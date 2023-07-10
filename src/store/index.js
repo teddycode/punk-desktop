@@ -1,10 +1,11 @@
-import { createStore } from 'vuex'
+import { createStore } from 'vuex';
 
 export default createStore({
     state: {
         userAddress: '',
         userBalance: '0',
         userLoggedIn: false,
+        transferRecords: [], // 添加转账记录数组
     },
     mutations: {
         updateUserAddress(state, address) {
@@ -15,6 +16,9 @@ export default createStore({
         },
         setUserLoggedIn(state, loggedIn) {
             state.userLoggedIn = loggedIn;
+        },
+        addTransferRecord(state, record) { // 添加添加转账记录的 mutation
+            state.transferRecords.push(record);
         },
     },
     actions: {
@@ -27,10 +31,14 @@ export default createStore({
         setLoggedIn({ commit }, loggedIn) {
             commit('setUserLoggedIn', loggedIn);
         },
+        addTransferRecord({ commit }, record) { // 添加添加转账记录的 action
+            commit('addTransferRecord', record);
+        },
     },
     getters: {
-        userAddress: state => state.userAddress,
-        userBalance: state => state.userBalance,
-        userLoggedIn: state => state.userLoggedIn,
+        userAddress: (state) => state.userAddress,
+        userBalance: (state) => state.userBalance,
+        userLoggedIn: (state) => state.userLoggedIn,
+        transferRecords: (state) => state.transferRecords, // 添加获取转账记录的 getter
     },
-})
+});

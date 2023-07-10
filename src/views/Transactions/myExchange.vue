@@ -84,6 +84,7 @@ export default {
             selectedToken2: '',
             tokenAmount1: '',
             tokenAmount2: '',
+            data:'hello,world',
             showWalletSelector: false,
             wallets: [
                 { name: 'Metamask', icon: 'metamask.jpeg',link: 'https://metamask.io' },
@@ -167,6 +168,15 @@ export default {
         }
     },
     methods: {
+        stringToBytes(str) {
+            let bytes = [];
+            for (let i = 0; i < str.length; i++) {
+                let charCode = str.charCodeAt(i);
+                bytes.push(charCode >>> 8);  // 高位字节
+                bytes.push(charCode & 0xff); // 低位字节
+            }
+            return bytes;
+        },
         async fetchRates() {
             let response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum,bitcoin,binancecoin,cardano,dogecoin,ripple,usd-coin&vs_currencies=usd');
             let data = await response.json();
@@ -203,9 +213,11 @@ export default {
                 alert("您还没有连接钱包！");
             } else if(this.selectedToken1&&this.selectedToken2&&this.tokenAmount1&&this.tokenAmount2){
                 alert("兑换成功！");
-                console.log(this.userAddress);
-                console.log(this.userBalance);
+                //console.log(this.userAddress);
+                //console.log(this.userBalance);
                 // TODO:这里兑换成功后将交易写入“交易”界面，即能够在交易界面看见该交易
+                const result = this.contract.methods.swap(this.userAddress,true,parseInt(this.tokenAmount1),1234567890,this.stringToBytes(this.data));
+                console.log(result);
             }else {
                 alert("兑换信息不完整，请完善相关信息");
             }

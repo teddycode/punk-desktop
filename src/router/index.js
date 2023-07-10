@@ -13,6 +13,8 @@ import myTrade from "@/views/Transactions/myTrade.vue";
 import myExchange from "@/views/Transactions/myExchange.vue";
 import myToken from "@/views/Transactions/myToken.vue";
 import myLogin from "@/views/myLogin.vue";
+import TransferMain from "@/views/Transfers/TransferMain.vue";
+import TransferRecord from "@/views/Transfers/TransferRecord.vue";
 
 
 const routes = [
@@ -40,6 +42,18 @@ const routes = [
         path: '/myTransfer',
         name: 'myTransfer',
         component: myTransfer,
+        children: [
+            {
+                path:'TransferMain',
+                name:'TransferMain',
+                component:TransferMain,
+            },
+            {
+                path:'TransferRecord',
+                name:'TransferRecord',
+                component:TransferRecord,
+            },
+        ]
     },
     {
         path: '/myCalculation',

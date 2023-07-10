@@ -145,7 +145,7 @@ body, html {
     padding: 20px;
     text-align: center;
     color: #888;
-    ;
+;
 }
 
 </style>
