@@ -134,6 +134,7 @@ export default {
 
 <style scoped>
 .token-page {
+
     width: 90%;
     margin: 0 auto;
 }

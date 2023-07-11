@@ -44,6 +44,11 @@ const routes = [
         component: myTransfer,
         children: [
             {
+                path:'',
+                name:'myTransfer',
+                component:TransferMain,
+            },
+            {
                 path:'TransferMain',
                 name:'TransferMain',
                 component:TransferMain,

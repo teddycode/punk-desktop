@@ -5,7 +5,8 @@
             <nav class="nav">
                 <ul>
                     <li v-for="item in menuItems" :key="item.id" :class="{ active: item.isActive }">
-                        <router-link :to="item.url">{{ item.label }}</router-link>
+                        <a v-if="item.label === '钱包'" href="#" @click="toggleWalletSelector">{{ item.label }}</a>
+                        <router-link v-else :to="item.url">{{ item.label }}</router-link>
                     </li>
                     <li v-if="isLoggedIn">
                         <a href="#" @click="logout">登出</a>
@@ -22,6 +23,9 @@
             </div>
         </div>
         <router-view></router-view>
+        <div v-if="showWalletSelector" class="overlay" @click="showWalletSelector = false">
+            <myWallet></myWallet>
+        </div>
         <footer class="footer">
             <p>&copy; 2023 Ethereum Foundation. All rights reserved.</p>
         </footer>
@@ -29,8 +33,12 @@
 </template>
 
 <script>
+import myWallet from "@/components/myWallet.vue";
 export default {
     name: 'App',
+    components: {
+        myWallet
+    },
     data() {
         return {
             menuItems: [
@@ -41,7 +49,9 @@ export default {
                 { id: 5, label: '钱包', url: '#' },
                 { id: 6, label: '系统设置', url: '#' },
             ],
-            isLoggedIn: false,
+            isLoggedIn:false,
+            userLoggedIn: false,
+            showWalletSelector: false,
         };
     },
     methods: {
@@ -56,6 +66,9 @@ export default {
         logout() {
             this.isLoggedIn = false;
             this.$router.push('/');
+        },
+        toggleWalletSelector() {
+            this.showWalletSelector = !this.showWalletSelector;
         },
     },
 };
@@ -139,6 +152,7 @@ body, html {
 .help-text {
     color: #fff;
 }
+
 .footer {
     display: grid;
     background-color: #f8f8f8;
