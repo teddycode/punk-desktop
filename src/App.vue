@@ -50,7 +50,6 @@ export default {
                 { id: 6, label: '系统设置', url: '#' },
             ],
             isLoggedIn:false,
-            userLoggedIn: false,
             showWalletSelector: false,
         };
     },

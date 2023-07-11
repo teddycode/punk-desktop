@@ -42,37 +42,27 @@
                 <p v-if="userLoggedIn&&ratesUpdateTime">汇率更新时间：{{ ratesUpdateTime }}</p>
             </div>
 
-            <button class="wallet-btn-transaction" @click="showWalletSelector = true" v-if="!userLoggedIn">连接钱包</button>
+            <button class="wallet-btn-transaction" @click="showWalletSelector = true"  v-if="!this.$store.state.userLoggedIn">连接钱包</button>
             <button class="wallet-btn-transaction" @click="showWalletSelector = true" v-else>查看钱包</button>
             <button class="wallet-btn-transaction" @click="exchange" >兑换代币</button> <!-- 新增兑换按钮 -->
         </div>
         <!-- Insert the similar structure for 'tokens' and 'collections' tabs -->
         <!-- Wallet Selector -->
-        <transition name="slide">
-            <div v-if="showWalletSelector" class="wallet-selector" @click.stop>
-                <h3 v-if="!userLoggedIn">选择钱包</h3>
-                <ul class="wallet-list" v-if="!userLoggedIn">
-                    <li v-for="wallet in wallets" :key="wallet.name" @click="openWalletLink(wallet)" :class="{ 'selected-wallet': selectedWallet === wallet, 'hovered-wallet': hoveredWallet === wallet }">
-                        <img :src="require(`@/assets/${wallet.icon}`)" alt="wallet-icon">
-                        {{ wallet.name }}
-                    </li>
-                </ul>
-                <div v-else>
-                    <h4>Connected to MetaMask</h4>
-                    <p class="address">Address: {{ userAddress }}</p>
-                    <p>Balance: {{ userBalance }} GoerliETH</p>
-                    <button class="logout-btn" @click="logout">登出</button>
-                </div>
-            </div>
-        </transition>
-        <div v-if="showWalletSelector" class="overlay" @click="showWalletSelector = false"></div>
+        <div v-if="showWalletSelector" class="overlay" @click="showWalletSelector = false">
+            <myWallet></myWallet>
+        </div>
+
     </div>
 </template>
 
 <script>
 import {Web3} from "web3";
+import myWallet from "@/components/myWallet.vue";
 
 export default {
+    components:{
+        myWallet
+    },
     data() {
         return {
             showSettings: false,
@@ -86,38 +76,16 @@ export default {
             tokenAmount2: '',
             //data:'hello,world',
             showWalletSelector: false,
-            wallets: [
-                { name: 'Metamask', icon: 'metamask.jpeg',link: 'https://metamask.io' },
-                { name: 'imToken', icon: 'imtoken.jpeg',link: 'https://token.im' },
-                { name: 'Trust Wallet', icon: 'trustwallet.png', link: 'https://trustwallet.com' }
-            ],
+            userLoggedIn:false,
             rate:{},
             ratesTimer: null,
             ratesUpdateTime: null,
             lastModifiedToken: null,
-            userAddress: '',
-            userBalance: '0',
-            userLoggedIn:false,
             web3: null,
             contract: null,
             contractAddress: '0xE592427A0AEce92De3Edee1F18E0157C05861564',
             contractABI:[{"inputs":[{"internalType":"address","name":"_factory","type":"address"},{"internalType":"address","name":"_WETH9","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"WETH9","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"components":[{"internalType":"bytes","name":"path","type":"bytes"},{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"deadline","type":"uint256"},{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"uint256","name":"amountOutMinimum","type":"uint256"}],"internalType":"struct ISwapRouter.ExactInputParams","name":"params","type":"tuple"}],"name":"exactInput","outputs":[{"internalType":"uint256","name":"amountOut","type":"uint256"}],"stateMutability":"payable","type":"function"},{"inputs":[{"components":[{"internalType":"address","name":"tokenIn","type":"address"},{"internalType":"address","name":"tokenOut","type":"address"},{"internalType":"uint24","name":"fee","type":"uint24"},{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"deadline","type":"uint256"},{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"uint256","name":"amountOutMinimum","type":"uint256"},{"internalType":"uint160","name":"sqrtPriceLimitX96","type":"uint160"}],"internalType":"struct ISwapRouter.ExactInputSingleParams","name":"params","type":"tuple"}],"name":"exactInputSingle","outputs":[{"internalType":"uint256","name":"amountOut","type":"uint256"}],"stateMutability":"payable","type":"function"},{"inputs":[{"components":[{"internalType":"bytes","name":"path","type":"bytes"},{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"deadline","type":"uint256"},{"internalType":"uint256","name":"amountOut","type":"uint256"},{"internalType":"uint256","name":"amountInMaximum","type":"uint256"}],"internalType":"struct ISwapRouter.ExactOutputParams","name":"params","type":"tuple"}],"name":"exactOutput","outputs":[{"internalType":"uint256","name":"amountIn","type":"uint256"}],"stateMutability":"payable","type":"function"},{"inputs":[{"components":[{"internalType":"address","name":"tokenIn","type":"address"},{"internalType":"address","name":"tokenOut","type":"address"},{"internalType":"uint24","name":"fee","type":"uint24"},{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"deadline","type":"uint256"},{"internalType":"uint256","name":"amountOut","type":"uint256"},{"internalType":"uint256","name":"amountInMaximum","type":"uint256"},{"internalType":"uint160","name":"sqrtPriceLimitX96","type":"uint160"}],"internalType":"struct ISwapRouter.ExactOutputSingleParams","name":"params","type":"tuple"}],"name":"exactOutputSingle","outputs":[{"internalType":"uint256","name":"amountIn","type":"uint256"}],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"factory","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes[]","name":"data","type":"bytes[]"}],"name":"multicall","outputs":[{"internalType":"bytes[]","name":"results","type":"bytes[]"}],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"refundETH","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"},{"internalType":"uint256","name":"deadline","type":"uint256"},{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"}],"name":"selfPermit","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"nonce","type":"uint256"},{"internalType":"uint256","name":"expiry","type":"uint256"},{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"}],"name":"selfPermitAllowed","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"nonce","type":"uint256"},{"internalType":"uint256","name":"expiry","type":"uint256"},{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"}],"name":"selfPermitAllowedIfNecessary","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"},{"internalType":"uint256","name":"deadline","type":"uint256"},{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"}],"name":"selfPermitIfNecessary","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"amountMinimum","type":"uint256"},{"internalType":"address","name":"recipient","type":"address"}],"name":"sweepToken","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"amountMinimum","type":"uint256"},{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"feeBips","type":"uint256"},{"internalType":"address","name":"feeRecipient","type":"address"}],"name":"sweepTokenWithFee","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"int256","name":"amount0Delta","type":"int256"},{"internalType":"int256","name":"amount1Delta","type":"int256"},{"internalType":"bytes","name":"_data","type":"bytes"}],"name":"uniswapV3SwapCallback","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amountMinimum","type":"uint256"},{"internalType":"address","name":"recipient","type":"address"}],"name":"unwrapWETH9","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amountMinimum","type":"uint256"},{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"feeBips","type":"uint256"},{"internalType":"address","name":"feeRecipient","type":"address"}],"name":"unwrapWETH9WithFee","outputs":[],"stateMutability":"payable","type":"function"},{"stateMutability":"payable","type":"receive"}],
         };
-    },
-    beforeRouteEnter(to, from, next) {
-        if (typeof window.ethereum !== 'undefined') {
-            const web3 = new Web3(window.ethereum);
-            next(vm => {
-                vm.web3 = web3;
-                vm.loadUserData();
-            });
-        }
-    },
-    beforeRouteUpdate(to, from, next) {
-        if (typeof window.ethereum !== 'undefined') {
-            this.loadUserData();
-            next();
-        }
     },
     watch: {
         rates: function() {
@@ -133,24 +101,12 @@ export default {
         }
     },
     created:function() {
-        if (typeof window.ethereum !== 'undefined') {
-            this.web3 = new Web3(window.ethereum);
-            this.loadUserData();
-        } else {
-            alert('Metamask is not installed. Please consider installing it: https://metamask.io');
-        }
         this.fetchRates();
         this.setRatesTimer();
     },
     beforeMount() {
-        // Create a Web3 instance and connect to the network
         this.web3 = new Web3('https://goerli.infura.io/v3/b8feaebcfe234f0c83af0e97c070e5f5');
-
-        // Create a contract instance
         this.contract = new this.web3.eth.Contract(this.contractABI, this.contractAddress);
-
-        // Now you can use this.web3 and this.contract to interact with the contract
-        // Call contract methods, listen to events, etc.
     },
     beforeUnmount: function() {
         // Clear the rates timer if it exists
@@ -168,15 +124,6 @@ export default {
         }
     },
     methods: {
-        stringToBytes(str) {
-            let bytes = [];
-            for (let i = 0; i < str.length; i++) {
-                let charCode = str.charCodeAt(i);
-                bytes.push(charCode >>> 8);  // 高位字节
-                bytes.push(charCode & 0xff); // 低位字节
-            }
-            return bytes;
-        },
         async fetchRates() {
             let response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum,bitcoin,binancecoin,cardano,dogecoin,ripple,usd-coin&vs_currencies=usd');
             let data = await response.json();
@@ -244,72 +191,6 @@ export default {
                 alert("兑换信息不完整，请完善相关信息");
             }
         },
-        async loadUserData() {
-            let loggedIn = this.$store.state.userLoggedIn;
-            if (loggedIn) {
-                this.userLoggedIn = true;
-                this.userAddress = this.$store.state.userAddress;
-                this.userBalance = await this.getBalance(this.userAddress);
-            }
-        },
-        async openWalletLink(wallet) {
-            if (wallet.name === 'Metamask') {
-                try {
-                    this.userLoggedIn = true;
-                    this.$store.dispatch('setLoggedIn', true);
-                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    this.userAddress = accounts[0];
-                    this.$store.dispatch('setAddress', this.userAddress);
-
-                    // 请求用户余额
-                    this.userBalance = await this.getBalance(this.userAddress);
-                    this.$store.dispatch('setBalance', this.userBalance);
-
-                    // 加载用户数据
-                    this.loadUserData();
-
-                } catch (error) {
-                    console.error(error);
-                }
-            } else {
-                window.open(wallet.link, '_blank');
-            }
-            //this.showWalletSelector = false;
-        },
-        async getBalance(address) {
-            try {
-                this.web3.eth.net.isListening().then(() => {
-                    this.web3.eth.getChainId().then((chainId) => {
-                        if (chainId !== 5) {  // Chain ID for Goerli Test Network is 5
-                            window.ethereum.request({
-                                method: 'wallet_switchEthereumChain',
-                                params: [{ chainId: '0x5' }]  // Switch to Goerli Test Network
-                            }).catch((error) => console.log(error));
-                        }
-                    });
-                });
-                // 请求用户余额
-                const balance = await window.ethereum.request({
-                    method: 'eth_getBalance',
-                    params: [address, 'latest'],
-                });
-
-                // 将余额从wei转换为eth并保存
-                return this.web3.utils.fromWei(balance, 'ether');
-            } catch (error) {
-                console.error(error);
-            }
-        },
-        logout() {
-            this.userLoggedIn = false;
-            this.userAddress = '';
-            this.userBalance = '0';
-            this.$store.dispatch('setLoggedIn', false);
-            this.$store.dispatch('setAddress', '');
-            this.$store.dispatch('setBalance', '0');
-            // 加载用户数据
-            this.loadUserData();
-        }
     }
 };
 </script>
