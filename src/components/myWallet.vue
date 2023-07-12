@@ -65,12 +65,8 @@ export default {
         } else {
             alert('Metamask is not installed. Please consider installing it: https://metamask.io');
         }
-        console.info("组件内 created")
     },
     methods:{
-        close() {
-            this.$emit('close');
-        },
         async loadUserData() {
             console.log('loadUserData!!!');
             let loggedIn = this.$store.state.userLoggedIn;

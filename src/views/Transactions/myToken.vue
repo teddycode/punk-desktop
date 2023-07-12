@@ -45,7 +45,7 @@
                 <tr v-for="(tokenData, index) in filteredTokenDataList" :key="tokenData.name">
                     <td>{{ index + 1 }}</td>
                     <td>{{ tokenData.name }}</td>
-                    <td>{{ tokenData.price }}</td>
+                    <td>{{ getTokenPrice(tokenData.name) }}</td>
                     <td :class="getTokenChangeClass(tokenData.change)">{{ tokenData.change }}</td>
                     <td>{{ tokenData.param1 }}</td>
                     <td>{{ tokenData.param2 }}</td>
@@ -65,14 +65,19 @@ export default {
             selectedToken: '',
             selectedTime: '',
             tokenDataList: [
-                { name: 'ETH', price: '$2000', change: '-2%', param1: 'A', param2: 'B', param3: 'C' },
-                { name: 'BTC', price: '$60000', change: '+5%', param1: 'D', param2: 'E', param3: 'F' },
-                { name: 'BNB', price: '$300', change: '-3%', param1: 'G', param2: 'H', param3: 'I' },
-                { name: 'ADA', price: '$1', change: '+1%', param1: 'J', param2: 'K', param3: 'L' },
-                { name: 'DOGE', price: '$0.1', change: '+10%', param1: 'M', param2: 'N', param3: 'O' },
+                { name: 'ETH', change: '-2%', param1: 'A', param2: 'B', param3: 'C' },
+                { name: 'BTC', change: '+5%', param1: 'D', param2: 'E', param3: 'F' },
+                { name: 'BNB', change: '-3%', param1: 'G', param2: 'H', param3: 'I' },
+                { name: 'ADA', change: '+1%', param1: 'J', param2: 'K', param3: 'L' },
+                { name: 'DOGE', change: '+10%', param1: 'M', param2: 'N', param3: 'O' },
             ],
             searchKeyword: '',
+            rates: {},
+            ratesUpdateTime: null,
         };
+    },
+    created() {
+        this.fetchRates();
     },
     computed: {
         filteredTokenDataList() {
@@ -91,7 +96,6 @@ export default {
                 filteredList = filteredList.filter(tokenData => {
                     return (
                         tokenData.name.toLowerCase().includes(keyword) ||
-                        tokenData.price.toLowerCase().includes(keyword) ||
                         tokenData.change.toLowerCase().includes(keyword) ||
                         tokenData.param1.toLowerCase().includes(keyword) ||
                         tokenData.param2.toLowerCase().includes(keyword) ||
@@ -103,8 +107,32 @@ export default {
             return filteredList;
         },
     },
-
-    methods:{
+    methods: {
+        async fetchRates() {
+            try {
+                let response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum,bitcoin,binancecoin,cardano,dogecoin,ripple,usd-coin&vs_currencies=usd');
+                let data = await response.json();
+                this.rates = {
+                    'ETH': data.ethereum.usd,
+                    'BTC': data.bitcoin.usd,
+                    'BNB': data.binancecoin.usd,
+                    'ADA': data.cardano.usd,
+                    'DOGE': data.dogecoin.usd,
+                    'XRP': data.ripple.usd,
+                    'USDC': data['usd-coin'].usd,
+                };
+                this.ratesUpdateTime = new Date();
+            } catch (error) {
+                console.error('Failed to fetch rates:', error);
+            }
+        },
+        getTokenPrice(token) {
+            // eslint-disable-next-line no-prototype-builtins
+            if (this.rates.hasOwnProperty(token)) {
+                return '$' + this.rates[token].toFixed(2);
+            }
+            return '';
+        },
         getTokenChangeClass(change) {
             if (change.startsWith('-')) {
                 return 'negative-change';
@@ -134,7 +162,6 @@ export default {
 
 <style scoped>
 .token-page {
-
     width: 90%;
     margin: 0 auto;
 }
@@ -155,6 +182,7 @@ export default {
 .selection-group label {
     margin-right: 5px;
 }
+
 .search-input {
     flex: 1;
 }
@@ -214,6 +242,7 @@ export default {
     border: none;
     text-align: center;
 }
+
 .tokens-table tr td.negative-change {
     color: green;
 }
@@ -221,11 +250,13 @@ export default {
 .tokens-table tr td.positive-change {
     color: red;
 }
+
 .tokens-table tr:hover {
     background-color: #eaf4ff;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
     cursor: pointer;
 }
+
 .search-bar {
     display: flex;
     align-items: center;

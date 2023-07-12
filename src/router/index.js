@@ -15,6 +15,7 @@ import myToken from "@/views/Transactions/myToken.vue";
 import myLogin from "@/views/myLogin.vue";
 import TransferMain from "@/views/Transfers/TransferMain.vue";
 import TransferRecord from "@/views/Transfers/TransferRecord.vue";
+import CollectionDetails from "@/views/Collections/CollectionDetails.vue";
 
 
 const routes = [
@@ -111,8 +112,14 @@ const routes = [
     {
         path: '/myCollection',
         name: 'myCollection',
-        component: myCollection
+        component: myCollection,
     },
+    {
+        path: '/CollectionDetails/:name',
+        name: 'CollectionDetails',
+        component: CollectionDetails
+    },
+
     // 其他路由配置
 ];
 

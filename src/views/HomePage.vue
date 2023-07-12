@@ -88,14 +88,14 @@ export default {
                 },
                 {
                     id: 3,
-                    title: '存储',
-                    description: '关于存储的描述..',
+                    title: '藏品',
+                    description: '关于藏品的描述..',
                     image: './assets/evm.jpg'
                 },
                 {
                     id: 4,
-                    title: '计算',
-                    description: '关于计算的描述.',
+                    title: '网络',
+                    description: '关于网络的描述.',
                     image: './assets/evm.jpg'
                 },
                 {
@@ -112,14 +112,14 @@ export default {
                 },
                 {
                     id: 7,
-                    title: '网络',
-                    description: '关于网络的描述.',
+                    title: '计算',
+                    description: '关于计算的描述.',
                     image: './assets/evm.jpg'
                 },
                 {
                     id: 8,
-                    title: '藏品',
-                    description: '关于藏品的描述.',
+                    title: '存储',
+                    description: '关于存储的描述.',
                     image: './assets/evm.jpg'
                 },
             ],
