@@ -29,7 +29,7 @@
             </div>
         </div>
         <div class="table-section">
-            <table class="tokens-table">
+            <table class="table">
                 <thead>
                 <tr>
                     <th>#</th>
@@ -58,7 +58,9 @@
 </template>
 
 <script>
+
 export default {
+
     data() {
         return {
             tokens: ['ETH', 'BTC', 'BNB', 'ADA', 'DOGE', 'XRP'],
@@ -76,6 +78,7 @@ export default {
             ratesUpdateTime: null,
         };
     },
+    //hello!
     created() {
         this.fetchRates();
     },
@@ -161,6 +164,7 @@ export default {
 </script>
 
 <style scoped>
+@import "@/assets/global.css";
 .token-page {
     width: 90%;
     margin: 0 auto;
@@ -175,7 +179,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     padding: 0 5%;
 }
 
@@ -213,48 +217,12 @@ export default {
 .table-section {
     padding: 0 5%;
 }
-
-.tokens-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 15px;
-}
-
-.tokens-table th,
-.tokens-table td {
-    padding: 8px;
-    text-align: center;
-}
-
-.tokens-table tr:first-child th {
-    border: none;
-    background-color: #4caf50;
-    color: white;
-}
-
-.tokens-table tr {
-    background-color: #f2f2f2;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-.tokens-table tr td {
-    border: none;
-    text-align: center;
-}
-
-.tokens-table tr td.negative-change {
+table tr td.negative-change {
     color: green;
 }
 
-.tokens-table tr td.positive-change {
+table tr td.positive-change {
     color: red;
-}
-
-.tokens-table tr:hover {
-    background-color: #eaf4ff;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
 }
 
 .search-bar {

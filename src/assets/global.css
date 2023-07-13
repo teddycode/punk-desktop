@@ -1,0 +1,44 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #ddd; /* 添加浅灰色边框 */
+    table-layout: fixed;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* 添加阴影 */
+}
+
+table th,
+table td {
+    padding: 15px 10px;
+    text-align: center;
+    font-size: 18px; /* 调整标题字体大小与其他行一致 */
+    border-bottom: 1px solid #ddd;
+}
+
+table tr:first-child th {
+    background-color: #f9f9f9; /* 标题背景颜色改为浅灰色 */
+    color: black; /* 标题文字颜色改为黑色 */
+    text-transform: uppercase;
+}
+
+table tr {
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+table tr td {
+    text-align: center;
+}
+
+table tr:hover {
+    transform: scale(1.01);
+    background-color: #eaf4ff; /* 鼠标悬停时的背景颜色改为浅蓝色 */
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2); /* 鼠标悬停时添加淡阴影 */
+    cursor: pointer;
+}
+
+table tr:not(:hover) {
+    transition: all 0.3s ease;
+}

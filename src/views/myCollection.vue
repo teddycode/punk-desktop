@@ -4,7 +4,7 @@
             <h1>我的藏品</h1>
         </div>
         <div class="table-section">
-            <table class="collections-table">
+            <table class="table">
                 <thead>
                 <tr>
                     <th>藏品名称</th>
@@ -18,7 +18,7 @@
                 </thead>
                 <tbody>
                 <tr v-for="collectionData in collections" :key="collectionData.name" @click="goToDetails(collectionData.name)">
-                <td>{{ collectionData.name }}</td>
+                    <td>{{ collectionData.name }}</td>
                     <td>{{ collectionData.lowestPrice }}</td>
                     <td :class="getPriceChangeClass(collectionData.lowestPriceChange)">{{ collectionData.lowestPriceChange }}</td>
                     <td>{{ collectionData.highestPrice }}</td>
@@ -78,6 +78,7 @@ export default {
 </script>
 
 <style scoped>
+@import "@/assets/global.css";
 .collections-page {
     min-height: 100vh;
     width: 90%;
@@ -93,40 +94,11 @@ export default {
     padding: 0 5%;
 }
 
-.collections-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 15px;
-}
-
-.collections-table th,
-.collections-table td {
-    padding: 8px;
-    text-align: center;
-}
-
-.collections-table tr:first-child th {
-    border: none;
-    background-color: #4caf50;
-    color: white;
-}
-
-.collections-table tr {
-    background-color: #f2f2f2;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-.collections-table tr td {
-    border: none;
-    text-align: center;
-}
-
-.collections-table tr td.negative-change {
+table tr td.negative-change {
     color: green;
 }
 
-.collections-table tr td.positive-change {
+table tr td.positive-change {
     color: red;
 }
 

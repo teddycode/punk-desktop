@@ -28,7 +28,7 @@
                     </select>
                 </div>
                 <div class="input-row">
-                    <input type="text" v-model.trim="addressTo" placeholder="输入转入地址" class="address-input">
+                    <input type="text" v-model.trim="ToAccount" placeholder="输入转入地址" class="address-input">
                 </div>
             </div>
             <button class="transfer-btn" @click="transferTokens">跨链转账</button>
@@ -37,6 +37,8 @@
 </template>
 
 <script>
+import Web3 from "web3";
+
 export default {
     data() {
         return {
@@ -44,33 +46,60 @@ export default {
             selectedTokenFrom: '',
             amountFrom: '',
             selectedBlockchainTo: '',
-            addressTo: '',
-            blockchains: ['Ethereum', 'Binance Smart Chain', 'Polygon'],
-            tokens: ['ETH', 'BNB', 'MATIC', 'DAI', 'USDT']
+            ToAccount: '',
+            blockchains: ['Ethereum','GoerliEthereum', 'Binance Smart Chain', 'Polygon'],
+            tokens: ['ETH', 'BNB', 'MATIC', 'DAI', 'USDT'],
+            web3: null,
+            fromAccount: '',
+        }
+    },
+    async beforeMount() {
+        if (typeof window.ethereum !== 'undefined') {
+            this.web3 = new Web3(window.ethereum);
+            try {
+                // Request account access
+                await window.ethereum.enable();
+                const accounts = await this.web3.eth.getAccounts();
+                this.fromAccount = accounts[0]; // Set the first account as the default account
+                console.log(this.fromAccount);
+            } catch (error) {
+                console.error("Error accessing accounts: ", error);
+            }
+        } else {
+            console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
         }
     },
     methods: {
-        transferTokens() {
-            // 在这里执行转账操作的相关代码
-            // 执行转账操作的相关代码...
+        async transferTokens() {
             // 构造转账记录对象
             const transferRecord = {
                 blockchainFrom: this.selectedBlockchainFrom,
                 tokenFrom: this.selectedTokenFrom,
                 blockchainTo: this.selectedBlockchainTo,
-                addressTo: this.addressTo,
+                addressTo: this.ToAccount,
                 amountFrom: this.amountFrom,
                 date: new Date().toLocaleString(),
             };
-
             // 将转账记录添加到 Vuex store
             this.$store.commit('addTransferRecord', transferRecord);
-
             console.log('跨链转账');
+            var amountInWei = this.web3.utils.toWei(this.amountFrom, 'ether');
+            console.log(amountInWei);
+            try {
+                const result = await this.web3.eth.sendTransaction({
+                    from: this.fromAccount,
+                    to: this.ToAccount,
+                    value: amountInWei
+                });
+                console.log("Transfer succeeded:", result);
+            } catch (error) {
+                console.error("Transfer failed:", error);
+            }
         }
     }
 }
 </script>
+
 
 <style scoped>
 .transfer{

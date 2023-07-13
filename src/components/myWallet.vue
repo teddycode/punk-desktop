@@ -232,4 +232,7 @@ export default {
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
 }
+.address{
+    word-break: break-all;
+}
 </style>

@@ -1,101 +1,225 @@
 <template>
-    <div class="network-container">
-        <h1 class="network-title">网络设置</h1>
-        <div class="network-setting-group">
-            <label for="port" class="network-label">端口</label>
-            <input id="port" v-model="port" class="network-input" type="number">
+    <div class="network-page">
+
+        <div class="network-top-bar">
+            <select v-model="selectedNetwork" class="network-blockchain-select">
+                <option v-for="network in networks" :key="network" :value="network">{{ network }}</option>
+            </select>
+            <i class="fas fa-cog"></i> <!-- Font Awesome 齿轮图标 -->
         </div>
-        <div class="network-setting-group">
-            <p class="network-setting-label">允许局域网接入</p>
-            <input type="checkbox" v-model="allowLAN" class="network-switch">
+        <div class="network-transfer-container">
+            <div class="network-input-section">
+                <div class="network-input-row">
+                    <label class="network-title">ID:</label>
+                    <input v-model="walletAddress" @input="handleAddressInput" class="network-address-input" :class="{ 'invalid-input': !isValidAddress }">
+                </div>
+            </div>
+            <p v-if="!showTransaction">输入不符合格式！</p>
         </div>
-        <div class="network-setting-group">
-            <p class="network-setting-label">系统代理</p>
-            <input type="checkbox" v-model="systemProxy" class="network-switch">
-        </div>
-        <div class="network-setting-group">
-            <p class="network-setting-label">TUN 模式</p>
-            <input type="checkbox" v-model="tunMode" class="network-switch">
-        </div>
-        <div class="network-setting-group">
-            <p class="network-setting-label">IPv6:</p>
-            <input type="checkbox" v-model="ipv6" class="network-switch">
-        </div>
+        <transition name="slide-down">
+            <div v-if="showTransaction" class="network-transfer-container">
+                <div class="network-button-group">
+                    <button @click="addcash" :class="['network-transfer-btn', { 'active': activeBtn === 'addcash' }]">充值</button>
+                    <button @click="withdraw" :class="['network-transfer-btn', { 'active': activeBtn === 'withdraw' }]">提取</button>
+                    <button @click="advanced" :class="['network-transfer-btn', { 'active': activeBtn === 'advanced' }]">高级</button>
+                </div>
+                <div class="network-input-section">
+                    <div class="network-input-row">
+                        <label class="network-title">余额:</label>
+                        <input v-model="balance" class="network-token-input">
+                    </div>
+                    <div class="network-input-row">
+                        <label class="network-title">存款:</label>
+                        <input v-model="deposit" class="network-token-input">
+                    </div>
+                </div>
+                <button class="network-transfer-btn-2">充值</button>
+            </div>
+        </transition>
+
+
+
     </div>
+
 </template>
 
 <script>
 export default {
     data() {
         return {
-            port: 8080,
-            allowLAN: false,
-            systemProxy: false,
-            tunMode: false,
-            ipv6: false,
+            networks: ['Ethereum', 'Binance Smart Chain', 'Polygon'],
+            selectedNetwork: 'Ethereum',
+            walletAddress: '',
+            balance: '',
+            showTransaction: false,
+            showFullAddress: false,
+            isValidAddress: false,
+            activeBtn: '',
         };
+    },
+    computed: {
+        truncatedAddress() {
+            if (this.walletAddress.length > 6) {
+                return this.walletAddress.slice(0, 6) + '...' + this.walletAddress.slice(-6);
+            } else {
+                return this.walletAddress;
+            }
+        },
+    },
+    methods: {
+        handleAddressInput() {
+            this.isValidAddress = this.checkID(this.walletAddress);
+            this.showTransaction = this.isValidAddress;
+        },
+        checkID(address) {
+            if (typeof address !== 'string') {
+                return false;
+            }
+            if (address.slice(0, 2) !== '0x') {
+                return false;
+            }
+            if (address.length !== 42) {
+                return false;
+            }
+            return true;
+        },
+        addcash() {
+            // Handle deposit
+            this.activeBtn = 'addcash';  // 设置当前激活的按钮为 "deposit"
+        },
+        withdraw() {
+            // Handle withdrawal
+            this.activeBtn = 'withdraw';  // 设置当前激活的按钮为 "withdraw"
+        },
+        advanced() {
+            // Handle advanced options
+            this.activeBtn = 'advanced';  // 设置当前激活的按钮为 "advanced"
+        },
+        openSettings() {
+            // Handle opening settings
+        },
     },
 };
 </script>
 
 <style scoped>
-.network-container {
-    padding: 2rem;
-    background-color: #f3f4f6;
+.network-page{
+    width: 100%;
     min-height: 100vh;
+}
+.network-top-bar{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 20px;
+    background-color: #F9FAFB;
+}
+.network-transfer-container {
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: #F9FAFB;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 500px;
+    margin: 20px auto;
+    padding: 30px;
 }
-.network-title {
-    font-size: 1.875rem;
-    margin-bottom: 2rem;
-    text-align: center;
+.network-input-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
 }
-.network-setting-group {
+.network-input-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 15px;
     width: 100%;
-    max-width: 500px;
 }
-.network-label, .network-setting-label {
-    text-align: left;
-}
-.network-input {
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 0.25rem;
+.network-address-input{
+    padding: 10px;
+    border: 1px solid #34D399;
+    border-radius: 5px;
+    background-color: #F5F7FA;
+    font-size: 16px;
+    margin-left: 10px;
     width: 100%;
-    max-width: 18.75rem;
 }
-.network-switch {
-    width: 3.5rem;
-    height: 2rem;
-    background-color: red;
-    border-radius: 1rem;
-    position: relative;
+.network-title {
+    float: left;
+}
+.network-blockchain-select {
+    padding: 10px;
+    border: 1px solid #34D399;
+    border-radius: 5px;
+    background-color: #F5F7FA;
+    font-size: 16px;
+    margin-left: 10px;
+    margin-right: 20px;
+}
+.network-wallet-info {
+    margin-left: 20px;
+}
+.network-token-input {
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #34D399;
+    border-radius: 5px;
+    background-color: #F5F7FA;
+    font-size: 16px;
+    margin-left: 10px;
+}
+.network-button-group {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 30px;
+    width: 100%;
+}
+.network-transfer-btn {
+    padding: 10px 20px;
+    border: none;
     cursor: pointer;
-    appearance: none;
-    outline: none;
-    transition: background-color 0.3s;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 10px;
 }
-.network-switch:before {
-    content: '';
-    width: 1.5rem;
-    height: 1.5rem;
-    background-color: white;
-    border-radius: 50%;
-    position: absolute;
-    top: 0.25rem;
-    left: 0.25rem;
-    transition: left 0.3s;
+.network-transfer-btn-2 {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    background-color: #34d399;
+    color: #F9FAFB;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 10px;
 }
-.network-switch:checked {
-    background-color: #34D399;
+.network-transfer-btn.active {
+    background-color: #34d399;  /* 点击后的背景颜色为湖绿色 */
+    color: #f9fafb;
 }
-.network-switch:checked:before {
-    left: 1.75rem;
+.invalid-input {
+    border-color: #e53e3e;
 }
+
+.slide-down-enter-active {
+    transition: all 0.3s ease;
+}
+.slide-down-leave-active {
+    transition: all 0.3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-down-enter, .slide-down-leave-to {
+    transform: translateY(-100%);
+    opacity: 0;
+}
+.slide-down-enter-to, .slide-down-leave {
+    transform: translateY(0);
+    opacity: 1;
+}
+
 </style>
