@@ -74,6 +74,18 @@ export default {
                 this.userLoggedIn = true;
                 this.userAddress = this.$store.state.userAddress;
                 this.userBalance = await this.getBalance(this.userAddress);
+            } else {
+                // 尝试从localStorage中获取用户数据
+                const storedAddress = localStorage.getItem('userAddress');
+                if (storedAddress) {
+                    this.userLoggedIn = true;
+                    this.userAddress = storedAddress;
+                    this.$store.dispatch('setLoggedIn', true);
+                    this.$store.dispatch('setAddress', this.userAddress);
+                    // 直接从网络获取用户余额，保证余额的实时性
+                    this.userBalance = await this.getBalance(this.userAddress);
+                    this.$store.dispatch('setBalance', this.userBalance);
+                }
             }
         },
         async openWalletLink(wallet) {
@@ -84,6 +96,7 @@ export default {
                     this.$store.dispatch('setLoggedIn', true);
                     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                     this.userAddress = accounts[0];
+                    localStorage.setItem('userAddress', this.userAddress);
                     this.$store.dispatch('setAddress', this.userAddress);
 
                     // 请求用户余额
@@ -135,8 +148,8 @@ export default {
             this.$store.dispatch('setLoggedIn', false);
             this.$store.dispatch('setAddress', '');
             this.$store.dispatch('setBalance', '0');
-
-            // 加载用户数据
+            // 清除localStorage中的用户数据
+            localStorage.removeItem('userAddress');
             this.$emit('walletLogout');
             this.loadUserData();
         }
@@ -199,7 +212,7 @@ export default {
     padding: 10px 20px;
     border: none;
     cursor: pointer;
-    background-color: #34D399;  /* I've chosen a red color, feel free to change it */
+    background-color: #34D399;
     color: #F9FAFB;
     border-radius: 5px;
     font-size: 16px;

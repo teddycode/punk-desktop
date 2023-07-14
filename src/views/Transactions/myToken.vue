@@ -164,7 +164,7 @@ export default {
 </script>
 
 <style scoped>
-@import "@/assets/global.css";
+@import "@/assets/global_table.css";
 .token-page {
     width: 90%;
     margin: 0 auto;

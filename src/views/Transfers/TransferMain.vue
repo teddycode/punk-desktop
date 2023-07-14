@@ -38,7 +38,6 @@
 
 <script>
 import Web3 from "web3";
-
 export default {
     data() {
         return {
@@ -85,11 +84,14 @@ export default {
             console.log('跨链转账');
             var amountInWei = this.web3.utils.toWei(this.amountFrom, 'ether');
             console.log(amountInWei);
+            console.log(this.fromAccount);
+            console.log(this.$store.state.userBalance);
             try {
                 const result = await this.web3.eth.sendTransaction({
                     from: this.fromAccount,
                     to: this.ToAccount,
-                    value: amountInWei
+                    value: amountInWei,
+                    gas:470000,
                 });
                 console.log("Transfer succeeded:", result);
             } catch (error) {

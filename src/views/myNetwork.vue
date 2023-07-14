@@ -1,6 +1,5 @@
 <template>
     <div class="network-page">
-
         <div class="network-top-bar">
             <select v-model="selectedNetwork" class="network-blockchain-select">
                 <option v-for="network in networks" :key="network" :value="network">{{ network }}</option>
@@ -14,7 +13,9 @@
                     <input v-model="walletAddress" @input="handleAddressInput" class="network-address-input" :class="{ 'invalid-input': !isValidAddress }">
                 </div>
             </div>
-            <p v-if="!showTransaction">输入不符合格式！</p>
+            <p v-if="!showTransaction">请输入正确的钱包地址！！！</p>
+            <div class="network-balance" v-if="showTransaction&&walletAddress===$store.state.userAddress">余额：{{walletbalance}} GoerliETH</div>
+            <div class="network-balance" v-if="showTransaction&&walletAddress!==$store.state.userAddress">不存在该账户！！！</div>
         </div>
         <transition name="slide-down">
             <div v-if="showTransaction" class="network-transfer-container">
@@ -37,24 +38,26 @@
             </div>
         </transition>
 
-
-
     </div>
 
 </template>
 
 <script>
+
+import store from "@/store";
 export default {
     data() {
         return {
             networks: ['Ethereum', 'Binance Smart Chain', 'Polygon'],
             selectedNetwork: 'Ethereum',
+            walletbalance:'',
             walletAddress: '',
             balance: '',
             showTransaction: false,
             showFullAddress: false,
             isValidAddress: false,
             activeBtn: '',
+            //NoAccount:false,
         };
     },
     computed: {
@@ -66,6 +69,7 @@ export default {
             }
         },
     },
+
     methods: {
         handleAddressInput() {
             this.isValidAddress = this.checkID(this.walletAddress);
@@ -81,11 +85,18 @@ export default {
             if (address.length !== 42) {
                 return false;
             }
+            // if (address !== store.state.userAddress){
+            //     this.NoAccount = true;
+            // }
+            // myWallet.methods.loadUserData();
+            // this.walletAddress = store.state.userAddress;
+            this.walletbalance = store.state.userBalance;
+            console.log(this.walletAddress);
+            console.log(this.walletbalance);
             return true;
         },
         addcash() {
-            // Handle deposit
-            this.activeBtn = 'addcash';  // 设置当前激活的按钮为 "deposit"
+            this.activeBtn = 'addcash';
         },
         withdraw() {
             // Handle withdrawal

@@ -1,7 +1,7 @@
 <template>
     <div class="collections-page">
         <div class="title-section">
-            <h1>我的藏品</h1>
+            <h1>藏品</h1>
         </div>
         <div class="table-section">
             <table class="table">
@@ -78,7 +78,7 @@ export default {
 </script>
 
 <style scoped>
-@import "@/assets/global.css";
+@import "@/assets/global_table.css";
 .collections-page {
     min-height: 100vh;
     width: 90%;
