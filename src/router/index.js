@@ -16,6 +16,7 @@ import myLogin from "@/views/myLogin.vue";
 import TransferMain from "@/views/Transfers/TransferMain.vue";
 import TransferRecord from "@/views/Transfers/TransferRecord.vue";
 import CollectionDetails from "@/views/Collections/CollectionDetails.vue";
+import newProposal from "@/views/Governances/newProposal.vue";
 
 
 const routes = [
@@ -75,6 +76,12 @@ const routes = [
         path: '/myGovernance',
         name: 'myGovernance',
         component: myGovernance,
+
+    },
+    {
+        path: '/Governances/newProposal',
+        name: 'newProposal',
+        component: newProposal,
     },
     {
         path: '/myTransaction',

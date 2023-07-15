@@ -41,8 +41,8 @@ export default {
             collections: [
                 { name: '猫猫', lowestPrice: '$1500', lowestPriceChange: '+2%', highestPrice: '$2000', highestPriceChange: '-1%', quantity: '5', owners: '3' },
                 { name: '狗子', lowestPrice: '$2500', lowestPriceChange: '-1%', highestPrice: '$3000', highestPriceChange: '+2%', quantity: '10', owners: '5' },
-                { name: 'LOL', lowestPrice: '$3500', lowestPriceChange: '+3%', highestPrice: '$4000', highestPriceChange: '-2%', quantity: '15', owners: '7' },
-                { name: '空洞骑士', lowestPrice: '$4500', lowestPriceChange: '-2%', highestPrice: '$5000', highestPriceChange: '+1%', quantity: '20', owners: '10' },
+                { name: 'Cryptopunks', lowestPrice: '$3500', lowestPriceChange: '+3%', highestPrice: '$4000', highestPriceChange: '-2%', quantity: '15', owners: '7' },
+                { name: '迈尔斯', lowestPrice: '$4500', lowestPriceChange: '-2%', highestPrice: '$5000', highestPriceChange: '+1%', quantity: '20', owners: '10' },
             ],
             web3:null,
             contract:null,
