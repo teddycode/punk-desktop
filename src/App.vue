@@ -5,8 +5,7 @@
             <nav class="nav">
                 <ul>
                     <li v-for="item in menuItems" :key="item.id" :class="{ active: item.isActive }">
-                        <a v-if="item.label === '钱包'" href="#" @click="toggleWalletSelector">{{ item.label }}</a>
-                        <router-link v-else :to="item.url">{{ item.label }}</router-link>
+                        <router-link :to="item.url">{{ item.label }}</router-link>
                     </li>
                     <li v-if="isLoggedIn">
                         <a href="#" @click="logout">登出</a>
@@ -16,6 +15,17 @@
                     </li>
                 </ul>
             </nav>
+            <div class="wallet">
+                <button class="wallet-btn" @click="toggleWalletSelector">
+            <span v-if="this.$store.state.userLoggedIn">
+                <img class="wallet-icon" src="./assets/metamask.jpeg" alt="Wallet Icon">
+                {{ this.$store.state.userAddress }}...
+            </span>
+                    <span v-else>
+                连接钱包
+            </span>
+                </button>
+            </div>
         </header>
         <div class="content">
             <div class="help-box" @mouseover="floatLeft" @mouseout="floatRight">
@@ -46,8 +56,7 @@ export default {
                 { id: 2, label: '关于', url: '/myAbout' },
                 { id: 3, label: '社区', url: '#' },
                 { id: 4, label: '语言选择', url: '#' },
-                { id: 5, label: '钱包', url: '#' },
-                { id: 6, label: '系统设置', url: '#' },
+                { id: 5, label: '系统设置', url: '#' },
             ],
             isLoggedIn:false,
             showWalletSelector: false,
@@ -97,7 +106,8 @@ body, html {
     padding: 20px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    position: relative;
+    /*justify-content: space-between;*/
 }
 
 .logo {
@@ -130,6 +140,32 @@ body, html {
 
 .nav .active a {
     color: #ccc;
+}
+.wallet {
+    position: absolute; /* 设置为绝对定位 */
+    top: 50%;           /* 顶部偏移50%，使其垂直居中 */
+    right: 20px;        /* 右侧偏移20px */
+    transform: translateY(-50%); /* 通过上下移动-50%来纠正垂直位置 */
+}
+.wallet-btn {
+    padding: 10px 20px;
+    border-radius: 50px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.wallet-btn:hover {
+    background-color: #45a049;
+}
+
+.wallet-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    vertical-align: middle;
 }
 .help-box {
     position: fixed;

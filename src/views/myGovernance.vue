@@ -35,7 +35,6 @@
                 <div class="name">Stargate DAO</div>
                 <div class="members">成员人数: {{ members }}</div>
                 <button class="join-btn" @click="join">加入</button>
-                <div class="menu-item" @click="goToPage('proposals')">提案</div>
                 <div class="menu-item" @click="goToPage('newProposal')">新提案</div>
                 <div class="menu-item" @click="goToPage('delegation')">委托</div>
                 <div class="menu-item" @click="goToPage('about')">关于</div>
@@ -63,7 +62,9 @@ export default {
             members: 100,  // 模拟的成员数量
         };
     },
-
+    created() {
+            this.$store.dispatch('setProposals',this.proposals);
+    },
     computed: {
         sortProposalsByEndtime() {
             return this.proposals.slice().sort((a, b) => {
@@ -75,7 +76,7 @@ export default {
     },
     methods: {
         goToProposal(id) {
-
+            this.$router.push({ name: 'myProposals', params: { id: id } });
             // 根据提案ID跳转到相应的二级页面
         },
         totalVote(proposal){

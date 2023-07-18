@@ -134,7 +134,6 @@ export default {
                     method: 'eth_getBalance',
                     params: [address, 'latest'],
                 });
-
                 // 将余额从wei转换为eth并保存
                 return this.web3.utils.fromWei(balance, 'ether');
             } catch (error) {
