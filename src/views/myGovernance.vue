@@ -24,9 +24,13 @@
                             <span class="against-label">{{ votesAgainstPercentage(proposal).toFixed(1) }}%</span>
                         </div>
                     </div>
+                    <div v-if="proposal.status === 'Active'">
+                        <button class="vote-button" @click.stop="castVote(proposal.id, 'pass')">投票通过</button>
+                        <button class="vote-button" @click.stop="castVote(proposal.id, 'against')">投票反对</button>
+                    </div>
                     <div class="proposal-totol-vote">总票数： {{totalVote(proposal)}}</div>
                 <div class="proposal-footer">
-                    <div class="proposal-end-time">End Time: {{ proposal.endTime }}</div>
+                    <div class="proposal-end-time">End Time: {{ proposal.endTime.substring(0,10) }}</div>
                 </div>
             </div>
             </div>
@@ -36,7 +40,7 @@
                 <div class="members">成员人数: {{ members }}</div>
                 <button class="join-btn" @click="join">加入</button>
                 <div class="menu-item" @click="goToPage('newProposal')">新提案</div>
-                <div class="menu-item" @click="goToPage('delegation')">委托</div>
+                <div class="menu-item" @click="goToPage('myEntrust')">委托</div>
                 <div class="menu-item" @click="goToPage('about')">关于</div>
                 <div class="menu-item" @click="goToPage('settings')">设置</div>
             </div>
@@ -45,25 +49,28 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
     data() {
         return {
-            proposals: [
-                { id: 1, author: '0x3f0a0ea339f208dbb0ad90f5e3d6e5b3d21a2c71', title: 'Proposal 1', content: 'Add Metis Chain support for MAI Bridging\n' +
-                        '\n' +
-                        '--MAI and Stargate--\n' +
-                        'MAI is currently listed on Stargate on Optimism, Arbitrum, Polygon, Ethereum, Avalanche, and BNB.\n' +
-                        '\n' +
-                        'MAI\'s deployment on Stargate enjoys liquidity support from QiDao. This reduces the cost of capital for Stargate to 0% for maintaining liquidity for MAI.', status: 'Passed', votesPass:210, votesAgainst: 20,endTime: '2023-07-15' },
-                { id: 2, author: '0x3f0a0ea339f208dbb0ad90f5e3d6e5b3d21a2c72', title: 'Proposal 2', content: 'Stargate should re-enable support for the Fantom chain by creating pools using the USDC token (https://ftmscan.com/address/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48). This would allow Stargate to once again support Fantom and provide the protocol with a way to use safe and trusted assets to do so.', status: 'Rejected', votesPass:50, votesAgainst: 67,endTime: '2023-07-20' },
-                { id: 3, author: '0x3f0a0ea339f208dbb0ad90f5e3d6e5b3d21a2c73', title: 'Proposal 3', content: 'Following the recent PolyNetwork exploit over the past weekend that significantly impacted the Metis token on BSC, we hereby propose the deprecation of METIS-BSC pool and pathway on the Stargate bridge. This measure will eliminate potential vulnerabilities that might jeopardize the safety of our community members\' assets.', status: 'Waiting', votesPass:0, votesAgainst: 0,endTime: '2023-07-25' },
-                { id: 4, author: '0x3f0a0ea339f208dbb0ad90f5e3d6e5b3d21a2c74', title: 'Proposal 4', content: 'The Kava Origin Foundation proposes for Stargate to launch on Kava now that there is the LayerZero endpoint on Kava mainnet. To start, the Foundation would like to request one pool: USDT (Ethereum, Arbitrum, Optimism, Polygon, BNB Chain and Avalanche)', status: 'Active', votesPass:110, votesAgainst: 10,endTime: '2023-07-30' },
-            ],
+            proposals: [],
             members: 100,  // 模拟的成员数量
+            hasVote: false,
         };
     },
     created() {
-            this.$store.dispatch('setProposals',this.proposals);
+        axios.get("http://localhost:8080/myGovernance",
+        ) // 请求提案数据
+            .then(response => {
+                this.proposals = response.data.proposals; // 将返回的数据存储到proposals
+                localStorage.setItem('proposals', JSON.stringify(response.data.proposals));
+                this.$store.dispatch('setProposals',this.proposals);
+                console.log(this.proposals); // 在获取数据后打印值
+            })
+            .catch(error => {
+                console.log(error); // 打印错误信息 console.log(response.data);
+            });
+
     },
     computed: {
         sortProposalsByEndtime() {
@@ -101,19 +108,45 @@ export default {
         join() {
             // 处理点击加入按钮的逻辑
         },
+        castVote(proposalId, voteType) {
+            // 这里的具体实现取决于你的后端API
+            // 假设你有一个API可以接受proposalId和voteType ('pass'或'against')，并返回更新后的proposal
+            if (!this.$store.state.userAddress){
+                alert("钱包未登录,不能投票");
+            }else {
+                axios.post("http://localhost:8080/myGovernance", {
+                    ProposalID: proposalId,
+                    voteType: voteType,
+                    WalletAddress: this.$store.state.userAddress,
+                })
+                    .then(response => {
+                        // 根据你的后端返回的数据更新proposals
+                        console.log(proposalId);
+                        const updatedProposal = response.data;
+                        const index = this.proposals.findIndex(proposal => proposal.id === updatedProposal.id);
+                        if (index !== -1) {
+                            this.$set(this.proposals, index, updatedProposal);
+                        }
+                    })
+                    .catch(error => {
+                        // 捕获后端返回的错误
+                        if (error.response && error.response.data && error.response.data.error) {
+                            alert(error.response.data.error);
+                        } else {
+                            console.log(error);
+                        }
+                    });
+            }
+        },
         goToPage(page) {
             switch (page) {
-                case 'proposals':
-                    // 导航到提案页面
-                    // 例如：this.$router.push('/proposals');
-                    break;
-                case 'newProposal':
+                 case 'newProposal':
                     // 导航到新提案页面
                     this.$router.push('/Governances/newProposal');
+                    console.log(this.proposals);
                     break;
-                case 'delegation':
-                    // 导航到委托页面
-                    // 例如：this.$router.push('/delegation');
+                case 'myEntrust':
+                    this.$router.push('/Governances/myEntrust');
                     break;
                 case 'about':
                     // 导航到关于页面
@@ -273,6 +306,20 @@ export default {
 .proposal-totol-vote{
     text-align: left;
 }
+.vote-button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.vote-button:hover {
+    background-color: #45a049;
+}
+
 .sidebar {
     flex: 2;
     display: flex;
@@ -284,6 +331,9 @@ export default {
     margin-left: 20px;
     margin-top: 1rem;
     margin-bottom: auto;
+    /*position: sticky;*/
+    /*top: 0px;*/
+    /*align-self: flex-start;*/
 }
 
 .sidebar .icon {

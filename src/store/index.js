@@ -6,17 +6,20 @@ export default createStore({
         userBalance: '0',
         userLoggedIn: false,
         transferRecords: [], // 添加转账记录数组
-        proposals:[],
+        proposals:JSON.parse(localStorage.getItem('proposals')) || [],
     },
     mutations: {
         updateUserAddress(state, address) {
             state.userAddress = address;
+            // localStorage.setItem('userAddress', address)
         },
         updateUserBalance(state, balance) {
             state.userBalance = balance;
+            // localStorage.setItem('userBalance',balance)
         },
         setUserLoggedIn(state, loggedIn) {
             state.userLoggedIn = loggedIn;
+            // localStorage.setItem('userLoggedIn', loggedIn)
         },
         addTransferRecord(state, record) { // 添加添加转账记录的 mutation
             state.transferRecords.push(record);

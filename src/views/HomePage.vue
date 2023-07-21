@@ -14,6 +14,18 @@
             <button class="hero-button" @click="explore">探索更多</button>
         </section>
         <router-view></router-view>
+        <section class="summary">
+            <div class="summary-container">
+                <div class="summary-item">
+                    <h2 class="summary-title">当前交易总数</h2>
+                    <p class="summary-content">{{ totalTransactions }}</p>
+                </div>
+                <div class="summary-item">
+                    <h2 class="summary-title">当前区块高度</h2>
+                    <p class="summary-content">{{ currentBlockHeight }}</p>
+                </div>
+            </div>
+        </section>
         <section class="features">
             <div class="feature-container">
                 <div class="feature" v-for="feature in features.slice(0,2)" :key="feature.id" @click="goToFeature(feature)">
@@ -123,6 +135,8 @@ export default {
                     image: './assets/evm.jpg'
                 },
             ],
+            totalTransactions: '2,100M',
+            currentBlockHeight: '5761',
         }
     },
     methods: {
@@ -262,6 +276,38 @@ export default {
 
 .hero-button:hover {
     background-color: #1f7d79;
+}
+.summary-container {
+    display: flex;
+    justify-content: center;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px 20px;
+}
+
+.summary-item {
+    flex: 0 0 48%;
+    margin-bottom: 10px;
+    background-color: #f8f8f8;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+    cursor: pointer;
+    text-align: center;
+    padding: 20px;
+}
+
+.summary-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.summary-content {
+    font-size: 24px;
+    color: #888;
+    margin-bottom: 10px;
 }
 
 .features {

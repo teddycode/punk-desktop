@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
     name: "newProposal",
     data() {
@@ -29,7 +31,31 @@ export default {
     },
     methods: {
         submitProposal() {
+            // 检查用户是否已经登录
+            if (!localStorage.getItem('userLoggedIn')) {
+                // 用户未登录，显示提示
+                alert("请先登录钱包，然后才能上传提案");
+                return;
+            }
             // 处理提交提案的逻辑
+            const endDate = new Date();
+            endDate.setDate(endDate.getDate()+5);
+            axios.post("http://localhost:8080/Governances/newProposal",{
+                author:this.$store.state.userAddress,
+                title:this.title,
+                content: this.description,
+                status: "Waiting",
+                votesPass: 0,
+                votesAgainst: 0,
+                endTime: endDate.toISOString().slice(0, 10) // 将日期转化为 'YYYY-MM-DD' 格式
+            })
+                .then(response => {
+                    console.log(response);
+                    //this.$router.push('/myGovernance');
+                })
+                .catch(error => {
+                    console.log(error);
+                });
         }
     }
 }
@@ -62,6 +88,7 @@ export default {
 }
 
 .input-group {
+    width: 80%;
     margin-bottom: 20px;
 }
 

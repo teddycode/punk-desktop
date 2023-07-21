@@ -9,7 +9,7 @@
                 <div class="proposal-header">
                     <h1 class="proposal-title">{{ proposal.title }}</h1>
                 </div>
-                <p class="proposal-end-time">结束时间: {{ proposal.endTime }}</p>
+                <p class="proposal-end-time">结束时间: {{ proposal.endTime.substring(0,10) }}</p>
                 <div :class="['proposal-status', getProposalStatusClass(proposal.status)]">{{ proposal.status }}</div>
                 <div class="proposal-content">{{ proposal.content }}</div>
             </div>
@@ -20,11 +20,11 @@
                 </div>
                 <div class="voting-results">
                     <h2>Voting Results</h2>
-                    <div class="progress-container">
+                    <div class="progress-container" v-if="totalVote!==0" >
                         <div class="progress-bar pass" :style="{ width: votesPassPercentage + '%' }"></div>
                         <span class="pass-label">{{ votesPassPercentage.toFixed(1) }}%</span>
                     </div>
-                    <div class="progress-container">
+                    <div class="progress-container" v-if="totalVote!==0" >
                         <div class="progress-bar against" :style="{ width: votesAgainstPercentage + '%' }"></div>
                         <span class="against-label">{{ votesAgainstPercentage.toFixed(1) }}%</span>
                     </div>
@@ -33,9 +33,9 @@
                 <div class="proposal-details">
                     <h2>Proposal Details</h2>
                     <p>Initiator: {{ proposal.author }}</p>
-                    <p>Start Time: {{ proposal.startTime }}</p>
-                    <p>End Time: {{ proposal.endTime }}</p>
-                    <p>Block Creation Time: {{ proposal.creationTime }}</p>
+                    <p>Start Time: {{ proposal.startTime.substring(0,10) }}</p>
+                    <p>End Time: {{ proposal.endTime.substring(0,10) }}</p>
+                    <p>Block Creation Time: unknown</p>
                 </div>
             </div>
         </div>
@@ -46,20 +46,13 @@
 export default {
     data(){
         return{
-            proposals: [
-                { id: 1, author: '0x3f0a0ea339f208dbb0ad90f5e3d6e5b3d21a2c71', title: 'Proposal 1', content: 'Add Metis Chain support for MAI Bridging\n' +
-                        '\n' +
-                        '--MAI and Stargate--\n' +
-                        'MAI is currently listed on Stargate on Optimism, Arbitrum, Polygon, Ethereum, Avalanche, and BNB.\n' +
-                        '\n' +
-                        'MAI\'s deployment on Stargate enjoys liquidity support from QiDao. This reduces the cost of capital for Stargate to 0% for maintaining liquidity for MAI.', status: 'Passed', votesPass:210, votesAgainst: 20,endTime: '2023-07-15' },
-                { id: 2, author: '0x3f0a0ea339f208dbb0ad90f5e3d6e5b3d21a2c72', title: 'Proposal 2', content: 'Stargate should re-enable support for the Fantom chain by creating pools using the USDC token (https://ftmscan.com/address/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48). This would allow Stargate to once again support Fantom and provide the protocol with a way to use safe and trusted assets to do so.', status: 'Rejected', votesPass:50, votesAgainst: 67,endTime: '2023-07-20' },
-                { id: 3, author: '0x3f0a0ea339f208dbb0ad90f5e3d6e5b3d21a2c73', title: 'Proposal 3', content: 'Following the recent PolyNetwork exploit over the past weekend that significantly impacted the Metis token on BSC, we hereby propose the deprecation of METIS-BSC pool and pathway on the Stargate bridge. This measure will eliminate potential vulnerabilities that might jeopardize the safety of our community members\' assets.', status: 'Waiting', votesPass:0, votesAgainst: 0,endTime: '2023-07-25' },
-                { id: 4, author: '0x3f0a0ea339f208dbb0ad90f5e3d6e5b3d21a2c74', title: 'Proposal 4', content: 'The Kava Origin Foundation proposes for Stargate to launch on Kava now that there is the LayerZero endpoint on Kava mainnet. To start, the Foundation would like to request one pool: USDT (Ethereum, Arbitrum, Optimism, Polygon, BNB Chain and Avalanche)', status: 'Active', votesPass:110, votesAgainst: 10,endTime: '2023-07-30' },
-            ],
+            proposals: [],
         }
     },
-
+    created() {
+        this.proposals = this.$store.state.proposals;
+        console.log(this.proposals);
+    },
     computed: {
         proposal() {
             const id = parseInt(this.$route.params.id, 10);

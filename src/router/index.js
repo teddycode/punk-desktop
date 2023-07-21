@@ -18,6 +18,7 @@ import TransferRecord from "@/views/Transfers/TransferRecord.vue";
 import CollectionDetails from "@/views/Collections/CollectionDetails.vue";
 import newProposal from "@/views/Governances/newProposal.vue";
 import myProposals from "@/views/Governances/myProposals.vue";
+import MyEntrust from "@/views/Governances/myEntrust.vue";
 
 
 const routes = [
@@ -83,6 +84,11 @@ const routes = [
         path: '/Governances/newProposal',
         name: 'newProposal',
         component: newProposal,
+    },
+    {
+        path: '/Governances/myEntrust',
+        name: 'myEntrust',
+        component: MyEntrust,
     },
     {
         path: '/Governances/myProposals/:id',

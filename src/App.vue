@@ -17,9 +17,9 @@
             </nav>
             <div class="wallet">
                 <button class="wallet-btn" @click="toggleWalletSelector">
-            <span v-if="this.$store.state.userLoggedIn">
+            <span v-if=this.$store.state.userLoggedIn>
                 <img class="wallet-icon" src="./assets/metamask.jpeg" alt="Wallet Icon">
-                {{ this.$store.state.userAddress }}...
+                {{ this.$store.state.userAddress }}
             </span>
                     <span v-else>
                 连接钱包
@@ -61,6 +61,19 @@ export default {
             isLoggedIn:false,
             showWalletSelector: false,
         };
+    },
+    created() {
+        console.log(localStorage.getItem('userLoggedIn'));
+        console.log(localStorage.getItem('userAddress'));
+        // myWallet.methods.loadUserData();
+    },
+    computed:{
+        userLoggedIn() {
+            return localStorage.getItem('userLoggedIn') === 'true' || false;
+        },
+        userAddress() {
+            return localStorage.getItem('userAddress') || '';
+        },
     },
     methods: {
         floatLeft() {
@@ -113,6 +126,7 @@ body, html {
 .logo {
     width: 100px;
     height: auto;
+    padding-right: 20px;
 }
 
 .nav ul {
@@ -144,7 +158,7 @@ body, html {
 .wallet {
     position: absolute; /* 设置为绝对定位 */
     top: 50%;           /* 顶部偏移50%，使其垂直居中 */
-    right: 20px;        /* 右侧偏移20px */
+    right: 50px;        /* 右侧偏移20px */
     transform: translateY(-50%); /* 通过上下移动-50%来纠正垂直位置 */
 }
 .wallet-btn {

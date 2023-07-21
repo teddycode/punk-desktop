@@ -10,8 +10,13 @@
             </ul>
             <div v-else>
                 <h4>Connected to MetaMask</h4>
-                <p class="address">Address: {{ userAddress }}</p>
-                <p>Balance: {{ userBalance }} GoerliETH</p>
+                <p class="address">
+                    Address: {{ userAddress }}
+                    <button class="copy-btn" @click="copyToClipboard(userAddress)">复制</button>
+                </p>
+                <p>Balance: {{ userBalance }} GoerliETH
+                    <button class="copy-btn" @click="copyToClipboard(userBalance)">复制</button>
+                </p>
                 <button class="logout-btn" @click="logout">登出</button>
             </div>
         </div>
@@ -57,6 +62,7 @@ export default {
     beforeMount() {
         // Create a Web3 instance and connect to the network
         this.web3 = new Web3('https://goerli.infura.io/v3/b8feaebcfe234f0c83af0e97c070e5f5');
+        // this.$store.state.userLoggedIn = localStorage.getItem('userLoggedIn');
     },
     created:function() {
         if (typeof window.ethereum !== 'undefined') {
@@ -94,6 +100,7 @@ export default {
                 try {
                     this.userLoggedIn = true;
                     this.$store.dispatch('setLoggedIn', true);
+                    localStorage.setItem('userLoggedIn', this.userLoggedIn);
                     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                     this.userAddress = accounts[0];
                     localStorage.setItem('userAddress', this.userAddress);
@@ -104,7 +111,7 @@ export default {
                     this.$store.dispatch('setBalance', this.userBalance);
 
                     // 加载用户数据
-                    this.loadUserData();
+                    await this.loadUserData();
                     console.log('openWalletLink2');
                     this.$emit('walletLogin');
                 } catch (error) {
@@ -149,8 +156,17 @@ export default {
             this.$store.dispatch('setBalance', '0');
             // 清除localStorage中的用户数据
             localStorage.removeItem('userAddress');
+            // localStorage.setItem('userLoggedIn',this.userLoggedIn);
             this.$emit('walletLogout');
             this.loadUserData();
+            // this.showWalletSelector = false;
+        },
+        copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                console.log('Copying to clipboard was successful!');
+            }, function(err) {
+                console.error('Could not copy text: ', err);
+            });
         }
     },
 }
@@ -163,11 +179,12 @@ export default {
     right: 0;
     top: 0;
     bottom: 0;
-    background-color: #fff;
+    background-color: #F9FAFB;
     width: 300px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
     z-index: 10;
+    border-radius: 15px;
 }
 
 .wallet-selector h3 {
@@ -246,5 +263,15 @@ export default {
 }
 .address{
     word-break: break-all;
+}
+.copy-btn {
+    margin-left: 5px;
+    padding: 2px 6px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #34D399;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 </style>
