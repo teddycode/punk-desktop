@@ -62,7 +62,7 @@ export default {
     beforeMount() {
         // Create a Web3 instance and connect to the network
         this.web3 = new Web3('https://goerli.infura.io/v3/b8feaebcfe234f0c83af0e97c070e5f5');
-        // this.$store.state.userLoggedIn = localStorage.getItem('userLoggedIn');
+        //this.$store.state.userLoggedIn = localStorage.getItem('userLoggedIn');
     },
     created:function() {
         if (typeof window.ethereum !== 'undefined') {
@@ -77,6 +77,7 @@ export default {
             console.log('loadUserData!!!');
             let loggedIn = this.$store.state.userLoggedIn;
             if (loggedIn) {
+                console.log("重新登录123")
                 this.userLoggedIn = true;
                 this.userAddress = this.$store.state.userAddress;
                 this.userBalance = await this.getBalance(this.userAddress);
@@ -86,6 +87,8 @@ export default {
                 if (storedAddress) {
                     this.userLoggedIn = true;
                     this.userAddress = storedAddress;
+                    console.log("loadUserData:this.userAddress =" + this.userAddress);
+                    console.log("loadUserData:this.userLoggedIn =" + this.userLoggedIn);
                     this.$store.dispatch('setLoggedIn', true);
                     this.$store.dispatch('setAddress', this.userAddress);
                     // 直接从网络获取用户余额，保证余额的实时性
@@ -156,7 +159,8 @@ export default {
             this.$store.dispatch('setBalance', '0');
             // 清除localStorage中的用户数据
             localStorage.removeItem('userAddress');
-            // localStorage.setItem('userLoggedIn',this.userLoggedIn);
+            // localStorage.removeItem('userLoggedIn');
+            console.log("logout: " + this.$store.state.userLoggedIn);
             this.$emit('walletLogout');
             this.loadUserData();
             // this.showWalletSelector = false;

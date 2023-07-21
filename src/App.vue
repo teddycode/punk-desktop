@@ -63,8 +63,8 @@ export default {
         };
     },
     created() {
-        console.log(localStorage.getItem('userLoggedIn'));
-        console.log(localStorage.getItem('userAddress'));
+        console.log(this.$store.state.userAddress)
+        // this.$store.state.userLoggedIn = localStorage.getItem('userLoggedIn');
         // myWallet.methods.loadUserData();
     },
     computed:{

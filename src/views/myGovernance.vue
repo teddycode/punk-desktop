@@ -4,7 +4,7 @@
         <div class="content">
             <div class="proposals-container">
                 <div
-                v-for="proposal in sortProposalsByEndtime"
+                v-for="proposal in displayedProposals"
                 :key="proposal.id"
                 class="proposal-card"
                 @click="goToProposal(proposal.id)"
@@ -15,20 +15,25 @@
                 </div>
                 <div class="proposal-content">{{ getTruncatedContent(proposal.content) }}</div>
                     <div v-if="proposal.status !== 'Waiting'" class="proposal-votes">
-                        <div class="progress-container">
-                            <div class="progress-bar pass" :style="{ width: votesPassPercentage(proposal) + '%' }"></div>
+                        <div class="vote-progress-container">
+                            <div class="progress-container">
+                                <div class="progress-bar pass" :style="{ width: votesPassPercentage(proposal) + '%' }"></div>
+                            </div>
                             <span class="pass-label">{{ votesPassPercentage(proposal).toFixed(1) }}%</span>
+                            <button v-if="proposal.status==='Active'" class="vote-button" @click.stop="castVote(proposal.id, 'pass')">投票通过</button>
                         </div>
-                        <div class="progress-container">
-                            <div class="progress-bar against" :style="{ width: votesAgainstPercentage(proposal) + '%' }"></div>
+                        <div class="vote-progress-container">
+                            <div class="progress-container">
+                                <div class="progress-bar against" :style="{ width: votesAgainstPercentage(proposal) + '%' }"></div>
+                            </div>
                             <span class="against-label">{{ votesAgainstPercentage(proposal).toFixed(1) }}%</span>
+                            <button v-if="proposal.status==='Active'" class="vote-button" @click.stop="castVote(proposal.id, 'against')">投票反对</button>
                         </div>
                     </div>
-                    <div v-if="proposal.status === 'Active'">
-                        <button class="vote-button" @click.stop="castVote(proposal.id, 'pass')">投票通过</button>
-                        <button class="vote-button" @click.stop="castVote(proposal.id, 'against')">投票反对</button>
+                    <div class="proposal-totol-vote">
+                        <p>总票数： {{totalVote(proposal)}}</p>
+                        <p v-if="proposal.voted">已投票</p>
                     </div>
-                    <div class="proposal-totol-vote">总票数： {{totalVote(proposal)}}</div>
                 <div class="proposal-footer">
                     <div class="proposal-end-time">End Time: {{ proposal.endTime.substring(0,10) }}</div>
                 </div>
@@ -45,24 +50,40 @@
                 <div class="menu-item" @click="goToPage('settings')">设置</div>
             </div>
         </div>
+        <myPagination :total="totalItems" :pagesize="itemsPerPage" :currentPage="1"  @change-page="updatePage"></myPagination>
     </div>
 </template>
 
 <script>
 import axios from "axios";
+import myPagination from "@/components/myPagination.vue";
 export default {
+    components:{
+        myPagination
+    },
     data() {
         return {
             proposals: [],
+            displayedProposals: [],
             members: 100,  // 模拟的成员数量
             hasVote: false,
+            totalItems:0,
+            page: 1,
+            itemsPerPage: 3,
         };
     },
     created() {
-        axios.get("http://localhost:8080/myGovernance",
-        ) // 请求提案数据
+        axios.get("http://localhost:8080/myGovernance",{
+            params: {
+                walletAddress: localStorage.getItem('userAddress')
+            }
+        }) // 请求提案数据
             .then(response => {
+                console.log(localStorage.getItem('userAddress'))
                 this.proposals = response.data.proposals; // 将返回的数据存储到proposals
+                this.totalItems = this.proposals.length; //计算当前card总数
+                console.log("totalItems:" + this.totalItems);
+                this.updatePage(this.page);
                 localStorage.setItem('proposals', JSON.stringify(response.data.proposals));
                 this.$store.dispatch('setProposals',this.proposals);
                 console.log(this.proposals); // 在获取数据后打印值
@@ -73,15 +94,14 @@ export default {
 
     },
     computed: {
-        sortProposalsByEndtime() {
-            return this.proposals.slice().sort((a, b) => {
-                const dateA = new Date(a.endTime);
-                const dateB = new Date(b.endTime);
-                return dateB - dateA;  // 从早到晚排序，如果想要从晚到早排序，你可以返回 dateB - dateA
-            });
-        },
     },
     methods: {
+        updatePage(newPage) {
+            this.page = newPage;
+            let start = (this.page - 1) * this.itemsPerPage;
+            let end = start + this.itemsPerPage;
+            this.displayedProposals = this.proposals.slice(start, end);
+        },
         goToProposal(id) {
             this.$router.push({ name: 'myProposals', params: { id: id } });
             // 根据提案ID跳转到相应的二级页面
@@ -164,7 +184,6 @@ export default {
 };
 </script>
 <style scoped>
-
 .governance-page {
     min-height: 100vh;
     padding: 2rem;
@@ -215,7 +234,7 @@ export default {
     text-align: left;
 }
 .proposal-content {
-    text-align: left;  /* 添加了这一行 */
+    text-align: left;
 }
 .proposal-status {
     font-size: small;
@@ -254,13 +273,20 @@ export default {
 .progress-container {
     position: relative;
     margin-top: 10px;
-    width: 50%;
+    width: 90%;
     height: 15px;
     background-color: #f2f2f2;
     margin-bottom: 10px;
     border-radius: 10px;
 }
 /* 进度条进度 */
+.vote-progress-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    /*margin-bottom: 10px;*/
+    margin-right: 40%;
+}
 .progress-bar {
     height: 100%;
     border-radius: 10px;
@@ -288,26 +314,22 @@ export default {
 }
 .pass-label,
 .against-label {
+    width: 20%;
+    text-align: left;
     margin-top: 8px;
-    position: absolute;
-    top: 0;
-    right: 0;
-    transform: translate(100%, -50%);
 }
 .pass-label {
     color: green;
-    position: absolute;
 }
 
 .against-label {
     color: red;
-    position: absolute;
 }
 .proposal-totol-vote{
     text-align: left;
 }
 .vote-button {
-    margin-left: 10px;
+    width: 20%;
     padding: 5px 10px;
     background-color: #4CAF50;
     color: white;
@@ -331,9 +353,6 @@ export default {
     margin-left: 20px;
     margin-top: 1rem;
     margin-bottom: auto;
-    /*position: sticky;*/
-    /*top: 0px;*/
-    /*align-self: flex-start;*/
 }
 
 .sidebar .icon {
@@ -381,3 +400,4 @@ export default {
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
 }
 </style>
+

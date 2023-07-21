@@ -40,6 +40,7 @@ export default {
             // 处理提交提案的逻辑
             const endDate = new Date();
             endDate.setDate(endDate.getDate()+5);
+            const startDate = new Date();
             axios.post("http://localhost:8080/Governances/newProposal",{
                 author:this.$store.state.userAddress,
                 title:this.title,
@@ -47,11 +48,12 @@ export default {
                 status: "Waiting",
                 votesPass: 0,
                 votesAgainst: 0,
-                endTime: endDate.toISOString().slice(0, 10) // 将日期转化为 'YYYY-MM-DD' 格式
+                endTime: endDate.toISOString().slice(0, 10) ,// 将日期转化为 'YYYY-MM-DD' 格式
+                startTime:startDate.toISOString().slice(0,10)
             })
                 .then(response => {
                     console.log(response);
-                    //this.$router.push('/myGovernance');
+                    this.$router.push('/myGovernance');
                 })
                 .catch(error => {
                     console.log(error);
