@@ -67,14 +67,6 @@ export default {
         // this.$store.state.userLoggedIn = localStorage.getItem('userLoggedIn');
         // myWallet.methods.loadUserData();
     },
-    computed:{
-        userLoggedIn() {
-            return localStorage.getItem('userLoggedIn') === 'true' || false;
-        },
-        userAddress() {
-            return localStorage.getItem('userAddress') || '';
-        },
-    },
     methods: {
         floatLeft() {
             const helpBox = document.querySelector('.help-box');
@@ -85,6 +77,7 @@ export default {
             helpBox.classList.remove('float-left');
         },
         logout() {
+            localStorage.removeItem('token');
             this.isLoggedIn = false;
             this.$router.push('/');
         },

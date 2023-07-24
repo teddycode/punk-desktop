@@ -1,6 +1,20 @@
 <template>
     <div class="governance-page">
         <h1 class="governance-title">提案</h1>
+        <div class="search-bar">
+            <div class="search-input">
+                <img class="search-icon" src="@/assets/search.jpg" />
+                <input type="text" placeholder="Search" v-model="searchQuery" />
+                <select v-model="statusFilter">
+                    <option>All</option>
+                    <option>Active</option>
+                    <option>Waiting</option>
+                    <option>Passed</option>
+                    <option>Rejected</option>
+                </select>
+            </div>
+            <button @click="search" class="search-button">Search</button>
+        </div>
         <div class="content">
             <div class="proposals-container">
                 <div
@@ -70,6 +84,8 @@ export default {
             totalItems:0,
             page: 1,
             itemsPerPage: 3,
+            searchQuery: '',
+            statusFilter: 'All',
         };
     },
     created() {
@@ -96,6 +112,9 @@ export default {
     computed: {
     },
     methods: {
+        search() {
+            // 这里处理你的搜索逻辑
+        },
         updatePage(newPage) {
             this.page = newPage;
             let start = (this.page - 1) * this.itemsPerPage;
@@ -203,6 +222,60 @@ export default {
 .icon img{
     width: 40%;
 }
+.search-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /*margin: 1rem 0;*/
+    margin: 0 11%;
+    width: 40%;
+}
+
+.search-input {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    width: 100%;
+}
+
+.search-input input {
+    border: none;
+    margin-left: 0.5rem;
+    flex-grow: 1;
+}
+
+.search-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-size: cover;
+}
+
+.search-input select {
+    margin-left: 0.5rem;
+    padding: 6px;
+    border: 1px solid #34D399;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: #F5F7FA;
+}
+
+.search-button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 20px;
+    background-color: #3aafa9;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+    background-color: #1f7d79;
+}
+
 .proposals-container {
     display: flex;
     flex-wrap: wrap;

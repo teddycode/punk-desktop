@@ -19,6 +19,7 @@ import CollectionDetails from "@/views/Collections/CollectionDetails.vue";
 import newProposal from "@/views/Governances/newProposal.vue";
 import myProposals from "@/views/Governances/myProposals.vue";
 import MyEntrust from "@/views/Governances/myEntrust.vue";
+import SignUp from "@/views/SignUp.vue";
 
 
 const routes = [
@@ -36,6 +37,11 @@ const routes = [
         path: '/myLogin',
         name: 'myLogin',
         component: myLogin,
+    },
+    {
+        path: '/SignUp',
+        name: 'SignUp',
+        component: SignUp,
     },
     {
         path: '/myStorage',

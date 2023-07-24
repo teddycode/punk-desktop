@@ -7,33 +7,62 @@
                     <label for="username">用户名</label>
                     <input type="text" id="username" v-model="username" required>
                 </div>
-                <div class="form-group">
+                <div class="form-group password-field">
                     <label for="password">密码</label>
-                    <input type="password" id="password" v-model="password" required>
+                    <input :type="showPassword ? 'text' : 'password'" id="password" v-model="password" required>
+                    <i @click="togglePasswordVisibility" :class="showPassword ? 'fas fa-eye' : 'fas fa-eye-slash' " class="password-icon"></i>
                 </div>
-                <button type="submit">登录</button>
+                <router-link to="/SignUp">没有账号?点击注册!</router-link>
+                <button type="submit" class="submitLogIn">登录</button>
             </form>
         </div>
     </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
     data() {
         return {
             username: '',
-            password: ''
+            password: '',
+            showPassword:false,
+            // users: [
+            //     { username: 'user1', password: 'password1', email: 'user1@example.com' },
+            //     { username: 'user2', password: 'password2', email: 'user2@example.com' },
+            //     { username: 'user3', password: 'password3', email: 'user3@example.com' },
+            //     { username: 'user4', password: 'password4', email: 'user4@example.com' },
+            //     { username: 'user5', password: 'password5', email: 'user5@example.com' },
+            //     { username: 'user6', password: 'password6', email: 'user6@example.com' }
+            // ]
         };
     },
     methods: {
-        login() {
-            // 执行登录逻辑
-            // 示例：验证用户名和密码，若验证通过则更新登录状态和导航栏标签，并跳转到主界面
-            if (this.username === 'admin' && this.password === '123456') {
-                this.$root.isLoggedIn = true;
-                this.$router.push('/');
-            } else {
-                alert('用户名或密码错误');
+        togglePasswordVisibility() {
+            this.showPassword = !this.showPassword;
+        },
+        async login() { // 声明为异步函数
+            try {
+                // 将输入的用户名和密码作为POST请求的数据发送到后端
+                const response = await axios.post('http://localhost:8080/myLogin', {
+                    username: this.username,
+                    password: this.password
+                });
+                // 检查返回的状态码
+                if (response.status === 200) {
+                    // 登录成功，存储 JWT 到 localStorage
+                    localStorage.setItem('token', response.data.token);
+                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
+                    this.$root.isLoggedIn = true;
+                    console.log("登陆成功！");
+                    this.$router.push('/');
+                } else {
+                    alert('用户名或密码错误');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('登录失败');
             }
         }
     }
@@ -56,7 +85,7 @@ export default {
 
 h1 {
     font-size: 28px;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
 }
 
 .login-form {
@@ -67,6 +96,7 @@ h1 {
 
 .form-group {
     margin-bottom: 20px;
+    position: relative; /* make the div relative so the icon can be positioned absolutely inside it */
 }
 
 label {
@@ -96,4 +126,14 @@ button {
     font-size: 16px;
 }
 
+.password-icon {
+    position: absolute;
+    right: -50px;
+    top: 50px;
+    cursor: pointer;
+}
+.submitLogIn{
+    margin-top: 20px;
+}
 </style>
+
