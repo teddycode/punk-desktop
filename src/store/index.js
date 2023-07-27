@@ -7,6 +7,7 @@ export default createStore({
         userLoggedIn: false,
         transferRecords: [], // 添加转账记录数组
         proposals:JSON.parse(localStorage.getItem('proposals')) || [],
+        token: localStorage.getItem('token') || null,
     },
     mutations: {
         updateUserAddress(state, address) {
@@ -26,7 +27,14 @@ export default createStore({
         },
         updateProposals(state, proposals){
             state.proposals = proposals;
-        }
+        },
+        SET_TOKEN(state, token) {
+            state.token = token;
+        },
+        removeToken(state) {
+            state.token = null;
+            localStorage.removeItem('token');
+        },
     },
     actions: {
         setAddress({ commit }, address) {
@@ -43,7 +51,15 @@ export default createStore({
         },
         setProposals({commit}, proposals){
             commit('updateProposals', proposals);
-        }
+        },
+        setToken({ commit }, token) {
+            localStorage.setItem('token', token);
+            commit('SET_TOKEN', token);
+        },
+        removeToken({ commit }) {
+            localStorage.removeItem('token');
+            commit('SET_TOKEN', null);
+        },
     },
     getters: {
         userAddress: (state) => state.userAddress,
@@ -51,5 +67,9 @@ export default createStore({
         userLoggedIn: (state) => state.userLoggedIn,
         transferRecords: (state) => state.transferRecords, // 添加获取转账记录的 getter
         proposals:(state)=> state.proposals,
+        loggedIn(state) {
+            return !!state.token;
+        },
+        token: state => state.token
     },
 });

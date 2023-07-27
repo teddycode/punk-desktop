@@ -27,15 +27,7 @@ export default {
         return {
             username: '',
             password: '',
-            showPassword:false,
-            // users: [
-            //     { username: 'user1', password: 'password1', email: 'user1@example.com' },
-            //     { username: 'user2', password: 'password2', email: 'user2@example.com' },
-            //     { username: 'user3', password: 'password3', email: 'user3@example.com' },
-            //     { username: 'user4', password: 'password4', email: 'user4@example.com' },
-            //     { username: 'user5', password: 'password5', email: 'user5@example.com' },
-            //     { username: 'user6', password: 'password6', email: 'user6@example.com' }
-            // ]
+            showPassword: false,
         };
     },
     methods: {
@@ -49,11 +41,18 @@ export default {
                     username: this.username,
                     password: this.password
                 });
+
                 // 检查返回的状态码
                 if (response.status === 200) {
                     // 登录成功，存储 JWT 到 localStorage
                     localStorage.setItem('token', response.data.token);
                     axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
+                    localStorage.setItem('userName', this.username);
+
+                    // 更新Vuex中的token状态
+                    this.$store.commit('SET_TOKEN', response.data.token);
+
+                    console.log("response name:" + this.username);
                     this.$root.isLoggedIn = true;
                     console.log("登陆成功！");
                     this.$router.push('/');
@@ -68,6 +67,7 @@ export default {
     }
 };
 </script>
+
 
 <style scoped>
 .login-page {

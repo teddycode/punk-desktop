@@ -21,7 +21,7 @@
             </div>
         </div>
     </transition>
-    <div v-if="showWalletSelector" class="overlay" @click="showWalletSelector = false"></div>
+    <div v-if="showWalletSelector" class="overlay" @click="closeWalletSelector"></div>
 </template>
 
 <script>
@@ -171,7 +171,10 @@ export default {
             }, function(err) {
                 console.error('Could not copy text: ', err);
             });
-        }
+        },
+        closeWalletSelector() {
+            this.$emit('close');
+        },
     },
 }
 </script>
