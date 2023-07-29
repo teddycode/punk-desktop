@@ -1,16 +1,17 @@
 <template>
-    <button
-        class="btn btn-moving-gradient btn-moving-gradient--blue"
-        @click="isUserLoggedIn ? logout() : navigateToLogin()"
-    >
-        {{ isUserLoggedIn ? userName : '登录' }}
-        <font-awesome-icon
-            v-if="isUserLoggedIn"
-            icon="sign-out-alt"
-            class="logout-icon"
-            @click="logout"
-        />
-    </button>
+    <div class="dropdown-container-login">
+        <el-dropdown trigger="click" size="small">
+            <el-button class="btn btn-moving-gradient btn-moving-gradient--blue" type="primary" @click="buttonClick">
+                {{ isUserLoggedIn ? userName : '登录' }}
+            </el-button>
+            <template #dropdown v-if="isUserLoggedIn">
+                <el-dropdown-menu class="el-dropdown-menu-login">
+                    <el-dropdown-item class="el-dropdown-menu__item" @click="navigateToUserProfile">个人信息</el-dropdown-item>
+                    <el-dropdown-item class="el-dropdown-menu__item" @click="logout">登出</el-dropdown-item>
+                </el-dropdown-menu>
+            </template>
+        </el-dropdown>
+    </div>
 </template>
 
 
@@ -18,12 +19,10 @@
 import axios from 'axios';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import {library} from "@fortawesome/fontawesome-svg-core";
-import { ArrowDown } from '@element-plus/icons-vue'
 library.add(faSignOutAlt);
 export default {
     name: "loginButton",
     components:{
-        ArrowDown
     },
     data() {
         return {
@@ -32,6 +31,11 @@ export default {
         }
     },
     methods: {
+        buttonClick() {
+            if (!this.isUserLoggedIn) {
+                this.navigateToLogin();
+            }
+        },
         async getLoggedInUser() {
             const token = localStorage.getItem('token');
             if (!token) {
@@ -45,6 +49,9 @@ export default {
         },
         navigateToLogin() {
             this.$router.push({name: 'myLogin'});
+        },
+        navigateToUserProfile(){
+
         },
         async logout() {
             // Make a request to your server to logout
@@ -75,12 +82,14 @@ export default {
 </script>
 
 <style scoped>
-.btn {
-    font-family: Arial, Helvetica, sans-serif;
-    text-transform: uppercase;
+.dropdown-container-login {
     position: absolute;
     right: 170px;
     top: 20px;
+}
+.btn {
+    font-family: Arial, Helvetica, sans-serif;
+    text-transform: uppercase;
     text-align: left;
 }
 
@@ -107,8 +116,14 @@ export default {
     background-image: linear-gradient(90deg, rgb(61, 135, 255), rgb(190, 61, 255), rgb(126, 61, 255), rgb(58, 134, 255));
     box-shadow: rgb(190, 61, 255) 0px 4px 15px 0px;
 }
-.logout-icon {
-    margin-left: 10px;
-    cursor: pointer;
+
+.el-dropdown-menu-login{
+    background-image: linear-gradient(90deg, rgb(61, 135, 255), rgb(190, 61, 255), rgb(126, 61, 255), rgb(58, 134, 255));
+    box-shadow: rgb(190, 61, 255) 0px 4px 15px 0px;
+    /*background-color: #5ab1ef;*/
+}
+.el-dropdown-menu-login >>> .el-dropdown-menu__item{
+    color: white;
 }
 </style>
+

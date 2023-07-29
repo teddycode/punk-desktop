@@ -20,6 +20,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faExchangeAlt, faHandHoldingUsd, faGem, faSitemap, faGavel, faHandsHelping, faCalculator, faDatabase } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import ElementPlus from 'element-plus'
+import 'element-plus/theme-chalk/index.css';
 library.add(faExchangeAlt, faHandHoldingUsd, faGem, faSitemap, faGavel, faHandsHelping, faCalculator, faDatabase)
 
 

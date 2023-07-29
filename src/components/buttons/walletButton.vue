@@ -1,9 +1,20 @@
 <template>
-    <button className="btn btn-moving-gradient btn-moving-gradient--blue" @click="toggleWalletSelector">
-        {{ buttonLabel }}
-    </button>
-    <my-wallet v-if="showWalletSelector" @close="toggleWalletSelector"></my-wallet>
+    <div class="dropdown-container-wallet">
+        <el-dropdown trigger="click" size="small">
+            <el-button class="btn btn-moving-gradient btn-moving-gradient--blue" type="primary" @click="buttonClick">
+                {{ buttonLabel }}
+            </el-button>
+            <template #dropdown v-if="userLoggedIn">
+                <el-dropdown-menu class="el-dropdown-menu-login">
+                    <el-dropdown-item class="el-dropdown-menu__item" @click="navigateToUserProfile">个人信息</el-dropdown-item>
+                    <el-dropdown-item class="el-dropdown-menu__item" @click="logout">登出</el-dropdown-item>
+                </el-dropdown-menu>
+            </template>
+        </el-dropdown>
+        <my-wallet v-if="showWalletSelector && !userLoggedIn" @close="toggleWalletSelector"></my-wallet>
+    </div>
 </template>
+
 
 <script>
 import myWallet from "@/components/myWallet.vue";
@@ -33,6 +44,11 @@ export default {
         }
     },
     methods: {
+        buttonClick() {
+            if (!this.userLoggedIn) {
+                this.toggleWalletSelector();
+            }
+        },
         toggleWalletSelector() {
             this.showWalletSelector = !this.showWalletSelector;
         },
@@ -41,13 +57,15 @@ export default {
 </script>
 
 <style scoped>
+.dropdown-container-wallet{
+    top: 20px;
+    right: 20px;
+    position: absolute;
+    margin-right: 10px;
+}
 .btn {
     font-family: Arial, Helvetica, sans-serif;
     text-transform: uppercase;
-    position: absolute;
-    margin-right: 10px;
-    top: 20px;
-    right: 20px;
 }
 
 .btn:hover .btn-slide-show-text1 {

@@ -10,20 +10,25 @@
         </div>
         <topnav></topnav>
         <login-button></login-button>
-        <wallet-button></wallet-button>
+        <my-wallet></my-wallet>
         <div class="data-content">
             <div class="data-main">
                 <div class="main-left">
                     <div class="main-left-top">
                         <mywallet-info></mywallet-info>
                     </div>
+                    <div class="main-left-center">
+                        <desktop-management></desktop-management>
+                    </div>
                     <div class="main-left-bottom">
-                    <dv-border-box10>left</dv-border-box10>
+                        <together></together>
                     </div>
                 </div>
                 <div class="main-center">
                     <main-center-blockchain-info class="main-center-info"></main-center-blockchain-info>
-                    <dv-border-box10 class="main-center-transactions">center</dv-border-box10>
+                    <dv-border-box10 class="main-center-transactions">
+                        <main-center-button></main-center-button>
+                    </dv-border-box10>
                 </div>
                 <div class="main-right">
                     <main-right-swiper></main-right-swiper>
@@ -41,13 +46,15 @@ import Topnav from "@/components/topnav/index.vue";
 import MainRightSwiper from "@/views/main-right/main-right-swiper.vue";
 import MainCenterBlockchainInfo from "@/views/main-center/main-center-blockchain-info/index.vue";
 import MywalletInfo from "@/views/main-left/main-left-top/index.vue";
-import WalletButton from "@/components/buttons/walletButton.vue";
 import MainRightAd from "@/views/main-right/main-right-ad.vue";
 import LoginButton from "@/components/buttons/loginButton.vue";
-
+import mainCenterButton from "@/views/main-center/main-center-bottom/index.vue";
+import myWallet from "@/components/myWallet.vue";
+import DesktopManagement from "@/views/main-left/main-left-center/index.vue"
+import Together from "@/views/main-left/main-left-bottom/index.vue"
 export default {
     name: 'HomePage',
-    components: {LoginButton, MainRightAd, WalletButton, MywalletInfo, MainCenterBlockchainInfo, MainRightSwiper, Topnav,},
+    components: {LoginButton, MainRightAd, myWallet, MywalletInfo, MainCenterBlockchainInfo, MainRightSwiper, Topnav,mainCenterButton,DesktopManagement,Together},
 
     data() {
         return {
@@ -111,8 +118,14 @@ export default {
             height: 30%;
             padding-bottom: 5%;
         }
+        .main-left-center{
+            height: 35%;
+            padding-bottom: 5%;
+            color: #3498da;
+        }
         .main-left-bottom{
-            height: 70%;
+            height: 35%;
+            color: #3498da;
         }
         .main-center {
             float: left;

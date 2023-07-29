@@ -14,7 +14,7 @@
             </div>
             <div class="ad-button">
                 <addnode-button>发布</addnode-button>
-                <addnode-button>屏蔽</addnode-button>
+                <addnode-button>筛选</addnode-button>
             </div>
         </dv-border-box10>
     </div>

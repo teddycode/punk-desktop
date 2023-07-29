@@ -91,7 +91,7 @@ export default {
 }
 
 .main-left-top-tip{
-    height: 20%;
+    height: 30%;
     font-size: x-large;
     margin-bottom: 20px;
     color: white;

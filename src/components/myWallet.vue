@@ -1,4 +1,17 @@
 <template>
+    <div class="dropdown-container-wallet">
+        <el-dropdown trigger="click" size="small">
+            <el-button class="btn btn-moving-gradient btn-moving-gradient--blue" type="primary" @click="buttonClick">
+                {{ buttonLabel }}
+            </el-button>
+            <template #dropdown v-if="userLoggedIn">
+                <el-dropdown-menu class="el-dropdown-menu-login">
+                    <el-dropdown-item class="el-dropdown-menu__item" @click="navigateToUserProfile">个人信息</el-dropdown-item>
+                    <el-dropdown-item class="el-dropdown-menu__item" @click="logout">登出</el-dropdown-item>
+                </el-dropdown-menu>
+            </template>
+        </el-dropdown>
+    </div>
     <transition name="slide">
         <div v-if="showWalletSelector" class="wallet-selector" @click.stop>
             <h3 v-if="!userLoggedIn">选择钱包</h3>
@@ -21,11 +34,12 @@
             </div>
         </div>
     </transition>
-    <div v-if="showWalletSelector" class="overlay" @click="closeWalletSelector"></div>
+    <div v-if="showWalletSelector" class="overlay" @click="toggleWalletSelector"></div>
 </template>
 
 <script>
 import {Web3} from "web3";
+import {mapGetters} from "vuex";
 
 export default {
     name: "myWallet",
@@ -38,7 +52,7 @@ export default {
     emits: ['close','walletLogout','walletLogin'],
     data() {
         return{
-            showWalletSelector: true,
+            showWalletSelector: false,
             wallets: [
                 { name: 'Metamask', icon: 'metamask.jpeg',link: 'https://metamask.io' },
                 { name: 'imToken', icon: 'imtoken.jpeg',link: 'https://token.im' },
@@ -48,6 +62,19 @@ export default {
             userBalance: '0',
             userLoggedIn:false,
             web3: null,
+        }
+    },
+    computed: {
+        ...mapGetters([
+            "userAddress",
+            "userLoggedIn"
+        ]),
+        buttonLabel() {
+            if (this.userLoggedIn && this.userAddress) {
+                return this.userAddress.slice(0,6) + '...' + this.userAddress.slice(-4);
+            } else {
+                return '连接钱包';
+            }
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -73,6 +100,14 @@ export default {
         }
     },
     methods:{
+        buttonClick() {
+            if (!this.userLoggedIn) {
+                this.toggleWalletSelector();
+            }
+        },
+        toggleWalletSelector() {
+            this.showWalletSelector = !this.showWalletSelector;
+        },
         async loadUserData() {
             console.log('loadUserData!!!');
             let loggedIn = this.$store.state.userLoggedIn;
@@ -181,17 +216,53 @@ export default {
 
 <style scoped>
 /* Wallet Selector Styles */
-.wallet-selector {
+.dropdown-container-wallet{
+    top: 20px;
+    right: 20px;
     position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
+    margin-right: 10px;
+}
+.btn {
+    font-family: Arial, Helvetica, sans-serif;
+    text-transform: uppercase;
+}
+
+.btn:hover .btn-slide-show-text1 {
+    margin-left: 65px;
+}
+
+.btn-moving-gradient {
+    height: 35px;
+    font-weight: 600;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+    border: medium none;
+    background-size: 300% 100%;
+    border-radius: 50px;
+}
+
+.btn-moving-gradient:hover {
+    transition: all 0.5s ease-in-out 0s;
+    background-position: 100% 0px;
+}
+
+.btn-moving-gradient--blue {
+    background-image: linear-gradient(90deg, rgb(61, 135, 255), rgb(190, 61, 255), rgb(126, 61, 255), rgb(58, 134, 255));
+    box-shadow: rgb(190, 61, 255) 0px 4px 15px 0px;
+}
+.wallet-selector {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     background-color: #F9FAFB;
     width: 300px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
     z-index: 10;
     border-radius: 15px;
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .wallet-selector h3 {
@@ -260,13 +331,13 @@ export default {
     }
 }
 .overlay {
-    position: fixed; /* Fixed/sticky position */
-    z-index: 1; /* Sit on top */
+    position: fixed;
+    z-index: 5;
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 .address{
     word-break: break-all;
