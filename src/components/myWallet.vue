@@ -5,8 +5,9 @@
                 {{ buttonLabel }}
             </el-button>
             <template #dropdown v-if="userLoggedIn">
-                <el-dropdown-menu class="el-dropdown-menu-login">
-                    <el-dropdown-item class="el-dropdown-menu__item" @click="navigateToUserProfile">个人信息</el-dropdown-item>
+                <el-dropdown-menu class="el-dropdown-menu-wallet">
+                    <el-dropdown-item class="el-dropdown-menu__item" @click="navigateToUserProfile">钱包信息</el-dropdown-item>
+                    <el-dropdown-item class="el-dropdown-menu__item" @click="toggleWalletSelector">切换钱包</el-dropdown-item>
                     <el-dropdown-item class="el-dropdown-menu__item" @click="logout">登出</el-dropdown-item>
                 </el-dropdown-menu>
             </template>
@@ -14,35 +15,64 @@
     </div>
     <transition name="slide">
         <div v-if="showWalletSelector" class="wallet-selector" @click.stop>
-            <h3 v-if="!userLoggedIn">选择钱包</h3>
-            <ul class="wallet-list" v-if="!userLoggedIn">
+            <h3>选择钱包</h3>
+            <ul class="wallet-list">
                 <li v-for="wallet in wallets" :key="wallet.name" @click="openWalletLink(wallet)" :class="{ 'selected-wallet': selectedWallet === wallet, 'hovered-wallet': hoveredWallet === wallet }">
                     <img :src="require(`@/assets/${wallet.icon}`)" alt="wallet-icon">
                     {{ wallet.name }}
                 </li>
             </ul>
-            <div v-else>
-                <h4>Connected to MetaMask</h4>
-                <p class="address">
-                    Address: {{ userAddress }}
-                    <button class="copy-btn" @click="copyToClipboard(userAddress)">复制</button>
-                </p>
-                <p>Balance: {{ userBalance }} GoerliETH
-                    <button class="copy-btn" @click="copyToClipboard(userBalance)">复制</button>
-                </p>
-                <button class="logout-btn" @click="logout">登出</button>
-            </div>
         </div>
     </transition>
     <div v-if="showWalletSelector" class="overlay" @click="toggleWalletSelector"></div>
+    <transition name="slide">
+        <div v-if="showUserInfo" class="wallet-selector" @click.stop>
+            <div>
+                <h4>Connected to MetaMask</h4>
+                <div class="info-item">
+                    <p class="address">
+                        Address: {{ userAddress }}
+                        <button class="copy-btn" @click.stop="copyToClipboard('address', userAddress)">
+                            <font-awesome-icon :icon="addressCopied ? 'check' : 'copy'" :style="{ color: addressCopied ? 'green' : 'inherit' }"/>
+                        </button>
+                    </p>
+                </div>
+                <div class="info-item">
+                    <p>Balance: {{ userBalance }} GoerliETH
+                        <button class="copy-btn" @click.stop="copyToClipboard('balance', userBalance)">
+                            <font-awesome-icon :icon="balanceCopied ? 'check' : 'copy'" />
+                        </button>
+                    </p>
+                </div>
+                <div class="navigation-panel">
+                    <el-button type="text">代币</el-button>
+                    <el-button type="text">NFTS</el-button>
+                    <el-button type="text">流动池</el-button>
+                    <el-button type="text">活动</el-button>
+                </div>
+                <div class="info-display">
+                    <!-- 信息展示区域 -->
+                </div>
+            </div>
+        </div>
+    </transition>
+    <div v-if="showUserInfo" class="overlay" @click="toggleUserInfo"></div>
 </template>
 
 <script>
 import {Web3} from "web3";
 import {mapGetters} from "vuex";
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faCheck, faCopy } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(faCheck, faCopy)
 
 export default {
     name: "myWallet",
+    components: {
+        FontAwesomeIcon
+    },
     props: {
         show: {
             type: Boolean,
@@ -53,6 +83,9 @@ export default {
     data() {
         return{
             showWalletSelector: false,
+            showUserInfo: false, // 添加新的data项
+            addressCopied: false,  // 用于跟踪地址复制状态的标志
+            balanceCopied: false,  // 用于跟踪余额复制状态的标志
             wallets: [
                 { name: 'Metamask', icon: 'metamask.jpeg',link: 'https://metamask.io' },
                 { name: 'imToken', icon: 'imtoken.jpeg',link: 'https://token.im' },
@@ -108,6 +141,12 @@ export default {
         toggleWalletSelector() {
             this.showWalletSelector = !this.showWalletSelector;
         },
+        navigateToUserProfile() {
+            this.showUserInfo = true;
+        },
+        toggleUserInfo() {
+            this.showUserInfo = !this.showUserInfo;
+        },
         async loadUserData() {
             console.log('loadUserData!!!');
             let loggedIn = this.$store.state.userLoggedIn;
@@ -160,7 +199,7 @@ export default {
                 console.log('openWalletLink4');
                 window.open(wallet.link, '_blank');
             }
-            //this.showWalletSelector = false;
+            this.showWalletSelector = false;
         },
         async getBalance(address) {
             try {
@@ -200,15 +239,12 @@ export default {
             this.loadUserData();
             // this.showWalletSelector = false;
         },
-        copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(function() {
-                console.log('Copying to clipboard was successful!');
-            }, function(err) {
-                console.error('Could not copy text: ', err);
-            });
-        },
-        closeWalletSelector() {
-            this.$emit('close');
+        async copyToClipboard(field, value) {
+            await navigator.clipboard.writeText(value);
+            this[field + 'Copied'] = true;
+            setTimeout(() => {
+                this[field + 'Copied'] = false;
+            }, 1000);  // 2秒后复制成功标志消失
         },
     },
 }
@@ -302,17 +338,7 @@ export default {
     width: 24px;
     height: 24px;
 }
-.logout-btn {
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    background-color: #34D399;
-    color: #F9FAFB;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: bold;
-    margin-top: 20px;
-}
+
 @keyframes slide-in {
     from {
         transform: translateX(100%);
@@ -330,6 +356,24 @@ export default {
         transform: translateX(100%);
     }
 }
+@keyframes slide-in-info {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes slide-out-info {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-100%);
+    }
+}
+
 .overlay {
     position: fixed;
     z-index: 5;
@@ -342,14 +386,34 @@ export default {
 .address{
     word-break: break-all;
 }
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .copy-btn {
-    margin-left: 5px;
-    padding: 2px 6px;
-    font-size: 14px;
-    color: #fff;
-    background-color: #34D399;
+    background: none;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
+    padding: 0;
+    margin-left: 0.5em;
+}
+.navigation-panel {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px; /* 根据需要调整 */
+    margin-right: 50%;
+}
+.info-display {
+    margin-top: 20px; /* 根据需要调整 */
+}.el-dropdown-menu-wallet{
+     background-image: linear-gradient(90deg, rgb(61, 135, 255), rgb(190, 61, 255), rgb(126, 61, 255), rgb(58, 134, 255));
+     box-shadow: rgb(190, 61, 255) 0px 4px 15px 0px;
+     /*background-color: #5ab1ef;*/
+ }
+.el-dropdown-menu-wallet >>> .el-dropdown-menu__item{
+    color: white;
 }
 </style>

@@ -7,42 +7,7 @@
 <script>
 export default {
     name: 'App'
-//     data() {
-//         return {
-//             menuItems: [
-//                 { id: 1, label: '主页', url: '/' },
-//                 { id: 2, label: '关于', url: '/myAbout' },
-//                 { id: 3, label: '社区', url: '#' },
-//                 { id: 4, label: '语言选择', url: '#' },
-//                 { id: 5, label: '系统设置', url: '#' },
-//             ],
-//             isLoggedIn:false,
-//             showWalletSelector: false,
-//         };
-//     },
-//     created() {
-//         console.log(this.$store.state.userAddress)
-//         // this.$store.state.userLoggedIn = localStorage.getItem('userLoggedIn');
-//         // myWallet.methods.loadUserData();
-//     },
-//     methods: {
-//         floatLeft() {
-//             const helpBox = document.querySelector('.help-box');
-//             helpBox.classList.add('float-left');
-//         },
-//         floatRight() {
-//             const helpBox = document.querySelector('.help-box');
-//             helpBox.classList.remove('float-left');
-//         },
-//         logout() {
-//             localStorage.removeItem('token');
-//             this.isLoggedIn = false;
-//             this.$router.push('/');
-//         },
-//         toggleWalletSelector() {
-//             this.showWalletSelector = !this.showWalletSelector;
-//         },
-//     },
+
 };
 </script>
 

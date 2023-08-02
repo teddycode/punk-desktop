@@ -1,21 +1,20 @@
 <template>
     <div class="login-page">
-        <div class="login-content">
-            <h1>登录</h1>
-            <form @submit.prevent="login" class="login-form">
-                <div class="form-group">
-                    <label for="username">用户名</label>
-                    <input type="text" id="username" v-model="username" required>
-                </div>
-                <div class="form-group password-field">
-                    <label for="password">密码</label>
-                    <input :type="showPassword ? 'text' : 'password'" id="password" v-model="password" required>
-                    <i @click="togglePasswordVisibility" :class="showPassword ? 'fas fa-eye' : 'fas fa-eye-slash' " class="password-icon"></i>
-                </div>
-                <router-link to="/SignUp">没有账号?点击注册!</router-link>
-                <button type="submit" class="submitLogIn">登录</button>
-            </form>
-        </div>
+        <el-container class="login-container">
+            <el-card class="login-card">
+                <h1 class="login-title">登录</h1>
+                <el-form class="login-form" :model="loginForm" :rules="rules" ref="loginForm" label-width="70px">
+                    <el-form-item label="用户名" prop="username">
+                        <el-input v-model="loginForm.username" prefix-icon="el-icon-user"></el-input>
+                    </el-form-item>
+                    <el-form-item label="密码" prop="password">
+                        <el-input v-model="loginForm.password" type="password" show-password prefix-icon="el-icon-lock"></el-input>
+                    </el-form-item>
+                    <el-button type="primary" @click="login" class="login-button">登录</el-button>
+                    <p class="register-link">没有账号? <router-link to="/SignUp">点击注册!</router-link></p>
+                </el-form>
+            </el-card>
+        </el-container>
     </div>
 </template>
 
@@ -25,115 +24,80 @@ import axios from "axios";
 export default {
     data() {
         return {
-            username: '',
-            password: '',
-            showPassword: false,
+            loginForm: {
+                username: '',
+                password: '',
+            },
+            rules: {
+                username: [
+                    { required: true, message: '请输入用户名', trigger: 'blur' }
+                ],
+                password: [
+                    { required: true, message: '请输入密码', trigger: 'blur' }
+                ]
+            }
         };
     },
     methods: {
-        togglePasswordVisibility() {
-            this.showPassword = !this.showPassword;
-        },
-        async login() { // 声明为异步函数
+        async login() {
+            const valid = await this.$refs.loginForm.validate();
+            if (!valid) return;
+
             try {
-                // 将输入的用户名和密码作为POST请求的数据发送到后端
                 const response = await axios.post('http://localhost:8080/myLogin', {
-                    username: this.username,
-                    password: this.password
+                    username: this.loginForm.username,
+                    password: this.loginForm.password
                 });
 
-                // 检查返回的状态码
                 if (response.status === 200) {
-                    // 登录成功，存储 JWT 到 localStorage
                     localStorage.setItem('token', response.data.token);
                     axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
-                    localStorage.setItem('userName', this.username);
-
-                    // 更新Vuex中的token状态
+                    localStorage.setItem('userName', this.loginForm.username);
                     this.$store.commit('SET_TOKEN', response.data.token);
-
-                    console.log("response name:" + this.username);
-                    this.$root.isLoggedIn = true;
-                    console.log("登陆成功！");
                     this.$router.push('/');
                 } else {
-                    alert('用户名或密码错误');
+                    this.$message.error('用户名或密码错误');
                 }
             } catch (error) {
                 console.error(error);
-                alert('登录失败');
+                this.$message.error('登录失败');
             }
         }
     }
 };
 </script>
 
-
 <style scoped>
 .login-page {
+    background: url('@/assets/bg-2.jpg') no-repeat center center fixed;
+    background-size: cover;
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
-    background-color: #f1f1f1;
 }
 
-.login-content {
-    width: 400px;
-    margin-top: -200px;
-}
-
-h1 {
-    font-size: 28px;
-    margin-bottom: 40px;
-}
-
-.login-form {
+.login-container {
     display: flex;
-    flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
 
-.form-group {
-    margin-bottom: 20px;
-    position: relative; /* make the div relative so the icon can be positioned absolutely inside it */
+.login-card {
+    width: 400px;
 }
 
-label {
-    display: block;
-    margin-bottom: 5px;
-    font-size: 18px;
+.login-title {
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 1em;
 }
 
-input {
+.login-button {
     width: 100%;
-    height: 40px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    outline: none;
-    font-size: 16px;
+    margin-top: 1em;
 }
-
-button {
-    width: 100px;
-    height: 40px;
-    background-color: #3aafa9;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.password-icon {
-    position: absolute;
-    right: -50px;
-    top: 50px;
-    cursor: pointer;
-}
-.submitLogIn{
+.register-link {
     margin-top: 20px;
 }
 </style>
-

@@ -1,4 +1,5 @@
 <template>
+    <MainBackground>
     <div class="transaction-view">
         <div class="header-transaction">
             <router-link to="/myTransaction/myExchange" class="btn-transaction" :class="{active: $route.path === '/myTransaction/myExchange'}">兑换</router-link>
@@ -9,11 +10,16 @@
             <router-view></router-view>
         </div>
     </div>
+    </MainBackground>
 </template>
 
 <script>
+import MainBackground from "@/components/MainBackground.vue";
 export default {
     name: 'myTransaction',
+    components:{
+        MainBackground
+    },
 };
 </script>
 
@@ -30,11 +36,11 @@ export default {
 }
 
 .btn-transaction {
+    color: white;
     padding: 10px 20px;
     border: none;
     cursor: pointer;
     background-color: transparent;
-    color: #1F2937;
     border-radius: 5px;
     margin-right: 15px;
     text-decoration: none;  /* add this to remove the underline */

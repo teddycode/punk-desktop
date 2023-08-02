@@ -7,7 +7,7 @@
         <div v-if="isOn" class="desktop-content">
             <div class="desktop-item" v-for="item in items" :key="item.id">
                 <img :src="require(`@/assets/${item.name}.png`)" alt="" class="icon">
-                <div>{{ item.name }}</div>
+                <div class="desktop-item-name">{{ item.name }}</div>
             </div>
         </div>
         <div v-else class="desktop-content">
@@ -97,5 +97,8 @@ export default {
 
 .tip-icon {
     color: deepskyblue;
+}
+.desktop-item-name{
+    color: white;
 }
 </style>

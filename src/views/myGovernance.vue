@@ -1,4 +1,5 @@
 <template>
+    <MainBackground>
     <div class="governance-page">
         <h1 class="governance-title">提案</h1>
         <div class="search-bar">
@@ -66,14 +67,16 @@
         </div>
         <myPagination :total="totalItems" :pagesize="itemsPerPage" :currentPage="1"  @change-page="updatePage"></myPagination>
     </div>
+    </MainBackground>
 </template>
 
 <script>
 import axios from "axios";
 import myPagination from "@/components/myPagination.vue";
+import MainBackground from "@/components/MainBackground.vue";
 export default {
     components:{
-        myPagination
+        myPagination,MainBackground
     },
     data() {
         return {

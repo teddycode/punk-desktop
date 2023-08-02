@@ -42,8 +42,6 @@
                 <p v-if="ratesUpdateTime">汇率更新时间：{{ ratesUpdateTime }}</p>
             </div>
 
-            <button class="wallet-btn-transaction" @click="showWalletSelector = true"  v-if="!this.$store.state.userLoggedIn">连接钱包</button>
-            <button class="wallet-btn-transaction" @click="showWalletSelector = true" v-else>查看钱包</button>
             <button class="wallet-btn-transaction" @click="exchange" >兑换代币</button> <!-- 新增兑换按钮 -->
         </div>
         <!-- Insert the similar structure for 'tokens' and 'collections' tabs -->
@@ -170,55 +168,6 @@ export default {
                 this.tokenAmount1 = this.tokenAmount2 * rate;
             }
         },
-        // async swapTokens(token1, token2, amount, slippage = "50") {
-        //     try {
-        //         const pair = await Fetcher.fetchPairData(token1, token2, this.provider); //creating instances of a pair
-        //         const route = await new Route([pair], token2); // a fully specified path from input token to output token
-        //         let amountIn = ethers.utils.parseEther(amount.toString()); //helper function to convert ETH to Wei
-        //         amountIn = amountIn.toString()
-        //
-        //         const slippageTolerance = new Percent(slippage, "10000"); // 50 bips, or 0.50% - Slippage tolerance
-        //
-        //         const trade = new Trade( //information necessary to create a swap transaction.
-        //             route,
-        //             new TokenAmount(token2, amountIn),
-        //             TradeType.EXACT_INPUT
-        //         );
-        //         const amountOutMin = trade.minimumAmountOut(slippageTolerance).raw; // needs to be converted to e.g. hex
-        //         const amountOutMinHex = ethers.BigNumber.from(amountOutMin.toString()).toHexString();
-        //         const path = [token2.address, token1.address]; //An array of token addresses
-        //         const to = this.wallet.address; // should be a checksummed recipient address
-        //         const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 minutes from the current Unix time
-        //         const value = trade.inputAmount.raw; // // needs to be converted to e.g. hex
-        //         const valueHex = await ethers.BigNumber.from(value.toString()).toHexString(); //convert to hex string
-        //
-        //         //Return a copy of transactionRequest, The default implementation calls checkTransaction and resolves to if it is an ENS name, adds gasPrice, nonce, gasLimit and chainId based on the related operations on Signer.
-        //         const rawTxn = await this.uniswap_router_contract.populateTransaction.swapExactETHForTokens(amountOutMinHex, path, to, deadline, {
-        //             value: valueHex
-        //         })
-        //
-        //         //Returns a Promise which resolves to the transaction.
-        //         let sendTxn = (await this.wallet).sendTransaction(rawTxn)
-        //
-        //         //Resolves to the TransactionReceipt once the transaction has been included in the chain for x confirms blocks.
-        //         let reciept = (await sendTxn).wait()
-        //
-        //         //Logs the information about the transaction it has been mined.
-        //         if (reciept) {
-        //             console.log(" - Transaction is mined - " + '\n'
-        //                 + "Transaction Hash:", (await sendTxn).hash
-        //                 + '\n' + "Block Number: "
-        //                 + (await reciept).blockNumber + '\n'
-        //                 + "Navigate to https://rinkeby.etherscan.io/txn/"
-        //                 + (await sendTxn).hash, "to see your transaction")
-        //         } else {
-        //             console.log("Error submitting transaction")
-        //         }
-        //
-        //     } catch(e) {
-        //         console.log(e)
-        //     }
-        // },
         async exchange() {  // 新增兑换方法
             this.userLoggedIn = this.$store.state.userLoggedIn;
             if (!this.userLoggedIn) {
@@ -226,12 +175,6 @@ export default {
             } else if (this.selectedToken1 && this.selectedToken2 && this.tokenAmount1 && this.tokenAmount2) {
                 // TODO:这里兑换成功后将交易写入“交易”界面，即能够在交易界面看见该交易
                 try {
-                    // const DAI = new Token(
-                    //     UNISWAP.ChainId.RINKEBY,
-                    //     "0x5592EC0cfb4dbc12D3aB100b257153436a1f0FEa",
-                    //     18
-                    // );
-                    // this.swapTokens(DAI, WETH[DAI.chainId], .02);
                     //TODO:调用swap合约
                     alert("兑换成功！");
                 } catch (error) {

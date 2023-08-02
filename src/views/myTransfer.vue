@@ -1,4 +1,5 @@
 <template>
+    <MainBackground>
     <div class="transaction-view">
         <div class="header-transaction">
             <router-link to="/myTransfer/TransferMain" class="btn-transaction" :class="{active: $route.path === '/myTransfer/TransferMain'}">转账</router-link>
@@ -8,11 +9,16 @@
             <router-view></router-view>
         </div>
     </div>
+    </MainBackground>
 </template>
 
 <script>
+import MainBackground from "@/components/MainBackground.vue";
 export default {
     name: 'myTransfer',
+    components:{
+        MainBackground
+    }
 };
 </script>
 

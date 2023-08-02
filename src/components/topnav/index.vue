@@ -7,10 +7,10 @@
             <li  @click="changeLen">
                 <font-awesome-icon :icon="['fas', 'language']"  style="color: white;"></font-awesome-icon>
             </li>
-            <li @click="showResource">
-                <font-awesome-icon :icon="['fas', 'archive']"  style="color: white;"></font-awesome-icon>
-            </li>
             <li @click="goHome">
+                <font-awesome-icon :icon="['fas', 'home']"  style="color: white;"></font-awesome-icon>
+            </li>
+            <li>
                 <font-awesome-icon :icon="['fas', 'arrow-right']"  style="color: white;"></font-awesome-icon>
             </li>
         </ul>
@@ -21,9 +21,9 @@
 import screenfull from "screenfull";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from '@fortawesome/fontawesome-svg-core'
-import {faExpandArrowsAlt, faLanguage, faArchive, faArrowRight} from '@fortawesome/free-solid-svg-icons'
+import {faExpandArrowsAlt, faLanguage, faHome, faArrowRight} from '@fortawesome/free-solid-svg-icons'
 
-library.add(faExpandArrowsAlt, faLanguage, faArchive, faArrowRight)
+library.add(faExpandArrowsAlt, faLanguage, faHome, faArrowRight)
 
 export default {
     name: "topnav",

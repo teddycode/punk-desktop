@@ -1,4 +1,5 @@
 <template>
+    <MainBackground>
     <div class="network-page">
         <div class="network-top-bar">
             <select v-model="selectedNetwork" class="network-blockchain-select">
@@ -37,15 +38,18 @@
                 <button class="network-transfer-btn-2">充值</button>
             </div>
         </transition>
-
     </div>
-
+    </MainBackground>
 </template>
 
 <script>
 
 import store from "@/store";
+import MainBackground from "@/components/MainBackground.vue";
 export default {
+    components:{
+        MainBackground
+    },
     data() {
         return {
             networks: ['Ethereum', 'Binance Smart Chain', 'Polygon'],
