@@ -27,12 +27,14 @@ export default {
 .transaction-view {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    /*min-height: 100vh;*/
 }
 .header-transaction {
+    margin:20px;
     display: flex;
     justify-content: flex-start;
     margin-bottom: 20px;
+    background-color: #2D3748;
 }
 
 .btn-transaction {
@@ -47,8 +49,8 @@ export default {
 }
 
 .btn-transaction.active {
-    background-color: #34D399;
-    color: #F9FAFB;
+    background-color: #4FD1C5; /* Use a brighter color for the active button */
+    color: #F7FAFC; /* Use a darker color for the text to make it stand out */
 }
 .content-transaction {
     flex: 1;

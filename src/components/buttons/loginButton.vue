@@ -50,8 +50,8 @@ export default {
         navigateToLogin() {
             this.$router.push({name: 'myLogin'});
         },
-        navigateToUserProfile(){
-
+        navigateToUserProfile() {
+            this.$router.push({ name: 'AdminPage' });
         },
         async logout() {
             // Make a request to your server to logout

@@ -7,10 +7,13 @@
                     磐古
                 </div>
             </div>
+            <topnav></topnav>
         </div>
-        <topnav></topnav>
         <login-button></login-button>
         <my-wallet></my-wallet>
+        <div class="search-bar">
+            <search-bar></search-bar>
+        </div>
         <div class="data-content">
             <div class="data-main">
                 <div class="main-left">
@@ -25,7 +28,6 @@
                     </div>
                 </div>
                 <div class="main-center">
-                    <main-center-blockchain-info class="main-center-info"></main-center-blockchain-info>
                     <dv-border-box10 class="main-center-transactions">
                         <main-center-button></main-center-button>
                     </dv-border-box10>
@@ -44,7 +46,6 @@
 
 import Topnav from "@/components/topnav/index.vue";
 import MainRightSwiper from "@/views/main-right/main-right-swiper.vue";
-import MainCenterBlockchainInfo from "@/views/main-center/main-center-blockchain-info/index.vue";
 import MywalletInfo from "@/views/main-left/main-left-top/index.vue";
 import MainRightAd from "@/views/main-right/main-right-ad.vue";
 import LoginButton from "@/components/buttons/loginButton.vue";
@@ -52,9 +53,10 @@ import mainCenterButton from "@/views/main-center/main-center-bottom/index.vue";
 import myWallet from "@/components/myWallet.vue";
 import DesktopManagement from "@/views/main-left/main-left-center/index.vue"
 import Together from "@/views/main-left/main-left-bottom/index.vue"
+import searchBar from "@/components/searchBar.vue";
 export default {
     name: 'HomePage',
-    components: {LoginButton, MainRightAd, myWallet, MywalletInfo, MainCenterBlockchainInfo, MainRightSwiper, Topnav,mainCenterButton,DesktopManagement,Together},
+    components: {LoginButton, MainRightAd, myWallet, MywalletInfo,  MainRightSwiper, Topnav,mainCenterButton,DesktopManagement,Together,searchBar},
 
     data() {
         return {
@@ -90,8 +92,9 @@ export default {
 #main {
     background-image: url('../assets/data/true.png');
     background-size: cover;
+    //overflow: auto;
     width: 100%;
-    height: 100%;
+    height: 100vh;
 }
 
 .host-body {
@@ -108,7 +111,6 @@ export default {
         margin-bottom: 40px;
         margin-left: 20px;
         height: 720px;
-
         .main-left {
             width: 24%;
             float: left;
@@ -133,11 +135,8 @@ export default {
             padding: 0 20px 0 20px;
             height: 95%;
         }.main-center-transactions{
-             height: 85%;
+             height: 100%;
          }
-        .main-center-info{
-            height: 15%;
-        }
         .main-right {
             float: left;
             width: 24%;

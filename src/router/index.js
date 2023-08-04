@@ -20,7 +20,7 @@ import newProposal from "@/views/Governances/newProposal.vue";
 import myProposals from "@/views/Governances/myProposals.vue";
 import MyEntrust from "@/views/Governances/myEntrust.vue";
 import SignUp from "@/views/SignUp.vue";
-
+import AdminPage from '@/views/AdminPage.vue';
 
 const routes = [
     {
@@ -144,7 +144,11 @@ const routes = [
         name: 'CollectionDetails',
         component: CollectionDetails
     },
-
+    {
+        path: '/AdminPage',
+        name: 'AdminPage',
+        component: AdminPage,
+    },
     // 其他路由配置
 ];
 

@@ -63,7 +63,7 @@ export default {
     background: rgba(216, 191, 216, 0.2);
     border-radius: 0;
     border: none;
-    margin-left: -150px;
+    margin-left: -170px;
     transition: margin-left 0.9s;
     ul {
         width: 100%;
@@ -85,7 +85,7 @@ export default {
         }
     }
     &:hover {
-        margin-left: 0px;
+        margin-left: -20px;
     }
 }
 

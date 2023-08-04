@@ -21,6 +21,7 @@ import { faExchangeAlt, faHandHoldingUsd, faGem, faSitemap, faGavel, faHandsHelp
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import ElementPlus from 'element-plus'
 import 'element-plus/theme-chalk/index.css';
+import '@element-plus/icons-vue'
 library.add(faExchangeAlt, faHandHoldingUsd, faGem, faSitemap, faGavel, faHandsHelping, faCalculator, faDatabase)
 
 
