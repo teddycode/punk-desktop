@@ -1,4 +1,5 @@
 <template>
+    <MainBackground>
     <div class="signup-page">
         <el-container class="signup-container">
             <el-card class="signup-card">
@@ -25,12 +26,15 @@
             </el-card>
         </el-container>
     </div>
+    </MainBackground>
 </template>
 
 <script>
 import axios from "axios";
+import MainBackground from "@/components/MainBackground.vue";
 
 export default {
+    components: {MainBackground},
     data() {
         return {
             signupForm: {
@@ -91,9 +95,7 @@ export default {
 
 <style scoped>
 .signup-page {
-    background: url('@/assets/bg-2.jpg') no-repeat center center fixed;
-    background-size: cover;
-    height: 100vh;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;

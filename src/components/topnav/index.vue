@@ -34,6 +34,9 @@ export default {
         return {
         }
     },
+    // mounted() {
+    //     this.fullBox();
+    // },
     methods: {
         fullBox() {
             if (!screenfull.isEnabled) {

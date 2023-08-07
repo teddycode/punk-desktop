@@ -1,4 +1,5 @@
 <template>
+    <MainBackground>
     <div class="login-page">
         <el-container class="login-container">
             <el-card class="login-card">
@@ -16,11 +17,14 @@
             </el-card>
         </el-container>
     </div>
+    </MainBackground>
 </template>
 
 <script>
 import axios from "axios";
+import MainBackground from "@/components/MainBackground.vue";
 export default {
+    components: {MainBackground},
     data() {
         return {
             loginForm: {
@@ -68,9 +72,7 @@ export default {
 
 <style scoped>
 .login-page {
-    background: url('@/assets/bg-2.jpg') no-repeat center center fixed;
-    background-size: cover;
-    height: 100vh;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;

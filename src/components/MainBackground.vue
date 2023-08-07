@@ -1,46 +1,52 @@
 <template>
-    <dv-full-screen-container>
-        <div id="main" class="bg">
-            <div class="header">
-                <div class="bg-header">
-                    <div class="t-title">
-                        磐古
+    <div id="main" class="bg">
+        <div class="header">
+            <div class="bg-header">
+                <div class="t-title">磐古</div>
+            </div>
+            <topnav></topnav>
+        </div>
+        <login-button></login-button>
+        <my-wallet></my-wallet>
+        <div class="search-bar">
+            <search-bar></search-bar>
+        </div>
+        <div class="data-content">
+            <div class="data-main">
+                <div :class="{'main-left': true, 'hidden': isLeftHidden}">
+                    <!-- 左边栏开关 -->
+                    <div class="main-left-top">
+                        <mywallet-info></mywallet-info>
+                    </div>
+                    <div class="main-left-center">
+                        <desktop-management></desktop-management>
+                    </div>
+                    <div class="main-left-bottom">
+                        <together></together>
                     </div>
                 </div>
-                <topnav></topnav>
-            </div>
-            <login-button></login-button>
-            <my-wallet></my-wallet>
-            <div class="search-bar">
-                <search-bar></search-bar>
-            </div>
-            <div class="data-content">
-                <div class="data-main">
-                    <div class="main-left">
-                        <div class="main-left-top">
-                            <mywallet-info></mywallet-info>
+                <div class="main-center" :style="{ width: mainCenterWidth }">
+                    <dv-border-box10 class="main-center-transactions">
+                        <div class="switch-container">
+                            <div class="switch-left">
+                                <el-switch v-model="isLeftHidden"  active-text="隐藏左边栏" inactive-text="显示左边栏"></el-switch>
+                            </div>
+                            <div class="switch-right">
+                                <el-switch v-model="isRightHidden" active-text="隐藏右边栏" inactive-text="显示右边栏"></el-switch>
+                            </div>
                         </div>
-                        <div class="main-left-center">
-                            <desktop-management></desktop-management>
-                        </div>
-                        <div class="main-left-bottom">
-                            <together></together>
-                        </div>
-                    </div>
-                    <div class="main-center">
-                        <dv-border-box10 class="main-center-transactions">
-                            <!-- 插槽，这里将放入各个页面的内容 -->
-                            <slot/>
-                        </dv-border-box10>
-                    </div>
-                    <div class="main-right">
-                        <main-right-swiper></main-right-swiper>
-                        <main-right-ad></main-right-ad>
-                    </div>
+                        <slot/>
+                    </dv-border-box10>
+                </div>
+                <div :class="{'main-right': true, 'hidden': isRightHidden}">
+                    <!-- 右边栏开关 -->
+                    <main-right-swiper></main-right-swiper>
+                    <main-right-ad></main-right-ad>
+                    <main-right-dapp></main-right-dapp>
                 </div>
             </div>
         </div>
-    </dv-full-screen-container>
+    </div>
 </template>
 
 <script>
@@ -53,19 +59,42 @@ import MainRightAd from "@/views/main-right/main-right-ad.vue";
 import MainRightSwiper from "@/views/main-right/main-right-swiper.vue";
 import DesktopManagement from "@/views/main-left/main-left-center/index.vue";
 import searchBar from "@/components/searchBar.vue";
+import mainRightDapp from "@/views/main-right/main-right-dapp.vue";
+import {ElSwitch} from "element-plus";
 export default {
     name: "myHeader",
     components: {
+        mainRightDapp,
         DesktopManagement,
         searchBar,
         MainRightSwiper,
         MainRightAd,
         Together,
-        myWallet, LoginButton, Topnav,MywalletInfo
+        myWallet, LoginButton, Topnav,MywalletInfo,ElSwitch
     },
-    created() {
-        console.log("innerheight:" + window.innerHeight);
-        console.log("innerwidth:" + window.innerWidth);
+    data(){
+        return{
+            isLeftHidden: false,
+            isRightHidden: false
+        }
+    },
+    computed: {
+        mainCenterWidth() {
+            if (this.isLeftHidden && this.isRightHidden) {
+                return '100%';
+            } else if (this.isLeftHidden || this.isRightHidden) {
+                return '76%';
+            }
+            return '52%';
+        }
+    },
+    methods: {
+        toggleLeft() {
+            this.isLeftHidden = !this.isLeftHidden;
+        },
+        toggleRight() {
+            this.isRightHidden = !this.isRightHidden;
+        }
     }
 }
 </script>
@@ -94,9 +123,14 @@ export default {
 #main {
     background-image: url('../assets/data/true.png');
     background-size: cover;
-    //overflow: auto;
+    overflow: hidden;
+    //min-width: 1600px;
+    background-repeat: no-repeat; // 防止背景重复
+    background-attachment: fixed; // 背景图像固定
+    //min-width: 100vw;
+    //min-height: 100vh; // 这确保主容器至少有视口的高度
     width: 100%;
-    min-height: 100vh;
+    height: 100%;
 }
 
 .host-body {
@@ -112,16 +146,24 @@ export default {
     align-items: center;
 }
 .data-content {
+    height:850px;
     padding-bottom: 20px;
     .data-main {
         width: calc(100% - 40px);
         margin-bottom: 40px;
         margin-left: 20px;
-        height: 720px;
+        height: 850px;
         .main-left {
+            overflow: hidden;
             width: 24%;
             float: left;
             height: 95%;
+            transform: translateX(0);
+            transition: transform 0.5s;
+            &.hidden {
+                transform: translateX(-110%);
+                width: 0;
+            }
         }
         .main-left-top{
             height: 30%;
@@ -138,23 +180,37 @@ export default {
         }
         .main-center {
             float: left;
-            width: 52%;
+            width: var(--main-center-width, 52%);
+            transition: width 0.5s ease-in-out;
             padding: 0 20px 0 20px;
             height: 95%;
+            .switch-container {
+                margin: 10px  10px 0 10px;
+                display: flex;
+                justify-content: space-between;
+                .switch-left {
+                }
+                .switch-right {
+                }
+            }
         }.main-center-transactions{
             overflow: auto;
              height: 100%;
          }
         .main-right {
+            overflow: hidden;
             float: left;
             width: 24%;
-            height: 80%;
+            height: 95%;
+            transform: translateX(0);
+            transition: transform 0.5s;
+            &.hidden {
+                transform: translateX(110%);
+                width: 0;
+            }
         }
     }
 }
-.ad{
-    color: white;
-    height: 80%;
-}
+
 
 </style>

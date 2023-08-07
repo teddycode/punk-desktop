@@ -13,8 +13,8 @@
                 </ul>
             </div>
             <div class="ad-button">
-                <addnode-button>发布</addnode-button>
-                <addnode-button>筛选</addnode-button>
+                <addnode-button class="ad-button-1">发布</addnode-button>
+                <addnode-button class="ad-button-1">筛选</addnode-button>
             </div>
         </dv-border-box10>
     </div>
@@ -27,7 +27,6 @@ import { faVolumeUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import addnodeButton from "@/components/buttons/addnodeButton.vue";
 library.add(faVolumeUp);
-
 
 export default {
     components: {
@@ -89,19 +88,20 @@ export default {
 .message-box {
     position: relative;
     width: 100%;
-    height: 84%;
-    padding: 15px;
+    height: 35%;
+    padding: 15px 0;
     overflow: hidden;
 }
 
 .title {
-    padding-top: 20px;
+    padding-top: 10px;
+    font-size: 1.5rem;
     color: #5ab1ef;
 }
 
 .message-content {
     width: 100%;
-    height: 55%;
+    height: 65%;
     overflow: hidden;
     padding-top: 4px;
     padding-right: 20px;
@@ -146,14 +146,10 @@ a {
 
 .ad-button{
     margin-left: 30px;
-    margin-top: 10%;
+    /*padding:5%;*/
 }
-
-.ad-button-top{
-    margin-top: 20px;
-}
-.ad-button-bottom {
-    margin-bottom: 20px;
-    /* additional styles for the bottom button */
+.ad-button-1{
+    width: 30%;
+    height: 40%;
 }
 </style>

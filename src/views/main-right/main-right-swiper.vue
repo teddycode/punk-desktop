@@ -160,6 +160,9 @@ export default {
 </script>
 
 <style lang="scss">
+.main-right-swiper{
+    height: 30%;
+}
 .features {
     display: flex;
     justify-content: center;
