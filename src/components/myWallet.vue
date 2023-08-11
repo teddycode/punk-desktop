@@ -60,12 +60,11 @@
 </template>
 
 <script>
-import {Web3} from "web3";
-import {mapGetters} from "vuex";
+import { ethers } from 'ethers';
+import { mapGetters } from 'vuex';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faCheck, faCopy } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-
 library.add(faCheck, faCopy)
 
 export default {
@@ -110,29 +109,31 @@ export default {
             }
         }
     },
-    beforeRouteEnter(to, from, next) {
-        if (typeof window.ethereum !== 'undefined') {
-            const web3 = new Web3(window.ethereum);
-            next(vm => {
-                vm.web3 = web3;
-                vm.loadUserData();
-            });
-        }
-    },
     beforeMount() {
-        // Create a Web3 instance and connect to the network
-        this.web3 = new Web3('https://goerli.infura.io/v3/b8feaebcfe234f0c83af0e97c070e5f5');
-        //this.$store.state.userLoggedIn = localStorage.getItem('userLoggedIn');
+        // Create an ethers provider and connect to the network
+        this.provider = new ethers.providers.JsonRpcProvider('/api');
+        console.log()
     },
-    created:function() {
-        if (typeof window.ethereum !== 'undefined') {
-            this.web3 = new Web3(window.ethereum);
-            this.loadUserData();
-        } else {
-            alert('Metamask is not installed. Please consider installing it: https://metamask.io');
-        }
+    mounted: function() {
+        setTimeout(() => {
+            if (typeof window.ethereum !== 'undefined') {
+                this.provider = new ethers.providers.Web3Provider(window.ethereum);
+                console.log("provider: " , this.provider)
+                this.loadUserData();
+            } else {
+                this.showAlert('Metamask is not installed. Please consider installing it: https://metamask.io');
+            }
+        }, 500);
     },
     methods:{
+        showAlert(str) {
+            if (window.electronAPI) {
+                window.electronAPI.customAlert(str);
+            } else {
+                console.error('electronAPI.customAlert is not available!');
+            }
+            console.log('electronAPI:', window.electronAPI);
+        },
         buttonClick() {
             if (!this.userLoggedIn) {
                 this.toggleWalletSelector();
@@ -178,16 +179,18 @@ export default {
                     this.userLoggedIn = true;
                     this.$store.dispatch('setLoggedIn', true);
                     localStorage.setItem('userLoggedIn', this.userLoggedIn);
-                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    this.userAddress = accounts[0];
+
+                    const signer = this.provider.getSigner();
+                    this.userAddress = await signer.getAddress();
+                    console.log("signer: " , signer)
                     localStorage.setItem('userAddress', this.userAddress);
                     this.$store.dispatch('setAddress', this.userAddress);
 
-                    // 请求用户余额
+                    // Request user balance
                     this.userBalance = await this.getBalance(this.userAddress);
                     this.$store.dispatch('setBalance', this.userBalance);
 
-                    // 加载用户数据
+                    // Load user data
                     await this.loadUserData();
                     console.log('openWalletLink2');
                     this.$emit('walletLogin');
@@ -203,23 +206,17 @@ export default {
         },
         async getBalance(address) {
             try {
-                this.web3.eth.net.isListening().then(() => {
-                    this.web3.eth.getChainId().then((chainId) => {
-                        if (chainId !== 5) {  // Chain ID for Goerli Test Network is 5
-                            window.ethereum.request({
-                                method: 'wallet_switchEthereumChain',
-                                params: [{ chainId: '0x5' }]  // Switch to Goerli Test Network
-                            }).catch((error) => console.log(error));
-                        }
-                    });
-                });
-                // 请求用户余额
-                const balance = await window.ethereum.request({
-                    method: 'eth_getBalance',
-                    params: [address, 'latest'],
-                });
-                // 将余额从wei转换为eth并保存
-                return this.web3.utils.fromWei(balance, 'ether');
+                const network = await this.provider.getNetwork();
+                if (network.chainId !== 1337) {  // Chain ID for Goerli Test Network is 5
+                    window.ethereum.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: '0x539' }]  // Switch to Goerli Test Network
+                    }).catch((error) => console.log(error));
+                }
+                // Request user balance
+                const balance = await this.provider.getBalance(address);
+                // Convert balance from wei to ether and return
+                return ethers.utils.formatEther(balance);
             } catch (error) {
                 console.error(error);
             }

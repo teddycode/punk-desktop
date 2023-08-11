@@ -62,6 +62,7 @@ import searchBar from "@/components/searchBar.vue";
 import mainRightDapp from "@/views/main-right/main-right-dapp.vue";
 import {ElSwitch} from "element-plus";
 import MainCenterButton from "@/views/main-center/main-center-bottom/index.vue";
+
 export default {
     name: "myHeader",
     components: {
@@ -74,6 +75,7 @@ export default {
         Together,
         myWallet, LoginButton, Topnav,MywalletInfo,ElSwitch
     },
+
     data(){
         return{
             isLeftHidden: false,
@@ -85,9 +87,9 @@ export default {
             if (this.isLeftHidden && this.isRightHidden) {
                 return '100%';
             } else if (this.isLeftHidden || this.isRightHidden) {
-                return '76%';
+                return '80%';
             }
-            return '52%';
+            return '60%';
         }
     },
     methods: {
@@ -157,7 +159,7 @@ export default {
         height: 850px;
         .main-left {
             overflow: hidden;
-            width: 24%;
+            width: 20%;
             float: left;
             height: 95%;
             transform: translateX(0);
@@ -182,7 +184,7 @@ export default {
         }
         .main-center {
             float: left;
-            width: var(--main-center-width, 52%);
+            width: var(--main-center-width, 60%);
             transition: width 0.5s ease-in-out;
             padding: 0 20px 0 20px;
             height: 95%;
@@ -202,7 +204,7 @@ export default {
         .main-right {
             overflow: hidden;
             float: left;
-            width: 24%;
+            width: 20%;
             height: 95%;
             transform: translateX(0);
             transition: transform 0.5s;

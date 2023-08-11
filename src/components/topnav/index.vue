@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import screenfull from "screenfull";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {faExpandArrowsAlt, faLanguage, faHome, faArrowRight} from '@fortawesome/free-solid-svg-icons'
@@ -32,18 +31,21 @@ export default {
     },
     data() {
         return {
+            flag : 0,
         }
     },
-    // mounted() {
-    //     this.fullBox();
-    // },
     methods: {
         fullBox() {
-            if (!screenfull.isEnabled) {
-                console.log('Cannot enter fullscreen mode');
-                return false;
+            if (window.electronAPI) {
+                window.electronAPI.toggleFullScreen();
+                if (this.flag===0){
+                    document.body.style.overflow = "auto";
+                    this.flag=1;
+                }else if(this.flag===1){
+                    document.body.style.overflow = "hidden";
+                    this.flag=0;
+                }
             }
-            screenfull.toggle();
         },
         changeLen() {
         },
