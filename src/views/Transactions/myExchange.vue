@@ -79,10 +79,11 @@
 
 <script>
 // import {Web3} from "web3";
-import {Contract, ethers} from "ethers";
+import {BigNumber, ethers} from "ethers";
 import addnodeButton from "@/components/buttons/addnodeButton.vue";
 import axios from "axios";
 import * as echarts from 'echarts';
+
 
 export default {
     components:{
@@ -125,9 +126,10 @@ export default {
                 'XRP': '0xCed0CE92F4bdC3c2201E255FAF12f05cf8206dA8',  // 请注意，XRP原生在Ripple网络上，这可能是其在Ethereum上的一个版本
                 'USDC': '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
                 'DAI': '0x6B175474E89094C44Da98b954EedeAC495271d0F',
-                'token0':'0x01e3C52AA1CdfaE2228A87bf18A408B18041E1A9',
-                'token1':'0x3ca6d0aa9a36cdA6869322e52caa0690398589b4',
+                'token0':'0x01a53cD5fBb1Ea5720066A67A133a68012ca1a30',
+                'token1':'0x2d121a0d1Aa8b181331f7101b41D91F153DAEF4E',
             },
+
             selectedToken1: 'ETH',
             selectedToken2: 'USDC',
             swapToken0:'',
@@ -141,10 +143,10 @@ export default {
             web3: null,
             provider:null,
             wallet:null,
-            myliquidityProviderAddress :  "0xFC633551d65D134b3351814b1dB5628c8201056E",
+            myliquidityProviderAddress :  "0x94d74855D127Aa58411Ff33F5A8e73Dd0921DEa6",
             MyLiquidityProviderAbi:require('../../../frontend/frontend/abi/MyLiquidityProvider.json').abi,
             MyLiquidityProvider: null,
-            hookAddress :  "0x9B6C21702e00fa2320989C5229b11B98F5819E21",
+            hookAddress :  "0xe030A38bb07b3A602E70e3FEF9C4a9eD24C11024",
             hookAbi:require('../../../frontend/frontend/abi/LimitOrder.json').abi,
             poolKey: {
                 currency0: '',
@@ -161,6 +163,9 @@ export default {
             erc20Abi : require('../../../frontend/frontend/abi/Token0.json').abi,
             token0: null,
             token1: null,
+            poolmanagerAddress : "0xe8d31aF220B968EbF9E2Fdef3C1F9b2c1D9b30B8",
+            poolmanagerAbi : require('../../../frontend 2(1)/frontend/abi/PoolManager.json').abi,
+            poolManager:null,
         };
     },
 
@@ -196,19 +201,20 @@ export default {
                 // 请求账户访问
                 await window.ethereum.request({ method: 'eth_requestAccounts' });
                 const signer = provider.getSigner();
-                const accounts = await signer.getAddress();
-                this.fromAccount = accounts; // 设置第一个账户为默认账户
+                this.fromAccount = await signer.getAddress(); // 设置第一个账户为默认账户
                 this.wallet = signer
                 this.MyLiquidityProvider = new ethers.Contract(this.myliquidityProviderAddress,this.MyLiquidityProviderAbi,signer)
                 this.poolKey.hooks = this.hookAddress
                 this.token0 = new ethers.Contract(this.tokenAddresses.token0,this.erc20Abi,signer)
                 this.token1 = new ethers.Contract(this.tokenAddresses.token1,this.erc20Abi,signer)
+                this.poolManager = new ethers.Contract(this.poolmanagerAddress,this.poolmanagerAbi,signer)
                 console.log("Account Address:", this.fromAccount);
                 console.log("Wallet Object:", this.wallet);
                 console.log("MyLiquidityProvider Contract:", this.MyLiquidityProvider);
                 console.log("poolKey.hooks Contract:", this.poolKey.hooks);
                 console.log("token0: " , this.token0)
                 console.log("token1: " , this.token1)
+                console.log("poolManager: " , this.poolManager)
             } catch (error) {
                 console.error("Error accessing accounts: ", error);
             }
@@ -230,48 +236,55 @@ export default {
                 return '';
             }
         },
-        usdValue1() {
-            if (this.tokenAmount1 && this.rates[this.selectedToken1]) {
-                return (this.tokenAmount1 * this.rates[this.selectedToken1]).toFixed(2);
-            }
-            return '';
-        },
-        usdValue2() {
-            if (this.tokenAmount2 && this.rates[this.selectedToken2]) {
-                return (this.tokenAmount2 * this.rates[this.selectedToken2]).toFixed(2);
-            }
-            return '';
-        }
     },
     methods: {
-        async getSlot0(contract, poolKey) {
-            let poolId = this.getPoolId(poolKey);
-
-            console.log(`PoolId: ${poolId}`);
-            let slot0 = await contract.getSlot0(poolId);
-            console.log(`Returned slot0: ${JSON.stringify(slot0)}`);
-            return poolId;
-        },
-        getPoolId(poolKey) {
-        return ethers.utils.solidityKeccak256(
-        ["bytes"],
-        [ethers.utils.defaultAbiCoder.encode(
-            ["address", "address", "uint24", "int24", "address"],
-            [poolKey.currency0, poolKey.currency1, poolKey.fee, poolKey.tickSpacing, poolKey.hooks]
-                )]
-            );
-        },
+        // async getSlot0(contract, poolKey) {
+        //     console.log('hello getslot0')
+        //     let poolId = '0x609d005fabd5342dd71a5a0b79ef2fec972bf7f267a50975cbf3b097e85154c9'
+        //     console.log(`PoolId: ${poolId}`);
+        //     let slot0 = await contract.getSlot0(poolId);
+        //     console.log(`Returned slot0: ${JSON.stringify(slot0)}`);
+        //     return poolId;
+        // },
+        // getPoolId(poolKey) {
+        // return ethers.utils.solidityKeccak256(
+        // ["bytes"],
+        // [ethers.utils.defaultAbiCoder.encode(
+        //     ["address", "address", "uint24", "int24", "address"],
+        //     [poolKey.currency0, poolKey.currency1, poolKey.fee, poolKey.tickSpacing, poolKey.hooks]
+        //         )]
+        //     );
+        // },
+        // async getPoolPrice(contract, poolKey) {
+        //     let slot0 = await this.getSlot0(contract, poolKey);
+        //     // const bigNumberValue = slot0[0].toString();
+        //     //console.log("bigNumberValue:", bigNumberValue);
+        //     const divisor = ethers.BigNumber.from(2).pow(96);
+        //     console.log("divisor:", divisor.toString());
+        //     console.log("slot:" ,ethers.BigNumber.from(slot0[0]))
+        //     const dividedValue = ethers.BigNumber.from(slot0[0]).div(divisor);
+        //     console.log("dividedValue:", dividedValue.toString());
+        //     const result = dividedValue.mul(dividedValue);
+        //     console.log("result:", result.toString());
+        //     return result;
+        // },
         getTokenAddresses(selectedToken1, selectedToken2) {
             // eslint-disable-next-line no-undef
-            if (BigInt(this.tokenAddresses[selectedToken1])<BigInt(this.tokenAddresses[selectedToken2])){
+            if (this.tokenAddresses[selectedToken1]<this.tokenAddresses[selectedToken2]){
             this.swapToken0 = this.tokenAddresses[selectedToken1];
             this.swapToken1 = this.tokenAddresses[selectedToken2];
-            this.swapParams.amountSpecified = this.tokenAmount1;
-            this.swapParams.zeroForOne = true
+            //this.swapParams.amountSpecified = ethers.BigNumber.from(this.tokenAmount1*1000000000000000000);
+            console.log(this.swapParams.amountSpecified);
+            this.swapParams.amountSpecified = this.tokenAmount1
+            console.log(selectedToken1,selectedToken2,this.swapToken0,this.swapToken1)
+            console.log("change to true");
+            this.swapParams.zeroForOne = true;
+            this.swapParams.sqrtPriceLimitX96=ethers.BigNumber.from('79228162514264337593543950336')
         }else {
                 this.swapToken1 = this.tokenAddresses[selectedToken1];
                 this.swapToken0 = this.tokenAddresses[selectedToken2];
                 this.swapParams.amountSpecified = this.tokenAmount1;
+
             }
             if (!this.swapToken0 || !this.swapToken1) {
                 throw new Error('Invalid token selection. Address not found.');
@@ -284,20 +297,27 @@ export default {
             this.customSlippage = value.replace(/[^0-9.]/g, '');
         },
         async fetchRates() {
-            let response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum,bitcoin,binancecoin,cardano,dogecoin,ripple,usd-coin,dai&vs_currencies=usd');
-            let data = await response.json();
-            this.rates = {
-                'ETH': data.ethereum.usd,
-                'BTC': data.bitcoin.usd,
-                'BNB': data.binancecoin.usd,
-                'ADA': data.cardano.usd,
-                'DOGE': data.dogecoin.usd,
-                'XRP': data.ripple.usd,
-                'USDC':data['usd-coin'].usd,
-                'DAI': data.dai.usd,
-            };
-            // 更新汇率更新时间
-            this.ratesUpdateTime = new Date();
+            try {
+                let response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum,bitcoin,binancecoin,cardano,dogecoin,ripple,usd-coin,dai&vs_currencies=usd');
+                let data = await response.json();
+
+                this.rates = {
+                    'ETH': data.ethereum.usd,
+                    'BTC': data.bitcoin.usd,
+                    'BNB': data.binancecoin.usd,
+                    'ADA': data.cardano.usd,
+                    'DOGE': data.dogecoin.usd,
+                    'XRP': data.ripple.usd,
+                    'USDC':data['usd-coin'].usd,
+                    'DAI': data.dai.usd,
+                    'token0':100 * data['usd-coin'].usd,
+                    'token1':data['usd-coin'].usd,
+                };
+                // 更新汇率更新时间
+                this.ratesUpdateTime = new Date();
+            }catch (err){
+                console.log(err)
+            }
         },
         setRatesTimer() {
             this.ratesTimer = setInterval(() => {
@@ -306,9 +326,10 @@ export default {
         },
         calculateAmount(tokenModified) {
             this.lastModifiedToken = tokenModified;
-            if(tokenModified === 'token1' && this.selectedToken1 && this.selectedToken2 && this.tokenAmount1) {
+            if(tokenModified === 'token1' && this.selectedToken1 && this.selectedToken2 && this.tokenAmount1){
                 let rate = this.rates[this.selectedToken1] / this.rates[this.selectedToken2];
                 this.tokenAmount2 = this.tokenAmount1 * rate;
+                console.log('正常兑换')
             }
             else if(tokenModified === 'token2' && this.selectedToken1 && this.selectedToken2 && this.tokenAmount2) {
                 let rate = this.rates[this.selectedToken2] / this.rates[this.selectedToken1];
@@ -340,11 +361,13 @@ export default {
             let tx2 = await contract.setSwapParameters(poolKey, swapParams);
             console.log("begin swap1")
             await tx2.wait();
-            console.log("Position parameters set successfully");
+            console.log("Position parameters set successfully!");
             // swap
             let tx3 = await contract.executeSwap();
             await tx3.wait();
             console.log("finish swap")
+            this.swapParams.zeroForOne=false;
+            this.swapParams.sqrtPriceLimitX96 = ethers.BigNumber.from('7922816251426433759354395033600')
         },
         async exchange() {  // 新增兑换方法
             this.userLoggedIn = this.$store.state.userLoggedIn;
@@ -359,7 +382,11 @@ export default {
                     this.poolKey.currency1 = this.swapToken1
                     console.log('poolkey:' , this.poolKey)
                     console.log('swapParams', this.swapParams)
-                    this.executeSwap(this.MyLiquidityProvider,this.poolKey,this.swapParams)
+                    try {
+                        this.executeSwap(this.MyLiquidityProvider,this.poolKey,this.swapParams)
+                    }catch (err){
+                        console.log(err)
+                    }
                     alert("兑换成功！");
                 } catch (error) {
                     console.error(error);
@@ -377,37 +404,46 @@ export default {
                 'DOGE': 'dogecoin',
                 'XRP': 'ripple',
                 'USDC': 'usd-coin',
-                'DAI': 'dai'
+                'DAI': 'dai',
+                'token0': 'token0',
+                'token1': 'token1'
             };
-            let coin1 = coinMapping[this.selectedToken1]
-            let coin2 = coinMapping[this.selectedToken2]
-            let response1 = await axios.get(`https://api.coingecko.com/api/v3/coins/${coin1}/market_chart`, {
-                params: {
-                    vs_currency: 'usd',
-                    days: 1,
-                }
-            });
+            let coin1 = coinMapping[this.selectedToken1];
+            let coin2 = coinMapping[this.selectedToken2];
+            try {
+                let response1 = await axios.get(`https://api.coingecko.com/api/v3/coins/${coin1}/market_chart`, {
+                    params: {
+                        vs_currency: 'usd',
+                        days: 1,
+                    }
+                });
 
-            let response2 = await axios.get(`https://api.coingecko.com/api/v3/coins/${coin2}/market_chart`, {
-                params: {
-                    vs_currency: 'usd',
-                    days: 1,
-                }
-            });
+                let response2 = await axios.get(`https://api.coingecko.com/api/v3/coins/${coin2}/market_chart`, {
+                    params: {
+                        vs_currency: 'usd',
+                        days: 1,
+                    }
+                });
 
-            let prices1 = response1.data.prices.map(p => p[1]);
-            let prices2 = response2.data.prices.map(p => p[1]);
-            console.log(`Fetching data for: ${this.selectedToken1} and ${this.selectedToken2}`);
-            this.ratioValues = prices1.map((price, index) => {
-                return price / prices2[index];
-            });
+                let prices1 = response1.data.prices.map(p => p[1]);
+                let prices2 = response2.data.prices.map(p => p[1]);
+                console.log(`Fetching data for: ${this.selectedToken1} and ${this.selectedToken2}`);
 
-            this.times = response1.data.prices.map(p => {
-                const date = new Date(p[0]);
-                return `${date.getHours()}:${date.getMinutes()}`;
-            });
-            //this.calculateYAxisRange();
-            this.drawChart();
+                // 计算比值并确保结果总是大于1
+                this.ratioValues = prices1.map((price1, index) => {
+                    const price2 = prices2[index];
+                    return (price1 >= price2) ? (price1 / price2) : (price2 / price1);
+                });
+
+                this.times = response1.data.prices.map(p => {
+                    const date = new Date(p[0]);
+                    return `${date.getHours()}:${date.getMinutes()}`;
+                });
+                //this.calculateYAxisRange();
+                this.drawChart();
+            } catch (err) {
+                console.log(err);
+            }
         },
         drawChart() {
             let currentHour = new Date().getHours();
@@ -416,14 +452,37 @@ export default {
                 let hour = (currentHour - i + 24) % 24;
                 times.unshift(hour + ":00");
             }
+            let minY = Math.min(...this.ratioValues) * 0.999;
+            let maxY = Math.max(...this.ratioValues) * 1.001;
+            // 修改 minY 和 maxY 的取整方法
+            minY = minY > 100 ? Math.floor(minY) : parseFloat(minY.toFixed(2));
+            maxY = maxY > 100 ? Math.ceil(maxY) : parseFloat(maxY.toFixed(2));
+            // 确保 minY 和 maxY 不相等
+            if (minY === maxY) {
+                minY -= 0.01;
+                maxY += 0.01;
+            }
 
-            let minY = Math.min(...this.ratioValues) * 0.95;
-            let maxY = Math.max(...this.ratioValues) * 1.05;
+            let items = [];
+            for (let i = 1; i < this.ratioValues.length; i++) {
+                let startValue = this.ratioValues[i - 1];
+                let endValue = this.ratioValues[i];
+                let color = endValue < startValue ? 'red' : '#0088CC';
+                items.push({
+                    value: [times[i - 1], startValue, endValue],
+                    itemStyle: {
+                        color: color
+                    }
+                });
+            }
+
+            // 我们从索引1开始，所以times数组也要相应地减少一个元素
+            times.shift();
 
             let chart = echarts.init(document.getElementById('chart'));
             let option = {
                 title: {
-                    text: `${this.selectedToken1} / ${this.selectedToken2} `,
+                    text: `${this.selectedToken1} / ${this.selectedToken2}`,
                     left: 'center',
                     textStyle: {
                         color: '#FFFFFF'
@@ -436,7 +495,7 @@ export default {
                 },
                 xAxis: {
                     type: 'category',
-                    data: times,  // 使用我们新创建的times数组
+                    data: times,
                     axisLabel: {
                         rotate: 45,
                         textStyle: {
@@ -447,12 +506,13 @@ export default {
                         lineStyle: {
                             color: '#FFFFFF'
                         }
-                    },
+                    }
                 },
                 yAxis: {
                     type: 'value',
-                    min: Math.floor(minY),
-                    max: Math.ceil(maxY),
+                    min: minY,
+                    max: maxY,
+                    show: true,  // 确保 y 轴显示
                     axisLine: {
                         lineStyle: {
                             color: '#FFFFFF'
@@ -465,17 +525,33 @@ export default {
                         }
                     }
                 },
-                tooltip: {  // 添加tooltip来在鼠标悬停时显示信息
-                    trigger: 'item',
-                    formatter: '{b}: {c}'
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: function(params) {
+                        let startValue = params[0].value[1];
+                        let endValue = params[0].value[2];
+                        return `${params[0].name}: 从 ${startValue} 到 ${endValue}`;
+                    }
                 },
                 series: [{
-                    data: this.ratioValues,
-                    type: 'scatter',  // 更改为散点图
-                    itemStyle: {
-                        color: '#0088CC'
+                    type: 'custom',
+                    renderItem: function(params, api) {
+                        let categoryIndex = api.value(0);
+                        let start = api.coord([categoryIndex, api.value(1)]);
+                        let end = api.coord([categoryIndex, api.value(2)]);
+                        return {
+                            type: 'rect',
+                            shape: {
+                                x: start[0] - 5,
+                                y: end[1],
+                                width: 10,
+                                height: start[1] - end[1]
+                            },
+                            style: api.style()
+                        };
                     },
-                }],
+                    data: items
+                }]
             };
             chart.setOption(option);
         }
