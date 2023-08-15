@@ -4,9 +4,10 @@ table {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    border: 1px solid #ddd; /* 添加浅灰色边框 */
+    border: 1px solid #fff; /* 修改边框颜色为白色 */
     table-layout: fixed;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* 添加阴影 */
+    background-color: transparent; /* 设置背景颜色为透明 */
 }
 
 table th,
@@ -14,17 +15,18 @@ table td {
     padding: 15px 10px;
     text-align: center;
     font-size: 18px; /* 调整标题字体大小与其他行一致 */
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #fff; /* 设置底部边框颜色为白色 */
+    color: white; /* 设置字体颜色为白色 */
 }
 
 table tr:first-child th {
-    background-color: #f9f9f9; /* 标题背景颜色改为浅灰色 */
-    color: black; /* 标题文字颜色改为黑色 */
+    background-color: transparent; /* 标题背景颜色设置为透明 */
+    color: white; /* 标题文字颜色改为白色 */
     text-transform: uppercase;
 }
 
 table tr {
-    background-color: #fff;
+    background-color: transparent; /* 行背景颜色设置为透明 */
     transition: all 0.3s ease;
 }
 
@@ -34,7 +36,7 @@ table tr td {
 
 table tr:hover {
     transform: scale(1.01);
-    background-color: #eaf4ff; /* 鼠标悬停时的背景颜色改为浅蓝色 */
+    background-color: rgba(255, 255, 255, 0.1); /* 鼠标悬停时的背景颜色为白色的透明度为0.1 */
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2); /* 鼠标悬停时添加淡阴影 */
     cursor: pointer;
 }

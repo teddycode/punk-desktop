@@ -129,7 +129,6 @@ export default {
                 'token0':'0x01a53cD5fBb1Ea5720066A67A133a68012ca1a30',
                 'token1':'0x2d121a0d1Aa8b181331f7101b41D91F153DAEF4E',
             },
-
             selectedToken1: 'ETH',
             selectedToken2: 'USDC',
             swapToken0:'',
@@ -157,7 +156,7 @@ export default {
             },
             swapParams: {
                 zeroForOne: false,
-                amountSpecified: 0,
+                amountSpecified: ethers.BigNumber.from('0'),
                 sqrtPriceLimitX96: ethers.BigNumber.from('7922816251426433759354395033600')
             },
             erc20Abi : require('../../../frontend/frontend/abi/Token0.json').abi,
@@ -168,7 +167,6 @@ export default {
             poolManager:null,
         };
     },
-
     watch: {
         rates: function() {
             if (this.lastModifiedToken) {
@@ -215,6 +213,7 @@ export default {
                 console.log("token0: " , this.token0)
                 console.log("token1: " , this.token1)
                 console.log("poolManager: " , this.poolManager)
+                console.log("swapParams:", this.swapParams)
             } catch (error) {
                 console.error("Error accessing accounts: ", error);
             }
@@ -274,8 +273,8 @@ export default {
             this.swapToken0 = this.tokenAddresses[selectedToken1];
             this.swapToken1 = this.tokenAddresses[selectedToken2];
             //this.swapParams.amountSpecified = ethers.BigNumber.from(this.tokenAmount1*1000000000000000000);
-            console.log(this.swapParams.amountSpecified);
-            this.swapParams.amountSpecified = this.tokenAmount1
+            this.swapParams.amountSpecified = ethers.utils.parseUnits(this.tokenAmount1.toString(), 18);
+            console.log("swapParams.amountSpecified: " + this.swapParams.amountSpecified);
             console.log(selectedToken1,selectedToken2,this.swapToken0,this.swapToken1)
             console.log("change to true");
             this.swapParams.zeroForOne = true;
@@ -283,8 +282,10 @@ export default {
         }else {
                 this.swapToken1 = this.tokenAddresses[selectedToken1];
                 this.swapToken0 = this.tokenAddresses[selectedToken2];
-                this.swapParams.amountSpecified = this.tokenAmount1;
-
+                this.swapParams.amountSpecified = ethers.utils.parseUnits(this.tokenAmount1.toString(), 18);
+                console.log("swapParams.amountSpecified: " + this.swapParams.amountSpecified);
+                this.swapParams.zeroForOne = false;
+                this.swapParams.sqrtPriceLimitX96=ethers.BigNumber.from('7922816251426433759354395033600')
             }
             if (!this.swapToken0 || !this.swapToken1) {
                 throw new Error('Invalid token selection. Address not found.');
@@ -328,12 +329,12 @@ export default {
             this.lastModifiedToken = tokenModified;
             if(tokenModified === 'token1' && this.selectedToken1 && this.selectedToken2 && this.tokenAmount1){
                 let rate = this.rates[this.selectedToken1] / this.rates[this.selectedToken2];
-                this.tokenAmount2 = this.tokenAmount1 * rate;
+                this.tokenAmount2 = parseFloat((this.tokenAmount1 * rate).toFixed(6)); // Round and then parse
                 console.log('正常兑换')
             }
             else if(tokenModified === 'token2' && this.selectedToken1 && this.selectedToken2 && this.tokenAmount2) {
                 let rate = this.rates[this.selectedToken2] / this.rates[this.selectedToken1];
-                this.tokenAmount1 = this.tokenAmount2 * rate;
+                this.tokenAmount1 = parseFloat((this.tokenAmount2 * rate).toFixed(6)); // Round and then parse
             }
         },
         async approveERC20(contract, toAddress, amount) {
@@ -353,7 +354,6 @@ export default {
             }
             await this.approveERC20(this.token0,this.myliquidityProviderAddress,ethers.utils.parseUnits("21000000", 18))
             await this.approveERC20(this.token1,this.myliquidityProviderAddress,ethers.utils.parseUnits("21000000", 18))
-
             let tx1 = await contract.setPositionParameters(poolKey, to0params);
             await tx1.wait();
             console.log('tx1 finish')
@@ -366,8 +366,8 @@ export default {
             let tx3 = await contract.executeSwap();
             await tx3.wait();
             console.log("finish swap")
-            this.swapParams.zeroForOne=false;
-            this.swapParams.sqrtPriceLimitX96 = ethers.BigNumber.from('7922816251426433759354395033600')
+            // this.swapParams.zeroForOne=false;
+            // this.swapParams.sqrtPriceLimitX96 = ethers.BigNumber.from('7922816251426433759354395033600')
         },
         async exchange() {  // 新增兑换方法
             this.userLoggedIn = this.$store.state.userLoggedIn;
@@ -383,11 +383,14 @@ export default {
                     console.log('poolkey:' , this.poolKey)
                     console.log('swapParams', this.swapParams)
                     try {
-                        this.executeSwap(this.MyLiquidityProvider,this.poolKey,this.swapParams)
+                        await this.executeSwap(this.MyLiquidityProvider, this.poolKey, this.swapParams)
+                        console.log("final swapParams.sqrtPriceLimitX96:" + this.swapParams.sqrtPriceLimitX96)
+                        alert("兑换成功！");
                     }catch (err){
                         console.log(err)
+                        console.log("final swapParams.sqrtPriceLimitX96:" + this.swapParams.sqrtPriceLimitX96)
+                        alert("兑换失败！");
                     }
-                    alert("兑换成功！");
                 } catch (error) {
                     console.error(error);
                 }

@@ -38,7 +38,6 @@ async function killLimitOrder(contract:Contract, poolKey:PoolKey, tickLower:numb
         console.log("TickLower: ", tickLower.toString());
         console.log("ZeroForOne: ", zeroForOne);
         console.log("Liquidity: ", liquidity.toString());
-    
         // Handle event here
     });
 }

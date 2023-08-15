@@ -6,26 +6,24 @@
         <div class="selection-section">
             <div class="token-selection">
                 <select id="token-select" v-model="selectedToken" class="token-select">
-                    <option value="">选择代币</option>
-                    <option v-for="token in tokens" :key="token" :value="token">{{ token }}</option>
+                    <option class="token-select-option" value="">选择代币</option>
+                    <option class="token-select-option" v-for="token in tokens" :key="token" :value="token">{{ token }}</option>
                 </select>
             </div>
             <div class="time-selection">
                 <select id="time-select" v-model="selectedTime" class="time-select">
-                    <option value="">选择时间</option>
-                    <option value="1小时">1小时</option>
-                    <option value="1天">1天</option>
-                    <option value="1周">1周</option>
-                    <option value="1月">1月</option>
-                    <option value="1年">1年</option>
+                    <option class="time-select-option" value="">选择时间</option>
+                    <option class="time-select-option" value="1小时">1小时</option>
+                    <option class="time-select-option" value="1天">1天</option>
+                    <option class="time-select-option" value="1周">1周</option>
+                    <option class="time-select-option" value="1月">1月</option>
+                    <option class="time-select-option" value="1年">1年</option>
                 </select>
             </div>
             <div class="search-bar">
-                <div class="search-input">
-                    <input type="text" placeholder="搜索" v-model.lazy="searchKeyword">
-                    <span class="search-icon"></span>
-                </div>
-                <button @click="search_token">搜索</button>
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="Search..." v-model.lazy="searchKeyword">
+                <addnode-button class="search-button" @click="search_token">Search</addnode-button>
             </div>
         </div>
         <div class="table-section">
@@ -41,7 +39,6 @@
                     <th>参数3</th>
                 </tr>
                 </thead>
-                <tbody>
                 <tr v-for="(tokenData, index) in filteredTokenDataList" :key="tokenData.name">
                     <td>{{ index + 1 }}</td>
                     <td>{{ tokenData.name }}</td>
@@ -51,16 +48,18 @@
                     <td>{{ tokenData.param2 }}</td>
                     <td>{{ tokenData.param3 }}</td>
                 </tr>
-                </tbody>
             </table>
         </div>
     </div>
 </template>
 
 <script>
-
+import addnodeButton from "@/components/buttons/addnodeButton.vue";
 export default {
-
+    name: "TokenPage",
+    components: {
+        addnodeButton,
+    },
     data() {
         return {
             tokens: ['ETH', 'BTC', 'BNB', 'ADA', 'DOGE', 'XRP'],
@@ -165,9 +164,11 @@ export default {
 
 <style scoped>
 @import "@/assets/global_table.css";
+
 .token-page {
     width: 90%;
     margin: 0 auto;
+    color: white; /* 设置字体颜色为白色 */
 }
 
 .title-section h1 {
@@ -187,36 +188,32 @@ export default {
     margin-right: 5px;
 }
 
-.search-input {
-    flex: 1;
-}
 
 .token-selection,
 .time-selection {
     display: flex;
     align-items: center;
     margin-right: 20px;
+
 }
 
-.token-select {
+.token-select, .time-select {
     padding: 6px;
-    border: 1px solid #34D399;
+    border: 1px solid white; /* 边框颜色为白色 */
     border-radius: 4px;
     font-size: 16px;
-    background-color: #F5F7FA;
+    background-color: transparent; /* 设置背景颜色为透明 */
+    color: white; /* 设置字体颜色为白色 */
+    height: 2.5em;
 }
-
-.time-select {
-    padding: 6px;
-    border: 1px solid #34D399;
-    border-radius: 4px;
-    font-size: 16px;
-    background-color: #F5F7FA;
+.token-select-option, .time-select-option{
+    color: white;
+    background-color: #2D3748;
 }
-
 .table-section {
     padding: 0 5%;
 }
+
 table tr td.negative-change {
     color: green;
 }
@@ -226,45 +223,37 @@ table tr td.positive-change {
 }
 
 .search-bar {
+    margin-top: 10px;
+    width: 80%;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: flex-start;
-    margin-bottom: 0px;
-}
-
-.search-input {
-    display: flex;
-    align-items: center;
-    margin-right: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.search-input input {
-    padding: 8px;
-    width: 300px;
-    border: none;
+    position: relative;
+    margin-bottom: 10px;
 }
 
 .search-icon {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    background-image: url(@/assets/search.jpg);
-    background-size: cover;
-    margin: 0 8px;
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
 }
 
-.search-bar button {
-    padding: 8px 16px;
-    background-color: #3aafa9;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+.search-input {
+    width: 85%;
+    height: 2.5em;
+    background: transparent;
+    border: 1px solid white;
+    border-radius: 15px;
+    color: white;
+    padding-left: 30px;
+    padding-right: 20px;
 }
 
-.search-bar button:hover {
-    background-color: #1f7d79;
+.search-button {
+    margin-left: 20px;
+    width: 20%;
+    height: 40px !important;
 }
 </style>
