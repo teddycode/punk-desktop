@@ -1,57 +1,61 @@
 <template>
     <MainBackground>
-    <div class="login-page">
-        <el-container class="login-container">
-            <el-card class="login-card">
+        <div class="login-page">
+            <div class="login-card">
                 <h1 class="login-title">登录</h1>
-                <el-form class="login-form" :model="loginForm" :rules="rules" ref="loginForm" label-width="70px">
-                    <el-form-item label="用户名" prop="username">
-                        <el-input v-model="loginForm.username" prefix-icon="el-icon-user"></el-input>
-                    </el-form-item>
-                    <el-form-item label="密码" prop="password">
-                        <el-input v-model="loginForm.password" type="password" show-password prefix-icon="el-icon-lock"></el-input>
-                    </el-form-item>
-                    <el-button type="primary" @click="login" class="login-button">登录</el-button>
+                <form class="login-form" @submit.prevent="login" autocomplete="off">
+                    <div class="form-item">
+                        <label for="username">用户名</label>
+                        <div class="input-with-icon">
+                            <font-awesome-icon icon="user" class="input-icon" />
+                            <input id="username" v-model="loginForm.username" type="text" />
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <label for="password">密码</label>
+                        <div class="input-with-icon">
+                            <font-awesome-icon icon="lock" class="input-icon" />
+                            <input :type="showPassword ? 'text' : 'password'" v-model="loginForm.password" />
+                            <font-awesome-icon :icon="showPassword ? 'eye' : 'eye-slash'" class="toggle-icon" @click="showPassword = !showPassword" />
+                        </div>
+                    </div>
+                    <addnode-button type="submit" class="login-button">登录</addnode-button>
                     <p class="register-link">没有账号? <router-link to="/SignUp">点击注册!</router-link></p>
-                </el-form>
-            </el-card>
-        </el-container>
-    </div>
+                </form>
+            </div>
+        </div>
     </MainBackground>
 </template>
 
 <script>
 import axios from "axios";
 import MainBackground from "@/components/MainBackground.vue";
+import addnodeButton from "@/components/buttons/addnodeButton.vue";
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faUser, faLock, faEye,faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+library.add(faUser, faLock, faEye,faEyeSlash)
 export default {
-    components: {MainBackground},
+    components: {MainBackground,addnodeButton},
     data() {
         return {
             loginForm: {
                 username: '',
                 password: '',
             },
-            rules: {
-                username: [
-                    { required: true, message: '请输入用户名', trigger: 'blur' }
-                ],
-                password: [
-                    { required: true, message: '请输入密码', trigger: 'blur' }
-                ]
-            }
+            showPassword: false,
         };
     },
     methods: {
         async login() {
-            const valid = await this.$refs.loginForm.validate();
-            if (!valid) return;
-
+            if (!this.loginForm.username || !this.loginForm.password) {
+                alert('请输入用户名和密码');
+                return;
+            }
             try {
                 const response = await axios.post('http://localhost:8080/myLogin', {
                     username: this.loginForm.username,
                     password: this.loginForm.password
                 });
-
                 if (response.status === 200) {
                     localStorage.setItem('token', response.data.token);
                     axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
@@ -59,11 +63,11 @@ export default {
                     this.$store.commit('SET_TOKEN', response.data.token);
                     this.$router.push('/');
                 } else {
-                    this.$message.error('用户名或密码错误');
+                    alert('用户名或密码错误');
                 }
             } catch (error) {
                 console.error(error);
-                this.$message.error('登录失败');
+                alert('用户名或密码错误，登陆失败！');
             }
         }
     }
@@ -76,16 +80,15 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.login-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    color: white;
 }
 
 .login-card {
     width: 400px;
+    background-color: transparent;
+    border: 1px solid white;
+    padding: 20px;
+    border-radius: 10px;
 }
 
 .login-title {
@@ -94,11 +97,55 @@ export default {
     margin-bottom: 1em;
 }
 
-.login-button {
-    width: 100%;
-    margin-top: 1em;
+.form-item {
+    margin-bottom: 20px;
 }
+
+.form-item label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.form-item input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid white;
+    background-color: transparent;
+    color: white;
+    border-radius: 4px;
+}
+
+.form-item input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+
 .register-link {
     margin-top: 20px;
+    text-align: center;
+}
+.input-with-icon {
+    position: relative;
+}
+
+.input-icon, .toggle-icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.input-icon {
+    left: 10px;
+}
+
+.toggle-icon {
+    right: 10px;
+    cursor: pointer;
+}
+
+.form-item input {
+    padding-left: 30px; /* Adjusted to make space for the icon */
+    padding-right: 30px; /* Adjusted for the toggle icon in password input */
 }
 </style>

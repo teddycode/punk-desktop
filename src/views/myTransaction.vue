@@ -5,6 +5,8 @@
             <router-link to="/myTransaction/myExchange" class="btn-transaction" :class="{active: $route.path === '/myTransaction/myExchange'}">兑换</router-link>
             <router-link to="/myTransaction/myToken" class="btn-transaction" :class="{active: $route.path === '/myTransaction/myToken'}">代币</router-link>
             <router-link to="/myTransaction/myTrade" class="btn-transaction" :class="{active: $route.path === '/myTransaction/myTrade'}">流动性</router-link>
+            <router-link to="/myTransaction/limitOrder" class="btn-transaction" :class="{active: $route.path === '/myTransaction/limitOrder'}">限价单</router-link>
+            <router-link to="/myTransaction/myOrder" class="btn-transaction" :class="{active: $route.path === '/myTransaction/myOrder'}">订单</router-link>
         </div>
         <div class="content-transaction">
             <router-view></router-view>

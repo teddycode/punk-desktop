@@ -21,6 +21,8 @@ import myProposals from "@/views/Governances/myProposals.vue";
 import MyEntrust from "@/views/Governances/myEntrust.vue";
 import SignUp from "@/views/SignUp.vue";
 import AdminPage from '@/views/AdminPage.vue';
+import limitOrder from "@/views/Transactions/limitOrder.vue";
+import myOrder from "@/views/Transactions/myOrder.vue";
 
 const routes = [
     {
@@ -126,6 +128,16 @@ const routes = [
                 path:'myTrade',
                 name:'myTrade',
                 component:myTrade,
+            },
+            {
+                path:'limitOrder',
+                name:'limitOrder',
+                component:limitOrder,
+            },
+            {
+                path:'myOrder',
+                name:'myOrder',
+                component:myOrder,
             },
         ]
     },

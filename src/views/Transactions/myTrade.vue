@@ -29,10 +29,24 @@
                 <div class="liquidity-right">
                     <h2 class="h2-2">添加数额</h2>
                     <div class="token-input">
-                        <input type="number" v-model="amountA" id="tokenA" class="custom-input">
+                        <input v-model.number="inputAmountA" id="tokenA" class="custom-input" type="number" autocomplete="off">
                     </div>
                     <div class="token-input">
-                        <input type="number" v-model="amountB" id="tokenB" class="custom-input">
+                        <input v-model.number="inputAmountB" id="tokenB" class="custom-input" type="number" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <div class="price-range-section">
+                <h2 class="price-range-title">价格区间</h2>
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <input v-model.number="priceLow" type="text" pattern="\d*" class="custom-input range-input">
+                        <span class="input-hint">MIN</span>
+                    </div>
+                    <div class="input-wrapper">
+                        <input v-model.number="priceUpper" type="text" pattern="\d*" class="custom-input range-input">
+                        <span class="input-hint">MAX</span>
                     </div>
                 </div>
             </div>
@@ -51,13 +65,17 @@
                 </div>
                 <p v-if="addressError" class="error-message">无效的地址格式</p>
             </div>
-            <addnode-button class="add-liquidity-button">Add</addnode-button>
+            <addnode-button class="add-liquidity-button" @click="validateAndAdd">Add</addnode-button>
         </div>
     </div>
 </template>
 
 <script>
 import addnodeButton from "@/components/buttons/addnodeButton.vue";
+import {addLiq} from "@/views/Transactions/function/addLiquidity";
+import {limitOrderPoolKey} from "@/views/Transactions/function/address.js";
+import {ethers} from "ethers";
+// import { initializeWallet } from "@/views/Transactions/function/address";
 export default {
     components:{
         addnodeButton
@@ -76,20 +94,71 @@ export default {
                 { label: 'token0', value: 'token0'},
                 { label: 'token1', value: 'token1'},
             ],
-            fees: ["0.04%", "0.2%", "1%"],
+            fees: ["动态","0.04%", "0.2%", "1%"],
             selectedTokenA: '',
             selectedTokenB: '',
             selectedFee: '',
             hookAddress: '',
-            amountA: '',
-            amountB: '',
-            addressError: false
+            inputAmountA: '',
+            inputAmountB: '',
+            priceLow:null,
+            priceUpper: null,
+            addressError: false,
+            isAddButtonClicked: false,
+            // wallet:null,
+            ModifyPositionParams: {
+                tickLower: 0,
+                tickUpper: 0,
+                liquidityDelta: 0,
+            }
         };
+    },
+    watch: {
+        hookAddress(newVal) {
+            if (newVal === '') {
+                this.isAddButtonClicked = false;
+                this.addressError = false;
+            }
+        },
     },
     methods: {
         validateHookAddress() {
-            const pattern = /^0x[a-fA-F0-9]{40}$/;
-            this.addressError = !this.hookAddress.match(pattern);
+            if (this.isAddButtonClicked) {
+                const pattern = /^0x[a-fA-F0-9]{40}$/;
+                this.addressError = !this.hookAddress.match(pattern);
+            }
+        },
+        async validateAndAdd() {
+            this.isAddButtonClicked = true;
+            this.validateHookAddress();
+            if (!this.addressError) {
+                console.log('begin addLiq')
+                console.log('priceLow: ', this.priceLow)
+                console.log('priceUpper: ', this.priceUpper)
+                if (this.selectedTokenA === 'token0' && this.selectedTokenB === 'token1') {
+                    console.log('inputAmountA:', this.inputAmountA);
+                    console.log('inputAmountB:', this.inputAmountB);
+                    try {
+                        await addLiq(this.priceLow, this.priceUpper, ethers.utils.parseUnits(this.inputAmountA.toString(), 18), ethers.utils.parseUnits(this.inputAmountB.toString(), 18), limitOrderPoolKey)
+                        alert("添加流动性成功")
+                    } catch (err) {
+                        console.log(err)
+                        alert("添加流动性失败")
+                    }
+                } else if (this.selectedTokenA === 'token1' && this.selectedTokenB === 'token0') {
+                    console.log('inputAmountA:', this.inputAmountB);
+                    console.log('inputAmountB:', this.inputAmountA);
+                    try {
+                        await addLiq(this.priceLow, this.priceUpper, ethers.utils.parseUnits(this.inputAmountB.toString(), 18), ethers.utils.parseUnits(this.inputAmountA.toString(), 18), limitOrderPoolKey)
+                        alert("添加流动性成功")
+                    } catch (err) {
+                        console.log(err)
+                        alert("添加流动性失败")
+                    }
+                } else {
+                    alert('暂时不支持tokenA,tokenB以外的代币对！')
+                }
+            }
         }
     }
 }
@@ -268,12 +337,63 @@ export default {
 }
 .error-message {
     color: red;
-    font-size: 12px;
-    margin-top: 5px;
+    font-size: 1rem;
+    padding: 2px 0; /* 将 padding 调整为更小的值来适应文本内容 */
     width: 100%;
-    text-align: left;
+    text-align: center;
+    line-height: 1.2; /* 调整行高 */
+    display: inline-block; /* 设置为 inline-block 使其仅占据文本内容的空间 */
+    margin-top: 5px;
 }
 .add-liquidity-button{
     margin-bottom: 2%;
+}
+.price-range-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2%;
+    width: 100%;
+    /*margin-bottom: 2%;*/
+}
+
+.price-range-title {
+    color: white;
+    font-size: 1.5rem;
+    margin-bottom: 2%;
+}
+
+.input-wrapper {
+    position: relative;
+    width: 48%;
+    margin-bottom: 2%;
+}
+.input-group {
+    display: flex; /* 设置为 flex 布局，使两个输入框位于同一行 */
+    justify-content: space-between; /* 在两个输入框之间留有一定的间距 */
+    width: 80%; /* 宽度可以根据需要调整 */
+}
+.range-input {
+    box-sizing: border-box;
+    width: 100%;
+    background-color: transparent;
+    border: 1px solid white;
+    color: white;
+    padding: 8px 12px 8px 12px;
+    border-radius: 4px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.15s ease-in-out;
+}
+
+.input-hint {
+    color: white;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.hook-address-longer{
+    margin-right: 2%;
 }
 </style>

@@ -8,6 +8,7 @@ export default createStore({
         transferRecords: [], // 添加转账记录数组
         proposals:JSON.parse(localStorage.getItem('proposals')) || [],
         token: localStorage.getItem('token') || null,
+        wallet:null,
     },
     mutations: {
         updateUserAddress(state, address) {

@@ -2,7 +2,7 @@
     <div class="transaction">
         <div class="chart-container">
             <!-- 这里可以放置图像或echarts -->
-            <div id="chart" style="width: 100%; height: 400px; "></div>
+            <div id="chart" style="width: 100%; height: 360px ;margin-top: 20px;margin-bottom: 20px "></div>
         </div>
         <div class="exchange-panel-transaction">
             <div class="settings">
@@ -55,7 +55,6 @@
                     <input type="number" v-model.trim="tokenAmount1" min="0" @input="calculateAmount('token1')" class="custom-input"/>
                 </div>
             </div>
-
             <div class="input-section-transaction">
                 <div>
                     <label for="token2">To</label>
@@ -71,7 +70,7 @@
                 <p>{{ rateText }}</p>
                 <p v-if="ratesUpdateTime">汇率更新时间：{{ ratesUpdateTime }}</p>
             </div>
-            <addnode-button style="width: 150px; height: 50%; margin-bottom: 20px;" @click="exchange()">兑换代币</addnode-button>
+            <addnode-button style="width: 150px; height: 10%;" @click="exchange()">兑换代币</addnode-button>
         </div>
     </div>
 </template>
@@ -79,7 +78,7 @@
 
 <script>
 // import {Web3} from "web3";
-import {BigNumber, ethers} from "ethers";
+import {ethers} from "ethers";
 import addnodeButton from "@/components/buttons/addnodeButton.vue";
 import axios from "axios";
 import * as echarts from 'echarts';
@@ -143,10 +142,10 @@ export default {
             provider:null,
             wallet:null,
             myliquidityProviderAddress :  "0x94d74855D127Aa58411Ff33F5A8e73Dd0921DEa6",
-            MyLiquidityProviderAbi:require('../../../frontend/frontend/abi/MyLiquidityProvider.json').abi,
+            MyLiquidityProviderAbi:require('../../../frontend 2(1)/frontend/abi/MyLiquidityProvider.json').abi,
             MyLiquidityProvider: null,
             hookAddress :  "0xe030A38bb07b3A602E70e3FEF9C4a9eD24C11024",
-            hookAbi:require('../../../frontend/frontend/abi/LimitOrder.json').abi,
+            hookAbi:require('../../../frontend 2(1)/frontend/abi/LimitOrder.json').abi,
             poolKey: {
                 currency0: '',
                 currency1: '',
@@ -159,7 +158,7 @@ export default {
                 amountSpecified: ethers.BigNumber.from('0'),
                 sqrtPriceLimitX96: ethers.BigNumber.from('7922816251426433759354395033600')
             },
-            erc20Abi : require('../../../frontend/frontend/abi/Token0.json').abi,
+            erc20Abi : require('../../../frontend 2(1)/frontend/abi/Token0.json').abi,
             token0: null,
             token1: null,
             poolmanagerAddress : "0xe8d31aF220B968EbF9E2Fdef3C1F9b2c1D9b30B8",
@@ -201,6 +200,7 @@ export default {
                 const signer = provider.getSigner();
                 this.fromAccount = await signer.getAddress(); // 设置第一个账户为默认账户
                 this.wallet = signer
+                console.log("wallet: ", this.wallet)
                 this.MyLiquidityProvider = new ethers.Contract(this.myliquidityProviderAddress,this.MyLiquidityProviderAbi,signer)
                 this.poolKey.hooks = this.hookAddress
                 this.token0 = new ethers.Contract(this.tokenAddresses.token0,this.erc20Abi,signer)
@@ -237,36 +237,6 @@ export default {
         },
     },
     methods: {
-        // async getSlot0(contract, poolKey) {
-        //     console.log('hello getslot0')
-        //     let poolId = '0x609d005fabd5342dd71a5a0b79ef2fec972bf7f267a50975cbf3b097e85154c9'
-        //     console.log(`PoolId: ${poolId}`);
-        //     let slot0 = await contract.getSlot0(poolId);
-        //     console.log(`Returned slot0: ${JSON.stringify(slot0)}`);
-        //     return poolId;
-        // },
-        // getPoolId(poolKey) {
-        // return ethers.utils.solidityKeccak256(
-        // ["bytes"],
-        // [ethers.utils.defaultAbiCoder.encode(
-        //     ["address", "address", "uint24", "int24", "address"],
-        //     [poolKey.currency0, poolKey.currency1, poolKey.fee, poolKey.tickSpacing, poolKey.hooks]
-        //         )]
-        //     );
-        // },
-        // async getPoolPrice(contract, poolKey) {
-        //     let slot0 = await this.getSlot0(contract, poolKey);
-        //     // const bigNumberValue = slot0[0].toString();
-        //     //console.log("bigNumberValue:", bigNumberValue);
-        //     const divisor = ethers.BigNumber.from(2).pow(96);
-        //     console.log("divisor:", divisor.toString());
-        //     console.log("slot:" ,ethers.BigNumber.from(slot0[0]))
-        //     const dividedValue = ethers.BigNumber.from(slot0[0]).div(divisor);
-        //     console.log("dividedValue:", dividedValue.toString());
-        //     const result = dividedValue.mul(dividedValue);
-        //     console.log("result:", result.toString());
-        //     return result;
-        // },
         getTokenAddresses(selectedToken1, selectedToken2) {
             // eslint-disable-next-line no-undef
             if (this.tokenAddresses[selectedToken1]<this.tokenAddresses[selectedToken2]){
@@ -465,12 +435,11 @@ export default {
                 minY -= 0.01;
                 maxY += 0.01;
             }
-
             let items = [];
             for (let i = 1; i < this.ratioValues.length; i++) {
                 let startValue = this.ratioValues[i - 1];
                 let endValue = this.ratioValues[i];
-                let color = endValue < startValue ? 'red' : '#0088CC';
+                let color = endValue < startValue ? 'red' : 'green';
                 items.push({
                     value: [times[i - 1], startValue, endValue],
                     itemStyle: {
