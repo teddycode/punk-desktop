@@ -26,19 +26,22 @@ async function killLimitOrder(contract, poolKey, tickLower, zeroForOne, to) {
 async function placeLimitOrder(contract, poolKey, tickLower, zeroForOne, liquidity) {
     let tx = await contract.place(poolKey, tickLower, zeroForOne, liquidity);
     await tx.wait();
-    console.log("limit order set successfully");
-    alert("limit order set successfully")
-    // await contract.on("Place", (owner, epoch, key, tickLower, zeroForOne, liquidity, event) => {
-    //     console.log("Place event emitted:");
-    //     console.log("Owner: ", owner);
-    //     console.log("Epoch: ", epoch.toString());
-    //     console.log("Key: ", key);
-    //     console.log("TickLower: ", tickLower.toString());
-    //     console.log("ZeroForOne: ", zeroForOne);
-    //     console.log("Liquidity: ", liquidity.toString());
+    console.log("成功设置限价订单");
 
-    //     // Handle event here
-    //});
+    let eventResult = await new Promise((resolve, reject) => {
+        contract.once("Place", (owner, epoch, key, tickLower, zeroForOne, liquidity, event) => {
+            let resultData = {
+                owner: owner,
+                epoch: epoch.toString(),
+                key: key,
+                tickLower: tickLower.toString(),
+                zeroForOne: zeroForOne,
+                liquidity: liquidity.toString()
+            };
+            resolve(resultData); // 返回整个数据对象
+        });
+    });
+    return eventResult.epoch;
 }
 
 async function withdrawLimitOrder(contract, epoch, to) {
@@ -72,8 +75,9 @@ async function isapproved(contract, ownerAddress, spenderAddress, amount) {
     }
 
 }
-export async function placeLimitOrderFrontend(poolkey, price, tokenup, tokendown, amount0){
+export async function placeLimitOrderFrontend(poolkey,price,tokenup,tokendown,amount0){
     let zeroForOne = tokenup < tokendown;
+    console.log(zeroForOne)
     let tick = calculateTickFromPriceWithSpacing(price);
     //检查ERC20代币余额是否足够
     //let balance0 = await token0.balanceOf(wallet.address);
@@ -88,9 +92,10 @@ export async function placeLimitOrderFrontend(poolkey, price, tokenup, tokendown
     }
     //place limit order
     let pricecur = await getPoolPrice(poolManager, poolkey);
+    console.log("cur:",pricecur)
 
-    if(pricecur>price && zeroForOne===true){console.log("price is too low");alert("price is too low");return 1;}
-    if(pricecur<price && zeroForOne===false){console.log("price is too high");alert("price is too high");return 1;}
+    if(pricecur>price && zeroForOne===true){console.log("price is too low");return 1;}
+    if(pricecur<price && zeroForOne===false){console.log("price is too high");return 1;}
     let liquidity = "0"
     console.log("pricecur:",pricecur.toString())
     if(zeroForOne===true)
@@ -101,7 +106,9 @@ export async function placeLimitOrderFrontend(poolkey, price, tokenup, tokendown
         liquidity = caculateLiqDetla2(calculatePriceFromTick(tick-poolkey.tickSpacing),pricecur,price,0,amount0).toString();
     }
     console.log("liquidity:",liquidity)
-    await placeLimitOrder(hook, poolkey, tick, zeroForOne,liquidity);
+    let epoch = await placeLimitOrder(hook, poolkey, tick, zeroForOne,liquidity);
+    console.log("epochfront:",epoch)
+    return epoch;
 }
 async function getSlot0(contract, poolKey) {
     let poolId = getPoolId(poolKey);
@@ -138,26 +145,6 @@ async function getERC20Balance(contract, address) {
     console.log(`ERC20 Balance: ${balance.toString()}`);
     return balance;
 }
-// async function main(){
-//
-//     // //let ticklower = 46080
-//     // let zeroforone = true
-//     // let liquidity = ethers.BigNumber.from('102345667900')
-//     // await placeLimitOrder(hook, limitOrderPoolKey, ticklower, zeroforone, liquidity);
-//     // console.log("place limit order successfully");
-//     //poolkey,price,tokenup,tokendown,amount0
-//
-//     let token0beforswap = await getERC20Balance(token0,wallet.address);
-//     let token1beforswap = await getERC20Balance(token1,wallet.address);
-//     let price = 60
-//     await placeLimitOrderFrontend(limitOrderPoolKey,price,token1.address,token0.address,ethers.utils.parseUnits("100", 18))
-//     let token0afterswap = await getERC20Balance(token0,wallet.address);
-//     let token1afterswap = await getERC20Balance(token1,wallet.address);
-//
-//     console.log("token0 change:",token0afterswap.sub(token0beforswap).toString())
-//     console.log("token1 change:",token1afterswap.sub(token1beforswap).toString())
-// }
-//
-// main()
+
 
 

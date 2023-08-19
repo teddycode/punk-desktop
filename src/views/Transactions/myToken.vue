@@ -253,7 +253,7 @@ table tr td.positive-change {
 
 .search-button {
     margin-left: 20px;
-    width: 20%;
+    width: 100px;
     height: 40px !important;
 }
 </style>

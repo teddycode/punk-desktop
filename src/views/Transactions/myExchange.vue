@@ -82,6 +82,9 @@ import {ethers} from "ethers";
 import addnodeButton from "@/components/buttons/addnodeButton.vue";
 import axios from "axios";
 import * as echarts from 'echarts';
+import {limitOrderPoolKey} from "@/views/Transactions/function/address";
+import {swap} from "@/views/Transactions/function/swap";
+import {getPoolPrice} from "@/views/Transactions/function/getprice";
 
 
 export default {
@@ -125,8 +128,8 @@ export default {
                 'XRP': '0xCed0CE92F4bdC3c2201E255FAF12f05cf8206dA8',  // 请注意，XRP原生在Ripple网络上，这可能是其在Ethereum上的一个版本
                 'USDC': '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
                 'DAI': '0x6B175474E89094C44Da98b954EedeAC495271d0F',
-                'token0':'0x01a53cD5fBb1Ea5720066A67A133a68012ca1a30',
-                'token1':'0x2d121a0d1Aa8b181331f7101b41D91F153DAEF4E',
+                'token0':'0x7C259EAdFaB9DE34aEc1690f9E27f18435493b3b',
+                'token1':'0x8161f63d320ee3EF6feD7dFA94923d940b19C8b1',
             },
             selectedToken1: 'ETH',
             selectedToken2: 'USDC',
@@ -141,29 +144,6 @@ export default {
             web3: null,
             provider:null,
             wallet:null,
-            myliquidityProviderAddress :  "0x94d74855D127Aa58411Ff33F5A8e73Dd0921DEa6",
-            MyLiquidityProviderAbi:require('../../../frontend 2(1)/frontend/abi/MyLiquidityProvider.json').abi,
-            MyLiquidityProvider: null,
-            hookAddress :  "0xe030A38bb07b3A602E70e3FEF9C4a9eD24C11024",
-            hookAbi:require('../../../frontend 2(1)/frontend/abi/LimitOrder.json').abi,
-            poolKey: {
-                currency0: '',
-                currency1: '',
-                fee: 60,
-                tickSpacing: 60,
-                hooks:null ,
-            },
-            swapParams: {
-                zeroForOne: false,
-                amountSpecified: ethers.BigNumber.from('0'),
-                sqrtPriceLimitX96: ethers.BigNumber.from('7922816251426433759354395033600')
-            },
-            erc20Abi : require('../../../frontend 2(1)/frontend/abi/Token0.json').abi,
-            token0: null,
-            token1: null,
-            poolmanagerAddress : "0xe8d31aF220B968EbF9E2Fdef3C1F9b2c1D9b30B8",
-            poolmanagerAbi : require('../../../frontend 2(1)/frontend/abi/PoolManager.json').abi,
-            poolManager:null,
         };
     },
     watch: {
@@ -172,12 +152,12 @@ export default {
                 this.calculateAmount(this.lastModifiedToken);
             }
         },
-        tokenAmount1: function() {
-            this.calculateAmount('token1');
-        },
-        tokenAmount2: function() {
-            this.calculateAmount('token2');
-        },
+        // tokenAmount1: function() {
+        //     this.calculateAmount('token1');
+        // },
+        // tokenAmount2: function() {
+        //     this.calculateAmount('token2');
+        // },
         selectedToken1() {
             this.fetchData();
         },
@@ -200,20 +180,6 @@ export default {
                 const signer = provider.getSigner();
                 this.fromAccount = await signer.getAddress(); // 设置第一个账户为默认账户
                 this.wallet = signer
-                console.log("wallet: ", this.wallet)
-                this.MyLiquidityProvider = new ethers.Contract(this.myliquidityProviderAddress,this.MyLiquidityProviderAbi,signer)
-                this.poolKey.hooks = this.hookAddress
-                this.token0 = new ethers.Contract(this.tokenAddresses.token0,this.erc20Abi,signer)
-                this.token1 = new ethers.Contract(this.tokenAddresses.token1,this.erc20Abi,signer)
-                this.poolManager = new ethers.Contract(this.poolmanagerAddress,this.poolmanagerAbi,signer)
-                console.log("Account Address:", this.fromAccount);
-                console.log("Wallet Object:", this.wallet);
-                console.log("MyLiquidityProvider Contract:", this.MyLiquidityProvider);
-                console.log("poolKey.hooks Contract:", this.poolKey.hooks);
-                console.log("token0: " , this.token0)
-                console.log("token1: " , this.token1)
-                console.log("poolManager: " , this.poolManager)
-                console.log("swapParams:", this.swapParams)
             } catch (error) {
                 console.error("Error accessing accounts: ", error);
             }
@@ -237,32 +203,6 @@ export default {
         },
     },
     methods: {
-        getTokenAddresses(selectedToken1, selectedToken2) {
-            // eslint-disable-next-line no-undef
-            if (this.tokenAddresses[selectedToken1]<this.tokenAddresses[selectedToken2]){
-            this.swapToken0 = this.tokenAddresses[selectedToken1];
-            this.swapToken1 = this.tokenAddresses[selectedToken2];
-            //this.swapParams.amountSpecified = ethers.BigNumber.from(this.tokenAmount1*1000000000000000000);
-            this.swapParams.amountSpecified = ethers.utils.parseUnits(this.tokenAmount1.toString(), 18);
-            console.log("swapParams.amountSpecified: " + this.swapParams.amountSpecified);
-            console.log(selectedToken1,selectedToken2,this.swapToken0,this.swapToken1)
-            console.log("change to true");
-            this.swapParams.zeroForOne = true;
-            this.swapParams.sqrtPriceLimitX96=ethers.BigNumber.from('79228162514264337593543950336')
-        }else {
-                this.swapToken1 = this.tokenAddresses[selectedToken1];
-                this.swapToken0 = this.tokenAddresses[selectedToken2];
-                this.swapParams.amountSpecified = ethers.utils.parseUnits(this.tokenAmount1.toString(), 18);
-                console.log("swapParams.amountSpecified: " + this.swapParams.amountSpecified);
-                this.swapParams.zeroForOne = false;
-                this.swapParams.sqrtPriceLimitX96=ethers.BigNumber.from('7922816251426433759354395033600')
-            }
-            if (!this.swapToken0 || !this.swapToken1) {
-                throw new Error('Invalid token selection. Address not found.');
-            }
-            console.log("token0Address: " + this.swapToken0)
-            console.log("token1Address: " + this.swapToken1)
-        },
         onInput(value) {
             // Remove non-numeric and non-period characters
             this.customSlippage = value.replace(/[^0-9.]/g, '');
@@ -271,7 +211,6 @@ export default {
             try {
                 let response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum,bitcoin,binancecoin,cardano,dogecoin,ripple,usd-coin,dai&vs_currencies=usd');
                 let data = await response.json();
-
                 this.rates = {
                     'ETH': data.ethereum.usd,
                     'BTC': data.bitcoin.usd,
@@ -281,8 +220,6 @@ export default {
                     'XRP': data.ripple.usd,
                     'USDC':data['usd-coin'].usd,
                     'DAI': data.dai.usd,
-                    'token0':100 * data['usd-coin'].usd,
-                    'token1':data['usd-coin'].usd,
                 };
                 // 更新汇率更新时间
                 this.ratesUpdateTime = new Date();
@@ -295,74 +232,75 @@ export default {
                 this.fetchRates();
             }, 60 * 1000);  // Update every minute
         },
-        calculateAmount(tokenModified) {
+        async calculateAmount(tokenModified) {
             this.lastModifiedToken = tokenModified;
-            if(tokenModified === 'token1' && this.selectedToken1 && this.selectedToken2 && this.tokenAmount1){
-                let rate = this.rates[this.selectedToken1] / this.rates[this.selectedToken2];
-                this.tokenAmount2 = parseFloat((this.tokenAmount1 * rate).toFixed(6)); // Round and then parse
-                console.log('正常兑换')
-            }
-            else if(tokenModified === 'token2' && this.selectedToken1 && this.selectedToken2 && this.tokenAmount2) {
-                let rate = this.rates[this.selectedToken2] / this.rates[this.selectedToken1];
-                this.tokenAmount1 = parseFloat((this.tokenAmount2 * rate).toFixed(6)); // Round and then parse
+            if (tokenModified === 'token1' && this.selectedToken1 && this.selectedToken2 && this.tokenAmount1) {
+                if (this.selectedToken1 === 'token0' && this.selectedToken2 === 'token1') {
+                    let rate = await getPoolPrice(limitOrderPoolKey)
+                    rate = Number(rate)
+                    console.log("rate: ", rate)
+                    console.log("amount1: ", this.tokenAmount1)
+                    this.tokenAmount2 = parseFloat((this.tokenAmount1 * rate).toFixed(6));
+                    console.log("amount2: ", this.tokenAmount2)
+                }else if(this.selectedToken1 === 'token1' && this.selectedToken2 === 'token0'){
+                    let rate = await getPoolPrice(limitOrderPoolKey)
+                    rate = Number(1/rate)
+                    console.log("rate: ", rate)
+                    console.log("amount1: ", this.tokenAmount1)
+                    this.tokenAmount2 = parseFloat((this.tokenAmount1 * rate).toFixed(6));
+                    console.log("amount2: ", this.tokenAmount2)
+                }else {
+                    let rate = this.rates[this.selectedToken1] / this.rates[this.selectedToken2];
+                    this.tokenAmount2 = parseFloat((this.tokenAmount1 * rate).toFixed(6)); // Round and then parse
+                    console.log('正常兑换')
+                }
+            } else if (tokenModified === 'token2' && this.selectedToken1 && this.selectedToken2 && this.tokenAmount2) {
+                if (this.selectedToken1 === 'token1' && this.selectedToken2 === 'token0'){
+                    let rate = await getPoolPrice(limitOrderPoolKey)
+                    rate = Number(rate)
+                    this.tokenAmount1 = parseFloat((this.tokenAmount2 * rate).toFixed(6));
+                }else if(this.selectedToken1 === 'token0' && this.selectedToken2 === 'token1'){
+                    let rate = await getPoolPrice(limitOrderPoolKey)
+                    rate = Number(1/rate)
+                    this.tokenAmount1 = parseFloat((this.tokenAmount2 * rate).toFixed(6));
+                }else {
+                    let rate = this.rates[this.selectedToken2] / this.rates[this.selectedToken1];
+                    this.tokenAmount1 = parseFloat((this.tokenAmount2 * rate).toFixed(6)); // Round and then parse
+                }
             }
         },
-        async approveERC20(contract, toAddress, amount) {
-            // 批准ERC20代币
-            let tx = await contract.approve(toAddress, amount);
-            // 等待交易被挖矿
-            let receipt = await tx.wait();
-            console.log(`Transaction hash: ${receipt.transactionHash}`);
-        },
-        async executeSwap(contract, poolKey, swapParams){
-            // Set position parameters
-            console.log("begin swap")
-            let to0params = {
-                tickLower: 840000, // lower price 0.5
-                tickUpper: 876600, // upper price 1.5
-                liquidityDelta: 0
-            }
-            await this.approveERC20(this.token0,this.myliquidityProviderAddress,ethers.utils.parseUnits("21000000", 18))
-            await this.approveERC20(this.token1,this.myliquidityProviderAddress,ethers.utils.parseUnits("21000000", 18))
-            let tx1 = await contract.setPositionParameters(poolKey, to0params);
-            await tx1.wait();
-            console.log('tx1 finish')
-            console.log(swapParams)
-            let tx2 = await contract.setSwapParameters(poolKey, swapParams);
-            console.log("begin swap1")
-            await tx2.wait();
-            console.log("Position parameters set successfully!");
-            // swap
-            let tx3 = await contract.executeSwap();
-            await tx3.wait();
-            console.log("finish swap")
-            // this.swapParams.zeroForOne=false;
-            // this.swapParams.sqrtPriceLimitX96 = ethers.BigNumber.from('7922816251426433759354395033600')
-        },
-        async exchange() {  // 新增兑换方法
+        async exchange() {
             this.userLoggedIn = this.$store.state.userLoggedIn;
             if (!this.userLoggedIn) {
                 alert("您还没有连接钱包！");
-            } else if (this.selectedToken1 && this.selectedToken2 && this.tokenAmount1 ) {
-                // TODO:这里兑换成功后将交易写入“交易”界面，即能够在交易界面看见该交易
+            } else if (this.selectedToken1 && this.selectedToken2 && this.tokenAmount1) {
                 try {
-                    // console.log("begin swap")
-                    this.getTokenAddresses(this.selectedToken1,this.selectedToken2)
-                    this.poolKey.currency0 = this.swapToken0
-                    this.poolKey.currency1 = this.swapToken1
-                    console.log('poolkey:' , this.poolKey)
-                    console.log('swapParams', this.swapParams)
                     try {
-                        await this.executeSwap(this.MyLiquidityProvider, this.poolKey, this.swapParams)
-                        console.log("final swapParams.sqrtPriceLimitX96:" + this.swapParams.sqrtPriceLimitX96)
-                        alert("兑换成功！");
+                        if (this.tokenAddresses[this.selectedToken1] > this.tokenAddresses[this.selectedToken2]) {
+                            await swap(limitOrderPoolKey, this.tokenAmount1, false)
+                        } else {
+                            await swap(limitOrderPoolKey, this.tokenAmount1, true)
+                        }
                     }catch (err){
                         console.log(err)
-                        console.log("final swapParams.sqrtPriceLimitX96:" + this.swapParams.sqrtPriceLimitX96)
-                        alert("兑换失败！");
+                    }
+                    console.log("执行了兑换！")
+                    let price0 = await getPoolPrice(limitOrderPoolKey); //获取最新的市价
+
+                    console.log("最新市价：" + price0)
+                    // 发送price0到后端
+                    const response = await axios.post("http://localhost:8080/myTransaction/myExchange", {
+                        price0: price0.toString()
+                    });
+
+                    if (response.data.message) {
+                        alert("兑换成功并成功更新订单状态!");
+                    } else {
+                        alert("兑换成功但更新订单状态失败!");
                     }
                 } catch (error) {
                     console.error(error);
+                    alert("兑换失败！");
                 }
             } else {
                 alert("兑换信息不完整，请完善相关信息");
@@ -407,7 +345,6 @@ export default {
                     const price2 = prices2[index];
                     return (price1 >= price2) ? (price1 / price2) : (price2 / price1);
                 });
-
                 this.times = response1.data.prices.map(p => {
                     const date = new Date(p[0]);
                     return `${date.getHours()}:${date.getMinutes()}`;
@@ -425,8 +362,11 @@ export default {
                 let hour = (currentHour - i + 24) % 24;
                 times.unshift(hour + ":00");
             }
-            let minY = Math.min(...this.ratioValues) * 0.999;
-            let maxY = Math.max(...this.ratioValues) * 1.001;
+
+            let validRatioValues = this.ratioValues.filter(val => typeof val === 'number' && !isNaN(val));
+
+            let minY = Math.min(...validRatioValues) * 0.999;
+            let maxY = Math.max(...validRatioValues) * 1.001;
             // 修改 minY 和 maxY 的取整方法
             minY = minY > 100 ? Math.floor(minY) : parseFloat(minY.toFixed(2));
             maxY = maxY > 100 ? Math.ceil(maxY) : parseFloat(maxY.toFixed(2));

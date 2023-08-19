@@ -1,128 +1,188 @@
 <template>
     <div class="myOrder-page">
-        <div class="myOrder-card">
+        <div class="myOrder-card" v-for="(order, index) in displayedOrders" :key="index">
             <h1 class="myOrder-title">My Orders</h1>
             <div class="myOrder-limitOrder">
                 <!-- 左边框 -->
                 <div class="myOrder-panel">
                     <div class="myOrder-limitOrder-token-pair">
                         <h2 class="token-pair-title">代币对</h2>
-                        <div class="myOrder-limitOrder-select-wrapper">
-                            <select class="myOrder-limitOrder-custom-select token-select" v-model="selectedToken1">
-                                <option class="select-option" v-for="token in tokens" :key="token.value" :value="token.value">
-                                    {{ token.label }}
-                                </option>
-                            </select>
-                            <select class="myOrder-limitOrder-custom-select token-select" v-model="selectedToken2">
-                                <option class="select-option" v-for="token in tokens" :key="token.value" :value="token.value">
-                                    {{ token.label }}
-                                </option>
-                            </select>
-                        </div>
+                        <div class="data-box">{{ order.sell }}</div>
+                        <div class="data-box">{{ order.buy }}</div>
                     </div>
                     <div class="fee-options">
                         <h3 class="fee-title">Fee Rates</h3>
-                        <div class="fee-radio-group">
-                            <label v-for="fee in fees" :key="fee" class="limitOrder-fee-box" :class="{ 'selected': selectedFee === fee }">
-                                <input type="radio" name="fee" :value="fee" v-model="selectedFee" class="limitOrder-hidden-radio"/>
-                                {{ fee }}
-                            </label>
-                        </div>
+                        <div class="data-box">{{ order.FeeRates }}</div>
                     </div>
-                    <div class="selected-tokens">{{ selectedToken1 }} -> {{ selectedToken2 }}</div>
+                    <div class="selected-tokens">{{ order.sell }} -> {{ order.buy }}</div>
                 </div>
                 <!-- 右边框 -->
                 <div class="myOrder-panel">
                     <div class="myOrder-input-section">
                         <label for="amount" class="myOrder-limitOrder-token-label">Amount</label>
                         <div class="input-with-token">
-                            <input id="amount" class="myOrder-limitOrder-custom-input" type="text" placeholder="Enter amount"/>
+                            <div class="data-box">{{ Number(order.amount) }}</div>
                         </div>
                     </div>
                     <div class="myOrder-input-section">
                         <label for="price" class="myOrder-limitOrder-token-label">Price</label>
                         <div class="input-with-token">
-                            <input id="price" v-model="price" class="myOrder-limitOrder-custom-input" type="text" placeholder="Enter price"/>
-                            <span class="input-token">{{ selectedToken1 }}/{{ selectedToken2 }}</span>
+                            <div class="data-box">{{ Number(order.price) }} <span>{{ order.sell }}/{{ order.buy }}</span></div>
                         </div>
                     </div>
+                    <!-- 你的数据中似乎没有Filled字段，如果需要可以自行添加 -->
                     <div class="myOrder-input-section">
-                        <label for="filled" class="myOrder-limitOrder-token-label">Filled</label>
-                        <div class="input-with-token">
-                            <input id="filled" class="myOrder-limitOrder-custom-input" type="text" placeholder="Enter filled amount"/>
-                            <span class="input-token">%</span>
-                        </div>
+                    <label for="filled" class="myOrder-limitOrder-token-label">Filled</label>
+                    <div class="input-with-token">
+                        <div :class="getStatusClass(order.status)" class="data-box">{{ order.status }} </div>
                     </div>
+                </div>
+
                 </div>
             </div>
             <div class="button-group">
-                <addnode-button class="addnode-button" @click="withdraw">withdraw</addnode-button>
-                <addnode-button class="addnode-button" @click="kill">cancel</addnode-button>
+                <addnode-button class="addnode-button"
+                                :disabled="order.status !== '成交'"
+                                @click="withdraw(Number(order.epoch),order.id)">
+                    withdraw
+                </addnode-button>
+                <addnode-button class="addnode-button"
+                                :disabled="order.status !== '待成交'"
+                                @click="kill(order.sell,order.buy,Number(order.price),order.id)">
+                    cancel
+                </addnode-button>
             </div>
         </div>
+
     </div>
+    <myPagination :total="totalItems" :pagesize="itemsPerPage" :currentPage="1"  @change-page="updatePage"></myPagination>
 </template>
+
 
 <script>
 import addnodeButton from "@/components/buttons/addnodeButton.vue";
 import {killLimitOrderFrontend} from "@/views/Transactions/function/kill"
-import {limitOrderPoolKey} from "@/views/Transactions/function/address";
+import {limitOrderPoolKey, token0, token1} from "@/views/Transactions/function/address";
 import {ethers} from "ethers";
+import {withdraw_main} from "@/views/Transactions/function/withdraw";
+import axios from "axios";
+import myPagination from "@/components/myPagination.vue";
 export default {
     name: "myOrder",
     components:{
+        myPagination,
         addnodeButton
     },
     data() {
         return {
-            tokens: [
-                { label: 'ETH', value: 'ETH' },
-                { label: 'BTC', value: 'BTC' },
-                { label: 'BNB', value: 'BNB' },
-                { label: 'ADA', value: 'ADA' },
-                { label: 'DOGE', value: 'DOGE' },
-                { label: 'XRP', value: 'XRP' },
-                { label: 'USDC', value: 'USDC' },
-                { label: 'DAI', value: 'DAI' },
-                { label: 'token0', value: 'token0'},
-                { label: 'token1', value: 'token1'},
-            ],
-            fees: ["0.04%", "0.1%", "0.2%", "动态"],
-            selectedToken1: 'ETH',
-            selectedToken2: 'USDC',
-            selectedFee: "0.04%",  // 默认选择的费率
+            orders: [],
+            currentPage: 0,
+            itemsPerPage: 1,
+            totalItems:0,
+            page: 1,
+            displayedOrders: [],
             price:'',
-            myAddress:'',
+            selectedToken1:'',
+            selectedToken2:'',
+            myAddress:''
         }
     },
+    async mounted() {
+        await this.getAddress();
+        await this.fetchOrders();
+    },
     methods:{
-        async withdraw(){
-
-        },
-        async kill(){
-            try {
-                if (typeof window.ethereum !== 'undefined') {
-                    // 使用MetaMask提供的provider
-                    const provider = new ethers.providers.Web3Provider(window.ethereum);
-                    try {
-                        // 请求账户访问
-                        await window.ethereum.request({ method: 'eth_requestAccounts' });
-                        const signer = provider.getSigner();
-                        this.myAddress = await signer.getAddress(); // 设置第一个账户为默认账户
-                        console.log("address: " , this.myAddress)
-                    } catch (error) {
-                        console.error("Error accessing accounts: ", error);
-                    }
-                } else {
-                    console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+        async getAddress() {
+            if (typeof window.ethereum !== 'undefined') {
+                // 使用MetaMask提供的provider
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                try {
+                    // 请求账户访问
+                    await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    const signer = provider.getSigner();
+                    this.myAddress = await signer.getAddress(); // 设置第一个账户为默认账户
+                    console.log("address: ", this.myAddress);
+                } catch (error) {
+                    console.error("Error accessing accounts: ", error);
                 }
-                await killLimitOrderFrontend(this.selectedToken1,this.selectedToken2,this.price,limitOrderPoolKey,this.myAddress)
-                alert("取消成功")
+            } else {
+                console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+            }
+        },
+        getStatusClass(status) {
+            switch (status) {
+                case '待成交':
+                    return 'status-pending';
+                case '成交':
+                    return 'status-done';
+                case '提取成功':
+                    return 'status-withdrawn';
+                case '已取消':
+                    return 'status-cancelled';
+                default:
+                    return '';
+            }
+        },
+        updatePage(newPage) {
+            this.page = newPage;
+            let start = (this.page - 1) * this.itemsPerPage;
+            let end = start + this.itemsPerPage;
+            this.displayedOrders = this.orders.slice(start, end);
+        },
+        async fetchOrders() {
+            try {
+                const response = await axios.post("http://localhost:8080/Transactions/myOrder", { action: "getOrders", userAddress: this.myAddress });
+                this.orders = response.data;
+                this.totalItems = this.orders.length;
+                // Initialize displayedOrders for the first page
+                this.updatePage(1);
+            } catch (error) {
+                console.error("Error fetching orders:", error);
+            }
+        },
+        changePage(page) {
+            this.currentPage = page - 1;
+        },
+        async withdraw(epoch, id) {
+            try {
+                await withdraw_main(epoch);
+                // 发送请求到后端，更新订单状态为 "提取成功"
+                const response = await axios.post("http://localhost:8080/Transactions/myOrder", { action: "withdraw", id: id });
+                if (response.data.message === "Order status updated to 提取成功") {
+                    alert("操作成功");
+                    await this.fetchOrders();
+                } else {
+                    alert("更新订单状态失败");
+                }
+            } catch (err) {
+                console.log(err);
+                alert("操作失败");
+            }
+        },
+        async kill(sell,buy,price,id){
+            console.log("sell: " + sell)
+            console.log("buy: " + buy)
+            console.log("price: " + price)
+            try {
+                if(sell === 'token0' && buy === 'token1'){
+                    await killLimitOrderFrontend(token0.address,token1.address,price,limitOrderPoolKey,this.myAddress)
+                    alert("取消成功")
+                }else if (sell === 'token1' && buy === 'token0'){
+                    await killLimitOrderFrontend(token1.address,token0.address,price,limitOrderPoolKey,this.myAddress)
+                    alert("取消成功")
+                }
+                const response = await axios.post("http://localhost:8080/Transactions/myOrder", { action: "cancel",id: id });
+                if (response.data.message === "Order status updated to 已取消") {
+                    alert("操作成功");
+                    await this.fetchOrders();
+                } else {
+                    alert("更新订单状态失败");
+                }
             }catch (err){
                 console.log(err)
                 alert("取消失败")
             }
-        }
+        },
     }
 }
 </script>
@@ -133,7 +193,7 @@ export default {
     align-items: center;
     justify-content: center;
     color: white;
-    margin-top: 6%;
+    margin-top: 1%;
 }
 
 .myOrder-card {
@@ -186,13 +246,6 @@ export default {
     width: 100%;
 }
 
-.input-token {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 1rem;
-}
 
 .selected-tokens {
     text-align: center;
@@ -200,33 +253,6 @@ export default {
     font-size: 1.2rem;
 }
 
-.myOrder-limitOrder-custom-input, .myOrder-limitOrder-custom-select {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 8px 12px;
-    border-radius: 4px;
-    border: 1px solid white;
-    background-color: transparent;
-    color: white;
-    font-size: 16px;
-    outline: none;
-    transition: border-color 0.15s ease-in-out;
-}
-.myOrder-limitOrder-custom-input{
-    padding-right: 120px;
-}
-.myOrder-limitOrder-custom-input:hover, .myOrder-limitOrder-custom-select:hover {
-    border-color: #007bff;
-}
-
-.myOrder-limitOrder-custom-input::placeholder {
-    color: rgba(255, 255, 255, 0.7);
-}
-
-.select-option {
-    color: white;
-    background-color: #2D3748;
-}
 
 .token-pair-title {
     font-size: 1.5rem;
@@ -239,6 +265,8 @@ export default {
     width: 46%;
     display: inline-block;
     margin: 0 2%;
+    border-color: white;
+    border-radius: 1px;
 }
 
 .fee-title {
@@ -246,38 +274,7 @@ export default {
     margin-bottom: 10px;
 }
 
-.fee-radio-group {
-    display: flex;
-    justify-content: center;
-}
 
-.limitOrder-fee-box {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid white;
-    padding: 5px 10px;
-    margin-right: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: border-color 0.3s ease;
-    color: white;
-    width: 23%;
-    text-align: center;
-}
-
-.limitOrder-fee-box:last-child {
-    margin-right: 0;
-}
-
-.limitOrder-fee-box.selected {
-    border-color: #007bff;
-}
-
-.limitOrder-hidden-radio {
-    display: none;
-}
 .fee-title{
     font-size: 1.5rem;
 }
@@ -287,5 +284,44 @@ export default {
     padding: 10px 20px;
     cursor: pointer;
     margin: 10px; /* 为第一个按钮增加右边距 */
+}
+.data-box {
+    border: 1px solid white;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin: 5px 0;
+    color: white;
+    text-align: center;
+}
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+.addnode-button[disabled] {
+    opacity: 0.5;
+    pointer-events: none; /* 禁止所有鼠标事件，包括点击 */
+    cursor: not-allowed;
+}
+.status-pending {
+    color: deepskyblue;
+}
+
+.status-done {
+    color: white;
+}
+
+.status-withdrawn {
+    color: green;
+}
+
+.status-cancelled {
+    color: red;
 }
 </style>

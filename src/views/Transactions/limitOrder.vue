@@ -54,14 +54,12 @@
 
 
 <script>
-// import {Web3} from "web3";
-// import {ethers} from "ethers";
-// import addnodeButton from "@/components/buttons/addnodeButton.vue";
 import axios from "axios";
 import * as echarts from 'echarts';
 import addnodeButton from "@/components/buttons/addnodeButton.vue";
 import {limitOrderPoolKey} from "@/views/Transactions/function/address";
 import {placeLimitOrderFrontend} from "@/views/Transactions/function/place";
+import {ethers} from "ethers";
 
 export default {
     components:{
@@ -87,6 +85,7 @@ export default {
             selectedFee: '0.04%',
             amount: '',
             price: '',
+            fromAccount:'',
         };
     },
     watch: {
@@ -158,8 +157,11 @@ export default {
                 let hour = (currentHour - i + 24) % 24;
                 times.unshift(hour + ":00");
             }
-            let minY = Math.min(...this.ratioValues) * 0.999;
-            let maxY = Math.max(...this.ratioValues) * 1.001;
+
+            let validRatioValues = this.ratioValues.filter(val => typeof val === 'number' && !isNaN(val));
+
+            let minY = Math.min(...validRatioValues) * 0.999;
+            let maxY = Math.max(...validRatioValues) * 1.001;
             // 修改 minY 和 maxY 的取整方法
             minY = minY > 100 ? Math.floor(minY) : parseFloat(minY.toFixed(2));
             maxY = maxY > 100 ? Math.ceil(maxY) : parseFloat(maxY.toFixed(2));
@@ -260,8 +262,51 @@ export default {
             chart.setOption(option);
         },
         async place(){
+            let epoch ;
+            let flag = 0;
+            if (typeof window.ethereum !== 'undefined') {
+                // 使用MetaMask提供的provider
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                try {
+                    // 请求账户访问
+                    await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    const signer = provider.getSigner();
+                    this.fromAccount = await signer.getAddress(); // 设置第一个账户为默认账户
+                    console.log("address:" + this.fromAccount)
+                } catch (error) {
+                    console.error("Error accessing accounts: ", error);
+                }
+            } else {
+                console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+            }
             try {
-                await placeLimitOrderFrontend(limitOrderPoolKey, this.price, this.selectedToken1, this.selectedToken2, this.amount)
+                try {
+                    epoch = await placeLimitOrderFrontend(limitOrderPoolKey, this.price, this.selectedToken1, this.selectedToken2, this.amount)
+                    console.log("address2:" + this.fromAccount)
+                    flag = 1
+                }catch (err){
+                    console.log(err)
+                }
+                if(flag===1){
+                    // 发送POST请求到后端
+                    const requestBody = {
+                        UserAddress: this.fromAccount,
+                        sell: this.selectedToken1,
+                        buy: this.selectedToken2,
+                        amount: this.amount,
+                        price: this.price,
+                        FeeRates: this.selectedFee,
+                        status: "待成交",
+                        epoch: epoch
+                    };
+                    console.log("requestBody", requestBody);
+                    const response = await axios.post("http://localhost:8080/Transactions/limitOrder", requestBody);
+                    if (response.data.message) {
+                        alert("Order added successfully!");
+                    }else {
+                        alert("插入数据失败！")
+                    }
+                }
             }catch (err){
                 console.log(err)
                 alert("操作失败")

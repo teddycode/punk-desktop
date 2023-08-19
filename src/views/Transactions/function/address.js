@@ -3,11 +3,11 @@
 import {ethers} from "ethers";
 
 //export this file to use in other files
-export const token0Address = "0x01a53cD5fBb1Ea5720066A67A133a68012ca1a30"
-export const token1Address =  "0x2d121a0d1Aa8b181331f7101b41D91F153DAEF4E"
-export const hookAddress = '0xe030A38bb07b3A602E70e3FEF9C4a9eD24C11024'
-export const myliquidityProviderAddress =  "0x94d74855D127Aa58411Ff33F5A8e73Dd0921DEa6"
-export const poolmanagerAddress =  "0xe8d31aF220B968EbF9E2Fdef3C1F9b2c1D9b30B8"
+export const token0Address = "0x7C259EAdFaB9DE34aEc1690f9E27f18435493b3b"
+export const token1Address =  "0x8161f63d320ee3EF6feD7dFA94923d940b19C8b1"
+export const hookAddress = '0xDeCEc241341edbfc17534BDb75CB9d6a8913ee31'
+export const myliquidityProviderAddress =  "0x2A65C18B0f2aB23A0A2e4135dDABe510E9026682"
+export const poolmanagerAddress =  "0x5142F7CB0D4E97DC972B87Fd67425820Fc7166f2"
 
 const poolmanagerAbi = require('./abi/PoolManager.json').abi;
 const erc20Abi = require('./abi/Token0.json').abi;

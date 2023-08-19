@@ -168,6 +168,7 @@ export default {
                     this.$store.dispatch('setAddress', this.userAddress);
                     // 直接从网络获取用户余额，保证余额的实时性
                     this.userBalance = await this.getBalance(this.userAddress);
+                    console.log("loadUserData:this.userBalance =" + this.userBalance);
                     this.$store.dispatch('setBalance', this.userBalance);
                 }
             }
