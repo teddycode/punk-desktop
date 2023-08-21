@@ -22,7 +22,7 @@ npm start    //启动electron项目并自动打包为一个桌面端可运行程
 
 #### 项目框架简单介绍
 
-<img src="C:\Users\22515\AppData\Local\Temp\WeChat Files\eeacaaf99cf326028805353115e8933.png" alt="eeacaaf99cf326028805353115e8933" style="zoom:50%;" />
+<img src="image\eeacaaf99cf326028805353115e8933.png" alt="eeacaaf99cf326028805353115e8933" style="zoom:50%;" />
 
 如图所示，目前项目文件结构如图，其中，node_modules文件夹主要存放依赖库，public暂时用不上，src是主要编写代码的地方。
 
@@ -30,7 +30,7 @@ npm start    //启动electron项目并自动打包为一个桌面端可运行程
 
 - **src/components :**存放一些公用组件，目前该模块定义的组件不多，结构如图所示：
 
-  <img src="C:\Users\22515\AppData\Local\Temp\WeChat Files\aec2fa4cfc4d3524570fcc11987cb60.png" alt="aec2fa4cfc4d3524570fcc11987cb60" style="zoom: 67%;" />
+  <img src="image\aec2fa4cfc4d3524570fcc11987cb60.png" alt="aec2fa4cfc4d3524570fcc11987cb60" style="zoom: 67%;" />
 
   buttons：封装了两个按钮组件，登录按钮的组件和addmodeButton的组件，后续使用button时，可以替换原生button这两个组件之一，用以改善button的视觉效果。
 
@@ -215,7 +215,7 @@ npm install //基本的就这个，下载库的指令，其余的可以查文档
 
 #### vue3与合约交互
 
-<img src="C:\Users\22515\AppData\Local\Temp\WeChat Files\9e7e2c8501d9226097f4a3cf8965027.png" alt="9e7e2c8501d9226097f4a3cf8965027" style="zoom:67%;" />
+<img src="image\9e7e2c8501d9226097f4a3cf8965027.png" alt="9e7e2c8501d9226097f4a3cf8965027" style="zoom:67%;" />
 
 这是一个目前基本上完成了界面与功能实现的文件目录。
 
@@ -229,7 +229,7 @@ npm install //基本的就这个，下载库的指令，其余的可以查文档
 
 目前的实现比较简单：以下图为例：
 
-<img src="C:\Users\22515\AppData\Local\Temp\WeChat Files\2ff19bd7ca05919c3b6fe6f56640c79.png" alt="2ff19bd7ca05919c3b6fe6f56640c79" style="zoom: 33%;" />
+<img src="image\2ff19bd7ca05919c3b6fe6f56640c79.png" alt="2ff19bd7ca05919c3b6fe6f56640c79" style="zoom: 33%;" />
 
 该页面位于src/views/Transactions/limitOrder,一些css样式可以在文件中得到，有需要可以直接使用。
 
