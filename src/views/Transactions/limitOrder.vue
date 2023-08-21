@@ -281,7 +281,7 @@ export default {
             }
             try {
                 try {
-                    epoch = await placeLimitOrderFrontend(limitOrderPoolKey, this.price, this.selectedToken1, this.selectedToken2, this.amount)
+                    epoch = await placeLimitOrderFrontend(limitOrderPoolKey, this.price, this.selectedToken1, this.selectedToken2, ethers.utils.parseUnits(this.amount.toString(),18))
                     console.log("address2:" + this.fromAccount)
                     flag = 1
                 }catch (err){
@@ -289,15 +289,19 @@ export default {
                 }
                 if(flag===1){
                     // 发送POST请求到后端
+                    const currentDate = new Date();
+                    const formattedDate = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()} ${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`;
+
                     const requestBody = {
-                        UserAddress: this.fromAccount,
+                        userAddress: this.fromAccount,
                         sell: this.selectedToken1,
                         buy: this.selectedToken2,
                         amount: this.amount,
                         price: this.price,
-                        FeeRates: this.selectedFee,
+                        feeRates: this.selectedFee,
                         status: "待成交",
-                        epoch: epoch
+                        epoch: epoch,
+                        submitTime: formattedDate
                     };
                     console.log("requestBody", requestBody);
                     const response = await axios.post("http://localhost:8080/Transactions/limitOrder", requestBody);

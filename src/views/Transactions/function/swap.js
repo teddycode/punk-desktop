@@ -59,14 +59,14 @@ export async function swap(poolkey, fromamount ,zeroForOne){
     let balance1 = await token1.balanceOf(wallet.address);
     //待完成
     //检查是否批准足够ERC20代币
-    if(await isapproved(token0, wallet.address, MyLiquidityProvider.address, ethers.utils.parseUnits("21000000", 18))===false){
+    if(await isapproved(token0, wallet.address, MyLiquidityProvider.address, ethers.utils.parseUnits("21000000", 18))==false){
         await approveERC20(token0,MyLiquidityProvider.address,ethers.utils.parseUnits("21000000", 18))
     }
-    if(await isapproved(token1, wallet.address, MyLiquidityProvider.address, ethers.utils.parseUnits("21000000", 18))===false){
+    if(await isapproved(token1, wallet.address, MyLiquidityProvider.address, ethers.utils.parseUnits("21000000", 18))==false){
         await approveERC20(token1,MyLiquidityProvider.address,ethers.utils.parseUnits("21000000", 18))
     }
     //执行交易
     await executeSwap(MyLiquidityProvider, poolkey, swapParams);
-    console.log("finish swap");
+    console.log("finish swap")
 }
 

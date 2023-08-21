@@ -4,6 +4,7 @@ import {wallet} from "@/views/Transactions/function/address"
 import {poolManager, hook, token0, token1} from "@/views/Transactions/function/address"
 import { limitOrderPoolKey } from "@/views/Transactions/function/address"
 import {caculateLiqDetla2,calculateTickFromPriceWithSpacing,calculatePriceFromTick} from "@/views/Transactions/function/cauculateliq"
+import Big from "big.js";
 
 
 async function killLimitOrder(contract, poolKey, tickLower, zeroForOne, to) {
@@ -127,17 +128,23 @@ function getPoolId(poolKey) {
         )]
     );
 }
-async function getPoolPrice(contract, poolKey)  {
+async function getPoolPrice(contract, poolKey) {
     let slot0 = await getSlot0(contract, poolKey);
     const bigNumberValue = slot0[0].toString();
     console.log("bigNumberValue:", bigNumberValue);
-    const divisor = ethers.BigNumber.from(2).pow(96);
+
+    // 使用 Big.js
+    const valueBig = new Big(bigNumberValue);
+    const divisor = new Big(2).pow(96);
     console.log("divisor:", divisor.toString());
-    const dividedValue = slot0[0].div(divisor);
+
+    const dividedValue = valueBig.div(divisor);
     console.log("dividedValue:", dividedValue.toString());
+
     const result = dividedValue.mul(dividedValue);
     console.log("result:", result.toString());
-    return result;
+
+    return result.toNumber(); // 注意，转换回数字可能导致精度丢失，如果这是一个问题，您可能需要返回字符串或Big对象
 }
 async function getERC20Balance(contract, address) {
     // 查询ERC20余额

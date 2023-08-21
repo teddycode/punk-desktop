@@ -1,7 +1,10 @@
 <template>
     <div class="myOrder-page">
         <div class="myOrder-card" v-for="(order, index) in displayedOrders" :key="index">
-            <h1 class="myOrder-title">My Orders</h1>
+            <div class="myOrder-title-container">
+                <h1 class="myOrder-title">My Orders</h1>
+                <font-awesome-icon class="info-icon" icon="info-circle" @click="showDetails(order)"/>
+            </div>
             <div class="myOrder-limitOrder">
                 <!-- 左边框 -->
                 <div class="myOrder-panel">
@@ -12,7 +15,7 @@
                     </div>
                     <div class="fee-options">
                         <h3 class="fee-title">Fee Rates</h3>
-                        <div class="data-box">{{ order.FeeRates }}</div>
+                        <div class="data-box">{{ order.feeRates }}</div>
                     </div>
                     <div class="selected-tokens">{{ order.sell }} -> {{ order.buy }}</div>
                 </div>
@@ -67,6 +70,10 @@ import {ethers} from "ethers";
 import {withdraw_main} from "@/views/Transactions/function/withdraw";
 import axios from "axios";
 import myPagination from "@/components/myPagination.vue";
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
+
+library.add(faInfoCircle)
 export default {
     name: "myOrder",
     components:{
@@ -92,6 +99,15 @@ export default {
         await this.fetchOrders();
     },
     methods:{
+        showDetails(order) {
+            let message = `提交时间: ${order.submitTime}\n`;
+            if (order.status === '提取成功') {
+                message += `成交时间: ${order.dealTime}\n`;
+            } else if (order.status === '已取消') {
+                message += `取消时间: ${order.cancelTime}\n`;
+            }
+            alert(message);
+        },
         async getAddress() {
             if (typeof window.ethereum !== 'undefined') {
                 // 使用MetaMask提供的provider
@@ -128,6 +144,7 @@ export default {
             let start = (this.page - 1) * this.itemsPerPage;
             let end = start + this.itemsPerPage;
             this.displayedOrders = this.orders.slice(start, end);
+            console.log("displayorders" , this.displayedOrders)
         },
         async fetchOrders() {
             try {
@@ -147,7 +164,16 @@ export default {
             try {
                 await withdraw_main(epoch);
                 // 发送请求到后端，更新订单状态为 "提取成功"
-                const response = await axios.post("http://localhost:8080/Transactions/myOrder", { action: "withdraw", id: id });
+
+                const currentDate = new Date();
+                const formattedDate = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()} ${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`;
+
+                console.log("withdrawtime: " , formattedDate)
+                const response = await axios.post("http://localhost:8080/Transactions/myOrder", {
+                    action: "withdraw",
+                    id: id,
+                    currentTime: formattedDate
+                });
                 if (response.data.message === "Order status updated to 提取成功") {
                     alert("操作成功");
                     await this.fetchOrders();
@@ -171,7 +197,15 @@ export default {
                     await killLimitOrderFrontend(token1.address,token0.address,price,limitOrderPoolKey,this.myAddress)
                     alert("取消成功")
                 }
-                const response = await axios.post("http://localhost:8080/Transactions/myOrder", { action: "cancel",id: id });
+                const currentDate = new Date();
+                const formattedDate = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()} ${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`;
+
+                console.log("canceltime: " , formattedDate)
+                const response = await axios.post("http://localhost:8080/Transactions/myOrder", {
+                    action: "cancel",
+                    id: id,
+                    currentTime: formattedDate
+                });
                 if (response.data.message === "Order status updated to 已取消") {
                     alert("操作成功");
                     await this.fetchOrders();
@@ -308,6 +342,24 @@ export default {
     opacity: 0.5;
     pointer-events: none; /* 禁止所有鼠标事件，包括点击 */
     cursor: not-allowed;
+}
+.myOrder-card {
+    position: relative;
+}
+.myOrder-title-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.info-icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+    cursor: pointer;
+    color: white;
+    font-size: 24px;
 }
 .status-pending {
     color: deepskyblue;

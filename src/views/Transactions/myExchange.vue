@@ -276,10 +276,12 @@ export default {
             } else if (this.selectedToken1 && this.selectedToken2 && this.tokenAmount1) {
                 try {
                     try {
+                        console.log("poolkey", limitOrderPoolKey)
+                        console.log("fromamonut:" , ethers.utils.parseUnits(this.tokenAmount1.toString(),18))
                         if (this.tokenAddresses[this.selectedToken1] > this.tokenAddresses[this.selectedToken2]) {
-                            await swap(limitOrderPoolKey, this.tokenAmount1, false)
+                            await swap(limitOrderPoolKey, ethers.utils.parseUnits(this.tokenAmount1.toString(),18), false)
                         } else {
-                            await swap(limitOrderPoolKey, this.tokenAmount1, true)
+                            await swap(limitOrderPoolKey, ethers.utils.parseUnits(this.tokenAmount1.toString(),18), true)
                         }
                     }catch (err){
                         console.log(err)
