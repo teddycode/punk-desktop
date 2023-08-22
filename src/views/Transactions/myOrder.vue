@@ -149,10 +149,18 @@ export default {
         async fetchOrders() {
             try {
                 const response = await axios.post("http://localhost:8080/Transactions/myOrder", { action: "getOrders", userAddress: this.myAddress });
-                this.orders = response.data;
-                this.totalItems = this.orders.length;
+                // this.orders = response.data;
+                if (response.data && Array.isArray(response.data)) {
+                    this.orders = response.data;
+                    this.totalItems = this.orders.length;
+                    // Initialize displayedOrders for the first page
+                    this.updatePage(1);
+                } else {
+                    console.error("Invalid data received:", response.data);
+                }
+                // this.totalItems = this.orders.length;
                 // Initialize displayedOrders for the first page
-                this.updatePage(1);
+                // this.updatePage(1);
             } catch (error) {
                 console.error("Error fetching orders:", error);
             }

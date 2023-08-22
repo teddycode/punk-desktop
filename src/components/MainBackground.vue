@@ -36,6 +36,9 @@
                             </div>
                         </div>
                         <slot/>
+                        <div class="tabs-container">
+                            <div id="tabs"></div>
+                        </div>
                     </dv-border-box10>
                 </div>
                 <div :class="{'main-right': true, 'hidden': isRightHidden}">

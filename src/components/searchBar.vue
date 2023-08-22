@@ -1,17 +1,27 @@
 <template>
     <div class="search-bar">
         <i class="fas fa-search search-icon"></i>
-        <input type="text" class="search-input" placeholder="Search...">
-        <addnode-button class="search-button">Search</addnode-button>
+        <input ref="searchInput" type="text" class="search-input" placeholder="Search...">
+        <addnode-button class="search-button" @click="search">Search</addnode-button>
     </div>
 </template>
 
 <script>
 import addnodeButton from "@/components/buttons/addnodeButton.vue";
+
 export default {
     name: "searchBar",
-    components:{
+    components: {
         addnodeButton,
+    },
+    methods: {
+        search() {
+            const query = this.$refs.searchInput.value;
+            window.electronAPI.sendSearchQuery(query);
+        },
+        closeWindow() {
+            window.electronAPI.closeSearchWindow();
+        }
     }
 }
 </script>

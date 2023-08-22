@@ -27,6 +27,7 @@
     "core-js": "^3.8.3",
     "echarts": "^5.4.3",
     "electron-squirrel-startup": "^1.0.0",
+    "electron-tabs": "^1.0.1",
     "element-plus": "^2.3.8",
     "ethers": "^5.7.2",
     "js-sha256": "^0.9.0",

@@ -1,7 +1,3 @@
-// preload.js
-
-// 所有的 Node.js API接口 都可以在 preload 进程中被调用.
-// 它拥有与Chrome扩展一样的沙盒。
 window.addEventListener('DOMContentLoaded', () => {
     const replaceText = (selector, text) => {
         const element = document.getElementById(selector)
@@ -11,7 +7,8 @@ window.addEventListener('DOMContentLoaded', () => {
     for (const dependency of ['chrome', 'node', 'electron']) {
         replaceText(`${dependency}-version`, process.versions[dependency])
     }
-    const { contextBridge, ipcRenderer, } = require('electron');
+
+    const { contextBridge, ipcRenderer } = require('electron');
 
     contextBridge.exposeInMainWorld('electronAPI', {
         toggleFullScreen: () => {
@@ -20,7 +17,13 @@ window.addEventListener('DOMContentLoaded', () => {
         customAlert: (str) => {
             ipcRenderer.send('show-custom-alert', str);
         },
+        sendSearchQuery: (query) => {
+            ipcRenderer.send('search', query);
+        },
+        closeSearchWindow: () => {
+            ipcRenderer.send('close-searchWindow')
+        },
     });
-    console.log('DOMContentLoaded event fired, setting up electronAPI');
 
-})
+    console.log('DOMContentLoaded event fired, setting up electronAPI');
+});

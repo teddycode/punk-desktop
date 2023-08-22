@@ -4484,6 +4484,11 @@ electron-squirrel-startup@^1.0.0:
   dependencies:
     debug "^2.2.0"
 
+electron-tabs@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/electron-tabs/-/electron-tabs-1.0.1.tgz"
+  integrity sha512-BwSDK0beANmcfedFB/FBZfTewLPniJKiWdK+5Eh0kqTLda2dqKNEoCqVvRqjJ81rHjhUKZANSY29ypMseCp+sA==
+
 electron-to-chromium@^1.4.431:
   version "1.4.454"
   resolved "https://registry.npmmirror.com/electron-to-chromium/-/electron-to-chromium-1.4.454.tgz"
