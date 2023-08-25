@@ -1,5 +1,6 @@
 <template>
     <div id="main" class="bg">
+        <task-bar></task-bar>
         <div class="header">
             <div class="bg-header">
                 <div class="t-title">磐古</div>
@@ -13,39 +14,10 @@
         </div>
         <div class="data-content">
             <div class="data-main">
-                <div :class="{'main-left': true, 'hidden': isLeftHidden}">
-                    <!-- 左边栏开关 -->
-                    <div class="main-left-top">
-                        <mywallet-info></mywallet-info>
-                    </div>
-                    <div class="main-left-center">
-                        <desktop-management></desktop-management>
-                    </div>
-                    <div class="main-left-bottom">
-                        <together></together>
-                    </div>
-                </div>
-                <div class="main-center" :style="{ width: mainCenterWidth }">
+                <div class="main-center" >
                     <dv-border-box10 class="main-center-transactions">
-                        <div class="switch-container">
-                            <div class="switch-left">
-                                <el-switch v-model="isLeftHidden"  active-text="隐藏左边栏" inactive-text="显示左边栏"></el-switch>
-                            </div>
-                            <div class="switch-right">
-                                <el-switch v-model="isRightHidden" active-text="隐藏右边栏" inactive-text="显示右边栏"></el-switch>
-                            </div>
-                        </div>
                         <slot/>
-                        <div class="tabs-container">
-                            <div id="tabs"></div>
-                        </div>
                     </dv-border-box10>
-                </div>
-                <div :class="{'main-right': true, 'hidden': isRightHidden}">
-                    <!-- 右边栏开关 -->
-                    <main-right-swiper></main-right-swiper>
-                    <main-right-ad></main-right-ad>
-                    <main-right-dapp></main-right-dapp>
                 </div>
             </div>
         </div>
@@ -56,49 +28,22 @@
 import Topnav from "@/components/topnav/index.vue";
 import LoginButton from "@/components/buttons/loginButton.vue";
 import myWallet from "@/components/myWallet.vue";
-import MywalletInfo from "@/views/main-left/main-left-top/index.vue";
-import Together from "@/views/main-left/main-left-bottom/index.vue";
-import MainRightAd from "@/views/main-right/main-right-ad.vue";
-import MainRightSwiper from "@/views/main-right/main-right-swiper.vue";
-import DesktopManagement from "@/views/main-left/main-left-center/index.vue";
 import searchBar from "@/components/searchBar.vue";
-import mainRightDapp from "@/views/main-right/main-right-dapp.vue";
-import {ElSwitch} from "element-plus";
+import TaskBar from "@/views/TaskBar.vue";
 
 export default {
     name: "myHeader",
     components: {
-        mainRightDapp,
-        DesktopManagement,
         searchBar,
-        MainRightSwiper,
-        MainRightAd,
-        Together,
-        myWallet, LoginButton, Topnav,MywalletInfo,ElSwitch
+        myWallet, LoginButton, Topnav,TaskBar
     },
-    data(){
-        return{
-            isLeftHidden: false,
-            isRightHidden: false
-        }
-    },
-    computed: {
-        mainCenterWidth() {
-            if (this.isLeftHidden && this.isRightHidden) {
-                return '100%';
-            } else if (this.isLeftHidden || this.isRightHidden) {
-                return '80%';
-            }
-            return '60%';
-        }
+    computed:{
+        openedPages() {
+            return this.$store.state.openedPages;
+        },
     },
     methods: {
-        toggleLeft() {
-            this.isLeftHidden = !this.isLeftHidden;
-        },
-        toggleRight() {
-            this.isRightHidden = !this.isRightHidden;
-        }
+
     }
 }
 </script>
@@ -151,6 +96,7 @@ export default {
     align-items: center;
 }
 .data-content {
+    margin-left: 8%;
     height:850px;
     padding-bottom: 20px;
     .data-main {
@@ -158,34 +104,9 @@ export default {
         margin-bottom: 40px;
         margin-left: 20px;
         height: 850px;
-        .main-left {
-            overflow: hidden;
-            width: 20%;
-            float: left;
-            height: 95%;
-            transform: translateX(0);
-            transition: transform 0.5s;
-            &.hidden {
-                transform: translateX(-110%);
-                width: 0;
-            }
-        }
-        .main-left-top{
-            height: 30%;
-            padding-bottom: 5%;
-        }
-        .main-left-center{
-            height: 35%;
-            padding-bottom: 5%;
-            color: #3498da;
-        }
-        .main-left-bottom{
-            height: 35%;
-            color: #3498da;
-        }
         .main-center {
             float: left;
-            width: var(--main-center-width, 60%);
+            width: 100%;
             transition: width 0.5s ease-in-out;
             padding: 0 20px 0 20px;
             height: 95%;
@@ -202,20 +123,68 @@ export default {
             overflow: auto;
              height: 100%;
          }
-        .main-right {
-            overflow: hidden;
-            float: left;
-            width: 20%;
-            height: 95%;
-            transform: translateX(0);
-            transition: transform 0.5s;
-            &.hidden {
-                transform: translateX(110%);
-                width: 0;
-            }
-        }
     }
 }
 
+.taskbar {
+    width: 8%;
+    height: 100%;
+    background-color: transparent;
+    border-right: 1px solid white;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    padding-top: 5%;
+}
 
+.tabs-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+.tab-item {
+    color: white;
+    display: flex;
+    flex-direction: row; // 修改为 row 以使其子元素在同一行上
+    align-items: center; // 使内容垂直居中
+    gap: 5px;
+    padding-right: 25px; // 添加一些右侧内边距
+}
+
+.close-tab {
+    display: none;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: none;
+    cursor: pointer;
+    padding: 2px 5px;
+    margin-left: 5px;
+    margin-right: -10px; // 使用负的 margin-right 进行调整
+}
+
+.home-tab {
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.2); // 使用与背景相近的边框色
+    padding: 5px 10px; // 适量的内边距
+    border-radius: 5px; // 可选的圆角
+    transition: background-color 0.3s ease; // 平滑的背景色过渡
+
+    &:hover {
+        background-color: darkblue; // 鼠标悬停时的背景色
+    }
+
+    .home-content {
+        display: flex;
+        align-items: center; // 使图标和文字垂直居中对齐
+        gap: 5px; // 图标和文字之间的间距
+    }
+}
+.home-tab:hover .close-tab {
+    display: inline-block;
+}
 </style>

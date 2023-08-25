@@ -137,6 +137,8 @@ export default {
     },
     methods: {
         goToFeature(feature) {
+            console.log("feature:" , feature)
+            this.$emit('featureClicked', feature);
             if (feature.title === '共识') {
                 this.$router.push('myConsensus');
             } else if (feature.title === '存储') {

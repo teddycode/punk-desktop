@@ -9,6 +9,7 @@ export default createStore({
         proposals:JSON.parse(localStorage.getItem('proposals')) || [],
         token: localStorage.getItem('token') || null,
         wallet:null,
+        openedPages: [],
     },
     mutations: {
         updateUserAddress(state, address) {
@@ -36,6 +37,12 @@ export default createStore({
             state.token = null;
             localStorage.removeItem('token');
         },
+        ADD_PAGE(state, page) {
+            state.openedPages.push(page);
+        },
+        REMOVE_PAGE(state, index) {
+            state.openedPages.splice(index, 1);
+        },
     },
     actions: {
         setAddress({ commit }, address) {
@@ -61,6 +68,12 @@ export default createStore({
             localStorage.removeItem('token');
             commit('SET_TOKEN', null);
         },
+        addPage({ commit }, page) {
+            commit('ADD_PAGE', page);
+        },
+        removePage({ commit }, index) {
+            commit('REMOVE_PAGE', index);
+        },
     },
     getters: {
         userAddress: (state) => state.userAddress,
@@ -71,6 +84,7 @@ export default createStore({
         loggedIn(state) {
             return !!state.token;
         },
-        token: state => state.token
+        token: state => state.token,
+        openedPages: (state) => state.openedPages,
     },
 });

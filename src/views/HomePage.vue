@@ -1,5 +1,6 @@
 <template>
     <div id="main" class="bg">
+        <task-bar></task-bar>
         <div class="header">
             <div class="bg-header">
                 <div class="t-title">磐古</div>
@@ -40,7 +41,7 @@
                 </div>
                 <div :class="{'main-right': true, 'hidden': isRightHidden}">
                     <!-- 右边栏开关 -->
-                    <main-right-swiper></main-right-swiper>
+                    <main-right-swiper @featureClicked="onFeatureClicked"></main-right-swiper>
                     <main-right-ad></main-right-ad>
                     <main-right-dapp></main-right-dapp>
                 </div>
@@ -62,6 +63,7 @@ import searchBar from "@/components/searchBar.vue";
 import mainRightDapp from "@/views/main-right/main-right-dapp.vue";
 import {ElSwitch} from "element-plus";
 import MainCenterButton from "@/views/main-center/main-center-bottom/index.vue";
+import TaskBar from "@/views/TaskBar.vue";
 
 export default {
     name: "myHeader",
@@ -73,16 +75,19 @@ export default {
         MainRightSwiper,
         MainRightAd,
         Together,
-        myWallet, LoginButton, Topnav,MywalletInfo,ElSwitch
+        myWallet, LoginButton, Topnav,MywalletInfo,ElSwitch,TaskBar
     },
 
     data(){
         return{
             isLeftHidden: false,
-            isRightHidden: false
+            isRightHidden: false,
         }
     },
     computed: {
+        openedPages() {
+            return this.$store.state.openedPages;
+        },
         mainCenterWidth() {
             if (this.isLeftHidden && this.isRightHidden) {
                 return '100%';
@@ -90,7 +95,7 @@ export default {
                 return '80%';
             }
             return '60%';
-        }
+        },
     },
     methods: {
         toggleLeft() {
@@ -98,7 +103,14 @@ export default {
         },
         toggleRight() {
             this.isRightHidden = !this.isRightHidden;
-        }
+        },
+        onFeatureClicked(feature) {
+            console.log("onFeatureClicked received", feature);
+            if (!this.openedPages.some(p => p.title === feature.title)) {
+                this.$store.commit("ADD_PAGE",feature);
+            }
+            console.log("onFeatureClicked", this.openedPages);
+        },
     }
 }
 </script>
@@ -215,6 +227,66 @@ export default {
         }
     }
 }
+.taskbar {
+    width: 8%;
+    height: 100%;
+    background-color: transparent;
+    border-right: 1px solid white;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    padding-top: 5%;
+}
 
+.tabs-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+.tab-item {
+    color: white;
+    display: flex;
+    flex-direction: row; // 修改为 row 以使其子元素在同一行上
+    align-items: center; // 使内容垂直居中
+    gap: 5px;
+    padding-right: 25px; // 添加一些右侧内边距
+}
+
+.close-tab {
+    display: none;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: none;
+    cursor: pointer;
+    padding: 2px 5px;
+    margin-left: 5px;
+    margin-right: -10px; // 使用负的 margin-right 进行调整
+}
+
+.home-tab {
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.2); // 使用与背景相近的边框色
+    padding: 5px 10px; // 适量的内边距
+    border-radius: 5px; // 可选的圆角
+    transition: background-color 0.3s ease; // 平滑的背景色过渡
+
+    &:hover {
+        background-color: darkblue; // 鼠标悬停时的背景色
+    }
+
+    .home-content {
+        display: flex;
+        align-items: center; // 使图标和文字垂直居中对齐
+        gap: 5px; // 图标和文字之间的间距
+    }
+}
+.home-tab:hover .close-tab {
+    display: inline-block;
+}
 
 </style>

@@ -121,7 +121,7 @@ export default {
                 console.log("provider: " , this.provider)
                 this.loadUserData();
             } else {
-                this.showAlert('Metamask is not installed. Please consider installing it: https://metamask.io');
+                // this.showAlert('Metamask is not installed. Please consider installing it: https://metamask.io');
             }
         }, 500);
     },
