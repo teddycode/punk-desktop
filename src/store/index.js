@@ -10,6 +10,7 @@ export default createStore({
         token: localStorage.getItem('token') || null,
         wallet:null,
         openedPages: [],
+        currentPage: '',
     },
     mutations: {
         updateUserAddress(state, address) {
@@ -42,6 +43,9 @@ export default createStore({
         },
         REMOVE_PAGE(state, index) {
             state.openedPages.splice(index, 1);
+        },
+        setCurrentPage(state, page) {  // <-- 添加这一块
+            state.currentPage = page;
         },
     },
     actions: {

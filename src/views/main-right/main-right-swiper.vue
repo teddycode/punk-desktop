@@ -48,6 +48,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import 'swiper/swiper-bundle.css';
+import {mapMutations} from "vuex";
 
 export default {
     name: "main-right-swiper",
@@ -135,10 +136,17 @@ export default {
             ],
         }
     },
+    computed:{
+        currentPage() {
+            return this.$store.state.currentPage;
+        }
+    },
     methods: {
+        ...mapMutations(['setCurrentPage']),
         goToFeature(feature) {
             console.log("feature:" , feature)
             this.$emit('featureClicked', feature);
+            this.setCurrentPage(feature.title)
             if (feature.title === '共识') {
                 this.$router.push('myConsensus');
             } else if (feature.title === '存储') {
