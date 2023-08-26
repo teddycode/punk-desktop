@@ -14,38 +14,36 @@
         </div>
         <div class="data-content">
             <div class="data-main">
-                <div :class="{'main-left': true, 'hidden': isLeftHidden}">
-                    <!-- 左边栏开关 -->
+                <div class="main-left">
                     <div class="main-left-top">
-                        <mywallet-info></mywallet-info>
-                    </div>
-                    <div class="main-left-center">
-                        <desktop-management></desktop-management>
+                        <div class="main-left-top-left">
+                            <main-right-ad></main-right-ad>
+                        </div>
+                        <div class="main-left-top-right">
+                            <main-center-button></main-center-button>
+                        </div>
                     </div>
                     <div class="main-left-bottom">
-                        <together></together>
+                        <div class="bottom-div">
+                            <desktop-management></desktop-management>
+                        </div>
+                        <div class="bottom-div">
+                            <together></together>
+                        </div>
+                        <div class="bottom-div">
+                            <together></together>
+                        </div>
                     </div>
                 </div>
-                <div class="main-center" :style="{ width: mainCenterWidth }">
-                    <dv-border-box10 class="main-center-transactions">
-                        <div class="switch-container">
-                            <div class="switch-left">
-                                <el-switch v-model="isLeftHidden"  active-text="隐藏左边栏" inactive-text="显示左边栏"></el-switch>
-                            </div>
-                            <div class="switch-right">
-                                <el-switch v-model="isRightHidden" active-text="隐藏右边栏" inactive-text="显示右边栏"></el-switch>
-                            </div>
-                        </div>
-                        <main-center-button></main-center-button>
-                    </dv-border-box10>
-                </div>
-                <div :class="{'main-right': true, 'hidden': isRightHidden}">
-                    <!-- 右边栏开关 -->
+                <div class="main-right">
+                    <div class="right-top-spacing"></div>
                     <main-right-swiper @featureClicked="onFeatureClicked"></main-right-swiper>
-                    <main-right-ad></main-right-ad>
+                    <div class="right-middle-spacing"></div>
                     <main-right-dapp></main-right-dapp>
+                    <div class="right-bottom-spacing"></div>
                 </div>
             </div>
+            <div class="custom-div"></div>
         </div>
     </div>
 </template>
@@ -54,14 +52,12 @@
 import Topnav from "@/components/topnav/index.vue";
 import LoginButton from "@/components/buttons/loginButton.vue";
 import myWallet from "@/components/myWallet.vue";
-import MywalletInfo from "@/views/main-left/main-left-top/index.vue";
 import Together from "@/views/main-left/main-left-bottom/index.vue";
-import MainRightAd from "@/views/main-right/main-right-ad.vue";
-import MainRightSwiper from "@/views/main-right/main-right-swiper.vue";
+import MainRightAd from "@/views/main-right/messagebox.vue";
+import MainRightSwiper from "@/views/main-right/main-function-box.vue";
 import DesktopManagement from "@/views/main-left/main-left-center/index.vue";
 import searchBar from "@/components/searchBar.vue";
-import mainRightDapp from "@/views/main-right/main-right-dapp.vue";
-import {ElSwitch} from "element-plus";
+import mainRightDapp from "@/views/main-right/dapp-square.vue";
 import MainCenterButton from "@/views/main-center/main-center-bottom/index.vue";
 import TaskBar from "@/views/TaskBar.vue";
 
@@ -75,35 +71,19 @@ export default {
         MainRightSwiper,
         MainRightAd,
         Together,
-        myWallet, LoginButton, Topnav,MywalletInfo,ElSwitch,TaskBar
+        myWallet, LoginButton, Topnav,TaskBar
     },
 
     data(){
         return{
-            isLeftHidden: false,
-            isRightHidden: false,
         }
     },
     computed: {
         openedPages() {
             return this.$store.state.openedPages;
         },
-        mainCenterWidth() {
-            if (this.isLeftHidden && this.isRightHidden) {
-                return '100%';
-            } else if (this.isLeftHidden || this.isRightHidden) {
-                return '80%';
-            }
-            return '60%';
-        },
     },
     methods: {
-        toggleLeft() {
-            this.isLeftHidden = !this.isLeftHidden;
-        },
-        toggleRight() {
-            this.isRightHidden = !this.isRightHidden;
-        },
         onFeatureClicked(feature) {
             console.log("onFeatureClicked received", feature);
             if (!this.openedPages.some(p => p.title === feature.title)) {
@@ -162,70 +142,84 @@ export default {
     align-items: center;
 }
 .data-content {
-    height:850px;
+    margin-left: 8%;
+    height: 850px;
     padding-bottom: 20px;
+
     .data-main {
-        width: calc(100% - 40px);
+        width: calc(100% - 80px);
         margin-bottom: 40px;
-        margin-left: 20px;
-        height: 850px;
+        margin-left: 40px;
+        height: 85%;
+
         .main-left {
-            overflow: hidden;
-            width: 20%;
+            margin-right: 4%;
             float: left;
+            width: 72%;
             height: 95%;
-            transform: translateX(0);
-            transition: transform 0.5s;
-            &.hidden {
-                transform: translateX(-110%);
-                width: 0;
-            }
-        }
-        .main-left-top{
-            height: 30%;
-            padding-bottom: 5%;
-        }
-        .main-left-center{
-            height: 35%;
-            padding-bottom: 5%;
-            color: #3498da;
-        }
-        .main-left-bottom{
-            height: 35%;
-            color: #3498da;
-        }
-        .main-center {
-            float: left;
-            width: var(--main-center-width, 60%);
-            transition: width 0.5s ease-in-out;
-            padding: 0 20px 0 20px;
-            height: 95%;
-            .switch-container {
-                margin: 10px  10px 0 10px;
+            .main-left-top {
+                margin-bottom: 5%;
+                height:65% ;
                 display: flex;
                 justify-content: space-between;
-                .switch-left {
+                .main-left-top-left {
+                    width: 30%;
+                    height: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    margin-right: 5%; /* Added margin to the right side */
                 }
-                .switch-right {
+                .main-left-top-right {
+                    width: 65%;
+                    height: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
                 }
             }
-        }.main-center-transactions{
-             overflow: auto;
-             height: 100%;
-         }
+            .main-left-bottom {
+                height: 35%;
+                display: flex;
+                justify-content: space-between;
+                .bottom-div {
+                    width: 30%;
+                    height: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+            }
+        }
         .main-right {
-            overflow: hidden;
             float: left;
-            width: 20%;
+            width: 24%;
             height: 95%;
-            transform: translateX(0);
-            transition: transform 0.5s;
-            &.hidden {
-                transform: translateX(110%);
-                width: 0;
+            display: flex;
+            flex-direction: column;
+
+            .right-top-spacing,
+            .right-bottom-spacing {
+                flex: 1;  /* This represents 10% height */
+            }
+
+            main-right-swiper,
+            main-right-dapp {
+                flex: 3.5;  /* This represents 35% height */
+            }
+
+            .right-middle-spacing {
+                flex: 1;  /* This represents 10% height */
             }
         }
     }
+}
+.custom-div {
+    width: 80%;
+    height: 10%;
+    border: 1px solid white;
+    border-radius: 10px;
+    margin: 0 auto; /* Center the div */
 }
 
 </style>

@@ -21,9 +21,10 @@
 <script>
 import { computed } from "vue";
 import { useStore } from "vuex";
-import vSidebar from "../components/Sidebar.vue";
-import vTags from "../components/Tags.vue";
+import vSidebar from "../../components/Sidebar.vue";
+import vTags from "../../components/Tags.vue";
 import MainBackground from "@/components/MainBackground.vue";
+
 export default {
     components: {
         MainBackground,

@@ -53,7 +53,7 @@
         <div style="width: 100%; border: 1px solid; border-color: #cdcbcb; padding: 10px 10px;">
             <el-space wrap>
                 <div style="width: 1000px; border: 1px solid; border-color: #cdcbcb;">
-                     <div style="padding: 10px 10px;">
+                    <div style="padding: 10px 10px;">
                         <span style="margin-right: 15px; font-size: 20px; color: blue; padding: 10px 10px;">PoT区块产出</span>
                         <span style="margin-right: 15px; font-size: 15px">区块高度：</span>
                         <el-input v-model="tableData.searchBlockHeight" placeholder="区块高度" class="handle-input mr10"></el-input>
@@ -66,11 +66,11 @@
                     </div>
                     <div style="padding: 10px 10px;">
                         <el-table ref="multipleTableRef"
-                            :data="tableData.displayBlockInfo"
-                            style="width: 100%"
-                            border
-                            :row-key="getRowKey"
-                            height="410"
+                                  :data="tableData.displayBlockInfo"
+                                  style="width: 100%"
+                                  border
+                                  :row-key="getRowKey"
+                                  height="410"
                         >
                             <el-table-column label="区块高度" width="110">
                                 <template #default="scope">
@@ -106,7 +106,7 @@
                             <el-table-column label="操作" width="200" align="center">
                                 <template #default="scope">
                                     <el-button type="text" icon="el-icon-tickets" class="green"
-                                            @click="detailDialogVisible=true;handleDetail(scope.$index, scope.row)">详细</el-button>
+                                               @click="detailDialogVisible=true;handleDetail(scope.$index, scope.row)">详细</el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -168,7 +168,7 @@
                     </div>
                 </div>
                 <div style="width: 1000px; border: 1px solid; border-color: #cdcbcb;">
-                     <div style="padding: 10px 10px;">
+                    <div style="padding: 10px 10px;">
                         <span style="margin-right: 15px; font-size: 20px; color: blue; padding: 10px 10px;">业务区块产出</span>
                         <span style="margin-right: 15px; font-size: 15px">区块高度：</span>
                         <el-input v-model="tableData.searchMicBlockHeight" placeholder="区块高度" class="handle-input mr10"></el-input>
@@ -181,11 +181,11 @@
                     </div>
                     <div style="padding: 10px 10px;">
                         <el-table ref="multipleTableForMicBlockRef"
-                            :data="tableData.displayMicBlockInfo"
-                            style="width: 100%"
-                            border
-                            :row-key="getRowKey"
-                            height="410"
+                                  :data="tableData.displayMicBlockInfo"
+                                  style="width: 100%"
+                                  border
+                                  :row-key="getRowKey"
+                                  height="410"
                         >
                             <el-table-column label="区块高度" width="110">
                                 <template #default="scope">
@@ -216,7 +216,7 @@
                             <el-table-column label="操作" width="200" align="center">
                                 <template #default="scope">
                                     <el-button type="text" icon="el-icon-tickets" class="green"
-                                            @click="detailDialogVisibleForMicBlock=true;handleDetailForMicBlock(scope.$index, scope.row)">详细</el-button>
+                                               @click="detailDialogVisibleForMicBlock=true;handleDetailForMicBlock(scope.$index, scope.row)">详细</el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -267,19 +267,19 @@
                 </div>
             </el-space>
         </div>
-        
+
         <div class="plugins-tips">数据更新时间：{{ nowDate }}</div>
     </div>
-    
+
 </template>
 
 <script>
 import { ref, reactive} from "vue";
 import { ElLoading, ElMessage, ElMessageBox } from "element-plus";
-import { getMyBlock, getMyMicBlock} from "../api/consensus/myBlock";
+import { getMyBlock, getMyMicBlock} from "./api/consensus/myBlock";
 
 export default {
-    name: "consensus",
+    name: "SelfConsensus",
     setup() {
         const multipleTableRef = ref();
         const multipleTableForMicBlockRef = ref();
@@ -309,23 +309,23 @@ export default {
             // displayBlockInfo 中的内容将会显示在界面的表格中
             // 清空 displayBlockInfo 数组
             tableData.displayBlockInfo.splice(0,tableData.displayBlockInfo.length);
-            if (tableData.searchBlockHeight == "" && tableData.searchBlockHash == "") {
+            if (tableData.searchBlockHeight === "" && tableData.searchBlockHash === "") {
                 tableData.displayBlockInfo = [].concat(tableData.blockInfo)
-            } else if (tableData.searchBlockHeight == "" && tableData.searchBlockHash != "") {
+            } else if (tableData.searchBlockHeight === "" && tableData.searchBlockHash !== "") {
                 tableData.blockInfo.forEach((item)=>{
-                    if (item.hash == tableData.searchBlockHash) {
+                    if (item.hash === tableData.searchBlockHash) {
                         tableData.displayBlockInfo.push(item);
                     }  
                 })
-            } else if (tableData.searchBlockHeight != "" && tableData.searchBlockHash == "") {
+            } else if (tableData.searchBlockHeight !== "" && tableData.searchBlockHash === "") {
                 tableData.blockInfo.forEach((item)=>{
-                    if (item.height == tableData.searchBlockHeight) {
+                    if (item.height === tableData.searchBlockHeight) {
                         tableData.displayBlockInfo.push(item);
                     }  
                 })
             } else {
                 tableData.blockInfo.forEach((item)=>{
-                    if (item.height == tableData.searchBlockHeight && item.hash == tableData.searchBlockHash) {
+                    if (item.height === tableData.searchBlockHeight && item.hash === tableData.searchBlockHash) {
                         tableData.displayBlockInfo.push(item);
                     }  
                 })
@@ -337,23 +337,23 @@ export default {
             // displayBlockInfo 中的内容将会显示在界面的表格中
             // 清空 displayBlockInfo 数组
             tableData.displayMicBlockInfo.splice(0,tableData.displayMicBlockInfo.length);
-            if (tableData.searchMicBlockHeight == "" && tableData.searchMicBlockHash == "") {
+            if (tableData.searchMicBlockHeight === "" && tableData.searchMicBlockHash === "") {
                 tableData.displayMicBlockInfo = [].concat(tableData.micBlockInfo)
-            } else if (tableData.searchMicBlockHeight == "" && tableData.searchMicBlockHash != "") {
+            } else if (tableData.searchMicBlockHeight === "" && tableData.searchMicBlockHash !== "") {
                 tableData.micBlockInfo.forEach((item)=>{
-                    if (item.hash == tableData.searchMicBlockHash) {
+                    if (item.hash === tableData.searchMicBlockHash) {
                         tableData.displayMicBlockInfo.push(item);
                     }  
                 })
-            } else if (tableData.searchMicBlockHeight != "" && tableData.searchMicBlockHash == "") {
+            } else if (tableData.searchMicBlockHeight !== "" && tableData.searchMicBlockHash === "") {
                 tableData.micBlockInfo.forEach((item)=>{
-                    if (item.height == tableData.searchMicBlockHeight) {
+                    if (item.height === tableData.searchMicBlockHeight) {
                         tableData.displayMicBlockInfo.push(item);
                     }  
                 })
             } else {
                 tableData.micBlockInfo.forEach((item)=>{
-                    if (item.height == tableData.searchMicBlockHeight && item.hash == tableData.searchMicBlockHash) {
+                    if (item.height === tableData.searchMicBlockHeight && item.hash === tableData.searchMicBlockHash) {
                         tableData.displayMicBlockInfo.push(item);
                     }  
                 })

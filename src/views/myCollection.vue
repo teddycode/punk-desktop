@@ -85,7 +85,7 @@ export default {
 <style scoped>
 @import "@/assets/global_table.css";
 .collections-page {
-    min-height: 100vh;
+    /*min-height: 100%;*/
     width: 90%;
     margin: 0 auto;
 }

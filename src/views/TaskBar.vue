@@ -60,6 +60,7 @@ export default {
         },
         closePage(pageIndex) {
             this.removePage(pageIndex);
+            this.navigateToHomePage()
         },
         getFeatureRoute(title) {
             switch (title) {

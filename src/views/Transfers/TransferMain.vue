@@ -105,7 +105,7 @@ export default {
 
 <style scoped>
 .transfer{
-    min-height: 100vh;
+    /*min-height: 100vh;*/
 }
 .transfer-container {
     display: flex;

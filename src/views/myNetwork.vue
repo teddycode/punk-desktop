@@ -120,7 +120,7 @@ export default {
 <style scoped>
 .network-page{
     width: 100%;
-    min-height: 100vh;
+    /*min-height: 100vh;*/
 }
 .network-top-bar{
     display: flex;

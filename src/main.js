@@ -23,6 +23,7 @@ import ElementPlus from 'element-plus'
 import 'element-plus/theme-chalk/index.css';
 import '@element-plus/icons-vue'
 library.add(faExchangeAlt, faHandHoldingUsd, faGem, faSitemap, faGavel, faHandsHelping, faCalculator, faDatabase)
+import './assets/css/icon.css'
 
 const app = createApp(App)
 app.component('font-awesome-icon', FontAwesomeIcon)
@@ -32,6 +33,7 @@ app.use(vClickOutside)
 app.use(dataV)
 app.use(PrimeVue)
 app.use(ElementPlus)
+
 // createApp(App).use(router).use(store).use(vClickOutside).use(dataV).mount('#app');
 
 app.config.globalProperties.$echarts = echarts

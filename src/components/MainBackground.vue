@@ -12,9 +12,9 @@
         <div class="search-bar">
             <search-bar></search-bar>
         </div>
-        <div class="data-content">
-            <div class="data-main">
-                <div class="main-center" >
+        <div class="data-content-main-background">
+            <div class="data-main-main-background">
+                <div class="main-center-main-background" >
                     <dv-border-box10 class="main-center-transactions">
                         <slot/>
                     </dv-border-box10>
@@ -95,16 +95,16 @@ export default {
     justify-content: center;
     align-items: center;
 }
-.data-content {
+.data-content-main-background {
     margin-left: 8%;
     height:850px;
     padding-bottom: 20px;
-    .data-main {
+    .data-main-main-background {
         width: calc(100% - 40px);
         margin-bottom: 40px;
         margin-left: 20px;
         height: 850px;
-        .main-center {
+        .main-center-main-background {
             float: left;
             width: 100%;
             transition: width 0.5s ease-in-out;

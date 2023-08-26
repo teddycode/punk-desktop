@@ -1,42 +1,24 @@
 <template>
+    <dv-border-box10>
     <div class="main-container">
         <div class="recent-container">
             <h2 class="title">最近关注</h2>
             <div class="chart-container">
+                <select v-model="selectedCoin.coin" @change="fetchData(selectedCoin.coin)" class="coin-select custom-select" id="coinSelect">
+                    <option class="select-option" v-for="coin in coins" :key="coin.coin" :value="coin.coin">{{ coin.coin }}</option>
+                </select>
                 <div id="chart" class="chart"></div>
-                <Dropdown
-                    v-model="selectedCoin"
-                    :options="coins"
-                    optionLabel="coin"
-                    @change="fetchData(selectedCoin.coin)"
-                    class="coin-select">
-                </Dropdown>
-            </div>
-        </div>
-        <div class="apps-container">
-            <h2 class="title">应用广场</h2>
-            <div class="apps-grid">
-                <div v-for="app in apps" :key="app.name" class="app-card">
-                    <img :src="app.icon" alt="" class="app-icon">
-                    <p class="app-name">{{ app.name }}</p>
-                </div>
-                <add-node-button class="dapp-button">探索更多</add-node-button>
             </div>
         </div>
     </div>
+    </dv-border-box10>
 </template>
 
 <script>
 import * as echarts from 'echarts';
 import axios from 'axios';
-import Dropdown from 'primevue/dropdown';
-import AddNodeButton from "@/components/buttons/addnodeButton.vue";
 export default {
     name: "MainCenterButton",
-    components: {
-        AddNodeButton,
-        Dropdown,
-    },
     data() {
         return {
             coins: [
@@ -139,24 +121,17 @@ export default {
 
 <style scoped>
 .main-container {
+    width:100%;
     height: 100%;
     display: flex;
     flex-direction: column;
 }
 
 .recent-container {
-    flex: 0.7;
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 1rem;
-}
-
-.apps-container {
-    flex: 0.3;
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
     padding: 1rem;
 }
 
@@ -183,39 +158,26 @@ export default {
     right: 0;
 
 }
-.apps-container {
-    flex: 0.3;
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
+.custom-select {
+    max-width: 80%;
+    background-color: transparent; /* Set the background to transparent */
+    border: 1px solid white; /* Set the border to white */
+    color: white; /* Set the text color to white */
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.15s ease-in-out;
 }
-
-.apps-grid {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
+.custom-select::placeholder {
+    color: rgba(255, 255, 255, 0.7); /* Lighter white for placeholders */
 }
-
-.app-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 1rem;
+.custom-select:focus {
+    border-color: white; /* White border on focus */
+    box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25); /* White shadow on focus */
 }
-
-.app-icon {
-    width: 50px;
-    height: 50px;
+.select-option{
+    color: white;
+    background-color: #2D3748;
 }
-
-.app-name {
-    margin-top: 0.5rem;
-    text-align: center;
-    color:white;
-}
-.dapp-button{
-    margin-top: 15px;
-    margin-left: 20px;
-}
-
 </style>

@@ -72,16 +72,16 @@ export default {
 .sidebar {
     display: block;
     position: absolute;
-    left: 0;
-    top: 70px;
-    bottom: 0;
+    left: 20px;
+    top: 30px;
+    bottom: 20px;
     overflow-y: scroll;
 }
 .sidebar::-webkit-scrollbar {
     width: 0;
 }
 .sidebar-el-menu:not(.el-menu--collapse) {
-    width: 250px;
+    width: 240px;
 }
 .sidebar > ul {
     height: 100%;

@@ -61,24 +61,24 @@
         <div style="width: 100%; border: 1px solid; border-color: #cdcbcb; padding: 10px 10px;">
             <el-space wrap>
                 <div style="width: 1000px; border: 1px solid; border-color: #cdcbcb;">
-                     <div style="padding: 10px 10px;">
+                    <div style="display: flex; align-items: center; padding: 10px 10px;">
                         <span style="margin-right: 15px; font-size: 20px; color: blue; padding: 10px 10px;">PoT区块</span>
                         <span style="margin-right: 15px; font-size: 15px">区块高度：</span>
                         <el-input v-model="tableData.searchBlockHeight" placeholder="区块高度" class="handle-input mr10"></el-input>
                         <span style="margin-right: 15px; font-size: 15px; margin-left: 30px">区块Hash：</span>
                         <el-input v-model="tableData.searchBlockHash" placeholder="区块Hash" class="handle-input mr10"></el-input>
-                        <div style="float: right">
+                        <div style="margin-left: auto;">
                             <el-button icon="el-icon-refresh" @click="handleSearchInputReset()" style="color: #696969">重置</el-button>
                             <el-button type="primary" icon="el-icon-search" @click="handleSearch()">搜索</el-button>
                         </div>
                     </div>
                     <div style="padding: 10px 10px;">
                         <el-table ref="multipleTableRef"
-                            :data="tableData.displayBlockInfo"
-                            style="width: 100%"
-                            border
-                            :row-key="getRowKey"
-                            height="410"
+                                  :data="tableData.displayBlockInfo"
+                                  style="width: 100%"
+                                  border
+                                  :row-key="getRowKey"
+                                  height="410"
                         >
                             <el-table-column label="区块高度" width="110">
                                 <template #default="scope">
@@ -114,7 +114,7 @@
                             <el-table-column label="操作" width="200" align="center">
                                 <template #default="scope">
                                     <el-button type="text" icon="el-icon-tickets" class="green"
-                                            @click="detailDialogVisible=true;handleDetail(scope.$index, scope.row)">详细</el-button>
+                                               @click="detailDialogVisible=true;handleDetail(scope.$index, scope.row)">详细</el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -176,7 +176,7 @@
                     </div>
                 </div>
                 <div style="width: 1000px; border: 1px solid; border-color: #cdcbcb;">
-                     <div style="padding: 10px 10px;">
+                    <div style="padding: 10px 10px;">
                         <span style="margin-right: 15px; font-size: 20px; color: blue; padding: 10px 10px;">业务区块</span>
                         <span style="margin-right: 15px; font-size: 15px">区块高度：</span>
                         <el-input v-model="tableData.searchMicBlockHeight" placeholder="区块高度" class="handle-input mr10"></el-input>
@@ -189,11 +189,11 @@
                     </div>
                     <div style="padding: 10px 10px;">
                         <el-table ref="multipleTableForMicBlockRef"
-                            :data="tableData.displayMicBlockInfo"
-                            style="width: 100%"
-                            border
-                            :row-key="getRowKey"
-                            height="410"
+                                  :data="tableData.displayMicBlockInfo"
+                                  style="width: 100%"
+                                  border
+                                  :row-key="getRowKey"
+                                  height="410"
                         >
                             <el-table-column label="区块高度" width="110">
                                 <template #default="scope">
@@ -224,7 +224,7 @@
                             <el-table-column label="操作" width="200" align="center">
                                 <template #default="scope">
                                     <el-button type="text" icon="el-icon-tickets" class="green"
-                                            @click="detailDialogVisibleForMicBlock=true;handleDetailForMicBlock(scope.$index, scope.row)">详细</el-button>
+                                               @click="detailDialogVisibleForMicBlock=true;handleDetailForMicBlock(scope.$index, scope.row)">详细</el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -275,19 +275,18 @@
                 </div>
             </el-space>
         </div>
-        
+
         <div class="plugins-tips">数据更新时间：{{ nowDate }}</div>
     </div>
-    
-</template>
 
+</template>
 <script>
 import { ref, reactive} from "vue";
 import { ElLoading, ElMessage, ElMessageBox } from "element-plus";
-import { getAllBlock, getBlockByHeight, getBlockByHash, getMicBlockByHeight, getMicBlockByHash} from "../api/consensus/block";
+import { getAllBlock, getBlockByHeight, getBlockByHash, getMicBlockByHeight, getMicBlockByHash} from "./api/consensus/block";
 
 export default {
-    name: "consensus",
+    name: "Consensus",
     setup() {
         const multipleTableRef = ref();
         const multipleTableForMicBlockRef = ref();
@@ -317,23 +316,23 @@ export default {
             // displayBlockInfo 中的内容将会显示在界面的表格中
             // 清空 displayBlockInfo 数组
             tableData.displayBlockInfo.splice(0,tableData.displayBlockInfo.length);
-            if (tableData.searchBlockHeight == "" && tableData.searchBlockHash == "") {
+            if (tableData.searchBlockHeight === "" && tableData.searchBlockHash === "") {
                 tableData.displayBlockInfo = [].concat(tableData.blockInfo)
-            } else if (tableData.searchBlockHeight == "" && tableData.searchBlockHash != "") {
+            } else if (tableData.searchBlockHeight === "" && tableData.searchBlockHash !== "") {
                 tableData.blockInfo.forEach((item)=>{
-                    if (item.hash == tableData.searchBlockHash) {
+                    if (item.hash === tableData.searchBlockHash) {
                         tableData.displayBlockInfo.push(item);
                     }  
                 })
-            } else if (tableData.searchBlockHeight != "" && tableData.searchBlockHash == "") {
+            } else if (tableData.searchBlockHeight !== "" && tableData.searchBlockHash === "") {
                 tableData.blockInfo.forEach((item)=>{
-                    if (item.height == tableData.searchBlockHeight) {
+                    if (item.height === tableData.searchBlockHeight) {
                         tableData.displayBlockInfo.push(item);
                     }  
                 })
             } else {
                 tableData.blockInfo.forEach((item)=>{
-                    if (item.height == tableData.searchBlockHeight && item.hash == tableData.searchBlockHash) {
+                    if (item.height === tableData.searchBlockHeight && item.hash === tableData.searchBlockHash) {
                         tableData.displayBlockInfo.push(item);
                     }  
                 })
@@ -345,23 +344,23 @@ export default {
             // displayBlockInfo 中的内容将会显示在界面的表格中
             // 清空 displayBlockInfo 数组
             tableData.displayMicBlockInfo.splice(0,tableData.displayMicBlockInfo.length);
-            if (tableData.searchMicBlockHeight == "" && tableData.searchMicBlockHash == "") {
+            if (tableData.searchMicBlockHeight === "" && tableData.searchMicBlockHash === "") {
                 tableData.displayMicBlockInfo = [].concat(tableData.micBlockInfo)
-            } else if (tableData.searchMicBlockHeight == "" && tableData.searchMicBlockHash != "") {
+            } else if (tableData.searchMicBlockHeight === "" && tableData.searchMicBlockHash !== "") {
                 tableData.micBlockInfo.forEach((item)=>{
-                    if (item.hash == tableData.searchMicBlockHash) {
+                    if (item.hash === tableData.searchMicBlockHash) {
                         tableData.displayMicBlockInfo.push(item);
                     }  
                 })
-            } else if (tableData.searchMicBlockHeight != "" && tableData.searchMicBlockHash == "") {
+            } else if (tableData.searchMicBlockHeight !== "" && tableData.searchMicBlockHash === "") {
                 tableData.micBlockInfo.forEach((item)=>{
-                    if (item.height == tableData.searchMicBlockHeight) {
+                    if (item.height === tableData.searchMicBlockHeight) {
                         tableData.displayMicBlockInfo.push(item);
                     }  
                 })
             } else {
                 tableData.micBlockInfo.forEach((item)=>{
-                    if (item.height == tableData.searchMicBlockHeight && item.hash == tableData.searchMicBlockHash) {
+                    if (item.height === tableData.searchMicBlockHeight && item.hash === tableData.searchMicBlockHash) {
                         tableData.displayMicBlockInfo.push(item);
                     }  
                 })
@@ -397,7 +396,7 @@ export default {
                 tableData.blockInfo=[].concat(res);
                 tableData.displayBlockInfo=[].concat(res);
                 let query = 0;
-                if (tableData.blockInfo.length != 0) {
+                if (tableData.blockInfo.length !== 0) {
                     console.log(tableData.blockInfo[0].height);
                     query = tableData.blockInfo[0].height
                     getMicBlockByHeight(query).then((res) => {
@@ -444,11 +443,178 @@ export default {
 }
 
 .handle-input {
-  width: 150px;
+  width: 150px !important;
   display: inline-block;
 }
 
 .mr10 {
   margin-right: 10px;
+}
+* {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none
+}
+
+
+.content-box {
+    position: absolute;
+    left: 250px;
+    right: 20px;
+    top: 30px;
+    bottom: 20px;
+    padding-bottom: 30px;
+    -webkit-transition: left .3s ease-in-out;
+    transition: left .3s ease-in-out;
+    background: #f0f0f0;
+}
+
+.content {
+    width: auto;
+    height: 100%;
+    padding: 10px;
+    overflow-y: scroll;
+    box-sizing: border-box;
+}
+
+.content-collapse {
+    left: 65px;
+}
+
+.container {
+    padding: 30px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.crumbs {
+    margin: 10px 0;
+}
+
+.el-table th {
+    background-color: #f5f7fa !important;
+}
+
+.pagination {
+    margin: 20px 0;
+    text-align: right;
+}
+
+.plugins-tips {
+    padding: 20px 10px;
+    margin-bottom: 20px;
+}
+
+.el-button+.el-tooltip {
+    margin-left: 10px;
+}
+el-button th,td,tr:first-child th{
+    color: black !important;
+}
+
+.el-table tr:hover {
+    background: #f6faff;
+}
+
+.mgb20 {
+    margin-bottom: 20px;
+}
+
+.move-enter-active,
+.move-leave-active {
+    transition: opacity .1s ease;
+}
+
+.move-enter-from,
+.move-leave-to {
+    opacity: 0;
+}
+
+/*BaseForm*/
+
+.form-box {
+    width: 600px;
+}
+
+.form-box .line {
+    text-align: center;
+}
+
+.el-time-panel__content::after,
+.el-time-panel__content::before {
+    margin-top: -7px;
+}
+
+.el-time-spinner__wrapper .el-scrollbar__wrap:not(.el-scrollbar__wrap--hidden-default) {
+    padding-bottom: 0;
+}
+
+/*Upload*/
+
+.pure-button {
+    width: 150px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    color: #fff;
+    border-radius: 3px;
+}
+
+.g-core-image-corp-container .info-aside {
+    height: 45px;
+}
+
+.el-upload--text {
+    background-color: #fff;
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    box-sizing: border-box;
+    width: 360px;
+    height: 180px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.el-upload--text .el-icon-upload {
+    font-size: 67px;
+    color: #97a8be;
+    margin: 40px 0 16px;
+    line-height: 50px;
+}
+
+.el-upload--text {
+    color: #97a8be;
+    font-size: 14px;
+    text-align: center;
+}
+
+.el-upload--text em {
+    font-style: normal;
+}
+
+/*VueEditor*/
+
+.ql-container {
+    min-height: 400px;
+}
+
+.ql-snow .ql-tooltip {
+    transform: translateX(117.5px) translateY(10px) !important;
+}
+
+.editor-btn {
+    margin-top: 20px;
+}
+
+/*markdown*/
+
+.v-note-wrapper .v-note-panel {
+    min-height: 500px;
 }
 </style>

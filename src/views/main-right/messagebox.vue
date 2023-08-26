@@ -2,6 +2,19 @@
     <dv-border-box10>
     <div class="message-box">
             <div class="title">最新消息</div>
+            <div class="subtitles-container">
+                <hr class="white-line"/>
+                <div class="subtitles">
+                    <div
+                            v-for="subtitle in subtitles"
+                            :key="subtitle.name"
+                            :class="{ active: activeSubtitle === subtitle.name }"
+                            @click="activeSubtitle = subtitle.name"
+                    >
+                        {{ subtitle.name }}
+                    </div>
+                </div>
+            </div>
             <div class="message-content">
                 <ul :style="{ 'margin-top': marginTop + 'px' }">
                     <li v-for="(item, index) in displayedData" :key="index" @click="handleClick(item)">
@@ -14,7 +27,7 @@
             </div>
             <div class="ad-button">
                 <addnode-button class="ad-button-1">发布</addnode-button>
-                <addnode-button class="ad-button-1">筛选</addnode-button>
+                <addnode-button class="ad-button-2">筛选</addnode-button>
             </div>
     </div>
     </dv-border-box10>
@@ -48,6 +61,11 @@ export default {
                 // add more items here
             ],
             activeIndex: 0,
+            subtitles: [
+                { name: '系统消息' },
+                { name: '私信' }
+            ],
+            activeSubtitle: '系统消息',
         };
     },
     computed: {
@@ -145,11 +163,58 @@ a {
 }
 
 .ad-button{
-    margin-left: 30px;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top:3%;
     /*padding:5%;*/
 }
 .ad-button-1{
     width: 30%;
     height: 40%;
+    margin-right:5%;
+}
+.ad-button-2{
+    width: 30%;
+    height: 40%;
+    margin-left:5%;
+}
+.subtitles-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.white-line {
+    color: white;
+    width: 100%;
+    height: 1px;
+    background-color: white;
+    margin: 10px 0;
+}
+
+.subtitles {
+    color: white;
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.subtitles > div {
+    flex: 1;
+    text-align: center;
+    padding: 5px 0;
+    cursor: pointer;
+    position: relative;  /* 将每个子标题都设为相对定位 */
+}
+
+.subtitles > div.active:before { /* 使用before伪元素来创建选中的子标题上方的蓝色条带 */
+    content: '';
+    position: absolute;
+    top: -10px;  /* 设置位置在选中的子标题上方 */
+    left: 0;
+    right: 0;
+    height: 5px;
+    background-color: #5ab1ef; /* or any color of your choice for the active state */
 }
 </style>

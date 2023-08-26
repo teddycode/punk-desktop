@@ -3,7 +3,7 @@ import HomePage from '../views/HomePage.vue';
 import myStorage from "@/views/myStorage.vue";
 import myTransfer from "@/views/myTransfer.vue";
 import myCalculation from "@/views/myCalculation.vue";
-import myConsensus from "@/views/myConsensus.vue";
+import myConsensus from "@/views/Consensus/myConsensus.vue";
 import myGovernance from "@/views/myGovernance.vue";
 import myTransaction from "@/views/myTransaction.vue";
 import myAbout from "@/views/myAbout.vue";
@@ -23,6 +23,8 @@ import SignUp from "@/views/SignUp.vue";
 import AdminPage from '@/views/AdminPage.vue';
 import limitOrder from "@/views/Transactions/limitOrder.vue";
 import myOrder from "@/views/Transactions/myOrder.vue";
+import Consensus from "@/views/Consensus/Consensus.vue";
+import SelfConsensus from "@/views/Consensus/SelfConsensus.vue";
 
 const routes = [
     {
@@ -78,9 +80,26 @@ const routes = [
         component: myCalculation,
     },
     {
-        path: '/myConsensus',
+        path: '/Consensus',
         name: 'myConsensus',
         component: myConsensus,
+        children: [
+            {
+                path: "/consensus",
+                name: "consensus",
+                meta: {
+                    title: '共识'
+                },
+                component: () => import ( /* webpackChunkName: "consensus" */ "../views/Consensus/Consensus.vue")
+            }, {
+                path: "/myConsensus",
+                name: "myConsensus",
+                meta: {
+                    title: '我的共识'
+                },
+                component: () => import ( /* webpackChunkName: "consensus" */ "../views/Consensus/SelfConsensus.vue")
+            }
+        ]
     },
     {
         path: '/myGovernance',
