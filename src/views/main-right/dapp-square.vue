@@ -64,7 +64,7 @@ export default {
 
 <style scoped>
 .dapp-square{
-    height: 35%;
+    height: 45%;
 }
 .title{
     padding-top: 10px;

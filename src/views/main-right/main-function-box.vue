@@ -171,7 +171,7 @@ export default {
 
 <style lang="scss">
 .main-right-swiper{
-    height: 30%;
+    height: 35%;
 }
 .features {
     display: flex;

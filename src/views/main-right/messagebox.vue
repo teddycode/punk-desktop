@@ -1,6 +1,6 @@
 <template>
+    <dv-border-box10>
     <div class="message-box">
-        <dv-border-box10>
             <div class="title">最新消息</div>
             <div class="message-content">
                 <ul :style="{ 'margin-top': marginTop + 'px' }">
@@ -16,8 +16,8 @@
                 <addnode-button class="ad-button-1">发布</addnode-button>
                 <addnode-button class="ad-button-1">筛选</addnode-button>
             </div>
-        </dv-border-box10>
     </div>
+    </dv-border-box10>
 </template>
 
 
@@ -88,7 +88,7 @@ export default {
 .message-box {
     position: relative;
     width: 100%;
-    height: 35%;
+    height: 100%;
     padding: 15px 0;
     overflow: hidden;
 }
@@ -101,7 +101,7 @@ export default {
 
 .message-content {
     width: 100%;
-    height: 65%;
+    height: 60%;
     overflow: hidden;
     padding-top: 4px;
     padding-right: 20px;
