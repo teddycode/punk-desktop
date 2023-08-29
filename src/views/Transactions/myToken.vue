@@ -214,14 +214,18 @@ export default {
     padding: 0 5%;
 }
 
+.table th,
+.table td,
+.table tr:first-child th {
+    color: white !important;
+}
 table tr td.negative-change {
-    color: green;
+    color: green !important;
 }
 
 table tr td.positive-change {
-    color: red;
+    color: red !important;
 }
-
 .search-bar {
     margin-top: 10px;
     width: 80%;

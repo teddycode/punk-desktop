@@ -1,8 +1,10 @@
-const { app, BrowserWindow, Menu, ipcMain, screen, dialog, BrowserView } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain, screen, dialog} = require('electron');
 
 let mainWindow;
-let searchView; // 添加一个 BrowserView 实例用于显示搜索结果
+let searchView;
 const path = require('path');
+const {openFile, runExecutable, saveFile} = require("./fileManager");
+const {readFileSync} = require("fs");
 
 function createWindow() {
     const mainScreen = screen.getPrimaryDisplay();
@@ -13,7 +15,7 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
-            preload: path.join(__dirname, 'preload.js'),
+            preload: path.join(__dirname, '../preload/preload.js'),
         },
         fullscreen: true,
     });
@@ -102,4 +104,19 @@ ipcMain.on('close-searchWindow', () => {
     if (searchWindow) {
         searchWindow.close();
     }
+});
+ipcMain.on('request-file-open', (event) => {
+    const filePath = openFile();
+    if (filePath) {
+        const content = readFileSync(filePath, 'utf8'); // 需要读取文件内容
+        event.sender.send('file-selected', filePath, content); // 同时发送filePath和content
+    }
+});
+
+ipcMain.on('run-exe', (event, filePath) => {
+    runExecutable(filePath);
+});
+ipcMain.on('save-file-content', (event, filePath, content) => {
+    saveFile(filePath, content);
+    event.sender.send('file-saved');
 });

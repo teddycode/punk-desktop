@@ -65,7 +65,7 @@ export default {
         getFeatureRoute(title) {
             switch (title) {
                 case '共识':
-                    return 'myConsensus';
+                    return 'consensus';
                 case '存储':
                     return 'myStorage';
                 case '计算':

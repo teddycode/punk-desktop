@@ -5,7 +5,7 @@ export const getMyBlock=(query) => {
     return request({
         url: '/consensus/myBlock.json',
         // url: '/list',
-        method: 'post',
+        method: 'get',
         params: query,
     })
 }
@@ -15,7 +15,7 @@ export const getMyMicBlock=(query) => {
     return request({
         url: '/consensus/micBlock.json',
         // url: '/list',
-        method: 'post',
+        method: 'get',
         params: query,
     })
 }

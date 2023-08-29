@@ -1,7 +1,9 @@
 <template>
     <dv-border-box10 class="desktop-box">
         <div class="desktop-header">
-            <div class="desktop-title">桌面管理</div>
+            <router-link to="/FileEdit" class="desktop-title-link">
+                <div class="desktop-title">桌面管理</div>
+            </router-link>
             <el-switch v-model="isOn" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
         </div>
         <div v-if="isOn" class="desktop-content">
@@ -60,7 +62,9 @@ export default {
     font-size: x-large;
     text-align: center;
 }
-
+.desktop-title-link {
+    text-decoration: none;
+}
 .desktop-header .el-switch {
     position: absolute;
     right: 10px;

@@ -17,12 +17,22 @@ import 'primevue/resources/primevue.min.css'                 //核心样式
 import 'primeicons/primeicons.css'                           //icons
 import PrimeVue from "primevue/config";
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faExchangeAlt, faHandHoldingUsd, faGem, faSitemap, faGavel, faHandsHelping, faCalculator, faDatabase } from '@fortawesome/free-solid-svg-icons'
+import {
+    faExchangeAlt,
+    faHandHoldingUsd,
+    faGem,
+    faSitemap,
+    faGavel,
+    faHandsHelping,
+    faCalculator,
+    faDatabase,
+    faWrench
+} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import ElementPlus from 'element-plus'
 import 'element-plus/theme-chalk/index.css';
 import '@element-plus/icons-vue'
-library.add(faExchangeAlt, faHandHoldingUsd, faGem, faSitemap, faGavel, faHandsHelping, faCalculator, faDatabase)
+library.add(faExchangeAlt, faHandHoldingUsd, faGem, faSitemap, faGavel, faHandsHelping, faCalculator, faDatabase,faWrench)
 import './assets/css/icon.css'
 
 const app = createApp(App)

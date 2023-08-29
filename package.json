@@ -91,7 +91,7 @@
     "not dead",
     "not ie 11"
   ],
-  "main": "electron-main.js",
+  "main": "main/electron-main.js",
   "build": {
     "appId": "com.your-app.id",
     "mac": {

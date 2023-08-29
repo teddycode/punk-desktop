@@ -10,6 +10,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const { contextBridge, ipcRenderer } = require('electron');
 
+    let fileSelectedCallback = null;
+
+    ipcRenderer.on('file-selected', (event, filePath, content) => {
+        if (fileSelectedCallback) {
+            fileSelectedCallback(filePath, content);
+        }
+    });
+
     contextBridge.exposeInMainWorld('electronAPI', {
         toggleFullScreen: () => {
             ipcRenderer.send('toggle-fullscreen');
@@ -23,6 +31,15 @@ window.addEventListener('DOMContentLoaded', () => {
         closeSearchWindow: () => {
             ipcRenderer.send('close-searchWindow')
         },
+        requestFileOpen: () => {
+            ipcRenderer.send('request-file-open');
+        },
+        saveFileContent: (filePath, content) => {
+            ipcRenderer.send('save-file-content', filePath, content);
+        },
+        onFileSelected: (callback) => {
+            fileSelectedCallback = callback;
+        }
     });
 
     console.log('DOMContentLoaded event fired, setting up electronAPI');

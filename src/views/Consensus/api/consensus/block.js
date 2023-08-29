@@ -15,7 +15,7 @@ export const getBlockByHeight=(query) => {
     return request({
         url: '/consensus/block.json',
         // url: '/list',
-        method: 'post',
+        method: 'get',
         params: query,
     })
 }
@@ -25,7 +25,7 @@ export const getBlockByHash=(query) => {
     return request({
         url: '/consensus/block.json',
         // url: '/list',
-        method: 'post',
+        method: 'get',
         params: query,
     })
 }
@@ -35,7 +35,7 @@ export const getMicBlockByHeight=(query) => {
     return request({
         url: '/consensus/micBlock.json',
         // url: '/list',
-        method: 'post',
+        method: 'get',
         params: query,
     })
 }
@@ -45,7 +45,7 @@ export const getMicBlockByHash=(query) => {
     return request({
         url: '/consensus/block.json',
         // url: '/list',
-        method: 'post',
+        method: 'get',
         params: query,
     })
 }

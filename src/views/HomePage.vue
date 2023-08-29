@@ -28,7 +28,7 @@
                             <desktop-management></desktop-management>
                         </div>
                         <div class="bottom-div">
-                            <together></together>
+                            <social-net></social-net>
                         </div>
                         <div class="bottom-div">
                             <together></together>
@@ -43,7 +43,9 @@
                     <div class="right-bottom-spacing"></div>
                 </div>
             </div>
-            <div class="custom-div"></div>
+            <div class="custom-div">
+                <div class="custom-title">常用工具栏</div>
+            </div>
         </div>
     </div>
 </template>
@@ -60,6 +62,7 @@ import searchBar from "@/components/searchBar.vue";
 import mainRightDapp from "@/views/main-right/dapp-square.vue";
 import MainCenterButton from "@/views/main-center/main-center-bottom/index.vue";
 import TaskBar from "@/views/TaskBar.vue";
+import SocialNet from "@/views/SocialNet.vue";
 
 export default {
     name: "myHeader",
@@ -71,7 +74,7 @@ export default {
         MainRightSwiper,
         MainRightAd,
         Together,
-        myWallet, LoginButton, Topnav,TaskBar
+        myWallet, LoginButton, Topnav,TaskBar,SocialNet
     },
 
     data(){
@@ -220,6 +223,16 @@ export default {
     border: 1px solid white;
     border-radius: 10px;
     margin: 0 auto; /* Center the div */
+    position: relative;
+
+    .custom-title {
+        font-size: 1.5rem;
+        position: absolute;
+        left: 10px;  // 你可以根据需要调整这个值
+        top: 50%;
+        transform: translateY(-50%);
+        color: #5ab1ef;
+    }
 }
 
 </style>

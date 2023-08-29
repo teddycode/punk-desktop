@@ -16,15 +16,15 @@ import myLogin from "@/views/myLogin.vue";
 import TransferMain from "@/views/Transfers/TransferMain.vue";
 import TransferRecord from "@/views/Transfers/TransferRecord.vue";
 import CollectionDetails from "@/views/Collections/CollectionDetails.vue";
-import newProposal from "@/views/Governances/newProposal.vue";
-import myProposals from "@/views/Governances/myProposals.vue";
-import MyEntrust from "@/views/Governances/myEntrust.vue";
+
 import SignUp from "@/views/SignUp.vue";
 import AdminPage from '@/views/AdminPage.vue';
 import limitOrder from "@/views/Transactions/limitOrder.vue";
 import myOrder from "@/views/Transactions/myOrder.vue";
-import Consensus from "@/views/Consensus/Consensus.vue";
-import SelfConsensus from "@/views/Consensus/SelfConsensus.vue";
+
+import FileEdit from "@/views/localFileManage/FileEdit.vue";
+import proposalHomePage from "@/views/Governances/proposalHomePage.vue";
+
 
 const routes = [
     {
@@ -105,23 +105,11 @@ const routes = [
         path: '/myGovernance',
         name: 'myGovernance',
         component: myGovernance,
-
     },
     {
-        path: '/Governances/newProposal',
-        name: 'newProposal',
-        component: newProposal,
-    },
-    {
-        path: '/Governances/myEntrust',
-        name: 'myEntrust',
-        component: MyEntrust,
-    },
-    {
-        path: '/Governances/myProposals/:id',
-        name: 'myProposals',
-        component: myProposals,
-        props:true,
+        path: '/Governances/proposalHomePage',
+        name: 'proposalHomePage',
+        component: proposalHomePage,
     },
     {
         path: '/myTransaction',
@@ -179,6 +167,11 @@ const routes = [
         path: '/AdminPage',
         name: 'AdminPage',
         component: AdminPage,
+    },
+    {
+        path: '/FileEdit',
+        name: 'FileEdit',
+        component: FileEdit
     },
     // 其他路由配置
 ];

@@ -219,6 +219,7 @@ export default {
 }
 
 .content {
+    overflow: hidden ;
     height: 80%;
     flex-grow: 1;
     display: flex;

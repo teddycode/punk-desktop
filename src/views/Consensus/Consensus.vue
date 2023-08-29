@@ -395,11 +395,11 @@ export default {
             getAllBlock().then((res) => {
                 tableData.blockInfo=[].concat(res);
                 tableData.displayBlockInfo=[].concat(res);
-                let query = 0;
+                let query = {height:0};
                 if (tableData.blockInfo.length !== 0) {
                     console.log(tableData.blockInfo[0].height);
-                    query = tableData.blockInfo[0].height
-                    getMicBlockByHeight(query).then((res) => {
+                    query.height = tableData.blockInfo[0].height
+                    getMicBlockByHeight().then((res) => {
                         tableData.micBlockInfo=[].concat(res);
                         tableData.displayMicBlockInfo=[].concat(res);
                     }).catch((error) => {
