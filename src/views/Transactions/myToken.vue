@@ -1,9 +1,9 @@
 <template>
     <div class="token-page">
-        <div class="title-section">
+        <!-- <div class="title-section">
             <h1>代币</h1>
-        </div>
-        <div class="selection-section">
+        </div> -->
+        <!-- <div class="selection-section">
             <div class="token-selection">
                 <select id="token-select" v-model="selectedToken" class="token-select">
                     <option class="token-select-option" value="">选择代币</option>
@@ -25,7 +25,7 @@
                 <input type="text" class="search-input" placeholder="Search..." v-model.lazy="searchKeyword">
                 <addnode-button class="search-button" @click="search_token">Search</addnode-button>
             </div>
-        </div>
+        </div> -->
         <div class="table-section">
             <table class="table">
                 <thead>
@@ -34,9 +34,7 @@
                     <th>代币名称</th>
                     <th>价格</th>
                     <th>变化</th>
-                    <th>参数1</th>
-                    <th>参数2</th>
-                    <th>参数3</th>
+                    <th>成交量</th>
                 </tr>
                 </thead>
                 <tr v-for="(tokenData, index) in filteredTokenDataList" :key="tokenData.name">
@@ -45,8 +43,6 @@
                     <td>{{ getTokenPrice(tokenData.name) }}</td>
                     <td :class="getTokenChangeClass(tokenData.change)">{{ tokenData.change }}</td>
                     <td>{{ tokenData.param1 }}</td>
-                    <td>{{ tokenData.param2 }}</td>
-                    <td>{{ tokenData.param3 }}</td>
                 </tr>
             </table>
         </div>
@@ -66,11 +62,11 @@ export default {
             selectedToken: '',
             selectedTime: '',
             tokenDataList: [
-                { name: 'ETH', change: '-2%', param1: 'A', param2: 'B', param3: 'C' },
-                { name: 'BTC', change: '+5%', param1: 'D', param2: 'E', param3: 'F' },
-                { name: 'BNB', change: '-3%', param1: 'G', param2: 'H', param3: 'I' },
-                { name: 'ADA', change: '+1%', param1: 'J', param2: 'K', param3: 'L' },
-                { name: 'DOGE', change: '+10%', param1: 'M', param2: 'N', param3: 'O' },
+                { name: 'ETH', change: '-2%', param1: '134M'},
+                { name: 'BTC', change: '+5%', param1: '224M' },
+                { name: 'BNB', change: '-3%', param1: '10M' },
+                { name: 'ADA', change: '+1%', param1: '1M' },
+                { name: 'DOGE', change: '+10%', param1: '2M' },
             ],
             searchKeyword: '',
             rates: {},
