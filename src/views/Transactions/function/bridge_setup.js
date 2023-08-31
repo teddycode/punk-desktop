@@ -7,7 +7,7 @@ const erc20ShadowArtifact = require(config.abiPath + 'VaultShadow.json');
 // console.log(ethVaultArtifact.abi)
 
 // Connect to the Ethereum provider
-const provider_main = new ethers.providers.JsonRpcProvider(config.providers.main);
+const provider_main = new ethers.providers.JsonRpcProvider('/api');
 const provider_side = new ethers.providers.JsonRpcProvider('/api');
 
 // Set up the wallet using the private key
