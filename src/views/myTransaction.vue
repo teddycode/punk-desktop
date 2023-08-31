@@ -62,7 +62,7 @@ export default {
                 symbol: "BTC",
                 symbolName: "比特币",
                 type: "poll",
-                url: "http://127.0.0.1:8080/mock.json"
+                url: "http://127.0.0.1:8081/mock.json"
             });
             this.kline.draw();
             this.container = this.$refs.klineContainer;
