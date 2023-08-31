@@ -1,9 +1,8 @@
 <template>
     <div class="transaction">
-        <div class="chart-container">
-            <!-- 这里可以放置图像或echarts -->
+        <!-- <div class="chart-container">
             <div id="chart" style="width: 100%; height: 360px ;margin-top: 20px;margin-bottom: 20px "></div>
-        </div>
+        </div> -->
         <div class="exchange-panel-transaction">
             <div class="settings">
                 <span>滑点：{{ customSlippage }}%</span>
@@ -42,7 +41,7 @@
                     </div>
                 </el-dialog>
             </div>
-            <h2 class="exchange-title">兑换</h2>
+            <!-- <h2 class="exchange-title">兑换</h2> -->
             <!-- Token 1 Selection and Input -->
             <div class="input-section-transaction">
                 <div>
@@ -66,11 +65,11 @@
                     <input type="number" v-model.trim="tokenAmount2" min="0" @input="calculateAmount('token2')" class="custom-input"/>
                 </div>
             </div>
-            <div class="rate-display">
+            <!-- <div class="rate-display">
                 <p>{{ rateText }}</p>
                 <p v-if="ratesUpdateTime">汇率更新时间：{{ ratesUpdateTime }}</p>
-            </div>
-            <addnode-button style="width: 150px; height: 10%;" @click="exchange()">兑换代币</addnode-button>
+            </div> -->
+            <addnode-button style="width: 150px; height: 15%;" @click="exchange()">兑换</addnode-button>
         </div>
     </div>
 </template>
@@ -474,12 +473,12 @@ export default {
 </script>
 
 <style scoped>
-.exchange-title{
+/* .exchange-title{
     margin-top: 20px;
     font-size: 2rem;
     font-weight: bold;
     color: white;
-}
+} */
 
 .settings {
     position: absolute;
@@ -565,7 +564,7 @@ export default {
     border-radius: 10px;
     /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
     width: 80%;
-    margin: 50px auto;
+    margin: 1px auto;
     padding: 20px;
     border: 1px solid white; /* Add a white border */
 }
