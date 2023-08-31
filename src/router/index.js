@@ -21,6 +21,8 @@ import SignUp from "@/views/SignUp.vue";
 import AdminPage from '@/views/AdminPage.vue';
 import limitOrder from "@/views/Transactions/limitOrder.vue";
 import myOrder from "@/views/Transactions/myOrder.vue";
+import depositToken from "@/views/Transactions/depositToken.vue";
+
 
 import FileEdit from "@/views/localFileManage/FileEdit.vue";
 import proposalHomePage from "@/views/Governances/proposalHomePage.vue";
@@ -151,6 +153,11 @@ const routes = [
                 path:'myOrder',
                 name:'myOrder',
                 component:myOrder,
+            },
+            {
+                path:'depositToken',
+                name:'depositToken',
+                component:depositToken,
             },
         ]
     },
