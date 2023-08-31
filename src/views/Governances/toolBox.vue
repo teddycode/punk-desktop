@@ -1,6 +1,6 @@
 <template>
     <div class="toolbox-container">
-        <h1 class="toolbox-title">
+        <h1 class="toolbox-title" @click="navigateToRicardianContract">
             工具箱
             <font-awesome-icon icon="wrench" class="icon"/>
         </h1>
@@ -15,6 +15,11 @@ export default {
     name: "toolBox",
     components: {
         FontAwesomeIcon
+    },
+    methods: {
+        navigateToRicardianContract() {
+            this.$router.push({ path: '/Governances/RicardianContract' });
+        }
     }
 }
 </script>

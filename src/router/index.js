@@ -24,6 +24,7 @@ import myOrder from "@/views/Transactions/myOrder.vue";
 
 import FileEdit from "@/views/localFileManage/FileEdit.vue";
 import proposalHomePage from "@/views/Governances/proposalHomePage.vue";
+import RicardianContract from "@/views/Governances/RicardianContract.vue";
 
 
 const routes = [
@@ -110,6 +111,11 @@ const routes = [
         path: '/Governances/proposalHomePage',
         name: 'proposalHomePage',
         component: proposalHomePage,
+    },
+    {
+        path: '/Governances/RicardianContract',
+        name: 'RicardianContract',
+        component: RicardianContract,
     },
     {
         path: '/myTransaction',
