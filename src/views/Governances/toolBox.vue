@@ -5,6 +5,7 @@
             <font-awesome-icon icon="wrench" class="icon"/>
         </h1>
         <p class="description">李嘉图合约</p>
+        <p class="description">测试环境入口</p>
     </div>
 </template>
 
@@ -22,12 +23,13 @@ export default {
         }
     }
 }
+
 </script>
 
 <style scoped>
 .toolbox-container {
     text-align: center;
-    margin-top: 10%;
+    margin-top: 7%;
 }
 
 .toolbox-title {
