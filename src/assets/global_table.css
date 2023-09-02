@@ -23,6 +23,7 @@ table tr:first-child th {
     background-color: transparent; /* 标题背景颜色设置为透明 */
     color: white; /* 标题文字颜色改为白色 */
     text-transform: uppercase;
+    font-weight: bold;
 }
 
 table tr {

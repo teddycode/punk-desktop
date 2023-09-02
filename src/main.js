@@ -29,13 +29,14 @@ import {
     faHandsHelping,
     faCalculator,
     faDatabase,
-    faWrench, faFileAlt
+    faWrench, faFire, faEdit, faVideo, faBookReader, faFileAlt, faAngleRight
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import ElementPlus from 'element-plus'
 import 'element-plus/theme-chalk/index.css';
 import '@element-plus/icons-vue'
-library.add(faExchangeAlt, faHandHoldingUsd, faGem, faSitemap, faGavel, faHandsHelping, faCalculator, faDatabase,faWrench,faFileAlt)
+
+library.add(faExchangeAlt, faHandHoldingUsd, faGem, faSitemap, faGavel, faHandsHelping, faCalculator, faDatabase,faWrench,faFire,faEdit,faVideo,faBookReader,faFileAlt,faAngleRight)
 import './assets/css/icon.css'
 
 const app = createApp(App)
@@ -51,7 +52,5 @@ app.use(ElementPlus)
 
 app.config.globalProperties.$echarts = echarts
 
-
-// eslint-disable-next-line vue/multi-word-component-names
 
 app.mount('#app')
