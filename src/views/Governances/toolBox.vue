@@ -1,11 +1,12 @@
 <template>
     <div class="toolbox-container">
-        <h1 class="toolbox-title" @click="navigateToRicardianContract">
+        <h1 class="toolbox-title">
             工具箱
             <font-awesome-icon icon="wrench" class="icon"/>
         </h1>
-        <p class="description">李嘉图合约</p>
+        <p class="description" @click="navigateToRicardianContract">李嘉图合约</p>
         <p class="description">测试环境入口</p>
+        <p class="description" @click="navigateToEmergencyResponse">紧急投票 </p>
     </div>
 </template>
 
@@ -20,6 +21,9 @@ export default {
     methods: {
         navigateToRicardianContract() {
             this.$router.push({ path: '/Governances/RicardianContract' });
+        },
+        navigateToEmergencyResponse() {
+            this.$router.push({ path: '/Governances/EmergencyResponse' });
         }
     }
 }

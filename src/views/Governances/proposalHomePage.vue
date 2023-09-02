@@ -12,7 +12,7 @@
         </div>
         <div class="right-section">
             <div class="upper-div">
-                <process-guide></process-guide>
+                <selfInfo></selfInfo>
             </div>
             <div class="lower-div">
                 <my-entrust></my-entrust>
@@ -25,13 +25,13 @@
 <script>
 import MainBackground from "@/components/MainBackground.vue";
 import addnodeButton from "@/components/buttons/addnodeButton.vue";
-import processGuide from "@/views/Governances/processGuide.vue";
+import selfInfo from "@/views/Governances/selfInfo.vue";
 import myEntrust from "@/views/Governances/myEntrust.vue";
 
 export default {
     name: "proposalHomePage",
     components:{
-        MainBackground,addnodeButton,processGuide,myEntrust,
+        MainBackground,addnodeButton,selfInfo,myEntrust,
     }
 }
 </script>

@@ -24,35 +24,35 @@
                         <div class="content-box">
                             <div class="box-title">
                                 <div class="box-title-left">最新提出</div>
-                                <div class="box-title-more">更多>></div>
+                                <div class="box-title-more" @click="navigateToProposalsList">更多>></div>
                             </div>
                             <div class="box-main-content">
-                                <img :src="require(`@/assets/pos_gov.jpg`)" alt="" class="main-img">
+                                <img :src="require(`@/assets/pos_gov.jpg`)" alt="" class="main-img" @click="navigateToProposalInformation">
                             </div>
                         </div>
 
                         <div class="content-box">
                             <div class="box-title">
                                 <div class="box-title-left">数据看板</div>
-                                <div class="box-title-more">更多>></div>
+                                <div class="box-title-more" @click="navigateToProposalsList">更多>></div>
                             </div>
                             <div class="box-main-content">
-
+                                <img :src="require(`@/assets/treasure.jpg`)" alt="" class="main-img">
                             </div>
                         </div>
 
                         <div class="content-box">
                             <div class="box-title">
                                 <div class="box-title-left">热门提案</div>
-                                <div class="box-title-more">更多>></div>
+                                <div class="box-title-more" @click="navigateToProposalsList">更多>></div>
                             </div>
                             <div class="box-main-content">
                                 <ul class="proposal-list">
-                                    <li>Proof-of-Stake 网络的区块奖励调整提案</li>
-                                    <li>去中心化金融 (DeFi) 协议的安全增强提案</li>
-                                    <li>跨链桥接协议的多链集成提案</li>
-                                    <li>稳定币发行和抵押品参数的调整</li>
-                                    <li>区块链社区治理流程改进提案</li>
+                                    <li @click="navigateToProposalInformation">Proof-of-Stake 网络的区块奖励调整提案</li>
+                                    <li @click="navigateToProposalInformation">去中心化金融 (DeFi) 协议的安全增强提案</li>
+                                    <li @click="navigateToProposalInformation">跨链桥接协议的多链集成提案</li>
+                                    <li @click="navigateToProposalInformation">稳定币发行和抵押品参数的调整</li>
+                                    <li @click="navigateToProposalInformation">区块链社区治理流程改进提案</li>
                                 </ul>
                             </div>
                         </div>
@@ -60,15 +60,15 @@
                         <div class="content-box">
                             <div class="box-title">
                                 <div class="box-title-left">正在评议</div>
-                                <div class="box-title-more">更多>></div>
+                                <div class="box-title-more" @click="navigateToProposalsList">更多>></div>
                             </div>
                             <div class="box-main-content">
                                 <ul class="proposal-list">
-                                    <li>Proof-of-Stake 网络的区块奖励调整提案</li>
-                                    <li>去中心化金融 (DeFi) 协议的安全增强提案</li>
-                                    <li>跨链桥接协议的多链集成提案</li>
-                                    <li>稳定币发行和抵押品参数的调整</li>
-                                    <li>区块链社区治理流程改进提案</li>
+                                    <li @click="navigateToProposalInformation">Proof-of-Stake 网络的区块奖励调整提案</li>
+                                    <li @click="navigateToProposalInformation">去中心化金融 (DeFi) 协议的安全增强提案</li>
+                                    <li @click="navigateToProposalInformation">跨链桥接协议的多链集成提案</li>
+                                    <li @click="navigateToProposalInformation">稳定币发行和抵押品参数的调整</li>
+                                    <li @click="navigateToProposalInformation">区块链社区治理流程改进提案</li>
                                 </ul>
                             </div>
                         </div>
@@ -105,6 +105,14 @@ export default {
         return {
         };
     },
+    methods: {
+        navigateToProposalInformation() {
+            this.$router.push({ path: '/Governances/OneProposals' });
+        },
+        navigateToProposalsList() {
+            this.$router.push({ path: '/Governances/proposalHomePage' });
+        },
+    }
 };
 </script>
 
