@@ -5,7 +5,7 @@
             <div class="content-container">
                 <div class="side-div left-div">
                     <div class="upper-div">
-                        <self-info></self-info>
+                        <process-guide></process-guide>
                     </div>
                     <div class="lower-div">
                         <tool-box></tool-box>
@@ -19,11 +19,63 @@
                         <button class="nav-btn">交易</button>
                         <button class="nav-btn">国库</button>
                     </div>
-                    <div class="white-boxes">
-                        <div class="white-box">最新提出</div>
+                    <div class="main-content">
+
+                        <div class="content-box">
+                            <div class="box-title">
+                                <div class="box-title-left">最新提出</div>
+                                <div class="box-title-more">更多>></div>
+                            </div>
+                            <div class="box-main-content">
+                                <img :src="require(`@/assets/pos_gov.jpg`)" alt="" class="main-img">
+                            </div>
+                        </div>
+
+                        <div class="content-box">
+                            <div class="box-title">
+                                <div class="box-title-left">数据看板</div>
+                                <div class="box-title-more">更多>></div>
+                            </div>
+                            <div class="box-main-content">
+
+                            </div>
+                        </div>
+
+                        <div class="content-box">
+                            <div class="box-title">
+                                <div class="box-title-left">热门提案</div>
+                                <div class="box-title-more">更多>></div>
+                            </div>
+                            <div class="box-main-content">
+                                <ul class="proposal-list">
+                                    <li>Proof-of-Stake 网络的区块奖励调整提案</li>
+                                    <li>去中心化金融 (DeFi) 协议的安全增强提案</li>
+                                    <li>跨链桥接协议的多链集成提案</li>
+                                    <li>稳定币发行和抵押品参数的调整</li>
+                                    <li>区块链社区治理流程改进提案</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="content-box">
+                            <div class="box-title">
+                                <div class="box-title-left">正在评议</div>
+                                <div class="box-title-more">更多>></div>
+                            </div>
+                            <div class="box-main-content">
+                                <ul class="proposal-list">
+                                    <li>Proof-of-Stake 网络的区块奖励调整提案</li>
+                                    <li>去中心化金融 (DeFi) 协议的安全增强提案</li>
+                                    <li>跨链桥接协议的多链集成提案</li>
+                                    <li>稳定币发行和抵押品参数的调整</li>
+                                    <li>区块链社区治理流程改进提案</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- <div class="white-box">最新提出</div>
                         <div class="white-box">数据看板</div>
                         <div class="white-box">热门提案</div>
-                        <div class="white-box">正在评议</div>
+                        <div class="white-box">正在评议</div> -->
                     </div>
                 </div>
                 <div class="side-div right-div">
@@ -41,13 +93,13 @@
 
 <script>
 import MainBackground from "@/components/MainBackground.vue";
-import selfInfo from "@/views/Governances/selfInfo.vue";
+import processGuide from "@/views/Governances/processGuide.vue";
 import toolBox from "@/views/Governances/toolBox.vue";
 import newProposal from "@/views/Governances/newProposal.vue";
 import myProposals from "@/views/Governances/myProposals.vue";
 export default {
     components:{
-        MainBackground,selfInfo,toolBox,newProposal,myProposals
+        MainBackground,processGuide,toolBox,newProposal,myProposals
     },
     data() {
         return {
@@ -142,7 +194,7 @@ export default {
 .lower-div {
     height: 30%;
 }
-.white-boxes {
+.main-content {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -150,15 +202,72 @@ export default {
     height: 90%;
 }
 
-.white-box {
+/* .white-box {
     color: white;
     font-size: 1.5rem;
-    margin-top: 3%;
+    margin-top: 2%;
+    padding-top: 2%;
     flex-basis: calc(50% - 1%);
     height: 40%;
-    border: 2px solid white;
-    border-radius: 15px;
-    box-sizing: border-box;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: rgb(202, 224, 243);
     background-color: transparent;
+} */
+.content-box {
+    padding-top: 2%;
+    flex-basis: calc(50% - 3%);
+    height: 40%;
+    color: white;
 }
+
+.proposal-list {
+    padding-left: 10%;
+    margin-top: 3%;
+    font-size: 1rem;
+    list-style-type: none;
+}
+
+.proposal-list li::marker{
+    color:white ;
+}
+
+.proposal-list li{
+    margin-bottom: 3%;
+    list-style-type: disc;
+}
+
+.box-title {
+    font-size: 1.2rem;
+    text-align: left;
+    padding-left: 4%;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: rgb(202, 224, 243);
+}
+
+.box-main-content{
+    text-align: left;
+}
+
+.box-title-left{
+    display: inline-block;
+    color: #1479d7;
+    border-bottom-width: 4px;
+    border-bottom-style: solid;
+    border-bottom-color: rgb(20, 121, 215);
+}
+
+.box-title-more{
+    display: block;
+    float: right;
+}
+
+.main-img {
+    max-width: 100%; /* 图片最大宽度为容器宽度 */
+    height: auto; /* 保持图片宽高比 */
+    display: block; /* 去掉默认行内元素的下方空白间隙 */
+}
+
+
 </style>

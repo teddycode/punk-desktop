@@ -13,7 +13,7 @@ export default {
 <style scoped>
 .proposal-container {
     text-align: center; /* 使内容居中 */
-    margin-top: 10%; /* 顶部外边距 */
+    margin-top: 7%; /* 顶部外边距 */
 }
 
 .proposal-title {
