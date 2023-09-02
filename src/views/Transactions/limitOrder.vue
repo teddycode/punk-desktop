@@ -1,11 +1,10 @@
 <template>
     <div class="limitOrder">
-        <div class="chart-container">
-            <!-- 这里可以放置图像或echarts -->
+        <!-- <div class="chart-container">
             <div id="chart" style="width: 100%; height: 400px; margin-bottom: 40px;margin-top: 40px"></div>
-        </div>
+        </div> -->
         <div class="limitOrder-panel-transaction">
-            <h2 class="exchange-title">限价单</h2>
+            <!-- <h2 class="exchange-title">限价单</h2> -->
             <!-- Sell & Buy Dropdowns -->
             <div class="limitOrder-token-pair">
                 <label class="limitOrder-token-label">Sell</label>
@@ -25,9 +24,9 @@
                 </div>
             </div>
             <!-- Divider -->
-            <div class="divider"/>
+            <!-- <div class="divider"/> -->
             <!-- Fee Tiers -->
-            <div class="fee-tiers-title">Fee Tiers</div>
+            <!-- <div class="fee-tiers-title">Fee Tiers</div> -->
             <div class="fee-options">
                 <label v-for="fee in fees" :key="fee" class="limitOrder-fee-box" :class="{ 'selected': selectedFee === fee }">
                     <input type="radio" name="fee" :value="fee" v-model="selectedFee" class="limitOrder-hidden-radio"/>
@@ -35,7 +34,7 @@
                 </label>
             </div>
             <!-- Divider -->
-            <div class="divider"/>
+            <!-- <div class="divider"/> -->
             <div class="limitOrder-token-input">
                 <label class="limitOrder-token-label">Amount</label>
                 <input type="text" v-model="amount" class="limitOrder-custom-input"/>
@@ -323,13 +322,13 @@ export default {
 <style scoped>
 .exchange-title{
     margin-top: 10px;
-    font-size: 2rem;
+    font-size: 0.5rem;
     font-weight: bold;
     color: white;
 }
 .fee-tiers-title{
     color: white;
-    font-size: 1.5rem;
+    font-size: 0.5rem;
     text-align: left;
 }
 .limitOrder {
@@ -373,7 +372,7 @@ export default {
     align-items: center;
     width: 100%;
     gap: 1%;
-    margin-bottom: 5%;
+    margin-bottom: 1%;
 }
 
 .limitOrder-select-wrapper {
@@ -391,7 +390,7 @@ export default {
     color: white;
     padding: 8px 12px;
     border-radius: 4px;
-    font-size: 16px;
+    font-size: 5px;
     outline: none;
     transition: border-color 0.15s ease-in-out;
 }
@@ -427,7 +426,7 @@ export default {
     align-items: center;
     width: 100%;
     gap: 1%;
-    margin-bottom: 5%;
+    margin-bottom: 1%;
     position:relative;
 }
 
@@ -439,7 +438,7 @@ export default {
     border: 1px solid white;
     background-color: transparent;
     color: white;
-    font-size: 16px;
+    font-size: 5px;
     outline: none;
     transition: border-color 0.15s ease-in-out;
 }

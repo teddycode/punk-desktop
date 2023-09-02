@@ -1,5 +1,5 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import HomePage from '../views/HomePage.vue';
+import { createRouter, createWebHistory } from "vue-router";
+import HomePage from "../views/HomePage.vue";
 import myStorage from "@/views/myStorage.vue";
 import myTransfer from "@/views/myTransfer.vue";
 import myCalculation from "@/views/myCalculation.vue";
@@ -18,167 +18,199 @@ import TransferRecord from "@/views/Transfers/TransferRecord.vue";
 import CollectionDetails from "@/views/Collections/CollectionDetails.vue";
 
 import SignUp from "@/views/SignUp.vue";
-import AdminPage from '@/views/AdminPage.vue';
+import AdminPage from "@/views/AdminPage.vue";
 import limitOrder from "@/views/Transactions/limitOrder.vue";
 import myOrder from "@/views/Transactions/myOrder.vue";
+import depositToken from "@/views/Transactions/depositToken.vue";
 
 import FileEdit from "@/views/localFileManage/FileEdit.vue";
 import proposalHomePage from "@/views/Governances/proposalHomePage.vue";
-
+import RicardianContract from "@/views/Governances/RicardianContract.vue";
+// 密码组
+import CryptoPage from "@/views/Crypto/CryptoPage.vue";
+import AddAlgorithmPage from "@/views/Crypto/AddAlgorithmPage.vue";
 
 const routes = [
-    {
-        path: '/',
-        name: 'HomePage',
-        component: HomePage,
-    },
-    {
-        path: '/myAbout',
-        name: 'myAbout',
-        component: myAbout,
-    },
-    {
-        path: '/myLogin',
-        name: 'myLogin',
-        component: myLogin,
-    },
-    {
-        path: '/SignUp',
-        name: 'SignUp',
-        component: SignUp,
-    },
-    {
-        path: '/myStorage',
-        name: 'myStorage',
-        component: myStorage,
-    },
-    {
-        path: '/myTransfer',
-        name: 'myTransfer',
-        component: myTransfer,
-        children: [
-            {
-                path:'',
-                name:'myTransfer',
-                component:TransferMain,
-            },
-            {
-                path:'TransferMain',
-                name:'TransferMain',
-                component:TransferMain,
-            },
-            {
-                path:'TransferRecord',
-                name:'TransferRecord',
-                component:TransferRecord,
-            },
-        ]
-    },
-    {
-        path: '/myCalculation',
-        name: 'myCalculation',
-        component: myCalculation,
-    },
-    {
-        path: '/Consensus',
-        name: 'myConsensus',
-        component: myConsensus,
-        children: [
-            {
-                path: "/consensus",
-                name: "consensus",
-                meta: {
-                    title: '共识'
-                },
-                component: () => import ( /* webpackChunkName: "consensus" */ "../views/Consensus/Consensus.vue")
-            }, {
-                path: "/myConsensus",
-                name: "myConsensus",
-                meta: {
-                    title: '我的共识'
-                },
-                component: () => import ( /* webpackChunkName: "consensus" */ "../views/Consensus/SelfConsensus.vue")
-            }
-        ]
-    },
-    {
-        path: '/myGovernance',
-        name: 'myGovernance',
-        component: myGovernance,
-    },
-    {
-        path: '/Governances/proposalHomePage',
-        name: 'proposalHomePage',
-        component: proposalHomePage,
-    },
-    {
-        path: '/myTransaction',
-        name: 'myTransaction',
-        component: myTransaction,
-        children:[
-            {
-                path:'',
-                name:'myTransaction',
-                component:myExchange,
-            },
-            {
-                path:'myExchange',
-                name:'myExchange',
-                component:myExchange,
-            },
-            {
-                path:'myToken',
-                name:'myToken',
-                component:myToken,
-            },
-            {
-                path:'myTrade',
-                name:'myTrade',
-                component:myTrade,
-            },
-            {
-                path:'limitOrder',
-                name:'limitOrder',
-                component:limitOrder,
-            },
-            {
-                path:'myOrder',
-                name:'myOrder',
-                component:myOrder,
-            },
-        ]
-    },
-    {
-        path: '/myNetwork',
-        name: 'myNetwork',
-        component: myNetwork
-    },
-    {
-        path: '/myCollection',
-        name: 'myCollection',
-        component: myCollection,
-    },
-    {
-        path: '/CollectionDetails/:name',
-        name: 'CollectionDetails',
-        component: CollectionDetails
-    },
-    {
-        path: '/AdminPage',
-        name: 'AdminPage',
-        component: AdminPage,
-    },
-    {
-        path: '/FileEdit',
-        name: 'FileEdit',
-        component: FileEdit
-    },
-    // 其他路由配置
+  {
+    path: "/",
+    name: "HomePage",
+    component: HomePage,
+  },
+  {
+    path: "/myAbout",
+    name: "myAbout",
+    component: myAbout,
+  },
+  {
+    path: "/myLogin",
+    name: "myLogin",
+    component: myLogin,
+  },
+  {
+    path: "/SignUp",
+    name: "SignUp",
+    component: SignUp,
+  },
+  {
+    path: "/myStorage",
+    name: "myStorage",
+    component: myStorage,
+  },
+  {
+    path: "/myTransfer",
+    name: "myTransfer",
+    component: myTransfer,
+    children: [
+      {
+        path: "",
+        name: "myTransfer",
+        component: TransferMain,
+      },
+      {
+        path: "TransferMain",
+        name: "TransferMain",
+        component: TransferMain,
+      },
+      {
+        path: "TransferRecord",
+        name: "TransferRecord",
+        component: TransferRecord,
+      },
+    ],
+  },
+  {
+    path: "/myCalculation",
+    name: "myCalculation",
+    component: myCalculation,
+  },
+  {
+    path: "/Consensus",
+    name: "myConsensus",
+    component: myConsensus,
+    children: [
+      {
+        path: "/consensus",
+        name: "consensus",
+        meta: {
+          title: "共识",
+        },
+        component: () =>
+          import(
+            /* webpackChunkName: "consensus" */ "../views/Consensus/Consensus.vue"
+          ),
+      },
+      {
+        path: "/myConsensus",
+        name: "myConsensus",
+        meta: {
+          title: "我的共识",
+        },
+        component: () =>
+          import(
+            /* webpackChunkName: "consensus" */ "../views/Consensus/SelfConsensus.vue"
+          ),
+      },
+    ],
+  },
+  {
+    path: "/myGovernance",
+    name: "myGovernance",
+    component: myGovernance,
+  },
+  {
+    path: "/Governances/proposalHomePage",
+    name: "proposalHomePage",
+    component: proposalHomePage,
+  },
+  {
+    path: "/Governances/RicardianContract",
+    name: "RicardianContract",
+    component: RicardianContract,
+  },
+  {
+    path: "/myTransaction",
+    name: "myTransaction",
+    component: myTransaction,
+    children: [
+      {
+        path: "",
+        name: "myTransaction",
+        component: myExchange,
+      },
+      {
+        path: "myExchange",
+        name: "myExchange",
+        component: myExchange,
+      },
+      {
+        path: "myToken",
+        name: "myToken",
+        component: myToken,
+      },
+      {
+        path: "myTrade",
+        name: "myTrade",
+        component: myTrade,
+      },
+      {
+        path: "limitOrder",
+        name: "limitOrder",
+        component: limitOrder,
+      },
+      {
+        path: "myOrder",
+        name: "myOrder",
+        component: myOrder,
+      },
+      {
+        path: "depositToken",
+        name: "depositToken",
+        component: depositToken,
+      },
+    ],
+  },
+  {
+    path: "/myNetwork",
+    name: "myNetwork",
+    component: myNetwork,
+  },
+  {
+    path: "/myCollection",
+    name: "myCollection",
+    component: myCollection,
+  },
+  {
+    path: "/CollectionDetails/:name",
+    name: "CollectionDetails",
+    component: CollectionDetails,
+  },
+  {
+    path: "/AdminPage",
+    name: "AdminPage",
+    component: AdminPage,
+  },
+  {
+    path: "/FileEdit",
+    name: "FileEdit",
+    component: FileEdit,
+  },
+  // 其他路由配置
+  // 密码组
+  {
+    path: "/Crypto",
+    name: "Crypto",
+    component: CryptoPage,
+  },
+  {
+    path: "/Crypto/AddAlgorithm",
+    name: "AddAlgorithm",
+    component: AddAlgorithmPage,
+  },
 ];
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes,
+  history: createWebHistory(),
+  routes,
 });
 
 export default router;

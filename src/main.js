@@ -7,6 +7,9 @@ import '@fortawesome/fontawesome-free/css/all.css'
 import dataV from '@kjgl77/datav-vue3'
 // import './assets/scss/style.scss';
 // 引入 eCharts
+import $ from 'jquery';
+window.$ = $;
+window.jQuery = $;
 import * as echarts from 'echarts'
 
 import "./assets/iconfont/iconfont.css";
