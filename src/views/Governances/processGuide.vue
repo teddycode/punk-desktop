@@ -12,7 +12,7 @@
             <div class="process-guide-content-title">角色导览</div>
             <div class="process-guide-row">提案参与者</div>
             <div class="process-guide-row">技术委员会</div>
-            <div class="process-guide-row">国库专家</div>
+            <div class="process-guide-row">国库专家</div> 
         </div>
     </div>
 </template>
