@@ -15,15 +15,15 @@
                 <el-menu-item index="zkp" @click="goAnchor('#zkp')">零知识证明</el-menu-item>
             </el-sub-menu>
             <el-menu-item index="2" @click="goAnchor('#developer')"> 进入社区</el-menu-item>
-            <el-menu-item index="3"> 了解更多</el-menu-item>
+            <el-menu-item index="3" @click="goAnchor('#more')"> 了解更多</el-menu-item>
         </el-menu>
         <div class="PageContent">
             <div class="DeveloperEntrance" id="developer">
                 <div class="developer-title">成为磐古开发者</div>
                 <div class="developer-description">想要在磐古系统中加入你的设计？来治理社区提交你的提案吧。</div>
                 <div class="buttons-container">
-                    <addnodeButton class="developer-button-left" color="blue">进入治理社区</addnodeButton>
-                    <addnodeButton class="developer-button-right" color="blue">创建新提案</addnodeButton>
+                    <addnode-button1 class="developer-button-left" color="blue" @click="gotoGovernance">进入治理社区</addnode-button1>
+                    <addnode-button1 class="developer-button-right" color="blue" @click="gotoNewProposal">创建新提案</addnode-button1>
                 </div>
             </div>
             <div>
@@ -168,15 +168,23 @@
                     </tbody>
                 </table>
             </div>
-            <el-row>
+            <div class="PageTitle" id="more">
+                了解更多
+            </div>
+            <el-row gutter="40">
                 <el-col :span="12">
                     <div class="document-button">
-                        <font-awesome-icon class="doc-icon" icon="file-alt"/>
+                        <font-awesome-icon icon="file-alt" class="icon"/>
                         <span class="doc-text">阅读文档</span>
+                        <font-awesome-icon icon="angle-right" class="right-icon"/>
                     </div>
                 </el-col>
                 <el-col :span="12">
-                    <div class="grid-content ep-bg-purple-light"/>
+                    <div class="document-button">
+                        <font-awesome-icon icon="fire" class="icon"/>
+                        <span class="doc-text">进入论坛</span>
+                        <font-awesome-icon icon="angle-right" class="right-icon"/>
+                    </div>
                 </el-col>
             </el-row>
 
@@ -186,10 +194,10 @@
 
 <script>
 import MainBackground from "@/components/MainBackground.vue";
-import addnodeButton from "@/components/buttons/addnodeButton.vue";
+import addnodeButton1 from "@/components/buttons/addnodeButton1.vue";
 
 export default {
-    components: {MainBackground, addnodeButton},
+    components: {MainBackground, addnodeButton1},
     provide() {
         return {
             // 导航窗格内容
@@ -206,6 +214,12 @@ export default {
                 behavior: "smooth",
             });
         },
+        gotoGovernance(){
+            this.$router.push("/myGovernance")
+        },
+        gotoNewProposal(){
+            this.$router.push("/Governances/proposalHomePage")
+        }
     },
     data() {
         return {
@@ -213,7 +227,7 @@ export default {
             hashData: [
                 {
                     name: "BLAKE2b",
-                    size: 256,
+                    size: 512,
                     version: "0.1.0",
                     lastUpdate: "2023-08-03",
                 },
@@ -431,7 +445,6 @@ export default {
 <style>
 .PageContent {
     color: #ffffff;
-    font-family: "Microsoft Yahei";
     text-align: left;
     margin-left: 5%;
     margin-right: 5%;
@@ -444,7 +457,8 @@ export default {
     font-size: 28px;
     text-align: left;
     margin-top: 10px;
-    margin-bottom: 20px;
+    padding-top: 10px;
+    margin-bottom: 10px;
     font-weight: bold;
 }
 
@@ -498,14 +512,14 @@ export default {
 .developer-button-left {
     font-size: 20px;
     color: #ffffff;
-    background-color: transparent !important;
+    /*background-color: transparent !important;*/
     margin-left: 15%; /* 这只是一个例子，您可以根据需要调整 */
 }
 
 .developer-button-right {
     font-size: 20px;
     color: #ffffff;
-    background-color: transparent !important;
+    /*background-color: transparent !important;*/
     margin-right: 15%; /* 这只是一个例子，您可以根据需要调整 */
 }
 
@@ -534,10 +548,10 @@ a {
 .document-button {
     display: flex;
     align-items: center;
+    justify-content: space-between; /* 添加这一行 */
     border: 2px solid white;
     padding: 10px 20px;
     cursor: pointer;
-    margin-top: 20px;
     border-radius: 5px;
     transition: background-color 0.3s;
 }
@@ -555,7 +569,11 @@ a {
 }
 
 .doc-text {
+    margin-left: 10px;
     color: white;
     font-weight: bold;
+}
+.right-icon{
+    margin-left: auto;
 }
 </style>

@@ -39,7 +39,7 @@ import {
     faGavel,
     faGem,
     faHandHoldingUsd,
-    faHandsHelping,
+    faHandsHelping, faLock,
     faSitemap
 } from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
@@ -133,6 +133,12 @@ export default {
                     description: '关于存储的描述.',
                     icon: faDatabase,
                 },
+                {
+                    id: 9,
+                    title: '密码',
+                    description: '关于密码的描述.',
+                    icon: faLock,
+                },
             ],
         }
     },
@@ -163,6 +169,8 @@ export default {
                 this.$router.push('/myNetwork');
             } else if (feature.title === '藏品') {
                 this.$router.push('/myCollection');
+            } else if(feature.title==='密码'){
+                this.$router.push('/Crypto');
             }
         },
     }

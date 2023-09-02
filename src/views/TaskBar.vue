@@ -80,6 +80,8 @@ export default {
                     return 'myNetwork';
                 case '藏品':
                     return 'myCollection';
+                case '密码':
+                    return 'Crypto';
                 default:
                     return 'HomePage';
             }
