@@ -28,7 +28,9 @@ import proposalHomePage from "@/views/Governances/proposalHomePage.vue";
 import RicardianContract from "@/views/Governances/RicardianContract.vue";
 // 密码组
 import CryptoPage from "@/views/Crypto/CryptoPage.vue";
-import AddAlgorithmPage from "@/views/Crypto/AddAlgorithmPage.vue";
+import OneProposals from "@/views/Governances/OneProposals.vue";
+import EmergencyResponse from "@/views/Governances/EmergencyResponse.vue";
+
 
 const routes = [
   {
@@ -128,6 +130,16 @@ const routes = [
     component: RicardianContract,
   },
   {
+    path: "/Governances/OneProposals",
+    name: "OneProposals",
+    component: OneProposals,
+  },
+  {
+    path: "/Governances/EmergencyResponse",
+    name: "EmergencyResponse",
+    component: EmergencyResponse,
+  },
+  {
     path: "/myTransaction",
     name: "myTransaction",
     component: myTransaction,
@@ -201,11 +213,7 @@ const routes = [
     name: "Crypto",
     component: CryptoPage,
   },
-  {
-    path: "/Crypto/AddAlgorithm",
-    name: "AddAlgorithm",
-    component: AddAlgorithmPage,
-  },
+
 ];
 
 const router = createRouter({

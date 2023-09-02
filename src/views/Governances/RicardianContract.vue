@@ -19,21 +19,30 @@
                 </div>
             </div>
 
-            <!-- 第二个div -->
-            <div class="content-div">
-                <div class="box left">
+            <!-- 编辑布局 -->
+            <div v-if="selected === 'edit'" class="content-div">
+                <div class="box-edit left-edit">
                     <h2>智能合约代码</h2>
                     <div class="button-group">
                         <addnode-button class="action-button">生成</addnode-button>
                         <addnode-button class="action-button">部署</addnode-button>
                     </div>
                 </div>
-                <div class="box right">
+                <div class="box-edit right-edit">
                     <h2>李嘉图合约代码</h2>
                     <div class="button-group">
-                    <addnode-button class="action-button">链接</addnode-button>
+                        <addnode-button class="action-button">链接</addnode-button>
                     </div>
                 </div>
+            </div>
+
+            <!-- 查看布局 -->
+            <div v-if="selected === 'view'" class="view-layout">
+                <div class="left-view">
+                    <div class="top-view">智能合约地址</div>
+                    <div class="bottom-view">合约函数名</div>
+                </div>
+                <div class="right-view">李嘉图合约</div>
             </div>
         </div>
     </MainBackground>
@@ -46,7 +55,7 @@ import addnodeButton from "@/components/buttons/addnodeButton.vue";
 export default {
     name: "RicardianContract",
     components: {
-        MainBackground,addnodeButton,
+        MainBackground, addnodeButton,
     },
     data() {
         return {
@@ -71,10 +80,10 @@ export default {
 .radio-div {
     color: white;
     height: 10%;
-    width: 15%; /* 将宽度设置为15% */
+    width: 15%;
     display: flex;
     align-items: center;
-    gap: 0; /* 移除间距 */
+    gap: 0;
 }
 
 .custom-radio {
@@ -86,7 +95,7 @@ export default {
     border: 2px solid white;
     cursor: pointer;
     transition: all 0.3s;
-    box-sizing: border-box; /* 确保边框宽度包含在元素的总宽度和高度中 */
+    box-sizing: border-box;
 }
 
 .custom-radio.selected {
@@ -103,42 +112,55 @@ export default {
     align-items: center;
 }
 
-.box {
-    position: relative; /* 添加此属性以确保子元素可以进行相对于此元素的绝对定位 */
+.box-edit {
+    position: relative;
     margin-top: 2%;
     height: 100%;
     width: 40%;
     display: flex;
-    flex-direction: column; /* 使标题和按钮组垂直排列 */
-    justify-content: space-between; /* 使标题和按钮组在垂直方向上分开 */
+    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
     border: 1px solid white;
 }
-
+.left-edit{
+    margin-right: 10%;
+}
 .button-group {
-    position: absolute; /* 使用绝对定位将按钮定位到.box的右下角 */
+    position: absolute;
     bottom: 5%;
     right: 5%;
     display: flex;
     gap: 10px;
 }
+
 .action-button{
     width: 100px;
 }
-.left {
-    margin-left: 5%;
-    margin-right: 5%;
+
+.view-layout {
+    color: white;
+    margin-left: 10%;
+    width: 90%;
+    height: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.right {
-    margin-left: 5%;
-    margin-right: 5%;
+.left-view, .right-view {
+    height: 100%;
+    width: 40%;
+    margin-right: 10%;
 }
-.button-group {
-    position: absolute; /* 使用绝对定位将按钮定位到.box的右下角 */
-    bottom: 5%;
-    right: 5%;
-    display: flex;
-    gap: 10px;
+.right-view {
+    border: 1px solid white;
+}
+
+.top-view, .bottom-view {
+    margin-top: 5%;
+    height: 45%;
+    width: 100%;
+    border: 1px solid white;
 }
 </style>

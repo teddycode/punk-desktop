@@ -24,14 +24,11 @@
                         </div>
                     </div>
                     <div class="main-left-bottom">
-                        <div class="bottom-div">
+                        <div class="bottom-div-left">
                             <desktop-management></desktop-management>
                         </div>
-                        <div class="bottom-div">
+                        <div class="bottom-div-right">
                             <social-net></social-net>
-                        </div>
-                        <div class="bottom-div">
-                            <together></together>
                         </div>
                     </div>
                 </div>
@@ -54,7 +51,6 @@
 import Topnav from "@/components/topnav/index.vue";
 import LoginButton from "@/components/buttons/loginButton.vue";
 import myWallet from "@/components/myWallet.vue";
-import Together from "@/views/main-left/main-left-bottom/index.vue";
 import MainRightAd from "@/views/main-right/messagebox.vue";
 import MainRightSwiper from "@/views/main-right/main-function-box.vue";
 import DesktopManagement from "@/views/main-left/main-left-center/index.vue";
@@ -73,7 +69,6 @@ export default {
         searchBar,
         MainRightSwiper,
         MainRightAd,
-        Together,
         myWallet, LoginButton, Topnav,TaskBar,SocialNet
     },
 
@@ -234,5 +229,11 @@ export default {
         color: #5ab1ef;
     }
 }
-
+.bottom-div-right{
+    width: 65%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 </style>
