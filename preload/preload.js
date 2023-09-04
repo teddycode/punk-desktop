@@ -18,6 +18,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // 使用 contextBridge API 来选择要从预加载脚本中暴露哪些 API
     contextBridge.exposeInMainWorld('electronAPI', {
         toggleFullScreen: () => {
             ipcRenderer.send('toggle-fullscreen');
@@ -39,7 +40,11 @@ window.addEventListener('DOMContentLoaded', () => {
         },
         onFileSelected: (callback) => {
             fileSelectedCallback = callback;
-        }
+        },
+        onRunApplication: (path,cmd) => {
+            ipcRenderer.send('run-application',path,cmd)
+        },
+        //     TODO add render2Main api here
     });
 
     console.log('DOMContentLoaded event fired, setting up electronAPI');
