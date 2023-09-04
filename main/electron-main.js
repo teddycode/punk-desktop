@@ -1,26 +1,28 @@
-const { app, BrowserWindow, Menu, ipcMain, screen, dialog} = require('electron');
+const {app, BrowserWindow, Menu, ipcMain, screen, dialog} = require('electron');
 
 let mainWindow;
 let searchView;
 const path = require('path');
 const {openFile, runExecutable, saveFile} = require("./fileManager");
 const {readFileSync} = require("fs");
+const {runAppByName} = require("./app-launcher");
 
 function createWindow() {
     const mainScreen = screen.getPrimaryDisplay();
-    const { width, height } = mainScreen.size;
+    const {width, height} = mainScreen.size;
     mainWindow = new BrowserWindow({
         width: width,
         height: height,
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
+            nodeIntegrationInWorker: true, // 启用多线程
             preload: path.join(__dirname, '../preload/preload.js'),
         },
         fullscreen: true,
     });
 
-    mainWindow.loadURL('http://localhost:8081');
+    mainWindow.loadURL('http://localhost:8080');
 
     mainWindow.webContents.on('did-finish-load', () => {
         mainWindow.webContents.executeJavaScript(`
@@ -30,7 +32,7 @@ function createWindow() {
 
     mainWindow.webContents.openDevTools();
 
-    mainWindow.on('closed', function() {
+    mainWindow.on('closed', function () {
         mainWindow = null;
         searchView = null;
     });
@@ -41,11 +43,11 @@ app.on('ready', async () => {
     createWindow();
 });
 
-app.on('window-all-closed', function() {
+app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') app.quit();
 });
 
-app.on('activate', function() {
+app.on('activate', function () {
     if (mainWindow === null) createWindow();
 });
 
@@ -116,6 +118,12 @@ ipcMain.on('request-file-open', (event) => {
 ipcMain.on('run-exe', (event, filePath) => {
     runExecutable(filePath);
 });
+
+// 主进程监听渲染进程的应用打开消息
+ipcMain.on('run-application', (event, path, cmd) => {
+    runAppByName(path, cmd);
+});
+
 ipcMain.on('save-file-content', (event, filePath, content) => {
     saveFile(filePath, content);
     event.sender.send('file-saved');

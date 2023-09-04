@@ -8,7 +8,7 @@
         </div>
         <div v-if="isOn" class="desktop-content">
             <div class="desktop-item" v-for="item in items" :key="item.id">
-                <img :src="require(`@/assets/${item.name}.png`)" alt="" class="icon">
+                <img :src="require(`@/assets/${item.name}.png`)" alt="" class="icon" @click="handleRunLocalAppClick(item)">
                 <div class="desktop-item-name">{{ item.name }}</div>
             </div>
         </div>
@@ -23,21 +23,26 @@
 
 <script>
 import { ref } from 'vue'
-
 export default {
     name: "DesktopManagement",
     setup() {
         const isOn = ref(true)
+      // cmd使用可执行程序、lnk均可打开应用
         const items = ref([
-            { id: 1, name: 'word' },
-            { id: 2, name: 'wps' },
-            { id: 3, name: 'steam' },
-            { id: 4, name: 'Typora' },
-            { id: 5, name: 'wechat' },
-            { id: 6, name: 'QQ' },
+            { id: 1, name: 'word', path: 'C:\\Program Files\\Microsoft Office\\root\\Office16\\', cmd: 'WINWORD.EXE' },
+            { id: 2, name: 'wps' , path: '',cmd:'notepad.exe'},
+            { id: 3, name: 'steam', path:'', cmd: 'notepad.exe' },
+            { id: 4, name: 'Typora', path:'', cmd: 'notepad.exe'},
+            { id: 5, name: 'wechat', path:'C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\微信\\',cmd: '微信.lnk' },
+            { id: 6, name: 'QQ', path:'C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\腾讯软件\\QQ\\', cmd: '腾讯QQ.lnk' },
         ])
-
         return { isOn, items }
+    },
+    methods: {
+      handleRunLocalAppClick(app) {
+        // 发送消息给主线程
+        window.electronAPI.onRunApplication(app.path,app.cmd);
+      }
     }
 }
 </script>
@@ -47,6 +52,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    width: 120%;
     height: 100%;
 }
 
