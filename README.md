@@ -1,26 +1,38 @@
 ## 磐古前端说明文档
 
-#### 选用框架
+致力于构建一个简单易用的多链跨链应用操作终端
 
-vue-cli(vue3)+electron。
+### 技术框架
 
-vue3用于前端框架，electron用于将前端内容打包成为一个桌面版的程序。
+yarn：包管理工具
+
+vue-cli(vue3)：vue3用于前端框架
+
+electron：于将前端内容打包成为一个桌面版的程序
 
 IDE: vscode or webstorm(我用的这个)
 
-#### 项目部署
+### 安装教程
 
 ```shell
-npm install    //下载相关依赖
+yarn    //下载相关依赖
 
-npm serve     //启动vue项目
+yarn serve     //启动vue项目
 
-npm start    //启动electron项目并自动打包为一个桌面端可运行程序
+yarn start     //启动electron项目并自动打包为一个桌面端可运行程序
 
 // 更多指令参考package.json scripts{}中的内容
 ```
 
-#### 项目框架简单介绍
+### 开发调试
+
+```shell
+
+yarn dev    // 一键启动vue进程与electron进程
+
+```
+
+### 项目介绍
 
 <img src="docs\image\eeacaaf99cf326028805353115e8933.png" alt="eeacaaf99cf326028805353115e8933" style="zoom:50%;" />
 
