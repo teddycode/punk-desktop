@@ -1,6 +1,6 @@
 {
   "name": "punkos_website",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -93,9 +93,9 @@
     "not dead",
     "not ie 11"
   ],
-  "main": "main/electron-main.js",
+  "main": "src/main/main.js",
   "build": {
-    "appId": "com.your-app.id",
+    "appId": "com.buaa.ioase.punkos",
     "mac": {
       "category": "your.app.category.type"
     },
