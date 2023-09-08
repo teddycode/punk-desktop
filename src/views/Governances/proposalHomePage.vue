@@ -4,7 +4,7 @@
         <div class="left-section">
             <div class="header">
                 <h1 class="title">提案</h1>
-                <addnode-button>创建提案</addnode-button>
+                <addnode-button @click="navigateToCreateProposal">创建提案</addnode-button>
             </div>
             <div class="proposal-card">
                 一条提案
@@ -32,6 +32,11 @@ export default {
     name: "proposalHomePage",
     components:{
         MainBackground,addnodeButton,selfInfo,myEntrust,
+    },
+    methods:{
+        navigateToCreateProposal() {
+            this.$router.push({ path: '/Governances/newProposal' });
+        },
     }
 }
 </script>

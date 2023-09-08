@@ -4,7 +4,6 @@ import myStorage from "@/views/myStorage.vue";
 import myTransfer from "@/views/myTransfer.vue";
 import myCalculation from "@/views/myCalculation.vue";
 import myConsensus from "@/views/Consensus/myConsensus.vue";
-import myGovernance from "@/views/myGovernance.vue";
 import myTransaction from "@/views/myTransaction.vue";
 import myAbout from "@/views/myAbout.vue";
 import myNetwork from "@/views/myNetwork.vue";
@@ -24,12 +23,17 @@ import myOrder from "@/views/Transactions/myOrder.vue";
 import depositToken from "@/views/Transactions/depositToken.vue";
 
 import FileEdit from "@/views/localFileManage/FileEdit.vue";
+// 治理
+import myGovernance from "@/views/myGovernance.vue";
+import OneProposals from "@/views/Governances/OneProposals.vue";
+import NewProposal from "@/views/Governances/newProposal.vue";
+import EmergencyResponse from "@/views/Governances/EmergencyResponse.vue";
 import proposalHomePage from "@/views/Governances/proposalHomePage.vue";
 import RicardianContract from "@/views/Governances/RicardianContract.vue";
 // 密码组
 import CryptoPage from "@/views/Crypto/CryptoPage.vue";
-import OneProposals from "@/views/Governances/OneProposals.vue";
-import EmergencyResponse from "@/views/Governances/EmergencyResponse.vue";
+
+
 
 
 const routes = [
@@ -133,6 +137,11 @@ const routes = [
     path: "/Governances/OneProposals",
     name: "OneProposals",
     component: OneProposals,
+  },
+  {
+    path: "/Governances/newProposal",
+    name: "NewProposal",
+    component: NewProposal,
   },
   {
     path: "/Governances/EmergencyResponse",

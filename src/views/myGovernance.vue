@@ -95,11 +95,11 @@
 import MainBackground from "@/components/MainBackground.vue";
 import processGuide from "@/views/Governances/processGuide.vue";
 import toolBox from "@/views/Governances/toolBox.vue";
-import newProposal from "@/views/Governances/newProposal.vue";
+import myCreateProposal from "@/views/Governances/myCreateProposal.vue";
 import myProposals from "@/views/Governances/myProposals.vue";
 export default {
     components:{
-        MainBackground,processGuide,toolBox,newProposal,myProposals
+        MainBackground,processGuide,toolBox,myCreateProposal,myProposals
     },
     data() {
         return {
