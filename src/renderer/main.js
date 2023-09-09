@@ -56,8 +56,6 @@ app.use(PrimeVue)
 app.use(ElementPlus)
 
 // createApp(App).use(router).use(store).use(vClickOutside).use(dataV).mount('#app');
-
 app.config.globalProperties.$echarts = echarts
-
 
 app.mount('#app')

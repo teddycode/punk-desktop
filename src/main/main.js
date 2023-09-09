@@ -1,12 +1,12 @@
 const {app, BrowserWindow, Menu, ipcMain, screen, dialog} = require('electron');
-
-let mainWindow;
-let searchView;
 const path = require('path');
 const {openFile, runExecutable, saveFile} = require("./fileManager");
 const {readFileSync} = require("fs");
 const {runAppByName} = require("./app-launcher");
+const {createDataTable} = require('./datastore');
 
+let mainWindow;
+let searchView;
 function createWindow() {
     const mainScreen = screen.getPrimaryDisplay();
     const {width, height} = mainScreen.size;
@@ -36,6 +36,9 @@ function createWindow() {
         mainWindow = null;
         searchView = null;
     });
+
+    // 创建本地数据库
+    createDataTable();
 }
 
 app.on('ready', async () => {
@@ -85,7 +88,7 @@ ipcMain.on('search', (event, query) => {
         width: 800,
         height: 600,
         webPreferences: {
-            nodeIntegration: false,
+            nodeIntegration: true,
             contextIsolation: true,
         },
         show: false

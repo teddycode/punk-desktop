@@ -10,6 +10,10 @@ module.exports = defineConfig({
   configureWebpack: {
     entry: "./src/renderer/main.js",
     resolve: {
+      fallback: {
+        path: false,
+        fs: false,
+      },
       extensions: [".js", ".vue", ".json", ".ts", ".less"],
       alias: {
         // @ 指代路径的重定向
