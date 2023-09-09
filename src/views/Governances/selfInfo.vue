@@ -35,9 +35,6 @@ export default {
 }
 
 .info-title {
-}
-
-.info-title {
     font-size: 1.5rem;
     margin-top: 10%;
     margin-bottom: 5%;
@@ -55,7 +52,5 @@ export default {
     margin-top: 5%;
     /* 使用百分比定义行距 */
     text-align: left;
-}
-</style>
 }
 </style>
