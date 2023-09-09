@@ -10,7 +10,7 @@ vue-cli(vue3)：vue3用于前端框架
 
 electron：于将前端内容打包成为一个桌面版的程序
 
-IDE: vscode or webstorm(我用的这个)
+IDE: vscode、IDEA  or webstorm(我用的这个)
 
 ### 安装教程
 
