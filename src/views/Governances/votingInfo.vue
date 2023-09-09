@@ -1,9 +1,9 @@
 <template>
     <div class="info-container">
-        <h1 class="info-title">个人信息</h1>
+        <h1 class="info-title">投票信息</h1>
         <div class="info-content">
-            <div class="info-row">代币余额：{{ balance }}</div>
-            <div class="info-row">投票权：{{ votingPower }}</div>
+            <div class="info-row">支持：{{ votingYes }}</div>
+            <div class="info-row">反对：{{ votingNo }}</div>
         </div>
     </div>
 </template>
@@ -13,11 +13,11 @@ import {ethers} from "ethers";
 import {governToken,userAddr,tokenPower,} from "@/views/Governances/function/address";
 
 export default {
-    name: "selfInfo",
+    name: "votingInfo",
     data() {
         return {
-            balance:null, // 用于存储从后台获取的数据
-            votingPower:null,
+            votingYes:null, // 用于存储从后台获取的数据
+            votingNo:null,
         };
     },
     async mounted() {
@@ -32,9 +32,6 @@ export default {
 <style scoped>
 .info-container {
     color: white;
-}
-
-.info-title {
 }
 
 .info-title {
@@ -55,7 +52,5 @@ export default {
     margin-top: 5%;
     /* 使用百分比定义行距 */
     text-align: left;
-}
-</style>
 }
 </style>

@@ -133,8 +133,13 @@ const routes = [
     name: "RicardianContract",
     component: RicardianContract,
   },
+//   {
+//     path: "/Governances/OneProposals",
+//     name: "OneProposals",
+//     component: OneProposals,
+//   },
   {
-    path: "/Governances/OneProposals",
+    path: "/Governances/OneProposals/:proposalId",
     name: "OneProposals",
     component: OneProposals,
   },

@@ -6,18 +6,18 @@
                     <h1 class="title">提案</h1>
                     <addnode-button @click="navigateToCreateProposal">创建提案</addnode-button>
                 </div>
-                <div class="proposal-card" v-for="item in proposals" :key="item.id">
+                <div class="proposal-card" v-for="item in proposals" :key="item.id" @click="navigateToProposalInformation(item.id)">
                     <h3 class="proposal-card-title">
                         提案标题
                     </h3>
                     <div class="proposal-card-info">
-                        <span class="proposal-card-info-id">
+                        ID：<span class="proposal-card-info-id">
                             {{ item.id }}
                         </span>
-                        <span class="proposal-card-info-state">
+                        状态：<span class="proposal-card-info-state">
                             {{ item.state }}
                         </span>
-                        <span class="proposal-card-info-time">
+                        开始时间：<span class="proposal-card-info-time">
                             {{ item.startBlock }}
                         </span>
                     </div>
@@ -58,14 +58,24 @@ export default {
         let proposalState;
         let proposals = [];
         let proposalCount = await governance.getProposalsCount()
+        const numberToState = new Map([
+            [0, "Pending"],
+            [1, "Canceled"],
+            [2, "Active"],
+            [3, "Failed"],
+            [4, "Succeeded"],
+            [5, "Expired"],
+            [6, "Executed"],
+            [7, "Queued"],
+        ]);
         for (let i = proposalCount - 1; i >= 0; i--) {
             proposalInfo = await governance.getProposalById(i)
             proposalInfo = this.convertObjectToExtend(proposalInfo);
             proposalState = await governance.getProposalState(i);
-            proposalInfo.state = proposalState;
+            proposalInfo.state = numberToState.get(proposalState);
             proposals.push(proposalInfo);
         };
-        this.proposals=proposals;
+        this.proposals = proposals;
     },
     methods: {
         navigateToCreateProposal() {
@@ -93,6 +103,10 @@ export default {
                 strategy: obj.strategy,
                 ipfsHash: obj.ipfsHash,
             }
+        },
+
+        navigateToProposalInformation(proposalId) {
+            this.$router.push({ path: `/Governances/OneProposals/${proposalId}` });
         }
     }
 }
@@ -172,5 +186,13 @@ export default {
     font-size: 1.125rem;
     display: block;
     text-align: left;
+}
+
+.proposal-card-info-id {
+    margin-right: 24px;
+}
+
+.proposal-card-info-state {
+    margin-right: 24px;
 }
 </style>
