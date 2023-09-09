@@ -1,0 +1,67 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "Target",
+  "sourceName": "contracts/target.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "newTarget",
+          "type": "uint256"
+        }
+      ],
+      "name": "setTargetWithValue",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "newTarget",
+          "type": "uint256"
+        }
+      ],
+      "name": "setTargetWithoutValue",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "value",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x608060405234801561001057600080fd5b50600560005560d0806100246000396000f3fe60806040526004361060305760003560e01c80633fa4f2451460355780636cd5fb8d14605b578063a4edefeb14606e575b600080fd5b348015604057600080fd5b50604960005481565b60405190815260200160405180910390f35b604960663660046082565b600081905590565b348015607957600080fd5b50604960663660045b600060208284031215609357600080fd5b503591905056fea26469706673582212202eb9e2ea729e266a9dc57e0911d1b5211262af115b05218081859f813348d4c964736f6c63430008130033",
+  "deployedBytecode": "0x60806040526004361060305760003560e01c80633fa4f2451460355780636cd5fb8d14605b578063a4edefeb14606e575b600080fd5b348015604057600080fd5b50604960005481565b60405190815260200160405180910390f35b604960663660046082565b600081905590565b348015607957600080fd5b50604960663660045b600060208284031215609357600080fd5b503591905056fea26469706673582212202eb9e2ea729e266a9dc57e0911d1b5211262af115b05218081859f813348d4c964736f6c63430008130033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
