@@ -20,7 +20,7 @@ function connectDatabase() {
 const db = connectDatabase();
 
 //创建数据库,如果用户本地没有数据库的话就创建否则跳过
-function createDataTable() {
+function createDataTables() {
     // 创建应用信息表
     try {
         db.serialize(function () {
@@ -39,5 +39,5 @@ function createDataTable() {
 }
 
 exports.connectDatabase = connectDatabase;
-exports.createDataTable = createDataTable;
+exports.createDataTables = createDataTables;
 exports.db = db;

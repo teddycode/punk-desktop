@@ -1,5 +1,3 @@
-// fileManager.js
-
 const { dialog } = require('electron');
 const { exec } = require('child_process');
 const {writeFileSync} = require("fs");
