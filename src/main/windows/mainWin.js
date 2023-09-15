@@ -12,10 +12,7 @@ function createMainWindow() {
             nodeIntegration: false,
             contextIsolation: true,
             nodeIntegrationInWorker: true, // 启用多线程
-            preload: [
-                path.join(__dirname, '../modules/initialize/preload.js'),
-                path.join(__dirname, '../modules/initialize/wsproxy.js'),
-            ]
+            preload: path.join(__dirname, '../modules/initialize/preload.js'),
         },
         fullscreen: true,
     });

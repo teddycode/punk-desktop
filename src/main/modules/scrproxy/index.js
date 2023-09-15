@@ -4,8 +4,6 @@ const child_process = require("child_process");
 const {createVirtualScr} = require("./vscreen");
 const {startTightVnc} = require("./tvnc");
 const {join} = require("path");
-const {runCommand} = require("../utils");
-const {startWebsockRelay} = require("./wsproxy");
 
 function initNoVncServer() {
     let isFirst = false;

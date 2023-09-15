@@ -1,7 +1,7 @@
 <template>
     <dv-border-box10>
         <div class="social-net">
-            <div class="title">Social Net</div>
+          <div class="title">社交网络</div>
             <div class="main-content">
                 <div class="left-container">
                     <div class="controls-container">
