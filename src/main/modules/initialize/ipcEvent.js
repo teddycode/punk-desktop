@@ -1,8 +1,8 @@
 const {ipcMain, dialog, app, BrowserWindow, shell} = require("electron");
-const {openFile, runExecutable, saveFile} = require("../modules/fileManager");
+const {openFile, runExecutable, saveFile} = require("../fileManager");
 const {readFileSync} = require("fs");
-const {runAppByName} = require("./appLauncher");
-const createSearchWindow = require("..//windows/searchWin");
+const {runAppByName} = require("../appLauncher");
+const createSearchWindow = require("../../windows/searchWin");
 
 module.exports = function () {
 

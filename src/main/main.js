@@ -1,8 +1,9 @@
 const {app} = require('electron');
-const {createDataTables} = require('./database');
-const initIPCEvents = require("./modules/ipcEvent");
+const initIPCEvents = require("./modules/initialize/ipcEvent");
 const createMainWindow = require("./windows/mainWin");
 const createSearchWindow = require("./windows/searchWin");
+const {runInitTasks} = require("./modules/initialize");
+// const {startWebsockRelay} = require("./modules/scrproxy/wsproxy");
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
@@ -14,11 +15,11 @@ function createWindows() {
 
 //  Electron 完成初始化时，发出一次
 app.on('ready', async () => {
-    // 创建本地数据库
-    createDataTables();
-    // 创建窗口
+    // 1. 执行初始化任务
+    runInitTasks();
+    // 2. 创建窗口
     createWindows();
-    // 初始化进程之间事件监听
+    // 3. 初始化进程之间事件监听
     initIPCEvents();
 });
 

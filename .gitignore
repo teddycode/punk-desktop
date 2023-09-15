@@ -24,3 +24,4 @@ pnpm-debug.log*
 
 out/
 yarn.lock
+logs
