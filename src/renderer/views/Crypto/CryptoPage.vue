@@ -215,10 +215,10 @@ export default {
             });
         },
         gotoGovernance(){
-            this.$router.push("/myGovernance")
+          this.$router.push({name: "GovernancePage"})
         },
         gotoNewProposal(){
-            this.$router.push("/Governances/proposalHomePage")
+          this.$router.push({name: "ProposalHomePage"})
         }
     },
     data() {

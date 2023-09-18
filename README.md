@@ -1,6 +1,6 @@
 ## 磐古前端说明文档
 
-致力于构建一个简单易用的多链跨链应用操作终端
+致力于构建一个打通区块链与互联网的多链跨链应用操作终端
 
 ### 技术框架
 
@@ -12,27 +12,89 @@ electron：于将前端内容打包成为一个桌面版的程序
 
 IDE: vscode、IDEA  or webstorm(我用的这个)
 
-### 安装教程
+### 使用教程
+
+介绍如何安装项目代码的依赖、运行项目及开发调试
+
+#### 依赖安装
 
 ```shell
 yarn    //下载相关依赖
+```
+
+#### 运行调试
+
+```shell
 
 yarn serve     //启动vue项目
 
 yarn start     //启动electron项目并自动打包为一个桌面端可运行程序
 
-// 更多指令参考package.json scripts{}中的内容
-```
-
-### 开发调试
-
-```shell
-
 yarn dev    // 一键启动vue进程与electron进程
+
+// 更多指令参考package.json scripts{}中的内容
 
 ```
 
 ### 项目介绍
+
+以下主要介绍项目工程的代码结构和主要页面结构
+
+#### 代码结构
+
+```shell
+├── build  // 打包用的静态资源
+├── dist   // 打包文件生成目录
+├── docs   // 项目文档
+├── logs   // 运行日志
+├── package.json // 依赖管理文件
+├── public  // 公开资源
+│   ├── images  // 图片资源
+│   ├── mock    // 模拟数据集合 
+├── README.md
+├── src
+│   ├── main        // 主进程
+│   │   ├── assets  // 静态依赖文件 TODO[分离到打包后应用程序的资源的目录:./resources/app]
+│   │   ├── modules   // 主进程逻辑模块
+│   │   ├── windows   // 主进程窗口定义
+│   │   └── main.js   // 主进程入口
+│   └── renderer    // 渲染进程
+│       ├── api       // 后端接口定义
+│       ├── App.vue   // 渲染进程主界面
+│       ├── assets    // 静态资源
+│       ├── components // 封装的组件
+│       ├── main.js    // 渲染进程入口
+│       ├── router     // 页面路由配置
+│       └── views      // 渲染进程页面
+│           ├── index.vue  // 
+│           ├── Collections    //
+│           ├── Consensus      // 共识组页面 
+│           ├── Crypto         // 密码组页面
+│           ├── Desktop        // 桌面管理页面
+│           ├── Governance    // 治理组页面
+│           ├── Users          // 用户相关页面
+│           ├── Home.vue   
+│           ├── main-center
+│           ├── main-left
+│           ├── main-right
+│           ├── About.vue
+│           ├── index.vue
+│           ├── index.vue
+│           ├── index.vue
+│           ├── Login.vue
+│           ├── index.vue
+│           ├── index.vue
+│           ├── index.vue
+│           ├── myTransfer.vue
+│           ├── SignUp.vue
+│           ├── index.vue
+│           ├── TaskBar.vue
+│           ├── Transaction
+│           └── Transfers
+├── webpack.config.js
+└── vue.config.js
+
+```
 
 <img src="docs\image\eeacaaf99cf326028805353115e8933.png" alt="eeacaaf99cf326028805353115e8933" style="zoom:50%;" />
 
@@ -40,7 +102,31 @@ yarn dev    // 一键启动vue进程与electron进程
 
 - **src/asset **: 存放一些静态资源，如图片，全局使用的css等等。
 
-- **src/components :**存放一些公用组件，目前该模块定义的组件不多，结构如图所示：
+- **src/compon`ents :**存放一些公用组件，目前该模块定义的组件不多，结构如图所示：
+
+```shell
+ case '共识':
+                    return 'consensus';
+                case '存储':
+                    return 'myStorage';
+                case '计算':
+                    return 'myCalculation';
+                case '交易':
+                    return 'myExchange';
+                case '转账':
+                    return 'TransferMain';
+                case '治理':
+                    return 'myGovernance';
+                case '网络':
+                    return 'myNetwork';
+                case '藏品':
+                    return 'myCollection';
+                case '密码':
+                    return 'Crypto';
+```
+
+#### 主要页面
+
 
   <img src="docs\image\aec2fa4cfc4d3524570fcc11987cb60.png" alt="aec2fa4cfc4d3524570fcc11987cb60" style="zoom: 67%;" />
 
@@ -255,6 +341,4 @@ npm install //基本的就这个，下载库的指令，其余的可以查文档
 - 屏幕分辨率适配：这一部分目前项目做的还不完善，无法给到更多的建议。
 - 需要使用到分页器的，components中有封装好的myPagination.vue组件。
 - 比较复杂的样式，也可以借助UI组件库，例如element-plus，primevue等等，只需要重写样式使得与风格较为统一即可。
-
-
 

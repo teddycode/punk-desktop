@@ -48,10 +48,10 @@ export default {
             }
         },
         navigateToLogin() {
-            this.$router.push({name: 'myLogin'});
+          this.$router.push({name: 'UserLoginPage'});
         },
         navigateToUserProfile() {
-            this.$router.push({ name: 'AdminPage' });
+          this.$router.push({name: 'UserInfoPage'});
         },
         async logout() {
             // Make a request to your server to logout
@@ -68,7 +68,8 @@ export default {
                     console.log("logout test:" + this.$store.state.token)
                     this.isUserLoggedIn = false;
                     this.userName = 'username';
-                    this.$router.push({name: ''});
+                  this.$router.push({name: 'UserLoginPage'});
+                  // TODO check 重定向至用户登录界面
                 }
             } catch(error) {
                 console.error('An error occurred while logging out:', error);
