@@ -58,4 +58,7 @@ app.use(ElementPlus)
 // createApp(App).use(router).use(store).use(vClickOutside).use(dataV).mount('#app');
 app.config.globalProperties.$echarts = echarts
 
+const BASEURL = process.env.VUE_APP_BACK_API_BASE;
+console.log('Env test in render:', BASEURL)
+
 app.mount('#app')
