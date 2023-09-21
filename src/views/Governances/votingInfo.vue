@@ -1,7 +1,10 @@
 <template>
     <div class="info-container">
-        <h1 class="info-title">投票信息</h1>
-        <div class="info-content">
+        <h1 class="info-title">提案信息</h1>
+        <div class="voting-info-content" v-if="state === 0">
+            <div class="info-row">质押量：{{ stakeAmount }}</div>
+        </div>
+        <div class="voting-info-content" v-else-if="state === 2">
             <div class="info-row">支持：{{ votingYes }}</div>
             <div class="info-row">反对：{{ votingNo }}</div>
         </div>
@@ -9,22 +12,33 @@
 </template>
     
 <script>
-import {ethers} from "ethers";
-import {governToken,userAddr,tokenPower,} from "@/views/Governances/function/address";
+import { governance, governanceAddr, factory, implementation } from "@/views/Governances/function/address";
 
 export default {
     name: "votingInfo",
+
     data() {
         return {
-            votingYes:null, // 用于存储从后台获取的数据
-            votingNo:null,
+            state: null,
+            stakeAmount:null,
+            votingYes: null, // 用于存储从后台获取的数据
+            votingNo: null,
         };
     },
     async mounted() {
-        let temp = await governToken.balanceOf(userAddr);
-        this.balance = ethers.utils.formatEther(temp);
-        temp = await tokenPower.getCurrentVotingPower(userAddr);
-        this.votingPower = ethers.utils.formatEther(temp);
+        let state = await governance.getProposalState(this.$route.params.proposalId);
+        this.state = state;
+        if (state == 0) {
+            let proposalInfo = await governance.getProposalById(this.$route.params.proposalId);
+            console.log(proposalInfo);
+            this.stakeAmount = proposalInfo.stakeAmount;
+        }
+        else if(state==2) {
+            let address = await factory.getContractAddress(governanceAddr, this.$route.params.proposalId);
+            let contract = implementation.attach(address);
+            this.votingYes = await contract.forVotes();
+            this.votingNo = await contract.againstVotes();
+        }
     }
 }
 </script>
@@ -41,7 +55,7 @@ export default {
     /* 标题与内容部分的间距 */
 }
 
-.info-content {
+.voting-info-content {
     padding-left: 1rem;
     /* 为内容部分增加左填充，以强调“靠左”效果 */
 }

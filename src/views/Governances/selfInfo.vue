@@ -10,7 +10,7 @@
     
 <script>
 import {ethers} from "ethers";
-import {governToken,userAddr,tokenPower,} from "@/views/Governances/function/address";
+import {governToken,factory,userAddr,governance,tokenPower,} from "@/views/Governances/function/address";
 
 export default {
     name: "selfInfo",
@@ -21,11 +21,20 @@ export default {
         };
     },
     async mounted() {
+        // let state = await governance.getProposalState(this.$route.params.proposalId);
+        // this.state = state;
         let temp = await governToken.balanceOf(userAddr);
         this.balance = ethers.utils.formatEther(temp);
         temp = await tokenPower.getCurrentVotingPower(userAddr);
         this.votingPower = ethers.utils.formatEther(temp);
-    }
+    },
+    // methods:{
+    //     async vote(){
+    //         let address = await factory.getContractAddress(governanceAddr, this.$route.params.proposalId);
+    //         let contract = implementation.attach(address);
+    //         contract.castVote()
+    //     }
+    // }
 }
 </script>
     

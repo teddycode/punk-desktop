@@ -11,7 +11,8 @@ export const factoryAddr = "0x7C0100e730f85CCe18bCd09C3FE8E27195DF60B6";
 export const reviewAddr = "0x906EeCadACE82b56D7F30b3C3B22Acb491457eD6";
 export const governanceAddr = "0x35434437FDEF676F3b74810D523E34A110CBc8dA";
 export const executorAddr = "0x022EadA8399B66C8f1CDcC68abbd0BeA87f45456";
-export const TargetAddr = "0xc03645416e0CC718117F71fEaEa83d595C564f77";
+export const targetAddr = "0xc03645416e0CC718117F71fEaEa83d595C564f77";
+export const implementationAddr = "0xE055Cfb39797Ffcdb14aa52BEBA32034D43B7F90";
 
 const conditionalTokensAbi = require("./abi/market/ConditionalTokens.sol/ConditionalTokens.json").abi;
 const ctHelperAbi = require("./abi/market/CTHelpers.sol/CTHelpers.json").abi;
@@ -21,7 +22,8 @@ const factoryAbi = require("./abi/factory/VoteFactory.sol/VoteFactory.json").abi
 const reviewAbi = require("./abi/governance/Review.sol/Review.json").abi;
 const governanceAbi = require("./abi/governance/Governance.sol/Governance.json").abi;
 const executorAbi = require("./abi/governance/Executor.sol/Executor.json").abi;
-const TargetAbi = require("./abi/target.sol/Target.json").abi;
+const targetAbi = require("./abi/target.sol/Target.json").abi;
+const implementationAbi = require("./abi/factory/TimeTokenVote.sol/TimeTokenVote.json").abi;
 
 export const provider = new ethers.providers.JsonRpcProvider('/api');
 export const wallet = new ethers.Wallet("6d11059e1d517f6880f8c8bbdc7ba81ba407226708cd21507b9b854a4ce5b18d", provider)
@@ -39,4 +41,5 @@ export const factory = new ethers.Contract(factoryAddr,factoryAbi,wallet);
 export const review = new ethers.Contract(reviewAddr,reviewAbi,wallet);
 export const governance = new ethers.Contract(governanceAddr,governanceAbi,wallet);
 export const executor = new ethers.Contract(executorAddr,executorAbi,wallet);
-export const Target = new ethers.Contract(TargetAddr,TargetAbi,wallet);
+export const target = new ethers.Contract(targetAddr,targetAbi,wallet);
+export const implementation = new ethers.Contract(implementationAddr,implementationAbi,wallet);

@@ -4,17 +4,25 @@
             <div class="header">
                 <div class="proposal-title">提案标题</div>
                 <div class="details">
-                    <span>创建者: <span>{{ proposalInfo?proposalInfo.creator:"" }}</span></span>
+                    <span>创建者: <span>{{ proposalInfo ? proposalInfo.creator : "" }}</span></span>
                     <span>提案 Id: <span>{{ $route.params.proposalId }}</span></span>
-                    <span>类型: <span>{{ proposalInfo?proposalInfo.proposalType:"" }}</span></span>
-                    <span>状态: <span>{{ proposalInfo?proposalInfo.state:"" }}</span></span>
+                    <span>类型: <span>{{ proposalInfo ? proposalInfo.proposalType : "" }}</span></span>
+                    <span>状态: <span>{{ proposalInfo ? proposalInfo.state : "" }}</span></span>
                 </div>
             </div>
             <div class="content">
                 <div class="left-section"></div>
                 <div class="right-section">
-                    <selfInfo></selfInfo>
+                    <div class="self-info">
+                        <selfInfo></selfInfo>
+
+                    </div>
+
+                    <div class="voting-info">
+                        <votingInfo></votingInfo>
+                    </div>
                 </div>
+
             </div>
         </div>
     </MainBackground>
@@ -24,11 +32,12 @@
 import MainBackground from "@/components/MainBackground.vue";
 import { governance } from "@/views/Governances/function/address";
 import selfInfo from "@/views/Governances/selfInfo.vue";
+import votingInfo from "@/views/Governances/votingInfo.vue";
 
 export default {
     name: "OneProposals",
     components: {
-        MainBackground,selfInfo,
+        MainBackground, selfInfo, votingInfo
     },
     data() {
         return {
@@ -144,7 +153,24 @@ export default {
 }
 
 .right-section {
+    display: flex;
     width: 25%;
     height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+
+}
+
+.self-info{
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    height: 45%;
     border: 1px solid white;
-}</style>
+}
+
+.voting-info{
+    height: 45%;
+    margin-top: 12px;
+    border: 1px solid white;
+}
+</style>
