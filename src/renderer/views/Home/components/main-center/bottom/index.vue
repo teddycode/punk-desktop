@@ -37,10 +37,10 @@ export default {
             minPrice: 0,
             maxPrice: 0,
             apps: [
-                {name: 'Uniswap', icon: '/images/dapps/uniswap.png' },
-                {name: 'MakerDAO', icon: '/images/dapps/maker.webp' },
-                {name: 'Compound', icon: '/images/dapps/compound.png' },
-                {name: 'CryptoKitties', icon: '/images/dapps/CryptoKitties.webp' },
+              {name: 'Uniswap', icon: '@/assets/images/dapps/uniswap.png'},
+              {name: 'MakerDAO', icon: '@/assets/images/dapps/maker.webp'},
+              {name: 'Compound', icon: '@/assets/images/dapps/compound.png'},
+              {name: 'CryptoKitties', icon: '@/assets/images/dapps/CryptoKitties.webp'},
             ],
         };
     },

@@ -466,7 +466,7 @@ export default {
     margin-top: 2%;
     border-radius: 20px;
     position: relative; /* 设置为相对定位 */
-    background-image: url('@/assets/images/developer-entrance-background.jpg'); /* 使用您上传的图片作为背景 */
+  background-image: url('@/assets/images/developer-background.jpg'); /* 使用您上传的图片作为背景 */
     background-size: cover; /* 使背景图像填充整个容器 */
     height: 400px; /* 为容器设置一个高度，您可以根据需要调整 */
 }

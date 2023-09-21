@@ -48,13 +48,13 @@
                         <font-awesome-icon icon="fire" class="icon" /> #活跃话题2
                     </div>
                     <div v-if="selectedTopic === '专区'" class="zone-container">
-                        <img src="/images/social/专区1logo.jpg" alt="专区1" class="zone-logo">
-                        <img src="/images/social/专区2logo.jpg" alt="专区2" class="zone-logo">
-                        <img src="/images/social/专区3logo.png" alt="专区3" class="zone-logo">
+                      <img alt="专区1" class="zone-logo" src="@/assets/images/social/专区1logo.jpg">
+                      <img alt="专区2" class="zone-logo" src="@/assets/images/social/专区2logo.jpg">
+                      <img alt="专区3" class="zone-logo" src="@/assets/images/social/专区3logo.png">
                     </div>
                     <div v-if="selectedTopic === '关注'" class="follow-container">
                         <div class="follow-logos">
-                            <img src="/images/social/专区1logo.jpg" alt="关注1" class="follow-logo">
+                          <img alt="关注1" class="follow-logo" src="@/assets/images/social/专区1logo.jpg">
                         </div>
                     </div>
                 </div>

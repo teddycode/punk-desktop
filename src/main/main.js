@@ -3,7 +3,6 @@ const initIPCEvents = require("./modules/initialize/ipcEvent");
 const createMainWindow = require("./windows/mainWin");
 const createSearchWindow = require("./windows/searchWin");
 const {runInitTasks} = require("./modules/initialize");
-// const {startWebsockRelay} = require("./modules/scrproxy/wsproxy");
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 

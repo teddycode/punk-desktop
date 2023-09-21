@@ -27,7 +27,8 @@
                                 <div class="box-title-more" @click="navigateToProposalsList">更多>></div>
                             </div>
                             <div class="box-main-content">
-                                <img src="/images/modules/governance/pos_gov.jpg" alt="" class="main-img" @click="navigateToProposalInformation">
+                              <img alt="" class="main-img" src="@/assets/images/governance/pos_gov.jpg"
+                                   @click="navigateToProposalInformation">
                             </div>
                         </div>
 
@@ -37,7 +38,7 @@
                                 <div class="box-title-more" @click="navigateToProposalsList">更多>></div>
                             </div>
                             <div class="box-main-content">
-                                <img src="/images/modules/governance/treasure.jpg" alt="" class="main-img">
+                              <img alt="" class="main-img" src="@/assets/images/governance/treasure.jpg">
                             </div>
                         </div>
 

@@ -18,7 +18,7 @@
             <h3>选择钱包</h3>
             <ul class="wallet-list">
                 <li v-for="wallet in wallets" :key="wallet.name" @click="openWalletLink(wallet)" :class="{ 'selected-wallet': selectedWallet === wallet, 'hovered-wallet': hoveredWallet === wallet }">
-                    <img :src="`/images/wallets/${wallet.icon}`" alt="wallet-icon">
+                  <img :src="`@/assets/images/wallets/${wallet.icon}`" alt="wallet-icon">
                     {{ wallet.name }}
                 </li>
             </ul>

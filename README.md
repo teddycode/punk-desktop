@@ -342,3 +342,13 @@ npm install //基本的就这个，下载库的指令，其余的可以查文档
 - 需要使用到分页器的，components中有封装好的myPagination.vue组件。
 - 比较复杂的样式，也可以借助UI组件库，例如element-plus，primevue等等，只需要重写样式使得与风格较为统一即可。
 
+#### 问题汇总
+
+1. sqlite3 安装问题
+
+```shell 
+添加编译环境
+npm install -g node-gyp
+npm install --global --production windows-build-tools
+
+```

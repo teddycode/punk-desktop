@@ -106,7 +106,7 @@ export default {
 .left-panel {
     width: 20%;  /* 20% */
     /* background-color: #f5f5f5; */
-    background-image: url('@/assets/images/modules/transactions/leftpic.png');
+  background-image: url('@/assets/images/transactions/leftpic.png');
     /* background-size: contain; */
     background-size: cover;
     display: flex;
@@ -121,7 +121,7 @@ export default {
     width: 20%;  /* 20% */
     display: flex;
     flex-direction: column;
-    background-image: url('@/assets/images/modules/transactions/right.jpg');
+  background-image: url('@/assets/images/transactions/right.jpg');
     /* background-size: contain; */
     /* //填充整个div */
     background-size: cover;
