@@ -10,7 +10,7 @@
     "output": "release/${version}"
   },
   "files": [
-    "dist",
+    "src"
   ],
   "mac": {
     "icon": "build/electron-icon/icon.ico",
@@ -40,15 +40,12 @@
   },
   "nsis": {
     "oneClick": false,
-    "perMachine": false,
     "allowToChangeInstallationDirectory": true,
     "deleteAppDataOnUninstall": false,
     "createStartMenuShortcut": true,
     "createDesktopShortcut": true,
     "runAfterFinish": true,
     "warningsAsErrors": false,
-    "multiLanguageInstaller": true,
-    "installerLanguages": "zh_CN",
     "installerIcon": "build/electron-icon/install.ico",
     "uninstallerIcon": "build/electron-icon/uninst.ico",
     "include": 'build/installer.nsh',
