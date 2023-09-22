@@ -6,8 +6,6 @@ const {runInitTasks} = require("./modules/initialize");
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
-const BASEURL = process.env.VUE_APP_BACK_API_BASE;
-console.log('Env test in main:', BASEURL)
 
 // 创建所有窗口
 function createWindows() {

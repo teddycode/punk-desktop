@@ -45,15 +45,15 @@ export default {
     setup() {
         return {
             recentApps: ref([
-              {name: 'Uniswap', icon: '@/assets/images/dapps/uniswap.png'},
-              {name: 'MakerDAO', icon: '@/assets/images/dapps/maker.webp'},
-              {name: 'Compound', icon: '@/assets/images/dapps/compound.png'},
+              {name: 'Uniswap', icon: '/images/dapps/uniswap.png'},
+              {name: 'MakerDAO', icon: '/images/dapps/maker.webp'},
+              {name: 'Compound', icon: '/images/dapps/compound.png'},
             ]),
             commonApps: ref([
-              {name: 'Uniswap', icon: '@/assets/images/dapps/uniswap.png'},
-              {name: 'MakerDAO', icon: '@/assets/images/dapps/maker.webp'},
-              {name: 'Compound', icon: '@/assets/images/dapps/compound.png'},
-              {name: 'CryptoKitties', icon: '@/assets/images/dapps/CryptoKitties.webp'},
+              {name: 'Uniswap', icon: '/images/dapps/uniswap.png'},
+              {name: 'MakerDAO', icon: '/images/dapps/maker.webp'},
+              {name: 'Compound', icon: '/images/dapps/compound.png'},
+              {name: 'CryptoKitties', icon: '/images/dapps/CryptoKitties.webp'},
             ]),
             modules:[Autoplay],
         };

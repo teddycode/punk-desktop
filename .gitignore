@@ -25,3 +25,5 @@ pnpm-debug.log*
 out/
 yarn.lock
 logs
+release/
+dist、/

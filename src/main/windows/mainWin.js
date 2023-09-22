@@ -17,7 +17,13 @@ function createMainWindow() {
         fullscreen: true,
     });
 
+    // if (app.isPackaged) {
+    //   mainWindow.loadFile(indexHtml);
+    // } else {
+    //   console.log("serve url: ",url)
+    // }
     mainWindow.loadURL('http://localhost:8080');
+
 
     mainWindow.webContents.on('did-finish-load', () => {
         mainWindow.webContents.executeJavaScript(`
@@ -31,7 +37,7 @@ function createMainWindow() {
 
     if (!process.env.IS_TEST) {
         // 开发环境下打开
-        mainWindow.webContents.openDevTools();
+        mainWindow.webContents.openDevTools({mode: "bottom"});
     }
 
     Menu.setApplicationMenu(null);
