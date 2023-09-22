@@ -3,6 +3,7 @@ import Message from "primevue/message";
 import * as url from "url";
 
 export const API_PREFIX = url.resolve(process.env.VUE_APP_BACK_API_BASE, "/api");
+console.log("api prefix:", API_PREFIX);
 
 const service = axios.create({
     url: API_PREFIX,

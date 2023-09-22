@@ -1,6 +1,7 @@
 import Mock from 'mockjs'
+import {API_PREFIX} from "@/utils/request";
 
-Mock.mock(`${process.env.VUE_APP_API_BASE_URL}/routes`, 'get', () => {
+Mock.mock(`${API_PREFIX}/routes`, 'get', () => {
     let result = {}
     result.code = 0
     result.data = [{

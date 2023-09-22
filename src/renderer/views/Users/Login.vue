@@ -1,151 +1,156 @@
 <template>
-    <MainBackground>
-        <div class="login-page">
-            <div class="login-card">
-                <h1 class="login-title">登录</h1>
-                <form class="login-form" @submit.prevent="login" autocomplete="off">
-                    <div class="form-item">
-                        <label for="username">用户名</label>
-                        <div class="input-with-icon">
-                            <font-awesome-icon icon="user" class="input-icon" />
-                            <input id="username" v-model="loginForm.username" type="text" />
-                        </div>
-                    </div>
-                    <div class="form-item">
-                        <label for="password">密码</label>
-                        <div class="input-with-icon">
-                            <font-awesome-icon icon="lock" class="input-icon" />
-                            <input :type="showPassword ? 'text' : 'password'" v-model="loginForm.password" />
-                            <font-awesome-icon :icon="showPassword ? 'eye' : 'eye-slash'" class="toggle-icon" @click="showPassword = !showPassword" />
-                        </div>
-                    </div>
-                    <addnode-button type="submit" class="login-button">登录</addnode-button>
-                    <p class="register-link">没有账号? <router-link to="/SignUp">点击注册!</router-link></p>
-                </form>
+  <MainBackground>
+    <div class="login-page">
+      <div class="login-card">
+        <h1 class="login-title">登录</h1>
+        <form autocomplete="off" class="login-form" @submit.prevent="login">
+          <div class="form-item">
+            <label for="username">用户名</label>
+            <div class="input-with-icon">
+              <font-awesome-icon class="input-icon" icon="user"/>
+              <input id="username" v-model="loginForm.username" type="text"/>
             </div>
-        </div>
-    </MainBackground>
+          </div>
+          <div class="form-item">
+            <label for="password">密码</label>
+            <div class="input-with-icon">
+              <font-awesome-icon class="input-icon" icon="lock"/>
+              <input v-model="loginForm.password" :type="showPassword ? 'text' : 'password'"/>
+              <font-awesome-icon :icon="showPassword ? 'eye' : 'eye-slash'" class="toggle-icon"
+                                 @click="showPassword = !showPassword"/>
+            </div>
+          </div>
+          <addnode-button class="login-button" type="submit">登录</addnode-button>
+          <p class="register-link">没有账号?
+            <router-link to="/SignUp">点击注册!</router-link>
+          </p>
+        </form>
+      </div>
+    </div>
+  </MainBackground>
 </template>
 
 <script>
 import axios from "axios";
 import MainBackground from "@/components/MainBackground.vue";
 import addnodeButton from "@/components/buttons/addnodeButton.vue";
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUser, faLock, faEye,faEyeSlash } from '@fortawesome/free-solid-svg-icons'
-library.add(faUser, faLock, faEye,faEyeSlash)
+import {library} from '@fortawesome/fontawesome-svg-core'
+import {faEye, faEyeSlash, faLock, faUser} from '@fortawesome/free-solid-svg-icons'
+
+library.add(faUser, faLock, faEye, faEyeSlash)
 export default {
-    components: {MainBackground,addnodeButton},
-    data() {
-        return {
-            loginForm: {
-                username: '',
-                password: '',
-            },
-            showPassword: false,
-        };
-    },
-    methods: {
-        async login() {
-            if (!this.loginForm.username || !this.loginForm.password) {
-                alert('请输入用户名和密码');
-                return;
-            }
-            try {
-                const response = await axios.post('http://localhost:8080/myLogin', {
-                    username: this.loginForm.username,
-                    password: this.loginForm.password
-                });
-                if (response.status === 200) {
-                    localStorage.setItem('token', response.data.token);
-                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
-                    localStorage.setItem('userName', this.loginForm.username);
-                    this.$store.commit('SET_TOKEN', response.data.token);
-                    this.$router.push('/');
-                } else {
-                    alert('用户名或密码错误');
-                }
-            } catch (error) {
-                console.error(error);
-                alert('用户名或密码错误，登陆失败！');
-            }
+  components: {MainBackground, addnodeButton},
+  data() {
+    return {
+      loginForm: {
+        username: '',
+        password: '',
+      },
+      showPassword: false,
+    };
+  },
+  methods: {
+    async login() {
+      if (!this.loginForm.username || !this.loginForm.password) {
+        alert('请输入用户名和密码');
+        return;
+      }
+      try {
+        const response = await axios.post('http://localhost:8080/myLogin', {
+          username: this.loginForm.username,
+          password: this.loginForm.password
+        });
+        if (response.status === 200) {
+          localStorage.setItem('token', response.data.token);
+          axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
+          localStorage.setItem('userName', this.loginForm.username);
+          this.$store.commit('SET_TOKEN', response.data.token);
+          this.$router.push('/');
+        } else {
+          alert('用户名或密码错误');
         }
+      } catch (error) {
+        console.error(error);
+        alert('用户名或密码错误，登陆失败！');
+      }
     }
+  }
 };
 </script>
 
 <style scoped>
 .login-page {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
 }
 
 .login-card {
-    width: 400px;
-    background-color: transparent;
-    border: 1px solid white;
-    padding: 20px;
-    border-radius: 10px;
+  width: 400px;
+  background-color: transparent;
+  border: 1px solid white;
+  padding: 20px;
+  border-radius: 10px;
 }
 
 .login-title {
-    text-align: center;
-    font-size: 1.5em;
-    margin-bottom: 1em;
+  text-align: center;
+  font-size: 1.5em;
+  margin-bottom: 1em;
 }
 
 .form-item {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .form-item label {
-    display: block;
-    margin-bottom: 10px;
+  display: block;
+  margin-bottom: 10px;
 }
 
 .form-item input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid white;
-    background-color: transparent;
-    color: white;
-    border-radius: 4px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid white;
+  background-color: transparent;
+  color: white;
+  border-radius: 4px;
 }
 
 .form-item input::placeholder {
-    color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 
 .register-link {
-    margin-top: 20px;
-    text-align: center;
+  margin-top: 20px;
+  text-align: center;
 }
+
 .input-with-icon {
-    position: relative;
+  position: relative;
 }
 
 .input-icon, .toggle-icon {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    color: rgba(255, 255, 255, 0.7);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .input-icon {
-    left: 10px;
+  left: 10px;
 }
 
 .toggle-icon {
-    right: 10px;
-    cursor: pointer;
+  right: 10px;
+  cursor: pointer;
 }
 
 .form-item input {
-    padding-left: 30px; /* Adjusted to make space for the icon */
-    padding-right: 30px; /* Adjusted for the toggle icon in password input */
+  padding-left: 30px; /* Adjusted to make space for the icon */
+  padding-right: 30px; /* Adjusted for the toggle icon in password input */
 }
 </style>

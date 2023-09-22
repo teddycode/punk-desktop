@@ -31,12 +31,12 @@ export const userAddr = "0x643AC6aFeFdC7E9E66648262C67247e1166946f9";
 // export const wallet = provider.getSigner()
 
 
-export const conditionalTokens = new ethers.Contract(conditionalTokensAddr,conditionalTokensAbi,wallet);
-export const ctHelper = new ethers.Contract(ctHelperAddr,ctHelperAbi,wallet);
-export const governToken = new ethers.Contract(governTokenAddr,governTokenAbi,wallet);
-export const tokenPower = new ethers.Contract(tokenPowerAddr,tokenPowerAbi,wallet);
-export const factory = new ethers.Contract(factoryAddr,factoryAbi,wallet);
-export const review = new ethers.Contract(reviewAddr,reviewAbi,wallet);
-export const governance = new ethers.Contract(governanceAddr,governanceAbi,wallet);
-export const executor = new ethers.Contract(executorAddr,executorAbi,wallet);
-export const Target = new ethers.Contract(TargetAddr,TargetAbi,wallet);
+export const conditionalTokens = new ethers.Contract(conditionalTokensAddr, conditionalTokensAbi, wallet);
+export const ctHelper = new ethers.Contract(ctHelperAddr, ctHelperAbi, wallet);
+export const governToken = new ethers.Contract(governTokenAddr, governTokenAbi, wallet);
+export const tokenPower = new ethers.Contract(tokenPowerAddr, tokenPowerAbi, wallet);
+export const factory = new ethers.Contract(factoryAddr, factoryAbi, wallet);
+export const review = new ethers.Contract(reviewAddr, reviewAbi, wallet);
+export const governance = new ethers.Contract(governanceAddr, governanceAbi, wallet);
+export const executor = new ethers.Contract(executorAddr, executorAbi, wallet);
+export const Target = new ethers.Contract(TargetAddr, TargetAbi, wallet);

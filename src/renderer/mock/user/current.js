@@ -1,11 +1,11 @@
 import Mock from 'mockjs'
-import '@/mock/extend'
+import {API_PREFIX} from "@/utils/request";
 
 const welcome = Mock.mock({
     timeFix: '@TIMEFIX',
     message: '@WELCOME'
 })
 
-Mock.mock('/user/welcome', 'get', () => {
+Mock.mock(`${API_PREFIX}/user/welcome`, 'get', () => {
     return welcome
 })

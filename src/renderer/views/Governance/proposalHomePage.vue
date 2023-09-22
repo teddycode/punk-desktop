@@ -25,8 +25,8 @@
 <script>
 import MainBackground from "@/components/MainBackground.vue";
 import addnodeButton from "@/components/buttons/addnodeButton.vue";
-import selfInfo from "@/views/Governance/componnents/selfInfo.vue";
-import myEntrust from "@/views/Governance/componnents/myEntrust.vue";
+import selfInfo from "@/views/Governance/components/selfInfo.vue";
+import myEntrust from "@/views/Governance/components/myEntrust.vue";
 
 export default {
     name: "proposalHomePage",
