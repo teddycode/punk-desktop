@@ -1,13 +1,24 @@
 import axios from 'axios';
 import Message from "primevue/message";
+import * as url from "url";
+
+export const API_PREFIX = url.resolve(process.env.VUE_APP_BACK_API_BASE, "/api");
 
 const service = axios.create({
-    url: process.env.VUE_APP_BACK_API_BASE,
+    url: API_PREFIX,
     timeout: 15000,
+    headers: {
+        'Content-Type': 'application/json;charset=UTF-8'
+    }
 });
 
 service.interceptors.request.use(
     config => {
+        // 添加Token到请求头中
+        const token = localStorage.getItem('token')
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`
+        }
         return config;
     },
     error => {
