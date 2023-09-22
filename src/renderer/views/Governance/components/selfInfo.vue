@@ -1,23 +1,23 @@
 <template>
     <div class="info-container">
-        <h1 class="info-title">投票信息</h1>
+        <h1 class="info-title">个人信息</h1>
         <div class="info-content">
-            <div class="info-row">支持：{{ votingYes }}</div>
-            <div class="info-row">反对：{{ votingNo }}</div>
+            <div class="info-row">代币余额：{{ balance }}</div>
+            <div class="info-row">投票权：{{ votingPower }}</div>
         </div>
     </div>
 </template>
     
 <script>
 import {ethers} from "ethers";
-import {governToken,userAddr,tokenPower,} from "@/views/Governances/function/address";
+import {governToken, userAddr, tokenPower,} from "@/views/Governance/components/function/address";
 
 export default {
-    name: "votingInfo",
+    name: "selfInfo",
     data() {
         return {
-            votingYes:null, // 用于存储从后台获取的数据
-            votingNo:null,
+            balance:null, // 用于存储从后台获取的数据
+            votingPower:null,
         };
     },
     async mounted() {

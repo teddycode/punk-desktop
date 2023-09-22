@@ -94,10 +94,10 @@
 
 <script>
 import MainBackground from "@/components/MainBackground.vue";
-import processGuide from "@/views/Governance/componnents/processGuide.vue";
-import toolBox from "@/views/Governance/componnents/toolBox.vue";
-import newProposal from "@/views/Governance/componnents/newProposal.vue";
-import myProposals from "@/views/Governance/componnents/myProposals.vue";
+import processGuide from "@//views/Governance/components/processGuide.vue";
+import toolBox from "@//views/Governance/components/toolBox.vue";
+import newProposal from "@//views/Governance/components/newProposal.vue";
+import myProposals from "@//views/Governance/components/myProposals.vue";
 export default {
     components:{
         MainBackground,processGuide,toolBox,newProposal,myProposals

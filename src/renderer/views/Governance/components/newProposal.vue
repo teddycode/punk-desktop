@@ -54,8 +54,8 @@
 
 <script>
 import MainBackground from "@/components/MainBackground.vue";
-import selfInfo from "@/views/Governances/selfInfo.vue";
-import { governance } from "@/views/Governances/function/address";
+import selfInfo from "./selfInfo.vue";
+import {governance} from "@//views/Governance/components/function/address";
 import { ethers } from "ethers";
 import { BigNumber } from "ethers";
 

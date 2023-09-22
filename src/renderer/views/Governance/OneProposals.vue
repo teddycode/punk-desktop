@@ -22,8 +22,8 @@
 
 <script>
 import MainBackground from "@/components/MainBackground.vue";
-import { governance } from "@/views/Governances/function/address";
-import selfInfo from "@/views/Governances/selfInfo.vue";
+import {governance} from "@//views/Governance/components/function/address";
+import selfInfo from "./components/selfInfo.vue";
 
 export default {
     name: "OneProposals",

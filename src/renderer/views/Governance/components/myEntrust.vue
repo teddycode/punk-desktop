@@ -12,7 +12,7 @@
 
 <script>
 import addnodeButton from "@/components/buttons/addnodeButton.vue"; // 请确保路径是正确的
-import { tokenPower } from "@/views/Governances/function/address";
+import {tokenPower} from "@//views/Governance/components/function/address";
 
 export default {
     name: "myEntrust",
