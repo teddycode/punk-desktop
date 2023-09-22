@@ -1,4 +1,4 @@
-const {ipcMain, dialog, app, BrowserWindow, shell} = require("electron");
+const {ipcMain, dialog, app, BrowserWindow, shell, remote} = require("electron");
 const {openFile, runExecutable, saveFile} = require("../fileManager");
 const {readFileSync} = require("fs");
 const {runAppByName} = require("../appLauncher");
@@ -58,6 +58,12 @@ module.exports = function () {
     ipcMain.on('save-file-content', (event, filePath, content) => {
         saveFile(filePath, content);
         event.sender.send('file-saved');
+    });
+
+    ipcMain.on('create-database', async (event, arg) => {
+        // 处理请求并返回结果
+        let dbPath = app.getPath("userData");
+        event.sender.send('create-database-finish', dbPath);
     });
 }
 
