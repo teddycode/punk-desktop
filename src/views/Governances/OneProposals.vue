@@ -14,7 +14,7 @@
                 <div class="left-section"></div>
                 <div class="right-section">
                     <div class="self-info">
-                        <selfInfo></selfInfo>
+                        <cast-vote></cast-vote>
 
                     </div>
 
@@ -31,13 +31,14 @@
 <script>
 import MainBackground from "@/components/MainBackground.vue";
 import { governance } from "@/views/Governances/function/address";
-import selfInfo from "@/views/Governances/selfInfo.vue";
+import selfInfoInSingleProposal from "@/views/Governances/selfInfoInSingleProposal.vue";
 import votingInfo from "@/views/Governances/votingInfo.vue";
 
 export default {
     name: "OneProposals",
     components: {
-        MainBackground, selfInfo, votingInfo
+        MainBackground, selfInfoInSingleProposal, votingInfo,
+        "cast-vote":selfInfoInSingleProposal,
     },
     data() {
         return {

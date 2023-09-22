@@ -3,16 +3,16 @@
 import {ethers} from "ethers";
 
 //export this file to use in other files
-export const conditionalTokensAddr = "0x52e974A29aCe3759a9d81aA304a1e68EB13A3F54";
-export const ctHelperAddr = "0x10FFE38b77991C535fdD2D1107968A7425c50CE4";
-export const governTokenAddr = "0x886F379aB7872308d52f8204DA4b7A614A3F9f81";
-export const tokenPowerAddr = "0x59a811896A41873E58F5F237FC6302Dc00148f57";
-export const factoryAddr = "0x7C0100e730f85CCe18bCd09C3FE8E27195DF60B6";
-export const reviewAddr = "0x906EeCadACE82b56D7F30b3C3B22Acb491457eD6";
-export const governanceAddr = "0x35434437FDEF676F3b74810D523E34A110CBc8dA";
-export const executorAddr = "0x022EadA8399B66C8f1CDcC68abbd0BeA87f45456";
-export const targetAddr = "0xc03645416e0CC718117F71fEaEa83d595C564f77";
-export const implementationAddr = "0xE055Cfb39797Ffcdb14aa52BEBA32034D43B7F90";
+export const conditionalTokensAddr = "0x6Bc8a795EAD1A713cDF69B78cdd7aFa810e66212";
+export const ctHelperAddr = "0x68Bf42Ee4c703c4B285e701F1d18d488fc384419";
+export const governTokenAddr = "0x483EaEb6614E534f4dC4B89081b32E74111a637a";
+export const tokenPowerAddr = "0xA391C1CDf022B934359601b22Da181109bB10D37";
+export const factoryAddr = "0x0818af0234209C87d3aB822C6D3c946fedE09c0B";
+export const reviewAddr = "0x6A9886E69922B2CcC8b9f2BfCcF953C12a9a0e74";
+export const governanceAddr = "0x86EaDE0E297f83568A44056A87e8FB2e75e51df2";
+export const executorAddr = "0x2c74158B46b891c57A24e190CA0ccBDeDA1a87C7";
+export const targetAddr = "0x11FDA58E1d06c2D2F9C243738FF6B0a3b25fD35A";
+export const implementationAddr = "0x334d6716cf14E166C8c9e2c14641f8f858D6F0a3";
 
 const conditionalTokensAbi = require("./abi/market/ConditionalTokens.sol/ConditionalTokens.json").abi;
 const ctHelperAbi = require("./abi/market/CTHelpers.sol/CTHelpers.json").abi;

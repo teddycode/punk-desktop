@@ -4,23 +4,36 @@
         <div class="voting-info-content" v-if="state === 0">
             <div class="info-row">质押量：{{ stakeAmount }}</div>
         </div>
-        <div class="voting-info-content" v-else-if="state === 2">
-            <div class="info-row">支持：{{ votingYes }}</div>
-            <div class="info-row">反对：{{ votingNo }}</div>
+        <div class="voting-info-content" v-if="state === 2">
+            <div class="vote-button" v-if="!isInitialized">
+                <button class="button" @click="initialize">初始化</button>
+            </div>
+            <div class="vote-button" v-if="isInitialized">
+                <div class="info-row">支持：{{ votingYes }}</div>
+                <div class="info-row">反对：{{ votingNo }}</div>
+                <div class="support-against-button">
+                    <button class="button" @click="castVoteFor">支持</button>
+                    <button class="button" @click="castVoteAgainst">反对</button>
+                </div>
+
+            </div>
+
         </div>
     </div>
 </template>
     
 <script>
-import { governance, governanceAddr, factory, implementation } from "@/views/Governances/function/address";
+import { governance, governanceAddr, factory, implementation, review } from "@/views/Governances/function/address";
+import {ethers} from "ethers";
 
 export default {
     name: "votingInfo",
 
     data() {
         return {
+            isInitialized: null,
             state: null,
-            stakeAmount:null,
+            stakeAmount: null,
             votingYes: null, // 用于存储从后台获取的数据
             votingNo: null,
         };
@@ -28,16 +41,35 @@ export default {
     async mounted() {
         let state = await governance.getProposalState(this.$route.params.proposalId);
         this.state = state;
+        let isInitialized = await review.isInitialized(this.$route.params.proposalId);
+        this.isInitialized = isInitialized;
         if (state == 0) {
             let proposalInfo = await governance.getProposalById(this.$route.params.proposalId);
-            console.log(proposalInfo);
             this.stakeAmount = proposalInfo.stakeAmount;
         }
-        else if(state==2) {
+        else if (state == 2) {
             let address = await factory.getContractAddress(governanceAddr, this.$route.params.proposalId);
             let contract = implementation.attach(address);
-            this.votingYes = await contract.forVotes();
-            this.votingNo = await contract.againstVotes();
+            if (isInitialized) {
+                this.votingYes = ethers.utils.formatEther(await contract.forVotes());
+                this.votingNo = ethers.utils.formatEther(await contract.againstVotes());
+            }
+
+        }
+    },
+    methods: {
+        async castVoteFor() {
+            let address = await factory.getContractAddress(governanceAddr, this.$route.params.proposalId);
+            let contract = implementation.attach(address);
+            contract.castVote(true);
+        },
+        async castVoteAgainst() {
+            let address = await factory.getContractAddress(governanceAddr, this.$route.params.proposalId);
+            let contract = implementation.attach(address);
+            contract.castVote(false);
+        },
+        async initialize() {
+            await review.createReview(governanceAddr, this.$route.params.proposalId);
         }
     }
 }
@@ -51,7 +83,6 @@ export default {
 .info-title {
     font-size: 1.5rem;
     margin-top: 10%;
-    margin-bottom: 5%;
     /* 标题与内容部分的间距 */
 }
 
@@ -66,5 +97,26 @@ export default {
     margin-top: 5%;
     /* 使用百分比定义行距 */
     text-align: left;
+}
+
+.vote-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.support-against-button{
+    margin-top: 12px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.button {
+    padding: 7px 10px;
+    background: transparent;
+    border: 1px solid white;
+    color: white;
+    margin-right: 40px;
 }
 </style>
