@@ -154,23 +154,23 @@ export default {
             this.$emit('featureClicked', feature);
             this.setCurrentPage(feature.title)
             if (feature.title === '共识') {
-              this.$router.push('ConsensusPage');
+              this.$router.push({name: 'ConsensusPage'});
             } else if (feature.title === '存储') {
-              this.$router.push('/StoragePage');
+              this.$router.push({name: 'StoragePage'});
             } else if (feature.title === '计算') {
-              this.$router.push('/ComputingPage');
+              this.$router.push({name: 'ComputingPage'});
             } else if (feature.title === '交易') {
-              this.$router.push('/TransactionPage');
+              this.$router.push({name: 'TransactionPage'});
             } else if (feature.title === '转账') {
-              this.$router.push('/TransferPage');
+              this.$router.push({name: 'TransferPage'});
             } else if (feature.title === '治理') {
-              this.$router.push('/GovernancePage');
+              this.$router.push({name: 'GovernancePage'});
             } else if (feature.title === '网络') {
-              this.$router.push('/NetworkPage');
+              this.$router.push({name: '/NetworkPage'});
             } else if (feature.title === '藏品') {
-              this.$router.push('/CollectionPage');
+              this.$router.push({name: 'CollectionPage'});
             } else if(feature.title==='密码'){
-              this.$router.push('/CryptoPage');
+              this.$router.push({name: 'CryptoPage'});
             }
         },
     }

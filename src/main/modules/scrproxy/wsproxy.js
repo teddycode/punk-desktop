@@ -105,13 +105,15 @@ function http_request(request, response) {
 
 function startWebsockRelay() {
 
-    console.log("WebSocket settings: proxying from " + source_host + ":" + source_port +
+    console.log("WebSocket settings: ");
+    console.log("    - proxying from " + source_host + ":" + source_port +
         " to " + target_host + ":" + target_port);
-    console.log("    - Web server active. Serving: " + web_dir + "    - Running in unencrypted HTTP (ws://) mode");
+    console.log("    - Web server active. Serving: " + web_dir);
+    console.log("    - Running in unencrypted HTTP (ws://) mode");
     let webServer = http.createServer(http_request);
     webServer.listen(source_port, () => {
         let wsServer = new WebSocketServer({server: webServer});
-        wsServer.on('new connection', new_client);
+        wsServer.on('connection', new_client);
     });
 
 }

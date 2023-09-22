@@ -9,37 +9,37 @@ import orderPage from "@/views/Transaction/orderPage.vue";
 let transactionRoutes = [
     {
         path: "index",
-        name: "transactionPage",
+        name: "TransactionPage",
         component: transactionPage,
     },
     {
         path: "myExchange",
-        name: "myExchange",
+        name: "MyExchange",
         component: myExchange,
     },
     {
         path: "myToken",
-        name: "myToken",
+        name: "MyToken",
         component: tokenPage,
     },
     {
         path: "myTrade",
-        name: "myTrade",
+        name: "MyTrade",
         component: tradePage,
     },
     {
         path: "limitOrder",
-        name: "limitOrder",
+        name: "LimitOrder",
         component: limitOrder,
     },
     {
         path: "myOrder",
-        name: "myOrder",
+        name: "MyOrder",
         component: orderPage,
     },
     {
         path: "depositToken",
-        name: "depositToken",
+        name: "DepositToken",
         component: depositToken,
     },
 ];

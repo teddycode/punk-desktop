@@ -40,8 +40,15 @@ export default {
     },
     methods: {
       handleRunLocalAppClick(app) {
-        // 发送消息给主线程
-        window.electronAPI.onRunApplication(app.path,app.cmd);
+        // 打开新窗口并跳转
+        this.$router.push({
+          name: "AppView",
+          params: {
+            name: app?.name,
+            path: app?.path,
+            cmd: app?.cmd,
+          }
+        })
       }
     }
 }
