@@ -5,20 +5,21 @@
         <div class="info-content">
             <div class="info-row">代币余额：{{ balance }}</div>
             <div class="info-row">投票权：{{ votingPower }}</div>
+            
         </div>
     </div>
 </template>
     
 <script>
-import {ethers} from "ethers";
-import {governToken,factory,userAddr,governance,tokenPower,} from "@/views/Governances/function/address";
+import { ethers } from "ethers";
+import { governToken, userAddr, tokenPower} from "@/views/Governances/function/address";
 
 export default {
-    name: "selfInfo",
+    name: "selfInfoInSingleProposal",
     data() {
         return {
-            balance:null, // 用于存储从后台获取的数据
-            votingPower:null,
+            balance: null, // 用于存储从后台获取的数据
+            votingPower: null,
         };
     },
     async mounted() {
@@ -27,13 +28,7 @@ export default {
         temp = await tokenPower.getCurrentVotingPower(userAddr);
         this.votingPower = ethers.utils.formatEther(temp);
     },
-    // methods:{
-    //     async vote(){
-    //         let address = await factory.getContractAddress(governanceAddr, this.$route.params.proposalId);
-    //         let contract = implementation.attach(address);
-    //         contract.castVote()
-    //     }
-    // }
+    
 }
 </script>
     
@@ -50,6 +45,8 @@ export default {
 }
 
 .info-content {
+    display: flex;
+    flex-direction: column;
     padding-left: 1rem;
     /* 为内容部分增加左填充，以强调“靠左”效果 */
 }
@@ -61,4 +58,6 @@ export default {
     /* 使用百分比定义行距 */
     text-align: left;
 }
+
+
 </style>
