@@ -8,6 +8,8 @@
         <el-button @click="onFreshView">刷新</el-button>
         <el-button @click="connect">连接</el-button>
       </div>
+    </div>
+    <div class="vnc-view-window">
       <VueVnc
           v-if="true"
           :url="'ws://localhost:5901'"
@@ -61,11 +63,21 @@ export default {
 }
 
 .view-header-info {
-  margin-bottom: 10px;
+  display: flex;
+  height: 20px;
 }
 
 .button-group {
   display: flex;
   gap: 10px; /* 两个按钮之间的间距 */
+}
+
+.vnc-view-window {
+  overflow: hidden;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 </style>
