@@ -1,5 +1,5 @@
 import Mock from 'mockjs'
-import '@/mock/extend'
+import {API_PREFIX} from "@/utils/request";
 
 const user = Mock.mock({
   name: '@ADMIN',
@@ -7,7 +7,7 @@ const user = Mock.mock({
   address: '@CITY',
   position: '@POSITION'
 })
-Mock.mock(`${process.env.VUE_APP_API_BASE_URL}/login`, 'post', ({body}) => {
+Mock.mock(`$${API_PREFIX}/login`, 'post', ({body}) => {
   let result = {data: {}}
   const {name, password} = JSON.parse(body)
 

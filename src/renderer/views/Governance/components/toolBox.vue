@@ -1,57 +1,57 @@
 <template>
-    <div class="toolbox-container">
-        <h1 class="toolbox-title">
-            工具箱
-            <font-awesome-icon icon="wrench" class="icon"/>
-        </h1>
-        <p class="description" @click="navigateToRicardianContract">李嘉图合约</p>
-        <p class="description">测试环境入口</p>
-        <p class="description" @click="navigateToEmergencyResponse">紧急投票 </p>
-    </div>
+  <div class="toolbox-container">
+    <h1 class="toolbox-title">
+      工具箱
+      <font-awesome-icon class="icon" icon="wrench"/>
+    </h1>
+    <p class="description" @click="navigateToRicardianContract">李嘉图合约</p>
+    <p class="description">测试环境入口</p>
+    <p class="description" @click="navigateToEmergencyResponse">紧急投票 </p>
+  </div>
 </template>
 
 <script>
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 
 export default {
-    name: "toolBox",
-    components: {
-        FontAwesomeIcon
+  name: "toolBox",
+  components: {
+    FontAwesomeIcon
+  },
+  methods: {
+    navigateToRicardianContract() {
+      this.$router.push({name: 'RicardianContract'});
     },
-    methods: {
-        navigateToRicardianContract() {
-          this.$router.push({name: 'RicardianContract'});
-        },
-        navigateToEmergencyResponse() {
-          this.$router.push({name: 'EmergencyResponse'});
-        }
+    navigateToEmergencyResponse() {
+      this.$router.push({name: 'EmergencyResponse'});
     }
+  }
 }
 
 </script>
 
 <style scoped>
 .toolbox-container {
-    text-align: center;
-    margin-top: 7%;
+  text-align: center;
+  margin-top: 7%;
 }
 
 .toolbox-title {
-    font-size: 1.5rem;
-    color: white;
-    display: flex;
-    justify-content: center; /* To center the title and the icon */
-    align-items: center;
-    gap: 0.5rem;
+  font-size: 1.5rem;
+  color: white;
+  display: flex;
+  justify-content: center; /* To center the title and the icon */
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .icon {
-    font-size: 1.2rem;
+  font-size: 1.2rem;
 }
 
 .description {
-    margin-top: 5%;
-    color: white;
-    font-size: 1rem;
+  margin-top: 5%;
+  color: white;
+  font-size: 1rem;
 }
 </style>

@@ -16,6 +16,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import 'primevue/resources/themes/saga-blue/theme.css' //主题
 import 'primevue/resources/primevue.min.css' //核心样式
 import 'primeicons/primeicons.css' //icons
+import Mock from './mock' // 项目引入mock
 import PrimeVue from "primevue/config";
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {

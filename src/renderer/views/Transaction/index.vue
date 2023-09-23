@@ -1,5 +1,5 @@
 <template>
- <MainBackground> 
+  <MainBackground>
         <div class="container">
         <div class="left-panel"></div>
         <div class="middle-panel">
@@ -125,17 +125,17 @@ export default {
     /* background-size: contain; */
     /* //填充整个div */
     background-size: cover;
-    background-repeat: no-repeat; 
+  background-repeat: no-repeat;
 }
 .middle-top {
     height: 57%;
-    position: relative; 
+  position: relative;
 }
 
 #kline_container {
     width: 100%;
     height: 100%;
-    position: absolute;  
+  position: absolute;
     top: 0;
     left: 0;
 }

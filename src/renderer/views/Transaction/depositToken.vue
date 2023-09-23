@@ -96,8 +96,8 @@ export default {
             priceUpper: null,
             addressError: false,
             isAddButtonClicked: false,
-            
-            // wallets:null,
+
+          // wallets:null,
             ModifyPositionParams: {
                 tickLower: 0,
                 tickUpper: 0,
