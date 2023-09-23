@@ -13,7 +13,7 @@
                         </path>
                     </g>
                 </svg>
-                <div class="GlobalWriteV2-topTitle">写提案</div>
+                <div class="GlobalWriteV2-topTitle" @click="navigateToCreateProposal">写提案</div>
             </button>
             <!-- <button class="GlobalWriteV2-topItem">
                 <svg width="40" height="40" viewBox="0 0 40 40" class="GlobalWriteV2-navIcon" fill="none">
@@ -67,7 +67,12 @@
 
 <script>
 export default {
-    name: "myCreateProposal"
+    name: "myCreateProposal",
+    methods:{
+        navigateToCreateProposal(){
+            this.$router.push({ path: '/Governances/newProposal' });
+        }
+    }
 }
 </script>
 
