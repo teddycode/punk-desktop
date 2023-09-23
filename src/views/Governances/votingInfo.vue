@@ -4,7 +4,7 @@
         <div class="voting-info-content" v-if="state === 0">
             <div class="info-row">质押量：{{ stakeAmount }}</div>
         </div>
-        <div class="voting-info-content" v-if="state === 2">
+        <div class="voting-info-content" v-else-if="state === 2">
             <div class="vote-button" v-if="!isInitialized">
                 <button class="button" @click="initialize">初始化</button>
             </div>
@@ -15,16 +15,56 @@
                     <button class="button" @click="castVoteFor">支持</button>
                     <button class="button" @click="castVoteAgainst">反对</button>
                 </div>
-
             </div>
-
+        </div>
+        <div class="voting-info-content" v-else-if="state === 3">
+            <div class="info-row">支持：{{ votingYes }}</div>
+            <div class="info-row">反对：{{ votingNo }}</div>
+            <div class="failed">
+                失败
+            </div>
+        </div>
+        <div class="voting-info-content" v-else-if="state === 4">
+            <div class="info-row">支持：{{ votingYes }}</div>
+            <div class="info-row">反对：{{ votingNo }}</div>
+            <div class="failed">
+                成功
+            </div>
+        </div>
+        <div class="voting-info-content" v-else-if="state === 5">
+            <div class="vote-button" v-if="isInitialized">
+                <div class="info-row">支持：{{ votingYes }}</div>
+                <div class="info-row">反对：{{ votingNo }}</div>
+            </div>
+            <div class="failed">
+                过期
+            </div>
+        </div>
+        <div class="voting-info-content" v-else-if="state === 6">
+            <div class="info-row">支持：{{ votingYes }}</div>
+            <div class="info-row">反对：{{ votingNo }}</div>
+            <div class="failed">
+                执行
+            </div>
+        </div>
+        <div class="voting-info-content" v-else-if="state === 7">
+            <div class="info-row">支持：{{ votingYes }}</div>
+            <div class="info-row">反对：{{ votingNo }}</div>
+            <div class="failed">
+                入队
+            </div>
+        </div>
+        <div class="voting-info-content" v-else>
+            <div class="failed">
+                取消
+            </div>
         </div>
     </div>
 </template>
     
 <script>
 import { governance, governanceAddr, factory, implementation, review } from "@/views/Governances/function/address";
-import {ethers} from "ethers";
+import { ethers } from "ethers";
 
 export default {
     name: "votingInfo",
@@ -47,14 +87,14 @@ export default {
             let proposalInfo = await governance.getProposalById(this.$route.params.proposalId);
             this.stakeAmount = proposalInfo.stakeAmount;
         }
-        else if (state == 2) {
+        // else if (state == 2 || state == 3|| state == 4|| state == 5|| state == 6|| state == 7) {
+        else {
             let address = await factory.getContractAddress(governanceAddr, this.$route.params.proposalId);
             let contract = implementation.attach(address);
             if (isInitialized) {
                 this.votingYes = ethers.utils.formatEther(await contract.forVotes());
                 this.votingNo = ethers.utils.formatEther(await contract.againstVotes());
             }
-
         }
     },
     methods: {
@@ -105,7 +145,7 @@ export default {
     justify-content: center;
 }
 
-.support-against-button{
+.support-against-button {
     margin-top: 12px;
     display: flex;
     flex-direction: row;
