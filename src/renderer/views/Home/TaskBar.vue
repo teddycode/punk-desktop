@@ -65,23 +65,23 @@ export default {
         getFeatureRoute(title) {
             switch (title) {
                 case '共识':
-                    return 'consensus';
+                  return 'ConsensusPage';
                 case '存储':
-                    return 'myStorage';
+                  return 'StoragePage';
                 case '计算':
-                    return 'myCalculation';
+                  return 'ComputingPage';
                 case '交易':
-                    return 'myExchange';
+                  return 'TransactionPage';
                 case '转账':
-                    return 'TransferMain';
+                  return 'TransferPage';
                 case '治理':
-                    return 'myGovernance';
+                  return 'GovernancePage';
                 case '网络':
-                    return 'myNetwork';
+                  return 'NetworkPage';
                 case '藏品':
-                    return 'myCollection';
+                  return 'CollectionPage';
                 case '密码':
-                    return 'Crypto';
+                  return 'CryptoPage';
                 default:
                     return 'HomePage';
             }
