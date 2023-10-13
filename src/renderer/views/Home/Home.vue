@@ -57,7 +57,7 @@ import DesktopManagement from "@/views/Home/components/main-left/center/index.vu
 import searchBar from "@/components/searchBar.vue";
 import mainRightDapp from "@/views/Home/components/main-right/dapp-square.vue";
 import MainCenterButton from "@/views/Home/components/main-center/bottom/index.vue";
-import TaskBar from "@/views/TaskBar.vue";
+import TaskBar from "@/views/Home/TaskBar.vue";
 import SocialNet from "@/views/SocialNet/index.vue";
 
 export default {

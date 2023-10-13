@@ -29,7 +29,7 @@ import Topnav from "@/components/topnav/index.vue";
 import LoginButton from "@/components/buttons/loginButton.vue";
 import myWallet from "@/components/myWallet.vue";
 import searchBar from "@/components/searchBar.vue";
-import TaskBar from "@/views/TaskBar.vue";
+import TaskBar from "@/views/Home/TaskBar.vue";
 
 export default {
     name: "myHeader",

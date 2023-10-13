@@ -23,7 +23,7 @@ function startWsProxyThread() {
 
 
 function testSuccess() {
-    // TODO
+    // TODO 检测vnc服务是否可用
 }
 
 module.exports = {

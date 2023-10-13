@@ -90,54 +90,63 @@ export default {
         {
           id: 1,
           title: '交易',
+          router: 'TransactionPage',
           description: '关于交易的描述.',
           icon: faExchangeAlt,
         },
         {
           id: 2,
           title: '转账',
+          router: 'TransferPage',
           description: '关于转账的描述.',
           icon: faHandHoldingUsd,
         },
         {
           id: 3,
           title: '藏品',
+          router: 'CollectionPage',
           description: '关于藏品的描述.',
           icon: faGem,
         },
         {
           id: 4,
           title: '网络',
+          router: 'NetworkPage',
           description: '关于网络的描述.',
           icon: faSitemap,
         },
         {
           id: 5,
           title: '治理',
+          router: 'GovernancePage',
           description: '关于治理的描述.',
           icon: faGavel,
         },
         {
           id: 6,
           title: '共识',
+          router: 'ConsensusPage',
           description: '关于共识的描述.',
           icon: faHandsHelping,
         },
         {
           id: 7,
           title: '计算',
+          router: 'ComputingPage',
           description: '关于计算的描述.',
           icon: faCalculator,
         },
         {
           id: 8,
           title: '存储',
+          router: 'StoragePage',
           description: '关于存储的描述.',
           icon: faDatabase,
         },
         {
           id: 9,
           title: '密码',
+          router: 'CryptoPage',
           description: '关于密码的描述.',
           icon: faLock,
         },
@@ -155,25 +164,7 @@ export default {
       console.log("feature:", feature)
       this.$emit('featureClicked', feature);
       this.setCurrentPage(feature.title)
-      if (feature.title === '共识') {
-        this.$router.push({name: 'ConsensusPage'});
-      } else if (feature.title === '存储') {
-        this.$router.push({name: 'StoragePage'});
-      } else if (feature.title === '计算') {
-        this.$router.push({name: 'ComputingPage'});
-      } else if (feature.title === '交易') {
-        this.$router.push({name: 'TransactionPage'});
-      } else if (feature.title === '转账') {
-        this.$router.push({name: 'TransferPage'});
-      } else if (feature.title === '治理') {
-        this.$router.push({name: 'GovernancePage'});
-      } else if (feature.title === '网络') {
-        this.$router.push({name: '/NetworkPage'});
-      } else if (feature.title === '藏品') {
-        this.$router.push({name: 'CollectionPage'});
-      } else if (feature.title === '密码') {
-        this.$router.push({name: 'CryptoPage'});
-      }
+      this.$router.push({name: feature.router});
     },
   }
 }
