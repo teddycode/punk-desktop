@@ -1,8 +1,6 @@
 // @ts-ignore
-import {wallet} from "@/views/Transaction/function/address"
-import {hook, token0, token1} from "@/views/Transaction/function/address"
-import {limitOrderPoolKey} from "@/views/Transaction/function/address"
-import {calculateTickFromPriceWithSpacing} from "@/views/Transaction/function/cauculateliq"
+import {hook} from "./address"
+import {calculateTickFromPriceWithSpacing} from "./cauculateliq"
 
 
 async function killLimitOrder(contract, poolKey, tickLower, zeroForOne, to) {
@@ -22,10 +20,11 @@ async function killLimitOrder(contract, poolKey, tickLower, zeroForOne, to) {
     //     // Handle event here
     // });
 }
-export async function killLimitOrderFrontend(tokenup, tokendown, price, poolkey, myaddress){
+
+export async function killLimitOrderFrontend(tokenup, tokendown, price, poolkey, myaddress) {
     let tick = calculateTickFromPriceWithSpacing(price)
     let zeroForOne = tokenup < tokendown
-    console.log("zeroForOne:" , zeroForOne)
+    console.log("zeroForOne:", zeroForOne)
     let tx = await hook.kill(poolkey, tick, zeroForOne, myaddress);
     await tx.wait();
     console.log("kill successfully");

@@ -1,5 +1,5 @@
 // contractSetup.js
-const { ethers } = require('ethers');
+const {ethers} = require('ethers');
 const config = require("./config");
 const ethVaultArtifact = require(config.abiPath + 'EthVault.json'); // Replace with the actual path
 const erc20ShadowArtifact = require(config.abiPath + 'VaultShadow.json');

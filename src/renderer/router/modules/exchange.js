@@ -1,16 +1,16 @@
-import limitOrder from "@/views/Transaction/limitOrder.vue";
-import depositToken from "@/views/Transaction/depositToken.vue";
-import myExchange from "@/views/Transaction/myExchange.vue";
-import transactionPage from "@/views/Transaction/index.vue";
-import tokenPage from "@/views/Transaction/tokenPage.vue";
-import tradePage from "@/views/Transaction/myTrade.vue";
-import orderPage from "@/views/Transaction/orderPage.vue";
+import limitOrder from "@/views/Exchange/limitOrder.vue";
+import depositToken from "@/views/Exchange/depositToken.vue";
+import myExchange from "@/views/Exchange/myExchange.vue";
+import exchangePage from "@/views/Exchange/index.vue";
+import tokenPage from "@/views/Exchange/tokenPage.vue";
+import tradePage from "@/views/Exchange/myTrade.vue";
+import orderPage from "@/views/Exchange/orderPage.vue";
 
-let transactionRoutes = [
+let exchangeRoutes = [
     {
         path: "index",
-        name: "TransactionPage",
-        component: transactionPage,
+        name: "ExchangePage",
+        component: exchangePage,
     },
     {
         path: "myExchange",
@@ -44,4 +44,4 @@ let transactionRoutes = [
     },
 ];
 
-export {transactionRoutes};
+export {exchangeRoutes};

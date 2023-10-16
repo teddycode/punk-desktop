@@ -90,7 +90,7 @@ export default {
         {
           id: 1,
           title: '交易',
-          router: 'TransactionPage',
+          router: 'ExchangePage',
           description: '关于交易的描述.',
           icon: faExchangeAlt,
         },

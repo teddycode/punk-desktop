@@ -4,10 +4,10 @@ import {ethers} from "ethers";
 
 //export this file to use in other files
 export const token0Address = "0x19e8DdB00E1c132B6FC56c374FaAe87921538f05"
-export const token1Address =  "0xDBB7ECEFE6a3526797C1465E8fabe69b4d638b83"
+export const token1Address = "0xDBB7ECEFE6a3526797C1465E8fabe69b4d638b83"
 export const hookAddress = '0xBC9474B034d6eb39BdEcf912B058F697cA2eB300'
-export const myliquidityProviderAddress =  "0xE251F565a1011B1271076f1643Bc7369a30e8e9A"
-export const poolmanagerAddress =  "0xA96Ec4c2f26B35263fC9b9Bc633FD0F61940eE74"
+export const myliquidityProviderAddress = "0xE251F565a1011B1271076f1643Bc7369a30e8e9A"
+export const poolmanagerAddress = "0xA96Ec4c2f26B35263fC9b9Bc633FD0F61940eE74"
 
 const poolmanagerAbi = require('./abi/PoolManager.json').abi;
 const erc20Abi = require('./abi/Token0.json').abi;
@@ -57,6 +57,6 @@ export let limitOrderPoolKey = {
     currency1: token1Address,
     fee: 60,
     tickSpacing: 60,
-    hooks:     hookAddress,
+    hooks: hookAddress,
 };
 

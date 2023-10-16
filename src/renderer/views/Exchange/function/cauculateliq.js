@@ -6,20 +6,21 @@
 // eslint-disable-next-line no-undef
 const q96 = BigInt(2) ** BigInt(96);
 
-export function calculateTickFromPriceWithSpacing(price, tickSpacing=60){
+export function calculateTickFromPriceWithSpacing(price, tickSpacing = 60) {
     let unroundedTick = Math.floor(Math.log(price) / Math.log(1.0001));
     return Math.round(unroundedTick / tickSpacing) * tickSpacing;
 }
-export function calculateTickFromPrice(price){
+
+export function calculateTickFromPrice(price) {
     let unroundedTick = Math.floor(Math.log(price) / Math.log(1.0001));
     return Math.round(unroundedTick);
 }
 
-export function calculatePriceFromTick(tick){
+export function calculatePriceFromTick(tick) {
     return Math.exp(tick * Math.log(1.0001));
 }
 
-export function priceToSqrtPrice(price){
+export function priceToSqrtPrice(price) {
     // eslint-disable-next-line no-undef
     return BigInt(Math.floor(Math.sqrt(price) * Number(q96)));
 }
@@ -34,7 +35,7 @@ export function priceToSqrtPrice(price){
 //     return sqrtPriceX96;
 // }
 
-function liquidity0(amount, pa, pb){
+function liquidity0(amount, pa, pb) {
     if (pa > pb) {
         [pa, pb] = [pb, pa];
     }
@@ -42,7 +43,7 @@ function liquidity0(amount, pa, pb){
     return BigInt(amount) * pa * pb / q96 / (pb - pa);
 }
 
-function liquidity1(amount, pa, pb){
+function liquidity1(amount, pa, pb) {
     if (pa > pb) {
         [pa, pb] = [pb, pa];
     }
@@ -50,8 +51,7 @@ function liquidity1(amount, pa, pb){
     return BigInt(amount) * q96 / (pb - pa);
 }
 
-export function caculateLiqDetla(pricelow,pricecur,priceupp,amount0,amount1)
-{
+export function caculateLiqDetla(pricelow, pricecur, priceupp, amount0, amount1) {
     let sqrt_low = priceToSqrtPrice(pricelow);
     let sqrt_cur = priceToSqrtPrice(pricecur);
     let sqrt_upp = priceToSqrtPrice(priceupp);
@@ -61,8 +61,8 @@ export function caculateLiqDetla(pricelow,pricecur,priceupp,amount0,amount1)
     console.log(liq.toString());
     return liq;
 }
-export function caculateLiqDetla2(pricelow,pricecur,priceupp,amount0,amount1)
-{
+
+export function caculateLiqDetla2(pricelow, pricecur, priceupp, amount0, amount1) {
     let sqrt_low = priceToSqrtPrice(pricelow);
     let sqrt_cur = priceToSqrtPrice(pricecur);
     let sqrt_upp = priceToSqrtPrice(priceupp);
@@ -72,7 +72,8 @@ export function caculateLiqDetla2(pricelow,pricecur,priceupp,amount0,amount1)
     console.log(liq.toString());
     return liq;
 }
-function main(){
+
+function main() {
     //console.log(caculateLiqDetla(100,110,120,100,100).toString);
 }
 

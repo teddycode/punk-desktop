@@ -11,10 +11,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "start": "electron-forge start",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
+    "pack": "electron-builder",
     "dev": "concurrently \"vue-cli-service serve\" \"electron-forge start\" "
   },
   "dependencies": {

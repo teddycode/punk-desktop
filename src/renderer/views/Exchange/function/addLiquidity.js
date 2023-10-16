@@ -2,10 +2,9 @@
 // @ts-ignore
 import {ethers} from "ethers";
 //import { token0Address, token1Address, hookAddress, myliquidityProviderAddress, poolmanagerAddress  } from "../lib/address";
-import {wallet} from "@/views/Transaction/function/address";
-import {poolManager, MyLiquidityProvider, token0, token1} from "@/views/Transaction/function/address"
-//import {limitOrderPoolKey} from "@/views/Transaction/function/address"
-import {caculateLiqDetla, calculateTickFromPriceWithSpacing} from "@/views/Transaction/function/cauculateliq"
+import {MyLiquidityProvider, poolManager, token0, token1, wallet} from "./address";
+//import {limitOrderPoolKey} from "./address"
+import {caculateLiqDetla, calculateTickFromPriceWithSpacing} from "./cauculateliq"
 
 
 async function modifyPosition(contract, poolKey, modifyPositionParams) {
@@ -27,14 +26,15 @@ async function approveERC20(contract, toAddress, amount) {
 }
 
 async function mygetSlot0(contract, poolKey) {
-    console.log("wallets:" , wallet)
+    console.log("wallets:", wallet)
     let poolId = getPoolId(poolKey);
     console.log(`PoolId: ${poolId}`);
     let slot0 = await poolManager.getSlot0(poolId);
     console.log(`Returned slot0: ${JSON.stringify(slot0)}`);
     return slot0;
 }
-function getPoolId(poolKey){
+
+function getPoolId(poolKey) {
     return ethers.utils.solidityKeccak256(
         ["bytes"],
         [ethers.utils.defaultAbiCoder.encode(
@@ -43,7 +43,8 @@ function getPoolId(poolKey){
         )]
     );
 }
-async function getPoolPrice(contract, poolKey){
+
+async function getPoolPrice(contract, poolKey) {
     let slot0 = await mygetSlot0(poolManager, poolKey);
     const bigNumberValue = slot0[0].toString();
     console.log("bigNumberValue:", bigNumberValue);
@@ -55,28 +56,29 @@ async function getPoolPrice(contract, poolKey){
     console.log("result:", result.toString());
     return result;
 }
+
 async function isapproved(contract, ownerAddress, spenderAddress, amount) {
     // Check the amount of tokens that an owner allowed to a spender
     let allowance = await contract.allowance(ownerAddress, spenderAddress);
     console.log(`Allowance: ${allowance.toString()}`);
     if (allowance >= amount) {
         return true;
-    }
-    else {
+    } else {
         return false;
     }
 
 }
-export async function addLiq(priceLower,priceUpper,amount0,amount1,poolKey){
+
+export async function addLiq(priceLower, priceUpper, amount0, amount1, poolKey) {
     console.log(poolKey)
     console.log(poolManager)
 
     let pricecur = await getPoolPrice(poolManager, poolKey);
-    let liqdelta = caculateLiqDetla(priceLower,pricecur,priceUpper,amount0,amount1).toString()
+    let liqdelta = caculateLiqDetla(priceLower, pricecur, priceUpper, amount0, amount1).toString()
     console.log(liqdelta)
 
-    let lowertick  = calculateTickFromPriceWithSpacing(priceLower, poolKey.tickSpacing)
-    let uppertick =  calculateTickFromPriceWithSpacing(priceUpper, poolKey.tickSpacing)
+    let lowertick = calculateTickFromPriceWithSpacing(priceLower, poolKey.tickSpacing)
+    let uppertick = calculateTickFromPriceWithSpacing(priceUpper, poolKey.tickSpacing)
     let modifyPositionParams = {
         tickLower: lowertick,
         tickUpper: uppertick,
@@ -87,11 +89,11 @@ export async function addLiq(priceLower,priceUpper,amount0,amount1,poolKey){
     // let balance1 = await token1.balanceOf(wallets.address);
     //待完成
     //检查是否批准足够ERC20代币
-    if(await isapproved(token0, wallet.address, MyLiquidityProvider.address, ethers.utils.parseUnits("21000000", 18))===false){
-        await approveERC20(token0,MyLiquidityProvider.address,ethers.utils.parseUnits("21000000", 18))
+    if (await isapproved(token0, wallet.address, MyLiquidityProvider.address, ethers.utils.parseUnits("21000000", 18)) === false) {
+        await approveERC20(token0, MyLiquidityProvider.address, ethers.utils.parseUnits("21000000", 18))
     }
-    if(await isapproved(token1, wallet.address, MyLiquidityProvider.address, ethers.utils.parseUnits("21000000", 18))===false){
-        await approveERC20(token1,MyLiquidityProvider.address,ethers.utils.parseUnits("21000000", 18))
+    if (await isapproved(token1, wallet.address, MyLiquidityProvider.address, ethers.utils.parseUnits("21000000", 18)) === false) {
+        await approveERC20(token1, MyLiquidityProvider.address, ethers.utils.parseUnits("21000000", 18))
     }
     //添加流动性
     await modifyPosition(MyLiquidityProvider, poolKey, modifyPositionParams);

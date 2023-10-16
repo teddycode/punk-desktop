@@ -1,11 +1,11 @@
 const config = require("./config");
 const {ethers} = require("ethers");
-const { ethVault, wallet_side, erc20ShadowArtifact } = require("./bridge_setup")
+const {ethVault, wallet_side, erc20ShadowArtifact} = require("./bridge_setup")
 
 async function deposit(chainId, token, amount, receiver) {
     // todo: chainId unused
 
-    if (token === config.token.eth ) {
+    if (token === config.token.eth) {
         const input = ethers.utils.defaultAbiCoder.encode(["address"], [receiver]);
         const tx = await ethVault.deposit(input, {value: ethers.utils.parseEther(amount)});
         console.log(tx.hash)

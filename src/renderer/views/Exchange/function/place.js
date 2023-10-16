@@ -1,13 +1,7 @@
 // @ts-ignore
-import { ethers } from "ethers";
-import {wallet} from "@/views/Transaction/function/address"
-import {poolManager, hook, token0, token1} from "@/views/Transaction/function/address"
-import {limitOrderPoolKey} from "@/views/Transaction/function/address"
-import {
-    caculateLiqDetla2,
-    calculateTickFromPriceWithSpacing,
-    calculatePriceFromTick
-} from "@/views/Transaction/function/cauculateliq"
+import {ethers} from "ethers";
+import {hook, poolManager, token0, token1, wallet} from "./address"
+import {caculateLiqDetla2, calculatePriceFromTick, calculateTickFromPriceWithSpacing} from "./cauculateliq"
 import Big from "big.js";
 
 
@@ -68,19 +62,20 @@ async function approveERC20(contract, toAddress, amount) {
     let receipt = await tx.wait();
     console.log(`Transaction hash: ${receipt.transactionHash}`);
 }
+
 async function isapproved(contract, ownerAddress, spenderAddress, amount) {
     // Check the amount of tokens that an owner allowed to a spender
     let allowance = await contract.allowance(ownerAddress, spenderAddress);
     console.log(`Allowance: ${allowance.toString()}`);
     if (allowance >= amount) {
         return true;
-    }
-    else {
+    } else {
         return false;
     }
 
 }
-export async function placeLimitOrderFrontend(poolkey,price,tokenup,tokendown,amount0){
+
+export async function placeLimitOrderFrontend(poolkey, price, tokenup, tokendown, amount0) {
     let zeroForOne = tokenup < tokendown;
     console.log(zeroForOne)
     let tick = calculateTickFromPriceWithSpacing(price);
@@ -89,32 +84,37 @@ export async function placeLimitOrderFrontend(poolkey,price,tokenup,tokendown,am
     //let balance1 = await token1.balanceOf(wallets.address);
     //待完成
     //检查是否批准足够ERC20代币
-    if(await isapproved(token0, wallet.address, hook.address, ethers.utils.parseUnits("21000000", 18))===false){
-        await approveERC20(token0,hook.address,ethers.utils.parseUnits("21000000", 18))
+    if (await isapproved(token0, wallet.address, hook.address, ethers.utils.parseUnits("21000000", 18)) === false) {
+        await approveERC20(token0, hook.address, ethers.utils.parseUnits("21000000", 18))
     }
-    if(await isapproved(token1, wallet.address, hook.address, ethers.utils.parseUnits("21000000", 18))===false){
-        await approveERC20(token1,hook.address,ethers.utils.parseUnits("21000000", 18))
+    if (await isapproved(token1, wallet.address, hook.address, ethers.utils.parseUnits("21000000", 18)) === false) {
+        await approveERC20(token1, hook.address, ethers.utils.parseUnits("21000000", 18))
     }
     //place limit order
     let pricecur = await getPoolPrice(poolManager, poolkey);
-    console.log("cur:",pricecur)
+    console.log("cur:", pricecur)
 
-    if(pricecur>price && zeroForOne===true){console.log("price is too low");return 1;}
-    if(pricecur<price && zeroForOne===false){console.log("price is too high");return 1;}
+    if (pricecur > price && zeroForOne === true) {
+        console.log("price is too low");
+        return 1;
+    }
+    if (pricecur < price && zeroForOne === false) {
+        console.log("price is too high");
+        return 1;
+    }
     let liquidity = "0"
-    console.log("pricecur:",pricecur.toString())
-    if(zeroForOne===true)
-    {
-        liquidity = caculateLiqDetla2(price,pricecur,calculatePriceFromTick(tick+poolkey.tickSpacing),amount0,0).toString();
+    console.log("pricecur:", pricecur.toString())
+    if (zeroForOne === true) {
+        liquidity = caculateLiqDetla2(price, pricecur, calculatePriceFromTick(tick + poolkey.tickSpacing), amount0, 0).toString();
+    } else {
+        liquidity = caculateLiqDetla2(calculatePriceFromTick(tick - poolkey.tickSpacing), pricecur, price, 0, amount0).toString();
     }
-    else{
-        liquidity = caculateLiqDetla2(calculatePriceFromTick(tick-poolkey.tickSpacing),pricecur,price,0,amount0).toString();
-    }
-    console.log("liquidity:",liquidity)
-    let epoch = await placeLimitOrder(hook, poolkey, tick, zeroForOne,liquidity);
-    console.log("epochfront:",epoch)
+    console.log("liquidity:", liquidity)
+    let epoch = await placeLimitOrder(hook, poolkey, tick, zeroForOne, liquidity);
+    console.log("epochfront:", epoch)
     return epoch;
 }
+
 async function getSlot0(contract, poolKey) {
     let poolId = getPoolId(poolKey);
 
@@ -123,6 +123,7 @@ async function getSlot0(contract, poolKey) {
     console.log(`Returned slot0: ${JSON.stringify(slot0)}`);
     return slot0;
 }
+
 function getPoolId(poolKey) {
     return ethers.utils.solidityKeccak256(
         ["bytes"],
@@ -132,6 +133,7 @@ function getPoolId(poolKey) {
         )]
     );
 }
+
 async function getPoolPrice(contract, poolKey) {
     let slot0 = await getSlot0(contract, poolKey);
     const bigNumberValue = slot0[0].toString();
@@ -150,6 +152,7 @@ async function getPoolPrice(contract, poolKey) {
 
     return result.toNumber(); // 注意，转换回数字可能导致精度丢失，如果这是一个问题，您可能需要返回字符串或Big对象
 }
+
 async function getERC20Balance(contract, address) {
     // 查询ERC20余额
     let balance = await contract.balanceOf(address);

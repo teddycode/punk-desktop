@@ -5,7 +5,7 @@ import {storageRoutes} from "@/router/modules/storage";
 import {computingRoutes} from "@/router/modules/computing";
 import {consensusRoutes} from "@/router/modules/consensus";
 import {governanceRoutes} from "@/router/modules/governance";
-import {transactionRoutes} from "@/router/modules/transaction";
+import {exchangeRoutes} from "@/router/modules/exchange";
 import {networkRoutes} from "@/router/modules/network";
 import {collectionRoutes} from "@/router/modules/collection";
 import {cryptoRoutes} from "@/router/modules/crypto";
@@ -56,10 +56,10 @@ const routes = [
         children: governanceRoutes,
     },
     {
-        path: "/transaction",
-        name: "Transaction",
-        redirect: '/transaction/index',
-        children: transactionRoutes,
+        path: "/exchange",
+        name: "Exchange",
+        redirect: '/exchange/index',
+        children: exchangeRoutes,
     },
     {
         path: "/network",

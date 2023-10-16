@@ -6,6 +6,7 @@ const {runInitTasks} = require("./modules/initialize");
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
+console.log("run env aaa :", process.env.NODE_ENV);
 
 // 创建所有窗口
 function createWindows() {

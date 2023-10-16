@@ -1,16 +1,5 @@
-import { BigNumber, Contract } from "ethers";
 // @ts-ignore
-import { ethers } from "ethers";
-import {
-    token0Address,
-    token1Address,
-    hookAddress,
-    myliquidityProviderAddress,
-    poolmanagerAddress
-} from "@/views/Transaction/function/address";
-import {wallet, provider} from "@/views/Transaction/function/address"
-import {poolManager, MyLiquidityProvider, hook, token0, token1} from "@/views/Transaction/function/address"
-import {limitOrderPoolKey} from "@/views/Transaction/function/address"
+import {hook, wallet} from "./address";
 
 async function withdrawLimitOrder(epoch, to) {
     let tx = await hook.withdraw(epoch, to);
@@ -24,7 +13,7 @@ async function withdrawLimitOrder(epoch, to) {
     });
 }
 
-export async function withdraw_main(epoch){
+export async function withdraw_main(epoch) {
     // let epoch = 6
     let to = wallet.address
     await withdrawLimitOrder(epoch, to);

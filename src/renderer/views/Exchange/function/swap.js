@@ -1,9 +1,7 @@
-
 // @ts-ignore
-import { ethers } from "ethers";
-// import { token0Address, token1Address, hookAddress, myliquidityProviderAddress, poolmanagerAddress  } from "@/views/Transaction/function/address";
-import {wallet} from "@/views/Transaction/function/address"
-import {MyLiquidityProvider, token0, token1} from "@/views/Transaction/function/address"
+import {ethers} from "ethers";
+// import { token0Address, token1Address, hookAddress, myliquidityProviderAddress, poolmanagerAddress  } from "./address";
+import {MyLiquidityProvider, token0, token1, wallet} from "./address"
 
 
 async function approveERC20(contract, toAddress, amount) {
@@ -14,7 +12,7 @@ async function approveERC20(contract, toAddress, amount) {
     console.log(`Transaction hash: ${receipt.transactionHash}`);
 }
 
-async function executeSwap(contract, poolKey, swapParams){
+async function executeSwap(contract, poolKey, swapParams) {
 
     // Set position parameters
     console.log("begin swap")
@@ -33,22 +31,22 @@ async function executeSwap(contract, poolKey, swapParams){
     let tx3 = await contract.executeSwap();
     await tx3.wait();
 }
+
 async function isapproved(contract, ownerAddress, spenderAddress, amount) {
     // Check the amount of tokens that an owner allowed to a spender
     let allowance = await contract.allowance(ownerAddress, spenderAddress);
     console.log(`Allowance: ${allowance.toString()}`);
     if (allowance >= amount) {
         return true;
-    }
-    else {
+    } else {
         return false;
     }
 
 }
 
-export async function swap(poolkey, fromamount ,zeroForOne){
-    let sqrtPriceLimitX96 = zeroForOne?ethers.BigNumber.from('79228162514264337593543950336'):ethers.BigNumber.from('7922816251426433759354395033600');
-    console.log("sqrtPriceLimitX96:",sqrtPriceLimitX96.toString())
+export async function swap(poolkey, fromamount, zeroForOne) {
+    let sqrtPriceLimitX96 = zeroForOne ? ethers.BigNumber.from('79228162514264337593543950336') : ethers.BigNumber.from('7922816251426433759354395033600');
+    console.log("sqrtPriceLimitX96:", sqrtPriceLimitX96.toString())
     let swapParams = {
         zeroForOne: zeroForOne,
         amountSpecified: fromamount,
@@ -59,11 +57,11 @@ export async function swap(poolkey, fromamount ,zeroForOne){
     let balance1 = await token1.balanceOf(wallet.address);
     //待完成
     //检查是否批准足够ERC20代币
-    if(await isapproved(token0, wallet.address, MyLiquidityProvider.address, ethers.utils.parseUnits("21000000", 18))==false){
-        await approveERC20(token0,MyLiquidityProvider.address,ethers.utils.parseUnits("21000000", 18))
+    if (await isapproved(token0, wallet.address, MyLiquidityProvider.address, ethers.utils.parseUnits("21000000", 18)) == false) {
+        await approveERC20(token0, MyLiquidityProvider.address, ethers.utils.parseUnits("21000000", 18))
     }
-    if(await isapproved(token1, wallet.address, MyLiquidityProvider.address, ethers.utils.parseUnits("21000000", 18))==false){
-        await approveERC20(token1,MyLiquidityProvider.address,ethers.utils.parseUnits("21000000", 18))
+    if (await isapproved(token1, wallet.address, MyLiquidityProvider.address, ethers.utils.parseUnits("21000000", 18)) == false) {
+        await approveERC20(token1, MyLiquidityProvider.address, ethers.utils.parseUnits("21000000", 18))
     }
     //执行交易
     await executeSwap(MyLiquidityProvider, poolkey, swapParams);

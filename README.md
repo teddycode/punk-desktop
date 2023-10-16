@@ -38,7 +38,7 @@ yarn dev    // 一键启动vue进程与electron进程
 ### 3.安装包构建
 
 ```shell
-yarn dist    // 一键构建并生成应用安装包
+yarn pack    // 一键构建并生成应用安装包
 ```
 
 > Note1: 其他开发命令请查阅package.json
@@ -81,7 +81,7 @@ yarn dist    // 一键构建并生成应用安装包
 │           ├── Network        // 网络组页面
 │           ├── SocialNet      // 社交网络模块
 │           ├── Storage        // 存储组页面
-│           ├── Transaction    // 交易组页面
+│           ├── Exchange    // 交易组页面
 │           ├── Transfers      // 转账组页面
 │           └── Users          // 用户相关页面
 ├── webpack.config.js   // idea读取的配置
@@ -129,7 +129,7 @@ yarn dist    // 一键构建并生成应用安装包
 
 <img src="docs\image\2ff19bd7ca05919c3b6fe6f56640c79.png" alt="2ff19bd7ca05919c3b6fe6f56640c79" style="zoom: 33%;" />
 
-该页面位于src/views/Transactions/limitOrder,一些css样式可以在文件中得到，有需要可以直接使用。
+该页面位于src/views/Exchanges/limitOrder,一些css样式可以在文件中得到，有需要可以直接使用。
 
 对于操作交互的页面，目前实现均比较简单，总结为以下几点：
 

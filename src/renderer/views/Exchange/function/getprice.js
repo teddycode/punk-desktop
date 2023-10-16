@@ -1,9 +1,9 @@
-
 // @ts-ignore
 //import { ethers } from "hardhat";
-import { ethers } from "ethers";
-import {poolManager} from "@/views/Transaction/function/address";
+import {ethers} from "ethers";
+import {poolManager} from "./address";
 import Big from 'big.js';
+
 async function getSlot0(poolKey) {
     let poolId = getPoolId(poolKey);
     console.log(`PoolId: ${poolId}`);
@@ -11,6 +11,7 @@ async function getSlot0(poolKey) {
     console.log(`Returned slot0: ${JSON.stringify(slot0)}`);
     return slot0;
 }
+
 function getPoolId(poolKey) {
     return ethers.utils.solidityKeccak256(
         ["bytes"],
@@ -20,7 +21,8 @@ function getPoolId(poolKey) {
         )]
     );
 }
-export async function getPoolPrice(contract, poolKey){
+
+export async function getPoolPrice(contract, poolKey) {
     let slot0 = await getSlot0(contract, poolKey);
     const bigNumberValue = slot0[0].toString();
     console.log("bigNumberValue:", bigNumberValue);

@@ -71,7 +71,7 @@ export default {
                 case '计算':
                   return 'ComputingPage';
                 case '交易':
-                  return 'TransactionPage';
+                  return 'ExchangePage';
                 case '转账':
                   return 'TransferPage';
                 case '治理':
