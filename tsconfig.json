@@ -13,7 +13,6 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "isolatedModules": true,
-    "allowJs": true,
     "target": "es2017",
     "types": [
       "vite/client"

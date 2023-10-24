@@ -1,10 +1,11 @@
 import type {App} from 'vue'
 import {nextTick} from "vue"
+import * as process from "process";
 
 export const errorHandler = (App: App<Element>) => {
   App.config.errorHandler = (err, vm, info) => {
     nextTick(() => {
-      if (config.isDevMode) {
+      if (process.env.NODE_ENV === 'development') {
         console.group('%c >>>>>> 错误信息 >>>>>>', 'color:red')
         console.log(`%c ${info}`, 'color:blue')
         console.groupEnd()

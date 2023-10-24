@@ -1,5 +1,4 @@
 import {app, BrowserWindow, dialog, ipcMain} from 'electron'
-import Server from '../server'
 import {winURL} from '../../config/staticPath'
 import Update from '../update/checkUpdate'
 import {updater} from '../update/hotUpdater'
@@ -46,9 +45,9 @@ export default {
     })
     ipcMain.handle('start-server', async () => {
       try {
-        const serveStatus = await Server.StatrServer()
-        console.log(serveStatus)
-        return serveStatus
+        // const serveStatus = await Server.StatrServer()
+        // console.log(serveStatus)
+        // return serveStatus
       } catch (error) {
         dialog.showErrorBox(
           '错误',
@@ -58,7 +57,7 @@ export default {
     })
     ipcMain.handle('stop-server', async (event, arg) => {
       try {
-        return await Server.StopServer()
+        // return await Server.StopServer()
       } catch (error) {
         dialog.showErrorBox(
           '错误',

@@ -22,6 +22,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      timers: 'rollup-plugin-node-polyfills/polyfills/timers',
       "@renderer": root,
       "@pages": join(root, "/pages"),
       "@store": join(root, "/store/modules"),

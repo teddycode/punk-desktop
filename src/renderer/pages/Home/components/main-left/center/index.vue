@@ -21,14 +21,17 @@
   </dv-border-box10>
 </template>
 
-<script>
-import {ref} from 'vue'
+<script lang="ts">
+import {defineComponent, ref} from 'vue'
+import {RouterLink} from 'vue-router'
 
-export default {
+export default defineComponent({
   name: "DesktopManagement",
+  components: {
+    RouterLink,
+  },
   setup() {
     const isOn = ref(true)
-    // cmd使用可执行程序、lnk均可打开应用
     const items = ref([
       {id: 1, name: 'word', path: 'C:\\Program Files\\Microsoft Office\\root\\Office16\\', cmd: 'WINWORD.EXE'},
       {id: 2, name: 'wps', path: '', cmd: 'notepad.exe'},
@@ -47,10 +50,8 @@ export default {
         cmd: '腾讯QQ.lnk'
       },
     ])
-    return {isOn, items}
-  },
-  methods: {
-    handleRunLocalAppClick(app) {
+
+    const handleRunLocalAppClick = (app: any) => {
       // 打开新窗口并跳转
       this.$router.push({
         name: "AppView",
@@ -61,8 +62,10 @@ export default {
         }
       })
     }
-  }
-}
+
+    return {isOn, items, handleRunLocalAppClick}
+  },
+})
 </script>
 
 <style scoped>
@@ -70,7 +73,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 120%;
+  width: 100%;
   height: 100%;
 }
 

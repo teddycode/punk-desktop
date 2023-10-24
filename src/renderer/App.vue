@@ -9,6 +9,7 @@ import {computed} from "vue";
 import TitleBar from "./components/common/TitleBar.vue";
 
 const i18nt = computed(() => i18n.global.messages[i18n.global.locale].el);
+
 </script>
 
 <style>
@@ -19,6 +20,7 @@ body, html {
   display: flex;
   flex-direction: column;
 }
+
 .app {
   font-family: Arial, sans-serif;
   text-align: center;
