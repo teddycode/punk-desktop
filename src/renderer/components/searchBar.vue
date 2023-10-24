@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import addnodeButton from "@/components/buttons/addnodeButton.vue";
+import addnodeButton from "@renderer/components/buttons/addnodeButton.vue";
 
 export default {
     name: "searchBar",

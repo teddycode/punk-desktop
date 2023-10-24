@@ -25,11 +25,11 @@
 </template>
 
 <script>
-import Topnav from "@/components/topnav/index.vue";
-import LoginButton from "@/components/buttons/loginButton.vue";
-import myWallet from "@/components/myWallet.vue";
-import searchBar from "@/components/searchBar.vue";
-import TaskBar from "@/views/Home/TaskBar.vue";
+import Topnav from "@renderer/components/topnav/index.vue";
+import LoginButton from "@renderer/components/buttons/loginButton.vue";
+import myWallet from "@renderer/components/myWallet.vue";
+import searchBar from "@renderer/components/searchBar.vue";
+import TaskBar from "@pages/Home/TaskBar.vue";
 
 export default {
     name: "myHeader",
