@@ -66,7 +66,7 @@ $ npm run build
 
 1. 安装依赖时，electron下载失败错误
 
-- 如图报错： ![img.png](img.png)
+- 如图报错： ![img.png](docs/image/bug1.png)
 - 解决办法：
   设置electron下载镜像` yarn config set electron_mirror https://npmmirror.com/mirrors/electron/`
   或 ` npm config set electron_mirror https://npmmirror.com/mirrors/electron/
