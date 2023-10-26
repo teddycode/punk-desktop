@@ -1,4 +1,4 @@
-# Electron-Vite-template
+#punkos
 
 [![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/umbrella22/electron-vite-template/tree/strict)
 ![GitHub Repo stars](https://img.shields.io/github/stars/umbrella22/electron-vite-template)
