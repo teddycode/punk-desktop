@@ -63,7 +63,7 @@
 
 
 <script>
-import addnodeButton from "@renderer/components/Buttons/addnodeButton.vue";
+import addnodeButton from "@renderer/components/buttons/ShapeButton.vue";
 import {killLimitOrderFrontend} from "@pages/Exchange/function/kill"
 import {limitOrderPoolKey, token0, token1} from "@pages/Exchange/function/address";
 import {ethers} from "ethers";

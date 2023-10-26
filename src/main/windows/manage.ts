@@ -5,7 +5,7 @@ import {loadingURL, winURL} from "@main/config/staticPath";
 import LoadingWindow from "@main/windows/loadingWind";
 
 var mainWindInstance: MainWindow = null;
-var loadingWindInstane: LoadingWindow = null;
+var loadingWindInstance: LoadingWindow = null;
 var searchWindInstance: SearchWindow = null;
 
 export default {
@@ -13,12 +13,12 @@ export default {
     mainWindInstance = new MainWindow(winURL);
     searchWindInstance = new SearchWindow(null);
     if (config.UseStartupChart) {
-      loadingWindInstane = new LoadingWindow(loadingURL);
-      loadingWindInstane.create();
-      loadingWindInstane.show();
+        loadingWindInstance = new LoadingWindow(loadingURL);
+        loadingWindInstance.create();
+        loadingWindInstance.show();
       setTimeout(() => {
         console.log("Loading finished!")
-        loadingWindInstane.close();
+          loadingWindInstance.close();
         mainWindInstance.create();
         mainWindInstance.show();
       }, 1500)
@@ -31,6 +31,6 @@ export default {
 
 export {
   mainWindInstance,
-  loadingWindInstane,
+    loadingWindInstance,
   searchWindInstance,
 } ;

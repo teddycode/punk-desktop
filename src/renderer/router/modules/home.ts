@@ -1,5 +1,5 @@
-import HomePage from "@pages/Home/Home.vue";
-import About from "@pages/Home/About.vue";
+import HomePage from "@pages/DashBorad/Home.vue";
+import About from "@pages/DashBorad/About.vue";
 
 export const homeRoutes = [
   {

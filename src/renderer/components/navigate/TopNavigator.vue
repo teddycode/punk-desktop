@@ -27,8 +27,9 @@ import {setLanguage} from '@renderer/i18n';
 
 library.add(faExpandArrowsAlt, faLanguage, faHome, faArrowRight)
 
+let {ipcRenderer} = window;
 export default {
-  name: 'TopNavItem',
+  name: 'TopNavigator',
   components: {
     FontAwesomeIcon,
   },
@@ -39,7 +40,7 @@ export default {
 
     // 切换全屏
     const onFullScreen = () => {
-      window?.electronAPI?.toggleFullScreen();
+      ipcRenderer.send("toggle-fullscreen");
       document.body.style.overflow = scrFlag.value ? 'hidden' : 'auto';
       scrFlag.value = !scrFlag.value;
     };

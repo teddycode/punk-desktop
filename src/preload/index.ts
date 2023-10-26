@@ -38,18 +38,6 @@ ipcRenderer.on('file-selected', (event, filePath: String, content: any) => {
 
 // 使用 contextBridge API 来选择要从预加载脚本中暴露哪些 API
 contextBridge.exposeInMainWorld('electronAPI', {
-  toggleFullScreen: () => {
-    ipcRenderer.send('toggle-fullscreen');
-  },
-  customAlert: (str: string) => {
-    ipcRenderer.send('show-custom-alert', str);
-  },
-  sendSearchQuery: (query: string) => {
-    ipcRenderer.send('search', query);
-  },
-  closeSearchWindow: () => {
-    ipcRenderer.send('close-searchWindow')
-  },
   requestFileOpen: () => {
     ipcRenderer.send('request-file-open');
   },

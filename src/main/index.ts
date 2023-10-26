@@ -6,15 +6,15 @@ import config from '@config/index'
 import windManager from "@main/windows/manage";
 import services from "./services/index"
 
-const installDevtool = () => {
+const installDevtool = async (): Promise<void> => {
   const {VUEJS3_DEVTOOLS} = require("electron-devtools-vendor");
-  session.defaultSession.loadExtension(VUEJS3_DEVTOOLS, {
+    await session.defaultSession.loadExtension(VUEJS3_DEVTOOLS, {
     allowFileAccess: true,
   });
   console.log('已安装: vue-devtools')
 }
 
-const onAppReadyInit = (): void => {
+const onAppReadyInit = async (): Promise<void> => {
   // 初始化各个服务
   services.initialize();
   // 初始化窗口设置
@@ -22,7 +22,7 @@ const onAppReadyInit = (): void => {
   // 禁用按键服务
   DisableButton.DisableF12()
   if (config.isDevMode) {
-    installDevtool();
+      await installDevtool();
   }
 }
 

@@ -94,7 +94,7 @@ export default {
 }
 
 :deep(.el-input__inner) {
-  background: url("@renderer/assets/data/true.png") !important;
+  background: url("@renderer/assets/images/main-backgroud.png") !important;
   border: 1px solid white !important;
   color: white !important;
 }

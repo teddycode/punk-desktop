@@ -1,30 +1,44 @@
 <template>
   <div class="search-bar">
     <i class="fas fa-search search-icon"></i>
-    <input ref="searchInput" type="text" class="search-input" placeholder="Search...">
-    <addnode-button class="search-button" @click="search">Search</addnode-button>
+    <input v-model="searchInput" class="search-input" placeholder="Search..." type="text">
+    <shape-button class="search-button" @click="doSearch">Search</shape-button>
   </div>
 </template>
 
-<script>
-import addnodeButton from "@renderer/components/Buttons/addnodeButton.vue";
+<script lang="ts">
+import ShapeButton from "@renderer/components/buttons/ShapeButton.vue";
+import {ref} from "vue";
+
+let {ipcRenderer} = window;
 
 export default {
-  name: "searchBar",
+  name: "SearchBar",
   components: {
-    addnodeButton,
+    ShapeButton,
   },
-  methods: {
-    search() {
-      const query = this.$refs.searchInput.value;
-      window.electronAPI.sendSearchQuery(query);
-    },
-    closeWindow() {
-      window.electronAPI.closeSearchWindow();
-    }
+
+  setup() {
+    let searchInput = ref('');
+    const doSearch = async () => {
+      const value = searchInput.value;
+      console.log("pre search:", value);
+      ipcRenderer.send("open-search-window", value);
+    };
+
+    const closeWindow = async () => {
+      ipcRenderer.send("close-search-window");
+    };
+
+    return {
+      searchInput,
+      doSearch,
+      closeWindow
+    };
   }
 }
 </script>
+
 
 <style scoped>
 .search-bar {

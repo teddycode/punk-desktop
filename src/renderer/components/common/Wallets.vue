@@ -67,8 +67,9 @@ import {ethers} from 'ethers';
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {faCheck, faCopy} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
-import Message from "ant-design-vue/es/message";
 import {useStore} from "vuex";
+
+let {ipcRenderer} = window;
 
 library.add(faCheck, faCopy);
 
@@ -112,7 +113,7 @@ export default defineComponent({
     });
 
     const showAlert = (str: string) => {
-      Message.error(str)
+      ipcRenderer.send("show-main-alert", str);
     };
 
     const buttonClick = () => {

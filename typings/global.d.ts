@@ -31,7 +31,9 @@ declare global {
     };
         electronAPI: {
             toggleFullScreen: () => void;
-            //   TODO event type define here
+            sendSearchQuery: (query: string) => void;
+            closeSearchWindow: () => void;
+            //  TODO event type define here
         };
   }
 }

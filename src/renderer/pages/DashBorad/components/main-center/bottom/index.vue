@@ -15,7 +15,7 @@
             </div>
           </div>
           <div class="button-container">
-            <addnode-button style="margin-top: 10%; height:80%; width:60%;">了解更多</addnode-button>
+            <shape-button style="margin-top: 10%; height:80%; width:60%;">了解更多</shape-button>
           </div>
         </div>
         <div v-if="selectedItem === '工作'" class="right-container">
@@ -65,31 +65,24 @@
   </dv-border-box10>
 </template>
 
-<script>
-import addnodeButton from "@renderer/components/Buttons/addnodeButton.vue";
+<script lang="ts" setup>
+import {ref} from 'vue';
+import ShapeButton from "@renderer/components/buttons/ShapeButton.vue";
 
-export default {
-  name: "SocialNet",
-  components: {
-    addnodeButton
-  },
-  data() {
-    return {
-      radioItems: [
-        {label: '工作'},
-        {label: '娱乐'},
-        {label: '社区'}
-      ],
-      topics: [
-        {label: '话题'},
-        {label: '专区'},
-        {label: '关注'}
-      ],
-      selectedItem: '工作',
-      selectedTopic: '话题'
-    }
-  }
-}
+const radioItems = ref([
+  {label: '工作'},
+  {label: '娱乐'},
+  {label: '社区'}
+]);
+
+const topics = ref([
+  {label: '话题'},
+  {label: '专区'},
+  {label: '关注'}
+]);
+
+const selectedItem = ref('工作');
+const selectedTopic = ref('话题');
 </script>
 
 <style scoped>

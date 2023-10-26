@@ -25,8 +25,8 @@
 </template>
 
 <script>
-import Topnav from "@renderer/components/TopNavItem/index.vue";
-import LoginButton from "@renderer/components/Buttons/loginButton.vue";
+import Topnav from "@renderer/components/navigate/TopNavigator.vue";
+import LoginButton from "@renderer/components/buttons/loginButton.vue";
 import Wallets from "@renderer/components/common/Wallets.vue";
 import searchBar from "@renderer/components/common/searchBar.vue";
 import TaskBar from "@renderer/components/common/TaskBar.vue";
@@ -74,7 +74,7 @@ export default {
 }
 
 #main {
-  background-image: url("@a/data/true.png");
+  background-image: url("@renderer/assets/images/main-backgroud.png");
   background-size: cover;
   overflow: hidden;
   //min-width: 1600px;

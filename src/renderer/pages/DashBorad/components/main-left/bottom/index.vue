@@ -4,7 +4,7 @@
       <router-link class="desktop-title-link" to="/FileEdit">
         <div class="desktop-title">桌面管理</div>
       </router-link>
-      <el-switch v-model="isOn" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+      <el-switch v-model="isOn" active-color="#13ce66" inactive-color="#ff4949"/>
     </div>
     <div v-if="isOn" class="desktop-content">
       <div v-for="item in items" :key="item.id" class="desktop-item">
@@ -13,7 +13,7 @@
       </div>
     </div>
     <div v-else class="desktop-content">
-      <div class="main-left-center-tip">
+      <div class="main-left-bottom-tip">
         <font-awesome-icon class="tip-icon" icon="exclamation-circle"/>
         您没有打开桌面管理器！
       </div>
@@ -23,10 +23,10 @@
 
 <script lang="ts">
 import {defineComponent, ref} from 'vue'
-import {RouterLink} from 'vue-router'
+import {RouterLink, useRouter} from 'vue-router'
 
 export default defineComponent({
-  name: "DesktopManagement",
+  name: "MainLeftBottom",
   components: {
     RouterLink,
   },
@@ -50,10 +50,10 @@ export default defineComponent({
         cmd: '腾讯QQ.lnk'
       },
     ])
-
-    const handleRunLocalAppClick = (app: any) => {
+    const router = useRouter();
+    const handleRunLocalAppClick = (app: { name: string, path: string, cmd: string }) => {
       // 打开新窗口并跳转
-      this.$router.push({
+      router.push({
         name: "AppView",
         params: {
           name: app?.name,
@@ -68,12 +68,13 @@ export default defineComponent({
 })
 </script>
 
+
 <style scoped>
 .desktop-box {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 100%;
+  width: 120%;
   height: 100%;
 }
 
@@ -120,7 +121,7 @@ export default defineComponent({
   height: 50px;
 }
 
-.main-left-center-tip {
+.main-left-bottom-tip {
   height: 30%;
   font-size: x-large;
   margin-bottom: 20px;

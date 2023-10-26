@@ -5,38 +5,38 @@
       <div class="bg-header">
         <div class="t-title fa-solid">{{ i18nt.home.title }}</div>
       </div>
-      <top-nav-item/>
+      <top-navigator/>
     </div>
     <login-button/>
     <wallets show/>
     <div class="search-bar">
-      <search-bar></search-bar>
+      <search-bar/>
     </div>
     <div class="data-content">
       <div class="data-main">
         <div class="main-left">
           <div class="main-left-top">
             <div class="main-left-top-left">
-              <main-right-ad/>
+              <main-left-top/>
             </div>
             <div class="main-left-top-right">
-              <main-center-button/>
+              <main-center-top/>
             </div>
           </div>
           <div class="main-left-bottom">
             <div class="bottom-div-left">
-              <desktop-management/>
+              <main-left-bottom/>
             </div>
             <div class="bottom-div-right">
-              <social-net/>
+              <main-center-bottom/>
             </div>
           </div>
         </div>
         <div class="main-right">
           <div class="right-top-spacing"></div>
-          <main-right-swiper @featureClicked="onFeatureClicked"></main-right-swiper>
+          <main-right-top @featureClicked="onFeatureClicked"></main-right-top>
           <div class="right-middle-spacing"></div>
-          <main-right-dapp/>
+          <main-right-bottom/>
           <div class="right-bottom-spacing"></div>
         </div>
       </div>
@@ -49,32 +49,36 @@
 <script lang="ts">
 import {defineComponent, computed} from 'vue';
 import {useStore} from 'vuex';
-import TopNavItem from "@renderer/components/TopNavItem/index.vue";
-import LoginButton from "@renderer/components/Buttons/loginButton.vue";
+import TopNavigator from "@renderer/components/navigate/TopNavigator.vue";
+import LoginButton from "@renderer/components/buttons/loginButton.vue";
 import Wallets from "@renderer/components/common/Wallets.vue";
-import MainRightAd from "@pages/Home/components/main-right/messagebox.vue";
-import MainRightSwiper from "@pages/Home/components/main-right/main-function-box.vue";
-import DesktopManagement from "@pages/Home/components/main-left/center/index.vue";
-import searchBar from "@renderer/components/common/searchBar.vue";
-import mainRightDapp from "@pages/Home/components/main-right/dapp-square.vue";
-import MainCenterButton from "@pages/Home/components/main-center/bottom/index.vue";
+import SearchBar from "@renderer/components/common/SearchBar.vue";
 import TaskBar from "@renderer/components/common/TaskBar.vue";
-import SocialNet from "@pages/SocialNet/index.vue";
+
+import MainLeftTop from "@pages/DashBorad/components/main-left/top/index.vue";
+import MainLeftBottom from "@pages/DashBorad/components/main-left/bottom/index.vue";
+
+import MainRightTop from "@pages/DashBorad/components/main-right/top/index.vue";
+import MainRightBottom from "@pages/DashBorad/components/main-right/bottom/index.vue";
+
+import MainCenterTop from "@pages/DashBorad/components/main-center/top/index.vue";
+import MainCenterBottom from "@pages/DashBorad/components/main-center/bottom/index.vue";
+
 import {i18nt} from "@renderer/i18n"
 
 export default defineComponent({
   components: {
     Wallets,
-    MainCenterButton,
-    mainRightDapp,
-    DesktopManagement,
-    searchBar,
-    MainRightSwiper,
-    MainRightAd,
+    MainCenterTop,
+    MainRightBottom,
+    MainLeftBottom,
+    SearchBar,
+    MainRightTop,
+    MainLeftTop,
     LoginButton,
-    TopNavItem,
+    TopNavigator,
     TaskBar,
-    SocialNet,
+    MainCenterBottom,
   },
   setup() {
     const store = useStore();
@@ -121,7 +125,7 @@ export default defineComponent({
 }
 
 #main {
-  background-image: url('@renderer/assets/data/true.png');
+  background-image: url('@renderer/assets/images/main-backgroud.png');
   background-size: cover;
   overflow: hidden;
   //min-width: 1600px;

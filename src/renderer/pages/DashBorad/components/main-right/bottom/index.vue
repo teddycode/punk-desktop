@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="section">
-        <h3 class="subtitle">推荐dapp</h3>
+        <h3 class="subtitle">推荐DApp</h3>
         <Swiper
           :autoplay="{delay: 2000,disableOnInteraction: false}"
           :loop="true"
@@ -26,41 +26,46 @@
           </SwiperSlide>
         </Swiper>
       </div>
-      <add-node-button class="dapp-button">探索更多</add-node-button>
+      <shape-button class="dapp-button">探索更多</shape-button>
     </div>
   </dv-border-box10>
 </template>
 
-<script>
-import {ref} from 'vue';
+<script lang="ts">
+import {defineComponent, reactive} from 'vue';
 import {Swiper, SwiperSlide} from 'swiper/vue';
 import 'swiper/css';
 import 'swiper/swiper-bundle.css';
 import {Autoplay} from 'swiper';
-import AddNodeButton from "@renderer/components/Buttons/addnodeButton.vue";
+import ShapeButton from "@renderer/components/buttons/ShapeButton.vue";
 
-export default {
-  name: "main-right-dapp",
-  components: {AddNodeButton, Swiper, SwiperSlide},
+export default defineComponent({
+  name: "MainRightBottom",
+  components: {ShapeButton, Swiper, SwiperSlide},
   setup() {
+    const recentApps = reactive([
+      {name: 'Uniswap', icon: '/images/dapps/uniswap.png'},
+      {name: 'MakerDAO', icon: '/images/dapps/maker.webp'},
+      {name: 'Compound', icon: '/images/dapps/compound.png'},
+    ]);
+
+    const commonApps = reactive([
+      {name: 'Uniswap', icon: '/images/dapps/uniswap.png'},
+      {name: 'MakerDAO', icon: '/images/dapps/maker.webp'},
+      {name: 'Compound', icon: '/images/dapps/compound.png'},
+      {name: 'CryptoKitties', icon: '/images/dapps/CryptoKitties.webp'},
+    ]);
+
+    const modules = [Autoplay];
+
     return {
-      recentApps: ref([
-        {name: 'Uniswap', icon: '/images/dapps/uniswap.png'},
-        {name: 'MakerDAO', icon: '/images/dapps/maker.webp'},
-        {name: 'Compound', icon: '/images/dapps/compound.png'},
-      ]),
-      commonApps: ref([
-        {name: 'Uniswap', icon: '/images/dapps/uniswap.png'},
-        {name: 'MakerDAO', icon: '/images/dapps/maker.webp'},
-        {name: 'Compound', icon: '/images/dapps/compound.png'},
-        {name: 'CryptoKitties', icon: '/images/dapps/CryptoKitties.webp'},
-      ]),
-      modules: [Autoplay],
+      recentApps,
+      commonApps,
+      modules,
     };
   },
-}
+});
 </script>
-
 
 <style scoped>
 .dapp-square {

@@ -34,13 +34,11 @@ class SearchWindow extends BaseWindow {
   }
 
   public show() {
-    if (this.instance)
-      this.instance.show();
+      this.instance?.show();
   }
 
   public close() {
-    if (this.instance)
-      this.instance.close();
+      this.instance?.close();
   }
 }
 
