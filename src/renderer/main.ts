@@ -45,6 +45,8 @@ import ElementPlus from 'element-plus'
 import 'element-plus/theme-chalk/index.css';
 import '@element-plus/icons-vue'
 import '@renderer/assets/css/icon.css'
+import 'jquery/dist/jquery.min.js'
+import 'bootstrap/dist/js/bootstrap.min.js'
 
 window.$ = $;
 window.jQuery = $;

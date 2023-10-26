@@ -20,106 +20,79 @@
 
 <script>
 import * as echarts from 'echarts';
-import axios from 'axios';
+import {QueryCoinPriceUsingGET} from "@renderer/api/exchange";
+import {ref, reactive, onMounted} from 'vue';
 
 export default {
   name: "MainCenterButton",
-  data() {
-    return {
-      coins: [
-        {coin: 'ethereum'},
-        {coin: 'bitcoin'},
-        {coin: 'binancecoin'},
-        {coin: 'cardano'},
-        {coin: 'dogecoin'},
-        {coin: 'ripple'},
-        {coin: 'usd-coin'},
-        {coin: 'dai'}
-      ],
-      selectedCoin: {coin: 'ethereum'},
-      prices: [],
-      times: [],
-      minPrice: 0,
-      maxPrice: 0,
-      apps: [
-        {name: 'Uniswap', icon: '@renderer/assets/images/dapps/uniswap.png'},
-        {name: 'MakerDAO', icon: '@renderer/assets/images/dapps/maker.webp'},
-        {name: 'Compound', icon: '@renderer/assets/images/dapps/compound.png'},
-        {name: 'CryptoKitties', icon: '@renderer/assets/images/dapps/CryptoKitties.webp'},
-      ],
-    };
-  },
-  methods: {
-    fetchData(coin) {
-      axios.get(`https://api.coingecko.com/api/v3/coins/${coin}/market_chart`, {
-        params: {
-          vs_currency: 'usd',
-          days: 1,
-        }
-      }).then(response => {
-        this.prices = response.data.prices.map(p => p[1]);
-        this.times = response.data.prices.map(p => {
+  setup() {
+    const coins = ref([
+      {coin: 'ethereum'},
+      {coin: 'bitcoin'},
+      {coin: 'binancecoin'},
+      {coin: 'cardano'},
+      {coin: 'dogecoin'},
+      {coin: 'ripple'},
+      {coin: 'usd-coin'},
+      {coin: 'dai'}
+    ]);
+    const selectedCoin = reactive({coin: 'ethereum'});
+    const prices = ref([]);
+    const times = ref([]);
+    const minPrice = ref(0);
+    const maxPrice = ref(0);
+
+    const fetchData = async (coin) => {
+      try {
+        const res = await QueryCoinPriceUsingGET(coin);
+        const obj = JSON.parse(res?.data);
+        prices.value = obj.prices.map(p => p[1]);
+        times.value = obj.prices.map(p => {
           const date = new Date(p[0]);
           return `${date.getHours()}:${date.getMinutes()}`;
         });
-        this.calculateYAxisRange();
-        this.drawChart();
-      });
-    },
-    calculateYAxisRange() {
-      let min = Math.min(...this.prices);
-      let max = Math.max(...this.prices);
+        calculateYAxisRange();
+        drawChart();
+      } catch (e) {
+        console.log(e.toString())
+      }
+    };
+
+    const calculateYAxisRange = () => {
+      let min = Math.min(...prices.value);
+      let max = Math.max(...prices.value);
       let diff = max - min;
 
       if (diff > 1) {
-        this.minPrice = Math.floor(min * 0.98);
-        this.maxPrice = Math.ceil(max * 1.02);
+        minPrice.value = Math.floor(min * 0.98);
+        maxPrice.value = Math.ceil(max * 1.02);
       } else {
-        this.minPrice = min - (diff * 0.02);
-        this.maxPrice = max + (diff * 0.02);
+        minPrice.value = min - (diff * 0.02);
+        maxPrice.value = max + (diff * 0.02);
       }
-    },
-    drawChart() {
-      let chart = echarts.init(document.getElementById('chart'));
-      let option = {
-        title: {
-          text: `${this.selectedCoin.coin} 价格变化（最近24小时）`,
-          left: 'center',
-          textStyle: { // 修改标题颜色
-            color: '#FFFFFF'
-          }
-        },
+    };
+
+    const drawChart = () => {
+      const chart = echarts.init(document.getElementById('chart'));
+      chart.setOption({
+        title: {text: `${selectedCoin.coin} 价格变化（最近24小时）`, left: 'center', textStyle: {color: '#FFFFFF'}},
         tooltip: {
           trigger: 'axis',
-          formatter: (params) => {
-            const data = params[0];
-            return `${this.times[data.dataIndex]}<br/>${this.selectedCoin.coin}: ${data.value}`
-          }
+          formatter: params => `${times.value[params[0].dataIndex]}<br/>${selectedCoin.coin}: ${params[0].value}`
         },
-        xAxis: {
-          type: 'category',
-          boundaryGap: false,
-          show: false,
-        },
-        yAxis: {
-          type: 'value',
-          min: this.minPrice,
-          max: this.maxPrice,
-        },
-        series: [{
-          data: this.prices,
-          type: 'line',
-          smooth: true,
-          itemStyle: {
-            color: '#0088CC'
-          },
-        }],
-      };
-      chart.setOption(option);
+        xAxis: {type: 'category', boundaryGap: false, show: false},
+        yAxis: {type: 'value', min: minPrice.value, max: maxPrice.value},
+        series: [{data: prices.value, type: 'line', smooth: true, itemStyle: {color: '#0088CC'}}],
+      });
+    };
+
+    onMounted(() => fetchData(selectedCoin.coin));
+
+    return {
+      coins,
+      selectedCoin,
+      fetchData
     }
-  },
-  created() {
-    this.fetchData(this.selectedCoin.coin);
   }
 };
 </script>
@@ -161,11 +134,10 @@ export default {
   position: absolute;
   top: 0;
   right: 0;
-
 }
 
 .custom-select {
-  max-width: 80%;
+  max-width: 70%;
   background-color: transparent; /* Set the background to transparent */
   border: 1px solid white; /* Set the border to white */
   color: white; /* Set the text color to white */
