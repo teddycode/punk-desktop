@@ -1,7 +1,7 @@
 <template>
   <div class="taskbar">
     <div class="tabs-container">
-      <div class="tab-item home-tab" @click="navigateToHomePage">
+      <div class="tab-item home-tab" @click="navigateTo('HomePage')">
         <div class="home-content">
           <font-awesome-icon :icon="['fas', 'home']" style="color: white;"></font-awesome-icon>
           Home
@@ -9,11 +9,11 @@
       </div>
       <div v-for="(page, index) in openedPages" :key="index" class="tab-item home-tab"
            :class="{ 'active-tab': currentPage === page.title }">
-        <div class="home-content" @click="navigateToFeature(page)">
+        <div class="home-content" @click="navigateTo(page.routeName)">
           <font-awesome-icon :icon="page.icon" style="color: white;"></font-awesome-icon>
           {{ page.title }}
         </div>
-        <font-awesome-icon @click.stop="closePage(index)" class="close-tab-icon"
+        <font-awesome-icon class="close-tab-icon" @click.stop="store.dispatch('removePage', index)"
                            :icon="['fas', 'times']"></font-awesome-icon>
       </div>
     </div>
@@ -22,77 +22,48 @@
 </template>
 
 <script>
-import {mapGetters, mapActions, mapMutations} from 'vuex';
+import {ref, computed, onMounted} from 'vue';
+import {useStore} from 'vuex';
+import {useRouter} from 'vue-router';
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {faHome, faTimes} from '@fortawesome/free-solid-svg-icons';
 
 library.add(faHome, faTimes);
+
 export default {
   name: "TaskBar",
-  computed: {
-    ...mapGetters(['openedPages']),
-    currentPage() {
-      return this.$store.state.currentPage;
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+    const openedPages = computed(() => store.getters.openedPages);
+    const currentPage = computed(() => store.state.currentPage);
+    const currentTime = ref(getCurrentTime());
+
+    onMounted(() => {
+      console.log("TaskBar openedPages:", openedPages.value);
+      setInterval(() => {
+        currentTime.value = getCurrentTime();
+      }, 1000);
+    });
+
+    function navigateTo(routeName) {
+      store.commit('setCurrentPage', routeName);
+      router.push({name: routeName});
     }
-  },
-  data() {
-    return {
-      currentTime: this.getCurrentTime(),
-    };
-  },
-  mounted() {
-    console.log("TaskBar openedPages:", this.openedPages);
-    setInterval(() => {
-      this.currentTime = this.getCurrentTime();
-    }, 1000);
-  },
-  methods: {
-    ...mapActions(['addPage', 'removePage']),
-    ...mapMutations(['setCurrentPage']),
-    navigateToHomePage() {
-      console.log("Home tab clicked!");
-      this.setCurrentPage('');
-      this.$router.push({name: 'HomePage'});
-    },
-    navigateToFeature(page) {
-      console.log("navigateToFeature:", page);
-      this.setCurrentPage(page.title);
-      const routeName = this.getFeatureRoute(page.title);
-      this.$router.push({name: routeName});
-    },
-    closePage(pageIndex) {
-      this.removePage(pageIndex);
-      this.navigateToHomePage()
-    },
-    getFeatureRoute(title) {
-      switch (title) {
-        case '共识':
-          return 'ConsensusPage';
-        case '存储':
-          return 'StoragePage';
-        case '计算':
-          return 'ComputingPage';
-        case '交易':
-          return 'ExchangePage';
-        case '转账':
-          return 'TransferPage';
-        case '治理':
-          return 'GovernancePage';
-        case '网络':
-          return 'NetworkPage';
-        case '藏品':
-          return 'CollectionPage';
-        case '密码':
-          return 'CryptoPage';
-        default:
-          return 'HomePage';
-      }
-    },
-    getCurrentTime() {
+
+    function getCurrentTime() {
       const date = new Date();
       const hours = date.getHours().toString().padStart(2, '0');
       const minutes = date.getMinutes().toString().padStart(2, '0');
       return `${hours}:${minutes}`;
+    }
+
+    return {
+      openedPages,
+      currentPage,
+      currentTime,
+      navigateTo,
+      store
     }
   }
 }
