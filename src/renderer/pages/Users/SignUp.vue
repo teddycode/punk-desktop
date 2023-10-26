@@ -57,8 +57,8 @@
 
 <script>
 import axios from "axios";
-import MainBackground from "@renderer/components/MainBackground.vue";
-import addnodeButton from "@renderer/components/buttons/addnodeButton.vue";
+import MainBackground from "@renderer/components/common/MainBackground.vue";
+import addnodeButton from "@renderer/components/Buttons/addnodeButton.vue";
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {faBuilding, faEnvelope, faEye, faEyeSlash, faLock, faUser} from '@fortawesome/free-solid-svg-icons'
 

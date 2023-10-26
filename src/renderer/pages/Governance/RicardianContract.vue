@@ -49,8 +49,8 @@
 </template>
 
 <script>
-import MainBackground from "@renderer/components/MainBackground.vue";
-import addnodeButton from "@renderer/components/buttons/addnodeButton.vue";
+import MainBackground from "@renderer/components/common/MainBackground.vue";
+import addnodeButton from "@renderer/components/Buttons/addnodeButton.vue";
 
 export default {
   name: "RicardianContract",

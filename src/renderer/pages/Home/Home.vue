@@ -8,7 +8,7 @@
       <top-nav-item/>
     </div>
     <login-button/>
-    <my-wallet/>
+    <wallets show/>
     <div class="search-bar">
       <search-bar></search-bar>
     </div>
@@ -50,27 +50,27 @@
 import {defineComponent, computed} from 'vue';
 import {useStore} from 'vuex';
 import TopNavItem from "@renderer/components/TopNavItem/index.vue";
-import LoginButton from "@renderer/components/buttons/loginButton.vue";
-import myWallet from "@renderer/components/myWallet.vue";
+import LoginButton from "@renderer/components/Buttons/loginButton.vue";
+import Wallets from "@renderer/components/common/Wallets.vue";
 import MainRightAd from "@pages/Home/components/main-right/messagebox.vue";
 import MainRightSwiper from "@pages/Home/components/main-right/main-function-box.vue";
 import DesktopManagement from "@pages/Home/components/main-left/center/index.vue";
-import searchBar from "@renderer/components/searchBar.vue";
+import searchBar from "@renderer/components/common/searchBar.vue";
 import mainRightDapp from "@pages/Home/components/main-right/dapp-square.vue";
 import MainCenterButton from "@pages/Home/components/main-center/bottom/index.vue";
-import TaskBar from "@pages/Home/TaskBar.vue";
+import TaskBar from "@renderer/components/common/TaskBar.vue";
 import SocialNet from "@pages/SocialNet/index.vue";
 import {i18nt} from "@renderer/i18n"
 
 export default defineComponent({
   components: {
+    Wallets,
     MainCenterButton,
     mainRightDapp,
     DesktopManagement,
     searchBar,
     MainRightSwiper,
     MainRightAd,
-    myWallet,
     LoginButton,
     TopNavItem,
     TaskBar,

@@ -26,16 +26,19 @@
 
 <script>
 import Topnav from "@renderer/components/TopNavItem/index.vue";
-import LoginButton from "@renderer/components/buttons/loginButton.vue";
-import myWallet from "@renderer/components/myWallet.vue";
-import searchBar from "@renderer/components/searchBar.vue";
-import TaskBar from "@pages/Home/TaskBar.vue";
+import LoginButton from "@renderer/components/Buttons/loginButton.vue";
+import Wallets from "@renderer/components/common/Wallets.vue";
+import searchBar from "@renderer/components/common/searchBar.vue";
+import TaskBar from "@renderer/components/common/TaskBar.vue";
 
 export default {
   name: "myHeader",
   components: {
     searchBar,
-    myWallet, LoginButton, Topnav, TaskBar
+    Wallets,
+    LoginButton,
+    Topnav,
+    TaskBar
   },
   computed: {
     openedPages() {
@@ -56,7 +59,7 @@ export default {
   .bg-header {
     width: 100%;
     height: 80px;
-    background: url(@a/data/title.png) no-repeat;
+    background: url(@renderer/assets/data/title.png) no-repeat;
     background-size: 100% 100%;
 
     .t-title {

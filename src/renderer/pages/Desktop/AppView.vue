@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import MainBackground from "@renderer/components/MainBackground.vue";
+import MainBackground from "@renderer/components/common/MainBackground.vue";
 import VueVnc from "./components/vue-vnc.vue";
 
 export default {

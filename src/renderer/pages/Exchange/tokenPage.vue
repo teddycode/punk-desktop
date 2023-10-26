@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import addnodeButton from "@renderer/components/buttons/addnodeButton.vue";
+import addnodeButton from "@renderer/components/Buttons/addnodeButton.vue";
 
 export default {
   name: "TokenPage",

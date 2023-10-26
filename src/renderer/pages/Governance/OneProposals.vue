@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import MainBackground from "@renderer/components/MainBackground.vue";
+import MainBackground from "@renderer/components/common/MainBackground.vue";
 import {governance} from "@pages/Governance/components/function/address";
 import selfInfo from "./components/selfInfo.vue";
 

@@ -60,7 +60,7 @@
 </template>
 
 <script lang="ts" setup>
-import SystemInformation from "./LandingPage/SystemInformation.vue";
+import SystemInformation from "./SystemInformation.vue";
 import {message} from "@renderer/api/users";
 import logo from "@renderer/assets/logo.png";
 import {onUnmounted, ref} from "vue";

@@ -37,7 +37,7 @@ import {Swiper, SwiperSlide} from 'swiper/vue';
 import 'swiper/css';
 import 'swiper/swiper-bundle.css';
 import {Autoplay} from 'swiper';
-import AddNodeButton from "@renderer/components/buttons/addnodeButton.vue";
+import AddNodeButton from "@renderer/components/Buttons/addnodeButton.vue";
 
 export default {
   name: "main-right-dapp",

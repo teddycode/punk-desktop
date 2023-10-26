@@ -294,7 +294,7 @@
 import {reactive, ref} from "vue";
 import {ElMessage} from "element-plus";
 import {getAllBlock, getMicBlockByHeight} from "@renderer/api/consensus";
-import MainBackground from "@renderer/components/MainBackground.vue";
+import MainBackground from "@renderer/components/common/MainBackground.vue";
 
 export default {
   name: "Consensus",

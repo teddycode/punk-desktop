@@ -52,7 +52,7 @@
 <script>
 
 import store from "@renderer/store";
-import MainBackground from "@renderer/components/MainBackground.vue";
+import MainBackground from "@renderer/components/common/MainBackground.vue";
 
 export default {
   components: {

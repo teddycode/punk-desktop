@@ -21,9 +21,9 @@
 <script>
 import {computed} from "vue";
 import {useStore} from "vuex";
-import vSidebar from "@renderer/components/Sidebar.vue";
-import vTags from "@renderer/components/Tags.vue";
-import MainBackground from "@renderer/components/MainBackground.vue";
+import vSidebar from "@renderer/components/common/Sidebar.vue";
+import vTags from "@renderer/components/common/Tags.vue";
+import MainBackground from "@renderer/components/common/MainBackground.vue";
 
 export default {
   components: {

@@ -20,7 +20,7 @@
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {faExclamationCircle} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
-import AddnodeButton from "@renderer/components/buttons/addnodeButton.vue";
+import AddnodeButton from "@renderer/components/Buttons/addnodeButton.vue";
 import {mapGetters} from 'vuex';
 
 library.add(faExclamationCircle);

@@ -38,7 +38,7 @@
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {faVolumeUp} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
-import addnodeButton from "@renderer/components/buttons/addnodeButton.vue";
+import addnodeButton from "@renderer/components/Buttons/addnodeButton.vue";
 
 library.add(faVolumeUp);
 

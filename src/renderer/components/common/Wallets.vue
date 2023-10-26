@@ -61,143 +61,122 @@
   <div v-if="showUserInfo" class="overlay" @click="toggleUserInfo"></div>
 </template>
 
-<script>
+<script lang="ts">
+import {defineComponent, ref, computed, onMounted} from 'vue';
 import {ethers} from 'ethers';
-import {mapGetters} from 'vuex';
-import {library} from '@fortawesome/fontawesome-svg-core'
-import {faCheck, faCopy} from '@fortawesome/free-solid-svg-icons'
-import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
+import {library} from '@fortawesome/fontawesome-svg-core';
+import {faCheck, faCopy} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
+import Message from "ant-design-vue/es/message";
+import {useStore} from "vuex";
 
-library.add(faCheck, faCopy)
+library.add(faCheck, faCopy);
 
-export default {
-  name: "myWallet",
+export default defineComponent({
+  name: 'Wallets',
   components: {
-    FontAwesomeIcon
+    FontAwesomeIcon,
   },
   props: {
     show: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   emits: ['close', 'walletLogout', 'walletLogin'],
-  data() {
-    return {
-      showWalletSelector: false,
-      showUserInfo: false, // 添加新的data项
-      addressCopied: false,  // 用于跟踪地址复制状态的标志
-      balanceCopied: false,  // 用于跟踪余额复制状态的标志
-      wallets: [
-        {name: 'Metamask', icon: 'metamask.jpeg', link: 'https://metamask.io'},
-        {name: 'imToken', icon: 'imtoken.jpeg', link: 'https://token.im'},
-        {name: 'Trust Wallet', icon: 'trustwallet.png', link: 'https://trustwallet.com'}
-      ],
-      userAddress: '',
-      userBalance: '0',
-      userLoggedIn: false,
-      web3: null,
-    }
-  },
-  computed: {
-    ...mapGetters([
-      "userAddress",
-      "userLoggedIn"
-    ]),
-    buttonLabel() {
-      if (this.userLoggedIn && this.userAddress) {
-        return this.userAddress.slice(0, 6) + '...' + this.userAddress.slice(-4);
+  setup(props, {emit}) {
+
+    const store = useStore();
+
+    const showWalletSelector = ref(false);
+    const showUserInfo = ref(false);
+    const addressCopied = ref(false);
+    const balanceCopied = ref(false);
+    const wallets = [
+      {name: 'Metamask', icon: 'metamask.jpeg', link: 'https://metamask.io'},
+      {name: 'imToken', icon: 'imtoken.jpeg', link: 'https://token.im'},
+      {name: 'Trust Wallet', icon: 'trustwallet.png', link: 'https://trustwallet.com'},
+    ];
+    const userAddress = ref('');
+    const userBalance = ref('0');
+    const userLoggedIn = ref(false);
+    const web3 = ref(null);
+    const provider = ref(null);
+
+    const buttonLabel = computed(() => {
+      if (userLoggedIn.value && userAddress.value) {
+        return userAddress.value.slice(0, 6) + '...' + userAddress.value.slice(-4);
       } else {
         return '连接钱包';
       }
-    }
-  },
-  beforeMount() {
-    // Create an ethers provider and connect to the network
-    this.provider = new ethers.providers.JsonRpcProvider('/api');
-    console.log()
-  },
-  mounted: function () {
-    setTimeout(() => {
-      if (typeof window.ethereum !== 'undefined') {
-        this.provider = new ethers.providers.Web3Provider(window.ethereum);
-        console.log("provider: ", this.provider)
-        this.loadUserData();
-      } else {
-        // this.showAlert('Metamask is not installed. Please consider installing it: https://metamask.io');
+    });
+
+    const showAlert = (str: string) => {
+      Message.error(str)
+    };
+
+    const buttonClick = () => {
+      if (!userLoggedIn.value) {
+        toggleWalletSelector();
       }
-    }, 500);
-  },
-  methods: {
-    showAlert(str) {
-      if (window.electronAPI) {
-        window.electronAPI.customAlert(str);
-      } else {
-        console.error('electronAPI.customAlert is not available!');
-      }
-      console.log('electronAPI:', window.electronAPI);
-    },
-    buttonClick() {
-      if (!this.userLoggedIn) {
-        this.toggleWalletSelector();
-      }
-    },
-    toggleWalletSelector() {
-      this.showWalletSelector = !this.showWalletSelector;
-    },
-    navigateToUserProfile() {
-      this.showUserInfo = true;
-    },
-    toggleUserInfo() {
-      this.showUserInfo = !this.showUserInfo;
-    },
-    async loadUserData() {
+    };
+
+    const toggleWalletSelector = () => {
+      showWalletSelector.value = !showWalletSelector.value;
+    };
+
+    const navigateToUserProfile = () => {
+      showUserInfo.value = true;
+    };
+
+    const toggleUserInfo = () => {
+      showUserInfo.value = !showUserInfo.value;
+    };
+
+    const loadUserData = async () => {
       console.log('loadUserData!!!');
-      let loggedIn = this.$store.state.userLoggedIn;
+      let loggedIn = userLoggedIn.value;
       if (loggedIn) {
-        console.log("重新登录123")
-        this.userLoggedIn = true;
-        this.userAddress = this.$store.state.userAddress;
-        this.userBalance = await this.getBalance(this.userAddress);
+        console.log('重新登录123');
+        userLoggedIn.value = true;
+        userAddress.value = store.state.userAddress.value;
+        userBalance.value = await getBalance(userAddress.value);
       } else {
-        // 尝试从localStorage中获取用户数据
         const storedAddress = localStorage.getItem('userAddress');
         if (storedAddress) {
-          this.userLoggedIn = true;
-          this.userAddress = storedAddress;
-          console.log("loadUserData:this.userAddress =" + this.userAddress);
-          console.log("loadUserData:this.userLoggedIn =" + this.userLoggedIn);
-          this.$store.dispatch('setLoggedIn', true);
-          this.$store.dispatch('setAddress', this.userAddress);
-          // 直接从网络获取用户余额，保证余额的实时性
-          this.userBalance = await this.getBalance(this.userAddress);
-          console.log("loadUserData:this.userBalance =" + this.userBalance);
-          this.$store.dispatch('setBalance', this.userBalance);
+          userLoggedIn.value = true;
+          userAddress.value = storedAddress;
+          console.log('loadUserData:this.userAddress =' + userAddress.value);
+          console.log('loadUserData:this.userLoggedIn =' + userLoggedIn.value);
+          store.dispatch('setLoggedIn', true);
+          store.dispatch('setAddress', userAddress.value);
+          userBalance.value = await getBalance(userAddress.value);
+          console.log('loadUserData:this.userBalance =' + userBalance.value);
+          store.dispatch('setBalance', userBalance.value);
         }
       }
-    },
-    async openWalletLink(wallet) {
+    };
+
+    const openWalletLink = async (wallet: any) => {
       console.log('openWalletLink1');
       if (wallet.name === 'Metamask') {
         try {
-          this.userLoggedIn = true;
-          this.$store.dispatch('setLoggedIn', true);
-          localStorage.setItem('userLoggedIn', this.userLoggedIn);
+          userLoggedIn.value = true;
+          await store.dispatch('setLoggedIn', true);
+          localStorage.setItem('userLoggedIn', userLoggedIn.value);
 
-          const signer = this.provider.getSigner();
-          this.userAddress = await signer.getAddress();
-          console.log("signer: ", signer)
-          localStorage.setItem('userAddress', this.userAddress);
-          this.$store.dispatch('setAddress', this.userAddress);
+          const signer = provider.value.getSigner();
+          userAddress.value = await signer.getAddress();
+          console.log('signer: ', signer);
+          localStorage.setItem('userAddress', userAddress.value);
+          await store.dispatch('setAddress', userAddress.value);
 
-          // Request user balance
-          this.userBalance = await this.getBalance(this.userAddress);
-          this.$store.dispatch('setBalance', this.userBalance);
+          userBalance.value = await getBalance(userAddress.value);
+          await store.dispatch('setBalance', userBalance.value);
 
-          // Load user data
-          await this.loadUserData();
+          await loadUserData();
           console.log('openWalletLink2');
-          this.$emit('walletLogin');
+          emit('walletLogin');
         } catch (error) {
           console.error(error);
           console.log('openWalletLink3');
@@ -206,49 +185,80 @@ export default {
         console.log('openWalletLink4');
         window.open(wallet.link, '_blank');
       }
-      this.showWalletSelector = false;
-    },
-    async getBalance(address) {
+      showWalletSelector.value = false;
+    };
+
+    const getBalance = async (address: string) => {
       try {
-        const network = await this.provider.getNetwork();
-        if (network.chainId !== 1337) {  // Chain ID for Goerli Test Network is 5
+        const network = await provider.value.getNetwork();
+        if (network.chainId !== 1337) {
           window.ethereum.request({
             method: 'wallet_switchEthereumChain',
-            params: [{chainId: '0x539'}]  // Switch to Goerli Test Network
+            params: [{chainId: '0x539'}],
           }).catch((error) => console.log(error));
         }
-        // Request user balance
-        const balance = await this.provider.getBalance(address);
-        // Convert balance from wei to ether and return
+        const balance = await provider.value.getBalance(address);
         return ethers.utils.formatEther(balance);
       } catch (error) {
         console.error(error);
       }
-    },
-    logout() {
-      this.userLoggedIn = false;
-      this.userAddress = '';
-      this.userBalance = '0';
-      this.$store.dispatch('setLoggedIn', false);
-      this.$store.dispatch('setAddress', '');
-      this.$store.dispatch('setBalance', '0');
-      // 清除localStorage中的用户数据
+    };
+
+    const logout = () => {
+      userLoggedIn.value = false;
+      userAddress.value = '';
+      userBalance.value = '0';
+      store.dispatch('setLoggedIn', false);
+      store.dispatch('setAddress', '');
+      store.dispatch('setBalance', '0');
       localStorage.removeItem('userAddress');
-      // localStorage.removeItem('userLoggedIn');
-      console.log("logout: " + this.$store.state.userLoggedIn);
-      this.$emit('walletLogout');
-      this.loadUserData();
-      // this.showWalletSelector = false;
-    },
-    async copyToClipboard(field, value) {
+      console.log('logout: ' + userLoggedIn.value);
+      emit('walletLogout');
+      loadUserData();
+    };
+
+    const copyToClipboard = async (field: string, value: string) => {
       await navigator.clipboard.writeText(value);
-      this[field + 'Copied'] = true;
+      addressCopied.value = true;
       setTimeout(() => {
-        this[field + 'Copied'] = false;
-      }, 1000);  // 2秒后复制成功标志消失
-    },
+        addressCopied.value = false;
+      }, 1000);
+    };
+
+    onMounted(() => {
+      setTimeout(() => {
+        if (typeof window.ethereum !== 'undefined') {
+          provider.value = new ethers.providers.Web3Provider(window.ethereum);
+          console.log('provider: ', provider.value);
+          loadUserData();
+        } else {
+          // this.showAlert('Metamask is not installed. Please consider installing it: https://metamask.io');
+        }
+      }, 500);
+    });
+
+    return {
+      showWalletSelector,
+      showUserInfo,
+      addressCopied,
+      balanceCopied,
+      wallets,
+      userAddress,
+      userBalance,
+      userLoggedIn,
+      buttonLabel,
+      buttonClick,
+      toggleWalletSelector,
+      navigateToUserProfile,
+      toggleUserInfo,
+      loadUserData,
+      openWalletLink,
+      getBalance,
+      logout,
+      copyToClipboard,
+    };
   },
-}
+});
 </script>
 
 <style scoped>

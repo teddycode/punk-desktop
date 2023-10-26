@@ -61,7 +61,7 @@
 <script>
 import axios from "axios";
 import * as echarts from 'echarts';
-import addnodeButton from "@renderer/components/buttons/addnodeButton.vue";
+import addnodeButton from "@renderer/components/Buttons/addnodeButton.vue";
 import {limitOrderPoolKey} from "@pages/Exchange/function/address";
 import {placeLimitOrderFrontend} from "@pages/Exchange/function/place";
 import {ethers} from "ethers";

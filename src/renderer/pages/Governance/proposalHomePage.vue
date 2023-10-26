@@ -23,8 +23,8 @@
 </template>
 
 <script>
-import MainBackground from "@renderer/components/MainBackground.vue";
-import addnodeButton from "@renderer/components/buttons/addnodeButton.vue";
+import MainBackground from "@renderer/components/common/MainBackground.vue";
+import addnodeButton from "@renderer/components/Buttons/addnodeButton.vue";
 import selfInfo from "@pages/Governance/components/selfInfo.vue";
 import myEntrust from "@pages/Governance/components/myEntrust.vue";
 

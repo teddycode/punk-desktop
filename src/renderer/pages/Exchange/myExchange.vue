@@ -86,7 +86,7 @@
 <script>
 // import {Web3} from "web3";
 import {ethers} from "ethers";
-import addnodeButton from "@renderer/components/buttons/addnodeButton.vue";
+import addnodeButton from "@renderer/components/Buttons/addnodeButton.vue";
 import axios from "axios";
 import * as echarts from 'echarts';
 import {limitOrderPoolKey} from "@pages/Exchange/function/address";

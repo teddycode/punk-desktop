@@ -43,7 +43,7 @@
 
 <script>
 import {Web3} from "web3";
-import MainBackground from "@renderer/components/MainBackground.vue";
+import MainBackground from "@renderer/components/common/MainBackground.vue";
 
 export default {
   data() {
