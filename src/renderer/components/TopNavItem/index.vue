@@ -1,17 +1,17 @@
 <template>
   <div class="navbar">
     <ul>
-      <li @click="onFullBox">
-        <font-awesome-icon :icon="['fas', 'expand-arrows-alt']" style="color: white;"/>
+      <li @click="onFullScreen">
+        <font-awesome-icon :icon="['fas', 'expand-arrows-alt']" class="icon"/>
       </li>
       <li @click="onChangeLang">
-        <font-awesome-icon :icon="['fas', 'language']" style="color: white;"/>
+        <font-awesome-icon :icon="['fas', 'language']" class="icon"/>
       </li>
       <li @click="onGotoHome">
-        <font-awesome-icon :icon="['fas', 'home']" style="color: white;"/>
+        <font-awesome-icon :icon="['fas', 'home']" class="icon"/>
       </li>
-      <li>
-        <font-awesome-icon :icon="['fas', 'arrow-right']" style="color: white;"/>
+      <li @click="onReturnPage">
+        <font-awesome-icon :icon="['fas', 'arrow-right']" class="icon"/>
       </li>
     </ul>
   </div>
@@ -23,7 +23,7 @@ import {library} from '@fortawesome/fontawesome-svg-core'
 import {faExpandArrowsAlt, faLanguage, faHome, faArrowRight} from '@fortawesome/free-solid-svg-icons'
 import {useRouter} from "vue-router";
 import {ref} from "vue";
-import {setLanguage} from "@renderer/i18n";
+import {setLanguage} from '@renderer/i18n';
 
 library.add(faExpandArrowsAlt, faLanguage, faHome, faArrowRight)
 
@@ -37,12 +37,14 @@ export default {
     const langFlg = ref(false);
     const router = useRouter();
 
-    const onFullBox = () => {
+    // 切换全屏
+    const onFullScreen = () => {
       window?.electronAPI?.toggleFullScreen();
       document.body.style.overflow = scrFlag.value ? 'hidden' : 'auto';
       scrFlag.value = !scrFlag.value;
     };
 
+    // 语言切换
     const onChangeLang = () => {
       const lang = langFlg.value ? "zh-cn" : "en";
       console.log("change language:", lang);
@@ -50,27 +52,34 @@ export default {
       langFlg.value = !langFlg.value;
     };
 
+    // 返回主页
     const onGotoHome = () => {
       router.push({name: 'HomePage'});
     };
 
-    const showResource = () => {
+    // 返回上一页
+    const onReturnPage = () => {
 // your code here
     };
 
     return {
       scrFlag,
       langFlg,
-      onFullBox,
+      onFullScreen,
       onChangeLang,
       onGotoHome,
-      showResource,
+      onReturnPage,
     };
   },
 };
 </script>
 
 <style lang="scss" scoped>
+
+.icon {
+  color: white;
+}
+
 .navbar {
   top: -80px;
   width: 200px;

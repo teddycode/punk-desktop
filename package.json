@@ -1,9 +1,10 @@
 {
-  "name": "electron-vite-template",
+  "name": "punkos",
+  "private": "true",
   "version": "1.0.0",
   "main": "./dist/electron/main/main.js",
   "author": "sky <https://github.com/umbrella22>",
-  "description": "electron-vite-template project",
+  "description": "dcl_gx@163.com",
   "license": "MIT",
   "scripts": {
     "dev": "esno .electron-vite/dev-runner.ts",

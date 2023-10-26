@@ -5,7 +5,7 @@
       <div class="bg-header">
         <div class="t-title fa-solid">{{ i18nt.home.title }}</div>
       </div>
-      <topnav/>
+      <top-nav-item/>
     </div>
     <login-button/>
     <my-wallet/>
@@ -49,7 +49,7 @@
 <script lang="ts">
 import {defineComponent, computed} from 'vue';
 import {useStore} from 'vuex';
-import Topnav from "@renderer/components/TopNavItem/index.vue";
+import TopNavItem from "@renderer/components/TopNavItem/index.vue";
 import LoginButton from "@renderer/components/buttons/loginButton.vue";
 import myWallet from "@renderer/components/myWallet.vue";
 import MainRightAd from "@pages/Home/components/main-right/messagebox.vue";
@@ -72,7 +72,7 @@ export default defineComponent({
     MainRightAd,
     myWallet,
     LoginButton,
-    Topnav,
+    TopNavItem,
     TaskBar,
     SocialNet,
   },
