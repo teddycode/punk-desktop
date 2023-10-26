@@ -1,14 +1,14 @@
 <template>
   <div id="main" class="bg">
-    <task-bar></task-bar>
+    <task-bar/>
     <div class="header">
       <div class="bg-header">
-        <div class="t-title">磐古</div>
+        <div class="t-title fa-solid">{{ i18nt.home.title }}</div>
       </div>
-      <topnav></topnav>
+      <topnav/>
     </div>
-    <login-button></login-button>
-    <my-wallet></my-wallet>
+    <login-button/>
+    <my-wallet/>
     <div class="search-bar">
       <search-bar></search-bar>
     </div>
@@ -17,18 +17,18 @@
         <div class="main-left">
           <div class="main-left-top">
             <div class="main-left-top-left">
-              <main-right-ad></main-right-ad>
+              <main-right-ad/>
             </div>
             <div class="main-left-top-right">
-              <main-center-button></main-center-button>
+              <main-center-button/>
             </div>
           </div>
           <div class="main-left-bottom">
             <div class="bottom-div-left">
-              <desktop-management></desktop-management>
+              <desktop-management/>
             </div>
             <div class="bottom-div-right">
-              <social-net></social-net>
+              <social-net/>
             </div>
           </div>
         </div>
@@ -36,7 +36,7 @@
           <div class="right-top-spacing"></div>
           <main-right-swiper @featureClicked="onFeatureClicked"></main-right-swiper>
           <div class="right-middle-spacing"></div>
-          <main-right-dapp></main-right-dapp>
+          <main-right-dapp/>
           <div class="right-bottom-spacing"></div>
         </div>
       </div>
@@ -46,9 +46,10 @@
     </div>
   </div>
 </template>
-
-<script>
-import Topnav from "@renderer/components/topnav/index.vue";
+<script lang="ts">
+import {defineComponent, computed} from 'vue';
+import {useStore} from 'vuex';
+import Topnav from "@renderer/components/TopNavItem/index.vue";
 import LoginButton from "@renderer/components/buttons/loginButton.vue";
 import myWallet from "@renderer/components/myWallet.vue";
 import MainRightAd from "@pages/Home/components/main-right/messagebox.vue";
@@ -59,9 +60,9 @@ import mainRightDapp from "@pages/Home/components/main-right/dapp-square.vue";
 import MainCenterButton from "@pages/Home/components/main-center/bottom/index.vue";
 import TaskBar from "@pages/Home/TaskBar.vue";
 import SocialNet from "@pages/SocialNet/index.vue";
+import {i18nt} from "@renderer/i18n"
 
-export default {
-  name: "myHeader",
+export default defineComponent({
   components: {
     MainCenterButton,
     mainRightDapp,
@@ -69,27 +70,31 @@ export default {
     searchBar,
     MainRightSwiper,
     MainRightAd,
-    myWallet, LoginButton, Topnav, TaskBar, SocialNet
+    myWallet,
+    LoginButton,
+    Topnav,
+    TaskBar,
+    SocialNet,
   },
+  setup() {
+    const store = useStore();
+    const openedPages = computed(() => store.state.openedPages);
 
-  data() {
-    return {}
-  },
-  computed: {
-    openedPages() {
-      return this.$store.state.openedPages;
-    },
-  },
-  methods: {
-    onFeatureClicked(feature) {
+    const onFeatureClicked = (feature: any) => {
       console.log("onFeatureClicked received", feature);
-      if (!this.openedPages.some(p => p.title === feature.title)) {
-        this.$store.commit("ADD_PAGE", feature);
+      if (!openedPages.value.some((p: any) => p.title === feature.title)) {
+        store.commit("ADD_PAGE", feature);
       }
-      console.log("onFeatureClicked", this.openedPages);
-    },
-  }
-}
+      console.log("onFeatureClicked", openedPages.value);
+    };
+
+    return {
+      i18nt,
+      openedPages,
+      onFeatureClicked,
+    };
+  },
+});
 </script>
 
 <style lang="scss" scoped>

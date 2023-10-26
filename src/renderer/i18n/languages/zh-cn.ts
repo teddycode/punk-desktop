@@ -28,4 +28,7 @@ export const lang = {
     changeLanguage: "Change language",
     ForcedUpdate: "强制更新模式",
   },
+  home: {
+    title: "磐古跨链操作系统",
+  }
 };

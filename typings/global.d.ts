@@ -11,7 +11,7 @@ interface memoryInfo {
 }
 
 declare global {
-  interface Window {
+    interface window {
     performance: {
       memory: memoryInfo;
     };
@@ -29,7 +29,8 @@ declare global {
     crash: {
       start: () => void;
     };
-    ElectronAPI: {
+        electronAPI: {
+            toggleFullScreen: () => void;
       //   TODO event type define here
     }
   }

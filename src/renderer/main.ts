@@ -24,29 +24,28 @@ import Mock from './mock' // 项目引入mock
 import PrimeVue from "primevue/config";
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {
-  faAngleRight,
-  faBookReader,
-  faCalculator,
-  faDatabase,
-  faEdit,
-  faExchangeAlt,
-  faFileAlt,
-  faFire,
-  faGavel,
-  faGem,
-  faHandHoldingUsd,
-  faHandsHelping,
-  faSitemap,
-  faVideo,
-  faWrench
+    faAngleRight,
+    faBookReader,
+    faCalculator,
+    faDatabase,
+    faEdit,
+    faExchangeAlt,
+    faFileAlt,
+    faFire,
+    faGavel,
+    faGem,
+    faHandHoldingUsd,
+    faHandsHelping,
+    faSitemap,
+    faVideo,
+    faWrench
 } from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 import ElementPlus from 'element-plus'
 import 'element-plus/theme-chalk/index.css';
 import '@element-plus/icons-vue'
 import '@renderer/assets/css/icon.css'
-import 'jquery/dist/jquery.min.js'
-import 'bootstrap/dist/js/bootstrap.min.js'
+import "bootstrap/dist/css/bootstrap.min.css";
 
 window.$ = $;
 window.jQuery = $;

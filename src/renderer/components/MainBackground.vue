@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import Topnav from "@renderer/components/topnav/index.vue";
+import Topnav from "@renderer/components/TopNavItem/index.vue";
 import LoginButton from "@renderer/components/buttons/loginButton.vue";
 import myWallet from "@renderer/components/myWallet.vue";
 import searchBar from "@renderer/components/searchBar.vue";

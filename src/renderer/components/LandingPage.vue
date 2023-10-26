@@ -64,7 +64,7 @@ import SystemInformation from "./LandingPage/SystemInformation.vue";
 import {message} from "@renderer/api/users";
 import logo from "@renderer/assets/logo.png";
 import {onUnmounted, ref} from "vue";
-import {globalLang, i18nt, setLanguage} from "@renderer/i18n";
+import {GlobalLanguage, i18nt, setLanguage} from "@renderer/i18n";
 import {useStoreTemplate} from "@store/template";
 
 let {ipcRenderer, shell, crash} = window;
@@ -109,7 +109,7 @@ const elPageSize = ref(100);
 const elCPage = ref(1);
 
 function changeLanguage() {
-  setLanguage(globalLang.value === "zh-cn" ? "en" : "zh-cn");
+  setLanguage(GlobalLanguage.value === "zh-cn" ? "en" : "zh-cn");
 }
 
 function startCrash() {

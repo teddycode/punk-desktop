@@ -28,4 +28,7 @@ export const lang = {
     changeLanguage: "切换语言",
     ForcedUpdate: "Forced Update Mode",
   },
+    home: {
+        title: "PunkOS Client",
+    }
 };

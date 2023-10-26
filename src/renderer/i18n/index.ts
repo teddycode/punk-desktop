@@ -1,7 +1,8 @@
 import {computed, ref} from "vue";
 
-export const globalLang = ref('zh-cn')
+export const GlobalLanguage = ref('zh-cn')
 
+// 加载已有的语言包资源
 export function loadLanguages() {
   const context: any = import.meta.glob("./languages/*.ts", {eager: true});
 
@@ -18,11 +19,12 @@ export function loadLanguages() {
   return languages
 }
 
+// TODO 改成vue3-18n@next【vue3版本】
 export const i18nt = computed(() => {
   const lang = loadLanguages()
-  return lang[globalLang.value]
+  return lang[GlobalLanguage.value]
 })
 
 export function setLanguage(locale: string) {
-  globalLang.value = locale
+  GlobalLanguage.value = locale
 }
