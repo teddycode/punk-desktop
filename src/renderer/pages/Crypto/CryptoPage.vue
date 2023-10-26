@@ -196,7 +196,7 @@
 
 <script>
 import MainBackground from "@renderer/components/common/MainBackground.vue";
-import addnodeButton1 from "@renderer/components/Buttons/addnodeButton1.vue";
+import addnodeButton1 from "@renderer/components/buttons/addnodeButton1.vue";
 
 export default {
   components: {MainBackground, addnodeButton1},

@@ -1,16 +1,16 @@
 <template>
   <div id="main" class="bg">
-    <task-bar></task-bar>
+    <task-bar/>
     <div class="header">
       <div class="bg-header">
         <div class="t-title">磐古</div>
       </div>
-      <topnav></topnav>
+      <top-navigator/>
     </div>
     <login-button></login-button>
-    <my-wallet></my-wallet>
+    <wallets show/>
     <div class="search-bar">
-      <search-bar></search-bar>
+      <search-bar/>
     </div>
     <div class="data-content-main-background">
       <div class="data-main-main-background">
@@ -24,31 +24,36 @@
   </div>
 </template>
 
-<script>
-import Topnav from "@renderer/components/TopNavItem/index.vue";
-import LoginButton from "@renderer/components/Buttons/loginButton.vue";
+<script lang="ts">
+
+import {computed} from 'vue'
+import {useStore} from 'vuex'
+import TopNavigator from "@renderer/components/navigate/TopNavigator.vue";
+import LoginButton from "@renderer/components/buttons/loginButton.vue";
 import Wallets from "@renderer/components/common/Wallets.vue";
-import searchBar from "@renderer/components/common/searchBar.vue";
+import SearchBar from "@renderer/components/common/searchBar.vue";
 import TaskBar from "@renderer/components/common/TaskBar.vue";
 
 export default {
-  name: "myHeader",
+  name: "MainBackground",
   components: {
-    searchBar,
+    SearchBar,
     Wallets,
     LoginButton,
-    Topnav,
+    TopNavigator,
     TaskBar
   },
-  computed: {
-    openedPages() {
-      return this.$store.state.openedPages;
-    },
-  },
-  methods: {}
+  setup() {
+    const store = useStore()
+
+    const openedPages = computed(() => store.state.openedPages)
+
+    return {
+      openedPages
+    }
+  }
 }
 </script>
-
 <style lang="scss">
 
 .header {
@@ -74,7 +79,7 @@ export default {
 }
 
 #main {
-  background-image: url("@a/data/true.png");
+  background-image: url("@renderer/assets/images/main-backgroud.png");
   background-size: cover;
   overflow: hidden;
   //min-width: 1600px;

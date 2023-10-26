@@ -1,14 +1,12 @@
 <template>
-
   <button class="btn btn-rect-to-round btn-rect-to-round--blue">
     <slot></slot>
   </button>
-
 </template>
 
-<script>
+<script lang="ts">
 export default {
-  name: "addNodeButton"
+  name: "ShapeButton",
 }
 </script>
 

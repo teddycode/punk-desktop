@@ -1,9 +1,9 @@
 <template>
   <dv-border-box10 class="dapp-square">
+    <h2 class="title">应用广场</h2>
     <div class="apps-container">
-      <h2 class="title">应用广场</h2>
       <div class="section">
-        <h3 class="subtitle">最近常用</h3>
+        <h3 class="subtitle">最近<br>常用</h3>
         <div class="app-grid">
           <div v-for="app in recentApps" :key="app.name" class="app-card">
             <img :src="app.icon" alt="" class="app-icon">
@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="section">
-        <h3 class="subtitle">推荐dapp</h3>
+        <h3 class="subtitle">推荐<br>DApp</h3>
         <Swiper
           :autoplay="{delay: 2000,disableOnInteraction: false}"
           :loop="true"
@@ -26,41 +26,46 @@
           </SwiperSlide>
         </Swiper>
       </div>
-      <add-node-button class="dapp-button">探索更多</add-node-button>
+      <shape-button class="dapp-button">探索更多</shape-button>
     </div>
   </dv-border-box10>
 </template>
 
-<script>
-import {ref} from 'vue';
+<script lang="ts">
+import {defineComponent, reactive} from 'vue';
 import {Swiper, SwiperSlide} from 'swiper/vue';
 import 'swiper/css';
 import 'swiper/swiper-bundle.css';
 import {Autoplay} from 'swiper';
-import AddNodeButton from "@renderer/components/Buttons/addnodeButton.vue";
+import ShapeButton from "@renderer/components/buttons/ShapeButton.vue";
 
-export default {
-  name: "main-right-dapp",
-  components: {AddNodeButton, Swiper, SwiperSlide},
+export default defineComponent({
+  name: "MainRightBottom",
+  components: {ShapeButton, Swiper, SwiperSlide},
   setup() {
+    const recentApps = reactive([
+      {name: 'Uniswap', icon: '/images/dapps/uniswap.png'},
+      {name: 'MakerDAO', icon: '/images/dapps/maker.webp'},
+      {name: 'Compound', icon: '/images/dapps/compound.png'},
+    ]);
+
+    const commonApps = reactive([
+      {name: 'Uniswap', icon: '/images/dapps/uniswap.png'},
+      {name: 'MakerDAO', icon: '/images/dapps/maker.webp'},
+      {name: 'Compound', icon: '/images/dapps/compound.png'},
+      {name: 'CryptoKitties', icon: '/images/dapps/CryptoKitties.webp'},
+    ]);
+
+    const modules = [Autoplay];
+
     return {
-      recentApps: ref([
-        {name: 'Uniswap', icon: '/images/dapps/uniswap.png'},
-        {name: 'MakerDAO', icon: '/images/dapps/maker.webp'},
-        {name: 'Compound', icon: '/images/dapps/compound.png'},
-      ]),
-      commonApps: ref([
-        {name: 'Uniswap', icon: '/images/dapps/uniswap.png'},
-        {name: 'MakerDAO', icon: '/images/dapps/maker.webp'},
-        {name: 'Compound', icon: '/images/dapps/compound.png'},
-        {name: 'CryptoKitties', icon: '/images/dapps/CryptoKitties.webp'},
-      ]),
-      modules: [Autoplay],
+      recentApps,
+      commonApps,
+      modules,
     };
   },
-}
+});
 </script>
-
 
 <style scoped>
 .dapp-square {
@@ -71,6 +76,10 @@ export default {
   padding-top: 10px;
   font-size: 1.5rem;
   color: #5ab1ef;
+}
+
+.apps-container {
+  padding-top: 6px;
 }
 
 .dapp-button {
@@ -86,28 +95,17 @@ export default {
 }
 
 .subtitle {
-  margin-left: 10px;
-  font-size: 1rem;
+  margin-left: 14px;
+  font-size: 1.2rem;
   color: #5ab1ef;
   flex-shrink: 0;
-  margin-right: 10px;
+  margin-right: 6px;
 }
 
 .app-grid {
   display: flex;
   justify-content: space-between;
   flex-grow: 1;
-}
-
-.mySwiper {
-  width: 100%;
-}
-
-.swiper-slide {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 
 .app-card {
@@ -127,4 +125,16 @@ export default {
   text-align: center;
   color: white;
 }
+
+.mySwiper {
+  width: 100%;
+}
+
+.swiper-slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 </style>

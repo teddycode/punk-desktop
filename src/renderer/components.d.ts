@@ -7,6 +7,8 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+      AModal: typeof import('ant-design-vue/es')['Modal']
+      ASpace: typeof import('ant-design-vue/es')['Space']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import addnodeButton from "@renderer/components/Buttons/addnodeButton.vue";
+import addnodeButton from "@renderer/components/buttons/ShapeButton.vue";
 // import {addLiq} from "@pages/Exchange/function/addLiquidity";
 import {burn, deposit} from "@pages/Exchange/function/bridge"
 // import {limitOrderPoolKey} from "@pages/Exchange/function/address.js";

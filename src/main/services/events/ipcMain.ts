@@ -120,14 +120,13 @@ export default {
     })
 
     //  handle用于返回结果，on用于监听事件
-
     ipcMain.on('toggle-fullscreen', () => {
       if (mainWindInstance && mainWindInstance.instance) {
         mainWindInstance.instance.setFullScreen(!mainWindInstance.instance.isFullScreen());
       }
     });
 
-    ipcMain.on('show-custom-alert', (event, message) => {
+    ipcMain.on('show-main-alert', (event, message) => {
       const options: MessageBoxSyncOptions = {
         type: 'warning',
         buttons: ["OK"],
@@ -140,18 +139,18 @@ export default {
     });
 
     // 响应搜索指令
-    ipcMain.on('search', async (event, query) => {
-      let searchUrl = `https://www.baidu.com/search?q=${encodeURIComponent(query)}`;
-      if (searchWindInstance) {
+    ipcMain.on('open-search-window', async (event, query) => {
+      console.log("query params:", query);
+      let searchUrl = `https://www.baidu.com/s?wd=${encodeURIComponent(query)}`;
+      console.log("Searching Url:", searchUrl)
         if (!searchWindInstance.instance) {
           searchWindInstance.create();
         }
-        searchWindInstance.show();
-      }
       searchWindInstance.setContent(searchUrl);
+      searchWindInstance.show();
     });
 
-    ipcMain.on('close-searchWindow', () => {
+    ipcMain.on('close-search-window', () => {
       if (searchWindInstance.instance) {
         searchWindInstance.close();
       }

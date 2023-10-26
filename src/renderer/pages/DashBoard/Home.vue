@@ -5,76 +5,88 @@
       <div class="bg-header">
         <div class="t-title fa-solid">{{ i18nt.home.title }}</div>
       </div>
-      <top-nav-item/>
+      <top-navigator/>
     </div>
     <login-button/>
     <wallets show/>
     <div class="search-bar">
-      <search-bar></search-bar>
+      <search-bar/>
     </div>
     <div class="data-content">
       <div class="data-main">
         <div class="main-left">
           <div class="main-left-top">
             <div class="main-left-top-left">
-              <main-right-ad/>
+              <main-left-top/>
             </div>
             <div class="main-left-top-right">
-              <main-center-button/>
+              <main-center-top/>
             </div>
           </div>
           <div class="main-left-bottom">
             <div class="bottom-div-left">
-              <desktop-management/>
+              <main-left-bottom/>
             </div>
-            <div class="bottom-div-right">
-              <social-net/>
+            <div class="main-center-bottom">
+              <main-center-bottom/>
             </div>
           </div>
         </div>
         <div class="main-right">
           <div class="right-top-spacing"></div>
-          <main-right-swiper @featureClicked="onFeatureClicked"></main-right-swiper>
+          <main-right-top @featureClicked="onFeatureClicked"/>
           <div class="right-middle-spacing"></div>
-          <main-right-dapp/>
+          <main-right-bottom/>
           <div class="right-bottom-spacing"></div>
         </div>
       </div>
-      <div class="custom-div">
-        <div class="custom-title">常用工具栏</div>
+      <div class="frequency-div">
+        <div class="toolbar">
+          <div class="frequency-title">常用工具栏</div>
+          <div class="app-grid">
+            <div v-for="app in frequencyApps" :key="app.name" class="app-card">
+              <img :src="app.icon" alt="" class="app-icon">
+              <p class="app-name">{{ app.name }}</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts">
-import {defineComponent, computed} from 'vue';
+import {defineComponent, computed, reactive} from 'vue';
 import {useStore} from 'vuex';
-import TopNavItem from "@renderer/components/TopNavItem/index.vue";
-import LoginButton from "@renderer/components/Buttons/loginButton.vue";
+import TopNavigator from "@renderer/components/navigate/TopNavigator.vue";
+import LoginButton from "@renderer/components/buttons/loginButton.vue";
 import Wallets from "@renderer/components/common/Wallets.vue";
-import MainRightAd from "@pages/Home/components/main-right/messagebox.vue";
-import MainRightSwiper from "@pages/Home/components/main-right/main-function-box.vue";
-import DesktopManagement from "@pages/Home/components/main-left/center/index.vue";
-import searchBar from "@renderer/components/common/searchBar.vue";
-import mainRightDapp from "@pages/Home/components/main-right/dapp-square.vue";
-import MainCenterButton from "@pages/Home/components/main-center/bottom/index.vue";
+import SearchBar from "@renderer/components/common/SearchBar.vue";
 import TaskBar from "@renderer/components/common/TaskBar.vue";
-import SocialNet from "@pages/SocialNet/index.vue";
+
+import MainLeftTop from "@pages/DashBoard/components/main-left/top/index.vue";
+import MainLeftBottom from "@pages/DashBoard/components/main-left/bottom/index.vue";
+
+import MainRightTop from "@pages/DashBoard/components/main-right/top/index.vue";
+import MainRightBottom from "@pages/DashBoard/components/main-right/bottom/index.vue";
+
+import MainCenterTop from "@pages/DashBoard/components/main-center/top/index.vue";
+import MainCenterBottom from "@pages/DashBoard/components/main-center/bottom/index.vue";
+
 import {i18nt} from "@renderer/i18n"
 
 export default defineComponent({
   components: {
     Wallets,
-    MainCenterButton,
-    mainRightDapp,
-    DesktopManagement,
-    searchBar,
-    MainRightSwiper,
-    MainRightAd,
+    MainCenterTop,
+    MainRightBottom,
+    MainLeftBottom,
+    SearchBar,
+    MainRightTop,
+    MainLeftTop,
     LoginButton,
-    TopNavItem,
+    TopNavigator,
     TaskBar,
-    SocialNet,
+    MainCenterBottom,
   },
   setup() {
     const store = useStore();
@@ -88,9 +100,16 @@ export default defineComponent({
       console.log("onFeatureClicked", openedPages.value);
     };
 
+    const frequencyApps = reactive([
+      {name: 'Uniswap', icon: '/images/dapps/uniswap.png'},
+      {name: 'MakerDAO', icon: '/images/dapps/maker.webp'},
+      {name: 'Compound', icon: '/images/dapps/compound.png'},
+    ]);
+
     return {
       i18nt,
       openedPages,
+      frequencyApps,
       onFeatureClicked,
     };
   },
@@ -121,7 +140,7 @@ export default defineComponent({
 }
 
 #main {
-  background-image: url('@renderer/assets/data/true.png');
+  background-image: url('@renderer/assets/images/main-backgroud.png');
   background-size: cover;
   overflow: hidden;
   //min-width: 1600px;
@@ -204,53 +223,80 @@ export default defineComponent({
       }
     }
 
+    .main-center-bottom {
+      width: 65%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
     .main-right {
       float: left;
       width: 24%;
-      height: 95%;
+      height: 100%;
       display: flex;
       flex-direction: column;
 
-      .right-top-spacing,
-      .right-bottom-spacing {
-        flex: 1; /* This represents 10% height */
-      }
-
-      main-right-swiper,
-      main-right-dapp {
-        flex: 3.5; /* This represents 35% height */
+      .right-top-spacing {
+        flex: 2.5; /* This represents 10% height */
       }
 
       .right-middle-spacing {
-        flex: 1; /* This represents 10% height */
+        flex: 3.5; /* This represents 10% height */
       }
+
+      .right-bottom-spacing {
+        flex: 1.5; /* This represents 10% height */
+      }
+
+      main-right-dapp {
+        flex: 4.5; /* This represents 35% height */
+      }
+
     }
   }
 }
 
-.custom-div {
+.frequency-div {
   width: 80%;
   height: 10%;
   border: 1px solid white;
   border-radius: 10px;
   margin: 0 auto; /* Center the div */
   position: relative;
-
-  .custom-title {
-    font-size: 1.5rem;
-    position: absolute;
-    left: 10px; // 你可以根据需要调整这个值
-    top: 50%;
-    transform: translateY(-50%);
-    color: #5ab1ef;
-  }
-}
-
-.bottom-div-right {
-  width: 65%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
   align-items: center;
 }
+
+.toolbar {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px; /* Space between title and icons */
+}
+
+.frequency-title {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: #5ab1ef;
+}
+
+.app-grid {
+  display: flex;
+  justify-content: flex-start; /* Align icons to the left */
+  align-items: center;
+  gap: 10px; /* Space between icons */
+}
+
+.app-card {
+  margin-top: 15px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.app-icon {
+  width: 50px;
+  height: 50px;
+}
+
 </style>

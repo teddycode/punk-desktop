@@ -13,7 +13,7 @@
   </MainBackground>
 </template>
 
-<script>
+<script lang="ts">
 import MainBackground from "@renderer/components/common/MainBackground.vue";
 
 export default {

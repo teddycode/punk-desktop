@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import addnodeButton from "@renderer/components/Buttons/addnodeButton.vue"; // 请确保路径是正确的
+import addnodeButton from "@renderer/components/buttons/ShapeButton.vue"; // 请确保路径是正确的
 import {tokenPower} from "@pages/Governance/components/function/address";
 
 export default {
