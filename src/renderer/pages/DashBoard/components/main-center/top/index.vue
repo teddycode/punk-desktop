@@ -116,6 +116,7 @@ export default {
 .title {
   font-size: 1.5rem;
   color: #5ab1ef;
+  margin-left: 40%;
 }
 
 .chart-container {

@@ -14,7 +14,7 @@
               navigation="navigation"
               @slideChange="onSlideChange"
               @swiper="onSwiper">
-        <SwiperSlide v-for="(func, index) in funcs" :key="index">
+        <SwiperSlide v-for="(func, index) in functions" :key="index">
           <div @click="goToSysFunc(func)">
             <div class="feature-content">
               <font-awesome-icon :icon="func.icon" class="feature-icon" size="3x"/>
@@ -34,7 +34,6 @@
 
 <script lang="ts">
 import {defineComponent, ref, computed} from 'vue';
-import {useStore} from 'vuex';
 import {Swiper, SwiperSlide} from "swiper/vue";
 import {A11y, Autoplay, EffectFlip, Navigation, Pagination, Scrollbar} from "swiper";
 import {
@@ -55,12 +54,14 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import 'swiper/swiper-bundle.css';
 import {useRouter} from "vue-router";
+import {storeToRefs} from "pinia";
+import {useBaseStore} from "@store/baseboard";
 
 export default defineComponent({
   name: "MainRightTop",
   components: {Swiper, SwiperSlide, FontAwesomeIcon},
   setup() {
-    const store = useStore();
+    const store = useBaseStore();
     const router = useRouter();
     const swiperRef = ref(null);
     const onSwiper = (swiper: any) => {
@@ -76,7 +77,7 @@ export default defineComponent({
     const nextEl = () => {
       swiperRef?.value.slideNext();
     };
-    const funcs = ref([
+    const functions = ref([
       {
         id: 1,
         title: '交易',
@@ -142,8 +143,8 @@ export default defineComponent({
       },
     ]);
 
-    const currentPage = computed(() => store.state.currentPage);
-    const setCurrentPage = (page: string) => store.commit('setCurrentPage', page);
+    const {currentPage} = storeToRefs(store);
+    const setCurrentPage = (page: string) => store.setCurrentPage(page);
     const goToSysFunc = (func: any) => {
       setCurrentPage(func.title);
       router.push({name: func.router});
@@ -153,7 +154,7 @@ export default defineComponent({
       onSlideChange,
       prevEl,
       nextEl,
-      funcs,
+      functions,
       currentPage,
       goToSysFunc,
       modules: [Navigation, Pagination, Scrollbar, A11y, Autoplay, EffectFlip],

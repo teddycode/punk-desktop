@@ -93,7 +93,7 @@
 </template>
 
 <script>
-import MainBackground from "@renderer/components/common/MainBackground.vue";
+import MainBackground from "@components/common/MainBackground.vue";
 import processGuide from "@pages/Governance/components/processGuide.vue";
 import toolBox from "@pages/Governance/components/toolBox.vue";
 import newProposal from "@pages/Governance/components/newProposal.vue";

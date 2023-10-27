@@ -20,10 +20,10 @@
 
 <script>
 import {computed} from "vue";
-import {useStore} from "vuex";
-import vSidebar from "@renderer/components/common/Sidebar.vue";
-import vTags from "@renderer/components/common/Tags.vue";
-import MainBackground from "@renderer/components/common/MainBackground.vue";
+import vSidebar from "@components/common/Sidebar.vue";
+import vTags from "@components/common/Tags.vue";
+import MainBackground from "@components/common/MainBackground.vue";
+import {useBaseStore} from "@store/baseboard";
 
 export default {
   components: {
@@ -32,9 +32,9 @@ export default {
     vTags,
   },
   setup() {
-    const store = useStore();
+    const store = useBaseStore();
     const tagsList = computed(() =>
-      store.state.tagsList.map((item) => item.name)
+        store.tagsList.map((item) => item.name)
     );
     const collapse = computed(() => store.state.collapse);
     return {

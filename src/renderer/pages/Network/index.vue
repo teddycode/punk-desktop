@@ -1,11 +1,11 @@
 <template>
-  <MainBackground>
+  <main-background>
     <div class="network-page">
       <div class="network-top-bar">
         <select v-model="selectedNetwork" class="network-blockchain-select">
           <option v-for="network in networks" :key="network" :value="network">{{ network }}</option>
         </select>
-        <i class="fas fa-cog"></i> <!-- Font Awesome 齿轮图标 -->
+        <i class="fas fa-cog"/>
       </div>
       <div class="network-transfer-container">
         <div class="network-input-section">
@@ -16,16 +16,16 @@
           </div>
         </div>
         <p v-if="!showTransaction">请输入正确的钱包地址！！！</p>
-        <div v-if="showTransaction&&walletAddress===$store.state.userAddress" class="network-balance">
+        <div v-if="showTransaction&&walletAddress===address" class="network-balance">
           余额：{{ walletbalance }} GoerliETH
         </div>
-        <div v-if="showTransaction&&walletAddress!==$store.state.userAddress" class="network-balance">不存在该账户！！！
+        <div v-if="showTransaction&&walletAddress!== address " class="network-balance">不存在该账户！！！
         </div>
       </div>
       <transition name="slide-down">
         <div v-if="showTransaction" class="network-transfer-container">
           <div class="network-button-group">
-            <button :class="['network-transfer-btn', { 'active': activeBtn === 'addcash' }]" @click="addcash">充值
+            <button :class="['network-transfer-btn', { 'active': activeBtn === 'charge' }]" @click="charge">充值
             </button>
             <button :class="['network-transfer-btn', { 'active': activeBtn === 'withdraw' }]" @click="withdraw">提取
             </button>
@@ -39,6 +39,7 @@
             </div>
             <div class="network-input-row">
               <label class="network-title">存款:</label>
+              <!-- TODO what`s this-->
               <input v-model="deposit" class="network-token-input">
             </div>
           </div>
@@ -46,52 +47,57 @@
         </div>
       </transition>
     </div>
-  </MainBackground>
+  </main-background>
 </template>
 
-<script>
-
-import store from "@renderer/store";
-import MainBackground from "@renderer/components/common/MainBackground.vue";
+<script lang="ts">
+import MainBackground from "@components/common/MainBackground.vue";
+import {ref} from "vue";
+import {useUserStore} from "@store/users";
+import {storeToRefs} from "pinia";
 
 export default {
   components: {
-    MainBackground
+    MainBackground,
   },
-  data() {
-    return {
-      networks: ['Ethereum', 'Binance Smart Chain', 'Polygon'],
-      selectedNetwork: 'Ethereum',
-      walletbalance: '',
-      walletAddress: '',
-      balance: '',
-      showTransaction: false,
-      showFullAddress: false,
-      isValidAddress: false,
-      activeBtn: '',
-      //NoAccount:false,
-    };
-  },
-  computed: {
-    truncatedAddress() {
-      if (this.walletAddress.length > 6) {
-        return this.walletAddress.slice(0, 6) + '...' + this.walletAddress.slice(-6);
-      } else {
-        return this.walletAddress;
-      }
-    },
-  },
+  setup() {
 
-  methods: {
-    handleAddressInput() {
-      this.isValidAddress = this.checkID(this.walletAddress);
-      this.showTransaction = this.isValidAddress;
-    },
-    checkID(address) {
-      if (typeof address !== 'string') {
+    const store = useUserStore();
+
+    let {address} = storeToRefs(store);
+
+    const networks = ref(["Ethereum", "Binance Smart Chain", "Polygon"]);
+    const selectedNetwork = ref("Ethereum");
+    const walletbalance = ref("");
+    const walletAddress = ref("");
+    const balance = ref("");
+    const showTransaction = ref(false);
+    const showFullAddress = ref(false);
+    const isValidAddress = ref(false);
+    const activeBtn = ref("");
+
+    function truncatedAddress() {
+      if (walletAddress.value.length > 6) {
+        return (
+            walletAddress.value.slice(0, 6) +
+            "..." +
+            walletAddress.value.slice(-6)
+        );
+      } else {
+        return walletAddress.value;
+      }
+    }
+
+    function handleAddressInput() {
+      isValidAddress.value = checkID(walletAddress.value);
+      showTransaction.value = isValidAddress.value;
+    }
+
+    function checkID(address: string) {
+      if (typeof address !== "string") {
         return false;
       }
-      if (address.slice(0, 2) !== '0x') {
+      if (address.slice(0, 2) !== "0x") {
         return false;
       }
       if (address.length !== 42) {
@@ -102,25 +108,49 @@ export default {
       // }
       // myWallet.methods.loadUserData();
       // this.walletAddress = store.state.userAddress;
-      this.walletbalance = store.state.userBalance;
-      console.log(this.walletAddress);
-      console.log(this.walletbalance);
+      walletbalance.value = store.userBalance;
+      console.log(walletAddress.value);
+      console.log(walletbalance.value);
       return true;
-    },
-    addcash() {
-      this.activeBtn = 'addcash';
-    },
-    withdraw() {
+    }
+
+    function charge() {
+      activeBtn.value = "charge";
+    }
+
+    function withdraw() {
       // Handle withdrawal
-      this.activeBtn = 'withdraw';  // 设置当前激活的按钮为 "withdraw"
-    },
-    advanced() {
+      activeBtn.value = "withdraw"; // 设置当前激活的按钮为 "withdraw"
+    }
+
+    function advanced() {
       // Handle advanced options
-      this.activeBtn = 'advanced';  // 设置当前激活的按钮为 "advanced"
-    },
-    openSettings() {
+      activeBtn.value = "advanced"; // 设置当前激活的按钮为 "advanced"
+    }
+
+    function openSettings() {
       // Handle opening settings
-    },
+    }
+
+    return {
+      networks,
+      selectedNetwork,
+      walletbalance,
+      walletAddress,
+      balance,
+      showTransaction,
+      showFullAddress,
+      isValidAddress,
+      activeBtn,
+      address,
+      truncatedAddress,
+      handleAddressInput,
+      checkID,
+      charge,
+      withdraw,
+      advanced,
+      openSettings,
+    };
   },
 };
 </script>

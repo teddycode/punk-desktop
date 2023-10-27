@@ -63,13 +63,13 @@
 
 
 <script>
-import addnodeButton from "@renderer/components/buttons/ShapeButton.vue";
+import addnodeButton from "@components/buttons/ShapeButton.vue";
 import {killLimitOrderFrontend} from "@pages/Exchange/function/kill"
 import {limitOrderPoolKey, token0, token1} from "@pages/Exchange/function/address";
 import {ethers} from "ethers";
 import {withdraw_main} from "@pages/Exchange/function/withdraw";
 import axios from "axios";
-import myPagination from "@renderer/components/common/myPagination.vue";
+import myPagination from "@components/common/myPagination.vue";
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {faInfoCircle} from '@fortawesome/free-solid-svg-icons'
 

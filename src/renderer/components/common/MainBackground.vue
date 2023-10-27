@@ -24,35 +24,18 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 
-import {computed} from 'vue'
-import {useStore} from 'vuex'
-import TopNavigator from "@renderer/components/navigate/TopNavigator.vue";
-import LoginButton from "@renderer/components/buttons/loginButton.vue";
-import Wallets from "@renderer/components/common/Wallets.vue";
-import SearchBar from "@renderer/components/common/searchBar.vue";
-import TaskBar from "@renderer/components/common/TaskBar.vue";
+import TopNavigator from "@components/navigate/TopNavigator.vue";
+import LoginButton from "@components/buttons/loginButton.vue";
+import Wallets from "@components/common/Wallets.vue";
+import SearchBar from "@components/common/searchBar.vue";
+import TaskBar from "@components/common/TaskBar.vue";
+import {useBaseStore} from "@renderer/store/baseboard";
+import {storeToRefs} from "pinia";
 
-export default {
-  name: "MainBackground",
-  components: {
-    SearchBar,
-    Wallets,
-    LoginButton,
-    TopNavigator,
-    TaskBar
-  },
-  setup() {
-    const store = useStore()
+const {openedPages} = storeToRefs(useBaseStore())
 
-    const openedPages = computed(() => store.state.openedPages)
-
-    return {
-      openedPages
-    }
-  }
-}
 </script>
 <style lang="scss">
 

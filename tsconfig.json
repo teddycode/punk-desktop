@@ -28,7 +28,10 @@
         "src/main/*"
       ],
       "@store/*": [
-        "src/renderer/store/modules/*"
+        "src/renderer/store/*"
+      ],
+      "@components/*": [
+        "src/renderer/components/*"
       ],
       "@pages/*": [
         "src/renderer/pages/*"

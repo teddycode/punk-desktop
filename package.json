@@ -90,8 +90,7 @@
     "unplugin-vue-components": "^0.25.2",
     "vite": "^4.4.9",
     "vue": "^3.3.6",
-    "vue-router": "^4.2.4",
-    "vuex": "^4.1.0"
+    "vue-router": "^4.2.4"
   },
   "keywords": [
     "vite",

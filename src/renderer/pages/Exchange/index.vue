@@ -44,7 +44,7 @@
   </MainBackground>
 </template>
 <script>
-import MainBackground from "@renderer/components/common/MainBackground.vue";
+import MainBackground from "@components/common/MainBackground.vue";
 import OrderPage from "@pages/Exchange/orderPage.vue";
 import TokenPage from "@pages/Exchange/tokenPage.vue";
 import Kline from 'kline';

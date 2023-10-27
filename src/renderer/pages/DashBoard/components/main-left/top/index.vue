@@ -49,7 +49,7 @@ import {defineComponent, ref, computed, reactive} from 'vue'
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {faVolumeUp} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
-import ShapeButton from "@renderer/components/buttons/ShapeButton.vue"
+import ShapeButton from "@components/buttons/ShapeButton.vue"
 
 library.add(faVolumeUp)
 

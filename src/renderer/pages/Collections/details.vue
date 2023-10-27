@@ -1,12 +1,19 @@
 <template>
-  <div className="main">
-    <h2>this is collection details page</h2>
-  </div>
+  <main-background>
+    <div class="main">
+      <h2>this is collection details page</h2>
+    </div>
+  </main-background>
 </template>
 
-<script>
+<script lang="ts">
+import MainBackground from "@components/common/MainBackground.vue";
+
 export default {
-  name: "CollectionDetails"
+  name: "details",
+  components: {
+    MainBackground
+  }
 }
 </script>
 

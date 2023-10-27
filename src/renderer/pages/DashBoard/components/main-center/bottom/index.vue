@@ -67,7 +67,7 @@
 
 <script lang="ts" setup>
 import {ref} from 'vue';
-import ShapeButton from "@renderer/components/buttons/ShapeButton.vue";
+import ShapeButton from "@components/buttons/ShapeButton.vue";
 
 const radioItems = ref([
   {label: '工作'},

@@ -1,12 +1,17 @@
 <template>
-  <div class="main">
-    <h2>this is calculation page</h2>
-  </div>
+  <main-background>
+    <div class="main">
+      <h2>this is calculation page</h2>
+    </div>
+  </main-background>
 </template>
 
 <script>
+import MainBackground from "@components/common/MainBackground.vue";
+
 export default {
-  name: "myCalculation"
+  name: "myCalculation",
+  components: {MainBackground}
 }
 </script>
 

@@ -37,7 +37,7 @@ import {Swiper, SwiperSlide} from 'swiper/vue';
 import 'swiper/css';
 import 'swiper/swiper-bundle.css';
 import {Autoplay} from 'swiper';
-import ShapeButton from "@renderer/components/buttons/ShapeButton.vue";
+import ShapeButton from "@components/buttons/ShapeButton.vue";
 
 export default defineComponent({
   name: "MainRightBottom",

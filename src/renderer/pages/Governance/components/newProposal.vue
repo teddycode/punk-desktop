@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import MainBackground from "@renderer/components/common/MainBackground.vue";
+import MainBackground from "@components/common/MainBackground.vue";
 import selfInfo from "./selfInfo.vue";
 import {governance} from "@pages/Governance/components/function/address";
 import {BigNumber} from "ethers";

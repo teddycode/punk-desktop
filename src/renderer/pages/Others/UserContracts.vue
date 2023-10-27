@@ -58,153 +58,177 @@
   </dv-border-box10>
 </template>
 
-<script>
-// 引入需要的库和组件
+<script lang="ts">
+import {ref, watch, defineComponent} from 'vue';
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {faExclamationCircle} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
-import {mapGetters} from 'vuex';
+import {useUserStore} from "@store/users";
 
 library.add(faExclamationCircle);
 
-export default {
+export default defineComponent({
   name: "Together",
   components: {
-    'font-awesome-icon': FontAwesomeIcon,
+    FontAwesomeIcon,
   },
-  data() {
-    return {
-      loggedIn: this.checkUserLoggedIn(),  // 初始化时检查用户的登录状态
-      user: {
-        nickname: 'User Name',
+  setup() {
+    const store = useUserStore();
+    const loggedIn = ref(checkUserLoggedIn());
+    const user = ref({
+      nickname: 'User Name',
+    });
+    const rooms = ref([
+      {
+        id: 1,
+        owner: 'Alice',
+        theme: 'Birthday Party',
+        roomNumber: '123',
+        roomCount: 5,
+        inviteCode: 'invite123'
       },
-      rooms: [
-        {
-          id: 1,
-          owner: 'Alice',
-          theme: 'Birthday Party',
-          roomNumber: '123',
-          roomCount: 5,
-          inviteCode: 'invite123'
-        },
-        {
-          id: 2,
-          owner: 'Bob',
-          theme: 'Game Night',
-          roomNumber: '456',
-          roomCount: 10,
-          inviteCode: 'invite456'
-        },
-        {
-          id: 3,
-          owner: 'Charlie',
-          theme: 'Study Group',
-          roomNumber: '789',
-          roomCount: 3,
-          inviteCode: 'invite789'
-        },
-        {
-          id: 4,
-          owner: 'Dave',
-          theme: 'Movie Night',
-          roomNumber: '012',
-          roomCount: 8,
-          inviteCode: 'invite012'
-        },
-        {
-          id: 5,
-          owner: 'Eve',
-          theme: 'Cooking Class',
-          roomNumber: '345',
-          roomCount: 7,
-          inviteCode: 'invite345'
-        }
-      ], // 假设这里已经有了房间的数据
-      myRooms: [
-        {
-          id: 1,
-          owner: '小小禾',
-          theme: 'Test code',
-          roomNumber: '666',
-          roomCount: 1,
-          inviteCode: '123456'
-        }
-      ],
-      friends: [
-        {
-          name: 'Alice',
-          avatar: 'images/room/Alice.webp'
-        },
-        {
-          name: 'Bob',
-          avatar: 'images/room/Bob.png'
-        },
-        // 更多好友...
-      ],
-      dialogVisible: false,
-      inviteDialogVisible: false,
-      selectedRoom: null,
-      inviteCodeInput: '',
-      roomThemeInput: '',
-      createRoomDialogVisible: false,
-      myRoomDialogVisible: false,
-    }
-  },
-  watch: {
-    '$store.state.token': function () {
-      this.loggedIn = this.checkUserLoggedIn();
-    },
-  },
-  methods: {
-    //TODO 缺一个邀请朋友的识别逻辑
-    openDialog() {
-      this.dialogVisible = true;
-      console.log('Dialog opened');
-    },
-    openInviteDialog(room) {
-      this.selectedRoom = room;
-      this.inviteDialogVisible = true;
-    },
-    checkUserLoggedIn() {
+      {
+        id: 2,
+        owner: 'Bob',
+        theme: 'Game Night',
+        roomNumber: '456',
+        roomCount: 10,
+        inviteCode: 'invite456'
+      },
+      {
+        id: 3,
+        owner: 'Charlie',
+        theme: 'Study Group',
+        roomNumber: '789',
+        roomCount: 3,
+        inviteCode: 'invite789'
+      },
+      {
+        id: 4,
+        owner: 'Dave',
+        theme: 'Movie Night',
+        roomNumber: '012',
+        roomCount: 8,
+        inviteCode: 'invite012'
+      },
+      {
+        id: 5,
+        owner: 'Eve',
+        theme: 'Cooking Class',
+        roomNumber: '345',
+        roomCount: 7,
+        inviteCode: 'invite345'
+      }
+    ]);
+    const myRooms = ref([
+      {
+        id: 1,
+        owner: '小小禾',
+        theme: 'Test code',
+        roomNumber: '666',
+        roomCount: 1,
+        inviteCode: '123456'
+      }
+    ]);
+    const friends = ref([
+      {
+        name: 'Alice',
+        avatar: 'images/room/Alice.webp'
+      },
+      {
+        name: 'Bob',
+        avatar: 'images/room/Bob.png'
+      },
+      // 更多好友...
+    ]);
+    const dialogVisible = ref(false);
+    const inviteDialogVisible = ref(false);
+    const selectedRoom = ref(null);
+    const inviteCodeInput = ref('');
+    const roomThemeInput = ref('');
+    const createRoomDialogVisible = ref(false);
+    const myRoomDialogVisible = ref(false);
+
+    watch(() => store.state.token, () => {
+      loggedIn.value = checkUserLoggedIn();
+    });
+
+    function checkUserLoggedIn() {
       const token = localStorage.getItem('token');
       return !!token;
-    },
-    inviteFriend() {
+    }
+
+    function openDialog() {
+      dialogVisible.value = true;
+      console.log('Dialog opened');
+    }
+
+    function openInviteDialog(room) {
+      selectedRoom.value = room;
+      inviteDialogVisible.value = true;
+    }
+
+    function inviteFriend() {
       // 用户邀请好友的逻辑
-    },
-    openCreateRoom() {
-      this.createRoomDialogVisible = true;
-    },
-    checkInviteCode() {
-      if (this.inviteCodeInput === this.selectedRoom.inviteCode) {
-        this.myRooms.push(this.selectedRoom);
-        this.inviteDialogVisible = false;
-        this.dialogVisible = false;
-        this.inviteCodeInput = '';
+    }
+
+    function openCreateRoom() {
+      createRoomDialogVisible.value = true;
+    }
+
+    function checkInviteCode() {
+      if (inviteCodeInput.value === selectedRoom.value.inviteCode) {
+        myRooms.value.push(selectedRoom.value);
+        inviteDialogVisible.value = false;
+        dialogVisible.value = false;
+        inviteCodeInput.value = '';
         // 进入房间的逻辑
       } else {
         alert('邀请码错误，请重新输入！');
-        this.inviteCodeInput = '';
+        inviteCodeInput.value = '';
       }
-    },
-    createNewRoom() {
+    }
+
+    function createNewRoom() {
       // 在这里添加创建新房间的逻辑
-      console.log(this.roomThemeInput);  // 可以查看输入的主题
-      this.roomThemeInput = '';  // 清空输入框
-      this.createRoomDialogVisible = false;  // 关闭对话框
-    },
-    openMyRoomDialog() {
-      this.myRoomDialogVisible = true;
-    },
+      console.log(roomThemeInput.value);  // 可以查看输入的主题
+      roomThemeInput.value = '';  // 清空输入框
+      createRoomDialogVisible.value = false;  // 关闭对话框
+    }
+
+    function openMyRoomDialog() {
+      myRoomDialogVisible.value = true;
+    }
+
+    return {
+      loggedIn,
+      user,
+      rooms,
+      myRooms,
+      friends,
+      dialogVisible,
+      inviteDialogVisible,
+      selectedRoom,
+      inviteCodeInput,
+      roomThemeInput,
+      createRoomDialogVisible,
+      myRoomDialogVisible,
+      openDialog,
+      openInviteDialog,
+      checkUserLoggedIn,
+      inviteFriend,
+      openCreateRoom,
+      checkInviteCode,
+      createNewRoom,
+      openMyRoomDialog,
+    };
   },
   mounted() {
     this.loggedIn = this.checkUserLoggedIn();
   },
-  computed: {
-    ...mapGetters(['loggedIn'])
-  }
-};
+});
 </script>
+
 
 <style scoped>
 .box {

@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts">
-import ShapeButton from "@renderer/components/buttons/ShapeButton.vue";
+import ShapeButton from "@components/buttons/ShapeButton.vue";
 import {ref} from "vue";
 
 let {ipcRenderer} = window;
