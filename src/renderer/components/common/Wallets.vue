@@ -67,7 +67,7 @@ import {ethers} from 'ethers';
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {faCheck, faCopy} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
-import {useStore} from "vuex";
+import {useUserStore} from "@store/users";
 
 let {ipcRenderer} = window;
 
@@ -87,7 +87,7 @@ export default defineComponent({
   emits: ['close', 'walletLogout', 'walletLogin'],
   setup(props, {emit}) {
 
-    const store = useStore();
+    const store = useUserStore();
 
     const showWalletSelector = ref(false);
     const showUserInfo = ref(false);
@@ -106,14 +106,14 @@ export default defineComponent({
 
     const buttonLabel = computed(() => {
       if (userLoggedIn.value && userAddress.value) {
-        return userAddress.value.slice(0, 6) + '...' + userAddress.value.slice(-4);
+        return store.getShortAddress;
       } else {
         return '连接钱包';
       }
     });
 
     const showAlert = (str: string) => {
-      ipcRenderer.send("show-main-alert", str);
+      // ipcRenderer.send("show-main-alert", str);
     };
 
     const buttonClick = () => {
@@ -136,11 +136,11 @@ export default defineComponent({
 
     const loadUserData = async () => {
       console.log('loadUserData!!!');
-      let loggedIn = userLoggedIn.value;
+      const loggedIn = userLoggedIn.value;
       if (loggedIn) {
         console.log('重新登录123');
         userLoggedIn.value = true;
-        userAddress.value = store.state.userAddress.value;
+        userAddress.value = store.address;
         userBalance.value = await getBalance(userAddress.value);
       } else {
         const storedAddress = localStorage.getItem('userAddress');
@@ -149,11 +149,11 @@ export default defineComponent({
           userAddress.value = storedAddress;
           console.log('loadUserData:this.userAddress =' + userAddress.value);
           console.log('loadUserData:this.userLoggedIn =' + userLoggedIn.value);
-          store.dispatch('setLoggedIn', true);
-          store.dispatch('setAddress', userAddress.value);
+          store.setIsLogin(true);
+          store.setAddress(storedAddress);
           userBalance.value = await getBalance(userAddress.value);
           console.log('loadUserData:this.userBalance =' + userBalance.value);
-          store.dispatch('setBalance', userBalance.value);
+          store.setBalance(userBalance.value);
         }
       }
     };
@@ -163,17 +163,17 @@ export default defineComponent({
       if (wallet.name === 'Metamask') {
         try {
           userLoggedIn.value = true;
-          await store.dispatch('setLoggedIn', true);
-          localStorage.setItem('userLoggedIn', userLoggedIn.value);
+          store.setIsLogin(true);
+          localStorage.setItem('isLogin', String(store.isLogin));
 
           const signer = provider.value.getSigner();
           userAddress.value = await signer.getAddress();
           console.log('signer: ', signer);
-          localStorage.setItem('userAddress', userAddress.value);
-          await store.dispatch('setAddress', userAddress.value);
+          localStorage.setItem('address', userAddress.value);
+          store.setAddress(userAddress.value);
 
           userBalance.value = await getBalance(userAddress.value);
-          await store.dispatch('setBalance', userBalance.value);
+          store.setBalance(userBalance.value);
 
           await loadUserData();
           console.log('openWalletLink2');
@@ -209,10 +209,10 @@ export default defineComponent({
       userLoggedIn.value = false;
       userAddress.value = '';
       userBalance.value = '0';
-      store.dispatch('setLoggedIn', false);
-      store.dispatch('setAddress', '');
-      store.dispatch('setBalance', '0');
-      localStorage.removeItem('userAddress');
+      store.setIsLogin(false);
+      store.setAddress('');
+      store.setBalance('0');
+      localStorage.removeItem('address');
       console.log('logout: ' + userLoggedIn.value);
       emit('walletLogout');
       loadUserData();
@@ -233,7 +233,7 @@ export default defineComponent({
           console.log('provider: ', provider.value);
           loadUserData();
         } else {
-          // this.showAlert('Metamask is not installed. Please consider installing it: https://metamask.io');
+          showAlert('Metamask is not installed. Please consider installing it: https://metamask.io');
         }
       }, 500);
     });

@@ -14,6 +14,7 @@
     </div>
     <div class="data-content">
       <div class="data-main">
+          <!--    整块大屏分视图上分为左中右三口，代码上分为左右两块，左边又分为左上部分和左下部分-->
         <div class="main-left">
           <div class="main-left-top">
             <div class="main-left-top-left">
@@ -24,10 +25,10 @@
             </div>
           </div>
           <div class="main-left-bottom">
-            <div class="bottom-div-left">
+              <div class="main-left-bottom-left">
               <main-left-bottom/>
             </div>
-            <div class="main-center-bottom">
+              <div class="main-left-bottom-right">
               <main-center-bottom/>
             </div>
           </div>
@@ -55,13 +56,12 @@
   </div>
 </template>
 <script lang="ts">
-import {defineComponent, computed, reactive} from 'vue';
-import {useStore} from 'vuex';
-import TopNavigator from "@renderer/components/navigate/TopNavigator.vue";
-import LoginButton from "@renderer/components/buttons/loginButton.vue";
-import Wallets from "@renderer/components/common/Wallets.vue";
-import SearchBar from "@renderer/components/common/SearchBar.vue";
-import TaskBar from "@renderer/components/common/TaskBar.vue";
+import {computed, defineComponent, reactive} from 'vue';
+import TopNavigator from "@components/navigate/TopNavigator.vue";
+import LoginButton from "@components/buttons/loginButton.vue";
+import Wallets from "@components/common/Wallets.vue";
+import SearchBar from "@components/common/SearchBar.vue";
+import TaskBar from "@components/common/TaskBar.vue";
 
 import MainLeftTop from "@pages/DashBoard/components/main-left/top/index.vue";
 import MainLeftBottom from "@pages/DashBoard/components/main-left/bottom/index.vue";
@@ -73,6 +73,7 @@ import MainCenterTop from "@pages/DashBoard/components/main-center/top/index.vue
 import MainCenterBottom from "@pages/DashBoard/components/main-center/bottom/index.vue";
 
 import {i18nt} from "@renderer/i18n"
+import {useBaseStore} from "@store/baseboard";
 
 export default defineComponent({
   components: {
@@ -89,13 +90,13 @@ export default defineComponent({
     MainCenterBottom,
   },
   setup() {
-    const store = useStore();
+      const store = useBaseStore();
     const openedPages = computed(() => store.state.openedPages);
 
     const onFeatureClicked = (feature: any) => {
       console.log("onFeatureClicked received", feature);
       if (!openedPages.value.some((p: any) => p.title === feature.title)) {
-        store.commit("ADD_PAGE", feature);
+          store.addOpenedPage(feature);
       }
       console.log("onFeatureClicked", openedPages.value);
     };
@@ -213,6 +214,22 @@ export default defineComponent({
         display: flex;
         justify-content: space-between;
 
+        .main-left-bottom-left {
+          width: 30%;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .main-left-bottom-right {
+          width: 65%;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
         .bottom-div {
           width: 30%;
           height: 100%;
@@ -223,13 +240,6 @@ export default defineComponent({
       }
     }
 
-    .main-center-bottom {
-      width: 65%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
 
     .main-right {
       float: left;

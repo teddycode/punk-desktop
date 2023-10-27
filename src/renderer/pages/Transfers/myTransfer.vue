@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import MainBackground from "@renderer/components/common/MainBackground.vue";
+import MainBackground from "@components/common/MainBackground.vue";
 
 export default {
   name: 'myTransfer',

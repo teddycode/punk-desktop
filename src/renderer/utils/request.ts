@@ -44,9 +44,9 @@ const onRejectHandler = (error: any) => {
         let res = error.response;
         switch (res.status) {
             case 301:
-                store.commit("User/SET_SHOW_LOGIN", true);
-                store.commit("User/SET_USER_INFO", {});
-                store.commit("App/SET_REDIRECT", "/home");
+                // store.commit("User/SET_SHOW_LOGIN", true);
+                // store.commit("User/SET_USER_INFO", {});
+                // store.commit("App/SET_REDIRECT", "/home");
                 // localStorage.removeItem("userId");
                 Message.warn(res.msg || "请先登录");
                 break;
@@ -56,9 +56,9 @@ const onRejectHandler = (error: any) => {
                 );
                 break;
             case 401:
-                store.commit("User/SET_SHOW_LOGIN", true);
-                store.commit("User/SET_USER_INFO", {});
-                store.commit("App/SET_REDIRECT", "/home");
+                // store.commit("User/SET_SHOW_LOGIN", true);
+                // store.commit("User/SET_USER_INFO", {});
+                // store.commit("App/SET_REDIRECT", "/home");
                 // localStorage.removeItem("userId");
                 Message.warn(res.msg || "请先登录");
                 break;

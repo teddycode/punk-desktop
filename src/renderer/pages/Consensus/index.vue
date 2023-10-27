@@ -1,5 +1,5 @@
 <template>
-  <MainBackground>
+    <main-background>
     <div class="container">
       <div style="padding: 10px 10px; margin-bottom: 20px">
         <span style="font-size: 30px">共识</span>
@@ -7,7 +7,7 @@
       <div style="padding: 10px 10px; margin-bottom: 20px">
         <span style="font-size: 20px">基础数据</span>
       </div>
-      <div style="border: 1px solid; border-radius: 10px; border-color: #cdcbcb; margin-bottom: 20px">
+        <div style="border-radius: 10px; border: 1px solid #cdcbcb;margin-bottom: 20px">
         <el-space wrap>
           <div style="padding: 10px 10px;">
             <div style="padding: 10px 5px;">
@@ -59,7 +59,7 @@
           </div>
         </el-space>
       </div>
-      <div style="width: 100%; border: 1px solid; border-color: #cdcbcb; padding: 10px 10px;">
+        <div style="width: 100%; border: 1px solid #cdcbcb;padding: 10px 10px;">
         <el-space wrap>
           <div style="width: 1000px; border: 1px solid; border-color: #cdcbcb;">
             <div style="display: flex; align-items: center; padding: 10px 10px;">
@@ -123,9 +123,9 @@
                 </el-table-column>
               </el-table>
               <el-dialog
-                v-model="detailDialogVisible"
-                title="区块详细信息"
-                width="30%"
+                      v-model="detailDialogVisible"
+                      title="区块详细信息"
+                      width="30%"
               >
                 <el-form :model="tableData.nowBlock" label-width="90px">
                   <el-form-item label="区块高度">
@@ -239,9 +239,9 @@
                 </el-table-column>
               </el-table>
               <el-dialog
-                v-model="detailDialogVisibleForMicBlock"
-                title="区块详细信息"
-                width="30%"
+                      v-model="detailDialogVisibleForMicBlock"
+                      title="区块详细信息"
+                      width="30%"
               >
                 <el-form :model="tableData.nowMicBlock" label-width="90px">
                   <el-form-item label="区块高度">
@@ -288,22 +288,22 @@
       </div>
       <div class="plugins-tips">数据更新时间：{{ nowDate }}</div>
     </div>
-  </MainBackground>
+    </main-background>
 </template>
-<script>
-import {reactive, ref} from "vue";
+<script lang="ts">
+import {defineComponent, reactive, ref} from "vue";
 import {ElMessage} from "element-plus";
 import {getAllBlock, getMicBlockByHeight} from "@renderer/api/consensus";
-import MainBackground from "@renderer/components/common/MainBackground.vue";
+import MainBackground from "@components/common/MainBackground.vue";
 
-export default {
+export default defineComponent({
   name: "Consensus",
   components: {
     MainBackground
   },
   setup() {
-    const multipleTableRef = ref();
-    const multipleTableForMicBlockRef = ref();
+      const multipleTableRef = ref<Element | null>(null);
+      const multipleTableForMicBlockRef = ref<Element | null>(null);
     const tableData = reactive({
       blockInfo: [],
       displayBlockInfo: [],
@@ -319,9 +319,9 @@ export default {
 
     let detailDialogVisible = ref(false);
     let detailDialogVisibleForMicBlock = ref(false);
-    let nowDate;
+      let nowDate: string | null = null;
 
-    const getRowKey = (row) => {
+      const getRowKey = (row: { id: number }) => {
       return row.id;
     };
 
@@ -333,19 +333,19 @@ export default {
       if (tableData.searchBlockHeight === "" && tableData.searchBlockHash === "") {
         tableData.displayBlockInfo = [].concat(tableData.blockInfo)
       } else if (tableData.searchBlockHeight === "" && tableData.searchBlockHash !== "") {
-        tableData.blockInfo.forEach((item) => {
+          tableData.blockInfo.forEach((item: { hash: string }) => {
           if (item.hash === tableData.searchBlockHash) {
             tableData.displayBlockInfo.push(item);
           }
         })
       } else if (tableData.searchBlockHeight !== "" && tableData.searchBlockHash === "") {
-        tableData.blockInfo.forEach((item) => {
+          tableData.blockInfo.forEach((item: { height: string }) => {
           if (item.height === tableData.searchBlockHeight) {
             tableData.displayBlockInfo.push(item);
           }
         })
       } else {
-        tableData.blockInfo.forEach((item) => {
+          tableData.blockInfo.forEach((item: { height: string, hash: string }) => {
           if (item.height === tableData.searchBlockHeight && item.hash === tableData.searchBlockHash) {
             tableData.displayBlockInfo.push(item);
           }
@@ -361,19 +361,19 @@ export default {
       if (tableData.searchMicBlockHeight === "" && tableData.searchMicBlockHash === "") {
         tableData.displayMicBlockInfo = [].concat(tableData.micBlockInfo)
       } else if (tableData.searchMicBlockHeight === "" && tableData.searchMicBlockHash !== "") {
-        tableData.micBlockInfo.forEach((item) => {
+          tableData.micBlockInfo.forEach((item: { hash: string }) => {
           if (item.hash === tableData.searchMicBlockHash) {
             tableData.displayMicBlockInfo.push(item);
           }
         })
       } else if (tableData.searchMicBlockHeight !== "" && tableData.searchMicBlockHash === "") {
-        tableData.micBlockInfo.forEach((item) => {
+          tableData.micBlockInfo.forEach((item: { height: string }) => {
           if (item.height === tableData.searchMicBlockHeight) {
             tableData.displayMicBlockInfo.push(item);
           }
         })
       } else {
-        tableData.micBlockInfo.forEach((item) => {
+          tableData.micBlockInfo.forEach((item: { height: string, hash: string }) => {
           if (item.height === tableData.searchMicBlockHeight && item.hash === tableData.searchMicBlockHash) {
             tableData.displayMicBlockInfo.push(item);
           }
@@ -391,14 +391,14 @@ export default {
       tableData.searchMicBlockHash = "";
     }
 
-    const handleDetail = (index, row) => {
+      const handleDetail = (index: number, row: any) => {
       console.log(row);
       // 深拷贝如下
       // 这里最好不直接使用 = ，因为修改失败时，我们不希望 tableData.nowMicBlock 的变化引起 row 的变化
       tableData.nowBlock = JSON.parse(JSON.stringify(row));
     }
 
-    const handleDetailForMicBlock = (index, row) => {
+      const handleDetailForMicBlock = (index: number, row: any) => {
       console.log(row);
       // 深拷贝如下
       // 这里最好不直接使用 = ，因为修改失败时，我们不希望 tableData.nowMicBlock 的变化引起 row 的变化
@@ -406,22 +406,22 @@ export default {
     }
 
     const getAllBlockData = () => {
-      getAllBlock().then((res) => {
+        getAllBlock().then((res: any) => {
         tableData.blockInfo = [].concat(res);
         tableData.displayBlockInfo = [].concat(res);
         let query = {height: 0};
         if (tableData.blockInfo.length !== 0) {
           console.log(tableData.blockInfo[0].height);
           query.height = tableData.blockInfo[0].height
-          getMicBlockByHeight().then((res) => {
+            getMicBlockByHeight().then((res: any) => {
             tableData.micBlockInfo = [].concat(res);
             tableData.displayMicBlockInfo = [].concat(res);
-          }).catch((error) => {
+            }).catch((error: Error) => {
             console.log(error);
             ElMessage.error("获取消息数据失败");
           });
         }
-      }).catch((error) => {
+        }).catch((error: Error) => {
         console.log(error);
         ElMessage.error("获取消息数据失败");
       });
@@ -430,7 +430,6 @@ export default {
     };
 
     getAllBlockData();
-    // getMicBlock();
 
     return {
       multipleTableRef,
@@ -448,8 +447,9 @@ export default {
       getRowKey,
     };
   },
-};
+});
 </script>
+
 
 <style>
 .handle-box {
@@ -501,7 +501,7 @@ a {
 
 .container {
   padding: 30px;
-  background: #fff;
+    background: transparent;
   border: 1px solid #ddd;
   border-radius: 5px;
 }

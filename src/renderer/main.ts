@@ -1,10 +1,9 @@
 import {createApp} from 'vue'
-// import {createPinia} from 'pinia'
+import {createPinia} from 'pinia'
 
 import './permission'
 import App from './App.vue'
 import router from './router'
-import store from "./store";
 import {errorHandler} from './error'
 
 const app = createApp(App)
@@ -58,9 +57,8 @@ app.use(PrimeVue)
 app.use(ElementPlus)
 app.config.globalProperties.$echarts = echarts
 
-// const store = createPinia()
 app.use(router)
-app.use(store)
+app.use(createPinia())
 errorHandler(app)
 
 app.mount("#app")

@@ -16,55 +16,61 @@
   </dv-border-box10>
 </template>
 
-<script>
+<script lang="ts">
+import {ref, watch, onMounted} from 'vue';
+import {useRouter} from 'vue-router';
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {faExclamationCircle} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
-import AddnodeButton from "@renderer/components/buttons/ShapeButton.vue";
-import {mapGetters} from 'vuex';
+import ShapeButton from "@components/buttons/ShapeButton.vue";
+import {useUserStore} from "@store/users";
 
 library.add(faExclamationCircle);
 
 export default {
-  name: "mywallet-info",
+  name: "NodeManager",
   components: {
-    'font-awesome-icon': FontAwesomeIcon,
-    'add-node-button': AddnodeButton,
+    FontAwesomeIcon,
+    ShapeButton,
   },
-  data() {
+  setup() {
+    const store = useUserStore();
+    const router = useRouter();
+    const user = ref({
+      nickname: 'User Name',
+      onlineNodes: 10
+    });
+    const loggedIn = ref(checkUserLoggedIn());
+
+    function checkUserLoggedIn() {
+      const token = localStorage.getItem('token');
+      console.log(token);
+      return !!token;
+    }
+
+    function navigateToLogin() {
+      router.push({name: 'UserLoginPage'});
+    }
+
+    function navigateToNodeManagement() {
+      router.push({name: 'NodeManagerPage'});
+    }
+
+    watch(() => store.state.token, () => {
+      loggedIn.value = checkUserLoggedIn();
+    });
+
+    onMounted(() => {
+      loggedIn.value = checkUserLoggedIn();
+    });
+
     return {
-      loggedIn: this.checkUserLoggedIn(),  // 初始化时检查用户的登录状态
-      user: {
-        nickname: 'User Name',
-        onlineNodes: 10
-      }
+      user,
+      loggedIn,
+      navigateToLogin,
+      navigateToNodeManagement
     }
   },
-  watch: {
-    '$store.state.token': function () {
-      this.loggedIn = this.checkUserLoggedIn();
-    },
-  },
-  methods: {
-    checkUserLoggedIn() {
-      const token = localStorage.getItem('token');
-      console.log(token)
-      console.log(this.loggedIn)
-      return !!token;
-    },
-    navigateToLogin() {
-      this.$router.push({name: 'UserLoginPage'});
-    },
-    navigateToNodeManagement() {
-      this.$router.push({name: 'NodeManagerPage'});
-    },
-  },
-  mounted() {
-    this.loggedIn = this.checkUserLoggedIn();
-  },
-  computed: {
-    ...mapGetters(['loggedIn'])
-  }
 };
 </script>
 

@@ -1,7 +1,7 @@
 import Mock from 'mockjs'
 import '@/mock/extend'
 import * as fs from "fs";
-import {API_PREFIX} from "../../utils/request";
+import {API_PREFIX} from "@renderer/utils/request";
 
 //  查询所有区块
 Mock.mock(`${API_PREFIX}/consensus/block/list`, 'get', () => {

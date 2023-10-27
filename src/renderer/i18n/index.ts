@@ -10,7 +10,7 @@ export const loadLanguages = (): any => {
 
   let langs = Object.keys(context);
   for (let key of langs) {
-    if (key === "./index.ts") return;
+      if (key === "./users.ts") return;
     let lang = context[key].lang;
     let name = key.replace(/(\.\/languages\/|\.ts)/g, '');
     languages[name] = lang

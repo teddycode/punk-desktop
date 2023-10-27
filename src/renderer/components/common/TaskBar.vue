@@ -23,20 +23,20 @@
 
 <script>
 import {ref, computed, onMounted} from 'vue';
-import {useStore} from 'vuex';
 import {useRouter} from 'vue-router';
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {faHome, faTimes} from '@fortawesome/free-solid-svg-icons';
+import {useBaseStore} from "@store/baseboard";
 
 library.add(faHome, faTimes);
 
 export default {
   name: "TaskBar",
   setup() {
-    const store = useStore();
+    const store = useBaseStore();
     const router = useRouter();
-    const openedPages = computed(() => store.getters.openedPages);
-    const currentPage = computed(() => store.state.currentPage);
+    const openedPages = computed(() => store.openedPages);
+    const currentPage = computed(() => store.currentPage);
     const currentTime = ref(getCurrentTime());
 
     onMounted(() => {
@@ -47,7 +47,7 @@ export default {
     });
 
     function navigateTo(routeName) {
-      store.commit('setCurrentPage', routeName);
+      store.setCurrentPage(routeName);
       router.push({name: routeName});
     }
 
@@ -99,7 +99,7 @@ export default {
   flex-direction: row;
   align-items: center;
   gap: 5px;
-  padding-right: 25px;
+  padding-right: 20px;
   transition: all 0.3s ease; // 添加过渡效果
 
   &.active-tab {
