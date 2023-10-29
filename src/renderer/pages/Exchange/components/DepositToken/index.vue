@@ -1,4 +1,5 @@
 <template>
+  <main-background>
   <div class="liquidity-wrapper">
     <div class="liquidity-container">
       <!-- <h1 class="liquidity-title">添加流动性</h1> -->
@@ -53,23 +54,26 @@
       </div>
       <div class="divider"></div>
       <div class="button-container">
-        <addnode-button class="add-liquidity-button" @click="validateAndDeposit">充币</addnode-button>
-        <addnode-button class="add-liquidity-button" @click="validateAndWithdraw">提币</addnode-button>
+        <shape-button class="add-liquidity-button" @click="validateAndDeposit">充币</shape-button>
+        <shape-button class="add-liquidity-button" @click="validateAndWithdraw">提币</shape-button>
       </div>
     </div>
   </div>
+  </main-background>
 </template>
 
 <script>
-import addnodeButton from "@components/buttons/ShapeButton.vue";
+import ShapeButton from "@components/buttons/ShapeButton.vue";
 // import {addLiq} from "@pages/Exchange/function/addLiquidity";
-import {burn, deposit} from "@pages/Exchange/function/bridge"
+import {burn, deposit} from "@pages/Exchange/services/bridge"
+import MainBackground from "@components/common/MainBackground.vue";
 // import {limitOrderPoolKey} from "@pages/Exchange/function/address.js";
 // import {ethers} from "ethers";
 // import { initializeWallet } from "@pages/Exchange/function/address";
 export default {
   components: {
-    addnodeButton,
+    MainBackground,
+    ShapeButton,
   },
   data() {
     return {
@@ -210,11 +214,14 @@ export default {
 </script>
 
 <style scoped>
+
 .liquidity-wrapper {
   border-radius: 10px;
   padding: 2%;
   max-width: 90%;
-  margin: 1px auto;
+  margin: auto;
+  margin-top: 30px;
+  align-content: center;
   border: 1px solid white;
   background-color: transparent;
 }
@@ -227,7 +234,7 @@ export default {
 
 .liquidity-title {
   color: white;
-  font-size: 0.5rem;
+  font-size: 14px;
   margin-bottom: 3%;
 }
 
@@ -248,13 +255,13 @@ export default {
 
 .h2-3 {
   color: white;
-  font-size: 0.5rem;
+  font-size: 14px;
   margin-bottom: 1%;
 }
 
 .h2-1 {
   color: white;
-  font-size: 0.5rem;
+  font-size: 14px;
   margin-bottom: 1%;
   text-align: left;
   margin-left: 20%;
@@ -262,7 +269,7 @@ export default {
 
 .h2-2 {
   color: white;
-  font-size: 0.5rem;
+  font-size: 14px;
   margin-bottom: 1%;
   text-align: left;
   margin-left: -10%;
@@ -286,7 +293,7 @@ export default {
   color: white;
   padding: 8px 12px;
   border-radius: 4px;
-  font-size: 5px;
+  font-size: 14px;
   outline: none;
   transition: border-color 0.15s ease-in-out;
 }
@@ -299,7 +306,7 @@ export default {
   color: white;
   padding: 8px 12px;
   border-radius: 4px;
-  font-size: 5px;
+  font-size: 14px;
   outline: none;
   transition: border-color 0.15s ease-in-out;
 }
@@ -392,7 +399,7 @@ export default {
 
 .error-message {
   color: red;
-  font-size: 0.5rem;
+  font-size: 14px;
   padding: 2px 0; /* 将 padding 调整为更小的值来适应文本内容 */
   width: 100%;
   text-align: center;
@@ -403,7 +410,7 @@ export default {
 
 .add-liquidity-button {
   margin-bottom: 1%;
-  font-size: 0.5rem;
+  font-size: 14px;
 }
 
 .price-range-section {
@@ -417,7 +424,7 @@ export default {
 
 .price-range-title {
   color: white;
-  font-size: 0.5rem;
+  font-size: 14px;
   margin-bottom: 1%;
 }
 

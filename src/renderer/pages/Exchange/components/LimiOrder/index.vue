@@ -1,74 +1,78 @@
 <template>
-  <div class="limitOrder">
-    <!-- <div class="chart-container">
-        <div id="chart" style="width: 100%; height: 400px; margin-bottom: 40px;margin-top: 40px"></div>
-    </div> -->
-    <div class="limitOrder-panel-transaction">
-      <!-- <h2 class="exchange-title">限价单</h2> -->
-      <!-- Sell & Buy Dropdowns -->
-      <div class="limitOrder-token-pair">
-        <label class="limitOrder-token-label">Sell</label>
-        <div class="limitOrder-select-wrapper">
-          <select v-model="selectedToken1" class="limitOrder-custom-select">
-            <option v-for="token in tokens" :key="token.value" :value="token.value" class="select-option">{{
-                token.label
-              }}
-            </option>
-          </select>
+  <main-background>
+    <div class="limitOrder">
+      <!-- <div class="chart-container">
+          <div id="chart" style="width: 100%; height: 400px; margin-bottom: 40px;margin-top: 40px"></div>
+      </div> -->
+      <div class="limitOrder-panel-transaction">
+        <!-- <h2 class="exchange-title">限价单</h2> -->
+        <!-- Sell & Buy Dropdowns -->
+        <div class="limitOrder-token-pair">
+          <label class="limitOrder-token-label">Sell</label>
+          <div class="limitOrder-select-wrapper">
+            <select v-model="selectedToken1" class="limitOrder-custom-select">
+              <option v-for="token in tokens" :key="token.value" :value="token.value" class="select-option">{{
+                  token.label
+                }}
+              </option>
+            </select>
+          </div>
         </div>
-      </div>
 
-      <div class="limitOrder-token-pair">
-        <label class="limitOrder-token-label">Buy</label>
-        <div class="limitOrder-select-wrapper">
-          <select v-model="selectedToken2" class="limitOrder-custom-select">
-            <option v-for="token in tokens" :key="token.value" :value="token.value" class="select-option">{{
-                token.label
-              }}
-            </option>
-          </select>
+        <div class="limitOrder-token-pair">
+          <label class="limitOrder-token-label">Buy</label>
+          <div class="limitOrder-select-wrapper">
+            <select v-model="selectedToken2" class="limitOrder-custom-select">
+              <option v-for="token in tokens" :key="token.value" :value="token.value" class="select-option">{{
+                  token.label
+                }}
+              </option>
+            </select>
+          </div>
         </div>
-      </div>
-      <!-- Divider -->
-      <!-- <div class="divider"/> -->
-      <!-- Fee Tiers -->
-      <!-- <div class="fee-tiers-title">Fee Tiers</div> -->
-      <div class="fee-options">
-        <label v-for="fee in fees" :key="fee" :class="{ 'selected': selectedFee === fee }" class="limitOrder-fee-box">
-          <input v-model="selectedFee" :value="fee" class="limitOrder-hidden-radio" name="fee" type="radio"/>
-          {{ fee }}
-        </label>
-      </div>
-      <!-- Divider -->
-      <!-- <div class="divider"/> -->
-      <div class="limitOrder-token-input">
-        <label class="limitOrder-token-label">Amount</label>
-        <input v-model="amount" class="limitOrder-custom-input" type="text"/>
-      </div>
-      <div class="limitOrder-token-input">
-        <label class="limitOrder-token-label">Price</label>
-        <div class="input-with-token">
-          <input v-model="price" class="limitOrder-custom-input" type="text"/>
-          <span class="selected-tokens">{{ selectedToken1 }}/{{ selectedToken2 }}</span>
+        <!-- Divider -->
+        <!-- <div class="divider"/> -->
+        <!-- Fee Tiers -->
+        <!-- <div class="fee-tiers-title">Fee Tiers</div> -->
+        <div class="fee-options">
+          <label v-for="fee in fees" :key="fee" :class="{ 'selected': selectedFee === fee }" class="limitOrder-fee-box">
+            <input v-model="selectedFee" :value="fee" class="limitOrder-hidden-radio" name="fee" type="radio"/>
+            {{ fee }}
+          </label>
         </div>
+        <!-- Divider -->
+        <!-- <div class="divider"/> -->
+        <div class="limitOrder-token-input">
+          <label class="limitOrder-token-label">Amount</label>
+          <input v-model="amount" class="limitOrder-custom-input" type="text"/>
+        </div>
+        <div class="limitOrder-token-input">
+          <label class="limitOrder-token-label">Price</label>
+          <div class="input-with-token">
+            <input v-model="price" class="limitOrder-custom-input" type="text"/>
+            <span class="selected-tokens">{{ selectedToken1 }}/{{ selectedToken2 }}</span>
+          </div>
+        </div>
+        <shape-button style="width: 150px;height: 40px" @click="place">Add</shape-button>
       </div>
-      <addnode-button style="width: 150px;height: 40px" @click="place">Add</addnode-button>
     </div>
-  </div>
+  </main-background>
 </template>
 
 
 <script>
 import axios from "axios";
 import * as echarts from 'echarts';
-import addnodeButton from "@components/buttons/ShapeButton.vue";
-import {limitOrderPoolKey} from "@pages/Exchange/function/address";
-import {placeLimitOrderFrontend} from "@pages/Exchange/function/place";
+import ShapeButton from "@components/buttons/ShapeButton.vue";
+import {limitOrderPoolKey} from "@pages/Exchange/services/address";
+import {placeLimitOrderFrontend} from "@pages/Exchange/services/place";
 import {ethers} from "ethers";
+import MainBackground from "@components/common/MainBackground.vue";
 
 export default {
   components: {
-    addnodeButton
+    MainBackground,
+    ShapeButton
   },
   data() {
     return {
@@ -343,6 +347,7 @@ export default {
   display: flex;
   justify-content: space-between;
   gap: 40px;
+  margin-top: 30px;
   padding: 0 30px; /* 设置左右两侧的间距为40px */
 }
 

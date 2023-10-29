@@ -5,7 +5,7 @@
       <div class="node-content">
         当前节点数: {{ user.onlineNodes }}
       </div>
-      <add-node-button @click="addNode">添加节点</add-node-button>
+      <shape-button @click="addNode">添加节点</shape-button>
     </div>
     <div v-else class="content">
       <div class="main-left-top-tip">

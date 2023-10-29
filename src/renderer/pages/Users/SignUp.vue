@@ -45,9 +45,9 @@
               <input id="company" v-model="signupForm.company" type="text"/>
             </div>
           </div>
-          <addnode-button class="signup-button" type="submit">注册</addnode-button>
+          <shape-button class="signup-button" type="submit">注册</shape-button>
           <p class="login-link">已有账号?
-            <router-link to="/myLogin">点击登录!</router-link>
+            <router-link to="/user/login">点击登录!</router-link>
           </p>
         </form>
       </div>
@@ -58,14 +58,14 @@
 <script>
 import axios from "axios";
 import MainBackground from "@components/common/MainBackground.vue";
-import addnodeButton from "@components/buttons/ShapeButton.vue";
+import ShapeButton from "@components/buttons/ShapeButton.vue";
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {faBuilding, faEnvelope, faEye, faEyeSlash, faLock, faUser} from '@fortawesome/free-solid-svg-icons'
 
 library.add(faUser, faLock, faEnvelope, faBuilding, faEye, faEyeSlash)
 
 export default {
-  components: {MainBackground, addnodeButton},
+  components: {MainBackground, ShapeButton},
   data() {
     return {
       signupForm: {

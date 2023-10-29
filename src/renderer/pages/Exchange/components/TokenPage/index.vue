@@ -23,7 +23,7 @@
         <div class="search-bar">
             <i class="fas fa-search search-icon"></i>
             <input type="text" class="search-input" placeholder="Search..." v-model.lazy="searchKeyword">
-            <addnode-button class="search-button" @click="search_token">Search</addnode-button>
+            <shape-button class="search-button" @click="search_token">Search</shape-button>
         </div>
     </div> -->
     <div class="table-section">
@@ -50,12 +50,12 @@
 </template>
 
 <script>
-import addnodeButton from "@components/buttons/ShapeButton.vue";
+import ShapeButton from "@components/buttons/ShapeButton.vue";
 
 export default {
   name: "TokenPage",
   components: {
-    addnodeButton,
+    ShapeButton,
   },
   data() {
     return {

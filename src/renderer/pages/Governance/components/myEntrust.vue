@@ -6,18 +6,18 @@
       <input v-model="inputAddress" class="custom-input" type="text">
     </div>
 
-    <addnode-button @click="delegate">委托</addnode-button>
+    <shape-button @click="delegate">委托</shape-button>
   </div>
 </template>
 
 <script>
-import addnodeButton from "@components/buttons/ShapeButton.vue"; // 请确保路径是正确的
+import ShapeButton from "@components/buttons/ShapeButton.vue"; // 请确保路径是正确的
 import {tokenPower} from "@pages/Governance/components/function/address";
 
 export default {
   name: "myEntrust",
   components: {
-    addnodeButton
+    ShapeButton
   },
   data() {
     return {

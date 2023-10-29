@@ -1,84 +1,89 @@
 <template>
-  <div class="myOrder-page">
-    <div v-for="(order, index) in displayedOrders" :key="index" class="myOrder-card">
-      <div class="myOrder-title-container">
-        <h1 class="myOrder-title">My Orders</h1>
-        <font-awesome-icon class="info-icon" icon="info-circle" @click="showDetails(order)"/>
-      </div>
-      <div class="myOrder-limitOrder">
-        <!-- 左边框 -->
-        <div class="myOrder-panel">
-          <div class="myOrder-limitOrder-token-pair">
-            <h2 class="token-pair-title">代币对</h2>
-            <div class="data-box">{{ order.sell }}</div>
-            <div class="data-box">{{ order.buy }}</div>
-          </div>
-          <div class="fee-options">
-            <h3 class="fee-title">Fee Rates</h3>
-            <div class="data-box">{{ order.feeRates }}</div>
-          </div>
-          <div class="selected-tokens">{{ order.sell }} -> {{ order.buy }}</div>
+  <main-background>
+    <div class="myOrder-page">
+      <div v-for="(order, index) in displayedOrders" :key="index" class="myOrder-card">
+        <div class="myOrder-title-container">
+          <h1 class="myOrder-title">My Orders</h1>
+          <font-awesome-icon class="info-icon" icon="info-circle" @click="showDetails(order)"/>
         </div>
-        <!-- 右边框 -->
-        <div class="myOrder-panel">
-          <div class="myOrder-input-section">
-            <label class="myOrder-limitOrder-token-label" for="amount">Amount</label>
-            <div class="input-with-token">
-              <div class="data-box">{{ Number(order.amount) }}</div>
+        <div class="myOrder-limitOrder">
+          <!-- 左边框 -->
+          <div class="myOrder-panel">
+            <div class="myOrder-limitOrder-token-pair">
+              <h2 class="token-pair-title">代币对</h2>
+              <div class="data-box">{{ order.sell }}</div>
+              <div class="data-box">{{ order.buy }}</div>
             </div>
-          </div>
-          <div class="myOrder-input-section">
-            <label class="myOrder-limitOrder-token-label" for="price">Price</label>
-            <div class="input-with-token">
-              <div class="data-box">{{ Number(order.price) }} <span>{{ order.sell }}/{{ order.buy }}</span></div>
+            <div class="fee-options">
+              <h3 class="fee-title">Fee Rates</h3>
+              <div class="data-box">{{ order.feeRates }}</div>
             </div>
+            <div class="selected-tokens">{{ order.sell }} -> {{ order.buy }}</div>
           </div>
-          <!-- 你的数据中似乎没有Filled字段，如果需要可以自行添加 -->
-          <div class="myOrder-input-section">
-            <label class="myOrder-limitOrder-token-label" for="filled">Filled</label>
-            <div class="input-with-token">
-              <div :class="getStatusClass(order.status)" class="data-box">{{ order.status }}</div>
+          <!-- 右边框 -->
+          <div class="myOrder-panel">
+            <div class="myOrder-input-section">
+              <label class="myOrder-limitOrder-token-label" for="amount">Amount</label>
+              <div class="input-with-token">
+                <div class="data-box">{{ Number(order.amount) }}</div>
+              </div>
             </div>
-          </div>
+            <div class="myOrder-input-section">
+              <label class="myOrder-limitOrder-token-label" for="price">Price</label>
+              <div class="input-with-token">
+                <div class="data-box">{{ Number(order.price) }} <span>{{ order.sell }}/{{ order.buy }}</span></div>
+              </div>
+            </div>
+            <!-- 你的数据中似乎没有Filled字段，如果需要可以自行添加 -->
+            <div class="myOrder-input-section">
+              <label class="myOrder-limitOrder-token-label" for="filled">Filled</label>
+              <div class="input-with-token">
+                <div :class="getStatusClass(order.status)" class="data-box">{{ order.status }}</div>
+              </div>
+            </div>
 
+          </div>
         </div>
-      </div>
-      <div class="button-group">
-        <addnode-button :disabled="order.status !== '成交'"
-                        class="addnode-button"
+        <div class="button-group">
+          <shape-button :disabled="order.status !== '成交'"
+                        class="shape-button"
                         @click="withdraw(Number(order.epoch),order.id)">
-          withdraw
-        </addnode-button>
-        <addnode-button :disabled="order.status !== '待成交'"
-                        class="addnode-button"
+            withdraw
+          </shape-button>
+          <shape-button :disabled="order.status !== '待成交'"
+                        class="shape-button"
                         @click="kill(order.sell,order.buy,Number(order.price),order.id)">
-          cancel
-        </addnode-button>
+            cancel
+          </shape-button>
+        </div>
       </div>
-    </div>
 
-  </div>
-  <myPagination :currentPage="1" :pagesize="itemsPerPage" :total="totalItems" @change-page="updatePage"></myPagination>
+    </div>
+    <myPagination :currentPage="1" :pagesize="itemsPerPage" :total="totalItems"
+                  @change-page="updatePage"></myPagination>
+  </main-background>
 </template>
 
 
 <script>
-import addnodeButton from "@components/buttons/ShapeButton.vue";
-import {killLimitOrderFrontend} from "@pages/Exchange/function/kill"
-import {limitOrderPoolKey, token0, token1} from "@pages/Exchange/function/address";
+import ShapeButton from "@components/buttons/ShapeButton.vue";
+import {killLimitOrderFrontend} from "@pages/Exchange/services/kill"
+import {limitOrderPoolKey, token0, token1} from "@pages/Exchange/services/address";
 import {ethers} from "ethers";
-import {withdraw_main} from "@pages/Exchange/function/withdraw";
+import {withdraw_main} from "@pages/Exchange/services/withdraw";
 import axios from "axios";
 import myPagination from "@components/common/myPagination.vue";
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {faInfoCircle} from '@fortawesome/free-solid-svg-icons'
+import MainBackground from "@components/common/MainBackground.vue";
 
 library.add(faInfoCircle)
 export default {
   name: "myOrder",
   components: {
+    MainBackground,
     myPagination,
-    addnodeButton
+    ShapeButton
   },
   data() {
     return {
@@ -324,7 +329,7 @@ export default {
   font-size: 1.5rem;
 }
 
-.addnode-button {
+.shape-button {
   flex: 1; /* 使得两个按钮平均分配空间 */
   padding: 10px 20px;
   cursor: pointer;
@@ -352,7 +357,7 @@ export default {
   cursor: pointer;
 }
 
-.addnode-button[disabled] {
+.shape-button[disabled] {
   opacity: 0.5;
   pointer-events: none; /* 禁止所有鼠标事件，包括点击 */
   cursor: not-allowed;

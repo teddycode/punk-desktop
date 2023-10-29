@@ -14,7 +14,7 @@
     </div>
     <div class="data-content">
       <div class="data-main">
-          <!--    整块大屏分视图上分为左中右三口，代码上分为左右两块，左边又分为左上部分和左下部分-->
+        <!--    整块大屏分视图上分为左中右三口，代码上分为左右两块，左边又分为左上部分和左下部分-->
         <div class="main-left">
           <div class="main-left-top">
             <div class="main-left-top-left">
@@ -25,10 +25,10 @@
             </div>
           </div>
           <div class="main-left-bottom">
-              <div class="main-left-bottom-left">
+            <div class="main-left-bottom-left">
               <main-left-bottom/>
             </div>
-              <div class="main-left-bottom-right">
+            <div class="main-left-bottom-right">
               <main-center-bottom/>
             </div>
           </div>
@@ -90,13 +90,13 @@ export default defineComponent({
     MainCenterBottom,
   },
   setup() {
-      const store = useBaseStore();
+    const store = useBaseStore();
     const openedPages = computed(() => store.state.openedPages);
 
     const onFeatureClicked = (feature: any) => {
       console.log("onFeatureClicked received", feature);
       if (!openedPages.value.some((p: any) => p.title === feature.title)) {
-          store.addOpenedPage(feature);
+        store.addOpenedPage(feature);
       }
       console.log("onFeatureClicked", openedPages.value);
     };

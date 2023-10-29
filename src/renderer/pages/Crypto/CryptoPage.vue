@@ -22,10 +22,10 @@
         <div class="developer-title">成为磐古开发者</div>
         <div class="developer-description">想要在磐古系统中加入你的设计？来治理社区提交你的提案吧。</div>
         <div class="buttons-container">
-          <addnode-button1 class="developer-button-left" color="blue" @click="gotoGovernance">进入治理社区
-          </addnode-button1>
-          <addnode-button1 class="developer-button-right" color="blue" @click="gotoNewProposal">创建新提案
-          </addnode-button1>
+          <shape-button class="developer-button-left" color="blue" @click="gotoGovernance">进入治理社区
+          </shape-button>
+          <shape-button class="developer-button-right" color="blue" @click="gotoNewProposal">创建新提案
+          </shape-button>
         </div>
       </div>
       <div>
@@ -196,10 +196,10 @@
 
 <script>
 import MainBackground from "@components/common/MainBackground.vue";
-import addnodeButton1 from "@components/buttons/addnodeButton1.vue";
+import ShapeButton from "@components/buttons/ShapeButton.vue";
 
 export default {
-  components: {MainBackground, addnodeButton1},
+  components: {MainBackground, ShapeButton},
   provide() {
     return {
       // 导航窗格内容
@@ -444,7 +444,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .PageContent {
   color: #ffffff;
   text-align: left;

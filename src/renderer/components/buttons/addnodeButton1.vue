@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: "addNodeButton"
+  name: "ShapeButton"
 }
 </script>
 

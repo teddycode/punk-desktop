@@ -24,14 +24,14 @@
         <div class="box-edit left-edit">
           <h2>智能合约代码</h2>
           <div class="button-group">
-            <addnode-button class="action-button">生成</addnode-button>
-            <addnode-button class="action-button">部署</addnode-button>
+            <shape-button class="action-button">生成</shape-button>
+            <shape-button class="action-button">部署</shape-button>
           </div>
         </div>
         <div class="box-edit right-edit">
           <h2>李嘉图合约代码</h2>
           <div class="button-group">
-            <addnode-button class="action-button">链接</addnode-button>
+            <shape-button class="action-button">链接</shape-button>
           </div>
         </div>
       </div>
@@ -50,12 +50,12 @@
 
 <script>
 import MainBackground from "@components/common/MainBackground.vue";
-import addnodeButton from "@components/buttons/ShapeButton.vue";
+import ShapeButton from "@components/buttons/ShapeButton.vue";
 
 export default {
   name: "RicardianContract",
   components: {
-    MainBackground, addnodeButton,
+    MainBackground, ShapeButton,
   },
   data() {
     return {

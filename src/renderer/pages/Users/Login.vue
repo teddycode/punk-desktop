@@ -20,7 +20,7 @@
                                  @click="showPassword = !showPassword"/>
             </div>
           </div>
-          <addnode-button class="login-button" type="submit">登录</addnode-button>
+          <shape-button class="login-button" type="submit">登录</shape-button>
           <p class="register-link">没有账号?
             <router-link to="/SignUp">点击注册!</router-link>
           </p>
@@ -33,13 +33,13 @@
 <script>
 import axios from "axios";
 import MainBackground from "@components/common/MainBackground.vue";
-import addnodeButton from "@components/buttons/ShapeButton.vue";
+import ShapeButton from "@components/buttons/ShapeButton.vue";
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {faEye, faEyeSlash, faLock, faUser} from '@fortawesome/free-solid-svg-icons'
 
 library.add(faUser, faLock, faEye, faEyeSlash)
 export default {
-  components: {MainBackground, addnodeButton},
+  components: {MainBackground, ShapeButton},
   data() {
     return {
       loginForm: {

@@ -4,7 +4,7 @@
       <div class="left-section">
         <div class="header">
           <h1 class="title">提案</h1>
-          <addnode-button>创建提案</addnode-button>
+          <shape-button>创建提案</shape-button>
         </div>
         <div class="proposal-card">
           一条提案
@@ -24,14 +24,14 @@
 
 <script>
 import MainBackground from "@components/common/MainBackground.vue";
-import addnodeButton from "@components/buttons/ShapeButton.vue";
+import ShapeButton from "@components/buttons/ShapeButton.vue";
 import selfInfo from "@pages/Governance/components/selfInfo.vue";
 import myEntrust from "@pages/Governance/components/myEntrust.vue";
 
 export default {
   name: "proposalHomePage",
   components: {
-    MainBackground, addnodeButton, selfInfo, myEntrust,
+    MainBackground, ShapeButton, selfInfo, myEntrust,
   }
 }
 </script>

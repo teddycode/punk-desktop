@@ -1,102 +1,106 @@
 <template>
-  <div class="transaction">
-    <!-- <div class="chart-container">
-        <div id="chart" style="width: 100%; height: 360px ;margin-top: 20px;margin-bottom: 20px "></div>
-    </div> -->
-    <div class="exchange-panel-transaction">
-      <div class="settings">
-        <span>滑点：{{ customSlippage }}%</span>
-        <el-button @click="dialogVisible = true">
-          设置
-        </el-button>
-        <el-dialog v-model="dialogVisible" title="设置" width="20%">
+  <main-background>
+    <div class="transaction">
+      <!-- <div class="chart-container">
+          <div id="chart" style="width: 100%; height: 360px ;margin-top: 20px;margin-bottom: 20px "></div>
+      </div> -->
+      <div class="exchange-panel-transaction">
+        <div class="settings">
+          <span>滑点：{{ customSlippage }}%</span>
+          <el-button @click="dialogVisible = true">
+            设置
+          </el-button>
+          <el-dialog v-model="dialogVisible" title="设置" width="20%">
+            <div>
+              <div class="dialog-row">
+                <span>本地路由</span>
+                <el-switch v-model="localRoute"></el-switch>
+              </div>
+              <el-divider></el-divider>
+              <div class="dialog-row">
+                <span>最大滑点</span>
+                <span>{{ customSlippage }}%</span>
+                <el-button @click="showCustomSlippage = !showCustomSlippage">
+                  自定义滑点
+                </el-button>
+              </div>
+              <div v-if="showCustomSlippage" class="dialog-row">
+                <el-radio-group v-model="radio">
+                  <el-radio label="自动"></el-radio>
+                  <el-radio label="自定义"></el-radio>
+                </el-radio-group>
+                <el-input
+                    v-model="customSlippage"
+                    :disabled="radio !== '自定义'"
+                    @input="onInput"
+                >
+                  <template #suffix>
+                    <span class="percentage-symbol">%</span>
+                  </template>
+                </el-input>
+              </div>
+            </div>
+          </el-dialog>
+        </div>
+        <!-- <h2 class="exchange-title">兑换</h2> -->
+        <!-- Token 1 Selection and Input -->
+        <div class="input-section-transaction">
           <div>
-            <div class="dialog-row">
-              <span>本地路由</span>
-              <el-switch v-model="localRoute"></el-switch>
-            </div>
-            <el-divider></el-divider>
-            <div class="dialog-row">
-              <span>最大滑点</span>
-              <span>{{ customSlippage }}%</span>
-              <el-button @click="showCustomSlippage = !showCustomSlippage">
-                自定义滑点
-              </el-button>
-            </div>
-            <div v-if="showCustomSlippage" class="dialog-row">
-              <el-radio-group v-model="radio">
-                <el-radio label="自动"></el-radio>
-                <el-radio label="自定义"></el-radio>
-              </el-radio-group>
-              <el-input
-                v-model="customSlippage"
-                :disabled="radio !== '自定义'"
-                @input="onInput"
-              >
-                <template #suffix>
-                  <span class="percentage-symbol">%</span>
-                </template>
-              </el-input>
-            </div>
+            <label for="token1">From</label>
           </div>
-        </el-dialog>
-      </div>
-      <!-- <h2 class="exchange-title">兑换</h2> -->
-      <!-- Token 1 Selection and Input -->
-      <div class="input-section-transaction">
-        <div>
-          <label for="token1">From</label>
+          <div class="input-container">
+            <select id="token1" v-model="selectedToken1" class="custom-select" @change="calculateAmount('token1')">
+              <option v-for="item in tokens" :key="item.value" :value="item.value" class="select-option">{{
+                  item.label
+                }}
+              </option>
+            </select>
+            <input v-model.trim="tokenAmount1" class="custom-input" min="0" type="number"
+                   @input="calculateAmount('token1')"/>
+          </div>
         </div>
-        <div class="input-container">
-          <select id="token1" v-model="selectedToken1" class="custom-select" @change="calculateAmount('token1')">
-            <option v-for="item in tokens" :key="item.value" :value="item.value" class="select-option">{{
-                item.label
-              }}
-            </option>
-          </select>
-          <input v-model.trim="tokenAmount1" class="custom-input" min="0" type="number"
-                 @input="calculateAmount('token1')"/>
+        <div class="input-section-transaction">
+          <div>
+            <label for="token2">To</label>
+          </div>
+          <div class="input-container">
+            <select id="token2" v-model="selectedToken2" class="custom-select" @change="calculateAmount('token2')">
+              <option v-for="item in tokens" :key="item.value" :value="item.value" class="select-option">{{
+                  item.label
+                }}
+              </option>
+            </select>
+            <input v-model.trim="tokenAmount2" class="custom-input" min="0" type="number"
+                   @input="calculateAmount('token2')"/>
+          </div>
         </div>
-      </div>
-      <div class="input-section-transaction">
-        <div>
-          <label for="token2">To</label>
-        </div>
-        <div class="input-container">
-          <select id="token2" v-model="selectedToken2" class="custom-select" @change="calculateAmount('token2')">
-            <option v-for="item in tokens" :key="item.value" :value="item.value" class="select-option">{{
-                item.label
-              }}
-            </option>
-          </select>
-          <input v-model.trim="tokenAmount2" class="custom-input" min="0" type="number"
-                 @input="calculateAmount('token2')"/>
-        </div>
-      </div>
-      <!-- <div class="rate-display">
+        <div class="rate-display">
           <p>{{ rateText }}</p>
           <p v-if="ratesUpdateTime">汇率更新时间：{{ ratesUpdateTime }}</p>
-      </div> -->
-      <addnode-button style="width: 150px; height: 15%;" @click="exchange()">兑换</addnode-button>
+        </div>
+        <shape-button style="width: 150px; height: 15%;" @click="exchange()">兑换</shape-button>
+      </div>
     </div>
-  </div>
+  </main-background>
 </template>
 
 
 <script>
 // import {Web3} from "web3";
 import {ethers} from "ethers";
-import addnodeButton from "@components/buttons/ShapeButton.vue";
+import ShapeButton from "@components/buttons/ShapeButton.vue";
 import axios from "axios";
 import * as echarts from 'echarts';
-import {limitOrderPoolKey} from "@pages/Exchange/function/address";
-import {swap} from "@pages/Exchange/function/swap";
-import {getPoolPrice} from "@pages/Exchange/function/getprice";
+import {limitOrderPoolKey} from "@pages/Exchange/services/address";
+import {swap} from "@pages/Exchange/services/swap";
+import {getPoolPrice} from "@pages/Exchange/services/getprice";
+import MainBackground from "@components/common/MainBackground.vue";
 
 
 export default {
   components: {
-    addnodeButton
+    MainBackground,
+    ShapeButton
   },
   data() {
     return {
@@ -217,6 +221,7 @@ export default {
     async fetchRates() {
       try {
         let response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum,bitcoin,binancecoin,cardano,dogecoin,ripple,usd-coin,dai&vs_currencies=usd');
+        // TODO 收费api请放到后端处理
         let data = await response.json();
         this.rates = {
           'ETH': data.ethereum.usd,
@@ -523,6 +528,7 @@ export default {
 }
 
 .transaction {
+  margin-top: 30px;
   display: flex;
   justify-content: space-between;
   gap: 40px;

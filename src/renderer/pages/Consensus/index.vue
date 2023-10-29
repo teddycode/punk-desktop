@@ -451,7 +451,7 @@ export default defineComponent({
 </script>
 
 
-<style>
+<style scoped>
 .handle-box {
   margin-bottom: 20px;
 }

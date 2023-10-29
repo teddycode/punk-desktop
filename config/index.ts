@@ -16,6 +16,6 @@ export default {
   resourceFolder: "resource",
   UseStartupChart: false,
   IsUseSysTitle: false,
-  BuiltInServerPort: 25565,
+  BuiltInServerPort: 25565, // TODO 修改成vnc服务端口
   isDevMode: process.env.NODE_ENV === 'development'
 };
