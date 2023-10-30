@@ -95,7 +95,7 @@ import {limitOrderPoolKey} from "@pages/Exchange/services/address";
 import {swap} from "@pages/Exchange/services/swap";
 import {getPoolPrice} from "@pages/Exchange/services/getprice";
 import MainBackground from "@components/common/MainBackground.vue";
-
+import {useUserStore} from "@store/users";
 
 export default {
   components: {
@@ -104,6 +104,7 @@ export default {
   },
   data() {
     return {
+      store: useUserStore(),
       dialogVisible: false,
       localRoute: false,
       maxSlippage: '0.01',
@@ -282,7 +283,7 @@ export default {
       }
     },
     async exchange() {
-      this.userLoggedIn = this.$store.state.userLoggedIn;
+      this.userLoggedIn = store.isLogin;
       if (!this.userLoggedIn) {
         alert("您还没有连接钱包！");
       } else if (this.selectedToken1 && this.selectedToken2 && this.tokenAmount1) {

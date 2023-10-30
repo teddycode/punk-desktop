@@ -22,7 +22,7 @@
 
 <script>
 import MainBackground from "@components/common/MainBackground.vue";
-import {governance} from "@pages/Governance/components/function/address";
+import {governance} from "@pages/Governance/services/address";
 import selfInfo from "./components/selfInfo.vue";
 
 export default {

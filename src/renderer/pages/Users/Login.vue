@@ -36,12 +36,16 @@ import MainBackground from "@components/common/MainBackground.vue";
 import ShapeButton from "@components/buttons/ShapeButton.vue";
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {faEye, faEyeSlash, faLock, faUser} from '@fortawesome/free-solid-svg-icons'
+import {useUserStore} from "@store/users";
+import {useRouter} from "vue-router";
 
 library.add(faUser, faLock, faEye, faEyeSlash)
 export default {
   components: {MainBackground, ShapeButton},
   data() {
     return {
+      store: useUserStore(),
+      route: useRouter(),
       loginForm: {
         username: '',
         password: '',
@@ -64,8 +68,8 @@ export default {
           localStorage.setItem('token', response.data.token);
           axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
           localStorage.setItem('userName', this.loginForm.username);
-          this.$store.commit('SET_TOKEN', response.data.token);
-          this.$router.push('/');
+          store.setToken(response.data.token);
+          await route.push('/');
         } else {
           alert('用户名或密码错误');
         }

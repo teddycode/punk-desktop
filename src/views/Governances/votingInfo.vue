@@ -61,16 +61,18 @@
         </div>
     </div>
 </template>
-    
+
 <script>
 import { governance, governanceAddr, factory, implementation, review } from "@/views/Governances/function/address";
 import { ethers } from "ethers";
+import {useRouter} from "vue-router";
 
 export default {
     name: "votingInfo",
 
     data() {
         return {
+          route: useRouter(),
             isInitialized: null,
             state: null,
             stakeAmount: null,
@@ -79,17 +81,17 @@ export default {
         };
     },
     async mounted() {
-        let state = await governance.getProposalState(this.$route.params.proposalId);
+      let state = await governance.getProposalState(route.params.proposalId);
         this.state = state;
-        let isInitialized = await review.isInitialized(this.$route.params.proposalId);
+      let isInitialized = await review.isInitialized(route.params.proposalId);
         this.isInitialized = isInitialized;
         if (state == 0) {
-            let proposalInfo = await governance.getProposalById(this.$route.params.proposalId);
+          let proposalInfo = await governance.getProposalById(route.params.proposalId);
             this.stakeAmount = proposalInfo.stakeAmount;
         }
         // else if (state == 2 || state == 3|| state == 4|| state == 5|| state == 6|| state == 7) {
         else {
-            let address = await factory.getContractAddress(governanceAddr, this.$route.params.proposalId);
+          let address = await factory.getContractAddress(governanceAddr, route.params.proposalId);
             let contract = implementation.attach(address);
             if (isInitialized) {
                 this.votingYes = ethers.utils.formatEther(await contract.forVotes());
@@ -99,22 +101,22 @@ export default {
     },
     methods: {
         async castVoteFor() {
-            let address = await factory.getContractAddress(governanceAddr, this.$route.params.proposalId);
+          let address = await factory.getContractAddress(governanceAddr, route.params.proposalId);
             let contract = implementation.attach(address);
             contract.castVote(true);
         },
         async castVoteAgainst() {
-            let address = await factory.getContractAddress(governanceAddr, this.$route.params.proposalId);
+          let address = await factory.getContractAddress(governanceAddr, route.params.proposalId);
             let contract = implementation.attach(address);
             contract.castVote(false);
         },
         async initialize() {
-            await review.createReview(governanceAddr, this.$route.params.proposalId);
+          await review.createReview(governanceAddr, route.params.proposalId);
         }
     }
 }
 </script>
-    
+
 <style scoped>
 .info-container {
     color: white;

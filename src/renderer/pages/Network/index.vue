@@ -157,6 +157,7 @@ export default {
 
 <style scoped>
 .network-page {
+  margin-top: 30px;
   width: 100%;
   /*min-height: 100vh;*/
 }
@@ -166,7 +167,7 @@ export default {
   justify-content: flex-end;
   align-items: center;
   padding: 20px;
-  background-color: #F9FAFB;
+  background-color: transparent;
 }
 
 .network-transfer-container {

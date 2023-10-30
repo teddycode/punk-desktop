@@ -29,10 +29,17 @@
 </template>
 
 <script>
+import {useUserStore} from "@store/users";
+
 export default {
+  data() {
+    return {
+      store: useUserStore(),
+    }
+  },
   computed: {
     transferRecords() {
-      return this.$store.state.transferRecords;
+      return store.transferRecords;
     },
   },
 };

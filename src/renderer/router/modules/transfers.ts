@@ -1,5 +1,5 @@
-import TransferPage from "@pages/Transfers/TransferMain.vue";
-import TransferRecord from "@pages/Transfers/TransferRecord.vue";
+import TransferPage from "@pages/Transfers/index.vue";
+import TransferRecord from "@pages/Transfers/componnets/TransferRecord.vue";
 
 export const transferRoutes: any[] = [
   {

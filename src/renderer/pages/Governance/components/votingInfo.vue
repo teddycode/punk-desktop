@@ -10,7 +10,7 @@
 
 <script>
 import {ethers} from "ethers";
-import {governToken, tokenPower, userAddr,} from "@pages/Governance/components/function/address";
+import {governToken, tokenPower, userAddr,} from "@pages/Governance/services/address";
 
 export default {
   name: "votingInfo",

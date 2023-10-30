@@ -1,5 +1,4 @@
 <template>
-  <MainBackground>
     <div class="main">
       <!-- <router-link to="/myGovernance" class="back-button">
           <img src="@renderer/assets/left-arrow.jpg" alt="Back">
@@ -49,13 +48,12 @@
         <button type="submit">提交</button>
       </form>
     </div>
-  </MainBackground>
 </template>
 
 <script>
 import MainBackground from "@components/common/MainBackground.vue";
 import selfInfo from "./selfInfo.vue";
-import {governance} from "@pages/Governance/components/function/address";
+import {governance} from "@pages/Governance/services/address";
 import {BigNumber} from "ethers";
 
 export default {

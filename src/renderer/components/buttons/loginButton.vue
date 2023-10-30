@@ -19,15 +19,20 @@
 import axios from 'axios';
 import {faSignOutAlt} from '@fortawesome/free-solid-svg-icons';
 import {library} from "@fortawesome/fontawesome-svg-core";
+import {useUserStore} from "@store/users";
+import {useRoute} from "vue-router";
 
 library.add(faSignOutAlt);
+
 export default {
   name: "loginButton",
   components: {},
   data() {
     return {
       isUserLoggedIn: false,
-      userName: ''
+      userName: '',
+      store: useUserStore(),
+      route: useRoute(),
     }
   },
   methods: {
@@ -48,10 +53,10 @@ export default {
       }
     },
     navigateToLogin() {
-      this.$router.push({name: 'UserLoginPage'});
+      route.push({name: 'UserLoginPage'});
     },
     navigateToUserProfile() {
-      this.$router.push({name: 'UserInfoPage'});
+      route.push({name: 'UserInfoPage'});
     },
     async logout() {
       // Make a request to your server to logout
@@ -64,11 +69,11 @@ export default {
         if (response.status === 200) {
           localStorage.removeItem('token');
           localStorage.removeItem('userName');
-          this.$store.commit('removeToken');
-          console.log("logout test:" + this.$store.state.token)
+          store.removeToken();
+          console.log("logout test:" + store.token)
           this.isUserLoggedIn = false;
           this.userName = 'username';
-          this.$router.push({name: 'UserLoginPage'});
+          route.push({name: 'UserLoginPage'});
           // TODO check 重定向至用户登录界面
         }
       } catch (error) {

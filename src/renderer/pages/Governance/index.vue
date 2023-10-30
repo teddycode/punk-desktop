@@ -1,5 +1,5 @@
 <template>
-  <MainBackground>
+  <main-background>
     <div class="governance-page">
       <h1 class="governance-title">治理</h1>
       <div class="content-container">
@@ -89,7 +89,7 @@
         </div>
       </div>
     </div>
-  </MainBackground>
+  </main-background>
 </template>
 
 <script>

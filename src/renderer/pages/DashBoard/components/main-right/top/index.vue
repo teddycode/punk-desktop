@@ -164,7 +164,7 @@ export default defineComponent({
 </script>
 
 
-<style lang="scss">
+<style lang="scss" scoped>
 .main-right-top-area {
   height: 42%;
 }
@@ -182,7 +182,8 @@ export default defineComponent({
 }
 
 .feature-content {
-  padding: 25px;
+  margin-top: 20px;
+  padding: 30px;
 }
 
 .feature-title {
@@ -199,6 +200,7 @@ export default defineComponent({
 
 .swiper {
   position: relative;
+  transform: scale(1, 1.1);
 }
 
 .swiper-pagination {
@@ -209,7 +211,6 @@ export default defineComponent({
 
 swiper {
   width: 100%;
-
   swiper-slide {
     height: 120%;
     box-shadow: 0 3px 6px 1px rgba(0, 0, 0, 0.16);
