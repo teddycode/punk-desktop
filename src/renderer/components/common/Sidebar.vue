@@ -34,8 +34,8 @@
 
 <script>
 import {computed, watch} from "vue";
-import {useStore} from "vuex";
 import {useRoute} from "vue-router";
+import {useBaseStore} from "@store/baseboard";
 
 export default {
   setup() {
@@ -58,8 +58,8 @@ export default {
       return route.path;
     });
 
-    const store = useStore();
-    const collapse = computed(() => store.state.collapse);
+    const store = useBaseStore();
+    const collapse = computed(() => store.collapse);
 
     return {
       items,
