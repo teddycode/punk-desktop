@@ -1,0 +1,67 @@
+@import '../../../node_modules/ant-design-vue/dist/antd.dark.css';
+@import "custom";
+.dark {
+  .key-button {
+    border: 1px solid #3a3a3a;
+    color: #8d8d8d;
+    background: linear-gradient(to right, #494949, #444444, #444444);
+  }
+
+
+  .bottom-panel {
+    .icon {
+      fill: #797979;
+    }
+
+    .item:hover .icon {
+      fill: rgb(255,255,255) !important;
+    }
+  }
+
+  .side-panel {
+    .icon {
+      fill: #6e6e6e;
+    }
+  }
+
+  .common-panel {
+
+    .item {
+      &:hover {
+          background: rgba(255,255,255,0.08);
+        .icon {
+          fill: rgba(255,255,255,.6);
+        }
+      }
+
+      &.active {
+        background: rgba(255,255,255,0.08);
+        .icon {
+          fill:rgba(255,255,255,.6);
+        }
+
+
+      }
+
+
+    }
+  }
+
+  color: #b7b7b7;
+
+  .card {
+  }
+
+
+  .input-box {
+    border-color: transparent !important;
+    border-width: 0.15em !important;
+    color: #7a7a7a;
+    background: $suspensionBackGround;
+    backdrop-filter:blur($suspensionBlur);
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+  }
+}
+
+
+

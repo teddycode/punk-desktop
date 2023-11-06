@@ -1,0 +1,43 @@
+const { contextBridge } = require('electron')
+
+function tipOpenInApp (params) {
+  // {
+  //   appId:'',//应用市场id
+  //     title:'安装提醒',
+  //   content:'是否安装此应用，并用应用模式打开？'
+  // }
+  // window.location.href=`tsb://app/redirect/?package=com.thisky.appStore&url=${params}`
+  ipc.send('openAppStore', params)
+}
+
+function installAppConfirm (e) {
+  ipc.send('installAppConfirm', e)
+}
+
+function openGroupChat (e) {
+  ipc.send('openAppGroupChat', e)
+}
+
+const browser = {
+  name: 'ThiskyBrowser',
+  alias: '磐古跨链客户端',
+  version: '3.4.1',
+  short: 'tsb'
+}
+
+try{
+  contextBridge.exposeInMainWorld('__TSB_RUNTIME', browser)
+  contextBridge.exposeInMainWorld('__TSB_API', {
+    tipOpenInApp,
+    installAppConfirm,
+    openGroupChat
+  })
+}catch (e) {
+  window.__TSB_RUNTIME=browser
+  window.__TSB_API={
+    tipOpenInApp,
+    installAppConfirm,
+    openGroupChat
+  }
+}
+

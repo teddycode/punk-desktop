@@ -1,57 +1,25 @@
+<!--
+ * @Author: teddycode 1055334354@qq.com
+ * @Date: 2023-10-31 18:05:17
+ * @LastEditors: teddycode 1055334354@qq.com
+ * @LastEditTime: 2023-11-06 16:28:11
+ * @Description: 阅读项目文档
+ * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved.
+-->
+
 # 磐古OS APP说明文档
 
 致力于构建一个打通区块链与互联网的多链跨链应用操作终端
 
-## 技术框架
+本项目官方主页：[磐古跨链客户端官方主页](https://www.punkos.com)
 
-### 1. 总体架构
+
+## 总体架构
 
 ![img_2.png](./docs/image/技术框架.png)
 
-### 2. 框架说明
-
-APP分桌面应用和后端服务，桌面应用由vue和electron构成，后端服务由gin框架及各个小组的后端api组成。
 > 本文档为桌面应用介绍文档，后端文档参考这里[TODO]。
 
-### 3. 技术栈列表
-
-| 名称             | 版本      | 作用                 |
-|----------------|---------|--------------------|
-| vue            | 3.3.4   | 响应式web前端框架,实现页面逻辑  |
-| electron       | 22.3.24 | 可运行web的跨平台桌面应用执行环境 |
-| jetbrains idea | 2023    | 代码开发工具             |
-| yarn           | 1.22    | 代码依赖管理工具           |
-
-## 使用教程
-
-### 1. 依赖安装
-
-```shell
-# set npm mirror
-config set registry https://registry.npmmirror.com/
-# Go into the repository
-cd punkos
-# install dependencies
-npm install
-```
-
-### 2.开发与调试
-
-```shell
-#  一键启动vue进程与electron进程
-npm run dev    
-```
-
-### 3.安装包构建
-
-```shell
-#  一键构建并生成应用安装包
-npm build      
-```
-
-> Note1: 其他开发命令请查阅package.json
-
-> Note2: Desktop模块的开发需要先安装第三方依赖,见文档[TODO]
 
 ## 项目代码结构
 
@@ -97,6 +65,58 @@ npm build
 
 ```
 
+
+## 开发调试
+
+1.安装nodejs-16版本（建议使用nvm管理node版本）
+
+2.在管路员终端安装win sdk工具`npm install --g --production windows-build-tools`
+
+3.安装python3.10或以上版本，并设置环境变量
+
+4.在根目录运行yarn命令
+
+5.在vite目录运行yarn命令
+
+6.vite下执行`yarn run build`编译一遍
+
+7.复制一个/node_modules下的dragula/dist/dragula.css 到 dragula/dist/dragula.min.css，不然会报这个库缺文件
+
+## 启动项目
+
+0.hosts下添加映射
+
+C:\Windows\System32\drivers\etc\hosts 注意这个文件不能带.txt扩展名，否则不生效
+注意，是每行一个。MD解析可能混在一行上了
+```shell
+127.0.0.1 table.com
+
+127.0.0.1 1.table.com
+
+127.0.0.1 2.table.com
+
+127.0.0.1 3.table.com
+
+127.0.0.1 4.table.com
+
+127.0.0.1 5.table.com
+
+127.0.0.1 6.table.com
+```
+
+验证方式，使用cmd ping table.com，响应127.0.0.1 ip数据包
+
+注意：代理要排除这个域名，否则可能导致无法打开
+
+1./vite yarn run start  在/vite目录下执行yarn run start命令，启动渲染进程
+
+2./ yarn run start 在/根目录下执行yarn run start 启动electron客户端
+
+
+## 打包桌面客户端
+
+在根目录运行yarn run packageWin
+
 ## 协作指南
 
 约定一些规范,制订相关流程，便于高效协作开发。
@@ -129,52 +149,23 @@ npm build
 - **新建接口定义**： 如需要后端提供数据，请在`/api/`下按照现有示例添加本组API接口，遵循RESTFUL接口规范。
 - **新建模拟数据**： 如有接口但是后端尚未实现，请在`/mock/`下按照现有示例添加本组的模拟接口，实现模拟数据返回。
 
-### 4. 页面实现风格
 
-每个组可以根据自己的需求进行界面风格的设计和实现，整体上风格需要严格较为统一。
+## 常见问题解决
+1. 问题：npm/yarn下载依赖失败或速度慢
 
-目前的实现比较简单：以下图为例：
+- 解决: (1)删除文件`rm yarn.lock & rm package-lock.json` (2) 更换源 `npm/yarn config set registry https://registry.npmmirror.com/`
 
-<img src="docs\image\2ff19bd7ca05919c3b6fe6f56640c79.png" alt="2ff19bd7ca05919c3b6fe6f56640c79" style="zoom: 33%;" />
+2. 问题：electron依赖下载失败
+- 解决：添加单独的代理 `npm/yarn config set electron_mirror=https://cdn.npmmirror.com/binaries/electron/` 
+   以及 `npm/yarn config set electron_builder_binaries_mirror=https://npmmirror.com/mirrors/electron-builder-binaries/`
 
-该页面位于src/views/Exchanges/limitOrder,一些css样式可以在文件中得到，有需要可以直接使用。
 
-对于操作交互的页面，目前实现均比较简单，总结为以下几点：
+## 开源引用说明
 
-- 顶上有一个导航栏
-- 白色边框，白色字体，透明背景颜色以适应暗色调的背景图片。
-- 对于原生button，input，select,radio等的样式重写，同样设置为白框，白字，透明或接近背景颜色的颜色。
-- 边框圆角，按钮的话有非常多的样式按钮，可以自行去网上搜寻css代码并使用自己喜欢的。
-- 布局：使用的flex布局，由于操作的main-center部分存在缩放，进行尽可能使用%来控制高度和宽度，减少px的使用。
-- 屏幕分辨率适配：这一部分目前项目做的还不完善，无法给到更多的建议。
-- 需要使用到分页器的，components中有封装好的myPagination.vue组件。
-- 比较复杂的样式，也可以借助UI组件库，例如element-plus，primevue等等，只需要重写样式使得与风格较为统一即可。
+本项目基于一些开源组件开发而成。最底层是基于Electron的Min浏览器，这是一个多标签浏览器，我们在此基础上增加了大量的优化和开发。
 
-## 公共组件
+包括开发了多功能左侧栏、标签组空间、密码管理器、收藏夹等等大量功能。
 
-> 所在路径 /src/renderer/components/
->
-  <img src="docs\image\aec2fa4cfc4d3524570fcc11987cb60.png" alt="aec2fa4cfc4d3524570fcc11987cb60" style="zoom: 67%;" />
+其中浏览器插件部分，引用了一个基于AGPL的插件。大家可以自行查阅依赖，已经放置到/packages目录下了。
 
-**buttons**：封装了两个按钮组件，登录按钮的组件和addmodeButton的组件，后续使用button时，可以替换原生button这两个组件之一，用以改善button的视觉效果。
-
-**topnav**：顶部左侧的可伸缩导航栏
-
-**MainBackground**.vue:定义了界面的背景，将界面按照左中右，分别切割，然后每一部分再按上中下进行div布局。在中间的部分使用slot进行插入，确保所编写的其余界面均在中间部分进行展示而不影响其他部分。
-
-**myPagination.vue**: 自定义的一个分页器，此前使用场景背景为白色，还没做界面背景适配的工作。
-
-**myWallet**：钱包操作的主要内容，包括了通过ethers.js连接metamask，获取metamask地址和余额，钱包切换样式等等页面和功能。
-
-**searchBar**：搜索框的样式
-
-> 其他请参阅 [《VUE开发指南》](./docs/VUE开发指南.md)
-
-## 问题汇总
-
-1. 依赖安装时遇到的其他问题
-
-```shell
-rm yarn.lock & rm package-lock.json
-yarn  // 重新安装依赖
-```
+项目是磐古跨链客户端的客户端前端部分，是全部前端源码，基于开源AGPL3.0协议的[想天工作台](https://gitee.com/tsbrowser/xtui)。

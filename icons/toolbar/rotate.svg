@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="140px" height="129px" viewBox="0 0 140 129" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>刷新</title>
+    <g id="刷新" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+        <path d="M42.5764689,110.164492 C51.3469334,113.35668 58.7302753,115.044014 64.7264946,115.226495 C92.6168745,115.226495 115.226495,92.6168745 115.226495,64.7264946 C115.226495,36.8361147 92.6168745,14.2264946 64.7264946,14.2264946 C36.8361147,14.2264946 14.2264946,36.8361147 14.2264946,64.7264946" id="椭圆形" stroke="#333333" stroke-width="10" transform="translate(64.726495, 64.726495) rotate(233.000000) translate(-64.726495, -64.726495) "></path>
+        <polyline id="路径-3" stroke="#333333" stroke-width="10" stroke-linejoin="round" transform="translate(108.662033, 43.288067) rotate(19.000000) translate(-108.662033, -43.288067) " points="127.121357 26.2533302 122.58237 60.3228044 90.2027098 50.0653758"></polyline>
+    </g>
+</svg>

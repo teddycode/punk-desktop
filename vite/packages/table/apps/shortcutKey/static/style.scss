@@ -1,0 +1,129 @@
+.btn-item {
+  display: flex;
+
+  > div {
+    color: var(--primary-text);
+    font-size: 16px;
+    background: var(--mask-bg);
+    width: 160px;
+    text-align: center;
+    height: 48px;
+    line-height: 48px;
+    margin: 0 7px;
+    border-radius: 12px;
+  }
+
+  > span {
+    background: var(--mask-bg);
+    border-radius: 12px;
+    width: 48px;
+    height: 48px;
+    line-height: 54px;
+    text-align: center;
+  }
+}
+.scheme-container{
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  height: auto;
+  justify-content: center;
+  align-content: center;
+  .scheme-item{
+    margin: 10px;
+    width:calc(350px);
+    border-radius: 10px;
+    display: flex;
+    overflow: hidden;
+    &:hover{
+      opacity: 0.8;
+    }
+
+
+  }
+  .cover{
+    width:50px;
+    height: 80px;
+  }
+  .description{
+    display: flex;
+    flex-direction: column;
+    flex:1;
+    width: 0;
+  }
+  .key-num{
+    min-width: 80px;
+    height:100%;
+    .num-youshe{
+      font-size: 28px;
+    }
+    background: var(--mask-bg);
+  }
+}
+
+.main-part {
+  > div {
+    background: var(--mask-bg);
+    border-radius: 12px;
+    width: 364px;
+    height: 88px;
+    position: relative;
+    margin: 16px 8px 0;
+
+    > div {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      width: 88px;
+      height: 88px;
+      background: var(--mask-bg);
+      border-radius: 0px 12px 12px 0px;
+
+      > span:nth-child(1) {
+        font-family: Oswald-SemiBold;
+        font-size: 28px;
+        color: var(--primary-text);
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+.item-content {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  overflow: auto;
+  justify-content: center;
+}
+
+.item-content::-webkit-scrollbar {
+  display: none;
+}
+.prompt {
+  background: var(--mask-bg);
+  border-radius: 12px;
+  height: 56px;
+}
+.add-content {
+  height: 90%;
+  width: 480px;
+  margin: 0 auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  > span {
+
+    font-size: 16px;
+    color: var(--primary-text);
+    font-weight: 500;
+    margin: 21px 0;
+    display: block;
+  }
+}
+.color-dot{
+  border-radius: 4px;
+  vertical-align: text-bottom;
+  width: 20px;height: 20px;display: inline-block;
+}

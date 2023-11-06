@@ -1,0 +1,106 @@
+const packager = require('electron-packager')
+const rebuild = require('electron-rebuild').default
+
+const packageFile = require('./../package.json')
+const version = packageFile.version
+const electronVersion = packageFile.electronVersion
+
+const basedir = require('path').join(__dirname, '../')
+
+// directories that will be ignored when building binaries
+const ignoredDirs = [
+  '.DS_Store',
+  'dist/app',
+  'dist/mac-arm64',
+  'setup',
+  /\.map$/g,
+  /\.md$/g,
+  // electron-installer-debian is actually a development module, but it isn't pruned because it's optional
+  'node_modules/electron-installer-debian',
+  'node_modules/electron-installer-common',
+  'node_modules/electron-installer-redhat',
+  'icons/source',
+  // this is copied during the build
+  'icons/icon.icns',
+  // localization files are compiled and copied to dist
+  'localization/',
+  // parts of modules that aren't needed
+  'node_modules/@types/',
+  'node_modules/pdfjs-dist/legacy',
+  'node_modules/pdfjs-dist/lib',
+  /node_modules\/[^/\n]+\/test\//g
+]
+
+var baseOptions = {
+  name: 'tswork',
+  dir: basedir,
+  out: 'dist/app',
+  electronVersion: electronVersion,
+  appVersion: version,
+  arch: 'all',
+  ignore: ignoredDirs,
+  prune: true,
+  overwrite: true,
+  afterCopy: [(buildPath, electronVersion, platform, arch, callback) => {
+    rebuild({ buildPath, electronVersion, arch })
+      .then(() => callback())
+      .catch((error) => callback(error))
+  }]
+}
+
+var platformOptions = {
+  darwinIntel: {
+    platform: 'darwin',
+    arch: 'x64',
+    icon: 'icons/icon.icns',
+    darwinDarkModeSupport: true,
+    protocols: [{
+      name: 'HTTP link',
+      schemes: ['http', 'https']
+    }, {
+      name: 'File',
+      schemes: ['file']
+    }],
+    extendInfo: 'scripts/macInfo.plist'
+  },
+  darwinArm: {
+    platform: 'darwin',
+    arch: 'arm64',
+    icon: 'icons/icon.icns',
+    darwinDarkModeSupport: true,
+    protocols: [{
+      name: 'HTTP link',
+      schemes: ['http', 'https']
+    }, {
+      name: 'File',
+      schemes: ['file']
+    }],
+    extendInfo: 'scripts/macInfo.plist'
+  },
+  win32: {
+    arch: 'all',
+    platform: 'win32',
+    icon: 'icons/browser.ico'
+  },
+  linuxAmd64: {
+    name: 'min', // name must be lowercase to run correctly after installation
+    platform: 'linux',
+    arch: 'x64'
+  },
+  raspi: {
+    name: 'min', // name must be lowercase to run correctly after installation
+    platform: 'linux',
+    arch: 'armv7l',
+    fpm: ['--architecture', 'armhf']
+  },
+  linuxArm64: {
+    name: 'min', // name must be lowercase to run correctly after installation
+    platform: 'linux',
+    arch: 'arm64',
+    fpm: ['--architecture', 'aarch64']
+  }
+}
+
+module.exports = function (platform, extraOptions) {
+  return packager(Object.assign({}, baseOptions, platformOptions[platform], extraOptions || {}))
+}
