@@ -173,7 +173,7 @@ export default {
   background: rgba(255, 255, 255, 0.2) !important;
   border-radius: 8px !important;
 }
-.nav-list-container ::v-deep .s-item{
+.nav-list-container :deep(.s-item){
   border-radius: 6px !important;
 }
 .ant-divider-horizontal{
@@ -184,7 +184,7 @@ export default {
   filter: brightness(0.8);
   background: rgba(0,0,0,0.40);
 }
-::v-deep .ant-avatar-image{
+:deep(.ant-avatar-image){
   position: relative;
   top:-5px;
 }

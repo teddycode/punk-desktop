@@ -249,7 +249,7 @@ export default {
     border: 1px solid rgba(255,255,255,0.2);
     margin: 12px 0 12px;
   }
-  ::v-deep .ant-select-selector{
+  :deep(.ant-select-selector){
     height: 48px;
   }
 </style>

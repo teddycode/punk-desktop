@@ -9,10 +9,6 @@
         <a-avatar :src="t.img" :size="40"></a-avatar>
         <span>{{ t.title }}</span>
       </div>
-        <div class="team-item" @click="openTask()">
-          <a-avatar src="/img/task/star.png" :size="40"></a-avatar>
-          <span>联系人列表</span>
-        </div>
     </div>
   </div>
   <TeamTip :key="teamKey" v-model:visible="showTeamTip"></TeamTip>
@@ -53,7 +49,7 @@ export default {
           type: 'team'
         },
         {
-          img: '/img/bottomPanel/rank.png',
+          img: '/img/bottomPanel/wallet.png',
           title: '我的钱包',
           route: {
             name: 'rank'
@@ -61,17 +57,22 @@ export default {
           type: 'route'
         },
         {
-          img: '/img/bottomPanel/prop.png',
+          img: '/img/bottomPanel/transaction.png',
           title: '交易记录',
           type: 'prop'
         },
         {
-          img: '/img/bottomPanel/market.png',
+          img: '/img/bottomPanel/history.png',
           title: '登录历史',
           route: {
             name: 'prop'
           },
           type: 'route'
+        },
+        {
+          img: '/img/bottomPanel/contact.png',
+          title: '联系人列表',
+          type: 'task'
         },
       ],
       //显示小组提示
@@ -86,9 +87,6 @@ export default {
   },
   methods: {
     ...mapActions(teamStore, ['updateMy']),
-    openTask() {
-      this.isTaskDrawer = true
-    },
     async jump(type,val){
       switch(type){
         case 'route':
@@ -105,6 +103,9 @@ export default {
           break;
          case 'prop':
           this.showMyProp = true
+          break;
+         case 'task':
+          this.isTaskDrawer = true
           break;
       }
       this.openTeam = false

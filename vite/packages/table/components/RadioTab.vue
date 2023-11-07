@@ -1,3 +1,12 @@
+<!--
+ * @Author: teddycode 1055334354@qq.com
+ * @Date: 2023-11-06 17:13:46
+ * @LastEditors: teddycode 1055334354@qq.com
+ * @LastEditTime: 2023-11-07 17:38:47
+ * @Description: 
+ * 
+ * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved. 
+-->
 <template>
   <div class="flex flex-row rounded-lg p-1" :class="bgColor" :style="{height:itemHeight}" style="background: var(--secondary-bg);">
     <div v-for="(item,index) in navList" :style="btnStyle" class="nav-box h-full panel-icon flex btn-active items-center relative rounded-lg pointer"
@@ -95,7 +104,7 @@ export default {
   width: 50%;
   padding: 0 20px;
 }
-::v-deep .xt-active-btn {
+:deep(.xt-active-btn) {
   justify-content: start;
 }
 .circle { 
