@@ -384,7 +384,7 @@ class WindowManager {
     if (url) {
       window.loadURL(url)
     }
-    //window.webContents.openDevTools()
+    window.webContents.openDevTools({mode:'detach'})
     this.windowMap[name] = window
     instance = new WindowInstance({
       window: window,
