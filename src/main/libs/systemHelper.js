@@ -3,6 +3,7 @@ const fs = require('fs-extra')
 const { app } = require('electron')
 const { exec } = require('child_process')
 const iconv = require('iconv-lite')
+const os = require('os')
 
 function getResPath () {
   const isDevelopmentMode = process.argv.some(arg => arg === '--development-mode')
@@ -18,7 +19,7 @@ function getResPath () {
  * @param paths
  */
 function getResPathJoin (...paths) {
-  return require('path').join(getResPath(), ...paths)
+  return path.join(getResPath(), ...paths)
 }
 
 /**
@@ -61,40 +62,47 @@ module.exports = class SystemHelper {
   static async getDeskFiles(withIcon=true){
 
     let apps=[]
-    let path = require('path')
     function getDesktopFiles (_dir) {
       const fs = require('fs')
       var filepaths = []
       //read directory
       let files = fs.readdirSync(_dir)
+      console.info("files:",files);
       files.forEach(_file => {
         let _p = _dir + '/' + _file
         //changes slashing for file paths
         let _path = _p.replace(/\\\\/g, '/')
         let name = path.parse(_path).name
-
-        try {
-          if (_path.endsWith('.lnk')) {
+        if (_path.endsWith('.lnk')) {  // 屏蔽其他文件
+          try{
             _path = require('electron').shell.readShortcutLink(_path).target
+          } catch (e) {
+            console.warn('存在失败的图标：', _path)
+            _path = '/icons/winapp.png'
           }
-        } catch (e) {
-          console.warn('存在失败的', e, _file)
-          _path = '/icons/winapp.png'
+          filepaths.push({
+            name: name,
+            path: _path,
+            ext: path.parse(_path).ext
+          })
         }
-        filepaths.push({
-          name: name,
-          path: _path,
-          ext: path.parse(_path).ext
-        })
-
-        //console.log(_file);
-
       })
       return filepaths
-
     }
 
+
     let filepaths = getDesktopFiles(app.getPath('desktop'))
+    if (os.platform() === 'win32'){ // 公共用户的应用图标
+      try{
+        let publicDesktop = app.getPath('desktop').replace(os.userInfo().username,'public')
+        let publicFilepaths = getDesktopFiles(publicDesktop)
+        filepaths = Array.from(
+          filepaths.concat(publicFilepaths).reduce((map, obj) => map.set(obj.name, obj), new Map()).values()
+        )
+      }catch(e){
+        console.warn("获取公共桌面图标错误：",e)
+      }
+    }
 
     for (let file of filepaths) {
       try {
@@ -118,10 +126,10 @@ module.exports = class SystemHelper {
       } catch (e) {
         console.warn('存在导入失败的', e, file)
       }
-
     }
     return apps
   }
+  // 保存图标到用户数据
   static async extractFileIcon (uri) {
     let savePath = path.join(app.getPath('userData'), 'icons')
     fs.ensureDirSync(savePath)
@@ -131,7 +139,7 @@ module.exports = class SystemHelper {
        return filePath
     }
     let error = false
-    if(process.platform==='win32'){
+    if(os.platform() ==='win32'){
       try {
         // let icon = fileIcon.getFileIcon(uri,256)  //await require('electron').app.getFileIcon(uri)
         const exePath = getResPathJoin('extracticon.exe')
@@ -152,7 +160,6 @@ module.exports = class SystemHelper {
       fs.writeFileSync(filePath, icon.toPNG())
     }
     return filePath
-
   }
 
   static sha (text) {
