@@ -104,7 +104,9 @@ app.config.globalProperties.$isWeb = isWeb;
 app.config.globalProperties.$isClient = isClient;
 app.config.globalProperties.$isMac = isMac;
 
+// 状态管理器
 const pinia = createPinia()
+// 状态持久化存储
 pinia.use(piniaPersist)
 
 // @ts-ignore

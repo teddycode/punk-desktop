@@ -56,6 +56,7 @@
       </div>
     </div>
     <div style="flex: 0;">
+      <!-- 底部任务栏 -->
       <BottomPanel v-if="!fullScreen" :delZone="delZone" @getDelIcon="getDelIcon"></BottomPanel>
     </div>
   </div>

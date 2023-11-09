@@ -14,6 +14,7 @@
           <h3 style="color: var(--primary-text)">快速开关功能</h3>
           <a-row :gutter="[20, 20]" style="font-size: 1.2em; text-align: center">
             <a-col :span="12">
+              <!-- TODO 修改设置内容 -->
               <div class="btn relative">
                 弹幕
                 <br />
@@ -44,7 +45,7 @@
 
             <a-col  :span="12">
               <div class="btn relative">
-                社群沟通<br />
+                社交网络<br />
                 <a-switch v-model:checked="settings.enableChat"></a-switch>
               </div>
             </a-col>

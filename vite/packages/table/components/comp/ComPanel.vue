@@ -1,3 +1,11 @@
+<!--
+ * @Author: teddycode 1055334354@qq.com
+ * @Date: 2023-11-06 17:13:46
+ * @LastEditors: teddycode 1055334354@qq.com
+ * @LastEditTime: 2023-11-09 15:57:34
+ * @Description: 
+ * Copyright (c) 2023 by buaa.ioase.dcl, All Rights Reserved. 
+-->
 <template>
   <h3 style="margin-bottom: 1em;color:var(--primary-text) "><a-avatar src="https://up.apps.vip/logo/yuan.png"></a-avatar> 元社区
 
@@ -13,7 +21,7 @@
         UID：{{ userInfo.uid }} （用于社区活动身份）
       </a-col>
       <a-col :span="24">
-        社区等级：{{ userInfo.grade.new_name }}
+        社区等级：{{ userInfo.grade?.new_name }}
       </a-col>
       <a-col :span="24" style="text-align: center">
         <a-row>
