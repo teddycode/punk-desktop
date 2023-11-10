@@ -7,8 +7,7 @@ const {api} =require('../../server-config')
 
 const user={
   get:async () => {
-    let userInfo = await ipc.invoke('user.get')
-    return userInfo
+    return await ipc.invoke('user.get')
   },
   login:(callback)=>{
     ipc.once('loginCallback',(event,args)=>{

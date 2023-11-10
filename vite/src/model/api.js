@@ -30,7 +30,7 @@ const getConfig = async () => {
   }
 }
 const result = (res,callback)=>{
-  if(res.data.code == 1000){
+  if(res.data.code === 1000){
     callback(true,res)
   }else{
     console.error(res)

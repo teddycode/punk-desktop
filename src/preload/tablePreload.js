@@ -1,3 +1,11 @@
+/*
+ * @Author: teddycode 1055334354@qq.com
+ * @Date: 2023-11-06 17:11:13
+ * @LastEditors: teddycode 1055334354@qq.com
+ * @LastEditTime: 2023-11-09 22:16:53
+ * @Description:
+ * Copyright (c) 2023 by buaa.ioase.dcl, All Rights Reserved.
+ */
 const api = require('../browserApi/baseApi')
 window.tsbApi = require('../browserApi/baseApi')
 window.tableApi = require('../tableApi/baseApi')

@@ -2,26 +2,24 @@
  * @Author: teddycode 1055334354@qq.com
  * @Date: 2023-11-08 16:07:35
  * @LastEditors: teddycode 1055334354@qq.com
- * @LastEditTime: 2023-11-09 16:06:12
- * @Description: 
- * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved. 
+ * @LastEditTime: 2023-11-09 21:58:05
+ * @Description:
+ * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved.
 -->
 <script>
-import { defineComponent } from "vue";
-import { Modal } from "ant-design-vue";
+import {defineComponent} from "vue";
+import {message, Modal} from "ant-design-vue";
 import Emoji from "../comp/Emoji.vue";
 import MyProp from "../team/MyProp.vue";
-import { appStore } from "../../store";
-import { teamStore } from "../../store/team";
-import { taskStore } from "../../apps/task/store";
+import {appStore} from "../../store";
+import {teamStore} from "../../store/team";
+import {taskStore} from "../../apps/task/store";
 import BorderAvatar from "../avatar/BorderAvatar.vue";
-import { mapWritableState } from "pinia";
-
-const { userModel } = window.$models;
+import {mapWritableState} from "pinia";
 
 export default defineComponent({
   name: "UserEntry",
-  components: { Emoji, MyProp, BorderAvatar },
+  components: {Emoji, MyProp, BorderAvatar},
   data() {
     return {
       teamList: [
@@ -72,10 +70,9 @@ export default defineComponent({
   computed: {
     ...mapWritableState(teamStore, ["team", "teamVisible"]),
     ...mapWritableState(taskStore, ["isTaskDrawer"]),
-    ...mapWritableState(appStore, ["userInfo"]),
+    ...mapWritableState(appStore, ["userInfo", "deleteUserInfo"]),
   },
   mounted() {
-    console.info("UserInfo:", this.userInfo);
   },
   methods: {
     async jump(type, val) {
@@ -99,7 +96,7 @@ export default defineComponent({
           this.isTaskDrawer = true;
           break;
         case "logout":
-          this.logout(this.userInfo.uid);
+          this.logout(this?.userInfo.uid);
           break;
       }
       this.openTeam = false;
@@ -112,26 +109,27 @@ export default defineComponent({
     },
     login() {
       tsbApi.user.login((data) => {
+        console.log("before get user details:", data)
         ipc.send("getDetailUserInfo");
       });
     },
-    logout (uid) {
+    logout(uid) {
       Modal.confirm({
-        title: '退出此帐号:'+this.userInfo.uid,
+        title: '退出此帐号:' + this.userInfo.uid,
         content: '退出帐号并不会影响帐号数据，仅仅是将本地帐号退出。但是退出后无法再使用此帐号下的所有空间。',
         centered: true,
         okText: '确认',
         cancelText: '取消',
-        onOk: () => {
-          console.log("uid:",this.userInfo.uid,userModel);
-          // userModel.logout();
-          // message.success('帐号退出成功。')
-           userModel?.delete({ uid: uid }).then(() => {
+        onOk: async () => {
+          console.log("uid:", uid)
+          await this.deleteUserInfo()
+          let res = await ipc.invoke("direct-logout", uid)
+          if (res){
             message.success('帐号退出成功。')
             this.$router.replace('/')
-          }).catch(() => {
-            message.error('退出帐号失败。')
-          })
+          }else{
+            message.error("账号退出失败，请重试！")
+          }
         }
       })
     }
@@ -149,8 +147,8 @@ export default defineComponent({
   <div v-else>
     <div class="team-module">
       <div
-        @click="toggleTeam"
-        style="
+          @click="toggleTeam"
+          style="
           margin-left: 0;
           padding: 0.6em !important;
           color: var(--primary-text);
@@ -158,7 +156,7 @@ export default defineComponent({
         "
       >
         <div v-if="userInfo.avatar">
-          <BorderAvatar :avatarUrl="userInfo.avatar" :avatarSize="50" />
+          <BorderAvatar :avatarUrl="userInfo.avatar" :avatarSize="50"/>
         </div>
         <div v-else>
           <emoji style="width: 52px; height: 52px" icon="unlogin"></emoji>
@@ -166,10 +164,10 @@ export default defineComponent({
       </div>
       <div class="team-box" v-if="openTeam">
         <div
-          v-for="t in teamList"
-          :key="t.title"
-          class="team-item"
-          @click="jump(t.type, t)"
+            v-for="t in teamList"
+            :key="t.title"
+            class="team-item"
+            @click="jump(t.type, t)"
         >
           <a-avatar :src="t.img" :size="40"></a-avatar>
           <span>{{ t.title }}</span>
@@ -182,6 +180,7 @@ export default defineComponent({
 <style scoped lang="scss">
 .team-module {
   position: relative;
+
   .team-box {
     position: absolute;
     top: -200px;
@@ -198,6 +197,7 @@ export default defineComponent({
     display: flex;
     flex-wrap: wrap;
     padding: 12px 6px;
+
     .team-item {
       width: 80px;
       height: 80px;
@@ -211,6 +211,7 @@ export default defineComponent({
       cursor: pointer;
       color: var(--primary-text);
     }
+
     .team-item:hover {
       background: rgba(80, 139, 254, 0.2);
     }

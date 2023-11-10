@@ -1,17 +1,17 @@
 <template>
   <div style="padding: 20px">
     <a-input-search
-      v-model:value="searchWord"
-      placeholder="输入文字搜索"
-      style="width: 390px;margin-right: 10px"
-      @search="onSearch"
+        v-model:value="searchWord"
+        placeholder="输入文字搜索"
+        style="width: 390px;margin-right: 10px"
+        @search="onSearch"
     />
     <a-select
-      ref="select"
-      v-model:value="sampleType"
-      style="width: 120px"
-      @change="handleChange"
-      @focus="focus"
+        ref="select"
+        v-model:value="sampleType"
+        style="width: 120px"
+        @change="handleChange"
+        @focus="focus"
     >
       <a-select-option value="all">全部</a-select-option>
       <a-select-option value="anserws">答案</a-select-option>
@@ -42,16 +42,18 @@
 
         </a-col>
       </a-row>
-      <div style="padding-top: 80px"><a-empty v-if="displayItems.length===0" description="不存在查找的示例"></a-empty></div>
+      <div style="padding-top: 80px">
+        <a-empty v-if="displayItems.length===0" description="不存在查找的示例"></a-empty>
+      </div>
     </div>
 
 
   </div>
   <a-modal
-    v-model:visible="visible"
-    width="100%"
-    wrap-class-name="full-modal"
-    :footer="null"
+      v-model:visible="visible"
+      width="100%"
+      wrap-class-name="full-modal"
+      :footer="null"
   >
     <div>
 
@@ -60,18 +62,18 @@
           <a-avatar :src="currentItem.icon" shape="square"></a-avatar>
         </a-col>
         <a-col>
-          <div class="m-title">    {{ currentItem.title }}</div>
+          <div class="m-title"> {{ currentItem.title }}</div>
           <div class="m-summary">{{ currentItem.summary }}</div>
         </a-col>
       </a-row>
 
 
       <div class="prompt">
-      <pre>{{currentItem.prompt}}</pre>
+        <pre>{{ currentItem.prompt }}</pre>
       </div>
       <div class="response">
 
-        <pre>{{currentItem.response}}</pre>
+        <pre>{{ currentItem.response }}</pre>
       </div>
 
     </div>
@@ -90,7 +92,7 @@ const data = [
     type: ['answers', 'generation', 'conversation'],
     summary: '基于已经存在的知识提问',
     prompt:
-      `我是一个高度智能的问答机器人。如果你问我一个植根于真理的问题，我会给你答案。如果你问我一个无稽之谈、诡计多端或没有明确答案的问题，我会回答“未知”。
+        `我是一个高度智能的问答机器人。如果你问我一个植根于真理的问题，我会给你答案。如果你问我一个无稽之谈、诡计多端或没有明确答案的问题，我会回答“未知”。
 
 问：美国的人类预期寿命是多少？
 答：美国的人类预期寿命为78岁。
@@ -123,7 +125,7 @@ const data = [
     type: ['transformation', 'generation'],
     summary: '将语句纠正成标准英语',
     prompt:
-      `修正下面的英语语法错误:
+        `修正下面的英语语法错误:
 
 She no went to the market.`,
     response: 'She did not go to the market.'
@@ -133,7 +135,7 @@ She no went to the market.`,
     type: ['transformation', 'generation'],
     summary: '将复杂文本翻译成更简单的概念',
     prompt:
-      `总结一下二年级学生：
+        `总结一下二年级学生：
 
 木星是距离太阳的第五颗行星，也是太阳系中最大的行星。它是一颗气态巨行星，质量是太阳的千分之一，但是太阳系中所有其他行星总和的两倍半。木星是夜空中肉眼可见的最亮的天体之一，早在有记载的历史之前就为古代文明所知。它以罗马神木星命名。[19]从地球上看，木星的亮度足以使其反射光投射出可见的阴影，[20]并且平均是夜空中仅次于月球和金星的第三亮自然物体。`,
     response: '木星是距离太阳的第五颗行星，非常大而明亮。它可以在夜空中用我们的眼睛看到，自古以来就为人所知。它的名字来自罗马神木星。它通常是夜空中第三亮的物体，仅次于月球和金星。'
@@ -141,7 +143,7 @@ She no went to the market.`,
   {
     title: '自然语言到OpenAI API',
     summary: '创建代码以使用自然语言指令调用 OpenAI API。',
-    type:['code','transformation'],
+    type: ['code', 'transformation'],
     prompt: `
     """
 Util exposes the following:
@@ -169,39 +171,39 @@ print(completion)
 ]
 export default {
   name: 'Learn',
-  data () {
+  data() {
     return {
-      searchWord:'',
+      searchWord: '',
       data,
       visible: false,
       sampleType: 'all',
       currentItem: {}
     }
   },
-  mounted () {
+  mounted() {
     changeHeight(600)
   },
-  computed:{
-    displayItems(){
-      let filteredType=[]
-      if(this.sampleType==='all'){
-        filteredType=this.data
-      }else{
-        filteredType=this.data.filter(item=>{
-          return item.type.indexOf(this.sampleType)>-1
+  computed: {
+    displayItems() {
+      let filteredType = []
+      if (this.sampleType === 'all') {
+        filteredType = this.data
+      } else {
+        filteredType = this.data.filter(item => {
+          return item.type.indexOf(this.sampleType) > -1
         })
       }
-      if(this.searchWord===''){
+      if (this.searchWord === '') {
         return filteredType
       }
-      return filteredType.filter(item=>{
-        return Object.keys(item).some(key=>{
-          return item[key].indexOf(this.searchWord)>-1
+      return filteredType.filter(item => {
+        return Object.keys(item).some(key => {
+          return item[key].indexOf(this.searchWord) > -1
         })
       })
     }
   },
-  methods:{
+  methods: {
     /**
      * 修改窗体自身高度
      * @param height
@@ -245,7 +247,8 @@ export default {
   border-radius: 4px;
   margin-bottom: 10px;
 }
-.prompt pre,.response pre{
+
+.prompt pre, .response pre {
   word-wrap: break-word;
   max-width: 100%;
   word-break: break-all;
@@ -254,6 +257,7 @@ export default {
   overflow: hidden !important;
   width: 100%;
 }
+
 .response {
   word-wrap: break-word;
   word-break: normal;
@@ -265,7 +269,8 @@ export default {
 <style lang="scss">
 
 .full-modal {
-  -webkit-app-region:no-drag;
+  -webkit-app-region: no-drag;
+
   .ant-modal {
     max-width: 100%;
     top: 0;
@@ -287,7 +292,7 @@ export default {
 }
 </style>
 <style>
-body{
+body {
   background: white !important;
 }
 </style>

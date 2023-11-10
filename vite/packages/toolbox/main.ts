@@ -1,9 +1,9 @@
-import { createApp } from "vue";
+import {createApp} from "vue";
 import "ant-design-vue/dist/antd.css";
 import App from "./App.vue";
 import router from "./router";
 import Antd from "ant-design-vue";
-import { createPinia } from "pinia";
+import {createPinia} from "pinia";
 import piniaPersist from "../table/js/ext/pinia-plugin-persist/index";
 // 基础样式
 import "./styles/index.scss";
@@ -17,7 +17,7 @@ import components from "../table/ui/components/index";
 import cache from "../table/components/card/hooks/cache";
 
 // @ts-ignore
-const { tools } = window.$models;
+const {tools} = window.$models;
 tools.getWindowArgs(window);
 
 const app = createApp(App);

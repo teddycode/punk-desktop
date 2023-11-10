@@ -8,7 +8,6 @@ const ipc = electron.ipcRenderer
 
 // tsbSdk.listener({isSystemApp: true})
 
-
 const { db } = require('../../js/util/database.js')
 window.mainWindowId = 0 //主窗体id
 window.l = l

@@ -1,31 +1,32 @@
 <template>
   <div
-    style="display:flex;height: 100vh;text-align: center;align-content: center;align-items: center;background:#333;justify-content: center"
-    class="drag">
+      class="drag"
+      style="display:flex;height: 100vh;text-align: center;align-content: center;align-items: center;background:#333;justify-content: center">
     <div v-if="launching" style="margin: auto;">
       <div class="mb-5 animate-bounce ">
         <a-avatar :size="60"
                   src="https://jxxt-1257689580.cos.ap-chengdu.myqcloud.com/8befa3834d2eb29e75685563ef513215.png?imageMogr2/crop/260x260/gravity/center"></a-avatar>
       </div>
       <div style="font-size: 1.2em;">
-        <svg style="vertical-align: text-bottom" class="w-5 h-5 mr-3 -ml-1 text-white animate-spin"
-             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" fill="none"
+             style="vertical-align: text-bottom" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+          <path class="opacity-75"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                fill="currentColor">
           </path>
         </svg>
-        欢迎回来，开启web2与web3的新世界！
+        欢迎使用磐古跨链客户端，带你探索通往web3的新世界！
       </div>
     </div>
-    <div v-else style="background: #333;width: 100vw;height:auto" class="">
+    <div v-else class="" style="background: #333;width: 100vw;height:auto">
       <div class="p-10 rounded-lg no-drag s-bg" style="width: 600px;margin: auto">
 
         <h3 style="text-align: center;font-size: 1.5em">
-          <a-avatar style="vertical-align: top" src="/icons/logo128.png"></a-avatar>
+          <a-avatar src="/icons/logo128.png" style="vertical-align: top"></a-avatar>
           磐古跨链客户端
         </h3>
-        <div class="mb-10 ml-40 text-center text-md">—— 连接web2与web3的一站式终端</div>
+        <div class="mb-10 ml-40 text-center text-md"> —— 连接web2与web3的一站式终端</div>
         <p v-if="!userInfo">
           <div class="mb-5 xt-text" style="font-size: 16px">
             本客户端需要借助后端计算服务，<strong>请登录后使用。</strong><br>
@@ -36,14 +37,12 @@
             <a-col flex="1">
               <xt-button size="mini" style="width: 100%" type="theme" @click="login">登录/注册账号</xt-button>
             </a-col>
-            <a-col flex="150px" v-if="netError">
+            <a-col v-if="netError" flex="150px">
               <xt-button style="width: 100%" @click="getUserInfo">重试</xt-button>
             </a-col>
           </a-row>
-
-
         </p>
-        <div class="text-center" v-else>
+        <div v-else class="text-center">
           <div class="inline-block mt-3 mb-3">
             <div>
               <a-avatar :size="68" :src="userInfo.avatar"></a-avatar>
@@ -54,7 +53,7 @@
           </div>
         </div>
         <div class="flex">
-          <a-button block v-if="userInfo" type="primary" size="large" class="m-3" @click="goDirect">开始使用</a-button>
+          <a-button v-if="userInfo" block class="m-3" size="large" type="primary" @click="goDirect">开始使用</a-button>
         </div>
       </div>
     </div>
@@ -63,31 +62,30 @@
 </template>
 
 <script>
-import { message, Modal } from 'ant-design-vue'
-import { appStore } from '../store'
-import { mapWritableState, mapActions } from 'pinia'
-import { codeStore } from '../store/code'
-import { cardStore } from '../store/card'
-import { deckStore } from '../apps/deck/store'
-import { paperStore } from '../store/paper'
-import { weatherStore } from '../store/weather'
-import { screenStore } from '../store/screen'
-import { isMain } from '../js/common/screenUtils'
-import { inspectorStore } from '../store/inspector'
-import { teamStore } from '../store/team'
-import { steamUserStore } from '../store/steamUser'
-import { captureStore } from '../store/capture'
-import { navStore } from '../store/nav'
-import { clipboardStore } from '../apps/clipboard/store'
-import { browserStore } from '../store/browser'
+import {message, Modal} from 'ant-design-vue'
+import {appStore} from '../store'
+import {mapActions, mapWritableState} from 'pinia'
+import {codeStore} from '../store/code'
+import {cardStore} from '../store/card'
+import {deckStore} from '../apps/deck/store'
+import {paperStore} from '../store/paper'
+import {weatherStore} from '../store/weather'
+import {screenStore} from '../store/screen'
+import {isMain} from '../js/common/screenUtils'
+import {inspectorStore} from '../store/inspector'
+import {teamStore} from '../store/team'
+import {steamUserStore} from '../store/steamUser'
+import {captureStore} from '../store/capture'
+import {navStore} from '../store/nav'
+import {clipboardStore} from '../apps/clipboard/store'
+import {browserStore} from '../store/browser'
 import RayMedal from '../components/small/RayMedal.vue'
-import { chatStore } from '../store/chat'
-import navigationData from '../js/data/tableData'
+import {chatStore} from '../store/chat'
 
 export default {
   name: 'Code',
-  components: { RayMedal },
-  data () {
+  components: {RayMedal},
+  data() {
     return {
       showTip: false,
       loading: false,
@@ -101,7 +99,7 @@ export default {
       version: tsbApi.runtime.appVersion
     }
   },
-  async mounted () {
+  async mounted() {
     //启动检测项的store，必须已经载入的项目，如果这边不写，就不确保必须载入完成
     //注意，此处的第二个参数，必须和此store同名，尤其注意有些命名里带了store的
     this.initStore(appStore, 'appStore')
@@ -164,7 +162,7 @@ export default {
     ...mapActions(appStore, ['getUserInfo', 'setUser']),
     ...mapActions(steamUserStore, ['bindClientEvents']),
     ...mapActions(captureStore, ['bindCaptureIPC']),
-    timeout () {
+    timeout() {
       this.timeoutHandler = setTimeout(() => {
         Modal.error({
           content: '服务器连接超时。可能服务器正在维护，请稍后再试。',
@@ -177,11 +175,11 @@ export default {
         })
       }, 5000)
     },
-    goDirect () {
-      this.$router.replace({ name: 'wizard' })
+    goDirect() {
+      this.$router.replace({name: 'wizard'})
       localStorage.setItem('wizarded', 1)
     },
-    enter () {
+    enter() {
       clearTimeout(this.timeoutHandler)//清理掉超时提示
       chatStore().login()
       if (localStorage.getItem('wizarded')) {
@@ -189,20 +187,20 @@ export default {
         if (currentRoute) {
           if (['lock', 'power'].includes(currentRoute.name)) {
             //阻止lock、power页面的自动跳转
-            this.$router.replace({ name: 'home' })
+            this.$router.replace({name: 'home'})
           } else {
             this.$router.replace(currentRoute)
           }
         } else {
-          this.$router.replace({ name: 'home' })
+          this.$router.replace({name: 'home'})
         }
       }
 
     },
-    bindUserInfoResponse () {
+    bindUserInfoResponse() {
       ipc.removeAllListeners('userInfo')
       ipc.on('userInfo', async (event, args) => {
-        console.error(args, '参数')
+        console.error('splash接收到登录参数:', args)
         if (args.data.uid === -2) {
           this.netError = true
           message.error({
@@ -229,13 +227,14 @@ export default {
         lvInfo.percentage = ((lvInfo.minute - current[0] * 60) / ((current[1] - current[0]) * 60)) * 100
         //this.lvInfo = lvInfo
         window.loadedStore['userInfo'] = true
+        console.error('更新了用户信息:',userInfo)
         this.setUser(userInfo)
         if (this.$route.name === 'splash') {
           this.enter()
         }
       })
     },
-    initStore (store, name) {
+    initStore(store, name) {
       if (!window.loadedStore) {
         window.loadedStore = {}
       }
@@ -245,9 +244,8 @@ export default {
       store()
     },
 
-    async afterLaunch () {
+    async afterLaunch() {
       this.bindCaptureIPC()
-
       this.bindClientEvents()
 
       clipboardStore().prepare()
@@ -278,9 +276,8 @@ export default {
       } else {
         this.enter()
       }
-
     },
-    gradeTableGenerate (num) {
+    gradeTableGenerate(num) {
       let lvSys = {}
       for (let i = 0; i < num + 1; i++) {
         let arrLef = 0
@@ -297,7 +294,7 @@ export default {
       delete lvSys['lv0']
       return lvSys
     },
-    login () {
+    login() {
       tsbApi.user.login((data) => {
         this.getUserInfo()
       })

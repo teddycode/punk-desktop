@@ -1,4 +1,4 @@
-const { app } = require('electron')
+const { app,Menu } = require('electron')
 
 class ToolboxManager {
   windowInstance = null//窗口实例
@@ -17,6 +17,7 @@ class ToolboxManager {
           frame: false,
           width: 572,
           height: 420,
+          closable:true,
         },
         webPreferences: {
           nodeIntegration: true,
