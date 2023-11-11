@@ -15,7 +15,6 @@
           </a-menu>
         </template>
       </a-dropdown>
-
     </vue-custom-scrollbar>
   </div>
 </template>
@@ -45,8 +44,9 @@ export default {
     this.apps = await appModel.getAllApps()
   },
   methods: {
+    // 运行app
     executeApp(app) {
-      ipc.send('executeApp', {app: JSON.parse(JSON.stringify(app))})
+      ipc.send('executeApp', {app: JSON.parse(JSON.stringify(app))}) // 传给appManager.js执行
     },
     uninstall(app) {
       let that = this

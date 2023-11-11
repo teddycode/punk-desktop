@@ -1,13 +1,14 @@
 <template>
-  <!-- 快速搜索 应用 主页 -->
+  <!-- 应用管理  -->
   <div style="display: flex;height: 100%;color: var(--primary-text)">
     <SecondPanel :menus="menus" :search="true" logo="https://up.apps.vip/logo/favicon.svg" @change-tab="changeTab">
     </SecondPanel>
-    <div v-show="currentIndex === 'my'" class="app-content s-bg" style="margin: 1em;background: var(--primary-bg);" @dragover.prevent="dragOver"
+  <!--  本地应用 -->
+    <div v-show="currentIndex === 'my'" class="app-content s-bg" style="margin: 1em;background: var(--primary-bg);"
+         @dragover.prevent="dragOver"
          @drop.prevent="drop">
       <div v-if="myApps.length === 0" style="font-size: 2em;padding-top: 6em;text-align: center;">
-        <Icon icon="line-dragdroptuofang"
-              style="font-size: 2em;vertical-align: middle;"></Icon>
+        <Icon icon="line-dragdroptuofang" style="font-size: 2em;vertical-align: middle;"></Icon>
         将应用拖放到此处，即可用于快捷启动
       </div>
       <div v-if="myApps.length === 0" style="text-align: center">
@@ -19,23 +20,22 @@
             @addIcons="iconVisible = true"
         ></MyApps>
         <Teleport to="body">
-          <AddIcon
-              v-if="iconVisible"
-              :navList="[
+          <AddIcon v-if="iconVisible" :navList="[
               { name: '桌面图标', component: 'Desktop' },
             ]"
-              navName="Desktop"
-              @close="iconHide"
-              @getSelectApps="getSelectApps"
+                 navName="Desktop"
+                 @close="iconHide"
+                 @getSelectApps="getSelectApps"
           >
           </AddIcon>
         </Teleport>
       </div>
     </div>
+    <!--  web3 应用   -->
     <div v-if="currentIndex === 'qing'" class="app-content s-bg" style="margin: 1em;background: var(--primary-bg);">
-      <QingApps>
-      </QingApps>
+      <QingApps/>
     </div>
+    <!-- 应用市场   -->
     <div v-if="currentIndex === 'store'" class="app-content s-bg"
          style="margin:1em;padding: 1em;background: var(--primary-bg);"
     >
@@ -47,8 +47,7 @@
               入驻成为开发者
             </div>
             共 {{ storeApps.length }} 应用
-            <div class="pointer" style="font-size: 0.8em;float: right"
-                 @click="openDir">
+            <div class="pointer" style="font-size: 0.8em;float: right" @click="openDir">
               <FolderOpenOutlined/>
               下载目录
             </div>
@@ -68,12 +67,8 @@
               <a-col :span="5">
                 <div :style="{ color: 'var(--font-color)' }" class="app-name  font-bold text-white"
                      style="text-align: left;">
-                  {{
-                    app.name
-                  }}
-
+                  {{ app.name }}
                 </div>
-
                 <div :title="app.summary" class="app-summary" style="text-align: left;">
                   {{ app.summary }}
                 </div>
@@ -86,7 +81,8 @@
                            style="vertical-align: text-bottom;" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
                                 stroke-width="4"></circle>
-                        <path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        <path class="opacity-75"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                               fill="currentColor">
                         </path>
                       </svg>
@@ -97,7 +93,8 @@
                            style="vertical-align: text-bottom;" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
                                 stroke-width="4"></circle>
-                        <path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        <path class="opacity-75"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                               fill="currentColor">
                         </path>
                       </svg>
@@ -117,7 +114,6 @@
                   </div>
                 </template>
               </a-col>
-
             </template>
           </a-row>
         </div>
