@@ -6,10 +6,10 @@ export const aiStore = defineStore("aiStore", {
      * 主菜单配置
      */
     gpt: "gpt-3.5-turbo", // 选中的模型
-    temperature: 1, // 联想度
+    temperature: 2, // 联想度
     count: 4, // 上下文长度
-    key: "sk-rtW2xHFoijpQ6v1huuJlWM8zJDHVfcpi5jtIigB4c668YeR0", // 密钥
-    url: "https://api.closeai-proxy.xyz", // 地址
+    key: "fk200537-ditsnYQ48GLvtjFRVWQ4ZWDYYAImChsl", // 密钥
+    url: "https://openai.api2d.net", // 地址
     isFull: false, // 组件全屏状态
     selectTab: "Chat", // 左侧tab选中情况
     fullState: {}, // 记录组件展示状态
