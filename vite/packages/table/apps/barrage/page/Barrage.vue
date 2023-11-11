@@ -13,11 +13,12 @@ export default defineComponent({
 
   <div class="xt-text" style="width:800px;margin:auto;height: 100%">
     <a-row :gutter="10" style="height: 100%">
-      <a-col style="height: 100%" :span="12" class="">
+      <a-col :span="12" class="" style="height: 100%">
         <BarragePanel></BarragePanel>
       </a-col>
       <a-col :span="1">
-        <div style="border-right: 1px solid var(--secondary-text);height:calc(100% - 40px);opacity: 0.5;width: 0;margin: auto;margin-top: 20px"></div>
+        <div
+            style="border-right: 1px solid var(--secondary-text);height:calc(100% - 40px);opacity: 0.5;width: 0;margin: auto;margin-top: 20px"></div>
       </a-col>
       <a-col :span="11" class="pt-2 pl-2">
         <BarrageSetting></BarrageSetting>
@@ -28,6 +29,6 @@ export default defineComponent({
 
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 
 </style>

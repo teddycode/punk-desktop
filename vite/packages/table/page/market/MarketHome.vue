@@ -1,33 +1,36 @@
 <template>
   <transition name="fade">
-    <div class="" style="
+    <div v-if="visibleAdd" class="" style="
         position: fixed;
         top: 0;
         right: 0;
         left: 0;
         bottom: 0;
         z-index: 999;
-      " v-if="visibleAdd">
-      <NewAddCard @setCustoms="hideAddCard" @close="hideAddCard" :desk="currentDesk" :panelIndex="panelIndex"></NewAddCard>
+      ">
+      <NewAddCard :desk="currentDesk" :panelIndex="panelIndex" @close="hideAddCard"
+                  @setCustoms="hideAddCard"></NewAddCard>
     </div>
   </transition>
   <div class="box">
-    <div @click="onBack" class="pointer button-active xt-mask h-12 w-12 flex items-center rounded-lg justify-center mr-3">
+    <div class="pointer button-active xt-mask h-12 w-12 flex items-center rounded-lg justify-center mr-3"
+         @click="onBack">
       <Icon icon="xiangzuo" style="font-size: 1.5em;color:var(--primary-text)"></Icon>
     </div>
     <div class="box-content">
       <div class="con-body">
         <div v-for="m in marketList" :key="m.title" class="con-item" @click="jumpMarket(m.type,m)">
-            <a-avatar shape="square" :src="m.imgBack" class="w-full h-full object-cover item-back" style="" alt=""></a-avatar>
-            <div class="item-content">
-              <div class="item-head">
-                <p>{{ m.title }}<span>{{ m.title }}</span></p>
-                <Icon icon="xiangyou" class="mt-2" style="font-size: 1.5em;color:var(--secondary-text)"></Icon>
-              </div>
-              <!-- <div class="item-body">
-
-              </div> -->
+          <a-avatar :src="m.imgBack" alt="" class="w-full h-full object-cover item-back" shape="square"
+                    style=""></a-avatar>
+          <div class="item-content">
+            <div class="item-head">
+              <p>{{ m.title }}<span>{{ m.title }}</span></p>
+              <Icon class="mt-2" icon="xiangyou" style="font-size: 1.5em;color:var(--secondary-text)"></Icon>
             </div>
+            <!-- <div class="item-body">
+
+            </div> -->
+          </div>
         </div>
       </div>
     </div>
@@ -35,10 +38,11 @@
 </template>
 
 <script>
-import { mapActions, mapWritableState } from "pinia";
+import {mapWritableState} from "pinia";
 import NewAddCard from "../app/card/NewAddCard.vue"
-import { appStore } from '../../store';
-import { cardStore } from '../../store/card'
+import {appStore} from '../../store';
+import {cardStore} from '../../store/card'
+
 export default {
   components: {
     NewAddCard
@@ -97,12 +101,12 @@ export default {
     }
   },
   methods: {
-    onBack(){
+    onBack() {
       this.fullScreen = false
       this.$router.go(-1)
     },
-    jumpMarket(val,market){
-      switch(val){
+    jumpMarket(val, market) {
+      switch (val) {
         case 'route':
           this.fullScreen = false
           // if(market.route.name === 'prop'){
@@ -111,7 +115,7 @@ export default {
           this.$router.push(market.route)
           break;
         case 'card':
-        this.panelIndex = 0
+          this.panelIndex = 0
           this.fullScreen = false
           this.visibleAdd = true
           break;
@@ -164,84 +168,94 @@ export default {
       }
     },
   },
-} 
+}
 </script>
 
 
-<style scoped lang="scss">
-  .box{
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--primary-bg);
-    padding: 12px;
-    .box-content{
-      width: 100%;
-      height: 90%;
+<style lang="scss" scoped>
+.box {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--primary-bg);
+  padding: 12px;
+
+  .box-content {
+    width: 100%;
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .con-body {
       display: flex;
       justify-content: center;
-      align-items: center;
-      .con-body{
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        max-width: 1200px;
-        height: 80%;
-        overflow: auto;
-        .con-item{
+      flex-wrap: wrap;
+      max-width: 1200px;
+      height: 80%;
+      overflow: auto;
+
+      .con-item {
+        width: 320px;
+        height: 200px;
+        position: relative;
+        cursor: pointer;
+        margin: 0 12px 24px;
+
+        .item-back {
+          position: absolute;
           width: 320px;
           height: 200px;
-          position: relative;
-          cursor: pointer;
-          margin: 0 12px 24px;
-          .item-back{
-            position: absolute;
-            width: 320px;
-            height: 200px;
-          }
-          .item-content{
-            position: absolute;
+        }
+
+        .item-content {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          z-index: 2;
+          padding: 16px;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+
+          .item-head {
             width: 100%;
-            height: 100%;
-            z-index: 2;
-            padding: 16px;
             display: flex;
-            flex-direction: column;
             justify-content: space-between;
-            .item-head{
+
+            p {
               width: 100%;
-              display: flex;
-              justify-content: space-between;
-              p{
-                width: 100%;
-                font-size: 24px;
-                color: var(--primary-text);
-                position: relative;
-                margin-top: 10px;
-                letter-spacing: 1px;
-                span{
-                  opacity: 0.25;
-                  position: absolute;
-                  font-size: 32px;
-                  top: -20px;
-                  left: 0px;
-                }
+              font-size: 24px;
+              color: var(--primary-text);
+              position: relative;
+              margin-top: 10px;
+              letter-spacing: 1px;
+
+              span {
+                opacity: 0.25;
+                position: absolute;
+                font-size: 32px;
+                top: -20px;
+                left: 0px;
               }
             }
-            .item-body{
-              background: var(--mask-bg);
-              border-radius: 12px;
-              width: 288px;
-              height: 78px;
-            }
+          }
+
+          .item-body {
+            background: var(--mask-bg);
+            border-radius: 12px;
+            width: 288px;
+            height: 78px;
           }
         }
       }
     }
   }
-  .con-body::-webkit-scrollbar{
-    display: none;
-  }
+}
+
+.con-body::-webkit-scrollbar {
+  display: none;
+}
 </style>

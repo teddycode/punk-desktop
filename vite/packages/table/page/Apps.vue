@@ -1,54 +1,54 @@
 <template>
   <!-- 快速搜索 应用 主页 -->
   <div style="display: flex;height: 100%;color: var(--primary-text)">
-    <SecondPanel :search="true" :menus="menus" logo="https://up.apps.vip/logo/favicon.svg" @change-tab="changeTab">
+    <SecondPanel :menus="menus" :search="true" logo="https://up.apps.vip/logo/favicon.svg" @change-tab="changeTab">
     </SecondPanel>
-    <div v-show="currentIndex === 'my'" @dragover.prevent="dragOver" @drop.prevent="drop" class="app-content s-bg"
-         style="margin: 1em;background: var(--primary-bg);">
+    <div v-show="currentIndex === 'my'" class="app-content s-bg" style="margin: 1em;background: var(--primary-bg);" @dragover.prevent="dragOver"
+         @drop.prevent="drop">
       <div v-if="myApps.length === 0" style="font-size: 2em;padding-top: 6em;text-align: center;">
-        <Icon style="font-size: 2em;vertical-align: middle;"
-              icon="line-dragdroptuofang"></Icon>
+        <Icon icon="line-dragdroptuofang"
+              style="font-size: 2em;vertical-align: middle;"></Icon>
         将应用拖放到此处，即可用于快捷启动
       </div>
       <div v-if="myApps.length === 0" style="text-align: center">
-        <div @click="loadDeskIconApps" class="btn" style="font-size: 1.5em;width: 8em">导入桌面应用</div>
+        <div class="btn" style="font-size: 1.5em;width: 8em" @click="loadDeskIconApps">导入桌面应用</div>
       </div>
       <div style="margin: 1em">
         <MyApps
-          @addIcons="iconVisible = true"
-          v-if="myApps.length > 0"
+            v-if="myApps.length > 0"
+            @addIcons="iconVisible = true"
         ></MyApps>
         <Teleport to="body">
           <AddIcon
-            v-if="iconVisible"
-            @getSelectApps="getSelectApps"
-            @close="iconHide"
-            navName="Desktop"
-            :navList="[
+              v-if="iconVisible"
+              :navList="[
               { name: '桌面图标', component: 'Desktop' },
             ]"
+              navName="Desktop"
+              @close="iconHide"
+              @getSelectApps="getSelectApps"
           >
           </AddIcon>
         </Teleport>
       </div>
     </div>
-    <div class="app-content s-bg" style="margin: 1em;background: var(--primary-bg);" v-if="currentIndex === 'qing'">
+    <div v-if="currentIndex === 'qing'" class="app-content s-bg" style="margin: 1em;background: var(--primary-bg);">
       <QingApps>
       </QingApps>
     </div>
-    <div class="app-content s-bg" v-if="currentIndex === 'store'"
+    <div v-if="currentIndex === 'store'" class="app-content s-bg"
          style="margin:1em;padding: 1em;background: var(--primary-bg);"
     >
       <vue-custom-scrollbar :settings="settings" style="position:relative;height:100%;  border-radius: 8px;">
         <div style="margin: auto;width:100%;height: auto;margin-bottom:1em;text-align: center ">
           <div style="margin-bottom: 1em;font-size: 1.5em">
-            <div @click="becomeDeveloper" class="pointer" style="float:left;font-size: 0.8em;">
+            <div class="pointer" style="float:left;font-size: 0.8em;" @click="becomeDeveloper">
               <notification-outlined/>
               入驻成为开发者
             </div>
             共 {{ storeApps.length }} 应用
-            <div class="pointer" @click="openDir"
-                 style="font-size: 0.8em;float: right">
+            <div class="pointer" style="font-size: 0.8em;float: right"
+                 @click="openDir">
               <FolderOpenOutlined/>
               下载目录
             </div>
@@ -57,48 +57,48 @@
             <template v-for="app in   storeApps  ">
               <a-col :span="3">
                 <div class="text-left" style="position:absolute;z-index: 9;">
-                  <a-tag color="#ff5500cc" v-if="app.data.type === 'system'">系统</a-tag>
-                  <a-tag color="#87d068cc" v-else-if="app.needInstall">软件</a-tag>
-                  <a-tag color="black" v-else-if="app.data.type === 'game'">游戏</a-tag>
-                  <a-tag color="#108ee9cc" v-else>网页</a-tag>
+                  <a-tag v-if="app.data.type === 'system'" color="#ff5500cc">系统</a-tag>
+                  <a-tag v-else-if="app.needInstall" color="#87d068cc">软件</a-tag>
+                  <a-tag v-else-if="app.data.type === 'game'" color="black">游戏</a-tag>
+                  <a-tag v-else color="#108ee9cc">网页</a-tag>
                 </div>
-                <a-avatar shape="square" :src="app.icon" style="margin-top: 10px" :size="60">
+                <a-avatar :size="60" :src="app.icon" shape="square" style="margin-top: 10px">
                 </a-avatar>
               </a-col>
               <a-col :span="5">
-                <div class="app-name  font-bold text-white" style="text-align: left;"
-                     :style="{ color: 'var(--font-color)' }">
+                <div :style="{ color: 'var(--font-color)' }" class="app-name  font-bold text-white"
+                     style="text-align: left;">
                   {{
                     app.name
                   }}
 
                 </div>
 
-                <div class="app-summary" :title="app.summary" style="text-align: left;">
+                <div :title="app.summary" class="app-summary" style="text-align: left;">
                   {{ app.summary }}
                 </div>
               </a-col>
               <a-col :span="4">
                 <tempalate v-if="app.needInstall">
-                  <div v-if="!checkInstalled(app)" @click="install(app)" class="btn">
+                  <div v-if="!checkInstalled(app)" class="btn" @click="install(app)">
                     <template v-if="app.downloading">
-                      <svg style="vertical-align: text-bottom;" class="ml-1 animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                           xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <svg class="ml-1 animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none"
+                           style="vertical-align: text-bottom;" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
                                 stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor"
-                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                        <path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                              fill="currentColor">
                         </path>
                       </svg>
                       <span>{{ app.percent }} %</span>
                     </template>
                     <template v-else-if="app.installing">
-                      <svg style="vertical-align: text-bottom;" class="ml-1 animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                           xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <svg class="ml-1 animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none"
+                           style="vertical-align: text-bottom;" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
                                 stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor"
-                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                        <path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                              fill="currentColor">
                         </path>
                       </svg>
                       安装中
@@ -107,12 +107,12 @@
                       <span>下载安装</span>
                     </template>
                   </div>
-                  <div v-else @click="executeLocalApp(app)" class="btn">
+                  <div v-else class="btn" @click="executeLocalApp(app)">
                     运行软件
                   </div>
                 </tempalate>
                 <template v-else>
-                  <div @click="executeApp(app.data)" class="btn">
+                  <div class="btn" @click="executeApp(app.data)">
                     打开
                   </div>
                 </template>
@@ -127,30 +127,29 @@
 </template>
 
 <script>
-import { mapWritableState, mapActions } from 'pinia'
-import { appStore } from '../store'
+import {mapActions, mapWritableState} from 'pinia'
+import {appStore} from '../store'
 import SecondPanel from '../components/SecondPanel.vue'
 import QingApps from '../components/QingApps.vue'
 import MyApps from '../components/MyApps.vue'
-import { appsStore } from '../store/apps'
-import { message } from 'ant-design-vue'
-import { runExec } from '../js/common/exec'
+import {appsStore} from '../store/apps'
+import {message} from 'ant-design-vue'
+import {runExec} from '../js/common/exec'
 import Template from '../../user/pages/Template.vue'
-import { NotificationOutlined, FolderOpenOutlined } from '@ant-design/icons-vue'
+import {FolderOpenOutlined, NotificationOutlined} from '@ant-design/icons-vue'
 import browser from '../js/common/browser'
 import AddIcon from '../page/app/addIcon/index.vue'
 import Desktop from '../page/app/addIcon/modules/Desktop.vue'
-import pathLib from 'path'
 
-let { fs } = window.$models
+let {fs} = window.$models
 export default {
   name: 'Apps',
-  components: { AddIcon, Desktop, Template, MyApps, QingApps, SecondPanel, NotificationOutlined, FolderOpenOutlined },
+  components: {AddIcon, Desktop, Template, MyApps, QingApps, SecondPanel, NotificationOutlined, FolderOpenOutlined},
   computed: {
     ...mapWritableState(appStore, ['appData']),
     ...mapWritableState(appsStore, ['myApps'])
   },
-  data () {
+  data() {
     return {
       iconVisible: false,
       settings: {
@@ -493,39 +492,39 @@ export default {
   },
   methods: {
     ...mapActions(appsStore, ['addApps']),
-    getSelectApps (data) {
+    getSelectApps(data) {
       this.addApps(data['default'])
     },
-    executeApp (appData) {
+    executeApp(appData) {
       this.$router.push({
         name: 'app',
         params: appData
       })
     },
-    open (app) {
+    open(app) {
       require('electron').shell.openPath(app.path)
     },
-    iconHide () {
+    iconHide() {
       this.iconVisible = false
     },
-    async loadDeskIconApps () {
+    async loadDeskIconApps() {
       this.iconVisible = true
       // const desktopApps = await ipc.sendSync('getDeskApps')
       // this.desktopApps = desktopApps
       // this.addApps(this.desktopApps)
     },
-    dragOver () {
+    dragOver() {
 
     },
-    changeTab (data) {
+    changeTab(data) {
       this.currentIndex = data.index
     },
-    checkInstalled (checkApp) {
+    checkInstalled(checkApp) {
       if (fs.existsSync(checkApp.installPath)) {
         return true
       }
     },
-    executeLocalApp (app) {
+    executeLocalApp(app) {
       runExec('"' + app.installPath + '"')
     },
     /**
@@ -533,43 +532,43 @@ export default {
      * @param app
      * @param path
      */
-    setup (app, path, silent = true) {
-      message.success({ content: '正在为您安装', key: 'install' })
+    setup(app, path, silent = true) {
+      message.success({content: '正在为您安装', key: 'install'})
       app.installing = true
       if (silent) {
         runExec('start /wait ' + path + ' /S', require('path').dirname(path)).then(rs => {
-          message.success({ content: '安装成功，并为您运行此软件', key: 'install' })
+          message.success({content: '安装成功，并为您运行此软件', key: 'install'})
           this.executeLocalApp(app)
           app.installed = true
         }, (rs) => {
-          message.error({ content: '安装失败', key: 'install' })
+          message.error({content: '安装失败', key: 'install'})
         }).catch((err) => {
-          message.error({ content: '安装错误', key: 'install' })
+          message.error({content: '安装错误', key: 'install'})
         }).finally(() => {
           app.installing = false
         })
       } else {
         runExec('start /wait ' + path, require('path').dirname(path)).then(rs => {
-          message.success({ content: '安装成功，并为您运行此软件', key: 'install' })
+          message.success({content: '安装成功，并为您运行此软件', key: 'install'})
           this.executeLocalApp(app)
           app.installed = true
         }, (rs) => {
-          message.error({ content: '安装失败', key: 'install' })
+          message.error({content: '安装失败', key: 'install'})
         }).catch((err) => {
-          message.error({ content: '安装错误', key: 'install' })
+          message.error({content: '安装错误', key: 'install'})
         }).finally(() => {
           app.installing = false
         })
       }
 
     },
-    becomeDeveloper () {
+    becomeDeveloper() {
       browser.openInUserSelect('https://www.yuque.com/tswork/mqon1y/hugtrbdiax9863ug')
     },
-    openDir () {
+    openDir() {
       require('electron').shell.openPath(require('path').join(window.globalArgs['user-data-dir'], 'download'))
     },
-    install (app) {
+    install(app) {
       if (app.downloading) {
         return
       }
@@ -606,7 +605,7 @@ export default {
         }
       })
     },
-    async drop (e) {
+    async drop(e) {
       let files = e.dataTransfer.files
 
       let filesArr = []
@@ -632,7 +631,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .btn {
   background: var(--secondary-bg);
 

@@ -50,13 +50,13 @@ const EXPIRETIME = 604800;
  */
 
 function genTestUserSig(options) {
-  const { SDKAppID, secretKey, userID } = options;
-  const generator = new LibGenerateTestUserSig(SDKAppID, secretKey, EXPIRETIME);
-  const userSig = generator.genTestUserSig(userID);
-  return {
-    SDKAppID,
-    userSig,
-  };
+    const {SDKAppID, secretKey, userID} = options;
+    const generator = new LibGenerateTestUserSig(SDKAppID, secretKey, EXPIRETIME);
+    const userSig = generator.genTestUserSig(userID);
+    return {
+        SDKAppID,
+        userSig,
+    };
 }
 
-export { genTestUserSig, EXPIRETIME };
+export {genTestUserSig, EXPIRETIME};

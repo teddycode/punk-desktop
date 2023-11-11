@@ -1,46 +1,46 @@
 <template>
   <Widget
-    :customData="customData"
-    :size="reSize"
-    :customIndex="customIndex"
-    :options="{...this.options,background:this.customData.background,title:this.customData.title}"
-    :menuList="menuList"
-    class="test"
-    ref="homelSlotRef"
-    :desk="desk"
+      ref="homelSlotRef"
+      :customData="customData"
+      :customIndex="customIndex"
+      :desk="desk"
+      :menuList="menuList"
+      :options="{...this.options,background:this.customData.background,title:this.customData.title}"
+      :size="reSize"
+      class="test"
   >
-  <!-- 图标 -->
+    <!-- 图标 -->
     <template #left-title>
-        <div class="icon"
-            style="width: 35px;height: 24px;display: flex; justify-content: center;align-items: center;position: absolute;left: 1px;top:14px;">
-            <Icon :icon="icons.notepad12Regular" width="20" height="20" />
-          </div>
+      <div class="icon"
+           style="width: 35px;height: 24px;display: flex; justify-content: center;align-items: center;position: absolute;left: 1px;top:14px;">
+        <Icon :icon="icons.notepad12Regular" height="20" width="20"/>
+      </div>
     </template>
     <!-- <cardDrag ref="drag" @reSizeInit="reSizeInit"> </cardDrag> -->
-    
+
     <cardDrag ref="drag" @reSizeInit="reSizeInit">
       <template #="{ row }">
         <!-- :style="{ backgroundImage: background, color: fontColor }" -->
         <textarea
-          spellcheck="false"
-          :style="{ backgroundImage: background}"
-          style="color: var(--primary-text);"
-          class="box no-drag"
-          placeholder="输入卡片内容"
-          v-model="text"
-          @blur="updateText"
+            v-model="text"
+            :style="{ backgroundImage: background}"
+            class="box no-drag"
+            placeholder="输入卡片内容"
+            spellcheck="false"
+            style="color: var(--primary-text);"
+            @blur="updateText"
         >
         </textarea>
       </template>
     </cardDrag>
   </Widget>
 
-  <a-drawer :width="500" v-model:visible="settingVisible" placement="right">
+  <a-drawer v-model:visible="settingVisible" :width="500" placement="right">
     <template #title>
       <div class="text-center">设置</div>
     </template>
 
-    <XtRadio @onChange="__updateSize" :data="customData.dragCardSize"></XtRadio>
+    <XtRadio :data="customData.dragCardSize" @onChange="__updateSize"></XtRadio>
     <!-- <div>文字颜色</div> -->
     <!-- <div class="item-box">
       <div
@@ -54,11 +54,11 @@
     <div class="text-base" style="margin: 12px 0">背景色</div>
     <div class="item-box">
       <div
-        class="item"
-        :key="item"
-        :style="{ backgroundImage: color[`${'color' + item}`] }"
-        v-for="item in 6"
-        @click="updateBackground(color[`${'color' + item}`])"
+          v-for="item in 6"
+          :key="item"
+          :style="{ backgroundImage: color[`${'color' + item}`] }"
+          class="item"
+          @click="updateBackground(color[`${'color' + item}`])"
       ></div>
     </div>
   </a-drawer>
@@ -69,12 +69,12 @@ import Widget from "../../card/Widget.vue";
 import cardSizeHook from "../../card/hooks/cardSizeHook";
 import cardDrag from "../../card/hooks/cardDrag.vue";
 import cardDragHook from "../../card/hooks/cardDragHook";
-import { message } from "ant-design-vue";
-import { Icon } from '@iconify/vue';
+import {message} from "ant-design-vue";
+import {Icon} from '@iconify/vue';
 import notepad12Regular from '@iconify-icons/fluent/notepad-12-regular';
 
 export default {
-  name:'便签', 
+  name: '便签',
   components: {
     Widget,
     Icon,
@@ -88,7 +88,8 @@ export default {
     },
     customData: {
       type: Object,
-      default: () => {},
+      default: () => {
+      },
     },
     menuList: {
       type: Array,
@@ -113,7 +114,7 @@ export default {
         icon: "",
         // icon: "bianji",
         type: "games",
-        isEdit:true,
+        isEdit: true,
       },
       settingVisible: false,
       menuList: [
@@ -151,9 +152,9 @@ export default {
       },
       text: "",
       background: "",
-			icons: {
-				notepad12Regular,
-			},
+      icons: {
+        notepad12Regular,
+      },
     };
   },
   created() {
@@ -186,11 +187,11 @@ export default {
   methods: {
     updateText() {
       this.updateCustomData(
-        this.customIndex,
-        {
-          text: this.text,
-        },
-        this.desk
+          this.customIndex,
+          {
+            text: this.text,
+          },
+          this.desk
       );
     },
     updateBackground(backgroundColor) {
@@ -199,32 +200,32 @@ export default {
         key: "bg",
       });
       this.updateCustomData(
-        this.customIndex,
-        {
-          background: backgroundColor,
-        },
-        this.desk
+          this.customIndex,
+          {
+            background: backgroundColor,
+          },
+          this.desk
       );
       this.background = backgroundColor;
       if (
-        backgroundColor ==
-        "linear-gradient(-45deg, #545454 0%, #F9F8F9 0%, #F2F1F2 100%)"
+          backgroundColor ==
+          "linear-gradient(-45deg, #545454 0%, #F9F8F9 0%, #F2F1F2 100%)"
       ) {
         this.updateCustomData(
-          this.customIndex,
-          {
-            color: "#000000",
-          },
-          this.desk
+            this.customIndex,
+            {
+              color: "#000000",
+            },
+            this.desk
         );
         this.colors = "#000000";
       } else {
         this.updateCustomData(
-          this.customIndex,
-          {
-            color: "#ffffff",
-          },
-          this.desk
+            this.customIndex,
+            {
+              color: "#ffffff",
+            },
+            this.desk
         );
         this.colors = "#ffffff";
       }
@@ -235,11 +236,11 @@ export default {
         key: "color",
       });
       this.updateCustomData(
-        this.customIndex,
-        {
-          fontColor: color,
-        },
-        this.desk
+          this.customIndex,
+          {
+            fontColor: color,
+          },
+          this.desk
       );
       this.fontColor = color;
     },
@@ -297,7 +298,7 @@ export default {
   justify-content: end;
 }
 
-::-webkit-input-placeholder{
+::-webkit-input-placeholder {
   color: var(--primary-text);
 }
 </style>

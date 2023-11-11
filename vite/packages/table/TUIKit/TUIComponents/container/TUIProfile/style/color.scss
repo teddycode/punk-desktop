@@ -1,9 +1,11 @@
 .TUI-profile {
   background: #FFFFFF;
+
   .profile {
     &-header {
       border-bottom: 1px solid #DDDDDD;
     }
+
     &-main {
       &-item {
         span {
@@ -13,12 +15,14 @@
           letter-spacing: 0;
         }
       }
+
       &-name {
 
         font-weight: 500;
         color: #000000;
         letter-spacing: 0;
       }
+
       &-label {
 
         font-weight: 400;
@@ -28,6 +32,7 @@
     }
   }
 }
+
 .TUI-profile-h5 {
   .profile {
     &-main {

@@ -1,30 +1,29 @@
 <script lang="ts">
 import {createVNode} from 'vue';
 import {
+  AppstoreAddOutlined,
+  ChromeOutlined,
   CloseCircleOutlined,
-  RedoOutlined,
-  SettingOutlined,
-  LockOutlined,
-  SendOutlined,
-  SmileOutlined,
+  DeleteOutlined,
   DragOutlined,
-  LikeOutlined,
+  EllipsisOutlined,
+  ExclamationCircleOutlined,
+  EyeInvisibleOutlined,
+  EyeOutlined,
+  FolderOpenOutlined,
+  GoogleOutlined,
   LikeFilled,
+  LikeOutlined,
+  LockOutlined,
   PauseCircleOutlined,
   PlayCircleOutlined,
-
   PlusOutlined,
-  AppstoreAddOutlined,
-  FolderOpenOutlined,
-  ChromeOutlined,
-  EyeOutlined,
-  EllipsisOutlined,
-  EyeInvisibleOutlined,
-  GoogleOutlined,
-  DeleteOutlined,
-  ExclamationCircleOutlined
+  RedoOutlined,
+  SendOutlined,
+  SettingOutlined,
+  SmileOutlined
 } from '@ant-design/icons-vue '
-import {message,Modal} from 'ant-design-vue';
+import {message, Modal} from 'ant-design-vue';
 
 export default {
   components: {
@@ -66,12 +65,12 @@ export default {
       inputPopVisible: false,
 
 
-      visibleBarrageOperation:false,
-      currentBarrageData:{},
-      manager:{},
-      runing:true,
-      supporting:false,
-      quickSend:false//是否是快速发布，快速发布后，自动恢复状态
+      visibleBarrageOperation: false,
+      currentBarrageData: {},
+      manager: {},
+      runing: true,
+      supporting: false,
+      quickSend: false//是否是快速发布，快速发布后，自动恢复状态
     }
   },
 
@@ -83,18 +82,18 @@ export default {
       this.user = userResult.data
     }
 
-    tsbApi.barrage.onPostBarrage((e,a)=>{
-      if(!document.body.classList.contains('active')){
-        this.quickSend=true
+    tsbApi.barrage.onPostBarrage((e, a) => {
+      if (!document.body.classList.contains('active')) {
+        this.quickSend = true
         tsbApi.barrage.unlock()//解锁
         //如果是锁定的
       }
-      this.inputPopVisible=true
+      this.inputPopVisible = true
       this.toggleInput()
     })
 
     window.$message = message
-    let that=this
+    let that = this
 
     // this.ipc = tsbApi.ipc
     // this.ipc.on('show', () => {
@@ -134,11 +133,13 @@ export default {
           }
           node.classList.add('barrage-style')
           node.onmouseenter = e => barrage.pause()
-          node.onmouseleave = e => {if($manager.runing)barrage.resume()}
+          node.onmouseleave = e => {
+            if ($manager.runing) barrage.resume()
+          }
           node.onclick = e => {
-            that.visibleBarrageOperation=true
-            that.currentBarrageData=barrage.data
-            that.currentNode=node
+            that.visibleBarrageOperation = true
+            that.currentBarrageData = barrage.data
+            that.currentNode = node
           }
         }
       }
@@ -173,8 +174,8 @@ export default {
     // },3000)
 
     window.$manager = manager
-    this.manager=manager
-    window.addEventListener('resize',()=>{
+    this.manager = manager
+    window.addEventListener('resize', () => {
       console.log('rezied')
       manager.resize()
     })
@@ -186,14 +187,14 @@ export default {
       this.pageUrl = url
       await this.getList()
     },
-    doDelete(nanoid){
+    doDelete(nanoid) {
       Modal.confirm({
         title: '删除确认',
         icon: createVNode(ExclamationCircleOutlined),
-        okText:'删除',
-        cancelText:'取消',
+        okText: '删除',
+        cancelText: '取消',
         content: '确认删除此弹幕？此操作不可撤销，请谨慎操作。',
-         onOk:async()=> {
+        onOk: async () => {
           try {
             let rs = await tsbApi.barrage.delete(nanoid)
             if (rs.status === 1) {
@@ -209,7 +210,8 @@ export default {
           }
         },
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        onCancel() {},
+        onCancel() {
+        },
       });
 
 
@@ -267,8 +269,8 @@ export default {
           })
           this.content = ''
           this.inputPopVisible = false
-          if(this.quickSend){
-            this.quickSend=false
+          if (this.quickSend) {
+            this.quickSend = false
             this.lock()
           }
           message.success('弹幕装填成功。')
@@ -342,7 +344,7 @@ export default {
     reload() {
       window.location.reload()
     },
-    openSpace(uid){
+    openSpace(uid) {
       tsbApi.user.openSpace(uid)
     },
     pause() {
@@ -364,17 +366,17 @@ export default {
         }, 500)
       }
     },
-    toggleRuning(){
-      if($manager.runing){
-        $manager.each(barrage=>{
+    toggleRuning() {
+      if ($manager.runing) {
+        $manager.each(barrage => {
           barrage.pause()
         })
-        this.runing=false
+        this.runing = false
         $manager.stop()
-      }else{
+      } else {
         $manager.start()
-        this.runing=true
-        $manager.each(barrage=>{
+        this.runing = true
+        $manager.each(barrage => {
           barrage.resume()
         })
       }
@@ -387,7 +389,7 @@ export default {
       this.supporting = true
       if (this.currentBarrageData.is_like) {
         //取消点赞
-        try{
+        try {
           let rs = await tsbApi.barrage.unlike(nanoid)
           if (rs.status) {
             this.currentBarrageData.is_like = true
@@ -395,13 +397,13 @@ export default {
           } else {
             message.error('网络错误，取消赞失败。')
           }
-        }catch (e) {
+        } catch (e) {
           console.error(e)
           message.error('网络错误，取消赞失败。')
         }
       } else {
         //点赞
-        try{
+        try {
           let rs = await tsbApi.barrage.like(nanoid)
           if (rs.status) {
             this.currentBarrageData.is_like = true
@@ -409,7 +411,7 @@ export default {
           } else {
             message.error('网络错误，点赞失败。')
           }
-        }catch (e) {
+        } catch (e) {
           console.error(e)
           message.error('网络错误，点赞失败。')
         }
@@ -423,154 +425,166 @@ export default {
 <template>
   <template>
     <div style="-webkit-app-region:no-drag">
-      <a-modal :centered="true"
+      <a-modal ref="modalRef"
+               v-model:visible="visibleBarrageOperation"
+               :centered="true"
                :maskClosable="true"
-        ref="modalRef"
                :title="undefined"
-        v-model:visible="visibleBarrageOperation"
-        :wrap-style="{ overflow: 'hidden' }"
+               :wrap-style="{ overflow: 'hidden' }"
       >
         <a-row>
-          <a-col flex="60px"><a-avatar class="link" @click="openSpace(currentBarrageData.uid)" size="large" :src="currentBarrageData.avatar"></a-avatar>
-        </a-col>
+          <a-col flex="60px">
+            <a-avatar :src="currentBarrageData.avatar" class="link" size="large"
+                      @click="openSpace(currentBarrageData.uid)"></a-avatar>
+          </a-col>
           <a-col flex="1">
-            <p style="font-weight: bold"><a class="link"  @click="openSpace(currentBarrageData.uid)">{{ currentBarrageData.nickname }}</a>
+            <p style="font-weight: bold"><a class="link" @click="openSpace(currentBarrageData.uid)">{{
+                currentBarrageData.nickname
+              }}</a>
             </p>
             <p>{{ currentBarrageData.content }}</p>
-            <p style="color: #999;font-size: 12px">{{new Date(currentBarrageData.create_time).toLocaleString()}}</p>
-        </a-col></a-row>
+            <p style="color: #999;font-size: 12px">{{ new Date(currentBarrageData.create_time).toLocaleString() }}</p>
+          </a-col>
+        </a-row>
         <template #footer="">
-             <div  style="text-align: center">
-               <a-button :loading="supporting"   :danger="currentBarrageData.is_like"  @click="doSupport(this.currentBarrageData.nanoid)" class="btn-margin">
-                 <span  class="link"  style="">
+          <div style="text-align: center">
+            <a-button :danger="currentBarrageData.is_like" :loading="supporting"
+                      class="btn-margin" @click="doSupport(this.currentBarrageData.nanoid)">
+                 <span class="link" style="">
 <transition :name="currentBarrageData.is_like ?'zoom': '' " mode="out-in">
                 <!-- 爱心图标 -->
-                <like-filled style="color:red" id="surrpotIco" v-if="currentBarrageData.is_like" key="like"></like-filled>
-                <like-outlined  id="surrpotedIco" v-else key="unlike"></like-outlined>
+                <like-filled v-if="currentBarrageData.is_like" id="surrpotIco" key="like"
+                             style="color:red"></like-filled>
+                <like-outlined v-else id="surrpotedIco" key="unlike"></like-outlined>
                 </transition>
             <div class="like-num-wrapper" style="margin-left: 5px">
               <transition :name="currentBarrageData.is_like?'plus':'minus'">
               <div
-                class="like-num"
-                :style="{color:currentBarrageData['is_like'] ? 'red':'#333'}"
-                :key="currentBarrageData['like_count']">
-              {{currentBarrageData["like_count"]}}
+                  :key="currentBarrageData['like_count']"
+                  :style="{color:currentBarrageData['is_like'] ? 'red':'#333'}"
+                  class="like-num">
+              {{ currentBarrageData["like_count"] }}
             </div>
             </transition>
     </div>
-            </span> </a-button>
-               <span class="btn-margin" v-if="this.currentBarrageData.uid===this.user.user_info.uid || [4].indexOf(this.user.user_info.uid)>-1 ">
+            </span></a-button>
+            <span v-if="this.currentBarrageData.uid===this.user.user_info.uid || [4].indexOf(this.user.user_info.uid)>-1 "
+                  class="btn-margin">
                  <a-button type="danger" @click="doDelete(this.currentBarrageData.nanoid)">
                  <span v-if="this.currentBarrageData.uid===this.user.user_info.uid">
-                   <delete-outlined /> 撤回
+                   <delete-outlined/> 撤回
                  </span>
                  <span v-else>
-                  <delete-outlined /> 删除
+                  <delete-outlined/> 删除
                  </span>
                  </a-button>
                </span>
 
-             </div>
+          </div>
         </template>
       </a-modal>
     </div>
   </template>
   <div class="window-frame">
-  <div id="danmuWrapper" class="barrage-container" style="height: calc(100vh - 30px);margin-top: 10px">
+    <div id="danmuWrapper" class="barrage-container" style="height: calc(100vh - 30px);margin-top: 10px">
 
-  </div>
-  <div id="controller" class="operation" style="text-align: center;position: absolute;bottom: 10px;width:300px;left: 50%;margin-left: -150px">
-    <a-popover v-model:visible="inputPopVisible"  trigger="click">
-      <template #content>
-        <div style="width: 350px;-webkit-app-region:no-drag" :style="{height:this.user?'100px':'130px'}">
-          <div><img style="width: 22px;vertical-align: top" src="../assets/hot.svg"> 发弹幕
-            &nbsp;
-            <a-switch v-if="false" v-model:checked="channelType" size="small" checked-children="团队频道"
-                      un-checked-children="公共频道"></a-switch>
-            <div style="float: right">
-              <a-avatar v-if="this.user" :src="user.user_info.avatar"></a-avatar>
+    </div>
+    <div id="controller" class="operation"
+         style="text-align: center;position: absolute;bottom: 10px;width:300px;left: 50%;margin-left: -150px">
+      <a-popover v-model:visible="inputPopVisible" trigger="click">
+        <template #content>
+          <div :style="{height:this.user?'100px':'130px'}" style="width: 350px;-webkit-app-region:no-drag">
+            <div><img src="../assets/hot.svg" style="width: 22px;vertical-align: top"> 发弹幕
+              &nbsp;
+              <a-switch v-if="false" v-model:checked="channelType" checked-children="团队频道" size="small"
+                        un-checked-children="公共频道"></a-switch>
+              <div style="float: right">
+                <a-avatar v-if="this.user" :src="user.user_info.avatar"></a-avatar>
+              </div>
+            </div>
+            <div style="margin-top: 10px;margin-bottom: 15px">
+
+              <a-input v-if="this.user" id="inputArea"
+                       v-model:value="content" :allowClear="true" :bordered="false" :maxlength="100"
+                       class="scroller-wrapper" placeholder="发一条弹幕吧~"
+                       spellcheck="false" style="resize: none;overflow: hidden !important;" @visibleChange="toggleInput"
+                       @keypress.enter="send"
+
+              />
+              <div v-else
+                   style="width: 100%;height: 60px;font-size: 13px;color: #999;text-align: center;background: rgba(128,128,128,0.15);border-radius:4px;line-height: 24px;padding-top: 5px">
+                <strong>未登录</strong>用户无法发布弹幕
+                <p>请
+                  <a-button size="small" type="primary" @click="login">登录</a-button>
+                  后重试
+                </p>
+              </div>
+            </div>
+            <div style="clear: both;position: absolute;bottom: 25px;width: 92%">
+              <div style="float: left">
+                <a-button v-if="false" :disabled="!this.user" size="small">
+                  <smile-outlined/>
+                </a-button>
+              </div>
+              <div style="float: right">
+                <a-select v-if="false" size="small">选择团队</a-select> &nbsp;
+                <a-button :disabled="!this.user" size="small" @click="send">发送</a-button>
+              </div>
             </div>
           </div>
-          <div style="margin-top: 10px;margin-bottom: 15px">
+        </template>
+        <a class="shadow-button" @click="toggleInput">
+          <send-outlined/>
+          发射</a>
 
-            <a-input @keypress.enter="send" v-if="this.user"
-                     v-model:value="content" spellcheck="false" @visibleChange="toggleInput" id="inputArea"
-                     class="scroller-wrapper" style="resize: none;overflow: hidden !important;"
-                     :allowClear="true" :maxlength="100" :bordered="false"
-                     placeholder="发一条弹幕吧~"
-
-            />
-            <div v-else
-                 style="width: 100%;height: 60px;font-size: 13px;color: #999;text-align: center;background: rgba(128,128,128,0.15);border-radius:4px;line-height: 24px;padding-top: 5px">
-              <strong>未登录</strong>用户无法发布弹幕
-              <p>请
-                <a-button type="primary" size="small" @click="login">登录</a-button>
-                后重试
-              </p>
-            </div>
-          </div>
-          <div style="clear: both;position: absolute;bottom: 25px;width: 92%">
-            <div style="float: left">
-              <a-button v-if="false" size="small" :disabled="!this.user">
-                <smile-outlined/>
-              </a-button>
-            </div>
-            <div style="float: right">
-              <a-select v-if="false" size="small">选择团队</a-select> &nbsp;
-              <a-button @click="send" size="small" :disabled="!this.user">发送</a-button>
-            </div>
-          </div>
-        </div>
-      </template>
-      <a @click="toggleInput" class="shadow-button">
-        <send-outlined/>
-        发射</a>
-
-    </a-popover>
-    <a class="shadow-button" @click="toggleRuning">
+      </a-popover>
+      <a class="shadow-button" @click="toggleRuning">
       <span v-if="this.runing">
-        <pause-circle-outlined />
+        <pause-circle-outlined/>
       </span>
-      <span v-else>
-        <play-circle-outlined />
+        <span v-else>
+        <play-circle-outlined/>
       </span>
-    </a>
-    <a class="shadow-button" @click="lock">
-      <lock-outlined/>
+      </a>
+      <a class="shadow-button" @click="lock">
+        <lock-outlined/>
       </a>
 
-<!--    <a class="shadow-button">-->
-<!--      <setting-outlined/>-->
-<!--      </a>-->
-    <!--    <a class="shadow-button" type="ghost" @click="pause">暂停</a>-->
-    <a class="shadow-button" @click="reload">
-      <redo-outlined/>
+      <!--    <a class="shadow-button">-->
+      <!--      <setting-outlined/>-->
+      <!--      </a>-->
+      <!--    <a class="shadow-button" type="ghost" @click="pause">暂停</a>-->
+      <a class="shadow-button" @click="reload">
+        <redo-outlined/>
       </a>
-    <a class="shadow-button" @click="close">
-      <CloseCircleOutlined  class="control-icon"/>
-    </a>
-  </div>
+      <a class="shadow-button" @click="close">
+        <CloseCircleOutlined class="control-icon"/>
+      </a>
+    </div>
   </div>
 </template>
 <style>
-.btn-margin{
+.btn-margin {
   margin-left: 10px;
   margin-right: 10px;
 }
-.ant-modal-mask{
-  -webkit-app-region:no-drag
+
+.ant-modal-mask {
+  -webkit-app-region: no-drag
 }
 
-.barrage-style:hover{
-  border:2px solid rgba(255, 255, 255, 0.47);
+.barrage-style:hover {
+  border: 2px solid rgba(255, 255, 255, 0.47);
   background: #000;
 }
-.barrage-style:hover .barrage-btn-wrapper{
+
+.barrage-style:hover .barrage-btn-wrapper {
   display: block;
 }
-.barrage-opt-button{
+
+.barrage-opt-button {
   border-radius: 6px;
-  background:rgba(0, 0, 0, 0.5) ;
+  background: rgba(0, 0, 0, 0.5);
   color: white;
   padding: 5px 8px;
   line-height: 18px;
@@ -579,9 +593,11 @@ export default {
   display: inline-block;
   cursor: pointer;
 }
-.barrage-opt-button:hover{
+
+.barrage-opt-button:hover {
   opacity: 0.8;
 }
+
 .barrage-style {
   -webkit-app-region: no-drag;
   user-select: none;
@@ -606,21 +622,24 @@ export default {
   vertical-align: text-top;
 }
 
-html,body {
+html, body {
   overflow: hidden !important;
   background-color: #00000000 !important;
 }
+
 .window-frame {
   height: 100vh;
 }
-.operation{
+
+.operation {
   display: none;
 }
 </style>
-<style scoped lang="scss">
-.link{
-  cursor:pointer;
+<style lang="scss" scoped>
+.link {
+  cursor: pointer;
 }
+
 .shadow-button {
   background: rgba(0, 0, 0, 0.5);
   color: white;
@@ -631,13 +650,14 @@ html,body {
   cursor: pointer;
   user-select: none;
   opacity: 1;
+
   &:hover {
     opacity: .81;
   }
 }
 
 .operation {
-  -webkit-app-region:no-drag;
+  -webkit-app-region: no-drag;
 }
 
 .control-action {
@@ -645,28 +665,33 @@ html,body {
 }
 
 .active {
-  .operation{
-   display: block;
+  .operation {
+    display: block;
   }
-  .window-frame{
+
+  .window-frame {
     background: rgba(0, 0, 0, 0.3);
     border-radius: 8px;
     position: absolute;
     height: 100vh;
     width: 100vw;
-    -webkit-app-region:drag;
+    -webkit-app-region: drag;
   }
+
   .control-action {
     opacity: 0.7;
-    &:hover{
+
+    &:hover {
       opacity: 1;
     }
+
     background: #8080803d;
     border-radius: 7px;
     display: inline-block;
     margin: 5px;
     float: right;
     cursor: move;
+
     .control-icon {
       color: #e5e5e5;
       padding: 4px;
@@ -710,6 +735,7 @@ html,body {
     background: #f6f6f6;
   }
 }
+
 /** 动画进行时的class **/
 .zoom-enter-active, .zoom-leave-active {
   transition: all .15s cubic-bezier(0.42, 0, 0.34, 1.55);
@@ -724,6 +750,7 @@ html,body {
 .zoom-enter-to, .zoom-leave {
   transform: scale(1);
 }
+
 .like-num-wrapper {
   position: relative;
   /* margin-left: 16px; */
@@ -734,6 +761,7 @@ html,body {
   display: inline-block;
   vertical-align: text-bottom;
   user-select: none;
+
   .like-num {
     top: 0;
     left: 0;
@@ -741,6 +769,7 @@ html,body {
     line-height: 17px;
   }
 }
+
 // 点赞数字+1动画
 .plus-enter-active, .plus-leave-active {
   transition: all .3s ease-in;
@@ -774,6 +803,7 @@ html,body {
 .minus-leave-to {
   transform: translateY(17px);
 }
+
 .minus-enter {
   transform: translateY(-34px);
 }

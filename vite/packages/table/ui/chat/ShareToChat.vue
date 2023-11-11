@@ -14,8 +14,8 @@
 
       <div class="flex-grow flex justify-between w-full px-1">
         <div class="flex flex-col" style="width: 293px;">
-          <a-input class="h-11" v-model:value="forwardText" placeholder="搜索好友、群聊"
-                   style="color:var(--secondary-text);" @pressEnter="enterSearch" @change="search($event)">
+          <a-input v-model:value="forwardText" class="h-11" placeholder="搜索好友、群聊"
+                   style="color:var(--secondary-text);" @change="search($event)" @pressEnter="enterSearch">
             <template #suffix>
               <div class="flex items-center justify-center pointer active-button" @click="enterSearch">
                 <SearchOutlined style="font-size: 1.5em;color:var(--secondary-text);"/>
@@ -27,9 +27,9 @@
             <!-- :class="{'select-bg':isSelect(index)}" -->
             <div v-for="(item,index) in list" class="flex items-center rounded-lg p-3 pointer"
                  @click="selectItem(item)">
-              <a-avatar shape="square" v-if="item.type === 'GROUP'" size="32"
-                        :src="item?.groupProfile?.avatar"></a-avatar>
-              <a-avatar v-else size="32" :src="item?.userProfile?.avatar"></a-avatar>
+              <a-avatar v-if="item.type === 'GROUP'" :src="item?.groupProfile?.avatar" shape="square"
+                        size="32"></a-avatar>
+              <a-avatar v-else :src="item?.userProfile?.avatar" size="32"></a-avatar>
               <span class="ml-4" style="color: var(--primary-text);">{{
                   item.type === 'C2C' ? item?.userProfile?.nick : item?.groupProfile?.name
                 }}</span>
@@ -37,7 +37,7 @@
           </vue-custom-scrollbar>
         </div>
 
-        <a-divider type="vertical" style="height: 100%; background-color:var(--divider);"/>
+        <a-divider style="height: 100%; background-color:var(--divider);" type="vertical"/>
 
         <div class="flex flex-col" style="width: 293px;">
           <span class="font-400" style="color:var(--secondary-text);">已选({{ rightSelectList.length }}个)</span>
@@ -45,9 +45,9 @@
             <div class="flex flex-col">
               <div v-for="item in rightSelectList" class="flex justify-between p-3 pointer">
                 <div class="flex tems-center">
-                  <a-avatar shape="square" v-if="item.type === 'GROUP'" size="32"
-                            :src="item?.groupProfile?.avatar"></a-avatar>
-                  <a-avatar v-else size="32" :src="item?.userProfile?.avatar"></a-avatar>
+                  <a-avatar v-if="item.type === 'GROUP'" :src="item?.groupProfile?.avatar" shape="square"
+                            size="32"></a-avatar>
+                  <a-avatar v-else :src="item?.userProfile?.avatar" size="32"></a-avatar>
                   <span class="ml-4" style="color: var(--primary-text);">{{
                       item.type === 'C2C' ? item?.userProfile?.nick : item?.groupProfile?.name
                     }}</span>
@@ -64,7 +64,8 @@
                         style="background: var(--secondary-bg);color:var(--secondary-text);width:100px;height: 44px;"
                         @click="closeForwardModal">取消
               </a-button>
-              <a-button class="ml-4 rounded-lg" type="primary" style="width:100px;height: 44px;color:var(--active-text);"
+              <a-button class="ml-4 rounded-lg" style="width:100px;height: 44px;color:var(--active-text);"
+                        type="primary"
                         @click="doShare">分享
               </a-button>
             </div>
@@ -77,12 +78,11 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, reactive, toRefs, computed } from 'vue'
-import { CloseOutlined, SearchOutlined, MinusCircleOutlined } from '@ant-design/icons-vue'
+import {defineComponent, onMounted, reactive, toRefs} from 'vue'
+import {CloseOutlined, MinusCircleOutlined, SearchOutlined} from '@ant-design/icons-vue'
 import _ from 'lodash-es'
-import { message } from 'ant-design-vue'
+import {message} from 'ant-design-vue'
 import Modal from '../../components/Modal.vue'
-import TIM from '../../TUIKit/TUICore/tim'
 import TencentCloudChat from 'tim-js-sdk'
 // import { pinyin,match,toRaw } from 'pinyin-pro'
 export default defineComponent({
@@ -92,12 +92,12 @@ export default defineComponent({
 
   },
 
-  props: ['content', 'type', 'visible','alias'],
+  props: ['content', 'type', 'visible', 'alias'],
 
-  setup (props, ctx) {
-    const C2CType=TencentCloudChat.TYPES.CONV_C2C
-    const GroupType=TencentCloudChat.TYPES.CONV_GROUP
-    console.log(C2CType,GroupType)
+  setup(props, ctx) {
+    const C2CType = TencentCloudChat.TYPES.CONV_C2C
+    const GroupType = TencentCloudChat.TYPES.CONV_GROUP
+    console.log(C2CType, GroupType)
 
     const data = reactive({
       list: [],
@@ -131,7 +131,9 @@ export default defineComponent({
 
     // 点击左侧选中
     const selectItem = (item) => {
-      const index = _.findIndex(data.rightSelectList, function (o) { return o.conversationID === item.conversationID })
+      const index = _.findIndex(data.rightSelectList, function (o) {
+        return o.conversationID === item.conversationID
+      })
       if (index === -1) {
         data.rightSelectList.push(item)
       } else {
@@ -167,7 +169,7 @@ export default defineComponent({
       }
     }
 
-    const doShare= async (e) => {
+    const doShare = async (e) => {
       if (data.rightSelectList.length !== 0) {
         for (let i = 0; i < data.rightSelectList.length; i++) {
           await shareContent(data.rightSelectList[i])
@@ -179,20 +181,20 @@ export default defineComponent({
       }
     }
 
-    const shareContent=async (target)=>{
-      console.log('触发分享',props.content,target)
-      const messageContent={
+    const shareContent = async (target) => {
+      console.log('触发分享', props.content, target)
+      const messageContent = {
         to: target.type === 'C2C' ? target.userProfile.userID : target.groupProfile.groupID,
         conversationType: `${target.type}`,
-        payload:props.content
+        payload: props.content
       }
-      console.log('需要发送的消息',messageContent)
-     let msg=  await window.$chat.createCustomMessage(messageContent)
-      let promise =  window.$chat.sendMessage(msg);
-      promise.then(function(imResponse) {
+      console.log('需要发送的消息', messageContent)
+      let msg = await window.$chat.createCustomMessage(messageContent)
+      let promise = window.$chat.sendMessage(msg);
+      promise.then(function (imResponse) {
         // 发送成功
         message.success('转发成功')
-      }).catch(function(imError) {
+      }).catch(function (imError) {
         // 发送失败
         message.error('转发失败')
       });
@@ -227,19 +229,19 @@ export default defineComponent({
         // return data.forwardText === text
 
         const text = item.type === 'C2C' ? item.userProfile.nick : item.groupProfile.name
-        const id = item.type  === 'C2C' ? item.userProfile.userID : item.groupProfile.groupID
+        const id = item.type === 'C2C' ? item.userProfile.userID : item.groupProfile.groupID
 
-       // const namePinyin = pinyin(item.type === 'C2C' ? item.userProfile.nick : item.groupProfile.name,{
-      //   style:pinyin.STYLE_NORMAL
-      // })
-      // console.log('过滤的拼音结果::>>',namePinyin);
+        // const namePinyin = pinyin(item.type === 'C2C' ? item.userProfile.nick : item.groupProfile.name,{
+        //   style:pinyin.STYLE_NORMAL
+        // })
+        // console.log('过滤的拼音结果::>>',namePinyin);
 
-      if(text.includes(data.forwardText)){
-        return item
-      }
-       if(id.includes(data.forwardText)){
-         return item
-       }
+        if (text.includes(data.forwardText)) {
+          return item
+        }
+        if (id.includes(data.forwardText)) {
+          return item
+        }
       })
       // console.log('结果',searchResult);
       data.list = searchResult
@@ -247,12 +249,12 @@ export default defineComponent({
     }
 
     // 实时搜索
-    const search = () =>{
-     if(data.forwardText.trim() === ''){
-      getForwardList()
-     }else{
-      return;
-     }
+    const search = () => {
+      if (data.forwardText.trim() === '') {
+        getForwardList()
+      } else {
+        return;
+      }
     }
 
     onMounted(() => {
@@ -264,7 +266,7 @@ export default defineComponent({
       doShare,
       getForwardList, closeForwardModal,
       selectItem, cancelSelect, forwardSend,
-      forwardMessage, enterSearch,search,
+      forwardMessage, enterSearch, search,
       // isSelect,
     }
   }

@@ -19,5 +19,5 @@ export const colorList = {
     color18: "#93BDD1",
     color19: "#333333",
     color20: "#000000",
-    color21:"#FFFFFF"
+    color21: "#FFFFFF"
 };

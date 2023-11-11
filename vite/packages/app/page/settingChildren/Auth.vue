@@ -8,8 +8,14 @@
         <div class="items-container">
           <div class="items-container">
             <a-row v-for="item in baseList" class="item">
-              <a-col :span="8"> <a-checkbox v-model:checked="auth.base[item.key]"><strong>{{ item.name }}</strong> <br>{{ item.alias }}</a-checkbox></a-col>
-              <a-col :span="16"> <template v-if="item.userSummary">{{item.userSummary}}</template><template v-else>{{ item.summary }}</template></a-col>
+              <a-col :span="8">
+                <a-checkbox v-model:checked="auth.base[item.key]"><strong>{{ item.name }}</strong> <br>{{ item.alias }}
+                </a-checkbox>
+              </a-col>
+              <a-col :span="16">
+                <template v-if="item.userSummary">{{ item.userSummary }}</template>
+                <template v-else>{{ item.summary }}</template>
+              </a-col>
             </a-row>
           </div>
         </div>
@@ -23,10 +29,14 @@
           <span class="sub-label" style="margin-left: 10px;font-weight: bold">启用</span>
           <a-switch v-model:checked="auth.api.enable"></a-switch>
         </div>
-        <div class="items-container" v-if="auth.api.enable">
+        <div v-if="auth.api.enable" class="items-container">
           <a-row v-for="api in apiList" class="item">
-            <a-col :span="9"> <a-checkbox :disabled="api.disabled" v-model:checked="auth.api[api.key]"><strong>{{ api.name }}</strong> <br>{{api.alias}}</a-checkbox></a-col>
-            <a-col :span="15">{{api.summary}}</a-col>
+            <a-col :span="9">
+              <a-checkbox v-model:checked="auth.api[api.key]" :disabled="api.disabled"><strong>{{ api.name }}</strong>
+                <br>{{ api.alias }}
+              </a-checkbox>
+            </a-col>
+            <a-col :span="15">{{ api.summary }}</a-col>
           </a-row>
         </div>
       </div>
@@ -39,9 +49,13 @@
         </div>
         <div class="items-container">
           <a-row v-for="api in abilityList" class="item">
-            <a-col :span="9"> <a-checkbox :disabled="api.disabled" v-model:checked="auth.api[api.key]"><strong>{{ api.name }}</strong> <br>{{api.alias}}</a-checkbox></a-col>
-            <a-col :span="15">{{api.summary}}</a-col>
-            <a-col v-if="auth.api[api.key]" style="padding-left: 20px" :span="24">
+            <a-col :span="9">
+              <a-checkbox v-model:checked="auth.api[api.key]" :disabled="api.disabled"><strong>{{ api.name }}</strong>
+                <br>{{ api.alias }}
+              </a-checkbox>
+            </a-col>
+            <a-col :span="15">{{ api.summary }}</a-col>
+            <a-col v-if="auth.api[api.key]" :span="24" style="padding-left: 20px">
               <div v-if="api.key==='offlinePush'">
                 必须注册包名，并申请开放平台应用才可使用此功能。<a>点此申请</a>
               </div>
@@ -57,52 +71,50 @@
 
 <script>
 const formItemLayout = {
-  labelCol: { span: 6 },
-  wrapperCol: { span: 16 },
+  labelCol: {span: 6},
+  wrapperCol: {span: 16},
 }
 const formTailLayout = {
-  labelCol: { span: 4 },
-  wrapperCol: { span: 8, offset: 4 },
+  labelCol: {span: 4},
+  wrapperCol: {span: 8, offset: 4},
 }
-import { appStore } from '../../store'
-import { mapWritableState } from 'pinia'
+import {appStore} from '../../store'
+import {mapWritableState} from 'pinia'
 import DebugTip from '../../components/DebugTip.vue'
-import { Modal, message } from 'ant-design-vue'
-const {appModel}=window.$models
-const baseList=appModel.authBaseList
-const apiList=appModel.authApiList
-const abilityList=appModel.authAbilityList
+
+const {appModel} = window.$models
+const baseList = appModel.authBaseList
+const apiList = appModel.authApiList
+const abilityList = appModel.authAbilityList
 export default {
   name: 'base',
 
   computed: {
-    ...mapWritableState(appStore, ['app', 'debugMod','userSetting'])
+    ...mapWritableState(appStore, ['app', 'debugMod', 'userSetting'])
   },
   components: {
     DebugTip
   },
-  data () {
+  data() {
     return {
       activeKey: 'base',
       formItemLayout,
       formTailLayout,
 
-      auth:{
-        base:{
-          webSecure:false,
-          node:false
+      auth: {
+        base: {
+          webSecure: false,
+          node: false
         },
-        api:{
-            runtime:true,
-            util:true,
-            window:true,
-            barrage:false,
-            user:false,
-            tabs:false,
+        api: {
+          runtime: true,
+          util: true,
+          window: true,
+          barrage: false,
+          user: false,
+          tabs: false,
         },
-        ability:{
-
-        }
+        ability: {}
       },
       baseList,
       apiList,
@@ -110,7 +122,7 @@ export default {
     }
   },
   methods: {
-    getExtra (type) {
+    getExtra(type) {
       let tip = `&nbsp;调试&nbsp;`
       switch (type) {
         case 'debug_url':
@@ -118,17 +130,17 @@ export default {
       }
     }
   },
-  mounted () {
-    if(this.userSetting.auth)
-      this.auth=this.userSetting.auth
-    else{
+  mounted() {
+    if (this.userSetting.auth)
+      this.auth = this.userSetting.auth
+    else {
 
     }
   }
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .detail-setting {
   background: white;
   padding: 10px;
@@ -167,22 +179,27 @@ export default {
   margin: 10px;
   border-radius: 4px
 }
-.record-row{
+
+.record-row {
 
 }
-.items-container{
-  .item{
-    padding:  3px 10px;
+
+.items-container {
+  .item {
+    padding: 3px 10px;
     border-radius: 4px;
     margin-bottom: 0;
     margin-top: 0;
-    &:nth-child(odd){
+
+    &:nth-child(odd) {
       background: rgba(241, 241, 241, 0.47);
     }
-    &:hover{
+
+    &:hover {
       background: #f1f1f1;
     }
   }
- padding: 15px;
+
+  padding: 15px;
 }
 </style>

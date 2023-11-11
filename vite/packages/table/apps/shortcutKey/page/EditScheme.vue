@@ -4,8 +4,8 @@
 
     <div class="flex    ">
       <div class="flex flex-1">
-        <div @click="onBack"
-             class="pointer button-active xt-mask h-12 w-12 flex items-center rounded-lg justify-center mr-3">
+        <div class="pointer button-active xt-mask h-12 w-12 flex items-center rounded-lg justify-center mr-3"
+             @click="onBack">
           <Icon icon="xiangzuo" style="font-size: 1.5em;color:var(--primary-text)"></Icon>
         </div>
       </div>
@@ -21,18 +21,18 @@
     </div>
     <div class="flex mt-2 items-center justify-center">
       <div>
-        <HorizontalPanel :navList="navType" v-model:selectType="defaultNavType"></HorizontalPanel>
+        <HorizontalPanel v-model:selectType="defaultNavType" :navList="navType"></HorizontalPanel>
       </div>
 
 
     </div>
     <!-- 基本信息 -->
-    <div class="add-content" v-if="defaultNavType.name === 'info'">
+    <div v-if="defaultNavType.name === 'info'" class="add-content">
       <span>方案封面</span>
       <div class="flex">
         <div class="avatar">
           <div>
-            <a-avatar shape="square" :size="100" :src="form.icon"/>
+            <a-avatar :size="100" :src="form.icon" shape="square"/>
           </div>
           <span v-if="icon || file.path" @click="delIcon"><Icon icon="guanbi2" style="font-size: 1.5em;"></Icon></span>
         </div>
@@ -41,116 +41,116 @@
           <!-- <div class="pointer xt-mask flex items-center rounded-lg justify-center mr-3 mt-2" @click="imageSelect" style="width:120px; height:48px;">自定义上传</div> -->
 
           <a-upload
-            name="file"
-            :showUploadList="false"
-            :customRequest="uploadImage"
-            :beforeUpload="beforeUpload"
-            accept="image/jpeg,image/jpg,image/png"
+              :beforeUpload="beforeUpload"
+              :customRequest="uploadImage"
+              :showUploadList="false"
+              accept="image/jpeg,image/jpg,image/png"
+              name="file"
           >
             <div class="flex mt-2">
-              <xt-button class="mr-2" type="theme"
-                         @click.stop="imageSelect" style="width:120px; height:48px;">自定义上传
+              <xt-button class="mr-2" style="width:120px; height:48px;"
+                         type="theme" @click.stop="imageSelect">自定义上传
               </xt-button>
               <xt-button
-                @click.stop="resetIcon" style="width:120px; height:48px;">同软件图标
+                  style="width:120px; height:48px;" @click.stop="resetIcon">同软件图标
               </xt-button>
             </div>
           </a-upload>
         </div>
       </div>
       <span>方案名称</span>
-      <a-input v-model:value="applyName" spellcheck="false" class="input" placeholder="请输入方案名称"
-               aria-placeholder="font-size: 14px;" style="width:480px;height: 48px;"/>
+      <a-input v-model:value="applyName" aria-placeholder="font-size: 14px;" class="input" placeholder="请输入方案名称"
+               spellcheck="false" style="width:480px;height: 48px;"/>
       <span>关联的软件</span>
-      <a-input v-model:value="form.exeName" spellcheck="false" class="input"
+      <a-input v-model:value="form.exeName" aria-placeholder="font-size: 14px;" class="input"
                placeholder="请输入软件程序（形如 explorer.exe）"
-               aria-placeholder="font-size: 14px;" style="width:480px;height: 48px;"/>
+               spellcheck="false" style="width:480px;height: 48px;"/>
       <span>方案简介</span>
-      <a-textarea v-model:value="introduce" spellcheck="false" class="input xt-text" placeholder="请输入描述"
-                  aria-placeholder="font-size: 14px;" :rows="4" style="width:480px;height: 100px;"/>
-      <div @click="nextStep" class="pointer flex items-center rounded-lg justify-center mr-3 mt-6 xt-active-btn"
-           style="width:480px;height:48px;font-size: 16px;">下一步
+      <a-textarea v-model:value="introduce" :rows="4" aria-placeholder="font-size: 14px;" class="input xt-text"
+                  placeholder="请输入描述" spellcheck="false" style="width:480px;height: 100px;"/>
+      <div class="pointer flex items-center rounded-lg justify-center mr-3 mt-6 xt-active-btn" style="width:480px;height:48px;font-size: 16px;"
+           @click="nextStep">下一步
       </div>
     </div>
     <!-- 快捷键 -->
-    <div class="key-content" v-show="defaultNavType.name === 'shortcutkey'">
+    <div v-show="defaultNavType.name === 'shortcutkey'" class="key-content">
       <!-- 提示 -->
-      <div class="prompt mt-4 mx-3 px-4 flex justify-between items-center" v-show="closePrompt">
+      <div v-show="closePrompt" class="prompt mt-4 mx-3 px-4 flex justify-between items-center">
         <span class="flex items-center">
           <Icon icon="tishi-xianxing" style="width: 21px;height: 21px;color:#508BFE;"></Icon>
           <span class="mx-4 xt-text">支持长按拖拽排序</span>
         </span>
-        <Icon icon="guanbi2" class="pointer" style="width: 20px;height: 20px;color:#7A7A7A;"
+        <Icon class="pointer" icon="guanbi2" style="width: 20px;height: 20px;color:#7A7A7A;"
               @click="closePrompt = false"></Icon>
       </div>
       <!-- 快捷键列表 -->
       <!-- <div :style="closePrompt ? 'height:90%' : 'height:100%'"> -->
       <vue-custom-scrollbar :settings="settingsScroller" :style="closePrompt ? 'height:90%' : 'height:100%'">
-        <div @click.self="completeEdit" class="key-box" :style="keyBoxStyle" id="keyBox">
+        <div id="keyBox" :style="keyBoxStyle" class="key-box" @click.self="completeEdit">
           <div v-for="(item,index) in keyList" :key="item.id">
             <!-- 分组名称 -->
             <div v-if="!item.keys" class="key-item border-right" @click="editItem(item,index,'name')">
-              <div class="flex items-center" v-if="item.isEdit">
-                <a-input @focus="currentItem=item" class="input"
-                         v-model:value="item.groupName"
-                         :ref="`inputNameEdit_${index}`"
-                         spellcheck="false"
+              <div v-if="item.isEdit" class="flex items-center">
+                <a-input :ref="`inputNameEdit_${index}`" v-model:value="item.groupName"
+                         class="input"
                          placeholder="分类名称"
+                         spellcheck="false"
                          style="width:353px;height: 48px;"
+                         @focus="currentItem=item"
                          @keydown.enter="completeEdit"
                 />
-                <ColorPicker @click.stop class="ml-2" :w="42" :h="42" v-model:color="item.color"></ColorPicker>
+                <ColorPicker v-model:color="item.color" :h="42" :w="42" class="ml-2" @click.stop></ColorPicker>
                 <span @click.stop="delKey(index,item)">
                     <Icon class="ml-3" icon="close-circle-fill" style="font-size:21px;color: #7A7A7A;"></Icon>
                   </span>
               </div>
               <span v-else class="truncate">
-                <div class="color-dot" :style="{backgroundColor:getColor(index)}"></div>
+                <div :style="{backgroundColor:getColor(index)}" class="color-dot"></div>
                 {{ item.groupName }}</span>
             </div>
             <!-- 快捷键 -->
-            <div :style="{backgroundColor:!item.isEdit?getColor(index):''}" v-else class="border-right key-item"
+            <div v-else :style="{backgroundColor:!item.isEdit?getColor(index):''}" class="border-right key-item"
                  @click="editItem(item,index,'item')">
               <div class="flex">
                 <template v-if="!item.isEdit">
                   <div v-for="i in item.keys" :key="i" class="flex">
-                    <span style="min-width:32px;padding:0 8px;"
-                          class="xt-mask h-8 flex items-center rounded-lg justify-center mr-3">{{ i }}</span>
+                    <span class="xt-mask h-8 flex items-center rounded-lg justify-center mr-3"
+                          style="min-width:32px;padding:0 8px;">{{ i }}</span>
                   </div>
                 </template>
                 <div v-else class="flex items-center mr-3" @click="openKeyBoard(item,'key')">
-                  <a-input class="input pointer"
-                           v-model:value="item.keyStr"
+                  <a-input v-model:value="item.keyStr"
+                           class="input pointer"
+                           placeholder="按下组合键"
                            readonly
                            spellcheck="false"
-                           placeholder="按下组合键"
                            style="width:179px;height: 48px;"
                   >
                     <template #suffix>
                       <div class="w-8 h-8 flex rounded-lg justify-center items-center"
                            style="background: rgba(80,139,254,0.20);">
-                        <Icon icon="jianpan-xianxing" class="active-bg" style="color:#508BFE;"></Icon>
+                        <Icon class="active-bg" icon="jianpan-xianxing" style="color:#508BFE;"></Icon>
                       </div>
                     </template>
                   </a-input>
                 </div>
               </div>
               <div>
-                <div class="key-title truncate" v-if="!item.isEdit">{{ item.title }}</div>
-                <a-input @focus="currentItem=item" class="input text-right"
-                         v-else
+                <div v-if="!item.isEdit" class="key-title truncate">{{ item.title }}</div>
+                <a-input v-else :id="`keyName_${item.id}`"
                          v-model:value="item.title"
-                         :id="`keyName_${item.id}`"
-                         spellcheck="false"
+                         class="input text-right"
                          placeholder="快捷键名称"
+                         spellcheck="false"
                          style="width:179px;height: 48px;"
+                         @focus="currentItem=item"
                          @keydown.enter="completeEdit"
                 />
               </div>
               <span v-if="item.isEdit" class="flex">
                 <a-tooltip v-if="!item.addNote">
                   <template #title>添加备注</template>
-                  <span @click.stop="setAddNote(index,item)" v-if="item.isEdit">
+                  <span v-if="item.isEdit" @click.stop="setAddNote(index,item)">
                     <Icon class="ml-3" icon="edit-square" style="font-size:21px;color: #7A7A7A;"></Icon>
                   </span>
                 </a-tooltip>
@@ -162,13 +162,13 @@
             </div>
             <!-- 备注 -->
             <div v-if="item.addNote" @click="editItem(item,index,'note')">
-              <div class="key-item border-right" v-if="item.isNote">
+              <div v-if="item.isNote" class="key-item border-right">
                 <div class="flex items-center">
-                  <a-input class="input text-right"
+                  <a-input :id="`note_${item.id}`"
                            v-model:value="item.noteVal"
-                           :id="`note_${item.id}`"
-                           spellcheck="false"
+                           class="input text-right"
                            placeholder="备注"
+                           spellcheck="false"
                            style="width:370px;height: 48px;"
                            @focus="currentItem=item;currentType='note'"
                            @keydown.enter="completeEdit"
@@ -249,11 +249,11 @@
     </div>
   </div>
   <!-- 分享成功的模态框和发布抽屉 -->
-  <ShareModal :shareModal="shareModal" :shareName="applyName" @closeShare="closeShare" :back="true"></ShareModal>
+  <ShareModal :back="true" :shareModal="shareModal" :shareName="applyName" @closeShare="closeShare"></ShareModal>
   <!-- 键盘 -->
   <KeyBoard v-if="keyBoard"
-            :selectKey="selectKey"
             :parentKeyList="keyList"
+            :selectKey="selectKey"
             @closeKeyBoard="closeKeyBoard"
             @saveKey="saveKey"></KeyBoard>
 </template>
@@ -264,10 +264,10 @@ import HorizontalPanel from '../../../components/HorizontalPanel.vue'
 import ShortcutKeyList from '../shortcutKey/ShortcutKeyList.vue'
 import KeyBoard from '../components/KeyBoard.vue'
 import ShareModal from '../../../components/ShareModal.vue'
-import { mapActions, mapWritableState } from 'pinia'
-import { keyStore } from '../store'
-import { nanoid } from 'nanoid'
-import { message, Modal } from 'ant-design-vue'
+import {mapActions, mapWritableState} from 'pinia'
+import {keyStore} from '../store'
+import {nanoid} from 'nanoid'
+import {message, Modal} from 'ant-design-vue'
 import ColorPicker from '../../../ui/components/ColorPicker/ColorPicker.vue'
 
 export default {
@@ -281,13 +281,13 @@ export default {
   },
   directives: {
     focus: {
-      inserted (el) {
+      inserted(el) {
         el.focus()
       }
     }
   },
 
-  data () {
+  data() {
     return {
       form: {
         icon: '',
@@ -305,10 +305,10 @@ export default {
         wheelPropagation: true
       },
       navType: [
-        { title: '基本信息', name: 'info' },
-        { title: '快捷键', name: 'shortcutkey' }
+        {title: '基本信息', name: 'info'},
+        {title: '快捷键', name: 'shortcutkey'}
       ],
-      defaultNavType: { title: '快捷键', name: 'shortcutkey' },
+      defaultNavType: {title: '快捷键', name: 'shortcutkey'},
       closePrompt: true, //提示
       keyList: [], //快捷键列表
       imageUrl: '',
@@ -336,13 +336,13 @@ export default {
   watch: {
     recentlyUsedList: {
       deep: true,
-      handler (newV, oldV) {
+      handler(newV, oldV) {
       }
     }
   },
   computed: {
     ...mapWritableState(keyStore, ['recentlyUsedList', 'currentApp']),
-    totalKeys () {
+    totalKeys() {
       let sum = 0
       this.keyList.map(item => {
         if (item.keys) {
@@ -355,7 +355,7 @@ export default {
       return sum
     }
   },
-  mounted () {
+  mounted() {
     this.exeName = this.$route.params.exeName
     this.getData()
     this.$nextTick(() => {
@@ -363,7 +363,7 @@ export default {
     })
 
   },
-  beforeRouteLeave (to, from, next) {
+  beforeRouteLeave(to, from, next) {
     if (!this.saved) {
       Modal.confirm({
         content: '尚未保存，是否离开？',
@@ -377,8 +377,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions(keyStore, ['setSchemeList', 'setShortcutKeyList', 'setMarketList', 'delRecentlyEmpty', 'addScheme', 'saveScheme', 'getCustomApp','getScheme']),
-    completeEdit () {
+    ...mapActions(keyStore, ['setSchemeList', 'setShortcutKeyList', 'setMarketList', 'delRecentlyEmpty', 'addScheme', 'saveScheme', 'getCustomApp', 'getScheme']),
+    completeEdit() {
       this.saved = false
       message.success('完成编辑')
 
@@ -387,7 +387,7 @@ export default {
         this.currentItem.isEdit = false
       }
     },
-    getColor (index) {
+    getColor(index) {
       for (let i = index; i >= 0; i--) {
         if (this.keyList[i].groupName) {
           //是组
@@ -396,7 +396,7 @@ export default {
       }
       return index
     },
-    async getData () {
+    async getData() {
       if (this.$route.params.id) {
         this.paramsId = this.$route.params.id
         // let usedList = this.deepClone({},this.recentlyUsedList)
@@ -405,11 +405,11 @@ export default {
             let item = JSON.parse(JSON.stringify(this.deepClone({}, i)))
             //this.appContent = item
             let data = await this.getScheme(item._id)
-            if(data?.docs.length>0){
-              console.log(data.docs[0],'找到的方案')
-              this.appContent=data.docs[0]
-             // this.appContent=
-            }else{
+            if (data?.docs.length > 0) {
+              console.log(data.docs[0], '找到的方案')
+              this.appContent = data.docs[0]
+              // this.appContent=
+            } else {
               message.error('方案不存在')
               this.$router.go(-1)
               return
@@ -428,7 +428,7 @@ export default {
         this.addShortcutKey()
       } else {
         //全新创建
-        this.defaultNavType={
+        this.defaultNavType = {
           name: 'info',
         }
 
@@ -444,7 +444,7 @@ export default {
       }
     },
     //深拷贝
-    deepClone (obj, newObj) {
+    deepClone(obj, newObj) {
       var newObj = newObj || {}
       for (let key in obj) {
         if (typeof obj[key] == 'object') {
@@ -457,19 +457,19 @@ export default {
       return newObj
     },
     // 删除空数据
-    delNotData () {
+    delNotData() {
       // 检测快捷键列表中的空数据后进行删除操作
       this.keyList = this.keyList.filter(item => {
-        const avaliable=item.keyStr !== '' || item.groupName !== '' || item.title !== '' //只要存在其中一项就当做不是空的
-        if(!avaliable){
-          console.error('无效的键位',item)
+        const avaliable = item.keyStr !== '' || item.groupName !== '' || item.title !== '' //只要存在其中一项就当做不是空的
+        if (!avaliable) {
+          console.error('无效的键位', item)
         }
         return avaliable
       })
-      this.delRecentlyEmpty({ keyList: this.keyList, id: this.paramsId })
+      this.delRecentlyEmpty({keyList: this.keyList, id: this.paramsId})
     },
     // 保存
-    async doSaveScheme () {
+    async doSaveScheme() {
       if (!this.applyName) return message.info('名称不能为空')
       if (!this.form.exeName) return message.info('必须填写方案对应的软件')
       let saveResult = false
@@ -510,28 +510,28 @@ export default {
             keyList: this.keyList, //快捷键列表
             exeName: this.form.exeName,
           }
-          saveResult=await this.addScheme(this.appContent, this.form.exeName)
+          saveResult = await this.addScheme(this.appContent, this.form.exeName)
         }
 
-        if(saveResult){
+        if (saveResult) {
           this.saved = true
           message.success('成功保存')
           setTimeout(() => {
             this.$router.go(-1)
           }, 200)
-        }else{
+        } else {
           message.error('方案保存失败。')
         }
       } catch (e) {
         console.error(e)
-        message.error('存储方案意外失败，失败原因：', e )
+        message.error('存储方案意外失败，失败原因：', e)
         console.log(this.appContent)
       }
 
     },
     // 保存并分享
     // setMarketList
-    saveShare () {
+    saveShare() {
       this.delNotData()
       if (!this.applyName) return message.info('名称不能为空')
       if (!this.keyList.length) return message.info('快捷键列表不能为空')
@@ -575,22 +575,22 @@ export default {
       }
       this.shareModal = true
     },
-    onBack () {
+    onBack() {
       this.delNotData()
       this.$router.go(-1)
     },
-    nextStep () {
-      this.defaultNavType = { title: '快捷键', name: 'shortcutkey' }
+    nextStep() {
+      this.defaultNavType = {title: '快捷键', name: 'shortcutkey'}
     },
     // close(){
     //   this.shareModal = false
     //   this.$router.go(-1)
     // },
-    closeShare (val) {
+    closeShare(val) {
       this.shareModal = val
     },
     // 编辑内容
-    editItem ({ id, groupName, keyStr, title }, index, type) {
+    editItem({id, groupName, keyStr, title}, index, type) {
       this.keyList.forEach(i => {
         if (i.id === id || i.keyStr === '' || i.groupName === '' || i.title === '' || this.bulkEditKey) {
           i.isEdit = true
@@ -631,7 +631,7 @@ export default {
       }
     },
     //添加的input获取焦点 (禁止拖拽导致需要手动获取焦点)
-    getFocus (type, index) {
+    getFocus(type, index) {
       switch (type) {
         case 'key':
           this.$refs[`inputFocusKey_${index}`][0].focus()
@@ -643,7 +643,7 @@ export default {
 
     },
     // 失去焦点，保存修改
-    lostFocus (item, type) {
+    lostFocus(item, type) {
       setTimeout(() => {
         switch (type) {
           case 'group':
@@ -712,7 +712,7 @@ export default {
 
     },
     // 开启键盘
-    openKeyBoard (item, type) {
+    openKeyBoard(item, type) {
       switch (type) {
         case 'key':
           this.selectKey = item
@@ -735,11 +735,11 @@ export default {
       this.keyBoard = true
     },
     // 关闭键盘
-    closeKeyBoard () {
+    closeKeyBoard() {
       this.keyBoard = false
     },
     // 保存修改的快捷键
-    saveKey (keyArr) {
+    saveKey(keyArr) {
 
       this.keyBoard = false
       this.keyList.forEach((item, index) => {
@@ -758,7 +758,7 @@ export default {
       })
     },
     // 添加快捷键
-    addShortcutKey () {
+    addShortcutKey() {
       this.keyList.push({
         id: nanoid(),
         keys: [],
@@ -770,7 +770,7 @@ export default {
       })
     },
     // 添加分类名称
-    addGroup () {
+    addGroup() {
       this.keyList.push({
         id: nanoid(),
         groupName: '',
@@ -792,13 +792,13 @@ export default {
       // }
     },
     // 删除一列快捷键
-    delKey (index, item) {
+    delKey(index, item) {
       this.keyList.forEach(i => {
         if (item.id === i.id) this.keyList.splice(index, 1)
       })
       // this.keyList.splice(index,1)
     },
-    delNote (index, item) {
+    delNote(index, item) {
       this.keyList.forEach(i => {
         if (item.id === i.id) {
           i.addNote = false
@@ -808,12 +808,12 @@ export default {
       })
     },
     //添加备注
-    setAddNote (index, item) {
+    setAddNote(index, item) {
       item.addNote = true
       item.isNote = true
     },
     // 删除暂存添加的内容
-    delStaging (type) {
+    delStaging(type) {
       switch (type) {
         case 'key':
           this.stagingKey = {}
@@ -826,7 +826,7 @@ export default {
       }
     },
     // 批量编辑
-    bulkEdit () {
+    bulkEdit() {
       this.bulkEditKey = !this.bulkEditKey
       if (this.bulkEditKey) {
         this.keyList.forEach(item => {
@@ -846,7 +846,7 @@ export default {
       }
     },
     //拖拽排序
-    keyDrop () {
+    keyDrop() {
       let that = this
       let side = document.getElementById('keyBox')
       Sortable.create(side, {
@@ -855,7 +855,7 @@ export default {
         animation: 150,
         onUpdate: function (event) {
           let newIndex = event.newIndex,
-            oldIndex = event.oldIndex
+              oldIndex = event.oldIndex
           let newItem = side.children[newIndex]
           let oldItem = side.children[oldIndex]
           // 先删除移动的节点
@@ -873,12 +873,12 @@ export default {
       })
     },
     // 删除上传的方案图标
-    delIcon () {
+    delIcon() {
       this.file = {}
       this.icon = ''
     },
     // 上传头像前校验
-    beforeUpload (file) {
+    beforeUpload(file) {
       const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'
       if (!isJpgOrPng) {
         this.$message.error('只能上传jpg/png格式的头像!')
@@ -889,11 +889,11 @@ export default {
       }
       return isJpgOrPng && isLt2M
     },
-    resetIcon () {
+    resetIcon() {
       this.form.icon = ''
     },
     // 上传头像
-    uploadImage (file) {
+    uploadImage(file) {
       this.file = file.file
       // this.avatarLoading = true
       // const formData = new FormData()

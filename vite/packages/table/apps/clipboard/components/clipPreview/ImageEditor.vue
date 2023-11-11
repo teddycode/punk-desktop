@@ -5,6 +5,7 @@ import "tui-color-picker/dist/tui-color-picker.css";
 
 import ImageEditor from "tui-image-editor";
 import {message, Modal} from "ant-design-vue";
+
 const locale_zh = {
   ZoomIn: "放大",
   ZoomOut: "缩小",
@@ -95,7 +96,6 @@ const customTheme = {
   "common.border": "1px solid #333",
 
 
-
   // header
 
   "header.backgroundImage": "none",
@@ -103,7 +103,6 @@ const customTheme = {
   "header.backgroundColor": "#f3f4f6",
 
   "header.border": "0px",
-
 
 
   // load button
@@ -121,7 +120,6 @@ const customTheme = {
   "loadButton.display": "none", // 隐藏
 
 
-
   // download button
 
   "downloadButton.backgroundColor": "#fdba3b",
@@ -135,7 +133,6 @@ const customTheme = {
   "downloadButton.fontSize": "12px",
 
   "downloadButton.display": "none", // 隐藏
-
 
 
   // icons default
@@ -153,7 +150,6 @@ const customTheme = {
   "submenu.activeIcon.color": "#e9e9e9",
 
 
-
   "menu.iconSize.width": "24px",
 
   "menu.iconSize.height": "24px",
@@ -163,13 +159,11 @@ const customTheme = {
   "submenu.iconSize.height": "32px",
 
 
-
   // submenu primary color
 
   "submenu.backgroundColor": "#1e1e1e",
 
   "submenu.partition.color": "#858585",
-
 
 
   // submenu labels
@@ -183,13 +177,11 @@ const customTheme = {
   "submenu.activeLabel.fontWeight": "lighter",
 
 
-
   // checkbox style
 
   "checkbox.border": "1px solid #ccc",
 
   "checkbox.backgroundColor": "#fff",
-
 
 
   // rango style
@@ -201,13 +193,11 @@ const customTheme = {
   "range.subbar.color": "#d1d1d1",
 
 
-
   "range.disabledPointer.color": "#414141",
 
   "range.disabledBar.color": "#282828",
 
   "range.disabledSubbar.color": "#414141",
-
 
 
   "range.value.color": "#fff",
@@ -225,7 +215,6 @@ const customTheme = {
   "range.title.fontWeight": "lighter",
 
 
-
   // colorpicker style
 
   "colorpicker.button.border": "1px solid #1e1e1e",
@@ -233,13 +222,12 @@ const customTheme = {
   "colorpicker.title.color": "#fff",
 
 };
-function decodeBase64Image(dataString)
-{
+
+function decodeBase64Image(dataString) {
   var matches = dataString.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
   var response = {};
 
-  if (matches.length !== 3)
-  {
+  if (matches.length !== 3) {
     return new Error('Invalid input string');
   }
 
@@ -251,7 +239,7 @@ function decodeBase64Image(dataString)
 
 export default defineComponent({
   name: "ImageEditor",
-  props:['filepath'],
+  props: ['filepath'],
   mounted() {
     this.path = 'file://' + this.$route.params['path']
     this.init(this.filepath)
@@ -260,44 +248,45 @@ export default defineComponent({
   methods: {
     init(path) {
       this.instance = new ImageEditor(
-        document.querySelector("#tui-image-editor"),
-        {
-          includeUI: {
-            loadImage: {
-              path: path,
-              name: "图片",
+          document.querySelector("#tui-image-editor"),
+          {
+            includeUI: {
+              loadImage: {
+                path: path,
+                name: "图片",
+              },
+              initMenu: "draw", // 默认打开的菜单项
+              menuBarPosition: "bottom", // 菜单所在的位置
+              theme: {
+                "common.bi.image": "",
+                "common.bisize.width": "0px",
+                "common.bisize.height": "0px",
+                "loadButton.display": "none",
+                "downloadButton.display": "none",
+              },//customTheme,
+              locale: locale_zh,
             },
-            initMenu: "draw", // 默认打开的菜单项
-            menuBarPosition: "bottom", // 菜单所在的位置
-            theme:{ "common.bi.image": "",
-              "common.bisize.width": "0px",
-              "common.bisize.height": "0px",
-              "loadButton.display": "none",
-              "downloadButton.display": "none", },//customTheme,
-            locale: locale_zh,
-          },
-          initMenu: "rotate",
-          cssMaxWidth: 1000, // canvas 最大宽度
-          cssMaxHeight: 600, // canvas 最大高度
+            initMenu: "rotate",
+            cssMaxWidth: 1000, // canvas 最大宽度
+            cssMaxHeight: 600, // canvas 最大高度
 
 
-        }
-
+          }
       )
       return customTheme
       //document.getElementsByClassName("tui-image-editor-main")[0].style.top = "45px"; // 图片距顶部工具栏的距离
     },
-    abort(){
+    abort() {
       Modal.confirm({
-        content:'确认放弃？',
-        centered:true,
-        onOk:()=>{
+        content: '确认放弃？',
+        centered: true,
+        onOk: () => {
           this.$emit('abort')
         }
       })
     },
     // 保存图片，并上传
-    getBase64Data(){
+    getBase64Data() {
       const base64String = this.instance.toDataURL() // base64 文件
       const data = window.atob(base64String.split(',')[1])
       const ia = new Uint8Array(data.length)
@@ -306,26 +295,26 @@ export default defineComponent({
       }
       return base64String
     },
-    copyToClip(){
-      const image=require('electron').nativeImage.createFromDataURL(this.getBase64Data())
+    copyToClip() {
+      const image = require('electron').nativeImage.createFromDataURL(this.getBase64Data())
       require('electron').clipboard.writeImage(image)
       message.success('复制到剪切板成功。')
     },
 
-    save () {
+    save() {
       Modal.confirm({
         title: '确认',
         content: '是否覆盖原图片文件？此操作无法恢复。建议另存为新的文件。',
         okText: '确认覆盖',
-        centered:true,
+        centered: true,
         cancelText: '取消',
         onOk: () => {
-          let imageBuffer=decodeBase64Image(this.getBase64Data())
-          require('fs').writeFile(this.filepath,imageBuffer.data,(err)=>{
-            if(err){
+          let imageBuffer = decodeBase64Image(this.getBase64Data())
+          require('fs').writeFile(this.filepath, imageBuffer.data, (err) => {
+            if (err) {
               console.warn(err)
               message.error('保存失败。意外错误。')
-            }else{
+            } else {
               message.success('保存成功。')
             }
           })
@@ -359,22 +348,22 @@ export default defineComponent({
 </script>
 
 <template>
-  <div style="background: #171717" class="w-full">
+  <div class="w-full" style="background: #171717">
     <div style="float:right;width: 200px;display: flex">
       <div style="position:absolute;right: 40px;bottom: 17px;z-index: 9">
-        <a-button shape="round" @click="abort" style="margin-right: 10px">放弃</a-button>
-        <a-button shape="round" @click="copyToClip" style="margin-right: 10px">复制到剪切板</a-button>
-        <a-button shape="round" @click="save" style="margin-right: 10px">保存</a-button>
-        <a-button shape="round" @click="saveAs()" type="primary" style="">另存为</a-button>
+        <a-button shape="round" style="margin-right: 10px" @click="abort">放弃</a-button>
+        <a-button shape="round" style="margin-right: 10px" @click="copyToClip">复制到剪切板</a-button>
+        <a-button shape="round" style="margin-right: 10px" @click="save">保存</a-button>
+        <a-button shape="round" style="" type="primary" @click="saveAs()">另存为</a-button>
       </div>
     </div>
     <a-layout-content style="background: white;height:calc(100vh - 80px);position:relative;">
-      <div id="tui-image-editor" ></div>
+      <div id="tui-image-editor"></div>
     </a-layout-content>
   </div>
 
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 
 </style>

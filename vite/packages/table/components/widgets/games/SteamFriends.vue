@@ -1,16 +1,18 @@
 <template>
-  <Widget :options="options" :customData="customData" :customIndex="customIndex" style="overflow: hidden" :desk="desk">
+  <Widget :customData="customData" :customIndex="customIndex" :desk="desk" :options="options" style="overflow: hidden">
     <!-- <a-empty style="margin-top: 10px" description="您还没有好友或未绑定Steam">
 
     </a-empty> -->
-    <XtState v-if="myFriends.length===0"  zoom="30" :state="'null'" :text="{'null':'您还没有好友或未绑定Steam'}" bg="" style="width: 100%;height: 80%;" class="mt-2"></XtState>
+    <XtState v-if="myFriends.length===0" :state="'null'" :text="{'null':'您还没有好友或未绑定Steam'}" bg="" class="mt-2"
+             style="width: 100%;height: 80%;" zoom="30"></XtState>
     <vue-custom-scrollbar v-else :settings="scrollbarSettings" style="height: 90%">
-      <div class="mt-5 my-friends"  >
-          <div v-for="item in myFriends" class=" avatar-item">
-            <a-popover :content="item.player_name">
-              <a-avatar shape="square" :size="48" :src="item.avatar_url_medium"  class="mb-4 rounded-md" style="border:3px solid rgba(82, 196, 26, 1);"></a-avatar>
-            </a-popover>
-          </div>
+      <div class="mt-5 my-friends">
+        <div v-for="item in myFriends" class=" avatar-item">
+          <a-popover :content="item.player_name">
+            <a-avatar :size="48" :src="item.avatar_url_medium" class="mb-4 rounded-md" shape="square"
+                      style="border:3px solid rgba(82, 196, 26, 1);"></a-avatar>
+          </a-popover>
+        </div>
       </div>
     </vue-custom-scrollbar>
   </Widget>
@@ -18,30 +20,32 @@
 <script>
 
 import Widget from '../../card/Widget.vue'
-import { steamUserStore } from '../../../store/steamUser'
-import {mapState}from 'pinia'
+import {steamUserStore} from '../../../store/steamUser'
+import {mapState} from 'pinia'
 import VueCustomScrollbar from '../../../../../src/components/vue-scrollbar.vue'
+
 export default {
-  name:'SteamFriends',
-  components:{
+  name: 'SteamFriends',
+  components: {
     VueCustomScrollbar,
     Widget,
   },
-  props:{
+  props: {
     customIndex: {
       type: Number,
       default: 0
     },
     customData: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
-    desk:{
-      type:Object
+    desk: {
+      type: Object
     }
   },
-  data(){
-    return{
+  data() {
+    return {
       scrollbarSettings: {
         useBothWheelAxes: true,
         swipeEasing: true,
@@ -57,24 +61,25 @@ export default {
       }
     }
   },
-  computed:{
-    ...mapState(steamUserStore,['myFriends'])
+  computed: {
+    ...mapState(steamUserStore, ['myFriends'])
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.my-friends{
+.my-friends {
   display: grid;
-  grid-template-columns: repeat(3,0.35fr);
+  grid-template-columns: repeat(3, 0.35fr);
   grid-gap: 10px;
   justify-content: center;
   align-items: center;
 }
-.avatar-item{
+
+.avatar-item {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin:  0  auto;
+  margin: 0 auto;
 }
 </style>

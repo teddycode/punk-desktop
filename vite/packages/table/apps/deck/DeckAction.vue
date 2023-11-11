@@ -3,51 +3,51 @@
 
   <!--  </SecondPanel>-->
 
-  <a-tabs style="margin-top: 4em" v-model:activeKey="activeTab" tab-position="left">
-    <a-tab-pane :key="group.name" :tab="group.title" v-for="group in actionGroups">
-      <ActionBuilder :key="'ab-'+resetActionBuilder" :ref="group.name" :group="group" :actions="group.actions">
+  <a-tabs v-model:activeKey="activeTab" style="margin-top: 4em" tab-position="left">
+    <a-tab-pane v-for="group in actionGroups" :key="group.name" :tab="group.title">
+      <ActionBuilder :key="'ab-'+resetActionBuilder" :ref="group.name" :actions="group.actions" :group="group">
       </ActionBuilder>
     </a-tab-pane>
-<!--    <a-tab-pane key="audio" tab="系统设置">-->
-<!--      <div class="action">-->
-<!--        调大音量-->
-<!--      </div>-->
-<!--      <div class="action">-->
-<!--        调小音量-->
-<!--      </div>-->
-<!--      <div class="action">-->
-<!--        静音-->
-<!--      </div>-->
-<!--      <div class="action">-->
-<!--        调高亮度-->
-<!--      </div>-->
-<!--      <div class="action">-->
-<!--        调低亮度-->
-<!--      </div>-->
-<!--    </a-tab-pane>-->
-<!--    <a-tab-pane key="keys" tab="键鼠">-->
-<!--      <div class="action">-->
-<!--        模拟鼠标-->
-<!--      </div>-->
-<!--      <div class="action">-->
-<!--        模拟按键-->
-<!--      </div>-->
-<!--    </a-tab-pane>-->
-<!--    <a-tab-pane key="app" tab="应用">-->
-<!--      <div class="action">-->
-<!--        打开系统内应用-->
-<!--      </div>-->
-<!--      <div class="action">-->
-<!--        打开轻应用-->
-<!--      </div>-->
-<!--      <div class="action">-->
-<!--        打开酷应用-->
-<!--      </div>-->
-<!--    </a-tab-pane>-->
+    <!--    <a-tab-pane key="audio" tab="系统设置">-->
+    <!--      <div class="action">-->
+    <!--        调大音量-->
+    <!--      </div>-->
+    <!--      <div class="action">-->
+    <!--        调小音量-->
+    <!--      </div>-->
+    <!--      <div class="action">-->
+    <!--        静音-->
+    <!--      </div>-->
+    <!--      <div class="action">-->
+    <!--        调高亮度-->
+    <!--      </div>-->
+    <!--      <div class="action">-->
+    <!--        调低亮度-->
+    <!--      </div>-->
+    <!--    </a-tab-pane>-->
+    <!--    <a-tab-pane key="keys" tab="键鼠">-->
+    <!--      <div class="action">-->
+    <!--        模拟鼠标-->
+    <!--      </div>-->
+    <!--      <div class="action">-->
+    <!--        模拟按键-->
+    <!--      </div>-->
+    <!--    </a-tab-pane>-->
+    <!--    <a-tab-pane key="app" tab="应用">-->
+    <!--      <div class="action">-->
+    <!--        打开系统内应用-->
+    <!--      </div>-->
+    <!--      <div class="action">-->
+    <!--        打开轻应用-->
+    <!--      </div>-->
+    <!--      <div class="action">-->
+    <!--        打开酷应用-->
+    <!--      </div>-->
+    <!--    </a-tab-pane>-->
 
   </a-tabs>
   <div style="text-align: center">
-    <a-button @click="addAction" type="primary">确认</a-button>
+    <a-button type="primary" @click="addAction">确认</a-button>
 
     <a-button @click="back">取消</a-button>
   </div>
@@ -62,6 +62,7 @@ import BackBtn from '../../components/comp/BackBtn.vue'
 import ActionBuilder from "../../components/deck/ActionBuilder.vue";
 import {ActionGroups} from "../../consts";
 import _ from 'lodash-es'
+
 /**
  * 添加一个新的Tab行为
  */
@@ -82,21 +83,21 @@ export default {
     return {
       current: '',//当前的
       activeTab: 'cmd',
-      resetActionBuilder:0,//用于重载组件
+      resetActionBuilder: 0,//用于重载组件
       actionGroups: ActionGroups,
-      actionData:{}//指令数据
+      actionData: {}//指令数据
     }
   },
-  props:['data'],
-  emits:['click'],
+  props: ['data'],
+  emits: ['click'],
   components: {ActionBuilder, BackBtn},
   computed: {},
   mounted() {
-   this.reset()
-    if(this.data){
-      this.$nextTick(()=>{
-        this.activeTab=this.data.group.name
-        this.$nextTick(()=>{
+    this.reset()
+    if (this.data) {
+      this.$nextTick(() => {
+        this.activeTab = this.data.group.name
+        this.$nextTick(() => {
           this.$refs[this.activeTab][0].setActionData(this.data)
         })
 
@@ -106,22 +107,22 @@ export default {
     }
   },
   methods: {
-    reset(){
-      this.actionGroups=_.cloneDeep(ActionGroups)
+    reset() {
+      this.actionGroups = _.cloneDeep(ActionGroups)
       this.activeTab = this.actionGroups[0].name
-      this.resetActionBuilder=Date.now()
+      this.resetActionBuilder = Date.now()
     },
     change(tab) {
     },
     back() {
       this.$emit('click')
     },
-    addAction(){
-      let actionData=this.$refs[this.activeTab][0].getActionData()
-      if(!actionData){
+    addAction() {
+      let actionData = this.$refs[this.activeTab][0].getActionData()
+      if (!actionData) {
         return
       }
-      this.$emit('click',actionData)
+      this.$emit('click', actionData)
     }
   }
 }

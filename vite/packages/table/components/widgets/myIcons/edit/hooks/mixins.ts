@@ -1,8 +1,8 @@
+import {mapWritableState} from "pinia";
+import {myIcons} from "../../../../../store/myIcons";
 
-import { mapWritableState } from "pinia";
-import { myIcons } from "../../../../../store/myIcons";
 export default {
-  computed: {
-    ...mapWritableState(myIcons, ["edit"]),
-  },
+    computed: {
+        ...mapWritableState(myIcons, ["edit"]),
+    },
 };

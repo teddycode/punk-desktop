@@ -15,6 +15,6 @@ export default defineComponent({
   <ShortcutKeyDetail></ShortcutKeyDetail>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 
 </style>

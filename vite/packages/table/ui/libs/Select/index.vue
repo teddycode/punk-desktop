@@ -1,23 +1,24 @@
 <template>
   <a-select
-    style="z-index: 99999999; position: relative"
-    v-model:value="data"
-    class="no-drag w-full rounded-xl"
-    size="large"
-    @change="handleChange"
-    :dropdownStyle="{
+      v-model:value="data"
+      :dropdownStyle="{
       'z-index': 999999999999,
       backgroundColor: 'var(--secondary-bg)',
     }"
+      class="no-drag w-full rounded-xl"
+      size="large"
+      style="z-index: 99999999; position: relative"
+      @change="handleChange"
   >
-    <a-select-option class="no-drag" v-for="item in list" :value="item.value"
-      >{{ item.name }}
+    <a-select-option v-for="item in list" :value="item.value" class="no-drag"
+    >{{ item.name }}
     </a-select-option>
   </a-select>
 </template>
 
 <script setup>
-import { ref, reactive, watch } from "vue";
+import {reactive, watch} from "vue";
+
 const props = defineProps({
   modelValue: {
     default: "默认排序",
@@ -25,9 +26,9 @@ const props = defineProps({
   list: {
     default: () => {
       return [
-        { value: "默认排序", name: "默认排序" },
-        { value: "下载次数", name: "下载次数" },
-        { value: "更新时间", name: "更新时间" },
+        {value: "默认排序", name: "默认排序"},
+        {value: "下载次数", name: "下载次数"},
+        {value: "更新时间", name: "更新时间"},
       ];
     },
   },
@@ -41,11 +42,11 @@ const handleChange = (value) => {
 };
 
 watch(
-  () => props.modelValue,
-  (newV) => {
-    // data = newV;
-    data = newV;
-  }
+    () => props.modelValue,
+    (newV) => {
+      // data = newV;
+      data = newV;
+    }
 );
 </script>
 

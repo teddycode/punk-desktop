@@ -1,10 +1,10 @@
 <template>
-  <div class="replies-item" :class="!isRoot ? 'replies-item-normal' : ''">
-    <div class="message-bubble" ref="htmlRefHook">
+  <div :class="!isRoot ? 'replies-item-normal' : ''" class="replies-item">
+    <div ref="htmlRefHook" class="message-bubble">
       <img
-        class="avatar"
-        :src="message?.avatar || 'https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'"
-        onerror="this.src='https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'"
+          :src="message?.avatar || 'https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'"
+          class="avatar"
+          onerror="this.src='https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'"
       />
       <main class="message-area">
         <div class="message-area-title">
@@ -17,39 +17,39 @@
         </div>
         <div class="content content-in">
           <MessageText
-            v-if="message.messageType === constant.typeText || message.type === TIM.TYPES.MSG_TEXT || !isRoot"
-            :data="handleTextMessageShowContext(isRoot ? message : { payload: { text: message?.messageAbstract } })"
+              v-if="message.messageType === constant.typeText || message.type === TIM.TYPES.MSG_TEXT || !isRoot"
+              :data="handleTextMessageShowContext(isRoot ? message : { payload: { text: message?.messageAbstract } })"
           />
           <span v-if="message.messageType === constant.typeCustom || message.type === TIM.TYPES.MSG_CUSTOM">{{
-            handleCustomMessageShowContext(message)?.custom
-          }}</span>
+              handleCustomMessageShowContext(message)?.custom
+            }}</span>
           <img
-            v-if="message.messageType === constant.typeImage || message.type === TIM.TYPES.MSG_IMAGE"
-            class="message-img"
-            :src="message?.payload?.imageInfoArray[1].url"
+              v-if="message.messageType === constant.typeImage || message.type === TIM.TYPES.MSG_IMAGE"
+              :src="message?.payload?.imageInfoArray[1].url"
+              class="message-img"
           />
           <div
-            v-if="message.messageType === constant.typeAudio || message.type === TIM.TYPES.MSG_AUDIO"
-            class="message-audio"
-            :style="`width: ${message?.payload?.second * 10 + 40}px`"
+              v-if="message.messageType === constant.typeAudio || message.type === TIM.TYPES.MSG_AUDIO"
+              :style="`width: ${message?.payload?.second * 10 + 40}px`"
+              class="message-audio"
           >
             <i class="icon icon-voice"></i>
             <label>{{ message?.payload?.second }}s</label>
           </div>
           <div
-            v-if="message.messageType === constant.typeVideo || message.type === TIM.TYPES.MSG_VIDEO"
-            class="message-video-cover"
+              v-if="message.messageType === constant.typeVideo || message.type === TIM.TYPES.MSG_VIDEO"
+              class="message-video-cover"
           >
-            <img class="message-videoimg" :src="message?.payload?.snapshotUrl || message?.payload?.thumbUrl" />
+            <img :src="message?.payload?.snapshotUrl || message?.payload?.thumbUrl" class="message-videoimg"/>
           </div>
           <img
-            v-if="message.messageType === constant.typeFace || message.type === TIM.TYPES.MSG_FACE"
-            class="message-img"
-            :src="url"
+              v-if="message.messageType === constant.typeFace || message.type === TIM.TYPES.MSG_FACE"
+              :src="url"
+              class="message-img"
           />
           <div
-            v-if="message.messageType === constant.typeFile || message.type === TIM.TYPES.MSG_FILE"
-            class="message-file"
+              v-if="message.messageType === constant.typeFile || message.type === TIM.TYPES.MSG_FILE"
+              class="message-file"
           >
             <i class="icon icon-files"></i>
             <div class="message-file-content">
@@ -57,24 +57,25 @@
               <span>{{ handleFileMessageShowContext(message)?.size || message?.payload?.fileSize }}</span>
             </div>
           </div>
-          <MessageEmojiReact :message="message" type="content" />
+          <MessageEmojiReact :message="message" type="content"/>
         </div>
       </main>
     </div>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, toRefs, watchEffect } from 'vue';
-import { Message } from '../../interface';
+import {defineComponent, reactive, toRefs, watchEffect} from 'vue';
+import {Message} from '../../interface';
 import {
-  handleTextMessageShowContext,
   handleCustomMessageShowContext,
   handleFileMessageShowContext,
+  handleTextMessageShowContext,
 } from '../../utils/utils';
-import { MessageText, MessageEmojiReact } from '../../components';
-import { caculateTimeago } from '../../../utils';
+import {MessageEmojiReact, MessageText} from '../../components';
+import {caculateTimeago} from '../../../utils';
 import constant from '../../../constant';
 import TIM from '../../../../../TUICore/tim/index';
+
 const RepliesItem = defineComponent({
   props: {
     message: {
@@ -126,29 +127,36 @@ export default RepliesItem;
 .replies-item {
   padding: 15px;
   width: auto;
+
   &-normal {
     padding: 12.8px 15px 0 17px;
+
     .message-bubble {
       padding-bottom: 0;
+
       .avatar {
         width: 48px;
         height: 48px;
         border-radius: 8px;
       }
+
       .message-area {
         padding: 0 0 8px 0;
         margin: 0 0 0 16px;
         border-bottom: 0.1px solid #dbdbdb;
+
         &-title {
           .name {
             font-size: 14px;
             line-height: 20px;
           }
+
           .time {
             font-size: 12px;
             line-height: 18px;
           }
         }
+
         .content,
         .content-in {
           background: inherit;
@@ -159,16 +167,19 @@ export default RepliesItem;
       }
     }
   }
+
   .avatar {
     width: 36px;
     height: 36px;
     border-radius: 5px;
   }
+
   .message-bubble {
     width: 100%;
     display: flex;
     padding-bottom: 5px;
   }
+
   .line-left {
     border: 1px solid rgba(0, 110, 255, 0.5);
   }
@@ -180,10 +191,12 @@ export default RepliesItem;
     flex-direction: column;
     padding: 0 8px;
     flex: 1;
+
     &-title {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
+
       .name,
       .time {
         padding-bottom: 4px;
@@ -192,6 +205,7 @@ export default RepliesItem;
         color: #999999;
         letter-spacing: 0;
       }
+
       .name {
         flex: 1;
         overflow: hidden;
@@ -199,6 +213,7 @@ export default RepliesItem;
         white-space: nowrap;
       }
     }
+
     .content {
       padding: 12px;
       font-weight: 400;
@@ -208,9 +223,11 @@ export default RepliesItem;
       word-wrap: break-word;
       word-break: break-all;
       width: fit-content;
+
       &-in {
         background: #F2F2F2;
         border-radius: 0px 10px 10px 10px;
+
         .message-img,
         .message-videoimg {
           width: inherit;
@@ -222,6 +239,7 @@ export default RepliesItem;
       }
     }
   }
+
   .message-label {
     align-self: flex-end;
 
@@ -230,10 +248,12 @@ export default RepliesItem;
     color: #b6b8ba;
     word-break: keep-all;
   }
+
   .message-file {
     flex: 1;
     display: flex;
     cursor: pointer;
+
     .message-file-content {
       flex: 1;
       display: flex;
@@ -248,14 +268,17 @@ export default RepliesItem;
     cursor: pointer;
     max-width: 100%;
     overflow: hidden;
+
     .icon {
       margin: 0 4px;
     }
+
     audio {
       width: 0;
       height: 0;
     }
   }
+
   .reserve {
     flex-direction: row-reverse;
   }

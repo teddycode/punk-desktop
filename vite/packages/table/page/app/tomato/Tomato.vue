@@ -1,40 +1,41 @@
 <template>
 
   <div class="s-bg rounded-lg xt-text" style="height: 100%">
-    <div class="back-btn ml-2" @click="goBack" >
-      <Icon icon="xiangzuo"  style="font-size: 2em;"></Icon>
+    <div class="back-btn ml-2" @click="goBack">
+      <Icon icon="xiangzuo" style="font-size: 2em;"></Icon>
     </div>
     <a-row style="margin-left:5em ">
       <a-col :span="8">
-        <a-progress style="margin-top: 8em;" type="circle" :percent="rate" strokeColor="#666" :strokeWidth="15"
-                    :width="250">
+        <a-progress :percent="rate" :strokeWidth="15" :width="250" strokeColor="#666" style="margin-top: 8em;"
+                    type="circle">
           <template #format="percent">
             <span style="font-size: 1em">{{ status }}</span>
           </template>
         </a-progress>
       </a-col>
-      <a-col style="font-size: 3em;text-align: center;padding-top: 1em" :soan="16">
+      <a-col :soan="16" style="font-size: 3em;text-align: center;padding-top: 1em">
         <div>番茄钟</div>
         <div style="font-size: 2.8em;font-weight: bold">
           {{ displayNum(hours) }}:{{ displayNum(minutes) }}:{{ displayNum(seconds) }}
         </div>
         <div style="">
 
-          <Icon v-for="i in tomato" style="margin-right:10px;vertical-align: middle;font-size: 1.5em" icon="fanqie"></Icon>
-          <Icon v-for="i in target-tomato" style="margin-right:10px;vertical-align: middle;opacity: 0.3;font-size: 1em"
-                icon="fanqie"></Icon>
+          <Icon v-for="i in tomato" icon="fanqie"
+                style="margin-right:10px;vertical-align: middle;font-size: 1.5em"></Icon>
+          <Icon v-for="i in target-tomato" icon="fanqie"
+                style="margin-right:10px;vertical-align: middle;opacity: 0.3;font-size: 1em"></Icon>
         </div>
         <div style="margin-top: 1em">
-          <a-row :gutter="30" v-if="running" >
-            <a-col  @click="pause" :span="12">
-              <div class="btn sm" v-if="timer">
-                <Icon style="font-size: 2em;vertical-align: middle" icon="zanting"></Icon>
+          <a-row v-if="running" :gutter="30">
+            <a-col :span="12" @click="pause">
+              <div v-if="timer" class="btn sm">
+                <Icon icon="zanting" style="font-size: 2em;vertical-align: middle"></Icon>
                 <span style="font-size: 0.7em">
                 暂停
               </span>
               </div>
-              <div class="btn sm" v-else>
-                <Icon style="font-size: 2em;vertical-align: middle" icon="bofang"></Icon>
+              <div v-else class="btn sm">
+                <Icon icon="bofang" style="font-size: 2em;vertical-align: middle"></Icon>
                 <span style="font-size: 0.7em">
                 <span>
                   继续
@@ -42,19 +43,19 @@
               </span>
               </div>
             </a-col>
-            <a-col  @click="stop" :span="12"  >
+            <a-col :span="12" @click="stop">
               <div class="btn sm">
-                <Icon style="font-size: 2em;vertical-align: middle" icon="tingzhi"></Icon>
+                <Icon icon="tingzhi" style="font-size: 2em;vertical-align: middle"></Icon>
                 <span style="font-size: 0.7em">放弃
               </span>
               </div>
 
             </a-col>
           </a-row>
-          <a-row @click="start" v-else>
-            <a-col  :span="24">
+          <a-row v-else @click="start">
+            <a-col :span="24">
               <div class="btn sm">
-                <Icon style="font-size: 2em;vertical-align: middle" icon="bofang"></Icon>
+                <Icon icon="bofang" style="font-size: 2em;vertical-align: middle"></Icon>
                 <span style="font-size: 0.7em">
               <span>
                   开始
@@ -73,11 +74,11 @@
 </template>
 
 <script>
-import { Modal } from 'ant-design-vue'
+import {Modal} from 'ant-design-vue'
 
 export default {
   name: 'Tomato',
-  data () {
+  data() {
     return {
       tomato: 0,
       target: 5,
@@ -95,29 +96,29 @@ export default {
       running: false,
     }
   },
-  mounted () {
+  mounted() {
     this.start()
   },
   computed: {
-    rate () {
+    rate() {
       let rate = this.getRate()
       return rate
     },
-    status(){
-      if(this.running){
-        if(!this.timer){
+    status() {
+      if (this.running) {
+        if (!this.timer) {
           return '暂停'
-        }else{
+        } else {
           return this.getRate()
         }
-      }else{
+      } else {
 
       }
     }
   },
-  beforeRouteLeave(to,from,next){
-    let isPaused=false
-    if(this.running) {
+  beforeRouteLeave(to, from, next) {
+    let isPaused = false
+    if (this.running) {
       if (!this.timer) {
         isPaused = true
       } else {
@@ -138,22 +139,22 @@ export default {
 
         }
       })
-    }else{
+    } else {
       history.go(-1)
     }
   },
   methods: {
-    goBack(){
-        this.$router.go(-1)
+    goBack() {
+      this.$router.go(-1)
     },
-    displayNum (num) {
+    displayNum(num) {
       if (num < 10) {
         return '0' + num
       } else {
         return num
       }
     },
-    reset (hours = 0, minutes = 0, seconds = 0) {
+    reset(hours = 0, minutes = 0, seconds = 0) {
       this.totalTime = {
         hours,
         minutes,
@@ -163,33 +164,33 @@ export default {
       this.minutes = this.totalTime.minutes
       this.seconds = this.totalTime.seconds
     },
-    start () {
+    start() {
       this.reset(0, 25, 0)
       this.timer = setInterval(this.interval, this.tick)
       this.running = true
     },
-    stop () {
+    stop() {
       this.running = false
       this.clearInterval()
       this.reset(0, 0, 0)
 
     },
-    clearInterval () {
+    clearInterval() {
       clearInterval(this.timer)
       this.timer = null
     },
-    getRate () {
+    getRate() {
       return Number(((1 - (this.seconds + this.minutes * 60 + this.hours * 60 * 60) / (this.totalTime.seconds + this.totalTime.minutes * 60 + this.totalTime.hours * 60 * 60)) * 100).toFixed())
     },
-    pause () {
+    pause() {
       if (this.timer === null) {
         this.timer = setInterval(this.interval, this.tick)
       } else {
         this.clearInterval()
       }
     },
-    finish () {
-      this.running=false
+    finish() {
+      this.running = false
       this.clearInterval()
       this.reset()
       Modal.success({
@@ -200,10 +201,10 @@ export default {
         onOk: () => {
           this.tomato++
         },
-        cancelText:null
+        cancelText: null
       })
     },
-    interval () {
+    interval() {
       if (!this.running) return
       if (this.seconds <= 0) {
         if (this.minutes === 0) {
@@ -216,8 +217,8 @@ export default {
         } else {
           this.minutes--
         }
-        if(!this.running){
-          this.seconds=0
+        if (!this.running) {
+          this.seconds = 0
           return
         }
         this.seconds = 59

@@ -1,18 +1,18 @@
 <template>
   <XtTitle titleClass="mt-0 mb-5">名称</XtTitle>
   <XtInput
-    style="width: 100%; height: 48px"
-    v-model="namehValue"
-    placeholder="请输入名称"
+      v-model="namehValue"
+      placeholder="请输入名称"
+      style="width: 100%; height: 48px"
   >
   </XtInput>
   <XtTitle>图标</XtTitle>
   <div class="flex flex-wrap">
     <div
-      v-for="(item, index) in iconList"
-      @click="itemClick(item, index)"
-      :class="{ 'xt-theme-b': item.id == selectIndex }"
-      class="xt-bg-2 w-10 h-10 rounded-xl m-2 flex justify-center items-center cursor-pointer"
+        v-for="(item, index) in iconList"
+        :class="{ 'xt-theme-b': item.id == selectIndex }"
+        class="xt-bg-2 w-10 h-10 rounded-xl m-2 flex justify-center items-center cursor-pointer"
+        @click="itemClick(item, index)"
     >
       <Icon :icon="item.name" class="text-xl"></Icon>
     </div>
@@ -20,7 +20,8 @@
 </template>
 
 <script>
-import { iconList } from "./config.ts";
+import {iconList} from "./config.ts";
+
 export default {
   data() {
     return {

@@ -3,52 +3,55 @@
     @click="selectTime"
     :style="{ color: this.modelValue ? '#1890ff' : '#BBBBBB' }"
   /> -->
-  <Icon class="pointer" @click="selectTime" :style="{ color: this.modelValue ? '#1890ff' : 'var(--disable-text)' }" icon="calendar-check" style="font-size:20px"></Icon>
+  <Icon :style="{ color: this.modelValue ? '#1890ff' : 'var(--disable-text)' }" class="pointer" icon="calendar-check"
+        style="font-size:20px" @click="selectTime"></Icon>
   <teleport to="body">
 
 
-  <Modal blurFlag="true" v-model:visible="promptVisible" v-if="promptVisible" style="z-index:99999;">
-    <div class="px-5 pb-5 xt-modal flex flex-col justify-between items-center" style="width:380px;height:300px;border-radius:16px">
-      <div class="head-nav">
-        <div class="ml-8">
-          <a-tag  class="tag-item" @click="setToday">今天</a-tag>
-          <a-tag  class="tag-item" @click="setTomorrow">明天</a-tag>
-          <a-tag  class="tag-item" @click="setNextWeek">下周</a-tag>
-          <a-tag  class="tag-item" @click="setNextMonth">下月</a-tag>
-          <a-tag  class="tag-item" @click="setNextYear">明年</a-tag>
+    <Modal v-if="promptVisible" v-model:visible="promptVisible" blurFlag="true" style="z-index:99999;">
+      <div class="px-5 pb-5 xt-modal flex flex-col justify-between items-center"
+           style="width:380px;height:300px;border-radius:16px">
+        <div class="head-nav">
+          <div class="ml-8">
+            <a-tag class="tag-item" @click="setToday">今天</a-tag>
+            <a-tag class="tag-item" @click="setTomorrow">明天</a-tag>
+            <a-tag class="tag-item" @click="setNextWeek">下周</a-tag>
+            <a-tag class="tag-item" @click="setNextMonth">下月</a-tag>
+            <a-tag class="tag-item" @click="setNextYear">明年</a-tag>
+          </div>
+          <div>
+            <Icon icon="guanbi" style="color:var(--primary-text);font-size:24px" @click="close"></Icon>
+          </div>
         </div>
-        <div>
-          <Icon @click="close" icon="guanbi" style="color:var(--primary-text);font-size:24px"></Icon>
+        <div class="flex justify-center">
+          <a-row type="flex">
+            <a-col>
+              <a-date-picker
+                  v-model:value="newDate"
+                  class="input"
+                  placeholder="选择日期"
+                  style="width: 100%;"
+                  @change="onDatePickerChange"
+              />
+              <a-time-picker
+                  v-model:value="newTime"
+                  class="input"
+                  format="HH:mm"
+                  placeholder="选择时间"
+                  style="width: 100%; margin-top: 10px"
+                  @change="onTimePickerChange"
+              />
+            </a-col>
+            <a-col flex="140px"></a-col>
+          </a-row>
+        </div>
+        <div class="modal-btn">
+          <div class="mr-3 rounded-lg xt-bg-2 pointer" @click="clearTime">清除</div>
+          <div class="mr-3 rounded-lg xt-bg-2 pointer" @click="seTime">确定</div>
         </div>
       </div>
-      <div class="flex justify-center">
-        <a-row type="flex">
-          <a-col>
-            <a-date-picker
-              @change="onDatePickerChange"
-              placeholder="选择日期"
-              style="width: 100%;"
-              v-model:value="newDate"
-              class="input"
-            />
-            <a-time-picker
-              @change="onTimePickerChange"
-              style="width: 100%; margin-top: 10px"
-              v-model:value="newTime"
-              placeholder="选择时间"
-              format="HH:mm"
-              class="input"
-            />
-          </a-col>
-          <a-col flex="140px"> </a-col>
-        </a-row>
-      </div>
-      <div class="modal-btn">
-        <div class="mr-3 rounded-lg xt-bg-2 pointer" @click="clearTime">清除</div>
-        <div class="mr-3 rounded-lg xt-bg-2 pointer" @click="seTime">确定</div>
-      </div>
-    </div>
-  </Modal>  </teleport>
+    </Modal>
+  </teleport>
   <!-- <a-modal
     @ok="seTime"
     @cancel="clearDeadTime"
@@ -92,10 +95,11 @@
 <script lang="ts">
 import dayjs from "dayjs";
 import objectSupport from "dayjs/plugin/objectSupport";
-import { CalendarOutlined } from "@ant-design/icons-vue";
+import {CalendarOutlined} from "@ant-design/icons-vue";
 import Modal from "../../../../components/Modal.vue";
-import { appStore } from "../../../../store";
-import { mapActions, mapWritableState } from "pinia";
+import {appStore} from "../../../../store";
+import {mapWritableState} from "pinia";
+
 dayjs.locale("zh-cn");
 dayjs.extend(objectSupport);
 export default {
@@ -133,7 +137,7 @@ export default {
     selectTime() {
       // this.dateTimePickerVisible = true;
       this.promptVisible = true
-     // this.fullScreen = true
+      // this.fullScreen = true
     },
     setTimeDayEnd(force = false) {
       if (force || this.newTime === null) {
@@ -179,7 +183,7 @@ export default {
       }
       let time = newTime.unix();
       // this.dateTimePickerVisible = false;
-     // this.fullScreen = false
+      // this.fullScreen = false
       this.promptVisible = false
       this.$emit("update:modelValue", time);
     },
@@ -204,11 +208,11 @@ export default {
         }
       }
     },
-    close(){
+    close() {
       this.fullScreen = false
       this.promptVisible = false
     },
-    clearTime(){
+    clearTime() {
       this.newDate = null;
       this.newTime = null;
       this.$emit("update:modelValue", null);
@@ -218,8 +222,8 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-.head-nav{
+<style lang="scss" scoped>
+.head-nav {
   width: 100%;
   height: 68px;
   position: relative;
@@ -229,11 +233,13 @@ export default {
   color: var(--primary-text);
   font-weight: 500;
   border-bottom: 1px solid var(--divider);
-  .tag-item{
+
+  .tag-item {
     color: var(--secondary-text);
     cursor: pointer;
   }
-  >div:nth-child(2){
+
+  > div:nth-child(2) {
     width: 44px;
     height: 44px;
     display: flex;
@@ -246,10 +252,12 @@ export default {
     right: 0px;
   }
 }
+
 .modal-btn {
   display: flex;
   font-size: 16px;
   color: var(--primary-text);
+
   > div {
     width: 120px;
     height: 44px;
@@ -259,18 +267,19 @@ export default {
     border-radius: 12px;
     background: var(--mask-bg);
   }
-  >div:nth-child(2){
+
+  > div:nth-child(2) {
     background: var(--active-bg) !important;
   }
 }
 
-.input{
-  width:200px;
+.input {
+  width: 200px;
   height: 48px;
   background: var(--secondary-bg);
   border-radius: 12px;
   color: var(--primary-text);
   font-size: 16px;
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 </style>

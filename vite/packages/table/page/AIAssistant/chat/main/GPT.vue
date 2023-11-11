@@ -1,15 +1,15 @@
 <template>
   <MdPreview
-    :showCodeRowNumber="true"
-    :modelValue="content"
-    :theme="theme"
-    :previewTheme="previewTheme"
-    :codeTheme="codeTheme"
+      :codeTheme="codeTheme"
+      :modelValue="content"
+      :previewTheme="previewTheme"
+      :showCodeRowNumber="true"
+      :theme="theme"
   />
 </template>
 
 <script setup>
-import { MdPreview } from "md-editor-v3";
+import {MdPreview} from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
 
 const props = defineProps({
@@ -33,6 +33,7 @@ const codeTheme = "github";
 #md-editor-v3 {
   background: none;
   user-select: text;
+
   .md-editor-preview-wrapper {
     padding: 12px !important;
   }

@@ -1,10 +1,10 @@
 <template>
-  <tippy ref="tippyRef" trigger="click" placement="bottom" :interactive="true" :appendTo="body">
-    <xtButton  :style="{backgroundColor:color}" :w="w" :h="h">
+  <tippy ref="tippyRef" :appendTo="body" :interactive="true" placement="bottom" trigger="click">
+    <xtButton :h="h" :style="{backgroundColor:color}" :w="w">
       &nbsp;
     </xtButton>
     <template #content="{hide}">
-      <XtColor v-model:color="selectColor" title="主题" btnText="恢复默认主题颜色" @onBtnClick="hide();"></XtColor>
+      <XtColor v-model:color="selectColor" btnText="恢复默认主题颜色" title="主题" @onBtnClick="hide();"></XtColor>
     </template>
 
   </tippy>
@@ -20,33 +20,31 @@ export default defineComponent({
   components: {Template, XtButton},
   props: {
     color: {
-      type:String,
+      type: String,
     },
-    defaultColor:{
-
-    },
+    defaultColor: {},
     w: {
-      type:Number,
-      default:20
+      type: Number,
+      default: 20
     },
     h: {
-      type:Number,
-      default:20
+      type: Number,
+      default: 20
     }
   },
-  data(){
+  data() {
     return {
-      selectColor:'',
-      body:document.body
+      selectColor: '',
+      body: document.body
     }
   },
   mounted() {
   }
   ,
-  watch:{
-    selectColor:{
-      handler(newValue){
-        this.$emit('update:color',newValue)
+  watch: {
+    selectColor: {
+      handler(newValue) {
+        this.$emit('update:color', newValue)
         this.$refs.tippyRef.hide()
       }
 
@@ -61,6 +59,6 @@ export default defineComponent({
 </script>
 
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 
 </style>

@@ -1,9 +1,9 @@
 <template>
   <div class="box rounded-xl">
     <a-collapse
-      ghost
-      class="xt-text xt-bg-2 rounded-xl"
-      expandIconPosition="right"
+        class="xt-text xt-bg-2 rounded-xl"
+        expandIconPosition="right"
+        ghost
     >
       <a-collapse-panel>
         <template #header>
@@ -15,7 +15,7 @@
       </a-collapse-panel>
     </a-collapse>
   </div>
-  <br />
+  <br/>
 </template>
 <script lang="ts" setup>
 const props = defineProps({
@@ -32,10 +32,12 @@ const props = defineProps({
 .ant-collapse {
   border-radius: 12px;
 }
+
 .box {
   :deep(.ant-collapse-header) {
     color: var(--primary-text) !important;
   }
+
   :deep(.ant-collapse-content-box) {
     padding-top: 0 !important;
 

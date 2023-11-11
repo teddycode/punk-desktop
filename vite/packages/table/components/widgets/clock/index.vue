@@ -1,49 +1,49 @@
 <template>
   <Widget
-    :customData="customData"
-    :size="reSize"
-    :customIndex="customIndex"
-    :options="options"
-    :menuList="menuList"
-    ref="homelSlotRef"
-    :desk="desk"
+      ref="homelSlotRef"
+      :customData="customData"
+      :customIndex="customIndex"
+      :desk="desk"
+      :menuList="menuList"
+      :options="options"
+      :size="reSize"
   >
-    <cardDrag ref="drag" @reSizeInit="reSizeInit" class="drag">
+    <cardDrag ref="drag" class="drag" @reSizeInit="reSizeInit">
       <template #="{ row }">
         <div class="box no-drag" @click="fullScreen()">
           <component
-            :is="customData.clockId"
-            :isSnow="isSnow"
-            :class="{
+              :is="customData.clockId"
+              :class="{
               isClock5: isClock5 == true,
               isClock5w420: isClock5w420 == true,
             }"
-            :style="{ zoom: zoom }"
+              :isSnow="isSnow"
+              :style="{ zoom: zoom }"
           />
         </div>
       </template>
     </cardDrag>
   </Widget>
-  <a-drawer :width="500" v-model:visible="settingVisible" placement="right">
+  <a-drawer v-model:visible="settingVisible" :width="500" placement="right">
     <template #title>
       <div class="text-center">设置</div>
     </template>
     <!--  -->
-    <XtRadio @onChange="__updateSize" :data="customData.dragCardSize"></XtRadio>
+    <XtRadio :data="customData.dragCardSize" @onChange="__updateSize"></XtRadio>
     <ClockStyle @updateClockStyle="updateClockStyle"></ClockStyle>
   </a-drawer>
 
   <ClockFullScreen
-    @updateBlur="updateBlur"
-    @updateBgZoom="updateBgZoom"
-    v-if="isClockFullScreen"
-    :imgUrl="customData.imgUrl"
-    :clock="customData.clockId"
-    @exit="isClockFullScreen = false"
-    @updateClockStyle="updateClockStyle"
-    @updateImgUrl="updateImgUrl"
-    :blur="customData.blurs"
-    :bgZoom="bgZoom"
+      v-if="isClockFullScreen"
+      :bgZoom="bgZoom"
+      :blur="customData.blurs"
+      :clock="customData.clockId"
+      :imgUrl="customData.imgUrl"
+      @exit="isClockFullScreen = false"
+      @updateBgZoom="updateBgZoom"
+      @updateBlur="updateBlur"
+      @updateClockStyle="updateClockStyle"
+      @updateImgUrl="updateImgUrl"
   >
   </ClockFullScreen>
 </template>
@@ -54,8 +54,8 @@ import ClockStyle from "./clockState/ClockStyle.vue";
 import ClockFullScreen from "./clockState/ClockFullScreen.vue";
 
 import mixin from "./hooks/clockMixin.js";
-import { cardStore } from "../../../store/card.ts";
-import { mapActions } from "pinia";
+import {cardStore} from "../../../store/card.ts";
+import {mapActions} from "pinia";
 
 import cardDrag from "../../card/hooks/cardDrag.vue";
 import cardDragHook from "../../card/hooks/cardDragHook";
@@ -71,7 +71,8 @@ export default {
     },
     customData: {
       type: Object,
-      default: () => {},
+      default: () => {
+      },
     },
     desk: {
       type: Object,
@@ -122,7 +123,8 @@ export default {
     ClockFullScreen,
     cardDrag,
   },
-  created() {},
+  created() {
+  },
   mounted() {
     let setData = {};
     if (!this.customData.clockId) {
@@ -130,7 +132,7 @@ export default {
     }
     if (!this.customData.imgUrl) {
       setData.imgUrl =
-        "https://p.ananas.chaoxing.com/star3/origin/fa7d6f2c69aae528484d8278575c28ef.jpg";
+          "https://p.ananas.chaoxing.com/star3/origin/fa7d6f2c69aae528484d8278575c28ef.jpg";
     }
     if (this.customData.blurs === undefined) {
       setData.blurs = 3;
@@ -150,7 +152,7 @@ export default {
     onReSize(e, i, clock, widthHeightObj) {
       clock = clock ?? this.customData.clockId;
       i = widthHeightObj ?? i;
-      let { width, height } = i;
+      let {width, height} = i;
       this.widthHeightObj = i;
       let zoomRatio = 0;
       let max = width > height ? width : height;
@@ -218,41 +220,41 @@ export default {
     },
     updateBlur(e) {
       this.updateCustomData(
-        this.customIndex,
-        {
-          blurs: e,
-        },
-        this.desk
+          this.customIndex,
+          {
+            blurs: e,
+          },
+          this.desk
       );
       this.blur = e;
     },
     updateBgZoom(e) {
       this.updateCustomData(
-        this.customIndex,
-        {
-          bgZoom: e,
-        },
-        this.desk
+          this.customIndex,
+          {
+            bgZoom: e,
+          },
+          this.desk
       );
       this.bgZoom = e;
     },
     updateClockStyle(e) {
       this.onReSize(0, 0, e, this.widthHeightObj);
       this.updateCustomData(
-        this.customIndex,
-        {
-          clockId: e,
-        },
-        this.desk
+          this.customIndex,
+          {
+            clockId: e,
+          },
+          this.desk
       );
     },
     updateImgUrl(url) {
       this.updateCustomData(
-        this.customIndex,
-        {
-          imgUrl: url,
-        },
-        this.desk
+          this.customIndex,
+          {
+            imgUrl: url,
+          },
+          this.desk
       );
     },
     fullScreen() {

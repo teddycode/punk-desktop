@@ -1,14 +1,14 @@
 <template>
   <div class="revoke">
-    <label v-if="message.flow === 'in'">{{message.nick || message.from}}</label>
-    <label v-else>{{$t('TUIChat.您')}}</label>
-    <span>{{$t("TUIChat.撤回了一条消息")}}</span>
-    <span class="edit pointer" v-if="message.flow === 'out'&&isEdit" @click="edit">{{$t('TUIChat.重新编辑')}}</span>
+    <label v-if="message.flow === 'in'">{{ message.nick || message.from }}</label>
+    <label v-else>{{ $t('TUIChat.您') }}</label>
+    <span>{{ $t("TUIChat.撤回了一条消息") }}</span>
+    <span v-if="message.flow === 'out'&&isEdit" class="edit pointer" @click="edit">{{ $t('TUIChat.重新编辑') }}</span>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, watchEffect, reactive, toRefs } from 'vue';
+import {defineComponent, reactive, toRefs, watchEffect} from 'vue';
 
 export default defineComponent({
   props: {
@@ -21,7 +21,7 @@ export default defineComponent({
       default: () => false,
     },
   },
-  setup(props:any, ctx:any) {
+  setup(props: any, ctx: any) {
     const data = reactive({
       message: {},
       isEdit: false,
@@ -46,12 +46,14 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import url('../../../styles/common.scss');
 @import url('../../../styles/icon.scss');
+
 .revoke {
   display: flex;
   justify-content: center;
   color: #999999;
   width: 100%;
   font-size: 14px;
+
   .edit {
     padding: 0 5px;
     color: #006EFF;

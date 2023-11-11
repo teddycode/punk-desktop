@@ -1,16 +1,16 @@
 <template>
-  <xt-left-menu :list="isFloat" :index="index" last="3" end="2">
+  <xt-left-menu :index="index" :list="isFloat" end="2" last="3">
 
     <div class="w-full">
-      <router-view ></router-view>
+      <router-view></router-view>
     </div>
 
     <template #communityFloat>
       <!-- {{ communityNo }} -->
-      <div class="flex flex-col" style="height:500px;width:300px;" v-if="communityNo !== 1">
+      <div v-if="communityNo !== 1" class="flex flex-col" style="height:500px;width:300px;">
         <CategoryFloat :communityID="{no:communityNo}" :float="true"></CategoryFloat>
       </div>
-      <div class="flex flex-col" style="height:500px;width:300px;" v-else>
+      <div v-else class="flex flex-col" style="height:500px;width:300px;">
         <DefaultFloat :float="true"></DefaultFloat>
       </div>
 
@@ -21,8 +21,8 @@
   <teleport to='body'>
     <Modal v-if="open" v-model:visible="open" :blurFlag="true">
       <AddFriend v-if="addIndex === 'launch'" @close="open = false"></AddFriend>
-      <CreateGroup v-if="addIndex === 'addGroup'" @close="open = false" :isH5="env.isH5"/>
-      <Transfer v-if="addIndex === 'addFriend'" @close="open = false" :isH5="env.isH5"></Transfer>
+      <CreateGroup v-if="addIndex === 'addGroup'" :isH5="env.isH5" @close="open = false"/>
+      <Transfer v-if="addIndex === 'addFriend'" :isH5="env.isH5" @close="open = false"></Transfer>
       <CreateCommunity v-if="addIndex === 'createCom'" @close="open = false"></CreateCommunity>
       <JoinCommunity v-if="addIndex === 'joinCom'" @close="open = false"></JoinCommunity>
     </Modal>
@@ -31,13 +31,11 @@
 </template>
 
 <script>
-import { defineComponent, reactive, toRefs, onMounted, ref, computed } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
-import { TUIEnv } from '../../TUIKit/TUIPlugin'
+import {computed, reactive, ref, toRefs} from 'vue'
+import {useRoute, useRouter} from 'vue-router'
 import Drag from '../../TUIKit/TUIComponents/components/drag'
 import TUIContact from '../../TUIKit/TUIComponents/container/TUIContact/index.vue'
 import SecondPanel from '../../components/SecondPanel.vue'
-import { message } from 'ant-design-vue'
 // import Commun from './Commun.vue'
 import ChatFind from './page/chatFind.vue'
 import ChatMain from './page/chatMain.vue'
@@ -47,20 +45,19 @@ import AddFriend from '../../TUIKit/TUIComponents/components/transfer/addFriend.
 import CreateGroup from '../../TUIKit/TUIComponents/container/TUISearch/components/createGroup/index.vue'
 import Transfer from '../../TUIKit/TUIComponents/components/transfer/index.vue'
 import CreateCommunity from './components/CreateCommunitys.vue'
-import _ from 'lodash-es'
 import config from './config'
-import { appStore } from '../../store'
-import { storeToRefs } from 'pinia'
-import { chatList } from '../../js/data/chatList'
+import {appStore} from '../../store'
+import {storeToRefs} from 'pinia'
+import {chatList} from '../../js/data/chatList'
 import ChatDropDown from './components/float/ChatsDropDown.vue'
 import ChatFold from './components/float/ChatFolds.vue'
 import JoinCommunity from './components/JoinCommunity.vue'
-import { AppstoreOutlined, MessageOutlined, LinkOutlined } from '@ant-design/icons-vue'
-import { communityStore } from './store/communityStore'
-import { localCache } from '../../js/axios/serverCache'
+import {AppstoreOutlined, LinkOutlined, MessageOutlined} from '@ant-design/icons-vue'
+import {communityStore} from './store/communityStore'
+import {localCache} from '../../js/axios/serverCache'
 import MyCommunity from './page/communityDetail.vue'
-import { Icon as chatIcon } from '@iconify/vue'
-import { chatStore } from '../../store/chat'
+import {Icon as chatIcon} from '@iconify/vue'
+import {chatStore} from '../../store/chat'
 import CategoryFloat from './components/float/CategorysFloat.vue'
 import DefaultFloat from './components/float/DefaultsFloat.vue'
 
@@ -77,22 +74,22 @@ export default {
     AddFriend, CreateGroup,
     Transfer,
     ChatDropDown, ChatFold,
-    CreateCommunity, JoinCommunity, MyCommunity,CategoryFloat,DefaultFloat,
+    CreateCommunity, JoinCommunity, MyCommunity, CategoryFloat, DefaultFloat,
   },
 
-  setup () {
+  setup() {
     const myCom = communityStore()
     const router = useRouter()
     const route = useRoute()
     const TUIServer = window.$TUIKit
     const Server = window.$chat
-    const chat  = chatStore()
-    const { settings }=  storeToRefs(chat)
+    const chat = chatStore()
+    const {settings} = storeToRefs(chat)
     const data = reactive({
       index: 'chat',
       // type:'chat',
       addIndex: '',
-      communityNo:'',
+      communityNo: '',
       open: false,
       env: TUIServer.TUIEnv,
       needSearch: !TUIServer.isOfficial,
@@ -112,9 +109,9 @@ export default {
     const selectTab = async (item) => {
       data.index = item.type
 
-      if(item.route.params.no !== 1){
+      if (item.route.params.no !== 1) {
         await myCom.getCategoryData(item.route.params.no)
-      }else{
+      } else {
         await myCom.getCategoryData('')
       }
 
@@ -144,8 +141,8 @@ export default {
 
     const appS = appStore()
 
-    const { userInfo } = appS
-    const { communityList } = myCom
+    const {userInfo} = appS
+    const {communityList} = myCom
 
     const menuCommunityList = []
     // 遍历将社群进行UI层数据替换
@@ -156,13 +153,13 @@ export default {
           img: communityList[i].communityInfo.icon,
           type: `community${communityList[i].cno}`,
           float: "",
-          tab:'community_'+ communityList[i].communityInfo.no,
+          tab: 'community_' + communityList[i].communityInfo.no,
           noBg: true,
-          callBack:(item)=>{
+          callBack: (item) => {
             selectTab(item)
             data.communityNo = communityList[i].communityInfo.no
-          } ,
-          route:{ name:'myCommunity',params:{no: communityList[i].communityInfo.no}},
+          },
+          route: {name: 'myCommunity', params: {no: communityList[i].communityInfo.no}},
         }
         menuCommunityList.push(item)
       } else {
@@ -181,51 +178,50 @@ export default {
     })
 
 
-
     const chatLeftList = ref([
       {
         // icon: 'message',
-        newIcon:'fluent:chat-16-regular',
+        newIcon: 'fluent:chat-16-regular',
         tab: 'session',
         route: {
           name: 'chatMain',
-          params:{no:'',info:JSON.stringify('')}
+          params: {no: '', info: JSON.stringify('')}
         },
         callBack: selectTab,
       },
       {
         // icon: 'team',
         tab: 'contact',
-        newIcon:'fluent:people-16-regular',
+        newIcon: 'fluent:people-16-regular',
         callBack: selectTab,
         route: {
           name: 'contact',
-          params:{no:'',info:JSON.stringify('')}
+          params: {no: '', info: JSON.stringify('')}
         }
       },
       ...(config.adminUids.includes(userInfo.uid) ? [
         {
           icon: 'diannao',
           type: 'admin',
-          tab:'admin',
+          tab: 'admin',
           title: '管理面板(仅管理员可见)',
           callBack: selectTab,
           route: {
             name: 'chatAdmin',
-            params:{no:'',info:JSON.stringify('')}
+            params: {no: '', info: JSON.stringify('')}
           }
         }
       ] : []),
 
       {
         // icon: 'zhinanzhen',
-        newIcon:'eva:compass-outline',
+        newIcon: 'eva:compass-outline',
         type: 'find',
-        tab:'find',
+        tab: 'find',
         callBack: selectTab,
         route: {
           name: 'chatFind',
-          params:{no:'',info:JSON.stringify('')}
+          params: {no: '', info: JSON.stringify('')}
         }
       },
       // 写社群相关静态内容时临时打开的路由
@@ -236,20 +232,20 @@ export default {
         float: "",
         // chat.settings.enableHide ? "communityFloat" :
         noBg: true,
-        callBack: (item)=>{
+        callBack: (item) => {
           selectTab(item)
-          data.communityNo=1
+          data.communityNo = 1
         },
-        tab:'community',
+        tab: 'community',
         route: {
-          name: 'defaultCommunity',params:{no:1}
+          name: 'defaultCommunity', params: {no: 1}
         }
       },
 
       ...menuCommunityList,
 
       {
-        newIcon:'fluent:add-16-filled',
+        newIcon: 'fluent:add-16-filled',
         icon: 'tianjia2',
         callBack: openAddCom,
       },
@@ -257,33 +253,33 @@ export default {
         full: true,
       },
       {
-        newIcon:'fluent:add-16-filled',
+        newIcon: 'fluent:add-16-filled',
         icon: 'tianjia2',
         children: [
           {
             icon: 'message',
-            newIcon:'fluent:chat-16-regular',
+            newIcon: 'fluent:chat-16-regular',
             name: '发起群聊',
             index: 'launch',
             callBack: selectDorpTab
           },
           {
             icon: 'team',
-            newIcon:'fluent:people-16-regular',
+            newIcon: 'fluent:people-16-regular',
             name: '加入群聊',
             index: 'addGroup',
             callBack: selectDorpTab
           },
           {
             icon: 'tianjiachengyuan',
-            newIcon:'fluent:people-add-16-regular',
+            newIcon: 'fluent:people-add-16-regular',
             name: '添加好友',
             index: 'addFriend',
             callBack: selectDorpTab
           },
           {
             icon: 'smile',
-            newIcon:'fluent:emoji-smile-slight-24-regular',
+            newIcon: 'fluent:emoji-smile-slight-24-regular',
             name: '创建社群',
             index: 'createCom',
             callBack: selectDorpTab
@@ -291,7 +287,7 @@ export default {
           {
             icon: 'team',
             name: '加入社群',
-            newIcon:'fluent:people-16-regular',
+            newIcon: 'fluent:people-16-regular',
             index: 'joinCom',
             callBack: addCom,
           }
@@ -300,16 +296,16 @@ export default {
     ])
 
     // 判断是否展开悬浮模式
-    const isFloat = computed(()=>{
+    const isFloat = computed(() => {
       // console.log('排查条件',chat.settings.enableHide)
       // return
-      if(settings.value.enableHide){
-        const mapList = chatLeftList.value.map((item)=>{
-          return {...item,float:item.float === '' ? "communityFloat" : ''}
+      if (settings.value.enableHide) {
+        const mapList = chatLeftList.value.map((item) => {
+          return {...item, float: item.float === '' ? "communityFloat" : ''}
         })
         // console.log('测试::>>',mapList)
         return mapList
-      }else{
+      } else {
         return chatLeftList.value
       }
     });
@@ -319,7 +315,7 @@ export default {
     // })
 
     return {
-      chatLeftList,  route, router, newArr: menuCommunityList, currentCom,isFloat,
+      chatLeftList, route, router, newArr: menuCommunityList, currentCom, isFloat,
       ...toRefs(data),
     }
   }

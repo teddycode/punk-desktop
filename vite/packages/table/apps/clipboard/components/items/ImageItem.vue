@@ -10,7 +10,7 @@ import {EditOutlined} from '@ant-design/icons-vue'
 
 export default {
   props: ['clipItem'],
-  components: {XtButton, textCodeMirror, ClipCodemirror, ClipItemWidget,EditOutlined},
+  components: {XtButton, textCodeMirror, ClipCodemirror, ClipItemWidget, EditOutlined},
   computed: {
     ...mapWritableState(clipboardStore, ['settings']),
     textDisplayTypes() {
@@ -24,11 +24,11 @@ export default {
       return this.textType
     },
   },
-  watch :{
-    'settings.codeHighlight':{
-      handler(){
+  watch: {
+    'settings.codeHighlight': {
+      handler() {
         this.textType.reverse()
-        this.textDisplayTypes=this.textType[0]
+        this.textDisplayTypes = this.textType[0]
       }
     }
   },
@@ -60,21 +60,21 @@ export default {
         this.tab = ''
       }
     },
-    editImage(){
-      this.$emit('previewItem',{
-        item:this.clipItem,
-        action:'editImage'
+    editImage() {
+      this.$emit('previewItem', {
+        item: this.clipItem,
+        action: 'editImage'
       })
     },
-    handleImage(){
-      const args={
-        type:'image',
-        args:{
-          'filePath':this.clipItem.path
+    handleImage() {
+      const args = {
+        type: 'image',
+        args: {
+          'filePath': this.clipItem.path
         }
       }
-      ipc.send('handleFileAssign',args)
-      console.log('发送handle',args)
+      ipc.send('handleFileAssign', args)
+      console.log('发送handle', args)
     },
     // 文本底部tab切换
     selectItem(item) {
@@ -99,8 +99,8 @@ export default {
     switchTab(tab) {
       this.$refs.widget.switchTab('item')
     },
-    previewItem(){
-      this.$emit('previewItem', {item:this.clipItem})
+    previewItem() {
+      this.$emit('previewItem', {item: this.clipItem})
     }
 
   }
@@ -110,19 +110,24 @@ export default {
 </script>
 
 <template>
-  <ClipItemWidget @previewItem="previewItem" ref="widget" @tabChanged="tabChanged" :menu-list="menuList" :clipItem="clipItem">
+  <ClipItemWidget ref="widget" :clipItem="clipItem" :menu-list="menuList" @previewItem="previewItem"
+                  @tabChanged="tabChanged">
     <template #body>
       <!-- 纯文本情况下 -->
-      <img  @click="previewItem"   :src="clipItem.path" alt="" class=" w-full h-full pointer  object-cover">
+      <img :src="clipItem.path" alt="" class=" w-full h-full pointer  object-cover" @click="previewItem">
     </template>
     <template #footer>
       <div class="p-1 w-full">
-        <div class="flex items-center justify-center" style="gap:20px" >
+        <div class="flex items-center justify-center" style="gap:20px">
           <a-tooltip title="直接编辑">
-            <xt-button type="theme" size="mini" :w="40" :h="32" @click="editImage"> <EditOutlined></EditOutlined></xt-button>
+            <xt-button :h="32" :w="40" size="mini" type="theme" @click="editImage">
+              <EditOutlined></EditOutlined>
+            </xt-button>
           </a-tooltip>
           <a-tooltip title="图片编辑器轻应用">
-            <xt-button size="mini" :w="40" :h="32" @click="handleImage">  <a-avatar  src="https://a.apps.vip/imageEditor/icon.svg"></a-avatar></xt-button>
+            <xt-button :h="32" :w="40" size="mini" @click="handleImage">
+              <a-avatar src="https://a.apps.vip/imageEditor/icon.svg"></a-avatar>
+            </xt-button>
           </a-tooltip>
         </div>
       </div>
@@ -133,7 +138,7 @@ export default {
   </ClipItemWidget>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 // 切换状态
 .s-active {
   background: var(--active-bg);

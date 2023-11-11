@@ -2,63 +2,63 @@
 <template>
   <!-- 图标组件开始 -->
   <Widget
-    :customData="customData"
-    :editing="true"
-    :customIndex="customIndex"
-    :options="options"
-    :menuList="menuList"
-    ref="homelSlotRef"
-    :desk="desk"
+      ref="homelSlotRef"
+      :customData="customData"
+      :customIndex="customIndex"
+      :desk="desk"
+      :editing="true"
+      :menuList="menuList"
+      :options="options"
   >
     <div
-      ref="iconRef"
-      class="icon-box box-border"
-      :style="dragStyle"
+        ref="iconRef"
+        :style="dragStyle"
+        class="icon-box box-border"
     >
-    <!-- @contextmenu.stop="handleMenu()" -->
+      <!-- @contextmenu.stop="handleMenu()" -->
       <!-- 可放置区域 -->
       <droppable-area @drop="handleDrop">
         <xt-task :modelValue="m0202" @cb="handleMenu">
           <drag-and-follow
-            :isSelect="isSelect"
-            :length="this.iconsRefs.length"
-            @drag-end="handleDragEnd"
-            @drag-start="handleDragStart"
+              :isSelect="isSelect"
+              :length="this.iconsRefs.length"
+              @drag-end="handleDragEnd"
+              @drag-start="handleDragStart"
           >
             <!-- 多图标组件 -->
             <template
-              v-if="
+                v-if="
                 customData.iconList !== undefined &&
                 customData.iconList.length > 1
               "
             >
               <div>
                 <icons
-                  v-model:width="customData.size.w"
-                  v-model:height="customData.size.h"
-                  :groupTitle="customData.groupTitle"
-                  :iconList="customData.iconList"
-                  :zoom="customData.zoom"
-                  @custom-event="handleCustomEvent"
-                  @disbandGroup="disbandGroup"
-                  @updateGroupTitle="updateGroupTitle"
-                  @deleteIcons="deleteIcons"
-                  @editIcons="editIcons"
-                  @dragAddIcon="dragAddIcon"
-                  @iconsRightClick="handleMenu()"
+                    v-model:height="customData.size.h"
+                    v-model:width="customData.size.w"
+                    :groupTitle="customData.groupTitle"
+                    :iconList="customData.iconList"
+                    :zoom="customData.zoom"
+                    @deleteIcons="deleteIcons"
+                    @disbandGroup="disbandGroup"
+                    @dragAddIcon="dragAddIcon"
+                    @editIcons="editIcons"
+                    @iconsRightClick="handleMenu()"
+                    @updateGroupTitle="updateGroupTitle"
+                    @custom-event="handleCustomEvent"
                 ></icons>
               </div>
             </template>
             <!-- 单图标组件 -->
             <template
-              v-else-if="
+                v-else-if="
                 customData.iconList !== undefined &&
                 customData.iconList.length > 0
               "
             >
               <icon
-                v-bind="customData.iconList[0]"
-                @custom-event="handleCustomEvent"
+                  v-bind="customData.iconList[0]"
+                  @custom-event="handleCustomEvent"
               ></icon>
             </template>
           </drag-and-follow>
@@ -77,7 +77,7 @@
     <div class="xt-bg-2 p-4 rounded-xl">
       <div class="flex justify-between mb-2">
         <div>放大模式</div>
-        <a-switch v-model:checked="customData.zoom.state" />
+        <a-switch v-model:checked="customData.zoom.state"/>
       </div>
       <div class="xt-text-2 text-sm">
         该模式下可以自由拖动文件夹大小，直接点击打开文件夹内的应用或连接。
@@ -87,9 +87,9 @@
   <!-- 底部导航 -->
   <XtDrawer v-model="menuVisible">
     <BottomEdit
-      :menuList="menuList"
-      :copy="customData.copy"
-      :merge="customData.merge"
+        :copy="customData.copy"
+        :menuList="menuList"
+        :merge="customData.merge"
     ></BottomEdit>
   </XtDrawer>
 </template>
@@ -103,14 +103,14 @@ import DragAndFollow from "./components/DragAndFollow.vue";
 import DroppableArea from "./components/DroppableArea.vue";
 import BottomEdit from "./components/bottomEdit.vue";
 // pinia
-import { mapActions, mapWritableState } from "pinia";
-import { cardStore } from "../../../store/card.ts";
-import { taskStore } from "../../../apps/task/store";
+import {mapActions, mapWritableState} from "pinia";
+import {cardStore} from "../../../store/card.ts";
+import {taskStore} from "../../../apps/task/store";
 
-import { myIcons } from "../../../store/myIcons.ts";
+import {myIcons} from "../../../store/myIcons.ts";
 
-import { message } from "ant-design-vue";
-import _ from "lodash-es";
+import {message} from "ant-design-vue";
+
 export default {
   props: {
     customIndex: {
@@ -119,7 +119,8 @@ export default {
     },
     customData: {
       type: Object,
-      default: () => {},
+      default: () => {
+      },
     },
     desk: {
       type: Object,
@@ -143,7 +144,7 @@ export default {
       isSelect: false,
       settingVisible: false, // 编辑状态
       iconsSetVisible: false,
-      options: { hide: true }, // 卡片核心配置
+      options: {hide: true}, // 卡片核心配置
     };
   },
   beforeMount() {
@@ -199,16 +200,16 @@ export default {
     ...mapWritableState(taskStore, ["taskID", "step"]),
     m02021() {
       return (
-        this.customData.copy === true &&
-        this.step == 1 &&
-        this.taskID == "M0202"
+          this.customData.copy === true &&
+          this.step == 1 &&
+          this.taskID == "M0202"
       );
     },
     m02023() {
       return (
-        this.customData.merge === true &&
-        this.step == 3 &&
-        this.taskID == "M0202"
+          this.customData.merge === true &&
+          this.step == 3 &&
+          this.taskID == "M0202"
       );
     },
     m0202() {
@@ -271,8 +272,8 @@ export default {
         });
       }
       if (
-        this.customData.iconList !== undefined &&
-        this.customData.iconList.length > 1
+          this.customData.iconList !== undefined &&
+          this.customData.iconList.length > 1
       ) {
         menus.unshift({
           icon: "zhankai",
@@ -317,7 +318,8 @@ export default {
       this.settingVisible = true;
     },
     // 开启框选
-    dragSelection() {},
+    dragSelection() {
+    },
     // ctrl + 点击
     handleCustomEvent(event) {
       this.iconSelect = true;
@@ -326,7 +328,7 @@ export default {
         this.moveIcon();
       } else {
         for (let i = 0; i < this.iconList.length; i++) {
-          const { iconIndex } = this.iconList[i];
+          const {iconIndex} = this.iconList[i];
           if (iconIndex === this.customIndex) {
             this.iconList.splice(i, 1);
           }
@@ -388,12 +390,12 @@ export default {
     // 添加单图标组件
     addIcon(icon) {
       this.addCard(
-        {
-          name: "myIcons",
-          id: Date.now(),
-          customData: { iconList: [{ ...icon }] },
-        },
-        this.desk
+          {
+            name: "myIcons",
+            id: Date.now(),
+            customData: {iconList: [{...icon}]},
+          },
+          this.desk
       );
     },
     // 解除多图标分组
@@ -416,7 +418,7 @@ export default {
       let state = false; // 初始化状态
       // 遍历全局数据并拦截重复的数据
       this.iconList.forEach((item) => {
-        const { iconIndex } = item;
+        const {iconIndex} = item;
         if (iconIndex === this.customIndex) state = true;
       });
       if (state) {
@@ -441,13 +443,13 @@ export default {
       //   return message.error("你还未移动任何图标组件");
       // 遍历全局数组并添加
       this.iconList.forEach((item) => {
-        const { iconRef, iconIndex, ...icon } = item;
+        const {iconRef, iconIndex, ...icon} = item;
         // 拦截重复的数据
         if (iconIndex !== undefined && iconIndex === this.customIndex) {
           this.iconState = false; // 关闭该图标状态 本次拖拽锁住无法添加
           return;
         }
-        this.customData.iconList.push({ ...icon });
+        this.customData.iconList.push({...icon});
       });
       // 遍历图标组件进行删除
       this.iconsRefs.forEach((item) => {
@@ -484,7 +486,7 @@ export default {
     save() {
       if (this.edit.src.length === 0) return message.error("图标不能为空");
       Object.keys(this.edit).forEach(
-        (k) => (this.customData.iconList[this.index][k] = this.edit[k])
+          (k) => (this.customData.iconList[this.index][k] = this.edit[k])
       );
       message.success("保存成功");
       this.settingVisible = false;

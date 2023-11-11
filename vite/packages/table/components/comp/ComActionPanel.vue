@@ -1,7 +1,7 @@
 <template>
   <h3 style="margin-bottom: 1em;color:var(--primary-text)">我的社区</h3>
   <div>
-    <a-row class="com-actions" :gutter="[20,20]">
+    <a-row :gutter="[20,20]" class="com-actions">
       <a-col :span="8">
         <div @click="openUpdateMyInfo">
           <Emoji icon="edit"></Emoji>
@@ -42,39 +42,40 @@
       </a-col>
     </a-row>
   </div>
-  <UpdateMyInfo @infoUpdated="infoUpdated" ref="myInfoRef"></UpdateMyInfo>
+  <UpdateMyInfo ref="myInfoRef" @infoUpdated="infoUpdated"></UpdateMyInfo>
 </template>
 
 <script>
-import {IdcardFilled,GoldFilled,BellFilled,ApiFilled,LockFilled,ScheduleFilled} from '@ant-design/icons-vue'
+import {ApiFilled, BellFilled, GoldFilled, IdcardFilled, LockFilled, ScheduleFilled} from '@ant-design/icons-vue'
 import browser from '../../js/common/browser'
 import UpdateMyInfo from './UpdateMyInfo.vue'
 import Emoji from './Emoji.vue'
+
 export default {
   name: 'ComActionPanel',
-  components:{
+  components: {
     Emoji,
-    IdcardFilled,GoldFilled,BellFilled,ApiFilled,LockFilled,ScheduleFilled,
+    IdcardFilled, GoldFilled, BellFilled, ApiFilled, LockFilled, ScheduleFilled,
     UpdateMyInfo
   },
-  methods:{
-    openUpdateMyInfo(){
+  methods: {
+    openUpdateMyInfo() {
       this.$refs.myInfoRef.openMyInfo()
     },
-    edit(){
+    edit() {
       browser.openInInner("https://s.apps.vip/user/info")
     },
-    go(url){
+    go(url) {
       browser.openInInner(url)
     },
-    infoUpdated(){
+    infoUpdated() {
       this.$emit('infoUpdated')
     }
   }
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .com-actions {
   & > div {
     cursor: pointer;

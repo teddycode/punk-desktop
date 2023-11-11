@@ -1,17 +1,17 @@
 <template>
   <div>
     <Widget
-      :desk="desk"
-      :sizeList="sizeList"
-      :options="options"
-      :customIndex="customIndex"
-      ref="cardSlot"
-      :customData="customData"
+        ref="cardSlot"
+        :customData="customData"
+        :customIndex="customIndex"
+        :desk="desk"
+        :options="options"
+        :sizeList="sizeList"
     >
       <template #left-title>
         <div
-          class="icon"
-          style="
+            class="icon"
+            style="
             width: 38px;
             height: 24px;
             display: flex;
@@ -21,31 +21,31 @@
             left: 2px;
           "
         >
-          <RobotOutlined style="font-size: 20px" />
+          <RobotOutlined style="font-size: 20px"/>
         </div>
       </template>
       <div class="content">
         <!-- {{ recentList.slice(0,4).length }} -->
         <div class="input xt-bg" style="position: relative">
           <a-input
-            placeholder="问我任何问题"
-            :bordered="false"
-            v-model:value="inputValue"
-            @keyup.enter="enterMsg"
+              v-model:value="inputValue"
+              :bordered="false"
+              placeholder="问我任何问题"
+              @keyup.enter="enterMsg"
           />
           <SendOutlined
-            style="
+              style="
               position: absolute;
               font-size: 22px;
               right: 16px;
               color: var(--primary-text);
             "
-            @click="enterMsg"
+              @click="enterMsg"
           />
         </div>
         <div
-          class="ai-con"
-          style="
+            class="ai-con"
+            style="
             display: flex;
             text-align: left;
             margin-top: 14px;
@@ -59,15 +59,15 @@
           <div v-for="index in copyNum">
             <div class="ai-msg xt-bg-2" @click="goPage(index - 1)">
               <xt-base-icon
-                class="msg-icon"
-                :icon="recentList[index - 1]?.icon.name || 'message'"
+                  :icon="recentList[index - 1]?.icon.name || 'message'"
+                  class="msg-icon"
               ></xt-base-icon>
               <div
-                class="msg-title"
-                :style="{
+                  :style="{
                   height: copyNum !== 1 ? '56px' : '48px',
                   lineHeight: copyNum !== 1 ? '56px' : '48px',
                 }"
+                  class="msg-title"
               >
                 {{ recentList[index - 1]?.name }}
               </div>
@@ -77,11 +77,11 @@
         <template v-else>
           <div v-if="copyNum == 1">暂无数据</div>
           <DataStatu
-            v-else
-            imgDisplay="/img/test/load-ail.png"
-            :btnToggle="false"
-            textPrompt="暂无数据"
-            style="margin-top: 200px"
+              v-else
+              :btnToggle="false"
+              imgDisplay="/img/test/load-ail.png"
+              style="margin-top: 200px"
+              textPrompt="暂无数据"
           ></DataStatu>
         </template>
       </div>
@@ -91,14 +91,11 @@
 
 <script>
 import Widget from "../card/Widget.vue";
-import {
-  MessageOutlined,
-  SendOutlined,
-  RobotOutlined,
-} from "@ant-design/icons-vue";
+import {MessageOutlined, RobotOutlined, SendOutlined,} from "@ant-design/icons-vue";
 import DataStatu from "./DataStatu.vue";
-import { aiStore } from "../../store/ai";
-import { mapWritableState } from "pinia";
+import {aiStore} from "../../store/ai";
+import {mapWritableState} from "pinia";
+
 export default {
   name: "AIaides",
   components: {
@@ -115,7 +112,8 @@ export default {
     },
     customData: {
       type: Object,
-      default: () => {},
+      default: () => {
+      },
     },
     desk: {
       type: Object,
@@ -124,8 +122,8 @@ export default {
   data() {
     return {
       sizeList: [
-        { title: "2x2", height: 1, width: 1, name: "2x2" },
-        { title: "2x4", height: 2, width: 1, name: "2x4" },
+        {title: "2x2", height: 1, width: 1, name: "2x2"},
+        {title: "2x4", height: 2, width: 1, name: "2x4"},
       ],
       options: {
         className: "card small ",
@@ -145,14 +143,14 @@ export default {
         return;
       }
 
-      this.$router.push({ name: "ai", params: { value: this.inputValue } });
+      this.$router.push({name: "ai", params: {value: this.inputValue}});
       this.inputValue = "";
     },
     // 跳转至具体会话
     goPage(index) {
       console.log(index);
       this.selectTopicIndex = this.recentList[index].id;
-      this.$router.push({ name: "ai" });
+      this.$router.push({name: "ai"});
     },
   },
   computed: {
@@ -160,7 +158,7 @@ export default {
     // 判断尺寸大小
     showSize() {
       if (this.customData && this.customData.width && this.customData.height) {
-        return { width: this.customData.width, height: this.customData.height };
+        return {width: this.customData.width, height: this.customData.height};
       }
       return this.sizeList[0];
     },
@@ -194,6 +192,7 @@ export default {
       height: 40px;
       width: 100%;
       padding-left: 16px;
+
       &::placeholder {
 
         font-size: 14px;
@@ -202,12 +201,14 @@ export default {
       }
     }
   }
+
   .ai-con {
 
     font-size: 16px;
     font-weight: 400;
     // margin-top: -5px;
   }
+
   .ai-msg {
     width: 252px;
     // height: 48px;
@@ -218,12 +219,14 @@ export default {
     // margin-top: 1.7%;
     margin-bottom: 12px;
     cursor: pointer;
+
     .msg-icon {
       font-size: 18px;
       margin-left: 17.25px;
       margin-right: 13.25px;
       flex-shrink: 0;
     }
+
     .msg-title {
 
       font-size: 16px;

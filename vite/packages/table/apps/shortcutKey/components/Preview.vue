@@ -1,6 +1,6 @@
 <template>
   <!-- 预览 -->
-  <div class="prompt-modal xt-mask" v-show="showModal">
+  <div v-show="showModal" class="prompt-modal xt-mask">
     <div class="head-icon">
       <div class="icon" @click="close">
         <Icon icon="guanbi" style="width: 24px;height: 24px;"></Icon>
@@ -10,56 +10,59 @@
       </div>
     </div>
     <div style="width:98%;height:80%;">
-      <ShortcutKeyList :keyList="keyScheme.keyList" :keyBoxStyle="{background:'var(--primary-bg)'}"></ShortcutKeyList>
+      <ShortcutKeyList :keyBoxStyle="{background:'var(--primary-bg)'}" :keyList="keyScheme.keyList"></ShortcutKeyList>
     </div>
     <div class="foot">
-      <xt-button class="mr-5" :w="140">{{ keyScheme.number }} 个快捷键</xt-button>      <xt-button @click="importScheme" type="theme" :w="140">下载方案</xt-button>
+      <xt-button :w="140" class="mr-5">{{ keyScheme.number }} 个快捷键</xt-button>
+      <xt-button :w="140" type="theme" @click="importScheme">下载方案</xt-button>
     </div>
   </div>
   <!-- 预览添加抽屉 -->
-  <a-drawer v-model:visible="openDrawer" style="z-index:9999;" width="320" placement="right">
+  <a-drawer v-model:visible="openDrawer" placement="right" style="z-index:9999;" width="320">
     <template #closeIcon>
       <Icon icon="xiangyou"></Icon>
     </template>
-     <template #extra v-if="!keyScheme.isMyCreate">
+    <template v-if="!keyScheme.isMyCreate" #extra>
       <a-space>
         <div class="add-scheme" @click="addPlan(keyScheme)">立即添加</div>
       </a-space>
     </template>
     <div class="drawer-center">
       <span class="h-14 w-14 flex justify-center items-center">
-        <a-avatar shape="square" :src="keyScheme.icon" :size="48"></a-avatar>
+        <a-avatar :size="48" :src="keyScheme.icon" shape="square"></a-avatar>
       </span>
-      <span class="mt-4" style="font-size: 18px;color: var(--primary-text);font-weight: 500;">{{ keyScheme.name }}</span>
+      <span class="mt-4" style="font-size: 18px;color: var(--primary-text);font-weight: 500;">{{
+          keyScheme.name
+        }}</span>
       <span class="mt-1" style="font-size: 16px;color: var(--secondary-text);">{{ keyScheme.commonUse }}</span>
-<!--      <span class="flex items-center my-4">-->
-<!--        <div>-->
-<!--          <a-avatar size="24">-->
-<!--              <template #icon><UserOutlined /></template>-->
-<!--          </a-avatar>-->
-<!--        </div>-->
-<!--        <span class="ml-3" style="color: var(&#45;&#45;secondary-text);">{{ keyScheme.nickName }}</span>-->
-<!--      </span>-->
-<!--      <span style="color: var(&#45;&#45;secondary-text);">-->
-<!--        <span>-->
-<!--          <Icon icon="dianzan" class="mr-2"></Icon>-->
-<!--          <span>{{ keyScheme.sumLikes }}</span>-->
-<!--        </span>-->
-<!--        <span class="ml-3">-->
-<!--          <Icon icon="xiazai" class="mr-2"></Icon>-->
-<!--          <span>{{ keyScheme.download }}</span>-->
-<!--        </span>-->
-<!--      </span>-->
+      <!--      <span class="flex items-center my-4">-->
+      <!--        <div>-->
+      <!--          <a-avatar size="24">-->
+      <!--              <template #icon><UserOutlined /></template>-->
+      <!--          </a-avatar>-->
+      <!--        </div>-->
+      <!--        <span class="ml-3" style="color: var(&#45;&#45;secondary-text);">{{ keyScheme.nickName }}</span>-->
+      <!--      </span>-->
+      <!--      <span style="color: var(&#45;&#45;secondary-text);">-->
+      <!--        <span>-->
+      <!--          <Icon icon="dianzan" class="mr-2"></Icon>-->
+      <!--          <span>{{ keyScheme.sumLikes }}</span>-->
+      <!--        </span>-->
+      <!--        <span class="ml-3">-->
+      <!--          <Icon icon="xiazai" class="mr-2"></Icon>-->
+      <!--          <span>{{ keyScheme.download }}</span>-->
+      <!--        </span>-->
+      <!--      </span>-->
     </div>
   </a-drawer>
 </template>
 
 <script>
 import ShortcutKeyList from '../shortcutKey/ShortcutKeyList.vue';
-import { message } from 'ant-design-vue';
-import { mapActions, mapWritableState } from "pinia";
-import { keyStore } from '../store'
-import { appStore } from '../../../store';
+import {message} from 'ant-design-vue';
+import {mapActions} from "pinia";
+import {keyStore} from '../store'
+
 export default {
   name: "Preview",
   components: {
@@ -87,24 +90,21 @@ export default {
       default: () => false
     }
   },
-  computed: {
-  },
-  watch: {
-
-  },
+  computed: {},
+  watch: {},
   methods: {
-    ...mapActions(keyStore,['setShortcutKeyList','import']),
-    addPlan(keyScheme){
+    ...mapActions(keyStore, ['setShortcutKeyList', 'import']),
+    addPlan(keyScheme) {
       this.setShortcutKeyList(keyScheme)
       message.success('添加成功');
       this.openDrawer = false
-      this.$emit('closePreview',false)
+      this.$emit('closePreview', false)
     },
-    close(){
-      this.$emit('closePreview',false)
+    close() {
+      this.$emit('closePreview', false)
       this.fullScreen = false
     },
-    async importScheme () {
+    async importScheme() {
       if (await this.import([this.keyScheme])) {
         message.success('下载方案成功。')
         this.close()
@@ -117,57 +117,62 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .prompt-modal{
-      position: absolute;
-      top:0;
-      bottom:0;
-      right:0;
-      left:0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 12px;
-      z-index: 99;
-      .head-icon{
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        height: 10%;
-        .icon{
-          background: var(--secondary-bg);
-          color: var(--primary-text);
-          border-radius: 12px;
-          width: 48px;
-          height: 48px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          cursor: pointer;
-        }
-      }
-      .foot{
-        display: flex;
-        justify-items: center;
-        align-items: end;
-      }
-    }
-    .add-scheme{
-      background: var(--active-bg);
-      font-size: 16px;
+.prompt-modal {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  z-index: 99;
+
+  .head-icon {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    height: 10%;
+
+    .icon {
+      background: var(--secondary-bg);
       color: var(--primary-text);
       border-radius: 12px;
-      width: 128px;
+      width: 48px;
       height: 48px;
       display: flex;
       justify-content: center;
       align-items: center;
+      cursor: pointer;
     }
-    .drawer-center{
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-top: 30%;
-    }
+  }
+
+  .foot {
+    display: flex;
+    justify-items: center;
+    align-items: end;
+  }
+}
+
+.add-scheme {
+  background: var(--active-bg);
+  font-size: 16px;
+  color: var(--primary-text);
+  border-radius: 12px;
+  width: 128px;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.drawer-center {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 30%;
+}
 </style>

@@ -1,33 +1,34 @@
 <script lang="ts">
 import KeyInput from "./KeyInput.vue";
 import {message} from "ant-design-vue";
-import {taskStore}from "../../apps/task/store"
-import { mapWritableState } from "pinia";
+import {taskStore} from "../../apps/task/store"
+import {mapWritableState} from "pinia";
+
 export default {
   name: "KeySetting",
   components: {KeyInput},
   data() {
     return {
-      keys:{//默认键位
+      keys: {//默认键位
         table: {
-          key:'alt+z',
-          title:'工作台'
+          key: 'alt+z',
+          title: '工作台'
         },
         globalSearch: {
-          key:'alt+f',
-          title:'浏览器搜索'
+          key: 'alt+f',
+          title: '浏览器搜索'
         },
-        superTools:{
-          key:'alt+x',
-          title:'超级工具箱'
+        superTools: {
+          key: 'alt+x',
+          title: '超级工具箱'
         },
       },
-      keyMap:{}//设置中取回的键位
+      keyMap: {}//设置中取回的键位
     }
   },
-  computed:{
+  computed: {
     ...mapWritableState(taskStore, ["taskID", "step"]),
-    m04012( ) {
+    m04012() {
       return this.taskID == "M0401" && this.step == 2
     }
   },
@@ -64,15 +65,15 @@ export default {
   <xt-task :modelValue="m04012"></xt-task>
   <div v-for="key in Object.keys(this.keys)">
     <div class="line">
-      {{this.keys[key].title}}快捷键
+      {{ this.keys[key].title }}快捷键
     </div>
     <div class="line">
-      <key-input  :title=" this.keys[key].title" :name="key" :value="keys[key].key"
-                  @changeKeys="setKeyMap"></key-input>
+      <key-input :name="key" :title=" this.keys[key].title" :value="keys[key].key"
+                 @changeKeys="setKeyMap"></key-input>
     </div>
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 
 </style>

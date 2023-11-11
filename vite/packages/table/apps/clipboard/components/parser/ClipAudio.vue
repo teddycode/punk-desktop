@@ -1,27 +1,27 @@
 <template>
   <!-- 剪切板音频组件 -->
   <div>
-    <audio @timeupdate="updateProgress" controls ref="audioRef" style="display: none">
-      <source :src="fileUrl" type="audio/mpeg" />
+    <audio ref="audioRef" controls style="display: none" @timeupdate="updateProgress">
+      <source :src="fileUrl" type="audio/mpeg"/>
     </audio>
     <div class="audio-right flex items-center ">
       <div class="flex dialog-audio-play" @click="playAudio">
         <Icon :icon="audioStatus !== 'pause' ? 'bofang' : 'zanting'" style="font-size: 2em;"></Icon>
       </div>
 
-      <div class="progress-bar-bg rounded-lg" id="progressBarBg" @click="setAudio($event)">
-        <div class="progress-bar" id="progressBar"></div>
+      <div id="progressBarBg" class="progress-bar-bg rounded-lg" @click="setAudio($event)">
+        <div id="progressBar" class="progress-bar"></div>
       </div>
 
       <div class="audio-time" style="min-height: 10px">
-        <span class="audio-length-current" id="audioCurTime">{{ audioStart }}</span>  /
+        <span id="audioCurTime" class="audio-length-current">{{ audioStart }}</span> /
         <span class="audio-length-total">{{ duration }}</span>
       </div>
 
       <div class="volume pl-3">
-        <div @click.stop="() => { return false } " class="volume-progress" v-if="audioHuds">
-          <div class="volume-bar-bg" id="volumeBarBg" @click="handleShowMuteIcon($event)">
-            <div class="volume-bar" id="volumeBar"></div>
+        <div v-if="audioHuds" class="volume-progress" @click.stop="() => { return false } ">
+          <div id="volumeBarBg" class="volume-bar-bg" @click="handleShowMuteIcon($event)">
+            <div id="volumeBar" class="volume-bar"></div>
           </div>
         </div>
         <div class="flex items-center" @click.stop="audioHuds = !audioHuds">
@@ -35,15 +35,15 @@
 
 <script>
 
-export default{
+export default {
   props: {
     fileUrl: {
       type: String
     }
   },
 
-  data(){
-    return{
+  data() {
+    return {
       audioStatus: 'play',
       audioStart: '0:00',
       duration: '0:00',
@@ -55,7 +55,7 @@ export default{
   computed: {
     audioIcon() {
       if (this.audioHuds) {
-        return this.audioVolume < 0.01 ?   'jingyin' : 'yinliang'
+        return this.audioVolume < 0.01 ? 'jingyin' : 'yinliang'
       } else {
         return 'yinliang'
       }
@@ -66,19 +66,19 @@ export default{
     this.fetch()
   },
 
-  methods:{
-    fetch(){
+  methods: {
+    fetch() {
       let that = this
       var myVid = this.$refs.audioRef
       myVid.loop = false
       // 监听音频播放完毕
       myVid.addEventListener(
-        'ended',
-        function () {
-          that.audioStatus = 'play' // 显示播放icon
-          document.getElementById('progressBar').style.width = '0%' // 进度条初始化
-        },
-        false
+          'ended',
+          function () {
+            that.audioStatus = 'play' // 显示播放icon
+            document.getElementById('progressBar').style.width = '0%' // 进度条初始化
+          },
+          false
       )
       if (myVid != null) {
         myVid.oncanplay = function () {
@@ -133,7 +133,7 @@ export default{
     },
 
     // 调节音频音量
-    handleShowMuteIcon(e){
+    handleShowMuteIcon(e) {
       let hdiv = document.getElementById('volumeBarBg').clientHeight
       let audio = this.$refs.audioRef
       // 只有音乐开始播放后才可以调节，已经播放过但暂停了的也可以
@@ -145,8 +145,8 @@ export default{
     },
 
     //音频进度调节
-    setAudio(e){
-      if(this.audioStatus === 'pause' || this.audioHuds === false){
+    setAudio(e) {
+      if (this.audioStatus === 'pause' || this.audioHuds === false) {
         let wdiv = document.getElementById('progressBarBg').clientWidth
         let audio = this.$refs.audioRef
         // 只有音乐开始播放后才可以调节，已经播放过但暂停了的也可以
@@ -164,8 +164,9 @@ export default{
 </script>
 
 <style lang="scss" scoped>
-.volume{
+.volume {
   position: relative;
+
   .volume-progress {
     position: absolute;
     top: -120px;
@@ -174,16 +175,18 @@ export default{
     background: var(--main-bg);
     border-radius: 4px;
   }
+
   .volume-bar-bg {
     margin: 0 auto;
     width: 6px;
     height: 100%;
-    background: rgba(92,94,102, 0.5);
+    background: rgba(92, 94, 102, 0.5);
     border-radius: 100px;
     flex: 1;
     position: relative;
     transform: rotate(180deg);
     cursor: pointer;
+
     .volume-bar {
       width: 6px;
       height: 50%;
@@ -191,6 +194,7 @@ export default{
       border-radius: 100px;
     }
   }
+
   .checked {
     color: var(--active-bg);
   }
@@ -200,17 +204,19 @@ export default{
   width: 100%;
   height: 49px;
   line-height: 49px;
-  background:var(--main-bg);
+  background: var(--main-bg);
   border-radius: 6px;
   display: flex;
   padding: 0 15px;
+
   .dialog-audio-play {
     cursor: pointer;
-    color:var(--primary-text);
+    color: var(--primary-text);
     font-size: 20px;
   }
+
   .progress-bar-bg {
-    background-color: rgba(92,94,102, 0.5);
+    background-color: rgba(92, 94, 102, 0.5);
     flex: 1;
     position: relative;
     height: 10px;
@@ -218,6 +224,7 @@ export default{
     cursor: pointer;
     margin: 0 10px;
   }
+
   .progress-bar {
     background: var(--active-bg);
     width: 0%;
@@ -228,10 +235,12 @@ export default{
   .audio-time {
     overflow: hidden;
     font-size: 14px;
+
     .audio-length-total {
       float: right;
       color: var(--primary-text);
     }
+
     .audio-length-current {
       float: left;
       color: var(--primary-text);

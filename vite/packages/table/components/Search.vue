@@ -1,20 +1,21 @@
 <template>
   <div class="flex items-center">
     <div>
-      <a-input allow-clear @keydown.enter="doSearch" :modelValue="keywordsData" @change="changeInput($event)" :placeholder="placeholder" spellcheck="false"
-               class="no-drag input" :style="inputStyle">
+      <a-input :modelValue="keywordsData" :placeholder="placeholder" :style="inputStyle" allow-clear
+               class="no-drag input" spellcheck="false"
+               @change="changeInput($event)" @keydown.enter="doSearch">
         <template #prefix>
-          <Icon v-if="isSearchIcon" icon="sousuo" class="mr-2" style="color: var(--disable-text) !important;"></Icon>
+          <Icon v-if="isSearchIcon" class="mr-2" icon="sousuo" style="color: var(--disable-text) !important;"></Icon>
         </template>
       </a-input>
     </div>
-    <div class="ml-3" v-if="isFiltrate && showSort">
-      <a-select :style="selectStyle"
-                @change="changeSelect($event)"
-                class="select rounded-lg  s-item flex items-center text-center" size="large" :bordered="false"
-                v-model:value="orderData"
-                :dropdownStyle="{ 'z-index': 999999999999, backgroundColor: 'var(--mask-bg)' }">
-        <a-select-option class="no-drag" v-for="item in sortType" :value="item.value" :key="item">{{
+    <div v-if="isFiltrate && showSort" class="ml-3">
+      <a-select v-model:value="orderData"
+                :bordered="false"
+                :dropdownStyle="{ 'z-index': 999999999999, backgroundColor: 'var(--mask-bg)' }" :style="selectStyle" class="select rounded-lg  s-item flex items-center text-center"
+                size="large"
+                @change="changeSelect($event)">
+        <a-select-option v-for="item in sortType" :key="item" :value="item.value" class="no-drag">{{
             item.name
           }}
         </a-select-option>
@@ -31,9 +32,9 @@ export default {
       type: String,
       default: '',
     },
-    showSort:{
-      type:Boolean,
-      default:true,
+    showSort: {
+      type: Boolean,
+      default: true,
     },
     //下拉的选中值
     order: {
@@ -72,24 +73,24 @@ export default {
     },
 
   },
-  mounted () {
-    this.keywordsData=this.keywords
-    this.orderData=this.order
+  mounted() {
+    this.keywordsData = this.keywords
+    this.orderData = this.order
   },
-  data () {
+  data() {
     return {
-      keywordsData:'',
-      orderData:'',
+      keywordsData: '',
+      orderData: '',
       selectValue: ''
     }
   },
   watch: {
-    keywords(newVal){
-      this.keywordsData=newVal
+    keywords(newVal) {
+      this.keywordsData = newVal
     },
     defaultSelect: {
       immediate: true,
-      handler (newValue, oldValue) {
+      handler(newValue, oldValue) {
         if (newValue != oldValue) {
           this.selectValue = this.defaultSelect
         }
@@ -97,17 +98,17 @@ export default {
     }
   },
   methods: {
-    doSearch(){
+    doSearch() {
       this.$emit('search')
     },
 
     //下拉值改变
-    changeSelect (event) {
+    changeSelect(event) {
       this.$emit('update:order', event)
       this.$emit('search')
     },
     //输入框值改变
-    changeInput (event) {
+    changeInput(event) {
       this.$emit('update:keywords', event.target.value)
     }
   }

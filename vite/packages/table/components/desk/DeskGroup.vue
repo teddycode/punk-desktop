@@ -1,48 +1,48 @@
 <template>
   <div class="flex flex-col h-full">
     <!--  工具栏-->
-    <div class="mb-2 flex flex-row" v-if="showTopBar && !fullScreen">
+    <div v-if="showTopBar && !fullScreen" class="mb-2 flex flex-row">
       <!-- tabs   -->
-      <div class="tabs flex flex-row mb-3 ml-3" v-if="showTabs && displayDesks.length>1">
+      <div v-if="showTabs && displayDesks.length>1" class="tabs flex flex-row mb-3 ml-3">
         <!--      <div @click="setCurrentDeskId('0')" :class="{'tab-active':currentDeskId==='0'}" class="pr-3 home game-tab game-bg">-->
         <!--        <icon class="icon" style="font-size: 22px;" icon="desktop"></icon>-->
         <!--        主桌面-->
         <!--      </div>-->
         <div
-          :class="{ 'tab-active': currentDeskId === item.id }"
-          @click="setCurrentDeskId(item.id)"
-          style="width: 140px"
-          class="truncate pr-3 tab s-bg xt-text"
-          v-for="(item, index) in displayDesks"
+            v-for="(item, index) in displayDesks"
+            :class="{ 'tab-active': currentDeskId === item.id }"
+            class="truncate pr-3 tab s-bg xt-text"
+            style="width: 140px"
+            @click="setCurrentDeskId(item.id)"
         >
           <a-avatar
-            v-if="item.iconUrl"
-            shape="square"
-            class="mr-2 icon"
-            :size="22"
-            :src="item.iconUrl"
+              v-if="item.iconUrl"
+              :size="22"
+              :src="item.iconUrl"
+              class="mr-2 icon"
+              shape="square"
           ></a-avatar>
           <icon
-            v-else
-            :icon="item.icon || 'desktop'"
-            style="font-size: 18px; vertical-align: middle"
-            class="mr-2"
+              v-else
+              :icon="item.icon || 'desktop'"
+              class="mr-2"
+              style="font-size: 18px; vertical-align: middle"
           ></icon>
           <span class="">{{ item.name }}</span>
           <div
-            v-if="currentDeskId === item.id"
-            style="border-bottom: 3px solid var(--active-bg)"
+              v-if="currentDeskId === item.id"
+              style="border-bottom: 3px solid var(--active-bg)"
           ></div>
         </div>
-        <a-tooltip title="全部桌面" placement="bottom">
+        <a-tooltip placement="bottom" title="全部桌面">
           <div
-            @click="showAll"
-            class="btn-bg no-drag pointer h-10 w-10 rounded-md flex justify-center items-center ml-3"
+              class="btn-bg no-drag pointer h-10 w-10 rounded-md flex justify-center items-center ml-3"
+              @click="showAll"
           >
             <icon
-              class="icon"
-              style="font-size: 22px"
-              icon="paixu-zuoyou"
+                class="icon"
+                icon="paixu-zuoyou"
+                style="font-size: 22px"
             ></icon>
           </div>
         </a-tooltip>
@@ -51,48 +51,48 @@
       <div v-if="showTools">
         <div class="ml-1 flex flex-row">
           <slot name="toolsBefore"></slot>
-          <a-tooltip v-if="!editing" title="开始调整桌面" placement="bottom">
+          <a-tooltip v-if="!editing" placement="bottom" title="开始调整桌面">
             <div
-              @click="startEdit"
-              class="btn-bg no-drag pointer h-10 w-10 rounded-md flex justify-center items-center ml-3"
+                class="btn-bg no-drag pointer h-10 w-10 rounded-md flex justify-center items-center ml-3"
+                @click="startEdit"
             >
               <icon
-                class="icon"
-                style="font-size: 22px"
-                icon="line-dragdroptuofang"
+                  class="icon"
+                  icon="line-dragdroptuofang"
+                  style="font-size: 22px"
               ></icon>
             </div>
           </a-tooltip>
-          <a-tooltip v-else title="停止调整桌面" placement="bottom">
+          <a-tooltip v-else placement="bottom" title="停止调整桌面">
             <div
-              @click="stopEdit"
-              class="btn-bg no-drag pointer h-10 w-10 rounded-md flex justify-center items-center ml-3"
+                class="btn-bg no-drag pointer h-10 w-10 rounded-md flex justify-center items-center ml-3"
+                @click="stopEdit"
             >
               <icon
-                class="icon"
-                style="font-size: 22px; color: red"
-                icon="tingzhi"
+                  class="icon"
+                  icon="tingzhi"
+                  style="font-size: 22px; color: red"
               ></icon>
             </div>
           </a-tooltip>
-          <a-tooltip title="全屏" placement="bottom">
+          <a-tooltip placement="bottom" title="全屏">
             <div
-              @click="setFullScreen"
-              class="btn-bg no-drag pointer h-10 w-10 rounded-md flex justify-center items-center ml-3"
+                class="btn-bg no-drag pointer h-10 w-10 rounded-md flex justify-center items-center ml-3"
+                @click="setFullScreen"
             >
-              <Icon style="font-size: 18px" icon="fullscreen"></Icon>
+              <Icon icon="fullscreen" style="font-size: 18px"></Icon>
             </div>
           </a-tooltip>
-          <a-tooltip title="菜单" placement="bottom">
+          <a-tooltip placement="bottom" title="菜单">
 
             <div class="pl-3">
               <xt-task :modelValue="getStep" @cb="showMenu">
                 <RightMenu :menus='$refs.currentDeskRef?.dropdownMenu' model='click'>
                   <div
-                    @click="showMenu"
-                    class="btn-bg no-drag pointer h-10 w-10 rounded-md flex justify-center items-center"
+                      class="btn-bg no-drag pointer h-10 w-10 rounded-md flex justify-center items-center"
+                      @click="showMenu"
                   >
-                    <xt-new-icon size='18' icon="fluent:more-horizontal-16-filled"/>
+                    <xt-new-icon icon="fluent:more-horizontal-16-filled" size='18'/>
                   </div>
                 </RightMenu>
               </xt-task>
@@ -105,26 +105,26 @@
     <div v-if="fullScreen" class="no-drag">
       <div style="position: absolute; right: 10px; top: 10px; z-index: 999">
         <div
-          @click="setFullScreen(false)"
-          class="btn-bg no-drag pointer w-10 rounded-md flex justify-center items-center ml-3"
+            class="btn-bg no-drag pointer w-10 rounded-md flex justify-center items-center ml-3"
+            @click="setFullScreen(false)"
         >
-          <Icon style="font-size: 18px" icon="quxiaoquanping_huaban"></Icon>
+          <Icon icon="quxiaoquanping_huaban" style="font-size: 18px"></Icon>
         </div>
       </div>
     </div>
     <div
-      style="flex: 1; height: 0"
-      v-if="currentDesk && currentDesk?.cards?.length > 0"
+        v-if="currentDesk && currentDesk?.cards?.length > 0"
+        style="flex: 1; height: 0"
     >
       <Desk
-        :deskGroupMenu='deskGroupMenu'
-        @changeEditing="editing = !editing"
-        :global-settings="settings"
-        :editing="editing"
-        ref="currentDeskRef"
-        :currentDesk="currentDesk"
-        v-model:settings="currentDesk.settings"
-        :key="key"
+          :key="key"
+          ref="currentDeskRef"
+          v-model:settings="currentDesk.settings"
+          :currentDesk="currentDesk"
+          :deskGroupMenu='deskGroupMenu'
+          :editing="editing"
+          :global-settings="settings"
+          @changeEditing="editing = !editing"
 
       >
         <!-- 拿菜单数据 -->
@@ -133,45 +133,45 @@
         </template>
 
         <template #outMenu>
-          <a-row class="text-center" style="margin-top: 20px" :gutter="20">
+          <a-row :gutter="20" class="text-center" style="margin-top: 20px">
             <xt-task :modelValue="mixTask" to="" @cb="showAddDeskForm">
               <a-col>
-                <div @click="showAddDeskForm" class="btn">
-                  <Icon style="font-size: 3em" icon="desktop"></Icon>
+                <div class="btn" @click="showAddDeskForm">
+                  <Icon icon="desktop" style="font-size: 3em"></Icon>
                   <div><span>添加桌面</span></div>
                 </div>
               </a-col>
             </xt-task>
 
             <a-col>
-              <div @click="importDesk" class="btn">
-                <Icon style="font-size: 3em" icon="daoru"></Icon>
+              <div class="btn" @click="importDesk">
+                <Icon icon="daoru" style="font-size: 3em"></Icon>
                 <div><span>导入桌面</span></div>
               </div>
             </a-col>
             <a-col>
               <div
-                v-if="this.currentDesk.lock"
-                class="btn"
-                style="opacity: 0.5"
+                  v-if="this.currentDesk.lock"
+                  class="btn"
+                  style="opacity: 0.5"
               >
-                <Icon style="font-size: 3em" icon="shanchu"></Icon>
+                <Icon icon="shanchu" style="font-size: 3em"></Icon>
                 <div><span>删除桌面</span></div>
               </div>
-              <div v-else @click="delDesk" class="btn">
-                <Icon style="font-size: 3em" icon="shanchu"></Icon>
+              <div v-else class="btn" @click="delDesk">
+                <Icon icon="shanchu" style="font-size: 3em"></Icon>
                 <div><span>删除桌面</span></div>
               </div>
             </a-col>
             <a-col>
-              <div @click="shareDesk" class="btn">
-                <Icon style="font-size: 3em" icon="fenxiang"></Icon>
+              <div class="btn" @click="shareDesk">
+                <Icon icon="fenxiang" style="font-size: 3em"></Icon>
                 <div><span>分享桌面</span></div>
               </div>
             </a-col>
             <a-col>
-              <div @click="exportDesk" class="btn">
-                <Icon style="font-size: 3em" icon="upload"></Icon>
+              <div class="btn" @click="exportDesk">
+                <Icon icon="upload" style="font-size: 3em"></Icon>
                 <div><span>导出桌面</span></div>
               </div>
             </a-col>
@@ -182,13 +182,13 @@
     <template v-else>
       <slot name="empty">
         <div
-          class="s-bg rounded-3xl p-4"
-          style="width: 80%; height: auto; margin: auto"
+            class="s-bg rounded-3xl p-4"
+            style="width: 80%; height: auto; margin: auto"
         >
           <div class="text-center">
             <div
-              class="line-title xt-text"
-              style="font-size: 24px; margin-bottom: 10px"
+                class="line-title xt-text"
+                style="font-size: 24px; margin-bottom: 10px"
             >
               欢迎使用完全DIY的卡片桌面
             </div>
@@ -197,20 +197,20 @@
             <!--              <strong class="xt-text"><icon icon="smile" style="font-size: 1.2em"></icon> 您可以通过桌面设置调节卡片到合适的大小</strong>-->
             <!--            </p>-->
             <div class="w-full flex justify-items-center justify-center align-items-center ">
-              <xt-button :w="160"
-                         style="color: var(--active-text)"
-                         @click="moreDesk"
+              <xt-button key="console"
+                         :w="160"
                          class="mr-10 xt-active-bg rounded-full border-none  "
-                         key="console"
+                         style="color: var(--active-text)"
                          type="primary"
+                         @click="moreDesk"
               >
                 <icon class="mr-1" icon="shop" style="font-size: 18px"></icon
                 >&nbsp;查看桌面市场
               </xt-button>
-              <xt-button :w="140"
-                         @click="newAddCard"
+              <xt-button key="console"
+                         :w="140"
                          class="mr-10 rounded-full xt-bg-2 border-none"
-                         key="console"
+                         @click="newAddCard"
               >
                 <icon class="mr-1" icon="tianjia2"></icon>&nbsp;DIY添加卡片
               </xt-button>
@@ -218,80 +218,80 @@
           </div>
           <div class="text-center mt-2 xt-text" style="font-size: 18px">
             <icon
-              icon="arrowdown"
-              style="font-size: 1.2em; vertical-align: text-bottom"
+                icon="arrowdown"
+                style="font-size: 1.2em; vertical-align: text-bottom"
             ></icon>
             为您推荐（左右滑动）
           </div>
           <vue-custom-scrollbar
-            :scrollbarSettings="scrollbarSettings"
-            class="mt-3"
-            style="width: 100%; height: 315px"
+              :scrollbarSettings="scrollbarSettings"
+              class="mt-3"
+              style="width: 100%; height: 315px"
           >
             <DeskMarket
-              :wrapperStyle="{
+                :closeParent="true"
+                :desks="deskList"
+                :items="recommendList"
+                :wrapperStyle="{
                 height: '100%',
                 flexWrap: 'nowrap',
                 overflow: 'visible',
                 width: 'auto',
               }"
-              :desks="deskList"
-              :items="recommendList"
-              :closeParent="true"
-              @openPreview="openPreview"
-              deskItemStyle="width:435px; height:300px"
+                deskItemStyle="width:435px; height:300px"
+                @openPreview="openPreview"
             ></DeskMarket>
           </vue-custom-scrollbar>
         </div>
       </slot>
       <span v-show="false">
         <Desk
-          ref="currentDeskRef"
-          :currentDesk="currentDesk"
-          :deskGroupMenu='deskGroupMenu'
-          :key="key"
-          :editing="editing"
+            :key="key"
+            ref="currentDeskRef"
+            :currentDesk="currentDesk"
+            :deskGroupMenu='deskGroupMenu'
+            :editing="editing"
         >
           <template #outMenu>
-            <a-row class="text-center" style="margin-top: 20px" :gutter="20">
+            <a-row :gutter="20" class="text-center" style="margin-top: 20px">
               <a-col>
-                <div @click="showAddDeskForm" class="btn">
-          <xt-new-icon  icon='fluent:eye-off-16-regular' size='42' />
+                <div class="btn" @click="showAddDeskForm">
+          <xt-new-icon icon='fluent:eye-off-16-regular' size='42'/>
 1
                   <div><span>添加桌面</span></div>
                 </div>
               </a-col>
               <a-col>
-                <div @click="importDesk" class="btn">
-          <xt-new-icon  icon='fluent:arrow-download-20-filled' size='42' />
+                <div class="btn" @click="importDesk">
+          <xt-new-icon icon='fluent:arrow-download-20-filled' size='42'/>
 
                   <div><span>导入桌面</span></div>
                 </div>
               </a-col>
               <a-col>
                 <div
-                  v-if="this.currentDesk.lock"
-                  class="btn"
-                  style="opacity: 0.5"
+                    v-if="this.currentDesk.lock"
+                    class="btn"
+                    style="opacity: 0.5"
                 >
-          <xt-new-icon  icon='akar-icons:trash-can' size='42' />
+          <xt-new-icon icon='akar-icons:trash-can' size='42'/>
 
                   <div><span>删除桌面</span></div>
                 </div>
-                <div v-else @click="delDesk" class="btn">
-                  <Icon style="font-size: 3em" icon="shanchu"></Icon>
+                <div v-else class="btn" @click="delDesk">
+                  <Icon icon="shanchu" style="font-size: 3em"></Icon>
                   <div><span>删除桌面</span></div>
                 </div>
               </a-col>
               <a-col>
-                <div @click="shareDesk" class="btn">
-          <xt-new-icon  icon='fluent:share-android-24-regular' size='42' />
+                <div class="btn" @click="shareDesk">
+          <xt-new-icon icon='fluent:share-android-24-regular' size='42'/>
                   <div><span>分享桌面</span></div>
                 </div>
               </a-col>
               <a-col>
-                <div @click="exportDesk" class="btn">
-          <xt-new-icon  icon='fluent:open-20-filled' size='42' />
+                <div class="btn" @click="exportDesk">
+          <xt-new-icon icon='fluent:open-20-filled' size='42'/>
                   <div><span>导出桌面</span></div>
                 </div>
               </a-col>
@@ -303,34 +303,34 @@
   </div>
 
   <a-drawer
-    height="220"
-    placement="bottom"
-    v-model:visible="allDeskListVisible"
+      v-model:visible="allDeskListVisible"
+      height="220"
+      placement="bottom"
   >
     <AllDeskList
-      :activeId="currentDeskId"
-      :items="deskList"
-      @visibleChanged=""
-      @valueChanged="
+        :activeId="currentDeskId"
+        :items="deskList"
+        @valueChanged="
         (event) => {
           setCurrentDeskId(event.id);
           this.allDeskListVisible = false;
         }
       "
+        @visibleChanged=""
     ></AllDeskList>
   </a-drawer>
 
   <a-drawer
-    v-if="addDeskVisible"
-    v-model:visible="addDeskVisible"
-    width="500"
-    title="添加桌面"
-    @close="shareCode = false"
+      v-if="addDeskVisible"
+      v-model:visible="addDeskVisible"
+      title="添加桌面"
+      width="500"
+      @close="shareCode = false"
   >
 
     <HorizontalPanel
-      :nav-list="currentAddMethod"
-      v-model:select-type="currentAddTab"
+        v-model:select-type="currentAddTab"
+        :nav-list="currentAddMethod"
     >
     </HorizontalPanel>
     <xt-task :modelValue="M03023">
@@ -347,21 +347,21 @@
       <div class="flex justify-between">
         <span class="flex items-center">
           <span class="desk-title mr-2">热门桌面</span>
-          <Icon style="font-size: 20px" icon="daohang_remen-xuanzhong"></Icon>
+          <Icon icon="daohang_remen-xuanzhong" style="font-size: 20px"></Icon>
         </span>
         <xt-task :modelValue="M03024" @cb="moreDesk">
-          <div class="btn-item" @click="moreDesk" style="width: 160px">
+          <div class="btn-item" style="width: 160px" @click="moreDesk">
             更多桌面分享
           </div>
         </xt-task>
       </div>
       <div>
         <DeskMarket
-          :desks="deskList"
-          :items="recommendList"
-          :closeParent="true"
-          @openPreview="openPreview"
-          deskItemStyle="width:435px; height:auto;"
+            :closeParent="true"
+            :desks="deskList"
+            :items="recommendList"
+            deskItemStyle="width:435px; height:auto;"
+            @openPreview="openPreview"
         ></DeskMarket>
       </div>
     </div>
@@ -373,77 +373,77 @@
 
       <div class="desk-title mt-4">标题</div>
       <a-input
-        v-model:value="deskTitle"
-        spellcheck="false"
-        class="input"
-        placeholder="请输入"
-        aria-placeholder="font-size: 16px;"
+          v-model:value="deskTitle"
+          aria-placeholder="font-size: 16px;"
+          class="input"
+          placeholder="请输入"
+          spellcheck="false"
       />
       <xt-task :modelValue="M01024" @cb="doAddDesk">
         <span class="desk-title">初始布局</span>
         <div class="mt-6">
           <HorizontalPanel
-            :navList="deskType"
-            v-model:selectType="selectDesk"
+              v-model:selectType="selectDesk"
+              :navList="deskType"
           ></HorizontalPanel>
         </div>
         <!-- <div @click="doAddDesk" class="btn-item xt-active-bg xt-text">立即添加</div> -->
-        <xt-button style="width: 100%;" type="theme" @click="doAddDesk" class="mt-4">立即添加</xt-button>
+        <xt-button class="mt-4" style="width: 100%;" type="theme" @click="doAddDesk">立即添加</xt-button>
       </xt-task>
 
       <div>
-        <div @click="importDesk" class="btn-item">导入桌面</div>
+        <div class="btn-item" @click="importDesk">导入桌面</div>
       </div>
     </div>
-    <template #extra v-if="shareCode"></template>
+    <template v-if="shareCode" #extra></template>
     <div v-if="!shareCode"></div>
     <div v-else>
       <span class="desk-title">分享码</span>
       <a-input
-        v-model:value="deskCode"
-        spellcheck="false"
-        class="input"
-        placeholder="请输入"
-        aria-placeholder="font-size: 16px;"
+          v-model:value="deskCode"
+          aria-placeholder="font-size: 16px;"
+          class="input"
+          placeholder="请输入"
+          spellcheck="false"
       />
     </div>
 
 
   </a-drawer>
   <ShareDesk
-    :deskList="deskList"
-    ref="shareDeskRef"
-    :deskRef="$refs.currentDeskRef"
-    :openDrawer="shareDeskVisible"
-    @closeShare="closeShare"
+      ref="shareDeskRef"
+      :deskList="deskList"
+      :deskRef="$refs.currentDeskRef"
+      :openDrawer="shareDeskVisible"
+      @closeShare="closeShare"
   ></ShareDesk>
   <ExportDesk
-    :openModal="exportModal"
-    @closeExport="closeExport"
-    :layoutSize="layoutSize"
-    :desks="deskList"
+      :desks="deskList"
+      :layoutSize="layoutSize"
+      :openModal="exportModal"
+      @closeExport="closeExport"
   ></ExportDesk>
 
   <div style="z-index: 9999">
     <DeskPreview
-      @afterAdded="afterAdded"
-      :deskList="deskList"
-      :scheme="scheme"
-      :showModal="showModal"
-      @closePreview="closePreview"
+        :deskList="deskList"
+        :scheme="scheme"
+        :showModal="showModal"
+        @afterAdded="afterAdded"
+        @closePreview="closePreview"
     ></DeskPreview>
   </div>
   <div
-    class=""
-    style="position: fixed; top: 0; right: 0; left: 0; bottom: 0; z-index: 999"
-    v-if="deskMarketVisible"
+      v-if="deskMarketVisible"
+      class=""
+      style="position: fixed; top: 0; right: 0; left: 0; bottom: 0; z-index: 999"
   >
     <NewAddCard
-      v-if="deskMarketVisible"
-      :deskList="deskList"
-      @onClose="hideMarket"
-      :desk="currentDesk"
-      :panelIndex="panelIndex"
+        v-if="deskMarketVisible"
+        :desk="currentDesk"
+        :deskList="deskList"
+        :panelIndex="panelIndex"
+        @onClose="hideMarket"
     ></NewAddCard>
   </div>
 </template>
@@ -452,7 +452,7 @@
 import Desk from "./Desk.vue";
 import {appStore} from "../../store";
 import {taskStore} from "../../apps/task/store";
-import {mapActions, mapWritableState, mapWritableState} from "pinia";
+import {mapActions, mapWritableState} from "pinia";
 import GameListDrawer from "../game/GameListDrawer.vue";
 import AllDeskList from "./AllDeskList.vue";
 import {message, Modal, notification} from "ant-design-vue";
@@ -536,7 +536,7 @@ export default {
           id: 9,
           newIcon: "fluent:more-horizontal-16-filled",
           name: "更多",
-            lock:true,
+          lock: true,
           children: [
             {
               id: 1,
@@ -684,19 +684,19 @@ export default {
           return !desk.pin;
         }),
       ]
-        .slice(0, 4)
-        .sort((a, b) => {
-          if (b.pin) {
-            //置顶的桌面排最前面
-            return 9999999999999;
-          }
-          return Number(b.order || 0) - Number(a.order || 0);
-        });
+          .slice(0, 4)
+          .sort((a, b) => {
+            if (b.pin) {
+              //置顶的桌面排最前面
+              return 9999999999999;
+            }
+            return Number(b.order || 0) - Number(a.order || 0);
+          });
     },
   },
   methods: {
     ...mapActions(marketStore, ["getRecommend"]),
-    ...mapActions(useFreeDeskStore,['delFreeDeskState']),
+    ...mapActions(useFreeDeskStore, ['delFreeDeskState']),
 
     newAddCard() {
       this.$refs.currentDeskRef.newAddCard();
@@ -790,8 +790,8 @@ export default {
             g.settings.zoom = g.settings.cardZoom;
           }
           let cardZoom = (
-            (g.settings.zoom * cardsHeight) /
-            g.deskHeight
+              (g.settings.zoom * cardsHeight) /
+              g.deskHeight
           ).toFixed();
           g.icon = "desktop";
           g.settings.zoom = parseInt(cardZoom);
@@ -834,10 +834,10 @@ export default {
           content: "删除当前桌面？此操作不可还原。",
           onOk: () => {
             this.deskList.splice(
-              this.deskList.findIndex((desk) => {
-                return desk === this.currentDesk;
-              }),
-              1
+                this.deskList.findIndex((desk) => {
+                  return desk === this.currentDesk;
+                }),
+                1
             );
             this.$emit("changeDesk", {id: this.deskList[0].id});
             this.delFreeDeskState(this.currentDeskId)
@@ -845,10 +845,10 @@ export default {
             this.key = Date.now();
             if (this.displayDesks.length === 1) {
               notification.open(
-                {
-                  message: '提示',
-                  description: '当前可用桌面为1个，自动为您隐藏切换桌面菜单。至少有2个桌面的时候才会显示快速切换栏。'
-                }
+                  {
+                    message: '提示',
+                    description: '当前可用桌面为1个，自动为您隐藏切换桌面菜单。至少有2个桌面的时候才会显示快速切换栏。'
+                  }
               )
             }
           },
@@ -898,7 +898,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .tabs {
   .tab {
     .icon {

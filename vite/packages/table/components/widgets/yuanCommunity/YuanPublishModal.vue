@@ -1,128 +1,130 @@
-
 <template>
-    <Modal :maskNoClose="true" class="" animationName="t-b-close">
-        <div class="w-[500px] pl-4 pr-4 content">
-            <div class="flex justify-between w-full h-[64px] items-center ">
-                <a-dropdown trigger="click" placement="bottom"
-                    overlayStyle="background-color: var(--primary-bg); padding-left:3px ;padding-right:3px; width: 100px;">
-                    <div class="flex items-center justify-center w-full">
-                        <div class="ml-20 font-16 xt-text">{{ defaultType.title }}</div>
-                        <newIcon icon="fluent:caret-down-12-filled" class="ml-1 xt-text" style="font-size: 20px;" />
-                    </div>
-                    <template #overlay>
-                        <a-menu class="text-center xt-bg"
-                            style="display: flex;justify-content: center;flex-direction: column;align-items: center;">
-                            <a-menu-item v-for="(item, index) in publishType" :key="index"
-                                @click="handleMenuItemClick(index)">
-                                <span class="ml-12 text-center xt-text">{{ item.title }}</span>
-                            </a-menu-item>
-                        </a-menu>
-                    </template>
-                </a-dropdown>
+  <Modal :maskNoClose="true" animationName="t-b-close" class="">
+    <div class="w-[500px] pl-4 pr-4 content">
+      <div class="flex justify-between w-full h-[64px] items-center ">
+        <a-dropdown overlayStyle="background-color: var(--primary-bg); padding-left:3px ;padding-right:3px; width: 100px;" placement="bottom"
+                    trigger="click">
+          <div class="flex items-center justify-center w-full">
+            <div class="ml-20 font-16 xt-text">{{ defaultType.title }}</div>
+            <newIcon class="ml-1 xt-text" icon="fluent:caret-down-12-filled" style="font-size: 20px;"/>
+          </div>
+          <template #overlay>
+            <a-menu class="text-center xt-bg"
+                    style="display: flex;justify-content: center;flex-direction: column;align-items: center;">
+              <a-menu-item v-for="(item, index) in publishType" :key="index"
+                           @click="handleMenuItemClick(index)">
+                <span class="ml-12 text-center xt-text">{{ item.title }}</span>
+              </a-menu-item>
+            </a-menu>
+          </template>
+        </a-dropdown>
 
-                <xt-button class="flex items-center justify-center border-0 rounded-md xt-bg-2 pointer"
-                    @click="handleFullScreen" style="width: 40px;height: 40px; flex-shrink: 0;">
-                    <newIcon icon="fluent:full-screen-maximize-16-filled" v-if="!fullScreen"
-                        class="mt-1 text-xl text-center xt-text pointer"></newIcon>
-                    <newIcon icon="fluent:full-screen-minimize-16-filled" v-else
-                        class="mt-1 text-xl text-center xt-text pointer"></newIcon>
-                </xt-button>
-                <xt-button class="flex items-center justify-center ml-2 border-0 rounded-md xt-bg-2 pointer"
-                    @click="handleOk" style="width: 40px;height: 40px;flex-shrink: 0;">
-                    <newIcon class="mt-1 text-xl text-center xt-text pointer" icon="akar-icons:cross" />
-                </xt-button>
+        <xt-button class="flex items-center justify-center border-0 rounded-md xt-bg-2 pointer"
+                   style="width: 40px;height: 40px; flex-shrink: 0;" @click="handleFullScreen">
+          <newIcon v-if="!fullScreen" class="mt-1 text-xl text-center xt-text pointer"
+                   icon="fluent:full-screen-maximize-16-filled"></newIcon>
+          <newIcon v-else class="mt-1 text-xl text-center xt-text pointer"
+                   icon="fluent:full-screen-minimize-16-filled"></newIcon>
+        </xt-button>
+        <xt-button class="flex items-center justify-center ml-2 border-0 rounded-md xt-bg-2 pointer"
+                   style="width: 40px;height: 40px;flex-shrink: 0;" @click="handleOk">
+          <newIcon class="mt-1 text-xl text-center xt-text pointer" icon="akar-icons:cross"/>
+        </xt-button>
 
-            </div>
-            <component :is="currentComponent"></component>
-            <!-- <DynamicItem v-if="defaultType.value='dynamic'"/>
-            <VideoItem v-if="defaultType.value='video'"/>
-            <PostItem v-if="defaultType.value='post'"/> -->
-            <div class="flex items-center justify-between h-[56px] ">
-                <!-- <a-button type="text" class=" xt-text xt-bg-2 font-14"
-                    style="border-radius:10px ; color: var(--secondary-text) !important;">磐古跨链客户端/桌面分享 ></a-button> -->
-                <a-select v-model:value="cascaderValue" :options="options" :placeholder="holderName" :bordered="false"
-                    @change="handleChange"
-                    style=" font-size: 16px; border-radius: 10px;width: 120px;background: var(--secondary-bg);height: 40px;"
-                    change-on-select>
-                    <template #suffixIcon>
-                        <newIcon icon="fluent:chevron-left-16-filled" class="rotate-180 xt-text-2" style="font-size: 20px;vertical-align: super;margin-top: -3px;"></newIcon>
-                    </template>
-                </a-select>
-                <div class="flex items-center">
-                    <xt-button type="text" class=" xt-text xt-bg-2"
-                        style="border-radius:10px ; color: var(--secondary-text) !important;width: 64px; height: 40px;"
-                        @click="handleOk">取消</xt-button>
-                    <xt-button type="primary" class="ml-2"
-                        style="border-radius:10px ; color: var(--secondary-text) !important; width: 64px; height: 40px;background-color: var(--active-bg);"
-                        @click="publishPost">发布</xt-button>
-                </div>
-            </div>
+      </div>
+      <component :is="currentComponent"></component>
+      <!-- <DynamicItem v-if="defaultType.value='dynamic'"/>
+      <VideoItem v-if="defaultType.value='video'"/>
+      <PostItem v-if="defaultType.value='post'"/> -->
+      <div class="flex items-center justify-between h-[56px] ">
+        <!-- <a-button type="text" class=" xt-text xt-bg-2 font-14"
+            style="border-radius:10px ; color: var(--secondary-text) !important;">磐古跨链客户端/桌面分享 ></a-button> -->
+        <a-select v-model:value="cascaderValue" :bordered="false" :options="options" :placeholder="holderName"
+                  change-on-select
+                  style=" font-size: 16px; border-radius: 10px;width: 120px;background: var(--secondary-bg);height: 40px;"
+                  @change="handleChange">
+          <template #suffixIcon>
+            <newIcon class="rotate-180 xt-text-2" icon="fluent:chevron-left-16-filled"
+                     style="font-size: 20px;vertical-align: super;margin-top: -3px;"></newIcon>
+          </template>
+        </a-select>
+        <div class="flex items-center">
+          <xt-button class=" xt-text xt-bg-2" style="border-radius:10px ; color: var(--secondary-text) !important;width: 64px; height: 40px;"
+                     type="text"
+                     @click="handleOk">取消
+          </xt-button>
+          <xt-button class="ml-2" style="border-radius:10px ; color: var(--secondary-text) !important; width: 64px; height: 40px;background-color: var(--active-bg);"
+                     type="primary"
+                     @click="publishPost">发布
+          </xt-button>
         </div>
+      </div>
+    </div>
 
-    </Modal>
+  </Modal>
 </template>
-<script setup lang='ts'>
-import { ref, reactive, onMounted, computed } from 'vue'
-import type { UploadProps } from 'ant-design-vue';
+<script lang='ts' setup>
+import {computed, onMounted, reactive, ref} from 'vue'
+import type {CascaderProps, UploadProps} from 'ant-design-vue';
+import {message} from 'ant-design-vue'
 import browser from '../../../js/common/browser';
 import Modal from '../../../components/Modal.vue'
-import { Icon as newIcon } from '@iconify/vue';
-import { fileUpload } from '../../../components/card/hooks/imageProcessing'
-import type { CascaderProps } from 'ant-design-vue';
-import { message } from 'ant-design-vue'
+import {Icon as newIcon} from '@iconify/vue';
+import {fileUpload} from '../../../components/card/hooks/imageProcessing'
 import fluentEmojis from '../../../js/chat/fulentEmojis'
-import { yuanCommunityStore } from '../../../store/yuanCommunity'
-import { useCommunityStore } from '../../../page/chat/commun'
+import {yuanCommunityStore} from '../../../store/yuanCommunity'
+import {useCommunityStore} from '../../../page/chat/commun'
 import PostItem from './Detail/PostItem.vue';
 import VideoItem from './Detail/VideoItem.vue';
 import DynamicItem from './Detail/DynamicItem.vue';
+
 const useCommunStore = useCommunityStore()
 const useYuanCommunityStore = yuanCommunityStore()
 // const imageLoadVisible = ref(true)
 const browserUrl = ref('https://s.apps.vip/forum?id=')
 const emoji = ref('https://sad.apps.vip/public/static/emoji/emojistatic/')
 const goYuan = () => {
-    browser.openInUserSelect(`${browserUrl.value}${props.forumId}`)
+  browser.openInUserSelect(`${browserUrl.value}${props.forumId}`)
 }
 const titleContent = ref('')
 const publishType = ref([
-    {
-        title: '发动态',
-        value: 'dynamic'
-    },
-    {
-        title: '发帖子',
-        value: 'post'
-    },
-    {
-        title: '发视频',
-        value: 'video'
-    }
+  {
+    title: '发动态',
+    value: 'dynamic'
+  },
+  {
+    title: '发帖子',
+    value: 'post'
+  },
+  {
+    title: '发视频',
+    value: 'video'
+  }
 ])
-const currentComponent=computed(()=>{
-    switch (defaultType.value.value) {
-        case 'dynamic':
-            return DynamicItem;
-            break;
-        case 'post':
-            return PostItem;
-            break;
-        case 'video':
-            return VideoItem;
-            
-            break;
-    
-        default:
-            return DynamicItem;
-            break;
-    }
+const currentComponent = computed(() => {
+  switch (defaultType.value.value) {
+    case 'dynamic':
+      return DynamicItem;
+      break;
+    case 'post':
+      return PostItem;
+      break;
+    case 'video':
+      return VideoItem;
+
+      break;
+
+    default:
+      return DynamicItem;
+      break;
+  }
 })
 const removeCover = () => {
-    coverList.value = []
+  coverList.value = []
 }
-let defaultType = ref({ 'title': '发动态', 'value': 'dynamic' })
+let defaultType = ref({'title': '发动态', 'value': 'dynamic'})
 const handleMenuItemClick = (index) => {
-    defaultType.value = publishType.value[index]
+  defaultType.value = publishType.value[index]
 }
 // 是否全屏
 const fullScreen = ref(false)
@@ -133,33 +135,35 @@ const handleFullScreen = () => {
 // const userName = ref('我是皮克斯呀')
 const postValue = ref('')
 const props = defineProps({
-    replyVisible: Boolean,
-    showPublishModal: Boolean,
-    forumId: Number,
-    forumIndex: Number
+  replyVisible: Boolean,
+  showPublishModal: Boolean,
+  forumId: Number,
+  forumIndex: Number
 })
 // 添加表情
 const addEmoji = (item) => {
-    const lastSlashIndex = item.lastIndexOf('/');
-    const emoiiValue = item.substring(lastSlashIndex + 1);
-    // console.log(emoiiValue);
+  const lastSlashIndex = item.lastIndexOf('/');
+  const emoiiValue = item.substring(lastSlashIndex + 1);
+  // console.log(emoiiValue);
 
-    const key = Object.entries(fluentEmojis).find(([k, v]) => v === (emoiiValue))[0]
-    postValue.value += `${key}`
+  const key = Object.entries(fluentEmojis).find(([k, v]) => v === (emoiiValue))[0]
+  postValue.value += `${key}`
 
 }
 const imageLoadVisible = computed(() => {
-    return fileList.value?.length > 0
+  return fileList.value?.length > 0
 })
 const visible = ref(false)
+
 function getBase64(file: File) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-    });
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
 }
+
 const emit = defineEmits(['handleOk'])
 const previewVisible = ref(false);
 const previewImage = ref('');
@@ -171,15 +175,15 @@ const previewTitle = ref('');
 let folderPath = reactive([])
 
 onMounted(() => {
-    Object.values(fluentEmojis).forEach((item) => {
-        folderPath.push(`${emoji.value}${item}`)
-    })
-    let textareaElement = window.document.querySelector('textarea')
-    // console.log(textareaElement);
+  Object.values(fluentEmojis).forEach((item) => {
+    folderPath.push(`${emoji.value}${item}`)
+  })
+  let textareaElement = window.document.querySelector('textarea')
+  // console.log(textareaElement);
 
-    textareaElement?.focus()
-    // console.log(navigator.plugins);
-    useYuanCommunityStore.getMyForumList()
+  textareaElement?.focus()
+  // console.log(navigator.plugins);
+  useYuanCommunityStore.getMyForumList()
 
 
 })
@@ -187,201 +191,203 @@ onMounted(() => {
 const communCate = computed(() => useYuanCommunityStore.myForumList.joined)
 let arr = ref([])
 communCate.value.forEach((item) => {
-    arr.value.push({
-        value: item.id,
-        label: item.name
-    })
+  arr.value.push({
+    value: item.id,
+    label: item.name
+  })
 })
 let cascaderValue = ref([])
 const options = ref<CascaderProps['options']>([]);
 arr.value.forEach((item) => {
-    options.value.push(item)
+  options.value.push(item)
 })
 const loadData: CascaderProps['loadData'] = selectedOptions => {
-    const targetOption = selectedOptions[selectedOptions.length - 1];
-    targetOption.loading = true;
-    arr.value.forEach((item) => {
-        targetOption.children?.push(item)
-    })
-    options.value = [...options.value];
+  const targetOption = selectedOptions[selectedOptions.length - 1];
+  targetOption.loading = true;
+  arr.value.forEach((item) => {
+    targetOption.children?.push(item)
+  })
+  options.value = [...options.value];
 };
 const handleChange = (value) => {
-    cascaderValue.value = value
-    console.log(cascaderValue.value);
+  cascaderValue.value = value
+  console.log(cascaderValue.value);
 }
 const holderName = computed(() => {
-    return useYuanCommunityStore.myForumList.joined[props.forumIndex].name
+  return useYuanCommunityStore.myForumList.joined[props.forumIndex].name
 })
 const settingsScroller = reactive({
-    useBothWheelAxes: true,
-    swipeEasing: true,
-    suppressScrollY: false,
-    suppressScrollX: true,
-    wheelPropagation: true,
+  useBothWheelAxes: true,
+  swipeEasing: true,
+  suppressScrollY: false,
+  suppressScrollX: true,
+  wheelPropagation: true,
 });
 const fileList = ref<UploadProps['fileList']>([]);
 
 const handleCancel = () => {
-    previewVisible.value = false;
-    previewTitle.value = '';
+  previewVisible.value = false;
+  previewTitle.value = '';
 };
 const handlePreview = async (file: UploadProps['fileList'][number]) => {
-    if (!file.url && !file.preview) {
-        file.preview = (await getBase64(file.originFileObj)) as string;
-    }
-    previewImage.value = file.url || file.preview;
-    previewVisible.value = true;
-    previewTitle.value = file.name || file.url.substring(file.url.lastIndexOf('/') + 1);
+  if (!file.url && !file.preview) {
+    file.preview = (await getBase64(file.originFileObj)) as string;
+  }
+  previewImage.value = file.url || file.preview;
+  previewVisible.value = true;
+  previewTitle.value = file.name || file.url.substring(file.url.lastIndexOf('/') + 1);
 };
 const handleOk = () => {
-    // console.log(e);
-    visible.value = false
-    emit('handleOk', visible)
+  // console.log(e);
+  visible.value = false
+  emit('handleOk', visible)
 };
 // 发布帖子
 const titleValue = ref('')
 const publishPost = async () => {
-    if (postValue.value || fileList.value.length > 0) {
-        const imageUrlList = await Promise.all(fileList.value.map(async (item) => {
-            const url = await fileUpload(item.originFileObj);
-            return url;
-        }));
-        // let image = JSON.stringify(imageUrlList.value)
-        let forumId = props.forumId
-        let content = postValue.value
-        let title = computed(() => {
-            if (!titleValue.value || titleValue.value.length < 5) {
-                return postValue.value.slice(0, 5)
-            }
-            return titleValue.value
-        })
-        // console.log(title.value, 'title.value');
+  if (postValue.value || fileList.value.length > 0) {
+    const imageUrlList = await Promise.all(fileList.value.map(async (item) => {
+      const url = await fileUpload(item.originFileObj);
+      return url;
+    }));
+    // let image = JSON.stringify(imageUrlList.value)
+    let forumId = props.forumId
+    let content = postValue.value
+    let title = computed(() => {
+      if (!titleValue.value || titleValue.value.length < 5) {
+        return postValue.value.slice(0, 5)
+      }
+      return titleValue.value
+    })
+    // console.log(title.value, 'title.value');
 
 
-        setTimeout(async () => {
-            // console.log(forumId, content, title.value, image, 'titleValue.value');
-            const imageList = JSON.stringify(imageUrlList);
-            await useCommunStore.getCommunityPublishPost(forumId, imageList, content, title.value, cascaderValue)
-            message.success('发布成功')
-            titleValue.value = ''
-            postValue.value = ''
-            fileList.value = []
-            handleOk()
-        });
+    setTimeout(async () => {
+      // console.log(forumId, content, title.value, image, 'titleValue.value');
+      const imageList = JSON.stringify(imageUrlList);
+      await useCommunStore.getCommunityPublishPost(forumId, imageList, content, title.value, cascaderValue)
+      message.success('发布成功')
+      titleValue.value = ''
+      postValue.value = ''
+      fileList.value = []
+      handleOk()
+    });
 
-    }
+  }
 }
 </script>
 <style lang='scss' scoped>
 :deep(.ant-upload-list-text-container) {
-    display: none;
+  display: none;
 }
 
 .box {
-    border-radius: 12px;
+  border-radius: 12px;
 }
 
 .font-16 {
 
-    font-size: 16px;
-    // text-align: center;
-    font-weight: 400;
+  font-size: 16px;
+  // text-align: center;
+  font-weight: 400;
 }
 
 .font-14 {
 
-    font-size: 14px;
-    line-height: 20px;
-    font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
 }
 
 :deep(.ant-upload-list-picture-card .ant-upload-list-item-thumbnail) {
-    font-size: 8px;
+  font-size: 8px;
 }
 
 :deep(.ant-upload.ant-upload-select-picture-card) {
-    width: 64px;
-    height: 64px;
+  width: 64px;
+  height: 64px;
 }
 
 :deep(.ant-upload-list-picture-card-container) {
-    width: 64px;
-    height: 64px;
-}
-:deep(.ant-select-single.ant-select-show-arrow .ant-select-selection-item){
-    padding-right: 0px;
-}
-:deep(.ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder) {
-    color: var(--secondary-text);
-    height: 40px;
-    line-height: 40px;
+  width: 64px;
+  height: 64px;
 }
 
 :deep(.ant-select-single.ant-select-show-arrow .ant-select-selection-item) {
-    color: var(--secondary-text);
-    height: 40px;
-    line-height: 40px;
+  padding-right: 0px;
+}
+
+:deep(.ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder) {
+  color: var(--secondary-text);
+  height: 40px;
+  line-height: 40px;
+}
+
+:deep(.ant-select-single.ant-select-show-arrow .ant-select-selection-item) {
+  color: var(--secondary-text);
+  height: 40px;
+  line-height: 40px;
 }
 
 :deep(.ant-select-arrow) {
-    color: var(--secondary-text);
-    font-size: 16px;
+  color: var(--secondary-text);
+  font-size: 16px;
 }
 
 :deep(.ant-select-single.ant-select-show-arrow .ant-select-selection-item, .ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder) {
-    // &::placeholder {
+  // &::placeholder {
+  font-weight: 400;
+  font-size: 16px;
+
+  color: var(--secondary-text);
+  // }
+}
+
+:deep(.ant-select-open) {
+  background: var(--primary-bg) !important;
+  color: var(--primary-text) !important;
+}
+
+:deep(.ant-select-focused) {
+  background: var(--primary-bg) !important;
+  color: var(--primary-text) !important;
+}
+
+:deep(.ant-select-focused .ant-select-open) {
+  background: var(--primary-bg) !important;
+  color: var(--primary-text) !important;
+}
+
+:deep(.ant-input) {
+  color: var(--secondary-text);
+  margin-left: 8px;
+
+  &::placeholder {
     font-weight: 400;
     font-size: 16px;
 
     color: var(--secondary-text);
-    // }
-}
-
-:deep(.ant-select-open) {
-    background: var(--primary-bg) !important;
-    color: var(--primary-text) !important;
-}
-
-:deep(.ant-select-focused) {
-    background: var(--primary-bg) !important;
-    color: var(--primary-text) !important;
-}
-
-:deep(.ant-select-focused .ant-select-open) {
-    background: var(--primary-bg) !important;
-    color: var(--primary-text) !important;
-}
-
-:deep(.ant-input) {
-    color: var(--secondary-text);
-    margin-left: 8px;
-
-    &::placeholder {
-        font-weight: 400;
-        font-size: 16px;
-
-        color: var(--secondary-text);
-        // padding-left: 8px;
-    }
+    // padding-left: 8px;
+  }
 }
 
 :deep(.tippy-box) {
-    width: 51%;
-    margin-left: 35%;
+  width: 51%;
+  margin-left: 35%;
 }
 
 
 .reply-textarea {
+  border-radius: 10px;
+
+  textarea {
     border-radius: 10px;
 
-    textarea {
-        border-radius: 10px;
-
-        &:deep(.ant-input) {
-            &::-webkit-scrollbar {
-                display: none;
-            }
-        }
+    &:deep(.ant-input) {
+      &::-webkit-scrollbar {
+        display: none;
+      }
     }
+  }
 }
 </style>

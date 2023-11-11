@@ -6,25 +6,25 @@
         <div style="font-size: 1em">{{ options.title }}</div>
       </div>
       <div class="right-title" @click.stop="showDrawer">
-        <Icon icon="gengduo1" class="title-icon" style="cursor:pointer"></Icon>
+        <Icon class="title-icon" icon="gengduo1" style="cursor:pointer"></Icon>
       </div>
     </div>
 
-    <div @click="go" class="pointer">
+    <div class="pointer" @click="go">
       <slot></slot>
     </div>
 
   </div>
   <a-drawer
-    :contentWrapperStyle="{ padding:10,marginLeft:'2.5%',
+      :closable="false"
+      :contentWrapperStyle="{ padding:10,marginLeft:'2.5%',
     backgroundColor:'#1F1F1F',width: '95%',height:'11em',borderRadius:'5%'}"
-    :width="120"
-    :height="120"
-    class="drawer"
-    :closable="false"
-    placement="bottom"
-    :visible="visible"
-    @close="onClose"
+      :height="120"
+      :visible="visible"
+      :width="120"
+      class="drawer"
+      placement="bottom"
+      @close="onClose"
   >
     <div style="display: flex;flex-direction: row;height: 100%">
 
@@ -42,13 +42,13 @@
 </template>
 
 <script>
-import { mapActions, mapWritableState } from 'pinia'
-import { cardStore } from '../../../store/card'
-import { message } from 'ant-design-vue'
-import { inspectorStore } from '../../../store/inspector'
+import {mapActions, mapWritableState} from 'pinia'
+import {cardStore} from '../../../store/card'
+import {message} from 'ant-design-vue'
+import {inspectorStore} from '../../../store/inspector'
 
 export default {
-  data () {
+  data() {
     return {
       visible: false,
     }
@@ -72,26 +72,26 @@ export default {
     ...mapWritableState(cardStore, ['aidaData']),
 
   },
-  mounted () {
+  mounted() {
     this.startInspect()
   },
-  unmounted () {
+  unmounted() {
     this.stopInspect()
   },
   methods: {
     ...mapActions(cardStore, ['removeCard']),
     ...mapActions(inspectorStore, ['startInspect', 'stopInspect']),
-    showDrawer () {
+    showDrawer() {
       this.visible = true
     },
-    onClose () {
+    onClose() {
       this.visible = false
     },
-    removeCard () {
+    removeCard() {
       this.removeCard(this.customIndex)
       this.visible = false
     },
-    onCopy () {
+    onCopy() {
       if (this.aidaData) {
         let textArea = document.getElementById('textArea')
         textArea.innerText = JSON.stringify(this.aidaData)
@@ -103,8 +103,8 @@ export default {
         message.info('复制失败，请检查是否启动过aida64！')
       }
     },
-    go () {
-      this.$router.push({ name: 'inspector' })
+    go() {
+      this.$router.push({name: 'inspector'})
     }
   }
 }

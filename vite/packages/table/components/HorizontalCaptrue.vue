@@ -1,10 +1,10 @@
 <template>
   <!-- 仅供改样式快速搜索：菜单切换 -->
-  <div class="flex flex-row rounded-lg p-1 " :class="bgColor"
-    :style="{ backgroundColor: 'var(--secondary-bg)', height: itemHeight }">
+  <div :class="bgColor" :style="{ backgroundColor: 'var(--secondary-bg)', height: itemHeight }"
+       class="flex flex-row rounded-lg p-1 ">
     <div v-for="(item, index) in navList"
-      class=" w-40 h-full nav-item flex justify-center btn-active items-center relative rounded-lg pointer"
-      @click.stop="clickNav(item, index)" :class="activeIndex === index ? 'xt-active-btn ' : 'xt-text-2'">
+         :class="activeIndex === index ? 'xt-active-btn ' : 'xt-text-2'"
+         class=" w-40 h-full nav-item flex justify-center btn-active items-center relative rounded-lg pointer" @click.stop="clickNav(item, index)">
       <span class="">{{ item.title }}</span>
       <div v-if="item.state === true" class="state-dot ml-2"></div>
     </div>
@@ -22,7 +22,8 @@ export default {
     },
     selectType: {
       type: Object,
-      default: () => { }
+      default: () => {
+      }
     },
     bgColor: {
       type: String,
@@ -75,14 +76,15 @@ export default {
 }
 </script>
 
-<style  scoped>
+<style scoped>
 .state-dot {
   width: 8px;
   height: 8px;
   background: #FF4D4F;
   border-radius: 4px;
 }
-.item-text{
-  color: rgba(255,255,255,0.85);
+
+.item-text {
+  color: rgba(255, 255, 255, 0.85);
 }
 </style>

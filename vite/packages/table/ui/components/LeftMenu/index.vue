@@ -1,26 +1,26 @@
 <template>
   <div
-    class="xt-text flex h-full xt-bg"
-    style="box-sizing: border-box"
-    :class="[typeClass]"
+      :class="[typeClass]"
+      class="xt-text flex h-full xt-bg"
+      style="box-sizing: border-box"
   >
     <!-- 左侧区域开始 -->
     <div
-      class="flex flex-col items-center h-full xt-br mr-3"
-      style="width: 72px; min-width: 72px"
+        class="flex flex-col items-center h-full xt-br mr-3"
+        style="width: 72px; min-width: 72px"
     >
       <div v-for="list in listOption" :class="list?.class">
         <Float
-          @itemClick="itemClick"
-          :list="item.children"
-          v-for="item in list.array"
-          :data="item"
+            v-for="item in list.array"
+            :data="item"
+            :list="item.children"
+            @itemClick="itemClick"
         >
           <Box
-            :item="item"
-            :id="currentIndex"
-            :boxClass="list?.boxClass"
-            :model="model"
+              :id="currentIndex"
+              :boxClass="list?.boxClass"
+              :item="item"
+              :model="model"
           >
             <Item :item="item" v-bind="list?.itemOption">
               <template #[item.slot]>
@@ -28,7 +28,9 @@
               </template>
             </Item>
           </Box>
-          <template #content> <slot :name="item.float"> </slot> </template>
+          <template #content>
+            <slot :name="item.float"></slot>
+          </template>
         </Float>
       </div>
     </div>
@@ -42,15 +44,15 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, toRefs } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { storeToRefs } from "pinia";
+import {computed, ref, toRefs} from "vue";
+import {storeToRefs} from "pinia";
 import Float from "./Float.vue";
 import Box from "./Box.vue";
 import Item from "./Item.vue";
-import { appStore } from "../../../store";
+import {appStore} from "../../../store";
+
 const store = appStore();
-const { fullScreen } = storeToRefs(store);
+const {fullScreen} = storeToRefs(store);
 
 const props = defineProps({
   config: {
@@ -68,7 +70,7 @@ const props = defineProps({
     default: 1,
   },
   modelValue: {},
-  index: { default: false },
+  index: {default: false},
   list: {
     default: () => {
       return [
@@ -94,8 +96,8 @@ const isFull = ref(false);
 const typeClass = computed(() => {
   if (full.value) {
     return isFull.value && fullScreen.value
-      ? " fixed left-0 right-0 top-0 bottom-0 pr-3 py-3 "
-      : "xt-bg pr-3 py-3 rounded-xl";
+        ? " fixed left-0 right-0 top-0 bottom-0 pr-3 py-3 "
+        : "xt-bg pr-3 py-3 rounded-xl";
   }
 });
 
@@ -104,7 +106,7 @@ const typeClass = computed(() => {
 // watch(route, (newRoute) => {
 //   if (full.value && currentPage !== newRoute.path) isFull.value = false;
 // });
-const { list } = toRefs(props);
+const {list} = toRefs(props);
 // 动态添加ID
 const newList = computed(() => {
   let index = -1;
@@ -128,7 +130,7 @@ const listOption = computed(() => {
     },
     {
       class:
-        "xt-scrollbar xt-container xt-bt flex flex-col items-center flex-1",
+          "xt-scrollbar xt-container xt-bt flex flex-col items-center flex-1",
       boxClass: "mt-2",
       array: newList.value.slice(props.last, -1 * props.end),
       itemOption: {

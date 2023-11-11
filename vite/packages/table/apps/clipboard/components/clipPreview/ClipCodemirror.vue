@@ -4,48 +4,50 @@
 </template>
 
 <script>
-import { mapWritableState,mapActions } from 'pinia'
-import { clipboardStore } from '../../store';
+import {mapWritableState} from 'pinia'
+import {clipboardStore} from '../../store';
 import CodeMirror from 'codemirror'
 
 export default {
-  props:{
-    editorContent:{
-      type:String,
+  props: {
+    editorContent: {
+      type: String,
     }
   },
-  computed:{
-    ...mapWritableState(clipboardStore,['settings']),
+  computed: {
+    ...mapWritableState(clipboardStore, ['settings']),
   },
-  mounted(){
-    const {clipMode,clipTheme,previewShow,showLineNumber,clipSize}=this.settings
-    this.myClipRefs = CodeMirror(this.$refs.myClip,{
-      value:this.editorContent,
-      theme:clipTheme,
-      smartIndent:true,
-      tabSize:clipSize,
-      indentWithTabs:true,
+  mounted() {
+    const {clipMode, clipTheme, previewShow, showLineNumber, clipSize} = this.settings
+    this.myClipRefs = CodeMirror(this.$refs.myClip, {
+      value: this.editorContent,
+      theme: clipTheme,
+      smartIndent: true,
+      tabSize: clipSize,
+      indentWithTabs: true,
       lineWrapping: true,
       lineNumbers: showLineNumber,
       direction: "ltr",
-      singleCursorHeightPerLine:true,
-      autocorrect:true,
-      viewportMargin:10,
-      spellcheck:true,
-      mode:clipMode
+      singleCursorHeightPerLine: true,
+      autocorrect: true,
+      viewportMargin: 10,
+      spellcheck: true,
+      mode: clipMode
     })
   }
 }
 </script>
 
 <style lang="scss" scoped>
-:deep(.CodeMirror-vscrollbar){
+:deep(.CodeMirror-vscrollbar) {
   display: none !important;
 }
-:deep(.CodeMirror-hscrollbar){
+
+:deep(.CodeMirror-hscrollbar) {
   display: none !important;
 }
-:deep(.CodeMirror-scrollbar-filler){
+
+:deep(.CodeMirror-scrollbar-filler) {
   display: none !important;
 }
 
@@ -57,7 +59,7 @@ export default {
 </style>
 
 <style>
-.CodeMirror-gutters{
+.CodeMirror-gutters {
   background: none !important;
 }
 </style>

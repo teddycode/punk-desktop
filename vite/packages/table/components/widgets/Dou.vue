@@ -1,9 +1,12 @@
 <template>
-  <div class="card" >
-    <div class="title"><Icon icon="douban" style="height: 1.3em;width: 1.3em;margin-right: 0.1em"></Icon> 豆瓣FM</div>
+  <div class="card">
+    <div class="title">
+      <Icon icon="douban" style="height: 1.3em;width: 1.3em;margin-right: 0.1em"></Icon>
+      豆瓣FM
+    </div>
     <div style="text-align: center;padding:3em;position:relative;">
       <div class="play-wrapper">
-        <Icon icon="bofang" class="play-btn"></Icon>
+        <Icon class="play-btn" icon="bofang"></Icon>
       </div>
       <a-avatar :size="100" src=""></a-avatar>
     </div>
@@ -27,27 +30,31 @@
 <script>
 export default {
   name: 'Dou',
-  data(){
-    return{
-      status:'pause',
+  data() {
+    return {
+      status: 'pause',
     }
   },
-  methods:{
-  }
+  methods: {}
 }
 </script>
 
-<style scoped lang="scss">
-.play-btn{
-  width: 5em;height:5em;margin-top: -0.8em;margin-left: 0.3em
+<style lang="scss" scoped>
+.play-btn {
+  width: 5em;
+  height: 5em;
+  margin-top: -0.8em;
+  margin-left: 0.3em
 }
-.play-wrapper{
-  &:hover{
-    .play-btn{
+
+.play-wrapper {
+  &:hover {
+    .play-btn {
       color: #e3e3e3;
     }
+
     background: rgb(0 0 0 / 50%);
-   }
+  }
 
   cursor: pointer;
   position: absolute;

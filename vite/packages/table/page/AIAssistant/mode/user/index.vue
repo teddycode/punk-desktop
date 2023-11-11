@@ -2,9 +2,9 @@
   <div class="flex flex-wrap" style="align-content: flex-start">
     <template v-for="item in userData">
       <div
-        @click="useDome()"
-        style="height: 150px; width: 280px"
-        class="mt-4 mr-4 xt-bg-2 rounded-xl flex justify-center items-center flex-col p-8 cursor-pointer"
+          class="mt-4 mr-4 xt-bg-2 rounded-xl flex justify-center items-center flex-col p-8 cursor-pointer"
+          style="height: 150px; width: 280px"
+          @click="useDome()"
       >
         <div class="text-base mb-3">{{ item.name }}</div>
         <div class="text-sm xt-text-2">{{ item.value }}</div>
@@ -14,10 +14,11 @@
 </template>
 
 <script>
-import { userData } from "./userData";
+import {userData} from "./userData";
 
-import { mapWritableState } from "pinia";
-import { aiStore } from "../../../../store/ai";
+import {mapWritableState} from "pinia";
+import {aiStore} from "../../../../store/ai";
+
 export default {
   computed: {
     ...mapWritableState(aiStore, ["isMode"]),

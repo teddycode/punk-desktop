@@ -1,24 +1,25 @@
 <template>
   <a-row class="w-full h-full">
-    <a-col  class="flex flex-col h-full px-3 find-left" v-if="isFloat === false"
-      style=" border-right:1px solid var(--divider);"
+    <a-col v-if="isFloat === false" class="flex flex-col h-full px-3 find-left"
+           style=" border-right:1px solid var(--divider);"
     >
-    <!-- :style="doubleCol ? { width:'336px' } :{ width:'240px '}" -->
-    <!-- :flex="doubleCol ? 0 1 336 : 0 1 240 "  -->
-    <!-- flex=" 0 1 300px" -->
+      <!-- :style="doubleCol ? { width:'336px' } :{ width:'240px '}" -->
+      <!-- :flex="doubleCol ? 0 1 336 : 0 1 240 "  -->
+      <!-- flex=" 0 1 300px" -->
 
-      <DefaultFloat :communityID="routeData"  :float="false" @updateColumn="updateColumn" @createCategory="clickEmptyButton" @clickItem="currentItem"></DefaultFloat>
+      <DefaultFloat :communityID="routeData" :float="false" @clickItem="currentItem"
+                    @createCategory="clickEmptyButton" @updateColumn="updateColumn"></DefaultFloat>
 
     </a-col>
 
-    <a-col flex=" 1 1 200px" class="flex flex-col h-full">
+    <a-col class="flex flex-col h-full" flex=" 1 1 200px">
       <div class="flex items-center px-4 mb-0 line-title">
         <div class="flex items-center justify-center">
           <template v-if="currentChannel.type === 'group'">
-            <communityIcon icon="fluent-emoji-flat:thought-balloon" style="font-size: 2em;" />
+            <communityIcon icon="fluent-emoji-flat:thought-balloon" style="font-size: 2em;"/>
           </template>
           <template v-if="currentChannel.type === 'link'">
-            <communityIcon icon="fluent-emoji-flat:globe-with-meridians" style="font-size: 2em;" />
+            <communityIcon icon="fluent-emoji-flat:globe-with-meridians" style="font-size: 2em;"/>
           </template>
           <template v-if="currentChannel.type === 'forum'">
             <communityIcon icon="fluent-emoji-flat:placard" style="font-size: 2em;"/>
@@ -31,11 +32,11 @@
         <ValidateModal :data="group"></ValidateModal>
       </div>
 
-      <div style="height: 0;flex:1" v-else>
+      <div v-else style="height: 0;flex:1">
         <template v-if="!currentChannel.name">
           <div class="flex flex-col items-center justify-center h-full">
-            <div style="width:64px;height:64px;" class="rounded-full mb-6">
-              <img src="/icons/logo128.png" class="w-full h-full object-cover rounded-full"/>
+            <div class="rounded-full mb-6" style="width:64px;height:64px;">
+              <img class="w-full h-full object-cover rounded-full" src="/icons/logo128.png"/>
             </div>
             <span class="font-24-500" style="color:var(--primary-text);">欢迎加入，磐古跨链客户端官方社群</span>
             <div class="mt-4 flex justify-center items-center" style="width:362px;">
@@ -50,7 +51,7 @@
             </div>
           </div>
         </template>
-        <Commun v-else-if="currentChannel.type === 'forum'" :forum-id="currentChannel.props.id" />
+        <Commun v-else-if="currentChannel.type === 'forum'" :forum-id="currentChannel.props.id"/>
         <TUIChat v-else-if="currentChannel.type==='group'"></TUIChat>
         <template v-else-if="currentChannel.type==='link'">
           <div v-if="currentChannel.props.openMethod==='userSelect'" style="text-align: center;margin-top: 30%">
@@ -72,26 +73,26 @@
 </template>
 
 <script>
-import { defineComponent, reactive, toRefs, ref, computed } from 'vue'
-import { chatList,hideDropList } from '../../../js/data/chatList'
+import {computed, defineComponent, reactive, ref, toRefs} from 'vue'
+import {chatList, hideDropList} from '../../../js/data/chatList'
 import ChatDropDown from '../components/float/ChatsDropDown.vue'
 import ChatFold from '../components/float/ChatFolds.vue'
-import { AppstoreOutlined, MessageOutlined, LinkOutlined,SelectOutlined } from '@ant-design/icons-vue'
+import {AppstoreOutlined, LinkOutlined, MessageOutlined, SelectOutlined} from '@ant-design/icons-vue'
 import Commun from '../Commun.vue'
-import { chatStore } from '../../../store/chat'
+import {chatStore} from '../../../store/chat'
 import browser from '../../../js/common/browser'
 import Emoji from '../../../components/comp/Emoji.vue'
-import { checkGroupShip } from '../../../js/common/sns'
+import {checkGroupShip} from '../../../js/common/sns'
 import Modal from '../../../components/Modal.vue'
 import ValidateModal from '../components/ValidationPrompts.vue'
-import { message } from 'ant-design-vue'
-import { Icon as communityIcon } from '@iconify/vue'
+import {message} from 'ant-design-vue'
+import {Icon as communityIcon} from '@iconify/vue'
 import DefaultFloat from '../components/float/DefaultsFloat.vue'
 
 
 export default defineComponent({
   components: {
-    AppstoreOutlined, MessageOutlined, LinkOutlined,SelectOutlined,
+    AppstoreOutlined, MessageOutlined, LinkOutlined, SelectOutlined,
     Emoji,
     ChatDropDown,
     ChatFold, Commun, Modal, ValidateModal,
@@ -99,13 +100,13 @@ export default defineComponent({
     communityIcon
   },
 
-  data(){
-    return{
-      routeData:this.$route.params
+  data() {
+    return {
+      routeData: this.$route.params
     }
   },
 
-  setup () {
+  setup() {
 
     const chat = chatStore()
     // const community = chatAdminStore()
@@ -132,7 +133,7 @@ export default defineComponent({
       group: {}, // 接收传递的社群id
       isChat: 'yes',
 
-      avatarUrl:'/icons/logo28.png'
+      avatarUrl: '/icons/logo28.png'
     })
 
     const updatePage = () => {
@@ -179,7 +180,7 @@ export default defineComponent({
     })
 
     return {
-      doubleCol, isFloat,hideDropList,
+      doubleCol, isFloat, hideDropList,
       ...toRefs(data), updatePage,
       currentItem, checkGroupShip,
     }
@@ -209,7 +210,7 @@ export default defineComponent({
     opacity: 0.8;
   }
 
-  &:hover ,&.active {
+  &:hover, &.active {
     background: var(--active-secondary-bg);
   }
 }
@@ -223,7 +224,7 @@ export default defineComponent({
   transform: rotateY(180deg)
 }
 
-.font-24-500{
+.font-24-500 {
   font-size: 24px;
   font-weight: 500;
 }

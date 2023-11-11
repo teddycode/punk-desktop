@@ -6,8 +6,9 @@
 <script>
 import Modes from "./Modes.vue";
 import Use from "./Use.vue";
-import { mapWritableState } from "pinia";
-import { aiStore } from "../../../../store/ai";
+import {mapWritableState} from "pinia";
+import {aiStore} from "../../../../store/ai";
+
 export default {
   computed: {
     ...mapWritableState(aiStore, ["isMode"]),

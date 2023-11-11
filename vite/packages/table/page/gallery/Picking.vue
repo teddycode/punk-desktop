@@ -3,9 +3,10 @@
     <div class="w-96 h-12 flex items-center">
       <div class="w-80 h-12 bg-opacity-10 rounded-lg flex items-center xt-bg-2 ">
         <div class="w-20 h-12 flex items-center justify-center"
-          style="border-right: 1px solid rgba(255, 255, 255, 0.1);color: var(--primary-text);">
-          壁纸源</div>
-        <a-select class="w-full" :bordered="false" v-model:value="pickFilterValue" @change="pickFilterChange($event)">
+             style="border-right: 1px solid rgba(255, 255, 255, 0.1);color: var(--primary-text);">
+          壁纸源
+        </div>
+        <a-select v-model:value="pickFilterValue" :bordered="false" class="w-full" @change="pickFilterChange($event)">
           <a-select-option v-for="item in  paperSourceOption " :value="item.name" style="color: var(--font - color)">
             {{ item.title }}
           </a-select-option>
@@ -15,11 +16,11 @@
     <div class="w-48 h-12 flex items-center justify-end" style="margin-right: 1em;color:var(--primary-text);">
       <div class="w-2/5 h-12 flex items-center rounded-lg cursor-pointer justify-center s-icon" @click="openFilter">
         <Icon icon="filter" style="font-size: 1.715em;"></Icon>
-        <span style="font-size: 1.15em; " class="s-text">筛选</span>
+        <span class="s-text" style="font-size: 1.15em; ">筛选</span>
       </div>
-      <div class="w-12 h-12 flex items-center rounded-lg cursor-pointer justify-center s-icon" @click="openInfo"
-        style="margin-left: 12px;">
-        <InfoCircleOutlined style="font-size: 1.715em;" />
+      <div class="w-12 h-12 flex items-center rounded-lg cursor-pointer justify-center s-icon" style="margin-left: 12px;"
+           @click="openInfo">
+        <InfoCircleOutlined style="font-size: 1.715em;"/>
       </div>
     </div>
   </div>
@@ -27,33 +28,33 @@
     <vue-custom-scrollbar id="pick-wrapper" :settings="settingsScroller" style="height: 100%">
       <viewer :images="pickImageData" :options="options">
         <div style="display: flex; align-items: center; justify-content: center;">
-          <a-spin v-if="isLoading" />
+          <a-spin v-if="isLoading"/>
         </div>
-        <a-row :gutter="[20, 20]" id="pick-images" ref="pickRef" style="margin-right: 1em">
-          <a-col class="image-wrapper " v-for=" (img,index)  in  pickImageData " :span="6" style="">
+        <a-row id="pick-images" ref="pickRef" :gutter="[20, 20]" style="margin-right: 1em">
+          <a-col v-for=" (img,index)  in  pickImageData " :span="6" class="image-wrapper " style="">
             <!-- 拾光壁纸循环位置 -->
-        <xt-task v-if="index==0" :modelValue="m01036" @cb="pickShow(img)">
-          <img @contextmenu.stop="pickShow(img)" class="image-item pointer" :src="img.src" :data-source="img.path"
-              :alt="img.resolution" style="position: relative">
-            <div style="position: absolute;right: 0;top: -10px ;padding: 10px">
-              <div @click.stop="addToMy(img)" class="bottom-actions pointer"
-                :style="{ background: isInMyPapers(img) ? '#009d00a8' : '' }">
-                <Icon v-if="!isInMyPapers(img)" icon="tianjia1"></Icon>
-                <Icon v-else style="" icon="yiwancheng"></Icon>
+            <xt-task v-if="index==0" :modelValue="m01036" @cb="pickShow(img)">
+              <img :alt="img.resolution" :data-source="img.path" :src="img.src" class="image-item pointer"
+                   style="position: relative" @contextmenu.stop="pickShow(img)">
+              <div style="position: absolute;right: 0;top: -10px ;padding: 10px">
+                <div :style="{ background: isInMyPapers(img) ? '#009d00a8' : '' }" class="bottom-actions pointer"
+                     @click.stop="addToMy(img)">
+                  <Icon v-if="!isInMyPapers(img)" icon="tianjia1"></Icon>
+                  <Icon v-else icon="yiwancheng" style=""></Icon>
+                </div>
               </div>
-            </div>
-        </xt-task>
-        <template v-else>
-          <img @contextmenu.stop="pickShow(img)" class="image-item pointer" :src="img.src" :data-source="img.path"
-              :alt="img.resolution" style="position: relative">
-            <div style="position: absolute;right: 0;top: -10px ;padding: 10px">
-              <div @click.stop="addToMy(img)" class="bottom-actions pointer"
-                :style="{ background: isInMyPapers(img) ? '#009d00a8' : '' }">
-                <Icon v-if="!isInMyPapers(img)" icon="tianjia1"></Icon>
-                <Icon v-else style="" icon="yiwancheng"></Icon>
+            </xt-task>
+            <template v-else>
+              <img :alt="img.resolution" :data-source="img.path" :src="img.src" class="image-item pointer"
+                   style="position: relative" @contextmenu.stop="pickShow(img)">
+              <div style="position: absolute;right: 0;top: -10px ;padding: 10px">
+                <div :style="{ background: isInMyPapers(img) ? '#009d00a8' : '' }" class="bottom-actions pointer"
+                     @click.stop="addToMy(img)">
+                  <Icon v-if="!isInMyPapers(img)" icon="tianjia1"></Icon>
+                  <Icon v-else icon="yiwancheng" style=""></Icon>
+                </div>
               </div>
-            </div>
-        </template>
+            </template>
           </a-col>
         </a-row>
       </viewer>
@@ -61,12 +62,13 @@
   </div>
 
 
-  <a-drawer v-model:visible="pickFilterShow" title="筛选" style="text-align: center !important;" class="no-drag"
-    @close="closeFilter()">
-    <div class="w-full h-12  flex rounded-lg" style="border:1px solid rgba(255, 255, 255, 0.1);margin-bottom:1.714289em;">
-      <div class="w-1/3 h-100 flex items-center justify-center filter-item"
-        :class="filterIndex === item.index ? 'active' : ''" v-for=" item  in  filterOption "
-        @click="filterOptionClick(item)" style="border-right:1px solid rgba(255, 255, 255, 0.1);">
+  <a-drawer v-model:visible="pickFilterShow" class="no-drag" style="text-align: center !important;" title="筛选"
+            @close="closeFilter()">
+    <div class="w-full h-12  flex rounded-lg"
+         style="border:1px solid rgba(255, 255, 255, 0.1);margin-bottom:1.714289em;">
+      <div v-for=" item  in  filterOption "
+           :class="filterIndex === item.index ? 'active' : ''" class="w-1/3 h-100 flex items-center justify-center filter-item"
+           style="border-right:1px solid rgba(255, 255, 255, 0.1);" @click="filterOptionClick(item)">
         {{ item.title }}
       </div>
     </div>
@@ -74,7 +76,7 @@
       <span>分类</span>
       <template v-if="pickFilterValue !== '/wallhaven/v2'">
         <div class="w-60  bg-white bg-opacity-10 rounded-lg flex items-center ">
-          <a-select class="w-full" :bordered="false" v-model:value="classValue" @change="filterClassValue($event)">
+          <a-select v-model:value="classValue" :bordered="false" class="w-full" @change="filterClassValue($event)">
             <a-select-option v-for=" item  in  classOption " :value="item.id">
               {{ item.name }}
             </a-select-option>
@@ -83,9 +85,11 @@
       </template>
       <template v-else>
         <div class="w-60  bg-white bg-opacity-10 rounded-lg flex items-center ">
-          <a-select class="w-full" :bordered="false" v-model:value="wallValue" @change="wallFilterChange($event)">
+          <a-select v-model:value="wallValue" :bordered="false" class="w-full" @change="wallFilterChange($event)">
             <a-select-option v-for=" item  in  wallFilterOption " :value="item.id">
-              {{ item.id === 'anime' ? '动漫精选' : item.id === 'general' ? '热门精选' : item.id === 'people' ? '人物精选' : '' }}
+              {{
+                item.id === 'anime' ? '动漫精选' : item.id === 'general' ? '热门精选' : item.id === 'people' ? '人物精选' : ''
+              }}
             </a-select-option>
           </a-select>
         </div>
@@ -93,34 +97,38 @@
     </div>
     <div class="w-full h-12  flex items-center justify-between" style="margin-bottom:1.714289em;">
       <span>筛选项</span>
-      <a-switch v-model:checked="pickChecked" />
+      <a-switch v-model:checked="pickChecked"/>
     </div>
     <div class="w-full flex items-center justify-center">
-      <div @click="restFilter"
-        class="w-28 h-12  flex items-center justify-center  rounded-lg cursor-pointer  bg-white bg-opacity-10">
+      <div class="w-28 h-12  flex items-center justify-center  rounded-lg cursor-pointer  bg-white bg-opacity-10"
+           @click="restFilter">
         <span>重置筛选</span>
       </div>
     </div>
   </a-drawer>
 
-  <a-drawer v-model:visible="pickInfoShow" title="信息" style="text-align: center !important;" class="no-drag"
-    :footer-style="{ border: 'none' }">
+  <a-drawer v-model:visible="pickInfoShow" :footer-style="{ border: 'none' }" class="no-drag" style="text-align: center !important;"
+            title="信息">
     <div class="flex w-full   justify-center items-center flex-col">
       <div class="flex-col flex justify-start mx-2 my-40">
         <div class="flex" style="margin-bottom: 12px;">
-          <span style="margin-right: 16px; color:rgba(255, 255, 255, 0.6); font-size: 16px; font-weight: 400;">壁纸源</span>
-          <span style="color:rgba(255, 255, 255, 0.85); font-size: 16px; font-weight: 400;">{{ defaultSynopsis.title
-          }}</span>
+          <span
+              style="margin-right: 16px; color:rgba(255, 255, 255, 0.6); font-size: 16px; font-weight: 400;">壁纸源</span>
+          <span style="color:rgba(255, 255, 255, 0.85); font-size: 16px; font-weight: 400;">{{
+              defaultSynopsis.title
+            }}</span>
         </div>
         <div class="flex" style="margin-bottom: 12px;">
           <span style="color:rgba(255, 255, 255, 0.6);font-size: 16px; font-weight: 400;">简介</span>
           <span class="ml-8" style="color:rgba(255, 255, 255, 0.85); font-size: 16px; font-weight: 400;">{{
-            defaultSynopsis.synopsis }}</span>
+              defaultSynopsis.synopsis
+            }}</span>
         </div>
         <div class="flex items-center">
-          <span style="margin-right: 30px; color:rgba(255, 255, 255, 0.6);font-size: 16px; font-weight: 400;">官网</span>
+          <span
+              style="margin-right: 30px; color:rgba(255, 255, 255, 0.6);font-size: 16px; font-weight: 400;">官网</span>
           <span class="w-40 h-12 flex items-center rounded-lg cursor-pointer justify-center bg-white bg-opacity-10"
-            @click="toOfficialWebsite">
+                @click="toOfficialWebsite">
             访问官网
           </span>
         </div>
@@ -131,30 +139,30 @@
     </template>
   </a-drawer>
 
-  <a-drawer :height="200" v-model:visible="visibleMenu" placement="bottom">
+  <a-drawer v-model:visible="visibleMenu" :height="200" placement="bottom">
     <a-row :gutter="20" style="text-align: center">
       <a-col :span="4">
-        <div @click="setDesktopPaper" class="btn">
-          <Icon style="font-size: 3em" icon="tianjia1"></Icon>
+        <div class="btn" @click="setDesktopPaper">
+          <Icon icon="tianjia1" style="font-size: 3em"></Icon>
           <div>设置为桌面壁纸</div>
         </div>
       </a-col>
 
       <a-col>
-        <div @click="add()" class="btn">
-          <Icon style="font-size: 3em" icon="xiazai"></Icon>
+        <div class="btn" @click="add()">
+          <Icon icon="xiazai" style="font-size: 3em"></Icon>
           <div>下载该壁纸</div>
         </div>
       </a-col>
       <a-col :span="4">
-      <xt-task :modelValue="m01037"  @cb="setAppPaper">
-        <div @click="setAppPaper" class="btn relative">
-          <Icon style="font-size: 3em" icon="tianjia1"></Icon>
-          <div>设为工作台背景</div>
-          <GradeSmallTip powerType="mainWallpaper"></GradeSmallTip>
-        </div>
+        <xt-task :modelValue="m01037" @cb="setAppPaper">
+          <div class="btn relative" @click="setAppPaper">
+            <Icon icon="tianjia1" style="font-size: 3em"></Icon>
+            <div>设为工作台背景</div>
+            <GradeSmallTip powerType="mainWallpaper"></GradeSmallTip>
+          </div>
 
-      </xt-task>
+        </xt-task>
       </a-col>
 
     </a-row>
@@ -162,29 +170,30 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
-import { InfoCircleOutlined } from '@ant-design/icons-vue'
+import {defineComponent, ref} from 'vue';
+import {InfoCircleOutlined} from '@ant-design/icons-vue'
 import axios from 'axios';
-import { paperStore } from "../../store/paper";
-import { mapActions, mapState,mapWritableState } from "pinia";
-import { message, Modal } from 'ant-design-vue'
+import {paperStore} from "../../store/paper";
+import {mapActions, mapState, mapWritableState} from "pinia";
+import {message, Modal} from 'ant-design-vue'
 import GradeSmallTip from "../../components/GradeSmallTip.vue";
-import { appStore } from "../../store";
+import {appStore} from "../../store";
 import browser from '../../js/common/browser'
-import { taskStore } from '../../apps/task/store';
+import {taskStore} from '../../apps/task/store';
+
 export default defineComponent({
   name: 'Picking',
   components: {
     InfoCircleOutlined, GradeSmallTip
   },
   computed: {
-    ...mapState(paperStore, ["myPapers","settings"]),
-    ...mapWritableState(taskStore, ['taskID','step']),
+    ...mapState(paperStore, ["myPapers", "settings"]),
+    ...mapWritableState(taskStore, ['taskID', 'step']),
     m01036() {
-        return  this.step === 6 && this.taskID == "M0103"
+      return this.step === 6 && this.taskID == "M0103"
     },
     m01037() {
-        return this.taskID == "M0103" && this.step ==7
+      return this.taskID == "M0103" && this.step == 7
     }
   },
   data() {
@@ -233,7 +242,7 @@ export default defineComponent({
           synopsis: 'The best wallpapers on the Net'
         }
       ],
-      defaultSynopsis: { title: '拾光', name: '/timeline/v2', synopsis: '时光如歌,岁月如诗' }
+      defaultSynopsis: {title: '拾光', name: '/timeline/v2', synopsis: '时光如歌,岁月如诗'}
     }
   },
   mounted() {
@@ -261,7 +270,7 @@ export default defineComponent({
     getPickingData(e) {
       const api = 'https://api.nguaduot.cn'
       const cate = this.pickFilterValue === '/wallhaven/v2' ? this.wallValue :
-        this.pickFilterValue === '/timeline/v2' ? this.classValue : ''
+          this.pickFilterValue === '/timeline/v2' ? this.classValue : ''
       const order = this.filterValue
       const no = this.no
       const dateTime = this.dateTime
@@ -295,11 +304,11 @@ export default defineComponent({
             return
           }
         })
-          .finally(() => {
-            this.$nextTick(() => {
-              this.isLoading = false;
-            });
-          })
+            .finally(() => {
+              this.$nextTick(() => {
+                this.isLoading = false;
+              });
+            })
       }
     },
     setAppPaper() {
@@ -352,43 +361,43 @@ export default defineComponent({
     },
     isInMyPapers(image) {
       return (
-        this.myPapers.findIndex((img) => {
-          return image.src === img.src;
-        }) > -1
+          this.myPapers.findIndex((img) => {
+            return image.src === img.src;
+          }) > -1
       );
     },
 
     pickShow(item) {
-console.log('11111 :>> ', 11111);
+      console.log('11111 :>> ', 11111);
       this.currentPaper = item
       this.visibleMenu = true
     },
 
     // 下载壁纸
     add() {
-      if(this.settings.savePath === ''){
+      if (this.settings.savePath === '') {
         Modal.confirm({
-          centered:true,
+          centered: true,
           content: '您尚未设置壁纸保存目录，请设置目录，设置目录后下载将自动开始。',
           onOk: async () => {
             await this.queryStart()
           }
         })
-      }else{
+      } else {
         this.doStartDownload(this.currentPaper.path)
       }
     },
 
     //开始下载文件
-    doStartDownload(item){
+    doStartDownload(item) {
       message.info('开始下载壁纸')
       const name = item.split('/')
-      const fileName  = name[name.length - 1]
+      const fileName = name[name.length - 1]
       tsbApi.download.start({
-        url:item,
+        url: item,
         savePath: this.settings.savePath + '/static/' + fileName,
-        done:(args)=>{
-          console.log('排查::>>',args)
+        done: (args) => {
+          console.log('排查::>>', args)
           message.success('壁纸下载完成')
         }
       })
@@ -396,7 +405,7 @@ console.log('11111 :>> ', 11111);
     },
 
     // 用户没有选中指定文件时需要提示选中文件
-    async queryStart (){
+    async queryStart() {
       let savePath = await tsbApi.dialog.showOpenDialog({
         title: '选择目录', message: '请选择下载壁纸的目录', properties: [
           'openDirectory', 'createDirectory',
@@ -500,12 +509,13 @@ console.log('11111 :>> ', 11111);
 
 <style lang="scss" scoped>
 .s-icon svg {
- filter: none  !important;
+  filter: none !important;
 }
 
 .s-text {
-    text-shadow: none;
+  text-shadow: none;
 }
+
 .filter-item:nth-of-type(3) {
   border: none !important;
 }
@@ -523,7 +533,8 @@ console.log('11111 :>> ', 11111);
     border-bottom-right-radius: 0.5em;
   }
 }
-:deep(.ant-select){
+
+:deep(.ant-select) {
   background: none;
 }
 </style>

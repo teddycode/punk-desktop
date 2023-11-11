@@ -2,52 +2,55 @@
   <div>
     <xt-text class="mb-3">
       <xt-new-icon
-        icon="fluent:chevron-left-16-filled"
-        @click="back()"
-        bgClass="xt-bg-2"
-        class="mr-3"
-        w="40"
+          bgClass="xt-bg-2"
+          class="mr-3"
+          icon="fluent:chevron-left-16-filled"
+          w="40"
+          @click="back()"
       />
       {{ task.chapter }}
       <template #right>
-        <Progress style="width: 68px; height: 20px" :task="task"
-      /></template>
+        <Progress :task="task" style="width: 68px; height: 20px"
+        />
+      </template>
     </xt-text>
     <xt-collapse v-for="data in task.tasks">
       <template #title>
         <xt-text>
-          <xt-new-icon :icon="icon" class="mr-3" size="20" />
+          <xt-new-icon :icon="icon" class="mr-3" size="20"/>
           {{ data.title }}
-        </xt-text></template
+        </xt-text>
+      </template
       >
-      <xt-title type="text" m="mb">{{ data.info }} </xt-title>
+      <xt-title m="mb" type="text">{{ data.info }}</xt-title>
       <xt-button
-        v-if="taskState(data)"
-        @click="getReceive(data)"
-        style="background: #faad14 !important; width: 100%"
-        >领取奖励</xt-button
+          v-if="taskState(data)"
+          style="background: #faad14 !important; width: 100%"
+          @click="getReceive(data)"
+      >领取奖励
+      </xt-button
       >
-      <xt-button v-else @click="startTak(data)" type="theme" style="width: 100%"
-        >开始任务</xt-button
+      <xt-button v-else style="width: 100%" type="theme" @click="startTak(data)"
+      >开始任务
+      </xt-button
       >
     </xt-collapse>
   </div>
 </template>
 
 <script setup>
-import { computed, toRefs, ref, reactive } from "vue";
-import { message } from "ant-design-vue";
-import { useRouter } from "vue-router";
-import { storeToRefs } from "pinia";
+import {message} from "ant-design-vue";
+import {useRouter} from "vue-router";
+import {storeToRefs} from "pinia";
 
 import Progress from "../../components/progress/index.vue";
-import { guide } from "./guide";
+import {guide} from "./guide";
 
-import { taskStore } from "../../store";
+import {taskStore} from "../../store";
 
 const store = taskStore();
 const router = useRouter();
-const { successBranchTask, startBranchTask } = storeToRefs(store);
+const {successBranchTask, startBranchTask} = storeToRefs(store);
 
 const props = defineProps({
   task: {
@@ -65,7 +68,7 @@ const back = () => {
 // 开始任务
 const startTak = (data) => {
   // 1 前置进度校验
-  const { id, pre, title } = data;
+  const {id, pre, title} = data;
   if (pre) {
     // 没完成
     if (!successBranchTask.value.includes(pre)) {
@@ -77,7 +80,7 @@ const startTak = (data) => {
   startBranchTask.value.push(id);
   let currentGuide = guide[id];
 
-  const { type, value } = guide[id];
+  const {type, value} = guide[id];
   if (type == "router") {
     router.push({
       name: value,

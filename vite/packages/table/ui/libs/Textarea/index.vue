@@ -1,21 +1,21 @@
 <template>
   <textarea
-    class="rounded-xl xt-bg-2 xt-scrollbar w-full p-2 no-darg"
-    :class="border"
-    style="
+      v-model="searchValue"
+      :class="border"
+      :placeholder="placeholder"
+      class="rounded-xl xt-bg-2 xt-scrollbar w-full p-2 no-darg"
+      rows="1"
+      spellcheck="false"
+      style="
       resize: none;
       background-color: transparent;
       outline: 0px solid transparent;
       outline-offset: 0px;
     "
-    rows="1"
-    v-model="searchValue"
-    spellcheck="false"
-    :placeholder="placeholder"
-    @keydown.enter.exact.prevent="handleEnter"
-    @change="handleChange"
-    @focus="handleFocus"
-    @blur="handleBlur"
+      @blur="handleBlur"
+      @change="handleChange"
+      @focus="handleFocus"
+      @keydown.enter.exact.prevent="handleEnter"
   ></textarea>
 </template>
 

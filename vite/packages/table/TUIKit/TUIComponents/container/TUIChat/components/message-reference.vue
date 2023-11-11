@@ -1,34 +1,34 @@
 <template>
   <div
-    v-if="referenceMessage?.messageID && allMessageID.indexOf(referenceMessage.messageID) !== -1"
-    :class="`${type} ${message.flow === 'in' && type + '-reverse'}`"
+      v-if="referenceMessage?.messageID && allMessageID.indexOf(referenceMessage.messageID) !== -1"
+      :class="`${type} ${message.flow === 'in' && type + '-reverse'}`"
   >
     <p class="message-reference-user">
       <span class="nick">{{ referenceForShow.nick || referenceForShow.from }}</span>
       <span class="colon">{{ type === 'reference' ? ':' : '' }}</span>
     </p>
-    <div class="face-box" v-if="referenceMessage.messageType === constant.typeText">
+    <div v-if="referenceMessage.messageType === constant.typeText" class="face-box">
       <div v-for="(item, index) in face" :key="index">
-        <span class="text-box" v-if="item.name === 'text'">{{ item.text }}</span>
-        <img class="text-img" v-else-if="item.name === 'img'" :src="item.src" />
+        <span v-if="item.name === 'text'" class="text-box">{{ item.text }}</span>
+        <img v-else-if="item.name === 'img'" :src="item.src" class="text-img"/>
       </div>
     </div>
     <span v-if="referenceMessage.messageType === constant.typeCustom">{{ referenceMessage.messageAbstract }}</span>
     <img
-      v-if="referenceMessage.messageType === constant.typeImage"
-      class="message-img"
-      :src="referenceForShow.payload.imageInfoArray[1].url"
+        v-if="referenceMessage.messageType === constant.typeImage"
+        :src="referenceForShow.payload.imageInfoArray[1].url"
+        class="message-img"
     />
     <div v-if="referenceMessage.messageType === constant.typeVideo" class="message-video-cover">
       <img
-        class="message-videoimg"
-        :src="referenceForShow?.payload?.snapshotUrl || referenceForShow?.payload?.thumbUrl"
+          :src="referenceForShow?.payload?.snapshotUrl || referenceForShow?.payload?.thumbUrl"
+          class="message-videoimg"
       />
     </div>
-    <img v-if="referenceMessage.messageType === constant.typeFace" class="message-img" :src="url" />
+    <img v-if="referenceMessage.messageType === constant.typeFace" :src="url" class="message-img"/>
     <span
-      v-if="referenceMessage.messageType === constant.typeFile || referenceMessage.messageType === constant.typeAudio"
-      >{{ referenceMessage?.messageAbstract }}</span
+        v-if="referenceMessage.messageType === constant.typeFile || referenceMessage.messageType === constant.typeAudio"
+    >{{ referenceMessage?.messageAbstract }}</span
     >
   </div>
   <div v-else :class="`${type} ${message.flow === 'in' && type + '-reverse'}`">
@@ -37,9 +37,10 @@
   </div>
 </template>
 <script lang="ts">
-import { Message } from '../interface';
-import { defineComponent, reactive, toRefs, watch, watchEffect } from 'vue';
+import {Message} from '../interface';
+import {defineComponent, reactive, toRefs, watch, watchEffect} from 'vue';
 import constant from '../../constant';
+
 const MessageReference = defineComponent({
   props: {
     message: {
@@ -91,13 +92,13 @@ const MessageReference = defineComponent({
       data.type = props.type;
     });
     watch(
-      () => props.referenceForShow,
-      () => {
-        data.referenceForShow = props.referenceForShow;
-      },
-      {
-        deep: true,
-      }
+        () => props.referenceForShow,
+        () => {
+          data.referenceForShow = props.referenceForShow;
+        },
+        {
+          deep: true,
+        }
     );
     return {
       ...toRefs(data),
@@ -110,6 +111,7 @@ export default MessageReference;
 <style lang="scss" scoped>
 @import url('../../../styles/common.scss');
 @import url('../../../styles/icon.scss');
+
 .reference {
   width: 100%;
   display: flex;
@@ -117,24 +119,29 @@ export default MessageReference;
   justify-content: center;
   padding: 10px;
   line-height: 20px;
+
   .message-img,
   .message-video-cover,
   .message-videoimg {
     max-width: min(calc(100vw - 230px), 300px);
     max-height: min(calc(100vw - 230px), 300px);
   }
+
   .face-box {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+
     &-name {
       padding-right: 5px;
     }
+
     .text-img {
       width: 20px;
       height: 20px;
     }
   }
+
   p {
 
     font-weight: 400;
@@ -149,6 +156,7 @@ export default MessageReference;
     word-break: break-all;
     white-space: nowrap;
   }
+
   span {
     line-height: 20px;
 
@@ -160,25 +168,30 @@ export default MessageReference;
     word-wrap: break-word;
     word-break: break-all;
     display: inline-block;
+
     p {
       font-weight: 800;
     }
   }
 }
+
 .reply {
   display: flex;
   flex-direction: column;
   align-self: start;
   border-left: 2px solid rgba(0, 110, 255, 0.499298);
+
   &-reverse {
     border-left: 2px solid rgba(153, 153, 153, 0.3);
   }
+
   padding-left: 7px;
   margin-bottom: 5px;
   color: #999999;
   font-size: 12px;
   line-height: 20px;
   min-width: 40px;
+
   .message-img,
   .message-video-cover,
   .message-videoimg {
@@ -187,15 +200,18 @@ export default MessageReference;
     object-fit: contain;
     align-self: flex-start;
   }
+
   .face-box {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+
     .text-img {
       width: 20px;
       height: 20px;
     }
   }
+
   p {
     font-weight: 800;
     max-width: min(calc(100vw - 180px), 300px);
@@ -205,17 +221,20 @@ export default MessageReference;
     white-space: nowrap;
   }
 }
-.message-reference-user{
+
+.message-reference-user {
   display: flex;
   flex-direction: row;
-  .nick{
+
+  .nick {
     flex: 1;
     overflow: hidden;
     text-overflow: ellipsis;
     word-break: break-all;
     white-space: nowrap;
   }
-  .colon{
+
+  .colon {
     width: fit-content;
   }
 }

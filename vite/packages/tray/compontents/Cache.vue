@@ -1,5 +1,5 @@
 <template>
-  <div class="main" >
+  <div class="main">
     <div class="title flex justify-start align-center">
       <span class="text-title" style="margin-left: 10px">缓存 ： xx 限制</span>
     </div>
@@ -9,7 +9,7 @@
         <span class="text-content-w">可用: xxGB</span>
       </div>
       <div style="width: 80%;margin-left: 15px">
-        <a-progress strokeColor="#da1f1d" trailColor="#4d4d4d" :percent="30" :showInfo="false" />
+        <a-progress :percent="30" :showInfo="false" strokeColor="#da1f1d" trailColor="#4d4d4d"/>
       </div>
     </div>
   </div>

@@ -1,36 +1,36 @@
 <template>
   <div>
 
-    <Widget :desk="desk" :sizeList="sizeList" :options="options" :customIndex="customIndex" :menuList="menuList"
-      ref="cardSlot" :customData="customData">
+    <Widget ref="cardSlot" :customData="customData" :customIndex="customIndex" :desk="desk" :menuList="menuList"
+            :options="options" :sizeList="sizeList">
       <template #left-title>
         <div class="icon"
-          style="width: 35px;height: 24px;display: flex; justify-content: center;align-items: center;position: absolute;left: 2px;">
-          <FileSearchOutlined style="font-size: 20px;" />
+             style="width: 35px;height: 24px;display: flex; justify-content: center;align-items: center;position: absolute;left: 2px;">
+          <FileSearchOutlined style="font-size: 20px;"/>
         </div>
 
       </template>
       <div class="top-bar">
         <div class="center">
-          <div :class="['item', { action: currentIndex == index }]" v-for="(title, index) in showList"
-            @click="setCurrentIndex(index)" :style="{width:this.showSize.width==1?'81px':'67px'}">
-            <span >{{ title.title }}</span>
+          <div v-for="(title, index) in showList" :class="['item', { action: currentIndex == index }]"
+               :style="{width:this.showSize.width==1?'81px':'67px'}" @click="setCurrentIndex(index)">
+            <span>{{ title.title }}</span>
           </div>
         </div>
       </div>
       <div v-if="pageToggle">
         <div v-if="isLoading">
-          <a-spin style="display: flex; justify-content: center; align-items:center;margin-top: 25%" />
+          <a-spin style="display: flex; justify-content: center; align-items:center;margin-top: 25%"/>
         </div>
-        <div class="content" v-else >
-          <div v-for="(item, index) in newsItemList" style="display: flex;" class="set-type">
-            <span class="sort">{{ index+1 }}</span>
+        <div v-else class="content">
+          <div v-for="(item, index) in newsItemList" class="set-type" style="display: flex;">
+            <span class="sort">{{ index + 1 }}</span>
             <div class="item">
-              <NewsItem  :key="index" :newsMsgList="item" :copyNum="copyNum"/>
+              <NewsItem :key="index" :copyNum="copyNum" :newsMsgList="item"/>
             </div>
             <!-- 添加分割线 -->
-            <div class="divider" v-show="this.copyNum>=8">
-              <a-divider type="vertical" orientation="center" style="color: var(--divider); width: 1px; height: 100%;"/>
+            <div v-show="this.copyNum>=8" class="divider">
+              <a-divider orientation="center" style="color: var(--divider); width: 1px; height: 100%;" type="vertical"/>
             </div>
 
           </div>
@@ -38,14 +38,16 @@
         </div>
 
       </div>
-      <DataStatu v-else imgDisplay="/img/test/load-ail.png" :btnToggle="false" textPrompt="暂无数据"></DataStatu>
+      <DataStatu v-else :btnToggle="false" imgDisplay="/img/test/load-ail.png" textPrompt="暂无数据"></DataStatu>
     </Widget>
 
-    <a-drawer :width="500" title="设置" v-model:visible="settingVisible" placement="right">
+    <a-drawer v-model:visible="settingVisible" :width="500" placement="right" title="设置">
       <vue-custom-scrollbar :settings="settingsScroller" style="height: 100%;">
         <div class="primary-title" style="color: var(--primary-text);">新闻类别</div>
-        <div class="mt-2 mb-6 secondary-title" style="color: var(--secondary-text);">长按拖拽排序,最多选择八个(小尺寸(2x4)只显示前三个)</div>
-        <NewsCardDrawer @setSortedList="setSortedList" :drawerList="aggList"></NewsCardDrawer>
+        <div class="mt-2 mb-6 secondary-title" style="color: var(--secondary-text);">
+          长按拖拽排序,最多选择八个(小尺寸(2x4)只显示前三个)
+        </div>
+        <NewsCardDrawer :drawerList="aggList" @setSortedList="setSortedList"></NewsCardDrawer>
       </vue-custom-scrollbar>
 
     </a-drawer>
@@ -55,11 +57,12 @@
 <script>
 import Widget from '../../card/Widget.vue';
 import NewsItem from './NewsItem.vue';
-import { mapWritableState, mapActions } from 'pinia'
+import {mapActions, mapWritableState} from 'pinia'
 import DataStatu from "../DataStatu.vue"
-import { newsStore } from '../../../store/news.ts'
+import {newsStore} from '../../../store/news.ts'
 import NewsCardDrawer from "./NewsCardDrawer.vue";
-import { LeftOutlined, RightOutlined, HolderOutlined, FileSearchOutlined } from '@ant-design/icons-vue'
+import {FileSearchOutlined, HolderOutlined, LeftOutlined, RightOutlined} from '@ant-design/icons-vue'
+
 export default {
   name: "News",
   props: {
@@ -69,7 +72,8 @@ export default {
     },
     customData: {
       type: Object,
-      default: () => { }
+      default: () => {
+      }
     },
     desk: {
       type: Object
@@ -119,7 +123,10 @@ export default {
         {
           icon: 'shezhi1',
           title: '设置',
-          fn: () => { this.settingVisible = true; this.$refs.cardSlot.visible = false }
+          fn: () => {
+            this.settingVisible = true;
+            this.$refs.cardSlot.visible = false
+          }
         },
       ],
       currentIndex: 0,
@@ -195,11 +202,11 @@ export default {
   methods: {
     setCurrentIndex(index) {
       this.currentIndex = index
-      this.customData.index=this.currentIndex
+      this.customData.index = this.currentIndex
       this.getNewsData()
-      this.customData.newsList=this.newsMsgList
+      this.customData.newsList = this.newsMsgList
       // console.log(this.customData.newsList,'newsList')
-      console.log(this.customData,'customData');
+      console.log(this.customData, 'customData');
     },
     setSortedList(arrList) {
       // 获取拖拽排序后数据
@@ -208,7 +215,7 @@ export default {
     ...mapActions(newsStore, ['getNewsMsg']),
     getNewsData() {
       let tag = this.showList[this.currentIndex].tag
-      this.customData.tag=tag
+      this.customData.tag = tag
       this.getNewsMsg(this.customData.tag)
 
       // this.customData.newsList=this.newsMsgList
@@ -231,38 +238,38 @@ export default {
     // 判断尺寸大小
     showSize() {
       if (this.customData && this.customData.width && this.customData.height) {
-        return { width: this.customData.width, height: this.customData.height }
+        return {width: this.customData.width, height: this.customData.height}
       }
       return this.sizeList[0]
     },
     // 判断不同高度返回不同个数
     copyNum() {
       // return this.showSize.height == 2 ? 6 : 10
-      if(this.showSize.width==1){
+      if (this.showSize.width == 1) {
         return 4
       }
-      return this.showSize.height==2?8:12
+      return this.showSize.height == 2 ? 8 : 12
 
     },
     // 判断top-bar需要几个标签
     copyItem() {
-      return this.showSize.width==1?3:8
+      return this.showSize.width == 1 ? 3 : 8
     },
     // 通过接口返回的数据进行裁切，返回适合页面长度的数据
     newsItemList() {
-      if(this.customData && this.customData.newsList?.length){
+      if (this.customData && this.customData.newsList?.length) {
         // console.log(this.customData.newsList,'newsList');
-        if(this.customData.newsList.tag){
-          this.customData.newsList=this.customData.newsList.tag
+        if (this.customData.newsList.tag) {
+          this.customData.newsList = this.customData.newsList.tag
           return []
         }
         return this.customData.newsList.slice(0, this.copyNum)
       }
-      return this.newsMsgList.slice(0,this.copyNum)
+      return this.newsMsgList.slice(0, this.copyNum)
 
     },
-    currentTag(){
-      if(this.customData && this.customData.index){
+    currentTag() {
+      if (this.customData && this.customData.index) {
         return this.showList[this.customData.index].title
       }
       return this.showList[this.currentIndex].title
@@ -366,7 +373,7 @@ export default {
   overflow: hidden;
   position: relative;
 
-  .divider{
+  .divider {
     width: 1px;
     height: 100%;
     position: absolute;
@@ -377,35 +384,35 @@ export default {
   }
 
   .sort {
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--mask-bg);
-  border-radius: 4px;
-  font-size: 16px;
-  color: var(--primary-text);
-  font-weight: 600;
-  margin-right: 8px;
-  margin-top: 8px;
-}
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--mask-bg);
+    border-radius: 4px;
+    font-size: 16px;
+    color: var(--primary-text);
+    font-weight: 600;
+    margin-right: 8px;
+    margin-top: 8px;
+  }
 
-.set-type:nth-of-type(1) > span {
-  background: #FE2C46;
-}
+  .set-type:nth-of-type(1) > span {
+    background: #FE2C46;
+  }
 
-.set-type:nth-of-type(2) > span {
-  background: #FF6600;
-}
+  .set-type:nth-of-type(2) > span {
+    background: #FF6600;
+  }
 
-.set-type:nth-of-type(3) > span {
-  background: #FAAA10;
-}
+  .set-type:nth-of-type(3) > span {
+    background: #FAAA10;
+  }
 
-.active-index{
-  background: var(--active-bg) !important;
-}
+  .active-index {
+    background: var(--active-bg) !important;
+  }
 }
 </style>
 

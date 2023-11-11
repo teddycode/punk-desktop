@@ -1,23 +1,23 @@
 <template>
   <teleport to="body">
 
-    <div class='pop-container' @click="closeFullScreen()" :style="show">
+    <div :style="show" class='pop-container' @click="closeFullScreen()">
     </div>
     <droppable-area @leave="handleLeave">
-      <div class="box  xt-modal" @click.stop="" :style="show">
+      <div :style="show" class="box  xt-modal" @click.stop="">
         <div class="title xt-text">
-          <input @blur="updateGroupTitle()" type="title" v-model="title" class="input-box" style="" />
+          <input v-model="title" class="input-box" style="" type="title" @blur="updateGroupTitle()"/>
           <div class="box-btn xt-bg-2" @click="disbandGroup">
             <Icon class="icon" icon="zhankai"></Icon>
           </div>
         </div>
-        <div class="item-box" >
-          <div ref="iconRef" v-for="(item, index) in iconLists" @contextmenu.prevent.stop="rightClick(index)">
+        <div class="item-box">
+          <div v-for="(item, index) in iconLists" ref="iconRef" @contextmenu.prevent.stop="rightClick(index)">
             <drag-and-follow @drag-start="handleDragStart" @drag-end="handleDragEnd">
               <icon
-              :isReSize="true"
-               v-bind="item" :index="index" :data-index="index" @onIconClick="closeFullScreen"
-               style="margin: 5px 10px;"
+                  :data-index="index"
+                  :index="index" :isReSize="true" style="margin: 5px 10px;" v-bind="item"
+                  @onIconClick="closeFullScreen"
               >
               </icon>
             </drag-and-follow>
@@ -26,7 +26,7 @@
       </div>
     </droppable-area>
 
-    <a-drawer :width="500" :height="200" placement="bottom" v-model:visible="visible" style="z-index: 99999999;">
+    <a-drawer v-model:visible="visible" :height="200" :width="500" placement="bottom" style="z-index: 99999999;">
       <BottomEdit :menuList="menuList"></BottomEdit>
     </a-drawer>
   </teleport>
@@ -39,13 +39,15 @@ import DroppableArea from "../components/DroppableArea.vue"
 import BottomEdit from "../components/bottomEdit.vue";
 
 
-import { mapWritableState } from 'pinia'
-import { myIcons } from '../../../../store/myIcons.ts'
+import {mapWritableState} from 'pinia'
+import {myIcons} from '../../../../store/myIcons.ts'
+
 export default {
   props: {
     iconLists: {
       type: Object,
-      default: () => { },
+      default: () => {
+      },
     },
     groupTitle: {
       type: String
@@ -85,9 +87,9 @@ export default {
     BottomEdit
   },
   computed: {
-    ...mapWritableState(myIcons, [ 'isDrag', 'isPaste', 'iconList', 'isClose', 'iconState']),
+    ...mapWritableState(myIcons, ['isDrag', 'isPaste', 'iconList', 'isClose', 'iconState']),
     show() {
-      return { display: this.isShow == true ? 'black' : 'none' }
+      return {display: this.isShow == true ? 'black' : 'none'}
     }
   },
   mounted() {
@@ -102,7 +104,7 @@ export default {
       this.iconState = true
       this.iconList = []
       this.index = event.target.dataset.index; // 获取拖拽的图标下标
-      this.iconList.push({ ...this.iconLists[this.index], iconIndex: this.customIndex })
+      this.iconList.push({...this.iconLists[this.index], iconIndex: this.customIndex})
     },
     // 全屏拖拽结束
     handleDragEnd() {

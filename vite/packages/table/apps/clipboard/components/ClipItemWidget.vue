@@ -4,9 +4,6 @@ import textCodeMirror from "./clipPreview/textCodeMirror.vue";
 import {formatFileSize, getDateTime} from '../../../util'
 import {clipboardStore} from "../store";
 import {mapActions} from "pinia";
-import {message} from "ant-design-vue";
-import browser from "../../../js/common/browser";
-import _ from 'lodash-es'
 import ClipMenuList from "./ClipMenuList.vue";
 
 export default {
@@ -83,8 +80,8 @@ export default {
     showMenu() {
       this.tab = 'menu'
     },
-    hideMenu(){
-      this.tab='item'
+    hideMenu() {
+      this.tab = 'item'
     },
     switchTab(tab) {
       this.tab = tab
@@ -100,8 +97,8 @@ export default {
 </script>
 
 <template>
-  <div style="width: 338px;height:420px;flex-shrink: 0; " v-if="tab === 'item'"
-       class="flex flex-col rounded-lg justify-between " @contextmenu="switchTab('menu')">
+  <div v-if="tab === 'item'" class="flex flex-col rounded-lg justify-between "
+       style="width: 338px;height:420px;flex-shrink: 0; " @contextmenu="switchTab('menu')">
     <!-- 文本卡片顶部标题开始 -->
     <div class="flex s-item h-item flex-col h-16 rounded-t-lg w-full px-4 py-2">
       <div class="flex items-center mb-1">
@@ -144,7 +141,7 @@ export default {
       <div class="flex flex-col">
         <vue-custom-scrollbar :settings="settingsScroller" style="height: 44vh;">
           <template v-if="tab==='menu'">
-            <ClipMenuList @clickItem="hideMenu" @previewItem="previewItem" :clip-item="clipItem"></ClipMenuList>
+            <ClipMenuList :clip-item="clipItem" @clickItem="hideMenu" @previewItem="previewItem"></ClipMenuList>
           </template>
           <!-- 代码语言切换界面 -->
 
@@ -158,7 +155,7 @@ export default {
 
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .flex-center {
   display: flex;
   flex: 1;

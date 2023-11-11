@@ -9,7 +9,7 @@
 
 <script>
 
-import { CodeTwoTone } from '@ant-design/icons-vue'
+import {CodeTwoTone} from '@ant-design/icons-vue'
 
 const tipMap = {
   'debug_url': {
@@ -24,26 +24,26 @@ const tipMap = {
     title: '启用调试入口',
     message: '开启后打开应用将被定位到调试入口'
   },
-  'package':{
-    title:'包名',
-    message:'包名是应用唯一可读身份，一般由三段组成。 【前缀】.【公司名】.【应用名】，只有注册了包名的应用，才能够上架市场。包名不注册是不可以直接上架的。在上架的时候会要求唯一包名。'
+  'package': {
+    title: '包名',
+    message: '包名是应用唯一可读身份，一般由三段组成。 【前缀】.【公司名】.【应用名】，只有注册了包名的应用，才能够上架市场。包名不注册是不可以直接上架的。在上架的时候会要求唯一包名。'
   },
-  'logo':{
-    title:'logo',
-    message:'应用图标必须为png，建议尺寸256*256，将被自动复制到项目目录下logo.png'
+  'logo': {
+    title: 'logo',
+    message: '应用图标必须为png，建议尺寸256*256，将被自动复制到项目目录下logo.png'
   },
-  'local_dir':{
-    title:'本地目录',
-    message:'本地目录，用于生成minifest.json文件，不选择则无法生成路径和打包项目。',
+  'local_dir': {
+    title: '本地目录',
+    message: '本地目录，用于生成minifest.json文件，不选择则无法生成路径和打包项目。',
 
-},
-  'open_source':{
-    title:'是否开源',
-    message:'此项不是必须的，如果您的应用同时开源，可以勾选后填写开源地址，将被展现在应用设置和应用市场页面上。'
   },
-  'os_summary':{
-    title:'开源说明',
-    message:'请写清楚开源协议，以及附加条款，方便其他用户全面了解应用的情况。'
+  'open_source': {
+    title: '是否开源',
+    message: '此项不是必须的，如果您的应用同时开源，可以勾选后填写开源地址，将被展现在应用设置和应用市场页面上。'
+  },
+  'os_summary': {
+    title: '开源说明',
+    message: '请写清楚开源协议，以及附加条款，方便其他用户全面了解应用的情况。'
   }
 }
 export default {
@@ -55,24 +55,25 @@ export default {
     tip: String
   },
 
-  mounted () {
+  mounted() {
 
   },
   computed: {
-    getTip () {
+    getTip() {
       return tipMap[this.tip]
     }
   }
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .tip-hover {
-  &:hover{
-      background: white;
+  &:hover {
+    background: white;
     box-shadow: 0 0 3px #cccccc;
     color: black;
-   }
+  }
+
   border-radius: 4px;
   padding: 3px 10px;
 

@@ -1,74 +1,74 @@
 <template>
   <Classification
-    :navClassify="navClassify"
-    v-if="editFlag"
-    v-model:show="editFlag"
-    @clickLeftList="clickItem"
+      v-if="editFlag"
+      v-model:show="editFlag"
+      :navClassify="navClassify"
+      @clickLeftList="clickItem"
   >
     <div v-show="nowClassify !== 'localApp'" class="h-full">
       <a-input
-        v-model:value="selectContent"
-        class="no-drag h-10 rounded-lg"
-        placeholder="搜索"
+          v-model:value="selectContent"
+          class="no-drag h-10 rounded-lg"
+          placeholder="搜索"
       >
         <template #prefix>
-          <Icon icon="sousuo" class="text-gray-600"></Icon>
+          <Icon class="text-gray-600" icon="sousuo"></Icon>
         </template>
       </a-input>
       <vue-custom-scrollbar
-        key="scrollbar"
-        :settings="rightScrollbarSettings"
-        class="relative"
-        style="height: calc(100% - 40px); padding: 5px 0"
+          key="scrollbar"
+          :settings="rightScrollbarSettings"
+          class="relative"
+          style="height: calc(100% - 40px); padding: 5px 0"
       >
         <listItem
-          v-for="(item, index) in filterList"
-          :item="item"
-          class="rounded-lg right-scroll-list xt-text"
-          @click="clickRightListItem(item, index)"
+            v-for="(item, index) in filterList"
+            :item="item"
+            class="rounded-lg right-scroll-list xt-text"
+            @click="clickRightListItem(item, index)"
         ></listItem>
       </vue-custom-scrollbar>
     </div>
     <div
-      v-show="nowClassify === 'localApp'"
-      class="flex flex-col items-start text-zinc-500 h-full xt-text"
+        v-show="nowClassify === 'localApp'"
+        class="flex flex-col items-start text-zinc-500 h-full xt-text"
     >
       <div>1. 点击选择需要添加的应用快捷方式</div>
       <div>2. 拖动应用快捷方式拖放到下方</div>
       <div
-        class="border-dashed w-full h-1/2 mt-2.5 rounded-lg flex flex-row justify-center items-center"
-        @dragover.prevent=""
-        @drop.prevent="drop"
+          class="border-dashed w-full h-1/2 mt-2.5 rounded-lg flex flex-row justify-center items-center"
+          @dragover.prevent=""
+          @drop.prevent="drop"
       >
         <Icon
-          icon="tianjia2"
-          style="width: 18px; height: 18px"
-          class="mr-2"
+            class="mr-2"
+            icon="tianjia2"
+            style="width: 18px; height: 18px"
         ></Icon>
         添加快捷方式
       </div>
       <ScrolX :height="66">
         <div
-          class="flex flex-row w-full justify-start mt-4 -ml-8 pt-4 pl-4 xt-text"
+            class="flex flex-row w-full justify-start mt-4 -ml-8 pt-4 pl-4 xt-text"
         >
           <div v-for="(item, index) in dropList" class="flex ml-4">
             <a-badge>
               <template #count>
                 <Icon
-                  icon="guanbi2"
-                  style="height: 24px; width: 24px"
-                  @click="deleteDropList(index)"
-                  class="pointer"
+                    class="pointer"
+                    icon="guanbi2"
+                    style="height: 24px; width: 24px"
+                    @click="deleteDropList(index)"
                 ></Icon>
               </template>
-              <a-avatar :size="40" shape="square" :src="item.icon"> </a-avatar>
+              <a-avatar :size="40" :src="item.icon" shape="square"></a-avatar>
             </a-badge>
           </div>
         </div>
       </ScrolX>
       <div
-        @click="clickRightListItem(dropList)"
-        class="pointer flex justify-center items-center mt-2 w-24 h-12 rounded-lg xt-bg xt-text"
+          class="pointer flex justify-center items-center mt-2 w-24 h-12 rounded-lg xt-bg xt-text"
+          @click="clickRightListItem(dropList)"
       >
         确定添加
       </div>
@@ -80,17 +80,18 @@
 import Classification from "../../../../comp/Classification.vue";
 import navigationData from "../../../../../js/data/tableData";
 import listItem from "../../../../bottomPanel/listItem.vue";
-const { appModel } = window.$models;
+
+const {appModel} = window.$models;
 export default {
-  components: { Classification, listItem },
+  components: {Classification, listItem},
   data() {
     return {
       navClassify: [
-        { name: "systemApp", cname: "系统应用" },
-        { name: "coolApp", cname: "酷应用" },
-        { name: "tableApp", cname: "Windows应用" },
+        {name: "systemApp", cname: "系统应用"},
+        {name: "coolApp", cname: "酷应用"},
+        {name: "tableApp", cname: "Windows应用"},
         // { name: 'localApp', cname: '自定义应用' },
-        { name: "lightApp", cname: "web3应用" },
+        {name: "lightApp", cname: "web3应用"},
       ],
       ClassifyData: [
         ...navigationData.coolAppList,
@@ -162,7 +163,7 @@ export default {
     filterList() {
       return this.ClassifyData.filter((i) => {
         return (
-          i.type === this.nowClassify && i.name.includes(this.selectContent)
+            i.type === this.nowClassify && i.name.includes(this.selectContent)
         );
       });
     },

@@ -6,14 +6,14 @@
       </div>
       <div class="flex-item flex-item-V uni-bg-green">
         <div class="screen-wrapper">
-          <div v-for="display in displays" >
-            <div @click="setToScreen(display)" class="screen"  :class="{'primary':display.workArea.x===0}"
-                 @mouseenter="display.enter=true"
-                 @mouseleave="display.enter=false"
-                 :style="{
+          <div v-for="display in displays">
+            <div :class="{'primary':display.workArea.x===0}" :style="{
 										left:getPosX(display.bounds.x)+'px',
 										top:getPosY(display.bounds.y)+'px',
-										width:getWidth(display.bounds.width)+'px',height:getHeight(display.bounds.height)+'px',display:'inline-block'}">
+										width:getWidth(display.bounds.width)+'px',height:getHeight(display.bounds.height)+'px',display:'inline-block'}" class="screen"
+                 @click="setToScreen(display)"
+                 @mouseenter="display.enter=true"
+                 @mouseleave="display.enter=false">
 
               <!-- 	({{getPosX(display.bounds.x)}} , {{getPosY(display.bounds.y)}}) -->
               <!-- 	{{getWidth(display.bounds.width)+'px'}} * {{getHeight(display.bounds.height)+'px'}} -->
@@ -29,12 +29,12 @@
 </template>
 
 <script>
-import { appStore } from '../store'
+import {appStore} from '../store'
 import {mapWritableState} from 'pinia'
 
 export default {
   name: 'ChooseScreen',
-  data () {
+  data() {
     return {
       displays: [],
       maxWidth: 0,
@@ -43,12 +43,12 @@ export default {
       displayHeight: 0,
     }
   },
-  async mounted () {
+  async mounted() {
     this.displays = await tsbApi.screen.getAllDisplays()
     this.getMaxWidth()
   },
   methods: {
-    async setToScreen (display) {
+    async setToScreen(display) {
       let bounds = {
         x: display.bounds.x,
         y: display.bounds.y,
@@ -59,12 +59,12 @@ export default {
       setTimeout(() => {
         tsbApi.window.setBounds(bounds)
         tsbApi.window.setFullScreen(true)
-        this.settings.attachScreen.id=display.id
-        this.settings.attachScreen.bounds=bounds
+        this.settings.attachScreen.id = display.id
+        this.settings.attachScreen.bounds = bounds
       }, 1000)
 
     },
-    getMaxWidth () {
+    getMaxWidth() {
       this.maxWidth = 0
       this.maxHeight = 0
       this.displays.forEach(display => {
@@ -77,23 +77,23 @@ export default {
       })
 
     },
-    getWidth (width) {
+    getWidth(width) {
       return (width / this.maxWidth * this.displayWidth).toFixed(0)
     },
-    getHeight (height) {
+    getHeight(height) {
       return (height / this.maxHeight * this.displayHeight).toFixed(0)
     },
-    getPosX (x) {
+    getPosX(x) {
       return (x / this.maxWidth * this.displayWidth).toFixed(0)
     },
-    getPosY (y) {
+    getPosY(y) {
       return (y / this.maxHeight * this.displayHeight).toFixed(0)
     },
-    getText (display) {
+    getText(display) {
       if (display.enter) {
         return '使用'
       } else {
-        if(display.workArea.x===0){
+        if (display.workArea.x === 0) {
           return '主屏'
         }
         return '副屏'
@@ -101,23 +101,25 @@ export default {
     }
   },
   computed: {
-    ...mapWritableState(appStore,['settings'])
+    ...mapWritableState(appStore, ['settings'])
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.primary{
-  .num{
+.primary {
+  .num {
     color: #383838 !important;
     font-weight: bold;
   }
 
   background: #c4c4c4 !important;
 }
-.s-screen{
-  background: #333 ;
+
+.s-screen {
+  background: #333;
 }
+
 .screen-wrapper {
   position: relative;
   width: 100px;
@@ -132,7 +134,7 @@ export default {
 
   .num {
     color: white;
-    font-size: 30 rpx;
+    font-size: 30rpx;
     top: calc(50% - 25rpx);
   }
 
@@ -155,12 +157,12 @@ export default {
 }
 
 .logo {
-  height: 200 rpx;
-  width: 200 rpx;
-  margin-top: 200 rpx;
+  height: 200rpx;
+  width: 200rpx;
+  margin-top: 200rpx;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 50 rpx;
+  margin-bottom: 50rpx;
 }
 
 .text-area {
@@ -169,7 +171,7 @@ export default {
 }
 
 .title {
-  font-size: 36 rpx;
+  font-size: 36rpx;
   color: #8f8f94;
 }
 </style>

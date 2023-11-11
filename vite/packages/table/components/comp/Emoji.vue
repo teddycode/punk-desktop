@@ -3,19 +3,19 @@ import {defineComponent} from 'vue'
 
 export default defineComponent({
   name: "Emoji",
-  props:['icon'],
-  methods:{
-    getUrl(){
-      return '/emoji/'+this.icon+'.png'
+  props: ['icon'],
+  methods: {
+    getUrl() {
+      return '/emoji/' + this.icon + '.png'
     }
   }
 })
 </script>
 
 <template>
-  <a-avatar shape="square" :src="getUrl()"></a-avatar>
+  <a-avatar :src="getUrl()" shape="square"></a-avatar>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 
 </style>

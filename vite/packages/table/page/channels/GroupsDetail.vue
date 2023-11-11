@@ -1,11 +1,10 @@
 <template>
-<div>
+  <div>
     <Commun></Commun>
-</div>
+  </div>
 </template>
 
-<script setup lang='ts'>
-import {ref,reactive} from 'vue'
+<script lang='ts' setup>
 import Commun from './components/com/Commun.vue';
 </script>
 <style lang='scss' scoped>

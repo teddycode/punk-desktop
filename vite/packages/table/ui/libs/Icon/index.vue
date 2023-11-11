@@ -1,10 +1,10 @@
 <template>
   <div>
     <div
-      :class="typeClass"
-      :style="[customStyle]"
-      class="xt-active xt-base-btn"
-      @click="copyToClipboard()"
+        :class="typeClass"
+        :style="[customStyle]"
+        class="xt-active xt-base-btn"
+        @click="copyToClipboard()"
     >
       <XtBaseIcon :icon="icon" :style="fontSizeStyle"></XtBaseIcon>
     </div>
@@ -12,7 +12,8 @@
 </template>
 
 <script>
-import { copyMixins } from "../../common/copyMixins";
+import {copyMixins} from "../../common/copyMixins";
+
 export default {
   name: "XtIcon",
   mixins: [copyMixins],

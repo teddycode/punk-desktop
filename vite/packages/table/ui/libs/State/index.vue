@@ -1,28 +1,28 @@
 <template>
   <!-- 早期组件已经很烂了 得重构 -->
   <div
-    class="w-full flex items-center justify-center flex-col" style="height: 95%;"
-    v-if="web"
+      v-if="web" class="w-full flex items-center justify-center flex-col"
+      style="height: 95%;"
   >
     <div class="mb-2">前往工具台体验完整功能</div>
     <XtButton @click="webClick()">下载</XtButton>
   </div>
   <div
-    v-else
-    class="controller-state w-full"
-    :class="bg"
-    :style="[
+      v-else
+      v-if="state !== ''"
+      :class="bg"
+      :style="[
       {
         width: window.w,
         height: window.h,
       },
     ]"
-    v-if="state !== ''"
+      class="controller-state w-full"
   >
     <img
-      :style="{ zoom: `${zoom}%` }"
-      :src="`/public/img/state/${state}.png`"
-      alt=""
+        :src="`/public/img/state/${state}.png`"
+        :style="{ zoom: `${zoom}%` }"
+        alt=""
     />
     <div>{{ text[`${state}`] }}</div>
     <template v-if="state !== 'null' && btn !== ''">
@@ -90,7 +90,8 @@ export default {
       default: false,
     },
   },
-  mounted() {},
+  mounted() {
+  },
   methods: {
     onClick() {
       this.$emit("onClick");
@@ -112,9 +113,11 @@ export default {
   text-align: center;
   border-radius: 10px;
 }
+
 img {
   margin-bottom: 22px;
 }
+
 .click {
   margin-top: 10px;
   padding: 13px 26px;

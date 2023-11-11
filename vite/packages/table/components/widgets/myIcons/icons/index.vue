@@ -1,39 +1,39 @@
 <template>
   <IconsFullScreen
-    @updateGroupTitle="updateGroupTitle"
-    :groupTitle="groupTitle"
-    v-if="isIconsFullScreen"
-    @closeFullScreen="closeFullScreen"
-    :iconLists="iconList"
-    @disbandGroup="disbandGroup"
-    @deleteIcons="deleteIcons"
-    @editIcons="editIcons"
-    @dragAddIcon="dragAddIcon"
+      v-if="isIconsFullScreen"
+      :groupTitle="groupTitle"
+      :iconLists="iconList"
+      @closeFullScreen="closeFullScreen"
+      @deleteIcons="deleteIcons"
+      @disbandGroup="disbandGroup"
+      @dragAddIcon="dragAddIcon"
+      @editIcons="editIcons"
+      @updateGroupTitle="updateGroupTitle"
   >
   </IconsFullScreen>
   <Custom
-    v-if="zoom.state"
-    v-model:width="w"
-    v-model:height="h"
-    :zoom="zoom"
-    :groupTitle="groupTitle"
-    :iconList="iconList"
-    @updateGroupTitle="updateGroupTitle"
-    @iconsRightClick="iconsRightClick"
-    @fullScreenClick="fullScreenClick"
-    @editIcons="editIcons"
-    @deleteIcons="deleteIcons"
-    @updateWidth="updateWidth"
-    @updateHeight="updateHeight"
+      v-if="zoom.state"
+      v-model:height="h"
+      v-model:width="w"
+      :groupTitle="groupTitle"
+      :iconList="iconList"
+      :zoom="zoom"
+      @deleteIcons="deleteIcons"
+      @editIcons="editIcons"
+      @fullScreenClick="fullScreenClick"
+      @iconsRightClick="iconsRightClick"
+      @updateGroupTitle="updateGroupTitle"
+      @updateHeight="updateHeight"
+      @updateWidth="updateWidth"
   ></Custom>
   <div v-else class="item-list no-drag" @click="fullScreenClick($event)">
     <div class="item">
       <template v-for="i in 4">
         <img
-          v-if="iconList[i - 1]"
-          class="img"
-          :src="renderIcon(iconList[i - 1].src)"
-          style="object-fit: cover"
+            v-if="iconList[i - 1]"
+            :src="renderIcon(iconList[i - 1].src)"
+            class="img"
+            style="object-fit: cover"
         />
         <div v-else class="img"></div>
       </template>
@@ -46,13 +46,15 @@
 import IconsFullScreen from "./fullScreen.vue";
 import Custom from "./Custom.vue";
 import {renderIcon} from '../../../../js/common/common'
+
 export default {
   props: {
     width: {},
     height: {},
     iconList: {
       type: Object,
-      default: () => {},
+      default: () => {
+      },
     },
     groupTitle: {
       type: String,
@@ -68,7 +70,7 @@ export default {
   data() {
     return {
       isIconsFullScreen: false, // 全屏开关
-      menus: [{ label: "删除", callBack: this.delColor }],
+      menus: [{label: "删除", callBack: this.delColor}],
       w: this.width,
       h: this.height,
     };
@@ -137,6 +139,7 @@ export default {
   flex-direction: column;
   font-size: 14px;
   cursor: pointer;
+
   .item {
     margin-top: 10px;
     width: 56px;

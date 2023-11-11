@@ -23,7 +23,7 @@ module.exports = {
         for (let i = 0; i < data.length; i++) {
             data[i] ^= salt[i];
         }
-        const result = { data: [...data], salt: [...salt] };
+        const result = {data: [...data], salt: [...salt]};
         data.fill(0);
         salt.fill(0);
 

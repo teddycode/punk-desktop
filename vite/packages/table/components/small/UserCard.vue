@@ -1,9 +1,9 @@
 <template>
-  <div style="max-width: 100%; width: 360px" class="flex-col">
+  <div class="flex-col" style="max-width: 100%; width: 360px">
     <div class="flex items-center my-3 mx-3">
       <div
-        class="pt-2 ml-2"
-        style="
+          class="pt-2 ml-2"
+          style="
           width: 70px;
           height: 70px;
           position: relative;
@@ -11,21 +11,22 @@
         "
       >
         <FrameAvatar
-          :frame="displayUserInfo?.equippedItems?.frameDetail"
-          :avatarSize="60"
-          :avatarUrl="displayUserInfo.avatar"
-          :frameUrl="displayUserInfo.equippedItems?.frameDetail?.image"
+            :avatarSize="60"
+            :avatarUrl="displayUserInfo.avatar"
+            :frame="displayUserInfo?.equippedItems?.frameDetail"
+            :frameUrl="displayUserInfo.equippedItems?.frameDetail?.image"
         >
         </FrameAvatar>
         <a-tooltip
-          v-if="
+            v-if="
             displayUserInfo.certification &&
             displayUserInfo.certification.length > 0
           "
-          :title="displayUserInfo.certification[0].name"
+            :title="displayUserInfo.certification[0].name"
         >
           <a-avatar
-            style="
+              :src="displayUserInfo.certification[0].attestation_icon"
+              style="
               position: absolute;
               width: 20px;
               height: 20px;
@@ -33,7 +34,6 @@
               bottom: 0;
               z-index: 999;
             "
-            :src="displayUserInfo.certification[0].attestation_icon"
           ></a-avatar>
         </a-tooltip>
       </div>
@@ -43,8 +43,8 @@
         </div>
         <div>
           <div
-            class="rounded-md px-2 bg-mask inline-block font-bold"
-            style="background: var(--primary-bg); width: auto"
+              class="rounded-md px-2 bg-mask inline-block font-bold"
+              style="background: var(--primary-bg); width: auto"
           >
             UID: {{ uid }}
           </div>
@@ -52,8 +52,8 @@
       </div>
       <div>
         <a-dropdown
-          overlayClassName="xt-text "
-          overlayStyle="background:var(--primary-bg-solid)"
+            overlayClassName="xt-text "
+            overlayStyle="background:var(--primary-bg-solid)"
         >
           <div class="xt-text p-3 cursor-pointer">
             <icon icon="gengduo2"></icon>
@@ -62,29 +62,29 @@
           <template #overlay>
             <a-menu style="background: none" @click="handleMenuClick">
               <a-menu-item
-                class="xt-text"
-                v-show="inBlackList !== 'unload'"
-                v-if="inBlackList === 'not'"
-                @click="addToBlacklist"
-                key="1"
+                  v-if="inBlackList === 'not'"
+                  v-show="inBlackList !== 'unload'"
+                  key="1"
+                  class="xt-text"
+                  @click="addToBlacklist"
               >
                 <icon
-                  style="font-size: 16px"
-                  class="mr-1"
-                  icon="chengyuan"
+                    class="mr-1"
+                    icon="chengyuan"
+                    style="font-size: 16px"
                 ></icon>
                 拉黑
               </a-menu-item>
               <a-menu-item
-                class="xt-text"
-                v-show="inBlackList !== 'unload'"
-                v-if="inBlackList === 'yes'"
-                @click="removeFromBlacklist"
+                  v-if="inBlackList === 'yes'"
+                  v-show="inBlackList !== 'unload'"
+                  class="xt-text"
+                  @click="removeFromBlacklist"
               >
                 <icon
-                  style="font-size: 16px"
-                  class="mr-1"
-                  icon="chengyuan"
+                    class="mr-1"
+                    icon="chengyuan"
+                    style="font-size: 16px"
                 ></icon>
                 取消拉黑
               </a-menu-item>
@@ -95,8 +95,8 @@
     </div>
     <div class="flex flex-col mb-4">
       <div
-        class="bg-mask rounded-lg py-3 px-2 m-3 mx-5 mt-2 mb-2"
-        style="
+          class="bg-mask rounded-lg py-3 px-2 m-3 mx-5 mt-2 mb-2"
+          style="
           min-height: 24px;
           background: var(--primary-bg);
           color: var(--primary-text);
@@ -108,72 +108,73 @@
         </div>
       </div>
       <div
-        class="bg-mask rounded-lg p-3 mx-5 m-3 mt-2 mb-0"
-        style="
+          class="bg-mask rounded-lg p-3 mx-5 m-3 mt-2 mb-0"
+          style="
           min-height: 77px;
           background: var(--primary-bg);
           color: var(--primary-text);
         "
       >
         <OnlineGradeDisplay
-          :key="key"
-          :grade="grade.grade"
-          :extra="grade"
+            :key="key"
+            :extra="grade"
+            :grade="grade.grade"
         ></OnlineGradeDisplay>
       </div>
     </div>
     <div class="flex flex-col">
       <div
-        class="mb-4 pd-0 m-3 p-1 mx-5 mt-0"
-        style="color: var(--primary-text)"
+          class="mb-4 pd-0 m-3 p-1 mx-5 mt-0"
+          style="color: var(--primary-text)"
       >
         成就勋章
       </div>
       <div
-        class="bg-mask rounded-lg p-3 m-3 mx-5 mt-0"
-        style="background: var(--primary-bg); color: var(--primary-text)"
+          class="bg-mask rounded-lg p-3 m-3 mx-5 mt-0"
+          style="background: var(--primary-bg); color: var(--primary-text)"
       >
         <OnlineMedal v-if="grade.rank" :rank="grade.rank"></OnlineMedal>
-        <Medal :medal="medal" v-for="medal in medals"></Medal>
+        <Medal v-for="medal in medals" :medal="medal"></Medal>
       </div>
     </div>
     <div
-      class="px-5 pb-4"
-      v-if="uid !== myUserInfo.uid"
-      v-show="relationship !== 'unload'"
+        v-if="uid !== myUserInfo.uid"
+        v-show="relationship !== 'unload'"
+        class="px-5 pb-4"
     >
-      <a-row :gutter="12" v-if="relationship !== 'unknown'">
+      <a-row v-if="relationship !== 'unknown'" :gutter="12">
         <a-col :span="12">
           <XtButton
-            @click="addFriend"
-            v-if="relationship === 'not'"
-            style="width: 100%"
-            class="rounded-full w-full"
+              v-if="relationship === 'not'"
+              class="rounded-full w-full"
+              style="width: 100%"
+              @click="addFriend"
           >
-            <icon style="font-size: 16px" class="mr-1" icon="tianjia1"></icon>
+            <icon class="mr-1" icon="tianjia1" style="font-size: 16px"></icon>
             加为好友
           </XtButton>
           <XtButton
-            @click="deleteFriend"
-            v-else-if="relationship === 'yes'"
-            style="width: 100%"
-            class="rounded-full w-full"
+              v-else-if="relationship === 'yes'"
+              class="rounded-full w-full"
+              style="width: 100%"
+              @click="deleteFriend"
           >
-            <icon style="font-size: 16px" class="mr-1" icon="guanbi2"></icon>
+            <icon class="mr-1" icon="guanbi2" style="font-size: 16px"></icon>
             解除好友
           </XtButton>
         </a-col>
 
         <a-col :span="12">
           <XtButton
-            @click="sendMessage"
-            :type="relationship === 'yes' ? 'theme' : 'default'"
-            style="width: 100%"
-            >发消息</XtButton
+              :type="relationship === 'yes' ? 'theme' : 'default'"
+              style="width: 100%"
+              @click="sendMessage"
+          >发消息
+          </XtButton
           >
         </a-col>
       </a-row>
-      <div class="text-center" v-else>
+      <div v-else class="text-center">
         <icon icon="tishi-xianxing"></icon>
         对方未登录过社群，无法使用好友功能
       </div>
@@ -182,16 +183,16 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapWritableState } from "pinia";
-import { teamStore } from "../../store/team";
+import {mapActions, mapState, mapWritableState} from "pinia";
+import {teamStore} from "../../store/team";
 import Medal from "../team/Medal.vue";
 import OnlineMedal from "../team/OnlineMedal.vue";
 import OnlineGradeDisplay from "../team/OnlineGradeDisplay.vue";
-import { appStore } from "../../store";
+import {appStore} from "../../store";
 import FrameAvatar from "../avatar/FrameAvatar.vue";
 import FrameStoreWidget from "../team/FrameStoreWidget.vue";
 import TencentCloudChat from "tim-js-sdk";
-import { message } from "ant-design-vue";
+import {message} from "ant-design-vue";
 
 export default {
   name: "UserCard",
@@ -280,29 +281,29 @@ export default {
         userIDList: [String(this.uid)],
       }); // 请注意：即使只添加一个用户账号到黑名单，也需要用数组类型，例如：userIDList: ['user1']
       promise
-        .then((imResponse) => {
-          if (imResponse.data.includes(String(this.uid))) {
-            this.inBlackList = "yes";
-            this.relationship = "not";
-            message.success("拉黑成功。");
-          }
-        })
-        .catch(function (imError) {
-          message.error("拉黑意外失败。", imError);
-        });
+          .then((imResponse) => {
+            if (imResponse.data.includes(String(this.uid))) {
+              this.inBlackList = "yes";
+              this.relationship = "not";
+              message.success("拉黑成功。");
+            }
+          })
+          .catch(function (imError) {
+            message.error("拉黑意外失败。", imError);
+          });
     },
     removeFromBlacklist() {
       let promise = $chat.removeFromBlacklist({
         userIDList: [String(this.uid)],
       }); // 请注意：即使只从黑名单中移除一个用户账号，也需要用数组类型，例如：userIDList: ['user1']
       promise
-        .then((imResponse) => {
-          message.success("取消拉黑成功。");
-          this.inBlackList = "not";
-        })
-        .catch(function (imError) {
-          message.error("取消拉黑失败。");
-        });
+          .then((imResponse) => {
+            message.success("取消拉黑成功。");
+            this.inBlackList = "not";
+          })
+          .catch(function (imError) {
+            message.error("取消拉黑失败。");
+          });
     },
     addFriend() {
       if (this.inBlackList === "yes") {
@@ -317,18 +318,18 @@ export default {
         type: TencentCloudChat.TYPES.SNS_ADD_TYPE_BOTH,
       });
       promise
-        .then((imResponse) => {
-          const { code } = imResponse.data;
-          if (code === 30539) {
-            message.info("申请加为好友成功，等待对方通过。");
-          } else if (code === 0) {
-            message.success("添加好友成功。");
-            this.relationship = "yes";
-          }
-        })
-        .catch((imError) => {
-          message.error("添加好友失败。");
-        });
+          .then((imResponse) => {
+            const {code} = imResponse.data;
+            if (code === 30539) {
+              message.info("申请加为好友成功，等待对方通过。");
+            } else if (code === 0) {
+              message.success("添加好友成功。");
+              this.relationship = "yes";
+            }
+          })
+          .catch((imError) => {
+            message.error("添加好友失败。");
+          });
     },
     deleteFriend() {
       let promise = window.$chat.deleteFriend({
@@ -336,43 +337,43 @@ export default {
         type: TencentCloudChat.TYPES.SNS_DELETE_TYPE_BOTH,
       });
       promise
-        .then((imResponse) => {
-          const { successUserIDList, failureUserIDList } = imResponse.data;
-          // 删除成功的 userIDList
-          successUserIDList.forEach((item) => {
-            const { userID } = item;
-            if (userID === String(this.uid)) {
-              message.success("删除好友成功。");
-              this.relationship = "not";
-            }
+          .then((imResponse) => {
+            const {successUserIDList, failureUserIDList} = imResponse.data;
+            // 删除成功的 userIDList
+            successUserIDList.forEach((item) => {
+              const {userID} = item;
+              if (userID === String(this.uid)) {
+                message.success("删除好友成功。");
+                this.relationship = "not";
+              }
+            });
+            // 删除失败的 userIDList
+            failureUserIDList.forEach((item) => {
+              const {userID, code, message} = item;
+              if (userID === String(this.uid)) {
+                message.error("删除好友失败。");
+              }
+            });
+            // 如果好友列表有变化，则 SDK 会触发 TencentCloudChat.EVENT.FRIEND_LIST_UPDATED 事件
+          })
+          .catch(function (imError) {
+            message.error("删除好友意外失败。", imError);
           });
-          // 删除失败的 userIDList
-          failureUserIDList.forEach((item) => {
-            const { userID, code, message } = item;
-            if (userID === String(this.uid)) {
-              message.error("删除好友失败。");
-            }
-          });
-          // 如果好友列表有变化，则 SDK 会触发 TencentCloudChat.EVENT.FRIEND_LIST_UPDATED 事件
-        })
-        .catch(function (imError) {
-          message.error("删除好友意外失败。", imError);
-        });
     },
     async checkBlacklist() {
       let promise = $chat.getBlacklist();
       promise
-        .then((imResponse) => {
-          if (imResponse.data.includes(String(this.uid))) {
-            this.inBlackList = "yes";
-          } else {
+          .then((imResponse) => {
+            if (imResponse.data.includes(String(this.uid))) {
+              this.inBlackList = "yes";
+            } else {
+              this.inBlackList = "not";
+            }
+          })
+          .catch((imError) => {
             this.inBlackList = "not";
-          }
-        })
-        .catch((imError) => {
-          this.inBlackList = "not";
-          console.warn("getBlacklist error:", imError); // 获取黑名单列表失败的相关信息
-        });
+            console.warn("getBlacklist error:", imError); // 获取黑名单列表失败的相关信息
+          });
     },
     sendMessage() {
       if (this.inBlackList === "yes" || this.relationship !== "yes") {
@@ -398,9 +399,9 @@ export default {
             userIDList: [String(this.uid)],
             type: TencentCloudChat.TYPES.SNS_CHECK_TYPE_SINGLE,
           });
-          const { successUserIDList, failureUserIDList } = rs.data;
+          const {successUserIDList, failureUserIDList} = rs.data;
           let item = successUserIDList[0];
-          const { userID, code, relation } = item;
+          const {userID, code, relation} = item;
           if (userID === "@TLS#NOT_FOUND") {
             this.relationship = "unknown";
           } else {

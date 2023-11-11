@@ -1,57 +1,64 @@
 <template>
   <div class="ml-4">
-    <a-row class="card flex auto-height s-bg " style="width:100%;max-width:50em;padding: 1em; background: var(    --primary-bg);color: var(--primary-text)" :gutter="20">
+    <a-row :gutter="20"
+           class="card flex auto-height s-bg "
+           style="width:100%;max-width:50em;padding: 1em; background: var(    --primary-bg);color: var(--primary-text)">
       <a-col :span="24">
         <div class="message-title flex items-center justify-between mb-4">
           <div class="flex items-center">
-            <a-avatar src="/icons/logo128.png" :size="24"></a-avatar>
+            <a-avatar :size="24" src="/icons/logo128.png"></a-avatar>
             <span class="ml-2" style="font-size: 16px; color: rgba(255,255,255,0.85); font-weight: 400;">元社区</span>
           </div>
-          <a-button type="primary" @click="goYuan"
-            style="font-size: 16px; font-weight: 400;float: right">前往元社区查收</a-button>
+          <a-button style="font-size: 16px; font-weight: 400;float: right" type="primary"
+                    @click="goYuan">前往元社区查收
+          </a-button>
         </div>
       </a-col>
       <a-col :md="24" style="flex:1">
 
         <!-- 消息分类的tab -->
-        <HorizontalPanel @changed="navChanged" :navList="category" v-model:selectType="categoryType"
-          bgColor="drawer-item-select-bg" :height="44"></HorizontalPanel>
+        <HorizontalPanel v-model:selectType="categoryType" :height="44" :navList="category"
+                         bgColor="drawer-item-select-bg" @changed="navChanged"></HorizontalPanel>
         <template v-if="categoryType.name === 'interact'">
           <div style="">
             <vueCustomScrollbar :settings="scrollbarSettings" class="pt-4" style="height: calc(100vh - 18em)">
               <div class="sub-tab" style="text-align: center">
                 <a-row :gutter="20" style="width:300px;margin: auto">
-                  <a-col @click="setCurrentSubTab('all')" :class="{ active: currentSubTab === 'all' }" :span="6"
-                    class=" item">全部</a-col>
-                  <a-col @click="setCurrentSubTab('comment')" :class="{ active: currentSubTab === 'comment' }" :span="6"
-                    class="item">评论</a-col>
-                  <a-col @click="setCurrentSubTab('support')" :class="{ active: currentSubTab === 'support' }" :span="6"
-                    class="item">点赞</a-col>
-                  <a-col @click="setCurrentSubTab('mention')" :class="{ active: currentSubTab === 'mention' }" :span="6"
-                    class="item">@</a-col>
+                  <a-col :class="{ active: currentSubTab === 'all' }" :span="6" class=" item"
+                         @click="setCurrentSubTab('all')">全部
+                  </a-col>
+                  <a-col :class="{ active: currentSubTab === 'comment' }" :span="6" class="item"
+                         @click="setCurrentSubTab('comment')">评论
+                  </a-col>
+                  <a-col :class="{ active: currentSubTab === 'support' }" :span="6" class="item"
+                         @click="setCurrentSubTab('support')">点赞
+                  </a-col>
+                  <a-col :class="{ active: currentSubTab === 'mention' }" :span="6" class="item"
+                         @click="setCurrentSubTab('mention')">@
+                  </a-col>
                 </a-row>
               </div>
               <!-- 数据空状态 -->
-              <a-list :data-source="[]" v-if="interact.length === 0"></a-list>
-              <div v-else v-for="item in  interact" class="px-4  interact-hover rounded-lg py-4  flex items-center">
+              <a-list v-if="interact.length === 0" :data-source="[]"></a-list>
+              <div v-for="item in  interact" v-else class="px-4  interact-hover rounded-lg py-4  flex items-center">
                 <div>
-                  <a-avatar @click.stop="showCard(item)" v-if="item.user" :size="50" :src="item.user.avatar_128"
-                    class="avatar-list pointer"></a-avatar>
+                  <a-avatar v-if="item.user" :size="50" :src="item.user.avatar_128" class="avatar-list pointer"
+                            @click.stop="showCard(item)"></a-avatar>
                 </div>
                 <div class="flex flex-col ml-4 " style="flex:1">
                   <div class="flex">
-                    <span @click="clickInteract(item)" class="pr-1 truncate pointer interact-name"
-                      style="max-width: 84px; font-size: 16px;color: var(--primary-text);font-weight: 600;">
+                    <span class="pr-1 truncate pointer interact-name" style="max-width: 84px; font-size: 16px;color: var(--primary-text);font-weight: 600;"
+                          @click="clickInteract(item)">
                       {{ item.title }}
                     </span>
                     <span class="pr-1 truncate  dynamic"
-                      style="font-size: 16px;color:  var(--primary-text);font-weight: 400;">
+                          style="font-size: 16px;color:  var(--primary-text);font-weight: 400;">
                       {{ item.dynamic }}
                     </span>
                   </div>
-                  <div @click="clickInteract(item)" class="truncate pointer" style="width: 98%;"><span
+                  <div class="truncate pointer" style="width: 98%;" @click="clickInteract(item)"><span
                       class="w-100 interact-content" style="color: var(--primary-text)">{{ item.content }}</span></div>
-                  <span class="create-time mt-2"  style="color: var(--secondary-text)">{{ item.create_time }}</span>
+                  <span class="create-time mt-2" style="color: var(--secondary-text)">{{ item.create_time }}</span>
                 </div>
               </div>
             </vueCustomScrollbar>
@@ -60,18 +67,19 @@
         <template v-if="categoryType.name === 'attention'">
           <vueCustomScrollbar :settings="scrollbarSettings" class="pt-4" style="height: calc(100vh - 18em)">
             <!-- 数据空状态 -->
-            <a-list :data-source="[]" v-if="newFollower.length === 0" />
-            <div v-else v-for="item in  newFollower" class="px-4 rounded-lg interact-hover  py-4  flex items-center" style="color: var(--primary-text)">
+            <a-list v-if="newFollower.length === 0" :data-source="[]"/>
+            <div v-for="item in  newFollower" v-else class="px-4 rounded-lg interact-hover  py-4  flex items-center"
+                 style="color: var(--primary-text)">
               <div>
-                <a-avatar @click="showCard(item)" :size="50" :src="item.user.avatar_64"
-                  class="avatar-list pointer"></a-avatar>
+                <a-avatar :size="50" :src="item.user.avatar_64" class="avatar-list pointer"
+                          @click="showCard(item)"></a-avatar>
               </div>
               <div class="flex flex-col ml-4">
                 <div class="flex">
-                  <span @click="showCard(item)" style="font-size: 16px" class="pr-1 truncatepush-theme pointer">
+                  <span class="pr-1 truncatepush-theme pointer" style="font-size: 16px" @click="showCard(item)">
                     {{ item.user.nickname }}
                   </span>
-                  <span @click="showCard(item)" class="pr-1 truncate dynamic pointer">
+                  <span class="pr-1 truncate dynamic pointer" @click="showCard(item)">
                     关注了你
                   </span>
                   <span class="truncate w-52 interact-content"></span>
@@ -82,14 +90,15 @@
           </vueCustomScrollbar>
         </template>
         <template v-if="categoryType.name === 'system'">
-          <div >
+          <div>
             <vueCustomScrollbar :settings="scrollbarSettings" class="pt-4" style="height: calc(100vh - 18em)">
               <!-- 数据空状态 -->
-              <a-list :data-source="[]" v-if="systemNotice.length === 0" />
-              <div v-else v-for="item in systemNotice" @click="openSystem(item)"
-                class="px-4 pointer interact-hover rounded-lg py-4  flex items-center" style="color: var(--primary-text)">
-                <div style="min-width: 40px;max-width:40px;flex:1"
-                  class="w-10 h-10 flex items-center  justify-center s-bg rounded-full">
+              <a-list v-if="systemNotice.length === 0" :data-source="[]"/>
+              <div v-for="item in systemNotice" v-else class="px-4 pointer interact-hover rounded-lg py-4  flex items-center"
+                   style="color: var(--primary-text)"
+                   @click="openSystem(item)">
+                <div class="w-10 h-10 flex items-center  justify-center s-bg rounded-full"
+                     style="min-width: 40px;max-width:40px;flex:1">
                   <Icon icon="bell" style="font-size: 1.429em;"></Icon>
                 </div>
                 <div class="flex flex-col ml-4">
@@ -110,9 +119,9 @@
         <template v-if="categoryType.name === 'push'">
           <vueCustomScrollbar :settings="scrollbarSettings" class="pt-4" style="height: calc(100vh - 18em)">
             <!-- 数据空状态 -->
-            <a-list :data-source="[]" v-if="push.length === 0" />
-            <div v-else v-for="item in push" @click="clickDetail(item)"
-              class="px-4 rounded-lg interact-hover pointer py-4  flex  flex-col" style="color: var(--primary-text)">
+            <a-list v-if="push.length === 0" :data-source="[]"/>
+            <div v-for="item in push" v-else class="px-4 rounded-lg interact-hover pointer py-4  flex  flex-col"
+                 style="color: var(--primary-text)" @click="clickDetail(item)">
               <span class="push-theme">
                 {{ item.title }}
               </span>
@@ -120,7 +129,7 @@
                 {{ item.summary }}
               </span>
               <div class="rounded-lg mt-3 mb-3" style="height: 240px;">
-                <img :src="item.logo_350" class="rounded-lg" style="width:100%;height: 100%; object-fit: cover;" alt="">
+                <img :src="item.logo_350" alt="" class="rounded-lg" style="width:100%;height: 100%; object-fit: cover;">
               </div>
               <div class="flex justify-between">
                 <span>{{ item.create_time }}</span>
@@ -133,10 +142,11 @@
           <div>
             <vueCustomScrollbar :settings="scrollbarSettings" class="pt-4" style="height: calc(100vh - 18em)">
               <!-- 数据空状态 -->
-              <a-list :data-source="[]" v-if="customNotice.length === 0" />
-              <div v-else v-for="item in customNotice" @click="clickDetail(item)"
-                class="px-4 pointer interact-hover rounded-lg py-4 mb-3 flex items-center" style="color: var(--primary-text)">
-                <div style="width: 120px" class="w-10 h-10 flex items-center  justify-center s-bg rounded-full">
+              <a-list v-if="customNotice.length === 0" :data-source="[]"/>
+              <div v-for="item in customNotice" v-else class="px-4 pointer interact-hover rounded-lg py-4 mb-3 flex items-center"
+                   style="color: var(--primary-text)"
+                   @click="clickDetail(item)">
+                <div class="w-10 h-10 flex items-center  justify-center s-bg rounded-full" style="width: 120px">
                   <Icon icon="bell" style="font-size: 1.429em;"></Icon>
                 </div>
                 <div class="flex flex-col ml-4">
@@ -155,16 +165,15 @@
           </div>
         </template>
       </a-col>
-      <a-col id="userDetail" v-show="selectedUid !== 0" :lg="10">
+      <a-col v-show="selectedUid !== 0" id="userDetail" :lg="10">
         <div style="display: flex;justify-content: center;flex-direction: column;height: 100%">
           <div class=" mb-5">
-            <div @click="openDetail" style="background: rgb(80, 139, 254); font-size: 16px; font-weight: 400;"
-              class="btn-active mt-4 h-12 flex justify-center cursor-pointer rounded-md items-center text-white text-white">
-              <ExportOutlined class="mr-3" />
+            <div class="btn-active mt-4 h-12 flex justify-center cursor-pointer rounded-md items-center text-white text-white" style="background: rgb(80, 139, 254); font-size: 16px; font-weight: 400;"
+                 @click="openDetail">
+              <ExportOutlined class="mr-3"/>
               查看消息详情
             </div>
           </div>
-
 
 
         </div>
@@ -175,13 +184,13 @@
 
 <script>
 import HorizontalPanel from '../../components/HorizontalPanel.vue'
-import { messageStore } from '../../store/message'
-import { mapActions, mapState } from 'pinia'
+import {messageStore} from '../../store/message'
+import {mapActions, mapState} from 'pinia'
 import _ from 'lodash-es'
 import UserCard from '../../components/small/UserCard.vue'
-import { ExportOutlined } from '@ant-design/icons-vue'
+import {ExportOutlined} from '@ant-design/icons-vue'
 import browser from '../../js/common/browser'
-import { appStore } from '../../store'
+import {appStore} from '../../store'
 
 export default {
   name: 'Message',
@@ -196,14 +205,14 @@ export default {
       // category这个数组后期需要从后端数据库获取数据
       // category数组中的state是模拟消息未读状态
       category: [
-        { title: '互动', name: 'interact', state: false }, { title: '关注', name: 'attention', state: false },
-        { title: '系统', name: 'system', state: false }, {
+        {title: '互动', name: 'interact', state: false}, {title: '关注', name: 'attention', state: false},
+        {title: '系统', name: 'system', state: false}, {
           title: '推送',
           name: 'push',
           state: false
-        }, { title: '自定义', name: 'custom', state: false }
+        }, {title: '自定义', name: 'custom', state: false}
       ],
-      categoryType: { title: '互动', name: 'interact' },
+      categoryType: {title: '互动', name: 'interact'},
       scrollbarSettings: {
         useBothWheelAxes: true,
         swipeEasing: true,
@@ -316,7 +325,8 @@ export default {
       this.openDetail()
     },
     // 系统消息列表点击事件
-    systemItemClick() { },
+    systemItemClick() {
+    },
     // 推送消息列表item点击事件
     clickPushDetail() {
       //this.getNewFollower().then()

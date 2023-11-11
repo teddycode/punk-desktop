@@ -13,24 +13,24 @@ import Words from './words.json';
 import Evaluate from './evaluate.json';
 
 const messages = {
-  zh_cn: {
-    取消: '取消',
-    发送: '发送',
-    系统通知: '系统通知',
-    关闭: '关闭',
-    确定: '确定',
-    TUIChat,
-    TUIConversation,
-    TUIGroup,
-    TUIProfile,
-    TUIContact,
-    message,
-    component,
-    time,
-    Evaluate,
-    Words,
-    TUISearch,
-  },
+    zh_cn: {
+        取消: '取消',
+        发送: '发送',
+        系统通知: '系统通知',
+        关闭: '关闭',
+        确定: '确定',
+        TUIChat,
+        TUIConversation,
+        TUIGroup,
+        TUIProfile,
+        TUIContact,
+        message,
+        component,
+        time,
+        Evaluate,
+        Words,
+        TUISearch,
+    },
 };
 
 export default messages;

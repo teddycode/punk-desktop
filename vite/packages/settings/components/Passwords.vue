@@ -1,27 +1,25 @@
 <script lang="ts">
 import {cloneDeep} from 'lodash-es';
-import {message,Modal} from 'ant-design-vue'
+import {message, Modal} from 'ant-design-vue'
 import {
-  FilterOutlined,
-  SearchOutlined,
-  EyeOutlined,
-  EyeInvisibleOutlined,
-  EllipsisOutlined,
-  DeleteOutlined,
-  EditOutlined,
   CheckOutlined,
   CloseCircleOutlined,
-  ExportOutlined
-} from '@ant-design/icons-vue'
-
-  ;
+  DeleteOutlined,
+  EditOutlined,
+  EllipsisOutlined,
+  ExportOutlined,
+  EyeInvisibleOutlined,
+  EyeOutlined,
+  FilterOutlined,
+  SearchOutlined
+} from '@ant-design/icons-vue';
 
 const editableData = {}
 
 export default {
   name: 'Passwords',
   components: {
-    FilterOutlined,ExportOutlined,
+    FilterOutlined, ExportOutlined,
     SearchOutlined, EyeOutlined, EyeInvisibleOutlined, EllipsisOutlined,
     DeleteOutlined, EditOutlined, CheckOutlined, CloseCircleOutlined
   },
@@ -37,7 +35,7 @@ export default {
           ellipsis: true,
           customFilterDropdown: true,
           onFilter: (value, record) =>
-            record.name.toString().toLowerCase().includes(value.toLowerCase()),
+              record.name.toString().toLowerCase().includes(value.toLowerCase()),
           onFilterDropdownVisibleChange: visible => {
             if (visible) {
               setTimeout(() => {
@@ -78,9 +76,7 @@ export default {
       ],
       passwords: [],
       editableData,
-      filters: {
-
-      },
+      filters: {},
       searchText: '',
       searchColumn: '',
 
@@ -98,8 +94,8 @@ export default {
       let result = this.passwords.filter((item) => {
         let pass
         if (this.filters['name']) {
-          let matchNameNamed=false
-          let matchNameNoName=false
+          let matchNameNamed = false
+          let matchNameNoName = false
           let name = item.name || ''
           if (this.filters['name'].indexOf('noname') > -1) {
             if (name === '') {
@@ -111,19 +107,19 @@ export default {
               matchNameNamed = true
             }
           }
-          pass= matchNameNamed || matchNameNoName
-        }else{
-          pass=true
+          pass = matchNameNamed || matchNameNoName
+        } else {
+          pass = true
         }
         if (pass) {
           //如果通过了名称筛选，再测试搜索
-          if (this.searchColumn!=='' && this.searchText !== '') {
-            console.log('text=',this.searchText,'column=',this.searchColumn)
+          if (this.searchColumn !== '' && this.searchText !== '') {
+            console.log('text=', this.searchText, 'column=', this.searchColumn)
             return item[this.searchColumn].indexOf(this.searchText) > -1
-          }else{
+          } else {
             return true
           }
-        }else{
+        } else {
           return false
         }
       })
@@ -131,9 +127,9 @@ export default {
     },
     async delAccount(account) {
       Modal.confirm({
-        content:'确认删除密码？此操作不可还原。',
-        centered:true,
-        onOk:async () => {
+        content: '确认删除密码？此操作不可还原。',
+        centered: true,
+        onOk: async () => {
           await ipc.invoke('credentialStoreDeletePassword', {
             domain: account.domain,
             username: account.username
@@ -173,23 +169,26 @@ export default {
       delete editableData[domain + '_' + username];
     },
     handleTableChange(
-      pag: { pageSize: number; current: number },
-      filters: any,
-      sorter: any,
+        pag: {
+          pageSize: number;
+          current: number
+        },
+        filters: any,
+        sorter: any,
     ) {
       this.filters = filters
     },
     handleSearch(selectedKeys, confirm, dataIndex) {
-      console.log('handleSearch',dataIndex)
+      console.log('handleSearch', dataIndex)
       this.searchColumn = dataIndex
     },
     handleReset() {
       this.searchText = ''
-      this.searchColumn=''
+      this.searchColumn = ''
     },
-    filterDomain(domain){
-      this.searchText=domain
-      this.searchColumn='domain'
+    filterDomain(domain) {
+      this.searchText = domain
+      this.searchColumn = 'domain'
     }
   }
 }
@@ -198,18 +197,20 @@ export default {
 <template>
   <div>
     <div style="margin-bottom: 10px">
-      <a-tag  v-if="this.searchColumn && this.searchText" :closable='true' @close='()=>{this.searchText="";this.searchColumn=""}'
-             color="#108ee9">网站：{{this.searchText}}</a-tag>
+      <a-tag v-if="this.searchColumn && this.searchText" :closable='true'
+             color="#108ee9"
+             @close='()=>{this.searchText="";this.searchColumn=""}'>网站：{{ this.searchText }}
+      </a-tag>
       <span v-if="this.filters['name']">
-      <a-tag v-for="name in this.filters['name']"  @close="()=>{
+      <a-tag v-for="name in this.filters['name']" color="#108ee9"
+             @close="()=>{
         this.filters['name'].splice(this.filters['name'].indexOf(name),1)
-      }"
-             color="#108ee9">{{name==='named'?'已命名':'未命名'}}</a-tag>
+      }">{{ name === 'named' ? '已命名' : '未命名' }}</a-tag>
       </span>
     </div>
 
   </div>
-  <a-table style="user-select: text" @change="handleTableChange" :columns="columns" :data-source="displayData()">
+  <a-table :columns="columns" :data-source="displayData()" style="user-select: text" @change="handleTableChange">
     <template #headerCell="{ column }">
       <template v-if="column.key === 'name'">
         <span>
@@ -219,21 +220,21 @@ export default {
       </template>
     </template>
     <template
-      #customFilterDropdown="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }"
+        #customFilterDropdown="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }"
     >
       <div style="padding: 8px">
         <a-input
-          ref="searchInput"
-          :placeholder="`搜索 ${column.title}`"
-          v-model:value="searchText"
-          style="width: 188px; margin-bottom: 8px; display: block"
-          @pressEnter="handleSearch(selectedKeys, confirm, column.dataIndex)"
+            ref="searchInput"
+            v-model:value="searchText"
+            :placeholder="`搜索 ${column.title}`"
+            style="width: 188px; margin-bottom: 8px; display: block"
+            @pressEnter="handleSearch(selectedKeys, confirm, column.dataIndex)"
         />
         <a-button
-          type="primary"
-          size="small"
-          style="width: 90px; margin-right: 8px"
-          @click="handleSearch(selectedKeys, confirm, column.dataIndex)"
+            size="small"
+            style="width: 90px; margin-right: 8px"
+            type="primary"
+            @click="handleSearch(selectedKeys, confirm, column.dataIndex)"
         >
           <template #icon>
             <SearchOutlined/>
@@ -247,7 +248,8 @@ export default {
     </template>
     <template #customFilterIcon="{ filtered,column }">
       <filter-outlined v-if="column.dataIndex==='name'" :style="{ color: filtered ? '#108ee9' : undefined }"/>
-      <search-outlined v-else :style="{ color: (this.searchText!=='' && this.searchColumn===column.dataIndex) ? '#108ee9' : undefined }"/>
+      <search-outlined v-else
+                       :style="{ color: (this.searchText!=='' && this.searchColumn===column.dataIndex) ? '#108ee9' : undefined }"/>
     </template>
     <template #bodyCell="{ column, record }">
       <template v-if="column.key === 'domain'">
@@ -258,10 +260,14 @@ export default {
           <template #overlay>
             <a-menu>
               <a-menu-item>
-                <a @click="filterDomain(record.domain)" href="javascript:;"><search-outlined></search-outlined> 只看此网站的账号</a>
+                <a href="javascript:;" @click="filterDomain(record.domain)">
+                  <search-outlined></search-outlined>
+                  只看此网站的账号</a>
               </a-menu-item>
               <a-menu-item>
-                <a :href="'http://'+record.domain" target="_blank" href="javascript:;"><export-outlined /> 打开此网站</a>
+                <a :href="'http://'+record.domain" href="javascript:;" target="_blank">
+                  <export-outlined/>
+                  打开此网站</a>
               </a-menu-item>
             </a-menu>
           </template>
@@ -302,7 +308,7 @@ export default {
 
       </template>
       <template v-else-if="column.key==='show'">
-        <a-button @click="record.show=!record.show" type="primary" shape="circle" size="small">
+        <a-button shape="circle" size="small" type="primary" @click="record.show=!record.show">
           <span v-if="!record.show">
              <eye-outlined/>
           </span>
@@ -314,9 +320,9 @@ export default {
       <template v-else-if="column.key === 'tags'">
         <span>
           <a-tag
-            v-for="tag in record.tags"
-            :key="tag"
-            :color="tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'"
+              v-for="tag in record.tags"
+              :key="tag"
+              :color="tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'"
           >
             {{ tag.toUpperCase() }}
           </a-tag>
@@ -330,7 +336,7 @@ export default {
           <template #overlay>
             <a-menu>
               <a-menu-item>
-                <a @click="delAccount(record)" href="javascript:;">
+                <a href="javascript:;" @click="delAccount(record)">
                   <delete-outlined/>
                   删除</a>
               </a-menu-item>
@@ -349,7 +355,7 @@ export default {
             </a-menu>
           </template>
         </a-dropdown>
-        <div style="font-size: 20px" v-else>
+        <div v-else style="font-size: 20px">
           <check-outlined class="editable-cell-icon-check" @click="save(record.domain,record.username)"/>
           &nbsp;
           <close-circle-outlined @click="cancelSave(record.domain,record.username)"/>

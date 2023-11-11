@@ -1,18 +1,18 @@
 <template>
   <div class="medal-wrapper">
-    <tippy trigger="mouseenter click" placement="left">
+    <tippy placement="left" trigger="mouseenter click">
       <div class="badge-box" style="border:none;background: none;zoom: 0.5;margin: 0">
         <div style="width: 100px;height: 100px;position: relative">
-          <img style="width: 75px;margin-top: 10px" :src="iconLarge">
+          <img :src="iconLarge" style="width: 75px;margin-top: 10px">
         </div>
       </div>
       <template #content>
-        <div style="width: 250px" class="badge-box big ">
+        <div class="badge-box big " style="width: 250px">
           <a-row>
             <a-col :span="10">
-              <img style="width: 60px;margin-top: 10px" :src="iconLarge">
+              <img :src="iconLarge" style="width: 60px;margin-top: 10px">
             </a-col>
-            <a-col style="line-height: 2" :span="14">
+            <a-col :span="14" style="line-height: 2">
               <div style="font-size: 13px;font-weight: bold;">{{ title }}</div>
               <div class="" style="font-size: 12px;line-height: 1.5;color: #ccc">{{ summary }}</div>
 
@@ -32,7 +32,7 @@
 export default {
   name: 'Medal',
   props: ['medal'],
-  data () {
+  data() {
     return {
       title: '',
       summary: '',
@@ -42,7 +42,7 @@ export default {
     }
   },
   components: [],
-  mounted () {
+  mounted() {
     let medal = this.medal
     this.title = medal.medal.alias
     this.summary = medal.medal.summary
@@ -53,7 +53,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .medal-wrapper {
   display: inline-block;
 

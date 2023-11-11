@@ -1,12 +1,12 @@
 <template>
-  <div style="display: flex" class="h-full">
+  <div class="h-full" style="display: flex">
 
     <SecondPanel :menus="menus" @changeTab="change"></SecondPanel>
-        <!-- 快速搜索 基础设置->基础设置 右侧框 -->
-    <div style="padding: 1em;border-radius: 8px;margin-left: 1em;width: 100%;margin: 1em;color: var(--primary-text);background: var(--primary-bg);
+    <!-- 快速搜索 基础设置->基础设置 右侧框 -->
+    <div class="s-bg"
+         style="padding: 1em;border-radius: 8px;margin-left: 1em;width: 100%;margin: 1em;color: var(--primary-text);background: var(--primary-bg);
 
-    "
-  class="s-bg">
+    ">
       <router-view></router-view>
     </div>
 
@@ -15,9 +15,10 @@
 
 <script>
 import SecondPanel from '../../components/SecondPanel.vue'
-import { isMain } from '../../js/common/screenUtils'
-import { taskStore } from '../../apps/task/store'
-import { mapWritableState } from 'pinia'
+import {isMain} from '../../js/common/screenUtils'
+import {taskStore} from '../../apps/task/store'
+import {mapWritableState} from 'pinia'
+
 const menus = [
   {
     title: '通用',
@@ -83,7 +84,7 @@ const subMenus = [
 ]
 export default {
   name: 'Basic',
-  components: { SecondPanel },
+  components: {SecondPanel},
   data() {
     return {
       menus: isMain() ? menus : subMenus,
@@ -104,20 +105,20 @@ export default {
     ...mapWritableState(taskStore, ["taskID", "step"]),
   },
   watch: {
-    taskID:{
+    taskID: {
       handler(newV) {
-      if (this.taskID === 'M0401' && this.step == 2) {
-        let obj = {
-          "menu": {
-            "route": {
-              "name": "key"
-            }
-          },
+        if (this.taskID === 'M0401' && this.step == 2) {
+          let obj = {
+            "menu": {
+              "route": {
+                "name": "key"
+              }
+            },
+          }
+          this.change(obj)
         }
-        this.change(obj)
-      }
-    },
-    immediate:true
+      },
+      immediate: true
     }
   },
   methods: {
@@ -147,7 +148,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .settings-menus {
   background: #3b3b3b;
   width: 8em;

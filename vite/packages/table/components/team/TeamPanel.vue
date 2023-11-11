@@ -1,36 +1,36 @@
 <template>
-  <div :class="{'fix':showDetail}" class="flex s-bg rounded-lg" :style="{height:showDetail?'100%':'auto'}"
+  <div :class="{'fix':showDetail}" :style="{height:showDetail?'100%':'auto'}" class="flex s-bg rounded-lg"
        style="overflow: hidden;background: var(--modal-bg);color: var(--primary-text)">
     <div v-if="showDetail"
          style="width:445px;height: 100%;position: relative;display: flex;flex-direction: column;">
       <a-row style="height: 100%">
         <a-col :span="4">
           <ul class="nav-list">
-            <li @click="closeDetail" class="flex pointer items-center justify-center mb-3">
+            <li class="flex pointer items-center justify-center mb-3" @click="closeDetail">
               <div class="rounded-lg" style="background: var(--secondary-bg);">
                 <Icon icon="doubleright" style="font-size: 0.9233em;"></Icon>
               </div>
             </li>
-            <li @click="currentTab='barrage'" class="flex items-center justify-center"
-                :class="{'nav-active':currentTab==='barrage'}">
+            <li :class="{'nav-active':currentTab==='barrage'}" class="flex items-center justify-center"
+                @click="currentTab='barrage'">
               <div>
                 <icon icon="xiaoxi" style="font-size: 0.9233em;"></icon>
               </div>
             </li>
-            <li @click="currentTab='devote'" class="flex items-center justify-center"
-                :class="{'nav-active':currentTab==='devote'}">
+            <li :class="{'nav-active':currentTab==='devote'}" class="flex items-center justify-center"
+                @click="currentTab='devote'">
               <div>
                 <icon icon="thunderbolt" style="font-size: 0.9233em;"></icon>
               </div>
             </li>
-            <li @click="currentTab='info'" class="flex items-center justify-center"
-                :class="{'nav-active':currentTab==='info'}">
+            <li :class="{'nav-active':currentTab==='info'}" class="flex items-center justify-center"
+                @click="currentTab='info'">
               <div>
                 <icon icon="tishi-xianxing" style="font-size: 0.9233em;"></icon>
               </div>
             </li>
-            <li @click="currentTab = 'store'" class="flex items-center justify-center"
-                :class="{'nav-active':currentTab === 'store'}">
+            <li :class="{'nav-active':currentTab === 'store'}" class="flex items-center justify-center"
+                @click="currentTab = 'store'">
               <div>
                 <Icon icon="gift" style="font-size: 0.9233em;"></Icon>
               </div>
@@ -39,12 +39,12 @@
           </ul>
         </a-col>
         <a-col :span="20" style="height: 100%;display: flex;flex-direction: column">
-          <a-row class="" @click="" v-if="showDetail && currentTab !=='store'" :gutter="20">
+          <a-row v-if="showDetail && currentTab !=='store'" :gutter="20" class="" @click="">
 
             <a-col style="padding: 0 !important;">
-              <div style="width:90px;height:90px;position: relative;" class="ml-5 pt-2">
+              <div class="ml-5 pt-2" style="width:90px;height:90px;position: relative;">
                 <!-- <img :src="avatar_url" class="w-full h-full object-cover" alt=""> -->
-                <a-avatar class="mt-3 ml-3 avatar-top" :size="50" shape="square" :src="team.avatar"></a-avatar>
+                <a-avatar :size="50" :src="team.avatar" class="mt-3 ml-3 avatar-top" shape="square"></a-avatar>
               </div>
               <!--  -->
             </a-col>
@@ -54,49 +54,51 @@
             </a-col>
           </a-row>
           <div v-if="showDetail && currentTab==='info'">
-            <TeamDetail @closeTeam="closeTeam" @closeDetail="closeDetail" @onReceiveTeamEarnings="receiveTeamEarnings"
-                        :online="online" :effect="effect" :team="team"
-                        :teamLeader="teamLeader"></TeamDetail>
+            <TeamDetail :effect="effect" :online="online" :team="team"
+                        :teamLeader="teamLeader" @closeDetail="closeDetail" @closeTeam="closeTeam"
+                        @onReceiveTeamEarnings="receiveTeamEarnings"></TeamDetail>
           </div>
-          <div style="flex: 1;height:0" v-if="showDetail && currentTab==='barrage' ">
+          <div v-if="showDetail && currentTab==='barrage' " style="flex: 1;height:0">
             <BarragePanel :defaultChannel="'team'"></BarragePanel>
           </div>
           <div v-if="showDetail && currentTab==='devote'"
                style="height: 100%;position: relative;width: 100%;flex:1;height:0">
-            <TeamDevote :teamLeader="teamLeader" :teamMembers="teamMembers" :team="team"></TeamDevote>
+            <TeamDevote :team="team" :teamLeader="teamLeader" :teamMembers="teamMembers"></TeamDevote>
           </div>
           <div v-if="showDetail && currentTab==='store'" style="height: 100%">
-            <FrameStoreWidget :teamLeader="teamLeader" :teamMembers="teamMembers" :team="team"></FrameStoreWidget>
+            <FrameStoreWidget :team="team" :teamLeader="teamLeader" :teamMembers="teamMembers"></FrameStoreWidget>
           </div>
         </a-col>
       </a-row>
     </div>
     <div v-if="userDetail" class="xt-bg"
          style="width:300px;height: 500px;position: relative">
-      <div @click="closeDetail" class="p-2 rounded-md inline-block m-2 pointer bg-mask"
-           style="position:absolute;right:0;width: 2.8em;text-align: center;z-index: 99">
+      <div class="p-2 rounded-md inline-block m-2 pointer bg-mask" style="position:absolute;right:0;width: 2.8em;text-align: center;z-index: 99"
+           @click="closeDetail">
         <Icon icon="guanbi" style="font-size: 1.2em"></Icon>
       </div>
       <vue-custom-scrollbar :settings="outerSettings"
                             style="position:relative;height:calc(100% - 60px);  ">
         <div class="mb-10">
 
-          <UserDetail :memberInfo="showUserMemberInfo" :key="userInfoKey" :userInfo="showUserInfo"
-                      :joinedTime="showUserMemberInfo.joinedTime"></UserDetail>
+          <UserDetail :key="userInfoKey" :joinedTime="showUserMemberInfo.joinedTime" :memberInfo="showUserMemberInfo"
+                      :userInfo="showUserInfo"></UserDetail>
         </div>
       </vue-custom-scrollbar>
 
       <div class="px-2" style="position: absolute;bottom: 0; left:0;right:0">
-        <a-row class="m-5 mb-2" :gutter="10">
-          <a-col :span="12" v-if="this.showUserInfo.uid!==userInfo.uid">
-            <AddFriendButton v-show="relationship==='not'" @relationshipChanged="updateRelationship" :key="this.showUserInfo.uid"
-                             :uid="this.showUserInfo.uid"></AddFriendButton>
-            <SendMessageButton :uid="this.showUserInfo.uid" :enable="true"   v-show="relationship==='yes'"></SendMessageButton>
+        <a-row :gutter="10" class="m-5 mb-2">
+          <a-col v-if="this.showUserInfo.uid!==userInfo.uid" :span="12">
+            <AddFriendButton v-show="relationship==='not'" :key="this.showUserInfo.uid"
+                             :uid="this.showUserInfo.uid"
+                             @relationshipChanged="updateRelationship"></AddFriendButton>
+            <SendMessageButton v-show="relationship==='yes'" :enable="true"
+                               :uid="this.showUserInfo.uid"></SendMessageButton>
           </a-col>
 
           <a-col :span="12">
-            <div class="rounded-lg bg-mask px-6 py-3 pointer "
-                 v-if="Number(teamLeader.userInfo.uid)===Number(userInfo.uid) && Number(this.showUserInfo.uid)!==Number(userInfo.uid)"
+            <div v-if="Number(teamLeader.userInfo.uid)===Number(userInfo.uid) && Number(this.showUserInfo.uid)!==Number(userInfo.uid)"
+                 class="rounded-lg bg-mask px-6 py-3 pointer "
                  @click="kick(this.showUserInfo.uid)">
               <icon icon="shanchu" style="font-size: 1.3em;vertical-align: text-bottom"></icon>
               移出小队
@@ -106,14 +108,14 @@
       </div>
     </div>
     <!-- 快速搜索 小队右边栏 -->
-    <div class="common-panel  flex" style="flex-direction: column;padding-bottom: 0;"
-         :style="showDetail === false ? { width:'80px' } : { width:'100px' }"
+    <div :style="showDetail === false ? { width:'80px' } : { width:'100px' }" class="common-panel  flex"
+         style="flex-direction: column;padding-bottom: 0;"
     >
-      <div v-if="!showDetail" @click="showBarragePanel"
-           class="p-2 pt-2 p-3 truncate font-large text-center pointer"
-           style="font-size: 1.1em">
+      <div v-if="!showDetail" class="p-2 pt-2 p-3 truncate font-large text-center pointer"
+           style="font-size: 1.1em"
+           @click="showBarragePanel">
         <div>
-          <a-avatar :size="50" shape="square" :src="team.avatar"></a-avatar>
+          <a-avatar :size="50" :src="team.avatar" shape="square"></a-avatar>
         </div>
       </div>
       <div v-if="showDetail" class="text-center">小队成员</div>
@@ -121,34 +123,34 @@
       <div style="margin-top: 10px;margin-bottom: 10px;text-align: center;">—————</div>
       <vue-custom-scrollbar :settings="outerSettings"
                             style="position:relative;height:100%;padding-top: 5px  ">
-        <div @click="showUserDetail(teamLeader.userInfo,teamLeader)"
+        <div v-if="teamLeader.userInfo"
              :class="{'active':this.showUserInfo===teamLeader.userInfo}" class="text-center mb-3 mt-2 pointer pt-2"
-             v-if="teamLeader.userInfo">
+             @click="showUserDetail(teamLeader.userInfo,teamLeader)">
 
-          <UserAvatar :frame="teamLeader.userInfo.equippedItems?.frameDetail"
-                      :frameUrl="teamLeader.userInfo.equippedItems?.frameDetail?.image" :online="teamLeader.online"
-                      :tag="teamLeader.userInfo.uid===userInfo.uid?'我':'队长'"
-                      :avatar="teamLeader.userInfo.avatar" :showDetail="showDetail"></UserAvatar>
+          <UserAvatar :avatar="teamLeader.userInfo.avatar"
+                      :frame="teamLeader.userInfo.equippedItems?.frameDetail" :frameUrl="teamLeader.userInfo.equippedItems?.frameDetail?.image"
+                      :online="teamLeader.online"
+                      :showDetail="showDetail" :tag="teamLeader.userInfo.uid===userInfo.uid?'我':'队长'"></UserAvatar>
 
-          <div v-if="showDetail" class="pt-1 truncate mt-3" style="font-size: 0.9em"
-               :title="teamLeader.userInfo.nickname">
+          <div v-if="showDetail" :title="teamLeader.userInfo.nickname" class="pt-1 truncate mt-3"
+               style="font-size: 0.9em">
             {{ teamLeader.userInfo.nickname }}
           </div>
         </div>
-        <div @click="showUserDetail(user.userInfo,user)" class="text-center  mb-3 pointer  pt-2"
-             :class="{'active':this.showUserInfo===user.userInfo}" v-for="user in teamMembers">
+        <div v-for="user in teamMembers" :class="{'active':this.showUserInfo===user.userInfo}"
+             class="text-center  mb-3 pointer  pt-2" @click="showUserDetail(user.userInfo,user)">
 
-          <UserAvatar :frame="user.userInfo.equippedItems?.frameDetail"
-                      :frameUrl="user.userInfo.equippedItems?.frameDetail?.image" :online="user.online"
-                      :avatar="user.userInfo.avatar"
-                      :tag="user.userInfo.uid===userInfo.uid?'我':''" :showDetail="showDetail"></UserAvatar>
-          <div v-if="showDetail" class="pt-1 truncate" style="font-size: 0.9em" :title=" user.userInfo.nickname">{{
+          <UserAvatar :avatar="user.userInfo.avatar"
+                      :frame="user.userInfo.equippedItems?.frameDetail" :frameUrl="user.userInfo.equippedItems?.frameDetail?.image"
+                      :online="user.online"
+                      :showDetail="showDetail" :tag="user.userInfo.uid===userInfo.uid?'我':''"></UserAvatar>
+          <div v-if="showDetail" :title=" user.userInfo.nickname" class="pt-1 truncate" style="font-size: 0.9em">{{
               user.userInfo.nickname
             }}
           </div>
         </div>
-        <div class="text-center pb-2" title="邀请"
-             v-if="team.leader===userInfo.uid && team.member_count < team.member_limit">
+        <div v-if="team.leader===userInfo.uid && team.member_count < team.member_limit" class="text-center pb-2"
+             title="邀请">
           <a-avatar :size="50" style="color:var(--primary-text) !important">
             <PlusOutlined/>
           </a-avatar>
@@ -160,11 +162,11 @@
 </template>
 
 <script>
-import { PlusOutlined } from '@ant-design/icons-vue'
-import { teamStore } from '../../store/team'
-import { mapWritableState, mapActions, mapState } from 'pinia'
-import { appStore } from '../../store'
-import { Modal } from 'ant-design-vue'
+import {PlusOutlined} from '@ant-design/icons-vue'
+import {teamStore} from '../../store/team'
+import {mapActions, mapState, mapWritableState} from 'pinia'
+import {appStore} from '../../store'
+import {Modal} from 'ant-design-vue'
 import UserDetail from './UserDetail.vue'
 import UserAvatar from '../small/UserAvatar.vue'
 import LevelIcon from '../small/LevelIcon.vue'
@@ -196,12 +198,12 @@ export default {
     FrameStoreWidget
   },
   computed: {
-    teamLeader () {
+    teamLeader() {
       return teamLeader
     },
     ...mapWritableState(teamStore, ['team', 'teamVisible', 'teamLeader', 'teamMembers']),
     ...mapState(appStore, ['userInfo']),
-    effect () {
+    effect() {
       let online = this.teamLeader.online ? 1 : 0
       this.teamMembers.forEach(member => {
         if (member.online) {
@@ -217,7 +219,7 @@ export default {
       return (online - 1) * 5 + 100
     }
   },
-  data () {
+  data() {
     return {
       online: 0,
       currentTab: 'barrage',
@@ -243,7 +245,7 @@ export default {
       relationship: 'unload'
     }
   },
-  mounted () {
+  mounted() {
     if (this.team.status) {
       this.updateTeamShip(this.team.no, {
         userCache: 0
@@ -254,21 +256,21 @@ export default {
       }, 30000)
     }
   },
-  unmounted () {
+  unmounted() {
     clearInterval(this.timer)
   },
 
   methods: {
     ...mapActions(teamStore, ['updateTeamShip', 'quitByNo', 'updateMy', 'closeTeam', 'updateTeam']),
-    updateRelationship (e) {
-      this.relationship=e.relationship
-      console.log(e,'更新关系')
+    updateRelationship(e) {
+      this.relationship = e.relationship
+      console.log(e, '更新关系')
     },
-    showBarragePanel () {
+    showBarragePanel() {
       this.userDetail = false
       this.showDetail = true
     },
-    showUserDetail (userInfo, memberInfo) {
+    showUserDetail(userInfo, memberInfo) {
       this.showUserMemberInfo = memberInfo
       if (this.showUserMemberInfo.uid === this.teamLeader.uid) {
         this.showUserMemberInfo.joinedTime = this.team.createTime
@@ -281,14 +283,14 @@ export default {
       this.showDetail = false
       this.userDetail = true
     },
-    closeDetail () {
+    closeDetail() {
       this.userDetail = false
       this.teamDetail = false
       this.showDetail = false
       this.showUserInfo = {}
       this.earningsShow = false
     },
-    showTeamDetail () {
+    showTeamDetail() {
       this.showBarrage = false
       this.userDetail = false
       this.updateTeam(this.team.no).then()
@@ -296,7 +298,7 @@ export default {
       this.showDetail = true
 
     },
-    cleanTeam () {
+    cleanTeam() {
       this.teamVisible = false
       this.team = {
         status: false
@@ -306,7 +308,7 @@ export default {
      *
      * @param uid
      */
-    kick (uid) {
+    kick(uid) {
       Modal.confirm({
         content: '将队员移出队伍后，此人将无法再为小队做出贡献，但是历史贡献记录将被保留，其再次加入队伍后可继承。',
         centered: true,
@@ -318,20 +320,20 @@ export default {
               this.closeDetail()
               this.updateTeamShip(this.team.no).then()
               this.updateMy().then()
-              Modal.info({ content: '将队员请离队伍成功', centered: true })
+              Modal.info({content: '将队员请离队伍成功', centered: true})
             } else {
               this.updateMy().then()
-              Modal.error({ content: '请离失败', centered: true })
+              Modal.error({content: '请离失败', centered: true})
             }
 
           } else {
             this.updateMy().then()
-            Modal.error({ content: '请离意外失败', centered: true })
+            Modal.error({content: '请离意外失败', centered: true})
           }
         }
       })
     },
-    exit () {
+    exit() {
       Modal.info({
         content: '此功能暂未完成',
         centered: true
@@ -342,7 +344,7 @@ export default {
       // this.teamVisible = false
     },
     // 点击领取收益弹出事件
-    receiveTeamEarnings () {
+    receiveTeamEarnings() {
       this.currentTab = 'devote'
     },
 
@@ -351,7 +353,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 :deep(.ant-avatar) {
   border-radius: 50%;
 }

@@ -86,18 +86,18 @@ export default {
 </script>
 
 <template>
-  <XtButton @click="addFriend" v-if="relationship==='not'" type="theme" style="width: 100%"
-            class="rounded-lg w-full">
-    <icon style="font-size: 16px" class="mr-1" icon="tianjia1"></icon>
+  <XtButton v-if="relationship==='not'" class="rounded-lg w-full" style="width: 100%" type="theme"
+            @click="addFriend">
+    <icon class="mr-1" icon="tianjia1" style="font-size: 16px"></icon>
     加为好友
   </XtButton>
-  <XtButton @click="deleteFriend" v-else-if="relationship==='yes'" style="width: 100%;" :style="bgColor"
-            class="rounded-lg w-full">
-    <icon style="font-size: 16px" class="mr-1" icon="guanbi2"></icon>
+  <XtButton v-else-if="relationship==='yes'" :style="bgColor" class="rounded-lg w-full" style="width: 100%;"
+            @click="deleteFriend">
+    <icon class="mr-1" icon="guanbi2" style="font-size: 16px"></icon>
     解除好友
   </XtButton>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 
 </style>

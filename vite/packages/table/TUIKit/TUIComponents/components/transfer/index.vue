@@ -1,57 +1,58 @@
 <template>
- <div class="flex flex-col" style="width: 400px !important;height: 400px !important;padding: 12px !important;">
-  <div class="top-close flex items-center">
-    <div class="font-16 flex items-center justify-center" style="color: var(--primary-text);">添加好友</div>
-    <div class="rounded-lg pointer active-button h-12 w-12 flex items-center justify-center" style="background: var(--secondary-bg);" @click="closeAddFriend">
-      <Icon icon="guanbi" style="color: var(--secondary-text);width: 24px !important; height: 24px !important;"></Icon>
+  <div class="flex flex-col" style="width: 400px !important;height: 400px !important;padding: 12px !important;">
+    <div class="top-close flex items-center">
+      <div class="font-16 flex items-center justify-center" style="color: var(--primary-text);">添加好友</div>
+      <div class="rounded-lg pointer active-button h-12 w-12 flex items-center justify-center"
+           style="background: var(--secondary-bg);" @click="closeAddFriend">
+        <Icon icon="guanbi"
+              style="color: var(--secondary-text);width: 24px !important; height: 24px !important;"></Icon>
+      </div>
     </div>
-  </div>
 
-  <div class="flex flex-col" style="margin-top: 16px !important;">
-    <a-input class=" h-11 mb-6" :spellcheck="false" v-model:value="friendValue" style="border-radius: 12px;"  @input="handleInput($event)"  enterkeyhint="search" placeholder="输入用户ID搜索" >
-      <template #suffix>
-        <SearchOutlined style="color:var(--secondary-text);font-size: 1.25em;" />
-      </template>
-    </a-input>
+    <div class="flex flex-col" style="margin-top: 16px !important;">
+      <a-input v-model:value="friendValue" :spellcheck="false" class=" h-11 mb-6" enterkeyhint="search"
+               placeholder="输入用户ID搜索" style="border-radius: 12px;" @input="handleInput($event)">
+        <template #suffix>
+          <SearchOutlined style="color:var(--secondary-text);font-size: 1.25em;"/>
+        </template>
+      </a-input>
 
-    <div class="flex flex-col" style="color: var(--primary-text);" v-if="addFriendLists.length !== 0 && friendValue !== ''">
-      <div class="font-14" style="color: var(--primary-text);">搜索结果</div>
-      <div class="flex flex-col">
-       <div v-for="item in addFriendLists" class="flex items-center justify-between" style="padding: 12px;">
-         <div class="flex items-center">
-          <a-avatar  :size="32" :src="item.avatar"></a-avatar>
-          <div style="margin-left: 16px;">{{ item.nick }}</div>
-         </div>
+      <div v-if="addFriendLists.length !== 0 && friendValue !== ''" class="flex flex-col"
+           style="color: var(--primary-text);">
+        <div class="font-14" style="color: var(--primary-text);">搜索结果</div>
+        <div class="flex flex-col">
+          <div v-for="item in addFriendLists" class="flex items-center justify-between" style="padding: 12px;">
+            <div class="flex items-center">
+              <a-avatar :size="32" :src="item.avatar"></a-avatar>
+              <div style="margin-left: 16px;">{{ item.nick }}</div>
+            </div>
 
-         <div v-if="isFriend" class=" flex items-center justify-center rounded-lg" style="background: var(--secondary-bg);color:var(--secondary-text);padding: 10px;">
-          已添加
-         </div>
+            <div v-if="isFriend" class=" flex items-center justify-center rounded-lg"
+                 style="background: var(--secondary-bg);color:var(--secondary-text);padding: 10px;">
+              已添加
+            </div>
 
-         <div v-else class="active-button flex items-center justify-center pointer rounded-lg"
-          style="background: var(--active-bg);color:var(--active-text);padding: 10px;" @click="addFriendButton(item)"
-         >
-           加好友
-         </div>
-       </div>
+            <div v-else class="active-button flex items-center justify-center pointer rounded-lg"
+                 style="background: var(--active-bg);color:var(--active-text);padding: 10px;"
+                 @click="addFriendButton(item)"
+            >
+              加好友
+            </div>
+          </div>
+        </div>
+
       </div>
 
+
+      <div v-else class="flex items-center  justify-center" style="color: var(--primary-text);margin-top: 50px;">
+        <a-empty :image="simpleImage"/>
+      </div>
+
+
     </div>
-
-
-
-    <div v-else class="flex items-center  justify-center" style="color: var(--primary-text);margin-top: 50px;">
-      <a-empty :image="simpleImage" />
-    </div>
-
 
 
   </div>
-
-
- </div>
-
-
-
 
 
   <!-- <div class="transfer" :class="[isH5 ? 'transfer-h5' : '']">
@@ -137,13 +138,13 @@
 </template>
 
 <script>
-import { defineComponent, reactive, watchEffect, toRefs, computed,ref, onMounted } from 'vue';
-import { SearchOutlined } from '@ant-design/icons-vue'
-import { appStore } from '../../../../store'
+import {computed, defineComponent, onMounted, reactive, ref, toRefs} from 'vue';
+import {SearchOutlined} from '@ant-design/icons-vue'
+import {appStore} from '../../../../store'
 import _ from 'lodash-es'
 
 export default defineComponent({
-  props:[
+  props: [
     'isH5',
   ],
 
@@ -186,14 +187,14 @@ export default defineComponent({
   //   },
   // },
 
-  components:{ SearchOutlined },
+  components: {SearchOutlined},
 
-  setup(props, ctx){
+  setup(props, ctx) {
     const friendValue = ref('')
     const data = reactive({
-      addFriendLists:[],
-      simpleImage:'/img/state/null.png', // 空状态图片
-      friendLists:[], // 获取好友列表进行比较
+      addFriendLists: [],
+      simpleImage: '/img/state/null.png', // 空状态图片
+      friendLists: [], // 获取好友列表进行比较
     })
 
     const infoStore = appStore()  // 获取state用户信息
@@ -201,30 +202,30 @@ export default defineComponent({
 
     const TIM = window.$TUIKit.TIM  // 大tim
 
-    const closeAddFriend = () =>{  // 关闭添加好友弹窗
+    const closeAddFriend = () => {  // 关闭添加好友弹窗
       ctx.emit('close')
     }
 
     const handleInput = async () => {   // 好友搜索
 
-      if(parseInt(friendValue.value) === isSelfUid){
+      if (parseInt(friendValue.value) === isSelfUid) {
         return
-      }else{
+      } else {
         const val = friendValue.value
         console.log(val);
-        const imResponse = await  window.$chat.getUserProfile({userIDList:[`${val}`]})
+        const imResponse = await window.$chat.getUserProfile({userIDList: [`${val}`]})
         data.addFriendLists = imResponse.data
       }
 
     }
 
-    const addFriendButton = async (item) =>{  // 点击添加好友按钮
+    const addFriendButton = async (item) => {  // 点击添加好友按钮
 
       const option = {
-        to:item.userID,
-        type:TIM.TYPES.SNS_ADD_TYPE_BOTH,
+        to: item.userID,
+        type: TIM.TYPES.SNS_ADD_TYPE_BOTH,
         source: 'AddSource_Type_Web',
-        remark:item.nick
+        remark: item.nick
       }
 
       await window.$chat.addFriend(option)
@@ -232,12 +233,13 @@ export default defineComponent({
     }
 
 
-
-    const isFriend = computed(()=>{
-      const index = _.find(data.friendLists,function(o){ return o.userID === friendValue.value })
-      if(index){
+    const isFriend = computed(() => {
+      const index = _.find(data.friendLists, function (o) {
+        return o.userID === friendValue.value
+      })
+      if (index) {
         return true
-      }else{
+      } else {
         return false
       }
     })
@@ -250,11 +252,10 @@ export default defineComponent({
     onMounted(loadFriend)
 
 
+    return {
+      friendValue, ...toRefs(data), isFriend,
 
-    return{
-      friendValue,...toRefs(data),isFriend,
-
-      handleInput,closeAddFriend,addFriendButton,loadFriend,
+      handleInput, closeAddFriend, addFriendButton, loadFriend,
     }
   }
 
@@ -354,49 +355,51 @@ export default defineComponent({
 
 <style lang="scss" scoped src="./style/transfer.scss"></style>
 <style lang="scss" scoped>
-.font-16{
+.font-16 {
 
   font-size: 16px;
   font-weight: 500;
 }
 
-.active-button{
-  &:active{
+.active-button {
+  &:active {
     filter: brightness(0.8);
     opacity: 0.8;
   }
-  &:hover{
+
+  &:hover {
     opacity: 0.8;
   }
 }
 
-.font-400{
+.font-400 {
 
   font-size: 16px;
   font-weight: 400;
 }
 
-:deep(.ant-input-affix-wrapper){
+:deep(.ant-input-affix-wrapper) {
   border: 1px solid var(--divider) !important;
   background: var(--secondary-bg) !important;
   cursor: pointer;
 }
 
-.font-14{
+.font-14 {
 
   font-size: 14px;
   font-weight: 400;
 }
 
-:deep(.ant-input){
+:deep(.ant-input) {
   color: var(--secondary-text) !important;
   font-size: 1.15em;
-  &::placeholder{
+
+  &::placeholder {
     color: var(--secondary-text) !important;
   }
 }
 
-.top-close{
+.top-close {
   width: 100%;
   height: 48px;
   padding: 12px;
@@ -404,7 +407,8 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   align-items: center;
-  >div:nth-of-type(2){
+
+  > div:nth-of-type(2) {
     position: absolute;
     right: 12px;
   }

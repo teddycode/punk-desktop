@@ -1,15 +1,15 @@
 <template>
   <div class="box w-full h-full">
     <a-popover
-      trigger="hover"
-      overlayClassName="bgg"
-      placement="right"
-      :mouseLeaveDelay="0.1"
-      :overlayInnerStyle="{
+        :mouseLeaveDelay="0.1"
+        :overlayInnerStyle="{
         'padding-left': '20px',
       }"
+        overlayClassName="bgg"
+        placement="right"
+        trigger="hover"
     >
-      <template #content >
+      <template #content>
         <slot name="content"></slot>
       </template>
 
@@ -22,12 +22,15 @@
 <style lang="scss">
 .bgg {
   z-index: 999999999999999;
+
   .ant-popover-arrow-content {
     display: none;
   }
+
   .ant-popover {
     margin-left: 10px;
   }
+
   .ant-popover-inner-content {
     border-radius: 12px !important;
     background: var(--modal-bg) !important;

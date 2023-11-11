@@ -1,16 +1,17 @@
 <template>
   <div
-    class="xt-active xt-base-btn xt-text"
-    :style="[boxStyle, boxBgStyle]"
-    :class="[bgClass]"
+      :class="[bgClass]"
+      :style="[boxStyle, boxBgStyle]"
+      class="xt-active xt-base-btn xt-text"
   >
     <myIcon :icon="icon" :style="iconSize"></myIcon>
   </div>
 </template>
 
 <script setup>
-import { Icon as myIcon } from "@iconify/vue";
-import { computed } from "vue";
+import {Icon as myIcon} from "@iconify/vue";
+import {computed} from "vue";
+
 const props = defineProps({
   icon: {
     type: String,

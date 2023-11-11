@@ -1,35 +1,35 @@
 <template>
   <div class="name">
-    <label>{{$t(`TUIChat.manage.群名称`)}}</label>
-    <div v-if="isEdit" :class="[isH5 ? 'edit-h5' : '']" ref="dialog">
+    <label>{{ $t(`TUIChat.manage.群名称`) }}</label>
+    <div v-if="isEdit" ref="dialog" :class="[isH5 ? 'edit-h5' : '']">
       <main>
-        <header class="edit-h5-header" v-if="isH5">
+        <header v-if="isH5" class="edit-h5-header">
           <aside class="left">
-            <h1>{{$t(`TUIChat.manage.修改群聊名称`)}}</h1>
-            <span>{{$t(`TUIChat.manage.修改群聊名称后，将在群内通知其他成员`)}}</span>
+            <h1>{{ $t(`TUIChat.manage.修改群聊名称`) }}</h1>
+            <span>{{ $t(`TUIChat.manage.修改群聊名称后，将在群内通知其他成员`) }}</span>
           </aside>
-          <span class="close" @click="toggleEdit">{{$t(`关闭`)}}</span>
+          <span class="close" @click="toggleEdit">{{ $t(`关闭`) }}</span>
         </header>
         <div class="input-box">
-          <input class="input" v-if="isEdit" v-model="input" type="text" @keyup.enter="updateProfile">
-          <span v-if="isH5">{{$t(`TUIChat.manage.仅限中文、字母、数字和下划线，2-20个字`)}}</span>
+          <input v-if="isEdit" v-model="input" class="input" type="text" @keyup.enter="updateProfile">
+          <span v-if="isH5">{{ $t(`TUIChat.manage.仅限中文、字母、数字和下划线，2-20个字`) }}</span>
         </div>
-        <footer class="edit-h5-footer" v-if="isH5">
-          <button class="btn" :disabled="!input" @click="updateProfile">{{$t(`确认`)}}</button>
+        <footer v-if="isH5" class="edit-h5-footer">
+          <button :disabled="!input" class="btn" @click="updateProfile">{{ $t(`确认`) }}</button>
         </footer>
       </main>
     </div>
     <p v-if="!isEdit || isH5" @click="toggleEdit">
-      <span>{{groupProfile.name}}</span>
-      <i class="icon icon-edit" v-if="isAuth"></i>
+      <span>{{ groupProfile.name }}</span>
+      <i v-if="isAuth" class="icon icon-edit"></i>
     </p>
 
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, watchEffect, reactive, toRefs, ref } from 'vue';
-import { onClickOutside } from '@vueuse/core';
+import {defineComponent, reactive, ref, toRefs, watchEffect} from 'vue';
+import {onClickOutside} from '@vueuse/core';
 
 const manageName = defineComponent({
   props: {
@@ -46,8 +46,8 @@ const manageName = defineComponent({
       default: false,
     },
   },
-  setup(props:any, ctx:any) {
-    const data:any = reactive({
+  setup(props: any, ctx: any) {
+    const data: any = reactive({
       groupProfile: {},
       input: '',
       isEdit: false,
@@ -57,7 +57,7 @@ const manageName = defineComponent({
       data.groupProfile = props.data;
     });
 
-    const dialog:any = ref();
+    const dialog: any = ref();
 
 
     onClickOutside(dialog, () => {
@@ -66,7 +66,7 @@ const manageName = defineComponent({
 
     const updateProfile = async () => {
       if (data.input && data.input !== data.groupProfile.name) {
-        ctx.emit('update', { key: 'name', value: data.input });
+        ctx.emit('update', {key: 'name', value: data.input});
         data.groupProfile.name = data.input;
         data.input = '';
       }
@@ -96,6 +96,7 @@ export default manageName;
 <style lang="scss" scoped>
 @import url('../../../styles/common.scss');
 @import url('../../../styles/icon.scss');
+
 .name {
   padding: 14px 20px;
   font-weight: 400;
@@ -103,17 +104,21 @@ export default manageName;
   color: #000000;
   display: flex;
   flex-direction: column;
+
   p {
     opacity: 0.6;
     display: flex;
     align-items: center;
+
     .icon {
       margin-left: 4px;
     }
   }
 }
+
 .input-box {
   display: flex;
+
   .input {
     flex: 1;
     border: 1px solid #E8E8E9;
@@ -126,31 +131,36 @@ export default manageName;
   }
 }
 
-.space-top{
+.space-top {
   border-top: 10px solid #F4F5F9;
 }
+
 .edit-h5 {
   position: fixed;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
-  background: rgba(0,0,0,.5);
+  background: rgba(0, 0, 0, .5);
   display: flex;
   align-items: flex-end;
   z-index: 1;
+
   main {
     background: #FFFFFF;
     flex: 1;
     padding: 18px;
     border-radius: 12px 12px 0 0;
+
     .input-box {
       flex-direction: column;
       padding: 18px 0;
+
       .input {
         background: #F8F8F8;
         padding: 10px 12px;
       }
+
       span {
 
         font-weight: 400;
@@ -161,10 +171,12 @@ export default manageName;
       }
     }
   }
+
   &-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     .close {
 
       font-weight: 400;
@@ -174,8 +186,10 @@ export default manageName;
       line-height: 27px;
     }
   }
+
   &-footer {
     display: flex;
+
     .btn {
       flex: 1;
       border: none;
@@ -188,6 +202,7 @@ export default manageName;
       letter-spacing: 0;
       line-height: 27px;
       padding: 8px 0;
+
       &:disabled {
         opacity: 0.3;
       }

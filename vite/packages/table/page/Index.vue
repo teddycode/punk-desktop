@@ -6,8 +6,8 @@
     </a-col>
     <a-col :style="{'padding-left': !fullScreen?'8em':'0'}">
       <vue-custom-scrollbar
-        :style="{'width':!fullScreen?'calc(100vw - 9em)':'100vw','height':fullScreen?'calc(100vw - 4em)' : 'calc(100vh - 12em)','border-radius':fullScreen?'0':'8px' }"
-        :settings="scrollbarSettings" :key="routeUpdateTime" style="position:relative;  ">
+          :key="routeUpdateTime"
+          :settings="scrollbarSettings" :style="{'width':!fullScreen?'calc(100vw - 9em)':'100vw','height':fullScreen?'calc(100vw - 4em)' : 'calc(100vh - 12em)','border-radius':fullScreen?'0':'8px' }" style="position:relative;  ">
         <router-view></router-view>
       </vue-custom-scrollbar>
     </a-col>
@@ -20,13 +20,13 @@
 import SidePanel from '../components/SidePanel.vue'
 import TopPanel from '../components/TopPanel.vue'
 import BottomPanel from '../components/BottomPanel.vue'
-import { mapWritableState } from 'pinia'
-import { appStore } from '../store'
+import {mapWritableState} from 'pinia'
+import {appStore} from '../store'
 
 export default {
   name: 'Index',
-  components: { BottomPanel, TopPanel, SidePanel },
-  mounted () {
+  components: {BottomPanel, TopPanel, SidePanel},
+  mounted() {
     this.$router.afterEach((to, from) => {
       this.routeUpdateTime = Date.now()
     })
@@ -34,7 +34,7 @@ export default {
   computed: {
     ...mapWritableState(appStore, ['routeUpdateTime', 'fullScreen', 'settings', 'init'])
   },
-  data(){
+  data() {
     return {
       scrollbarSettings: {
         useBothWheelAxes: true,

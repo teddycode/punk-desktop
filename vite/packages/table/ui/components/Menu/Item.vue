@@ -1,25 +1,25 @@
 <template>
   <div
-    class="flex w-full cursor-pointer items-center h-10"
-    :class="{ item: isBg }"
+      :class="{ item: isBg }"
+      class="flex w-full cursor-pointer items-center h-10"
   >
     <xt-base-icon
-      :style="{ 'font-size': '20px' }"
-      v-if="data?.icon"
-      :icon="data.icon"
-      class="ml-3"
+        v-if="data?.icon"
+        :icon="data.icon"
+        :style="{ 'font-size': '20px' }"
+        class="ml-3"
     />
     <xt-new-icon
-      size="20"
-      v-else-if="data?.newIcon"
-      :icon="data.newIcon"
-      class="ml-3"
+        v-else-if="data?.newIcon"
+        :icon="data.newIcon"
+        class="ml-3"
+        size="20"
     />
     <div
-      class="truncate w-full flex-1 pl-3 text-base"
-      :style="{
+        :style="{
         color: data.color ? data.color : color,
       }"
+        class="truncate w-full flex-1 pl-3 text-base"
     >
 
       {{ data[`${name}`] }}

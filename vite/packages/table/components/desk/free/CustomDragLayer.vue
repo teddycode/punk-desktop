@@ -1,14 +1,14 @@
-<script setup lang="ts">
-import { XYCoord, useDragLayer } from "vue3-dnd";
-import { ItemTypes } from "./ItemTypes";
+<script lang="ts" setup>
+import {useDragLayer, XYCoord} from "vue3-dnd";
+import {ItemTypes} from "./ItemTypes";
 import BoxDragPreview from "./BoxDragPreview.vue";
-import { snapToGrid } from "./snapToGrid";
-import { toRefs } from "@vueuse/core";
+import {snapToGrid} from "./snapToGrid";
+import {toRefs} from "@vueuse/core";
 
 function getItemStyles(
-  initialOffset: XYCoord | null,
-  currentOffset: XYCoord | null,
-  isSnapToGrid: boolean
+    initialOffset: XYCoord | null,
+    currentOffset: XYCoord | null,
+    isSnapToGrid: boolean
 ) {
   if (!initialOffset || !currentOffset) {
     return {
@@ -16,7 +16,7 @@ function getItemStyles(
     };
   }
 
-  let { x, y } = currentOffset;
+  let {x, y} = currentOffset;
 
   if (isSnapToGrid) {
     x -= initialOffset.x;
@@ -43,14 +43,14 @@ const collect = useDragLayer((monitor) => ({
   currentOffset: monitor.getSourceClientOffset(),
   isDragging: monitor.isDragging(),
 }));
-const { itemType, isDragging, item, initialOffset, currentOffset } =
-  toRefs(collect);
+const {itemType, isDragging, item, initialOffset, currentOffset} =
+    toRefs(collect);
 </script>
 
 <template>
   <div class="layer">
     <div :style="getItemStyles(initialOffset, currentOffset, props.snapToGrid)">
-      <BoxDragPreview v-if="itemType === ItemTypes.BOX" :title="item.title" />
+      <BoxDragPreview v-if="itemType === ItemTypes.BOX" :title="item.title"/>
     </div>
   </div>
 </template>

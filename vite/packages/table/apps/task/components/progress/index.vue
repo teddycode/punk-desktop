@@ -1,11 +1,11 @@
 <template>
   <div class="rounded-lg w-full h-full overflow-hidden">
     <div class="flex w-full h-full relative">
-      <div class="xt-active-bg h-full" :style="[branchProgress]"></div>
+      <div :style="[branchProgress]" class="xt-active-bg h-full"></div>
       <div class="flex-1 xt-active-bg-2"></div>
       <div
-        class="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-full text-center xt-text"
-        style="font-size: 12px"
+          class="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-full text-center xt-text"
+          style="font-size: 12px"
       >
         {{ text }} {{ progress }} %
       </div>
@@ -14,13 +14,13 @@
 </template>
 
 <script setup>
-import { computed, toRefs, ref, reactive } from "vue";
+import {computed, reactive, ref, toRefs} from "vue";
 
-import { storeToRefs } from "pinia";
-import { taskStore } from "../../store";
+import {storeToRefs} from "pinia";
+import {taskStore} from "../../store";
 
 const store = taskStore();
-const { successBranchTask } = storeToRefs(store);
+const {successBranchTask} = storeToRefs(store);
 const props = defineProps({
   text: {
     default: "进度",
@@ -29,7 +29,7 @@ const props = defineProps({
     default: {},
   },
 });
-const { task } = toRefs(props);
+const {task} = toRefs(props);
 
 // 获取当前分支总长度
 let branchLength = ref(task.value.tasks.length);

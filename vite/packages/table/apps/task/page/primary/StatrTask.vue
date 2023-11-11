@@ -1,30 +1,32 @@
 <template>
   <!-- 任务弹窗 -->
   <xt-message
-    @ok="ok()"
-    @no="no()"
-    v-model="data.visible"
-    :text="data.text"
+      v-model="data.visible"
+      :text="data.text"
+      @no="no()"
+      @ok="ok()"
   ></xt-message>
   <!-- 任务按钮 -->
   <xt-button
-    v-if="isFirst && store.success"
-    style="background: #faad14 !important; width: 100%"
-    @click="receive()"
-    >领取奖励</xt-button
+      v-if="isFirst && store.success"
+      style="background: #faad14 !important; width: 100%"
+      @click="receive()"
+  >领取奖励
+  </xt-button
   >
   <xt-button v-else style="width: 100%" type="theme" @click="taskGuide()"
-    >开始任务</xt-button
+  >开始任务
+  </xt-button
   >
 </template>
 
 <script setup>
-import { reactive, ref } from "vue";
-import { useRouter } from "vue-router";
-import { guide } from "../../../../ui/components/Task/guide";
-import { lastGuide } from "./lastGuide";
-import { endGuide } from "./endGuide";
-import { taskStore } from "../../store";
+import {reactive} from "vue";
+import {useRouter} from "vue-router";
+import {guide} from "../../../../ui/components/Task/guide";
+import {lastGuide} from "./lastGuide";
+import {endGuide} from "./endGuide";
+import {taskStore} from "../../store";
 
 // 初始化
 const store = taskStore();

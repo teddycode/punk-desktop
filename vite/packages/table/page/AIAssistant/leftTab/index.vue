@@ -1,5 +1,5 @@
 <template>
-   <xt-left-menu :list="menuList" last="1" end="3" model="id">
+  <xt-left-menu :list="menuList" end="3" last="1" model="id">
     <template #test>
       <xt-button @click="showRightPanel = !showRightPanel">Toggle Right Panel</xt-button>
     </template>
@@ -7,11 +7,11 @@
   </xt-left-menu>
 
   <!-- 新建对话  -->
-  <xt-modal v-model="createChatVisible"  title="新建模板"  :isFooter="false">
+  <xt-modal v-model="createChatVisible" :isFooter="false" title="新建模板">
     <CreateTopic @close="createChatVisible = false"></CreateTopic>
   </xt-modal>
   <!-- 系统设置 -->
-  <xt-drawer title="12" v-model="setVisible" placement="right">
+  <xt-drawer v-model="setVisible" placement="right" title="12">
     <template #title>
       <div>设置</div>
     </template>
@@ -21,10 +21,11 @@
 
 <script>
 import CreateTopic from "../chat/left/createTopic.vue";
-import { mapWritableState } from "pinia";
-import { aiStore } from "../../../store/ai";
+import {mapWritableState} from "pinia";
+import {aiStore} from "../../../store/ai";
 import Edit from "./edit.vue";
-import { SettingFilled } from "@ant-design/icons-vue";
+import {SettingFilled} from "@ant-design/icons-vue";
+
 export default {
   components: {
     CreateTopic,

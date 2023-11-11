@@ -1,7 +1,7 @@
 <template>
-  <div class="flex flex-col h-full items-center justify-between p-5" v-if="showModal === false">
+  <div v-if="showModal === false" class="flex flex-col h-full items-center justify-between p-5">
     <!-- 返回按钮 -->
-    <div class="guide-button" v-if="isShow === false ">
+    <div v-if="isShow === false " class="guide-button">
       <div class="flex guide-page-bg button-active pointer w-12 h-12 rounded-lg items-center justify-center "
            @click="backSplash"
       >
@@ -10,7 +10,7 @@
     </div>
 
     <!-- 引导内容提示 -->
-    <div class="h-full flex items-center justify-center min-content mb-4" v-if="isShow === false">
+    <div v-if="isShow === false" class="h-full flex items-center justify-center min-content mb-4">
       <!-- 合适工作台模式 -->
       <template v-if="step === 0">
         <div class="flex flex-col items-center">
@@ -27,7 +27,7 @@
             >
               <!--  -->
               <div style="width: 100px;height: 100px;">
-                <img :src="guideImg(item.url)" class="w-full h-full" alt="">
+                <img :src="guideImg(item.url)" alt="" class="w-full h-full">
               </div>
               <span class="my-4 primary-title">{{ item.title }}</span>
               <div class="container flex items-center justify-center">
@@ -54,7 +54,7 @@
                  @click="selectThemeMode(item.id)"
             >
               <div style="width: 100px;height: 100px;">
-                <img :src="guideImg(item.url) " class="w-full h-full" alt="">
+                <img :src="guideImg(item.url) " alt="" class="w-full h-full">
               </div>
               <span class="mt-4 primary-title">{{ item.title }}</span>
             </div>
@@ -71,23 +71,23 @@
           </div>
           <div class="flex">
             <div class="mode-image mr-9 flex items-center justify-center">
-              <img :src="modeImg.initUrl" class="w-full h-full " alt="" v-if="defaultMode.name === 'intMode'">
-              <img :src="modeImg.simpleUrl" v-else class="w-full h-full object-cover" alt="">
+              <img v-if="defaultMode.name === 'intMode'" :src="modeImg.initUrl" alt="" class="w-full h-full ">
+              <img v-else :src="modeImg.simpleUrl" alt="" class="w-full h-full object-cover">
             </div>
             <div class="flex flex-col">
-              <HorizontalPanel :navList="modeData" v-model:selectType="defaultMode" class="mb-5"></HorizontalPanel>
-              <div v-for="item in teamData" @click="openTeamPersonal(item)"
-                   class="guide-page-bg mb-4 p-4 button-active flex items-center justify-between pointer rounded-lg"
+              <HorizontalPanel v-model:selectType="defaultMode" :navList="modeData" class="mb-5"></HorizontalPanel>
+              <div v-for="item in teamData" class="guide-page-bg mb-4 p-4 button-active flex items-center justify-between pointer rounded-lg"
+                   @click="openTeamPersonal(item)"
               >
                 <div class="flex items-center">
                   <div style="width:40px;height:40px;">
-                    <img :src="guideImg(item.img)" class="w-full h-full" alt="">
+                    <img :src="guideImg(item.img)" alt="" class="w-full h-full">
                   </div>
                   <span class="ml-4 guide-title primary-title xt-text">{{ item.title }}</span>
                 </div>
                 <span :style="{background: !simple? 'green':'red'}" class="p-2 rounded-lg px-3">
-              <icon style="font-size: 18px;color: white;vertical-align: middle" v-if="!simple" icon="yixuan"></icon>
-               <icon style="font-size: 18px;color: white;vertical-align: middle" v-else icon="guanbi"></icon>
+              <icon v-if="!simple" icon="yixuan" style="font-size: 18px;color: white;vertical-align: middle"></icon>
+               <icon v-else icon="guanbi" style="font-size: 18px;color: white;vertical-align: middle"></icon>
              </span>
               </div>
             </div>
@@ -99,11 +99,11 @@
 
     <!-- 上下一步点击按钮 -->
     <div class="flex">
-      <xt-button class="mr-10 w-40 h-12 rounded-lg" style="color: var(--active-text);" v-if="step !== 0"
+      <xt-button v-if="step !== 0" class="mr-10 w-40 h-12 rounded-lg" style="color: var(--active-text);"
                  @click="prevButton">
         上一步
       </xt-button>
-      <xt-button type="theme" :disabled="!isNext" class="w-40 h-12 rounded-lg" style="color: var(--active-text);"
+      <xt-button :disabled="!isNext" class="w-40 h-12 rounded-lg" style="color: var(--active-text);" type="theme"
                  @click="nextButton">
         {{ step === 2 ? 'GO' : '下一步' }}
       </xt-button>
@@ -114,7 +114,7 @@
    -->
   </div>
   <transition name="fade">
-    <div class="guide-page-bg h-full flex items-center justify-center" v-if="showModal === true">
+    <div v-if="showModal === true" class="guide-page-bg h-full flex items-center justify-center">
       <div class="rounded-lg flex flex-col p-4" style="width:480px;background: var(--modal-bg);">
         <div class="flex items-center justify-end">
           <div class="w-12 h-12 rounded-lg pointer mouse-click flex items-center justify-center"
@@ -123,8 +123,8 @@
           </div>
         </div>
         <div class="flex items-center flex-col justify-center">
-          <div style="width: 64px;height: 64px;" class="mb-6">
-            <img :src="guideImg(defaultTeamData.img)" class="w-full h-full" alt="">
+          <div class="mb-6" style="width: 64px;height: 64px;">
+            <img :src="guideImg(defaultTeamData.img)" alt="" class="w-full h-full">
           </div>
           <span class="mb-6 primary-text">{{ defaultTeamData.title }}</span>
           <span class="secondary-title mb-14" style="max-width: 380px;">{{ defaultTeamData.content }}</span>

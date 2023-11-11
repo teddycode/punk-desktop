@@ -21,32 +21,32 @@ const grpc = require("@grpc/grpc-js");
 // }
 const proto = grpc.loadPackageDefinition()
 var client = new services.InspectorClient('127.0.0.1:50051',
-  grpc.credentials.createInsecure());
+    grpc.credentials.createInsecure());
 
- const inspector = {
-  async getFPS() {
-    let request=new messages.Empty({})
-    return new Promise((resolve,reject)=>{
-       client.getFPS(request,(err,response)=>{
-         if(err){
-           console.error('客户端返回error',err)
-           reject(err)
-         }
-         resolve(response.getFps())
-       })
-    })
-    // try{
-    //   let response=
-    //   console.log(response)
-    //
-    // }catch(e){
-    //   console.warn('客户端返回error',e)
-    // }
-  }
+const inspector = {
+    async getFPS() {
+        let request = new messages.Empty({})
+        return new Promise((resolve, reject) => {
+            client.getFPS(request, (err, response) => {
+                if (err) {
+                    console.error('客户端返回error', err)
+                    reject(err)
+                }
+                resolve(response.getFps())
+            })
+        })
+        // try{
+        //   let response=
+        //   console.log(response)
+        //
+        // }catch(e){
+        //   console.warn('客户端返回error',e)
+        // }
+    }
 }
 
-const rpc={
-   inspector
+const rpc = {
+    inspector
 }
 
-module.exports=rpc
+module.exports = rpc

@@ -1,17 +1,18 @@
 <script lang="ts">
 import tools from '../../../src/util/tools.js'
-import {Modal} from 'ant-design-vue'
-let {appModel, placesModel,statsh} = window.$models
-window.ipc = require('electron').ipcRenderer
-import {mapActions, mapWritableState, mapState, mapGetters} from "pinia";
-import {SearchOutlined, SmileOutlined,CloseOutlined,BulbOutlined} from '@ant-design/icons-vue'
+import {mapState, mapWritableState} from "pinia";
+import {BulbOutlined, CloseOutlined, SearchOutlined, SmileOutlined} from '@ant-design/icons-vue'
 import {appStore} from "../store";
 
 import SearchInput from "../components/SearchInput.vue";
+
+let {appModel, placesModel, statsh} = window.$models
+window.ipc = require('electron').ipcRenderer
+
 export default {
   components: {
     SearchInput,
-    SearchOutlined, SmileOutlined,CloseOutlined,BulbOutlined
+    SearchOutlined, SmileOutlined, CloseOutlined, BulbOutlined
   },
   watch: {
     searchWord: {
@@ -60,15 +61,15 @@ export default {
     }
   },
   computed: {
-    ...mapState(appStore, ['getAllTasks','searchWord']),
-    ...mapWritableState(appStore,['contentLoading','searchResult','apps']),
+    ...mapState(appStore, ['getAllTasks', 'searchWord']),
+    ...mapWritableState(appStore, ['contentLoading', 'searchResult', 'apps']),
 
   },
   async mounted() {
     await this.getAllApps()
     this.bindKeys()
 
-    window.changeHeight=this.changeHeight
+    window.changeHeight = this.changeHeight
     this.calculateAreaHeight(await this.getHistoryCount())
     this.recentOpenedHistory = await this.handleRecentOpenedHistory()
     this.recentReadyedItem = this.recentOpenedHistory[0]

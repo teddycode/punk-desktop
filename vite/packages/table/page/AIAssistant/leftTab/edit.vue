@@ -6,9 +6,9 @@
       <div v-else class="xt-text-2">完成配置后即可查看可用余量。</div>
     </div>
     <xt-title spacing="5">API 域名</xt-title>
-    <xt-input style="height: 48px" v-model="url" class="xt-b"></xt-input>
+    <xt-input v-model="url" class="xt-b" style="height: 48px"></xt-input>
     <xt-title spacing="5">API 密钥</xt-title>
-    <xt-input style="height: 48px" v-model="key" class="xt-b"></xt-input>
+    <xt-input v-model="key" class="xt-b" style="height: 48px"></xt-input>
     <xt-title spacing="5">注意事项</xt-title>
     <div class="flex flex-col xt-bg-2 rounded-xl p-3">
       <div>
@@ -19,36 +19,37 @@
       <div class="link mt-3 cursor-pointer" @click="resetting()">重置为默认值</div>
     </div>
     <xt-title spacing="5">GTP模型</xt-title>
-    <xt-select v-model="gpt" :list="gptList"> </xt-select>
+    <xt-select v-model="gpt" :list="gptList"></xt-select>
     <xt-title spacing="5">严谨与想象（Temperature）</xt-title>
     <div class="flex">
       <a-slider
-        class="flex-1"
-        v-model:value="temperature"
-        :min="0"
-        :max="1"
-        :step="0.1"
-        tooltipPlacement="left"
-        :tooltipOpen="true"
+          v-model:value="temperature"
+          :max="1"
+          :min="0"
+          :step="0.1"
+          :tooltipOpen="true"
+          class="flex-1"
+          tooltipPlacement="left"
       />
       <a-input-number
-        v-model:value="temperature"
-        :min="0"
-        :max="2"
+          v-model:value="temperature"
+          :max="2"
+          :min="0"
       ></a-input-number>
     </div>
     <xt-title spacing="5">上下文的条数</xt-title>
     <div class="flex">
-      <a-slider v-model:value="count" :min="1" :max="10" class="flex-1" />
-      <a-input-number v-model:value="count" :min="1" :max="10"></a-input-number>
+      <a-slider v-model:value="count" :max="10" :min="1" class="flex-1"/>
+      <a-input-number v-model:value="count" :max="10" :min="1"></a-input-number>
     </div>
   </div>
 </template>
 
 <script>
-import { aiStore } from "../../../store/ai";
-import { mapWritableState } from "pinia";
-import { balance } from "../service/api/ai";
+import {aiStore} from "../../../store/ai";
+import {mapWritableState} from "pinia";
+import {balance} from "../service/api/ai";
+
 export default {
   computed: {
     ...mapWritableState(aiStore, ["temperature", "count", "key", "url", "gpt"]),
@@ -62,7 +63,7 @@ export default {
   },
   methods: {
     async getMoney() {
-      let { data } = await balance();
+      let {data} = await balance();
       this.money = data.total_available;
     },
     resetting() {
@@ -74,12 +75,12 @@ export default {
   data() {
     return {
       gptList: [
-        { value: "gpt-3.5-turbo", name: "gpt-3.5" },
+        {value: "gpt-3.5-turbo", name: "gpt-3.5"},
         {
           value: "gpt-4",
           name: "gpt-4",
         },
-        { value: "gpt-4-32k", name: "gpt-4 稳定版" },
+        {value: "gpt-4-32k", name: "gpt-4 稳定版"},
       ],
       money: "",
     };

@@ -1,16 +1,14 @@
-<script setup lang="ts">
-import { reactive, computed, watch, ref, toRefs } from "vue";
-import { useDrop } from "vue3-dnd";
+<script lang="ts" setup>
+import {ref, toRefs, watch} from "vue";
+import {useDrop} from "vue3-dnd";
 
-import { ItemTypes } from "./ItemTypes";
-import { DragItem } from "./interfaces";
-import { snapToGrid as doSnapToGrid } from "./snapToGrid";
+import {ItemTypes} from "./ItemTypes";
+import {DragItem} from "./interfaces";
+import {snapToGrid as doSnapToGrid} from "./snapToGrid";
 
-import { storeToRefs } from "pinia";
-import { useFreeDeskStore } from "./store";
-import { cardStore } from "../../../store/card";
-
-import Container from "./Container.vue";
+import {storeToRefs} from "pinia";
+import {useFreeDeskStore} from "./store";
+import {cardStore} from "../../../store/card";
 import CustomDragLayer from "./CustomDragLayer.vue";
 import DraggableBox from "./DraggableBox.vue";
 
@@ -34,11 +32,11 @@ const handleSnapToGridWhileDraggingChange = () => {
 const freeDeskStore: any = useFreeDeskStore();
 const card: any = cardStore();
 
-const { getCurrentDesk, freeDesk } = storeToRefs(freeDeskStore);
+const {getCurrentDesk, freeDesk} = storeToRefs(freeDeskStore);
 
-const { currentDesk } = toRefs(props);
+const {currentDesk} = toRefs(props);
 // 获取组件
-const { currentDeskId } = storeToRefs(card);
+const {currentDeskId} = storeToRefs(card);
 
 function renaw(cards) {
   let obj = {};
@@ -50,7 +48,7 @@ function renaw(cards) {
     }
     // 不存在要追加进去
     else {
-      const { id, name, data, customData } = item;
+      const {id, name, data, customData} = item;
 
       obj[item.id] = {
         top: 0,
@@ -65,6 +63,7 @@ function renaw(cards) {
   console.log("obj :>> ", obj);
   freeDesk.value[currentDeskId.value] = obj;
 }
+
 let resizeTimer: any = null; // 用于存储 setTimeout 的返回值
 const updateWindowDimensions = (newV) => {
   // 在窗口大小变化停止后才更新窗口大小
@@ -80,7 +79,7 @@ watch(currentDesk?.value.cards, (newV) => {
 // 1 缓存下来 如何缓存 怎么实现
 
 const moveBox = (id: string, left: number, top: number) => {
-  Object.assign(getCurrentDesk.value[id], { left, top }); // 现在我们可以安全地合并对象
+  Object.assign(getCurrentDesk.value[id], {left, top}); // 现在我们可以安全地合并对象
 };
 
 const [, drop] = useDrop(() => ({
@@ -103,59 +102,59 @@ const [, drop] = useDrop(() => ({
 </script>
 
 <template>
-    <div :ref="drop" class="container">
-      <!-- <Container
+  <div :ref="drop" class="container">
+    <!-- <Container
 
-        :desk="desk"
-        :currentDesk="currentDesk"
-      /> -->
-      <DraggableBox
-      :snap-to-grid="snapToGridAfterDrop"
+      :desk="desk"
+      :currentDesk="currentDesk"
+    /> -->
+    <DraggableBox
         v-for="data in getCurrentDesk"
         :id="data.id"
         :key="data.id"
-        :left="data.left"
-        :top="data.top"
-        :data="data"
         :currentDesk="currentDesk"
-      >
-        <template #item="{ data }">
-          <slot name="item" :data="{ data }">{{ data  }} </slot>
-        </template>
-        <!-- <template #item="{ item }">
-          <slot name="item" :item="item"> </slot>
-        </template> -->
-      </DraggableBox>
-    </div>
-    <CustomDragLayer :snap-to-grid="snapToGridWhileDragging" />
-    <p>
-      <label for="snapToGridWhileDragging">
-        <input
+        :data="data"
+        :left="data.left"
+        :snap-to-grid="snapToGridAfterDrop"
+        :top="data.top"
+    >
+      <template #item="{ data }">
+        <slot :data="{ data }" name="item">{{ data }}</slot>
+      </template>
+      <!-- <template #item="{ item }">
+        <slot name="item" :item="item"> </slot>
+      </template> -->
+    </DraggableBox>
+  </div>
+  <CustomDragLayer :snap-to-grid="snapToGridWhileDragging"/>
+  <p>
+    <label for="snapToGridWhileDragging">
+      <input
           id="snapToGridWhileDragging"
-          type="checkbox"
           :checked="snapToGridWhileDragging"
-          @change="handleSnapToGridWhileDraggingChange"
-        />
-        <small>Snap to grid while dragging</small>
-      </label>
-      <br />
-      <label for="snapToGridAfterDrop">
-        <input
-          id="snapToGridAfterDrop"
           type="checkbox"
+          @change="handleSnapToGridWhileDraggingChange"
+      />
+      <small>Snap to grid while dragging</small>
+    </label>
+    <br/>
+    <label for="snapToGridAfterDrop">
+      <input
+          id="snapToGridAfterDrop"
           :checked="snapToGridAfterDrop"
+          type="checkbox"
           @change="handleSnapToGridAfterDropChange"
-        />
-        <small>Snap to grid after drop</small>
-      </label>
-    </p>
+      />
+      <small>Snap to grid after drop</small>
+    </label>
+  </p>
 </template>
 
-<style scoped lang="less">
+<style lang="less" scoped>
 .container {
   position: relative;
   width: 100%;
-  height:  90%;
+  height: 90%;
   border: 1px solid black;
 }
 </style>

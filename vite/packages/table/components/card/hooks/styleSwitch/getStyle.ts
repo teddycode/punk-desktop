@@ -1,5 +1,6 @@
 import cache from "../cache";
-import { BG_COLOR, SECONDARY_BG_COLOR, TEXT_COLOR ,WALLPAPER_COLOR} from "./types";
+import {BG_COLOR, SECONDARY_BG_COLOR, TEXT_COLOR, WALLPAPER_COLOR} from "./types";
+
 /**
  * 获取背景颜色
  * @returns {string} 背景颜色

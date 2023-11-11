@@ -18,9 +18,7 @@ export default {
     this.$emit('loaded')
   },
   data() {
-    return {
-
-    }
+    return {}
   },
   methods: {
     sendMessage() {
@@ -32,18 +30,19 @@ export default {
       //   }
 
       // })
-      this.$emit('send',this.uid)
+      this.$emit('send', this.uid)
     }
   }
 }
 </script>
 
 <template>
-  <XtButton @click="sendMessage" :type="enable || enable===undefined?'theme':'default'" style="width:100%">
+  <XtButton :type="enable || enable===undefined?'theme':'default'" style="width:100%" @click="sendMessage">
     <icon icon="message"></icon>
-    发消息</XtButton>
+    发消息
+  </XtButton>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 
 </style>

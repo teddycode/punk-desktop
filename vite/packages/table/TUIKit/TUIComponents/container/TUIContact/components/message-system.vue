@@ -1,19 +1,24 @@
 <template>
-  <div class="message-system" :class="[ isH5 ? 'message-system-h5' : '']">
-    <div class="flex h-full items-center justify-center" v-if="isEmpty">
+  <div :class="[ isH5 ? 'message-system-h5' : '']" class="message-system">
+    <div v-if="isEmpty" class="flex h-full items-center justify-center">
       <a-empty :image="simpleImage" description="没有数据"></a-empty>
     </div>
-    <ul class="list" v-else>
+    <ul v-else class="list">
       <li v-for="(item, index) in messageList" :key="index">
         <template v-if="item.type === types.MSG_GRP_TIP || item.type === types.MSG_GRP_SYS_NOTICE">
           <i class="icon icon-system"></i>
 
-          <span class="font-16" style="color:var(--primary-text);">{{translateGroupSystemNotice(item)}}</span>
+          <span class="font-16" style="color:var(--primary-text);">{{ translateGroupSystemNotice(item) }}</span>
 
-          <div class="btn-box" v-if="item?.payload?.operationType === 1">
-            <button v-if="!item.isHandle" class="btn btn-default h-11" @click="handleApplication('Agree', item)">{{$t('TUIContact.接受')}}</button>
-            <button v-if="!item.isHandle" class="btn btn-cancel h-11" style="background: var(--secondary-bg) !important;color:var(--primary-text);" @click="handleApplication('Reject', item)">{{$t('TUIContact.拒绝')}}</button>
-            <span v-else class="font-16" style="color:var(--primary-text);">{{$t('TUIContact.已处理')}}</span>
+          <div v-if="item?.payload?.operationType === 1" class="btn-box">
+            <button v-if="!item.isHandle" class="btn btn-default h-11" @click="handleApplication('Agree', item)">
+              {{ $t('TUIContact.接受') }}
+            </button>
+            <button v-if="!item.isHandle" class="btn btn-cancel h-11"
+                    style="background: var(--secondary-bg) !important;color:var(--primary-text);"
+                    @click="handleApplication('Reject', item)">{{ $t('TUIContact.拒绝') }}
+            </button>
+            <span v-else class="font-16" style="color:var(--primary-text);">{{ $t('TUIContact.已处理') }}</span>
           </div>
         </template>
       </li>
@@ -22,18 +27,18 @@
 </template>
 
 <script>
-import { defineComponent, watchEffect, reactive, toRefs } from 'vue';
-import { translateGroupSystemNotice } from '../../utils';
+import {defineComponent, reactive, toRefs, watchEffect} from 'vue';
+import {translateGroupSystemNotice} from '../../utils';
 
 export default defineComponent({
-  props:['data','types','isH5','isEmpty'],
+  props: ['data', 'types', 'isH5', 'isEmpty'],
 
   setup(props, ctx) {
     const data = reactive({
       messageList: [],
       types: {},
       isHandle: false,
-      simpleImage:'/img/state/null.png', // 空状态
+      simpleImage: '/img/state/null.png', // 空状态
     });
 
     watchEffect(() => {
@@ -60,7 +65,7 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped src="./style/index.scss"></style>
 <style lang="scss" scope>
-.font-16{
+.font-16 {
 
   font-size: 16px;
   font-weight: 500;

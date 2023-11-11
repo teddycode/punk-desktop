@@ -227,7 +227,7 @@ export default {
         lvInfo.percentage = ((lvInfo.minute - current[0] * 60) / ((current[1] - current[0]) * 60)) * 100
         //this.lvInfo = lvInfo
         window.loadedStore['userInfo'] = true
-        console.error('更新了用户信息:',userInfo)
+        console.error('更新了用户信息:', userInfo)
         this.setUser(userInfo)
         if (this.$route.name === 'splash') {
           this.enter()

@@ -1,49 +1,49 @@
 <template>
   <div style="width: 100%; display: flex; height: 100%; flex-direction: column">
     <div
-      class="drag"
-      :style="{ background: app.theme || '#424242' }"
-      style="height: 4em; width: 100%"
+        :style="{ background: app.theme || '#424242' }"
+        class="drag"
+        style="height: 4em; width: 100%"
     >
       <a-row>
         <a-col :span="6">
-          <div @click="goBack" class="app-btn no-drag">
+          <div class="app-btn no-drag" @click="goBack">
             <div class="btn-wrapper">
               <Icon
-                icon="xiangzuo"
-                style="font-size: 1.5em; vertical-align: middle"
+                  icon="xiangzuo"
+                  style="font-size: 1.5em; vertical-align: middle"
 
               ></Icon>
             </div>
           </div>
-          <div @click="refresh" class="app-btn no-drag">
+          <div class="app-btn no-drag" @click="refresh">
             <div class="btn-wrapper">
               <Icon
-                icon="shuaxin"
-                style="font-size: 1.5em; vertical-align: middle"
+                  icon="shuaxin"
+                  style="font-size: 1.5em; vertical-align: middle"
               ></Icon>
             </div>
           </div>
         </a-col>
         <a-col :span="10" style="text-align: center; line-height: 3">
-          <div class="no-drag" v-if="showScale">
+          <div v-if="showScale" class="no-drag">
             <a-row>
-              <a-col :span="6"> 网页缩放 </a-col>
+              <a-col :span="6"> 网页缩放</a-col>
               <a-col :span="10">
                 <a-slider
-                  @change="setScale"
-                  :marks="marks"
-                  :step="10"
-                  v-model:value="scale"
-                  :min="50"
-                  :max="300"
-                  style="width: 100px"
+                    v-model:value="scale"
+                    :marks="marks"
+                    :max="300"
+                    :min="50"
+                    :step="10"
+                    style="width: 100px"
+                    @change="setScale"
                 ></a-slider>
               </a-col>
               <a-col :span="8">
                 <a-button-group>
                   <a-button
-                    @click="
+                      @click="
                       () => {
                         if (this.scale + 10 <= 300) {
                           this.scale = this.scale + 10;
@@ -51,10 +51,12 @@
                         }
                       }
                     "
-                    ><plus-outlined
-                  /></a-button>
+                  >
+                    <plus-outlined
+                    />
+                  </a-button>
                   <a-button
-                    @click="
+                      @click="
                       () => {
                         if (this.scale - 10 >= 20) {
                           this.scale = this.scale - 10;
@@ -62,8 +64,11 @@
                         }
                       }
                     "
-                    ><minus-outlined /></a-button
-                ></a-button-group>
+                  >
+                    <minus-outlined/>
+                  </a-button
+                  >
+                </a-button-group>
               </a-col>
             </a-row>
           </div>
@@ -71,36 +76,36 @@
           <!--        <span style="font-size: 1.2em">您可以通过按下esc键隐藏/显示外框。</span>-->
         </a-col>
         <a-col :span="8" style="text-align: right">
-          <div @click="switchScale" class="app-btn no-drag">
+          <div class="app-btn no-drag" @click="switchScale">
             <Icon
-              icon="wenzidaxiao2"
-              style="font-size: 1.5em; vertical-align: middle"
+                icon="wenzidaxiao2"
+                style="font-size: 1.5em; vertical-align: middle"
             ></Icon>
             <div class="scale">{{ scale }}%</div>
           </div>
           <div class="app-btn no-drag">
             <div
-              v-if="fullScreen"
-              @click="toggleFullScreen"
-              class="btn-wrapper"
+                v-if="fullScreen"
+                class="btn-wrapper"
+                @click="toggleFullScreen"
             >
               <Icon
-                icon="quxiaoquanping_huaban"
-                style="font-size: 1.5em; vertical-align: middle"
+                  icon="quxiaoquanping_huaban"
+                  style="font-size: 1.5em; vertical-align: middle"
               ></Icon>
             </div>
-            <div v-else @click="toggleFullScreen" class="btn-wrapper">
+            <div v-else class="btn-wrapper" @click="toggleFullScreen">
               <Icon
-                icon="quanping_huaban"
-                style="font-size: 1.4em; vertical-align: middle"
+                  icon="quanping_huaban"
+                  style="font-size: 1.4em; vertical-align: middle"
               ></Icon>
             </div>
           </div>
           <div class="app-btn no-drag">
             <div class="btn-wrapper">
               <Icon
-                icon="touping"
-                style="font-size: 1.5em; vertical-align: middle"
+                  icon="touping"
+                  style="font-size: 1.5em; vertical-align: middle"
               ></Icon>
             </div>
           </div>
@@ -108,16 +113,16 @@
       </a-row>
     </div>
     <div
-      v-if="fullScreen"
-      id="frame"
-      :style="{ background: app.theme || '#424242' }"
-      style="width: 100%; flex: 1"
+        v-if="fullScreen"
+        id="frame"
+        :style="{ background: app.theme || '#424242' }"
+        style="width: 100%; flex: 1"
     ></div>
     <div
-      v-else
-      id="frame"
-      :style="{ background: app.theme || '#424242' }"
-      style="width: 100%; flex: 1"
+        v-else
+        id="frame"
+        :style="{ background: app.theme || '#424242' }"
+        style="width: 100%; flex: 1"
     >
       &nbsp;
     </div>
@@ -125,10 +130,11 @@
 </template>
 
 <script>
-import { appStore } from "../store";
-import { mapWritableState } from "pinia";
-import { PlusOutlined, MinusOutlined } from "@ant-design/icons-vue";
+import {appStore} from "../store";
+import {mapWritableState} from "pinia";
+import {MinusOutlined, PlusOutlined} from "@ant-design/icons-vue";
 import _ from "lodash-es";
+
 export default {
   name: "AppFrame",
   data() {
@@ -265,7 +271,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .app-btn {
   display: inline-block;
   cursor: pointer;

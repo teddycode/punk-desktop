@@ -1,11 +1,11 @@
 <template>
-  <div class="mask" @click.self="toggleView" v-if="show">
-    <slot />
+  <div v-if="show" class="mask" @click.self="toggleView">
+    <slot/>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, watchEffect, toRefs } from 'vue';
+import {defineComponent, reactive, toRefs, watchEffect} from 'vue';
 
 export default defineComponent({
   props: {
@@ -14,7 +14,7 @@ export default defineComponent({
       default: () => false,
     },
   },
-  setup(props:any, ctx:any) {
+  setup(props: any, ctx: any) {
     const data = reactive({
       show: false,
     });
@@ -39,6 +39,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import url('../../styles/common.scss');
 @import url('../../styles/icon.scss');
+
 .mask {
   position: fixed;
   width: 100vw;
@@ -50,6 +51,7 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   align-items: center;
+
   main {
     position: relative;
   }

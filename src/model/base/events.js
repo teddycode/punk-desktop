@@ -9,4 +9,4 @@ class Events extends EventEmitter {
 
 const instance = new Events();
 
-module.exports =instance
+module.exports = instance

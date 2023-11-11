@@ -2,41 +2,48 @@
   <!--  <div class="card  gradient gradient&#45;&#45;14  content small" style="display: flex;flex-direction: column;align-content: center;align-items: center">-->
   <!--&lt;!&ndash;  <my-list id="my" > <slot></slot></my-list>&ndash;&gt;-->
   <!--  </div>-->
-<xt-task :modelValue="m03031" @cb="openRightMenu">
-  <Widget :customIndex="customIndex" :size="customSize" :options="options" :menuList="menuList"
-    ref="remote" :custom-data="customData" :desk="desk" :showRightIcon="notTrigger ? false : true">
-    <div ref="cardSize" style="align-items: center;align-content: center;width: 100%;height:100%;text-align: center" :class="notTrigger ? 'trigger' : '' ">
-      <div v-if="!customData.url"
-        style="display: flex;flex-direction: column;align-items: center;justify-content: center;height:100%">
-        <a-button size="large" @click="this.panelVisible = true" type="primary" class="xt-active-text">
-          配置卡片</a-button>
+  <xt-task :modelValue="m03031" @cb="openRightMenu">
+    <Widget ref="remote" :custom-data="customData" :customIndex="customIndex" :desk="desk"
+            :menuList="menuList" :options="options" :showRightIcon="notTrigger ? false : true" :size="customSize">
+      <div ref="cardSize" :class="notTrigger ? 'trigger' : '' "
+           style="align-items: center;align-content: center;width: 100%;height:100%;text-align: center">
+        <div v-if="!customData.url"
+             style="display: flex;flex-direction: column;align-items: center;justify-content: center;height:100%">
+          <a-button class="xt-active-text" size="large" type="primary" @click="this.panelVisible = true">
+            配置卡片
+          </a-button>
+        </div>
+        <template v-else>
+          <iframe ref="myIframe" :src="customData.url"
+                  allowtransparency="true" sandbox="allow-forms allow-modals allow-popups allow-same-origin allow-scripts"
+                  style="width: 100%;height: 100%;border: none;border-radius: 8px">
+          </iframe>
+        </template>
       </div>
-      <template v-else>
-        <iframe sandbox="allow-forms allow-modals allow-popups allow-same-origin allow-scripts" ref="myIframe"
-          allowtransparency="true" :src="customData.url" style="width: 100%;height: 100%;border: none;border-radius: 8px">
-        </iframe>
-      </template>
-    </div>
-  </Widget>
-</xt-task>
+    </Widget>
+  </xt-task>
   <a-drawer v-model:visible="panelVisible">
     <div class="line">
-      卡片地址： <a-input v-model:value="url" style="width:230px" placeholder="请输入远程地址，需带协议"></a-input>
+      卡片地址：
+      <a-input v-model:value="url" placeholder="请输入远程地址，需带协议" style="width:230px"></a-input>
     </div>
     <div class="line">卡片尺寸：</div>
     <div class="line">
-      <a-input-number  :min="2"
-      :max="20"
-      :step="2" v-model:value="width"></a-input-number> x <a-input-number :min="2"
-      :max="20"
-      :step="2"
-        v-model:value="height"></a-input-number>
+      <a-input-number v-model:value="width"
+                      :max="20"
+                      :min="2" :step="2"></a-input-number>
+      x
+      <a-input-number v-model:value="height"
+                      :max="20"
+                      :min="2"
+                      :step="2"></a-input-number>
     </div>
     <div class="line">
-      隐藏卡片外框： <a-switch v-model:checked="customData.hideFrame"></a-switch>
+      隐藏卡片外框：
+      <a-switch v-model:checked="customData.hideFrame"></a-switch>
     </div>
     <div class="mt-10">
-      <a-button type="primary" @click="save" block>确定</a-button>
+      <a-button block type="primary" @click="save">确定</a-button>
     </div>
   </a-drawer>
   <!-- <template v-if="openShare">
@@ -46,9 +53,10 @@
 
 <script>
 import Widget from '../../card/Widget.vue'
-import { message } from 'ant-design-vue'
+import {message} from 'ant-design-vue'
 import {taskStore} from "../../../apps/task/store"
-import { mapWritableState } from 'pinia';
+import {mapWritableState} from 'pinia';
+
 // import RemoteShare from '../../card/remote/RemoteShare.vue';
 function loadScript(src, id, callback) {
   const s = document.createElement("script", id);
@@ -63,9 +71,10 @@ function loadScript(src, id, callback) {
   };
   document.body.appendChild(s);
 }
+
 export default {
   name: 'Remote',
-  components: { Widget },
+  components: {Widget},
   props: {
     customIndex: {
       type: Number,
@@ -74,12 +83,11 @@ export default {
     customData: {
       type: Object,
       default: () => {
-        return {
-        }
-       }
+        return {}
+      }
     },
-    desk:{
-      type:Object
+    desk: {
+      type: Object
     },
     notTrigger: {
       type: Boolean,
@@ -108,7 +116,10 @@ export default {
           icon: "shop",
           title: '发现',
           fn: () => {
-            this.$router.push({name: 'remoteCommunity',params: {id: this.desk.id,cardId: this.customIndex,size: JSON.stringify(this.cardSize) }})
+            this.$router.push({
+              name: 'remoteCommunity',
+              params: {id: this.desk.id, cardId: this.customIndex, size: JSON.stringify(this.cardSize)}
+            })
           }
         },
         {
@@ -147,10 +158,10 @@ export default {
     }
   },
   methods: {
-    openRightMenu(){
+    openRightMenu() {
       this.$refs.remote.menuVisible = true
     },
-    closeModal(val){
+    closeModal(val) {
       this.showCommunity = val
     },
     ensureEvenNumber(value) {
@@ -166,7 +177,7 @@ export default {
       message.success('修改成功')
 
     },
-    closeShare(val){
+    closeShare(val) {
       this.openShare = val
     },
     setUA() {
@@ -199,7 +210,7 @@ export default {
   computed: {
     ...mapWritableState(taskStore, ["taskID", "step"]),
     m03031() {
-      return this.customData.task && this.taskID == "M0303" && this.step == 1; 
+      return this.customData.task && this.taskID == "M0303" && this.step == 1;
     },
     customSize() {
       return {
@@ -208,8 +219,8 @@ export default {
       }
     },
     cardSize() {
-      const { width, height } = this.$refs.cardSize.getBoundingClientRect();
-      return { width, height };
+      const {width, height} = this.$refs.cardSize.getBoundingClientRect();
+      return {width, height};
     }
   },
   mounted() {
@@ -218,7 +229,7 @@ export default {
     // }
     this.width = this.customData.width * 2 || 2
     this.height = this.customData.height * 2 || 2
-    if(!this.customData.width){
+    if (!this.customData.width) {
       this.customData.width = 1
       this.customData.height = 1
     }

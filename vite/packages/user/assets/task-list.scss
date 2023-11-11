@@ -1,4 +1,4 @@
-.custom-scroller{
+.custom-scroller {
   &::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -47,16 +47,19 @@
   height: 300px;
   margin-bottom: 10px;
   border-radius: 4px;
-  .icon{
+
+  .icon {
     vertical-align: middle;
     width: 24px;
     height: 24px;
   }
-  .single-avatar{
+
+  .single-avatar {
     margin-left: 6px;
     width: 18px;
   }
-  .operation{
+
+  .operation {
     visibility: hidden;
     cursor: pointer;
   }
@@ -64,9 +67,11 @@
 
 .task:hover {
   box-shadow: 0 0 15px #00000030;
-  .operation{
+
+  .operation {
     visibility: visible;
-    &:hover{
+
+    &:hover {
       color: red;
     }
   }

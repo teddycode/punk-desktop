@@ -2,14 +2,14 @@
   <div class="TUI-group">TUIGroup</div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
+import {defineComponent, reactive, toRefs} from 'vue';
 
 const TUIGroup = defineComponent({
   name: 'TUIGroup',
   components: {},
 
   setup(props) {
-    const TUIServer:any = TUIGroup.TUIServer;
+    const TUIServer: any = TUIGroup.TUIServer;
     const data = reactive({
       groupList: [],
       searchGroup: [],

@@ -7,9 +7,9 @@ export default defineComponent({
 </script>
 
 <template>
-<router-view></router-view>
+  <router-view></router-view>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 
 </style>

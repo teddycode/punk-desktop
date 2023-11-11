@@ -2,29 +2,29 @@
   <!-- 23/8/21扩展tooltip适配 -->
   <!-- 外层容器 -->
   <div
-    class="flex rounded-xl xt-container "
-    :class="[mode == 'row' ? 'flex-row ' : 'flex-col', boxClass]"
-    :style="[boxStyle]"
+      :class="[mode == 'row' ? 'flex-row ' : 'flex-col', boxClass]"
+      :style="[boxStyle]"
+      class="flex rounded-xl xt-container "
   >
     <!-- 循环渲染子项 -->
     <template v-for="item in list" :key="item[`${value}`]">
       <a-tooltip :placement="placement">
-        <template #title v-if="item[`${tip}`]">{{ item[`${tip}`] }}</template>
+        <template v-if="item[`${tip}`]" #title>{{ item[`${tip}`] }}</template>
         <div
-          class="flex justify-center items-center rounded-xl text-base cursor-pointer"
-          :class="[
+            :class="[
             valueData === item[`${value}`] ? active : '',
             mode == 'row' ? 'flex-1 ' : '',
             itemClass,
           ]"
-          :style="[itemStyle]"
-          @click="valueData = item[`${value}`]"
+            :style="[itemStyle]"
+            class="flex justify-center items-center rounded-xl text-base cursor-pointer"
+            @click="valueData = item[`${value}`]"
         >
           <XtBaseIcon
-            v-if="item[`${icon}`]"
-            class="icon"
-            style="font-size: 22"
-            :icon="item[`${icon}`]"
+              v-if="item[`${icon}`]"
+              :icon="item[`${icon}`]"
+              class="icon"
+              style="font-size: 22"
           ></XtBaseIcon>
           <div v-if="item[`${name}`]" :class="[item[`${icon}`] ? 'ml-1' : '']">
             {{ item[`${name}`] }}
@@ -120,10 +120,10 @@ export default {
     list: {
       type: Array,
       default: () => [
-        { name: "2 x 2", value: "card small" },
-        { name: "2 x 4", value: "card" },
-        { name: "4 x 2", value: "card1" },
-        { name: "4 x 4", value: "card double" },
+        {name: "2 x 2", value: "card small"},
+        {name: "2 x 4", value: "card"},
+        {name: "4 x 2", value: "card1"},
+        {name: "4 x 4", value: "card double"},
       ],
       validator: (val) => {
         if (!Array.isArray(val)) {
@@ -131,7 +131,7 @@ export default {
           return false;
         }
         const res = val.every(
-          (item) => typeof item === "object" && item !== null
+            (item) => typeof item === "object" && item !== null
         );
         if (!res) {
           console.error("list 包含的元素必须是对象");

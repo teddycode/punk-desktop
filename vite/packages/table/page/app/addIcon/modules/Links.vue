@@ -1,37 +1,37 @@
 <template>
   <div class="flex relative">
     <div class="w-32">
-      <div class="overflow-y-auto xt-container" :style="heightStyle">
+      <div :style="heightStyle" class="overflow-y-auto xt-container">
         <div
-          v-for="(item, index) in webBtn"
-          @click="handleChange(index)"
-          class="h-12 justify-center items-center cursor-pointer flex rounded-xl mr-2"
-          style="flex: 0 0 auto ;width: 120px;"
-          :class="{
+            v-for="(item, index) in webBtn"
+            :class="{
             'xt-bg-2': index === selectIndex,
           }"
+            class="h-12 justify-center items-center cursor-pointer flex rounded-xl mr-2"
+            style="flex: 0 0 auto ;width: 120px;"
+            @click="handleChange(index)"
         >
           {{ item.label }}
         </div>
       </div>
     </div>
     <Icon
-      ref="iconRef"
-      @updateSelectApps="updateSelectApps"
-      :isSelect="true"
-      :name="selectName"
-      style="height: calc(100% - 48px)"
-      :data="appList[selectName]"
+        ref="iconRef"
+        :data="appList[selectName]"
+        :isSelect="true"
+        :name="selectName"
+        style="height: calc(100% - 48px)"
+        @updateSelectApps="updateSelectApps"
     >
     </Icon>
   </div>
 </template>
 
 <script>
-import { getSelect } from "../api/api";
+import {getSelect} from "../api/api";
 import syncSelected from "../hooks/syncSelected";
 import cache from "../../../../components/card/hooks/cache";
-import { scrollable } from "../hooks/scrollable";
+import {scrollable} from "../hooks/scrollable";
 
 export default {
   inject: ["height"],

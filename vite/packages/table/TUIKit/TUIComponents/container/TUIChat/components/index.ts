@@ -17,21 +17,21 @@ import MessageItem from './index.vue';
 import MessageTimestamp from './message-timestamp.vue'
 
 export {
-  MessageText,
-  MessageImage,
-  MessageVideo,
-  MessageAudio,
-  MessageFile,
-  MessageFace,
-  MessageLocation,
-  MessageMerger,
-  MessageCustom,
-  MessageTip,
-  MessageTimestamp,
-  MessageBubble,
-  MessageRevoked,
-  MessageSystem,
-  MessageTool,
-  MessageEmojiReact,
-  MessageItem
+    MessageText,
+    MessageImage,
+    MessageVideo,
+    MessageAudio,
+    MessageFile,
+    MessageFace,
+    MessageLocation,
+    MessageMerger,
+    MessageCustom,
+    MessageTip,
+    MessageTimestamp,
+    MessageBubble,
+    MessageRevoked,
+    MessageSystem,
+    MessageTool,
+    MessageEmojiReact,
+    MessageItem
 };

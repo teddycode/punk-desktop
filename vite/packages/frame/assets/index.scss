@@ -9,7 +9,6 @@ button {
 }
 
 
-
 body.mac #titleBar {
   width: calc(100vw - 65px);
   margin-left: 65px;
@@ -104,7 +103,7 @@ body:not(.task-overlay-is-shown).dark-theme .action-icon path {
 
 .windows {
   .extra-actions {
-      margin-right: -20px;
+    margin-right: -20px;
   }
 }
 
@@ -115,17 +114,20 @@ body:not(.task-overlay-is-shown).dark-theme .action-icon path {
   line-height: 30px;
   -webkit-app-region: none;
 }
-.action-icon-wrapper{
-  padding:3px;
+
+.action-icon-wrapper {
+  padding: 3px;
   line-height: 19px;
   margin-top: 2px;
   border-radius: 4px;
   display: inline-block;
+
   &:hover {
     background-color: rgba(227, 227, 227, 0.41);
   }
+
   .action-icon-ant {
     color: white;
-    font-size:19px;
+    font-size: 19px;
   }
 }

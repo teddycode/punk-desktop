@@ -1,16 +1,17 @@
 <template>
-  <div class="flex flex-col overflow pt-1" v-if="rankList.length">
-    <div  v-for="item in rankList" :key="item.id"
-          class="w-full flex items-center rounded-lg justify-between pointer set-type" style="margin: 6px 0 6px;">
+  <div v-if="rankList.length" class="flex flex-col overflow pt-1">
+    <div v-for="item in rankList" :key="item.id"
+         class="w-full flex items-center rounded-lg justify-between pointer set-type" style="margin: 6px 0 6px;">
       <span class="ranking">{{ item.id }}</span>
       <div class="flex-1 flex ml-3 items-center">
-        <a-avatar @click="showCard(item.uid)" :src="item.avatar"></a-avatar>
-        <div @click="showCard(item.uid)" class="ml-3 truncate" style="color: var(--primary-text);font-size: 16px;max-width: 120px;">
+        <a-avatar :src="item.avatar" @click="showCard(item.uid)"></a-avatar>
+        <div class="ml-3 truncate" style="color: var(--primary-text);font-size: 16px;max-width: 120px;"
+             @click="showCard(item.uid)">
           {{ item.nickname }}
         </div>
       </div>
       <div style="color:var(--secondary-text);font-size: 16px;">
-        {{ item[lastName] }} 
+        {{ item[lastName] }}
         <span> {{ unit }}</span>
       </div>
     </div>
@@ -21,12 +22,12 @@
 </template>
 
 <script>
-import { mapActions, mapWritableState } from 'pinia'
-import { appStore } from '../../store'
+import {mapActions} from 'pinia'
+import {appStore} from '../../store'
+
 export default {
   name: 'RankList',
-  components: {
-  },
+  components: {},
   props: {
     // 排行榜列表
     rankList: {
@@ -44,22 +45,20 @@ export default {
       default: () => ''
     }
   },
-  data () {
-    return {
-      
-    }
+  data() {
+    return {}
   },
   methods: {
-    ...mapActions(appStore,['showUserCard']),
-    showCard(uid){
+    ...mapActions(appStore, ['showUserCard']),
+    showCard(uid) {
       this.showUserCard(uid)
     },
-   
+
   }
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 
 .ranking {
   width: 24px;
@@ -84,7 +83,7 @@ export default {
   background: #FAAA10;
 }
 
-.active-index{
+.active-index {
   background: var(--active-bg) !important;
 }
 </style>

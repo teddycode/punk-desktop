@@ -4,23 +4,26 @@
       <a-col :span="24">
         <a-row>
           <a-col :span="14">
-            <a-row><a-col :span="4" style="text-align: right;margin-top: 5px">
-                <FrameAvatar :frame="userInfo.equippedItems?.frameDetail" class="frame" :avatarUrl="userInfo.avatar" :avatarSize="50" :frameUrl="userInfo.equippedItems?.frameDetail?.image"></FrameAvatar>
+            <a-row>
+              <a-col :span="4" style="text-align: right;margin-top: 5px">
+                <FrameAvatar :avatarSize="50" :avatarUrl="userInfo.avatar" :frame="userInfo.equippedItems?.frameDetail"
+                             :frameUrl="userInfo.equippedItems?.frameDetail?.image" class="frame"></FrameAvatar>
               </a-col>
               <a-col :span="20" style="padding-left: 20px">
                 <div style="font-size: 16px;font-weight: bold">{{ userInfo.nickname }}</div>
                 <div class="live-grade" style="cursor:pointer;">
-                  <div class="ts-grade flex justify-start align-center grade-icon" style="margin-top: 4px" v-if="grade.lv > 0" @click="openTip">
-                    <div class="ts-grade-crown" v-for="item in userInfo.onlineGradeIcons.crown">
+                  <div v-if="grade.lv > 0" class="ts-grade flex justify-start align-center grade-icon"
+                       style="margin-top: 4px" @click="openTip">
+                    <div v-for="item in userInfo.onlineGradeIcons.crown" class="ts-grade-crown">
                       <img :src="item.icon" alt="" style="width: 20px; height: 20px">
                     </div>
-                    <div class="ts-grade-sun" v-for="item in userInfo.onlineGradeIcons.sun">
+                    <div v-for="item in userInfo.onlineGradeIcons.sun" class="ts-grade-sun">
                       <img :src="item.icon" alt="" style="width: 20px; height: 20px">
                     </div>
-                    <div class="ts-grade-moon" v-for="item in userInfo.onlineGradeIcons.moon">
+                    <div v-for="item in userInfo.onlineGradeIcons.moon" class="ts-grade-moon">
                       <img :src="item.icon" alt="" style="width: 20px; height: 20px">
                     </div>
-                    <div class="ts-grade-star" v-for="item in userInfo.onlineGradeIcons.star">
+                    <div v-for="item in userInfo.onlineGradeIcons.star" class="ts-grade-star">
                       <img :src="item.icon" alt="" style="width: 20px; height: 20px">
                     </div>
                   </div>
@@ -33,14 +36,15 @@
             </a-row>
           </a-col>
           <a-col :span="10">
-            <div class="p-1" style="line-height: 2;background: #333;border-radius: 8px;text-align: center;background-color: var(--active-bg);">
+            <div class="p-1"
+                 style="line-height: 2;background: #333;border-radius: 8px;text-align: center;background-color: var(--active-bg);">
               在线等级: <span style="font-size: 18px">{{ grade.lv }}</span>级
               <div v-if="badge.rank < 300"
                    style="border-radius: 6px;line-height: 18px;padding-bottom:7px"
               ><span>
                                    全球排名:<span style="font-size: 20px;"> {{ badge.rank }}</span>
 </span></div>
-              <div v-else> 超过{{ (grade.percentage*100).toFixed(2) }}%的用户</div>
+              <div v-else> 超过{{ (grade.percentage * 100).toFixed(2) }}%的用户</div>
 
             </div>
           </a-col>
@@ -49,25 +53,29 @@
         <a-row>
           <div class="arrow-box" style="width:100%;line-height: 2">
 
-            <div class="text-grey mt-2" style="line-height: 2">升级剩余时长: {{ remainHour }}小时{{ remainMinute }}分</div>
-            <div class="tip text-grey mt-2">距离上一名 ： {{ distance }} <span class="text-button" :disabled="this.times===0"
-                                                                         @click="use" type="primary"
-                                                                         style="margin-left:20px;margin-top: 10px">查看（{{
+            <div class="text-grey mt-2" style="line-height: 2">升级剩余时长: {{ remainHour }}小时{{
+                remainMinute
+              }}分
+            </div>
+            <div class="tip text-grey mt-2">距离上一名 ： {{ distance }} <span :disabled="this.times===0"
+                                                                              class="text-button"
+                                                                              style="margin-left:20px;margin-top: 10px" type="primary"
+                                                                              @click="use">查看（{{
                 times
               }}次）</span></div>
             <div class="text-grey mt-2" style="line-height: 2">累计在线时长:
               {{ grade.cumulativeHours }}小时{{ grade.cumulativeMinutes }}分
             </div>
             <!-- 快速搜索 等级权益 排名 -->
-            <div class="badge-box" :style="{'border-color':this.getBadge().color}">
+            <div :style="{'border-color':this.getBadge().color}" class="badge-box">
               <a-row>
                 <a-col :span="6">
-                  <img style="width: 75px;margin-top: 10px" :src="this.getPath+getBadge().badge+'.png'">
-                  <div v-if="badge.rank<100" class="badge-num" :style="{'background-color':this.getBadge().color}">
+                  <img :src="this.getPath+getBadge().badge+'.png'" style="width: 75px;margin-top: 10px">
+                  <div v-if="badge.rank<100" :style="{'background-color':this.getBadge().color}" class="badge-num">
                     {{ badge.rank }}
                   </div>
                 </a-col>
-                <a-col style="line-height: 2" :span="18">
+                <a-col :span="18" style="line-height: 2">
                   <div style="font-size: 16px;font-weight: bold;">{{ getBadge().title }}</div>
                   <div class="text-grey">{{ getBadge().summaryNames }}</div>
                   <div class="text-grey">{{ getBadge().summaryDes }}</div>
@@ -82,23 +90,23 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
-import { mapState, mapActions } from 'pinia'
-import { message, Modal } from 'ant-design-vue'
-import { appStore } from '../../store'
+import {defineComponent} from 'vue'
+import {mapActions, mapState} from 'pinia'
+import {message, Modal} from 'ant-design-vue'
+import {appStore} from '../../store'
 import FrameAvatar from '../avatar/FrameAvatar.vue'
 
 export default defineComponent({
   name: 'grade-panel',
-  components: { FrameAvatar },
+  components: {FrameAvatar},
   props: {},
   computed: {
     ...mapState(appStore, ['userInfo']),
-    getPath () {
+    getPath() {
       return 'file://' + window.globalArgs['app-dir_name'] + '/../../icons/badge/'
     }
   },
-  data () {
+  data() {
     return {
 
       grade: {},
@@ -156,7 +164,7 @@ export default defineComponent({
       }
     }
   },
-  mounted () {
+  mounted() {
     this.getUserInfo()
     this.onlineGrade = this.userInfo.onlineGrade
     this.grade = this.userInfo.onlineGradeExtra
@@ -170,10 +178,10 @@ export default defineComponent({
 
   methods: {
     ...mapActions(appStore, ['getUserInfo']),
-    openTip(){
-    this.$emit('openGradeTip')
+    openTip() {
+      this.$emit('openGradeTip')
     },
-    getBadge () {
+    getBadge() {
       if (!this.grade.rank) {
         return this.badge.t9999
       }
@@ -194,23 +202,23 @@ export default defineComponent({
       }
     },
 
-    getTimes () {
+    getTimes() {
       let str = this.getDateStr()
       let times = localStorage.getItem(str)
       times = Number(times === null ? 2 : times)
       this.times = times
       return times
     },
-    getDateStr () {
+    getDateStr() {
       let date = new Date(Date.now())
       let str = date.getFullYear() + '_' + (date.getMonth() + 1) + '_' + date.getDate() + '_' + this.userInfo.uid
       return str
     },
-    setTimes (times) {
+    setTimes(times) {
       let str = this.getDateStr()
       localStorage.setItem(str, Number(times))
     },
-    use () {
+    use() {
       let times = this.getTimes()
       if (times <= 0) {
         message.error('剩余道具不足，无法使用。')
@@ -235,7 +243,7 @@ export default defineComponent({
       }
     },
 
-    gradeTableGenerate (num) {
+    gradeTableGenerate(num) {
       let lvSys = {}
       for (let i = 0; i < num + 1; i++) {
         let arrLef = 0
@@ -255,12 +263,13 @@ export default defineComponent({
   }
 })
 </script>
-<style scoped lang="scss">
-@media screen and (min-width: 1493px)  {
-  .grade-icon{
+<style lang="scss" scoped>
+@media screen and (min-width: 1493px) {
+  .grade-icon {
     pointer-events: none;
   }
 }
+
 .ts-grade-crown, .ts-grade-moon, .ts-grade-star, .ts-grade-sun {
   display: inline-block;
 }

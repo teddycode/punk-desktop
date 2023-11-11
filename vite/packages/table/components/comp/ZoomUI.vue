@@ -1,49 +1,50 @@
 <template>
   <div v-if="showRestore" class="no-drag"
-    style="z-index:9999;position:fixed;left: 1em;top: 1em;background: #333;border-radius:3px;padding: 8px 14px 8px 14px;box-shadow: 0 0 4px rgba(0,0,0,0.76);">
+       style="z-index:9999;position:fixed;left: 1em;top: 1em;background: #333;border-radius:3px;padding: 8px 14px 8px 14px;box-shadow: 0 0 4px rgba(0,0,0,0.76);">
     <div class="mb-3">当前窗口分辨率：{{ currentWidth }} * {{ currentHeight }}，将于{{ timeout }}秒后还原</div>
-    <a-button @click="restore" class="ml-3">还原</a-button>
-    <a-button @click="reset" class="ml-3">重置</a-button>
-    <a-button @click="sure" type="primary" class="ml-3">确认</a-button>
+    <a-button class="ml-3" @click="restore">还原</a-button>
+    <a-button class="ml-3" @click="reset">重置</a-button>
+    <a-button class="ml-3" type="primary" @click="sure">确认</a-button>
 
   </div>
 
-  <div class="line" >
+  <div class="line">
     缩放比例（输入后回车确认）：
     <!-- 后期可删 -->
-    <a-input-number style="color: var(--primary-text);" :min="30" :max="500" @pressEnter="inputEnter"
-      v-model:value="inputZoom"></a-input-number>
+    <a-input-number v-model:value="inputZoom" :max="500" :min="30" style="color: var(--primary-text);"
+                    @pressEnter="inputEnter"></a-input-number>
     %<br>
   </div>
   <div class="line">
 
     分辨率：<span :class="{ 'unfit': fitWidth.status !== 0 }">
-      <Icon icon="kuandu" />宽 {{ currentWidth }} <template v-if="fitWidth.status !== 0">（
-        <Icon icon="tishi-xianxing" />
+      <Icon icon="kuandu"/>宽 {{ currentWidth }} <template v-if="fitWidth.status !== 0">（
+        <Icon icon="tishi-xianxing"/>
 
         <span v-if="fitWidth.status === -1">低</span><span v-if="fitWidth.status === 1">高</span>于推荐值）
       </template>
     </span>
-    <Icon icon="guanbi1" />
+    <Icon icon="guanbi1"/>
 
 
     <span :class="{ 'unfit': fitHeight.status !== 0 }">
-      <Icon icon="gaodu" />
+      <Icon icon="gaodu"/>
       高 {{ currentHeight }} <template v-if="fitHeight.status !== 0">（
-        <Icon icon="tishi-xianxing" />
+        <Icon icon="tishi-xianxing"/>
 
-        <span v-if="fitHeight.status === -1">低</span><span v-if="fitHeight.status === 1">高</span>于推荐值{{ fitHeight.suggest
-        }}）
+        <span v-if="fitHeight.status === -1">低</span><span v-if="fitHeight.status === 1">高</span>于推荐值{{
+        fitHeight.suggest
+      }}）
       </template>
     </span>
 
-    <a-slider @afterChange="setZoomFactor" :min="30" :max="500" v-model:value="newZoom"></a-slider>
+    <a-slider v-model:value="newZoom" :max="500" :min="30" @afterChange="setZoomFactor"></a-slider>
   </div>
 </template>
 
 <script>
-import { mapWritableState } from 'pinia'
-import { appStore } from '../../store'
+import {mapWritableState} from 'pinia'
+import {appStore} from '../../store'
 
 export default {
   name: 'ZoomUI',
@@ -194,4 +195,4 @@ export default {
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style lang="scss" scoped></style>

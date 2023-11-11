@@ -1,11 +1,10 @@
 <!-- 拖拽层 -->
-<script setup lang="ts">
-import { useDrag, DragSourceMonitor } from "vue3-dnd";
-import { ItemTypes } from "./ItemTypes";
-import { getEmptyImage } from "react-dnd-html5-backend";
-import Box from "./Box.vue";
-import { toRefs } from "@vueuse/core";
-import { onMounted } from "vue";
+<script lang="ts" setup>
+import {DragSourceMonitor, useDrag} from "vue3-dnd";
+import {ItemTypes} from "./ItemTypes";
+import {getEmptyImage} from "react-dnd-html5-backend";
+import {toRefs} from "@vueuse/core";
+import {onMounted} from "vue";
 
 const props = defineProps<{
   id: string;
@@ -26,26 +25,26 @@ const [collect, drag, preview] = useDrag(() => ({
 }));
 
 onMounted(() => {
-  preview(getEmptyImage(), { captureDraggingState: true });
+  preview(getEmptyImage(), {captureDraggingState: true});
 });
 
-const { isDragging } = toRefs(collect);
+const {isDragging} = toRefs(collect);
 </script>
 
 <template>
   <div
-    :ref="drag"
-    :style="{
+      :ref="drag"
+      :style="{
       position: 'absolute',
       transform: `translate3d(${left}px, ${top}px, 0)`,
       opacity: isDragging ? 0 : 1,
       height: isDragging ? 0 : '',
     }"
-    role="DraggableBox"
+      role="DraggableBox"
   >
     <slot
-      name="item"
-      :data="data"
+        :data="data"
+        name="item"
     />
 
   </div>

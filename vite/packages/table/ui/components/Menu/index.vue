@@ -1,65 +1,65 @@
 <template>
   <div
-    ref="containerRef"
-    @click.stop.prevent="handleClickMenu($event)"
-    @contextmenu.stop.prevent="handleContextMenu($event)"
+      ref="containerRef"
+      @click.stop.prevent="handleClickMenu($event)"
+      @contextmenu.stop.prevent="handleContextMenu($event)"
   >
     <!-- 展开菜单的范围 -->
     <slot></slot>
     <!-- 将菜单传递到body -->
     <teleport to="body">
       <Transition
-        @beforeEnter="handleBeforeEnter"
-        @enter="handleEnter"
-        @afterEnter="handleAfterEnter"
+          @afterEnter="handleAfterEnter"
+          @beforeEnter="handleBeforeEnter"
+          @enter="handleEnter"
       >
         <!-- 便利菜单项 -->
         <div
-          v-if="show"
-          class="container fixed xt-modal xt-b xt-shadow rounded-xl xt-text"
-          :style="pos"
+            v-if="show"
+            :style="pos"
+            class="container fixed xt-modal xt-b xt-shadow rounded-xl xt-text"
         >
           <div
-            class="list w-full h-full p-2"
-            v-resize="handeleMenuViewport"
-            @mouseleave="handeleCloseLock()"
-            @mouseover="handeleStartLock()"
+              v-resize="handeleMenuViewport"
+              class="list w-full h-full p-2"
+              @mouseleave="handeleCloseLock()"
+              @mouseover="handeleStartLock()"
           >
             <template v-for="menu in props.menus">
               <template v-if="menu.slot">
                 <div class="item rounded-lg">
-                  <Item :data="menu" :name="name" />
+                  <Item :data="menu" :name="name"/>
                 </div>
                 <slot :name="menu.slot"></slot>
               </template>
-              <xt-divider v-else-if="menu.divider" class="my-3" />
+              <xt-divider v-else-if="menu.divider" class="my-3"/>
               <div
-                v-else-if="menu.children"
-                class="item rounded-lg"
-                :key="menu[`${name}`]"
-                @click="handleClick(menu)"
+                  v-else-if="menu.children"
+                  :key="menu[`${name}`]"
+                  class="item rounded-lg"
+                  @click="handleClick(menu)"
               >
                 <xt-popover>
                   <xt-text class="w-full h-full">
-                    <Item :data="menu" :name="name" />
+                    <Item :data="menu" :name="name"/>
                     <template #right>
                       <xt-new-icon
-                        size="20"
-                        class="mr-3"
-                        icon="fluent:chevron-left-16-filled"
-                        style="transform: rotate(180deg)"
+                          class="mr-3"
+                          icon="fluent:chevron-left-16-filled"
+                          size="20"
+                          style="transform: rotate(180deg)"
                       />
                     </template>
                   </xt-text>
                   <template #content>
                     <div class="list w-full h-full p-1">
                       <div
-                        class="item"
-                        @click="handleClick(data)"
-                        v-for="data in menu.children"
-                        :name="name"
+                          v-for="data in menu.children"
+                          :name="name"
+                          class="item"
+                          @click="handleClick(data)"
                       >
-                        <Item :data="data" :isBg="true" />
+                        <Item :data="data" :isBg="true"/>
                       </div>
                     </div>
                   </template>
@@ -67,7 +67,7 @@
               </div>
               <div v-else class="item rounded-lg" @click="handleClick(menu)">
                 <xt-text class="w-full h-full">
-                  <Item :data="menu" :name="name" />
+                  <Item :data="menu" :name="name"/>
                 </xt-text>
               </div>
             </template>
@@ -82,6 +82,7 @@
 .container {
   width: 200px;
   z-index: 999999999999;
+
   .list {
     border-radius: 12px;
     box-sizing: border-box;
@@ -101,10 +102,10 @@
 }
 </style>
 
-<script setup lang="ts">
-import { ref, computed, toRefs, onMounted, onBeforeUnmount } from "vue";
+<script lang="ts" setup>
+import {computed, onBeforeUnmount, onMounted, ref, toRefs} from "vue";
 import useWindowViewport from "./useWindowViewport";
-import { reSize as vResize } from "./useElementResize";
+import {reSize as vResize} from "./useElementResize";
 import Item from "./Item.vue";
 
 // 接收父组件传递的菜单项
@@ -139,7 +140,7 @@ const props = defineProps({
   },
 });
 
-const { model, trigger, start, lock } = toRefs(props);
+const {model, trigger, start, lock} = toRefs(props);
 const emits = defineEmits(["closeMenu"]);
 
 /**
@@ -203,7 +204,7 @@ const handleCloseMenu = () => {
 };
 
 // 获取 视图大小
-const { windowWidth, windowHeight } = useWindowViewport();
+const {windowWidth, windowHeight} = useWindowViewport();
 // 获取菜单大小
 const w = ref(0);
 const h = ref(0);
@@ -259,11 +260,11 @@ const pos = computed(() => {
 });
 
 onMounted(() => {
-  window.addEventListener("click", handleCloseMenu, { capture: true });
-  window.addEventListener("contextmenu", handleCloseMenu, { capture: true });
+  window.addEventListener("click", handleCloseMenu, {capture: true});
+  window.addEventListener("contextmenu", handleCloseMenu, {capture: true});
 });
 onBeforeUnmount(() => {
-  window.addEventListener("click", handleCloseMenu, { capture: true });
-  window.addEventListener("contextmenu", handleCloseMenu, { capture: true });
+  window.addEventListener("click", handleCloseMenu, {capture: true});
+  window.addEventListener("contextmenu", handleCloseMenu, {capture: true});
 });
 </script>

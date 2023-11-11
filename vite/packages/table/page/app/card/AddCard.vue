@@ -23,23 +23,23 @@
       </template>
     </a-input>
   </div>
-  <vue-custom-scrollbar key="scrollbar" id="addScroll" :settings="scrollbarSettings"
-    style="position:relative;  border-radius: 8px;height: 100vh">
-    <CardPreview :desk="desk" :cardType="item" v-for="item in filterList" @addSuccess="onBack"></CardPreview>
+  <vue-custom-scrollbar id="addScroll" key="scrollbar" :settings="scrollbarSettings"
+                        style="position:relative;  border-radius: 8px;height: 100vh">
+    <CardPreview v-for="item in filterList" :cardType="item" :desk="desk" @addSuccess="onBack"></CardPreview>
     <div style="height: 650px"></div>
   </vue-custom-scrollbar>
 </template>
 
 <script>
-import { mapActions } from 'pinia'
-import { cardStore } from '../../../store/card'
+import {mapActions} from 'pinia'
+import {cardStore} from '../../../store/card'
 import CardPreview from './CardPreview.vue'
 
 export default {
   name: "AddCard",
-  components: { CardPreview },
-  props:['desk'],
-  emits:['onBack'],
+  components: {CardPreview},
+  props: ['desk'],
+  emits: ['onBack'],
   data() {
     return {
       cardList: [
@@ -178,7 +178,7 @@ export default {
           cname: '豆瓣电影',
           icon: 'video',
           detail: '查看最近正在上映的热门电影',
-          images: ['singleFilm','manyFilm'],
+          images: ['singleFilm', 'manyFilm'],
           size: ['1x2']
         },
         {
@@ -198,36 +198,36 @@ export default {
           size: ['1x2']
         },
         {
-          name:'news',
-          cname:'新闻资讯',
-          icon:"time-circle",
-          detail:'头条（推荐），国内，娱乐，体育，军事，科技，财经，时尚等新闻信息',
-          images:['news'],
-          size:['4x4']
+          name: 'news',
+          cname: '新闻资讯',
+          icon: "time-circle",
+          detail: '头条（推荐），国内，娱乐，体育，军事，科技，财经，时尚等新闻信息',
+          images: ['news'],
+          size: ['4x4']
         },
         {
-          name:'AIaides',
-          cname:'AI助手',
-          icon:"time-circle",
-          detail:'你的专属AI助手,内置数个预设模板供你使用。',
-          images:['AIaides'],
-          size:['2x2']
+          name: 'AIaides',
+          cname: 'AI助手',
+          icon: "time-circle",
+          detail: '你的专属AI助手,内置数个预设模板供你使用。',
+          images: ['AIaides'],
+          size: ['2x2']
         },
         {
-          name:'OilPrices',
-          cname:'今日油价',
-          icon:"time-circle",
-          detail:'时刻关注你所在的城市的92号，96号，98号，0号油价',
-          images:['OilPrices'],
-          size:['2x4']
+          name: 'OilPrices',
+          cname: '今日油价',
+          icon: "time-circle",
+          detail: '时刻关注你所在的城市的92号，96号，98号，0号油价',
+          images: ['OilPrices'],
+          size: ['2x4']
         },
         {
-          name:'yuanCommunity',
-          cname:'元社区动态',
-          icon:"time-circle",
-          detail:'元社区里又发了什么好玩的事情？时刻关注热门和最新动态。',
-          images:['yuanCommunity'],
-          size:['4x4']
+          name: 'yuanCommunity',
+          cname: '元社区动态',
+          icon: "time-circle",
+          detail: '元社区里又发了什么好玩的事情？时刻关注热门和最新动态。',
+          images: ['yuanCommunity'],
+          size: ['4x4']
         }
       ],
       cardType: {},
@@ -245,13 +245,14 @@ export default {
     };
   },
 
-  mounted() { },
+  mounted() {
+  },
   computed: {
     filterList() {
       return this.cardList.filter((i) => {
         return (
-          i.cname.toLowerCase().includes(this.selectContent.toLowerCase()) ||
-          i.detail.toLowerCase().includes(this.selectContent.toLowerCase())
+            i.cname.toLowerCase().includes(this.selectContent.toLowerCase()) ||
+            i.detail.toLowerCase().includes(this.selectContent.toLowerCase())
         );
       });
     },

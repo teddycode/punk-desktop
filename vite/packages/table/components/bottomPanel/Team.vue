@@ -1,12 +1,12 @@
 <template>
   <div class="team-module">
-    <div @click="toggleTeam" class="common-panel s-bg pointer "
-    style="margin-left: 0;padding:0.6em !important;color:var(--primary-text);background: var(--primary-bg);">
-    <emoji style="width: 52px;height:52px" icon="glassface"></emoji>
+    <div class="common-panel s-bg pointer " style="margin-left: 0;padding:0.6em !important;color:var(--primary-text);background: var(--primary-bg);"
+         @click="toggleTeam">
+      <emoji icon="glassface" style="width: 52px;height:52px"></emoji>
     </div>
-    <div class="team-box" v-if="openTeam">
+    <div v-if="openTeam" class="team-box">
       <div v-for="t in teamList" :key="t.title" class="team-item" @click="jump(t.type,t)">
-        <a-avatar :src="t.img" :size="40"></a-avatar>
+        <a-avatar :size="40" :src="t.img"></a-avatar>
         <span>{{ t.title }}</span>
       </div>
     </div>
@@ -17,11 +17,12 @@
 
 <script>
 import TeamTip from '../TeamTip.vue'
-import { mapWritableState, mapActions } from 'pinia'
-import { teamStore } from '../../store/team'
+import {mapActions, mapWritableState} from 'pinia'
+import {teamStore} from '../../store/team'
 import MyProp from '../team/MyProp.vue'
 import Emoji from '../comp/Emoji.vue'
-import { taskStore } from '../../apps/task/store'
+import {taskStore} from '../../apps/task/store'
+
 export default {
   name: "Team",
   components: {
@@ -29,9 +30,7 @@ export default {
     TeamTip,
     MyProp
   },
-  props: {
-
-  },
+  props: {},
   data() {
     return {
       teamList: [
@@ -87,8 +86,8 @@ export default {
   },
   methods: {
     ...mapActions(teamStore, ['updateMy']),
-    async jump(type,val){
-      switch(type){
+    async jump(type, val) {
+      switch (type) {
         case 'route':
           this.$router.push(val.route)
           break;
@@ -101,19 +100,19 @@ export default {
             this.teamVisible = !this.teamVisible
           }
           break;
-         case 'prop':
+        case 'prop':
           this.showMyProp = true
           break;
-         case 'task':
+        case 'task':
           this.isTaskDrawer = true
           break;
       }
       this.openTeam = false
     },
-    toggleTeam () {
+    toggleTeam() {
       this.openTeam = !this.openTeam
     },
-    closeMyProp(val){
+    closeMyProp(val) {
       this.showMyProp = val
     }
   },
@@ -121,9 +120,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.team-module{
+.team-module {
   position: relative;
-  .team-box{
+
+  .team-box {
     position: absolute;
     top: -200px;
     right: 10px;
@@ -134,12 +134,13 @@ export default {
     background: var(--main-mask-bg);
     // background: rgba(26,26,26,0.65);
     backdrop-filter: blur(8px);
-    box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.2);
     border-radius: 12px;
     display: flex;
     flex-wrap: wrap;
     padding: 12px 6px;
-    .team-item{
+
+    .team-item {
       width: 80px;
       height: 80px;
       border-radius: 12px;
@@ -152,8 +153,9 @@ export default {
       cursor: pointer;
       color: var(--primary-text);
     }
-    .team-item:hover{
-      background: rgba(80,139,254,0.20);
+
+    .team-item:hover {
+      background: rgba(80, 139, 254, 0.20);
     }
   }
 }

@@ -1,18 +1,18 @@
 <template>
-  <vue-custom-scrollbar @contextmenu.stop="menuVisible = true" :settings="outerSettings"
-    style="position:relative;height:calc(100vh - 14em);  ">
+  <vue-custom-scrollbar :settings="outerSettings" style="position:relative;height:calc(100vh - 14em);  "
+                        @contextmenu.stop="menuVisible = true">
     <!-- 添加样式 -->
     <a-dropdown>
-      <div @click="addIcons()"  class="app" style="height: 78px;">
-      <div class="flex justify-center items-center w-full h-full" style="">
-        <Icon class=" xt-text" icon="tianjia2" style="font-size: 30px;"></Icon>
+      <div class="app" style="height: 78px;" @click="addIcons()">
+        <div class="flex justify-center items-center w-full h-full" style="">
+          <Icon class=" xt-text" icon="tianjia2" style="font-size: 30px;"></Icon>
+        </div>
       </div>
-    </div>
     </a-dropdown>
-    <a-dropdown @contextmenu.stop="() => { }" v-for="app in myApps" :trigger="['contextmenu']">
-      <div @click="open(app)" class="app">
+    <a-dropdown v-for="app in myApps" :trigger="['contextmenu']" @contextmenu.stop="() => { }">
+      <div class="app" @click="open(app)">
 
-        <a-avatar :size="50" shape="square" :src="renderIcon(app.icon)"></a-avatar>
+        <a-avatar :size="50" :src="renderIcon(app.icon)" shape="square"></a-avatar>
         <br>
         <div class="name text-more">
           {{ app.name }}
@@ -20,11 +20,11 @@
       </div>
       <template #overlay>
         <a-menu>
-          <a-menu-item @click="open(app)" key="open">
+          <a-menu-item key="open" @click="open(app)">
             打开
           </a-menu-item>
-          <a-menu-item @click="deleteAnApp(app)" key="delete">删除</a-menu-item>
-          <a-menu-item @click="showInFolder(app)" key="show">打开所在位置</a-menu-item>
+          <a-menu-item key="delete" @click="deleteAnApp(app)">删除</a-menu-item>
+          <a-menu-item key="show" @click="showInFolder(app)">打开所在位置</a-menu-item>
         </a-menu>
       </template>
 
@@ -32,11 +32,11 @@
 
 
   </vue-custom-scrollbar>
-  <a-drawer :height="250" v-model:visible="menuVisible" placement="bottom">
-    <a-row style="margin-top: 1em" :gutter="[20, 20]">
+  <a-drawer v-model:visible="menuVisible" :height="250" placement="bottom">
+    <a-row :gutter="[20, 20]" style="margin-top: 1em">
       <a-col>
-        <div @click="clear" class="btn">
-          <Icon style="font-size: 3em" icon="shanchu"></Icon>
+        <div class="btn" @click="clear">
+          <Icon icon="shanchu" style="font-size: 3em"></Icon>
           <div><span>清空应用</span></div>
         </div>
       </a-col>
@@ -45,12 +45,13 @@
 </template>
 
 <script>
-import { mapWritableState, mapActions, mapState } from 'pinia'
-import { appStore } from '../store'
-import { Modal } from 'ant-design-vue'
-import { appsStore } from '../store/apps'
-const { fs } = window.$models
+import {mapActions, mapWritableState} from 'pinia'
+import {Modal} from 'ant-design-vue'
+import {appsStore} from '../store/apps'
 import {renderIcon} from '../js/common/common'
+
+const {fs} = window.$models
+
 export default {
   name: 'MyApps',
   data() {
@@ -72,7 +73,7 @@ export default {
   methods: {
     ...mapActions(appsStore, ['deleteApp']),
     renderIcon,
-    addIcons(){
+    addIcons() {
       this.$emit("addIcons")
     },
     open(app) {
@@ -112,7 +113,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .app {
   display: inline-block;
   width: 5em;

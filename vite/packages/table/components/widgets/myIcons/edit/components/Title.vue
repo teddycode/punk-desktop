@@ -3,7 +3,7 @@
     <div>
       <slot></slot>
     </div>
-    <div >
+    <div>
       <slot name="right"></slot>
     </div>
   </div>

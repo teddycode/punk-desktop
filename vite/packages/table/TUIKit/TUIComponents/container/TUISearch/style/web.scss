@@ -2,19 +2,23 @@
   header {
     display: flex;
     align-items: center;
+
     h1 {
       padding: 0 8px;
       font-size: 14px;
     }
-    .more{
+
+    .more {
       display: inline-block;
       width: 28px;
       height: 28px;
       border-radius: 4px;
     }
+
     ul {
       display: flex;
       align-items: center;
+
       li {
         display: flex;
         align-items: center;

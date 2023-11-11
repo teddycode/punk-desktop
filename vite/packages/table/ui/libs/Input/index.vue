@@ -1,23 +1,31 @@
 <template>
-  <div class="w-full h-full no-darg" :class="typeCalss">
+  <div :class="typeCalss" class="w-full h-full no-darg">
     <a-input
-      ref="inputRef"
-      spellcheck="false"
-      class="xt-text w-full no-darg h-full"
-      :class="typeCalss"
-      :placeholder="placeholder"
-      v-model:value="searchValue"
-      @input="handleInput"
-      @keydown.enter.exact.prevent="handleEnter"
-      @focus="handleFocus"
-      @blur="handleBlur"
-      @change="handleChange"
-      @keyup="handleKeyUp"
+        ref="inputRef"
+        v-model:value="searchValue"
+        :class="typeCalss"
+        :placeholder="placeholder"
+        class="xt-text w-full no-darg h-full"
+        spellcheck="false"
+        @blur="handleBlur"
+        @change="handleChange"
+        @focus="handleFocus"
+        @input="handleInput"
+        @keyup="handleKeyUp"
+        @keydown.enter.exact.prevent="handleEnter"
     >
-      <template #addonBefore> <slot name="addonBefore"></slot></template>
-      <template #addonAfter> <slot name="addonAfter"></slot> </template>
-      <template #prefix> <slot name="prefix"></slot> </template>
-      <template #suffix> <slot name="suffix"></slot></template>
+      <template #addonBefore>
+        <slot name="addonBefore"></slot>
+      </template>
+      <template #addonAfter>
+        <slot name="addonAfter"></slot>
+      </template>
+      <template #prefix>
+        <slot name="prefix"></slot>
+      </template>
+      <template #suffix>
+        <slot name="suffix"></slot>
+      </template>
     </a-input>
   </div>
 </template>
@@ -130,21 +138,26 @@ export default {
   padding: 0;
   border: 0;
 }
+
 :deep(.ant-input) {
   color: var(--primary-text);
+
   &:focus {
     box-shadow: none;
   }
+
   border: none;
   background: none;
   font-size: 16px !important;
 }
+
 :deep(.ant-input-affix-wrapper) {
   height: 100%;
   background: none;
   border: 0;
   box-shadow: none;
 }
+
 :deep(.ant-input-group) {
   height: 100%;
 }

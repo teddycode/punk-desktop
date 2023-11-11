@@ -3,9 +3,10 @@
 </template>
 
 <script>
-import { defineAsyncComponent } from "vue";
-import { mapWritableState } from "pinia";
-import { aiStore } from "../../../store/ai";
+import {defineAsyncComponent} from "vue";
+import {mapWritableState} from "pinia";
+import {aiStore} from "../../../store/ai";
+
 export default {
   computed: {
     ...mapWritableState(aiStore, ["selectTab"]),

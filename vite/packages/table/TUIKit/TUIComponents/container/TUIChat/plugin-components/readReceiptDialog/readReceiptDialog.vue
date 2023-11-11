@@ -1,9 +1,9 @@
 <template>
   <div
-    class="read-receipt"
-    :class="[isH5 ? 'read-receipt-H5' : '', isMenuOpen ? 'read-receipt-menu-open' : '']"
-    v-if="show"
-    ref="dialog"
+      v-if="show"
+      ref="dialog"
+      :class="[isH5 ? 'read-receipt-H5' : '', isMenuOpen ? 'read-receipt-menu-open' : '']"
+      class="read-receipt"
   >
     <div class="header">
       <div class="header-back">
@@ -24,7 +24,7 @@
             <span>{{ caculateTimeago(message.time * 1000) }}</span>
           </div>
           <div class="message-cont">
-            <img v-if="messageInfo.isImg" class="message-cont-img" :src="messageInfo.content" />
+            <img v-if="messageInfo.isImg" :src="messageInfo.content" class="message-cont-img"/>
             <p v-else>{{ messageInfo.content }}</p>
           </div>
         </div>
@@ -32,11 +32,11 @@
       <div class="body-tab">
         <template v-for="(val, key) in readReceiptList">
           <div
-            class="tab-item"
-            :class="key === showListNow && 'tab-item-now'"
-            v-if="val.show"
-            :key="key"
-            @click="showListNow = key"
+              v-if="val.show"
+              :key="key"
+              :class="key === showListNow && 'tab-item-now'"
+              class="tab-item"
+              @click="showListNow = key"
           >
             <div class="tab-item-title">{{ val?.label }}</div>
             <div class="tab-item-count">{{ val?.count }}</div>
@@ -47,31 +47,32 @@
         <ul>
           <li v-for="(item, index) in readReceiptList[showListNow].userList" :key="index" class="body-list-item">
             <img
-              class="avatar"
-              :src="item?.avatar || 'https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'"
-              onerror="this.src='https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'"
+                :src="item?.avatar || 'https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'"
+                class="avatar"
+                onerror="this.src='https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'"
             />
             <div class="name">
               {{ item?.nick || item?.userID }}
             </div>
           </li>
         </ul>
-        <div class="more" v-if="!readReceiptList[showListNow].isCompleted" @click="getMoreList">查看更多</div>
+        <div v-if="!readReceiptList[showListNow].isCompleted" class="more" @click="getMoreList">查看更多</div>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, watchEffect, toRefs, watch, ref } from 'vue';
-import { onClickOutside } from '@vueuse/core';
-import { caculateTimeago, handleErrorPrompts } from '../../../utils';
-import { Message, userListItem } from '../../interface';
+import {defineComponent, reactive, ref, toRefs, watch, watchEffect} from 'vue';
+import {onClickOutside} from '@vueuse/core';
+import {caculateTimeago, handleErrorPrompts} from '../../../utils';
+import {Message, userListItem} from '../../interface';
 import {
+  handleFaceMessageShowContext,
   handleImageMessageShowContext,
   handleVideoMessageShowContext,
-  handleFaceMessageShowContext,
 } from '../../utils/utils';
-import { TUIEnv } from '../../../../../TUIPlugin';
+import {TUIEnv} from '../../../../../TUIPlugin';
+
 const ReadReceiptDialog = defineComponent({
   type: 'custom',
   props: {
@@ -89,7 +90,7 @@ const ReadReceiptDialog = defineComponent({
     },
   },
   setup(props: any, ctx: any) {
-    const { t } = (window as any).TUIKitTUICore.config.i18n.useI18n();
+    const {t} = (window as any).TUIKitTUICore.config.i18n.useI18n();
     const data = reactive({
       message: {} as Message,
       isGroup: false,
@@ -138,21 +139,21 @@ const ReadReceiptDialog = defineComponent({
     });
 
     watch(
-      () => {
-        props.message, data.show;
-      },
-      async () => {
-        if (!data.show) return;
-        handleDialogPosition();
-        data.message = props.message;
-        isGroup();
-        showMessage();
-        data.readReceiptList[0].count = data.message?.readReceiptInfo?.readCount || data.readReceiptList[0].count;
-        data.readReceiptList[1].count = data.message?.readReceiptInfo?.unreadCount || data.readReceiptList[1].count;
-        getReadList();
-        getUnreadList();
-      },
-      { deep: true }
+        () => {
+          props.message, data.show;
+        },
+        async () => {
+          if (!data.show) return;
+          handleDialogPosition();
+          data.message = props.message;
+          isGroup();
+          showMessage();
+          data.readReceiptList[0].count = data.message?.readReceiptInfo?.readCount || data.readReceiptList[0].count;
+          data.readReceiptList[1].count = data.message?.readReceiptInfo?.unreadCount || data.readReceiptList[1].count;
+          getReadList();
+          getUnreadList();
+        },
+        {deep: true}
     );
 
     const toggleShow = () => {
@@ -173,16 +174,16 @@ const ReadReceiptDialog = defineComponent({
       if (!data.isGroup || !data.message || Object.keys(data.message).length === 0) return;
       try {
         const obj = await ReadReceiptDialog.TUIServer.getGroupReadMemberList(
-          data.message,
-          more ? data.readReceiptList[0].cursor : ''
+            data.message,
+            more ? data.readReceiptList[0].cursor : ''
         );
         data.readReceiptList[0].isCompleted = obj?.data?.isCompleted;
         data.readReceiptList[0].cursor = obj?.data?.cursor || '';
         const list = obj.data.readUserIDList;
         const readList: userListItem[] = await handleAvatarAndName(list);
         data.readReceiptList[0].userList = more
-          ? ([...data.readReceiptList[0].userList, ...readList] as userListItem[])
-          : readList;
+            ? ([...data.readReceiptList[0].userList, ...readList] as userListItem[])
+            : readList;
       } catch (error) {
         if (error && (error as any)?.code === 10062) {
           const message = t('TUIChat.您当前购买使用的套餐包暂未开通群消息已读回执功能');
@@ -195,16 +196,16 @@ const ReadReceiptDialog = defineComponent({
     const getUnreadList = async (more = false) => {
       if (!data.isGroup || !data.message || Object.keys(data.message).length === 0) return;
       const obj = await ReadReceiptDialog.TUIServer.getGroupUnreadMemberList(
-        data.message,
-        more ? data.readReceiptList[1].cursor : ''
+          data.message,
+          more ? data.readReceiptList[1].cursor : ''
       );
       data.readReceiptList[1].isCompleted = obj?.data.isCompleted;
       data.readReceiptList[1].cursor = obj?.data?.cursor || '';
       const list = obj.data.unreadUserIDList;
       const unreadList: userListItem[] = await handleAvatarAndName(list);
       data.readReceiptList[1].userList = more
-        ? ([...data.readReceiptList[1].userList, ...unreadList] as userListItem[])
-        : unreadList;
+          ? ([...data.readReceiptList[1].userList, ...unreadList] as userListItem[])
+          : unreadList;
     };
 
     const handleAvatarAndName = async (list: any) => {

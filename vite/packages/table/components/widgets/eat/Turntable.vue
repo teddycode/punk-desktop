@@ -1,22 +1,23 @@
 <template>
-  <div id="app" v-cloak>
+  <div v-cloak id="app">
     <div class="box">
-  		<div class="prize-list" ref="prizeWrap" :style="bgColor">
-  			<div class="prize-item" v-for="(item, index) in eatList" :style="prizeStyle(index)">
-  				<p :style="eatList.length > 2 ? 'transform:rotate(-90deg);': 'font-size: 18px;'">{{ item }}</p>
-  			</div>
-  		</div>
+      <div ref="prizeWrap" :style="bgColor" class="prize-list">
+        <div v-for="(item, index) in eatList" :style="prizeStyle(index)" class="prize-item">
+          <p :style="eatList.length > 2 ? 'transform:rotate(-90deg);': 'font-size: 18px;'">{{ item }}</p>
+        </div>
+      </div>
       <div class="box-btn" style="z-index:9;" @click.stop="start">GO</div>
     </div>
-	</div>
+  </div>
 </template>
 
 <script>
-import { createApp, onMounted, onUnmounted, ref, reactive, toRefs, computed, nextTick } from 'vue';
+import {computed, onMounted, onUnmounted, reactive, ref, toRefs} from 'vue';
+
 export default {
   props: ['eatList'],
-  setup (props,ctx) {
-    const eatList = props.eatList
+  setup(props, ctx) {
+    const eatList = props.eatList
     const state = reactive({
       isRunning: false, // 是否正在转动
       baseRunAngle: 360 * 5, // 总共转动角度 至少5圈
@@ -68,7 +69,7 @@ export default {
 
     const getRandomNum = () => {
       const num = Math.floor(Math.random() * eatList?.length)
-      return num    		
+      return num
     }
 
     const start = () => {
@@ -109,69 +110,80 @@ export default {
   }
 }
 </script>
-<style scoped lang="scss">
-		* {  margin: 0; padding: 0; box-sizing: border-box; }
-		[v-cloak] {
-			display: none;
-		}
-		.box {
-      margin: 50px auto 0;
-			width: 240px;
-			height: 240px;
-      position: relative;
-		}
-    .prize-list {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-			// border: 10px solid #98d3fc;
-      overflow: hidden;
-    }
-		.prize-item {
-			/*border: 2px solid red;*/
-			position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
-      margin: auto;
-      font-size: 14px;
-		}
-		.prize-item p {
-      // color: var(--primary-text);
-			color: #fff;
-			text-align: center;
-			line-height: 20px;
-      margin: 35px -26px;
-      letter-spacing: 2px;
-		}
-    .box-btn {
-      width: 50px;
-      height: 50px;
-      line-height: 50px;
-      border-radius: 50%;
-      background:var(--active-bg);
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      margin: auto;
-      cursor: pointer;
-      font-size: 20px;
-      color: var(--primary-text);
-      text-align: center;
-      font-weight: 700;
-    }
-    .box-btn::before{
-      content: "";
-      position: absolute;
-      left: 16px;
-      right: 0;
-      top: -20px;
-      width: 0;
-      height: 0;
-      border-left: 10px solid transparent;
-      border-right: 10px solid transparent;
-      border-bottom: 24px solid var(--active-bg);
-    }
-	</style>
+<style lang="scss" scoped>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+[v-cloak] {
+  display: none;
+}
+
+.box {
+  margin: 50px auto 0;
+  width: 240px;
+  height: 240px;
+  position: relative;
+}
+
+.prize-list {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  // border: 10px solid #98d3fc;
+  overflow: hidden;
+}
+
+.prize-item {
+  /*border: 2px solid red;*/
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  margin: auto;
+  font-size: 14px;
+}
+
+.prize-item p {
+  // color: var(--primary-text);
+  color: #fff;
+  text-align: center;
+  line-height: 20px;
+  margin: 35px -26px;
+  letter-spacing: 2px;
+}
+
+.box-btn {
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  border-radius: 50%;
+  background: var(--active-bg);
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  cursor: pointer;
+  font-size: 20px;
+  color: var(--primary-text);
+  text-align: center;
+  font-weight: 700;
+}
+
+.box-btn::before {
+  content: "";
+  position: absolute;
+  left: 16px;
+  right: 0;
+  top: -20px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 24px solid var(--active-bg);
+}
+</style>

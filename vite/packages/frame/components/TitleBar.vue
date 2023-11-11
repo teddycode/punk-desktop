@@ -1,27 +1,28 @@
 <template>
-  <div id="titleBar" @contextmenu="showMenu"
-       style="display: flex;justify-content: flex-start;flex-direction: row;">
-    <div class="control-actions" style="width: 120px;display: flex;justify-content: flex-start;flex-direction: row;margin-left: 10px">
-      <div id="goHome" @click="home" title="首页" class="action">
+  <div id="titleBar" style="display: flex;justify-content: flex-start;flex-direction: row;"
+       @contextmenu="showMenu">
+    <div class="control-actions"
+         style="width: 120px;display: flex;justify-content: flex-start;flex-direction: row;margin-left: 10px">
+      <div id="goHome" class="action" title="首页" @click="home">
         <span class="action-icon-wrapper">
-          <span class="bicon action-icon-ant" >&#xe648;</span>
+          <span class="bicon action-icon-ant">&#xe648;</span>
         </span>
       </div>
-      <div id="goBack" @click="goBack" title="返回" class="action" style="opacity: 0.5">
+      <div id="goBack" class="action" style="opacity: 0.5" title="返回" @click="goBack">
         <span class="action-icon-wrapper">
-          <span class="bicon action-icon-ant" >&#xe650;</span>
+          <span class="bicon action-icon-ant">&#xe650;</span>
         </span>
       </div>
-      <div id="goForward" @click="goForward" title="前进" class="action" style="display: none">
+      <div id="goForward" class="action" style="display: none" title="前进" @click="goForward">
         <span class="action-icon-wrapper">
 
-            <span class="bicon action-icon-ant" >&#xe64f;</span>
+            <span class="bicon action-icon-ant">&#xe64f;</span>
         </span>
       </div>
-      <div id="refresh" @click="refresh" title="刷新" class="action">
+      <div id="refresh" class="action" title="刷新" @click="refresh">
         <span class="action-icon-wrapper" style="transform: rotateY(180deg)">
 
-            <span class="bicon action-icon-ant" >&#xe661;</span>
+            <span class="bicon action-icon-ant">&#xe661;</span>
 
         </span>
       </div>
@@ -33,38 +34,42 @@
     </div>
 
     <div id="title" style="flex: auto; line-height: 30px;text-align: center;">
-      <img onerror="this.src='../../icons/default.svg'"
+      <img id="appLogo"
            :src="app.logo"
-           style="margin-top:-3px;border-radius: 100px ;background-color: white;width: 20px;height: 20px;vertical-align: middle;border:2px solid white"
-           id="appLogo"><span :title="'网址：' + encodeURI(this.app.url) + '（双击复制）'" style="color: white;margin-left: 10px;font-size: 14px" id="appName" @dblclick="copyAddress">{{ app.name }}</span>
+           onerror="this.src='../../icons/default.svg'"
+           style="margin-top:-3px;border-radius: 100px ;background-color: white;width: 20px;height: 20px;vertical-align: middle;border:2px solid white"><span id="appName"
+                              :title="'网址：' + encodeURI(this.app.url) + '（双击复制）'" style="color: white;margin-left: 10px;font-size: 14px"
+                              @dblclick="copyAddress">{{ app.name }}</span>
 
 
     </div>
     <div class="extra-actions" style="display: flex;width: auto;padding-right: 10px">
       <div class="action">
-        <span @click="showMenu" class="action-icon-wrapper">
-           <span class="bicon action-icon-ant" >&#xe63d;</span>
+        <span class="action-icon-wrapper" @click="showMenu">
+           <span class="bicon action-icon-ant">&#xe63d;</span>
 
 
         </span>
       </div>
-      </div>
+    </div>
 
-    <div id="windows-control"  v-if="platform==='win32'" style="width: 140px;display: flex">
+    <div v-if="platform==='win32'" id="windows-control" style="width: 140px;display: flex">
       <div class="windows-caption-buttons">
-        <div class="element caption-minimise"  @click="minimize" v-show="!windowIsMaximized">
+        <div v-show="!windowIsMaximized" class="element caption-minimise" @click="minimize">
           <svg>
-            <line x1="1" y1="5.5" x2="11" y2="5.5"/>
+            <line x1="1" x2="11" y1="5.5" y2="5.5"/>
           </svg>
         </div>
-        <div class="element caption-maximize"  @click="maximize" v-show="!(this.windowIsMaximized || this.windowIsFullscreen)">
+        <div v-show="!(this.windowIsMaximized || this.windowIsFullscreen)" class="element caption-maximize"
+             @click="maximize">
           <svg>
-            <rect x="1.5" y="1.5" width="9" height="9"/>
+            <rect height="9" width="9" x="1.5" y="1.5"/>
           </svg>
         </div>
-        <div class="element caption-restore" @click="restore" v-show="this.windowIsMaximized || this.windowIsFullscreen">
+        <div v-show="this.windowIsMaximized || this.windowIsFullscreen" class="element caption-restore"
+             @click="restore">
           <svg>
-            <rect x="1.5" y="3.5" width="7" height="7"/>
+            <rect height="7" width="7" x="1.5" y="3.5"/>
             <polyline points="3.5,3.5 3.5,1.5 10.5,1.5 10.5,8.5 8.5,8.5"/>
           </svg>
         </div>
@@ -90,29 +95,30 @@
 </template>
 
 <script>
-import { LeftOutlined,RightOutlined,RedoOutlined,HomeOutlined,EllipsisOutlined } from '@ant-design/icons-vue'
+import {EllipsisOutlined, HomeOutlined, LeftOutlined, RedoOutlined, RightOutlined} from '@ant-design/icons-vue'
+
 export default {
   name: 'TitleBar',
-  components:{
+  components: {
     LeftOutlined,
     RightOutlined,
     RedoOutlined,
     HomeOutlined,
     EllipsisOutlined
   },
-  data(){
+  data() {
     return {
-      platform:'darwin',
-      currentUrl:'',
-      app: {  },
+      platform: 'darwin',
+      currentUrl: '',
+      app: {},
 
 
-      windowIsMaximized:false,
-      windowIsFullscreen:false
+      windowIsMaximized: false,
+      windowIsFullscreen: false
     }
   },
-  mounted () {
-    this.platform=process.platform
+  mounted() {
+    this.platform = process.platform
     if (this.platform === 'darwin') {
       document.body.classList.add('mac')
     } else if (this.platform === 'win32') {
@@ -139,8 +145,8 @@ export default {
 
     ipc.on('init', (event, args) => {
       windowId = args.windowId
-      window.app=args.app
-      this.app=args.app
+      window.app = args.app
+      this.app = args.app
       window.nanoid = args.app.nanoid
       document.getElementById('address').value = args.url
       document.getElementById('addressWrapper').style.display = 'none'
@@ -148,81 +154,81 @@ export default {
       document.body.style.backgroundColor = args.app.user_theme_color ? args.app.user_theme_color : args.app.theme_color
 
       //暂时取消应用市场的窗体返回图标
-      if(!args.app.window.frameWindow.controllers.goBack)  document.getElementById('goBack').hidden = true
-      if(!args.app.window.frameWindow.controllers.goForward)  document.getElementById('goForward').hidden = true
-      if(!args.app.window.frameWindow.controllers.refresh)  document.getElementById('refresh').hidden = true
-      if(!args.app.window.frameWindow.controllers.home)  document.getElementById('goHome').hidden = true
+      if (!args.app.window.frameWindow.controllers.goBack) document.getElementById('goBack').hidden = true
+      if (!args.app.window.frameWindow.controllers.goForward) document.getElementById('goForward').hidden = true
+      if (!args.app.window.frameWindow.controllers.refresh) document.getElementById('refresh').hidden = true
+      if (!args.app.window.frameWindow.controllers.home) document.getElementById('goHome').hidden = true
       // document.getElementById('goForward').hidden = true
       //   document.getElementById('goHome').hidden = true
       //   document.getElementById('refresh').style.marginLeft = '30px'
 
 
     })
-    ipc.on('maximize',  (e) =>{
+    ipc.on('maximize', (e) => {
       this.windowIsMaximized = true
     })
-    ipc.on('unmaximize',  (e) =>{
+    ipc.on('unmaximize', (e) => {
       this.windowIsMaximized = false
     })
-    ipc.on('enter-full-screen',  (e) =>{
+    ipc.on('enter-full-screen', (e) => {
       this.windowIsFullscreen = true
     })
-    ipc.on('leave-full-screen',  (e) =>{
+    ipc.on('leave-full-screen', (e) => {
       this.windowIsFullscreen = false
     })
 
   },
   methods: {
-    showMenu(){
+    showMenu() {
       console.log(window.nanoid)
-      ipc.send('createAppMenu',{nanoid:window.nanoid})
+      ipc.send('createAppMenu', {nanoid: window.nanoid})
     },
-    goBack () {
+    goBack() {
       ipc.send('saAppGoBack', {
         nanoid: window.nanoid
       })
     },
 
-    goForward () {
+    goForward() {
       ipc.send('saAppGoForward', {
         nanoid: window.nanoid
       })
     },
 
-    refresh () {
+    refresh() {
       ipc.send('saAppRefresh', {
         nanoid: window.nanoid
       })
     },
 
-    home () {
+    home() {
       ipc.send('saAppHome', {
         nanoid: window.nanoid
       })
     },
 
-    resetSize () {
+    resetSize() {
       ipc.send('saAppResetSize', {
         nanoid: window.nanoid
       })
     },
-    minimize(){
-      ipc.invoke('minimizeAppWindow', { nanoid: window.nanoid })
+    minimize() {
+      ipc.invoke('minimizeAppWindow', {nanoid: window.nanoid})
     },
-    maximize(){
-      ipc.invoke('maximizeAppWindow', { nanoid: window.nanoid })
+    maximize() {
+      ipc.invoke('maximizeAppWindow', {nanoid: window.nanoid})
     },
-    restore(){
+    restore() {
       if (this.windowIsFullscreen) {
-        ipc.invoke('setFullScreenAppWindow', { flag: false, nanoid: window.nanoid })
+        ipc.invoke('setFullScreenAppWindow', {flag: false, nanoid: window.nanoid})
       } else {
-        ipc.invoke('unmaximizeAppWindow', { nanoid: window.nanoid })
+        ipc.invoke('unmaximizeAppWindow', {nanoid: window.nanoid})
       }
     },
-    close(){
-      ipc.invoke('closeAppWindow', { nanoid: window.nanoid })
+    close() {
+      ipc.invoke('closeAppWindow', {nanoid: window.nanoid})
     },
-    copyAddress(){
+    copyAddress() {
       clipboard.writeText(this.currentUrl)
     }
   }

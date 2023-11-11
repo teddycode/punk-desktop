@@ -1,6 +1,6 @@
 <template>
   <!-- 预览 -->
-  <div class="prompt-modal xt-mask" v-if="showModal">
+  <div v-if="showModal" class="prompt-modal xt-mask">
     <div class="head-icon">
       <div class="icon" @click="close">
         <Icon icon="guanbi" style="width: 24px;height: 24px;"></Icon>
@@ -14,60 +14,70 @@
     </div>
     <!-- 预览 -->
     <!-- <div class="flex justify-center items-center preview" :style="{'--previewH': previewH}" id="cards" readonly> -->
-    <div class="flex justify-center items-center preview" id="previewContent">
-      <Desk :currentDesk="displayScheme" :settings="displayScheme.settings" :notTrigger="true" :editing="false"></Desk>
+    <div id="previewContent" class="flex justify-center items-center preview">
+      <Desk :currentDesk="displayScheme" :editing="false" :notTrigger="true" :settings="displayScheme.settings"></Desk>
     </div>
     <div class="foot flex ">
       <div class="flex items-center mr-2">
         <strong class="mr-2">{{ scheme.alias }}</strong> 共{{ template.cards.length }}个组件，尺寸
         {{ layoutSize.width + '*' + layoutSize.height }}
-        <Icon icon="tishi-xianxing" class="ml-3" style="width: 24px;height: 24px;"></Icon>
+        <Icon class="ml-3" icon="tishi-xianxing" style="width: 24px;height: 24px;"></Icon>
       </div>
       <div class="flex" style="padding: 0">
-   <xt-task @cb="addPlan" :modelValue="m03026">
-    <div class="market-button mr-2 active" @click="addPlan"><icon icon="xiazai1"></icon> 立即添加</div>
-   </xt-task>
-        <div class="market-button mr-0" @click="doIncSupport"><icon icon="dianzan"></icon> 点赞 {{displayScheme.support}}</div>
+        <xt-task :modelValue="m03026" @cb="addPlan">
+          <div class="market-button mr-2 active" @click="addPlan">
+            <icon icon="xiazai1"></icon>
+            立即添加
+          </div>
+        </xt-task>
+        <div class="market-button mr-0" @click="doIncSupport">
+          <icon icon="dianzan"></icon>
+          点赞 {{ displayScheme.support }}
+        </div>
       </div>
     </div>
   </div>
   <!-- 预览添加抽屉 -->
-  <a-drawer v-model:visible="openDrawer" style="z-index:9999999999;" width="320" placement="right">
+  <a-drawer v-model:visible="openDrawer" placement="right" style="z-index:9999999999;" width="320">
     <template #closeIcon>
       <Icon icon="xiangyou"></Icon>
     </template>
-    <template #extra v-if="!displayScheme.uid===userInfo.uid">
+    <template v-if="!displayScheme.uid===userInfo.uid" #extra>
       <a-space>
         <div class="flex">
           <div class="pointer mr-3 xt-bg-2 xt-text h-12 w-12 flex items-center rounded-lg justify-center"
                @click="openSet = true">
             <Icon icon="dianzan" style="font-size: 1.5em;"></Icon>
           </div>
-          <div class="add-scheme" @click="addPlan"><icon icon="xiazai1"></icon>立即添加</div>
+          <div class="add-scheme" @click="addPlan">
+            <icon icon="xiazai1"></icon>
+            立即添加
+          </div>
         </div>
       </a-space>
     </template>
     <div class="drawer-center no-drag">
-      <span class="drawer-title">{{ scheme.alias }} <span class="xt-text-2 " style="user-select: text">{{scheme.nanoid}}</span></span>
+      <span class="drawer-title">{{ scheme.alias }} <span class="xt-text-2 "
+                                                          style="user-select: text">{{ scheme.nanoid }}</span></span>
       <span class="drawer-text">{{ scheme.summary }}</span>
-      <div class="flex" v-if="tagList.length>0">
-        <div class="label" v-for="tag in tagList">{{ tag }}</div>
+      <div v-if="tagList.length>0" class="flex">
+        <div v-for="tag in tagList" class="label">{{ tag }}</div>
       </div>
       <div class="flex justify-between items-center">
         <span class="flex items-center my-4">
           <div>
-            <a-avatar size="24" :src="displayScheme.userInfo?.avatar">
+            <a-avatar :src="displayScheme.userInfo?.avatar" size="24">
             </a-avatar>
           </div>
           <span class="ml-3" style="color: var(--secondary-text);">{{ scheme.userInfo?.nickname }}</span>
         </span>
         <span style="color: var(--secondary-text);">
           <span>
-            <Icon icon="dianzan" class="mr-2"></Icon>
+            <Icon class="mr-2" icon="dianzan"></Icon>
             <span>{{ scheme.support }}</span>
           </span>
           <span class="ml-3">
-            <Icon icon="xiazai" class="mr-2"></Icon>
+            <Icon class="mr-2" icon="xiazai"></Icon>
             <span>{{ scheme.count }}</span>
           </span>
         </span>
@@ -82,20 +92,20 @@
 </template>
 
 <script>
-import { message } from 'ant-design-vue'
-import { mapActions, mapWritableState } from 'pinia'
-import { appStore } from '../../store'
+import {message} from 'ant-design-vue'
+import {mapActions, mapWritableState} from 'pinia'
+import {appStore} from '../../store'
 import Desk from './Desk.vue'
-import { cardStore } from '../../store/card'
-import {nanoid} from 'nanoid'
-import { marketStore } from '../../store/market'
-import { taskStore } from '../../apps/task/store'
+import {cardStore} from '../../store/card'
+import {marketStore} from '../../store/market'
+import {taskStore} from '../../apps/task/store'
+
 export default {
   name: 'DeskPreview',
   components: {
     Desk
   },
-  data () {
+  data() {
     return {
       // 添加
       openDrawer: false,
@@ -133,31 +143,31 @@ export default {
     }
   },
   computed: {
-    ...mapWritableState(appStore, ['fullScreen','userInfo']),
+    ...mapWritableState(appStore, ['fullScreen', 'userInfo']),
     ...mapWritableState(taskStore, ["taskID", "step"]),
     m03026() {
       return this.taskID == "M0302" && this.step == 6
     },
-    tagList () {
+    tagList() {
       if (this.scheme.tags) {
         return this.scheme.tags.split(',')
       } else {
         return []
       }
     },
-    layoutSize () {
+    layoutSize() {
       return JSON.parse(this.scheme.layoutSize)
     },
-    template () {
+    template() {
       return JSON.parse(this.scheme.template)
     }
   },
   watch: {
-    showModal (newVal) {
+    showModal(newVal) {
       if (newVal) this.fullScreen = true
       if (this.fullScreen) {
         this.cardZoom = this.template.settings.cardZoom
-        this.cardMargin=this.template.settings.cardMargin
+        this.cardMargin = this.template.settings.cardMargin
         this.zoom = this.cardZoom / 100
         this.getPreviewHeight()
         this.displayScheme = {
@@ -165,8 +175,8 @@ export default {
           settings: {
             ...this.template.settings
           },
-          cards:[
-            ... this.template.cards
+          cards: [
+            ...this.template.cards
           ],
         }
         this.deskWidth = this.layoutSize.width
@@ -191,26 +201,26 @@ export default {
   },
   methods: {
     ...mapActions(cardStore, ['addShareDesk', 'setDeskSize']),
-    ...mapActions(marketStore,['incSupport']),
-    async doIncSupport(){
-      const rs=await this.incSupport(this.displayScheme.dataNanoid)
-      if(rs && rs.msg.includes('取消')){
-        this.displayScheme.support=rs.supportCount
+    ...mapActions(marketStore, ['incSupport']),
+    async doIncSupport() {
+      const rs = await this.incSupport(this.displayScheme.dataNanoid)
+      if (rs && rs.msg.includes('取消')) {
+        this.displayScheme.support = rs.supportCount
         message.success('已取消点赞')
-      }else{
+      } else {
         console.log(rs)
-        this.displayScheme.support=rs.supportCount
+        this.displayScheme.support = rs.supportCount
         message.success('感谢您的支持，您的支持是对作者最大的鼓励。')
       }
     },
-    addPlan () {
+    addPlan() {
       this.close()
       this.addShareDesk({
         ...this.displayScheme,
-        title:this.displayScheme.alias,
-        cards:this.template.cards,
-        settings:this.template.settings
-      },this.layoutSize, this.deskList)
+        title: this.displayScheme.alias,
+        cards: this.template.cards,
+        settings: this.template.settings
+      }, this.layoutSize, this.deskList)
       message.success('添加成功')
       this.$emit('afterAdded')
       this.openDrawer = false
@@ -227,27 +237,27 @@ export default {
       //   this.cardsHeight = cardsHeight
       // }, 300)
     },
-    close () {
+    close() {
       // this.cards.settings.cardZoom = this.cardZoom
       this.$emit('closePreview', false)
       this.fullScreen = false
     },
-    getPreviewHeight () {
+    getPreviewHeight() {
       this.$nextTick(() => {
         if (this.fullScreen) {
           //计算得出修正后的缩放率
           this.previewHeight = document.getElementById('previewContent')?.offsetHeight
           let cardZoom = (this.cardZoom * this.previewHeight / this.cardHeight).toFixed()
-          let cardMargin=(this.cardMargin * this.previewHeight / this.cardHeight).toFixed()
+          let cardMargin = (this.cardMargin * this.previewHeight / this.cardHeight).toFixed()
           this.displayScheme.settings.cardZoom = cardZoom
-          this.displayScheme.settings.cardMargin=cardMargin
-          this.displayScheme.settings.enableZoom=true
+          this.displayScheme.settings.cardMargin = cardMargin
+          this.displayScheme.settings.enableZoom = true
         }
       })
     }
 
   },
-  mounted () {
+  mounted() {
   },
 }
 </script>
@@ -384,6 +394,7 @@ export default {
   height: 75%;
   // height:var(--previewH);
 }
+
 .market-button {
   border-radius: 8px;
   width: 100px;
@@ -391,17 +402,20 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
- color:var(--primary-text);
+  color: var(--primary-text);
   padding: 10px;
   cursor: pointer;
-  &.active,&:hover{
+
+  &.active, &:hover {
     background: var(--active-bg);
     color: var(--active-text);
   }
-  &:hover{
+
+  &:hover {
     opacity: 0.9;
   }
 }
+
 //  .preview2{
 //   width:95%;
 //   height: 90%;

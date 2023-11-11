@@ -3,16 +3,17 @@
     <arrow-left-outlined @click="goBack"/>
     &nbsp;{{ detail.title }}
   </div>
-  <vueCustomScrollbar  :settings="settings"  style="height: calc(100vh - 35px);padding: 15px">
+  <vueCustomScrollbar :settings="settings" style="height: calc(100vh - 35px);padding: 15px">
     <GradePanel></GradePanel>
   </vueCustomScrollbar>
 </template>
 
 <script>
 import GradePanel from '../compontents/GradePanel.vue'
-import { ArrowLeftOutlined } from '@ant-design/icons-vue'
+import {ArrowLeftOutlined} from '@ant-design/icons-vue'
 
 import vueCustomScrollbar from '../../../src/components/vue-scrollbar.vue'
+
 const components = {
   GradePanel,
   //下面是icons
@@ -28,24 +29,24 @@ const detailMap = {
 export default {
   name: 'Detail',
   components,
-  data () {
+  data() {
     return {
       detail: {},
       settings: {
-        swipeEasing:true,
+        swipeEasing: true,
         suppressScrollY: false,
         suppressScrollX: true,
         wheelPropagation: true
       },
     }
   },
-  mounted () {
+  mounted() {
     this.detail = detailMap[this.$route.params.path]
-    ipc.send('resizeTray',{width:400,height:430})
+    ipc.send('resizeTray', {width: 400, height: 430})
     console.log(this.detail)
   },
-  methods:{
-    goBack(){
+  methods: {
+    goBack() {
       this.$router.go(-1)
     }
   }

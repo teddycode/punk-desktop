@@ -6,7 +6,7 @@ import {appStore} from "../../store";
 export default {
   name: "CoolWidget",
   components: {Widget},
-  data(){
+  data() {
     return {
       options: {
         className: 'card small',
@@ -35,9 +35,9 @@ export default {
       type: Object
     }
   },
-  methods:{
-    ...mapActions(appStore,['showUserCard']),
-    doShowUserCard(){
+  methods: {
+    ...mapActions(appStore, ['showUserCard']),
+    doShowUserCard() {
       this.showUserCard(4)
     }
   }
@@ -45,25 +45,25 @@ export default {
 </script>
 
 <template>
-  <Widget :options="options"  :customIndex="customIndex" :desk="desk">
+  <Widget :customIndex="customIndex" :desk="desk" :options="options">
     <WujieVue
-              width="100%"
-              height="100%"
-              :name="'dd'+Date.now()"
-              url="http://localhost:5173/#/card1"
-              :sync="true"
-              :fetch="fetch"
-              :props="{data:{
+        :fetch="fetch"
+        :name="'dd'+Date.now()"
+        :props="{data:{
                 a:1,
                 b:2
               },
               methods:{
                 showUserCard:doShowUserCard
               }}"
+        :sync="true"
+        height="100%"
+        url="http://localhost:5173/#/card1"
+        width="100%"
     ></WujieVue>
   </Widget>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 
 </style>

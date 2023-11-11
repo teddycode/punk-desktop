@@ -84,7 +84,6 @@ import ChannelIndex from '../page/channels/ChannelsIndex.vue'
 import Circle from '../page/channels/Groups.vue'
 import CircleDetail from '../page/channels/GroupsDetail.vue'
 /**聊天团队模式结束**/
-
 //导入应用路由
 import ShortcutKeyRoute from '../apps/shortcutKey/route'
 import BarrageRoute from '../apps/barrage/route'
@@ -93,571 +92,571 @@ import Power from "../page/Power.vue";
 
 
 export default [
-  {
-    path: "/main",
-    name: "main",
-    component: Main,
-    children: [
-      {
-        path: '/power',
-        name: 'power',
-        component: Power
-
-      },
-
-      {
-        path: "/inspector",
-        name: "inspector",
-        component: Inspector,
-      },
-      {
-        path: "",
-        name: "home",
-        component: Home,
-        meta:{
-          tab1:'home'
-        }
-      },
-      {
-        path: "/app",
-        name: "app",
-        component: AppFrame,
-        children: [],
-      },
-      {
-        path: "/watch",
-        name: "watch",
-        component: Watch,
-      },
-      {
-        path: "/dashboard",
-        name: "dashboard",
-        component: Dashboard,
-      },
-      {
-        path: "/social",
-        name: "social",
-        component: Social,
+    {
+        path: "/main",
+        name: "main",
+        component: Main,
         children: [
-          {
-            path: "",
-            name: "com",
-            component: Com,
-          },
-          {
-            path: "/my",
-            name: "socialMy",
-            component: SocialMy,
-          },
-          {
-            path: "/invite",
-            name: "invite",
-            component: Invite,
-          },
-          {
-            path: "/grade",
-            name: "grade",
-            component: Grade,
-          },
-          {
-            path: "/message",
-            name: "message",
-            component: Message,
-          },
-          {
-            path: "/rank",
-            name: "rank",
-            component: Rank,
-          },
-          {
-            path: "/bill",
-            name: 'bill',
-            component: BillingRecord
-          },
-          {
-            path: "/promotion",
-            name: 'promotion',
-            component: Promotion
-          }
-        ],
-      },
-      {
-        path: "/apps",
-        name: "apps",
-        component: Apps,
-      },
-      {
-        path: '/browser',
-        component: BrowserMain,
-        children: [
-          {
-            path: '',
-            name: 'browser',
-            component: BrowserIndex
-          },
-          {
-            path: '/tabs',
-            name: 'browserTabs',
-            component: BrowserTabs
-          }
-        ]
-      },
-      {
-        path: '/chat',
-        component: ChatIndex,
-        name: 'chatIndex',
-        rememberChildrenPosition: true,
-        redirect: {
-          name:'chat'
-        },
-        children: [
-          BarrageRoute,
-          {
-            path: '/chatDesk',
-            name: 'chatDesk',
-            component: ChatDesk
-          },
+            {
+                path: '/power',
+                name: 'power',
+                component: Power
 
-          {
-            path: '/chatHome',
-            name: 'chat',
-            component: Chat,
-            meta: {
-              rememberChildrenPosition: true
             },
-            redirect: {
-              name: 'chatMain',
-            },
-            children: [
-              {
-                path: '/contact',
-                name: 'contact',
-                component: Contact,
-                meta: {
-                  type: 'contact',
-                  tab1:'community',
-                  tab2: 'chat',
-                  tab3:'contact'
-                }
-              },
-              {
-                path: '/chatMain',
-                name: 'chatMain',
-                component: ChatMain,
-                meta: {
-                  type: 'chat',
-                  tab1:'community',
-                  tab2: 'chat',
-                  tab3:'session'
-                }
-              },
-              {
-                path: '/chatAdmin',
-                name: 'chatAdmin',
-                component: ChatAdmin,
-                meta: {
-                  type: 'chatAdmin',
-                  tab1:'community',
-                  tab2: 'chat',
-                  tab3:'admin'
-                }
-              },
-              {
-                path: '/chatFind',
-                name: 'chatFind',
-                component: ChatFind,
-                meta: {
-                  type: 'find',
-                  tab1:'community',
-                  tab2: 'chat',
-                  tab3:'find'
-                }
-              },
-              {
-                path:'/community',
-                name:'defaultCommunity',
-                component:CommunityIndex,
-                props:true,
-                meta: {
-                  tab1:'community',
-                  tab2: 'chat',
-                  tab3:'community'
-                }
-              },
-              {
-                path:'/myCommunity/:no',
-                name:'myCommunity',
-                component:MyCommunity,
-                props:true,
-                meta: {
-                  tab1:'community',
-                  tab2: 'chat',
-                  tab3:'community_{no}',
-                }
-              }
-            ]
-          },
 
-          {
-            path: "/team",
-            name: "team",
-            component: Team,
-            children: [
-              {
+            {
+                path: "/inspector",
+                name: "inspector",
+                component: Inspector,
+            },
+            {
                 path: "",
-                name: "hall",
+                name: "home",
+                component: Home,
                 meta: {
-                  tab1:'community',
-                  tab2: 'team',
-                },
-                component: Hall,
-              },
-            ],
-          },
-          {
-            path:'/channel',
-            name:'channel',
-            component:Channel,
-            // meta:{
-            //   tab1:'channel'
-            // },
-            redirect:{
-              name:'channelsIndex'
-            },
-            children:[
-              {
-                path:'',
-                name:'channelsIndex',
-                meta:{
-                  tab1:'community',
-                  tab2:'channel'
-                },
-                component:ChannelIndex
-              },
-              {
-                path:"",
-                name:'circle',
-                meta:{
-                  tab1:'community',
-                  tab2:'channel'
-                },
-                component:Circle
-              },
-              {
-                path:"",
-                name:'circleDetail',
-                meta:{
-                  tab1:'community',
-                  tab2:'channel'
-                },
-                component:CircleDetail
-              }
-            ]
-          }
-
-        ]
-      },
-
-      {
-        path: "/music",
-        name: "music",
-        component: Music,
-      },
-      {
-        path: "/weather",
-        name: "weather",
-        component: Weather,
-      },
-      {
-        path: "/gameAssistant",
-        name: "gameAssistant",
-        component: GameAssistant,
-        children: [
-          {
-            path: "/gameIndex",
-            name: "gameIndex",
-            component: GameIndex,
-            meta:{
-              tab1:'game'
-            }
-          },
-          {
-            path: "/gameSetting",
-            name: "gameSetting",
-            component: GameSetting,
-            meta:{
-              tab1:'game'
-            }
-          },
-          {
-            path: "/gameCommunity",
-            name: "gameCommunity",
-            component: GameCommunity,
-            meta:{
-              tab1:'game'
-            }
-          },
-          {
-            path: "/gameMedia",
-            name: "gameMedia",
-            component: GameMedia,
-            meta:{
-              tab1:'game'
-            }
-          },
-          {
-            path: "/gameDiscount",
-            name: "recommend",
-            component: GameDiscount,
-            meta:{
-              tab1:'game'
-            }
-          },
-          {
-            path: "/gameIntroduction",
-            name: "gameIntroduction",
-            component: GameIntroduction,
-            meta:{
-              tab1:'game'
-            }
-          },
-          {
-            path: "/myGame",
-            name: "myGame",
-            component: MyGame,
-            meta:{
-              tab1:'game'
-            }
-          },
-          {
-            path: "/GameDiscountDetail",
-            name: "GameDiscountDetail",
-            component: GameDiscountDetail,
-            props: true,
-            meta:{
-              tab1:'game'
-            }
-          },
-          {
-            path: "/GameCapture",
-            name: 'GameCapture',
-            component: GameCapture,
-            meta:{
-              tab1:'game'
-            }
-          }
-        ],
-      },
-
-      {
-        path: "/work",
-        name: 'work',
-        component: WorkIndex,
-        meta: {
-          rememberChildrenPosition: true
-        },
-        redirect: '/desk',
-        children: [
-          {
-            path: '/Note',
-            name: 'note',
-            component: Note,
-            meta:{
-              tab1:'work',
-              tab2:'note'
-            }
-          },
-          {
-            path: "/deck",
-            name: "deckIndex",
-            component: DeckIndex,
-            children: [
-              {
-                path: '',
-                name: 'deck',
-                component: DeckHome,
-                meta:{
-                  tab1:'work',
-                  tab2:'deck'
+                    tab1: 'home'
                 }
-              },
-              {
-                path: "/add",
-                name: 'deckAdd',
-                component: DeckAdd
-              }
-            ]
-          },
-          {
-            path: '/TomatoStart',
-            name: 'tomatoStart',
-            component: TomatoStart
-          },
+            },
+            {
+                path: "/app",
+                name: "app",
+                component: AppFrame,
+                children: [],
+            },
+            {
+                path: "/watch",
+                name: "watch",
+                component: Watch,
+            },
+            {
+                path: "/dashboard",
+                name: "dashboard",
+                component: Dashboard,
+            },
+            {
+                path: "/social",
+                name: "social",
+                component: Social,
+                children: [
+                    {
+                        path: "",
+                        name: "com",
+                        component: Com,
+                    },
+                    {
+                        path: "/my",
+                        name: "socialMy",
+                        component: SocialMy,
+                    },
+                    {
+                        path: "/invite",
+                        name: "invite",
+                        component: Invite,
+                    },
+                    {
+                        path: "/grade",
+                        name: "grade",
+                        component: Grade,
+                    },
+                    {
+                        path: "/message",
+                        name: "message",
+                        component: Message,
+                    },
+                    {
+                        path: "/rank",
+                        name: "rank",
+                        component: Rank,
+                    },
+                    {
+                        path: "/bill",
+                        name: 'bill',
+                        component: BillingRecord
+                    },
+                    {
+                        path: "/promotion",
+                        name: 'promotion',
+                        component: Promotion
+                    }
+                ],
+            },
+            {
+                path: "/apps",
+                name: "apps",
+                component: Apps,
+            },
+            {
+                path: '/browser',
+                component: BrowserMain,
+                children: [
+                    {
+                        path: '',
+                        name: 'browser',
+                        component: BrowserIndex
+                    },
+                    {
+                        path: '/tabs',
+                        name: 'browserTabs',
+                        component: BrowserTabs
+                    }
+                ]
+            },
+            {
+                path: '/chat',
+                component: ChatIndex,
+                name: 'chatIndex',
+                rememberChildrenPosition: true,
+                redirect: {
+                    name: 'chat'
+                },
+                children: [
+                    BarrageRoute,
+                    {
+                        path: '/chatDesk',
+                        name: 'chatDesk',
+                        component: ChatDesk
+                    },
 
-          {
-            path: '/Tomato',
-            name: 'tomato',
-            component: Tomato
-          },
-          {
-            path: '/desk',
-            name: 'workDesk',
-            component: WorkDesk,
-            meta:{
-              tab1:'work',
-              tab2:'workDesk'
-            }
-          },
-          {
-            path: "/ai",
-            name: "ai",
-            component: AIAssistant,
-            meta:{
-              tab1:'work',
-              tab2:'ai'
-            }
-          },
-          {
-            path: '/clipboard',
-            name: 'clipboard',
-            component: Clipboard,
-            meta:{
-              tab1:'work',
-              tab2:'clipboard'
-            }
-          },
-          ShortcutKeyRoute,
-          {
-            path: "/todo",
-            name: "todo",
-            component: Todo,
-            meta:{
-              tab1:'work',
-              tab2:'todo'
-            }
-          }
-        ]
-      },
+                    {
+                        path: '/chatHome',
+                        name: 'chat',
+                        component: Chat,
+                        meta: {
+                            rememberChildrenPosition: true
+                        },
+                        redirect: {
+                            name: 'chatMain',
+                        },
+                        children: [
+                            {
+                                path: '/contact',
+                                name: 'contact',
+                                component: Contact,
+                                meta: {
+                                    type: 'contact',
+                                    tab1: 'community',
+                                    tab2: 'chat',
+                                    tab3: 'contact'
+                                }
+                            },
+                            {
+                                path: '/chatMain',
+                                name: 'chatMain',
+                                component: ChatMain,
+                                meta: {
+                                    type: 'chat',
+                                    tab1: 'community',
+                                    tab2: 'chat',
+                                    tab3: 'session'
+                                }
+                            },
+                            {
+                                path: '/chatAdmin',
+                                name: 'chatAdmin',
+                                component: ChatAdmin,
+                                meta: {
+                                    type: 'chatAdmin',
+                                    tab1: 'community',
+                                    tab2: 'chat',
+                                    tab3: 'admin'
+                                }
+                            },
+                            {
+                                path: '/chatFind',
+                                name: 'chatFind',
+                                component: ChatFind,
+                                meta: {
+                                    type: 'find',
+                                    tab1: 'community',
+                                    tab2: 'chat',
+                                    tab3: 'find'
+                                }
+                            },
+                            {
+                                path: '/community',
+                                name: 'defaultCommunity',
+                                component: CommunityIndex,
+                                props: true,
+                                meta: {
+                                    tab1: 'community',
+                                    tab2: 'chat',
+                                    tab3: 'community'
+                                }
+                            },
+                            {
+                                path: '/myCommunity/:no',
+                                name: 'myCommunity',
+                                component: MyCommunity,
+                                props: true,
+                                meta: {
+                                    tab1: 'community',
+                                    tab2: 'chat',
+                                    tab3: 'community_{no}',
+                                }
+                            }
+                        ]
+                    },
 
-      {
-        path: "/status",
-        name: "status",
-        component: Status,
-      },
-      {
-        path: "/sensor",
-        name: "sensor",
-        component: Sensor,
-      },
-      {
-        path: "/setting",
-        name: "setting",
-        component: Setting,
-      },
-      {
-        path: "/basicSetting",
-        name: "basicSetting",
-        component: BasicSetting,
-        children: [
-          {
-            path: "",
-            name: "common",
-            component: Common,
-          },
-          {
-            path: "/key",
-            name: "key",
-            component: Key,
-          },
-          {
-            path: "/browser",
-            name: "browserSetting",
-            component: BrowserSetting,
-          },
-          {
-            path: "/subscreen",
-            name: "subscreen",
-            component: Subscreen,
-          },
-          {
-            path: "/barrage",
-            name: "barrageSetting",
-            component: BarrageSetting,
-          },
+                    {
+                        path: "/team",
+                        name: "team",
+                        component: Team,
+                        children: [
+                            {
+                                path: "",
+                                name: "hall",
+                                meta: {
+                                    tab1: 'community',
+                                    tab2: 'team',
+                                },
+                                component: Hall,
+                            },
+                        ],
+                    },
+                    {
+                        path: '/channel',
+                        name: 'channel',
+                        component: Channel,
+                        // meta:{
+                        //   tab1:'channel'
+                        // },
+                        redirect: {
+                            name: 'channelsIndex'
+                        },
+                        children: [
+                            {
+                                path: '',
+                                name: 'channelsIndex',
+                                meta: {
+                                    tab1: 'community',
+                                    tab2: 'channel'
+                                },
+                                component: ChannelIndex
+                            },
+                            {
+                                path: "",
+                                name: 'circle',
+                                meta: {
+                                    tab1: 'community',
+                                    tab2: 'channel'
+                                },
+                                component: Circle
+                            },
+                            {
+                                path: "",
+                                name: 'circleDetail',
+                                meta: {
+                                    tab1: 'community',
+                                    tab2: 'channel'
+                                },
+                                component: CircleDetail
+                            }
+                        ]
+                    }
+
+                ]
+            },
+
+            {
+                path: "/music",
+                name: "music",
+                component: Music,
+            },
+            {
+                path: "/weather",
+                name: "weather",
+                component: Weather,
+            },
+            {
+                path: "/gameAssistant",
+                name: "gameAssistant",
+                component: GameAssistant,
+                children: [
+                    {
+                        path: "/gameIndex",
+                        name: "gameIndex",
+                        component: GameIndex,
+                        meta: {
+                            tab1: 'game'
+                        }
+                    },
+                    {
+                        path: "/gameSetting",
+                        name: "gameSetting",
+                        component: GameSetting,
+                        meta: {
+                            tab1: 'game'
+                        }
+                    },
+                    {
+                        path: "/gameCommunity",
+                        name: "gameCommunity",
+                        component: GameCommunity,
+                        meta: {
+                            tab1: 'game'
+                        }
+                    },
+                    {
+                        path: "/gameMedia",
+                        name: "gameMedia",
+                        component: GameMedia,
+                        meta: {
+                            tab1: 'game'
+                        }
+                    },
+                    {
+                        path: "/gameDiscount",
+                        name: "recommend",
+                        component: GameDiscount,
+                        meta: {
+                            tab1: 'game'
+                        }
+                    },
+                    {
+                        path: "/gameIntroduction",
+                        name: "gameIntroduction",
+                        component: GameIntroduction,
+                        meta: {
+                            tab1: 'game'
+                        }
+                    },
+                    {
+                        path: "/myGame",
+                        name: "myGame",
+                        component: MyGame,
+                        meta: {
+                            tab1: 'game'
+                        }
+                    },
+                    {
+                        path: "/GameDiscountDetail",
+                        name: "GameDiscountDetail",
+                        component: GameDiscountDetail,
+                        props: true,
+                        meta: {
+                            tab1: 'game'
+                        }
+                    },
+                    {
+                        path: "/GameCapture",
+                        name: 'GameCapture',
+                        component: GameCapture,
+                        meta: {
+                            tab1: 'game'
+                        }
+                    }
+                ],
+            },
+
+            {
+                path: "/work",
+                name: 'work',
+                component: WorkIndex,
+                meta: {
+                    rememberChildrenPosition: true
+                },
+                redirect: '/desk',
+                children: [
+                    {
+                        path: '/Note',
+                        name: 'note',
+                        component: Note,
+                        meta: {
+                            tab1: 'work',
+                            tab2: 'note'
+                        }
+                    },
+                    {
+                        path: "/deck",
+                        name: "deckIndex",
+                        component: DeckIndex,
+                        children: [
+                            {
+                                path: '',
+                                name: 'deck',
+                                component: DeckHome,
+                                meta: {
+                                    tab1: 'work',
+                                    tab2: 'deck'
+                                }
+                            },
+                            {
+                                path: "/add",
+                                name: 'deckAdd',
+                                component: DeckAdd
+                            }
+                        ]
+                    },
+                    {
+                        path: '/TomatoStart',
+                        name: 'tomatoStart',
+                        component: TomatoStart
+                    },
+
+                    {
+                        path: '/Tomato',
+                        name: 'tomato',
+                        component: Tomato
+                    },
+                    {
+                        path: '/desk',
+                        name: 'workDesk',
+                        component: WorkDesk,
+                        meta: {
+                            tab1: 'work',
+                            tab2: 'workDesk'
+                        }
+                    },
+                    {
+                        path: "/ai",
+                        name: "ai",
+                        component: AIAssistant,
+                        meta: {
+                            tab1: 'work',
+                            tab2: 'ai'
+                        }
+                    },
+                    {
+                        path: '/clipboard',
+                        name: 'clipboard',
+                        component: Clipboard,
+                        meta: {
+                            tab1: 'work',
+                            tab2: 'clipboard'
+                        }
+                    },
+                    ShortcutKeyRoute,
+                    {
+                        path: "/todo",
+                        name: "todo",
+                        component: Todo,
+                        meta: {
+                            tab1: 'work',
+                            tab2: 'todo'
+                        }
+                    }
+                ]
+            },
+
+            {
+                path: "/status",
+                name: "status",
+                component: Status,
+            },
+            {
+                path: "/sensor",
+                name: "sensor",
+                component: Sensor,
+            },
+            {
+                path: "/setting",
+                name: "setting",
+                component: Setting,
+            },
+            {
+                path: "/basicSetting",
+                name: "basicSetting",
+                component: BasicSetting,
+                children: [
+                    {
+                        path: "",
+                        name: "common",
+                        component: Common,
+                    },
+                    {
+                        path: "/key",
+                        name: "key",
+                        component: Key,
+                    },
+                    {
+                        path: "/browser",
+                        name: "browserSetting",
+                        component: BrowserSetting,
+                    },
+                    {
+                        path: "/subscreen",
+                        name: "subscreen",
+                        component: Subscreen,
+                    },
+                    {
+                        path: "/barrage",
+                        name: "barrageSetting",
+                        component: BarrageSetting,
+                    },
+                ],
+            },
+            {
+                path: "/setting",
+                name: "addCardSetting",
+                component: SetupCard,
+            },
+            {
+                path: "/CPUIndex",
+                name: "CPUIndex",
+                component: CPUIndex,
+            },
+            {
+                path: "/gallery",
+                name: "gallery",
+                component: Gallery,
+                children: [
+                    {
+                        path: "",
+                        name: "my",
+                        component: My,
+                    },
+                    {
+                        path: "",
+                        name: "bing",
+                        component: Bing,
+                    },
+                    {
+                        path: "",
+                        name: "wallheaven",
+                        component: Wallheaven,
+                    },
+                    {
+                        path: "",
+                        name: "pickingPaper",
+                        component: PickingPaper,
+                    },
+                    {
+                        path: "",
+                        name: "lively",
+                        component: Lively,
+                    },
+                    {
+                        path: "",
+                        name: "papersSetting",
+                        component: PapersSetting,
+                    },
+                ],
+            },
+
+
+            {
+                path: "/market",
+                name: "marketIndex",
+                component: MarketIndex,
+                children: [
+                    {
+                        path: '',
+                        name: 'market',
+                        component: MarketHome
+                    },
+                    {
+                        path: '/prop',
+                        name: 'prop',
+                        component: Prop
+                    }
+                ]
+            },
+            {
+                path: "/remoteCommunity",
+                name: "remoteCommunity",
+                component: RemoteCommunity,
+            },
+
         ],
-      },
-      {
-        path: "/setting",
-        name: "addCardSetting",
-        component: SetupCard,
-      },
-      {
-        path: "/CPUIndex",
-        name: "CPUIndex",
-        component: CPUIndex,
-      },
-      {
-        path: "/gallery",
-        name: "gallery",
-        component: Gallery,
-        children: [
-          {
-            path: "",
-            name: "my",
-            component: My,
-          },
-          {
-            path: "",
-            name: "bing",
-            component: Bing,
-          },
-          {
-            path: "",
-            name: "wallheaven",
-            component: Wallheaven,
-          },
-          {
-            path: "",
-            name: "pickingPaper",
-            component: PickingPaper,
-          },
-          {
-            path: "",
-            name: "lively",
-            component: Lively,
-          },
-          {
-            path: "",
-            name: "papersSetting",
-            component: PapersSetting,
-          },
-        ],
-      },
-
-
-      {
-        path: "/market",
-        name: "marketIndex",
-        component: MarketIndex,
-        children: [
-          {
-            path: '',
-            name: 'market',
-            component: MarketHome
-          },
-          {
-            path: '/prop',
-            name: 'prop',
-            component: Prop
-          }
-        ]
-      },
-      {
-        path: "/remoteCommunity",
-        name: "remoteCommunity",
-        component: RemoteCommunity,
-      },
-
-    ],
-  },
+    },
 ];

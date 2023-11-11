@@ -1,14 +1,14 @@
 <template>
 
-  <div style="height:100%;width: calc(100% - 20px); " v-if="currentDesk.cards">
-    <div style="width: 100%;height: 100%;" :class="notTrigger ? 'trigger' : '' " class="m-auto"
-         v-if="currentDesk.cards.length === 0">
+  <div v-if="currentDesk.cards" style="height:100%;width: calc(100% - 20px); ">
+    <div v-if="currentDesk.cards.length === 0" :class="notTrigger ? 'trigger' : '' " class="m-auto"
+         style="width: 100%;height: 100%;">
       <div style="width: 100%;height: 100%">
-        <a-result class="m-auto rounded-lg s-bg" style="margin: auto" status="success" title="使用卡片桌面"
-                  sub-title="您可以长按空白处、右键添加小组件。">
+        <a-result class="m-auto rounded-lg s-bg" status="success" style="margin: auto" sub-title="您可以长按空白处、右键添加小组件。"
+                  title="使用卡片桌面">
           <template #extra>
-            <a-button style="color: var(--active-text);" @click="newAddCard" class="mr-10 xt-active-bg" key="console"
-                      type="primary">添加第一张卡片
+            <a-button key="console" class="mr-10 xt-active-bg" style="color: var(--active-text);" type="primary"
+                      @click="newAddCard">添加第一张卡片
             </a-button>
             <a-button key="buy" @click="learn">学习</a-button>
           </template>
@@ -26,135 +26,134 @@
       </div>
     </div>
 
-    <RightMenu :menus='dropdownMenu'  class="w-full h-full"  @contextmenu="showMenu">
+    <RightMenu :menus='dropdownMenu' class="w-full h-full" @contextmenu="showMenu">
       <!-- <xt-button @click='addFreeDeskState(currentDesk.id)'>自由布局</xt-button>
       <xt-button @click='delFreeDeskState(currentDesk.id)'>默认布局</xt-button> -->
-      <FreeDesk :currentDesk="currentDesk" v-if='getFreeDeskState(currentDesk.id)' >
+      <FreeDesk v-if='getFreeDeskState(currentDesk.id)' :currentDesk="currentDesk">
         <template #item="{ data }">
-            <component   :desk="currentDesk" :is="data.data.name"  :customIndex="data.data.id" :customData="data.data.customData"  :editing="editing"/>
-          </template>
+          <component :is="data.data.name" :customData="data.data.customData" :customIndex="data.data.id"
+                     :desk="currentDesk" :editing="editing"/>
+        </template>
       </FreeDesk>
-        <vue-custom-scrollbar  v-show="!getFreeDeskState(currentDesk.id)" class="no-drag" key="scrollbar" id="scrollerBar"
-                          :settings="{...scrollbarSettings,
+      <vue-custom-scrollbar v-show="!getFreeDeskState(currentDesk.id)" id="scrollerBar" key="scrollbar" :settings="{...scrollbarSettings,
                             suppressScrollY:settings.vDirection?false: true ,
         suppressScrollX:settings.vDirection?true: false,
                           }"
-                          style="position: relative; width: 100%; height: 100%;padding-left: 10px;padding-right: 10px;display: flex;flex-direction: row">
+                            class="no-drag"
+                            style="position: relative; width: 100%; height: 100%;padding-left: 10px;padding-right: 10px;display: flex;flex-direction: row">
 
 
-
-
-      <div id="cardContent" ref="deskContainer"
-           style="
-          /*display: flex;*/
-          /*align-items: center;*/
-          /*align-content: center;*/
-        " :style="{
+        <div id="cardContent" ref="deskContainer"
+             :class="notTrigger ? 'trigger' : '' " :style="{
            // 'flex-direction': settings.vDirection?'row':'column',
            'padding-top': this.usingSettings.marginTop + 'px',
               width:settings.vDirection?'100%':'auto',
           height:settings.vDirection?'auto':'100%',
         }"
-           :class="notTrigger ? 'trigger' : '' "
-      >
-        <vuuri :key="key" v-if=" currentDesk.cards && !hide" :get-item-margin="() => {
+             style="
+          /*display: flex;*/
+          /*align-items: center;*/
+          /*align-content: center;*/
+        "
+        >
+          <vuuri v-if=" currentDesk.cards && !hide" :key="key" ref="grid" v-model="currentDesk.cards" :drag-enabled="editing" :get-item-margin="() => {
             return usingSettings.cardMargin * this.adjustZoom  + 'px';
           }
 
-          " group-id="grid.id" :drag-enabled="editing" v-model="currentDesk.cards"  :style="{
+          " :options="muuriOptions" :style="{
           width:settings.vDirection?'100%':'auto',
           height:settings.vDirection?'auto':'100%',
-    }" class="grid home-widgets" ref="grid" :options="muuriOptions">
+    }" class="grid home-widgets" group-id="grid.id">
 
-          <template #item="{ item }">
-            <div
-              :class="{editing:editing}"
-              :editing="editing"
-              :style="{ zoom: (usingSettings.cardZoom * this.adjustZoom / 100).toFixed(2), }">
+            <template #item="{ item }">
+              <div
+                  :class="{editing:editing}"
+                  :editing="editing"
+                  :style="{ zoom: (usingSettings.cardZoom * this.adjustZoom / 100).toFixed(2), }">
 
 
-              <component :desk="currentDesk" :is="item.name" :customIndex="item.id"
-                         :customData="item.customData" :editing="editing"></component>
-            </div>
+                <component :is="item.name" :customData="item.customData" :customIndex="item.id"
+                           :desk="currentDesk" :editing="editing"></component>
+              </div>
 
-          </template>
-        </vuuri>
-      </div>
-    </vue-custom-scrollbar>
-    <!-- </div> -->
-  </RightMenu>
+            </template>
+          </vuuri>
+        </div>
+      </vue-custom-scrollbar>
+      <!-- </div> -->
+    </RightMenu>
 
   </div>
 
   <transition name="fade">
-    <div class="home-blur" style="
+    <div v-if="addCardVisible" class="home-blur" style="
         position: fixed;
         top: 0;
         right: 0;
         left: 0;
         bottom: 0;
         z-index: 999;
-      " v-if="addCardVisible">
-      <NewAddCard @close="hideAddCard" @addSuccess="hideAddCard" :desk="currentDesk"
+      ">
+      <NewAddCard :desk="currentDesk" @addSuccess="hideAddCard" @close="hideAddCard"
                   @onBack="() => { this.addCardVisible = false }"></NewAddCard>
     </div>
   </transition>
 
-  <a-drawer :contentWrapperStyle="{ backgroundColor: '#1F1F1F' }" :width="120" :height="350" class="drawer"
-            style="z-index: 99999999999;"
-            placement="bottom" :visible="menuVisible" @close="onClose">
-    <a-row style="margin-top: 1em" :gutter="[20, 20]">
-      <div style="height: 200px;" class="hidden mb-3">
+  <a-drawer :contentWrapperStyle="{ backgroundColor: '#1F1F1F' }" :height="350" :visible="menuVisible" :width="120"
+            class="drawer"
+            placement="bottom" style="z-index: 99999999999;" @close="onClose">
+    <a-row :gutter="[20, 20]" style="margin-top: 1em">
+      <div class="hidden mb-3" style="height: 200px;">
       </div>
       <xt-task id='M0101' no='2' to="" @cb="newAddCard()">
         <a-col>
-          <div @click="newAddCard" class="btn">
+          <div class="btn" @click="newAddCard">
             <xt-new-icon icon='fluent:collections-add-24-regular' size='42'/>
             <div><span>添加小组件</span></div>
           </div>
         </a-col>
       </xt-task>
-      <xt-task   id='M0201' no='2' to="" @cb="newAddIcon()">
+      <xt-task id='M0201' no='2' to="" @cb="newAddIcon()">
         <a-col>
-          <div @click="newAddIcon" class="btn flex flex-col items-center">
+          <div class="btn flex flex-col items-center" @click="newAddIcon">
             <xt-new-icon icon='fluent:add-16-filled' size='42'/>
             <div><span>添加图标</span></div>
           </div>
         </a-col>
       </xt-task>
       <a-col>
-        <div @click="toggleEditing" class="btn">
-          <xt-new-icon v-if="!this.editing" icon='fluent:window-new-16-regular' size='42' />
-          <xt-new-icon  v-else  icon='fluent:record-stop-16-regular' size='42' />
+        <div class="btn" @click="toggleEditing">
+          <xt-new-icon v-if="!this.editing" icon='fluent:window-new-16-regular' size='42'/>
+          <xt-new-icon v-else icon='fluent:record-stop-16-regular' size='42'/>
           <div>
             <span v-if="!this.editing">调整布局</span><span v-else style="color: red">停止调整</span>
           </div>
         </div>
       </a-col>
-      <xt-task  id='M0103' no='2' to="" @cb="showSetting">
+      <xt-task id='M0103' no='2' to="" @cb="showSetting">
         <a-col>
-          <div @click="showSetting" class="btn">
-          <xt-new-icon  icon='fluent:settings-16-regular' size='42' />
+          <div class="btn" @click="showSetting">
+            <xt-new-icon icon='fluent:settings-16-regular' size='42'/>
             <div><span>桌面设置</span></div>
           </div>
         </a-col>
       </xt-task>
       <a-col>
-        <div @click="clear" class="btn">
-          <xt-new-icon  icon='fluent:circle-off-16-regular' size='42' />
+        <div class="btn" @click="clear">
+          <xt-new-icon icon='fluent:circle-off-16-regular' size='42'/>
 
           <div><span>清空桌面</span></div>
         </div>
       </a-col>
 
       <a-col>
-        <div v-if="!hide" @click="hideDesk" class="btn">
-          <xt-new-icon  icon='fluent:eye-off-16-regular' size='42' />
+        <div v-if="!hide" class="btn" @click="hideDesk">
+          <xt-new-icon icon='fluent:eye-off-16-regular' size='42'/>
 
           <div><span>隐藏小组件</span></div>
         </div>
-        <div v-else @click="showDesk" class="btn">
-          <xt-new-icon  icon='fluent:eye-16-regular' size='42' />
+        <div v-else class="btn" @click="showDesk">
+          <xt-new-icon icon='fluent:eye-16-regular' size='42'/>
           <div><span>显示小组件</span></div>
         </div>
       </a-col>
@@ -177,12 +176,12 @@
     <slot name="outMenu"></slot>
   </a-drawer>
   <a-drawer v-model:visible="settingVisible" placement="right">
-    <XtTab class="mb-2"
-           v-if="settingVisible"
-           style="height: 48px"
-           boxClass="p-1 xt-bg-2"
+    <XtTab v-if="settingVisible"
            v-model="currentSettingTab"
            :list="settingsTab"
+           boxClass="p-1 xt-bg-2"
+           class="mb-2"
+           style="height: 48px"
     ></XtTab>
     <template v-if="currentSettingTab==='current' && currentDesk.settings">
       <div class="line-title">基础设置</div>
@@ -204,15 +203,15 @@
 
         <div class="line">
           卡片缩放：
-          <a-slider @afterChange="update" :min="20" :max="500" v-model:value="settings.cardZoom"></a-slider>
+          <a-slider v-model:value="settings.cardZoom" :max="500" :min="20" @afterChange="update"></a-slider>
         </div>
         <div class="line">
           卡片空隙：(调大空隙可能变成瀑布流布局)
-          <a-slider :min="5" :max="30" v-model:value="settings.cardMargin"></a-slider>
+          <a-slider v-model:value="settings.cardMargin" :max="30" :min="5"></a-slider>
         </div>
         <div class="line">
           距离顶部：
-          <a-slider :min="0" :max="200" v-model:value="settings.marginTop"></a-slider>
+          <a-slider v-model:value="settings.marginTop" :max="200" :min="0"></a-slider>
         </div>
       </template>
 
@@ -224,12 +223,12 @@
     </template>
     <template v-else>
       <div class="line-title">卡片设置：</div>
-<!-- <xt-text class=" xt-bg-2 rounded-xl p-3 mb-1">
-  <div class=" flex flex-col">
-    <div >自由布局（开发中）：<a-switch v-model:checked="freeDeskState" /></div>
-    <xt-text type="2">该功能尚未完成 可能会产生严重bug，开启需谨慎！！！</xt-text>
-  </div>
-</xt-text> -->
+      <!-- <xt-text class=" xt-bg-2 rounded-xl p-3 mb-1">
+        <div class=" flex flex-col">
+          <div >自由布局（开发中）：<a-switch v-model:checked="freeDeskState" /></div>
+          <xt-text type="2">该功能尚未完成 可能会产生严重bug，开启需谨慎！！！</xt-text>
+        </div>
+      </xt-text> -->
       <template v-if="settings.enableZoom">
         <div class="mb-2" style="color:orangered">
           <icon icon="tishi-xianxing"></icon>
@@ -238,15 +237,15 @@
       </template>
       <div class="line">
         卡片缩放：
-        <a-slider @afterChange="update" :min="20" :max="500" v-model:value="globalSettings.cardZoom"></a-slider>
+        <a-slider v-model:value="globalSettings.cardZoom" :max="500" :min="20" @afterChange="update"></a-slider>
       </div>
       <div class="line">
         卡片空隙：(调大空隙可能变成瀑布流布局)
-        <a-slider :min="5" :max="30" v-model:value="globalSettings.cardMargin"></a-slider>
+        <a-slider v-model:value="globalSettings.cardMargin" :max="30" :min="5"></a-slider>
       </div>
       <div class="line">
         距离顶部：
-        <a-slider :min="0" :max="200" v-model:value="globalSettings.marginTop"></a-slider>
+        <a-slider v-model:value="globalSettings.marginTop" :max="200" :min="0"></a-slider>
       </div>
       <slot name="settingsAllAfter">
       </slot>
@@ -256,15 +255,15 @@
   </a-drawer>
 
   <transition name="fade">
-    <div class="" style="
+    <div v-if="iconVisible" class="" style="
          position: fixed;
          top: 0;
          right: 0;
          left: 0;
          bottom: 0;
          z-index: 999;
-       " v-if="iconVisible">
-      <AddIcon @setCustoms="setCustoms" @close="iconHide" :desk="currentDesk"></AddIcon>
+       ">
+      <AddIcon :desk="currentDesk" @close="iconHide" @setCustoms="setCustoms"></AddIcon>
     </div>
   </transition>
 
@@ -273,106 +272,107 @@
 <script>
 
 import Muuri from 'muuri'
-import { message, Modal } from 'ant-design-vue'
-import { mapWritableState ,mapActions} from 'pinia'
-import { appStore } from '../../store'
+import {message, Modal} from 'ant-design-vue'
+import {mapActions, mapWritableState} from 'pinia'
+import {appStore} from '../../store'
 
 import {useWidgetStore} from "../card/store.ts"
 import {useFreeDeskStore} from './free/store'
-import componentsMinis  from "./components.ts"
+import componentsMinis from "./components.ts"
+
 export default {
   name: 'Desk',
   emits: ['changeEditing'],
-mixins:[componentsMinis],
+  mixins: [componentsMinis],
   props:
-    {
-      deskGroupMenu:{
-        default: () => {
-          return []
-        }
-      },
-      globalSettings: {
-        type: Object,
-        default: {}
-      },
-      editing: {
-        type: Boolean,
-        required: true,
-        default: false,
-      },
-      currentDesk: {
-        type: Object,
-        required: true,
-        default: () => {
-          return { cards: [] }
-        }
-
-      },
-      muuriOptions: {
-        type: Object,
-        required: false,
-        default: () => {
-          return {
-            // dragStartPredicate: {
-            //   distance: 10,
-            //   delay: 1000,
-            // },
-            dragAutoScroll: {},
-            layout: {
-              // fillGaps: true,
-              // horizontal: false,
-              alignRight: false,
-              alignBottom: false,
-              // rounding: true
-            },
-            targets: [
-              {
-                element: '#scrollerBar>div',
-              },
-            ],
-            handle: null,
-            threshold: 50,
-            safeZone: 0.2,
-            speed: Muuri.AutoScroller.smoothSpeed(1000, 2000, 2500),
-            sortDuringScroll: true,
-            smoothStop: false,
-            onStart: null,
-            onStop: null,
-            dragSortPredicate: {
-              threshold: 30,
-            },
-            dragSortHeuristics: {
-              sortInterval: 10,
-              minDragDistance: 5,
-              minBounceBackAngle: Math.PI / 2,
-            },
-
+      {
+        deskGroupMenu: {
+          default: () => {
+            return []
           }
-        }
-      },
-      settings: {
-        type: Object,
-        required: false,
-        default: {
-          cardZoom: 100,
-          marginTop: 0,
-          cardMargin: 5,//卡片间隙
-          vDirection: false,
-        }
-      },
-      notTrigger: {
-        type: Boolean,
-        default: () => false
-      },
+        },
+        globalSettings: {
+          type: Object,
+          default: {}
+        },
+        editing: {
+          type: Boolean,
+          required: true,
+          default: false,
+        },
+        currentDesk: {
+          type: Object,
+          required: true,
+          default: () => {
+            return {cards: []}
+          }
 
-    }
+        },
+        muuriOptions: {
+          type: Object,
+          required: false,
+          default: () => {
+            return {
+              // dragStartPredicate: {
+              //   distance: 10,
+              //   delay: 1000,
+              // },
+              dragAutoScroll: {},
+              layout: {
+                // fillGaps: true,
+                // horizontal: false,
+                alignRight: false,
+                alignBottom: false,
+                // rounding: true
+              },
+              targets: [
+                {
+                  element: '#scrollerBar>div',
+                },
+              ],
+              handle: null,
+              threshold: 50,
+              safeZone: 0.2,
+              speed: Muuri.AutoScroller.smoothSpeed(1000, 2000, 2500),
+              sortDuringScroll: true,
+              smoothStop: false,
+              onStart: null,
+              onStop: null,
+              dragSortPredicate: {
+                threshold: 30,
+              },
+              dragSortHeuristics: {
+                sortInterval: 10,
+                minDragDistance: 5,
+                minBounceBackAngle: Math.PI / 2,
+              },
+
+            }
+          }
+        },
+        settings: {
+          type: Object,
+          required: false,
+          default: {
+            cardZoom: 100,
+            marginTop: 0,
+            cardMargin: 5,//卡片间隙
+            vDirection: false,
+          }
+        },
+        notTrigger: {
+          type: Boolean,
+          default: () => false
+        },
+
+      }
   ,
 
   watch: {
     freeDeskState(newV) {
       this.renewFreeDeskState(this.currentDesk.id)
     },
-    currentDesk (newVal) {
+    currentDesk(newVal) {
       newVal.layoutSize = this.getLayoutSize()
       // if (!newVal.settings) {
       //   newVal.settings=
@@ -383,99 +383,101 @@ mixins:[componentsMinis],
       //     vDirection: false,
       //   }
       // }
-      this.muuriOptions.layout.horizontal =! newVal.settings?.vDirection
+      this.muuriOptions.layout.horizontal = !newVal.settings?.vDirection
     },
 
     'currentDesk.settings': {
-      handler (newVal) {
+      handler(newVal) {
         console.log('更改了方向')
         console.log()
-        if(!newVal){
-          newVal={
+        if (!newVal) {
+          newVal = {
             cardZoom: 100,
             marginTop: 0,
             cardMargin: 5,//卡片间隙
             vDirection: false,
           }
         }
-        this.muuriOptions.layout.horizontal =! newVal.vDirection
-        this.currentDesk.settings=newVal
+        this.muuriOptions.layout.horizontal = !newVal.vDirection
+        this.currentDesk.settings = newVal
         this.update()
 
       },
       deep: true,
       immediate: true,
     },
-    'currentDesk.settings.vDirection':{
-      handler (newVal) {
+    'currentDesk.settings.vDirection': {
+      handler(newVal) {
         console.log('更新了方向，重载')
-        this.key=Date.now()
-        console.log(this.muuriOptions.layout,'murri参数')
+        this.key = Date.now()
+        console.log(this.muuriOptions.layout, 'murri参数')
       },
-      deep:true
+      deep: true
     }
   },
   computed: {
     ...mapWritableState(appStore, ['fullScreen']),
     ...mapWritableState(useWidgetStore, ['rightModel']),
-   deskGroupMenus() {
-    if (this.deskGroupMenu && this.deskGroupMenu.length > 1) {
-      let arr = [...this.deskGroupMenu[1].children];
-      let exists = arr.some(item => item.id === 4);
-      if (!exists) {
+    deskGroupMenus() {
+      if (this.deskGroupMenu && this.deskGroupMenu.length > 1) {
+        let arr = [...this.deskGroupMenu[1].children];
+        let exists = arr.some(item => item.id === 4);
+        if (!exists) {
           arr.push({
-              id: 4,
-              newIcon: "fluent:circle-off-16-regular",
-              name: "清空桌面",
-              fn: this.clear
+            id: 4,
+            newIcon: "fluent:circle-off-16-regular",
+            name: "清空桌面",
+            fn: this.clear
           });
+        }
+        arr.sort((a, b) => a.id - b.id);
+        let deskGroupMenu = [...this.deskGroupMenu]
+        deskGroupMenu[1].children = [...arr]
+        return deskGroupMenu;
       }
-      arr.sort((a, b) => a.id - b.id);
-      let deskGroupMenu = [...this.deskGroupMenu]
-      deskGroupMenu[1].children = [...arr]
-      return deskGroupMenu;
-     }
       return []
-  },
+    },
 
     deskMenus() {
       return [
-          {
-            id:1,
-            newIcon:"fluent:add-16-filled",
-            name:"添加图标",
-            fn:this.newAddIcon,
-          },
-          {
-            id:2,
-              newIcon:"fluent:collections-add-24-regular",
-            name:"添加小组件",
-            fn:this.newAddCard,
-          },
-          { id:4,
-            divider:true
-          },
-          {
-            id:5,
-              newIcon:this.editing ? "fluent:record-stop-16-regular":"fluent:window-new-16-regular",
-            name:this.editing ? '停止调整':'调整桌面布局',
-            fn:this.toggleEditing,
-          },
-          {
-            id:6,
-              newIcon:this.hide ? 'fluent:eye-16-regular':"fluent:eye-off-16-regular",
-            name:this.hide ? '显示小组件':"隐藏小组件",
-            fn: this.hide ? this.showDesk :this.hideDesk
-          },
-          {id:7,
-            divider:true
-          },
-          {
-            id:8,
-              newIcon:"fluent:settings-16-regular",
-            name:"桌面设置",
-            fn:this.showSetting,
-          },
+        {
+          id: 1,
+          newIcon: "fluent:add-16-filled",
+          name: "添加图标",
+          fn: this.newAddIcon,
+        },
+        {
+          id: 2,
+          newIcon: "fluent:collections-add-24-regular",
+          name: "添加小组件",
+          fn: this.newAddCard,
+        },
+        {
+          id: 4,
+          divider: true
+        },
+        {
+          id: 5,
+          newIcon: this.editing ? "fluent:record-stop-16-regular" : "fluent:window-new-16-regular",
+          name: this.editing ? '停止调整' : '调整桌面布局',
+          fn: this.toggleEditing,
+        },
+        {
+          id: 6,
+          newIcon: this.hide ? 'fluent:eye-16-regular' : "fluent:eye-off-16-regular",
+          name: this.hide ? '显示小组件' : "隐藏小组件",
+          fn: this.hide ? this.showDesk : this.hideDesk
+        },
+        {
+          id: 7,
+          divider: true
+        },
+        {
+          id: 8,
+          newIcon: "fluent:settings-16-regular",
+          name: "桌面设置",
+          fn: this.showSetting,
+        },
       ]
     },
     dropdownMenu() {
@@ -483,7 +485,7 @@ mixins:[componentsMinis],
       arr.sort((a, b) => a.id - b.id);
       return arr;
     },
-    usingSettings () {
+    usingSettings() {
       if (this.settings.enableZoom) {
         return this.settings
       } else {
@@ -491,10 +493,10 @@ mixins:[componentsMinis],
       }
     }
   },
-  data () {
+  data() {
     return {
-      freeDeskState:false,
-      stashBound: { width: 0, height: 0, zoom: 0 },
+      freeDeskState: false,
+      stashBound: {width: 0, height: 0, zoom: 0},
       adjustZoom: 1,
       iconVisible: false,
       settingVisible: false,
@@ -511,14 +513,14 @@ mixins:[componentsMinis],
         currentItemId: -1,
       },
       settingsTab: [
-        { name: '通用桌面设置', value: 'all' },
-        { name: '当前桌面设置', value: 'current' }
+        {name: '通用桌面设置', value: 'all'},
+        {name: '当前桌面设置', value: 'current'}
       ],
       currentSettingTab: 'all',
       resizeHandler: null
     }
   },
-  mounted () {
+  mounted() {
     this.resizeHandler = () => {
       this.currentDesk.layoutSize = this.getLayoutSize()
     }
@@ -526,24 +528,24 @@ mixins:[componentsMinis],
 
     window.addEventListener('resize', this.resizeHandler)
   },
-  unmounted () {
+  unmounted() {
     window.removeEventListener('resize', this.resizeHandler)
   },
   methods: {
-    ...mapActions(useFreeDeskStore,['addFreeDeskState','getFreeDeskState','delFreeDeskState','renewFreeDeskState']),
-    learn () {
+    ...mapActions(useFreeDeskStore, ['addFreeDeskState', 'getFreeDeskState', 'delFreeDeskState', 'renewFreeDeskState']),
+    learn() {
       browser.openInTable('https://www.bilibili.com/video/BV1Th4y1o7SZ/?vd_source=2b7e342ffb60104849f5db6262bb1e0b')
     },
-    update () {
+    update() {
       if (this.$refs.grid) {
         this.$refs.grid.update()
       }
 
     },
-    hideMenu () {
+    hideMenu() {
       this.menuVisible = false
     },
-    toggleEditing () {
+    toggleEditing() {
 
       if (this.editing) {
         message.info('已关闭拖拽调整')
@@ -554,25 +556,25 @@ mixins:[componentsMinis],
       this.$emit('changeEditing', this.editing)
       this.menuVisible = false
       this.key = Date.now()
-      console.log(this.muuriOptions,'ediingt输出')
+      console.log(this.muuriOptions, 'ediingt输出')
     },
-    showSetting () {
+    showSetting() {
       this.settingVisible = true
       this.menuVisible = false
     },
-    hideDesk () {
+    hideDesk() {
       this.hide = !this.hide
       this.menuVisible = false
     },
-    iconHide () {
+    iconHide() {
       this.iconVisible = false
     },
 
-    showDesk () {
+    showDesk() {
       this.hide = !this.hide
       this.menuVisible = false
     },
-    clear () {
+    clear() {
       this.menuVisible = false
       let desk = this.currentDesk
       if (desk) {
@@ -587,29 +589,29 @@ mixins:[componentsMinis],
         })
       }
     },
-    newAddCard () {
+    newAddCard() {
       this.addCardVisible = true
       // addCardVisible
       this.menuVisible = false
     },
-    hideAddCard () {
+    hideAddCard() {
       this.addCardVisible = false
     },
-    onClose () {
+    onClose() {
       this.menuVisible = false
     },
-    showMenu () {
+    showMenu() {
       if (!this.notTrigger && this.rightModel !== 'follow') this.menuVisible = true
     },
     // 添加图标
-    newAddIcon () {
+    newAddIcon() {
       this.iconVisible = true
       this.menuVisible = false
     },
     /**
      * 暂存布局，与restore结对使用。
      */
-    stashLayout () {
+    stashLayout() {
       let bound = {
         width: this.$refs.deskContainer.clientWidth,
         height: this.$refs.deskContainer.clientHeight
@@ -619,7 +621,7 @@ mixins:[componentsMinis],
     /**
      * 恢复布局
      */
-    restoreLayout (rate = 0) {
+    restoreLayout(rate = 0) {
       if (rate) {
         this.adjustZoom = 1
         this.update()
@@ -637,13 +639,13 @@ mixins:[componentsMinis],
      * 获取当前布局的宽高
      * @returns {{width: number, height: number}}
      */
-    getLayoutSize () {
+    getLayoutSize() {
       this.currentDesk.layoutSize = {
         width: this.$refs.deskContainer.clientWidth,
         height: this.$refs.deskContainer.clientHeight
       }
       if (this.currentDesk?.settings?.preparing) {
-        message.loading({ content: '此桌面为首次使用，正在为您适配您的桌面…', key: 'preparing' })
+        message.loading({content: '此桌面为首次使用，正在为您适配您的桌面…', key: 'preparing'})
         this.setFullScreen(true, () => {
           setTimeout(() => {
             this.$nextTick(() => {
@@ -656,7 +658,7 @@ mixins:[componentsMinis],
               settings.cardZoom = (settings.cardZoom * fullLayoutSize.height / oldLayoutSize.height / this.adjustZoom).toFixed()
               settings.cardMargin = (settings.cardMargin * fullLayoutSize.height / oldLayoutSize.height / this.adjustZoom).toFixed()
               //todo竖屏界面不一样
-              message.success({ content: '此桌面为首次使用，已为您适配您的当前窗口。', key: 'preparing' })
+              message.success({content: '此桌面为首次使用，已为您适配您的当前窗口。', key: 'preparing'})
               settings.preparing = false
               this.setFullScreen(false)
               delete settings.layoutSize
@@ -668,7 +670,7 @@ mixins:[componentsMinis],
 
       return this.currentDesk.layoutSize
     },
-    setFullScreen (flag, cb) {
+    setFullScreen(flag, cb) {
       this.stashLayout()
       this.fullScreen = flag
       this.$nextTick(() => {
@@ -681,14 +683,14 @@ mixins:[componentsMinis],
 
       })
     },
-    getAdjustZoom () {
+    getAdjustZoom() {
       return this.adjustZoom
     }
   }
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .grid {
   position: relative;
   //display: inline-block;
@@ -733,7 +735,7 @@ mixins:[componentsMinis],
   }
 }
 </style>
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .grid {
   position: relative;
   //display: inline-block;
@@ -751,8 +753,9 @@ mixins:[componentsMinis],
 
 .btn {
   text-align: center;
-display:flex;
-flex-direction: column;align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 //@media screen and (min-height: 1020px) and (max-height: 1600px) {

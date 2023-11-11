@@ -3,25 +3,25 @@ import {defineComponent} from 'vue'
 
 export default defineComponent({
   name: "MedalNo",
-  props:['no']
+  props: ['no']
 })
 </script>
 
 <template>
  <span v-if="no === 1">
-              <a-avatar src="/img/rankingList/one.png" :size="32"></a-avatar>
+              <a-avatar :size="32" src="/img/rankingList/one.png"></a-avatar>
             </span>
   <span v-else-if="no === 2">
-              <a-avatar src="/img/rankingList/two.png" :size="32"></a-avatar>
+              <a-avatar :size="32" src="/img/rankingList/two.png"></a-avatar>
             </span>
   <span v-else-if="no === 3">
-              <a-avatar src="/img/rankingList/three.png" :size="32"></a-avatar>
+              <a-avatar :size="32" src="/img/rankingList/three.png"></a-avatar>
             </span>
 
-  <div v-else class="ranking-back flex justify-center items-center" :style="no < 11 ? 'width:32px' : ''">{{ no }}</div>
+  <div v-else :style="no < 11 ? 'width:32px' : ''" class="ranking-back flex justify-center items-center">{{ no }}</div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .ranking-back {
   height: 32px;
   padding: 0 10px;

@@ -1,44 +1,44 @@
 <template>
   <Widget
-    :options="options"
-    :sizeList="sizeList"
-    :customData="customData"
-    :desk="desk"
-    ref="todoSlot"
-    :menuList="toggleTodoList"
+      ref="todoSlot"
+      :customData="customData"
+      :desk="desk"
+      :menuList="toggleTodoList"
+      :options="options"
+      :sizeList="sizeList"
   >
     <template #right-menu>
-      <div @click="todoPage" class="pointer float-right" style=" z-index: 0;  margin-left: 10px">
-        <RightOutlined />
+      <div class="pointer float-right" style=" z-index: 0;  margin-left: 10px" @click="todoPage">
+        <RightOutlined/>
       </div>
     </template>
 
     <div style="height:100%;">
-      <div @click="todoPage" class="pointer" style="position: absolute;left: 12px;top:12px;">
+      <div class="pointer" style="position: absolute;left: 12px;top:12px;" @click="todoPage">
         <Icon icon="check-square" style="color:var(--secondary-text);font-size:24px"></Icon>
       </div>
 
       <div class="head-title">
-        <div   @click.stop="showDrawer">{{ selectTodo.title }}
+        <div @click.stop="showDrawer">{{ selectTodo.title }}
         </div>
 
       </div>
 
-      <div @click.stop style="cursor: auto;height:calc( 100% - 30px);position: relative" class="mt-2 ">
-        <Tasklist class="content-box " :data="notFinish"></Tasklist>
+      <div class="mt-2 " style="cursor: auto;height:calc( 100% - 30px);position: relative" @click.stop>
+        <Tasklist :data="notFinish" class="content-box "></Tasklist>
 
         <div style="position:absolute;display: flex;right:0;align-content: end;bottom:0;z-index: 99">
           <div v-if="addVisible" style="display: flex;margin-bottom:-15px;width: 250px;">
-            <xt-button class="mr-2" style="margin-top:9px" @click="toggleInput" :w="42" :h="47" type="default">
+            <xt-button :h="47" :w="42" class="mr-2" style="margin-top:9px" type="default" @click="toggleInput">
               <left-outlined/>
             </xt-button>
             <div style="flex:1;">
-              <TaskInput  @added="added" :addToList="selectTodo" ref="input"></TaskInput>
+              <TaskInput ref="input" :addToList="selectTodo" @added="added"></TaskInput>
             </div>
           </div>
           <div>
 
-            <xt-button v-if="!addVisible" @click="toggleInput" :w="40" :h="40" type="theme">
+            <xt-button v-if="!addVisible" :h="40" :w="40" type="theme" @click="toggleInput">
               <plus-outlined/>
             </xt-button>
           </div>
@@ -50,20 +50,20 @@
 
     </div>
   </Widget>
-  <a-drawer v-model:visible="openSettings" title="设置" placement="right" width="500">
+  <a-drawer v-model:visible="openSettings" placement="right" title="设置" width="500">
     <div class="flex flex-col" style="color:var(--primary-text)">
       <span class="drawer-title" style="margin-top:0;">类型</span>
       <span v-for="(item,index) in todoType" :key="index"
-            @click.stop="getTodoType(item)"
             :class="selectTodo.nanoid === item.nanoid ? 'active-index':''"
-            class="mb-4  text-center pointer change h-12 xt-bg-2 rounded-lg show-game-time py-3">
+            class="mb-4  text-center pointer change h-12 xt-bg-2 rounded-lg show-game-time py-3"
+            @click.stop="getTodoType(item)">
          {{ item.title }}
       </span>
       <span class="drawer-title">清单</span>
       <span v-for="(item,index) in listType" :key="index"
-            @click.stop="getTodoType(item,index)"
             :class="selectTodo.nanoid === item.nanoid ? 'active-index':''"
-            class="mb-4  text-center pointer change h-12 xt-bg-2 rounded-lg show-game-time py-3">
+            class="mb-4  text-center pointer change h-12 xt-bg-2 rounded-lg show-game-time py-3"
+            @click.stop="getTodoType(item,index)">
          {{ item.title }}
       </span>
     </div>
@@ -72,22 +72,23 @@
 
 <script lang="ts">
 import Widget from '../../card/Widget.vue'
-import {mapActions, mapWritableState} from 'pinia'
+import {mapWritableState} from 'pinia'
 import Tasklist from './TaskList.vue'
 import {databaseStore, listStore, taskStore} from "../../../page/app/todo/store";
-import {PlusOutlined, LeftOutlined,RightOutlined} from "@ant-design/icons-vue";
+import {LeftOutlined, PlusOutlined, RightOutlined} from "@ant-design/icons-vue";
 import XtButton from "../../../ui/libs/Button/index.vue";
 import Modal from "../../Modal.vue";
 import TaskInput from "../../../page/app/todo/components/TaskInput.vue";
 import {Tippy} from "vue-tippy";
 import {message} from 'ant-design-vue'
+
 export default {
   name: 'Todo',
   components: {
     Tippy,
     TaskInput,
     Modal,
-    XtButton, PlusOutlined, LeftOutlined,RightOutlined,
+    XtButton, PlusOutlined, LeftOutlined, RightOutlined,
     Widget,
     Tasklist,
   },
@@ -158,7 +159,7 @@ export default {
 
   },
   methods: {
-    added(){
+    added() {
       this.getTodoType(this.selectTodo)
       message.success('添加任务成功。')
     },
@@ -200,7 +201,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .content-box {
   height: calc(100% - 35px);
   margin-top: 10px;

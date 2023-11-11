@@ -1,10 +1,9 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
 import Search from "../../../components/Search.vue";
 import XtButton from "../../../ui/libs/Button/index.vue";
 import {mapActions, mapWritableState} from "pinia";
 import {keyStore} from "../store";
-import {PlusOutlined, EditOutlined} from '@ant-design/icons-vue'
+import {EditOutlined, PlusOutlined} from '@ant-design/icons-vue'
 import VueCustomScrollbar from "../../../../../src/components/vue-scrollbar.vue";
 import {message, Modal} from "ant-design-vue";
 import {Icon} from "@iconify/vue";
@@ -13,17 +12,17 @@ import Preview from "./Preview.vue";
 export default {
   name: "localSchemeList",
   components: {Preview, VueCustomScrollbar, XtButton, Search, PlusOutlined, EditOutlined, Icon},
-  props: ['schemes','keywords'],
+  props: ['schemes', 'keywords'],
   data() {
     return {
       loading: true,
       shortcutSchemeList: [],
-      selectedSchemeIds:[],//选中的schemes
+      selectedSchemeIds: [],//选中的schemes
       app: {},
       exeName: '',
       selecting: false,//选择
-      previewVisible:false,
-      previewKeys:{},
+      previewVisible: false,
+      previewKeys: {},
       settings: {
         default: {
           useBothWheelAxes: true,
@@ -37,21 +36,21 @@ export default {
   },
   computed: {
     ...mapWritableState(keyStore, ['shortcutKeyList', 'schemeList', 'currentApp', 'settings']),
-    list(){
-      if(!this.keywords){
+    list() {
+      if (!this.keywords) {
         return this.schemes
-      }else{
+      } else {
         var regExp = new RegExp(this.keywords, 'i')
         return this.schemes.filter(item => {
-          let match=false
+          let match = false
           if (item.name) {
-            match=match|| item.name.match(regExp)
+            match = match || item.name.match(regExp)
           }
-          if(item.commonUse){
-            match=match || item.commonUse.match(regExp)
+          if (item.commonUse) {
+            match = match || item.commonUse.match(regExp)
           }
-          if(item.exeName){
-            match=match || item.exeName.match(regExp)
+          if (item.exeName) {
+            match = match || item.exeName.match(regExp)
           }
           return match
         })
@@ -92,21 +91,21 @@ export default {
     btnDetail(item) {
       if (this.selecting) {
         //执行选中事件
-        if(!this.selectedSchemeIds.includes(item.id)){
+        if (!this.selectedSchemeIds.includes(item.id)) {
           this.selectedSchemeIds.push(item.id)
-        }else{
-          this.selectedSchemeIds.splice(this.selectedSchemeIds.indexOf(item.id),1)
+        } else {
+          this.selectedSchemeIds.splice(this.selectedSchemeIds.indexOf(item.id), 1)
         }
         return
-      }else{
+      } else {
         console.log(item)
-        this.previewKeys=item
-        this.previewVisible=true
+        this.previewKeys = item
+        this.previewVisible = true
       }
 
     },
     cancelExport() {
-     this.selectedSchemeIds=[]
+      this.selectedSchemeIds = []
       this.selecting = false
     },
     goEdit(app) {
@@ -118,13 +117,13 @@ export default {
       })
     },
     async importSchemes() {
-     let downloadSchemes=this.schemes.filter(item=>{
-       return this.selectedSchemeIds.includes(item.id)
-     })
-      if(downloadSchemes.length===0){
+      let downloadSchemes = this.schemes.filter(item => {
+        return this.selectedSchemeIds.includes(item.id)
+      })
+      if (downloadSchemes.length === 0) {
         message.info('至少选择1个方案')
         return
-      }else{
+      } else {
 
       }
       try {
@@ -136,8 +135,8 @@ export default {
       this.selecting = false
 
     },
-    closePreview(){
-      this.previewVisible=false
+    closePreview() {
+      this.previewVisible = false
     },
     remove() {
       if (this.selectedCount === 0) {
@@ -160,7 +159,7 @@ export default {
     },
     edit() {
       this.selecting = true
-      this.selectedSchemeIds=[]
+      this.selectedSchemeIds = []
     },
     async doExport() {
       let selectedSchemes = this.shortcutSchemeList.filter(item => {
@@ -203,7 +202,7 @@ export default {
         name: 'editScheme'
       })
     },
-    isSelected(id){
+    isSelected(id) {
       return this.selectedSchemeIds.includes(id)
     }
   }
@@ -227,24 +226,24 @@ export default {
           <!--          <span class="button-active pointer" @click="setShow = true">-->
           <!--                <Icon icon="setting" style="width: 20px;height: 20px;color:var(&#45;&#45;primary-text);"></Icon>-->
           <!--            </span>-->
-<!--          <xt-button @click="createScheme">-->
-<!--            <Icon class="icon" icon="akar-icons:edit"></Icon>-->
-<!--            创建-->
-<!--          </xt-button>-->
+          <!--          <xt-button @click="createScheme">-->
+          <!--            <Icon class="icon" icon="akar-icons:edit"></Icon>-->
+          <!--            创建-->
+          <!--          </xt-button>-->
           <template v-if="selecting">
-            <xt-button type="theme" v-if="selecting" @click="importSchemes">
+            <xt-button v-if="selecting" type="theme" @click="importSchemes">
               <Icon class="icon" icon="akar-icons:download"></Icon>
               确认下载
             </xt-button>
-<!--            <xt-button type="theme" v-if="selecting" @click="doExport">-->
-<!--              <Icon class="icon" icon="akar-icons:share-box"></Icon>-->
-<!--              导出-->
-<!--            </xt-button>-->
-<!--            <xt-button type="error" v-if="selecting" @click="remove">-->
-<!--              <Icon class="icon" icon="akar-icons:trash-can"></Icon>-->
-<!--              删除-->
-<!--            </xt-button>-->
-            <xt-button class="ml-10" v-if="selecting" @click="cancelExport">
+            <!--            <xt-button type="theme" v-if="selecting" @click="doExport">-->
+            <!--              <Icon class="icon" icon="akar-icons:share-box"></Icon>-->
+            <!--              导出-->
+            <!--            </xt-button>-->
+            <!--            <xt-button type="error" v-if="selecting" @click="remove">-->
+            <!--              <Icon class="icon" icon="akar-icons:trash-can"></Icon>-->
+            <!--              删除-->
+            <!--            </xt-button>-->
+            <xt-button v-if="selecting" class="ml-10" @click="cancelExport">
               <Icon class="icon" icon="akar-icons:x-small"></Icon>
               退出
             </xt-button>
@@ -270,13 +269,13 @@ export default {
         </div>
         <div v-else class="main-part item-content"
              style="flex:1">
-          <div :class="{selectable:selecting,selected:isSelected(item.id)}" v-for="item in list"
+          <div v-for="item in list" :class="{selectable:selecting,selected:isSelected(item.id)}"
                class="flex items-center pointer" @click="btnDetail(item)">
             <span class="mx-4 h-14 w-14 flex justify-center items-center">
-                <a-avatar shape="square" :src="item.icon" :size="48"></a-avatar>
+                <a-avatar :size="48" :src="item.icon" shape="square"></a-avatar>
             </span>
-            <span class="xt-text truncate" style="max-width: 180px" :title="item.name"> {{ item.name }}
-              <div class="xt-text-2">{{item.exeName}}</div></span>
+            <span :title="item.name" class="xt-text truncate" style="max-width: 180px"> {{ item.name }}
+              <div class="xt-text-2">{{ item.exeName }}</div></span>
 
             <div class="flex flex-col justify-center items-center">
               <span>{{ item.number }}</span>
@@ -300,7 +299,7 @@ export default {
 
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .selectable {
 }
 

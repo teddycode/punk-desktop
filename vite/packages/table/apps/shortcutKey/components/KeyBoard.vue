@@ -3,7 +3,7 @@
     <div class="xt-modal box">
       <div class="box-head">
         <div class="title">选择需要的组合健</div>
-        <div @click="onBack" class="head-icon xt-text">
+        <div class="head-icon xt-text" @click="onBack">
           <Icon icon="guanbi" style="font-size: 1.5em;"></Icon>
         </div>
       </div>
@@ -14,27 +14,27 @@
             <div class="key-box mt-6">
               <div v-for="(item, index) in modifierKeyOne"
                    :key="item"
-                   :style="{backgroundColor:item.color}"
                    :class="[item.checked ? 'xt-active-btn':'', item.isGray ? 'text-gray':'']"
-                   @click="onKeyDown(item, index, 'modifierKeyOne')"
-                   class="key-item">
+                   :style="{backgroundColor:item.color}"
+                   class="key-item"
+                   @click="onKeyDown(item, index, 'modifierKeyOne')">
                 {{ item.key }}
               </div>
             </div>
           </div>
           <div class="mt-10">
-            <div class="box-foot action-panel"   >
+            <div class="box-foot action-panel">
               <div class="line-title text-center ">按键确认</div>
               <div class="active">
 
-                <div v-for="(item, index) in keyContent.keyArr" class="flex items-center" :key="item">
+                <div v-for="(item, index) in keyContent.keyArr" :key="item" class="flex items-center">
                   <!-- :style="item.field === 'keyList[0]' || item.field === 'keyList[1]' ? 'width:44px' : 'padding:0 10px;'" -->
                   <div class="key-item" style="min-width:44px;padding:0 10px;">{{ item.key }}</div>
-                  <span class="mx-3" v-if="keyContent.keyArr.length != (index + 1)">+</span>
+                  <span v-if="keyContent.keyArr.length != (index + 1)" class="mx-3">+</span>
                 </div>
               </div>
               <div class="btn-box">
-                <xt-button type="theme" style="width:100%"   @click="confirm">确定</xt-button>
+                <xt-button style="width:100%" type="theme" @click="confirm">确定</xt-button>
               </div>
             </div>
           </div>
@@ -45,8 +45,8 @@
             <div v-for="(item, index) in keyList[0]"
                  :key="item"
                  :class="item.checked ? 'xt-active-btn':'' "
-                 @click="onKeyDown(item, index, 'keyList[0]')"
-                 class="key-item w-11">
+                 class="key-item w-11"
+                 @click="onKeyDown(item, index, 'keyList[0]')">
               {{ item.key }}
             </div>
           </div>
@@ -55,8 +55,8 @@
             <div v-for="(item, index) in keyList[1]"
                  :key="item"
                  :class="item.checked ? 'xt-active-btn':'' "
-                 @click="onKeyDown(item, index, 'keyList[1]')"
-                 class="key-item w-11">
+                 class="key-item w-11"
+                 @click="onKeyDown(item, index, 'keyList[1]')">
               {{ item.key }}
             </div>
           </div>
@@ -64,8 +64,8 @@
             <div v-for="(item, index) in keyList[2]"
                  :key="item"
                  :class="item.checked ? 'xt-active-btn':'' "
-                 @click="onKeyDown(item, index, 'keyList[2]')"
-                 class="key-item px-3">
+                 class="key-item px-3"
+                 @click="onKeyDown(item, index, 'keyList[2]')">
               {{ item.key }}
             </div>
           </div>
@@ -76,41 +76,42 @@
 </template>
 
 <script>
-import { message } from 'ant-design-vue'
+import {message} from 'ant-design-vue'
 import XtButton from '../../../ui/libs/Button/index.vue'
 
 export default {
   name: 'KeyBoard',
-  components: { XtButton },
+  components: {XtButton},
   props: {
     //需要修改的内容
     selectKey: {
       type: Object,
-      defalut: () => {}
+      defalut: () => {
+      }
     },
     parentKeyList: {
       type: Array,
       defalut: () => []
     }
   },
-  data () {
+  data() {
     return {
       modifierKeyOne: [
         {
           key: 'Ctrl',
-          color:'rgb(255, 108, 97)',
+          color: 'rgb(255, 108, 97)',
           checked: false,
           isGray: false,
         },
         {
           key: 'Tab',
-          color:'rgb(80, 139, 254)',
+          color: 'rgb(80, 139, 254)',
           checked: false,
           isGray: false,
         },
         {
           key: 'Shift',
-          color:'rgb(251, 114, 153)',
+          color: 'rgb(251, 114, 153)',
           checked: false,
           isGray: false,
         },
@@ -141,17 +142,17 @@ export default {
         {
           key: 'Ctrl',
           checked: false,
-          color:'red',
+          color: 'red',
           isGray: false,
         },
         {
           key: 'Alt',
           checked: false,
-          color:'orange',
+          color: 'orange',
           isGray: false,
         },
         {
-          color:'blue',
+          color: 'blue',
           key: 'Shift',
           checked: false,
           isGray: false,
@@ -518,7 +519,7 @@ export default {
       keyContent: {}
     }
   },
-  mounted () {
+  mounted() {
     this.keyContent = this.deepClone(this.selectKey, this.keyContent)
     this.keyContent.keyArr.forEach(item => {
       this.isKeyChecked(item.field, item.index, true)
@@ -526,7 +527,7 @@ export default {
   },
   methods: {
     //深拷贝
-    deepClone (obj, newObj) {
+    deepClone(obj, newObj) {
       var newObj = newObj || {}
       for (let key in obj) {
         if (typeof obj[key] == 'object') {
@@ -539,12 +540,12 @@ export default {
       return newObj
     },
     // 取消
-    onBack () {
+    onBack() {
       this.keyContent = []
       this.$emit('closeKeyBoard')
     },
     // 确定
-    confirm () {
+    confirm() {
       // if(!this.keyContent.keyArr.length) return message.info('不能为空')
       if (!this.keyContent.keyArr.length) {
         this.keyContent.keyStr = '?'
@@ -572,7 +573,7 @@ export default {
 
     },
     // 按键
-    onKeyDown (item, index, field) {
+    onKeyDown(item, index, field) {
       let flag = false // 阻止触发改变数据操作
       let isChecked = true
 
@@ -606,9 +607,9 @@ export default {
       if (hasKeyIndex != -1) {
         isChecked = false
         this.isKeyChecked(
-          this.keyContent.keyArr[hasKeyIndex].field,
-          this.keyContent.keyArr[hasKeyIndex].index,
-          isChecked
+            this.keyContent.keyArr[hasKeyIndex].field,
+            this.keyContent.keyArr[hasKeyIndex].index,
+            isChecked
         )
         this.keyContent.keyArr.splice(hasKeyIndex, 1)
       } else {
@@ -618,7 +619,7 @@ export default {
       }
     },
     // 设置是否选中
-    isKeyChecked (field, index, isChecked) {
+    isKeyChecked(field, index, isChecked) {
       switch (field) {
         case 'modifierKeyOne':
           this.modifierKeyOne[index].checked = isChecked
@@ -774,9 +775,11 @@ export default {
 .box::-webkit-scrollbar {
   display: none;
 }
-.action-panel{
-  padding:20px;
+
+.action-panel {
+  padding: 20px;
   border-radius: 8px;
-  border:1px solid var(--active-bg);background-color:var(--secondary-bg)
+  border: 1px solid var(--active-bg);
+  background-color: var(--secondary-bg)
 }
 </style>

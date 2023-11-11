@@ -3,47 +3,46 @@ import {mapActions, mapWritableState} from "pinia";
 import {browserStore} from "../../../store/browser";
 import BackBtn from "../../../components/comp/BackBtn.vue";
 import Template from "../../../../user/pages/Template.vue";
-import {nanoid} from "nanoid";
 
 export default {
   components: {Template, BackBtn},
   computed: {
-    ...mapWritableState(browserStore, ['runningTabs','currentTab'])
+    ...mapWritableState(browserStore, ['runningTabs', 'currentTab'])
   },
   methods: {
     ...mapActions(browserStore, ['updateAllCapture']),
-    switchToTab(tab){
-      this.currentTab=tab
+    switchToTab(tab) {
+      this.currentTab = tab
       this.$router.push({
-        name:'browser',
-        params:{
-          id:tab.id
+        name: 'browser',
+        params: {
+          id: tab.id
         }
       })
     },
-    closeTab(id){
-      ipc.send('closeTableTab',{tab:{id}})
-      let index=this.runningTabs.findIndex(tab=>{
-        return tab.id===id
+    closeTab(id) {
+      ipc.send('closeTableTab', {tab: {id}})
+      let index = this.runningTabs.findIndex(tab => {
+        return tab.id === id
       })
-      this.runningTabs.splice(index,1)
-      if(this.runningTabs.length===0){
-        this.currentTab={}
-      }else{
-        if(index-1>0){
-          this.currentTab=this.runningTabs[index-1]
-        }else{
-          this.currentTab=this.runningTabs[index]
+      this.runningTabs.splice(index, 1)
+      if (this.runningTabs.length === 0) {
+        this.currentTab = {}
+      } else {
+        if (index - 1 > 0) {
+          this.currentTab = this.runningTabs[index - 1]
+        } else {
+          this.currentTab = this.runningTabs[index]
         }
       }
     },
-    closeAllTab(){
-      this.runningTabs.forEach((tab)=>{
-        ipc.send('closeTableTab',{tab:{id:tab.id}})
+    closeAllTab() {
+      this.runningTabs.forEach((tab) => {
+        ipc.send('closeTableTab', {tab: {id: tab.id}})
       })
 
-      this.runningTabs=[]
-      this.currentTab= {}
+      this.runningTabs = []
+      this.currentTab = {}
 
     }
   },
@@ -57,22 +56,24 @@ export default {
 <template>
   <back-btn></back-btn>
   <div style="position: relative;clear: both">
-      <div style="display: inline-block;position: relative;float: right">
-        <div @click.stop="closeAllTab()" class="close-btn big">
+    <div style="display: inline-block;position: relative;float: right">
+      <div class="close-btn big" @click.stop="closeAllTab()">
         <icon icon="guanbi1"></icon>
       </div>
-      </div>
+    </div>
 
   </div>
   <div class="ml-20 mt-2">
     <template v-for="tab in runningTabs">
 
-      <div @click="switchToTab(tab)" v-if="tab.url" class="s-bg p-2 rounded-md m-1 pointer" style="display: inline-block;vertical-align: top;width: 220px;">
-        <div >
-          <a-image  @click.stop class="mb-1 rounded-md" :width="200" :height="140" style="width: 200px;height:140px;object-fit: cover"
-                   :src="'file://'+tab.capture">
+      <div v-if="tab.url" class="s-bg p-2 rounded-md m-1 pointer" style="display: inline-block;vertical-align: top;width: 220px;"
+           @click="switchToTab(tab)">
+        <div>
+          <a-image :height="140" :src="'file://'+tab.capture" :width="200" class="mb-1 rounded-md"
+                   style="width: 200px;height:140px;object-fit: cover"
+                   @click.stop>
           </a-image>
-          <div @click.stop="closeTab(tab.id)" class="close-btn">
+          <div class="close-btn" @click.stop="closeTab(tab.id)">
             <icon icon="guanbi1"></icon>
           </div>
 
@@ -80,9 +81,10 @@ export default {
 
         <a-tooltip :title=" tab.url.toLowerCase() ">
           <div class="mt-2 ml-1 truncate">
-            <a-avatar shape="square" style="vertical-align: text-top" :size="18" :src="tab.favicons[0]" v-if="tab.favicons">
+            <a-avatar v-if="tab.favicons" :size="18" :src="tab.favicons[0]" shape="square"
+                      style="vertical-align: text-top">
             </a-avatar>
-            {{ tab.title ||'新标签页'}}
+            {{ tab.title || '新标签页' }}
           </div>
         </a-tooltip>
       </div>
@@ -91,12 +93,12 @@ export default {
   </div>
 </template>
 
-<style scoped lang="scss">
-.close-btn{
+<style lang="scss" scoped>
+.close-btn {
   position: absolute;
   right: 0;
   top: 0;
-  padding:5px;
+  padding: 5px;
   border-radius: 4px;
   width: 40px;
   height: 40px;
@@ -104,12 +106,14 @@ export default {
   margin: 3px;
   font-size: 19px;
   cursor: pointer;
-  &:hover{
+
+  &:hover {
     opacity: 0.8;
   }
 }
-.big{
-  position:relative;
+
+.big {
+  position: relative;
   background: rgba(234, 72, 72, 0.8);
   color: white;
 }

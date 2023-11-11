@@ -1,11 +1,11 @@
 <template>
   <!-- 弹窗层 -->
   <div
-    v-if="modelValue"
-    class="xt-text xt-modal xt-shadow fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 rounded-xl p-3"
-    :style="{
+      v-if="modelValue"
+      :style="{
       'z-index': boxIndex,
     }"
+      class="xt-text xt-modal xt-shadow fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 rounded-xl p-3"
   >
     <!-- 头部 -->
     <header v-if="isHeader">
@@ -17,12 +17,12 @@
           </slot>
         </template>
         <template #right>
-          <div class="flex items-center "    >
+          <div class="flex items-center ">
             <slot name="headerRight"></slot>
             <xt-new-icon
-              icon="fluent:dismiss-16-filled"
-              bgClass="xt-bg-2"
-              @click="colseClick()"
+                bgClass="xt-bg-2"
+                icon="fluent:dismiss-16-filled"
+                @click="colseClick()"
             />
           </div>
         </template>
@@ -42,17 +42,18 @@
   </div>
   <!-- 遮罩层 -->
   <div
-    v-if="modelValue"
-    @click.stop.self="colseClick()"
-    class="xt-mask h-full w-full fixed top-0 left-0 ring-0 bottom-0"
-    :style="{
+      v-if="modelValue"
+      :style="{
       'z-index': maskIndex,
     }"
+      class="xt-mask h-full w-full fixed top-0 left-0 ring-0 bottom-0"
+      @click.stop.self="colseClick()"
   ></div>
 </template>
 
 <script setup>
-import { onMounted, onBeforeUnmount } from "vue";
+import {onBeforeUnmount, onMounted} from "vue";
+
 const props = defineProps({
   // 遮罩层级
   maskIndex: {

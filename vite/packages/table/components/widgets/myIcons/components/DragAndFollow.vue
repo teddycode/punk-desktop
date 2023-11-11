@@ -1,11 +1,11 @@
 <template>
   <!-- 可拖拽元素 -->
   <div
-    ref="draggable"
-    @mousedown="handleMouseDown"
-    @mouseup="handleMouseUp"
-    @click="handleClick"
-    class="draggable"
+      ref="draggable"
+      class="draggable"
+      @click="handleClick"
+      @mousedown="handleMouseDown"
+      @mouseup="handleMouseUp"
   >
     <slot></slot>
   </div>
@@ -13,15 +13,15 @@
     <!-- 拖拽元素 -->
     <div v-show="isDragging" class="follow-container">
       <div
-        ref="follow"
-        class="follow"
-        :style="{
+          ref="follow"
+          :style="{
           transform: `translate(${followPosition.x - followWidth / 2}px, ${
             followPosition.y - followHeight / 2
           }px)`,
           width: `${followWidth}px`,
           height: `${followHeight}px`,
         }"
+          class="follow"
       >
         <template v-if="isSelect && length > 1">
           <div class="icons">{{ length }}</div>
@@ -35,15 +35,16 @@
 </template>
 
 <script>
-import { mapWritableState, mapActions } from "pinia";
-import { cardStore } from "../../../../store/card";
-import { useFreeDeskStore } from "../../../desk/free/store";
+import {mapActions, mapWritableState} from "pinia";
+import {cardStore} from "../../../../store/card";
+import {useFreeDeskStore} from "../../../desk/free/store";
+
 export default {
   emits: ["drag-start", "drag-end", "click"],
   data() {
     return {
       isDragging: false,
-      followPosition: { x: 0, y: 0 },
+      followPosition: {x: 0, y: 0},
       followWidth: 0,
       followHeight: 0,
       dragStartTimer: null,
@@ -52,8 +53,8 @@ export default {
     };
   },
   props: {
-    isSelect: { type: Boolean },
-    length: { type: Number },
+    isSelect: {type: Boolean},
+    length: {type: Number},
   },
   computed: {
     ...mapWritableState(cardStore, ["currentDeskId"]),
@@ -63,7 +64,7 @@ export default {
     // 鼠标按下事件处理方法
     handleMouseDown(event) {
       if (this.getFreeDeskState(this.currentDeskId)) return;
-      this.followPosition = { x: event.clientX, y: event.clientY }; // 初始化拖拽元素坐标
+      this.followPosition = {x: event.clientX, y: event.clientY}; // 初始化拖拽元素坐标
       event.preventDefault();
       event.stopPropagation();
       this.dragStartTimer = setTimeout(() => {

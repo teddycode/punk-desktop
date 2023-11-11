@@ -8,39 +8,40 @@
 -->
 <template>
   <a-drawer
-    :width="512"
-    :closable="false"
-    style="z-index: 1000"
-    placement="right"
-    v-model:visible="store.isTaskDrawer"
-    :bodyStyle="{ padding: ' 0 ', overflow: 'hidden !important' }"
-    @closeMessage="task.isTaskDrawer = false"
+      v-model:visible="store.isTaskDrawer"
+      :bodyStyle="{ padding: ' 0 ', overflow: 'hidden !important' }"
+      :closable="false"
+      :width="512"
+      placement="right"
+      style="z-index: 1000"
+      @closeMessage="task.isTaskDrawer = false"
   >
     <div class="xt-modal flex py-3" style="width: 500px; height: 100%">
-      <xt-left-menu :list="menus" last="5" model="id" />
+      <xt-left-menu :list="menus" last="5" model="id"/>
       <div class="w-full xt-scrollbar xt-text">
-        <Primary v-if="currentTask == 'Primary'" />
+        <Primary v-if="currentTask == 'Primary'"/>
         <Branch
-          v-else-if="currentTask == 'Branch'"
-          :tasks="task"
-          :key="Date.now()"
-          :icon="icon"
+            v-else-if="currentTask == 'Branch'"
+            :key="Date.now()"
+            :icon="icon"
+            :tasks="task"
         />
-        <Activity v-else-if="currentTask == 'Activity'" />
-        <Set v-else-if="currentTask == 'Set'" />
+        <Activity v-else-if="currentTask == 'Activity'"/>
+        <Set v-else-if="currentTask == 'Set'"/>
       </div>
     </div>
   </a-drawer>
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
-import { taskStore } from "../store";
+import {ref} from "vue";
+import {taskStore} from "../store";
 import Primary from "./primary/index.vue";
 import Branch from "./branch/index.vue";
 import Activity from "./activity/index.vue";
 import Set from "./Set.vue";
-import { tasks } from "../page/branch/Branch.ts";
+import {tasks} from "../page/branch/Branch.ts";
+
 let currentTask = ref("Primary");
 let task = ref([]);
 let icon = ref("");

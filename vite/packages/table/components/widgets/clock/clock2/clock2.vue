@@ -1,7 +1,7 @@
 <template>
   <div class="clock2">
     <p class="time">{{ time }}<span :style="{ display: isSnow == true ? 'inline-block' : 'none' }">{{ min }}</span></p>
-    <p class="date" :style="{ display: isSnow == true ? 'inline-block' : 'none' }">{{ date }}</p>
+    <p :style="{ display: isSnow == true ? 'inline-block' : 'none' }" class="date">{{ date }}</p>
   </div>
 </template>
 
@@ -45,19 +45,19 @@ export default {
     updateTime() {
       let cd = new Date();
       this.time =
-        this.zeroPadding(cd.getHours(), 2) +
-        ":" +
-        this.zeroPadding(cd.getMinutes(), 2)
+          this.zeroPadding(cd.getHours(), 2) +
+          ":" +
+          this.zeroPadding(cd.getMinutes(), 2)
       this.min = ":" +
-        this.zeroPadding(cd.getSeconds(), 2);
+          this.zeroPadding(cd.getSeconds(), 2);
       this.date =
-        this.zeroPadding(cd.getFullYear(), 4) +
-        "年" +
-        this.zeroPadding(cd.getMonth() + 1, 2) +
-        "月" +
-        this.zeroPadding(cd.getDate(), 2) +
-        "日 " +
-        this.week[cd.getDay()];
+          this.zeroPadding(cd.getFullYear(), 4) +
+          "年" +
+          this.zeroPadding(cd.getMonth() + 1, 2) +
+          "月" +
+          this.zeroPadding(cd.getDate(), 2) +
+          "日 " +
+          this.week[cd.getDay()];
     },
   },
   destroyed() {

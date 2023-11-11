@@ -1,24 +1,24 @@
 <template>
-  <xt-modal @close="close()" title="批量添加图标"  :isFooter="false">
+  <xt-modal :isFooter="false" title="批量添加图标" @close="close()">
     <main class="flex h-full p-1" style="min-width: 200px !important">
-      <div style="" class="h-full">
+      <div class="h-full" style="">
         <div
-          class="overflow-y-auto xt-container"
-          style="border-right: 1px solid var(--divider)"
-          :style="leftTabHeight"
+            :style="leftTabHeight"
+            class="overflow-y-auto xt-container"
+            style="border-right: 1px solid var(--divider)"
         >
           <div
-            :style="{
+              v-for="item in navList"
+              :style="{
               'border-right':
                 item.component == name ? '1px solid var(--active-bg)' : '',
             }"
-            v-for="item in navList"
           >
             <div
-              class="flex justify-center items-center rounded-xl cursor-pointer h-12 w-120 mr-2"
-              :key="item.name"
-              @click="name = item.component"
-              :class="{ 'xt-bg-2': item.component == name }"
+                :key="item.name"
+                :class="{ 'xt-bg-2': item.component == name }"
+                class="flex justify-center items-center rounded-xl cursor-pointer h-12 w-120 mr-2"
+                @click="name = item.component"
             >
               {{ item.name }}
             </div>
@@ -28,39 +28,39 @@
       <div class="pl-2 w-full h-full">
         <xt-task :modelValue="m02013"></xt-task>
         <component
-          ref="apps"
-          :is="name"
-          :type="type"
-          @updateData="updateData"
+            :is="name"
+            ref="apps"
+            :type="type"
+            @updateData="updateData"
         ></component>
       </div>
     </main>
-    <div class="flex items-center my-3" v-if="selectAppsLenght">
-      <div style="width: 130px" class="flex justify-end">
+    <div v-if="selectAppsLenght" class="flex items-center my-3">
+      <div class="flex justify-end" style="width: 130px">
         已选 {{ selectAppsLenght }} ：
       </div>
       <div
-        class="flex overflow-x-auto xt-container"
-        v-scrollable
-        :style="selectedWidth"
+          v-scrollable
+          :style="selectedWidth"
+          class="flex overflow-x-auto xt-container"
       >
         <template v-for="(v, k) of selectApps">
           <div v-for="item in selectApps[k]">
-            <img :src="renderIcon(item.icon)" class="w-12 h-12 rounded-xl mr-3" alt="" />
+            <img :src="renderIcon(item.icon)" alt="" class="w-12 h-12 rounded-xl mr-3"/>
           </div>
         </template>
       </div>
     </div>
     <footer class="flex items-center justify-center mt-2">
       <XtTab
-        v-if="name == 'Links'"
-        style="width: 380px; height: 48px"
-        boxClass="my-2 p-1 xt-bg-2"
-        v-model:data="type"
-        :list="linkList"
+          v-if="name == 'Links'"
+          v-model:data="type"
+          :list="linkList"
+          boxClass="my-2 p-1 xt-bg-2"
+          style="width: 380px; height: 48px"
       ></XtTab>
       <xt-task :modelValue="m02015" @cb="commitIcons">
-        <XtButton type="theme" class="ml-2" @click="commitIcons()">
+        <XtButton class="ml-2" type="theme" @click="commitIcons()">
           确认
         </XtButton>
       </xt-task>
@@ -73,13 +73,13 @@ import Links from "./modules/Links.vue";
 import MyApps from "./modules/MyApps.vue";
 import Desktop from "./modules/Desktop.vue";
 import QingApps from "./modules/QingApps.vue";
-import { cardStore } from "../../../store/card.ts";
-import { myIcons } from "../../../store/myIcons.ts";
-import { scrollable } from "./hooks/scrollable";
-import { mapActions, mapWritableState } from "pinia";
-import { useBase64AsImage } from "../../../../table/components/card/hooks/base64";
-import { taskStore } from "../../../apps/task/store";
+import {cardStore} from "../../../store/card.ts";
+import {myIcons} from "../../../store/myIcons.ts";
+import {scrollable} from "./hooks/scrollable";
+import {mapActions, mapWritableState} from "pinia";
+import {taskStore} from "../../../apps/task/store";
 import {renderIcon} from '../../../js/common/common'
+
 export default {
   emits: ["update:navName"],
   props: {
@@ -88,10 +88,10 @@ export default {
       type: Array,
       default: () => {
         return [
-          { name: "网址导航", component: "Links" },
-          { name: "本地应用", component: "MyApps" },
-          { name: "桌面图标", component: "Desktop" },
-          { name: "web3应用", component: "QingApps" },
+          {name: "网址导航", component: "Links"},
+          {name: "本地应用", component: "MyApps"},
+          {name: "桌面图标", component: "Desktop"},
+          {name: "web3应用", component: "QingApps"},
         ];
       },
     },
@@ -198,9 +198,9 @@ export default {
   },
   mounted() {
     this.screenHeight =
-      window.innerHeight || document.documentElement.clientHeight;
+        window.innerHeight || document.documentElement.clientHeight;
     this.screenWidth =
-      window.innerWidtht || document.documentElement.clientWidth;
+        window.innerWidtht || document.documentElement.clientWidth;
     window.addEventListener("resize", this.handleResize);
   },
   beforeDestroy() {
@@ -214,9 +214,9 @@ export default {
     },
     handleResize() {
       this.screenHeight =
-        window.innerHeight || document.documentElement.clientHeight;
+          window.innerHeight || document.documentElement.clientHeight;
       this.screenWidth =
-        window.innerWidtht || document.documentElement.clientWidth;
+          window.innerWidtht || document.documentElement.clientWidth;
     },
     close() {
       this.$emit("close");
@@ -230,7 +230,7 @@ export default {
       }
       for (let key in this.selectApps) {
         this.selectApps[key].forEach(async (item) => {
-          let iconOption = { ...this.iconOption };
+          let iconOption = {...this.iconOption};
           iconOption.titleValue = item.name;
           iconOption.link = item.link || "fast";
           iconOption.src = item.icon;
@@ -250,14 +250,14 @@ export default {
     // 添加单图标组件
     addIcon(icon) {
       let random =
-        Math.floor(Math.random() * 50) * Math.floor(Math.random() * 100);
+          Math.floor(Math.random() * 50) * Math.floor(Math.random() * 100);
       this.addCard(
-        {
-          name: "myIcons",
-          id: Date.now() - random,
-          customData: { iconList: [{ ...icon }] },
-        },
-        this.desk
+          {
+            name: "myIcons",
+            id: Date.now() - random,
+            customData: {iconList: [{...icon}]},
+          },
+          this.desk
       );
     },
   },

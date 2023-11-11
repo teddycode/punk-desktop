@@ -1,5 +1,6 @@
 {
   "name": "punkos",
+  "private": "true",
   "productName": "磐古跨链客户端",
   "author": "buaa.ioase.blockchain",
   "version": "1.0.0-alpha",

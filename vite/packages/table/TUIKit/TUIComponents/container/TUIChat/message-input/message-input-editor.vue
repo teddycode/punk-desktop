@@ -1,29 +1,29 @@
 <template>
   <div :class="['message-input-container', isH5 && 'message-input-container-h5']">
-    <div class="message-input-mute" v-show="isMute">
+    <div v-show="isMute" class="message-input-mute">
       {{ $t(`TUIChat.${muteText}`) }}
     </div>
     <editor-content
-      v-show="!isMute && enableInput"
-      :editor="editor"
-      class="message-input-area"
-      ref="editorContainer"
-      @drop="(e:any) => handleFileDropOrPaste(e, 'drop')"
-      @paste="(e:any) => handleFileDropOrPaste(e, 'paste')"
-      @keydown.enter="handleEnter"
+        v-show="!isMute && enableInput"
+        ref="editorContainer"
+        :editor="editor"
+        class="message-input-area"
+        @drop="(e:any) => handleFileDropOrPaste(e, 'drop')"
+        @paste="(e:any) => handleFileDropOrPaste(e, 'paste')"
+        @keydown.enter="handleEnter"
     />
   </div>
 </template>
-<script setup lang="ts">
-import { defineProps, defineEmits, toRefs, ref, defineExpose } from 'vue';
-import { useEditor, EditorContent } from '@tiptap/vue-3';
+<script lang="ts" setup>
+import {defineEmits, defineExpose, defineProps, ref, toRefs} from 'vue';
+import {EditorContent, useEditor} from '@tiptap/vue-3';
 import Document from '@tiptap/extension-document';
 import Paragraph from '@tiptap/extension-paragraph';
 import Placeholder from '@tiptap/extension-placeholder';
 import Text from '@tiptap/extension-text';
 import Mention from '@tiptap/extension-mention';
 import CustomImage from './message-input-file';
-import { MessageInputAtSuggestion } from './message-input-at.vue';
+import {MessageInputAtSuggestion} from './message-input-at.vue';
 
 const props = defineProps({
   placeholder: {
@@ -68,7 +68,7 @@ const props = defineProps({
   },
 });
 const emits = defineEmits(['sendMessage', 'onTyping']);
-const { placeholder, isH5, enableAt, enableDragUpload, isGroup, enableTyping } = toRefs(props);
+const {placeholder, isH5, enableAt, enableDragUpload, isGroup, enableTyping} = toRefs(props);
 const inputContentEmpty = ref(true);
 const inputBlur = ref(true);
 
@@ -100,7 +100,7 @@ const editor = useEditor({
   injectCSS: false,
 
   // handle input edtor typing (only in C2C and enable typing)
-  onUpdate({ editor, transaction }) {
+  onUpdate({editor, transaction}) {
     if (!enableTyping.value || isGroup.value) return;
     inputBlur.value = !editor.isFocused;
     if (transaction?.doc?.content?.size > 2) {
@@ -210,7 +210,7 @@ const addImageProcess = (src: string, type: string) => {
 
 // draw file tag canvas
 const drawFileCanvasToImageUrl = async (file: any) => {
-  const { name, type } = file;
+  const {name, type} = file;
   const canvas = document.createElement('canvas');
   let width = 160;
   let height = 50;
@@ -227,7 +227,7 @@ const drawFileCanvasToImageUrl = async (file: any) => {
   // 标准化坐标系以使用 css 像素
   ctx.scale(scale, scale);
   // draw icon
-  const { iconSrc, iconType } = handleFileIconForShow(type);
+  const {iconSrc, iconType} = handleFileIconForShow(type);
   const img = await addImageProcess(iconSrc, iconType);
   ctx?.drawImage(img as any, 10, 10, 30, 30);
   // draw font
@@ -314,19 +314,19 @@ const handleEditorForMessage = () => {
       } else {
         content.push({
           type: 'text',
-          payload: { text: text },
+          payload: {text: text},
         });
       }
     } else if (node.type === 'custom-image' && node?.attrs?.class === 'normal') {
       content.push({
         type: 'image',
-        payload: { file: fileMap?.get(node?.attrs?.src) },
+        payload: {file: fileMap?.get(node?.attrs?.src)},
       });
     } else if (node.type === 'custom-image' && node?.attrs?.class === 'file') {
       const file = fileMap?.get(node?.attrs?.src);
       content.push({
         type: file?.type?.includes('video') ? 'video' : 'file',
-        payload: { file },
+        payload: {file},
       });
     } else if (node.type === 'mention') {
       const text = '@' + node?.attrs?.label + ' ';
@@ -335,7 +335,7 @@ const handleEditorForMessage = () => {
       } else {
         content.push({
           type: 'text',
-          payload: { text: text },
+          payload: {text: text},
         });
       }
       if (content[content.length - 1]?.payload?.atUserList) {
@@ -347,15 +347,15 @@ const handleEditorForMessage = () => {
   };
   handleEditorContent(editorJSON);
   if (
-    content.length > 0 &&
-    content[content.length - 1] &&
-    content[content.length - 1]?.type === "text" &&
-    content[content.length - 1]?.payload?.text?.endsWith("\n")
+      content.length > 0 &&
+      content[content.length - 1] &&
+      content[content.length - 1]?.type === "text" &&
+      content[content.length - 1]?.payload?.text?.endsWith("\n")
   ) {
     const text = content[content.length - 1].payload.text;
     content[content.length - 1].payload.text = text?.substring(
-      0,
-      text.lastIndexOf("\n")
+        0,
+        text.lastIndexOf("\n")
     );
   }
   return content;
@@ -395,9 +395,10 @@ defineExpose({
 });
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 @import url('../../../styles/common.scss');
 @import url('../../../styles/icon.scss');
+
 .message-input {
   &-container {
     display: flex;
@@ -408,11 +409,13 @@ defineExpose({
     padding: 3px 10px 10px 10px;
     overflow: hidden;
   }
+
   &-area {
     flex: 1;
     display: flex;
     overflow-y: scroll;
   }
+
   &-mute {
     flex: 1;
     display: flex;
@@ -422,6 +425,7 @@ defineExpose({
     align-items: center;
   }
 }
+
 .message-input-container-h5 {
   flex: 1;
   height: auto;
@@ -442,24 +446,30 @@ defineExpose({
   word-wrap: break-word;
   word-break: break-all;
   white-space: pre-wrap;
-  div,ul,ol,dl,dt,dd,li,dl,h1,h2,h3,h4,p{
-    margin:0;
-    padding:0;
-    font-style:normal;
+
+  div, ul, ol, dl, dt, dd, li, dl, h1, h2, h3, h4, p {
+    margin: 0;
+    padding: 0;
+    font-style: normal;
   }
+
   p {
     * {
       vertical-align: bottom;
       color: var(--primary-text) !important;
     }
+
     color: var(--primary-text) !important;
   }
+
   -webkit-user-select: text;
   user-select: text;
+
   &-focused {
     border: none;
     outline: none;
   }
+
   img {
     &.ProseMirror-selectednode {
       outline: 2px solid #68cef8;
@@ -471,12 +481,14 @@ defineExpose({
       max-height: 120px;
       max-width: 200px;
     }
+
     &-file {
       height: 50px;
       width: 160px;
       border: 1px solid #e8e8e9;
       border-radius: 5px;
     }
+
     &-emoji {
       height: 20px;
       width: 20px;
@@ -487,6 +499,7 @@ defineExpose({
     outline: 2px solid #68cef8;
     cursor: none;
   }
+
   p,
   [contenteditable] {
     -webkit-user-select: text;
@@ -495,7 +508,7 @@ defineExpose({
 
   // placeholder style
   p.is-editor-empty:first-child::before {
-    color:var(--secondary-text);
+    color: var(--secondary-text);
     content: attr(data-placeholder);
     float: left;
     height: 0;

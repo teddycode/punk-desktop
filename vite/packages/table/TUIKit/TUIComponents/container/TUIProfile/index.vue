@@ -1,18 +1,18 @@
 <template>
-  <div class="TUI-profile" :class="[env.isH5 ? 'TUI-profile-h5' : '']">
-    <div class="profile" v-if="!isEdit" @click="toggleEdit">
+  <div :class="[env.isH5 ? 'TUI-profile-h5' : '']" class="TUI-profile">
+    <div v-if="!isEdit" class="profile" @click="toggleEdit">
       <header class="profile-header">
         <aside class="profile-avatar">
           <img
-            class="avatar"
-            :src="profile.avatar ? profile.avatar : 'https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'"
-            onerror="this.src='https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'"
+              :src="profile.avatar ? profile.avatar : 'https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'"
+              class="avatar"
+              onerror="this.src='https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'"
           />
         </aside>
         <ul class="profile-main">
           <li class="profile-main-item">
             <h1 class="profile-main-name">{{ profile.nick || '-' }}</h1>
-            <p class="gender" v-if="!env.isH5">
+            <p v-if="!env.isH5" class="gender">
               {{ profile.gender ? $t(`TUIProfile.${genderLabel[profile.gender]}`) : '' }}
             </p>
           </li>
@@ -20,13 +20,13 @@
             <label class="profile-main-label">{{ $t('TUIProfile.用户ID') }}:</label>
             <span>{{ profile.userID }}</span>
           </li>
-          <li class="profile-main-item" v-if="env.isH5">
+          <li v-if="env.isH5" class="profile-main-item">
             <label class="profile-main-label">{{ $t('TUIProfile.个性签名') }}:</label>
             <span>{{ profile.selfSignature || $t('TUIProfile.暂未设置') }}</span>
           </li>
         </ul>
       </header>
-      <ul class="profile-main" v-if="!env.isH5">
+      <ul v-if="!env.isH5" class="profile-main">
         <li class="profile-main-item">
           <label class="profile-main-label">{{ $t('TUIProfile.个性签名') }}</label>
           <span>{{ profile.selfSignature || $t('TUIProfile.暂未设置') }}</span>
@@ -36,14 +36,14 @@
           <span>{{ profile.birthday ? profile.birthday : $t('TUIProfile.暂未设置') }}</span>
         </li>
       </ul>
-      <i class="icon icon-right" v-if="env.isH5"></i>
+      <i v-if="env.isH5" class="icon icon-right"></i>
     </div>
-    <TUIProfileEdit v-else :userInfo="profile" :isH5="env.isH5" @submit="submit" @cancel="cancel" />
+    <TUIProfileEdit v-else :isH5="env.isH5" :userInfo="profile" @cancel="cancel" @submit="submit"/>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
-import { useStore } from 'vuex';
+import {defineComponent, reactive, toRefs} from 'vue';
+import {useStore} from 'vuex';
 import TUIProfileEdit from './components/TUIProfileEdit';
 
 const TUIProfile = defineComponent({

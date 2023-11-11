@@ -1,98 +1,98 @@
 <template>
   <!-- 文本列表 -->
   <template v-if="clipItem.type === 'text'">
-    <TextItem @previewItem="previewItem" :clip-item="clipItem"></TextItem>
-<!--    &lt;!&ndash; 列表主界面 &ndash;&gt;-->
-<!--    <div style="width: 338px;height:420px;flex-shrink: 0; " v-if="controlsShow === false && codeLanguageShow === false"-->
-<!--         class="flex flex-col rounded-lg justify-between " @contextmenu="textButton">-->
-<!--      &lt;!&ndash; 文本卡片顶部标题开始 &ndash;&gt;-->
-<!--      <div class="flex s-item h-item flex-col h-16 rounded-t-lg w-full px-4 py-2">-->
-<!--        <div class="flex items-center mb-1">-->
-<!--          <Icon :icon="getType(clipItem.type).icon" style="font-size: 1.45em;"></Icon>-->
-<!--          <span class="ml-2">{{ getType(clipItem.type).title }}</span>-->
-<!--        </div>-->
-<!--        <div class="flex justify-between content-text">-->
-<!--          <span class="time-bg" v-html="timeText"></span>-->
-<!--          <span class="time-bg">{{ clipItem.capacity }}</span>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      &lt;!&ndash; 文本卡片顶部标题结束 &ndash;&gt;-->
+    <TextItem :clip-item="clipItem" @previewItem="previewItem"></TextItem>
+    <!--    &lt;!&ndash; 列表主界面 &ndash;&gt;-->
+    <!--    <div style="width: 338px;height:420px;flex-shrink: 0; " v-if="controlsShow === false && codeLanguageShow === false"-->
+    <!--         class="flex flex-col rounded-lg justify-between " @contextmenu="textButton">-->
+    <!--      &lt;!&ndash; 文本卡片顶部标题开始 &ndash;&gt;-->
+    <!--      <div class="flex s-item h-item flex-col h-16 rounded-t-lg w-full px-4 py-2">-->
+    <!--        <div class="flex items-center mb-1">-->
+    <!--          <Icon :icon="getType(clipItem.type).icon" style="font-size: 1.45em;"></Icon>-->
+    <!--          <span class="ml-2">{{ getType(clipItem.type).title }}</span>-->
+    <!--        </div>-->
+    <!--        <div class="flex justify-between content-text">-->
+    <!--          <span class="time-bg" v-html="timeText"></span>-->
+    <!--          <span class="time-bg">{{ clipItem.capacity }}</span>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--      &lt;!&ndash; 文本卡片顶部标题结束 &ndash;&gt;-->
 
-<!--      &lt;!&ndash; 纯文本情况下 &ndash;&gt;-->
-<!--      <div class="flex  flex-1 text-md" v-if="defaultTextType.name === 'text'">-->
-<!--        <textCodeMirror :editorContent="clipItem.content"></textCodeMirror>-->
-<!--      </div>-->
-<!--      &lt;!&ndash; 代码高亮情况下 &ndash;&gt;-->
-<!--      <div v-if="defaultTextType.name === 'code'" class="flex-1 w-full">-->
-<!--        <ClipCodemirror :editorContent="clipItem.content" class="w-full"></ClipCodemirror>-->
-<!--      </div>-->
+    <!--      &lt;!&ndash; 纯文本情况下 &ndash;&gt;-->
+    <!--      <div class="flex  flex-1 text-md" v-if="defaultTextType.name === 'text'">-->
+    <!--        <textCodeMirror :editorContent="clipItem.content"></textCodeMirror>-->
+    <!--      </div>-->
+    <!--      &lt;!&ndash; 代码高亮情况下 &ndash;&gt;-->
+    <!--      <div v-if="defaultTextType.name === 'code'" class="flex-1 w-full">-->
+    <!--        <ClipCodemirror :editorContent="clipItem.content" class="w-full"></ClipCodemirror>-->
+    <!--      </div>-->
 
-<!--      &lt;!&ndash; 文本底部切换 &ndash;&gt;-->
-<!--      <div class="flex s-item h-item py-1 px-1 h-12 rounded-b-lg items-center justify-between">-->
-<!--        <div v-for="(item) in showArray" :class="defaultTextType.name === item.name ? 's-active':''"-->
-<!--             class="flex items-center justify-center py-2.5 px-4  pointer rounded-lg w-1/2"-->
-<!--             @click.stop="selectItem(item)" @tabClick="openCode"-->
-<!--        >-->
-<!--          <Icon :icon="item.icon" style="font-size: 1.45em;"></Icon>-->
-<!--          <span class="ml-2 mr-2">{{ item.title }}</span>-->
-<!--          <Icon icon="xiangyou" class="pointer" v-if="item.title !== '纯文本' && item.title !=='代码块'"-->
-<!--                style="font-size: 1.25em;"></Icon>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-
-
-<!--    &lt;!&ndash; 操作界面 &ndash;&gt;-->
-<!--    <div v-else-if="controlsShow === true" style="width: 338px;height:420px;">-->
-<!--      <div class="flex s-item flex-col rounded-lg px-4 py-3 h-full default-content">-->
-<!--        <div class="flex mb-3">-->
-<!--          <div class="w-12 s-item button-active bt-default h-12 rounded-lg pointer flex items-center justify-center"-->
-<!--               @click="backClip">-->
-<!--            <Icon icon="xiangzuo" style="font-size: 1.45em;"></Icon>-->
-<!--          </div>-->
-<!--          <div class="flex items-center mx-24 justify-center">-->
-<!--            <span>操作</span>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        &lt;!&ndash; 快捷键按钮 &ndash;&gt;-->
-<!--        <div class="flex flex-col">-->
-<!--          <vue-custom-scrollbar :settings="settingsScroller" style="height: 44vh;">-->
-<!--            <div v-for="item in textKey" @click="keyOperation(item)"-->
-<!--                 class="flex pointer justify-between s-item button-active  btn-list px-4 rounded-lg py-3 mb-2">-->
-<!--              <span>{{ item.title }}</span>-->
-<!--              <span>{{ item.intr }}</span>-->
-<!--            </div>-->
-<!--          </vue-custom-scrollbar>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
+    <!--      &lt;!&ndash; 文本底部切换 &ndash;&gt;-->
+    <!--      <div class="flex s-item h-item py-1 px-1 h-12 rounded-b-lg items-center justify-between">-->
+    <!--        <div v-for="(item) in showArray" :class="defaultTextType.name === item.name ? 's-active':''"-->
+    <!--             class="flex items-center justify-center py-2.5 px-4  pointer rounded-lg w-1/2"-->
+    <!--             @click.stop="selectItem(item)" @tabClick="openCode"-->
+    <!--        >-->
+    <!--          <Icon :icon="item.icon" style="font-size: 1.45em;"></Icon>-->
+    <!--          <span class="ml-2 mr-2">{{ item.title }}</span>-->
+    <!--          <Icon icon="xiangyou" class="pointer" v-if="item.title !== '纯文本' && item.title !=='代码块'"-->
+    <!--                style="font-size: 1.25em;"></Icon>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </div>-->
 
 
-<!--    &lt;!&ndash; 代码语言切换界面 &ndash;&gt;-->
-<!--    <div v-else style="width: 338px;height:100%;" class="flex flex-col">-->
-<!--      <div class="p-4 ">-->
-<!--        <div class="flex justify-between items-center mb-3">-->
-<!--          <div class="w-12 h-12 pointer  rounded-lg button-active bt-default  flex items-center justify-center"-->
-<!--               @click="backClip">-->
-<!--            <Icon icon="xiangzuo" style="font-size: 1.5em;"></Icon>-->
-<!--          </div>-->
-<!--          <span class="title-text">语言</span>-->
-<!--          <div class="w-12 h-12 pointer rounded-lg button-active bt-default flex items-center justify-center"-->
-<!--               @click="openClipSet">-->
-<!--            <Icon icon="shezhi" style="font-size: 1.5em;"></Icon>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        &lt;!&ndash; 代码块语言包切换列表 &ndash;&gt;-->
-<!--        <div class="flex flex-col">-->
-<!--          <vue-custom-scrollbar :settings="settingsScroller" style="height: 49vh;">-->
-<!--            <div v-for="item in codeLanguage" class="rounded-lg pointer button-active btn-list px-4 py-3 mb-2"-->
-<!--                 @click="clickCodeLanguage(item)">-->
-<!--              {{ item.title }}-->
-<!--            </div>-->
-<!--          </vue-custom-scrollbar>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
+    <!--    &lt;!&ndash; 操作界面 &ndash;&gt;-->
+    <!--    <div v-else-if="controlsShow === true" style="width: 338px;height:420px;">-->
+    <!--      <div class="flex s-item flex-col rounded-lg px-4 py-3 h-full default-content">-->
+    <!--        <div class="flex mb-3">-->
+    <!--          <div class="w-12 s-item button-active bt-default h-12 rounded-lg pointer flex items-center justify-center"-->
+    <!--               @click="backClip">-->
+    <!--            <Icon icon="xiangzuo" style="font-size: 1.45em;"></Icon>-->
+    <!--          </div>-->
+    <!--          <div class="flex items-center mx-24 justify-center">-->
+    <!--            <span>操作</span>-->
+    <!--          </div>-->
+    <!--        </div>-->
+    <!--        &lt;!&ndash; 快捷键按钮 &ndash;&gt;-->
+    <!--        <div class="flex flex-col">-->
+    <!--          <vue-custom-scrollbar :settings="settingsScroller" style="height: 44vh;">-->
+    <!--            <div v-for="item in textKey" @click="keyOperation(item)"-->
+    <!--                 class="flex pointer justify-between s-item button-active  btn-list px-4 rounded-lg py-3 mb-2">-->
+    <!--              <span>{{ item.title }}</span>-->
+    <!--              <span>{{ item.intr }}</span>-->
+    <!--            </div>-->
+    <!--          </vue-custom-scrollbar>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </div>-->
+
+
+    <!--    &lt;!&ndash; 代码语言切换界面 &ndash;&gt;-->
+    <!--    <div v-else style="width: 338px;height:100%;" class="flex flex-col">-->
+    <!--      <div class="p-4 ">-->
+    <!--        <div class="flex justify-between items-center mb-3">-->
+    <!--          <div class="w-12 h-12 pointer  rounded-lg button-active bt-default  flex items-center justify-center"-->
+    <!--               @click="backClip">-->
+    <!--            <Icon icon="xiangzuo" style="font-size: 1.5em;"></Icon>-->
+    <!--          </div>-->
+    <!--          <span class="title-text">语言</span>-->
+    <!--          <div class="w-12 h-12 pointer rounded-lg button-active bt-default flex items-center justify-center"-->
+    <!--               @click="openClipSet">-->
+    <!--            <Icon icon="shezhi" style="font-size: 1.5em;"></Icon>-->
+    <!--          </div>-->
+    <!--        </div>-->
+    <!--        &lt;!&ndash; 代码块语言包切换列表 &ndash;&gt;-->
+    <!--        <div class="flex flex-col">-->
+    <!--          <vue-custom-scrollbar :settings="settingsScroller" style="height: 49vh;">-->
+    <!--            <div v-for="item in codeLanguage" class="rounded-lg pointer button-active btn-list px-4 py-3 mb-2"-->
+    <!--                 @click="clickCodeLanguage(item)">-->
+    <!--              {{ item.title }}-->
+    <!--            </div>-->
+    <!--          </vue-custom-scrollbar>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </div>-->
   </template>
   <!-- 文本列表 -->
 
@@ -100,61 +100,61 @@
   <!-- 图片列表 -->
   <template v-if="clipItem.type === 'image'">
 
-    <ImageItem  @previewItem="previewItem" :clip-item="clipItem"></ImageItem>
+    <ImageItem :clip-item="clipItem" @previewItem="previewItem"></ImageItem>
 
     <!-- 列表主界面 -->
-<!--    <div style="width: 338px;height:420px;" v-if="controlsShow === false" class="flex flex-col"-->
-<!--         @contextmenu="textButton">-->
-<!--      &lt;!&ndash; 图片标题开始 &ndash;&gt;-->
-<!--      <div class="flex s-item h-item flex-col rounded-t-lg w-full px-4 py-2">-->
-<!--        <div class="flex items-center mb-1">-->
-<!--          <Icon :icon="getType(clipItem.type).icon" style="font-size: 1.45em;"></Icon>-->
-<!--          <span class="ml-2">{{ getType(clipItem.type).title }}</span>-->
-<!--        </div>-->
-<!--        <div class="flex justify-between">-->
-<!--          <span class="time-bg">{{ timeText }}</span>-->
-<!--          <span class="time-bg">{{ clipItem.capacity }}</span>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      &lt;!&ndash; 图片标题结束 &ndash;&gt;-->
+    <!--    <div style="width: 338px;height:420px;" v-if="controlsShow === false" class="flex flex-col"-->
+    <!--         @contextmenu="textButton">-->
+    <!--      &lt;!&ndash; 图片标题开始 &ndash;&gt;-->
+    <!--      <div class="flex s-item h-item flex-col rounded-t-lg w-full px-4 py-2">-->
+    <!--        <div class="flex items-center mb-1">-->
+    <!--          <Icon :icon="getType(clipItem.type).icon" style="font-size: 1.45em;"></Icon>-->
+    <!--          <span class="ml-2">{{ getType(clipItem.type).title }}</span>-->
+    <!--        </div>-->
+    <!--        <div class="flex justify-between">-->
+    <!--          <span class="time-bg">{{ timeText }}</span>-->
+    <!--          <span class="time-bg">{{ clipItem.capacity }}</span>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--      &lt;!&ndash; 图片标题结束 &ndash;&gt;-->
 
-<!--      &lt;!&ndash; 图片内容开始 &ndash;&gt;-->
-<!--&lt;!&ndash;      <div class="flex px-5 pt-20 pb-20 items-center ">&ndash;&gt;-->
-<!--&lt;!&ndash;        <div class="rounded-lg flex flex-col" v-if="img">&ndash;&gt;-->
-<!--&lt;!&ndash;          <a-image :src="img" alt="" class="rounded-lg w-full h-full  object-cover"></a-image>&ndash;&gt;-->
-<!--&lt;!&ndash;          &lt;!&ndash; <span class="pt-5 text-center">{{ clip.name }}</span> &ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;        </div>&ndash;&gt;-->
-<!--&lt;!&ndash;      </div>&ndash;&gt;-->
-<!--      &lt;!&ndash; 图片内容结束 &ndash;&gt;-->
+    <!--      &lt;!&ndash; 图片内容开始 &ndash;&gt;-->
+    <!--&lt;!&ndash;      <div class="flex px-5 pt-20 pb-20 items-center ">&ndash;&gt;-->
+    <!--&lt;!&ndash;        <div class="rounded-lg flex flex-col" v-if="img">&ndash;&gt;-->
+    <!--&lt;!&ndash;          <a-image :src="img" alt="" class="rounded-lg w-full h-full  object-cover"></a-image>&ndash;&gt;-->
+    <!--&lt;!&ndash;          &lt;!&ndash; <span class="pt-5 text-center">{{ clip.name }}</span> &ndash;&gt;&ndash;&gt;-->
+    <!--&lt;!&ndash;        </div>&ndash;&gt;-->
+    <!--&lt;!&ndash;      </div>&ndash;&gt;-->
+    <!--      &lt;!&ndash; 图片内容结束 &ndash;&gt;-->
 
-<!--    </div>-->
+    <!--    </div>-->
 
-<!--    &lt;!&ndash; 图片操作界面 &ndash;&gt;-->
-<!--    <div v-else-if="controlsShow === true" style="width: 338px;height:420px;">-->
-<!--      <div class="flex  flex-col px-4 py-3 rounded-lg">-->
-<!--        <div class="flex mb-3">-->
-<!--          <div class="w-12 bt-default button-active h-12 rounded-lg pointer flex items-center justify-center"-->
-<!--               @click="backClip">-->
-<!--            <Icon icon="xiangzuo" style="font-size: 1.45em;"></Icon>-->
-<!--          </div>-->
-<!--          <div class="flex  items-center  justify-center mx-24">-->
-<!--            <span>操作</span>-->
-<!--          </div>-->
-<!--        </div>-->
+    <!--    &lt;!&ndash; 图片操作界面 &ndash;&gt;-->
+    <!--    <div v-else-if="controlsShow === true" style="width: 338px;height:420px;">-->
+    <!--      <div class="flex  flex-col px-4 py-3 rounded-lg">-->
+    <!--        <div class="flex mb-3">-->
+    <!--          <div class="w-12 bt-default button-active h-12 rounded-lg pointer flex items-center justify-center"-->
+    <!--               @click="backClip">-->
+    <!--            <Icon icon="xiangzuo" style="font-size: 1.45em;"></Icon>-->
+    <!--          </div>-->
+    <!--          <div class="flex  items-center  justify-center mx-24">-->
+    <!--            <span>操作</span>-->
+    <!--          </div>-->
+    <!--        </div>-->
 
-<!--        &lt;!&ndash; 快捷键按钮 &ndash;&gt;-->
-<!--        <div class="flex flex-col">-->
-<!--          <vue-custom-scrollbar :settings="settingsScroller" style="height: 48vh;">-->
-<!--            <div v-for="item in imageKey" @click="keyOperation(item)"-->
-<!--                 class="flex pointer button-active justify-between s-item px-4 rounded-lg btn-list py-3 mb-2">-->
-<!--              <span>{{ item.title }}</span>-->
-<!--              <span>{{ item.intr }}</span>-->
-<!--            </div>-->
-<!--          </vue-custom-scrollbar>-->
-<!--        </div>-->
+    <!--        &lt;!&ndash; 快捷键按钮 &ndash;&gt;-->
+    <!--        <div class="flex flex-col">-->
+    <!--          <vue-custom-scrollbar :settings="settingsScroller" style="height: 48vh;">-->
+    <!--            <div v-for="item in imageKey" @click="keyOperation(item)"-->
+    <!--                 class="flex pointer button-active justify-between s-item px-4 rounded-lg btn-list py-3 mb-2">-->
+    <!--              <span>{{ item.title }}</span>-->
+    <!--              <span>{{ item.intr }}</span>-->
+    <!--            </div>-->
+    <!--          </vue-custom-scrollbar>-->
+    <!--        </div>-->
 
-<!--      </div>-->
-<!--    </div>-->
+    <!--      </div>-->
+    <!--    </div>-->
 
   </template>
   <!-- 图片列表 -->
@@ -162,170 +162,170 @@
 
   <!-- 文件列表 -->
   <template v-if="clipItem.type === 'file'">
-    <FileItem  @previewItem="previewItem" :clip-item="clipItem"></FileItem>
+    <FileItem :clip-item="clipItem" @previewItem="previewItem"></FileItem>
 
     <!--    &lt;!&ndash; 列表主界面 &ndash;&gt;-->
-<!--    <div style="width: 338px;height:420px;" v-if="controlsShow === false" class="flex flex-col"-->
-<!--         @contextmenu="textButton">-->
-<!--      &lt;!&ndash; 文件标题开始 &ndash;&gt;-->
-<!--      <div class="flex h-item flex-col rounded-t-lg w-full px-4 py-2">-->
-<!--        <div class="flex items-center mb-1">-->
-<!--          <Icon :icon="getType(clipItem.type).icon" style="font-size: 1.45em;"></Icon>-->
-<!--          <span class="ml-2">{{ getType(clipItem.type).title }}</span>-->
-<!--        </div>-->
-<!--        <div class="flex justify-between">-->
-<!--          <span class="time-bg">{{ timeText }}</span>-->
-<!--          <span class="time-bg">{{ clipItem.capacity }}</span>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      &lt;!&ndash; 文件标题结束 &ndash;&gt;-->
+    <!--    <div style="width: 338px;height:420px;" v-if="controlsShow === false" class="flex flex-col"-->
+    <!--         @contextmenu="textButton">-->
+    <!--      &lt;!&ndash; 文件标题开始 &ndash;&gt;-->
+    <!--      <div class="flex h-item flex-col rounded-t-lg w-full px-4 py-2">-->
+    <!--        <div class="flex items-center mb-1">-->
+    <!--          <Icon :icon="getType(clipItem.type).icon" style="font-size: 1.45em;"></Icon>-->
+    <!--          <span class="ml-2">{{ getType(clipItem.type).title }}</span>-->
+    <!--        </div>-->
+    <!--        <div class="flex justify-between">-->
+    <!--          <span class="time-bg">{{ timeText }}</span>-->
+    <!--          <span class="time-bg">{{ clipItem.capacity }}</span>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--      &lt;!&ndash; 文件标题结束 &ndash;&gt;-->
 
-<!--      &lt;!&ndash; 文件内容开始 &ndash;&gt;-->
-<!--      <div class="flex px-5 py-20 items-center  justify-center">-->
-<!--        <div class="flex items-center justify-center flex-col">-->
-<!--          <Icon :icon="clipItem.picIcon" style="font-size: 9em;"></Icon>-->
-<!--          <span class="py-3">{{ clipItem.content }}</span>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      &lt;!&ndash; 文件内容结束 &ndash;&gt;-->
+    <!--      &lt;!&ndash; 文件内容开始 &ndash;&gt;-->
+    <!--      <div class="flex px-5 py-20 items-center  justify-center">-->
+    <!--        <div class="flex items-center justify-center flex-col">-->
+    <!--          <Icon :icon="clipItem.picIcon" style="font-size: 9em;"></Icon>-->
+    <!--          <span class="py-3">{{ clipItem.content }}</span>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--      &lt;!&ndash; 文件内容结束 &ndash;&gt;-->
 
-<!--    </div>-->
+    <!--    </div>-->
 
-<!--    &lt;!&ndash; 文件快捷键操作界面 &ndash;&gt;-->
-<!--    <div v-else-if="controlsShow === true" style="width: 338px;height:420px;">-->
-<!--      <div class="flex flex-col rounded-lg px-4 py-3 ">-->
-<!--        <div class="flex  mb-3">-->
-<!--          <div class="w-12 bt-default button-active  h-12 rounded-lg pointer flex items-center justify-center"-->
-<!--               @click="backClip">-->
-<!--            <Icon icon="xiangzuo" style="font-size: 1.45em;"></Icon>-->
-<!--          </div>-->
-<!--          <div class="flex items-center  justify-center mx-24">-->
-<!--            <span>操作</span>-->
-<!--          </div>-->
-<!--        </div>-->
+    <!--    &lt;!&ndash; 文件快捷键操作界面 &ndash;&gt;-->
+    <!--    <div v-else-if="controlsShow === true" style="width: 338px;height:420px;">-->
+    <!--      <div class="flex flex-col rounded-lg px-4 py-3 ">-->
+    <!--        <div class="flex  mb-3">-->
+    <!--          <div class="w-12 bt-default button-active  h-12 rounded-lg pointer flex items-center justify-center"-->
+    <!--               @click="backClip">-->
+    <!--            <Icon icon="xiangzuo" style="font-size: 1.45em;"></Icon>-->
+    <!--          </div>-->
+    <!--          <div class="flex items-center  justify-center mx-24">-->
+    <!--            <span>操作</span>-->
+    <!--          </div>-->
+    <!--        </div>-->
 
-<!--        &lt;!&ndash; 快捷键按钮 &ndash;&gt;-->
-<!--        <div class="flex flex-col">-->
-<!--          <vue-custom-scrollbar :settings="settingsScroller" style="height:38vh;">-->
-<!--            <div v-for="item in imageKey" @click="keyOperation(item)"-->
-<!--                 class="flex pointer justify-between btn-list button-active px-4 rounded-lg py-3 mb-2">-->
-<!--              <span>{{ item.title }}</span>-->
-<!--              <span>{{ item.intr }}</span>-->
-<!--            </div>-->
-<!--          </vue-custom-scrollbar>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
+    <!--        &lt;!&ndash; 快捷键按钮 &ndash;&gt;-->
+    <!--        <div class="flex flex-col">-->
+    <!--          <vue-custom-scrollbar :settings="settingsScroller" style="height:38vh;">-->
+    <!--            <div v-for="item in imageKey" @click="keyOperation(item)"-->
+    <!--                 class="flex pointer justify-between btn-list button-active px-4 rounded-lg py-3 mb-2">-->
+    <!--              <span>{{ item.title }}</span>-->
+    <!--              <span>{{ item.intr }}</span>-->
+    <!--            </div>-->
+    <!--          </vue-custom-scrollbar>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </div>-->
   </template>
   <!-- 文件列表 -->
 
 
   <!-- 视频列表 -->
   <template v-if="clipItem.type === 'video'">
-    <VideoItem  @previewItem="previewItem" :clip-item="clipItem"></VideoItem>
+    <VideoItem :clip-item="clipItem" @previewItem="previewItem"></VideoItem>
 
-<!--    &lt;!&ndash; 列表主界面 &ndash;&gt;-->
-<!--    <div style="width: 338px;height:420px;" class="flex flex-col " v-if="controlsShow === false">-->
-<!--      &lt;!&ndash; 视频标题开始 &ndash;&gt;-->
-<!--      <div class="flex h-item flex-col rounded-t-lg w-full px-4 py-2">-->
-<!--        <div class="flex items-center mb-1">-->
-<!--          <Icon :icon="getType(clipItem.type).icon" style="font-size: 1.45em;"></Icon>-->
-<!--          <span class="ml-2">{{ getType(clipItem.type).title }}</span>-->
-<!--        </div>-->
-<!--        <div class="flex justify-between">-->
-<!--          <span class="time-bg">{{ timeText }}</span>-->
-<!--          <span class="time-bg">{{ clipItem.capacity }}</span>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      &lt;!&ndash; 视频标题结束 &ndash;&gt;-->
+    <!--    &lt;!&ndash; 列表主界面 &ndash;&gt;-->
+    <!--    <div style="width: 338px;height:420px;" class="flex flex-col " v-if="controlsShow === false">-->
+    <!--      &lt;!&ndash; 视频标题开始 &ndash;&gt;-->
+    <!--      <div class="flex h-item flex-col rounded-t-lg w-full px-4 py-2">-->
+    <!--        <div class="flex items-center mb-1">-->
+    <!--          <Icon :icon="getType(clipItem.type).icon" style="font-size: 1.45em;"></Icon>-->
+    <!--          <span class="ml-2">{{ getType(clipItem.type).title }}</span>-->
+    <!--        </div>-->
+    <!--        <div class="flex justify-between">-->
+    <!--          <span class="time-bg">{{ timeText }}</span>-->
+    <!--          <span class="time-bg">{{ clipItem.capacity }}</span>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--      &lt;!&ndash; 视频标题结束 &ndash;&gt;-->
 
-<!--      &lt;!&ndash; 视频内容开始 &ndash;&gt;-->
-<!--      <div class="flex px-5 py-20 items-center pointer flex-col justify-center" @click="textButton">-->
-<!--        <ClipVideo :videoUrl="clipItem.videoUrl"></ClipVideo>-->
-<!--      </div>-->
-<!--      &lt;!&ndash; 视频内容结束 &ndash;&gt;-->
-<!--    </div>-->
+    <!--      &lt;!&ndash; 视频内容开始 &ndash;&gt;-->
+    <!--      <div class="flex px-5 py-20 items-center pointer flex-col justify-center" @click="textButton">-->
+    <!--        <ClipVideo :videoUrl="clipItem.videoUrl"></ClipVideo>-->
+    <!--      </div>-->
+    <!--      &lt;!&ndash; 视频内容结束 &ndash;&gt;-->
+    <!--    </div>-->
 
-<!--    &lt;!&ndash; 视频快捷键操作界面 &ndash;&gt;-->
-<!--    <div v-else-if="controlsShow === true" style="width: 338px;height:100%;">-->
-<!--      <div class="flex flex-col px-4 py-3 rounded-lg">-->
-<!--        <div class="flex  mb-3">-->
-<!--          <div class="w-12 bt-default button-active h-12 rounded-lg pointer flex items-center justify-center"-->
-<!--               @click="backClip">-->
-<!--            <Icon icon="xiangzuo" style="font-size: 1.45em;"></Icon>-->
-<!--          </div>-->
-<!--          <div class="flex  items-center  justify-center mx-24">-->
-<!--            <span>操作</span>-->
-<!--          </div>-->
-<!--        </div>-->
+    <!--    &lt;!&ndash; 视频快捷键操作界面 &ndash;&gt;-->
+    <!--    <div v-else-if="controlsShow === true" style="width: 338px;height:100%;">-->
+    <!--      <div class="flex flex-col px-4 py-3 rounded-lg">-->
+    <!--        <div class="flex  mb-3">-->
+    <!--          <div class="w-12 bt-default button-active h-12 rounded-lg pointer flex items-center justify-center"-->
+    <!--               @click="backClip">-->
+    <!--            <Icon icon="xiangzuo" style="font-size: 1.45em;"></Icon>-->
+    <!--          </div>-->
+    <!--          <div class="flex  items-center  justify-center mx-24">-->
+    <!--            <span>操作</span>-->
+    <!--          </div>-->
+    <!--        </div>-->
 
-<!--        &lt;!&ndash; 快捷键按钮 &ndash;&gt;-->
-<!--        <div class="flex flex-col">-->
-<!--          <vue-custom-scrollbar :settings="settingsScroller" style="height: 38vh;">-->
-<!--            <div v-for="item in imageKey" @click="keyOperation(item)"-->
-<!--                 class="flex pointer justify-between button-active btn-list px-4 rounded-lg py-3 mb-2">-->
-<!--              <span>{{ item.title }}</span>-->
-<!--              <span>{{ item.intr }}</span>-->
-<!--            </div>-->
-<!--          </vue-custom-scrollbar>-->
-<!--        </div>-->
+    <!--        &lt;!&ndash; 快捷键按钮 &ndash;&gt;-->
+    <!--        <div class="flex flex-col">-->
+    <!--          <vue-custom-scrollbar :settings="settingsScroller" style="height: 38vh;">-->
+    <!--            <div v-for="item in imageKey" @click="keyOperation(item)"-->
+    <!--                 class="flex pointer justify-between button-active btn-list px-4 rounded-lg py-3 mb-2">-->
+    <!--              <span>{{ item.title }}</span>-->
+    <!--              <span>{{ item.intr }}</span>-->
+    <!--            </div>-->
+    <!--          </vue-custom-scrollbar>-->
+    <!--        </div>-->
 
-<!--      </div>-->
-<!--    </div>-->
+    <!--      </div>-->
+    <!--    </div>-->
   </template>
   <!-- 视频列表-->
 
 
   <!-- 音频列表 -->
   <template v-if="clipItem.type === 'audio'">
-    <AudioItem  @previewItem="previewItem" :clip-item="clipItem"></AudioItem>
+    <AudioItem :clip-item="clipItem" @previewItem="previewItem"></AudioItem>
     <!-- 列表主界面 -->
-<!--    <div style="width: 338px;height:420px;" class="flex flex-col" v-if="controlsShow === false">-->
-<!--      &lt;!&ndash; 标题内容 &ndash;&gt;-->
-<!--      <div class="flex h-item flex-col rounded-t-lg w-full px-4 py-2">-->
-<!--        <div class="flex items-center mb-1">-->
-<!--          <Icon :icon="getType(clipItem.type).icon" style="font-size: 1.45em;"></Icon>-->
-<!--          <span class="ml-2">{{ getType(clipItem.type).title }}</span>-->
-<!--        </div>-->
-<!--        <div class="flex justify-between">-->
-<!--          <span class="time-bg">{{ timeText }}</span>-->
-<!--          <span class="time-bg">{{ clipItem.capacity }}</span>-->
-<!--        </div>-->
-<!--      </div>-->
+    <!--    <div style="width: 338px;height:420px;" class="flex flex-col" v-if="controlsShow === false">-->
+    <!--      &lt;!&ndash; 标题内容 &ndash;&gt;-->
+    <!--      <div class="flex h-item flex-col rounded-t-lg w-full px-4 py-2">-->
+    <!--        <div class="flex items-center mb-1">-->
+    <!--          <Icon :icon="getType(clipItem.type).icon" style="font-size: 1.45em;"></Icon>-->
+    <!--          <span class="ml-2">{{ getType(clipItem.type).title }}</span>-->
+    <!--        </div>-->
+    <!--        <div class="flex justify-between">-->
+    <!--          <span class="time-bg">{{ timeText }}</span>-->
+    <!--          <span class="time-bg">{{ clipItem.capacity }}</span>-->
+    <!--        </div>-->
+    <!--      </div>-->
 
-<!--      &lt;!&ndash; 内容 &ndash;&gt;-->
-<!--      <div class="flex px-5 py-20 " @contextmenu="textButton">-->
-<!--        <ClipAudio :fileUrl="clipItem.audioUrl" class="flex items-center justify-center"-->
-<!--                   style="width:302px;height:148px;"></ClipAudio>-->
-<!--      </div>-->
-<!--    </div>-->
+    <!--      &lt;!&ndash; 内容 &ndash;&gt;-->
+    <!--      <div class="flex px-5 py-20 " @contextmenu="textButton">-->
+    <!--        <ClipAudio :fileUrl="clipItem.audioUrl" class="flex items-center justify-center"-->
+    <!--                   style="width:302px;height:148px;"></ClipAudio>-->
+    <!--      </div>-->
+    <!--    </div>-->
 
-<!--    &lt;!&ndash; 快捷键操作界面 &ndash;&gt;-->
-<!--    <div v-else-if="controlsShow === true" style="width: 338px;height:100%;">-->
-<!--      <div class="flex  flex-col px-4 py-3 rounded-lg">-->
-<!--        <div class="flex  mb-3">-->
-<!--          <div class="w-12 bt-default button-active h-12 rounded-lg pointer flex items-center justify-center"-->
-<!--               @click="backClip">-->
-<!--            <Icon icon="xiangzuo" style="font-size: 1.45em;"></Icon>-->
-<!--          </div>-->
-<!--          <div class="flex  items-center  justify-center mx-24">-->
-<!--            <span>操作</span>-->
-<!--          </div>-->
-<!--        </div>-->
+    <!--    &lt;!&ndash; 快捷键操作界面 &ndash;&gt;-->
+    <!--    <div v-else-if="controlsShow === true" style="width: 338px;height:100%;">-->
+    <!--      <div class="flex  flex-col px-4 py-3 rounded-lg">-->
+    <!--        <div class="flex  mb-3">-->
+    <!--          <div class="w-12 bt-default button-active h-12 rounded-lg pointer flex items-center justify-center"-->
+    <!--               @click="backClip">-->
+    <!--            <Icon icon="xiangzuo" style="font-size: 1.45em;"></Icon>-->
+    <!--          </div>-->
+    <!--          <div class="flex  items-center  justify-center mx-24">-->
+    <!--            <span>操作</span>-->
+    <!--          </div>-->
+    <!--        </div>-->
 
-<!--        &lt;!&ndash; 快捷键按钮 &ndash;&gt;-->
-<!--        <div class="flex flex-col">-->
-<!--          <vue-custom-scrollbar :settings="settingsScroller" style="height: 44vh;">-->
-<!--            <div v-for="item in imageKey" @click="keyOperation(item)"-->
-<!--                 class="flex pointer btn-list button-active justify-between s-item px-4 rounded-lg py-3 mb-2">-->
-<!--              <span>{{ item.title }}</span>-->
-<!--              <span>{{ item.intr }}</span>-->
-<!--            </div>-->
-<!--          </vue-custom-scrollbar>-->
-<!--        </div>-->
+    <!--        &lt;!&ndash; 快捷键按钮 &ndash;&gt;-->
+    <!--        <div class="flex flex-col">-->
+    <!--          <vue-custom-scrollbar :settings="settingsScroller" style="height: 44vh;">-->
+    <!--            <div v-for="item in imageKey" @click="keyOperation(item)"-->
+    <!--                 class="flex pointer btn-list button-active justify-between s-item px-4 rounded-lg py-3 mb-2">-->
+    <!--              <span>{{ item.title }}</span>-->
+    <!--              <span>{{ item.intr }}</span>-->
+    <!--            </div>-->
+    <!--          </vue-custom-scrollbar>-->
+    <!--        </div>-->
 
-<!--      </div>-->
-<!--    </div>-->
+    <!--      </div>-->
+    <!--    </div>-->
   </template>
   <!-- 音频列表 -->
 
@@ -337,14 +337,13 @@
 <script>
 import HorzontanlPanelIcon from '../../../components/HorzontanlPanelIcon.vue'
 import ClipSetDrawer from './clipPreview/ClipSetDrawer.vue'
-import { toRaw } from 'vue'
 import ClipCodemirror from './clipPreview/ClipCodemirror.vue'
-import { mapActions, mapWritableState } from 'pinia'
-import { clipboardStore } from '../store'
+import {mapActions, mapWritableState} from 'pinia'
+import {clipboardStore} from '../store'
 import textCodeMirror from './clipPreview/textCodeMirror.vue'
 import ClipVideo from './parser/ClipVideo.vue'
 import ClipAudio from './parser/ClipAudio.vue'
-import { codeLanguage } from '../../../js/data/clipTheme'
+import {codeLanguage} from '../../../js/data/clipTheme'
 import ClipItemWidget from './ClipItemWidget.vue'
 import {getDateTime} from '../../../util'
 import TextItem from './items/TextItem.vue'
@@ -352,6 +351,7 @@ import ImageItem from './items/ImageItem.vue'
 import FileItem from './items/FileItem.vue'
 import VideoItem from './items/VideoItem.vue'
 import AudioItem from './items/AudioItem.vue'
+
 export default {
   components: {
     AudioItem,
@@ -370,10 +370,11 @@ export default {
   props: {
     clipItem: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
-  data () {
+  data() {
     return {
       type: {},
       img: {},
@@ -388,31 +389,31 @@ export default {
 
       // 文本底部切换
       textType: [
-        { title: '纯文本', icon: 'ziyuan', name: 'text', id: 0 },
+        {title: '纯文本', icon: 'ziyuan', name: 'text', id: 0},
         {
           title: '代码块', icon: 'daima', name: 'code', id: 1
         }
       ],
-      defaultTextType: { title: '纯文本', icon: 'ziyuan', name: 'text' },
+      defaultTextType: {title: '纯文本', icon: 'ziyuan', name: 'text'},
 
       // 文本键盘快捷键操作按钮
       textKey: [
-        { title: '复制', intr: 'Ctrl + C', id: 'cc' },
-        { title: '打开链接', intr: 'Ctrl + O', id: 'co' },
-        { title: '预览', intr: 'Space', id: 's' },
-        { title: '添加到收藏', intr: 'Ctrl + S', id: 'cs' },
-        { title: '删除', intr: 'Delete', id: 'd' }
+        {title: '复制', intr: 'Ctrl + C', id: 'cc'},
+        {title: '打开链接', intr: 'Ctrl + O', id: 'co'},
+        {title: '预览', intr: 'Space', id: 's'},
+        {title: '添加到收藏', intr: 'Ctrl + S', id: 'cs'},
+        {title: '删除', intr: 'Delete', id: 'd'}
       ],
 
       // 图片快捷键操作按钮
       imageKey: [
-        { title: '复制', intr: 'Ctrl + C', id: 'cc' },
-        { title: '打开', intr: 'Ctrl + O', id: 'co' },
-        { title: '预览', intr: 'Space', id: 's' },
-        { title: '复制路径', intr: 'Ctrl + Alt + C', id: 'cac' },
-        { title: '在资源管理器中打开', intr: 'Ctrl + Enter', id: 'ce' },
-        { title: '添加到收藏', intr: 'Ctrl + S', id: 'cs' },
-        { title: '删除', intr: 'Delete', id: 'd' }
+        {title: '复制', intr: 'Ctrl + C', id: 'cc'},
+        {title: '打开', intr: 'Ctrl + O', id: 'co'},
+        {title: '预览', intr: 'Space', id: 's'},
+        {title: '复制路径', intr: 'Ctrl + Alt + C', id: 'cac'},
+        {title: '在资源管理器中打开', intr: 'Ctrl + Enter', id: 'ce'},
+        {title: '添加到收藏', intr: 'Ctrl + S', id: 'cs'},
+        {title: '删除', intr: 'Delete', id: 'd'}
       ],
 
       settingsScroller: {
@@ -430,8 +431,8 @@ export default {
   },
 
   computed: {
-    ...mapWritableState(clipboardStore, ['previewShow', 'clipSetShow', 'settings','tab']),
-    showArray () {
+    ...mapWritableState(clipboardStore, ['previewShow', 'clipSetShow', 'settings', 'tab']),
+    showArray() {
       if (!this.clipItem.showType) {
         if (this.clipSetShow) {
           const newTextArr = this.textType.slice()  // 将文本底部tab数组复制一份
@@ -443,7 +444,7 @@ export default {
       }
       return this.clipItem.showType
     },
-    timeText () {
+    timeText() {
       const time = getDateTime(new Date(this.clipItem.createTime))
       return `${time.hours}:${time.minutes}:${time.seconds}` + '&nbsp;&nbsp;&nbsp;' + `${time.month}月${time.day}日`
     }
@@ -451,25 +452,25 @@ export default {
 
   watch: {
     'clipItem': {
-      handler () {
+      handler() {
         this.refresh()
       }
     },
     'defaultTextType': {
-      handler () {
+      handler() {
         this.defaultTextType = this.defaultTextType
       },
       immediate: true,
     },
   },
 
-  mounted () {
+  mounted() {
     window.addEventListener('keydown', this.clipKeyDown)
   },
 
   methods: {
     ...mapActions(clipboardStore, ['changeClipMode', 'isOpenPreview']),
-    refresh () {
+    refresh() {
 
       // this.type = this.getType(this.clipItem.type)
       // this.capacity = this.clipItem.content.length + '个字符'
@@ -477,7 +478,7 @@ export default {
       //   this.img = toRaw(this.clipItem.content).toDataURL()
       // }
     },
-    getType (type) {
+    getType(type) {
       switch (type) {
         case 'text':
           return {
@@ -508,22 +509,22 @@ export default {
 
     },
     // 鼠标右键触发
-    textButton () {
+    textButton() {
       this.controlsShow = true
     },
     // 返回按钮
-    backClip () {
+    backClip() {
       this.controlsShow = false
       this.codeLanguageShow = false
     },
 
 
     // 键盘快捷键触发
-    clipKeyDown (e) {
+    clipKeyDown(e) {
       // 打开预览快捷键功能
       if (e.keyCode === 32) {
         if (this.controlsShow) {
-          console.log('按下key',e.keyCode)
+          console.log('按下key', e.keyCode)
           this.$emit('previewItem', this.clipItem)  // 模板搭建测试,后期需要根据剪切板的id来触发预览
           this.isOpenPreview(true)
           this.controlsShow = false
@@ -532,7 +533,7 @@ export default {
     },
 
     // 快捷键按钮触发
-    keyOperation (item) {
+    keyOperation(item) {
       switch (item.id) {
         case 'cc':
           message.success('复制成功')
@@ -567,24 +568,24 @@ export default {
           break
       }
     },
-    previewItem(item){
-      console.log('猫盘',item)
-      this.$emit('previewItem',item)
+    previewItem(item) {
+      console.log('猫盘', item)
+      this.$emit('previewItem', item)
     },
     // 打开代码块语言包切换界面
-    openCode () {
+    openCode() {
       this.codeLanguageShow = true
     },
 
     // 代码块语言包切换的回调事件
-    clickCodeLanguage (item) {
+    clickCodeLanguage(item) {
       this.changeClipMode(item.abbr) // 将代码块语言包进行替换的方法
       this.defaultTextType.title = item.title
       this.codeLanguageShow = false
     },
 
     // 打开设置
-    openClipSet () {
+    openClipSet() {
       this.$refs.setDrawer.clipOpenShow()
     },
   },
@@ -596,7 +597,6 @@ export default {
 .h-item {
   background: var(--primary-bg);
 }
-
 
 
 // 隐藏滚动条

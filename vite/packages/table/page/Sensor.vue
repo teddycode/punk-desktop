@@ -1,24 +1,24 @@
 <template>
-<textarea style="width: 100%" v-html="data"></textarea>
+  <textarea style="width: 100%" v-html="data"></textarea>
 </template>
 
 <script>
 export default {
   name: 'Sensor',
-  data () {
+  data() {
     return {
       data: ''
     }
   },
-  mounted () {
+  mounted() {
 
-    if(process.platform==='win32'){
+    if (process.platform === 'win32') {
       const readAida64 = window.readAida64
-      setInterval(()=>{
+      setInterval(() => {
         readAida64().then(res => {
-          this.data=JSON.stringify(res, null, '\t')
+          this.data = JSON.stringify(res, null, '\t')
         })
-      },1000)
+      }, 1000)
     }
 
   }

@@ -1,18 +1,18 @@
 <template>
-<!--  <div class="line-title">-->
-<!--    网络资源-->
-<!--  </div>-->
-<!--  <div class="line">导入网络资源</div>-->
-<!--  <div class="line">-->
-<!--    <a-input-group compact>-->
+  <!--  <div class="line-title">-->
+  <!--    网络资源-->
+  <!--  </div>-->
+  <!--  <div class="line">导入网络资源</div>-->
+  <!--  <div class="line">-->
+  <!--    <a-input-group compact>-->
 
 
-<!--      <a-input style="width: calc(100% - 80px)" placeholder="资源地址：图片、视频">-->
+  <!--      <a-input style="width: calc(100% - 80px)" placeholder="资源地址：图片、视频">-->
 
-<!--      </a-input>-->
-<!--      <a-button type="primary" @click="importNetworkFile">导入</a-button>-->
-<!--    </a-input-group>-->
-<!--  </div>-->
+  <!--      </a-input>-->
+  <!--      <a-button type="primary" @click="importNetworkFile">导入</a-button>-->
+  <!--    </a-input-group>-->
+  <!--  </div>-->
   <div class="line-title">
     数据库修复
   </div>
@@ -33,7 +33,7 @@
          @dragover.prevent="dragOver" @drop.prevent="drop">
       <a-row :gutter="20">
         <a-col>
-          <Icon style="font-size: 3em" icon="line-dragdroptuofang"></Icon>
+          <Icon icon="line-dragdroptuofang" style="font-size: 3em"></Icon>
         </a-col>
         <a-col>
           将文件拖放到此处快速导入<br>
@@ -45,9 +45,9 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from 'pinia'
+import {mapWritableState} from 'pinia'
 import {paperStore} from '../../store/paper'
-import {message, Modal} from 'ant-design-vue'
+import {Modal} from 'ant-design-vue'
 
 const fs = window.$models.fs
 const path = require('path')
@@ -65,14 +65,14 @@ export default {
     // }
   },
   computed: {
-    ...mapWritableState(paperStore, ['settings','myPapers'])
+    ...mapWritableState(paperStore, ['settings', 'myPapers'])
   },
   mounted() {
   },
   methods: {
-    clearFix(){
-      this.myPapers=[]
-      this.activePapers=[]
+    clearFix() {
+      this.myPapers = []
+      this.activePapers = []
     },
     //选择本地按钮的导入方式
     async importFile() {

@@ -1,15 +1,23 @@
 <template>
-  <Widget :menuList="menuList" :options="options" :customData="customData" :customIndex="customIndex"
-           ref="captureNewSlot" :desk="desk">
+  <Widget ref="captureNewSlot" :customData="customData" :customIndex="customIndex" :desk="desk"
+          :menuList="menuList" :options="options">
 
-      <CaptureCore @selectSource="visibleSource=true"></CaptureCore>
+    <CaptureCore @selectSource="visibleSource=true"></CaptureCore>
 
 
     <div class="flex flex-col items-center justify-center">
-      <span :class="{disable:!this.settings.imageSavePath}" @click="showImages" class="mb-3 s-item w-full pointer btn-active voice-hover text-center rounded-lg py-3">我的截屏({{ images.length }})</span>
-      <span :class="{disable:!this.settings.videoSavePath}" @click="showVideos" class="mb-3 s-item w-full pointer btn-active voice-hover text-center rounded-lg py-3">我的录制({{ videos.length }})</span>
-      <span class="mb-2 s-item w-full pointer btn-active voice-hover text-center rounded-lg py-3" @click="visibleSettings=true">快捷键设置</span>
-      <span class="mb-3 s-item w-full pointer btn-active voice-hover text-center rounded-lg py-3" @click="visibleSettings=true">捕获设置</span>
+      <span :class="{disable:!this.settings.imageSavePath}" class="mb-3 s-item w-full pointer btn-active voice-hover text-center rounded-lg py-3"
+            @click="showImages">我的截屏({{
+          images.length
+        }})</span>
+      <span :class="{disable:!this.settings.videoSavePath}" class="mb-3 s-item w-full pointer btn-active voice-hover text-center rounded-lg py-3"
+            @click="showVideos">我的录制({{
+          videos.length
+        }})</span>
+      <span class="mb-2 s-item w-full pointer btn-active voice-hover text-center rounded-lg py-3"
+            @click="visibleSettings=true">快捷键设置</span>
+      <span class="mb-3 s-item w-full pointer btn-active voice-hover text-center rounded-lg py-3"
+            @click="visibleSettings=true">捕获设置</span>
     </div>
   </Widget>
   <teleport to="#app">
@@ -18,8 +26,8 @@
       </SourceSelector>
     </Modal>
   </teleport>
-  <a-drawer @close="reloadMic" width="500" title="设置" :bodyStyle="{ overflow: 'hidden' }"
-            v-model:visible="visibleSettings">
+  <a-drawer v-model:visible="visibleSettings" :bodyStyle="{ overflow: 'hidden' }" title="设置" width="500"
+            @close="reloadMic">
     <CaptureSettings></CaptureSettings>
   </a-drawer>
 </template>
@@ -30,8 +38,8 @@ import CaptureCore from './CaptureCore.vue'
 import SourceSelector from '../../modal/SourceSelector.vue'
 import CaptureSettings from '../../modal/CaptureSettings.vue'
 import Modal from '../../Modal.vue'
-import { captureStore } from '../../../store/capture'
-import { mapActions,mapState } from 'pinia'
+import {captureStore} from '../../../store/capture'
+import {mapActions, mapState} from 'pinia'
 
 export default {
   name: 'CaptureNewCard',
@@ -47,13 +55,14 @@ export default {
     },
     customData: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
     desk: {
       type: Object
     }
   },
-  data () {
+  data() {
     return {
       visibleSettings: false,
       visibleSource: false,
@@ -84,27 +93,27 @@ export default {
       microphoneShow: false,
     }
   },
-  mounted () {
+  mounted() {
     this.reloadAll()
   },
-  computed:{
-    ...mapState(captureStore,['images','videos','settings'])
+  computed: {
+    ...mapState(captureStore, ['images', 'videos', 'settings'])
   },
   methods: {
-    ...mapActions(captureStore,['reloadAll']),
-    closeMicrophone () {
+    ...mapActions(captureStore, ['reloadAll']),
+    closeMicrophone() {
       this.microphoneShow = !this.microphoneShow
     },
-    choosenSource(){
-      this.visibleSource=false
+    choosenSource() {
+      this.visibleSource = false
     },
-    openDir(dir){
+    openDir(dir) {
       require('electron').shell.openPath(dir)
     },
-    showImages(){
+    showImages() {
       this.openDir(this.settings.imageSavePath)
     },
-    showVideos(){
+    showVideos() {
       this.openDir(this.settings.videoSavePath)
     }
   }
@@ -128,6 +137,7 @@ export default {
 .voice-hover:hover {
   opacity: 0.5;
 }
+
 .disable {
   pointer-events: none;
   opacity: 0.5;

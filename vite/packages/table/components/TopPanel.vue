@@ -1,58 +1,59 @@
 <template>
   <div class="flex items-center justify-between w-full top-panel drag" style="width: calc(100%);">
 
-    <div @contextmenu.stop="toggleAppStats" class="flex flex-row items-center no-drag">
-      <a-tooltip title="剪切板监听中，点击进入应用，右键查看全部" v-if="enable">
+    <div class="flex flex-row items-center no-drag" @contextmenu.stop="toggleAppStats">
+      <a-tooltip v-if="enable" title="剪切板监听中，点击进入应用，右键查看全部">
         <div class="mr-2 cursor-pointer no-drag" @click="enterClipboard">
-          <icon style="font-size: 24px;vertical-align: text-top" icon="xiangmu"></icon>
+          <icon icon="xiangmu" style="font-size: 24px;vertical-align: text-top"></icon>
         </div>
       </a-tooltip>
 
-      <div class="pointer no-drag text-more" style="display: inline-block" @click="enterGameDesk(runningGame.appid)"
-        v-if="runningGame.appid">
+      <div v-if="runningGame.appid" class="pointer no-drag text-more" style="display: inline-block"
+           @click="enterGameDesk(runningGame.appid)">
         <a-avatar :size="22" :src="getClientIcon(this.runningGame.appid, this.runningGame.clientIcon)"></a-avatar>
         {{ runningGame.chineseName }}
       </div>
-      <a-tooltip title="音乐播放中，点击进入应用，右键查看全部" v-else-if="status.music.playing && status.music.title && status.music">
+      <a-tooltip v-else-if="status.music.playing && status.music.title && status.music"
+                 title="音乐播放中，点击进入应用，右键查看全部">
         <div class="pointer no-drag text-more" style="display: inline-block;color: var(--primary-text);"
-          @click="enterMusic">
-          <a-avatar style="margin-right: 0.5em" :size="22" :src="status.music.cover"></a-avatar>
+             @click="enterMusic">
+          <a-avatar :size="22" :src="status.music.cover" style="margin-right: 0.5em"></a-avatar>
           {{ status.music.title }} {{ status.music.singer }}
         </div>
       </a-tooltip>
     </div>
     <div class="flex max-search" hidden="">
-      <div hidden="" @click="openGlobalSearch" class="inline-block input-box no-drag pointer"
-        style=" background: var( --primary-bg); color: var(--secondary-text);width: 320px">
+      <div class="inline-block input-box no-drag pointer" hidden="" style=" background: var( --primary-bg); color: var(--secondary-text);width: 320px"
+           @click="openGlobalSearch">
         <Icon icon="sousuo"></Icon>
       </div>
     </div>
     <div class="flex items-end justify-end flex-1 right-area align-items-end xt-text" style="position: relative;">
       <div class="top-state">
         <!-- 番茄钟 -->
-        <TopTomato />
+        <TopTomato/>
         <TopClockTimer v-if="topClockTimerVisible"/>
       </div>
 
-      <div v-if="status.show && hasChat" class="flex items-center no-drag pointer" @click="messageAlert"
-        style="color: var(--primary-text);">
+      <div v-if="status.show && hasChat" class="flex items-center no-drag pointer" style="color: var(--primary-text);"
+           @click="messageAlert">
         <div class="flex items-center justify-center notification" style="width: 20px;height: 20px;position: relative;">
-          <img src="/icons/logo128.png" class="object-cover w-full h-full">
+          <img class="object-cover w-full h-full" src="/icons/logo128.png">
           <div class="new-message-tag"></div>
         </div>
         <div class="pl-1 primary-title pointer" style="color: var(--primary-text);">新消息</div>
-        <a-divider type="vertical" style="height: 18px;width: 1px; background: var(--primary-text);opacity: 0.2 " />
+        <a-divider style="height: 18px;width: 1px; background: var(--primary-text);opacity: 0.2 " type="vertical"/>
       </div>
 
-      <div v-else class="flex items-center justify-center pr-3 no-drag pointer" @click="messageAlert"
-        style="color: var(--primary-text);">
+      <div v-else class="flex items-center justify-center pr-3 no-drag pointer" style="color: var(--primary-text);"
+           @click="messageAlert">
         <Icon icon="notification" style="font-size:1.5em;"></Icon>
       </div>
 
       <div class="mr-2"
-        style="text-align: right;display: flex;flex-direction: row;align-items: flex-end;justify-content: flex-end;color: var(--primary-text);">
-        <div class="truncate no-drag" v-if="!loading">
-          <span hidden style=" font-size: 0.8em; margin-right: 1em" v-if="settings.tipLock && this.showLockTip">
+           style="text-align: right;display: flex;flex-direction: row;align-items: flex-end;justify-content: flex-end;color: var(--primary-text);">
+        <div v-if="!loading" class="truncate no-drag">
+          <span v-if="settings.tipLock && this.showLockTip" hidden style=" font-size: 0.8em; margin-right: 1em">
             <!-- {{ lockTimeoutDisplay }}后锁屏 -->
           </span>
           <span v-if="appSettings.showTopbarTime">
@@ -61,29 +62,30 @@
           </span>
 
           <span v-if="hasWeather && city.now && appSettings.showTopbarWeather">
-            <i style="" :class="'qi-' + city.now.icon + '-fill'"></i> {{ city.now.temp }}℃
+            <i :class="'qi-' + city.now.icon + '-fill'" style=""></i> {{ city.now.temp }}℃
           </span>
         </div>
       </div>
 
     </div>
-    <div id="windowController" v-if="showWindowController" class="flex rounded-bl-lg s-item s-bg btn-container "
-      style=" background: var(--primary-bg) !important;margin-top: -11px;overflow: hidden">
+    <div v-if="showWindowController" id="windowController" class="flex rounded-bl-lg s-item s-bg btn-container "
+         style=" background: var(--primary-bg) !important;margin-top: -11px;overflow: hidden">
       <WindowController></WindowController>
     </div>
   </div>
 
 
-  <a-drawer :width="500" :closable="false" style="z-index:1000;" placement="right" v-model:visible="messageDrawer"
-    :bodyStyle="{ padding: '12px 12px 12px 0 ', overflow: 'hidden !important', }" @closeMessage="messageDrawer = false">
+  <a-drawer v-model:visible="messageDrawer" :bodyStyle="{ padding: '12px 12px 12px 0 ', overflow: 'hidden !important', }" :closable="false" :width="500" placement="right"
+            style="z-index:1000;"
+            @closeMessage="messageDrawer = false">
     <MessagePopup @closeMessage="messageDrawer = false"></MessagePopup>
   </a-drawer>
   <a-drawer v-model:visible="appStats" placement="left">
     <div class="app-stats">
-      <div @click="enterClipboard" class="cursor-pointer app" v-if="enable">
+      <div v-if="enable" class="cursor-pointer app" @click="enterClipboard">
         <a-row>
           <a-col :span="5">
-            <icon style="font-size: 48px;vertical-align: text-top" icon="xiangmu"></icon>
+            <icon icon="xiangmu" style="font-size: 48px;vertical-align: text-top"></icon>
           </a-col>
           <a-col>
             <div class="font-bold app-title">
@@ -96,10 +98,10 @@
         </a-row>
 
       </div>
-      <div @click="enterMusic" class="app" v-if="status.music.playing && status.music.title && status.music">
+      <div v-if="status.music.playing && status.music.title && status.music" class="app" @click="enterMusic">
         <a-row>
           <a-col :span="5">
-            <a-avatar style="margin-right: 0.5em" :size="48" :src="status.music.cover"></a-avatar>
+            <a-avatar :size="48" :src="status.music.cover" style="margin-right: 0.5em"></a-avatar>
           </a-col>
           <a-col>
             <div class="font-bold app-title">
@@ -116,22 +118,22 @@
 </template>
 
 <script>
-import { countDownStore } from '../store/countDown'
-import { getDateTime } from '../../../src/util/dateTime'
-import { appStore } from '../store'
-import { cardStore } from '../store/card'
-import { topClockSettingStore } from '../store/topClockSetting'
-import { mapWritableState, mapState, mapActions } from 'pinia'
-import { paperStore } from '../store/paper'
-import { weatherStore } from '../store/weather'
-import { getSign, isMain } from '../js/common/screenUtils'
-import { timerStore } from '../store/timer'
+import {countDownStore} from '../store/countDown'
+import {getDateTime} from '../../../src/util/dateTime'
+import {appStore} from '../store'
+import {cardStore} from '../store/card'
+import {topClockSettingStore} from '../store/topClockSetting'
+import {mapActions, mapState, mapWritableState} from 'pinia'
+import {paperStore} from '../store/paper'
+import {weatherStore} from '../store/weather'
+import {isMain} from '../js/common/screenUtils'
+import {timerStore} from '../store/timer'
 import WindowController from './WindowController.vue'
 import MessagePopup from '../page/notice/noticeIndex.vue'
-import { steamUserStore } from '../store/steamUser'
-import { getClientIcon, getCover, getIcon } from '../js/common/game'
-import { clipboardStore } from '../apps/clipboard/store'
-import { noticeStore } from '../store/notice'
+import {steamUserStore} from '../store/steamUser'
+import {getClientIcon, getCover, getIcon} from '../js/common/game'
+import {clipboardStore} from '../apps/clipboard/store'
+import {noticeStore} from '../store/notice'
 import TopTomato from '../../table/apps/tomato/widget/TopTomato.vue'
 import TopClockTimer from './widgets/TopClockTimer.vue'
 
@@ -157,9 +159,9 @@ export default {
   },
   computed: {
     ...mapWritableState(countDownStore, ['countDowndate', 'countDowntime']),
-    ...mapWritableState(cardStore, ["countdownDay", "appDate", "clockEvent","filterClockEvent","clockTag",'chooseType']),
-    ...mapWritableState(appStore,['status','showWindowController']),
-    ...mapWritableState(appStore,{
+    ...mapWritableState(cardStore, ["countdownDay", "appDate", "clockEvent", "filterClockEvent", "clockTag", 'chooseType']),
+    ...mapWritableState(appStore, ['status', 'showWindowController']),
+    ...mapWritableState(appStore, {
       appSettings: 'settings'
     }),
     ...mapState(weatherStore, ['cities']),
@@ -240,9 +242,9 @@ export default {
     getClientIcon,
     getIcon,
     getCover,
-    ...mapActions(cardStore, ['setAppDate','filterClock']),
+    ...mapActions(cardStore, ['setAppDate', 'filterClock']),
     ...mapActions(noticeStore, ['loadNoticeDB']),
-    ...mapActions(appStore,['hideNoticeEntry']),
+    ...mapActions(appStore, ['hideNoticeEntry']),
     clearLockTimer() {
       if (this.lockTimer) {
         clearInterval(this.lockTimer)
@@ -305,26 +307,23 @@ export default {
       this.hideNoticeEntry()
     },
     topClockTimerVisibleSetting() {
-      this.filterClock(this.clockTag,this.chooseType)
-      if(this.checkTopClock===true){
+      this.filterClock(this.clockTag, this.chooseType)
+      if (this.checkTopClock === true) {
         if (this.filterClockEvent.length > 0) {
           // console.log(this.filterClockEvent.length);
           this.topClockTimerVisible = true
-        }
-        else if (this.countDowntime.seconds !== undefined) {
+        } else if (this.countDowntime.seconds !== undefined) {
           // console.log(this.countDowndate);
           this.topClockTimerVisible = true
-        }
-        else {
+        } else {
           // console.log(this.countDowndate,this.clockEvent);
           this.topClockTimerVisible = false
         }
-      }else{
-        this.topClockTimerVisible=false
+      } else {
+        this.topClockTimerVisible = false
 
       }
       // console.log(this.clockTag);
-
 
 
     },
@@ -428,7 +427,8 @@ export default {
   display: flex;
   // position: relative;
 }
-.right-area{
+
+.right-area {
   display: flex;
   align-items: center;
   height: 25px;

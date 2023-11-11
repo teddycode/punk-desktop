@@ -1,9 +1,9 @@
 <template>
   <!-- 统一选择模板 -->
   <div
-    :class="[{ active: activeState }, boxClass]"
-    class="xt-base-btn menu-item"
-    style=""
+      :class="[{ active: activeState }, boxClass]"
+      class="xt-base-btn menu-item"
+      style=""
   >
     <slot></slot>
   </div>
@@ -11,9 +11,8 @@
 
 <script setup>
 import routerTab from '../../../js/common/routerTab'
-import { useRoute } from 'vue-router'
-import { reactive, ref, watchEffect, onMounted, computed } from 'vue'
-import { onBeforeRouteUpdate } from 'vue-router'
+import {onBeforeRouteUpdate, useRoute} from 'vue-router'
+import {computed, onMounted, ref} from 'vue'
 
 const isActive = routerTab.isActive
 const props = defineProps({

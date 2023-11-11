@@ -1,50 +1,51 @@
 <template>
-  <Widget 
-  :options="options" 
-  :sizeList="sizeList"
-  :customData="customData"
-  :desk="desk" 
-  ref="rankingSmallSlot" 
-  :menuList="toggleRankingList">
-  <div class="bg-mask rounded-lg px-3 py-1 pointer" @click="showDrawer"
-    style="position: absolute;left: 45px;top:10px;background: var(--primary-bg);color:var(--primary-text)">{{ rankingType[rankIndex].title }}
-  </div>
+  <Widget
+      ref="rankingSmallSlot"
+      :customData="customData"
+      :desk="desk"
+      :menuList="toggleRankingList"
+      :options="options"
+      :sizeList="sizeList">
+    <div class="bg-mask rounded-lg px-3 py-1 pointer" style="position: absolute;left: 45px;top:10px;background: var(--primary-bg);color:var(--primary-text)"
+         @click="showDrawer">
+      {{ rankingType[rankIndex].title }}
+    </div>
     <!-- 总在线时长榜 -->
-    <div class="content-box" v-if="rankIndex === 0">
+    <div v-if="rankIndex === 0" class="content-box">
       <!-- 列表 -->
       <RankList :rankList="onLineList" lastName="totalDuration" unit="h"></RankList>
     </div>
     <!-- 净在线时长榜 -->
-    <div class="content-box" v-if="rankIndex === 1">
+    <div v-if="rankIndex === 1" class="content-box">
       <RankList :rankList="onLineList" lastName="netDuration" unit="h"></RankList>
     </div>
     <!-- 小队榜 -->
-    <div class="content-box" v-if="rankIndex === 2">
+    <div v-if="rankIndex === 2" class="content-box">
       <RankList :rankList="teamList" lastName="onlineDuration" unit="h"></RankList>
     </div>
     <!-- 邀请榜 -->
-    <div class="content-box" v-if="rankIndex === 3">
+    <div v-if="rankIndex === 3" class="content-box">
       <RankList :rankList="inviteList" lastName="invite" unit="人"></RankList>
     </div>
     <!-- 今日签到 -->
-    <div class="content-box" v-if="rankIndex === 4">
+    <div v-if="rankIndex === 4" class="content-box">
       <RankList :rankList="signInList" lastName="signInTime"></RankList>
     </div>
     <!-- 累积签到 -->
-    <div class="content-box" v-if="rankIndex === 5">
+    <div v-if="rankIndex === 5" class="content-box">
       <RankList></RankList>
     </div>
     <!-- 连续签到 -->
-    <div class="content-box" v-if="rankIndex === 6">
+    <div v-if="rankIndex === 6" class="content-box">
       <RankList></RankList>
     </div>
   </Widget>
-  <a-drawer v-model:visible="middleShow" title="设置" placement="right" width="500">
+  <a-drawer v-model:visible="middleShow" placement="right" title="设置" width="500">
     <div class="flex flex-col" style="color:var(--primary-text)">
-      <span   v-for="(item,index) in rankingType" :key="index"  
-      @click="getRankingType(item,index)" 
-      :class="rankIndex === index ? 'active-index':''" 
-      class="mb-4  text-center pointer change h-12 xt-bg-2 rounded-lg show-game-time py-3">
+      <span v-for="(item,index) in rankingType" :key="index"
+            :class="rankIndex === index ? 'active-index':''"
+            class="mb-4  text-center pointer change h-12 xt-bg-2 rounded-lg show-game-time py-3"
+            @click="getRankingType(item,index)">
          {{ item.title }}
       </span>
     </div>
@@ -53,10 +54,11 @@
 
 <script>
 import Widget from '../card/Widget.vue'
-import { mapActions, mapWritableState } from 'pinia'
-import { appStore } from '../../store'
-import { onLineList,teamList,inviteList,signInList } from "../../js/rank"
+import {mapActions} from 'pinia'
+import {appStore} from '../../store'
+import {inviteList, onLineList, signInList, teamList} from "../../js/rank"
 import RankList from '../rank/RankList.vue'
+
 export default {
   name: 'SmallRank',
   components: {
@@ -70,16 +72,17 @@ export default {
     },
     customData: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
-    desk:{
-      type:Object
+    desk: {
+      type: Object
     }
   },
-  data () {
+  data() {
     return {
-      options: {className: 'card small',title: '',icon: 'linechart',type: 'smallRank'},
-      sizeList:[{title:'1x1',height:1,width:1,name:'1x1'},{title:'1x2',height:2,width:1,name:'1x2'},],
+      options: {className: 'card small', title: '', icon: 'linechart', type: 'smallRank'},
+      sizeList: [{title: '1x1', height: 1, width: 1, name: '1x1'}, {title: '1x2', height: 2, width: 1, name: '1x2'},],
       //在线时长榜
       onLineList,
       // 小队榜
@@ -89,15 +92,20 @@ export default {
       // 签到榜
       signInList,
       middleShow: false,
-      toggleRankingList:[ { icon: 'shezhi1', title: '设置', fn: () => {this.middleShow = true;this.$refs.rankingSmallSlot.visible = false } } ],
+      toggleRankingList: [{
+        icon: 'shezhi1', title: '设置', fn: () => {
+          this.middleShow = true;
+          this.$refs.rankingSmallSlot.visible = false
+        }
+      }],
       rankingType: [
-        {title:'总在线时长榜',name:'total'},
-        {title:'净在线时长榜',name:'net'},
-        {title:'小队榜',name:'team'},
-        {title:'邀请榜',name:'invite'},
-        {title:'今日签到榜',name:'today'},
-        {title:'累计签到榜',name:'accrue'},
-        {title:'连续签到榜',name:'series'},
+        {title: '总在线时长榜', name: 'total'},
+        {title: '净在线时长榜', name: 'net'},
+        {title: '小队榜', name: 'team'},
+        {title: '邀请榜', name: 'invite'},
+        {title: '今日签到榜', name: 'today'},
+        {title: '累计签到榜', name: 'accrue'},
+        {title: '连续签到榜', name: 'series'},
       ],
       rankIndex: 0
     }
@@ -108,16 +116,16 @@ export default {
     }
   },
   methods: {
-    ...mapActions(appStore,['showUserCard']),
-    showCard(uid){
+    ...mapActions(appStore, ['showUserCard']),
+    showCard(uid) {
       this.showUserCard(uid)
     },
-    getRankingType(item,index){
+    getRankingType(item, index) {
       this.customData.id = index
       this.rankIndex = this.customData.id
       this.middleShow = false
     },
-    showDrawer(){
+    showDrawer() {
       this.middleShow = true
       this.$refs.rankingSmallSlot.visible = false
     }
@@ -125,7 +133,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 
 .ranking {
   width: 24px;
@@ -156,7 +164,7 @@ export default {
   background: #FAAA10;
 }
 
-.active-index{
+.active-index {
   background: var(--active-bg) !important;
 }
 </style>

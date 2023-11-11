@@ -7,8 +7,9 @@
 
 <script>
 import Main from "./main/index.vue";
-import { mapWritableState } from "pinia";
-import { aiStore } from "../../../store/ai";
+import {mapWritableState} from "pinia";
+import {aiStore} from "../../../store/ai";
+
 export default {
   data() {
     return {

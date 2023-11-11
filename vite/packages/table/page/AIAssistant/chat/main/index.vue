@@ -4,7 +4,7 @@
       <List :chatList="currentList"></List>
     </template>
     <template #text>
-      <Text @onSearch="onSearch" :isSearch="isSearch"></Text>
+      <Text :isSearch="isSearch" @onSearch="onSearch"></Text>
     </template>
   </View>
 </template>
@@ -12,10 +12,11 @@
 import Text from "./Text.vue";
 import List from "./List.vue";
 import View from "./View.vue";
-import { mapWritableState, mapActions } from "pinia";
-import { aiStore } from "../../../../store/ai";
-import { message } from "ant-design-vue";
-import { getStreamData } from "./api";
+import {mapActions, mapWritableState} from "pinia";
+import {aiStore} from "../../../../store/ai";
+import {message} from "ant-design-vue";
+import {getStreamData} from "./api";
+
 export default {
   computed: {
     ...mapWritableState(aiStore, [
@@ -80,13 +81,13 @@ export default {
       let arr = [];
 
       this.chatList[this.selectTopicIndex]
-        .slice(-1 * this.count)
-        .forEach((item) => {
-          arr.push({
-            role: item.role,
-            content: item.content,
+          .slice(-1 * this.count)
+          .forEach((item) => {
+            arr.push({
+              role: item.role,
+              content: item.content,
+            });
           });
-        });
       await this.processGPTResults(arr);
       this.isSearch = true;
       // this.topicList[this.selectTopicIndex].time = Date.now();
@@ -110,13 +111,13 @@ export default {
         }
         // 如果返回的结果 ID 与当前对话 ID 相同，则将聊天机器人的回复拼接到当前对话中
         const index = this.chatList[this.selectTopicIndex].findIndex(
-          (item) => item.id === result.id
+            (item) => item.id === result.id
         );
 
         if (index !== -1) {
           this.chatList[this.selectTopicIndex][
-            this.chatList[this.selectTopicIndex].length - 1
-          ].content += result.content;
+          this.chatList[this.selectTopicIndex].length - 1
+              ].content += result.content;
         } else {
           let assistant = {
             content: result.content,

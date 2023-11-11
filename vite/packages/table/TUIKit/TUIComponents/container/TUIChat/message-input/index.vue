@@ -1,42 +1,42 @@
 <template>
   <div :class="['message-input', isH5 && 'message-input-h5']">
     <MessageInputEditor
-      ref="editor"
-      :isH5="isH5"
-      :placeholder="placeholder"
-      :isGroup="isGroup"
-      :isMute="isMute"
-      :muteText="muteText"
-      :enableInput="enableInput"
-      :enableAt="enableAt"
-      :enableTyping="enableTyping"
-      :enableDragUpload="enableDragUpload"
-      @sendMessage="sendMessage"
-      @onTyping="onTyping"
+        ref="editor"
+        :enableAt="enableAt"
+        :enableDragUpload="enableDragUpload"
+        :enableInput="enableInput"
+        :enableTyping="enableTyping"
+        :isGroup="isGroup"
+        :isH5="isH5"
+        :isMute="isMute"
+        :muteText="muteText"
+        :placeholder="placeholder"
+        @onTyping="onTyping"
+        @sendMessage="sendMessage"
     ></MessageInputEditor>
-    <MessageInputButton :isH5="isH5" @sendMessage="sendMessage" v-if="!isMute"></MessageInputButton>
+    <MessageInputButton v-if="!isMute" :isH5="isH5" @sendMessage="sendMessage"></MessageInputButton>
     <MessageInputAt
-      :memberList="memberList"
-      :isGroup="isGroup"
-      :selfInfo="conversation?.groupProfile?.selfInfo"
-      :isH5="isH5"
-      v-if="enableAt"
+        v-if="enableAt"
+        :isGroup="isGroup"
+        :isH5="isH5"
+        :memberList="memberList"
+        :selfInfo="conversation?.groupProfile?.selfInfo"
     ></MessageInputAt>
     <MessageInputReferenceOrReply
-      :replyOrReference="replyOrReference"
-      :isH5="isH5"
-      @resetReplyOrReference="resetReplyOrReference"
+        :isH5="isH5"
+        :replyOrReference="replyOrReference"
+        @resetReplyOrReference="resetReplyOrReference"
     ></MessageInputReferenceOrReply>
   </div>
 </template>
-<script setup lang="ts">
-import { defineProps, defineEmits, toRefs, ref, defineExpose, watch } from 'vue';
+<script lang="ts" setup>
+import {defineEmits, defineExpose, defineProps, ref, toRefs, watch} from 'vue';
 import MessageInputEditor from './message-input-editor.vue';
 import MessageInputAt from './message-input-at.vue';
 import MessageInputButton from './message-input-button.vue';
 import MessageInputReferenceOrReply from './message-input-reference-or-reply.vue';
-import { JSONToObject } from '../utils/utils';
-import { handleErrorPrompts } from '../../utils';
+import {JSONToObject} from '../utils/utils';
+import {handleErrorPrompts} from '../../utils';
 
 const props = defineProps({
   placeholder: {
@@ -90,21 +90,21 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['sendMessage', 'resetReplyOrReference', 'onTyping']);
-const { placeholder, isGroup, memberList, conversation, replyOrReference, env, enableTyping } = toRefs(props);
+const {placeholder, isGroup, memberList, conversation, replyOrReference, env, enableTyping} = toRefs(props);
 const editor = ref();
 const isH5 = ref(props?.env?.isH5);
 
 watch(
-  () => conversation.value,
-  (newVal: any, oldVal: any) => {
-    if (newVal?.conversationID !== oldVal?.conversationID) {
-      // conversation change
-      editor?.value?.resetEditor();
+    () => conversation.value,
+    (newVal: any, oldVal: any) => {
+      if (newVal?.conversationID !== oldVal?.conversationID) {
+        // conversation change
+        editor?.value?.resetEditor();
+      }
+    },
+    {
+      immediate: true,
     }
-  },
-  {
-    immediate: true,
-  }
 );
 
 const sendMessage = async () => {
@@ -124,11 +124,11 @@ const sendMessage = async () => {
           // @ text message
           if (content?.payload?.atUserList) {
             res = await TUIServer?.sendTextAtMessage(
-              {
-                text: JSON.parse(JSON.stringify(content?.payload?.text)),
-                atUserList: content?.payload?.atUserList,
-              },
-              cloudCustomData
+                {
+                  text: JSON.parse(JSON.stringify(content?.payload?.text)),
+                  atUserList: content?.payload?.atUserList,
+                },
+                cloudCustomData
             );
           } else {
             res = await TUIServer?.sendTextMessage(JSON.parse(JSON.stringify(content?.payload?.text)), cloudCustomData);
@@ -195,7 +195,7 @@ const handleMessageReplyOrReference = (cloudCustomData: any) => {
       if (replyOrReference?.value?.message?.cloudCustomData) {
         const replyMessageCloudCustomData = JSONToObject(replyOrReference?.value?.message?.cloudCustomData as any);
         cloudCustomData.messageReply.messageRootID =
-          replyMessageCloudCustomData?.messageReply?.messageRootID || replyOrReference?.value?.message?.ID;
+            replyMessageCloudCustomData?.messageReply?.messageRootID || replyOrReference?.value?.message?.ID;
       }
     } catch (error) {
       console.warn(error);
@@ -224,9 +224,10 @@ defineExpose({
 });
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 @import url('../../../styles/common.scss');
 @import url('../../../styles/icon.scss');
+
 .message-input {
   flex: 1;
   position: relative;
@@ -239,6 +240,7 @@ defineExpose({
   max-width: 100%;
   overflow: hidden;
 }
+
 .message-input-h5 {
   display: flex;
   flex-direction: row;

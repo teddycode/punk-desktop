@@ -9,16 +9,16 @@ export default {
   methods: {
     getCover,
     select(game) {
-      this.$emit('valueChanged',game)
-      this.$emit('update:visible',false)
-      this.drawerVisible=false
+      this.$emit('valueChanged', game)
+      this.$emit('update:visible', false)
+      this.drawerVisible = false
     },
-    visibleChanged(){
-      this.$emit('update:visible',false)
+    visibleChanged() {
+      this.$emit('update:visible', false)
     }
   },
-  props: ['visible','items','activeId'],
-  emits: ['valueChanged','visibleChanged'],
+  props: ['visible', 'items', 'activeId'],
+  emits: ['valueChanged', 'visibleChanged'],
   data() {
     return {
       drawerVisible: false,
@@ -34,10 +34,10 @@ export default {
   computed: {
     ...mapWritableState(steamUserStore, ['runningGame']),
   },
-  watch:{
-    'visible':{
-      handler(newVal){
-        this.drawerVisible=newVal
+  watch: {
+    'visible': {
+      handler(newVal) {
+        this.drawerVisible = newVal
       }
     }
   },
@@ -48,15 +48,16 @@ export default {
 
 <template>
 
-  <vue-custom-scrollbar style="width: 100%;height: 100%;white-space: nowrap;" :settings="outerSettings">
-    <div  :class="{'active-game':item.id===activeId}" @click="select(item)" v-for="item in items" style="display: inline-block;width: 100px"
-         class="mr-6 text-center pointer mb-1 game">
+  <vue-custom-scrollbar :settings="outerSettings" style="width: 100%;height: 100%;white-space: nowrap;">
+    <div v-for="item in items" :class="{'active-game':item.id===activeId}" class="mr-6 text-center pointer mb-1 game"
+         style="display: inline-block;width: 100px"
+         @click="select(item)">
       <div>
-        <a-avatar v-if="item.iconUrl" :size="50" class="mb-2" :preview="false" style="border-radius: 4px"
-                  :src="item.iconUrl"></a-avatar>
+        <a-avatar v-if="item.iconUrl" :preview="false" :size="50" :src="item.iconUrl" class="mb-2"
+                  style="border-radius: 4px"></a-avatar>
         <icon v-else :icon="item.icon || 'desktop'" style="font-size: 40px"></icon>
       </div>
-      <div style="font-size: 14px" class="truncate">
+      <div class="truncate" style="font-size: 14px">
         {{ item.name }}
       </div>
     </div>
@@ -65,11 +66,11 @@ export default {
 
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .game {
   opacity: 0.5;
 
-  &:hover, &.active,&.active-game {
+  &:hover, &.active, &.active-game {
     opacity: 1;
   }
 }

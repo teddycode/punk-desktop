@@ -1,38 +1,41 @@
 <template>
 
-  <Widget  :options="options" @pickFilterChange="pickFilterChange" :customIndex="customIndex"
-                     :menuList="menuList" ref="cardSlot" :desk="desk">
+  <Widget ref="cardSlot" :customIndex="customIndex" :desk="desk"
+          :menuList="menuList" :options="options" @pickFilterChange="pickFilterChange">
     <div class="small-wallpaper">
       <div class="absolute inset-0 " style="border-radius: 8px;z-index: -1">
-        <div class=" w-full   " style="margin-top: 15%;text-align: center" v-if="imgList.length<=0">
+        <div v-if="imgList.length<=0" class=" w-full   " style="margin-top: 15%;text-align: center">
           <a-empty :image="simpleImage"/>
           <div class="item-content">
-            <xt-button size="mini" :w="100" :h="40" type="theme" @click="goGallery">去挑选壁纸</xt-button>
+            <xt-button :h="40" :w="100" size="mini" type="theme" @click="goGallery">去挑选壁纸</xt-button>
           </div>
         </div>
-        <div class="h-full w-full" v-else>
-          <video class="fullscreen-video " ref="wallpaperVideo" style="border-radius: 8px;object-fit: cover"
-                 playsinline="" autoplay="" muted="" loop="" v-if="currentImg.srcProtocol">
-            <source :src="currentImg.srcProtocol" type="video/mp4" id="bgVid">
+        <div v-else class="h-full w-full">
+          <video v-if="currentImg.srcProtocol" ref="wallpaperVideo" autoplay=""
+                 class="fullscreen-video " loop="" muted="" playsinline="" style="border-radius: 8px;object-fit: cover">
+            <source id="bgVid" :src="currentImg.srcProtocol" type="video/mp4">
           </video>
-          <img :src="currentImg.middleSrc" alt="" @error="imgError" class="h-full w-full" style="border-radius: 8px;object-fit: cover"
-               v-else-if="currentImg.middleSrc">
-          <img :src="currentImg.src" alt="" @error="imgError" class="h-full w-full" style="border-radius: 8px;object-fit: cover" v-else>
+          <img v-else-if="currentImg.middleSrc" :src="currentImg.middleSrc" alt="" class="h-full w-full"
+               style="border-radius: 8px;object-fit: cover"
+               @error="imgError">
+          <img v-else :src="currentImg.src" alt="" class="h-full w-full"
+               style="border-radius: 8px;object-fit: cover" @error="imgError">
 
         </div>
       </div>
-      <div class="home-blur absolute inset-0  small-blur" style="border-radius: 8px;z-index: -1;"  v-if="imgList.length>0">
+      <div v-if="imgList.length>0" class="home-blur absolute inset-0  small-blur"
+           style="border-radius: 8px;z-index: -1;">
         <div class="item-icon flex justify-center items-center pointer mx-auto mt-2" @click="randomImg">
-          <Icon class="icon " :class="randomFlag?'replace-it':''" icon="reload"></Icon>
+          <Icon :class="randomFlag?'replace-it':''" class="icon " icon="reload"></Icon>
         </div>
         <div class="flex flex-row mt-2 justify-between px-3">
           <div class="item-icon flex justify-center items-center pointer" @click="lastImg">
             <Icon class="icon" icon="caret-left"></Icon>
           </div>
-          <div class="item-icon flex justify-center items-center pointer" @click="collect"
-               v-if="addressType.name!=='my'">
+          <div v-if="addressType.name!=='my'" class="item-icon flex justify-center items-center pointer"
+               @click="collect">
             <Icon v-if="!isInMyPapers" icon="star"></Icon>
-            <Icon v-else style="fill: yellow" icon="star-fill"></Icon>
+            <Icon v-else icon="star-fill" style="fill: yellow"></Icon>
           </div>
           <div class="item-icon flex justify-center items-center pointer" @click="nextImg">
             <Icon class="icon" icon="caret-right"></Icon>
@@ -46,14 +49,14 @@
       </div>
     </div>
   </Widget>
-  <a-drawer :width="500" v-model:visible="settingVisible" placement="right">
+  <a-drawer v-model:visible="settingVisible" :width="500" placement="right">
     <template #title>
       <div class="text-center">「壁纸」设置</div>
     </template>
     <div class="text-base">壁纸源</div>
-    <a-select style="background: rgba(42, 42, 42, 1);border: 1px solid rgba(255, 255, 255, 0.1);"
-              class="w-full h-10 rounded-lg mt-4 text-xs" size="large" :bordered="false" v-model:value="pickFilterValue"
-              @change="pickFilterChange($event)" :options="wallpaperOptions">
+    <a-select v-model:value="pickFilterValue"
+              :bordered="false" :options="wallpaperOptions" class="w-full h-10 rounded-lg mt-4 text-xs" size="large"
+              style="background: rgba(42, 42, 42, 1);border: 1px solid rgba(255, 255, 255, 0.1);" @change="pickFilterChange($event)">
     </a-select>
   </a-drawer>
 </template>
@@ -61,11 +64,10 @@
 <script>
 import Widget from '../card/Widget.vue'
 import axios from 'axios'
-import { mapActions, mapWritableState } from 'pinia'
-import { Empty } from 'ant-design-vue'
-import { paperStore } from '../../store/paper'
-import { appStore } from '../../store'
-import { cardStore } from '../../store/card'
+import {mapActions, mapWritableState} from 'pinia'
+import {paperStore} from '../../store/paper'
+import {appStore} from '../../store'
+import {cardStore} from '../../store/card'
 import XtButton from '../../ui/libs/Button/index.vue'
 
 export default {
@@ -81,13 +83,14 @@ export default {
     },
     customData: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
-    desk:{
-      type:Object
+    desk: {
+      type: Object
     }
   },
-  data () {
+  data() {
     return {
       options: {
         className: 'card small',
@@ -104,12 +107,12 @@ export default {
       },],
       pickFilterValue: '我的收藏',
       wallpaperOptions: [
-        { value: '我的收藏', name: 'my', path: '' },
-        { value: '必应壁纸', name: 'bing', path: 'https://cn.bing.com/HPImageArchive.aspx?format=js&idx=1&n=8' },
-        { value: '拾光壁纸', path: 'https://api.nguaduot.cn/timeline/v2?client=thisky', name: 'PickingPaper' },
-        { value: '贪食鬼', path: 'https://api.nguaduot.cn/glutton/v2?client=thisky', name: 'PickingPaper' },
-        { value: '贪吃蛇', path: 'https://api.nguaduot.cn/snake/v2?client=thisky', name: 'PickingPaper' },
-        { value: 'wallhaven', path: 'https://api.nguaduot.cn/wallhaven/v2?client=thisky', name: 'PickingPaper' },
+        {value: '我的收藏', name: 'my', path: ''},
+        {value: '必应壁纸', name: 'bing', path: 'https://cn.bing.com/HPImageArchive.aspx?format=js&idx=1&n=8'},
+        {value: '拾光壁纸', path: 'https://api.nguaduot.cn/timeline/v2?client=thisky', name: 'PickingPaper'},
+        {value: '贪食鬼', path: 'https://api.nguaduot.cn/glutton/v2?client=thisky', name: 'PickingPaper'},
+        {value: '贪吃蛇', path: 'https://api.nguaduot.cn/snake/v2?client=thisky', name: 'PickingPaper'},
+        {value: 'wallhaven', path: 'https://api.nguaduot.cn/wallhaven/v2?client=thisky', name: 'PickingPaper'},
         // {value:'动态壁纸',name:'lively',path:'https://api.nguaduot.cn/timeline/v2'}
       ],
       settingVisible: false,
@@ -119,7 +122,7 @@ export default {
         path: '',
         name: 'my'
       },
-      imgList: [{ src: '' }],
+      imgList: [{src: ''}],
       currentImg: {
         srcProtocol: null,
         path: ''
@@ -132,18 +135,18 @@ export default {
     ...mapActions(paperStore, ['removeToMyPaper']),
     ...mapActions(appStore, ['setBackgroundImage']),
     ...mapActions(cardStore, ['updateCustomData']),
-    goGallery(){
-      this.$router.push({name:'my'})
+    goGallery() {
+      this.$router.push({name: 'my'})
     },
-    imgError(){
+    imgError() {
       this.imgSpin = false
       this.currentImg.src = '/img/defaultImg.jpg'
     },
-    pickFilterChange (e) {
+    pickFilterChange(e) {
       this.addressType = this.wallpaperOptions.find(i => i.value === e)
-      this.updateCustomData(this.customIndex, this.addressType,this.desk)
-      if(!this.addressType) {
-        this.addressType='我的收藏'
+      this.updateCustomData(this.customIndex, this.addressType, this.desk)
+      if (!this.addressType) {
+        this.addressType = '我的收藏'
       }
       if (this.addressType.path !== '') {
         axios.get(this.addressType.path, {}).then(res => {
@@ -207,11 +210,11 @@ export default {
         this.initImg()
       }
     },
-    initImg () {
+    initImg() {
       this.imgIndex = 0
       this.setImg()
     },
-    setImg () {
+    setImg() {
       this.currentImg = this.imgList[this.imgIndex] || {
         srcProtocol: null,
         path: ''
@@ -224,13 +227,13 @@ export default {
       })
 
     },
-    lastImg () {
+    lastImg() {
       this.imgIndex -= 1
       if (this.imgIndex < 0) {
         this.imgIndex = this.imgList.length - 1
       }
     },
-    async nextImg () {
+    async nextImg() {
       // if(this.imgIndex>=this.imgList.length-1){
       //   if(this.addressType.name ==='picking') {
       //
@@ -275,7 +278,7 @@ export default {
         this.imgIndex = 0
       }
     },
-    randomImg () {
+    randomImg() {
       if (this.randomFlag === true) return
       this.randomFlag = true
       setTimeout(() => {
@@ -285,7 +288,7 @@ export default {
       }, 500)
 
     },
-    collect () {
+    collect() {
       if (this.addressType.name === 'PickingPaper') {
         this.removeToMyPaper(this.imgList[this.imgIndex])
       } else if (this.addressType.name === 'bing') {
@@ -297,7 +300,7 @@ export default {
       }
 
     },
-    settingImg () {
+    settingImg() {
       if (this.addressType.name === 'my') {
         if (this.imgList[this.imgIndex].srcProtocol) {
           this.setBackgroundImage({
@@ -319,19 +322,19 @@ export default {
   },
   computed: {
     ...mapWritableState(paperStore, ['myPapers']),
-    isInMyPapers () {
+    isInMyPapers() {
       return (
-        this.myPapers.findIndex((img) => {
-          return this.imgList[this.imgIndex].src === img.src
-        }) > -1
+          this.myPapers.findIndex((img) => {
+            return this.imgList[this.imgIndex].src === img.src
+          }) > -1
       )
     },
   },
-  mounted () {
-    this.$nextTick(()=>{
-      if(!this.customData){
+  mounted() {
+    this.$nextTick(() => {
+      if (!this.customData) {
         this.pickFilterChange('我的收藏')
-      }else{
+      } else {
         this.pickFilterValue = this.customData.value
         this.pickFilterChange(this.customData.value)
       }
@@ -341,7 +344,7 @@ export default {
   },
   watch: {
     imgIndex: {
-      handler () {
+      handler() {
         this.setImg()
       },
     }
@@ -366,7 +369,7 @@ export default {
 
 .small-wallpaper {
   .small-blur {
-    background:rgba(0,0,0,0);
+    background: rgba(0, 0, 0, 0);
     backdrop-filter: blur(0) !important;
     display: none;
 
@@ -382,7 +385,7 @@ export default {
 
 }
 
-:deep(.ant-empty-image){
+:deep(.ant-empty-image) {
   height: 60px;
 }
 </style>

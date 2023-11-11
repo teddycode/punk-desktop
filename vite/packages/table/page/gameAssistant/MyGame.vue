@@ -1,50 +1,51 @@
 <template>
-  <ShareToChat :visible="shareVisible" @close="shareVisible=false" :content="shareContent" type="game" alias="游戏"></ShareToChat>
+  <ShareToChat :content="shareContent" :visible="shareVisible" alias="游戏" type="game"
+               @close="shareVisible=false"></ShareToChat>
   <div v-if="fullScreen === false">
     <div class="pt-3.5">
       <div class="flex flex-row  items-center game-page-nav">
         <div class="flex flex-row" style="padding-left: 1em">
-          <HorizontalPanel :navList="gameNavList" v-model:selectType="gameType"></HorizontalPanel>
-          <HorizontalPanel :navList="sortList" class="ml-3 main-nav" v-model:selectType="sortType"></HorizontalPanel>
+          <HorizontalPanel v-model:selectType="gameType" :navList="gameNavList"></HorizontalPanel>
+          <HorizontalPanel v-model:selectType="sortType" :navList="sortList" class="ml-3 main-nav"></HorizontalPanel>
         </div>
         <div class="flex flex-row ml-3">
-          <div @click="openDrawer"
-               class="my-bg my-title pointer h-12 w-12 rounded-lg  flex justify-center items-center">
-            <Icon style="font-size: 22px" icon="sousuo"></Icon>
+          <div class="my-bg my-title pointer h-12 w-12 rounded-lg  flex justify-center items-center"
+               @click="openDrawer">
+            <Icon icon="sousuo" style="font-size: 22px"></Icon>
           </div>
-          <div @click="openModal"
-               class="my-bg my-title pointer h-12 w-12 rounded-lg flex justify-center items-center ml-3">
-            <Icon style="font-size: 22px" icon="tianjia2"></Icon>
+          <div class="my-bg my-title pointer h-12 w-12 rounded-lg flex justify-center items-center ml-3"
+               @click="openModal">
+            <Icon icon="tianjia2" style="font-size: 22px"></Icon>
           </div>
-          <div @click="()=>{this.settingVisible = true}"
-               class="my-bg my-title pointer h-12 w-12 rounded-lg flex justify-center items-center ml-3">
-            <Icon style="font-size: 22px" icon="shezhi"></Icon>
+          <div class="my-bg my-title pointer h-12 w-12 rounded-lg flex justify-center items-center ml-3"
+               @click="()=>{this.settingVisible = true}">
+            <Icon icon="shezhi" style="font-size: 22px"></Icon>
           </div>
-          <div @click="openScreen"
-               class="my-bg my-title pointer h-12 w-12 rounded-lg flex justify-center items-center ml-3">
-            <Icon style="font-size: 22px" icon="fullscreen"></Icon>
+          <div class="my-bg my-title pointer h-12 w-12 rounded-lg flex justify-center items-center ml-3"
+               @click="openScreen">
+            <Icon icon="fullscreen" style="font-size: 22px"></Icon>
           </div>
         </div>
 
       </div>
-      <vue-custom-scrollbar :settings="settingsScroller"
-                            ref="gameScroll" style="height: calc(100vh - 15.8em);padding-right: 5px;padding-left: 1em"
-                            class="pt-3 mr-3" @scroll="scrollList($event)">
-        <div class="flex flex-row flex-wrap -ml-3 " v-if="gameType.name==='other'&&myGameList.length>0">
+      <vue-custom-scrollbar ref="gameScroll"
+                            :settings="settingsScroller" class="pt-3 mr-3"
+                            style="height: calc(100vh - 15.8em);padding-right: 5px;padding-left: 1em" @scroll="scrollList($event)">
+        <div v-if="gameType.name==='other'&&myGameList.length>0" class="flex flex-row flex-wrap -ml-3 ">
           <!--   导入的外部游戏，非steam   -->
-          <div class="pb-3 pl-3 game-list-local flex-shrink-0 my-game-content" v-for="(item,index) in myGameList">
+          <div v-for="(item,index) in myGameList" class="pb-3 pl-3 game-list-local flex-shrink-0 my-game-content">
             <div class="my-bg h-full pointer w-full rounded-lg" style="padding-top:30px" @click="openMyGame(item)"
                  @contextmenu="openOtherDetail(item)">
-              <div class="relative    mx-auto " style="height: 65px;width: 65px;" :class="hoverIndex===index?'fly':''"
+              <div :class="hoverIndex===index?'fly':''" class="relative    mx-auto " style="height: 65px;width: 65px;"
                    @mouseenter="mouseOn(index)" @mouseleave="mouseClose">
-                <img :src="item.icon" class="w-full h-full rounded-lg object-cover" alt="">
+                <img :src="item.icon" alt="" class="w-full h-full rounded-lg object-cover">
               </div>
               <div class="w-full h-12  bottom-0  mt-4 text-center text-white truncate px-3">{{ item.name }}</div>
             </div>
           </div>
         </div>
-        <div class="flex flex-row flex-wrap -ml-3 content-game "
-             v-else-if="gameType.name==='steam'&&steamGameList.length>0">
+        <div v-else-if="gameType.name==='steam'&&steamGameList.length>0"
+             class="flex flex-row flex-wrap -ml-3 content-game ">
           <!--  <div class=" pl-3 pb-3 game-list-item-first flex-shrink-0">-->
           <!--    <div class="relative rounded-lg  w-auto h-full " @contextmenu="openSteamDetail(steamGameList[0])">-->
           <!--      <img :src="'https://cdn.cloudflare.steamstatic.com/steam/apps/'+steamGameList[0].appinfo.appid+'/header.jpg'" class="w-full h-full rounded-lg object-cover"  alt="">-->
@@ -65,14 +66,14 @@
           <!--       </div>-->
           <!--    </div>-->
           <!--  </div>-->
-          <div class="pb-3 pl-3 game-list-item flex-shrink-0 my-game-content " v-for="(item,index) in selectSteamList">
-            <div class="relative  w-auto h-full my-bg  pointer flex flex-col " style="border-radius: 12px"
-                 :class="hoverIndex===index?'fly':''" @mouseenter="mouseOn(index)" @mouseleave="mouseClose"
-                 @click="openSteamDetail(item)">
+          <div v-for="(item,index) in selectSteamList" class="pb-3 pl-3 game-list-item flex-shrink-0 my-game-content ">
+            <div :class="hoverIndex===index?'fly':''" class="relative  w-auto h-full my-bg  pointer flex flex-col "
+                 style="border-radius: 12px" @click="openSteamDetail(item)" @mouseenter="mouseOn(index)"
+                 @mouseleave="mouseClose">
               <div :style="showTime?'height: calc(100% - 96px)':'height: calc(100% - 50px)'">
-                <img v-if="item" style="border-radius: 12px 12px 0 0"
-                     :src="'https://cdn.cloudflare.steamstatic.com/steam/apps/'+item.appid+'/header.jpg'"
-                     class="w-full h-full  object-cover" alt="">
+                <img v-if="item" :src="'https://cdn.cloudflare.steamstatic.com/steam/apps/'+item.appid+'/header.jpg'"
+                     alt=""
+                     class="w-full h-full  object-cover" style="border-radius: 12px 12px 0 0">
               </div>
 
               <!--    <div class="game-item-title-bg w-full h-12 absolute bottom-0 flex items-center pl-3" >{{item.appinfo.common.name}}</div>-->
@@ -91,15 +92,15 @@
         </div>
         <div v-else>
           <div class="text-center mt-20">
-            <a-empty image="/img/test/load-ail.png" description=""/>
-            <a-button v-if="gameType.name==='steam'" @click="goBind" type="primary">绑定Steam账号</a-button>
-            <a-button v-else @click="openModal" type="primary">导入外部游戏</a-button>
+            <a-empty description="" image="/img/test/load-ail.png"/>
+            <a-button v-if="gameType.name==='steam'" type="primary" @click="goBind">绑定Steam账号</a-button>
+            <a-button v-else type="primary" @click="openModal">导入外部游戏</a-button>
           </div>
 
         </div>
       </vue-custom-scrollbar>
     </div>
-    <Modal v-model:visible="modalVisibility" v-if="modalVisibility" animationName="b-t" :blurFlag="true">
+    <Modal v-if="modalVisibility" v-model:visible="modalVisibility" :blurFlag="true" animationName="b-t">
       <div class="p-6 my-bg" @click.stop>
         <!--      <div class="flex flex-row items-center">-->
         <!--        <Icon style="height: 26px;width: 26px" icon="steam"></Icon>-->
@@ -113,33 +114,33 @@
         <!--      <div @click="openModal" class="s-item pointer h-12 w-12 rounded-lg flex justify-center items-center ml-3"><Icon style="" icon="yiwen-xianxing"></Icon></div>-->
         <!--    </div>-->
         <div class="flex flex-row items-center">
-          <Icon style="height: 26px;width: 26px" icon="game"></Icon>
+          <Icon icon="game" style="height: 26px;width: 26px"></Icon>
           <div class="flex flex-col ml-4">
             <span style="color:var(--primary-text)">自定义导入其他游戏</span>
             <span style="color: var(--secondary-text);">手动选择游戏运行文件</span>
           </div>
         </div>
         <div class="flex flex-row mt-4">
-          <div style="background: var(--active-bg);color:var(--active-text);"
-               class="pointer h-12 w-48 rounded-lg flex justify-center items-center" @click.stop="openLocal">选择游戏
+          <div class="pointer h-12 w-48 rounded-lg flex justify-center items-center"
+               style="background: var(--active-bg);color:var(--active-text);" @click.stop="openLocal">选择游戏
           </div>
-          <div @click="openModal" style="background: var(--secondary-bg);"
-               class="my-title pointer h-12 w-12 rounded-lg flex justify-center items-center ml-3">
-            <Icon style="" icon="yiwen-xianxing"></Icon>
+          <div class="my-title pointer h-12 w-12 rounded-lg flex justify-center items-center ml-3" style="background: var(--secondary-bg);"
+               @click="openModal">
+            <Icon icon="yiwen-xianxing" style=""></Icon>
           </div>
         </div>
       </div>
     </Modal>
-    <Modal v-model:visible="steamShow" v-if="steamShow" animationName="bounce-in" :blurFlag="true">
-      <div class=" flex flex-col" style="border-radius: 6px;overflow: hidden" v-if="currentSteam">
-        <div class=" relative" style="height: 188px;width: 400px" v-if="currentSteam">
-          <img :src="'https://cdn.cloudflare.steamstatic.com/steam/apps/'+currentSteam.appid+'/header.jpg'" style=" "
-               class="w-full h-full object-cover" alt="">
+    <Modal v-if="steamShow" v-model:visible="steamShow" :blurFlag="true" animationName="bounce-in">
+      <div v-if="currentSteam" class=" flex flex-col" style="border-radius: 6px;overflow: hidden">
+        <div v-if="currentSteam" class=" relative" style="height: 188px;width: 400px">
+          <img :src="'https://cdn.cloudflare.steamstatic.com/steam/apps/'+currentSteam.appid+'/header.jpg'" alt=""
+               class="w-full h-full object-cover" style=" ">
         </div>
         <div class="  p-4">
-          <div style="user-select: text" class="text-white">
-            <a-avatar shape="square" :size="24"
-                      :src="getClientIcon(this.currentSteam.appid,this.currentSteam.clientIcon)"></a-avatar>
+          <div class="text-white" style="user-select: text">
+            <a-avatar :size="24" :src="getClientIcon(this.currentSteam.appid,this.currentSteam.clientIcon)"
+                      shape="square"></a-avatar>
             <span class="xt-text ml-2 truncate"> {{ currentSteam.chineseName }} {{ currentSteam.appid }}</span></div>
           <div class="flex flex-row flex-wrap w-80">
             <div class="w-1/2 mt-3">上次游玩：{{ getDateMyTime(currentSteam.time) }}</div>
@@ -152,25 +153,25 @@
             <div v-if="runningGame.appid!==currentSteam.appid"
                  class="pointer s-item game-start-button flex h-10 justify-center items-center rounded-sm w-52"
                  @click="playSteamGame(currentSteam)">
-              <Icon style="font-size: 22px" class="mr-2" icon="bofang"></Icon>
+              <Icon class="mr-2" icon="bofang" style="font-size: 22px"></Icon>
               开始游戏
             </div>
             <div v-else
                  class="pointer s-item flex h-10 justify-center items-center game-start-button running rounded-lg w-64"
                  @click="stopGame(currentSteam)">
-              <Icon style="font-size: 18px" class="mr-2" icon="guanbi"></Icon>
+              <Icon class="mr-2" icon="guanbi" style="font-size: 18px"></Icon>
               停止
             </div>
             <!--                <div class="pointer s-item w-10  flex justify-center items-center rounded-lg ml-4" @click="openDetail"><Icon style=""  icon="folder-open"></Icon></div>-->
-            <xt-button @click="shareSteamGame" :w="40" :h="40">
-              <Icon style="" icon="fenxiang"></Icon>
+            <xt-button :h="40" :w="40" @click="shareSteamGame">
+              <Icon icon="fenxiang" style=""></Icon>
             </xt-button>
-            <xt-button @click="goDetail" :w="40" :h="40">
+            <xt-button :h="40" :w="40" @click="goDetail">
               <shop-outlined/>
             </xt-button>
             <!--                <div class="pointer s-item h-10 w-10 flex justify-center items-center rounded-lg ml-4" @click="deleteGame"><Icon style=""   icon="delete"></Icon></div>-->
             <Menu :menus="gameMenus">
-              <xt-button :w="40" :h="40">
+              <xt-button :h="40" :w="40">
                 <more-outlined/>
               </xt-button>
             </Menu>
@@ -178,50 +179,50 @@
         </div>
       </div>
     </Modal>
-    <Modal v-model:visible="otherShow" v-show="otherShow" animationName="bounce-in" :blurFlag="true">
+    <Modal v-show="otherShow" v-model:visible="otherShow" :blurFlag="true" animationName="bounce-in">
       <!--   外部游戏详情弹窗     -->
       <div class="pt-12 pb-8 px-8">
         <div class="w-24 h-24 mx-auto">
-          <img :src="currentGame.icon" class="w-full h-full rounded-lg object-cover" alt="">
+          <img :src="currentGame.icon" alt="" class="w-full h-full rounded-lg object-cover">
         </div>
         <div class=" w-full h-12  flex items-center justify-center mt-3">{{ currentGame.name }}</div>
         <div class="flex flex-col  justify-between">
           <div class="flex flex-row  mt-3">
-            <div @click="showMyGameDir" class="pointer s-item w-44 flex justify-center items-center rounded-lg mr-3">
-              <Icon style="" class="mr-2" icon="folder-open"></Icon>
+            <div class="pointer s-item w-44 flex justify-center items-center rounded-lg mr-3" @click="showMyGameDir">
+              <Icon class="mr-2" icon="folder-open" style=""></Icon>
               安装路径
             </div>
-            <div @click="deleteMyGame" class="pointer s-item w-10 h-10 flex justify-center items-center rounded-lg">
+            <div class="pointer s-item w-10 h-10 flex justify-center items-center rounded-lg" @click="deleteMyGame">
               <Icon icon="delete"></Icon>
             </div>
           </div>
-          <div @click="openMyGame(currentGame)"
-               class="pointer s-item flex h-10 justify-center items-center rounded-lg mt-3">
-            <Icon style="" class="mr-2" icon="game"></Icon>
+          <div class="pointer s-item flex h-10 justify-center items-center rounded-lg mt-3"
+               @click="openMyGame(currentGame)">
+            <Icon class="mr-2" icon="game" style=""></Icon>
             开始游戏
           </div>
         </div>
       </div>
     </Modal>
-    <a-drawer :width="500" v-model:visible="drawerVisible" placement="right">
+    <a-drawer v-model:visible="drawerVisible" :width="500" placement="right">
       <template #title>
         <div class="text-center">搜索</div>
       </template>
       <a-input
-        v-model:value="selectName"
-        class="rounded-lg mt-6 my-bg my-title"
-        style="height: 48px"
-        placeholder="搜索游戏"
+          v-model:value="selectName"
+          class="rounded-lg mt-6 my-bg my-title"
+          placeholder="搜索游戏"
+          style="height: 48px"
       >
       </a-input>
     </a-drawer>
-    <a-drawer :width="500" v-model:visible="settingVisible" placement="right">
+    <a-drawer v-model:visible="settingVisible" :width="500" placement="right">
       <template #title>
         <div class="text-center">设置</div>
       </template>
       <div class="hidden select-main-nav">
         <div>排序</div>
-        <HorizontalPanel :navList="sortList" class="w-80 mt-3 " v-model:selectType="sortType"></HorizontalPanel>
+        <HorizontalPanel v-model:selectType="sortType" :navList="sortList" class="w-80 mt-3 "></HorizontalPanel>
       </div>
       <div class="flex justify-between items-center mt-4">
         显示游戏时长
@@ -236,22 +237,23 @@
 import HorizontalPanel from '../../components/HorizontalPanel.vue'
 import Modal from '../../components/Modal.vue'
 import MyFullScreenGame from './MyFullScreenGame.vue'
-import { mapWritableState, mapActions } from 'pinia'
-import { appStore } from '../../store'
-import { steamUserStore } from '../../store/steamUser'
-import { getDateTime } from '../../util'
-import { runExec } from '../../js/common/exec'
-import { message, Modal as AntModal } from 'ant-design-vue'
-import { getClientIcon, steamProtocol } from '../../js/common/game'
+import {mapActions, mapWritableState} from 'pinia'
+import {appStore} from '../../store'
+import {steamUserStore} from '../../store/steamUser'
+import {getDateTime} from '../../util'
+import {runExec} from '../../js/common/exec'
+import {message, Modal as AntModal} from 'ant-design-vue'
+import {getClientIcon, steamProtocol} from '../../js/common/game'
 import JumpNotice from '../../components/game/JumpNotice.vue'
-import { useToast } from 'vue-toastification'
+import {useToast} from 'vue-toastification'
 import cache from '../../components/card/hooks/cache'
 import Menu from '../../ui/components/Menu/index.vue'
 import XtButton from '../../ui/libs/Button/index.vue'
-import { MoreOutlined, ShopOutlined } from '@ant-design/icons-vue'
+import {MoreOutlined, ShopOutlined} from '@ant-design/icons-vue'
 import ShareToChat from '../../ui/chat/ShareToChat.vue'
 
-import {completeTask } from "../../apps/task/page/branch/task.ts"
+import {completeTask} from "../../apps/task/page/branch/task.ts"
+
 const toast = useToast()
 export default {
   name: 'MyGame',
@@ -266,9 +268,9 @@ export default {
     MoreOutlined,
     ShopOutlined
   },
-  data () {
+  data() {
     return {
-      shareVisible:false,//分享组件可见
+      shareVisible: false,//分享组件可见
       gameMenus: [
         {
           label: '删除',
@@ -297,10 +299,10 @@ export default {
         wheelPropagation: true
       },
       selectName: '',
-      gameNavList: [{ title: 'Steam游戏', name: 'steam' }, { title: '其他游戏', name: 'other' }],
-      gameType: { title: 'Steam游戏', name: 'steam' },
-      sortList: [{ title: '最近游玩', name: 'timer' }, { title: 'A-Z', name: 'letter' }],
-      sortType: { title: '最近游玩', name: 'timer' },
+      gameNavList: [{title: 'Steam游戏', name: 'steam'}, {title: '其他游戏', name: 'other'}],
+      gameType: {title: 'Steam游戏', name: 'steam'},
+      sortList: [{title: '最近游玩', name: 'timer'}, {title: 'A-Z', name: 'letter'}],
+      sortType: {title: '最近游玩', name: 'timer'},
       steamGameList: [],
       modalVisibility: false,
       gameRun: false,
@@ -315,7 +317,7 @@ export default {
       screenShow: false,
     }
   },
-  mounted () {
+  mounted() {
     this.steamGameList = this.gameList
     if (this.gameList.length > 0) {
       if (this.gameList[0].appinfo) {
@@ -328,7 +330,7 @@ export default {
   computed: {
     ...mapWritableState(steamUserStore, ['gameList', 'myGameList', 'runningGame', 'showTime', 'deskList']),
     ...mapWritableState(appStore, ['fullScreen']),
-    selectSteamList () {
+    selectSteamList() {
       if (this.selectName.trim() !== '') {
         this.steamGameList.filter((i) => {
           if (i.appInfo) {
@@ -340,15 +342,15 @@ export default {
       } else
         return this.steamGameList
     },
-    shareContent(){
+    shareContent() {
       return {
-        description:'steam游戏',
-        data:JSON.stringify({
-          type:'game',
-          game:{
+        description: 'steam游戏',
+        data: JSON.stringify({
+          type: 'game',
+          game: {
             ...this.currentSteam,
-            header:'https://cdn.cloudflare.steamstatic.com/steam/apps/'+this.currentSteam.appid+'/header.jpg',
-            icon:getClientIcon(this.currentSteam.appid,this.currentSteam.clientIcon),
+            header: 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + this.currentSteam.appid + '/header.jpg',
+            icon: getClientIcon(this.currentSteam.appid, this.currentSteam.clientIcon),
           }
         })
       }
@@ -357,16 +359,16 @@ export default {
   methods: {
     getClientIcon,
     ...mapActions(steamUserStore, ['setGameList', 'playGame', 'getClient', 'updateGameTime']),
-    goBind () {
-      this.$router.push({ name: 'gameSetting' })
+    goBind() {
+      this.$router.push({name: 'gameSetting'})
     },
-    openMyGame (item) {
+    openMyGame(item) {
       require('electron').shell.openPath(item.path)
     },
-    async openLocal () {
+    async openLocal() {
       let openPath = await tsbApi.dialog.showOpenDialog({
         title: '选择导入的代码',
-        filters: [{ name: '全部', extensions: ['*'] }],
+        filters: [{name: '全部', extensions: ['*']}],
         properties: ['multiSelections'],
       })
       if (!openPath) {
@@ -380,14 +382,14 @@ export default {
         this.myGameList.unshift(game)
       })
     },
-    stopGame () {
+    stopGame() {
       steamProtocol._run('stopstreaming')
       this.runningGame = {}
     },
     /**
      * 开始steam游戏游玩
      */
-    playSteamGame () {
+    playSteamGame() {
       // 支线任务点
       completeTask('Z0102')
       this.playGame(this.currentSteam)
@@ -423,13 +425,13 @@ export default {
         pauseOnHover: false
       })
     },
-    deleteGame () {
+    deleteGame() {
       steamProtocol.uninstall(this.currentSteam.appid)
     },
-    showMyGameDir () {
+    showMyGameDir() {
       require('electron').shell.showItemInFolder(this.currentGame.path)
     },
-    deleteMyGame () {
+    deleteMyGame() {
       AntModal.confirm({
         centered: true,
         content: '是否确认删除游戏？此操作不可还原。',
@@ -443,11 +445,11 @@ export default {
       })
 
     },
-    shareSteamGame () {
-      this.steamShow=false
-      this.shareVisible=true
+    shareSteamGame() {
+      this.steamShow = false
+      this.shareVisible = true
     },
-    goDetail () {
+    goDetail() {
       console.log(this.currentSteam)
       this.$router.push({
         name: 'GameDiscountDetail',
@@ -456,11 +458,11 @@ export default {
         }
       })
     },
-    openDetail () {
+    openDetail() {
       message.info('正在为定位到Steam游戏库')
       runExec('start steam://nav/games/details/' + this.currentSteam.appid)
     },
-    getDateMyTime (time) {
+    getDateMyTime(time) {
       if (time) {
         const timer = getDateTime(new Date(parseInt(time.rtime_last_played) * 1000))
         return time.rtime_last_played !== 0 ? timer.year + '-' + timer.month + '-' + timer.day : '0'
@@ -469,36 +471,36 @@ export default {
       }
 
     },
-    twoWeekTime (time) {
+    twoWeekTime(time) {
       return time ? (time.playtime_2weeks / 60).toFixed(1) : 0
     },
-    totalTime (time) {
+    totalTime(time) {
       return time ? (time.playtime_forever / 60).toFixed(1) : 0
     },
-    scrollList (e) {
+    scrollList(e) {
       if (e.target.scrollTop < 13) {
         this.$refs.gameScroll.$el.style.marginTop = e.target.scrollTop + 'px'
       } else {
         this.$refs.gameScroll.$el.style.marginTop = '13px'
       }
     },
-    mouseOn (e) {
+    mouseOn(e) {
       this.hoverIndex = e
     },
-    mouseClose () {
+    mouseClose() {
       this.hoverIndex = -1
     },
-    openModal () {
+    openModal() {
       this.modalVisibility = true
     },
-    openDrawer () {
+    openDrawer() {
       this.drawerVisible = true
     },
-    runGame () {
+    runGame() {
       this.gameRun = !this.gameRun
     },
 
-    openSteamDetail (item) {
+    openSteamDetail(item) {
       this.currentSteam = item
       this.steamShow = true
       this.getClient().getPlayerCount(this.currentSteam.appid, (err, online) => {
@@ -508,22 +510,22 @@ export default {
         this.currentSteam.online = online
       })
     },
-    openOtherDetail (item) {
+    openOtherDetail(item) {
       console.log(item)
       this.currentGame = item
       this.otherShow = true
     },
-    openScreen () {
+    openScreen() {
       this.fullScreen = true
       // document.querySelector('.content-view').style = 'margin:0;padding:0;'
     },
-    closeScreen () {
+    closeScreen() {
       this.fullScreen = false
     },
   },
   watch: {
     'sortType': {
-      handler () {
+      handler() {
         if (this.sortType.name === 'letter') {
           this.selectSteamList.sort((a, b) => a.name.localeCompare(b.name))
         } else {
@@ -543,7 +545,7 @@ export default {
       immediate: true
     },
     'showTime': {
-      handler (newVal) {
+      handler(newVal) {
         cache.set('game_duration', newVal)
       }
     }

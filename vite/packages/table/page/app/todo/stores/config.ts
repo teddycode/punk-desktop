@@ -1,10 +1,10 @@
 import {defineStore} from "pinia";
-import {DataSourceTypes, MenuState,sortType} from "../consts";
+import {DataSourceTypes, MenuState, sortType} from "../consts";
 import dbStorage from '../../../../store/dbStorage'
-import {ISort, IListInfo} from "../interfaces";
-import {ref} from "vue";
-window.addEventListener('resize',()=>{
-    configStore().runtime.windowWidth=document.body.clientWidth
+import {IListInfo, ISort} from "../interfaces";
+
+window.addEventListener('resize', () => {
+    configStore().runtime.windowWidth = document.body.clientWidth
 })
 // @ts-ignore
 export const configStore = defineStore('config', {
@@ -13,15 +13,13 @@ export const configStore = defineStore('config', {
             dataSourceType: DataSourceTypes.LOCAL_STORAGE, //cloud
             config: {
                 menuState: MenuState.UN_FOLD,
-                showComplete:false,
-                sort:<ISort>sortType.TIME,
+                showComplete: false,
+                sort: <ISort>sortType.TIME,
             },
-            runtime:{
-                windowWidth:document.body.clientWidth
+            runtime: {
+                windowWidth: document.body.clientWidth
             },
-            filter:{
-
-            }
+            filter: {}
         }
     },
     actions: {
@@ -31,15 +29,15 @@ export const configStore = defineStore('config', {
             }
             this.config.menuState = this.config.menuState === MenuState.FOLD ? MenuState.UN_FOLD : MenuState.FOLD
         },
-        showCompleted(){
-            this.config.showComplete=true
+        showCompleted() {
+            this.config.showComplete = true
         },
-        hideCompleted(){
-            this.config.showComplete=false
+        hideCompleted() {
+            this.config.showComplete = false
         },
-        setSort(list:IListInfo, sort:ISort){
-            if(!list){
-                this.config.sort=sort
+        setSort(list: IListInfo, sort: ISort) {
+            if (!list) {
+                this.config.sort = sort
             }
         }
 
@@ -47,13 +45,13 @@ export const configStore = defineStore('config', {
     persist: {
         enabled: true,
         strategies: [
-          {
-            // 自定义存储的 key，默认是 store.$id
-            // 可以指定任何 extends Storage 的实例，默认是 sessionStorage
-            storage: dbStorage,
-            paths: ['dataSourceType','config','runtime','filter']
-            // state 中的字段名，按组打包储存
-          },
+            {
+                // 自定义存储的 key，默认是 store.$id
+                // 可以指定任何 extends Storage 的实例，默认是 sessionStorage
+                storage: dbStorage,
+                paths: ['dataSourceType', 'config', 'runtime', 'filter']
+                // state 中的字段名，按组打包储存
+            },
         ],
     }
 })

@@ -1,10 +1,10 @@
 <template>
   <xt-menu :menus="menus">
     <div
-      class="group cursor-pointer flex items-center text-base relative rounded-xl pl-2 mb-2 mr-3"
-      style="width: 212px; height: 72px"
-      :class="{ 'xt-active-bg-2': selectTopicIndex === data.id }"
-      @click="handleIndex()"
+        :class="{ 'xt-active-bg-2': selectTopicIndex === data.id }"
+        class="group cursor-pointer flex items-center text-base relative rounded-xl pl-2 mb-2 mr-3"
+        style="width: 212px; height: 72px"
+        @click="handleIndex()"
     >
       <Icon :icon="data.icon.name" style="font-size: 17.5px"></Icon>
       <div class="ml-2 flex flex-col">
@@ -15,26 +15,27 @@
           </div>
         </div>
         <div
-          class="truncate xt-text-2 text-sm mt-1"
-          style="width: 160px; height: 22px"
+            class="truncate xt-text-2 text-sm mt-1"
+            style="width: 160px; height: 22px"
         >
           {{ text }}
         </div>
       </div>
       <div
-        class="absolute"
-        :class="{
+          :class="{
           triangle: data.top == true,
         }"
+          class="absolute"
       ></div>
     </div>
   </xt-menu>
 </template>
 
 <script>
-import { mapWritableState, mapActions } from "pinia";
-import { aiStore } from "../../../../store/ai";
+import {mapActions, mapWritableState} from "pinia";
+import {aiStore} from "../../../../store/ai";
 import dayjs from "dayjs";
+
 export default {
   data() {
     return {
@@ -44,7 +45,7 @@ export default {
           label: this.data.top ? "取消置顶" : "置顶",
           callBack: this.handleTop,
         },
-        { icon: "shanchu", label: "删除", callBack: this.handleDel },
+        {icon: "shanchu", label: "删除", callBack: this.handleDel},
         // {
         //   newIcon: "fluent-emoji:star",
         //   label: " 新删除",
@@ -101,7 +102,8 @@ export default {
       }
     },
   },
-  mounted() {},
+  mounted() {
+  },
   methods: {
     ...mapActions(aiStore, ["delTopic"]),
     getData() {

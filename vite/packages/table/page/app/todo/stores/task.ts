@@ -1,7 +1,7 @@
 import {defineStore} from "pinia";
-import {ITaskInfo, ITaskInfo as TaskInfo} from "../interfaces";
+import {ITaskInfo as TaskInfo} from "../interfaces";
 import {nanoid} from "nanoid";
-import {configStore,listStore} from "../store";
+import {configStore, listStore} from "../store";
 import dbStorage from '../../../../store/dbStorage'
 // @ts-ignore
 import _ from 'lodash-es'
@@ -21,35 +21,37 @@ export const taskStore = defineStore('task', {
         displayList: (state) => {
             //显示
             let displayArray = state.tasks
-            if(state.taskFilter){
-                displayArray=state.tasks.filter(task=>{return state.taskFilter(task)})
+            if (state.taskFilter) {
+                displayArray = state.tasks.filter(task => {
+                    return state.taskFilter(task)
+                })
             }
 
             if (!configStore().config.showComplete) {
                 displayArray = displayArray.filter(item => !item.completed)
             }
-            if(listStore().activeList===null || typeof listStore().activeList==='undefined'){
+            if (listStore().activeList === null || typeof listStore().activeList === 'undefined') {
                 //不做处理
-            }else if(listStore().activeList.nanoid){
-                displayArray = displayArray.filter(item =>{
-                    if(item.listNanoid){
-                        return item.listNanoid.indexOf(listStore().activeList.nanoid)>-1
-                    }else{
+            } else if (listStore().activeList.nanoid) {
+                displayArray = displayArray.filter(item => {
+                    if (item.listNanoid) {
+                        return item.listNanoid.indexOf(listStore().activeList.nanoid) > -1
+                    } else {
                         return false
-                    }})//todo
+                    }
+                })//todo
             }
             if (configStore().config.sort.value === sortType.TIME.value) {
-                displayArray = displayArray.sort((a, b) =>
-                {
-                    return (a.deadTime||-10) - (b.deadTime||-10)
+                displayArray = displayArray.sort((a, b) => {
+                    return (a.deadTime || -10) - (b.deadTime || -10)
                 })
-            }else if(configStore().config.sort.value === sortType.TITLE.value){
-                displayArray = displayArray.sort((a,b)=>{
-                   return (a.title>b.title?1:-1)
+            } else if (configStore().config.sort.value === sortType.TITLE.value) {
+                displayArray = displayArray.sort((a, b) => {
+                    return (a.title > b.title ? 1 : -1)
                 })
-            }else if(configStore().config.sort.value === sortType.LIST.value){
-                displayArray = displayArray.sort((a,b)=>{
-                    return ((a.listNanoid||0)>(b.listNanoid||0)?1:-1)
+            } else if (configStore().config.sort.value === sortType.LIST.value) {
+                displayArray = displayArray.sort((a, b) => {
+                    return ((a.listNanoid || 0) > (b.listNanoid || 0) ? 1 : -1)
                 })
             }
 
@@ -65,7 +67,7 @@ export const taskStore = defineStore('task', {
                 nanoid: nanoid(6),
                 createTime: Date.now(),
                 description: '',
-                descriptionType: {title: '纯文字',name: 'text'}
+                descriptionType: {title: '纯文字', name: 'text'}
             }))
             this.tasks.unshift(newTask)
         },
@@ -82,13 +84,13 @@ export const taskStore = defineStore('task', {
     persist: {
         enabled: true,
         strategies: [
-          {
-            // 自定义存储的 key，默认是 store.$id
-            // 可以指定任何 extends Storage 的实例，默认是 sessionStorage
-            storage: dbStorage,
-            paths: ['tasks','currentTasks','activeTask','taskFilter']
-            // state 中的字段名，按组打包储存`
-          },
+            {
+                // 自定义存储的 key，默认是 store.$id
+                // 可以指定任何 extends Storage 的实例，默认是 sessionStorage
+                storage: dbStorage,
+                paths: ['tasks', 'currentTasks', 'activeTask', 'taskFilter']
+                // state 中的字段名，按组打包储存`
+            },
         ],
     }
 

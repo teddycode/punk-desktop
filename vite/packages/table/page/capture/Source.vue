@@ -4,12 +4,12 @@
       <div style="display: flex;flex-direction: row;max-width: 100%;flex-wrap: wrap">
         <a-row :gutter="20">
           <a-col :span="12">
-            <div class="mr-3 pointer" style="width: 300px" v-for="source in sources">
-              <div @click="this.currentSource=source" class="mb-3 truncate">
-                <a-avatar shape="square" style="width: 20px;height: 20px" v-if="source.type==='window'"
-                          :src="'file://'+source.icon">
+            <div v-for="source in sources" class="mr-3 pointer" style="width: 300px">
+              <div class="mb-3 truncate" @click="this.currentSource=source">
+                <a-avatar v-if="source.type==='window'" :src="'file://'+source.icon" shape="square"
+                          style="width: 20px;height: 20px">
                 </a-avatar>
-                <a-avatar style="width: 20px;height: 20px" shape="square" v-else
+                <a-avatar v-else shape="square" style="width: 20px;height: 20px"
                 ></a-avatar>
                 {{ source.name }}
               </div>
@@ -17,10 +17,10 @@
             </div>
           </a-col>
           <a-col :span="12">
-            <div >
+            <div>
               预览：
               <div class="mb-4">
-                <a-image style="width: 300px;object-fit: contain" :src="'file://'+currentSource.src">
+                <a-image :src="'file://'+currentSource.src" style="width: 300px;object-fit: contain">
                 </a-image>
               </div>
             </div>
@@ -37,14 +37,14 @@
 </template>
 
 <script>
-import { captureStore } from '../../store/capture'
-import { mapActions, mapState } from 'pinia'
+import {captureStore} from '../../store/capture'
+import {mapActions, mapState} from 'pinia'
 import VueCustomScrollbar from '../../../../src/components/vue-scrollbar.vue'
 
 export default {
   name: 'Source',
-  components: { VueCustomScrollbar },
-  data () {
+  components: {VueCustomScrollbar},
+  data() {
     return {
       scrollbarSettings: {
         useBothWheelAxes: false,
@@ -54,13 +54,12 @@ export default {
         suppressScrollX: false,
         wheelPropagation: true
       },
-      currentSource:{}
+      currentSource: {}
     }
   },
 
-  mounted () {
+  mounted() {
     this.getSource()
-
 
 
   },

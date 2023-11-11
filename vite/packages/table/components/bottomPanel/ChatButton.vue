@@ -26,19 +26,19 @@ export default defineComponent({
 
 <template>
   <a-tooltip title="社交网络">
-  <div @click.stop="enterIM" style="padding:0.6em !important;;position:relative;" >
-    <emoji style="width: 52px;height:52px" icon="chat"></emoji>
-    <div class="rounded-full flex items-center justify-center  ml-3 p-0.5"
-         style="width:25px;height:25px; background:var(--error);color:var(--active-text); position: absolute;right:4px;top:4px"
-         v-if="unReadStatus !== undefined &&  unReadStatus !== 0"
-    >
-      <span v-if="unReadStatus > 99 "  style="font-size: 12px;">99+</span>
-      <span v-else> {{ unReadStatus }} </span>
+    <div style="padding:0.6em !important;;position:relative;" @click.stop="enterIM">
+      <emoji icon="chat" style="width: 52px;height:52px"></emoji>
+      <div v-if="unReadStatus !== undefined &&  unReadStatus !== 0"
+           class="rounded-full flex items-center justify-center  ml-3 p-0.5"
+           style="width:25px;height:25px; background:var(--error);color:var(--active-text); position: absolute;right:4px;top:4px"
+      >
+        <span v-if="unReadStatus > 99 " style="font-size: 12px;">99+</span>
+        <span v-else> {{ unReadStatus }} </span>
+      </div>
     </div>
-  </div>
   </a-tooltip>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 
 </style>

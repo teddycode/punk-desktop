@@ -1,14 +1,14 @@
 <template>
   <div class="FlipClock clock1">
-    <Flipper ref="flipperHour1" />
-    <Flipper ref="flipperHour2" />
+    <Flipper ref="flipperHour1"/>
+    <Flipper ref="flipperHour2"/>
     <em>:</em>
-    <Flipper ref="flipperMinute1" />
-    <Flipper ref="flipperMinute2" />
+    <Flipper ref="flipperMinute1"/>
+    <Flipper ref="flipperMinute2"/>
     <template :style="{ display: isSnow == true ? 'inline-block' : 'none' }">
       <em>:</em>
-      <Flipper ref="flipperSecond1" />
-      <Flipper ref="flipperSecond2" />
+      <Flipper ref="flipperSecond1"/>
+      <Flipper ref="flipperSecond2"/>
     </template>
 
   </div>
@@ -16,6 +16,7 @@
 
 <script>
 import Flipper from "./flipper.vue";
+
 export default {
   name: "Audio",
   components: {
@@ -54,8 +55,8 @@ export default {
         // 获取当前时间
         let now = new Date();
         let nowTimeStr = this.formatDate(
-          new Date(now.getTime() - 1000),
-          "hhiiss"
+            new Date(now.getTime() - 1000),
+            "hhiiss"
         );
         let nextTimeStr = this.formatDate(now, "hhiiss");
         for (let i = 0; i < this.flipObjs.length; i++) {
@@ -75,8 +76,8 @@ export default {
      */
       if (/(y+)/.test(dateFormat)) {
         dateFormat = dateFormat.replace(
-          RegExp.$1,
-          (date.getFullYear() + "").substr(4 - RegExp.$1.length)
+            RegExp.$1,
+            (date.getFullYear() + "").substr(4 - RegExp.$1.length)
         );
       }
       // 格式化月、日、时、分、秒
@@ -97,8 +98,8 @@ export default {
            * 例如: 下午15时，hh => 15, h => 15
            */
           dateFormat = dateFormat.replace(
-            RegExp.$1,
-            RegExp.$1.length === 1 ? str : this.padLeftZero(str)
+              RegExp.$1,
+              RegExp.$1.length === 1 ? str : this.padLeftZero(str)
           );
         }
       }

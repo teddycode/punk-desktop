@@ -1,21 +1,22 @@
 <template>
   <div class="flex flex-wrap">
     <div
-      v-for="tool in toolsList"
-      :key="tool.route"
-      class="xt-text flex flex-col items-center justify-center m-1 cursor-pointer"
-      style="width: 100px; height: 100px"
-      @click="toolClick(tool)"
+        v-for="tool in toolsList"
+        :key="tool.route"
+        class="xt-text flex flex-col items-center justify-center m-1 cursor-pointer"
+        style="width: 100px; height: 100px"
+        @click="toolClick(tool)"
     >
-      <img class="w-12 h-12 mb-2" :src="'/tools/' + tool.img + '.png'" alt="" />
+      <img :src="'/tools/' + tool.img + '.png'" alt="" class="w-12 h-12 mb-2"/>
       <div class="text-sm">{{ tool.name }}</div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapWritableState } from "pinia";
-import { main } from "../../store/main";
+import {mapWritableState} from "pinia";
+import {main} from "../../store/main";
+
 export default {
   computed: {
     ...mapWritableState(main, ["useTool"]),
@@ -23,9 +24,9 @@ export default {
   data() {
     return {
       toolsList: [
-        { name: "计算器", img: "calculator", route: "calculator" },
-        { name: "时间戳转换", img: "timeConversion", route: "timeConversion" },
-        { name: "翻译", img: "translate", route: "translate" },
+        {name: "计算器", img: "calculator", route: "calculator"},
+        {name: "时间戳转换", img: "timeConversion", route: "timeConversion"},
+        {name: "翻译", img: "translate", route: "translate"},
         {
           name: "汇率转换",
           img: "currencyExchange",
@@ -36,7 +37,7 @@ export default {
           img: "QRCodeGeneration",
           route: "QRCodeGeneration",
         },
-        { name: "一键取色", img: "colorSelection", route: "colorSelection" },
+        {name: "一键取色", img: "colorSelection", route: "colorSelection"},
         // { name: "搜索网格", img: "searchTools", route: "searchTools" },
         // { name: "文件分享", img: "fileFhare", route: "fileFhare" },
 

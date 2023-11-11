@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-center h-full" v-if="!data.length">
+  <div v-if="!data.length" class="flex items-center justify-center h-full">
     <a-empty description="点击进入待办应用" image="/emoji/sleep.png"></a-empty>
   </div>
   <vue-custom-scrollbar :settings="scrollbarSettings" style="height: 100%">
@@ -10,7 +10,7 @@
           <a-checkbox @change="changeState($event,task)"></a-checkbox>
         </div>
         <div
-          style="
+            style="
           flex: auto;
           text-wrap: normal;
           word-break: break-all;
@@ -19,8 +19,8 @@
         "
         >
           <div
-            :class="{ completed: task.completed }"
-            class="title truncate"
+              :class="{ completed: task.completed }"
+              class="title truncate"
           >
           <span style="margin-bottom: 0; line-height: 28px;color: var(--primary-text);"
           ><to-top-outlined v-if="task.isTop"/> {{ task.title }}</span
@@ -30,14 +30,14 @@
         </div>
         <div>
         <span
-          style="
+            v-if="task.deadTime"
+            class="dead-time"
+            style="
             margin-left: 5px;
             white-space: nowrap;
             word-break-wrap: none;
             display: inline-block;
           "
-          class="dead-time"
-          v-if="task.deadTime"
         >{{ getDistance(task.deadTime) }}</span
         >
         </div>
@@ -52,11 +52,10 @@ import {ITaskInfo} from "../../../page/app/todo/interfaces";
 import dayjs from "dayjs";
 import {mapActions, mapState} from "pinia";
 import {taskStore} from "../../../page/app/todo/stores/task";
-import {ToTopOutlined} from "@ant-design/icons-vue";
+import {PlusSquareOutlined, ToTopOutlined} from "@ant-design/icons-vue";
 import VueCustomScrollbar from "../../../../../src/components/vue-scrollbar.vue";
 import Emoji from "../../comp/Emoji.vue";
 import XtButton from "../../../ui/libs/Button/index.vue";
-import {PlusSquareOutlined} from '@ant-design/icons-vue'
 
 export default {
   name: "TaskList",
@@ -137,7 +136,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 :deep(.ant-checkbox-inner) {
   border: none
 }

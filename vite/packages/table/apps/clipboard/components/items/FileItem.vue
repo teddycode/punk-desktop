@@ -7,9 +7,10 @@ import {mapWritableState} from "pinia";
 import {clipboardStore} from "../../store";
 import {FileOutlined} from '@ant-design/icons-vue'
 import VueCustomScrollbar from "../../../../../../src/components/vue-scrollbar.vue";
+
 export default {
   props: ['clipItem'],
-  components: {VueCustomScrollbar, textCodeMirror, ClipCodemirror, ClipItemWidget,FileOutlined},
+  components: {VueCustomScrollbar, textCodeMirror, ClipCodemirror, ClipItemWidget, FileOutlined},
   computed: {
     ...mapWritableState(clipboardStore, ['settings']),
   },
@@ -76,7 +77,7 @@ export default {
     previewItem(item) {
       this.$emit('previewItem', item)
     },
-    getFilename(path){
+    getFilename(path) {
       return require('path').basename(path)
     }
 
@@ -87,27 +88,27 @@ export default {
 </script>
 
 <template>
-  <ClipItemWidget @previewItem="previewItem" ref="widget" @tabChanged="tabChanged" :menu-list="menuList"
-                  :clipItem="clipItem">
+  <ClipItemWidget ref="widget" :clipItem="clipItem" :menu-list="menuList" @previewItem="previewItem"
+                  @tabChanged="tabChanged">
     <template #body>
-      <vue-custom-scrollbar :settings="settingsScroller" style="height: 100%;width: 100%" >
-        <a-row  class=" m-1 line" v-for="file in clipItem.files">
-          <a-col class="text-left pt-1" :span="3">
-            <file-outlined style="font-size: 24px" />
+      <vue-custom-scrollbar :settings="settingsScroller" style="height: 100%;width: 100%">
+        <a-row v-for="file in clipItem.files" class=" m-1 line">
+          <a-col :span="3" class="text-left pt-1">
+            <file-outlined style="font-size: 24px"/>
           </a-col>
           <a-col :span="21">
             <div class="font-bold font-14">
-              {{getFilename(file)}}
+              {{ getFilename(file) }}
             </div>
             <div :title="file" class="xt-text-2 font-12 truncate">
-              {{file}}
+              {{ file }}
             </div>
 
           </a-col>
 
         </a-row>
       </vue-custom-scrollbar>
-<!--      {{clipItem.files}}-->
+      <!--      {{clipItem.files}}-->
 
     </template>
     <template #footer>
@@ -116,7 +117,7 @@ export default {
   </ClipItemWidget>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 // 切换状态
 .s-active {
   background: var(--active-bg);
@@ -149,6 +150,7 @@ export default {
 .btn-list {
   background: var(--primary-bg);
 }
-.line{
+
+.line {
 }
 </style>

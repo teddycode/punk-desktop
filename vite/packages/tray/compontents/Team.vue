@@ -1,74 +1,75 @@
 <template>
-<div class="main" v-if="messages.length>0" >
-  <div class="box-title flex justify-start align-center">
-      <comment-outlined class="box-icon" />
+  <div v-if="messages.length>0" class="main">
+    <div class="box-title flex justify-start align-center">
+      <comment-outlined class="box-icon"/>
       <span class="text-title" style="margin-left: 10px">轻聊</span>
-  </div>
-  <div class="box-content  flex flex-direction" style="height: auto">
-    <div style="width: 100%;margin-bottom: 5px;margin-top: 10px">
-      <a-row :gutter="10">
-        <a-col @click="openItem(message)" class="text-button text-more" :span="12" v-for="message in messages" style="margin-bottom: 5px">
+    </div>
+    <div class="box-content  flex flex-direction" style="height: auto">
+      <div style="width: 100%;margin-bottom: 5px;margin-top: 10px">
+        <a-row :gutter="10">
+          <a-col v-for="message in messages" :span="12" class="text-button text-more" style="margin-bottom: 5px"
+                 @click="openItem(message)">
           <span style="cursor: pointer" type="text">
-            <a-avatar v-if="message.avatar" size="small" :src="message.avatar"></a-avatar>
+            <a-avatar v-if="message.avatar" :src="message.avatar" size="small"></a-avatar>
             <a-avatar v-else size="small" src="https://up.apps.vip/logo/group.png?t=2"></a-avatar>
             &nbsp;
             <span v-if="message.body">
-              {{message.body}}
-            </span><span v-else>{{message.title}}</span><br><span style="font-size: 12px;color:grey;margin-left: 34px"> {{this.friendlyDate(message.create_time)}}</span>
+              {{ message.body }}
+            </span><span v-else>{{ message.title }}</span><br><span
+              style="font-size: 12px;color:grey;margin-left: 34px"> {{ this.friendlyDate(message.create_time) }}</span>
             &nbsp;&nbsp;</span>
-        </a-col>
-      </a-row>
-    </div>
-    <div  style="width: 100%;text-align: center;">
-      <span @click="openChat"  class="text-content-b text-button">打开轻聊查看</span>
+          </a-col>
+        </a-row>
+      </div>
+      <div style="width: 100%;text-align: center;">
+        <span class="text-content-b text-button" @click="openChat">打开轻聊查看</span>
+      </div>
     </div>
   </div>
-</div>
 </template>
 
 <script lang="ts">
-import {
-  CommentOutlined
-} from '@ant-design/icons-vue'
+import {CommentOutlined} from '@ant-design/icons-vue'
 
-import { defineComponent } from 'vue'
-const {messageModel}=window.$models
+import {defineComponent} from 'vue'
+
+const {messageModel} = window.$models
 
 export default defineComponent({
   components: {
     CommentOutlined
   },
-  data(){
+  data() {
     return {
-      messages:[]
+      messages: []
     }
   },
-   mounted() {
+  mounted() {
     this.loadMessages()
-    setInterval( ()=>{
-     this.loadMessages()
-    },2000)
+    setInterval(() => {
+      this.loadMessages()
+    }, 2000)
   },
-  methods:{
-    friendlyDate:window.tsbApi.util.friendlyDate,
-    async loadMessages(){
-      this.messages=await messageModel.allList()
-      if(this.messages.length>4){
+  methods: {
+    friendlyDate: window.tsbApi.util.friendlyDate,
+    async loadMessages() {
+      this.messages = await messageModel.allList()
+      if (this.messages.length > 4) {
         this.messages.splice(4)
       }
     },
-    openChat(){
+    openChat() {
       ipc.invoke('saAppOpenSysApp')
     },
-    openItem(item){
-      if(item.type === 'groupChat') {
+    openItem(item) {
+      if (item.type === 'groupChat') {
         ipc.send('mesageOpenOperate', {
           type: 'groupChat',
           indexName: item.index_name
         })
-      } else if(item.type === 'webOs') {
-        ipc.send('addTab',{url: item.title});
-      } else if(item.type === 'community') {
+      } else if (item.type === 'webOs') {
+        ipc.send('addTab', {url: item.title});
+      } else if (item.type === 'community') {
         //todo
       }
     }

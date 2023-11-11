@@ -1,51 +1,52 @@
 <template>
   <div class="text-base" style="margin-bottom: 10px">背景图片</div>
   <div
-    class="xt-text"
-    style=" font-size: 16px; font-weight: 400"
+      class="xt-text"
+      style=" font-size: 16px; font-weight: 400"
   >
     支持直接复制粘贴图片到此处
   </div>
   <div
-    class="flex flex-row justify-between items-center mt-6 drag"
-    style="margin: 12px 0"
+      class="flex flex-row justify-between items-center mt-6 drag"
+      style="margin: 12px 0"
   >
     <div
-      class="flex justify-center items-center rounded-lg h-12 drawer-item-bg w-1/2 pointer text-base no-drag xt-bg-2"
-      @click="importFile"
+        class="flex justify-center items-center rounded-lg h-12 drawer-item-bg w-1/2 pointer text-base no-drag xt-bg-2"
+        @click="importFile"
     >
       选择图片
     </div>
     <div
-      class="flex justify-center items-center rounded-lg h-12 drawer-item-bg w-1/2 ml-3 pointer text-base no-drag xt-bg-2"
-      @click="openMy"
+        class="flex justify-center items-center rounded-lg h-12 drawer-item-bg w-1/2 ml-3 pointer text-base no-drag xt-bg-2"
+        @click="openMy"
     >
       选自壁纸收藏
     </div>
   </div>
 
   <div class="text-base" style="margin-bottom: 10px">背景模糊度</div>
-  <a-slider v-model:value="blurs" :max="100" :step="1" class="no-drag" />
+  <a-slider v-model:value="blurs" :max="100" :step="1" class="no-drag"/>
   <div class="text-base" style="margin-bottom: 10px">调整时钟比例</div>
-  <a-slider v-model:value="zoom" :max="100" :step="1" />
+  <a-slider v-model:value="zoom" :max="100" :step="1"/>
   <ModalList
-    v-if="myImgShow"
-    v-model:visible="myImgShow"
-    title="我的收藏"
-    :imgList="myPapers"
-    @sendImg="sendImg"
-    style="z-index: 99999"
+      v-if="myImgShow"
+      v-model:visible="myImgShow"
+      :imgList="myPapers"
+      style="z-index: 99999"
+      title="我的收藏"
+      @sendImg="sendImg"
   ></ModalList>
-  <input style="display: none" ref="fileRef" type="file" name="" id="" />
+  <input id="" ref="fileRef" name="" style="display: none" type="file"/>
 </template>
 
 <script>
 import ModalList from "../../../comp/ModalList.vue";
-import { paperStore } from "../../../../store/paper";
-import { message } from "ant-design-vue";
+import {paperStore} from "../../../../store/paper";
+import {message} from "ant-design-vue";
 
-import { validateFile } from "../../../card/hooks/imageProcessing";
-import { mapWritableState } from "pinia";
+import {validateFile} from "../../../card/hooks/imageProcessing";
+import {mapWritableState} from "pinia";
+
 export default {
   computed: {
     ...mapWritableState(paperStore, ["myPapers"]),
@@ -55,7 +56,7 @@ export default {
   },
   data() {
     return {
-      myData: { title: "", link: undefined, img: {} },
+      myData: {title: "", link: undefined, img: {}},
       myImgShow: false,
       blurs: 0,
       zoom: 0,

@@ -1,5 +1,5 @@
 <template>
-  <svg class="icon" :style="style" aria-hidden="true">
+  <svg :style="style" aria-hidden="true" class="icon">
     <use v-bind:xlink:href="'#icons-'+icon"></use>
   </svg>
 
@@ -8,7 +8,7 @@
 <script>
 export default {
   name: 'Icon',
-  props:['icon','style']
+  props: ['icon', 'style']
 }
 </script>
 

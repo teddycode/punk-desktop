@@ -1,9 +1,10 @@
 <template>
   <div style="margin-top: 10px">
-    <a-empty style="margin-top: 30px" v-if="versions.length===0" description="">
+    <a-empty v-if="versions.length===0" description="" style="margin-top: 30px">
     </a-empty>
     <a-timeline>
-      <a-timeline-item @dblclick="restoreVersion(version)" @click="setActive(version)" v-for="version in versions" color="green">
+      <a-timeline-item v-for="version in versions" color="green" @click="setActive(version)"
+                       @dblclick="restoreVersion(version)">
         <div :class="{active:this.activeVersion===version}" class="version-item">
           <div class="name">{{ version.name }}</div>
           <div class="info">
@@ -27,33 +28,35 @@ export default {
     versions: [],
     activeVersion: {}
   },
-  data(){
+  data() {
     return {
-      activeVersion:{}
+      activeVersion: {}
     }
   },
   emits: ['setActive']
   , methods: {
     friendlyDate: window.tsbApi.util.friendlyDate,
-    setActive (version) {
-      this.activeVersion=version
+    setActive(version) {
+      this.activeVersion = version
       this.$emit('setActive', version)
     },
-    restoreVersion(version){
-      this.$emit('restoreVersion',version)
+    restoreVersion(version) {
+      this.$emit('restoreVersion', version)
     }
   }
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .version-item {
   cursor: pointer;
   box-sizing: border-box;
-  &.active{
+
+  &.active {
     border: 1px solid #c1c1c1;
     background: rgba(227, 227, 227, 0.71);
   }
+
   .name {
     font-size: 14px;
     font-weight: bold;

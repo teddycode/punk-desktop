@@ -1,6 +1,6 @@
 <template>
   <!-- 设置 -->
-  <a-drawer v-model:visible="setShow" title="设置" width="500" placement="right">
+  <a-drawer v-model:visible="setShow" placement="right" title="设置" width="500">
     <div class="flex items-center justify-between mb-6">
       <div class="flex flex-col">
         <span class="mb-2 primary-title">剪切板</span>
@@ -21,11 +21,11 @@
       </div>
     </div>
     <div class="primary-title mt-4">历史记录容量</div>
-    <HorizontalPanel class="mt-2" :navList="historyCapacity" v-model:selectType="defaultCapacity"></HorizontalPanel>
+    <HorizontalPanel v-model:selectType="defaultCapacity" :navList="historyCapacity" class="mt-2"></HorizontalPanel>
     <div class="primary-title mt-4">每次载入页数</div>
-    <HorizontalPanel class="mt-2" :navList="pageSizes" v-model:selectType="pageSizeTab"></HorizontalPanel>
-    <div @click="cleanData"
-         class="w-full flex items-center button-active pointer justify-center rounded-lg py-3 button-bg my-6">
+    <HorizontalPanel v-model:selectType="pageSizeTab" :navList="pageSizes" class="mt-2"></HorizontalPanel>
+    <div class="w-full flex items-center button-active pointer justify-center rounded-lg py-3 button-bg my-6"
+         @click="cleanData">
       <span>清除剪切板记录</span>
     </div>
     <div class="flex my-6 justify-between">
@@ -42,7 +42,7 @@
   </a-drawer>
 
   <!-- 代码高亮设置 -->
-  <a-drawer placement="right" width="500" title="代码高亮设置" v-model:visible="clipSetVisible" @close="onClose">
+  <a-drawer v-model:visible="clipSetVisible" placement="right" title="代码高亮设置" width="500" @close="onClose">
     <div class="flex justify-between mb-6">
       <div class="flex flex-col">
         <span class="primary-title">代码高亮自动识别</span>
@@ -51,13 +51,13 @@
       <a-switch v-model:checked="settings.codeHighlight"/>
     </div>
     <div class="mb-6 primary-title">默认语言</div>
-    <div @click="openLanguageDrawer"
-         class="mb-6 bt-bg py-3 button-active button-bg flex items-center rounded-lg pointer justify-center">
+    <div class="mb-6 bt-bg py-3 button-active button-bg flex items-center rounded-lg pointer justify-center"
+         @click="openLanguageDrawer">
       <span>{{ selectLanguage.name }}</span>
     </div>
     <div class="mb-6 primary-title">编辑器主题</div>
-    <div @click="openThemeDrawer"
-         class="mb-6 py-3 flex items-center bt-bg button-active  button-bg rounded-lg pointer justify-center">
+    <div class="mb-6 py-3 flex items-center bt-bg button-active  button-bg rounded-lg pointer justify-center"
+         @click="openThemeDrawer">
       <span>{{ settings.clipTheme }}</span>
     </div>
     <div class="flex justify-between mb-6">
@@ -68,35 +68,34 @@
       <a-switch v-model:checked="settings.showLineNumber"/>
     </div>
     <div class="mb-6 primary-title">缩进单位</div>
-    <a-input placeholder="4" class="h-12 " v-model:value="settings.clipSize" @pressEnter="updateIndentUnit($event)"/>
+    <a-input v-model:value="settings.clipSize" class="h-12 " placeholder="4" @pressEnter="updateIndentUnit($event)"/>
   </a-drawer>
 
   <!-- 主题色模块 -->
-  <HorizontalDrawer :rightSelect="themeType" ref="themeRef"
-                    v-model:selectRegion="settings.clipTheme" @getArea="getTheme"
+  <HorizontalDrawer ref="themeRef" v-model:selectRegion="settings.clipTheme"
+                    :rightSelect="themeType" @getArea="getTheme"
   >
   </HorizontalDrawer>
 
   <!-- 语言包选择 -->
-  <HorizontalDrawer :rightSelect="codeLanguage" v-model:selectRegion="settings.clipMode" ref="languageRef"
+  <HorizontalDrawer ref="languageRef" v-model:selectRegion="settings.clipMode" :rightSelect="codeLanguage"
                     @getArea="getLanguage"></HorizontalDrawer>
 </template>
 
 <script>
-import { mapActions, mapWritableState } from 'pinia'
-import { clipboardStore } from '../../store'
+import {mapActions, mapWritableState} from 'pinia'
+import {clipboardStore} from '../../store'
 import HorizontalPanel from '../../../../components/HorizontalPanel.vue'
 import HorizontalDrawer from '../../../../components/HorizontalDrawer.vue'
-import { themeType } from '../../../../js/data/clipTheme'
-import { codeLanguage } from '../../../../js/data/clipTheme'
-import { message, Modal } from 'ant-design-vue'
+import {codeLanguage, themeType} from '../../../../js/data/clipTheme'
+import {message, Modal} from 'ant-design-vue'
 
 export default {
   components: {
     HorizontalPanel,
     HorizontalDrawer
   },
-  data () {
+  data() {
     return {
       // 控制抽屉打开
       setShow: false,
@@ -108,13 +107,13 @@ export default {
       instruct: 'CTRL + ALT + V',
       // 历史记录时间
       historyCapacity: [
-        { title: '1天', name: 'day' },
-        { title: '1周', name: 'week' },
-        { title: '1月', name: 'month' },
-        { title: '不限制', name: 'unlimited' }
+        {title: '1天', name: 'day'},
+        {title: '1周', name: 'week'},
+        {title: '1月', name: 'month'},
+        {title: '不限制', name: 'unlimited'}
       ],
       pageSizes: [
-        { title: '10', name: '10' },
+        {title: '10', name: '10'},
         {
           title: '15', name: '15'
         },
@@ -126,7 +125,7 @@ export default {
         }
       ],
       // 默认历史记录时间
-      defaultCapacity: { title: '1天', name: 'day' },
+      defaultCapacity: {title: '1天', name: 'day'},
       pageSizeTab: {}
     }
   },
@@ -134,33 +133,33 @@ export default {
     ...mapWritableState(clipboardStore, [
       'settings'
     ]),
-    selectLanguage () {
+    selectLanguage() {
       const index = this.codeLanguage.find(el => {
         return el.abbr === this.settings.clipMode
       })
       return index
     }
   },
-  mounted () {
+  mounted() {
     this.pageSizeTab = this.pageSizes.find(s => {
       return String(s.name) === String(this.settings.pageSize)
     })
   },
   methods: {
     ...mapActions(clipboardStore,
-      [
-        'start', 'stop', 'isRunning', 'prepare',
-        'isClipLineNumber', 'isSetCodeHighlight',
-        'updateClipSize', 'updateTheme', 'changeClipMode',
-        'clean','isRunning'
-      ]
+        [
+          'start', 'stop', 'isRunning', 'prepare',
+          'isClipLineNumber', 'isSetCodeHighlight',
+          'updateClipSize', 'updateTheme', 'changeClipMode',
+          'clean', 'isRunning'
+        ]
     ),
     // 通过该方法可以打开弹窗
-    clipOpenShow () {
+    clipOpenShow() {
       this.setShow = true
     },
     //清理数据
-    async cleanData () {
+    async cleanData() {
       Modal.confirm({
         content: '确认清空全部记录？此操作不会删除收藏内的内容。',
         centered: true,
@@ -173,39 +172,39 @@ export default {
 
     },
     // 打开代码高亮
-    openCodeHighlight () {
+    openCodeHighlight() {
       this.clipSetVisible = true
     },
     // 关闭全部
-    onClose () {
+    onClose() {
       this.clipSetVisible = false
     },
     // 修改缩进单位配置
-    updateIndentUnit (e) {
+    updateIndentUnit(e) {
       this.updateClipSize(e.target.value)
     },
     // 选择主题
-    openThemeDrawer () {
+    openThemeDrawer() {
       this.$refs.themeRef.openDrawer()
     },
     // 选择代码语言
-    openLanguageDrawer () {
+    openLanguageDrawer() {
       this.$refs.languageRef.openDrawer()
     },
     // 修改主题
-    getTheme (item) {
+    getTheme(item) {
       // console.log('修改主题',item);
       this.updateTheme(item.name)
     },
     // 修改语言包
-    getLanguage (item) {
+    getLanguage(item) {
       // console.log('修改语言',item);
       this.changeClipMode(item.abbr)
     }
   },
   watch: {
     'settings.enable': {
-      handler (newVal, oldVal) {
+      handler(newVal, oldVal) {
         // console.log('剪切板开关',newVal)
         if (newVal) {
           //是切换到了启用
@@ -221,23 +220,23 @@ export default {
     },
     // 是否默认代码高亮
     'settings.clipSetShow': {
-      handler (newVal, oldVal) {
+      handler(newVal, oldVal) {
         this.isSetCodeHighlight(newVal)
       }
     },
     // 是否显示行号
     'settings.showLineNumber': {
-      handler (newVal, oldVal) {
+      handler(newVal, oldVal) {
         this.isClipLineNumber(newVal)
       }
     },
     'pageSizeTab': {
-      handler (newVal) {
+      handler(newVal) {
         this.settings.pageSize = Number(newVal.name)
       }
     },
     'defaultCapacity': {
-      handler (newVal) {
+      handler(newVal) {
         const values = {
           'day': 86400,
           'week': 604800,

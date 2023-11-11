@@ -1,10 +1,10 @@
-<template>    
-   <xt-left-menu :list="this.menuList" last="2" model="id" end="1">
+<template>
+  <xt-left-menu :list="this.menuList" end="1" last="2" model="id">
 
     <slot></slot>
 
   </xt-left-menu>
-<!-- 全屏 -->
+  <!-- 全屏 -->
 </template>
 
 <script>
@@ -13,8 +13,9 @@
 // import { aiStore } from "../../../store/ai";
 // import Edit from "./edit.vue";
 // import { SettingFilled } from "@ant-design/icons-vue";
-  import {mapActions, mapState,mapWritableState} from "pinia";
-  import { noteStore } from '../store'
+import {mapActions, mapWritableState} from "pinia";
+import {noteStore} from '../store'
+
 export default {
   components: {
     // CreateTopic,
@@ -23,23 +24,23 @@ export default {
     // SettingFilled,
   },
   computed: {
-      ...mapWritableState(noteStore, ['isSelTab','selNote']),
-    },
-    data() {
+    ...mapWritableState(noteStore, ['isSelTab', 'selNote']),
+  },
+  data() {
     return {
-      menuList:[
+      menuList: [
         {
           // flag: true,
           newIcon: "fluent:notepad-12-regular",
           // isSel:this.isSelTab,
-          isSel:false,
+          isSel: false,
           callBack: () => {
             // console.log('便签');
             this.isSelTab = false
             this.getNotes()
-            this.menuList[0].isSel=true
-            this.menuList[1].isSel=false
-            this.selNote=-1
+            this.menuList[0].isSel = true
+            this.menuList[1].isSel = false
+            this.selNote = -1
             // console.log(this.selIndex);
             // console.log(this.menuList);
           },
@@ -47,14 +48,14 @@ export default {
         {
           // flag: true,
           newIcon: "akar-icons:trash-can",
-          isSel:false,
+          isSel: false,
           callBack: () => {
             // console.log('回收站');
             this.isSelTab = true
             this.getNotes()
-            this.menuList[0].isSel=false
-            this.menuList[1].isSel=true
-            this.selNote=-1
+            this.menuList[0].isSel = false
+            this.menuList[1].isSel = true
+            this.selNote = -1
             // console.log(this.menuList);
           },
         },
@@ -65,8 +66,8 @@ export default {
 
     };
   },
-  methods:{
-    
+  methods: {
+
     ...mapActions(noteStore, ['getNotes']),
     formatTimestamp(timestamp) {
       var date = new Date(timestamp * 1000);

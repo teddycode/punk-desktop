@@ -1,14 +1,14 @@
 <template>
   <div
-    v-if="slot == 'default'"
-    ref="el"
-    @click="next($event)"
-    @contextmenu="next($event)"
-    class="box"
+      v-if="slot == 'default'"
+      ref="el"
+      class="box"
+      @click="next($event)"
+      @contextmenu="next($event)"
   >
     <div :class="{ 'xt-task-container': zIndexValue }">
       <slot></slot>
-      <div class="" :class="{ 'xt-task-overlay': zIndexValue }"></div>
+      <div :class="{ 'xt-task-overlay': zIndexValue }" class=""></div>
     </div>
   </div>
   <div v-else-if="slot == 'noMenu'" ref="el" @click.prevent.stop="next($event)">
@@ -19,10 +19,10 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
-import { guide } from "./guide";
-import { taskStore } from "../../../apps/task/store";
-import { mapWritableState } from "pinia";
+import {defineComponent} from "vue";
+import {guide} from "./guide";
+import {taskStore} from "../../../apps/task/store";
+import {mapWritableState} from "pinia";
 
 export default defineComponent({
   data() {
@@ -110,7 +110,7 @@ export default defineComponent({
       });
 
       this.tour.addStep({
-        attachTo: { element: this.$refs.el, on: this.task?.position ?? "top" },
+        attachTo: {element: this.$refs.el, on: this.task?.position ?? "top"},
         text: this.task?.text,
         title: this.task?.title,
         buttons: [
@@ -170,7 +170,8 @@ export default defineComponent({
     },
   },
 
-  mounted() {},
+  mounted() {
+  },
 });
 </script>
 

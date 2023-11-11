@@ -1,47 +1,52 @@
 <template>
   <div class="main" style="text-align: center;padding-top: 10em">
 
-    <div @click="exit" class="power-btn" style="background-color:var(--primary-bg) ; color: var(--primary-text);">退出
+    <div class="power-btn" style="background-color:var(--primary-bg) ; color: var(--primary-text);" @click="exit">退出
     </div>
     <div style="margin:auto;width: 51em;text-align: center; ">
       <a-row>
         <a-col>
-          <div @click="shutdown" style="background-color:var(--primary-bg) ; color: var(--primary-text);"
-            class="power-btn">关机</div>
-          <div @click="logout" style="background-color:var(--primary-bg) ; color: var(--primary-text);"
-            class="power-btn">注销</div>
+          <div class="power-btn" style="background-color:var(--primary-bg) ; color: var(--primary-text);"
+               @click="shutdown">关机
+          </div>
+          <div class="power-btn" style="background-color:var(--primary-bg) ; color: var(--primary-text);"
+               @click="logout">注销
+          </div>
         </a-col>
         <a-col>
-          <div @click="reboot" style="background-color:var(--primary-bg) ; color: var(--primary-text);"
-            class="power-btn">重启</div>
-          <div @click="sleep" style="background-color:var(--primary-bg) ; color: var(--primary-text);"
-            class="power-btn">休眠</div>
+          <div class="power-btn" style="background-color:var(--primary-bg) ; color: var(--primary-text);"
+               @click="reboot">重启
+          </div>
+          <div class="power-btn" style="background-color:var(--primary-bg) ; color: var(--primary-text);"
+               @click="sleep">休眠
+          </div>
         </a-col>
       </a-row>
     </div>
 
 
-    <br />
+    <br/>
 
   </div>
 </template>
 
 <script>
 import BackBtn from '../components/comp/BackBtn.vue'
-import { Modal, message } from 'ant-design-vue'
-import { runNir } from '../js/common/exec'
-import { getSign, isMain } from '../js/common/screenUtils'
+import {message, Modal} from 'ant-design-vue'
+import {runNir} from '../js/common/exec'
+import {getSign, isMain} from '../js/common/screenUtils'
+
 const execShell = require('child_process').exec
 export default {
   name: 'Power',
-  components: { BackBtn },
+  components: {BackBtn},
   methods: {
 
     exit() {
       if (isMain()) {
         ipc.send('exitTable')
       } else {
-        ipc.send('closeScreen', { fullDomain: getSign() })
+        ipc.send('closeScreen', {fullDomain: getSign()})
       }
 
     },
@@ -102,7 +107,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .power-btn {
   display: inline-block;
   border-radius: 100%;

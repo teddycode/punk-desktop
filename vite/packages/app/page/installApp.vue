@@ -1,45 +1,45 @@
 <template>
   <div style="padding: 20px;text-align: center">
     <div style="text-align: center">
-      <a-avatar style="width: 60px;height: 60px" :src="app.logo">
+      <a-avatar :src="app.logo" style="width: 60px;height: 60px">
       </a-avatar>
 
     </div>
     <div style="font-size: 18px;font-weight: bold;margin-top: 10px">{{ app.name }}</div>
-    <div style="margin-top:10px;margin-bottom: 10px;color: grey;font-size: 12px" v-if="from">来源：{{ from }}</div>
+    <div v-if="from" style="margin-top:10px;margin-bottom: 10px;color: grey;font-size: 12px">来源：{{ from }}</div>
     <div class="card-container">
       <p style="color: grey;margin-bottom: 10px">需要的权限</p>
-      <a-tabs  class="card-container" type="card" size="small" v-model:active-key="current">
-        <a-tab-pane  key="base" tab="基础权限">
-          <a-empty style="margin-top: 30px" description="" v-if="!checkHas(this.app.auth.base)">
+      <a-tabs v-model:active-key="current" class="card-container" size="small" type="card">
+        <a-tab-pane key="base" tab="基础权限">
+          <a-empty v-if="!checkHas(this.app.auth.base)" description="" style="margin-top: 30px">
           </a-empty>
           <ul class="auth-list">
             <template v-for="item in authList.baseList">
               <li v-if="app.auth.base[item.key]">
-                <a-checkbox block v-model:checked="userSetting.auth.base[item.key]"> {{ item.alias }}</a-checkbox>
+                <a-checkbox v-model:checked="userSetting.auth.base[item.key]" block> {{ item.alias }}</a-checkbox>
               </li>
             </template>
           </ul>
         </a-tab-pane>
-        <a-tab-pane  key="api" tab="API权限">
-          <a-empty style="margin-top: 30px" description="" v-if="!checkHas(this.app.auth.api)">
+        <a-tab-pane key="api" tab="API权限">
+          <a-empty v-if="!checkHas(this.app.auth.api)" description="" style="margin-top: 30px">
           </a-empty>
           <ul class="auth-list">
             <template v-for="item in authList.apiList">
               <li v-if="app.auth.api[item.key]">
-                <a-checkbox block v-model:checked="userSetting.auth.api[item.key]">{{ item.alias }}</a-checkbox>
+                <a-checkbox v-model:checked="userSetting.auth.api[item.key]" block>{{ item.alias }}</a-checkbox>
               </li>
             </template>
           </ul>
         </a-tab-pane>
-        <a-tab-pane  key="extra" tab="额外能力">
-          <a-empty style="margin-top: 30px" description="" v-if="!checkHas(this.app.auth.ability)">
+        <a-tab-pane key="extra" tab="额外能力">
+          <a-empty v-if="!checkHas(this.app.auth.ability)" description="" style="margin-top: 30px">
 
           </a-empty>
           <ul class="auth-list">
             <template v-for="item in authList.abilityList">
               <li v-if="app.auth.ability[item.key]">
-                <a-checkbox block v-model:checked="userSetting.auth.ability[item.key]">{{ item.alias }}</a-checkbox>
+                <a-checkbox v-model:checked="userSetting.auth.ability[item.key]" block>{{ item.alias }}</a-checkbox>
               </li>
             </template>
           </ul>
@@ -60,11 +60,12 @@
 </template>
 
 <script>
-const { appModel } = window.$models
-import  _ from 'lodash-es'
+const {appModel} = window.$models
+import _ from 'lodash-es'
+
 export default {
   name: 'installApp',
-  data () {
+  data() {
     return {
       app: {
         auth: {
@@ -92,45 +93,45 @@ export default {
     }
 
   },
-  mounted () {
+  mounted() {
     ipc.on('returnInstallAppJson', (event, args) => {
       this.app = args.appJson
       this.from = args.from
       this.auth = this.app.auth
-      this.userSetting.auth = _.cloneDeep(Object.assign(this.userSetting.auth,this.app.auth))
+      this.userSetting.auth = _.cloneDeep(Object.assign(this.userSetting.auth, this.app.auth))
     })
     ipc.send('getInstallAppJson')
   },
   methods: {
-    checkHas(object){
-      return Object.keys(object).some(key=>{
+    checkHas(object) {
+      return Object.keys(object).some(key => {
         console.log(object[key])
         return object[key]
       })
     },
-    async install () {
-      let installedAppId=''
+    async install() {
+      let installedAppId = ''
       delete this.app.nanoid
-      try{
-        if(this.app.is_debug){
-          installedAppId=await appModel.installDebugAppFromJson(this.app)
-        }else{
-          installedAppId=await appModel.installFromJson(this.app)
+      try {
+        if (this.app.is_debug) {
+          installedAppId = await appModel.installDebugAppFromJson(this.app)
+        } else {
+          installedAppId = await appModel.installFromJson(this.app)
         }
-        if(installedAppId){
-          await appModel.setUserSetting(this.app,this.userSetting)
-          ipc.send('installAppReturn', { result: true, nanoid:installedAppId})
-        }else{
-          ipc.send('installAppReturn', { result: false})
+        if (installedAppId) {
+          await appModel.setUserSetting(this.app, this.userSetting)
+          ipc.send('installAppReturn', {result: true, nanoid: installedAppId})
+        } else {
+          ipc.send('installAppReturn', {result: false})
         }
-      }catch (e) {
+      } catch (e) {
         console.warn(e)
-        ipc.send('installAppReturn', { result: false})
+        ipc.send('installAppReturn', {result: false})
       }
       ipc.send('closeSelf')
     },
-    close () {
-      ipc.send('installAppReturn', { result: false })
+    close() {
+      ipc.send('installAppReturn', {result: false})
       ipc.send('closeSelf')
     }
   }
@@ -140,12 +141,14 @@ export default {
 .card-container p {
   margin: 0;
 }
-.card-container > .ant-tabs-card .ant-tabs-content{
+
+.card-container > .ant-tabs-card .ant-tabs-content {
   height: 210px !important;
   border-radius: 3px;
   overflow-y: auto;
   background: white;
 }
+
 .card-container > .ant-tabs-card .ant-tabs-content {
   height: 120px;
   margin-top: -16px;
@@ -205,7 +208,7 @@ body {
   user-select: none;
 }
 </style>
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .auth-list {
   padding-left: 0;
   text-align: left;
@@ -213,7 +216,7 @@ body {
 
   li {
     margin-bottom: 5px;
-    padding:  5px 10px;
+    padding: 5px 10px;
     border-radius: 4px;
     border-bottom: 1px solid rgba(241, 241, 241, 0.58);
 

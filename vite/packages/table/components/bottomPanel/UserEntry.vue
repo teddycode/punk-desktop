@@ -124,10 +124,10 @@ export default defineComponent({
           console.log("uid:", uid)
           await this.deleteUserInfo()
           let res = await ipc.invoke("direct-logout", uid)
-          if (res){
+          if (res) {
             message.success('帐号退出成功。')
             this.$router.replace('/')
-          }else{
+          } else {
             message.error("账号退出失败，请重试！")
           }
         }
@@ -140,36 +140,36 @@ export default defineComponent({
 <template>
   <div v-if="!userInfo">
     <!-- need login  -->
-    <div @click="login" style="padding: 0.5em">
-      <emoji style="width: 52px; height: 52px" icon="unlogin"></emoji>
+    <div style="padding: 0.5em" @click="login">
+      <emoji icon="unlogin" style="width: 52px; height: 52px"></emoji>
     </div>
   </div>
   <div v-else>
     <div class="team-module">
       <div
-          @click="toggleTeam"
           style="
           margin-left: 0;
           padding: 0.6em !important;
           color: var(--primary-text);
           background: var(--primary-bg);
         "
+          @click="toggleTeam"
       >
         <div v-if="userInfo.avatar">
-          <BorderAvatar :avatarUrl="userInfo.avatar" :avatarSize="50"/>
+          <BorderAvatar :avatarSize="50" :avatarUrl="userInfo.avatar"/>
         </div>
         <div v-else>
-          <emoji style="width: 52px; height: 52px" icon="unlogin"></emoji>
+          <emoji icon="unlogin" style="width: 52px; height: 52px"></emoji>
         </div>
       </div>
-      <div class="team-box" v-if="openTeam">
+      <div v-if="openTeam" class="team-box">
         <div
             v-for="t in teamList"
             :key="t.title"
             class="team-item"
             @click="jump(t.type, t)"
         >
-          <a-avatar :src="t.img" :size="40"></a-avatar>
+          <a-avatar :size="40" :src="t.img"></a-avatar>
           <span>{{ t.title }}</span>
         </div>
       </div>
@@ -177,7 +177,7 @@ export default defineComponent({
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .team-module {
   position: relative;
 

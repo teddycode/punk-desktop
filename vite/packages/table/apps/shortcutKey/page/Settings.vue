@@ -9,7 +9,7 @@ export default defineComponent({
   name: "Settings",
   components: {XtButton},
   computed: {
-    ...mapWritableState(keyStore, ['sessionList', 'executedApps', 'customApps','recentlyUsedList']),
+    ...mapWritableState(keyStore, ['sessionList', 'executedApps', 'customApps', 'recentlyUsedList']),
     hideApps() {
       return this.executedApps.filter(app => app.hide)
     }
@@ -18,15 +18,15 @@ export default defineComponent({
       this.customApps = []
       this.executedApps = []
       this.sessionList = []
-      this.recentlyUsedList=[]
+      this.recentlyUsedList = []
       message.success('清理会话列表成功')
       console.log('当前的会话', this.sessionList)
     },
-    enterEdit(app){
+    enterEdit(app) {
       this.$router.push({
-        name:'editApp',
-        params:{
-          'exeName':app.exeName
+        name: 'editApp',
+        params: {
+          'exeName': app.exeName
         }
       })
     }
@@ -37,11 +37,11 @@ export default defineComponent({
 <template>
   <h3>快捷键设置</h3>
   <div class="p-4">
-    <xt-button class="mb-5" @click="clearSessionList" type="theme">清空会话列表</xt-button>
+    <xt-button class="mb-5" type="theme" @click="clearSessionList">清空会话列表</xt-button>
     <div class="line-title">已经被隐藏的软件：</div>
-    <div class="pl-2" v-if="hideApps.length===0">暂无被隐藏的软件，您可以在软件设置中隐藏不需要的软件。</div>
+    <div v-if="hideApps.length===0" class="pl-2">暂无被隐藏的软件，您可以在软件设置中隐藏不需要的软件。</div>
     <ul class="hide-app-list w-full flex gap-2">
-      <li class="pointer " v-for="app in hideApps" @click="enterEdit(app)">
+      <li v-for="app in hideApps" class="pointer " @click="enterEdit(app)">
         <div class="hide-app">
           <a-row :gutter="10">
             <a-col>
@@ -59,11 +59,12 @@ export default defineComponent({
 
 </template>
 
-<style scoped lang="scss">
-.hide-app-list{
+<style lang="scss" scoped>
+.hide-app-list {
   list-style: none;
   padding-left: 20px;
 }
+
 .hide-app {
   border-radius: 4px;
   background: var(--secondary-bg);

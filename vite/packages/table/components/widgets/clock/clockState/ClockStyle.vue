@@ -21,9 +21,10 @@
 </template>
 <script>
 import mixin from "../hooks/clockMixin.js"
+
 export default {
   mixins: [mixin],
-  emits:['updateClockStyle'],
+  emits: ['updateClockStyle'],
   methods: {
     updateClockStyle(e) {
       this.$emit("updateClockStyle", e);

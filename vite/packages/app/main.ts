@@ -26,68 +26,68 @@ import {createPinia} from 'pinia'
 
 const pinia = createPinia()
 const routes = [
-  {
-    path: '/list',component: List,
-  },
-  {
-    path: '/setting', component: Setting,
-    children: [
-      {
-        path: 'auth', component: Auth
-      }, {
-        path: ':appId', component: BaseInfo, name: 'settingBase'
-      }, {
-        path: 'optimize', component: Optimize
-      },
-      {
-        path: 'develop', component: Develop
-      },
-    ]
-  },
-  {
-    path: "/allDevApps", component: AllDevApps
-  },
-  {
-    path: "/allApps", component: AllApps
-  },
-  {
-    path: "/installApp", component: InstallApp
-  },
-  {
-    path: '/dev', name: 'dev', component: DevMod,
-    children: [
+    {
+        path: '/list', component: List,
+    },
+    {
+        path: '/setting', component: Setting,
+        children: [
+            {
+                path: 'auth', component: Auth
+            }, {
+                path: ':appId', component: BaseInfo, name: 'settingBase'
+            }, {
+                path: 'optimize', component: Optimize
+            },
+            {
+                path: 'develop', component: Develop
+            },
+        ]
+    },
+    {
+        path: "/allDevApps", component: AllDevApps
+    },
+    {
+        path: "/allApps", component: AllApps
+    },
+    {
+        path: "/installApp", component: InstallApp
+    },
+    {
+        path: '/dev', name: 'dev', component: DevMod,
+        children: [
 
 
-      {
-        path: 'optimize', component: OptimizeDev
-      },
-      {
-        path: 'author', component: Author
-      },
-      {
-        path: 'auth', component: AuthDev
-      },
+            {
+                path: 'optimize', component: OptimizeDev
+            },
+            {
+                path: 'author', component: Author
+            },
+            {
+                path: 'auth', component: AuthDev
+            },
 
-      {
-        path: 'window', component: Window
-      },
-      {
-        path: 'tool', component: Tool
-      }, {
-        path: 'wizard', component: Wizard
-      },
-      {
-        path: '', component: BaseDev
-      },
-      {
-        path: 'export', component: Export
-      }
-    ]
-  }
+            {
+                path: 'window', component: Window
+            },
+            {
+                path: 'tool', component: Tool
+            }, {
+                path: 'wizard', component: Wizard
+            },
+            {
+                path: '', component: BaseDev
+            },
+            {
+                path: 'export', component: Export
+            }
+        ]
+    }
 ]
 const router = createRouter({
-  history: createWebHashHistory(),
-  routes
+    history: createWebHashHistory(),
+    routes
 })
 createApp(App).use(pinia).use(Antd).use(router).mount('#app')
 

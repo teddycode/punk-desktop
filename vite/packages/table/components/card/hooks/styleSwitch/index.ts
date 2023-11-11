@@ -1,6 +1,6 @@
-import { getStyleColor } from "./getStyle";
-import { setColor } from "./setStyle";
-import { STYLE_ARRAY } from "./types";
+import {getStyleColor} from "./getStyle";
+import {setColor} from "./setStyle";
+import {STYLE_ARRAY} from "./types";
 
 /**
  * 绑定已存在的自定义颜色

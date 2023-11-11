@@ -1,5 +1,5 @@
 <template>
-社区
+  社区
 </template>
 
 <script>

@@ -1,7 +1,7 @@
 <template>
   <div class="s-bg m-2 rounded-md px-5 xt-bg xt-text" style="height: calc(100% - 20px);">
     <back-btn class="xt-bg-2 xt-text"></back-btn>
-    <div  style="font-size: 18px;display: flex;flex-direction: column;height: 100%">
+    <div style="font-size: 18px;display: flex;flex-direction: column;height: 100%">
       <h3 class="mt-3" style="text-align: center;">
       <span v-if="!this.id">
        添加自定义按钮
@@ -22,18 +22,18 @@
 
                 <div v-if="type==='font'">
 
-                  <div class="text-icon"
-                       :style="{'font-size':iconFontSize+'px',color:this.color,'background':this.bgColor}">
+                  <div :style="{'font-size':iconFontSize+'px',color:this.color,'background':this.bgColor}"
+                       class="text-icon">
                     {{ iconText }}
                   </div>
                 </div>
                 <div v-else>
-                  <CustomIcon v-if="icon" style="font-size: 60px;margin-top: 0.15em"
-                              :icon="icon"></CustomIcon>
+                  <CustomIcon v-if="icon" :icon="icon"
+                              style="font-size: 60px;margin-top: 0.15em"></CustomIcon>
                 </div>
               </div>
               <div style="text-align: center;margin-top: 1em;margin-right: 0">
-                <a-button v-if="!this.data" type="primary" @click="doAdd" style="width: 8em">添加按钮</a-button>
+                <a-button v-if="!this.data" style="width: 8em" type="primary" @click="doAdd">添加按钮</a-button>
                 <a-button v-else type="primary" @click="doAdd">
                   保存按钮
                 </a-button>
@@ -45,8 +45,8 @@
               名称
             </div>
             <div class="line">
-              <a-input @change="syncTitle" style="width: 20em" v-model:value="title" size="large"
-                       placeholder="输入按钮名称"></a-input>
+              <a-input v-model:value="title" placeholder="输入按钮名称" size="large" style="width: 20em"
+                       @change="syncTitle"></a-input>
             </div>
             <div class="line-title ">图标</div>
             <div class="line">
@@ -64,11 +64,11 @@
             <div v-if="type==='font'">
               <div class="line">
                 按钮文字：
-                <a-textarea style="width: 20em" v-model:value="iconText" placeholder="输入文字"></a-textarea>
+                <a-textarea v-model:value="iconText" placeholder="输入文字" style="width: 20em"></a-textarea>
               </div>
               <div class="line">
                 字体大小：
-                <a-input-number placeholder="字体大小" v-model:value="iconFontSize"></a-input-number>
+                <a-input-number v-model:value="iconFontSize" placeholder="字体大小"></a-input-number>
               </div>
               <div class="line">
                 文字颜色：
@@ -81,8 +81,8 @@
 
             </div>
 
-            <div v-else class="line"><span style="margin-right: 1em"><CustomIcon v-if="icon" style="font-size: 60px"
-                                                                                 :icon="icon"></CustomIcon>
+            <div v-else class="line"><span style="margin-right: 1em"><CustomIcon v-if="icon" :icon="icon"
+                                                                                 style="font-size: 60px"></CustomIcon>
 
       <a-avatar v-else :size="60"></a-avatar></span>
 
@@ -90,12 +90,12 @@
             </div>
             <div class="line-title">功能</div>
             <div class="line">
-              <div @click="editAction(data)" :style="{'border-left-color':data.group.color}"
-                   v-for="(data,index) in actions" class="action">
+              <div v-for="(data,index) in actions" :style="{'border-left-color':data.group.color}"
+                   class="action" @click="editAction(data)">
                 {{ data.action.title }}
-                <Icon class="close-btn" @click.stop="removeAction(index)" style="font-size: 15px" icon="guanbi1"></Icon>
+                <Icon class="close-btn" icon="guanbi1" style="font-size: 15px" @click.stop="removeAction(index)"></Icon>
               </div>
-              <a-button @click="addAction" class="xt-bg-2 xt-text">添加</a-button>
+              <a-button class="xt-bg-2 xt-text" @click="addAction">添加</a-button>
 
             </div>
           </div>
@@ -105,7 +105,7 @@
           <IconList @onSelect="setIcon"></IconList>
         </div>
         <div v-if="tab==='action'">
-          <DeckAction :data="editingAction" ref="_deckAction" @click="doAddAction"></DeckAction>
+          <DeckAction ref="_deckAction" :data="editingAction" @click="doAddAction"></DeckAction>
         </div>
       </vue-custom-scrollbar>
     </div>
@@ -149,7 +149,7 @@ export default {
       icon: null,
       title: '',
       actions: [],//功能
-      data:{},
+      data: {},
 
       id: 0,
 
@@ -163,8 +163,8 @@ export default {
     })
     let id = this.$route.params.id
     if (id) {
-      let data= this.currentGrid.children.find(b=>{
-        return String(b.id)===String(id)
+      let data = this.currentGrid.children.find(b => {
+        return String(b.id) === String(id)
       })
       /**
        * {
@@ -189,7 +189,7 @@ export default {
       this.actions = data.actions
       this.id = data.id
       this.type = data.type
-      this.data=data
+      this.data = data
     }
   },
   components: {BackBtn, VueCustomScrollbar, DeckAction, CustomIcon, IconList},
@@ -284,7 +284,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .line {
   margin-top: 1em;
   margin-bottom: 1em;

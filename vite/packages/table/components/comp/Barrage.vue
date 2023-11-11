@@ -1,10 +1,10 @@
 <template></template>
 
 <script>
-import { message } from 'ant-design-vue'
-import { appStore } from '../../store'
-import { mapActions, mapState } from 'pinia'
-import { teamStore } from '../../store/team'
+import {message} from 'ant-design-vue'
+import {appStore} from '../../store'
+import {mapActions, mapState} from 'pinia'
+import {teamStore} from '../../store/team'
 
 export default {
   name: 'Barrage',
@@ -13,18 +13,18 @@ export default {
       sendBarragesCount: {},//用于屏蔽弹幕的数组，最终会存入localStorage ,nanoid:times
       filteredBarrages: [],//已经被屏蔽的
       timer: null,
-      barragesTeam:{}
+      barragesTeam: {}
     }
   },
   computed: {
-    ...mapState(appStore, ['settings','userInfo']),
-    ...mapState(teamStore, ['my','myTeamNo','myTeam']),
+    ...mapState(appStore, ['settings', 'userInfo']),
+    ...mapState(teamStore, ['my', 'myTeamNo', 'myTeam']),
   },
   async mounted() {
     window.loadBarrage = this.loadAll
-    if(this.userInfo){
-      if(!this.my.created){
-        this.updateMy().then(()=>{
+    if (this.userInfo) {
+      if (!this.my.created) {
+        this.updateMy().then(() => {
           this.getTeamBarrage().then()
         })
       }
@@ -63,7 +63,7 @@ export default {
               node.style.background = 'black'
               node.style.fontWeight = 'bold'
             }
-            if(barrage.data.type==='team'){
+            if (barrage.data.type === 'team') {
               node.style.background = '#177ddc'
               node.style.fontWeight = 'bold'
             }
@@ -73,12 +73,12 @@ export default {
         barrageAppend(barrage, node) {
           //node.textContent = barrage.data.content
           node.textContent = barrage.data.self ? '我：' + barrage.data.content : barrage.data.content
-          if(barrage.data.type==='team'){
-            node.textContent ='[小队]'+node.textContent
+          if (barrage.data.type === 'team') {
+            node.textContent = '[小队]' + node.textContent
           }
           let data = barrage.data
 
-          let frameAvatar=document.createElement('div')
+          let frameAvatar = document.createElement('div')
           frameAvatar.classList.add('frame-avatar')
           if (barrage.data.avatar) {
             let avatarEl = document.createElement('img')
@@ -87,10 +87,10 @@ export default {
             frameAvatar.appendChild(avatarEl)
           }
 
-          if(data.userInfo?.equippedItems?.frameDetail?.image){
-            let frameEl=document.createElement('img')
+          if (data.userInfo?.equippedItems?.frameDetail?.image) {
+            let frameEl = document.createElement('img')
             frameEl.classList.add('barrage-avatar-frame')
-            frameEl.src=data.userInfo?.equippedItems?.frameDetail?.image
+            frameEl.src = data.userInfo?.equippedItems?.frameDetail?.image
             frameAvatar.appendChild(frameEl)
           }
 
@@ -98,7 +98,9 @@ export default {
           node.appendChild(frameAvatar)
           node.classList.add('barrage-style')
           node.onmouseenter = e => barrage.pause()
-          node.onmouseleave = e => { if ($manager.runing) barrage.resume() }
+          node.onmouseleave = e => {
+            if ($manager.runing) barrage.resume()
+          }
           node.onclick = e => {
             that.visibleBarrageOperation = true
             that.currentBarrageData = barrage.data
@@ -131,7 +133,7 @@ export default {
     window.$manager = manager
     window.$manager.reload = this.getList
     window.$manager.sendChat = this.sendChat
-    window.$manager.test=this.test
+    window.$manager.test = this.test
     this.manager = manager
     window.addEventListener('resize', () => {
       manager.resize()
@@ -143,12 +145,12 @@ export default {
     clearInterval(this.timer)
   },
   methods: {
-    ...mapActions(teamStore,['updateMy']),
-    async test(){
+    ...mapActions(teamStore, ['updateMy']),
+    async test() {
       this.getList()
       this.getTeamBarrage()
     },
-    async loadAll(url){
+    async loadAll(url) {
       this.changeUrl(url).then()
       this.getTeamBarrage().then()
     },
@@ -160,18 +162,18 @@ export default {
       }
     },
 
-    async getTeamBarrage(){
+    async getTeamBarrage() {
       if (this.myTeamNo) {
         tsbApi.barrage.getList(this.CONST.CHANNEL.TEAM, this.myTeamNo).then(rs => {
           if (rs.status) {
             rs.data.forEach(item => {
               item.create_time_text = tsbApi.util.friendlyDate(item.create_time)
-              item.type='team'
+              item.type = 'team'
             })
             this.barragesTeam = rs.data
             if (this.settings.enableBarrage) {
               //如果是设置了启用弹幕
-              $manager.send(this.filterBarrages(this.barragesTeam),undefined,true)//进行前置过滤
+              $manager.send(this.filterBarrages(this.barragesTeam), undefined, true)//进行前置过滤
               $manager.start()
             }
 
@@ -240,11 +242,11 @@ export default {
           }
 
         } else {
-          message.error({ content: '获取弹幕接口返回错误，可能是服务器正在维护，请稍后再试。', key: 'barrage' })
+          message.error({content: '获取弹幕接口返回错误，可能是服务器正在维护，请稍后再试。', key: 'barrage'})
         }
       } catch (e) {
         console.error(e)
-        message.error({ content: '获取弹幕意外错误。', key: 'barrage' })
+        message.error({content: '获取弹幕意外错误。', key: 'barrage'})
       }
     },
   }
@@ -306,15 +308,17 @@ export default {
   position: absolute;
   vertical-align: text-top;
 }
-.barrage-avatar-frame{
+
+.barrage-avatar-frame {
   position: absolute;
-  left:50%;
+  left: 50%;
   top: 50%;
   transform: translateY(-50%) translateX(-50%);
   width: 60px;
 
 }
-.frame-avatar{
+
+.frame-avatar {
   position: absolute;
   display: inline-block;
   width: 50px;

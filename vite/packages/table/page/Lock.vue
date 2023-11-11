@@ -1,11 +1,11 @@
 <template>
-  <div class=" fixed inset-0 " style="z-index:1" v-if="singleLively">
-    <video class="fullscreen-video" playsinline="" autoplay="" muted="" loop="" ref="backgroundVideo">
-      <source :src="videoPath" type="video/mp4" id="bgVid">
+  <div v-if="singleLively" class=" fixed inset-0 " style="z-index:1">
+    <video ref="backgroundVideo" autoplay="" class="fullscreen-video" loop="" muted="" playsinline="">
+      <source id="bgVid" :src="videoPath" type="video/mp4">
     </video>
   </div>
-  <div id="displayMiddle" class="pointer item-content" @click="enter"
-       style="">
+  <div id="displayMiddle" class="pointer item-content" style=""
+       @click="enter">
     <div v-if="settings.showTime && loaded" class="time" style="">
       <span style="font-size: 3.5em">{{ hours }}:{{ minutes }}</span>
       <div style="margin-top: -0.5em"> {{ year }}年{{ month }}月{{ day }}日 {{ week }}</div>
@@ -13,7 +13,7 @@
     <div id="tip" class="flex items-center justify-center" style="color: white;font-size: 20px;margin-top: 2em">
       <!--      <Icon icon="jiesuo" style="font-size: 30px;vertical-align: text-top"></Icon>-->
       <div class="flex flex-row tip-items">
-        <div @click.stop="enter" class="tip-item">
+        <div class="tip-item" @click.stop="enter">
           <div>
             <iconify class="tip-icon" icon="akar-icons:lock-off"></iconify>
           </div>
@@ -29,7 +29,7 @@
         <!--            切换-->
         <!--          </div>-->
         <!--        </div>-->
-        <div @click.stop="enterGallery" class="tip-item">
+        <div class="tip-item" @click.stop="enterGallery">
           <div>
             <iconify class="tip-icon" icon="akar-icons:star"></iconify>
           </div>
@@ -37,7 +37,7 @@
             壁纸库
           </div>
         </div>
-        <div @click.stop="enterSetting" class="tip-item">
+        <div class="tip-item" @click.stop="enterSetting">
           <div>
             <iconify class="tip-icon" icon="akar-icons:gear"></iconify>
           </div>
@@ -50,35 +50,35 @@
       <!--      <span class="ml-2">点击屏幕中间解锁，右键进入壁纸设置</span>-->
     </div>
 
-    <div class="mt-2 card half count-downtime item-content" v-if="countDowntime.hours">
+    <div v-if="countDowntime.hours" class="mt-2 card half count-downtime item-content">
       <div class="left-time">
         <Icon
-          style="width: 3em; height: 3em;cursor:pointer;color: #FBAE17"
-          icon="zanting"
-          @click="closeCountDown" v-show="!countDownBtn"
+            v-show="!countDownBtn"
+            icon="zanting"
+            style="width: 3em; height: 3em;cursor:pointer;color: #FBAE17" @click="closeCountDown"
         ></Icon>
         <Icon
-          style="width: 3em; height: 3em;cursor:pointer;color: #FBAE17"
-          icon="bofang"
-          @click="startCountDown" v-show="countDownBtn"
+            v-show="countDownBtn"
+            icon="bofang"
+            style="width: 3em; height: 3em;cursor:pointer;color: #FBAE17" @click="startCountDown"
         ></Icon>
         <Icon
-          style="width: 2em; height: 2em;cursor:pointer"
-          icon="guanbi1"
-          @click="deleteCountDown"
+            icon="guanbi1"
+            style="width: 2em; height: 2em;cursor:pointer"
+            @click="deleteCountDown"
         ></Icon>
       </div>
       <div class="right-time">
         <span style="color: #FBAE17;text-align: center; font-size: 1.5em;margin-right: 1em">计时</span>
         <span
-          style="color: #FBAE17;font-size: 4em;font-weight:bolder"> {{
+            style="color: #FBAE17;font-size: 4em;font-weight:bolder"> {{
             countDowntime.hours + ':' + countDowntime.minutes + ':' + countDowntime.seconds
           }}</span>
       </div>
     </div>
   </div>
 
-  <div class="fixed inset-0 home-blur" style="z-index: 999999999999;" v-if="visible">
+  <div v-if="visible" class="fixed inset-0 home-blur" style="z-index: 999999999999;">
 
     <div v-if="clockEvent[0]"
          class="fixed text-4xl text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  rounded-lg flex flex-col justify-evenly items-center"
@@ -91,8 +91,8 @@
       <div>
         {{ clockEvent[0].eventValue }}
       </div>
-      <div style="width: 100px;height: 48px;"
-           class="flex justify-center items-center text-base bg-blue-500 rounded-lg pointer" @click="handleOk">
+      <div class="flex justify-center items-center text-base bg-blue-500 rounded-lg pointer"
+           style="width: 100px;height: 48px;" @click="handleOk">
         好的
       </div>
 
@@ -101,15 +101,13 @@
 </template>
 
 <script>
-import Spotlight from 'spotlight.js'
-import { appStore } from '../store'
-import { countDownStore } from '../store/countDown'
-import { cardStore } from '../store/card'
-import { mapActions, mapState, mapWritableState } from 'pinia'
-import { message, Modal } from 'ant-design-vue'
-import { paperStore } from '../store/paper'
+import {countDownStore} from '../store/countDown'
+import {cardStore} from '../store/card'
+import {mapActions, mapState, mapWritableState} from 'pinia'
+import {Modal} from 'ant-design-vue'
+import {paperStore} from '../store/paper'
 import axios from 'axios'
-import { Icon as iconify } from '@iconify/vue'
+import {Icon as iconify} from '@iconify/vue'
 
 const spotConfig = {
   control: '',
@@ -125,7 +123,7 @@ export default {
   components: {
     iconify
   },
-  data () {
+  data() {
     return {
       playing: [],
       singleLively: false,
@@ -185,7 +183,7 @@ export default {
       ]
     }
   },
-  mounted () {
+  mounted() {
     this.$nextTick(() => {
       $('#displayMiddle').css('top', 'calc(50vh - ' + $('#displayMiddle').height() / 2 + 'px)')
     })
@@ -205,17 +203,17 @@ export default {
       }, 1000)
     }
   },
-  beforeUnmount () {
+  beforeUnmount() {
     clearInterval(this.timer)
   },
   computed: {
     ...mapState(paperStore, ['myPapers', 'settings', 'activePapers']),
     ...mapWritableState(cardStore, ['clockEvent', 'appDate',]),
     ...mapWritableState(countDownStore, ['countDowndate', 'countDowntime', 'countDownBtn']),
-    videoPath () {
+    videoPath() {
       return this.playing[0]['src-mp4']
     },
-    config () {
+    config() {
       return {
         ...spotConfig,
         ...{
@@ -228,14 +226,14 @@ export default {
   methods: {
     ...mapActions(countDownStore, ['setCountDown', 'stopCountDown', 'openCountDown', 'dCountDown']),
     ...mapActions(cardStore, ['removeClock', 'changeClock']),
-    enter (closeSpot = true) {
+    enter(closeSpot = true) {
       if (closeSpot && !this.singleLively) {
         window.Spotlight.close()
       }
       console.log('处罚顶层返回')
       this.$router.go(-1)
     },
-    enterSetting () {
+    enterSetting() {
       if (!this.singleLively) {
         window.Spotlight.close()
       }
@@ -246,7 +244,7 @@ export default {
         })
       }, 200)
     },
-    enterGallery () {
+    enterGallery() {
       if (!this.singleLively) {
         window.Spotlight.close()
       }
@@ -257,13 +255,13 @@ export default {
         })
       }, 200)
     },
-    handleOk () {
+    handleOk() {
       this.visible = false
       this.removeClock(0)
       this.$refs.clock.currentTime = 0
       this.$refs.clock.pause()
     },
-    tick () {
+    tick() {
       let weeks = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日']
       var date = new Date()
       this.year = date.getFullYear()
@@ -280,7 +278,7 @@ export default {
       this.loaded = true
     },
 
-    playAll () {
+    playAll() {
       let LockArr = []
       if (this.settings.wallSource == 'my') {
         // 我的收藏
@@ -288,7 +286,7 @@ export default {
           this.$router.replace({
             name: 'my'
           })
-          Modal.error({ content: '请添加我的壁纸后重新锁屏。' })
+          Modal.error({content: '请添加我的壁纸后重新锁屏。'})
           return
         }
         this.myPapers.map(el => {
@@ -330,11 +328,11 @@ export default {
             })
             window.Spotlight.show(LockArr, this.config)
           } else {
-            Modal.error({ content: '网络加载错误，请检查设备后重试' })
+            Modal.error({content: '网络加载错误，请检查设备后重试'})
             return
           }
         }, rej => {
-          Modal.error({ content: '网络加载错误，请检查设备后重试' })
+          Modal.error({content: '网络加载错误，请检查设备后重试'})
           return
         }).catch((err) => {
           console.log(err)
@@ -357,20 +355,20 @@ export default {
             return
           }
         }, rej => {
-          Modal.error({ content: '网络加载错误，请检查设备后重试' })
+          Modal.error({content: '网络加载错误，请检查设备后重试'})
           return
         }).catch((err) => {
           console.log(err)
         })
       }
     },
-    playActive () {
+    playActive() {
       console.log('playActive')
       if (this.activePapers.length === 0) {
         this.$router.replace({
           name: 'my'
         })
-        Modal.error({ content: '请激活壁纸后重新使用激活壁纸模式。' })
+        Modal.error({content: '请激活壁纸后重新使用激活壁纸模式。'})
         return
       }
       let lockActive = []
@@ -400,17 +398,17 @@ export default {
       }
       window.Spotlight.show(lockActive, this.config)
     },
-    closeCountDown () {
+    closeCountDown() {
       this.stopCountDown()
     },
-    startCountDown () {
+    startCountDown() {
       this.openCountDown()
     },
-    deleteCountDown () {
+    deleteCountDown() {
       this.dCountDown()
     },
     // 判断文件是否为图片
-    fileImageExtension (filePath) {
+    fileImageExtension(filePath) {
       const fileExtensions = filePath.src.split('.').pop()
       const extensions = ['mp4', 'mpeg', 'avi', 'rmvb']
       if (extensions.indexOf(fileExtensions) !== -1) {
@@ -422,11 +420,11 @@ export default {
   },
   watch: {
     'appDate.minutes': {
-      handler (newVal, oldVal) {
+      handler(newVal, oldVal) {
         try {
           if (
-            this.appDate.minutes === this.clockEvent[0].dateValue.minutes &&
-            this.appDate.hours === this.clockEvent[0].dateValue.hours && this.clockEvent[0].flag === undefined
+              this.appDate.minutes === this.clockEvent[0].dateValue.minutes &&
+              this.appDate.hours === this.clockEvent[0].dateValue.hours && this.clockEvent[0].flag === undefined
           ) {
             this.visible = true
             setTimeout(() => {

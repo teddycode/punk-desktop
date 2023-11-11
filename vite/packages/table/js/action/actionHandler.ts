@@ -7,37 +7,37 @@ import SendKeysAction from "./sendKeysAction";
  * 动作处理类，根据指令类型，分发处理指令，此类不做具体操作，只负责分发和返回结果
  */
 class ActionHandler {
-  action: IDeckAction
-  args: IArgs
+    action: IDeckAction
+    args: IArgs
 
 
-  result: ActionResult
+    result: ActionResult
 
-  constructor(action) {
-    this.action = action
-    this.args = action.args
-  }
-
-  /**
-   * 处理一个指令
-   */
-  async doAction(): ActionResult {
-    let {action, args} = this
-
-    let actionCommander: ActionExecutor
-    switch (action.group.name) {
-      case 'sendKeys':
-        actionCommander = new SendKeysAction(action)
-        break
-      case 'browser':
-        actionCommander = new BrowserAction(action)
-        break
-      case 'cmd':
-        actionCommander = new CmdAction(action)
-        break
+    constructor(action) {
+        this.action = action
+        this.args = action.args
     }
-    return await actionCommander.doAction()
-  }
+
+    /**
+     * 处理一个指令
+     */
+    async doAction(): ActionResult {
+        let {action, args} = this
+
+        let actionCommander: ActionExecutor
+        switch (action.group.name) {
+            case 'sendKeys':
+                actionCommander = new SendKeysAction(action)
+                break
+            case 'browser':
+                actionCommander = new BrowserAction(action)
+                break
+            case 'cmd':
+                actionCommander = new CmdAction(action)
+                break
+        }
+        return await actionCommander.doAction()
+    }
 }
 
 /**

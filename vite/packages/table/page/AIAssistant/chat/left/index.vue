@@ -7,13 +7,13 @@
 </template>
 
 <script>
-import { defineAsyncComponent } from "vue";
-import { mapWritableState } from "pinia";
+import {defineAsyncComponent} from "vue";
+import {mapWritableState} from "pinia";
 import Topic from "./topic.vue";
 import List from "./List.vue";
-import dayjs from "dayjs";
 
-import { aiStore } from "../../../../store/ai";
+import {aiStore} from "../../../../store/ai";
+
 export default {
   components: {
     Topic,

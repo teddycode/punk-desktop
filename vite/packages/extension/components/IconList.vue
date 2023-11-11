@@ -3,11 +3,12 @@ import twoColor from '../../../public/iconLists/twoColor.json'
 import fruit from '../../../public/iconLists/fruit.json'
 import animal from '../../../public/iconLists/animal.json'
 import jingling from '../../../public/iconLists/jingling.json'
+
 const ipc = eval('require')('electron').ipcRenderer
 export default {
   data() {
     return {
-      callerId:0,
+      callerId: 0,
       activeKey: 'twoColor',
 
       iconLists: [
@@ -18,26 +19,26 @@ export default {
       ]
     }
   },
-  mounted(){
-    ipc.on('show',()=>{
+  mounted() {
+    ipc.on('show', () => {
       this.getCaller()
     })
   },
   methods: {
-    getCaller(){
-      ipc.invoke('getPopCallerId').then((data)=>{
+    getCaller() {
+      ipc.invoke('getPopCallerId').then((data) => {
         console.log(data)
-        this.callerId=data
+        this.callerId = data
       })
     },
-    selectIcon(icon,iconList) {
-      let param={
-        list:iconList.key,
-        name:icon.name,
-        alias:icon.alias
+    selectIcon(icon, iconList) {
+      let param = {
+        list: iconList.key,
+        name: icon.name,
+        alias: icon.alias
       }
-      ipc.sendTo(this.callerId, 'selectedIcon',{
-        icon:param
+      ipc.sendTo(this.callerId, 'selectedIcon', {
+        icon: param
       })
     }
   }
@@ -46,31 +47,31 @@ export default {
 
 <template>
   <div class="card-container">
-    <a-tabs type="card" v-model:activeKey="activeKey">
-      <a-tab-pane :key="iconList.key" v-for="iconList in iconLists">
+    <a-tabs v-model:activeKey="activeKey" type="card">
+      <a-tab-pane v-for="iconList in iconLists" :key="iconList.key">
         <template #tab>
         <span>
            <a-tooltip placement="bottom">
          <template #title>
             <span style="user-select: none">{{ iconList.alias }}</span>
           </template>
-          <svg class="icon group-icon" aria-hidden="true">
+          <svg aria-hidden="true" class="icon group-icon">
             <use v-bind:xlink:href="'#icon-'+iconList.icon"></use>
           </svg>
            </a-tooltip>
         </span>
         </template>
         <p class="group-items" style="display: flex;flex-wrap: wrap">
-          <a-tooltip placement="top" v-for="icon in iconList.list">
+          <a-tooltip v-for="icon in iconList.list" placement="top">
             <template #title>
               <span style="user-select: none">{{ icon.alias }}</span>
             </template>
-        <div @click="selectIcon(icon,iconList)">
-          <svg class="icon" aria-hidden="true">
-            <use v-bind:xlink:href="'#icon-'+icon.name"></use>
-          </svg>
-        </div>
-        </a-tooltip>
+            <div @click="selectIcon(icon,iconList)">
+              <svg aria-hidden="true" class="icon">
+                <use v-bind:xlink:href="'#icon-'+icon.name"></use>
+              </svg>
+            </div>
+          </a-tooltip>
         </p>
       </a-tab-pane>
       <!--      <a-tab-pane key="2">-->
@@ -149,7 +150,7 @@ export default {
   border-color: #141414;
 }
 </style>
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .icon {
   width: 1em;
   height: 1em;

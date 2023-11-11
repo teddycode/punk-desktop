@@ -1,61 +1,62 @@
 <template>
   <a-input-group compact>
-    <a-input style="width:calc(100% - 70px);" @keyup.enter="postBarrage" v-model:value="postContent"
-             :placeholder="'发送至'+currentChannel.title+'频道'">
+    <a-input v-model:value="postContent" :placeholder="'发送至'+currentChannel.title+'频道'" style="width:calc(100% - 70px);"
+             @keyup.enter="postBarrage">
       <template #addonBefore>
         <span style="color:var(--primary-text)">{{ currentChannel.title }}</span>
       </template>
     </a-input>
-    <a-button @click="postBarrage" type="primary">发送</a-button>
+    <a-button type="primary" @click="postBarrage">发送</a-button>
   </a-input-group>
 </template>
 
 <script>
-import { message } from 'ant-design-vue'
-import { mapActions, mapState } from 'pinia'
-import { teamStore } from '../../store/team'
+import {message} from 'ant-design-vue'
+import {mapActions, mapState} from 'pinia'
+import {teamStore} from '../../store/team'
 import {completeTask} from "../../apps/task/page/branch/task.ts"
+
 export default {
   name: 'BarrageSender',
-  props:['currentChannel'],
-  emits:['loadTeamBarrage','loadAllBarrages'],
-  data(){
+  props: ['currentChannel'],
+  emits: ['loadTeamBarrage', 'loadAllBarrages'],
+  data() {
     return {
-      postContent:'',
-      CONST:[]
+      postContent: '',
+      CONST: []
     }
   },
-  mounted () {
+  mounted() {
     this.CONST = tsbApi.barrage.CONST
   },
-  computed:{
-    ...mapState(teamStore, ['my','myTeamNo','myTeam']),
+  computed: {
+    ...mapState(teamStore, ['my', 'myTeamNo', 'myTeam']),
   },
-  methods:{
-    ...mapActions(teamStore,['updateMy']),
-    async postBarrage () {
+  methods: {
+    ...mapActions(teamStore, ['updateMy']),
+    async postBarrage() {
 
       if (!this.postContent) {
         message.error('请输入弹幕内容')
         return
       } else {
         completeTask('Z0501')
-        let channelType=this.CONST.CHANNEL.PUBLIC
-        let pageUrl='table'
-        if(this.currentChannel.name!=='all'){
-          channelType=this.CONST.CHANNEL.TEAM
-          pageUrl=this.myTeamNo
+        let channelType = this.CONST.CHANNEL.PUBLIC
+        let pageUrl = 'table'
+        if (this.currentChannel.name !== 'all') {
+          channelType = this.CONST.CHANNEL.TEAM
+          pageUrl = this.myTeamNo
           completeTask('Z0502')
-          if(String(pageUrl).trim()===''){
+          if (String(pageUrl).trim() === '') {
             await this.updateMy()
-            if(String(pageUrl).trim()===''){
+            if (String(pageUrl).trim() === '') {
               message.error('小队号错误，无法发送弹幕')
             }
             return
           }
         }
         let data = {
-          channel_type:channelType ,
+          channel_type: channelType,
           content: this.postContent,
           page_url: String(pageUrl),
         }
@@ -68,9 +69,9 @@ export default {
           console.log('33233333 :>> ', 33233333);
           message.success('弹幕发送成功')
           setTimeout(() => {
-            if(this.currentChannel.name==='all'){
+            if (this.currentChannel.name === 'all') {
               this.$emit('loadAllBarrages')
-            }else{
+            } else {
               this.$emit('loadTeamBarrage')
             }
           }, 5000)

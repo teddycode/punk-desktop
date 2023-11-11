@@ -1,69 +1,69 @@
 <template>
   <teleport to="body">
-    <img class="popContainer" :src="imgUrl" alt="" />
+    <img :src="imgUrl" alt="" class="popContainer"/>
     <div class="box">
       <component
-        :is="clock"
-        v-if="clock !== 'clock3'"
-        :key="clock"
-        :style="{ zoom: zoom }"
+          :is="clock"
+          v-if="clock !== 'clock3'"
+          :key="clock"
+          :style="{ zoom: zoom }"
       />
       <clock3
-        v-if="clock == 'clock3'"
-        key="clock3"
-        :style="{ zoom: zoom }"
+          v-if="clock == 'clock3'"
+          key="clock3"
+          :style="{ zoom: zoom }"
       ></clock3>
       <div
-        class="flex bottom"
-        :style="optAction == true ? 'display: none' : ''"
+          :style="optAction == true ? 'display: none' : ''"
+          class="flex bottom"
       >
         <div
-          class="item-icon flex justify-center items-center pointer mr-4 no-drag"
-          @click="up()"
+            class="item-icon flex justify-center items-center pointer mr-4 no-drag"
+            @click="up()"
         >
           <Icon class="icon" icon="caret-left"></Icon>
         </div>
         <div
-          class="item-icon flex justify-center items-center pointer mr-4 no-drag"
-          @click="down()"
+            class="item-icon flex justify-center items-center pointer mr-4 no-drag"
+            @click="down()"
         >
           <Icon class="icon" icon="caret-right"></Icon>
         </div>
         <div
-          class="item-icon flex justify-center items-center pointer mr-4 no-drag"
-          @click="random()"
+            class="item-icon flex justify-center items-center pointer mr-4 no-drag"
+            @click="random()"
         >
           <Icon class="icon" icon="reload"></Icon>
         </div>
         <div
-          class="item-icon flex justify-center items-center pointer mr-4 no-drag"
-          @click="setting()"
+            class="item-icon flex justify-center items-center pointer mr-4 no-drag"
+            @click="setting()"
         >
           <Icon class="icon" icon="setting"></Icon>
         </div>
         <div
-          class="item-icon flex justify-center items-center pointer mr-4 no-drag"
-          @click="exit()"
+            class="item-icon flex justify-center items-center pointer mr-4 no-drag"
+            @click="exit()"
         >
           <Icon class="icon" icon="guanbi2"></Icon>
         </div>
       </div>
     </div>
     <a-drawer
-      style="z-index: 999999999; scrollbar-width: none"
-      :width="500"
-      v-model:visible="settingVisible"
-      placement="right"
+        v-model:visible="settingVisible"
+        :width="500"
+        placement="right"
+        style="z-index: 999999999; scrollbar-width: none"
     >
       <template #title>
         <div class="text-center">设置</div>
       </template>
       <ClockBackground
-        @img="img"
-        @updateBlur="updateBlur"
-        @updateBgZoom="updateBgZoom"
-        :bgZoom="bgZoom"
-        :blur="blur"
+          :bgZoom="bgZoom"
+          :blur="blur"
+          @img="img"
+          @updateBgZoom="updateBgZoom"
+          @updateBlur="updateBlur"
       >
       </ClockBackground>
       <ClockStyle @updateClockStyle="updateClockStyle"></ClockStyle>
@@ -76,6 +76,7 @@ import mixin from "../hooks/clockMixin.js";
 
 import ClockStyle from "./ClockStyle.vue";
 import ClockBackground from "./ClockBackground.vue";
+
 export default {
   mixins: [mixin],
   components: {
@@ -113,13 +114,13 @@ export default {
     this.touchEvent();
 
     //鼠标事件
-    document.addEventListener("mousemove", this.touchEvent, { capture: true }); //鼠标移动
-    document.addEventListener("mousedown", this.touchEvent, { capture: true }); //鼠标按下
+    document.addEventListener("mousemove", this.touchEvent, {capture: true}); //鼠标移动
+    document.addEventListener("mousedown", this.touchEvent, {capture: true}); //鼠标按下
     //触摸事件
-    document.addEventListener("touchstart", this.touchEvent, { capture: true }); //手指放到屏幕上时触发
-    document.addEventListener("touchmove", this.touchEvent, { capture: true }); //手指在屏幕上滑动式触发
+    document.addEventListener("touchstart", this.touchEvent, {capture: true}); //手指放到屏幕上时触发
+    document.addEventListener("touchmove", this.touchEvent, {capture: true}); //手指在屏幕上滑动式触发
     //键盘事件
-    document.addEventListener("keydown", this.touchEvent, { capture: true }); //键盘按下事件
+    document.addEventListener("keydown", this.touchEvent, {capture: true}); //键盘按下事件
   },
   data() {
     return {

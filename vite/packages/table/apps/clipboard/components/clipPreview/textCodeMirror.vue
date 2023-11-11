@@ -8,45 +8,48 @@ import CodeMirror from 'codemirror'
 
 
 export default {
-  props:{
-    editorContent:{
-      type:String,
+  props: {
+    editorContent: {
+      type: String,
     }
   },
-  mounted(){
-    this.myClipRefs = CodeMirror(this.$refs.myClip,{
-      value:this.editorContent,
-      smartIndent:true,
-      tabSize:6,
-      indentWithTabs:true,
+  mounted() {
+    this.myClipRefs = CodeMirror(this.$refs.myClip, {
+      value: this.editorContent,
+      smartIndent: true,
+      tabSize: 6,
+      indentWithTabs: true,
       direction: "ltr",
       lineWrapping: true,
       viewportMargin: Infinity,
-      mode:null
+      mode: null
     })
   }
 }
 </script>
 
 <style lang="scss" scoped>
-:deep(.CodeMirror-vscrollbar){
+:deep(.CodeMirror-vscrollbar) {
   display: none !important;
 }
-:deep(.CodeMirror-hscrollbar){
+
+:deep(.CodeMirror-hscrollbar) {
   display: none !important;
 }
-:deep(.CodeMirror-scrollbar-filler){
+
+:deep(.CodeMirror-scrollbar-filler) {
   display: none !important;
 }
 </style>
 
 <style>
-.CodeMirror{
-  background:none !important;
+.CodeMirror {
+  background: none !important;
   color: var(--primary-text);
   width: 100% !important;
 }
-.CodeMirror-gutters{
+
+.CodeMirror-gutters {
   border: none !important;
 }
 </style>

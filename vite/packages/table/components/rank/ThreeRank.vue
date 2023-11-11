@@ -2,7 +2,7 @@
   <!-- 排名前三 -->
   <div class="top-three-box">
     <div class="box-item pointer" @click="showCard(rankList[1].userInfo.uid,rankList[1].userInfo)">
-      <div class="item-avatar two-avatar" >
+      <div class="item-avatar two-avatar">
         <a-avatar :src="rankList[1].avatar" class="other-img"></a-avatar>
       </div>
       <span class="xt-text mb-2 truncate">{{ rankList[1].name }}</span>
@@ -16,7 +16,7 @@
     </div>
     <div class="one-box-item pointer" @click="showCard(rankList[0].userInfo.uid,rankList[0].userInfo)">
       <div class="one-avatar">
-        <div class="avatar-img" >
+        <div class="avatar-img">
           <a-avatar :src="rankList[0].avatar" class="one-img"></a-avatar>
         </div>
       </div>
@@ -30,7 +30,7 @@
       </span>
     </div>
     <div class="box-item pointer" @click="showCard(rankList[2].userInfo.uid,rankList[2].userInfo)">
-      <div class="item-avatar three-avatar" >
+      <div class="item-avatar three-avatar">
         <a-avatar :src="rankList[2].avatar" class="other-img"></a-avatar>
       </div>
       <span class="xt-text mb-2 truncate">{{ rankList[2].name }}</span>
@@ -46,8 +46,8 @@
 </template>
 
 <script>
-import { mapActions, mapWritableState } from 'pinia'
-import { appStore } from '../../store'
+import {mapActions} from 'pinia'
+import {appStore} from '../../store'
 
 export default {
   name: 'RankList',
@@ -78,16 +78,16 @@ export default {
       default: () => ''
     }
   },
-  data () {
+  data() {
     return {
       selectVal: ''
     }
   },
   methods: {
     ...mapActions(appStore, ['showUserCard']),
-    showCard (uid,userInfo) {
-      if(uid){
-        this.showUserCard(uid,userInfo)
+    showCard(uid, userInfo) {
+      if (uid) {
+        this.showUserCard(uid, userInfo)
       }
 
     },
@@ -95,12 +95,13 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-.box-item,.one-box-item{
-  &:hover{
+<style lang="scss" scoped>
+.box-item, .one-box-item {
+  &:hover {
     opacity: 0.8;
   }
 }
+
 @media screen and (min-width: 992px) {
   .one-box-item {
     width: 231px;

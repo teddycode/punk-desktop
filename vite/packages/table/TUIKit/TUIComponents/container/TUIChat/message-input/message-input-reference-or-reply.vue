@@ -1,14 +1,14 @@
 <template>
   <div
-    :class="[
+      v-if="replyOrReference?.show"
+      :class="[
       replyOrReference?.show === 'reference' && 'message-input-reference',
       replyOrReference?.show === 'reply' && 'message-input-reply',
       isH5 && replyOrReference?.show === 'reference' && 'message-input-reference-h5',
       isH5 && replyOrReference?.show === 'reply' && 'message-input-reply-h5',
     ]"
-    v-if="replyOrReference?.show"
   >
-    <div class="reference" v-if="replyOrReference?.show === 'reference'">
+    <div v-if="replyOrReference?.show === 'reference'" class="reference">
       <div class="reference-box">
         <div class="reference-box-show">
           <span class="reference-box-show-name">
@@ -19,12 +19,13 @@
         <label class="icon icon-cancel" @click="close"></label>
       </div>
     </div>
-    <div class="reply" v-else-if="replyOrReference?.show === 'reply'">
+    <div v-else-if="replyOrReference?.show === 'reply'" class="reply">
       <div class="reply-box">
         <i></i>
         <div class="reply-box-show">
           <span
-            >{{ replyOrReference?.message?.nick ? replyOrReference?.message?.nick : replyOrReference?.message?.from
+          >{{
+              replyOrReference?.message?.nick ? replyOrReference?.message?.nick : replyOrReference?.message?.from
             }}{{ isH5 ? ':' : '' }}
           </span>
           <span>{{ replyOrReference?.content }}</span>
@@ -34,8 +35,9 @@
     </div>
   </div>
 </template>
-<script setup lang="ts">
-import { defineProps, toRefs, defineEmits } from 'vue';
+<script lang="ts" setup>
+import {defineEmits, defineProps, toRefs} from 'vue';
+
 const props = defineProps({
   replyOrReference: {
     type: Object,
@@ -47,7 +49,7 @@ const props = defineProps({
   },
 });
 const emit = defineEmits(['resetReplyOrReference']);
-const { replyOrReference, isH5 } = toRefs(props);
+const {replyOrReference, isH5} = toRefs(props);
 const close = () => {
   emit('resetReplyOrReference');
 };
@@ -55,8 +57,10 @@ const close = () => {
 <style lang="scss" scoped>
 @import url('../../../styles/common.scss');
 @import url('../../../styles/icon.scss');
+
 .message-input-reference {
   order: 1;
+
   .reference {
     width: auto;
     padding-bottom: 0px;
@@ -102,8 +106,10 @@ const close = () => {
     }
   }
 }
+
 .message-input-reply {
   order: -1;
+
   .reply {
     display: flex;
     width: 100%;
@@ -155,20 +161,26 @@ const close = () => {
   order: -1;
   flex: 1 0 100%;
   padding-bottom: 10px;
+
   .reply {
     &-box {
       padding: 0;
+
       i {
         display: none;
       }
+
       &-show {
         flex-direction: row;
+
         span {
           width: auto;
         }
+
         span:first-child {
           padding-right: 2px;
         }
+
         span:last-child {
           flex: 1;
         }
@@ -176,6 +188,7 @@ const close = () => {
     }
   }
 }
+
 .message-input-reference-h5 {
   order: 1;
   flex: 1 0 100%;
@@ -183,8 +196,10 @@ const close = () => {
   width: 100%;
   max-width: 100%;
   margin: 0;
+
   .reference {
     margin: 0;
+
     &-box {
       overflow: hidden;
       padding: 0;

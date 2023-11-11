@@ -1,16 +1,18 @@
 <template>
-  <desk-group :settings="deskSettings" @changeDesk="changeDesk" ref="deskGroupRef" @showMore="showMore" :desk-list="deskList" v-model:current-desk-id="currentDeskId">
+  <desk-group ref="deskGroupRef" v-model:current-desk-id="currentDeskId" :desk-list="deskList" :settings="deskSettings"
+              @changeDesk="changeDesk" @showMore="showMore">
     <template #empty>
-      <div v-if="currentDeskId!=='0' && currentDesk.iconUrl" class="game-bg p-5 rounded-md" style="margin: auto;width: 400px;margin-top: 40px">
+      <div v-if="currentDeskId!=='0' && currentDesk.iconUrl" class="game-bg p-5 rounded-md"
+           style="margin: auto;width: 400px;margin-top: 40px">
         <p>
-          <a-image class="rounded-md" :preview="false" :src="getCover(currentDeskId)"></a-image>
+          <a-image :preview="false" :src="getCover(currentDeskId)" class="rounded-md"></a-image>
           <div class="mt-3 mb-3 text-lg font-bold">{{ getGame(currentDeskId).chineseName }}-{{ currentDeskId }}</div>
           此游戏还没有创建桌面，当您为游戏单独创建桌面后，游戏运行中，会自动为您切换至此桌面。
           点击下方按钮为此游戏创建独立桌面。
         </p>
         <a-row :gutter="15">
           <a-col :span="12">
-            <a-button block size="large" @click="addCard()" type="primary ">添加第一个卡片</a-button>
+            <a-button block size="large" type="primary " @click="addCard()">添加第一个卡片</a-button>
           </a-col>
           <a-col :span="12">
             <a-button block size="large" @click="createMainDesk()">基于主桌面创建</a-button>
@@ -29,16 +31,16 @@
         </div>
         <a-row :gutter="15">
           <a-col :span="24">
-            <a-button block size="large" @click="addCard()" type="primary ">添加第一个卡片</a-button>
+            <a-button block size="large" type="primary " @click="addCard()">添加第一个卡片</a-button>
           </a-col>
         </a-row>
       </div>
     </template>
     <template #toolsBefore>
-      <a-tooltip title="添加游戏桌面" placement="bottom">
-        <div @click="showMore"
-             class=" btn-bg no-drag pointer h-10 w-10 rounded-md flex justify-center items-center ml-3">
-          <icon class="icon" style="font-size: 22px" icon="tianjia1"></icon>
+      <a-tooltip placement="bottom" title="添加游戏桌面">
+        <div class=" btn-bg no-drag pointer h-10 w-10 rounded-md flex justify-center items-center ml-3"
+             @click="showMore">
+          <icon class="icon" icon="tianjia1" style="font-size: 22px"></icon>
         </div>
       </a-tooltip>
     </template>
@@ -115,32 +117,32 @@
   <!--    </div>-->
 
   <!--  </div>-->
-  <GameListDrawer :activeId="currentDeskId" :items="displayGameList" @visibleChanged=""
+  <GameListDrawer v-model:visible="recentVisible" :activeId="currentDeskId" :items="displayGameList"
                   @valueChanged="(event)=>{this.currentDeskId=event.appid}"
-                  v-model:visible="recentVisible"></GameListDrawer>
+                  @visibleChanged=""></GameListDrawer>
 
 </template>
 
 <script>
-import { steamUserStore } from '../../store/steamUser'
+import {steamUserStore} from '../../store/steamUser'
 import Desk from '../../components/desk/Desk.vue'
-import { mapWritableState } from 'pinia'
-import { getClientIcon, getCover } from '../../js/common/game'
-import { nanoid } from 'nanoid'
+import {mapWritableState} from 'pinia'
+import {getClientIcon, getCover} from '../../js/common/game'
+import {nanoid} from 'nanoid'
 import GameListDrawer from '../../components/game/GameListDrawer.vue'
-import { appStore } from '../../store'
-import { useToast } from 'vue-toastification'
+import {appStore} from '../../store'
+import {useToast} from 'vue-toastification'
 import DeskGroup from '../../components/desk/DeskGroup.vue'
 import Template from '../../../user/pages/Template.vue'
 import Emoji from '../../components/comp/Emoji.vue'
 
 const toast = useToast()
 export default {
-  components: { Emoji, Template, DeskGroup, GameListDrawer, Desk },
+  components: {Emoji, Template, DeskGroup, GameListDrawer, Desk},
   computed: {
-    ...mapWritableState(steamUserStore, ['deskSettings','desks', 'runningGame', 'recentGameList', 'deskList', 'currentDeskId', 'desksOld']),
+    ...mapWritableState(steamUserStore, ['deskSettings', 'desks', 'runningGame', 'recentGameList', 'deskList', 'currentDeskId', 'desksOld']),
     ...mapWritableState(appStore, ['fullScreen']),
-    selectDeskGame () {
+    selectDeskGame() {
       let found = this.recentGameList.find(g => {
         return g.appid === this.selectDeskId
       })
@@ -153,7 +155,7 @@ export default {
         }
       }
     },
-    displayGameList () {
+    displayGameList() {
       return this.recentGameList.filter(game => {
         let found = this.deskList.find(desk => {
           return desk.id === game.appid
@@ -168,7 +170,7 @@ export default {
       })
     }
   },
-  data () {
+  data() {
     return {
       recentVisible: false,
       selectDeskId: '0',
@@ -182,12 +184,12 @@ export default {
       }
     }
   },
-  mounted () {
+  mounted() {
     this.migrateOldData()
-    this.deskList.forEach(desk=>{
+    this.deskList.forEach(desk => {
       //修正一下锁定机制，锁定的桌面无法被删除
-      if(desk.iconUrl || desk.id==='0'){
-        desk.lock=true
+      if (desk.iconUrl || desk.id === '0') {
+        desk.lock = true
       }
     })
     let mainDesk = this.deskList.find(desk => {
@@ -200,7 +202,7 @@ export default {
         name: '主桌面',
         nanoid: nanoid(4),
         cards: [],
-        lock:true,//锁定桌面，无法删除
+        lock: true,//锁定桌面，无法删除
         pin: true,
         icon: 'desktop',
         settings: {
@@ -234,10 +236,10 @@ export default {
   methods: {
     getClientIcon,
     getCover,
-    setSelectDeskId (id) {
+    setSelectDeskId(id) {
       this.selectDeskId = id
     },
-    migrateOldData () {
+    migrateOldData() {
       if (typeof this.desks === 'object') {
         console.log(this.desks, '需要转移')
         if (Object.keys(this.desks).length === 0) {
@@ -274,7 +276,7 @@ export default {
             this.deskList.push({
               id: g.appid,
               name: g.chineseName,
-              lock:true,
+              lock: true,
               cards: [],
               settings: {
                 cardZoom: 100,
@@ -291,23 +293,23 @@ export default {
         this.desks = []
       }
     },
-    changeDesk(p){
-      let changeDesk=this.deskList.find(desk=>{
-        return desk.id===p.id
+    changeDesk(p) {
+      let changeDesk = this.deskList.find(desk => {
+        return desk.id === p.id
       })
 
-      if(changeDesk){
-        this.currentDeskId=changeDesk.id
-        this.currentDesk=changeDesk
+      if (changeDesk) {
+        this.currentDeskId = changeDesk.id
+        this.currentDesk = changeDesk
       }
     },
-    addCard () {
-      let foundDesk=this.deskList.find(desk=>{
-        return desk.id===this.currentDeskId
+    addCard() {
+      let foundDesk = this.deskList.find(desk => {
+        return desk.id === this.currentDeskId
       })
 
-      if(!foundDesk){
-        const game=this.getGame(this.currentDeskId)
+      if (!foundDesk) {
+        const game = this.getGame(this.currentDeskId)
         this.deskList.unshift({
           id: game.appid,
           name: game.chineseName,
@@ -323,7 +325,7 @@ export default {
 
       this.$refs.deskGroupRef.addCard()
     },
-    createMainDesk () {
+    createMainDesk() {
       this.desks[this.selectDeskGame.appid] = {
         name: this.selectDeskGame.name,
         nanoid: nanoid(4),
@@ -331,10 +333,10 @@ export default {
         settings: this.desks['0'].settings
       }
     },
-    showMore () {
+    showMore() {
       this.recentVisible = true
     },
-    getGame (id) {
+    getGame(id) {
       return this.recentGameList.find(g => {
         return g.appid === id
       })
@@ -402,6 +404,7 @@ export default {
   background: var(--primary-bg);
   color: var(--primary-text);
 }
+
 .btn-bg {
   background: var(--primary-bg);
   color: var(--primary-text);

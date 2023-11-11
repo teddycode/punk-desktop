@@ -7,18 +7,18 @@ let tools = require('../util/util').tools
 
 require('./appPreloads/passwordFillForApp.js')
 
-const { nanoid } = require('nanoid')
+const {nanoid} = require('nanoid')
 
 const axios = require('axios')
-const { config, api } = require('../../server-config')
+const {config, api} = require('../../server-config')
 const tsbApi = require('../../src/browserApi/baseApi.js')
-if(typeof tsbApi==='undefined'){
-  try{
-    const tsbApi=require('../../src/browserApi/baseApi.js')
-    contextBridge.exposeInMainWorld('tsbApi',tsbApi)
-  }catch(e){
-    console.warn(e)
-  }
+if (typeof tsbApi === 'undefined') {
+    try {
+        const tsbApi = require('../../src/browserApi/baseApi.js')
+        contextBridge.exposeInMainWorld('tsbApi', tsbApi)
+    } catch (e) {
+        console.warn(e)
+    }
 }
 
 axios.defaults.baseURL = config.NODE_SERVER_BASE_URL;
@@ -26,96 +26,99 @@ axios.defaults.adapter = require('axios/lib/adapters/http');
 
 //todo 为了引入findinpage，关闭了sandbox，可能存在安全隐患
 ipc.on('findInPage', () => {
-  let findInPage = new FindInPage(remote.getCurrentWebContents())
-  findInPage.openFindWindow()
+    let findInPage = new FindInPage(remote.getCurrentWebContents())
+    findInPage.openFindWindow()
 })
 window = tools.getWindowArgs(window)
 
 //通过内容暴露给 window/浏览器侧sdk 一些应用信息
 let sdkObject = {
-  hashId: nanoid(),
-  has: true,
-  globalArgs: window.globalArgs,
-  platform: window.platformType,
+    hashId: nanoid(),
+    has: true,
+    globalArgs: window.globalArgs,
+    platform: window.platformType,
 }
-ipc.on('fileAssign',(event,args)=>{
-  window.postMessage({
-    eventName: "fileAssign",
-    filePath:args.filePath})
+ipc.on('fileAssign', (event, args) => {
+    window.postMessage({
+        eventName: "fileAssign",
+        filePath: args.filePath
+    })
 })
 
 ipc.invoke('appPreloadReady', tools.execDomain(location.href)).then(args => {
-  let assignSdkObject =  Object.assign(sdkObject, args.saApp)
+    let assignSdkObject = Object.assign(sdkObject, args.saApp)
 
-  tsbSdk.listener(assignSdkObject) //浏览器侧sdk挂载
-  contextBridge.exposeInMainWorld('$browser', 'tsbrowser') //此处挂载上browserTag //todo 此处要考虑如何兼容不需要本地sdk的系统应用
+    tsbSdk.listener(assignSdkObject) //浏览器侧sdk挂载
+    contextBridge.exposeInMainWorld('$browser', 'tsbrowser') //此处挂载上browserTag //todo 此处要考虑如何兼容不需要本地sdk的系统应用
 
-  window.addEventListener('message', function(e) {
-    let eventName = e.data.eventName
-    let id = e.data.id;
-    let options = e.data.options
-    if(!eventName) return
-    if(!eventName.startsWith('third')) return
-    if(e.data.hashId !== sdkObject.hashId) { throw ({code: 401, msg: '非安全的第三方应用'}) }
-    switch(eventName) {
-      case 'thirdHideApp':
-        ipc.invoke('saAppHideApp', options).then(res => {
-          tsbSdk.bridgeToWeb({eventName, resInfo: res, id})
-        }).catch(err => {
-          tsbSdk.bridgeToWeb({eventName: 'errorSys', errorInfo: err, id})
-        })
-        break;
-      case 'thirdTabLinkJump':
-        ipc.invoke('saAppTabLinkJump', options).then(res => {
-          tsbSdk.bridgeToWeb({eventName, resInfo: res, id})
-        }).catch(err => {
-          tsbSdk.bridgeToWeb({eventName: 'errorSys', errorInfo: err, id})
-        })
-        break;
-      case 'thirdNotice':
-        ipc.invoke('saAppNotice', options).then(res => {
-          tsbSdk.bridgeToWeb({eventName, resInfo: res, id})
-        }).catch(err => {
-          tsbSdk.bridgeToWeb({eventName: 'errorSys', errorInfo: err, id})
-        })
-        break
-      case 'thirdOpenSysApp':
-        ipc.invoke('saAppOpenSysApp', options).then(res => {
-          tsbSdk.bridgeToWeb({eventName, resInfo: res, id})
-        }).catch(err => {
-          tsbSdk.bridgeToWeb({eventName: 'errorSys', errorInfo: err, id})
-        })
-        break
-      case 'thirdOsxOpenInviteMember':
-        ipc.invoke('saAppOsxOpenInviteMember', options.groupId).then(res => {
-          tsbSdk.bridgeToWeb({eventName, resInfo: res, id})
-        }).catch(err => {
-          tsbSdk.bridgeToWeb({eventName: 'errorSys', errorInfo: err, id})
-        })
-        break
-      case 'thirdGetUserProfile':
-        ipc.invoke('saAppGetUserProfile').then(res => {
-          tsbSdk.bridgeToWeb({eventName, resInfo: res, id})
-        }).catch(err => {
-          tsbSdk.bridgeToWeb({eventName: 'errorSys', errorInfo: err, id})
-        })
-        break
-      case 'thirdCheckBrowserLogin':
-        ipc.invoke('saAppCheckBrowserLogin').then(res => {
-          tsbSdk.bridgeToWeb({eventName, resInfo: res, id})
-        }).catch(err => {
-          tsbSdk.bridgeToWeb({eventName: 'errorSys', errorInfo: err, id})
-        })
-        break
-      case 'thirdOpenPermissionWindow':
-        ipc.invoke('saAppOpenPermissionWindow', options).then(res => {
-          tsbSdk.bridgeToWeb({eventName, resInfo: res, id})
-        }).catch(err => {
-          tsbSdk.bridgeToWeb({eventName: 'errorSys', errorInfo: err, id})
-        })
-        break;
-    }
-  })
+    window.addEventListener('message', function (e) {
+        let eventName = e.data.eventName
+        let id = e.data.id;
+        let options = e.data.options
+        if (!eventName) return
+        if (!eventName.startsWith('third')) return
+        if (e.data.hashId !== sdkObject.hashId) {
+            throw ({code: 401, msg: '非安全的第三方应用'})
+        }
+        switch (eventName) {
+            case 'thirdHideApp':
+                ipc.invoke('saAppHideApp', options).then(res => {
+                    tsbSdk.bridgeToWeb({eventName, resInfo: res, id})
+                }).catch(err => {
+                    tsbSdk.bridgeToWeb({eventName: 'errorSys', errorInfo: err, id})
+                })
+                break;
+            case 'thirdTabLinkJump':
+                ipc.invoke('saAppTabLinkJump', options).then(res => {
+                    tsbSdk.bridgeToWeb({eventName, resInfo: res, id})
+                }).catch(err => {
+                    tsbSdk.bridgeToWeb({eventName: 'errorSys', errorInfo: err, id})
+                })
+                break;
+            case 'thirdNotice':
+                ipc.invoke('saAppNotice', options).then(res => {
+                    tsbSdk.bridgeToWeb({eventName, resInfo: res, id})
+                }).catch(err => {
+                    tsbSdk.bridgeToWeb({eventName: 'errorSys', errorInfo: err, id})
+                })
+                break
+            case 'thirdOpenSysApp':
+                ipc.invoke('saAppOpenSysApp', options).then(res => {
+                    tsbSdk.bridgeToWeb({eventName, resInfo: res, id})
+                }).catch(err => {
+                    tsbSdk.bridgeToWeb({eventName: 'errorSys', errorInfo: err, id})
+                })
+                break
+            case 'thirdOsxOpenInviteMember':
+                ipc.invoke('saAppOsxOpenInviteMember', options.groupId).then(res => {
+                    tsbSdk.bridgeToWeb({eventName, resInfo: res, id})
+                }).catch(err => {
+                    tsbSdk.bridgeToWeb({eventName: 'errorSys', errorInfo: err, id})
+                })
+                break
+            case 'thirdGetUserProfile':
+                ipc.invoke('saAppGetUserProfile').then(res => {
+                    tsbSdk.bridgeToWeb({eventName, resInfo: res, id})
+                }).catch(err => {
+                    tsbSdk.bridgeToWeb({eventName: 'errorSys', errorInfo: err, id})
+                })
+                break
+            case 'thirdCheckBrowserLogin':
+                ipc.invoke('saAppCheckBrowserLogin').then(res => {
+                    tsbSdk.bridgeToWeb({eventName, resInfo: res, id})
+                }).catch(err => {
+                    tsbSdk.bridgeToWeb({eventName: 'errorSys', errorInfo: err, id})
+                })
+                break
+            case 'thirdOpenPermissionWindow':
+                ipc.invoke('saAppOpenPermissionWindow', options).then(res => {
+                    tsbSdk.bridgeToWeb({eventName, resInfo: res, id})
+                }).catch(err => {
+                    tsbSdk.bridgeToWeb({eventName: 'errorSys', errorInfo: err, id})
+                })
+                break;
+        }
+    })
 
-  tsbSdk.onThirdAutoLogin(ipc)
+    tsbSdk.onThirdAutoLogin(ipc)
 })

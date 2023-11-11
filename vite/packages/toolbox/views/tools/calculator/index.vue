@@ -1,31 +1,31 @@
 <template>
   <div class="xt-border h-full xt-bg-2 xt-text text-base flex flex-col">
     <div class="flex-grow overflow-hidden overflow-y-auto xt-scrollbar p-2">
-      <div class="h-12 flex" v-for="(i, index) in calculators" :key="index">
+      <div v-for="(i, index) in calculators" :key="index" class="h-12 flex">
         <XtInput
-          :key="index"
-          class="xt-text flex-1"
-          placeholder="请输入计算式，如 99+99 "
-          style="height: 48px"
-          :class="border"
-          :limit="{ space: true }"
-          v-model="computeList[index]"
-          @focus="handleFocus(index)"
-          @change="handleChange()"
-          @blur="handleBlur(index)"
+            :key="index"
+            v-model="computeList[index]"
+            :class="border"
+            :limit="{ space: true }"
+            class="xt-text flex-1"
+            placeholder="请输入计算式，如 99+99 "
+            style="height: 48px"
+            @blur="handleBlur(index)"
+            @change="handleChange()"
+            @focus="handleFocus(index)"
         ></XtInput>
         <div
-          v-if="countList[index]"
-          class="px-3 flex items-center success cursor-pointer xt-active res truncate"
-          style="
+            v-if="countList[index]"
+            class="px-3 flex items-center success cursor-pointer xt-active res truncate"
+            style="
             max-width: 30%;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
           "
-          @click="copyToClipboard(countList[index])"
-          @mouseover="showCopy()"
-          @mouseout="hideCopy()"
+            @click="copyToClipboard(countList[index])"
+            @mouseout="hideCopy()"
+            @mouseover="showCopy()"
         >
           {{ countList[index] }}
         </div>
@@ -34,13 +34,13 @@
     <div class="flex justify-between p-2">
       <div class="overflow-hidden" style="width: 0">1</div>
       <XtBaseIcon
-        icon="shanchu"
-        style="font-size: 20px"
-        @click="delCalculator()"
+          icon="shanchu"
+          style="font-size: 20px"
+          @click="delCalculator()"
       ></XtBaseIcon>
       <div
-        class="absolute left-1/2 -translate-x-1/2 res-copy"
-        style="bottom: 22px"
+          class="absolute left-1/2 -translate-x-1/2 res-copy"
+          style="bottom: 22px"
       >
         点击复制
       </div>
@@ -49,9 +49,9 @@
 </template>
 
 <script>
-import { message } from "ant-design-vue";
-import { calculator } from "../../../store/calculator";
-import { mapWritableState } from "pinia";
+import {message} from "ant-design-vue";
+import {calculator} from "../../../store/calculator";
+import {mapWritableState} from "pinia";
 import Mexp from "math-expression-evaluator";
 
 export default {
@@ -109,19 +109,20 @@ export default {
     },
     copyToClipboard(text) {
       navigator.clipboard
-        .writeText(text)
-        .then(() => {
-          message.success("已成功复制到剪切板");
-        })
-        .catch((err) => {});
+          .writeText(text)
+          .then(() => {
+            message.success("已成功复制到剪切板");
+          })
+          .catch((err) => {
+          });
     },
     handleFocus(i) {
       this.selectIndex = i;
     },
     handleBlur(index) {
       if (
-        this.computeList[index] === "" &&
-        index !== this.computeList.length - 1
+          this.computeList[index] === "" &&
+          index !== this.computeList.length - 1
       ) {
         this.computeList.splice(index, 1);
         this.countList.splice(index, 1);
@@ -148,13 +149,16 @@ export default {
     color: var(--primary-text);
   }
 }
+
 .res-copy {
   display: none;
 }
+
 input {
   border: none;
   background: none;
 }
+
 .ant-input:focus {
   box-shadow: none;
 }

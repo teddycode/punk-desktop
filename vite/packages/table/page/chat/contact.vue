@@ -1,7 +1,7 @@
 <!-- 联系人页面 -->
 <template>
   <div style="margin-top: -12px;height:100%;width: 100%;display: flex;flex-direction: column">
-    <TUIContact style="height: 100%" :display-online-status="false"></TUIContact>
+    <TUIContact :display-online-status="false" style="height: 100%"></TUIContact>
   </div>
 
 </template>
@@ -23,6 +23,6 @@ export default defineComponent({
 })
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 
 </style>

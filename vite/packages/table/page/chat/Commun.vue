@@ -1,5 +1,5 @@
 <template>
-  <div @resize="updateScroller" class="container flex flex-col xt-text">
+  <div class="container flex flex-col xt-text" @resize="updateScroller">
     <div class="top-bar">
       <div class="left shrink h-[40px] flex">
         <div class=" h-[40px] xt-bg rounded-lg text-center font-16 mr-3 xt-text-2 pl-1 pr-1" style="line-height: 40px;">
@@ -7,17 +7,18 @@
         </div>
         <div class="flex  w-[200px] h-[40px] justify-center xt-bg rounded-lg">
           <div v-for="(item, index) in menuList" :key="index"
-            class="w-[64px] h-[32px]  mt-1 mb-1 text-center leading-8 font-16"
-            :class="[{ action: currentIndex == index }]" style="cursor: pointer;" @click="setCurrentIndex(index)">{{
+               :class="[{ action: currentIndex == index }]"
+               class="w-[64px] h-[32px]  mt-1 mb-1 text-center leading-8 font-16" style="cursor: pointer;" @click="setCurrentIndex(index)">{{
               item.name
-            }}</div>
+            }}
+          </div>
         </div>
         <div class="xt-bg w-[115px] h-[40px] text-center ml-3 leading-10 rounded-lg font-16" style="cursor: pointer">
-          <a-dropdown trigger="click" placement="bottom"
-            overlayStyle="background-color: var(--primary-bg); padding-left:3px ;padding-right:3px; width: 100px;">
+          <a-dropdown overlayStyle="background-color: var(--primary-bg); padding-left:3px ;padding-right:3px; width: 100px;" placement="bottom"
+                      trigger="click">
             <span class=" ant-dropdown-link" @click.prevent>
               {{ checkMenuList[checkMenuCurrentIndex].type }}
-              <DownOutlined class="text-sm" />
+              <DownOutlined class="text-sm"/>
             </span>
             <template #overlay>
               <a-menu class="text-center xt-bg">
@@ -31,21 +32,23 @@
       </div>
       <div class="flex mr-6 right">
         <!-- <div class="flex items-center"> -->
-        <xt-button type="primary"
-          style="color: var(--active-bg); width: 83px;height: 40px;background: rgba(80,139,254,0.20);"
-          @click="visibleModal">
-          <Icon class="pr-1 text-xl xt-theme-text" style="font-size: 22px;vertical-align: sub;margin-right:6px ;" icon="akar-icons:circle-plus-fill" />发布
+        <xt-button style="color: var(--active-bg); width: 83px;height: 40px;background: rgba(80,139,254,0.20);"
+                   type="primary"
+                   @click="visibleModal">
+          <Icon class="pr-1 text-xl xt-theme-text" icon="akar-icons:circle-plus-fill"
+                style="font-size: 22px;vertical-align: sub;margin-right:6px ;"/>
+          发布
         </xt-button>
-        <a-tooltip  title="刷新" placement="bottom">
-          <xt-button class="ml-3 border-0 rounded-md xt-bg pointer " @click="refreshPost"
-            style="flex-shrink: 0;width: 40px;height: 40px;">
-            <Icon class="text-lg xt-text" style="vertical-align: sub;" icon="akar-icons:arrow-clockwise" />
+        <a-tooltip placement="bottom" title="刷新">
+          <xt-button class="ml-3 border-0 rounded-md xt-bg pointer " style="flex-shrink: 0;width: 40px;height: 40px;"
+                     @click="refreshPost">
+            <Icon class="text-lg xt-text" icon="akar-icons:arrow-clockwise" style="vertical-align: sub;"/>
           </xt-button>
         </a-tooltip>
-        <a-tooltip title="前往元社区" placement="bottom">
-          <xt-button class="ml-3 border-0 rounded-md xt-bg pointer" @click="goYuan"
-            style="flex-shrink: 0;width: 40px;height: 40px;">
-            <Icon class="text-lg xt-text" style="vertical-align: sub;" icon="majesticons:open" />
+        <a-tooltip placement="bottom" title="前往元社区">
+          <xt-button class="ml-3 border-0 rounded-md xt-bg pointer" style="flex-shrink: 0;width: 40px;height: 40px;"
+                     @click="goYuan">
+            <Icon class="text-lg xt-text" icon="majesticons:open" style="vertical-align: sub;"/>
           </xt-button>
         </a-tooltip>
 
@@ -53,37 +56,39 @@
         <!-- </div> -->
 
       </div>
-      <publishModal v-if="showPublishModal" :showPublishModal="showPublishModal" @handleOk="modalVisible"
-        :forumId="props.forumId" />
+      <publishModal v-if="showPublishModal" :forumId="props.forumId" :showPublishModal="showPublishModal"
+                    @handleOk="modalVisible"/>
 
     </div>
     <!-- {{ store.communityPost.count }} -->
-    <a-spin tip="Loading..." v-if="refreshFlag" size="large" style=" margin-top: 28%;"></a-spin>
-    <div class="flex justify-center flex-auto " style="height: 0;" v-else>
+    <a-spin v-if="refreshFlag" size="large" style=" margin-top: 28%;" tip="Loading..."></a-spin>
+    <div v-else class="flex justify-center flex-auto " style="height: 0;">
       <!-- 左侧卡片区域 -->
-      <vue-custom-scrollbar ref="threadListRef" :key="current" :class="{ 'detail-visible': detailVisible }"
-        class="w-full thread-list" :settings="settingsScroller" style="height: 100%;overflow: hidden;flex-shrink: 0; "
-        :style="{ width: detailVisible ? '40%' : '70%' }">
+      <vue-custom-scrollbar :key="current" ref="threadListRef" :class="{ 'detail-visible': detailVisible }"
+                            :settings="settingsScroller" :style="{ width: detailVisible ? '40%' : '70%' }"
+                            class="w-full thread-list"
+                            style="height: 100%;overflow: hidden;flex-shrink: 0; ">
         <div class="flex justify-center content">
           <!-- {{ checkMenuList.value[currentIndex.value].order }} -->
           <!-- 循环渲染多个 ComCard -->
           <a-empty v-if="comCards.list?.length === 0" description="暂无内容" image="/img/test/load-ail.png"
-            style="margin-top: 30%;"></a-empty>
+                   style="margin-top: 30%;"></a-empty>
           <template v-else>
-            <ComCard v-for="(card, index) in comCards.list" :key="index" :cardData="card" @click="showDetail(index)"
-              :detailVisible="detailVisible" class="xt-bg"
-              :style="{ backgroundColor: selectedIndex === index ? 'var(--active-secondary-bg) !important' : 'var(--primary-bg) !important', flex: 1 }">
+            <ComCard v-for="(card, index) in comCards.list" :key="index" :cardData="card" :detailVisible="detailVisible"
+                     :style="{ backgroundColor: selectedIndex === index ? 'var(--active-secondary-bg) !important' : 'var(--primary-bg) !important', flex: 1 }" class="xt-bg"
+                     @click="showDetail(index)">
             </ComCard>
-            <a-pagination v-model:current="current" :total="totalPost" simple @change="changePage" class="xt-text-2" />
+            <a-pagination v-model:current="current" :total="totalPost" class="xt-text-2" simple @change="changePage"/>
           </template>
 
         </div>
       </vue-custom-scrollbar>
       <!-- <DataStatu v-else imgDisplay="/img/test/load-ail.png" :btnToggle="false" textPrompt="暂无数据"></DataStatu> -->
       <!-- 右侧详情区域 -->
-      <vue-custom-scrollbar class="ml-2 rounded-lg thread-detail xt-bg" :key="selectedIndex" v-if="detailVisible"
-        :settings="settingsScroller" style="height: 100%;" :style="{ width: detailVisible ? '55%' : '40%' }">
-        <div class="h-full detail" v-if="detailVisible">
+      <vue-custom-scrollbar v-if="detailVisible" :key="selectedIndex" :settings="settingsScroller"
+                            :style="{ width: detailVisible ? '55%' : '40%' }" class="ml-2 rounded-lg thread-detail xt-bg"
+                            style="height: 100%;">
+        <div v-if="detailVisible" class="h-full detail">
           <DetailCard :cardData="detailText" @closeDetail="closeDetail"></DetailCard>
           <!-- <a-pagination v-model:current="detailCurrent" :total="totalReply" simple @change="changePage" /> -->
         </div>
@@ -92,17 +97,18 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, reactive, onBeforeMount, onMounted, computed, watch, onBeforeUpdate, onUpdated } from 'vue';
-import { DownOutlined } from '@ant-design/icons-vue';
+<script lang="ts" setup>
+import {computed, onBeforeMount, onBeforeUpdate, onMounted, onUpdated, reactive, ref, watch} from 'vue';
+import {DownOutlined} from '@ant-design/icons-vue';
 import ComCard from './com/ComList.vue';
 import DetailCard from './com/Detail.vue';
 import publishModal from './com/PublishModal.vue';
-import { useCommunityStore } from './commun'
+import {useCommunityStore} from './commun'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
-import { Icon } from '@iconify/vue'
+import {Icon} from '@iconify/vue'
 import browser from '../../js/common/browser';
+
 const current = ref(1)
 // 更新帖子列表
 const refreshFlag = ref(false)
@@ -152,10 +158,10 @@ const setCurrentIndex = (index) => {
   detailVisible.value = false
   current.value = 1
   store.getCommunityPost(
-    props.forumId,
-    current.value,
-    menuList.value[currentIndex.value].type,
-    checkMenuList.value[checkMenuCurrentIndex.value].order)
+      props.forumId,
+      current.value,
+      menuList.value[currentIndex.value].type,
+      checkMenuList.value[checkMenuCurrentIndex.value].order)
   // let tid = store.communityPost.list[index].pay_set.tid ? store.communityPost.list[index].pay_set.tid : store.communityPost.list[index].id
   // if (detailVisible.value === true) {
   //   store.getCommunityPostDetail(tid)
@@ -206,10 +212,12 @@ const visibleModal = () => {
 }
 
 const threadListRef = ref()
+
 function updateScroller() {
   // console.log(threadListRef)
   threadListRef.value.update()
 }
+
 // 控制显示状态和选中状态的变量
 const detailVisible = ref(false);
 let detailStorage
@@ -245,8 +253,8 @@ const closeDetail = (value) => {
 }
 onBeforeMount(async () => {
   NProgress.start()
-  NProgress.configure({ showSpinner: false });
-  await NProgress.configure({ parent: '.container' })
+  NProgress.configure({showSpinner: false});
+  await NProgress.configure({parent: '.container'})
 })
 onMounted(() => {
   // setCurrentIndex(0)
@@ -329,7 +337,6 @@ onUpdated(() => {
       border-radius: 10px;
     }
   }
-
 
 
   .content {

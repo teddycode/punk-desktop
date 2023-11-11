@@ -2,18 +2,19 @@
   <xt-task :modelValue="m02014"></xt-task>
   <div class="h-full w-full">
     <Icon
-      ref="iconRef"
-      :isSelect="true"
-      :data="allApps"
-      @updateSelectApps="updateSelectApps"
+        ref="iconRef"
+        :data="allApps"
+        :isSelect="true"
+        @updateSelectApps="updateSelectApps"
     ></Icon>
   </div>
 </template>
 
 <script>
 import syncSelected from "../hooks/syncSelected";
-import { taskStore } from "../../../../apps/task/store";
-import { mapWritableState } from "pinia";
+import {taskStore} from "../../../../apps/task/store";
+import {mapWritableState} from "pinia";
+
 export default {
   mixins: [syncSelected],
 
@@ -40,7 +41,7 @@ export default {
       for (const item of desktopApps) {
         data.push({
           ...item,
-          icon:await tsbApi.system.extractFileIcon(item.path),
+          icon: await tsbApi.system.extractFileIcon(item.path),
           open: {
             type: "tableApp",
             value: item.path,

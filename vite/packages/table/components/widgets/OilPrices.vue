@@ -1,32 +1,33 @@
 <template>
   <div>
-    <Widget :options="options" :customIndex="customIndex" :customData="customData" :menuList="menuList" ref="cardSlot"
-      :desk="desk" :size="size">
+    <Widget ref="cardSlot" :customData="customData" :customIndex="customIndex" :desk="desk" :menuList="menuList"
+            :options="options" :size="size">
       <template #left-title>
         <div class="icon"
-          style="width: 35px;height: 24px;display: flex; justify-content: center;align-items: center;position: absolute;left: 2px;">
-          <LineChartOutlined style="font-size: 20px;" />
+             style="width: 35px;height: 24px;display: flex; justify-content: center;align-items: center;position: absolute;left: 2px;">
+          <LineChartOutlined style="font-size: 20px;"/>
         </div>
       </template>
       <!-- {{ currentCity }} -->
       <!-- {{ cityOilData }} -->
       <!-- {{ cityOilList }} -->
       <div v-if="isLoading">
-        <a-spin style="display: flex; justify-content: center; align-items:center;margin-top: 60%" />
+        <a-spin style="display: flex; justify-content: center; align-items:center;margin-top: 60%"/>
       </div>
       <template v-else-if="fail">
-        <a-result :status="null" title="请确认网络" style="margin-top: 3em">
+        <a-result :status="null" style="margin-top: 3em" title="请确认网络">
           <template #extra>
-            <a-button key="console" type="primary" @click="retry"
-              style="background: var(--primary-bg);color:var(--primary-text)">重试</a-button>
+            <a-button key="console" style="background: var(--primary-bg);color:var(--primary-text)" type="primary"
+                      @click="retry">重试
+            </a-button>
           </template>
         </a-result>
 
       </template>
-      <div v-else >
+      <div v-else>
         <div class="city xt-bg xt-text" @click="showMenu">
           {{ showOilData[0].city }}
-          <CaretDownOutlined style="font-size: 16px; " />
+          <CaretDownOutlined style="font-size: 16px; "/>
         </div>
         <div class="oil">
           <div class="oil-item mar-r xt-bg ">
@@ -58,11 +59,11 @@
 
     </Widget>
     <!-- {{ showOilData[0] }} -->
-    <a-drawer :width="500" title="设置" v-model:visible="settingVisible" placement="right">
+    <a-drawer v-model:visible="settingVisible" :width="500" placement="right" title="设置">
       <vue-custom-scrollbar :settings="settingsScroller" style="height: 100%;">
         <div class="primary-title" style="color: var(--primary-text);">选择地区</div>
-        <div class="flex items-center justify-center w-full h-12 my-4 rounded-lg pointer s-list" v-for="(item) in city"
-          :class="defaultCityIndex === item.id ? 'drawer-active' : ''" @click="selectedAreaSuit(item)">
+        <div v-for="(item) in city" :class="defaultCityIndex === item.id ? 'drawer-active' : ''"
+             class="flex items-center justify-center w-full h-12 my-4 rounded-lg pointer s-list" @click="selectedAreaSuit(item)">
           <!-- {{ defaultCityIndex }} -->
           <!-- {{ item.id }} -->
           {{ item.city }}
@@ -75,10 +76,11 @@
 
 <script>
 import Widget from '../card/Widget.vue'
-import { LineChartOutlined, CaretDownOutlined } from '@ant-design/icons-vue'
+import {CaretDownOutlined, LineChartOutlined} from '@ant-design/icons-vue'
 import city from '../../js/axios/city.ts'
-import { mapActions, mapState } from 'pinia'
-import { oilStore } from '../../store/store.ts'
+import {mapActions, mapState} from 'pinia'
+import {oilStore} from '../../store/store.ts'
+
 export default {
   name: 'OilPrices',
   components: {
@@ -93,7 +95,8 @@ export default {
     },
     customData: {
       type: Object,
-      default: () => { }
+      default: () => {
+      }
     },
     desk: {
       type: Object
@@ -112,7 +115,10 @@ export default {
         {
           icon: 'shezhi1',
           title: '设置',
-          fn: () => { this.settingVisible = true; this.$refs.cardSlot.visible = false }
+          fn: () => {
+            this.settingVisible = true;
+            this.$refs.cardSlot.visible = false
+          }
         },
       ],
       currentIndex: 0,
@@ -193,7 +199,7 @@ export default {
         this.cityOil(this.customData.city)
 
       } else {
-        this.customData.city=this.city[this.defaultCityIndex].city
+        this.customData.city = this.city[this.defaultCityIndex].city
         this.cityOil(this.city[this.defaultCityIndex].city)
       }
       // this.customData.city=this.city[this.defaultCityIndex].city

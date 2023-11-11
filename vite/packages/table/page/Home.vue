@@ -1,6 +1,6 @@
 <template>
   <div v-if="hide" style="position: fixed; top: 0; bottom: 0; right: 0; left: 0" @click="hideDesk"
-    @contextmenu="hideDesk"></div>
+       @contextmenu="hideDesk"></div>
   <!--  <div v-if="!hide" @contextmenu="showMenu" style="-->
   <!--      display: flex;-->
   <!--      align-items: flex-start;-->
@@ -82,26 +82,27 @@
   <!--    </vue-custom-scrollbar>-->
   <!--  </div>-->
   <div style="height: 100%">
-    <desk-group @changeDesk="changeDesk" ref="deskGroupRef" :settings="settings" :desk-list="desks"
-      v-model:currentDeskId="this.currentDeskId">
+    <desk-group ref="deskGroupRef" v-model:currentDeskId="this.currentDeskId" :desk-list="desks" :settings="settings"
+                @changeDesk="changeDesk">
       <template #settingsAll>
-        <xt-task :modelValue="m01033" to="" >
-            </xt-task>
-        <div class="line-title xt-text" >背景设置：</div>
+        <xt-task :modelValue="m01033" to="">
+        </xt-task>
+        <div class="line-title xt-text">背景设置：</div>
         <div class="line" @click="setTransparent()">
-          透明背景(透出系统桌面壁纸)：<a-switch v-model:checked="appSettings.transparent"></a-switch>
+          透明背景(透出系统桌面壁纸)：
+          <a-switch v-model:checked="appSettings.transparent"></a-switch>
         </div>
-        <div class="flex line" v-if="!appSettings.transparent">
+        <div v-if="!appSettings.transparent" class="flex line">
 
-        <xt-task :modelValue="m01034" to="" @cb="goPaper">
-          <a-button type="primary" class="mr-3 xt-active-bg" @click="goPaper">背景设置</a-button>
-      </xt-task>
-          <a-button @click="clearWallpaper" class="xt-text">清除背景</a-button>
+          <xt-task :modelValue="m01034" to="" @cb="goPaper">
+            <a-button class="mr-3 xt-active-bg" type="primary" @click="goPaper">背景设置</a-button>
+          </xt-task>
+          <a-button class="xt-text" @click="clearWallpaper">清除背景</a-button>
         </div>
         <div v-if="!appSettings.transparent" class="line">
           <div class="line">
             背景模糊度：
-            <a-slider v-model:value="backgroundSettings.backGroundImgBlur" :max="100" :step="1" />
+            <a-slider v-model:value="backgroundSettings.backGroundImgBlur" :max="100" :step="1"/>
           </div>
           <!--      <div class="line">-->
           <!--        遮罩浓度：-->
@@ -109,7 +110,7 @@
           <!--      </div>-->
         </div>
 
-        <div class="line-title">RGB<br />（此类功能性能消耗较高，请酌情开启）</div>
+        <div class="line-title">RGB<br/>（此类功能性能消耗较高，请酌情开启）</div>
         <div class="line">
           边框跑马灯：
           <a-switch v-model:checked="appSettings.houserun"></a-switch>
@@ -118,7 +119,7 @@
           飘落特效：
           <a-switch v-model:checked="appSettings.down.enable"></a-switch>
         </div>
-        <div class="line" v-if="appSettings.down.enable">
+        <div v-if="appSettings.down.enable" class="line">
           飘落物：
           <a-radio-group v-model:value="appSettings.down.type">
             <a-radio value="rain">雨</a-radio>
@@ -126,7 +127,7 @@
             <a-radio value="leaf">叶</a-radio>
           </a-radio-group>
         </div>
-        <div class="line" v-if="appSettings.down.enable">
+        <div v-if="appSettings.down.enable" class="line">
           飘落物数量：
           <a-input-number v-model:value="appSettings.down.count"></a-input-number>
         </div>
@@ -161,33 +162,32 @@
   </div>
 
   <transition name="fade">
-    <div class="" style="
+    <div v-if="iconVisible" class="" style="
          position: fixed;
          top: 0;
          right: 0;
          left: 0;
          bottom: 0;
          z-index: 999;
-       " v-if="iconVisible">
-      <AddIcon @setCustoms="setCustoms" @close="iconHide" :desk="currentDesk"></AddIcon>
+       ">
+      <AddIcon :desk="currentDesk" @close="iconHide" @setCustoms="setCustoms"></AddIcon>
     </div>
   </transition>
   <!-- <div class="fixed inset-0 p-12 home-blur" style="z-index: 999" >
     <GradeNotice></GradeNotice>
   </div> -->
 
-  <div class="fixed inset-0 home-guide" style="z-index: 999;" v-if="agreeTest">
+  <div v-if="agreeTest" class="fixed inset-0 home-guide" style="z-index: 999;">
     <GuidePage></GuidePage>
   </div>
 
   <!-- 检测到用户头像为默认头像时触发用户中心个人信息修改弹窗 -->
-  <div class="fixed inset-0 home-guide" style="z-index: 999;" v-if="infoVisible === true">
+  <div v-if="infoVisible === true" class="fixed inset-0 home-guide" style="z-index: 999;">
     <UpdateMyInfo :updateVisible="true"></UpdateMyInfo>
   </div>
 </template>
 
 <script>
-import  { onMounted } from 'vue'
 import Weather from "../components/widgets/Weather.vue";
 import Timer from "../components/widgets/Timer.vue";
 import Music from "../components/widgets/Music.vue";
@@ -199,11 +199,11 @@ import CustomTimer from "../components/widgets/CustomTimer.vue";
 import SmallCountdownDay from "../components/widgets/SmallCountdownDay.vue";
 import Clock from "../components/widgets/Clock.vue";
 import CountdownDay from "../components/widgets/CountdownDay.vue";
-import { mapActions, mapWritableState } from "pinia";
-import { cardStore } from "../store/card";
+import {mapActions, mapWritableState} from "pinia";
+import {cardStore} from "../store/card";
 import vuuri from "../components/vuuriHome/Vuuri.vue";
 import Widget from "../components/muuri/Widget.vue";
-import { message, Modal } from "ant-design-vue";
+import {message, Modal} from "ant-design-vue";
 import CPULineChart from "../components/widgets/supervisory/CPULineChart.vue";
 import CPUFourCard from "../components/widgets/supervisory/CPUFourCard.vue";
 import InternalList from "../components/widgets/supervisory/InternalList.vue";
@@ -221,10 +221,10 @@ import GradeNotice from "./app/grade/GradeNotice.vue";
 import Voice from "../components/widgets/games/Voice.vue";
 import Audio from "../components/widgets/games/Audio.vue";
 import CaptureNewCard from "../components/widgets/games/CaptureNewCard.vue";
-import { runExec } from "../js/common/exec";
-import { appStore } from "../store";
+import {runExec} from "../js/common/exec";
+import {appStore} from "../store";
 import Remote from "../components/widgets/custom/Remote.vue";
-import { weatherStore } from "../store/weather";
+import {weatherStore} from "../store/weather";
 import GameEpic from "../components/widgets/games/GameEpic.vue";
 import CustomAssembly from "../components/widgets/custom/CustomAssembly.vue";
 import SignIn from "../components/widgets/SignIn.vue"
@@ -248,7 +248,7 @@ import AggregateSearch from '../components/widgets/aggregate/AggregateSearch.vue
 import UpdateMyInfo from '../components/comp/UpdateMyInfo.vue';
 import ShareDesk from '../components/desk/ShareDesk.vue';
 import DeskMarket from "./app/card/DeskMarket.vue";
-import { deskStore } from "../store/desk";
+import {deskStore} from "../store/desk";
 import DeskPreview from '../components/desk/DeskPreview.vue';
 import ExportDesk from "../components/desk/ExportDesk.vue"
 import DeskGroup from '../components/desk/DeskGroup.vue'
@@ -258,14 +258,14 @@ import Todo from '../components/widgets/todo/Todo.vue'
 import EatToday from '../components/widgets/eat/EatToday.vue'
 import HotSearch from '../components/widgets/HotSearch.vue'
 // import News from "../components/widgets/news/NewsCard.vue";
-import { setTransparent, detTransparent } from "../components/card/hooks/themeSwitch"
+import {detTransparent, setTransparent} from "../components/card/hooks/themeSwitch"
 import {taskStore} from "../apps/task/store"
 import navigationData from '../js/data/tableData'
-import { navStore } from '../store/nav'
+import {navStore} from '../store/nav'
 
-const { steamUser, steamSession, path, https, steamFs } = $models
-if(steamUser && steamSession){
-  const { LoginSession, EAuthTokenPlatformType } = steamSession
+const {steamUser, steamSession, path, https, steamFs} = $models
+if (steamUser && steamSession) {
+  const {LoginSession, EAuthTokenPlatformType} = steamSession
   var session = new LoginSession(EAuthTokenPlatformType.SteamClient);
   var client = new steamUser({
     enablePicsCache: true,
@@ -335,12 +335,12 @@ export default {
       },
       openDesk: false,
       deskType: [
-        { title: '日常桌面', name: 'daily' },
-        { title: '游戏桌面', name: 'game' },
-        { title: '办公桌面', name: 'work' },
-        { title: '空白桌面', name: 'empty' },
+        {title: '日常桌面', name: 'daily'},
+        {title: '游戏桌面', name: 'game'},
+        {title: '办公桌面', name: 'work'},
+        {title: '空白桌面', name: 'empty'},
       ],
-      selectDesk: { title: '日常桌面', name: 'daily' },
+      selectDesk: {title: '日常桌面', name: 'daily'},
       deskTitle: '',
       hotDesk: [],
       scheme: {},
@@ -351,14 +351,14 @@ export default {
       cardSettings: {},
       cardDesk: 'all',
       cardDeskList: [
-        { name: "通用桌面设置", value: "all" },
-        { name: "当前桌面设置", value: "current" }
+        {name: "通用桌面设置", value: "all"},
+        {name: "当前桌面设置", value: "current"}
       ],
       cardSwitch: false,
       exportModal: false,
       // 在页面创建的第一次触发，后面就不触发了--替换图标
-      hasTriggered:1,
-      replaceFlag:true
+      hasTriggered: 1,
+      replaceFlag: true
     };
   },
   components: {
@@ -427,7 +427,7 @@ export default {
     HotSearch
   },
   computed: {
-    ...mapWritableState(navStore, [ 'sideNavigationList', 'footNavigationList', 'rightNavigationList']),
+    ...mapWritableState(navStore, ['sideNavigationList', 'footNavigationList', 'rightNavigationList']),
     ...mapWritableState(cardStore, [
       "customComponents",
       "clockEvent",
@@ -453,12 +453,12 @@ export default {
       appSettings: "settings",
     }),
     ...mapWritableState(deskStore, ['deskList']),
-    ...mapWritableState(taskStore, ['taskID','step']),
-    m01033(){
-        return this.taskID == "M0103" && this.step == 3
+    ...mapWritableState(taskStore, ['taskID', 'step']),
+    m01033() {
+      return this.taskID == "M0103" && this.step == 3
     },
-    m01034(){
-        return this.taskID == "M0103" && this.step == 4;
+    m01034() {
+      return this.taskID == "M0103" && this.step == 4;
     },
     desksList() {
       return this.desks.map((desk) => {
@@ -489,8 +489,8 @@ export default {
       }
     },
   },
-  beforeUpdate(){
-    if(this.hasTriggered<=10){
+  beforeUpdate() {
+    if (this.hasTriggered <= 10) {
       console.log('chufa')
       this.replaceIcon()
       this.hasTriggered++
@@ -678,7 +678,7 @@ export default {
           e.customData = {}
         }
         if (Object.keys(e.data).length > 0) {
-          e.customData = { ...e.customData, ...e.data }
+          e.customData = {...e.customData, ...e.data}
           e.data1 = e.data//转移备份
           e.data = {}//修理掉
         }
@@ -717,29 +717,29 @@ export default {
       this.iconVisible = true
       this.menuVisible = false;
     },
-    replaceIcon(){
+    replaceIcon() {
       navigationData.systemFillAppList.forEach((item) => {
-      this.sideNavigationList.forEach((i) => {
-        if (item.name === i.name) {
-          i.icon=item.icon
-        }
+        this.sideNavigationList.forEach((i) => {
+          if (item.name === i.name) {
+            i.icon = item.icon
+          }
+        })
       })
-    })
-    navigationData.systemFillAppList.forEach((item) => {
-      this.rightNavigationList.forEach((i) => {
-        if (item.name === i.name) {
-          i.icon=item.icon
-        }
+      navigationData.systemFillAppList.forEach((item) => {
+        this.rightNavigationList.forEach((i) => {
+          if (item.name === i.name) {
+            i.icon = item.icon
+          }
+        })
       })
-    })
-    navigationData.systemAppList.forEach((item) => {
-      this.footNavigationList.forEach((i) => {
-        if (item.name === i.name) {
-          i.icon=item.icon
-        }
+      navigationData.systemAppList.forEach((item) => {
+        this.footNavigationList.forEach((i) => {
+          if (item.name === i.name) {
+            i.icon = item.icon
+          }
+        })
       })
-    })
-    this.replaceFlag=false
+      this.replaceFlag = false
     },
     setTransparent() {
       console.log('this.appSettings.transparent :>> ', this.appSettings.transparent);
@@ -781,7 +781,7 @@ export default {
     // ...mapActions(deskStore, ["setDeskSize"]),
 
     clearWallpaper() {
-      this.setBackgroundImage({ path: "" });
+      this.setBackgroundImage({path: ""});
       // const value = cache.get("style")
       // document.documentElement.classList.remove(value);
       // cache.set("background","-no")
@@ -834,14 +834,14 @@ export default {
       //   return;
       // }
       this.addDesk(
-        this.deskTitle,
-        this.cleanMuuriData(deskTemplate[this.selectDesk.name])
-        // this.newDesk.name,
-        // this.cleanMuuriData(deskTemplate[this.newDesk.template])
+          this.deskTitle,
+          this.cleanMuuriData(deskTemplate[this.selectDesk.name])
+          // this.newDesk.name,
+          // this.cleanMuuriData(deskTemplate[this.newDesk.template])
       );
       this.switchToDesk(this.desks.length - 1);
       this.deskTitle = ''
-      this.selectDesk = { title: '日常桌面', name: 'daily' }
+      this.selectDesk = {title: '日常桌面', name: 'daily'}
       // this.newDesk = {
       //   name: "",
       //   template: "daily",
@@ -907,7 +907,7 @@ export default {
       this.menuVisible = false;
     },
     goPaper() {
-      this.$router.push({ name: "my" });
+      this.$router.push({name: "my"});
     },
     addCard() {
       this.custom = true;
@@ -941,7 +941,7 @@ export default {
       this.openDesk = true
       this.menuVisible = false;
     },
-    openPerview({ scheme, showModal }) {
+    openPerview({scheme, showModal}) {
       this.scheme = scheme
       this.showModal = showModal
     },
@@ -993,7 +993,7 @@ export default {
     async importDesk() {
       let openPath = await tsbApi.dialog.showOpenDialog({
         title: '选择导入的代码',
-        filters: [{ name: 'desk存档', extensions: ['desk'] }],
+        filters: [{name: 'desk存档', extensions: ['desk']}],
       })
       if (!openPath) {
         return
@@ -1028,12 +1028,12 @@ export default {
     backgroundSettings: {
       handler() {
         document.body.style.setProperty(
-          "--backGroundImgBlur",
-          this.backgroundSettings.backGroundImgBlur + "px"
+            "--backGroundImgBlur",
+            this.backgroundSettings.backGroundImgBlur + "px"
         );
         document.body.style.setProperty(
-          "--backGroundImgLight",
-          this.backgroundSettings.backGroundImgLight
+            "--backGroundImgLight",
+            this.backgroundSettings.backGroundImgLight
         );
       },
       deep: true,
@@ -1128,7 +1128,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 :deep(.ant-result-title) {
   color: var(--primary-text);
 }

@@ -1,9 +1,9 @@
 <template>
   <div
-    class="replies"
-    :class="[isH5 ? 'replies-H5' : '', isMenuOpen ? 'replies-menu-open' : '']"
-    v-if="show"
-    ref="dialog"
+      v-if="show"
+      ref="dialog"
+      :class="[isH5 ? 'replies-H5' : '', isMenuOpen ? 'replies-menu-open' : '']"
+      class="replies"
   >
     <div class="header">
       <div class="header-back">
@@ -18,12 +18,12 @@
     </div>
     <div class="body">
       <div class="body-message">
-        <RepliesItem :message="message" :isH5="isH5" :isRoot="true" />
+        <RepliesItem :isH5="isH5" :isRoot="true" :message="message"/>
       </div>
       <div class="body-list">
         <ul>
           <li v-for="(item, index) in replies" :key="index" class="body-list-item">
-            <RepliesItem :message="item" :isH5="isH5" :isRoot="false" />
+            <RepliesItem :isH5="isH5" :isRoot="false" :message="item"/>
           </li>
         </ul>
       </div>
@@ -31,13 +31,14 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, watchEffect, toRefs, watch, ref } from 'vue';
-import { onClickOutside } from '@vueuse/core';
-import { caculateTimeago } from '../../../utils';
-import { Message } from '../../interface';
+import {defineComponent, reactive, ref, toRefs, watch, watchEffect} from 'vue';
+import {onClickOutside} from '@vueuse/core';
+import {caculateTimeago} from '../../../utils';
+import {Message} from '../../interface';
 import TIM from '../../../../../TUICore/tim';
 import RepliesItem from './replies-item.vue';
-import { JSONToObject } from '../../utils/utils';
+import {JSONToObject} from '../../utils/utils';
+
 const ReadReceiptDialog = defineComponent({
   type: 'custom',
   components: {
@@ -90,15 +91,15 @@ const ReadReceiptDialog = defineComponent({
     });
 
     watch(
-      () => {
-        data.message, data.messageList;
-      },
-      () => {
-        data.message = props.message;
-        data.messageList = props.messageList;
-        handleReplies(data.message);
-      },
-      { deep: true }
+        () => {
+          data.message, data.messageList;
+        },
+        () => {
+          data.message = props.message;
+          data.messageList = props.messageList;
+          handleReplies(data.message);
+        },
+        {deep: true}
     );
 
     const toggleShow = () => {
@@ -117,14 +118,14 @@ const ReadReceiptDialog = defineComponent({
 
     const handleReplies = (message: Message) => {
       try {
-        const { cloudCustomData } = message;
+        const {cloudCustomData} = message;
         if (!cloudCustomData) return;
         const cloudCustomObject = JSONToObject(cloudCustomData);
         data.replies = cloudCustomObject?.messageReplies?.replies;
         data?.replies?.forEach((item: any) => {
-          const { messageID, messageSender } = item;
-          const message = data.messageList.find((item: Message) => 
-            (item.ID === messageID || item.from === messageSender)
+          const {messageID, messageSender} = item;
+          const message = data.messageList.find((item: Message) =>
+              (item.ID === messageID || item.from === messageSender)
           );
           item.avatar = message ? (message as Message)?.avatar : '';
         });

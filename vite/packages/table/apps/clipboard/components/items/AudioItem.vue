@@ -25,11 +25,11 @@ export default {
       return this.textType
     },
   },
-  watch :{
-    'settings.codeHighlight':{
-      handler(){
+  watch: {
+    'settings.codeHighlight': {
+      handler() {
         this.textType.reverse()
-        this.textDisplayTypes=this.textType[0]
+        this.textDisplayTypes = this.textType[0]
       }
     }
   },
@@ -84,8 +84,8 @@ export default {
     switchTab(tab) {
       this.$refs.widget.switchTab('item')
     },
-    previewItem(item){
-      this.$emit('previewItem',item)
+    previewItem(item) {
+      this.$emit('previewItem', item)
     }
 
   }
@@ -95,7 +95,8 @@ export default {
 </script>
 
 <template>
-  <ClipItemWidget @previewItem="previewItem" ref="widget" @tabChanged="tabChanged" :menu-list="menuList" :clipItem="clipItem">
+  <ClipItemWidget ref="widget" :clipItem="clipItem" :menu-list="menuList" @previewItem="previewItem"
+                  @tabChanged="tabChanged">
     <template #body>
       <!-- 纯文本情况下 -->
       <ClipAudio :fileUrl="clipItem.filepath" class="flex items-center justify-center"
@@ -110,7 +111,7 @@ export default {
   </ClipItemWidget>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 // 切换状态
 .s-active {
   background: var(--active-bg);

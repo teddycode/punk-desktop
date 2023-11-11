@@ -1,8 +1,8 @@
 <template>
   <div class="nav-items">
-    <div class="item"
-      @click="setTab('personal')"
-      :class="{ active: this.isActive('personal') }"
+    <div :class="{ active: this.isActive('personal') }"
+         class="item"
+         @click="setTab('personal')"
     >
       <div class="nav-wrapper font-color flex items-center justify-between">
         <div>
@@ -10,20 +10,20 @@
           <span class="ml-2.5">个人</span>
         </div>
         <span>{{
-          this.tasks.filter((task) => !task.completed).length
-        }}</span>
+            this.tasks.filter((task) => !task.completed).length
+          }}</span>
       </div>
     </div>
-    <div class="item"
-      @click="this.setTab('today')"
-      :class="{ active: this.isActive('today') }"
+    <div :class="{ active: this.isActive('today') }"
+         class="item"
+         @click="this.setTab('today')"
     >
       <div class="nav-wrapper font-color flex items-center">
         <Icon icon="shoucang" style="color:var(--secondary-text);font-size:20px"></Icon>
         <span class="ml-2.5">今天</span>
       </div>
     </div>
-    <div class="item" @click="this.setTab('week')" :class="{ active: this.isActive('week') }">
+    <div :class="{ active: this.isActive('week') }" class="item" @click="this.setTab('week')">
       <div class="nav-wrapper font-color flex items-center">
         <Icon icon="carryout" style="color:var(--secondary-text);font-size:20px"></Icon>
         <span class="ml-2.5">7天</span>
@@ -35,20 +35,15 @@
     <!--        团队-->
     <!--      </div>-->
     <!--    </li>-->
-    </div>
+  </div>
 </template>
 
 <script lang="ts">
-import { mapState, mapWritableState } from "pinia";
-import { listStore } from "../stores/list";
-import { taskStore } from "../stores/task";
-import {
-  AlertOutlined,
-  UserOutlined,
-  TeamOutlined,
-  CalendarOutlined,
-} from "@ant-design/icons-vue";
-import dayjs from "dayjs";
+import {mapState, mapWritableState} from "pinia";
+import {listStore} from "../stores/list";
+import {taskStore} from "../stores/task";
+import {AlertOutlined, CalendarOutlined, TeamOutlined, UserOutlined,} from "@ant-design/icons-vue";
+
 export default {
   name: "NavList",
   components: {
@@ -139,12 +134,14 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .nav-items {
   color: var(--primary-text);
   border-bottom: 1px solid var(--divider);
+
   .item {
     font-size: 13px;
+
     .nav-wrapper {
       cursor: pointer;
       height: 48px;
@@ -152,6 +149,7 @@ export default {
       border-radius: 10px;
       line-height: 48px;
     }
+
     &.active,
     &:hover {
       .nav-wrapper {

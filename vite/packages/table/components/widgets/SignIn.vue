@@ -1,10 +1,10 @@
 <template>
-  <Widget :options="options" :desk="desk" :showRightIcon='rightIcon'>
+  <Widget :desk="desk" :options="options" :showRightIcon='rightIcon'>
     <div></div>
-<!--    <div class="pointer" @click="activityDescription(illustrateUrl)"-->
-<!--         style="position: absolute;left: 90px;top:15px;font-size: 13px;color: rgba(255, 255, 255, 0.6);background: rgba(255, 255, 255, 0.2); padding: 3px 12px;border-radius: 4px;">-->
-<!--      活动说明-->
-<!--    </div>-->
+    <!--    <div class="pointer" @click="activityDescription(illustrateUrl)"-->
+    <!--         style="position: absolute;left: 90px;top:15px;font-size: 13px;color: rgba(255, 255, 255, 0.6);background: rgba(255, 255, 255, 0.2); padding: 3px 12px;border-radius: 4px;">-->
+    <!--      活动说明-->
+    <!--    </div>-->
     <template v-if="!newPeoplePage">
       <div class="flex justify-between s-item p-4 rounded-lg xt-bg-2 xt-text"
            style="margin-top: 1em;">
@@ -14,29 +14,30 @@
           </div>
           <span v-if="false" style="color: var(--secondary-text); font-size: 14px;">已连续签到2天</span>
         </div>
-        <div @click="signIn" class="middle-button sign-in-btn s-item"
+        <div :class="signedIn ? (completeLikes.length > 4 ? 'already' : 'new-people') : 'old-people'" class="middle-button sign-in-btn s-item"
              style="height: 42px;line-height: 42px;color: white"
-             :class="signedIn ? (completeLikes.length > 4 ? 'already' : 'new-people') : 'old-people'">
+             @click="signIn">
           {{ signedIn ? (completeLikes.length > 4 ? '已签到' : '今日新人') : '签到' }}
         </div>
       </div>
-      <HorizontalPanel style="min-width: 100%" :navList="signInTitle" v-model:selectType="signInType" :height="44"
-                       class="mt-3 mb-2"></HorizontalPanel>
+      <HorizontalPanel v-model:selectType="signInType" :height="44" :navList="signInTitle" class="mt-3 mb-2"
+                       style="min-width: 100%"></HorizontalPanel>
       <div v-if="signInType.name === 'today'" class="flex flex-col overflow content-box pt-1 ">
         <!-- <vue-custom-scrollbar  @touchstart.stop @touchmove.stop @touchend.stop :settings="settingsScroller" style="height:210px;"> -->
         <div v-if="!todayRank.length" class="not-sign h-full flex justify-center items-center ">还没有人签到，快来抢第一
         </div>
-        <div v-else v-for="item in todayRank.slice(0,5)" :key="item.id"
+        <div v-for="item in todayRank.slice(0,5)" v-else :key="item.id"
              class="w-full flex items-center rounded-lg justify-between pointer set-type" style="margin: 6px 0 6px;">
           <span class="ranking">{{ item.id }}</span>
           <div class="flex-1 flex ml-3 items-center" style="width: 60px">
-            <FrameAvatar style="zoom:0.5;" :avatar-size="60" @click="showCard(item.uid)" :avatar-url="item.avatar" :frame-url="item.equippedItems?.frameDetail?.image">
+            <FrameAvatar :avatar-size="60" :avatar-url="item.avatar" :frame-url="item.equippedItems?.frameDetail?.image" style="zoom:0.5;"
+                         @click="showCard(item.uid)">
               <template #icon>
                 <UserOutlined/>
               </template>
             </FrameAvatar>
-            <div @click="showCard(item.uid)" class="ml-3 truncate"
-                 style="color: var(--primary-text);font-size: 14px;max-width: 120px;">
+            <div class="ml-3 truncate" style="color: var(--primary-text);font-size: 14px;max-width: 120px;"
+                 @click="showCard(item.uid)">
               {{ item.nickname }}
             </div>
           </div>
@@ -65,8 +66,8 @@
         <div class="text-center py-5">暂未开放，敬请期待</div>
         <!-- </vue-custom-scrollbar> -->
       </div>
-      <div class="integral-modal s-bg" v-if="toggleModal">
-        <img class="modal-icon" src="../../../../public/img/test/s-good.png" alt="">
+      <div v-if="toggleModal" class="integral-modal s-bg">
+        <img alt="" class="modal-icon" src="../../../../public/img/test/s-good.png">
         <span class="modal-number">+2积分</span>
       </div>
     </template>
@@ -85,12 +86,12 @@
       <div class="mt-3" style="height:235px; overflow:hidden;">
         <!--        <div class="text-center mb-1" style="color: var(--secondary-text);font-size: 14px;">今日新人</div>-->
         <div class="head-list">
-          <div v-for="item in newPeopleList" class=" w-14  flex justify-center items-center pointer flex-col"
-               :key="item.id"
+          <div v-for="item in newPeopleList" :key="item.id"
+               class=" w-14  flex justify-center items-center pointer flex-col"
                style="margin:8px 14px;border-radius: 50%;" @click="showCard(item.uid,item.userInfo)"
                @contextmenu.stop="showCard(item.uid,item.userInfo)">
             <div class="mb-2 mt-2">
-              <a-avatar class="h-14 w-14" :class="item.headToggle ? 'h-8 w-8' : ''" :src="item.userInfo.avatar"/>
+              <a-avatar :class="item.headToggle ? 'h-8 w-8' : ''" :src="item.userInfo.avatar" class="h-14 w-14"/>
             </div>
             <div>
               {{ item.userInfo.nickname }}
@@ -99,14 +100,14 @@
         </div>
       </div>
       <div class="flex items-center justify-around">
-        <div @click="signInBack"
-             class="s-item change cursor-pointer rounded-lg w-12 h-12 flex items-center justify-center">
+        <div class="s-item change cursor-pointer rounded-lg w-12 h-12 flex items-center justify-center"
+             @click="signInBack">
           <Icon icon="xiangzuo" style="font-size: 1.715em;color: var(--primary-text);"></Icon>
         </div>
-        <span @click="popUsers" class="change pointer rounded-lg s-item  flex items-center justify-center"
-              style="padding:13px 55px;color: var(--primary-text);"
+        <span class="change pointer rounded-lg s-item  flex items-center justify-center" style="padding:13px 55px;color: var(--primary-text);"
+              @click="popUsers"
         >
-          <icon style="font-size: 20px" icon="shuaxin" class="mr-2"></icon>   换一换
+          <icon class="mr-2" icon="shuaxin" style="font-size: 20px"></icon>   换一换
           </span>
       </div>
     </template>
@@ -116,11 +117,11 @@
 <script>
 import Widget from '../card/Widget.vue'
 import HorizontalPanel from '../HorizontalPanel.vue'
-import { mapActions, mapWritableState } from 'pinia'
-import { UserOutlined } from '@ant-design/icons-vue'
-import { comStore } from '../../store/com'
-import { message } from 'ant-design-vue'
-import { appStore } from '../../store'
+import {mapActions, mapWritableState} from 'pinia'
+import {UserOutlined} from '@ant-design/icons-vue'
+import {comStore} from '../../store/com'
+import {message} from 'ant-design-vue'
+import {appStore} from '../../store'
 import _ from 'lodash-es'
 import FrameAvatar from '../avatar/FrameAvatar.vue'
 
@@ -133,7 +134,7 @@ export default {
     UserOutlined
   },
   props: ['desk', 'rightIcon'],
-  data () {
+  data() {
     return {
       options: {
         className: 'card',
@@ -141,17 +142,17 @@ export default {
         icon: 'star',
         type: 'signIn'
       },
-      signInTitle: [{ title: '今日已签', name: 'today' },
-        { title: '累签榜', name: 'accrue' }, { title: '连签榜', name: 'continued' }
+      signInTitle: [{title: '今日已签', name: 'today'},
+        {title: '累签榜', name: 'accrue'}, {title: '连签榜', name: 'continued'}
       ],
-      signInType: { title: '今日签到榜', name: 'today' },
+      signInType: {title: '今日签到榜', name: 'today'},
       // todayList: [],
       accrueList: [
-        { id: 1, headSculpture: '', username: '外太空的狗', accumulate: '345天' },
-        { id: 2, headSculpture: '', username: '猫星人', accumulate: '300天' },
-        { id: 3, headSculpture: '', username: '晒太阳的猫', accumulate: '1266天' },
-        { id: 4, headSculpture: '', username: '猪猪人', accumulate: '240天' },
-        { id: 5, headSculpture: '', username: '彩虹马', accumulate: '160天' }
+        {id: 1, headSculpture: '', username: '外太空的狗', accumulate: '345天'},
+        {id: 2, headSculpture: '', username: '猫星人', accumulate: '300天'},
+        {id: 3, headSculpture: '', username: '晒太阳的猫', accumulate: '1266天'},
+        {id: 4, headSculpture: '', username: '猪猪人', accumulate: '240天'},
+        {id: 5, headSculpture: '', username: '彩虹马', accumulate: '160天'}
       ],
       settingsScroller: {
         useBothWheelAxes: true,
@@ -173,7 +174,7 @@ export default {
       total: 0,
     }
   },
-  async mounted () {
+  async mounted() {
     this.updateTodayRank().then()
     this.getSingInfo()
 
@@ -188,7 +189,7 @@ export default {
   methods: {
     ...mapActions(comStore, ['updateTodayRank', 'doSign', 'getSignInfo', 'getDailyNewUsers']),
     ...mapActions(appStore, ['showUserCard']),
-    async popUsers () {
+    async popUsers() {
       // console.log('开始弹出用户')
       if (this.lastUsers.length > 0) {
         // console.log('剩余用户数组', this.lastUsers)
@@ -218,23 +219,23 @@ export default {
           await this.request(this.page)
         }
         // console.log('再次执行弹出')
-        if(this.page===1 && this.lastUsers.length===0 && this.total===0){
+        if (this.page === 1 && this.lastUsers.length === 0 && this.total === 0) {
           //如果是第一页，且已经没有空余的了，不需要再请求
           return
-        }else{
+        } else {
           await this.popUsers()
         }
 
       }
     },
-    async request (page) {
+    async request(page) {
       let dailyNew = await this.getDailyNewUsers(page)
       this.lastUsers = _.chunk(dailyNew.list, 6)//按照每页6个分页
       this.max = dailyNew.pageInfo.pages
       this.total = dailyNew.pageInfo.count
       // console.log(dailyNew, '请求到一页的数据')
     },
-    async getTodayList () {
+    async getTodayList() {
       // let rankResponse = await this.getTodayRank()
       // if(rankResponse.status===1){
       //   return rankResponse.data.rankInfo.map(r=>{
@@ -250,7 +251,7 @@ export default {
       // }
       // console.log(rankResponse)
     },
-    getSingInfo () {
+    getSingInfo() {
       this.getSignInfo().then(data => {
         if (data) {
           if (data.status === 1) {
@@ -261,10 +262,10 @@ export default {
         this.signedIn = false
       })
     },
-    showCard (uid, userInfo) {
+    showCard(uid, userInfo) {
       this.showUserCard(uid, userInfo)
     },
-    async signIn () {
+    async signIn() {
       if (!this.signedIn) {
 
         let doSign = await this.doSign()
@@ -283,10 +284,10 @@ export default {
         this.newPeoplePage = true
       }
     },
-    signInBack () {
+    signInBack() {
       this.newPeoplePage = false
     },
-    newLikes (item) {
+    newLikes(item) {
       if (this.completeLikes.length) {
         if (!this.completeLikes.find(info => info.id === item.id)) {
           this.completeLikes.push(item)
@@ -307,14 +308,14 @@ export default {
         })
       }
     },
-    activityDescription (url) {
+    activityDescription(url) {
       window.open(url, '_blank')
     }
   }
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .sign-in-btn {
   width: 91px;
   height: 48px;

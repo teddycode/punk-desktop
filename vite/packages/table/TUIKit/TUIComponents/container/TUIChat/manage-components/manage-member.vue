@@ -1,25 +1,25 @@
 <template>
   <main class="member">
     <ul class="list">
-      <li class="list-item" v-for="(item, index) in list" :key="index">
+      <li v-for="(item, index) in list" :key="index" class="list-item">
         <aside @click="handleMemberProfileShow(item)">
           <img
-            class="avatar"
-            :src="item?.avatar || 'https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'"
-            onerror="this.src='https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'"
+              :src="item?.avatar || 'https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'"
+              class="avatar"
+              onerror="this.src='https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'"
           />
           <span class="name">{{ item?.nick || item?.userID }}</span>
           <span>{{ handleRoleName(item) }}</span>
         </aside>
         <i v-if="item.role !== 'Owner' && isShowDel" class="icon icon-del" @click="submit(item)"></i>
       </li>
-      <li class="list-item" v-if="list.length < total" @click="getMore">{{ $t(`TUIChat.manage.查看更多`) }}</li>
+      <li v-if="list.length < total" class="list-item" @click="getMore">{{ $t(`TUIChat.manage.查看更多`) }}</li>
     </ul>
   </main>
 </template>
 
 <script lang="ts">
-import { defineComponent, watchEffect, reactive, toRefs } from 'vue';
+import {defineComponent, reactive, toRefs, watchEffect} from 'vue';
 import TIM from 'tim-js-sdk';
 
 const ManageMember = defineComponent({
@@ -59,7 +59,7 @@ const ManageMember = defineComponent({
     });
 
     const handleRoleName = (item: any) => {
-      const { t } = (window as any).TUIKitTUICore.config.i18n.useI18n();
+      const {t} = (window as any).TUIKitTUICore.config.i18n.useI18n();
       let name = '';
       switch (item?.role) {
         case types.GRP_MBR_ROLE_ADMIN:
@@ -105,14 +105,17 @@ export default ManageMember;
 <style lang="scss" scoped>
 @import url('../../../styles/common.scss');
 @import url('../../../styles/icon.scss');
+
 .member {
   flex: 1;
   background: #ffffff;
+
   .list {
     display: flex;
     flex-direction: column;
     background: #f4f5f9;
     padding-top: 22px;
+
     &-item {
       padding: 13px;
       display: flex;
@@ -121,14 +124,17 @@ export default ManageMember;
       background: #ffffff;
       font-size: 14px;
       overflow: hidden;
+
       &:hover {
         background: #f1f2f6;
       }
+
       aside {
         display: flex;
         align-items: center;
         width: 100%;
         overflow: hidden;
+
         .name {
           padding-left: 8px;
           font-weight: 400;
@@ -143,6 +149,7 @@ export default ManageMember;
     }
   }
 }
+
 .avatar {
   width: 36px;
   height: 36px;

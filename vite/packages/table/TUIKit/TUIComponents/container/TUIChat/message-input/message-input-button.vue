@@ -1,6 +1,7 @@
 <template>
-  <div :class="['message-input-button', isH5 && 'message-input-button-h5']" :style="isChatMain ? {bottom:'20px !important'} : { bottom:'42px !important' } ">
-    <button v-if="enableSend" class="message-input-button-cont" data-type="text" @click="sendMessage" :disabled="false">
+  <div :class="['message-input-button', isH5 && 'message-input-button-h5']"
+       :style="isChatMain ? {bottom:'20px !important'} : { bottom:'42px !important' } ">
+    <button v-if="enableSend" :disabled="false" class="message-input-button-cont" data-type="text" @click="sendMessage">
       <p class="message-input-button-hover">
         {{ $t('TUIChat.按Enter发送，Ctrl+Enter换行') }}
       </p>
@@ -8,9 +9,9 @@
     </button>
   </div>
 </template>
-<script setup lang="ts">
-import { defineProps, toRefs, defineEmits, ref,computed } from 'vue';
-import { useRoute } from 'vue-router'
+<script lang="ts" setup>
+import {computed, defineEmits, defineProps, toRefs} from 'vue';
+import {useRoute} from 'vue-router'
 
 const route = useRoute()
 const props = defineProps({
@@ -27,7 +28,7 @@ const props = defineProps({
     default: true,
   },
 });
-const { enableSend } = toRefs(props);
+const {enableSend} = toRefs(props);
 const emits = defineEmits(['sendMessage']);
 const sendMessage = () => {
   emits('sendMessage');
@@ -39,16 +40,19 @@ const isChatMain = computed(() => {
 
 
 </script>
-<style scoped lang="scss">
+<style lang="scss" scoped>
 @import url('../../../styles/common.scss');
 @import url('../../../styles/icon.scss');
+
 .message-input-button {
   position: absolute;
   bottom: 20px;
   right: 20px;
-  &-h5{
+
+  &-h5 {
     position: static;
   }
+
   &-cont {
     padding: 8px 20px;
     border-radius: 4px;
@@ -62,11 +66,13 @@ const isChatMain = computed(() => {
     letter-spacing: 0;
     cursor: pointer;
   }
+
   &:hover {
     .message-input-button-hover {
       display: flex;
     }
   }
+
   &-hover {
     display: none;
     justify-content: center;

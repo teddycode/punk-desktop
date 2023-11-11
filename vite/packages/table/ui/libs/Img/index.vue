@@ -1,6 +1,6 @@
 <template>
   <div>
-    <input style="display: block" ref="fileRef" type="file" name="" id="" />
+    <input id="" ref="fileRef" name="" style="display: block" type="file"/>
   </div>
 </template>
 

@@ -4,6 +4,7 @@
 
 <script>
 import BottomEdit from "../components/bottomEdit.vue";
+
 export default {
   components: {
     BottomEdit,

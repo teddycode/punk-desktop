@@ -1,21 +1,26 @@
 <template>
-  <a-layout-header  style="background: rgb(255,255,255);box-shadow: 0 0 8px rgba(63,63,63,0.2);z-index: 1;padding-left: 20px;padding-right: 20px;" class="header" theme="light">
+  <a-layout-header
+      class="header"
+      style="background: rgb(255,255,255);box-shadow: 0 0 8px rgba(63,63,63,0.2);z-index: 1;padding-left: 20px;padding-right: 20px;" theme="light">
     <div style="display: flex">
       <div>
-        <div class="logo" style="font-size: 16px;margin-right: 20px;font-weight: 700"><a-avatar style="margin-right: 10px" src="/icons/dev.svg"></a-avatar> 开发模式</div>
+        <div class="logo" style="font-size: 16px;margin-right: 20px;font-weight: 700">
+          <a-avatar src="/icons/dev.svg" style="margin-right: 10px"></a-avatar>
+          开发模式
+        </div>
       </div>
       <div style="flex: auto">
         <a-menu
-          v-model:selectedKeys="currentDevApp"
-          theme="light"
-          mode="horizontal"
-          :style="{ lineHeight: '64px' ,borderBottom:'none'}"
+            v-model:selectedKeys="currentDevApp"
+            :style="{ lineHeight: '64px' ,borderBottom:'none'}"
+            mode="horizontal"
+            theme="light"
         >
           <a-sub-menu>
             <template #title>
               开发中的项目
             </template>
-            <a-menu-item v-for="app in devApps" @click="loadDevApp(app)" :key="app.nanoid">
+            <a-menu-item v-for="app in devApps" :key="app.nanoid" @click="loadDevApp(app)">
               <template #icon>
                 <a-avatar :src="app.logo"></a-avatar>
               </template>
@@ -38,7 +43,7 @@
         </a-menu>
       </div>
       <div>
-<span @click="login" v-if="!user" style="cursor: pointer">  <a-avatar>
+<span v-if="!user" style="cursor: pointer" @click="login">  <a-avatar>
               开
             </a-avatar> 登录</span>
         <a-dropdown v-else>
@@ -59,15 +64,15 @@
 
   </a-layout-header>
   <a-layout>
-    <a-layout-sider width="200" theme="light" style="position: relative">
-      <div  style="display:flex;flex-direction:column;width: 200px;height: 100vh">
+    <a-layout-sider style="position: relative" theme="light" width="200">
+      <div style="display:flex;flex-direction:column;width: 200px;height: 100vh">
         <div style="flex:auto">
           <a-menu
-            theme="light"
-            mode="inline"
-            :default-selected-keys="['basic']"
-            :open-keys="['basic','dev','basicDev']"
-            :style="{ height: '100%', borderRight: 0 }"
+              :default-selected-keys="['basic']"
+              :open-keys="['basic','dev','basicDev']"
+              :style="{ height: '100%', borderRight: 0 }"
+              mode="inline"
+              theme="light"
           >
 
             <!--              <a-menu-item key="fenshen">-->
@@ -118,37 +123,41 @@
             </a-sub-menu>
           </a-menu>
         </div>
-        <div style="height: 160px;padding: 10px" >
+        <div style="height: 160px;padding: 10px">
           <div style="width: 82%;margin: auto;margin-bottom: 10px;">
 
-            <router-link :to="{path:'/dev/wizard'}"><a-button block type="danger" >    <smile-outlined/><strong>&nbsp; 开发向导</strong></a-button>
+            <router-link :to="{path:'/dev/wizard'}">
+              <a-button block type="danger">
+                <smile-outlined/>
+                <strong>&nbsp; 开发向导</strong></a-button>
             </router-link>
           </div>
           <div style=" text-align: center;width: 100%">
-            <a-button type="primary" style="margin-right: 20px" @click="save">保存</a-button>
+            <a-button style="margin-right: 20px" type="primary" @click="save">保存</a-button>
             <a-button @click="reset">重置</a-button>
           </div>
         </div>
       </div>
     </a-layout-sider>
     <a-layout-content>
-      <a-page-header  @back="goALl"
-                      style="box-shadow: 0 2px 8px #f0f1f2;z-index: 1; padding:6px 10px;"
-                      :title="this.devApp.name"
+      <a-page-header :avatar="{src:this.getLogo(this.devApp.logo)}"
+                     :title="this.devApp.name"
+                     style="box-shadow: 0 2px 8px #f0f1f2;z-index: 1; padding:6px 10px;"
 
-                      :avatar="{src:this.getLogo(this.devApp.logo)}"
-                      sub-title="开发中的项目"
+                     sub-title="开发中的项目"
+                     @back="goALl"
       >
         <template #extra>
           <a-button-group>
-            <a-button  type="primary" @click="run">
+            <a-button type="primary" @click="run">
               运行测试应用
-            </a-button >
+            </a-button>
             <a-button :disabled="!devApp.debug_app_nanoid" @click="reInstallAndRun">重新安装并运行</a-button>
           </a-button-group>
         </template>
       </a-page-header>
-      <vue-custom-scrollbar :key="routeUpdateTime" :settings="settings" style="position:relative;height: calc(100vh - 105px)">
+      <vue-custom-scrollbar :key="routeUpdateTime" :settings="settings"
+                            style="position:relative;height: calc(100vh - 105px)">
         <div style="padding: 20px">
           <router-view/>
         </div>
@@ -159,32 +168,39 @@
 
 <script>
 import vueCustomScrollbar from '../../../src/components/vue-scrollbar.vue'
-import { SettingOutlined, LaptopOutlined, SmileOutlined,BookOutlined,SelectOutlined } from '@ant-design/icons-vue'
-import { appStore } from '../store'
-import { mapState, mapActions,mapWritableState } from 'pinia'
-import { CodeTwoTone } from '@ant-design/icons-vue'
-import { message, Modal } from 'ant-design-vue'
+import {
+  BookOutlined,
+  CodeTwoTone,
+  LaptopOutlined,
+  SelectOutlined,
+  SettingOutlined,
+  SmileOutlined
+} from '@ant-design/icons-vue'
+import {appStore} from '../store'
+import {mapActions, mapState, mapWritableState} from 'pinia'
+import {message, Modal} from 'ant-design-vue'
 import {getLogo} from '../util'
-let { appModel, devAppModel } = window.$models
+
+let {appModel, devAppModel} = window.$models
 let appId =
-  window.globalArgs['app-id']
+    window.globalArgs['app-id']
 
 export default {
   name: 'DevMod',
   components: {
-    SettingOutlined, LaptopOutlined, CodeTwoTone, vueCustomScrollbar, SmileOutlined,BookOutlined,SelectOutlined
+    SettingOutlined, LaptopOutlined, CodeTwoTone, vueCustomScrollbar, SmileOutlined, BookOutlined, SelectOutlined
   },
   computed: {
     ...mapState(appStore, ['app', 'debugMod', 'devApp']),
-    ...mapWritableState(appStore,['user']),
+    ...mapWritableState(appStore, ['user']),
   },
-  beforeRouteUpdate(){
-    this.routeUpdateTime=Date.now()
+  beforeRouteUpdate() {
+    this.routeUpdateTime = Date.now()
   },
-  data () {
+  data() {
     return {
       currentDevApp: [],
-      routeUpdateTime:0,
+      routeUpdateTime: 0,
       settings: {
         swipeEasing: true,
         suppressScrollY: false,
@@ -221,22 +237,22 @@ export default {
     }
   },
 
-  async mounted () {
+  async mounted() {
     this.devApps = await devAppModel.getAll()
-    let userRs =  await tsbApi.user.get()
-    if(userRs.status){
-      this.user=userRs.data
+    let userRs = await tsbApi.user.get()
+    if (userRs.status) {
+      this.user = userRs.data
     }
 
-    let hasTipAppManagerWizard=localStorage.getItem('hasTipAppManagerWizard')
-    if(!hasTipAppManagerWizard){
+    let hasTipAppManagerWizard = localStorage.getItem('hasTipAppManagerWizard')
+    if (!hasTipAppManagerWizard) {
       Modal.info({
-        centered:true,
-        content:'首次使用开发者工具，建议点击左下角红色开发向导按钮，详细了解一个应用从创建项目到上线需要做的事情。',
-        okText:'我知道了，不再提示',
-        onOk:()=>{
-          localStorage.setItem('hasTipAppManagerWizard',true)
-      }
+        centered: true,
+        content: '首次使用开发者工具，建议点击左下角红色开发向导按钮，详细了解一个应用从创建项目到上线需要做的事情。',
+        okText: '我知道了，不再提示',
+        onOk: () => {
+          localStorage.setItem('hasTipAppManagerWizard', true)
+        }
       })
     }
 
@@ -244,19 +260,18 @@ export default {
   },
   methods: {
     getLogo,
-    installAndRun(){
+    installAndRun() {
       Modal.confirm({
         centered: true,
         content: '首次运行测试应用需要安装此应用，是否以当前配置安装并运行测试应用？此操作将保存全部的配置。',
         onOk: async () => {
           try {
-            let app=await this.saveAndInstall()
-            if(app)
-            {
+            let app = await this.saveAndInstall()
+            if (app) {
               Modal.info({
-                centered:true,
-                content:'成功安装运行，如若需要设置生效，则需要重新安装并运行应用',
-                okText:'我知道了'
+                centered: true,
+                content: '成功安装运行，如若需要设置生效，则需要重新安装并运行应用',
+                okText: '我知道了'
               })
             }
           } catch (e) {
@@ -268,23 +283,23 @@ export default {
     /**
      * 重装兵运行
      */
-    reInstallAndRun(){
+    reInstallAndRun() {
       Modal.confirm({
         centered: true,
         content: '是否以当前配置重新安装并运行测试应用？此操作将保存全部的配置并删除之前的测试应用。',
         onOk: async () => {
           try {
-            let debugApp=await appModel.get({nanoid:this.devApp.debug_app_nanoid})
-            console.log(debugApp,'调试应用=')
+            let debugApp = await appModel.get({nanoid: this.devApp.debug_app_nanoid})
+            console.log(debugApp, '调试应用=')
             message.info(this.devApp.debug_app_nanoid)
-            if(!!!debugApp){
+            if (!!!debugApp) {
               message.error('调试应用不存在，忽略')
-            }else{
+            } else {
               await appModel.uninstall(this.devApp.debug_app_nanoid)
-              ipc.sendSync('deleteApp',{nanoid:this.devApp.debug_app_nanoid})
+              ipc.sendSync('deleteApp', {nanoid: this.devApp.debug_app_nanoid})
             }
-            this.devApp.debug_app_nanoid=''
-            let app=await this.saveAndInstall()
+            this.devApp.debug_app_nanoid = ''
+            let app = await this.saveAndInstall()
           } catch (e) {
             message.error('运行测试应用失败，失败原因：' + e)
           }
@@ -295,96 +310,96 @@ export default {
      * 保存当前设置并安装
      * @returns {Promise<*>}
      */
-    async saveAndInstall () {
+    async saveAndInstall() {
       await this.saveDevApp()
       let appJson = await devAppModel.get(this.devApp.nanoid)
-      appJson.is_debug=true
-     // let appNanoid = await appModel.installDebugAppFromJson(appJson)
-      let installResult=ipc.sendSync('installAppConfirm',{background:false,appJson:appJson})
-      if(installResult.result){
-        let app = await appModel.get({ nanoid: installResult.nanoid })
+      appJson.is_debug = true
+      // let appNanoid = await appModel.installDebugAppFromJson(appJson)
+      let installResult = ipc.sendSync('installAppConfirm', {background: false, appJson: appJson})
+      if (installResult.result) {
+        let app = await appModel.get({nanoid: installResult.nanoid})
         this.devApp.debug_app_nanoid = app.nanoid
         await this.saveDevApp()
         return app
-      }else{
+      } else {
         message.error('安装意外终止')
       }
 
     },
-    async run () {
+    async run() {
       if (!this.devApp.debug_app_nanoid) {
         this.installAndRun()
       } else {
-        let app = await appModel.get({ nanoid: this.devApp.debug_app_nanoid })
+        let app = await appModel.get({nanoid: this.devApp.debug_app_nanoid})
         if (!app) {
           this.installAndRun()
-        }else{
+        } else {
           ipc.send('executeApp', {
             app: app
           })
         }
       }
     },
-    goDoc(){
-      ipc.send('addTab',{url:'https://a.apps.vip/docs'})
+    goDoc() {
+      ipc.send('addTab', {url: 'https://a.apps.vip/docs'})
     },
-    login(){
+    login() {
       tsbApi.user.login()
     },
-    goALl(){
-      this.devMod=false
+    goALl() {
+      this.devMod = false
       this.$router.push('/allDevapps')
     },
     ...mapActions(appStore, ['reloadDevApp', 'saveDevApp', 'setDevApp']),
-    async loadDevApp (devApp) {
+    async loadDevApp(devApp) {
       await this.setDevApp(devApp)
       this.$router.push('/dev/')
     },
-    goDevelop () {
-      this.$router.push({ path: 'develop' })
+    goDevelop() {
+      this.$router.push({path: 'develop'})
     },
-    userThemeColorChanged (input) {
-      appModel.update(this.appId, { user_theme_color: input })
+    userThemeColorChanged(input) {
+      appModel.update(this.appId, {user_theme_color: input})
       this.tipSave()
     },
-    tipSave () {
-      appVue.$message.info({ content: '保存成功，此处设置修改需浏览器重启后生效。', key: 'save' })
+    tipSave() {
+      appVue.$message.info({content: '保存成功，此处设置修改需浏览器重启后生效。', key: 'save'})
     },
-    uninstall (appId) {
+    uninstall(appId) {
       this.$confirm({
         title: '确定卸载此应用？',
         content: '此操作将卸载应用并清空所有应用数据，且无法还原。请谨慎操作。',
         okText: '确认',
         okType: 'danger',
         cancelText: '取消',
-        onOk () {
+        onOk() {
           appModel.uninstall(appId).then(success => {
-            ipc.send('message', { type: 'success', config: { content: '卸载应用成功。' } })
-            ipc.send('deleteApp', { nanoid: appId })
+            ipc.send('message', {type: 'success', config: {content: '卸载应用成功。'}})
+            ipc.send('deleteApp', {nanoid: appId})
           }, err => {
-            ipc.send('message', { type: 'success', config: { content: '卸载失败。' } })
+            ipc.send('message', {type: 'success', config: {content: '卸载失败。'}})
           })
         },
-        onCancel () {
+        onCancel() {
           console.log('Cancel')
         },
       })
 
     },
-    check () {
+    check() {
       this.form.validateFields(err => {
         if (!err) {
           console.info('success')
         }
       })
     },
-    handleChange (e) {
+    handleChange(e) {
       this.checkNick = e.target.checked
       this.$nextTick(() => {
-        this.form.validateFields(['nickname'], { force: true })
+        this.form.validateFields(['nickname'], {force: true})
       })
     },
-    reset () {
+    reset() {
       Modal.confirm({
         content: '是否放弃当前所有改动重载之前的配置？',
         onOk: () => {
@@ -393,7 +408,7 @@ export default {
         }
       })
     },
-    async save () {
+    async save() {
       try {
         await this.saveDevApp()
         message.success('保存成功。')
@@ -406,19 +421,19 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 h3 {
-&:before {
-   content: "";
-   display: inline-block;
-   background: #0051ff;
-   width: 5px;
-   border-radius: 3px;
-   height: 16px;
-   position: absolute;
-   bottom: 8px;
-   left: -8px;
+  &:before {
+    content: "";
+    display: inline-block;
+    background: #0051ff;
+    width: 5px;
+    border-radius: 3px;
+    height: 16px;
+    position: absolute;
+    bottom: 8px;
+    left: -8px;
 
- }
+  }
 }
 </style>

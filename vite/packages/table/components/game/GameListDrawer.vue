@@ -9,16 +9,16 @@ export default {
   methods: {
     getCover,
     select(game) {
-      this.$emit('valueChanged',game)
-      this.$emit('update:visible',false)
-      this.drawerVisible=false
+      this.$emit('valueChanged', game)
+      this.$emit('update:visible', false)
+      this.drawerVisible = false
     },
-    visibleChanged(){
-      this.$emit('update:visible',false)
+    visibleChanged() {
+      this.$emit('update:visible', false)
     }
   },
-  props: ['visible','items','activeId'],
-  emits: ['valueChanged','visibleChanged'],
+  props: ['visible', 'items', 'activeId'],
+  emits: ['valueChanged', 'visibleChanged'],
   data() {
     return {
       drawerVisible: false,
@@ -34,10 +34,10 @@ export default {
   computed: {
     ...mapWritableState(steamUserStore, ['desks', 'runningGame']),
   },
-  watch:{
-    'visible':{
-      handler(newVal){
-        this.drawerVisible=newVal
+  watch: {
+    'visible': {
+      handler(newVal) {
+        this.drawerVisible = newVal
       }
     }
   },
@@ -49,13 +49,14 @@ export default {
 
 <template>
 
-  <a-drawer @close="visibleChanged" :height="270" placement="bottom" v-model:visible="drawerVisible">
-    <vue-custom-scrollbar style="width: 100%;height: 100%;white-space: nowrap;" :settings="outerSettings">
-      <div :class="{'active-game':game.appid===activeId}" @click="select(game)" v-for="game in items" style="display: inline-block"
-           class="mr-6 text-center pointer mb-1 game">
-        <a-image class="mb-2" :preview="false" style="width:250px;border-radius: 4px"
-                 :src="getCover(game.appid)"></a-image>
-        <div style="font-size: 18px" class="truncate">
+  <a-drawer v-model:visible="drawerVisible" :height="270" placement="bottom" @close="visibleChanged">
+    <vue-custom-scrollbar :settings="outerSettings" style="width: 100%;height: 100%;white-space: nowrap;">
+      <div v-for="game in items" :class="{'active-game':game.appid===activeId}" class="mr-6 text-center pointer mb-1 game"
+           style="display: inline-block"
+           @click="select(game)">
+        <a-image :preview="false" :src="getCover(game.appid)" class="mb-2"
+                 style="width:250px;border-radius: 4px"></a-image>
+        <div class="truncate" style="font-size: 18px">
           {{ game.chineseName }}
         </div>
       </div>
@@ -65,11 +66,11 @@ export default {
 
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .game {
   opacity: 0.5;
 
-  &:hover, &.active,&.active-game {
+  &:hover, &.active, &.active-game {
     opacity: 1;
   }
 }

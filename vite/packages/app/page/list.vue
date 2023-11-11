@@ -5,39 +5,43 @@
                       style="width: 100%" @search="onSearch"></a-input-search>
     </div>
 
-    <div class="app-list" style="padding: 10px;padding-top: 0" >
+    <div class="app-list" style="padding: 10px;padding-top: 0">
       <template v-if="this.searchWords===''" style="position: relative;">
         <a-tabs v-model:value="tabIndex" type="card">
           <a-tab-pane key="recent" tab="最近使用">
-            <vue-custom-scrollbar :settings="settings" style="position:relative;height:calc(100vh - 120px);margin-right:-15px;margin-left:-10px;padding-left:10px;padding-top: 5px;padding-right: 15px">
-              <a-row  >
-                <div style="width: 20%"  v-for="app in appsRecently">
+            <vue-custom-scrollbar :settings="settings"
+                                  style="position:relative;height:calc(100vh - 120px);margin-right:-15px;margin-left:-10px;padding-left:10px;padding-top: 5px;padding-right: 15px">
+              <a-row>
+                <div v-for="app in appsRecently" style="width: 20%">
                   <div style="margin-bottom: 15px;text-align: center">
-                    <AppItem @uninstall="()=>{ this.uninstall(app,appsRecently)}" @favUpdated="refresh" :app="app"></AppItem>
+                    <AppItem :app="app" @favUpdated="refresh"
+                             @uninstall="()=>{ this.uninstall(app,appsRecently)}"></AppItem>
                   </div>
                 </div>
               </a-row>
             </vue-custom-scrollbar>
           </a-tab-pane>
           <a-tab-pane key="fav" tab="收藏">
-            <a-empty description="暂无收藏，您可在应用上「右键」-「添加为收藏」" v-if="this.appsFav.length===0" style="margin-top: 100px"></a-empty>
-            <vue-custom-scrollbar :settings="settings" style="position:relative;height:calc(100vh - 120px);margin-right:-15px;margin-left:-10px;padding-left:10px;padding-top: 5px;padding-right: 15px">
-              <a-row  >
-                <div style="width: 20%"  v-for="app in appsFav">
+            <a-empty v-if="this.appsFav.length===0" description="暂无收藏，您可在应用上「右键」-「添加为收藏」"
+                     style="margin-top: 100px"></a-empty>
+            <vue-custom-scrollbar :settings="settings"
+                                  style="position:relative;height:calc(100vh - 120px);margin-right:-15px;margin-left:-10px;padding-left:10px;padding-top: 5px;padding-right: 15px">
+              <a-row>
+                <div v-for="app in appsFav" style="width: 20%">
                   <div style="margin-bottom: 15px;text-align: center">
-                    <AppItem @uninstall="()=>{ this.uninstall(app,appsFav)}" @favUpdated="refresh" :app="app"></AppItem>
+                    <AppItem :app="app" @favUpdated="refresh" @uninstall="()=>{ this.uninstall(app,appsFav)}"></AppItem>
                   </div>
                 </div>
               </a-row>
             </vue-custom-scrollbar>
           </a-tab-pane>
-          <a-tab-pane key="all" tab="全部" >
+          <a-tab-pane key="all" tab="全部">
             <div style="position:relative;margin-bottom: 15px">
               <a-select
-                v-model:value="type"
-                size="small"
-                style="width: 80px;"
-                :options="options"
+                  v-model:value="type"
+                  :options="options"
+                  size="small"
+                  style="width: 80px;"
               ></a-select>
               <div style="position:absolute;right: 0;top: 0">
                 <a @click="manage">管理</a> &nbsp;
@@ -45,11 +49,13 @@
               </div>
             </div>
 
-            <vue-custom-scrollbar :settings="settings" style="position:relative;height:calc(100vh - 160px);margin-right:-15px;margin-left:-10px;padding-left:10px;padding-top: 5px;padding-right: 15px">
-              <a-row  >
-                <div style="width: 20%"  v-for="app in filteredApps">
+            <vue-custom-scrollbar :settings="settings"
+                                  style="position:relative;height:calc(100vh - 160px);margin-right:-15px;margin-left:-10px;padding-left:10px;padding-top: 5px;padding-right: 15px">
+              <a-row>
+                <div v-for="app in filteredApps" style="width: 20%">
                   <div style="margin-bottom: 15px;text-align: center">
-                    <AppItem @uninstall="()=>{ this.uninstall(app,filteredApps)}" @favUpdated="refresh" :app="app"></AppItem>
+                    <AppItem :app="app" @favUpdated="refresh"
+                             @uninstall="()=>{ this.uninstall(app,filteredApps)}"></AppItem>
                   </div>
                 </div>
               </a-row>
@@ -61,8 +67,8 @@
         <h1>搜索结果 - <span>{{ searchWords }}</span></h1>
         <a-empty v-if="this.searchResult.length===0" description="暂无相关应用"></a-empty>
         <a-row>
-          <a-col :span="4" v-for="app in searchResult">
-            <AppItem @uninstall="()=>{ this.uninstall(app,searchResult)}" :app="app"></AppItem>
+          <a-col v-for="app in searchResult" :span="4">
+            <AppItem :app="app" @uninstall="()=>{ this.uninstall(app,searchResult)}"></AppItem>
           </a-col>
         </a-row>
       </div>
@@ -83,14 +89,14 @@ export default {
   components: {
     AppItem, vueCustomScrollbar
   },
-  data () {
+  data() {
     return {
       type: 'all',
       apps: [],
       tabIndex: 'all',
       appsRecently: [],
       searchResult: [],
-      appsFav:[],//我的收藏
+      appsFav: [],//我的收藏
       options: [
         {
           value: 'all',
@@ -120,13 +126,13 @@ export default {
     }
   },
   watch: {
-    async searchWords () {
+    async searchWords() {
       if (this.searchWords !== '')
-        this.searchResult = await appModel.find(this.searchWords, { order: 'last_execute_time' })
+        this.searchResult = await appModel.find(this.searchWords, {order: 'last_execute_time'})
     }
   },
   computed: {
-    filteredApps () {
+    filteredApps() {
       if (this.type === 'all') {
         return this.apps
       } else if (this.type === 'system') {
@@ -144,45 +150,45 @@ export default {
       }
     }
   },
-  async mounted () {
+  async mounted() {
     window.$refesh = this.refresh
     await appModel.initDb()
     this.refresh()
   },
   methods: {
-    uninstall(app,list){
+    uninstall(app, list) {
       appModel.uninstall(app.nanoid).then(success => {
-        list.splice(list.findIndex(item=>{
-          return item===app
-        }),1)
-        ipc.send('message', { type: 'success', config: { content: '卸载应用成功。' } })
-        ipc.send('deleteApp', { nanoid: app.nanoid })
+        list.splice(list.findIndex(item => {
+          return item === app
+        }), 1)
+        ipc.send('message', {type: 'success', config: {content: '卸载应用成功。'}})
+        ipc.send('deleteApp', {nanoid: app.nanoid})
         this.refresh()
       }, err => {
-        ipc.send('message', { type: 'success', config: { content: '卸载失败。' } })
+        ipc.send('message', {type: 'success', config: {content: '卸载失败。'}})
       })
     },
-    async addNew () {
-      ipc.send('executeApp', { app: await appModel.get({ package: 'com.thisky.appStore' }) })
+    async addNew() {
+      ipc.send('executeApp', {app: await appModel.get({package: 'com.thisky.appStore'})})
     },
-    async manage () {
+    async manage() {
       ipc.send('openAppManage')
     },
-    onSearch (value) {
+    onSearch(value) {
       this.searchWords = value
     },
-    refresh () {
-      appModel.getAllApps({ order: 'create_time' }).then((data) => {
+    refresh() {
+      appModel.getAllApps({order: 'create_time'}).then((data) => {
         this.apps = data
       })
       this.refreshFav()
-      appModel.getAllApps({ order: 'last_execute_time' }).then((data) => {
+      appModel.getAllApps({order: 'last_execute_time'}).then((data) => {
         this.appsRecently = data
       })
 
     },
-    refreshFav(){
-      appModel.getAllApps({ where:{is_fav:true} }).then((data) => {
+    refreshFav() {
+      appModel.getAllApps({where: {is_fav: true}}).then((data) => {
         this.appsFav = data
       })
     }
@@ -196,46 +202,57 @@ ipc.on('refresh', () => {
 .app-list p {
   margin: 0;
 }
+
 .app-list > .ant-tabs-card .ant-tabs-content {
   height: calc(100vh - 100px);
   margin-top: -16px;
 }
+
 .app-list > .ant-tabs-card .ant-tabs-content > .ant-tabs-tabpane {
   padding: 16px;
   background: #fff;
 }
+
 .app-list > .ant-tabs-card > .ant-tabs-nav::before {
   display: none;
 }
+
 .app-list > .ant-tabs-card .ant-tabs-tab,
 [data-theme='compact'] .app-list > .ant-tabs-card .ant-tabs-tab {
   background: transparent;
   border-color: transparent;
 }
+
 .app-list > .ant-tabs-card .ant-tabs-tab-active,
 [data-theme='compact'] .app-list > .ant-tabs-card .ant-tabs-tab-active {
   background: #fff;
   border-color: #fff;
 }
+
 #components-tabs-demo-card-top .code-box-demo {
   padding: 24px;
   overflow: hidden;
   background: #f5f5f5;
 }
+
 [data-theme='compact'] .app-list > .ant-tabs-card .ant-tabs-content {
   height: 300px;
   margin-top: -8px;
 }
+
 [data-theme='dark'] .app-list > .ant-tabs-card .ant-tabs-tab {
   background: transparent;
   border-color: transparent;
 }
+
 [data-theme='dark'] #components-tabs-demo-card-top .code-box-demo {
   background: #000;
 }
+
 [data-theme='dark'] .app-list > .ant-tabs-card .ant-tabs-content > .ant-tabs-tabpane {
   background: #141414;
 }
+
 [data-theme='dark'] .app-list > .ant-tabs-card .ant-tabs-tab-active {
   background: #141414;
   border-color: #141414;

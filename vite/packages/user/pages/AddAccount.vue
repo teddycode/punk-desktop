@@ -18,7 +18,7 @@
     </p>
     <p style="text-align: center">本机全部账号在此计算机上均可浏览和使用收藏夹、密码。</p>
     <div style="text-align: center">
-      <a-button @click="goLogin" type="primary">去登录</a-button>
+      <a-button type="primary" @click="goLogin">去登录</a-button>
     </div>
   </div>
 </template>
@@ -26,10 +26,10 @@
 <script>
 export default {
   name: 'AddAccount',
-  mounted () {
+  mounted() {
   },
   methods: {
-    goLogin(){
+    goLogin() {
       ipc.send('login')
       //https://s.apps.vip/login?response_type=code&client_id=10001&state=1
     }

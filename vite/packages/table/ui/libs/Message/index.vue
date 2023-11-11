@@ -1,21 +1,21 @@
 <template>
   <template v-if="modelValue">
-    <xt-mask :modelValue="true"> </xt-mask>
+    <xt-mask :modelValue="true"></xt-mask>
     <Teleport to="body">
       <div
-        class="fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 rounded-xl xt-modal xt-shadow p-3 xt-text"
-        style="z-index: 99999999"
+          class="fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 rounded-xl xt-modal xt-shadow p-3 xt-text"
+          style="z-index: 99999999"
       >
         <div class="flex items-center justify-center">
           <div
-            style="
+              class="xt-base-btn"
+              style="
               border-radius: 50%;
               background: var(--warning);
               width: 21px;
               height: 21px;
               color: #000;
             "
-            class="xt-base-btn"
           >
             i
           </div>

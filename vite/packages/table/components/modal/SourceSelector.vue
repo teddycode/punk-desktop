@@ -40,7 +40,7 @@ export default defineComponent({
   },
   computed: {
     ...mapState(steamUserStore, ['runningGame']),
-    ...mapWritableState(captureStore, ['currentSource','sources', 'settings', 'images', 'videos']),
+    ...mapWritableState(captureStore, ['currentSource', 'sources', 'settings', 'images', 'videos']),
     windowSource() {
       return this.sources.filter(s => {
         return s.type === 'window'
@@ -84,7 +84,7 @@ export default defineComponent({
     /**
      * 查找源
      */
-    findWindow () {
+    findWindow() {
       if (!this.runningGame.chineseName) {
         return false
       }
@@ -104,29 +104,29 @@ export default defineComponent({
   <div style="width: 550px;max-height: 600px;padding:20px">
     <div style="max-height: 550px;display: flex;flex-direction: column;overflow: hidden;position: relative">
       <div style="width: 300px;margin: auto">
-        <HorizontalCapture @click="refreshSource" :navList="captureType" v-model:selectType="defaultRecordingType"
-                           class="mb-4"></HorizontalCapture>
+        <HorizontalCapture v-model:selectType="defaultRecordingType" :navList="captureType" class="mb-4"
+                           @click="refreshSource"></HorizontalCapture>
       </div>
 
-      <div style="height: 450px;" class="text-center" v-if="loading===true">
+      <div v-if="loading===true" class="text-center" style="height: 450px;">
         <div style="margin-top: 100px;">
 
-            <icon class=" animate-spin " icon="shuaxin" style="font-size:24px;vertical-align: top"></icon>
+          <icon class=" animate-spin " icon="shuaxin" style="font-size:24px;vertical-align: top"></icon>
 
-           捕获源获取中…
+          捕获源获取中…
         </div>
-             </div>
+      </div>
       <div v-else style="flex:1;height: 0">
         <template v-if="defaultRecordingType.name === 'recordFullScreen'">
-          <vue-custom-scrollbar @touchstart.stop @touchmove.stop @touchend.stop :settings="settingsScroller"
-                                style="max-height:450px;position:relative;height: 450px;padding-right: 15px">
+          <vue-custom-scrollbar :settings="settingsScroller" style="max-height:450px;position:relative;height: 450px;padding-right: 15px" @touchstart.stop @touchmove.stop
+                                @touchend.stop>
             <div v-if="deskSource.length === 0">
               <a-empty :image="simpleImage"/>
             </div>
-            <div class="flex justify-between flex-wrap" v-else>
+            <div v-else class="flex justify-between flex-wrap">
               <div v-for="(item,index) in  deskSource"
-                   class="flex flex-col capture-bg rounded-lg mb-4 pointer record-game-item"
-                   @click="chooseSource(item,index)" :class="{'s-active':defaultIndex === index}"
+                   :class="{'s-active':defaultIndex === index}"
+                   class="flex flex-col capture-bg rounded-lg mb-4 pointer record-game-item" @click="chooseSource(item,index)"
               >
                 <img :src="'file://'+item.src" class="w-full rounded-t-lg h-full object-cover">
                 <div class="px-4 py-3">
@@ -137,15 +137,15 @@ export default defineComponent({
           </vue-custom-scrollbar>
         </template>
         <template v-if="defaultRecordingType.name === 'logger'">
-          <vue-custom-scrollbar @touchstart.stop @touchmove.stop @touchend.stop :settings="settingsScroller"
-                                style="max-height:450px;position:relative;height:450px;padding-right: 15px">
+          <vue-custom-scrollbar :settings="settingsScroller" style="max-height:450px;position:relative;height:450px;padding-right: 15px" @touchstart.stop @touchmove.stop
+                                @touchend.stop>
             <div v-if="windowSource.length === 0">
               <a-empty :image="simpleImage"/>
             </div>
-            <div class="flex justify-between flex-wrap" v-else>
+            <div v-else class="flex justify-between flex-wrap">
               <div v-for="(item,index) in  windowSource"
-                   class="flex flex-col justify-between capture-bg rounded-lg mb-4 pointer record-game-item"
-                   @click="chooseSource(item,index)" :class="{'s-active':defaultIndex === index}"
+                   :class="{'s-active':defaultIndex === index}"
+                   class="flex flex-col justify-between capture-bg rounded-lg mb-4 pointer record-game-item" @click="chooseSource(item,index)"
               >
                 <img :src="'file://'+item.src" class="w-full rounded-t-lg h-full object-cover">
                 <div class="px-4 py-3 truncate">
@@ -161,18 +161,19 @@ export default defineComponent({
 
 </template>
 
-<style scoped lang="scss">
-.capture-bg{
+<style lang="scss" scoped>
+.capture-bg {
   background: var(--primary-bg);
 }
 
-.cap-active{
+.cap-active {
   color: var(--active-text);
 }
 
-.capture-title{
-  color:var(--primary-text);
+.capture-title {
+  color: var(--primary-text);
 }
+
 .cp-w {
   display: flex;
   align-items: center;
@@ -185,6 +186,7 @@ export default defineComponent({
   width: 64px;
   height: 64px;
 }
+
 .record-game-item {
   max-width: 234px;
 }

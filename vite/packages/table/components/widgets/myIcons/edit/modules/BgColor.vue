@@ -10,6 +10,7 @@
 
 <script>
 import editMixins from "../hooks/mixins";
+
 export default {
   mixins: [editMixins],
 };

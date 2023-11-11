@@ -7,9 +7,9 @@
           <div class="mb-2 text-lg ">{{ data.title }}</div>
         </a-col>
         <a-col :span="8" style="text-align: right">
-          <a-row class="text-center" :gutter="10">
+          <a-row :gutter="10" class="text-center">
             <a-col :span="{sm:24,md:12}">
-              <a-button @click="share" type="primary">
+              <a-button type="primary" @click="share">
                 <Icon class="mr-2" icon="fenxiang"></Icon>
                 生成报告
               </a-button>
@@ -26,13 +26,13 @@
                 </template>
                 <template #overlay>
                   <a-menu @click="handleMenuClick">
-                    <a-menu-item v-if="task.running" @click="refresh" key="1">
+                    <a-menu-item v-if="task.running" key="1" @click="refresh">
                       立即刷新
                     </a-menu-item>
-                    <a-menu-item v-if="task.running" @click="showTask" key="1">
+                    <a-menu-item v-if="task.running" key="1" @click="showTask">
                       显示运行中网页
                     </a-menu-item>
-                    <a-menu-item @click="openUrl" key="2">
+                    <a-menu-item key="2" @click="openUrl">
                       浏览器打开源网页
                     </a-menu-item>
                     <a-menu-item key="3">
@@ -49,9 +49,9 @@
     <vue-custom-scrollbar :settings="outerSettings" style="position:relative;height:calc(100vh - 21em);  ">
       <div id="report" style="max-width: 900px;margin:auto;background: var(--primary-bg);color:var(--primary-text)">
         <div class="p-3">
-          <a-row class="mb-5" :gutter="[20,10]">
+          <a-row :gutter="[20,10]" class="mb-5">
             <a-col :md="5">
-              <img crossorigin="anonymous" class="cover" :src="fixHttp(data.cover+'@320w_200h')">
+              <img :src="fixHttp(data.cover+'@320w_200h')" class="cover" crossorigin="anonymous">
             </a-col>
             <a-col :md="18">
               <div class="mb-2" style=""><span data-html2canvas-ignore>任务：{{ task.title }} </span>&nbsp;
@@ -63,8 +63,8 @@
                 <a-row>
                   <a-col :span="6" class="pt-7 text-center">
                     <div
-                      style="background: var(--primary-bg);line-height:30px;width: 100px;border-radius: 6px;display: inline-block">
-                      <Icon title="播放" icon="bofang"></Icon>
+                        style="background: var(--primary-bg);line-height:30px;width: 100px;border-radius: 6px;display: inline-block">
+                      <Icon icon="bofang" title="播放"></Icon>
                       总播放
                       <div>
                         <span class="text-white text-lg ml-2">{{ format(data.viewText) }}</span>
@@ -73,36 +73,36 @@
 
                   </a-col>
                   <a-col :offset="2">
-                    <a-row class="text-l" :gutter="[10,15]">
+                    <a-row :gutter="[10,15]" class="text-l">
                       <a-col :span="8">
-                        <Icon title="点赞" icon="dianzan"></Icon>
+                        <Icon icon="dianzan" title="点赞"></Icon>
                         点赞<br/>
                         <span class="text-white  ml-2">{{ format(data.like) }}</span>
                       </a-col>
                       <a-col :span="8">
-                        <Icon title="投币" icon="jinbi"></Icon>
+                        <Icon icon="jinbi" title="投币"></Icon>
                         投币 <br>
                         <span class="text-white  ml-2">{{ format(data.coin) }}</span>
                       </a-col>
                       <a-col :span="8">
-                        <Icon title="收藏" icon="shoucang"></Icon>
+                        <Icon icon="shoucang" title="收藏"></Icon>
                         收藏 <br>
                         <span class="text-white  ml-2">{{ format(data.collect) }}</span>
                       </a-col>
                       <a-col :span="8">
-                        <Icon title="弹幕" icon="shouqi"></Icon>
+                        <Icon icon="shouqi" title="弹幕"></Icon>
                         弹幕 <br>
                         <span class="text-white  ml-2">{{ format(data.dm) }}</span>
                       </a-col>
                       <a-col :span="8">
-                        <Icon title="评论" icon="xiaoxi"></Icon>
+                        <Icon icon="xiaoxi" title="评论"></Icon>
                         评论 <br>
                         <span class="text-white  ml-2">{{ format(data.totalReply) }}</span>
                       </a-col>
                       <a-col :span="8">
-                        <Icon title="转发" icon="fenxiang"></Icon>
+                        <Icon icon="fenxiang" title="转发"></Icon>
                         分享<br>
-                        <span class="text-white ml-2" >{{ format(data.share) }}</span>
+                        <span class="text-white ml-2">{{ format(data.share) }}</span>
                       </a-col>
                     </a-row>
                   </a-col>
@@ -128,7 +128,7 @@
         </div>
 
 
-        <div style="background: var(--primary-bg);color: var(--primary-text);" class="p-4 rounded-md mb-5">
+        <div class="p-4 rounded-md mb-5" style="background: var(--primary-bg);color: var(--primary-text);">
           <h3 class="mb-4" style="color: var(--primary-text);">
             <icon icon="diannao"/>
             实时票房
@@ -193,14 +193,14 @@
               <div>点赞</div>
               <div>
                 <span class="text-white mr-1">{{ format(data.like) }}</span> <span>{{ data.rate.like }}%</span>
-                <Arrow type="like" :value="data.rate.like"></Arrow>
+                <Arrow :value="data.rate.like" type="like"></Arrow>
               </div>
             </a-col>
             <a-col :span="3">
               <div>投币</div>
               <div>
                 <span class="text-white mr-1">{{ format(data.coin) }}</span> <span>{{ data.rate.coin }}%</span>
-                <Arrow type="coin" :value=" data.rate.coin"></Arrow>
+                <Arrow :value=" data.rate.coin" type="coin"></Arrow>
               </div>
             </a-col>
             <a-col :span="3">
@@ -209,7 +209,7 @@
               </div>
               <div>
                 <span class="text-white mr-1">{{ format(data.collect) }}</span> <span>{{ data.rate.collect }}%</span>
-                <Arrow type="collect" :value=" data.rate.collect"></Arrow>
+                <Arrow :value=" data.rate.collect" type="collect"></Arrow>
               </div>
             </a-col>
             <a-col :span="3">
@@ -218,7 +218,7 @@
               </div>
               <div>
                 <span class="text-white mr-1">{{ format(data.dm) }}</span> <span>{{ data.rate.dm }}%</span>
-                <Arrow type="dm" :value=" data.rate.dm"></Arrow>
+                <Arrow :value=" data.rate.dm" type="dm"></Arrow>
               </div>
             </a-col>
             <a-col :span="3">
@@ -227,7 +227,7 @@
               </div>
               <div>
                 <span class="text-white mr-1">{{ format(data.totalReply) }}</span> <span>{{ data.rate.reply }}%</span>
-                <Arrow type="dm" :value="data.rate.reply"></Arrow>
+                <Arrow :value="data.rate.reply" type="dm"></Arrow>
               </div>
             </a-col>
 
@@ -236,7 +236,7 @@
               <div>转发</div>
               <div>
                 <span class="text-white mr-1">{{ format(data.share) }}</span> <span>{{ data.rate.share }}%</span>
-                <Arrow type="share" :value=" data.rate.share"></Arrow>
+                <Arrow :value=" data.rate.share" type="share"></Arrow>
               </div>
             </a-col>
             <a-col :span="3"></a-col>
@@ -244,7 +244,7 @@
         </div>
 
 
-        <div  style="background: var(--primary-bg);color: var(--primary-text);"  class="p-4 rounded-md mb-5">
+        <div class="p-4 rounded-md mb-5" style="background: var(--primary-bg);color: var(--primary-text);">
           <h3 class="mb-4" style="color: var(--primary-text);">
             <Icon icon="gupiao"/>
             热度走势
@@ -257,14 +257,14 @@
 
         </div>
 
-        <div style="background: #2d2d2d;" class="p-4 rounded-md mb-5 ">
+        <div class="p-4 rounded-md mb-5 " style="background: #2d2d2d;">
           <a-row :gutter="40" class="">
             <a-col :span="12">
               <h3 class="mb-4">
                 <icon icon="yiwen-xianxing"/>
                 预测总票房
               </h3>
-              <a-row class="text-center" :gutter="[10,10]">
+              <a-row :gutter="[10,10]" class="text-center">
                 <a-col :span="8">
                   <div>总票房</div>
                   <div class="text-lg text-white">{{ caculateData.view }}</div>
@@ -332,7 +332,7 @@
                   </a-col>
                   <a-col :span="6">
                     <a-button type="primary" @click="visibleStages=true">参考</a-button>
-                    <a-drawer placement="right" v-model:visible="visibleStages">
+                    <a-drawer v-model:visible="visibleStages" placement="right">
               <pre>
 1.初始流量池：200-500
 2.千人流量池：3K-5K
@@ -350,18 +350,18 @@
 
                 </a-row>
                 <div class="text-lg mt-2">
-                <span v-if="stage.condition==='pre'"> <Icon style="font-size: 40px;vertical-align: middle"
-                                                            icon="gaoxingneng"/>  正在 <strong
-                  class="text-white">预热</strong> 阶段</span>
-                  <span v-if="stage.condition==='in'"><Icon style="font-size: 40px;vertical-align: middle;color: white"
-                                                            icon="xingneng"/> 正在 <strong
-                    class="text-white">推送</strong> 阶段</span>
+                <span v-if="stage.condition==='pre'"> <Icon icon="gaoxingneng"
+                                                            style="font-size: 40px;vertical-align: middle"/>  正在 <strong
+                    class="text-white">预热</strong> 阶段</span>
+                  <span v-if="stage.condition==='in'"><Icon icon="xingneng"
+                                                            style="font-size: 40px;vertical-align: middle;color: white"/> 正在 <strong
+                      class="text-white">推送</strong> 阶段</span>
                 </div>
-                <div class="pl-11" v-if="stage.condition==='in'">
+                <div v-if="stage.condition==='in'" class="pl-11">
                   <icon icon="tishi-xianxing"/>
                   此阶段主要是分发流量，相对比较平稳
                 </div>
-                <div class="pl-11" v-if="stage.condition==='pre'">
+                <div v-if="stage.condition==='pre'" class="pl-11">
                   <icon icon="tishi-xianxing"/>
                   此阶段如果无法达成流量目标，可能导致推送停止
                 </div>
@@ -375,7 +375,7 @@
 
         </div>
 
-        <div style="background: #2d2d2d;" class="p-4 rounded-md mb-5">
+        <div class="p-4 rounded-md mb-5" style="background: #2d2d2d;">
 
           <a-row :gutter="40">
             <a-col :span="12">
@@ -433,34 +433,33 @@
 
   <div>
     <a-image
-      :width="200"
-      :style="{ display: 'none' }"
-      :preview="{
+        :preview="{
         previewVisible,
         onVisibleChange: setVisible,
       }"
-      src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+        :style="{ display: 'none' }"
+        :width="200"
+        src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
     />
   </div>
 </template>
 
 <script>
-import { Modal } from 'ant-design-vue'
+import {Modal} from 'ant-design-vue'
 import BackBtn from '../../../components/comp/BackBtn.vue'
 import dataHelper from '../../../js/watch/dataHelper'
 import Arrow from '../../../components/watch/Arrow.vue'
 import bili from '../../../js/watch/bili'
-import { fixHttp, formatSeconds } from '../../../util'
+import {fixHttp, formatSeconds} from '../../../util'
 import Template from '../../../../user/pages/Template.vue'
 import OnlineChart from './OnlineChart.vue'
 import html2canvas from 'html2canvas'
-import viewer from 'viewerjs'
 import browser from '../../../js/common/browser'
 
 export default {
   name: 'Dashboard',
-  components: { OnlineChart, Template, Arrow, BackBtn },
-  data () {
+  components: {OnlineChart, Template, Arrow, BackBtn},
+  data() {
     return {
       previewVisible: false,
 
@@ -495,7 +494,7 @@ export default {
     }
 
   },
-  mounted () {
+  mounted() {
     let nanoid = this.$route.params['nanoid']
     this.nanoid = nanoid
     this.loadTaskInfo(nanoid, () => {
@@ -510,11 +509,11 @@ export default {
     }, 1000)
 
   },
-  unmounted () {
+  unmounted() {
     clearInterval(this.updateExecutedTimer)
   },
   computed: {
-    suggestions () {
+    suggestions() {
       let suggestion = []
       let data = this.data
       let score = this.score
@@ -542,7 +541,7 @@ export default {
       }
       return suggestion
     },
-    caculateData () {
+    caculateData() {
       let data = {}
       let view = this.stage.data.view
       let videoRate = this.data.rate
@@ -552,7 +551,7 @@ export default {
       })
       return data
     },
-    score () {
+    score() {
       let score = {}
       let data = this.data
       if (!data) {
@@ -568,11 +567,11 @@ export default {
     }
   },
   methods: {
-    setVisible (visible) {
+    setVisible(visible) {
       this.previewVisible = visible
     },
-    async getData () {
-      let data = await tableApi.watch.getTaskData({ task_id: this.task.nanoid, type: 'interval' }, 10000)
+    async getData() {
+      let data = await tableApi.watch.getTaskData({task_id: this.task.nanoid, type: 'interval'}, 10000)
       let chartData = []
       try {
         chartData = data.map(d => {
@@ -588,8 +587,8 @@ export default {
       this.chartData = chartData
       //this.chartKey=Date.now()
     },
-    loadTaskInfo (nanoid, cb) {
-      tableApi.watch.getTask({ nanoid: nanoid }).then(task => {
+    loadTaskInfo(nanoid, cb) {
+      tableApi.watch.getTask({nanoid: nanoid}).then(task => {
         this.task = task
         this.data = task.data
         let data = this.data
@@ -611,7 +610,7 @@ export default {
         if (cb) cb(task)
       })
     },
-    handleButtonClick () {
+    handleButtonClick() {
       if (!this.task.running) {
         tableApi.watch.startTask(this.task)
         this.task.running = true
@@ -621,30 +620,30 @@ export default {
       }
     },
     fixHttp: fixHttp,
-    updateExecutedTime () {
+    updateExecutedTime() {
       this.task.executed_time_until_now = this.formatSeconds((Date.now() - this.task.last_execute_time) / 1000)
     },
     formatSeconds: formatSeconds,
     format: dataHelper.format,
     getRate: dataHelper.getRate,
     convertWan: dataHelper.convertWan,
-    refresh () {
+    refresh() {
       tableApi.watch.refreshTask(this.task)
     },
-    showTask () {
+    showTask() {
       tableApi.watch.showTask(this.task)
     },
-    stopTask () {
+    stopTask() {
       tableApi.watch.stopTask(this.task)
     },
-    openUrl () {
+    openUrl() {
       browser.openInUserSelect(this.task.url)
     },
-    share () {
+    share() {
       Modal.info({
         content: '点击生成报告',
         onOk: () => {//allowTaint: true,
-          html2canvas(document.querySelector('#report'), { useCORS: true }).then(canvas => {
+          html2canvas(document.querySelector('#report'), {useCORS: true}).then(canvas => {
             document.querySelector('#report').appendChild(canvas)
             let ctx = canvas.getContext('2d')
             var img = new Image()
@@ -663,7 +662,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .cover {
   width: 160px;
   height: 100px;

@@ -1,15 +1,16 @@
 <template>
-  <Widget :options="options"  :customIndex="customIndex" :desk="desk">
+  <Widget :customIndex="customIndex" :desk="desk" :options="options">
     <div style="display: flex;flex-direction: column">
       <div style="flex:1;margin-right: 20px;margin-left: 20px">
-        <div ref="fish" @click="click" class="fish"
-             style="display: flex;align-items: center;align-content: center;height: 205px;width: 100%;justify-content: center;position: relative;cursor: pointer;">
-          <img ref="wooden" class="wooden" :src="fish" style="width: 120px;height:120px;margin-top: -30px">
-          <img ref="bing" class="bing " :src="bing"
+        <div ref="fish" class="fish" style="display: flex;align-items: center;align-content: center;height: 205px;width: 100%;justify-content: center;position: relative;cursor: pointer;"
+             @click="click">
+          <img ref="wooden" :src="fish" class="wooden" style="width: 120px;height:120px;margin-top: -30px">
+          <img ref="bing" :src="bing" class="bing "
                style="width: 80px;height: 80px;position: absolute;margin-top: -20px">
           <span class="tip" style="color: var(--primary-text);"> 功德 +1</span>
           <div style="position: absolute;bottom:35px">
-            <div style="color: var(--primary-text);"><span class="mr-4">今日 {{ getToday }}</span> 总 {{ getTotal }}</div>
+            <div style="color: var(--primary-text);"><span class="mr-4">今日 {{ getToday }}</span> 总 {{ getTotal }}
+            </div>
           </div>
         </div>
       </div>
@@ -22,8 +23,8 @@
 import Widget from '../card/Widget.vue'
 import fish from '../../assets/img/fish/muyu.svg'
 import bing from '../../assets/img/fish/bing.svg'
-import { fishStore } from '../../store/fish'
-import { mapWritableState } from 'pinia'
+import {fishStore} from '../../store/fish'
+import {mapWritableState} from 'pinia'
 
 export default {
   name: 'Fish',
@@ -34,13 +35,14 @@ export default {
     },
     customData: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
-    desk:{
-      type:Object
+    desk: {
+      type: Object
     }
   },
-  data () {
+  data() {
     return {
       clicking: false,
       options: {
@@ -56,17 +58,17 @@ export default {
   },
   computed: {
     ...mapWritableState(fishStore, ['days', 'total']),
-    getToday () {
+    getToday() {
       let now = new Date()
-      if(!this.days[now.getFullYear() + '-' + now.getMonth() + '-' + now.getDay()]){
+      if (!this.days[now.getFullYear() + '-' + now.getMonth() + '-' + now.getDay()]) {
         return 0
       }
       return this.days[now.getFullYear() + '-' + now.getMonth() + '-' + now.getDay()]
     },
-    getTotal(){
-      let total=0
-      Object.keys(this.days).forEach(key=>{
-        total+=this.days[key]
+    getTotal() {
+      let total = 0
+      Object.keys(this.days).forEach(key => {
+        total += this.days[key]
       })
       return total
     }
@@ -75,16 +77,15 @@ export default {
     Widget
   },
   methods: {
-    addToday () {
+    addToday() {
       let now = new Date()
-      if(!this.days[now.getFullYear() + '-' + now.getMonth() + '-' + now.getDay()])
-      {
-        this.days[now.getFullYear() + '-' + now.getMonth() + '-' + now.getDay()]=0
+      if (!this.days[now.getFullYear() + '-' + now.getMonth() + '-' + now.getDay()]) {
+        this.days[now.getFullYear() + '-' + now.getMonth() + '-' + now.getDay()] = 0
       }
       this.days[now.getFullYear() + '-' + now.getMonth() + '-' + now.getDay()]++
     },
 
-    click () {
+    click() {
       if (this.clicking) {
         return
       }
@@ -93,9 +94,9 @@ export default {
       this.addToday()
       this.$refs.bing.classList.add('bing-click')
       this.clicking = true
-      setTimeout(()=>{
+      setTimeout(() => {
         this.$refs.bing.classList.remove('bing-click')
-      },100)
+      }, 100)
       setTimeout(() => {
         this.clicking = false
         this.$refs.fish.classList.remove('click')
@@ -105,7 +106,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .bing {
   left: 50px;
   top: 20px;
@@ -118,7 +119,7 @@ export default {
     transition: scale 0.2s;
   }
 
-  &:hover ,  &.active {
+  &:hover, &.active {
     .bing {
       rotate: -60deg
     }
@@ -143,9 +144,11 @@ export default {
 
 
 }
+
 .bing-click {
   rotate: -20deg !important;
 }
+
 @keyframes mymove {
   from {
     top: 60px;

@@ -1,14 +1,16 @@
 <template>
   <div class="mb-6">
     <transition name="fade">
-      <div class="flex flex-col" id="aggregate-drop" ref="aggDropRef">
-        <div v-for="item in drawerList" class="flex items-center cursor-move agg-set mb-4 p-3 rounded-xl" :data-index="item.id">
+      <div id="aggregate-drop" ref="aggDropRef" class="flex flex-col">
+        <div v-for="item in drawerList" :data-index="item.id"
+             class="flex items-center cursor-move agg-set mb-4 p-3 rounded-xl">
           <div class="flex items-center cursor-move search-engine" style="width: 40%;">
-             <HolderOutlined style="font-size: 20px;"></HolderOutlined>
+            <HolderOutlined style="font-size: 20px;"></HolderOutlined>
           </div>
           <div class="flex items-center">
             <div class="flex items-center justify-center mr-2">
-              <Icon :icon="item.icon" style="font-size: 1.75em;" :style="item.icon === 'bing' ? {color:'rgba(82,196,26, 1)'} : {}">
+              <Icon :icon="item.icon" :style="item.icon === 'bing' ? {color:'rgba(82,196,26, 1)'} : {}"
+                    style="font-size: 1.75em;">
               </Icon>
             </div>
             <span>{{ item.title }}</span>
@@ -22,24 +24,25 @@
 
 <script>
 import Sortable from 'sortablejs';
+
 export default {
-  props:{
-    drawerList:{
-      type:Object,
-      default:()=>[]
+  props: {
+    drawerList: {
+      type: Object,
+      default: () => []
     }
   },
-  mounted(){
+  mounted() {
     const el = this.$refs.aggDropRef
-    new Sortable(el,{
+    new Sortable(el, {
       group: 'sortableGroup',
       onEnd: this.onSortEnd // 拖拽结束时触发的回调函数
     })
   },
-  methods:{
+  methods: {
 
-    onSortEnd(evt){
-      let newIndex = evt.newIndex , oldIndex = evt.oldIndex
+    onSortEnd(evt) {
+      let newIndex = evt.newIndex, oldIndex = evt.oldIndex
       let newItem = this.$refs.aggDropRef.children[newIndex]
       let oldItem = this.$refs.aggDropRef.children[oldIndex]
       // 先删除移动的节点
@@ -55,7 +58,7 @@ export default {
       let temp = cloneTemp[evt.oldIndex]  // 获取旧的下标
       cloneTemp.splice(evt.oldIndex, 1)   // 移除旧的下标
       cloneTemp.splice(evt.newIndex, 0, temp) // 将旧的下标进行替换
-      this.$emit('setSortedList',cloneTemp)  // 将替换后数据进行回传
+      this.$emit('setSortedList', cloneTemp)  // 将替换后数据进行回传
     }
 
   }
@@ -65,26 +68,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.primary-title{
+.primary-title {
 
   font-size: 16px;
   font-weight: 500;
 }
-.secondary-title{
+
+.secondary-title {
 
   font-size: 16px;
   font-weight: 400;
 }
-.agg-set{
+
+.agg-set {
   background: var(--secondary-bg);
 }
 
-:deep(.nav-item){
+:deep(.nav-item) {
   width: 50% !important;
   border-radius: 8px !important;
 }
 
-:deep(.ps__rail-y){
+:deep(.ps__rail-y) {
   display: none !important;
 }
 </style>

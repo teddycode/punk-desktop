@@ -1,7 +1,7 @@
 <template>
   <div class="px-5 pt-3.5">
     <div class="h-20 set-bg rounded-lg flex flex-row items-center px-6 mb-4" style="width: 572px">
-      <Icon style="height: 36px;width: 36px" icon="steam"></Icon>
+      <Icon icon="steam" style="height: 36px;width: 36px"></Icon>
       <div class="flex flex-col ml-4 w-2/3">
         <span class="set-title">Steam</span>
         <span v-if="steamLoginData.refreshToken">{{ userData.name }}</span>
@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="h-20 set-bg rounded-lg flex flex-row items-center px-6 mb-4" style="width: 572px">
-      <Icon style="height: 36px;width: 36px" icon="shijian3dian"></Icon>
+      <Icon icon="shijian3dian" style="height: 36px;width: 36px"></Icon>
       <div class="flex flex-col ml-4 w-2/3">
         <span class="set-title">最近游玩的游戏记录</span>
         <span style="color: var(--secondary-text);">清空游玩记录不会删除对应的游戏桌面。</span>
@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="h-20 set-bg rounded-lg flex flex-row items-center px-6 mb-4" style="width: 572px">
-      <Icon style="height: 36px;width: 36px" icon="desktop"></Icon>
+      <Icon icon="desktop" style="height: 36px;width: 36px"></Icon>
       <div class="flex flex-col ml-4 w-2/3">
         <span class="set-title">游戏桌面</span>
         <span style="color: var(--secondary-text);">每个游戏的独立桌面</span>
@@ -32,29 +32,29 @@
       </div>
     </div>
     <div class="h-20 set-bg rounded-lg flex flex-row items-center px-6 mb-4" style="width: 572px">
-      <Icon style="height: 36px;width: 36px" icon="position"></Icon>
+      <Icon icon="position" style="height: 36px;width: 36px"></Icon>
       <div class="flex flex-col ml-4 w-2/3">
         <span class="set-title">折扣地区</span>
         <span style="color: var(--secondary-text);">选择默认的折扣地区</span>
       </div>
-      <a-select style="border: 1px solid rgba(255, 255, 255, 0.1);"
-                @change="getRegion($event)" class="w-56 h-auto rounded-lg  text-xs s-item" size="large"
-                :bordered="false"
-                v-model:value="area">
+      <a-select v-model:value="area"
+                :bordered="false" class="w-56 h-auto rounded-lg  text-xs s-item" size="large"
+                style="border: 1px solid rgba(255, 255, 255, 0.1);"
+                @change="getRegion($event)">
         <a-select-option v-for="item in region" :value="item.id">{{ item.name }}</a-select-option>
       </a-select>
     </div>
     <div class="h-20 set-bg rounded-lg flex flex-row items-center px-6 mb-4" style="width: 572px">
-      <Icon style="height: 36px;width: 36px" icon="lianjie"></Icon>
+      <Icon icon="lianjie" style="height: 36px;width: 36px"></Icon>
       <div class="flex flex-col ml-4 w-2/3">
         <span class="set-title">启用代理</span>
         <span style="color: var(--secondary-text);">设置您的代理，提升登录成功率（推荐）</span>
       </div>
 
-      <div class=" ml-6 w-28 h-12 rounded-lg flex justify-center items-center pointer"  >
+      <div class=" ml-6 w-28 h-12 rounded-lg flex justify-center items-center pointer">
         <a-select v-model:value="settings.proxy.type">
           <a-select-option value="none">不使用代理</a-select-option>
-<!--          <a-select-option value="web">网页代理</a-select-option>-->
+          <!--          <a-select-option value="web">网页代理</a-select-option>-->
           <a-select-option value="http">http代理</a-select-option>
           <a-select-option value="socks5">socks5代理</a-select-option>
         </a-select>
@@ -65,74 +65,95 @@
     </div>
 
   </div>
-  <Modal v-model:visible="proxyVisibility" v-show="proxyVisibility" animationName="bounce-in" :maskNoClose="false"
-         :blurFlag="true" @click.stop>
+  <Modal v-show="proxyVisibility" v-model:visible="proxyVisibility" :blurFlag="true" :maskNoClose="false"
+         animationName="bounce-in" @click.stop>
     <div class="p-10" style="width:400px">
       <div class="line-title">代理设置（修改直接生效）</div>
       <div class="line">
         <a-row>
-        <a-col :span="6" class="text-left">
-          类型：
-        </a-col>
-          <a-col class="text-right" :span="18"><a-select v-model:value="settings.proxy.type">
-            <a-select-option value="none">不使用代理代理</a-select-option>
-<!--            <a-select-option value="web">网页代理</a-select-option>-->
-            <a-select-option value="http">http代理</a-select-option>
-            <a-select-option value="socks5">socks5代理</a-select-option>
-          </a-select></a-col></a-row>
+          <a-col :span="6" class="text-left">
+            类型：
+          </a-col>
+          <a-col :span="18" class="text-right">
+            <a-select v-model:value="settings.proxy.type">
+              <a-select-option value="none">不使用代理代理</a-select-option>
+              <!--            <a-select-option value="web">网页代理</a-select-option>-->
+              <a-select-option value="http">http代理</a-select-option>
+              <a-select-option value="socks5">socks5代理</a-select-option>
+            </a-select>
+          </a-col>
+        </a-row>
       </div>
-      <div class="line   "><a-row>
-        <a-col :span="5" class="text-left">
-        地址：
-        </a-col>
-        <a-col :span="19">
-          <a-input class="w-full" v-model:value="settings.proxy.address"></a-input>
-        </a-col>
-      </a-row></div>
-      <div class="line"><a-row>
-        <a-col :span="5"  class="text-left">
-          端口：
-        </a-col><a-col :span="19"> <a-input  class="w-full"  v-model:value="settings.proxy.port"></a-input></a-col></a-row>
+      <div class="line   ">
+        <a-row>
+          <a-col :span="5" class="text-left">
+            地址：
+          </a-col>
+          <a-col :span="19">
+            <a-input v-model:value="settings.proxy.address" class="w-full"></a-input>
+          </a-col>
+        </a-row>
       </div>
-      <div class="line"><a-row>
-        <a-col :span="5"  class="text-left">
-          用户名：
-        </a-col><a-col :span="19"><a-input v-model:value="settings.proxy.userName"></a-input></a-col>
-      </a-row></div>
-      <div class="line"><a-row>
-        <a-col :span="5"  class="text-left">
-          密码：
-        </a-col><a-col :span="19"><a-input-password v-model:value="settings.proxy.password"></a-input-password></a-col>
-      </a-row></div>
+      <div class="line">
+        <a-row>
+          <a-col :span="5" class="text-left">
+            端口：
+          </a-col>
+          <a-col :span="19">
+            <a-input v-model:value="settings.proxy.port" class="w-full"></a-input>
+          </a-col>
+        </a-row>
+      </div>
+      <div class="line">
+        <a-row>
+          <a-col :span="5" class="text-left">
+            用户名：
+          </a-col>
+          <a-col :span="19">
+            <a-input v-model:value="settings.proxy.userName"></a-input>
+          </a-col>
+        </a-row>
+      </div>
+      <div class="line">
+        <a-row>
+          <a-col :span="5" class="text-left">
+            密码：
+          </a-col>
+          <a-col :span="19">
+            <a-input-password v-model:value="settings.proxy.password"></a-input-password>
+          </a-col>
+        </a-row>
+      </div>
 
     </div>
 
   </Modal>
-  <Modal v-model:visible="modalVisibility" v-show="modalVisibility" animationName="bounce-in" :maskNoClose="true"
-         :blurFlag="true" @click.stop>
+  <Modal v-show="modalVisibility" v-model:visible="modalVisibility" :blurFlag="true" :maskNoClose="true"
+         animationName="bounce-in" @click.stop>
     <div class="flex flex-col p-6 xt-text" @click.stop>
       <div class="mx-auto">绑定Steam</div>
-      <HorizontalPanel :navList="loginTypeList" v-model:selectType="loginType" class="mt-4 mx-auto"
-                       bgColor="drawer-item-select-bg"></HorizontalPanel>
+      <HorizontalPanel v-model:selectType="loginType" :navList="loginTypeList" bgColor="drawer-item-select-bg"
+                       class="mt-4 mx-auto"></HorizontalPanel>
       <div class="mt-3 mb-0 pl-2">
         <ExclamationCircleFilled/>
         普通登录支持邮箱验证和手机app授权。<br>
-        网络不好建议设置代理！ steam302用户请看-><a style="color:var(--secondary-text);" target="_blank"
-                                               href="https://www.yuque.com/tswork/mqon1y/kvinb8xbzw2eaa2e">技术说明</a>
+        网络不好建议设置代理！ steam302用户请看-><a href="https://www.yuque.com/tswork/mqon1y/kvinb8xbzw2eaa2e" style="color:var(--secondary-text);"
+                                                   target="_blank">技术说明</a>
       </div>
       <div class=" mt-3">
-        <a-input v-model:value="userName" placeholder="用户名（非邮箱）" class="no-drag rounded-lg h-12 mx-auto"
+        <a-input v-model:value="userName" class="no-drag rounded-lg h-12 mx-auto" placeholder="用户名（非邮箱）"
                  spellcheck="false" style="  width: 328px;background:var(--secondary-bg);" @click.stop/>
       </div>
       <div class=" mt-6">
-        <a-input-password @keyup.enter="bindSteam" v-model:value="password" class="no-drag  rounded-lg h-12  mx-auto"
-                          placeholder="密码" style="width: 328px;background: var(--secondary-bg);" @click.stop/>
+        <a-input-password v-model:value="password" class="no-drag  rounded-lg h-12  mx-auto" placeholder="密码"
+                          style="width: 328px;background: var(--secondary-bg);" @keyup.enter="bindSteam" @click.stop/>
       </div>
-      <div class=" mt-6" v-show="loginType.name==='phone'">
-        <a-input  spellcheck="false" @keyup.enter="bindSteam" v-model:value="authCode" class="no-drag   rounded-lg h-12  mx-auto" placeholder="令牌"
-                 style="width: 328px;background: var(--secondary-bg);text-transform: uppercase" @click.stop/>
+      <div v-show="loginType.name==='phone'" class=" mt-6">
+        <a-input v-model:value="authCode" class="no-drag   rounded-lg h-12  mx-auto" placeholder="令牌"
+                 spellcheck="false" style="width: 328px;background: var(--secondary-bg);text-transform: uppercase"
+                 @keyup.enter="bindSteam" @click.stop/>
       </div>
-      <div class=" mt-6" v-show="mailBoxShow&&loginType.name!=='phone'">
+      <div v-show="mailBoxShow&&loginType.name!=='phone'" class=" mt-6">
         <a-input v-model:value="mailBoxAuthCode" class="no-drag   rounded-lg h-12  mx-auto" placeholder="邮箱验证码"
                  style="width: 328px;background: var(--secondary-bg);" @click.stop/>
       </div>
@@ -149,20 +170,20 @@
       </div>
     </div>
   </Modal>
-  <Modal v-model:visible="loadingUserInfoVisible" v-if="loadingUserInfoVisible" :blurFlag="true" :mask-no-close="true">
+  <Modal v-if="loadingUserInfoVisible" v-model:visible="loadingUserInfoVisible" :blurFlag="true" :mask-no-close="true">
     <div class="py-5 px-10">
       <div class="mb-4 text-lg">
-        当前登录账号：{{logUserName}}<br>
+        当前登录账号：{{ logUserName }}<br>
         正在获取用户信息…
       </div>
 
       <div>
         <a-row :gutter="10">
           <a-col :span="12">
-            <a-button block @click="retry()" type="primary">重试</a-button>
+            <a-button block type="primary" @click="retry()">重试</a-button>
           </a-col>
           <a-col :span="12">
-            <a-button block @click="cancelLoadUserInfo" >放弃</a-button>
+            <a-button block @click="cancelLoadUserInfo">放弃</a-button>
           </a-col>
         </a-row>
 
@@ -174,44 +195,43 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapWritableState } from 'pinia'
-import { Modal as antModal } from 'ant-design-vue'
+import {mapActions, mapState, mapWritableState} from 'pinia'
+import {message, Modal as antModal} from 'ant-design-vue'
 import Modal from '../../components/Modal.vue'
 import HorizontalPanel from '../../components/HorizontalPanel.vue'
-import { message } from 'ant-design-vue'
-import { cardStore } from '../../store/card'
-import { steamUserStore } from '../../store/steamUser'
-import { ExclamationCircleFilled } from '@ant-design/icons-vue'
+import {steamUserStore} from '../../store/steamUser'
+import {ExclamationCircleFilled} from '@ant-design/icons-vue'
 
 import {completeTask} from "../../apps/task/page/branch/task"
-const { steamSession, path, https,steamUser } = $models
+
+const {steamSession, path, https, steamUser} = $models
 let LoginSession
 let EAuthTokenPlatformType
-if(steamSession){
+if (steamSession) {
   LoginSession = steamSession.LoginSession
-  EAuthTokenPlatformType= steamSession.EAuthTokenPlatformType
+  EAuthTokenPlatformType = steamSession.EAuthTokenPlatformType
 }
 
 
 export default {
   name: 'gameSetting',
-  components: { ExclamationCircleFilled, Modal, HorizontalPanel },
-  data () {
+  components: {ExclamationCircleFilled, Modal, HorizontalPanel},
+  data() {
     return {
-      retry:{},
-      loadingUserInfoVisible:false,
-      logUserName:'',
+      retry: {},
+      loadingUserInfoVisible: false,
+      logUserName: '',
       session: {},//会话
       mailBoxShow: false,
-      loginTypeList: [{ title: '普通登录', name: 'mailBox' }, { title: '手机令牌离线登录', name: 'phone' }],
-      loginType: { title: '邮箱验证', name: 'mailBox' },
+      loginTypeList: [{title: '普通登录', name: 'mailBox'}, {title: '手机令牌离线登录', name: 'phone'}],
+      loginType: {title: '邮箱验证', name: 'mailBox'},
       loginLoading: false,
       userName: '',
       password: '',
       mailBoxAuthCode: '',
       authCode: '',
       modalVisibility: false,
-      proxyVisibility:false,
+      proxyVisibility: false,
       area: '国区',
       region: [
         {
@@ -265,20 +285,20 @@ export default {
       ],
     }
   },
-  mounted () {
+  mounted() {
 
   },
-  watch:{
-    'settings.proxy':{
-      handler(newVal){
+  watch: {
+    'settings.proxy': {
+      handler(newVal) {
         console.log('修改了设置')
-        const user=window.client
-        const {type,address,port,userName,password}=newVal
+        const user = window.client
+        const {type, address, port, userName, password} = newVal
         //user.setOption('httpProxy',null)
         //user.setOption('socksProxy',null)
         //user.setOption('webCompatibilityMode',false)
 
-        switch  (type){
+        switch (type) {
           case 'none':
             break
           case 'http':
@@ -287,28 +307,28 @@ export default {
             // }else{
             //   user.setOption('httpProxy',`http://${address}:${port}`)
             // }
-           // user.httpProxy=`http://${address}:${port}`
+            // user.httpProxy=`http://${address}:${port}`
             break;
           case 'socks5':
-           // user.setOption('socksProxy',`socks5://${userName}:${password}@${address}:${port}`)
+            // user.setOption('socksProxy',`socks5://${userName}:${password}@${address}:${port}`)
             break;
           case 'web':
-           // user.setOption('webCompatibilityMode',true)
+            // user.setOption('webCompatibilityMode',true)
         }
-        console.log(user,'steamuser=')
-        console.log('修改了设置',`http://${userName}:${password}@${address}:${port}`,`socks5://${userName}:${password}@${address}:${port}`)
+        console.log(user, 'steamuser=')
+        console.log('修改了设置', `http://${userName}:${password}@${address}:${port}`, `socks5://${userName}:${password}@${address}:${port}`)
       },
-      deep:true,
-      immediate:true
+      deep: true,
+      immediate: true
     }
   },
   computed: {
     ...mapState(steamUserStore, ['steamLoginData', 'userData']),
-    ...mapWritableState(steamUserStore, ['recentGameList', 'desks','settings'])
+    ...mapWritableState(steamUserStore, ['recentGameList', 'desks', 'settings'])
   },
   methods: {
     ...mapActions(steamUserStore, ['setSteamLoginData', 'setUserData']),
-    clearRecent () {
+    clearRecent() {
       antModal.confirm({
         centered: true,
         content: '确认清空游玩记录？此操作并不会删除对应的游戏桌面。但不可恢复。',
@@ -317,7 +337,7 @@ export default {
         }
       })
     },
-    removeAllDesk () {
+    removeAllDesk() {
       antModal.confirm({
         centered: true,
         content: '确认删除全部的桌面？此操作非常危险，一旦操作就无法撤销！',
@@ -327,22 +347,22 @@ export default {
         okText: '确认删除'
       })
     },
-    cancelLoadUserInfo(){
-      this.loadingUserInfoVisible=false
+    cancelLoadUserInfo() {
+      this.loadingUserInfoVisible = false
     },
-    async loginSuccessCallback (session) {
-      this.mailBoxShow=false
+    async loginSuccessCallback(session) {
+      this.mailBoxShow = false
       message.info({
         content: `登录成功用户名 ${session.accountName}`,
       })
       // 支线任务点
       completeTask('Z0101')
       this.modalVisibility = false
-      this.logUserName= session.accountName
-      this.loadingUserInfoVisible=true
+      this.logUserName = session.accountName
+      this.loadingUserInfoVisible = true
 
-      try{
-        this.retry=async () => {
+      try {
+        this.retry = async () => {
           let webCookies = await session.getWebCookies()
           if (webCookies) {
             const steamLoginData = {
@@ -355,17 +375,17 @@ export default {
           }
         }
         await this.retry()
-        this.loadingUserInfoVisible=false
-      }catch (e) {
+        this.loadingUserInfoVisible = false
+      } catch (e) {
         console.error(e)
         message.error({
-          content:'获取用户信息失败。'
+          content: '获取用户信息失败。'
         })
       }
     },
-    getProxyOptions(){
-      const {type,address,port,userName,password}=this.settings.proxy
-      switch  (type) {
+    getProxyOptions() {
+      const {type, address, port, userName, password} = this.settings.proxy
+      switch (type) {
         case 'none':
           return {}
           break
@@ -380,29 +400,29 @@ export default {
             httpProxy: `http://${userName}:${password}@${address}:${port}`
           }
         case 'socks5':
-          return { 'socksProxy': `socks5://${userName}:${password}@${address}:${port}` }
+          return {'socksProxy': `socks5://${userName}:${password}@${address}:${port}`}
       }
 
     },
-    showBind(){
-      const options=this.getProxyOptions()
-      console.log(options,'参数')
-      let session = new LoginSession(EAuthTokenPlatformType.SteamClient,options)
+    showBind() {
+      const options = this.getProxyOptions()
+      console.log(options, '参数')
+      let session = new LoginSession(EAuthTokenPlatformType.SteamClient, options)
       session.on('authenticated', async () => {
         await this.loginSuccessCallback(session)
       })
       window.steamSession = session
       this.clickBind()
     },
-    cancelLogin(){
+    cancelLogin() {
       this.modalVisibility = false;
-      this.mailBoxShow=false
-      this.loginLoading=false
+      this.mailBoxShow = false
+      this.loginLoading = false
     },
-    showProxySettings(){
-      this.proxyVisibility=true
+    showProxySettings() {
+      this.proxyVisibility = true
     },
-    clickBind () {
+    clickBind() {
       if (this.steamLoginData.refreshToken === '') {
         this.modalVisibility = true
       } else {
@@ -414,13 +434,13 @@ export default {
         this.setUserData({})
       }
     },
-    getRegion (e) {
+    getRegion(e) {
       console.log(e)
     },
-    mailBox () {
+    mailBox() {
       window.steamSession.submitSteamGuardCode(this.mailBoxAuthCode)
     },
-    errorParse (str) {
+    errorParse(str) {
       str = str.toLowerCase()
       if (str.indexOf('invalidpassword') > -1) {
         return '用户名或密码错误'
@@ -430,7 +450,7 @@ export default {
         return str
       }
     },
-    async bindSteam () {
+    async bindSteam() {
       if (this.loginLoading === true) return
       this.loginLoading = true
       switch (this.loginType.name) {
@@ -451,7 +471,9 @@ export default {
                 content: '登录失败，失败原因：' + this.errorParse(String(err)),
                 centered: true
               })
-            }).finally(() => {this.loginLoading = false})
+            }).finally(() => {
+              this.loginLoading = false
+            })
           } else {
             window.steamSession.submitSteamGuardCode(this.mailBoxAuthCode).then((res) => {
               message.info({
@@ -486,11 +508,11 @@ export default {
             })
           }).catch(err => {
             console.error(err)
-            if(String(err).includes('ETIMEDOUT')){
+            if (String(err).includes('ETIMEDOUT')) {
               message.error({
-                    content: '服务器超时',
-                  })
-            }else{
+                content: '服务器超时',
+              })
+            } else {
               message.error({
                 content: '用户或密码错误',
               })
@@ -503,7 +525,9 @@ export default {
             // }
 
 
-          }).finally(() => {this.loginLoading = false})
+          }).finally(() => {
+            this.loginLoading = false
+          })
           break
       }
     }

@@ -8,18 +8,18 @@
       </XtButton>
     </div>
     <div
-      class="flex h-full flex-wrap overflow-y-auto xt-container mt-3"
-      :style="[heightStyle, widthStyle]"
-      style="align-content: flex-start"
+        :style="[heightStyle, widthStyle]"
+        class="flex h-full flex-wrap overflow-y-auto xt-container mt-3"
+        style="align-content: flex-start"
     >
       <div
-        v-for="(item, index) in data"
-        class="mx-2 mb-4 rounded-xl flex flex-col items-center justify-center cursor-pointer text-xs"
-        style="width: 125px; height: 125px"
-        @click="selectApp(item, index)"
-        :style="[isSelected(index)]"
+          v-for="(item, index) in data"
+          :style="[isSelected(index)]"
+          class="mx-2 mb-4 rounded-xl flex flex-col items-center justify-center cursor-pointer text-xs"
+          style="width: 125px; height: 125px"
+          @click="selectApp(item, index)"
       >
-        <a-avatar :size="52" shape="square" :src="renderIcon(item.icon)"></a-avatar>
+        <a-avatar :size="52" :src="renderIcon(item.icon)" shape="square"></a-avatar>
         <div class="w-full text-center truncate mt-3">{{ item.name }}</div>
       </div>
     </div>
@@ -27,9 +27,10 @@
 </template>
 
 <script>
-import { taskStore } from "../../../../apps/task/store";
-import { mapWritableState } from "pinia";
+import {taskStore} from "../../../../apps/task/store";
+import {mapWritableState} from "pinia";
 import {renderIcon} from '../../../../js/common/common'
+
 export default {
   inject: ["width", "height"],
   props: {
@@ -66,9 +67,9 @@ export default {
     // 全选状态
     selectAll() {
       if (
-        this.selectAppsLength &&
-        this.selectAppsLength == this.appsLenght &&
-        this.isSelectedArr[this.name] !== true
+          this.selectAppsLength &&
+          this.selectAppsLength == this.appsLenght &&
+          this.isSelectedArr[this.name] !== true
       ) {
         this.isSelectedArr[this.name] = !this.isSelectedArr[this.name];
         return "取消全选";
@@ -78,8 +79,8 @@ export default {
     // 选中数组长度
     selectAppsLength() {
       return this.selectApps[this.name]
-        ? this.selectApps[this.name].length
-        : "";
+          ? this.selectApps[this.name].length
+          : "";
     },
     // 数组总长度
     appsLenght() {
@@ -135,8 +136,8 @@ export default {
         // 二维数组不存在则开辟一个数组
         // if (!this.selectApps[this.name]) this.selectApps[this.name] = [];
         this.selectedIndexes[this.name] = this.selectedIndexes[
-          this.name
-        ].filter((i) => i !== index); // 取消选中
+            this.name
+            ].filter((i) => i !== index); // 取消选中
       } else {
         this.selectedIndexes[this.name].push(index); // 添加选中
       }

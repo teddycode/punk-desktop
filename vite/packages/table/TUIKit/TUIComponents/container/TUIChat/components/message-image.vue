@@ -1,11 +1,9 @@
 <template>
-  <div class="message-image" @click.self="toggleShow" ref="skeleton">
+  <div ref="skeleton" class="message-image" @click.self="toggleShow">
     <img
-      class="message-img"
-      :src="data.url"
-      :width="data.width"
-      :height="data.height"
-      :style="
+        :height="data.height"
+        :src="data.url"
+        :style="
         isH5
           ? {
               maxWidth: data.width ? data.width + 'px' : 'calc(100vw - 180px)',
@@ -13,26 +11,28 @@
             }
           : {}
       "
+        :width="data.width"
+        class="message-img"
     />
-    <div class="progress" v-if="data.progress">
+    <div v-if="data.progress" class="progress">
       <progress :value="data.progress" max="1"></progress>
     </div>
-    <div class="dialog" v-if="show" @click.self="toggleShow">
+    <div v-if="show" class="dialog" @click.self="toggleShow">
       <header v-if="!isH5">
         <i class="icon icon-close" @click.stop="toggleShow"></i>
       </header>
-      <div class="dialog-box" :class="[isH5 ? 'dialog-box-h5' : '']" @click.self="toggleShow">
+      <div :class="[isH5 ? 'dialog-box-h5' : '']" class="dialog-box" @click.self="toggleShow">
         <img
-          :class="[isWidth ? 'isWidth' : 'isHeight']"
-          :src="data.message.payload.imageInfoArray[0].url"
-          @click.self="toggleShow"
+            :class="[isWidth ? 'isWidth' : 'isHeight']"
+            :src="data.message.payload.imageInfoArray[0].url"
+            @click.self="toggleShow"
         />
         <div v-if="isH5" class="dialog-box-h5-footer">
           <p @click="toggleShow">
-            <img src="../../../assets/icon/close-image.png" />
+            <img src="../../../assets/icon/close-image.png"/>
           </p>
           <p @click.stop="downloadImage(data.message)">
-            <img src="../../../assets/icon/downaload-image.png" />
+            <img src="../../../assets/icon/downaload-image.png"/>
           </p>
         </div>
       </div>
@@ -41,8 +41,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, watchEffect, reactive, toRefs, computed, ref, nextTick } from 'vue';
-import { handleSkeletonSize } from '../utils/utils';
+import {computed, defineComponent, nextTick, reactive, ref, toRefs, watchEffect} from 'vue';
+import {handleSkeletonSize} from '../utils/utils';
+
 export default defineComponent({
   props: {
     data: {
@@ -66,7 +67,7 @@ export default defineComponent({
     const skeleton: any = ref();
 
     const isWidth = computed(() => {
-      const { width = 0, height = 0 } = (data.data as any)?.message?.payload?.imageInfoArray[0];
+      const {width = 0, height = 0} = (data.data as any)?.message?.payload?.imageInfoArray[0];
       return width >= height;
     });
 
@@ -75,7 +76,7 @@ export default defineComponent({
       if (!data.data) return;
       nextTick(() => {
         if (!data.data.progress) {
-          const { width = 0, height = 0 } = data.data as any;
+          const {width = 0, height = 0} = data.data as any;
           if (width === 0 || height === 0) return;
           const containerWidth = document.getElementById('app')?.clientWidth || 0;
           const max = props.isH5 ? Math.min(containerWidth - 180, 300) : 300;
@@ -129,16 +130,19 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import url('../../../styles/common.scss');
 @import url('../../../styles/icon.scss');
+
 .message-image {
   position: relative;
   overflow: hidden;
   opacity: 1;
+
   .message-img {
     max-width: min(calc(100vw - 180px), 300px);
     max-height: min(calc(100vw - 180px), 300px);
     width: inherit;
     height: inherit;
   }
+
   .progress {
     position: absolute;
     box-sizing: border-box;
@@ -150,6 +154,7 @@ export default defineComponent({
     background: rgba(#000000, 0.5);
     display: flex;
     align-items: center;
+
     progress {
       color: #006eff;
       appearance: none;
@@ -157,14 +162,17 @@ export default defineComponent({
       background: rgba(#ffffff, 1);
       width: 100%;
       height: 0.5rem;
+
       &::-webkit-progress-value {
         background-color: #006eff;
         border-radius: 0.25rem;
       }
+
       &::-webkit-progress-bar {
         border-radius: 0.25rem;
         background: rgba(#ffffff, 1);
       }
+
       &::-moz-progress-bar {
         color: #006eff;
         background: #006eff;
@@ -173,6 +181,7 @@ export default defineComponent({
     }
   }
 }
+
 .dialog {
   position: fixed;
   z-index: 12;
@@ -184,6 +193,7 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   align-items: center;
+
   header {
     display: flex;
     justify-content: flex-end;
@@ -192,6 +202,7 @@ export default defineComponent({
     box-sizing: border-box;
     padding: 10px 10px;
   }
+
   &-box {
     display: flex;
     flex: 1;
@@ -202,6 +213,7 @@ export default defineComponent({
     align-items: center;
   }
 }
+
 .dialog-box-h5 {
   width: 100%;
   height: 100%;
@@ -209,19 +221,23 @@ export default defineComponent({
   padding: 30px 0;
   display: flex;
   flex-direction: column;
+
   &-footer {
     position: fixed;
     bottom: 10px;
     display: flex;
     width: 90vw;
     justify-content: space-between;
+
     p {
       width: 3.88rem;
       height: 3.88rem;
     }
+
     img {
       width: 100%;
     }
+
     i {
       padding: 20px;
     }
@@ -231,6 +247,7 @@ export default defineComponent({
 .isWidth {
   width: 100%;
 }
+
 .isHeight {
   height: 100%;
 }

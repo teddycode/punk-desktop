@@ -3,8 +3,8 @@
     <xt-title m="">
       <div class="flex items-center">
         <StarFilled
-          aria-label="1"
-          style="
+            aria-label="1"
+            style="
             font-size: 12px;
             background: #ff4d4f;
             width: 20px;
@@ -18,12 +18,12 @@
         />
         {{ currentStage.chapter }}
       </div>
-      <template #right>{{ stage }} / {{ currentStage.tasks.length }} </template>
+      <template #right>{{ stage }} / {{ currentStage.tasks.length }}</template>
     </xt-title>
     <div class="my-1">
-      <a-progress :percent="progress" :show-info="false" />
+      <a-progress :percent="progress" :show-info="false"/>
     </div>
-    <xt-title type="text" m=""> 当前阶段可以获得的奖励 </xt-title>
+    <xt-title m="" type="text"> 当前阶段可以获得的奖励</xt-title>
   </div>
 
   <xt-title>正在进行</xt-title>
@@ -36,23 +36,24 @@
     <div class="flex justify-center items-center flex-col">
       <xt-title type="text">完成奖励</xt-title>
 
-{{ currentTask }}
+      {{ currentTask }}
       <!-- <xt-title type="text" v-if="currentTask.task"
         >当前任务含有操作引导</xt-title
       > -->
       <xt-button style="width: 100%" type="theme" @click="taskGuide(task)"
-        >开始任务</xt-button
+      >开始任务
+      </xt-button
       >
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed } from "vue";
-import { StarFilled } from "@ant-design/icons-vue";
-import { taskStore } from "../store";
-import { useRouter } from "vue-router";
-import { guide } from "../../../ui/components/Task/guide";
+import {StarFilled} from "@ant-design/icons-vue";
+import {taskStore} from "../store";
+import {useRouter} from "vue-router";
+import {guide} from "../../../ui/components/Task/guide";
+
 const router = useRouter();
 const task = taskStore();
 const props = defineProps({

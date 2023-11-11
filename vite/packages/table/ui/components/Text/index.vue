@@ -1,7 +1,7 @@
 <template>
   <div
-    class="w-full flex justify-between items-center relative"
-    :class="[textClass]"
+      :class="[textClass]"
+      class="w-full flex justify-between items-center relative"
   >
     <div class="flex items-center">
       <slot></slot>
@@ -16,7 +16,8 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import {computed} from "vue";
+
 const props = defineProps({
   type: {
     default: 1,

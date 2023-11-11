@@ -1,5 +1,5 @@
 <template>
-  <a-badge status="success" color="#52c41a" :numberStyle="{width:'30px'}"></a-badge>
+  <a-badge :numberStyle="{width:'30px'}" color="#52c41a" status="success"></a-badge>
 </template>
 
 <script>
@@ -8,7 +8,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 :deep(.ant-badge-status-dot) {
 
   width: 10px !important;

@@ -1,23 +1,23 @@
 <template>
-  <div class="dialog" :class="[isH5 ? 'dialog-h5' : '', center ? 'center' : '']" v-if="show" @click.self="toggleView">
-    <main class="dialog-main" :style="!background && {'background': 'none'}">
+  <div v-if="show" :class="[isH5 ? 'dialog-h5' : '', center ? 'center' : '']" class="dialog" @click.self="toggleView">
+    <main :style="!background && {'background': 'none'}" class="dialog-main">
       <header v-if="isHeaderShow">
-        <h1>{{title}}</h1>
+        <h1>{{ title }}</h1>
         <i class="icon icon-close" @click="toggleView"></i>
       </header>
       <div class="dialog-main-content">
-        <slot />
+        <slot/>
       </div>
       <footer v-if="isFooterShow">
-        <button class="btn btn-cancel" @click="toggleView">{{$t('component.取消')}}</button>
-        <button class="btn btn-default" @click="submit">{{$t('component.确定')}}</button>
+        <button class="btn btn-cancel" @click="toggleView">{{ $t('component.取消') }}</button>
+        <button class="btn btn-default" @click="submit">{{ $t('component.确定') }}</button>
       </footer>
     </main>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, watchEffect, toRefs } from 'vue';
+import {defineComponent, reactive, toRefs, watchEffect} from 'vue';
 
 export default defineComponent({
   props: {
@@ -50,7 +50,7 @@ export default defineComponent({
       default: () => false,
     },
   },
-  setup(props:any, ctx:any) {
+  setup(props: any, ctx: any) {
     const data = reactive({
       show: false,
       isHeaderShow: true,

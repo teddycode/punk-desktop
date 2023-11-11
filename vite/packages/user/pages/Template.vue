@@ -1,28 +1,29 @@
 <template>
   <div style="padding: 40px;padding-top: 20px">
     <h2>欢迎使用空间模板功能</h2>
-    <a-row type="flex" class="type">
+    <a-row class="type" type="flex">
       <a-col flex="60px">
-        <img style="width: 40px"  src="../assets/icon/right.svg">
+        <img src="../assets/icon/right.svg" style="width: 40px">
       </a-col>
       <a-col>
         <div class="title">个人空间模板</div>
         <div class="summary">自己使用的空间模板。<br>主要用于与将自己认为比较好的标签组搭配保存成模板，以便下次取用。</div>
       </a-col>
     </a-row>
-    <a-row type="flex"  class="type">
+    <a-row class="type" type="flex">
       <a-col flex="60px">
-        <img style="width: 40px" src="../assets/icon/group.svg">
+        <img src="../assets/icon/group.svg" style="width: 40px">
       </a-col>
 
-      <a-col >
+      <a-col>
         <div class="title">团队空间模板</div>
-        <div class="summary">共享空间模板给团队成员使用，团队下的所有成员均可使用这些空间模板。<br>主要用于共享空间模板给新入职的同事。</div>
+        <div class="summary">共享空间模板给团队成员使用，团队下的所有成员均可使用这些空间模板。<br>主要用于共享空间模板给新入职的同事。
+        </div>
       </a-col>
     </a-row>
-    <a-row type="flex" class="type">
+    <a-row class="type" type="flex">
       <a-col flex="60px">
-        <img style="width: 40px"  src="../assets/icon/share.svg">
+        <img src="../assets/icon/share.svg" style="width: 40px">
       </a-col>
       <a-col>
         <div class="title">公共空间模板</div>
@@ -31,11 +32,12 @@
     </a-row>
 
     <div style="text-align: center;margin-top: 20px">
-      <p><a-button type="primary" disabled>开始使用</a-button></p>
+      <p>
+        <a-button disabled type="primary">开始使用</a-button>
+      </p>
       <p class="summary">空间模板功能即将上线，敬请期待</p>
     </div>
   </div>
-
 
 
 </template>
@@ -46,18 +48,20 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-.title{
+<style lang="scss" scoped>
+.title {
   font-size: 16px;
   font-weight: bold;
 }
-.type{
+
+.type {
   padding: 20px;
   margin-bottom: 10px;
   border-radius: 8px;
   background: #efefef;
 }
-.summary{
+
+.summary {
   color: #999;
 }
 </style>

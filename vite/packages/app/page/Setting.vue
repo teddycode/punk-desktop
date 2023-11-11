@@ -1,20 +1,18 @@
 <template>
-
-
   <a-layout style="height:calc(100vh)">
     <a-layout>
-      <a-layout-sider width="200" theme="light" style="position: relative">
-        <div  style="display:flex;flex-direction:column;width: 200px;height: 100vh">
+      <a-layout-sider style="position: relative" theme="light" width="200">
+        <div style="display:flex;flex-direction:column;width: 200px;height: 100vh">
           <div style="flex:auto">
             <a-menu
-              theme="light"
-              mode="inline"
-              v-model:selectedKeys="activeNav"
-              :default-selected-keys="['base']"
-              :open-keys="['basic' ]"
-              :style="{ height: '100%', borderRight: 0 }"
+                v-model:selectedKeys="activeNav"
+                :default-selected-keys="['base']"
+                :open-keys="['basic' ]"
+                :style="{ height: '100%', borderRight: 0 }"
+                mode="inline"
+                theme="light"
             >
-              <a-sub-menu   key="basic">
+              <a-sub-menu key="basic">
                 <template #icon>
                   <SettingOutlined></SettingOutlined>
                 </template>
@@ -34,17 +32,18 @@
               </a-sub-menu>
             </a-menu>
           </div>
-          <div style="height: 50px" >
+          <div style="height: 50px">
             <div style=" text-align: center;width: 100%">
-              <a-button type="primary" style="margin-right: 20px" @click="save">保存</a-button>
+              <a-button style="margin-right: 20px" type="primary" @click="save">保存</a-button>
               <a-dropdown>
                 <template #overlay>
                   <a-menu>
-                    <a-menu-item @click="restore" key="restoreAppSetting">还原到初始设置</a-menu-item>
+                    <a-menu-item key="restoreAppSetting" @click="restore">还原到初始设置</a-menu-item>
                   </a-menu>
                 </template>
                 <a-button @click="reset">
-                  重置 <DownOutlined />
+                  重置
+                  <DownOutlined/>
                 </a-button>
               </a-dropdown>
             </div>
@@ -55,20 +54,20 @@
       </a-layout-sider>
       <a-layout-content>
         <a-page-header
-          @back="goALl"
-                       style="box-shadow: 0 2px 8px #f0f1f2;z-index: 1; padding:6px 10px;"
-                       :title="this.app.name"
+            :avatar="{src:app.logo}"
+            :title="this.app.name"
+            style="box-shadow: 0 2px 8px #f0f1f2;z-index: 1; padding:6px 10px;"
 
-                       :avatar="{src:app.logo}"
-                       sub-title="应用设置"
+            sub-title="应用设置"
+            @back="goALl"
         >
           <template #extra>
-            <a-button key="1" type="danger" @click="uninstall(appId)" v-if="!app.isSystemApp">
+            <a-button v-if="!app.isSystemApp" key="1" type="danger" @click="uninstall(appId)">
               卸载应用
             </a-button>
             <span v-else>
         <a-tooltip title="系统应用，不可卸载">
-          <a-button disabled size="small" key="1" @click="uninstall(appId)">
+          <a-button key="1" disabled size="small" @click="uninstall(appId)">
         卸载应用
       </a-button>
         </a-tooltip>
@@ -87,29 +86,28 @@
 
 <script>
 import vueCustomScrollbar from '../../../src/components/vue-scrollbar.vue'
-import { SettingOutlined, LaptopOutlined, SmileOutlined,DownOutlined } from '@ant-design/icons-vue'
-import { appStore } from '../store'
-import { mapState, mapActions } from 'pinia'
-import { CodeTwoTone } from '@ant-design/icons-vue'
-import { message, Modal } from 'ant-design-vue'
+import {CodeTwoTone, DownOutlined, LaptopOutlined, SettingOutlined, SmileOutlined} from '@ant-design/icons-vue'
+import {appStore} from '../store'
+import {mapActions, mapState} from 'pinia'
+import {message, Modal} from 'ant-design-vue'
 
-let { appModel, devAppModel } = window.$models
+let {appModel, devAppModel} = window.$models
 let appId =
-  window.globalArgs['app-id']
+    window.globalArgs['app-id']
 
 export default {
   name: 'Setting',
   components: {
-    SettingOutlined, LaptopOutlined, CodeTwoTone, vueCustomScrollbar, SmileOutlined,DownOutlined
+    SettingOutlined, LaptopOutlined, CodeTwoTone, vueCustomScrollbar, SmileOutlined, DownOutlined
   },
   computed: {
     ...mapState(appStore, ['app', 'debugMod', 'devApp'])
   },
-  data () {
+  data() {
     return {
-      activeNav:['base'],
-      user:{
-        user_info:{}
+      activeNav: ['base'],
+      user: {
+        user_info: {}
       },
       currentDevApp: [],
       settings: {
@@ -122,88 +120,88 @@ export default {
     }
   },
 
-  async mounted () {
+  async mounted() {
     this.appId = appId
     console.log(this.$route.params)
-    if(this.$route.params.appId){
-      this.appId=this.$route.params.appId
+    if (this.$route.params.appId) {
+      this.appId = this.$route.params.appId
     }
     await appStore().getApp(this.appId)
-    let userRs =  await tsbApi.user.get()
-    if(userRs.status){
-      this.user=userRs.data
+    let userRs = await tsbApi.user.get()
+    if (userRs.status) {
+      this.user = userRs.data
     }
   },
   methods: {
-    login(){
+    login() {
       tsbApi.user.login()
     },
-    goALl(){
-      this.devMod=false
+    goALl() {
+      this.devMod = false
       this.$router.push('/allApps')
     },
-    ...mapActions(appStore, ['reloadAppSetting', 'saveAppSetting', 'setApp','restoreAppSetting']),
-    goDevelop () {
-      this.$router.push({ path: '/dev/' })
+    ...mapActions(appStore, ['reloadAppSetting', 'saveAppSetting', 'setApp', 'restoreAppSetting']),
+    goDevelop() {
+      this.$router.push({path: '/dev/'})
     },
-    restore(){
+    restore() {
       Modal.confirm({
-        content:'是否还原应用的全部设置？这将丢失所有的设置内容，还原到首次安装时的设置状态。',
-        onOk:()=>{
+        content: '是否还原应用的全部设置？这将丢失所有的设置内容，还原到首次安装时的设置状态。',
+        onOk: () => {
           this.restoreAppSetting()
-          this.$router.replace({path:'/setting/'+this.app.nanoid})
-          this.activeNav=['base']
+          this.$router.replace({path: '/setting/' + this.app.nanoid})
+          this.activeNav = ['base']
           message.success('还原设置成功。')
         }
       })
     },
-    uninstall (appId) {
+    uninstall(appId) {
       this.$confirm({
         title: '确定卸载此应用？',
         content: '此操作将卸载应用并清空所有应用数据，且无法还原。请谨慎操作。',
         okText: '确认',
         okType: 'danger',
         cancelText: '取消',
-        onOk () {
+        onOk() {
           appModel.uninstall(appId).then(success => {
-            ipc.send('message', { type: 'success', config: { content: '卸载应用成功。' } })
-            ipc.send('deleteApp', { nanoid: appId })
+            ipc.send('message', {type: 'success', config: {content: '卸载应用成功。'}})
+            ipc.send('deleteApp', {nanoid: appId})
           }, err => {
-            ipc.send('message', { type: 'success', config: { content: '卸载失败。' } })
+            ipc.send('message', {type: 'success', config: {content: '卸载失败。'}})
           })
         },
-        onCancel () {
+        onCancel() {
           console.log('Cancel')
         },
       })
 
     },
-    check () {
+    check() {
       this.form.validateFields(err => {
         if (!err) {
           console.info('success')
         }
       })
     },
-    handleChange (e) {
+    handleChange(e) {
       this.checkNick = e.target.checked
       this.$nextTick(() => {
-        this.form.validateFields(['nickname'], { force: true })
+        this.form.validateFields(['nickname'], {force: true})
       })
     },
-    reset () {
+    reset() {
       Modal.confirm({
         content: '是否放弃当前所有改动重载之前的配置？',
         onOk: () => {
           this.reloadAppSetting()
-          this.$router.replace({path:'/setting/'+this.app.nanoid})
-          this.activeNav=['base']
+          this.$router.replace({path: '/setting/' + this.app.nanoid})
+          this.activeNav = ['base']
           message.success('已为您重置当前应用的信息。')
 
         }
       })
     },
-    async save () {
+    async save() {
       try {
         await this.saveAppSetting()
         message.success('保存成功。')

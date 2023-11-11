@@ -1,13 +1,13 @@
 <template>
   <Icon
-    :isSelect="true"
-    @updateSelectApps="updateSelectApps"
-    :data="appList"
+      :data="appList"
+      :isSelect="true"
+      @updateSelectApps="updateSelectApps"
   ></Icon>
 </template>
 
 <script>
-import { getQingApps } from "../api/api";
+import {getQingApps} from "../api/api";
 import syncSelected from "../hooks/syncSelected";
 
 export default {
@@ -23,7 +23,7 @@ export default {
         link: "fast",
         icon: item.logo,
         name: item.name,
-        path: { package: item.package, type: "lightApp", name: item.name },
+        path: {package: item.package, type: "lightApp", name: item.name},
         open: {
           type: "lightApp",
           value: item.package,

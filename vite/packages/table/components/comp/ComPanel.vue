@@ -3,15 +3,18 @@
  * @Date: 2023-11-06 17:13:46
  * @LastEditors: teddycode 1055334354@qq.com
  * @LastEditTime: 2023-11-09 15:57:34
- * @Description: 
- * Copyright (c) 2023 by buaa.ioase.dcl, All Rights Reserved. 
+ * @Description:
+ * Copyright (c) 2023 by buaa.ioase.dcl, All Rights Reserved.
 -->
 <template>
-  <h3 style="margin-bottom: 1em;color:var(--primary-text) "><a-avatar src="https://up.apps.vip/logo/yuan.png"></a-avatar> 元社区
+  <h3 style="margin-bottom: 1em;color:var(--primary-text) ">
+    <a-avatar src="https://up.apps.vip/logo/yuan.png"></a-avatar>
+    元社区
 
     <div style="float: right">
-      <a-button @click="go('https://s.apps.vip')" style="color:var(--primary-text)">
-        <Icon icon="yichu"> </Icon> 前往元社区
+      <a-button style="color:var(--primary-text)" @click="go('https://s.apps.vip')">
+        <Icon icon="yichu"></Icon>
+        前往元社区
       </a-button>
     </div>
   </h3>
@@ -47,9 +50,9 @@
 </template>
 
 <script>
-import { appStore } from '../../store'
-import { mapState } from 'pinia'
-import { SendOutlined, UserAddOutlined, EyeOutlined, EditOutlined } from '@ant-design/icons-vue '
+import {appStore} from '../../store'
+import {mapState} from 'pinia'
+import {EditOutlined, EyeOutlined, SendOutlined, UserAddOutlined} from '@ant-design/icons-vue '
 import browser from '../../js/common/browser'
 
 export default {
@@ -58,9 +61,7 @@ export default {
     SendOutlined, UserAddOutlined, EyeOutlined, EditOutlined
   },
   data() {
-    return {
-
-    }
+    return {}
   },
   computed: {
     ...mapState(appStore, ['userInfo'])

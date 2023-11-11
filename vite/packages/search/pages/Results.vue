@@ -13,16 +13,16 @@
     <div class="category-rg flex justify-around align-center">
       <smile-outlined/>
       <div
-        class="flex align-center justify-center"
-        style="padding-left: 5px"
+          class="flex align-center justify-center"
+          style="padding-left: 5px"
       >
         按下Tab键切换类型
       </div>
     </div>
   </div>
   <div
-    v-if="openFirst"
-    class="recent-open flex flex-direction justify-between"
+      v-if="openFirst"
+      class="recent-open flex flex-direction justify-between"
   >
 
 
@@ -31,10 +31,10 @@
     <div v-if="contentLoading" key="loading">
       <a-spin>
         <a-icon
-          slot="indicator"
-          spin
-          style="font-size: 40px"
-          type="loading"
+            slot="indicator"
+            spin
+            style="font-size: 40px"
+            type="loading"
         ></a-icon>
       </a-spin>
     </div>
@@ -47,13 +47,13 @@
           @click="click(item)"
       >
         <img
-          :src="item.icon"
-          onerror="this.src='../../icons/default.svg'"
-          style="width: 30px; height: 30px"
+            :src="item.icon"
+            onerror="this.src='../../icons/default.svg'"
+            style="width: 30px; height: 30px"
         />
         <div
-          class="flex flex-direction justify-around align-start"
-          style="padding-left: 20px; height: 100%"
+            class="flex flex-direction justify-around align-start"
+            style="padding-left: 20px; height: 100%"
         >
           <div class="text-black-lg sg-omit-sm"
                v-html="item.title.replaceAll(searchWord,`<strong style='color:orangered'>${searchWord}</strong>`)"></div>
@@ -62,9 +62,9 @@
         </div>
       </li>
       <div
-        v-show="compSearchResult.length === 0 && !openFirst"
-        class="text-grey flex justify-center align-center"
-        style="width: 100%; height: 50px"
+          v-show="compSearchResult.length === 0 && !openFirst"
+          class="text-grey flex justify-center align-center"
+          style="width: 100%; height: 50px"
       >
         未找到任何结果
       </div>
@@ -73,9 +73,10 @@
 </template>
 
 <script lang="ts">
-import { appStore } from '../store'
-import { mapWritableState } from 'pinia'
-let {appModel, placesModel,statsh} = window.$models
+import {appStore} from '../store'
+import {mapWritableState} from 'pinia'
+
+let {appModel, placesModel, statsh} = window.$models
 export default {
   name: 'Results',
   methods: {
@@ -130,7 +131,7 @@ export default {
     changeHeight(height: number) {
       ipc.send('changeBrowserWindowHeight', height)
     },
-    calculateAreaHeight (res) {
+    calculateAreaHeight(res) {
       //计算搜索结果区域的高度，传给main变换窗体高度
       let num
       num = res.length
@@ -151,7 +152,7 @@ export default {
   },
   computed: {
     ...mapWritableState(appStore, ['tags', 'itemReadyedIndex', 'itemReadyedItem', 'searchResult']),
-    compSearchResult () {
+    compSearchResult() {
       let findResult = this.tags.find(v => v.checked === true)
       if (findResult.label === '全部') {
         this.itemReadyedIndex = 0

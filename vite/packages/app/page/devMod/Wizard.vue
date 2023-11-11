@@ -5,17 +5,17 @@
   <div style="background: white;padding: 20px;border-radius: 4px">
 
     <a-steps v-model:current="currentStep" direction="vertical">
-      <a-step v-for="step in steps" :title="step.title" :sub-title="step.subTitle">
+      <a-step v-for="step in steps" :sub-title="step.subTitle" :title="step.title">
         <template #description>
-          <a-list size="small" :data-source="step.nodes">
+          <a-list :data-source="step.nodes" size="small">
             <template #renderItem="{ item }">
               <a-list-item>
                 <template #actions>
                   <div v-if="!item.target && item.href">
 
-                    <a-progress :width="20" v-if="item.hasPercent" type="circle" :strokeWidth="20"
-                                :format="()=>{return ''}" :percent="item.percent()"
-                                style="margin-right: 10px"></a-progress>
+                    <a-progress v-if="item.hasPercent" :format="()=>{return ''}" :percent="item.percent()" :strokeWidth="20"
+                                :width="20" style="margin-right: 10px"
+                                type="circle"></a-progress>
                     <a @click="go(item.href)">{{ item.hrefText || '去设置' }}</a>
                     <!--                      <router-link :to="{path:item.href}">{{item.href}}去设置</router-link>-->
                   </div>
@@ -45,22 +45,22 @@
 </template>
 
 <script>
-import { mapWritableState, mapActions } from 'pinia'
-import { appStore } from '../../store'
-import { CodeTwoTone } from '@ant-design/icons-vue'
+import {mapActions, mapWritableState} from 'pinia'
+import {appStore} from '../../store'
+import {CodeTwoTone} from '@ant-design/icons-vue'
 
 export default {
   name: 'develop',
   components: {
     CodeTwoTone
   },
-  data () {
+  data() {
     return {
       currentStep: '',
       steps: []
     }
   },
-  mounted () {
+  mounted() {
     const steps = [
       {
         title: '基础设置',
@@ -152,10 +152,10 @@ export default {
             description: '登录浏览器账号后才可上架应用到市场',
             href: 'com.thisky.appStore',
             hrefText: '去登录',
-            onClick:()=>{
+            onClick: () => {
               tsbApi.user.login()
             },
-            target:'button',
+            target: 'button',
             checked: () => {
               return this.user.uid
             }
@@ -183,15 +183,15 @@ export default {
     this.steps = steps
   },
   computed: {
-    ...mapWritableState(appStore, ['app', 'debugMod', 'devApp','user'])
+    ...mapWritableState(appStore, ['app', 'debugMod', 'devApp', 'user'])
   },
   methods: {
     ...mapActions(appStore, ['toggleDebug']),
-    go (path) {
-      this.$router.push({ path })
+    go(path) {
+      this.$router.push({path})
     },
-    addTab (url) {
-      ipc.send('addTab', { url: url })
+    addTab(url) {
+      ipc.send('addTab', {url: url})
     }
   }
 }

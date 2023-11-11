@@ -1,13 +1,13 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
 import {message} from "ant-design-vue";
 import browser from "../../../js/common/browser";
 import {mapActions} from "pinia";
 import {clipboardStore} from "../store";
 import _ from 'lodash-es'
+
 export default {
   name: "ClipMenuList",
-  props: ['clipItem','hidePreview'],
+  props: ['clipItem', 'hidePreview'],
   computed: {
     urls() {
       if (['image', 'video', 'audio'].includes(this.clipItem.type)) {
@@ -82,7 +82,7 @@ export default {
           return item.title === '添加到收藏'
         })
       }
-      if(this.hidePreview){
+      if (this.hidePreview) {
         _.remove(menuList, (item) => {
           return item.title === '预览'
         })
@@ -110,7 +110,7 @@ export default {
     previewItem(item) {
       this.$emit('previewItem', {item})
     },
-    clickItem(){
+    clickItem() {
       this.$emit('clickItem')
     }
   }
@@ -119,15 +119,15 @@ export default {
 
 <template>
   <div class="menu-wrapper">
-    <div  v-for="item in menuList" @click="this.clickItem();item.fn(clipItem)"
-         class="flex pointer justify-between s-item button-active  btn-list px-4 rounded-lg py-3 mb-2">
+    <div v-for="item in menuList" class="flex pointer justify-between s-item button-active  btn-list px-4 rounded-lg py-3 mb-2"
+         @click="this.clickItem();item.fn(clipItem)">
       <span>{{ item.title }}</span>
-<!--      <span>{{ item.shortKeys }}</span>-->
+      <!--      <span>{{ item.shortKeys }}</span>-->
     </div>
   </div>
 
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 
 </style>

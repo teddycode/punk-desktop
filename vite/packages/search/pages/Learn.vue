@@ -51,9 +51,9 @@
   </div>
   <a-modal
       v-model:visible="visible"
+      :footer="null"
       width="100%"
       wrap-class-name="full-modal"
-      :footer="null"
   >
     <div>
 

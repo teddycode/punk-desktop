@@ -2,42 +2,43 @@
   <!-- <div class="side-panel common-panel s-bg " style=" z-index: 999;
   width: 6em;max-height: 446px;overflow: hidden;" ref="sideContent"> -->
 
-    <div @click.stop class="box common-panel hide-scrollbar s-bg "
-         style="display: flex;flex-direction: row;justify-items: center;justify-content: center;
+  <div ref="sideContent" class="box common-panel hide-scrollbar s-bg "
+       style="display: flex;flex-direction: row;justify-items: center;justify-content: center;
           background: var(--primary-bg); z-index: 99;width: 80px;max-height: 100%;
           overflow-x: hidden;
-          padding-top: 0;padding-bottom: 0;position:relative;" ref="sideContent"
-         @contextmenu.stop="showMenu">
-      <div   style="width: 67px;overflow-x: hidden">
-        <div :id="sortId" class="scroller-wrapper hide-scrollbar xt-container" style="width: 80px;overflow-y:auto;max-height: 100%;display: flex;flex-direction: column;overflow-x: hidden;align-items: flex-start" >
-          <a-tooltip :title="item.name" v-for="item in sideNavigationList" placement="right">
-            <div   :key="item.name" @click.stop="clickNavigation(item)">
-              <div  @contextmenu.stop="enableDrag"   class="item-content item-nav" :class="{ 'active-back': current(item) }">
-                <div class="icon-color" v-if="item.type === 'systemApp'">
-                  <navIcon class="icon-color xt-text" :icon="item.icon" style="width:2.5em;height:2.5em;"
-                           :class="{ 'active-color': current(item) }"></navIcon>
-                </div>
-                <a-avatar v-else :size="37" shape="square" :src="renderIcon(item.icon)"></a-avatar>
+          padding-top: 0;padding-bottom: 0;position:relative;" @click.stop
+       @contextmenu.stop="showMenu">
+    <div style="width: 67px;overflow-x: hidden">
+      <div :id="sortId" class="scroller-wrapper hide-scrollbar xt-container"
+           style="width: 80px;overflow-y:auto;max-height: 100%;display: flex;flex-direction: column;overflow-x: hidden;align-items: flex-start">
+        <a-tooltip v-for="item in sideNavigationList" :title="item.name" placement="right">
+          <div :key="item.name" @click.stop="clickNavigation(item)">
+            <div :class="{ 'active-back': current(item) }" class="item-content item-nav" @contextmenu.stop="enableDrag">
+              <div v-if="item.type === 'systemApp'" class="icon-color">
+                <navIcon :class="{ 'active-color': current(item) }" :icon="item.icon" class="icon-color xt-text"
+                         style="width:2.5em;height:2.5em;"></navIcon>
               </div>
+              <a-avatar v-else :size="37" :src="renderIcon(item.icon)" shape="square"></a-avatar>
             </div>
-          </a-tooltip>
-        </div>
+          </div>
+        </a-tooltip>
       </div>
-
     </div>
 
+  </div>
 
-  <a-drawer :contentWrapperStyle="{ backgroundColor: '#212121', height: '216px' }" class="drawer" :closable="true"
-    placement="bottom" :visible="menuVisible" @close="onClose">
+
+  <a-drawer :closable="true" :contentWrapperStyle="{ backgroundColor: '#212121', height: '216px' }" :visible="menuVisible"
+            class="drawer" placement="bottom" @close="onClose">
     <a-row>
       <a-col>
-        <div @click="editNavigation" class="relative btn">
-          <Icon style="font-size: 3em" icon="tianjia1"></Icon>
+        <div class="relative btn" @click="editNavigation">
+          <Icon icon="tianjia1" style="font-size: 3em"></Icon>
           <div><span>编辑导航</span></div>
           <GradeSmallTip powerType="bottomNavigation" @closeDrawer="closeDrawer"></GradeSmallTip>
         </div>
-        <div @click="clickNavigation(item)" class="btn" v-for="item in builtInFeatures" :key="item.name">
-          <navIcon style="font-size: 3em" :icon="item.icon"></navIcon>
+        <div v-for="item in builtInFeatures" :key="item.name" class="btn" @click="clickNavigation(item)">
+          <navIcon :icon="item.icon" style="font-size: 3em"></navIcon>
           <div><span>{{ item.name }}</span></div>
         </div>
       </a-col>
@@ -45,22 +46,23 @@
   </a-drawer>
 
   <transition name="fade">
-    <div class="fixed inset-0 home-blur" style="z-index: 999" v-if="quick">
+    <div v-if="quick" class="fixed inset-0 home-blur" style="z-index: 999">
       <EditNavigation @setQuick="setQuick"></EditNavigation>
     </div>
   </transition>
 </template>
 
 <script>
-import { mapWritableState } from 'pinia';
+import {mapWritableState} from 'pinia';
 import EditNavigation from './bottomPanel/EditNavigation.vue';
-import { navStore } from "../store/nav";
-import { cardStore } from '../store/card';
+import {navStore} from "../store/nav";
+import {cardStore} from '../store/card';
 import Sortable from 'sortablejs';
-import { message } from 'ant-design-vue';
+import {message} from 'ant-design-vue';
 import routerTab from '../js/common/routerTab'
-import { Icon as navIcon } from '@iconify/vue';
+import {Icon as navIcon} from '@iconify/vue';
 import {renderIcon} from '../js/common/common'
+
 export default {
   name: 'SidePanel',
   components: {
@@ -72,9 +74,9 @@ export default {
       menuVisible: false,
       quick: false,
       delNav: false,
-      sortable:null,
-      dragEnable:false,
-      dragEvent:null
+      sortable: null,
+      dragEnable: false,
+      dragEvent: null
     }
   },
   props: {
@@ -86,17 +88,20 @@ export default {
     // 排序的方法
     sortNavigationList: {
       type: Function,
-      default: () => {}
+      default: () => {
+      }
     },
     //要排序的容器id
     sortId: {
       type: Function,
-      default: () => {}
+      default: () => {
+      }
     },
     //删除的方法
     delNavList: {
       type: Function,
-      default: () => {}
+      default: () => {
+      }
     },
     // 其他开关1
     otherSwitch1: {
@@ -125,43 +130,43 @@ export default {
     }
   },
   computed: {
-    ...mapWritableState(navStore, ['builtInFeatures','mainNavigationList']),
+    ...mapWritableState(navStore, ['builtInFeatures', 'mainNavigationList']),
     ...mapWritableState(cardStore, ['routeParams']),
   },
   mounted() {
     this.colDrop()
-  // this.scrollNav('sideContent', 'scrollTop')
+    // this.scrollNav('sideContent', 'scrollTop')
   },
   watch: {
-    delZone(val){
+    delZone(val) {
       this.delNav = val
     }
   },
   methods: {
     renderIcon,
-    disableDrag(){
-      if(this.sortable){
-        document.removeEventListener('click',this.disableDrag)
+    disableDrag() {
+      if (this.sortable) {
+        document.removeEventListener('click', this.disableDrag)
         this.sortable.destroy()
-        this.sortable=null
+        this.sortable = null
         message.info('已中止侧栏调整')
         return
       }
     },
-    enableDrag(){
-      if(this.sortable){
+    enableDrag() {
+      if (this.sortable) {
         return
       }
       let that = this
       let drop = document.getElementById(this.sortId)
-      document.addEventListener('click',this.disableDrag)
+      document.addEventListener('click', this.disableDrag)
 
-      this.sortable=Sortable.create(drop,{
+      this.sortable = Sortable.create(drop, {
         sort: true,
         animation: 150,
         onStart: function (event) {
           let delIcon = document.getElementById('delIcon2')
-          that.$emit('getDelIcon',true)
+          that.$emit('getDelIcon', true)
           this.delNav = true
           if (this.delNav) {
             delIcon.ondragover = function (ev) {
@@ -183,7 +188,7 @@ export default {
               sumList = that.otherNavList1
             } else if (!that.otherSwitch1 && that.otherSwitch2) {
               sumList = that.otherNavList2
-            } else{
+            } else {
               message.info(`导航栏中至少保留一个「${oneNav.name}」`)
               // console.log('不可删除')
               return
@@ -191,9 +196,9 @@ export default {
             that.delNavigation(sumList, oneNav, event.oldIndex, that.delNavList)
           }
         },
-        onUpdate:function(event){
+        onUpdate: function (event) {
           let newIndex = event.newIndex,
-            oldIndex = event.oldIndex
+              oldIndex = event.oldIndex
           let newItem = drop.children[newIndex]
           let oldItem = drop.children[oldIndex]
 
@@ -208,14 +213,14 @@ export default {
           that.sortNavigationList(event)
         },
         onEnd: function (event) {
-          that.$emit('getDelIcon',false)
+          that.$emit('getDelIcon', false)
         }
       })
       message.success('开始拖拽调整侧边栏。调整完毕后点击外部即可终止。')
     },
     current(item) {
-      if(item.tab){
-        return routerTab.isActive(item.tab,1)
+      if (item.tab) {
+        return routerTab.isActive(item.tab, 1)
       }
       if (item.data?.name) {
         return this.$route.params.name === item.data.name
@@ -240,7 +245,7 @@ export default {
             if (this.$route.path === '/status') {
               this.$router.go(-1)
             } else {
-              this.$router.push({ path: '/status' })
+              this.$router.push({path: '/status'})
             }
           } else if (item.data) {
             this.$router.push({
@@ -248,7 +253,7 @@ export default {
               params: item.data
             })
           } else {
-            this.$router.push({ name: item.event })
+            this.$router.push({name: item.event})
           }
           break
         case 'coolApp':
@@ -261,7 +266,7 @@ export default {
           require('electron').shell.openPath(item.path)
           break
         case 'lightApp':
-          ipc.send('executeAppByPackage', { package: item.package })
+          ipc.send('executeAppByPackage', {package: item.package})
           break
         default:
           require('electron').shell.openPath(item.path)
@@ -283,20 +288,20 @@ export default {
       this.menuVisible = false
     },
     showMenu() {
-      this.routeParams.url && ipc.send('hideTableApp', { app: JSON.parse(JSON.stringify(this.routeParams)) })
+      this.routeParams.url && ipc.send('hideTableApp', {app: JSON.parse(JSON.stringify(this.routeParams))})
       this.menuVisible = true
     },
     setQuick() {
       this.quick = false
     },
     onClose() {
-      this.routeParams.url && this.$router.push({ name: 'app', params: this.routeParams })
+      this.routeParams.url && this.$router.push({name: 'app', params: this.routeParams})
       this.menuVisible = false
     },
-    colDrop () {
+    colDrop() {
 
     },
-    delNavigation (sumList, oneNav, index, delMethod) {
+    delNavigation(sumList, oneNav, index, delMethod) {
       if (!this.mainNavigationList.find(item => item.name === oneNav.name)) {
         //如果不是必须的
         delMethod(index)
@@ -314,12 +319,11 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 
 :deep(.icon) {
   fill: var(--secondary-text);
 }
-
 
 
 .item:hover {
@@ -352,19 +356,23 @@ export default {
 
 .item-nav:hover {
   background: var(--active-bg);
+
   .icon-color {
     :deep(.icon) {
-      fill: rgba(255,255,255,0.9) !important;
+      fill: rgba(255, 255, 255, 0.9) !important;
     }
   }
 }
-.icon-color{
+
+.icon-color {
   height: 34px;
   width: 34px;
 }
+
 .icon-color:hover {
   color: rgba(255, 255, 255, 0.8) !important;
 }
+
 //.dark-model .active-back{
 //  background: var(--active-secondary-bg) !important;
 //}
@@ -373,9 +381,11 @@ export default {
 
   // color: var(--primary-text) !important;
   background: var(--active-bg);
+
   :deep(.icon) {
-    fill: rgba(255,255,255,0.9) !important;
+    fill: rgba(255, 255, 255, 0.9) !important;
   }
+
   //:deep(.icon) {
   //  fill: var(white) !important;
   //}
@@ -414,7 +424,7 @@ export default {
   }
 }
 
-.hide-scrollbar{
+.hide-scrollbar {
   &::-webkit-scrollbar {
     display: none; /* Chrome Safari */
   }

@@ -1,41 +1,41 @@
 <template>
-  <div class="dialog-emoji" :class="env?.isH5?'dialog-emoji-h5':''" v-if="type === 'dropdown'">
+  <div v-if="type === 'dropdown'" :class="env?.isH5?'dialog-emoji-h5':''" class="dialog-emoji">
     <div class="face-list collapse">
       <ul class="face-list-collapse">
         <li
-          class="face-list-item "
-          v-for="(childrenItem, childrenIndex) in emojiCollapseList"
-          :key="childrenIndex"
-          @click.stop="select(childrenItem)"
+            v-for="(childrenItem, childrenIndex) in emojiCollapseList"
+            :key="childrenIndex"
+            class="face-list-item "
+            @click.stop="select(childrenItem)"
         >
-          <img :src="emojiUrl + emojiMap[childrenItem]" />
+          <img :src="emojiUrl + emojiMap[childrenItem]"/>
         </li>
       </ul>
       <div class="face-list-button" @click.stop="isCollapse = !isCollapse">
-        <i class="icon" :class="[isCollapse ? 'icon-expand' : 'icon-collapse']"></i>
+        <i :class="[isCollapse ? 'icon-expand' : 'icon-collapse']" class="icon"></i>
       </div>
     </div>
-    <ul class="face-list face-list-expand" v-show="!isCollapse">
+    <ul v-show="!isCollapse" class="face-list face-list-expand">
       <li
-        class="face-list-item"
-        v-for="(childrenItem, childrenIndex) in emojiExpandList"
-        :key="childrenIndex"
-        @click.stop="select(childrenItem)"
+          v-for="(childrenItem, childrenIndex) in emojiExpandList"
+          :key="childrenIndex"
+          class="face-list-item"
+          @click.stop="select(childrenItem)"
       >
-        <img :src="emojiUrl + emojiMap[childrenItem]" />
+        <img :src="emojiUrl + emojiMap[childrenItem]"/>
       </li>
     </ul>
   </div>
   <div v-if="type === 'content'" class="emoji-content">
-    <ul class="emoji-react" ref="container">
+    <ul ref="container" class="emoji-react">
       <li
-        class="emoji-react-item"
-        v-for="(val, key) in handleEmojiReact(message)"
-        :key="key"
-        v-show="val && val?.length"
-        @click.stop="select(key)"
+          v-for="(val, key) in handleEmojiReact(message)"
+          v-show="val && val?.length"
+          :key="key"
+          class="emoji-react-item"
+          @click.stop="select(key)"
       >
-        <img :src="emojiUrl + emojiMap[key]" />
+        <img :src="emojiUrl + emojiMap[key]"/>
         <div class="emoji-react-item-content">
           <span>{{ handleEmojiReactItem(val) }}</span>
         </div>
@@ -44,12 +44,13 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, watch, reactive, toRefs, computed, ref, onMounted, nextTick } from 'vue';
+import {computed, defineComponent, reactive, ref, toRefs, watch} from 'vue';
 import TIM from '../../../../TUICore/tim';
-import { emojiUrl, emojiMap, emojiName } from '../utils/emojiMap';
-import { JSONToObject } from '../utils/utils';
+import {emojiMap, emojiName, emojiUrl} from '../utils/emojiMap';
+import {JSONToObject} from '../utils/utils';
 import TUIChat from '../index.vue';
-import { Message } from 'tim-js-sdk';
+import {Message} from 'tim-js-sdk';
+
 export default defineComponent({
   props: {
     message: {
@@ -67,7 +68,7 @@ export default defineComponent({
   },
   emits: ['handleCollapse'],
   setup(props: any, ctx: any) {
-    const { TUIServer } = TUIChat;
+    const {TUIServer} = TUIChat;
     const data = reactive({
       message: {} as Message,
       emojiUrl,
@@ -141,23 +142,23 @@ export default defineComponent({
     };
 
     watch(
-      () => props.message,
-      (newVal: any, oldVal: any) => {
-        data.message = props.message;
-        if (newVal?.conversationID !== oldVal?.conversationID) {
-          handleAllMemberList(newVal);
-        }
-      },
-      { deep: true, immediate: true }
+        () => props.message,
+        (newVal: any, oldVal: any) => {
+          data.message = props.message;
+          if (newVal?.conversationID !== oldVal?.conversationID) {
+            handleAllMemberList(newVal);
+          }
+        },
+        {deep: true, immediate: true}
     );
 
     watch(
-      ()=>data.isCollapse,
-      (newVal, oldVal) => {
-        if (newVal === oldVal) return;
-        if (!data?.env?.isH5) return;
-        ctx.emit('handleCollapse', newVal);
-      }
+        () => data.isCollapse,
+        (newVal, oldVal) => {
+          if (newVal === oldVal) return;
+          if (!data?.env?.isH5) return;
+          ctx.emit('handleCollapse', newVal);
+        }
     )
 
     return {
@@ -175,6 +176,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import url('../../../styles/common.scss');
 @import url('../../../styles/icon.scss');
+
 .dialog-emoji {
   margin-left: 2px;
   background: #ffffff;
@@ -187,22 +189,26 @@ export default defineComponent({
   word-break: keep-all;
   top: 30px;
   border-radius: 8px;
-  &-h5{
+
+  &-h5 {
     margin: 0 5px;
     border: none;
     border-bottom: 1px solid #e0e0e0;
     box-shadow: none;
     border-radius: 10px 10px 0 0;
   }
+
   .collapse {
     padding: 2px 0px;
   }
+
   .face-list {
     display: flex;
     overflow: hidden;
     flex-wrap: nowrap;
     flex-direction: row;
     cursor: pointer;
+
     &-collapse {
       display: flex;
       overflow: hidden;
@@ -211,6 +217,7 @@ export default defineComponent({
       align-items: center;
       flex: 1;
     }
+
     &-expand {
       border-top: 1px solid #e0e0e0;
       display: flex;
@@ -219,22 +226,26 @@ export default defineComponent({
       max-height: 90px;
       overflow-y: auto;
     }
+
     &-button {
       padding: 5px 7px;
       height: 20px;
       line-height: 20px;
       text-align: center;
       align-items: center;
+
       i {
         text-align: center;
       }
     }
+
     li {
       margin: 4px;
       display: flex;
       flex-direction: row;
       align-items: center;
       flex-direction: row;
+
       img {
         width: 22px;
         height: 22px;
@@ -242,6 +253,7 @@ export default defineComponent({
     }
   }
 }
+
 .emoji-content {
   .emoji-react {
     margin-top: 3px;
@@ -249,6 +261,7 @@ export default defineComponent({
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
+
     &-item {
       width: fit-content;
       height: 20px;
@@ -260,17 +273,20 @@ export default defineComponent({
       text-overflow: ellipsis;
       max-width: 200px;
       display: flex;
+
       img {
         width: 16px;
         height: 16px;
         padding: 2px;
       }
+
       &-content {
         overflow: hidden;
         text-overflow: ellipsis;
         font-size: 10px;
         color: #999999;
         align-self: center;
+
         span {
           margin: 2px;
           font-size: 10px;

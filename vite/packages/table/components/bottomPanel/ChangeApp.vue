@@ -1,15 +1,15 @@
 <template>
   <div>
     <div
-      class="m-3"
-      style="width: 320px; margin: auto; text-align: center; margin-top: 1em"
+        class="m-3"
+        style="width: 320px; margin: auto; text-align: center; margin-top: 1em"
     >
       <HorizontalPanel
-        class="no-drag"
-        @click.stop
-        @changed="this.key = Date.now()"
-        :navList="tabs"
-        v-model:selectType="currentTab"
+          v-model:selectType="currentTab"
+          :navList="tabs"
+          class="no-drag"
+          @changed="this.key = Date.now()"
+          @click.stop
       ></HorizontalPanel>
     </div>
   </div>
@@ -20,24 +20,24 @@
   </div>
   <div v-else>
     <div style="max-width: 1200px; margin: auto">
-      <RunningApps />
+      <RunningApps/>
     </div>
   </div>
 
   <div class="p-5 text-base no-drag">
     <div
-      class="w-96 justify-between flex flex-row absolute bottom-8 left-1/2 -translate-x-1/2"
+        class="w-96 justify-between flex flex-row absolute bottom-8 left-1/2 -translate-x-1/2"
     >
       <div
-        style="width: 56px; height: 56px"
-        class="flex justify-center items-center"
-        v-for="item in listData"
+          v-for="item in listData"
+          class="flex justify-center items-center"
+          style="width: 56px; height: 56px"
       >
         <Icon
-          :icon="item.icon"
-          style="width: 32px; height: 32px; color: white"
-          class="pointer"
-          @click.stop="clickListItem(item)"
+            :icon="item.icon"
+            class="pointer"
+            style="width: 32px; height: 32px; color: white"
+            @click.stop="clickListItem(item)"
         ></Icon>
       </div>
     </div>
@@ -46,15 +46,15 @@
 
 <script>
 import navigationData from "../../js/data/tableData";
-import { appsStore } from "../../store/apps";
-import { mapWritableState } from "pinia";
+import {appsStore} from "../../store/apps";
+import {mapWritableState} from "pinia";
 import ScreenManage from "./ScreenManage.vue";
 import RunningApps from "./RunningApps.vue";
 import HorizontalPanel from "../HorizontalPanel.vue";
 
 export default {
   name: "ChangeApp",
-  components: { HorizontalPanel, RunningApps, ScreenManage },
+  components: {HorizontalPanel, RunningApps, ScreenManage},
   data() {
     return {
       tabs: [

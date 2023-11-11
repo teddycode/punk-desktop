@@ -1,53 +1,53 @@
 <template>
   <div class="message-video">
     <div
-      class="message-video-box"
-      :class="[!data.progress && data.message.status === 'success' && isH5 && 'message-video-cover']"
-      @click="toggleShow"
-      ref="skeleton"
+        ref="skeleton"
+        :class="[!data.progress && data.message.status === 'success' && isH5 && 'message-video-cover']"
+        class="message-video-box"
+        @click="toggleShow"
     >
       <img
-        class="message-img"
-        v-if="(data.progress && poster) || (isH5 && poster)"
-        :class="[isWidth ? 'isWidth' : 'isHeight']"
-        :src="poster"
+          v-if="(data.progress && poster) || (isH5 && poster)"
+          :class="[isWidth ? 'isWidth' : 'isHeight']"
+          :src="poster"
+          class="message-img"
       />
       <video
-        class="message-img video-h5-uploading"
-        v-else-if="isH5"
-        :src="data.url + '#t=0.1'"
-        :poster="data.url"
-        preload="auto"
-        muted
-        ref="video"
+          v-else-if="isH5"
+          ref="video"
+          :poster="data.url"
+          :src="data.url + '#t=0.1'"
+          class="message-img video-h5-uploading"
+          muted
+          preload="auto"
       ></video>
       <video
-        class="message-img video-web"
-        v-else-if="!data.progress && !isH5"
-        :src="data.url"
-        controls
-        preload="metadata"
-        :poster="poster"
-        ref="video"
+          v-else-if="!data.progress && !isH5"
+          ref="video"
+          :poster="poster"
+          :src="data.url"
+          class="message-img video-web"
+          controls
+          preload="metadata"
       ></video>
-      <div class="progress" v-if="data.progress">
+      <div v-if="data.progress" class="progress">
         <progress :value="data.progress" max="1"></progress>
       </div>
     </div>
-    <div class="dialog-video" v-if="show && isH5" @click.self="toggleShow">
+    <div v-if="show && isH5" class="dialog-video" @click.self="toggleShow">
       <header>
         <i class="icon icon-close" @click.stop="toggleShow"></i>
       </header>
-      <div class="dialog-video-box" :class="[isH5 ? 'dialog-video-h5' : '']" @click.self="toggleShow">
-        <video :class="[isWidth ? 'isWidth' : 'isHeight']" :src="data.url" controls autoplay></video>
+      <div :class="[isH5 ? 'dialog-video-h5' : '']" class="dialog-video-box" @click.self="toggleShow">
+        <video :class="[isWidth ? 'isWidth' : 'isHeight']" :src="data.url" autoplay controls></video>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, watchEffect, reactive, toRefs, computed, nextTick, ref, watch } from 'vue';
-import { handleSkeletonSize } from '../utils/utils';
+import {computed, defineComponent, nextTick, reactive, ref, toRefs, watch, watchEffect} from 'vue';
+import {handleSkeletonSize} from '../utils/utils';
 
 export default defineComponent({
   props: {
@@ -71,7 +71,7 @@ export default defineComponent({
     const skeleton = ref();
     const video = ref();
     const isWidth = computed(() => {
-      const { snapshotWidth = 0, snapshotHeight = 0 } = (data.data as any)?.message?.payload;
+      const {snapshotWidth = 0, snapshotHeight = 0} = (data.data as any)?.message?.payload;
       return snapshotWidth >= snapshotHeight;
     });
     const transparentPosterUrl = 'https://web.sdk.qcloud.com/im/assets/images/transparent.png';
@@ -91,20 +91,20 @@ export default defineComponent({
         video.setAttribute('src', url);
         video.setAttribute('preload', 'auto');
         video.addEventListener(
-          'loadeddata',
-          function () {
-            let canvas = document.createElement('canvas'),
-              width = video.videoWidth, //canvas的尺寸和图片一样
-              height = video.videoHeight;
-            canvas.width = width;
-            canvas.height = height;
-            (canvas as any).getContext('2d').drawImage(video, 0, 0, width, height); //绘制canvas
-            dataURL = canvas.toDataURL('image/jpeg'); //转换为base64
-            data.posterWidth = width;
-            data.posterHeight = height;
-            resolve(dataURL);
-          },
-          { once: true }
+            'loadeddata',
+            function () {
+              let canvas = document.createElement('canvas'),
+                  width = video.videoWidth, //canvas的尺寸和图片一样
+                  height = video.videoHeight;
+              canvas.width = width;
+              canvas.height = height;
+              (canvas as any).getContext('2d').drawImage(video, 0, 0, width, height); //绘制canvas
+              dataURL = canvas.toDataURL('image/jpeg'); //转换为base64
+              data.posterWidth = width;
+              data.posterHeight = height;
+              resolve(dataURL);
+            },
+            {once: true}
         );
       });
     };
@@ -115,10 +115,10 @@ export default defineComponent({
         return await getVideoBase64(data.url);
       } else {
         return (
-          (data.snapshotUrl !== transparentPosterUrl && data.snapshotUrl) ||
-          (data?.message?.payload?.snapshotUrl !== transparentPosterUrl && data?.message?.payload?.snapshotUrl) ||
-          (data?.message?.payload?.thumbUrl !== transparentPosterUrl && data?.message?.payload?.thumbUrl) ||
-          (await getVideoBase64(data.url))
+            (data.snapshotUrl !== transparentPosterUrl && data.snapshotUrl) ||
+            (data?.message?.payload?.snapshotUrl !== transparentPosterUrl && data?.message?.payload?.snapshotUrl) ||
+            (data?.message?.payload?.thumbUrl !== transparentPosterUrl && data?.message?.payload?.thumbUrl) ||
+            (await getVideoBase64(data.url))
         );
       }
     };
@@ -132,7 +132,7 @@ export default defineComponent({
         const max = props.isH5 ? Math.min(containerWidth - 172, 300) : 300;
         let size;
         if (!(data.data as any).progress) {
-          let { snapshotWidth = 0, snapshotHeight = 0, snapshotUrl } = data.data as any;
+          let {snapshotWidth = 0, snapshotHeight = 0, snapshotUrl} = data.data as any;
           if (snapshotWidth === 0 || snapshotHeight === 0) return;
           if (snapshotUrl === transparentPosterUrl) {
             snapshotWidth = data.posterWidth;
@@ -152,12 +152,12 @@ export default defineComponent({
     });
 
     watch(
-      () => (data.data as any)?.progress,
-      (newVal, oldVal) => {
-        if (!newVal && oldVal) {
-          ctx.emit('uploading');
+        () => (data.data as any)?.progress,
+        (newVal, oldVal) => {
+          if (!newVal && oldVal) {
+            ctx.emit('uploading');
+          }
         }
-      }
     );
 
     return {
@@ -175,13 +175,16 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import url('../../../styles/common.scss');
 @import url('../../../styles/icon.scss');
+
 .message-video {
   position: relative;
   display: flex;
   justify-content: center;
   overflow: hidden;
+
   &-box {
     max-width: min(calc(100vw - 180px), 300px);
+
     video {
       max-width: min(calc(100vw - 180px), 300px);
       max-height: min(calc(100vw - 180px), 300px);
@@ -189,6 +192,7 @@ export default defineComponent({
       height: inherit;
       border-radius: 10px;
     }
+
     img {
       max-width: min(calc(100vw - 180px), 300px);
       max-height: min(calc(100vw - 180px), 300px);
@@ -196,14 +200,17 @@ export default defineComponent({
       height: inherit;
       border-radius: 10px;
     }
+
     img[src=''],
     img:not([src]) {
       opacity: 0;
     }
   }
+
   &-cover {
     display: inline-block;
     position: relative;
+
     &::before {
       position: absolute;
       z-index: 1;
@@ -219,6 +226,7 @@ export default defineComponent({
       margin: auto;
       transform: translate(5px, 0px);
     }
+
     video {
       max-width: min(calc(100vw - 180px), 300px);
       max-height: min(calc(100vw - 180px), 300px);
@@ -227,6 +235,7 @@ export default defineComponent({
       border-radius: 10px;
     }
   }
+
   .progress {
     position: absolute;
     box-sizing: border-box;
@@ -240,6 +249,7 @@ export default defineComponent({
     display: flex;
     align-items: center;
     flex: 1;
+
     progress {
       color: #006eff;
       appearance: none;
@@ -247,14 +257,17 @@ export default defineComponent({
       background: rgba(#ffffff, 1);
       width: 100%;
       height: 0.5rem;
+
       &::-webkit-progress-value {
         background-color: #006eff;
         border-radius: 0.25rem;
       }
+
       &::-webkit-progress-bar {
         border-radius: 0.25rem;
         background: rgba(#ffffff, 1);
       }
+
       &::-moz-progress-bar {
         color: #006eff;
         background: #006eff;
@@ -263,6 +276,7 @@ export default defineComponent({
     }
   }
 }
+
 .dialog-video {
   position: fixed;
   z-index: 12;
@@ -273,6 +287,7 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   align-items: center;
+
   header {
     display: flex;
     justify-content: flex-end;
@@ -281,6 +296,7 @@ export default defineComponent({
     box-sizing: border-box;
     padding: 10px 10px;
   }
+
   &-box {
     display: flex;
     flex: 1;
@@ -289,12 +305,14 @@ export default defineComponent({
     box-sizing: border-box;
     justify-content: center;
     align-items: center;
+
     video {
       max-width: 100%;
       max-height: 100%;
     }
   }
 }
+
 .dialog-video-h5 {
   width: 100%;
   height: 100%;
@@ -305,6 +323,7 @@ export default defineComponent({
 .isWidth {
   width: 100%;
 }
+
 .isHeight {
   height: 100%;
 }

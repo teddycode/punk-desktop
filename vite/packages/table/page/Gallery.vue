@@ -1,7 +1,9 @@
 <template>
-  <div id="galleryContainer"  style="text-align: center;display: flex;height: 100%">
-    <SecondPanel :search="true" :goHome="goHome" :menus="menus" :gallery="gallery" style="padding: 1em; text-align: left; "  @changeTab="changeTab"></SecondPanel>
-    <div id="parentScroller" style="flex-grow: 1;flex-shrink: 1;margin-left: 1em;display: flex;flex-direction: column;height: 100%">
+  <div id="galleryContainer" style="text-align: center;display: flex;height: 100%">
+    <SecondPanel :gallery="gallery" :goHome="goHome" :menus="menus" :search="true"
+                 style="padding: 1em; text-align: left; " @changeTab="changeTab"></SecondPanel>
+    <div id="parentScroller"
+         style="flex-grow: 1;flex-shrink: 1;margin-left: 1em;display: flex;flex-direction: column;height: 100%">
       <router-view></router-view>
     </div>
   </div>
@@ -9,9 +11,6 @@
 
 
 <script>
-import justifiedGallery from 'justifiedGallery'
-
-
 import VueCustomScrollbar from '../../../src/components/vue-scrollbar.vue'
 import GradeSmallTip from "../components/GradeSmallTip.vue";
 import SecondPanel from '../components/SecondPanel.vue'
@@ -29,21 +28,21 @@ export default {
       {
         index: 'm',
         title: '我的收藏',
-        icon:'xihuan',
+        icon: 'xihuan',
         route:
-          {
-            name: 'my'
-          }
+            {
+              name: 'my'
+            }
       },
       {
         title: '必应壁纸',
         index: 'b',
-        icon:'bing',
+        icon: 'bing',
         route:
-          {
-            name: 'bing',
+            {
+              name: 'bing',
 
-          }
+            }
       },
       // {
       //   title: 'Wallheaven',
@@ -55,30 +54,30 @@ export default {
       //     }
       // },
       {
-        index:'p',
-        title:'拾光壁纸',
-        icon:'wallpaper',
-        route:{
-          name:'pickingPaper'
+        index: 'p',
+        title: '拾光壁纸',
+        icon: 'wallpaper',
+        route: {
+          name: 'pickingPaper'
         }
       },
       {
         index: 'l',
         title: '动态壁纸',
-        icon:'a-zujiantianchong_huaban1fuben7',
+        icon: 'a-zujiantianchong_huaban1fuben7',
         route:
-          {
-            name: 'lively'
-          }
+            {
+              name: 'lively'
+            }
       },
       {
         index: 's',
         title: '设置',
-        icon:'shezhi',
+        icon: 'shezhi',
         route:
-          {
-            name: 'papersSetting'
-          }
+            {
+              name: 'papersSetting'
+            }
       },
 
     ],
@@ -94,10 +93,10 @@ export default {
     },
 
     images: [],//当前相册图片
-    gallery:true,
+    gallery: true,
   }),
-  async mounted () {
-    $('#galleryContainer').on('touchend',(e)=>{
+  async mounted() {
+    $('#galleryContainer').on('touchend', (e) => {
       e.stopPropagation();
     })
     // this.$router.push({name:'my'})
@@ -111,15 +110,15 @@ export default {
 
   },
   methods: {
-    changeTab (args) {
+    changeTab(args) {
       this.$router.push(args.menu.route)
       this.tab = args.index
     },
-    goLock () {
+    goLock() {
       this.$router.push('/lock')
     },
 
-    play () {
+    play() {
       window.Spotlight.show(this.bingImages, {
         control: 'autofit,page,fullscreen,close,zoom,prev,next',
         play: true,
@@ -129,9 +128,9 @@ export default {
         title: false
       })
     },
-    goHome(){
+    goHome() {
       this.$router.push({
-        name:'setting'
+        name: 'setting'
       })
     }
   },
@@ -139,16 +138,19 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import 'justifiedGallery/dist/css/justifiedGallery.min.css';
-.float-left{
+
+.float-left {
   width: 175px;
-  height:auto;
+  height: auto;
   padding: 0 1em;
   border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
+
 .menu {
   &:hover {
     background: #696969;
   }
+
   width: 8em;
   padding-left: 1em;
   font-size: 1.3em;
@@ -162,11 +164,11 @@ export default {
 
 <style>
 .s-icon svg {
- filter: none  !important;
+  filter: none !important;
 }
 
 .s-text {
-    text-shadow: none;
+  text-shadow: none;
 }
 
 .spl-pane > * {
@@ -175,10 +177,10 @@ export default {
   transition: all 4s ease-out, transform 3s linear;
 }
 
-.spl-pane>*{
-  top:0 !important;
+.spl-pane > * {
+  top: 0 !important;
   left: 0 !important;
-  width:100% !important;
+  width: 100% !important;
   height: 100% !important;
   object-fit: cover !important;
 }

@@ -1,11 +1,12 @@
 <template>
   <XtTitle v-if="text">{{ text }}</XtTitle>
-  <colorPicker v-model:hex="colorData" @click="colorClick()" />
+  <colorPicker v-model:hex="colorData" @click="colorClick()"/>
 </template>
 
 <script>
 import ColorPicker from "colorpicker-v3";
 import "colorpicker-v3/style.css";
+
 export default {
   components: {
     ColorPicker,
@@ -50,6 +51,7 @@ export default {
 :deep(.zs-color-picker-btn .zs-color-picker-btn-color) {
   border: none !important;
 }
+
 :deep(.zs-color-picker-panel__visible) {
   z-index: 99999 !important;
 }

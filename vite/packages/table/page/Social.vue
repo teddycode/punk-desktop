@@ -1,6 +1,6 @@
 <template>
   <div style="display: flex;height: 100%">
-    <SecondPanel   @change-tab="changeTab" :menus="tabs"  ></SecondPanel>
+    <SecondPanel :menus="tabs" @change-tab="changeTab"></SecondPanel>
     <div style="flex-grow: 1;flex-shrink: 1;height: 100%;display: flex;flex-direction: column;overflow: hidden;">
       <router-view>
       </router-view>
@@ -21,78 +21,78 @@ import browser from '../js/common/browser'
 
 export default {
   name: 'Social',
-  components: { SecondPanel, GroupPanel, GradePanel, ComPanel, ComActionPanel },
-  data () {
+  components: {SecondPanel, GroupPanel, GradePanel, ComPanel, ComActionPanel},
+  data() {
     return {
-      tabs:[
+      tabs: [
         {
           index: 'com',
           title: '版本历史',
-          icon:'xiaoxi',
+          icon: 'xiaoxi',
           route:
-            {
-              name: 'com'
-            }
+              {
+                name: 'com'
+              }
         },
         {
           title: '我的',
           index: 'user',
-          icon:'chengyuan',
+          icon: 'chengyuan',
           route:
-            {
-              name: 'socialMy',
-            }
+              {
+                name: 'socialMy',
+              }
         },
         {
           title: '邀请',
           index: 'invite',
-          icon:'tianjiachengyuan',
+          icon: 'tianjiachengyuan',
           route:
-            {
-              name: 'invite',
-            }
+              {
+                name: 'invite',
+              }
         },
-       {
-         title: '等级权益',
-           index: 'grade',
-         icon:'star',
-         route:
-         {
-           name: 'grade',
-         }
-       },
-       {
-        title:'消息',
-        index:'message',
-        icon:'message',
-        route:{
-          name:'message'
-        }
-       },
-       {
-        title:'榜单',
-        index:'rank',
-        icon:'trophy',
-        route:{
-          name:'rank'
-        }
-       },
-      //  {
-      //   title:'推广中心',
-      //   index:'promotion',
-      //   icon:'trophy',
-      //   route:{
-      //     name:'promotion'
-      //   }
-      //  },
-      //  {
-      //   title:'账单(开发中)',
-      //   index:'bill',
-      //   icon:'zhangdan',
-      //   route:{
-      //     name:'bill',
-      //   }
-      //  }
+        {
+          title: '等级权益',
+          index: 'grade',
+          icon: 'star',
+          route:
+              {
+                name: 'grade',
+              }
+        },
+        {
+          title: '消息',
+          index: 'message',
+          icon: 'message',
+          route: {
+            name: 'message'
+          }
+        },
+        {
+          title: '榜单',
+          index: 'rank',
+          icon: 'trophy',
+          route: {
+            name: 'rank'
+          }
+        },
+        //  {
+        //   title:'推广中心',
+        //   index:'promotion',
+        //   icon:'trophy',
+        //   route:{
+        //     name:'promotion'
+        //   }
+        //  },
+        //  {
+        //   title:'账单(开发中)',
+        //   index:'bill',
+        //   icon:'zhangdan',
+        //   route:{
+        //     name:'bill',
+        //   }
+        //  }
       ],
 
 
@@ -106,38 +106,38 @@ export default {
 
     }
   },
-  async mounted () {
+  async mounted() {
 
   },
   methods: {
-    goUrl(url){
+    goUrl(url) {
       browser.openInInner(url)
     },
-    changeTab (data) {
+    changeTab(data) {
       this.$router.push(data.menu.route)
     },
   }
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 :deep(.muuri-item ) {
   /* any styles to card on the item container */
   /* only to override positioning */
   margin: 5px;
 
-.muuri-item-content {
-  /* card any markup you like */
-}
+  .muuri-item-content {
+    /* card any markup you like */
+  }
 
-&.muuri-item-dragging {
- }
+  &.muuri-item-dragging {
+  }
 
-&.muuri-item-releasing {
- }
+  &.muuri-item-releasing {
+  }
 
-&.muuri-item-hidden {
- }
+  &.muuri-item-hidden {
+  }
 }
 
 </style>

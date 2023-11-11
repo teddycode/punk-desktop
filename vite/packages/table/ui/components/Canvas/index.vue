@@ -1,7 +1,7 @@
 <template>
   <div>
     <template v-for="item in cards">
-      <slot name="item" :item="item" />
+      <slot :item="item" name="item"/>
     </template>
   </div>
 </template>

@@ -1,16 +1,34 @@
-const kdbxweb =require('kdbxweb');
+const kdbxweb = require('kdbxweb');
 //import { IconMap } from 'const/icon-map';
-const EntryModel=require('./entryModel');
+const EntryModel = require('./entryModel');
 //import { MenuItemModel } from 'models/menu/menu-item-model';
 //import { IconUrlFormat } from 'util/formatting/icon-url-format';
-const GroupCollection =require('./collections/groupCollection');
-const EntryCollection =require('./collections/entryCollection');
+const GroupCollection = require('./collections/groupCollection');
+const EntryCollection = require('./collections/entryCollection');
 
 const KdbxIcons = kdbxweb.Consts.Icons;
 
 const DefaultAutoTypeSequence = '{USERNAME}{TAB}{PASSWORD}{ENTER}';
 
 class GroupModel extends MenuItemModel {
+    static fromGroup(group, file, parentGroup) {
+        const model = new GroupModel();
+        model.setGroup(group, file, parentGroup);
+        return model;
+    }
+
+    static newGroup(group, file) {
+        const model = new GroupModel();
+        const grp = file.db.createGroup(group.group);
+        model.setGroup(grp, file, group);
+        model.group.times.update();
+        model.isJustCreated = true;
+        group.addGroup(model);
+        file.setModified();
+        file.reload();
+        return model;
+    }
+
     setGroup(group, file, parentGroup) {
         const isRecycleBin = group.uuid.equals(file.db.meta.recycleBinUuid);
         const id = file.subId(group.uuid.id);
@@ -30,7 +48,7 @@ class GroupModel extends MenuItemModel {
                 drag: !!parentGroup,
                 collapsible: !!parentGroup
             },
-            { silent: true }
+            {silent: true}
         );
         this.group = group;
         this.file = file;
@@ -72,7 +90,7 @@ class GroupModel extends MenuItemModel {
                 customIconId: this.group.customIcon ? this.group.customIcon.toString() : null,
                 expanded: this.group.expanded !== false
             },
-            { silent }
+            {silent}
         );
     }
 
@@ -334,24 +352,6 @@ class GroupModel extends MenuItemModel {
         }
         this.file.reload();
     }
-
-    static fromGroup(group, file, parentGroup) {
-        const model = new GroupModel();
-        model.setGroup(group, file, parentGroup);
-        return model;
-    }
-
-    static newGroup(group, file) {
-        const model = new GroupModel();
-        const grp = file.db.createGroup(group.group);
-        model.setGroup(grp, file, group);
-        model.group.times.update();
-        model.isJustCreated = true;
-        group.addGroup(model);
-        file.setModified();
-        file.reload();
-        return model;
-    }
 }
 
 GroupModel.defineModelProperties({
@@ -374,4 +374,4 @@ GroupModel.defineModelProperties({
     isJustCreated: false
 });
 
-module.exports=GroupModel
+module.exports = GroupModel

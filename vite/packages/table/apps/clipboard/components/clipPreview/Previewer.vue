@@ -17,15 +17,15 @@
                 <textCodeMirror :editorContent="previewContent.content" class="w-full"></textCodeMirror>
               </template>
               <template v-else>
-                <ClipCodemirror ref="myClipCodeMirror" class="w-full"
-                                :editorContent="previewContent.content"></ClipCodemirror>
+                <ClipCodemirror ref="myClipCodeMirror" :editorContent="previewContent.content"
+                                class="w-full"></ClipCodemirror>
               </template>
             </div>
             <!-- 底部tab切换 -->
             <div class="flex items-center justify-center">
-              <HorizontalPanel :navList="textType" v-model:selectType="defaultText"></HorizontalPanel>
-              <div class="flex ml-3 py-3 px-4 pointer items-center rounded-lg justify-center"
-                   style="background: var(--secondary-bg);" @click="openCodeLanguage" v-if="defaultText.name === 'code'"
+              <HorizontalPanel v-model:selectType="defaultText" :navList="textType"></HorizontalPanel>
+              <div v-if="defaultText.name === 'code'"
+                   class="flex ml-3 py-3 px-4 pointer items-center rounded-lg justify-center" style="background: var(--secondary-bg);" @click="openCodeLanguage"
               >
                 <span class="mr-5 type-right">
                   {{ language.title }}
@@ -41,7 +41,7 @@
               <PreviewDetail :preview-content="previewContent"></PreviewDetail>
             </div>
             <div class="flex  flex-col justify-between">
-              <ClipMenuList  :hidePreview="true"   :clip-item="previewContent"></ClipMenuList>
+              <ClipMenuList :clip-item="previewContent" :hidePreview="true"></ClipMenuList>
             </div>
           </div>
         </template>
@@ -60,16 +60,20 @@
 
             <!-- 内容预览区域 -->
             <div class="flex h-full w-full flex-col justify-center items-center" style="flex:1;height: 0">
-              <div class="clip-image rounded-lg  h-full mr-2 " style="position: relative;overflow: hidden;width: calc(100% - 20px)">
+              <div class="clip-image rounded-lg  h-full mr-2 "
+                   style="position: relative;overflow: hidden;width: calc(100% - 20px)">
                 <template v-if="editImage">
-                  <ImageEditor @abort="editImage=false" :filepath="previewContent.path"></ImageEditor>
+                  <ImageEditor :filepath="previewContent.path" @abort="editImage=false"></ImageEditor>
                 </template>
                 <div v-else>
                   <a-image :src="previewContent.path" alt="" class="w-full rounded-lg h-full object-cover"></a-image>
                 </div>
               </div>
               <div v-if="!editImage" class="m-2 text-center" style="position:absolute;bottom:10px">
-                <xt-button type="theme" @click="doEditImage"><EditOutlined /> 编辑</xt-button>
+                <xt-button type="theme" @click="doEditImage">
+                  <EditOutlined/>
+                  编辑
+                </xt-button>
               </div>
             </div>
           </div>
@@ -82,7 +86,7 @@
                   <PreviewDetail :preview-content="previewContent"></PreviewDetail>
                 </div>
                 <div class="flex  flex-col justify-between">
-                  <ClipMenuList :hidePreview="true"   :clip-item="previewContent"></ClipMenuList>
+                  <ClipMenuList :clip-item="previewContent" :hidePreview="true"></ClipMenuList>
                 </div>
               </div>
             </vue-custom-scrollbar>
@@ -115,7 +119,7 @@
                 </div>
                 <div class="flex  flex-col justify-between">
                   <div class="flex  flex-col justify-between">
-                    <ClipMenuList  :hidePreview="true"   :clip-item="previewContent"></ClipMenuList>
+                    <ClipMenuList :clip-item="previewContent" :hidePreview="true"></ClipMenuList>
                   </div>
                 </div>
               </div>
@@ -136,7 +140,8 @@
 
             <!-- 内容预览 -->
             <div class="flex h-full flex-col items-center justify-center">
-              <ClipVideo :playerProps="{ playbackRate: [0.5, 0.75, 1, 1.5, 2],}" :videoUrl="previewContent.filepath" class="middle-clip rounded-lg"></ClipVideo>
+              <ClipVideo :playerProps="{ playbackRate: [0.5, 0.75, 1, 1.5, 2],}" :videoUrl="previewContent.filepath"
+                         class="middle-clip rounded-lg"></ClipVideo>
             </div>
           </div>
           <div class="pl-6 flex flex-col justify-between" style="width: 352px;border-left: 1px solid var(--divider);">
@@ -147,7 +152,7 @@
                 </div>
                 <div class="flex  flex-col justify-between">
                   <div class="flex  flex-col justify-between">
-                    <ClipMenuList  :hidePreview="true"   :clip-item="previewContent"></ClipMenuList>
+                    <ClipMenuList :clip-item="previewContent" :hidePreview="true"></ClipMenuList>
                   </div>
                 </div>
               </div>
@@ -180,7 +185,7 @@
                 </div>
                 <div class="flex n-drag flex-col justify-between">
                   <div class="flex  flex-col justify-between">
-                    <ClipMenuList  :hidePreview="true"   :clip-item="previewContent"></ClipMenuList>
+                    <ClipMenuList :clip-item="previewContent" :hidePreview="true"></ClipMenuList>
                   </div>
                 </div>
               </div>
@@ -194,27 +199,27 @@
   </transition>
 
   <!-- 语言包切换弹窗设置 -->
-  <HorizontalDrawer ref="previewRef" :drawerTitle="defaultTitle" :rightSelect="codeLanguage"
-                    v-model:selectRegion="language.id" @getArea="getArea"></HorizontalDrawer>
+  <HorizontalDrawer ref="previewRef" v-model:selectRegion="language.id" :drawerTitle="defaultTitle"
+                    :rightSelect="codeLanguage" @getArea="getArea"></HorizontalDrawer>
 </template>
 
 <script>
-import { mapActions, mapWritableState } from 'pinia'
-import { clipboardStore } from '../../store'
-import { codeLanguage } from '../../../../js/data/clipTheme'
+import {mapActions, mapWritableState} from 'pinia'
+import {clipboardStore} from '../../store'
+import {codeLanguage} from '../../../../js/data/clipTheme'
 import ClipCodemirror from './ClipCodemirror.vue'
 import HorizontalPanel from '../../../../components/HorizontalPanel.vue'
 import textCodeMirror from './textCodeMirror.vue'
 import HorizontalDrawer from '../../../../components/HorizontalDrawer.vue'
 import ClipVideo from '../parser/ClipVideo.vue'
 import ClipAudio from '../parser/ClipAudio.vue'
-import { getDateTime } from '../../../../util'
-import { message, Modal } from 'ant-design-vue'
+import {message, Modal} from 'ant-design-vue'
 import ImageEditor from './ImageEditor.vue'
 import XtButton from '../../../../ui/libs/Button/index.vue'
 import {EditOutlined} from '@ant-design/icons-vue'
 import ClipMenuList from '../ClipMenuList.vue'
 import PreviewDetail from '../previewDetail.vue'
+
 export default {
   components: {
     PreviewDetail,
@@ -232,20 +237,21 @@ export default {
   props: {
     previewContent: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
 
-  data () {
+  data() {
     return {
-      editImage:false,
+      editImage: false,
       // 预览代码块类型切换
       textType: [
-        { title: '纯文本', name: 'plainText' },
-        { title: '代码块', name: 'code' }
+        {title: '纯文本', name: 'plainText'},
+        {title: '代码块', name: 'code'}
       ],
       // 默认的预览代码块类型
-      defaultText: { title: '纯文本', name: 'plainText' },
+      defaultText: {title: '纯文本', name: 'plainText'},
       // 代码块语言包选项
       codeLanguage,
       defaultTitle: '语言',
@@ -257,7 +263,7 @@ export default {
             message.success('复制成功。')
           }
         },
-        { title: '打开链接', key: 'Ctrl + O', id: 'co' },
+        {title: '打开链接', key: 'Ctrl + O', id: 'co'},
         {
           title: '添加收藏', key: 'Ctrl + S', id: 'cs', fn: (item) => {
             this.addToCollection(item)
@@ -273,16 +279,18 @@ export default {
       ],
       // 其他文件预览快捷键
       fileClipKey: [
-        { title: '复制', key: 'Ctrl + C', id: 'cs' },
-        { title: '打开', key: 'Ctrl + O', id: 'co' },
-        { title: '编辑', key: 'Ctrl + e', id: 'ed' ,
-          fn:(item)=>{
+        {title: '复制', key: 'Ctrl + C', id: 'cs'},
+        {title: '打开', key: 'Ctrl + O', id: 'co'},
+        {
+          title: '编辑', key: 'Ctrl + e', id: 'ed',
+          fn: (item) => {
             this.doEditImage()
-          }},
-        { title: '复制路径', key: 'Ctrl + Alt + C', id: 'cas' },
-        { title: '在资源管理器中打开', key: 'Ctrl + Enter', id: 'ce' },
-        { title: '添加收藏', key: 'Ctrl + S', id: 'cs' },
-        { title: '删除', key: 'Delete', id: 'd' }
+          }
+        },
+        {title: '复制路径', key: 'Ctrl + Alt + C', id: 'cas'},
+        {title: '在资源管理器中打开', key: 'Ctrl + Enter', id: 'ce'},
+        {title: '添加收藏', key: 'Ctrl + S', id: 'cs'},
+        {title: '删除', key: 'Delete', id: 'd'}
       ],
       settingsScroller: {
         useBothWheelAxes: true,
@@ -297,55 +305,55 @@ export default {
   computed: {
     ...mapWritableState(clipboardStore, ['settings', 'previewShow', 'clipMode']),
 
-    language () {
+    language() {
       const index = this.codeLanguage.find(el => {
         return el.abbr === this.settings.clipMode
       })
       return index
     },
-    ext(){
+    ext() {
       return require('path').extname(this.previewContent.path)
     }
   },
 
-  mounted () {
+  mounted() {
   },
 
   methods: {
     ...mapActions(clipboardStore, ['isOpenPreview', 'changeClipMode', 'addToCollection', 'remove']),
 
     // 关闭预览全屏窗口
-    closePreview () {
-      if(this.editImage){
+    closePreview() {
+      if (this.editImage) {
         Modal.confirm({
-          content:'退出预览会丢弃未保存的编辑内容，是否确定？',
-          centered:true,
-          onOk:()=>{
-            this.editImage=false
+          content: '退出预览会丢弃未保存的编辑内容，是否确定？',
+          centered: true,
+          onOk: () => {
+            this.editImage = false
             this.isOpenPreview(false)
           }
         })
-      }else{
+      } else {
         this.isOpenPreview(false)
       }
 
     },
     // 打开语言包选项配置
-    openCodeLanguage () {
+    openCodeLanguage() {
       this.$refs.previewRef.openDrawer()
     },
-    getArea (v) {
+    getArea(v) {
       this.changeClipMode(v.abbr)
       // this.$refs.myClipCodeMirror.$forceUpdate()
     },
-    doEditImage(){
-      this.editImage=true
+    doEditImage() {
+      this.editImage = true
     }
   },
 
   watch: {
     'defaultText': {
-      handler () {
+      handler() {
         this.defaultText = this.defaultText
       },
       immediate: true
@@ -374,9 +382,10 @@ export default {
 }
 
 .s-item {
-  &:hover{
+  &:hover {
     opacity: 0.7;
   }
+
   background: var(--secondary-bg);
   color: var(--primary-text);
   cursor: pointer;
@@ -476,7 +485,8 @@ export default {
     height: 100% !important;
   }
 }
-:deep(.tui-image-editor-menu){
+
+:deep(.tui-image-editor-menu) {
   text-align: left !important;
   padding-left: 10px !important;
 }

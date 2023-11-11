@@ -15,12 +15,12 @@ export default defineComponent({
 
 <template>
   <a-tooltip title="AI助手">
-  <div @click.stop="enterAI" style="padding:0.6em !important;;position:relative;" >
-    <emoji style="width: 52px;height:52px" icon="ai"></emoji>
-  </div>
+    <div style="padding:0.6em !important;;position:relative;" @click.stop="enterAI">
+      <emoji icon="ai" style="width: 52px;height:52px"></emoji>
+    </div>
   </a-tooltip>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 
 </style>

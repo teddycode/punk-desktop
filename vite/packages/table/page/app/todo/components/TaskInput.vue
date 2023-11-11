@@ -1,10 +1,10 @@
 <template>
   <a-input ref="inputer"
-           class="input main-input" style="background:--var(primary-bg);color:var(--active-text) !important; "
+           v-model:value="newTask.title" :placeholder="getPlaceholder()"
            :size="runtime.windowWidth >= 600 ? 'normal' : 'small'"
-           v-model:value="newTask.title"
+           class="input main-input"
+           style="background:--var(primary-bg);color:var(--active-text) !important; "
            @pressEnter="addNewTask"
-           :placeholder="getPlaceholder()"
   >
     <template #suffix>
       <TimerSelector v-model="newTask.deadTime"/>
@@ -21,7 +21,7 @@ import objectSupport from "dayjs/plugin/objectSupport";
 import TimerSelector from "./TimerSelector.vue";
 import {configStore, listStore} from "../store";
 // import { completeTask } from "../apps/task/page/branch/task"
- import { completeTask } from "../../../../apps/task/page/branch/task.ts"
+import {completeTask} from "../../../../apps/task/page/branch/task.ts"
 
 dayjs.locale("zh-cn");
 dayjs.extend(objectSupport);
@@ -82,8 +82,8 @@ export default {
       let task = this.newTask;
       if (this.currentList) {
         task.listNanoid = [this.currentList.nanoid]
-      }else{
-        task.listNanoid=[]
+      } else {
+        task.listNanoid = []
       }
       // 支线任务点
       completeTask('Z0203')

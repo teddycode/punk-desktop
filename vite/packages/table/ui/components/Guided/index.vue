@@ -1,6 +1,6 @@
 <template>
   <Teleport to="body">
-    <XtView type="popup" title="客户端下载" :showFull="false" @close="close()">
+    <XtView :showFull="false" title="客户端下载" type="popup" @close="close()">
       <div style="width: 552px">
         <div class="xt-bg-2 rounded-xl flex flex-col p-3 mb-3">
           <div class="">当前功能暂不支持Web版，推荐下载客户端体验完整功能</div>
@@ -8,14 +8,14 @@
         </div>
         <div class="flex flex-wrap justify-between">
           <div
-            style="width: 49%; height: 126px"
-            class="rounded-xl p-3 xt-bg-2 mb-3 flex p-3"
-            v-for="item in appList"
+              v-for="item in appList"
+              class="rounded-xl p-3 xt-bg-2 mb-3 flex p-3"
+              style="width: 49%; height: 126px"
           >
             <div class="mr-3">
               <div
-                class="xt-modal rounded-xl"
-                style="width: 56px; height: 56px"
+                  class="xt-modal rounded-xl"
+                  style="width: 56px; height: 56px"
               ></div>
             </div>
             <div class="flex flex-col">
@@ -25,8 +25,9 @@
           </div>
         </div>
         <div class="flex justify-center my-1">
-          <XtButton @click="download()" type="theme" style="width: 240px"
-            >前往下载</XtButton
+          <XtButton style="width: 240px" type="theme" @click="download()"
+          >前往下载
+          </XtButton
           >
         </div>
       </div>

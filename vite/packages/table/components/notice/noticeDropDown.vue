@@ -1,11 +1,14 @@
 <template>
- <a-dropdown trigger="click" >
-    <div class="w-8 h-8 p-1 flex items-center active-button pointer rounded-md justify-center" style="background: var(--secondary-bg);">
+  <a-dropdown trigger="click">
+    <div class="w-8 h-8 p-1 flex items-center active-button pointer rounded-md justify-center"
+         style="background: var(--secondary-bg);">
       <Icon icon="gengduo1" style="font-size: 2em;color: var(--secondary-text);"></Icon>
     </div>
     <template #overlay>
-      <a-menu class="custom-dropdown-menu flex-col flex items-center justify-center" style="background: var(--secondary-bg);">
-        <a-menu-item style="color: var(--secondary-text);" class="rounded-lg" :class="{select:dropDownIndex === index}" v-for="(item,index) in dropList" @click="selectMenuItem(item,index)">
+      <a-menu class="custom-dropdown-menu flex-col flex items-center justify-center"
+              style="background: var(--secondary-bg);">
+        <a-menu-item v-for="(item,index) in dropList" :class="{select:dropDownIndex === index}" class="rounded-lg"
+                     style="color: var(--secondary-text);" @click="selectMenuItem(item,index)">
           {{ item.title }}
         </a-menu-item>
       </a-menu>
@@ -14,39 +17,39 @@
 </template>
 
 <script>
-import { mapActions } from 'pinia'
-import { noticeStore } from '../../store/notice'
-import { Modal } from 'ant-design-vue'
+import {mapActions} from 'pinia'
+import {noticeStore} from '../../store/notice'
+import {Modal} from 'ant-design-vue'
 
 export default {
-  props:{
-    select:{
-      type:Number
+  props: {
+    select: {
+      type: Number
     }
   },
-  data(){
-    return{
-      dropList:[{title:'打开应用',name:'open'}],
+  data() {
+    return {
+      dropList: [{title: '打开应用', name: 'open'}],
       // ,{title:'全部清理',name:'clear'}
-      dropDownIndex:0,
+      dropDownIndex: 0,
 
     }
   },
-  methods:{
-    ...mapActions(noticeStore,['deleteAllNotice']),
-    selectMenuItem(item,index){
+  methods: {
+    ...mapActions(noticeStore, ['deleteAllNotice']),
+    selectMenuItem(item, index) {
       this.dropDownIndex = index
-      if(item.name === 'clear'){
+      if (item.name === 'clear') {
         Modal.confirm({
-         content:"确定要清理所有消息",
-         okText: "删除",
-         centered: true,
-         onOk: () => {
-           this.deleteAllNotice()
-           window.$notice.removeNotice()
-         },
+          content: "确定要清理所有消息",
+          okText: "删除",
+          centered: true,
+          onOk: () => {
+            this.deleteAllNotice()
+            window.$notice.removeNotice()
+          },
         })
-      }else{
+      } else {
         // this.$router.push({name:'gameIndex'}) 模拟消息打开应用通知机制
       }
     }
@@ -55,15 +58,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.custom-dropdown-menu{
+.custom-dropdown-menu {
   border-radius: 10px !important;
-  background-color:var(--secondary-bg) !important;
-  box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.5);
+  background-color: var(--secondary-bg) !important;
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);
   width: 120px;
-  padding:8px 0;
+  padding: 8px 0;
 }
 
-:deep(.select){
+:deep(.select) {
   background: var(--active-bg);
   color: var(--active-text) !important;
 }

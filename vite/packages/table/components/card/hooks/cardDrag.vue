@@ -1,18 +1,19 @@
 <template>
-  <div class="boxs no-drag" ref="textRef" style="margin-top: 8px; " :style="{ width: w, height: h }">
+  <div ref="textRef" :style="{ width: w, height: h }" class="boxs no-drag" style="margin-top: 8px; ">
     <slot :row="1123"></slot>
-    <svg @mousedown.stop  t="1684744355055" ref="dragRef" class="icon drag-boxs no-drag" viewBox="0 0 1024 1024" version="1.1"
-         xmlns="http://www.w3.org/2000/svg" p-id="10063">
+    <svg ref="dragRef" class="icon drag-boxs no-drag" p-id="10063" t="1684744355055" version="1.1"
+         viewBox="0 0 1024 1024"
+         xmlns="http://www.w3.org/2000/svg" @mousedown.stop>
       <path
-        d="M469.333333 256a85.333333 85.333333 0 1 1-85.333333-85.333333 85.333333 85.333333 0 0 1 85.333333 85.333333z m-85.333333 170.666667a85.333333 85.333333 0 1 0 85.333333 85.333333 85.333333 85.333333 0 0 0-85.333333-85.333333z m0 256a85.333333 85.333333 0 1 0 85.333333 85.333333 85.333333 85.333333 0 0 0-85.333333-85.333333z m256-341.333334a85.333333 85.333333 0 1 0-85.333333-85.333333 85.333333 85.333333 0 0 0 85.333333 85.333333z m0 85.333334a85.333333 85.333333 0 1 0 85.333333 85.333333 85.333333 85.333333 0 0 0-85.333333-85.333333z m0 256a85.333333 85.333333 0 1 0 85.333333 85.333333 85.333333 85.333333 0 0 0-85.333333-85.333333z"
-        p-id="10064"></path>
+          d="M469.333333 256a85.333333 85.333333 0 1 1-85.333333-85.333333 85.333333 85.333333 0 0 1 85.333333 85.333333z m-85.333333 170.666667a85.333333 85.333333 0 1 0 85.333333 85.333333 85.333333 85.333333 0 0 0-85.333333-85.333333z m0 256a85.333333 85.333333 0 1 0 85.333333 85.333333 85.333333 85.333333 0 0 0-85.333333-85.333333z m256-341.333334a85.333333 85.333333 0 1 0-85.333333-85.333333 85.333333 85.333333 0 0 0 85.333333 85.333333z m0 85.333334a85.333333 85.333333 0 1 0 85.333333 85.333333 85.333333 85.333333 0 0 0-85.333333-85.333333z m0 256a85.333333 85.333333 0 1 0 85.333333 85.333333 85.333333 85.333333 0 0 0-85.333333-85.333333z"
+          p-id="10064"></path>
     </svg>
   </div>
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       w: '100%',
       h: '360px',
@@ -24,11 +25,11 @@ export default {
       default: '1',
     },
   },
-  mounted () {
+  mounted() {
     this.drag()
   },
   methods: {
-    dragCallBack (e) {
+    dragCallBack(e) {
       if (e == 'card1') {
         this.w = `${540}px`
         this.h = `${140}px`
@@ -49,7 +50,7 @@ export default {
         this.h = height * 205 + (height - 1) * 10 - 60 + 'px'
       }
     },
-    drag () {
+    drag() {
       let that = this
       let a = this.$refs.textRef
       let dragRef = this.$refs.dragRef
@@ -81,7 +82,7 @@ export default {
           document.onmouseup = null
           that.dragCallBack(name)
         }
-      }, { capture: true })
+      }, {capture: true})
     },
   }
 }
@@ -101,7 +102,7 @@ export default {
 }
 
 
-.boxs:hover .drag-boxs{
+.boxs:hover .drag-boxs {
   display: block;
 }
 

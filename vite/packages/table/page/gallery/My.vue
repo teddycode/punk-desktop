@@ -1,27 +1,27 @@
 <template>
   <div class="rotate-center" style="margin-bottom: 1em;margin-top: 2em;color: var(--primary-text);">
-    <span style="font-size: 2em;" class="s-text">我的收藏 {{ myPapers.length }}</span>
+    <span class="s-text" style="font-size: 2em;">我的收藏 {{ myPapers.length }}</span>
     <div class="pointer" style="float: right;font-size: 1em;">
-      <div @click="playAll" class=" rounded-lg list-hover s-icon"
-        style="display: inline-block;margin-right: 1em;padding: 10px;">
+      <div class=" rounded-lg list-hover s-icon" style="display: inline-block;margin-right: 1em;padding: 10px;"
+           @click="playAll">
         <span>
-          <Icon style="font-size: 2em;vertical-align: top" icon="bofang"></Icon>
+          <Icon icon="bofang" style="font-size: 2em;vertical-align: top"></Icon>
         </span>
-        <span style="font-size:1.2em" class="s-text">轮播全部</span>
+        <span class="s-text" style="font-size:1.2em">轮播全部</span>
       </div>
-      <div @click="playActive" class="rounded-lg list-hover s-icon"
-        style="display: inline-block; margin-right: 1em;padding: 10px;">
+      <div class="rounded-lg list-hover s-icon" style="display: inline-block; margin-right: 1em;padding: 10px;"
+           @click="playActive">
         <span>
-          <Icon style="font-size: 2em;vertical-align: top" icon="bofang"></Icon>
+          <Icon icon="bofang" style="font-size: 2em;vertical-align: top"></Icon>
         </span>
-        <span style="font-size:1.2em" class="s-text">激活壁纸（ {{ activePapers.length }} ）</span>
+        <span class="s-text" style="font-size:1.2em">激活壁纸（ {{ activePapers.length }} ）</span>
       </div>
-      <div @click="this.visibleImport = true" class=" rounded-lg list-hover s-icon"
-        style="display: inline-block;margin-right: 1em;padding: 10px;">
+      <div class=" rounded-lg list-hover s-icon" style="display: inline-block;margin-right: 1em;padding: 10px;"
+           @click="this.visibleImport = true">
         <span>
-          <Icon style="font-size: 2em;vertical-align: top;margin-right: 0.2em;" icon="tianjiawenjianjia"></Icon>
+          <Icon icon="tianjiawenjianjia" style="font-size: 2em;vertical-align: top;margin-right: 0.2em;"></Icon>
         </span>
-        <span style="font-size:1.2em;" class="s-text">导入</span>
+        <span class="s-text" style="font-size:1.2em;">导入</span>
       </div>
     </div>
   </div>
@@ -29,29 +29,29 @@
 
   <div style="flex-grow: 1;flex-shrink: 1;height: 0">
     <div v-if="myPapers.length === 0">
-      <a-empty style="margin-top: 3em" description=""></a-empty>
+      <a-empty description="" style="margin-top: 3em"></a-empty>
       <a-button type="primary" @click="go">去挑选心仪的壁纸</a-button>
     </div>
 
-    <vue-custom-scrollbar id="containerWrapper" v-else :settings="settingsScroller"
-      style="flex-shrink: 1;flex-grow: 1;height: 100%">
+    <vue-custom-scrollbar v-else id="containerWrapper" :settings="settingsScroller"
+                          style="flex-shrink: 1;flex-grow: 1;height: 100%">
       <viewer :images="myPapers" :options="options">
-        <a-row :gutter="[20, 20]" id="bingImages" style="margin-right: 1em">
-          <a-col class="image-wrapper" v-for="img in myPapers" :span="6" style="">
-            <img @contextmenu.stop="showMenu(img)" @error="deleteAll(img)" :data-source="img.path" :alt="img.resolution"
-              class="image-item pointer" :src="fileImageExtension(img) === true ? img.path : img.src"
-              style="position: relative">
-            <div @click="previewVideo(img)" v-if="fileImageExtension(img) === true" class="play-icon pointer" style="">
+        <a-row id="bingImages" :gutter="[20, 20]" style="margin-right: 1em">
+          <a-col v-for="img in myPapers" :span="6" class="image-wrapper" style="">
+            <img :alt="img.resolution" :data-source="img.path" :src="fileImageExtension(img) === true ? img.path : img.src" class="image-item pointer"
+                 style="position: relative" @error="deleteAll(img)"
+                 @contextmenu.stop="showMenu(img)">
+            <div v-if="fileImageExtension(img) === true" class="play-icon pointer" style="" @click="previewVideo(img)">
               <Icon icon="bofang" style="font-size:3em;margin-top: 8px"></Icon>
             </div>
             <div style="position: absolute;right: 0;top: -10px ;padding: 10px">
-              <div @click.stop="addToActive(img)" class="bottom-actions pointer"
-                :style="{ background: isInActive(img) ? 'rgba(255,0,0,0.66)' : '' }">
+              <div :style="{ background: isInActive(img) ? 'rgba(255,0,0,0.66)' : '' }" class="bottom-actions pointer"
+                   @click.stop="addToActive(img)">
                 <Icon v-if="!isInActive(img)" icon="tianjia1"></Icon>
-                <Icon v-else style="" icon="yiwancheng"></Icon>
+                <Icon v-else icon="yiwancheng" style=""></Icon>
               </div>
             </div>
-            <div id="mse" v-if="fileImageExtension(img) === true"></div>
+            <div v-if="fileImageExtension(img) === true" id="mse"></div>
           </a-col>
         </a-row>
       </viewer>
@@ -59,18 +59,18 @@
   </div>
 
 
-  <a-drawer v-model:visible="visibleMenu" placement="bottom" :height="200">
+  <a-drawer v-model:visible="visibleMenu" :height="200" placement="bottom">
     <a-row :gutter="20" style="text-align: center">
       <a-col :span="3">
-        <div @click="setDesktopPaper" class="btn">
-          <Icon style="font-size: 3em" icon="tianjia1"></Icon>
+        <div class="btn" @click="setDesktopPaper">
+          <Icon icon="tianjia1" style="font-size: 3em"></Icon>
           <div>设置桌面壁纸</div>
         </div>
       </a-col>
 
       <a-col :span="3">
-        <div @click="download()" class="btn">
-          <Icon style="font-size: 3em" icon="xiazai"></Icon>
+        <div class="btn" @click="download()">
+          <Icon icon="xiazai" style="font-size: 3em"></Icon>
           <div>下载壁纸</div>
         </div>
       </a-col>
@@ -91,14 +91,14 @@
     </a-row>
   </a-drawer>
 
-  <a-drawer v-model:visible="visibleImport" placement="right" class="no-drag">
-    <Import :loadStaticPaper="loadStaticPaper" :getLoadLively="getLoadLively"></Import>
+  <a-drawer v-model:visible="visibleImport" class="no-drag" placement="right">
+    <Import :getLoadLively="getLoadLively" :loadStaticPaper="loadStaticPaper"></Import>
   </a-drawer>
 
-  <div v-show="previewVideoVisible" style="position: fixed;left: 0;right: 0;top: 0;bottom: 0;z-index:9999999"
-    id="previwer">
+  <div v-show="previewVideoVisible" id="previwer"
+       style="position: fixed;left: 0;right: 0;top: 0;bottom: 0;z-index:9999999">
     <div id="actions" class="no-drag" style="position: fixed;right: 2em;top: 2em;z-index: 9999999999;">
-      <div @click="closePreview" class="btn pointer" style="background: rgba(0,0,0,0.76);min-width: 4em;">
+      <div class="btn pointer" style="background: rgba(0,0,0,0.76);min-width: 4em;" @click="closePreview">
         <Icon icon="guanbi1" style="font-size: 2em"></Icon>
       </div>
     </div>
@@ -107,22 +107,21 @@
 </template>
 
 <script>
-import { mapWritableState, mapActions } from 'pinia'
-import { appStore } from '../../store'
+import {mapActions, mapWritableState} from 'pinia'
+import {appStore} from '../../store'
 import Import from './Import.vue'
-import { message, Modal } from 'ant-design-vue'
+import {message, Modal} from 'ant-design-vue'
 import GradeSmallTip from "../../components/GradeSmallTip.vue";
-import Spotlight from 'spotlight.js'
+import {paperStore} from '../../store/paper'
+import Player from 'xgplayer/dist/simple_player'
+import {defineComponent} from 'vue'
 
 const fs = window.$models.fs
 const path = require('path')
-import { paperStore } from '../../store/paper'
-import Player from 'xgplayer/dist/simple_player'
-import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
   name: 'My',
-  components: { Import, GradeSmallTip },
+  components: {Import, GradeSmallTip},
   computed: {
     ...mapWritableState(paperStore, ['settings', 'activePapers', 'myPapers']),
     ...mapWritableState(appStore, ['backgroundImage', 'styles']),
@@ -167,7 +166,7 @@ export default defineComponent({
     ...mapActions(paperStore, ['addToActive', 'addToMyPaper', 'addToStaticPaper']),
     ...mapActions(appStore, ['setBackgroundImage']),
     go() {
-      this.$router.push({ name: 'pickingPaper' })
+      this.$router.push({name: 'pickingPaper'})
     },
     // 获取本地视频目录数据
     getLoadLively() {
@@ -430,26 +429,26 @@ export default defineComponent({
         window.$xgplayer = null
       }
     },
-    
+
     // 下载壁纸
     download() {
-      if(this.settings.savePath === ''){
+      if (this.settings.savePath === '') {
         Modal.confirm({
-          centered:true,
-          style:{'z-index':999999},
+          centered: true,
+          style: {'z-index': 999999},
           content: '您尚未设置壁纸保存目录，请设置目录，设置目录后下载将自动开始。',
           onOk: async () => {
             await this.queryStart()
           }
         })
-      }else{
+      } else {
         // console.log('测试::>>',this.currentPaper.path)
         this.doStartDownload(this.currentPaper.path)
       }
     },
 
     // 开始下载
-    doStartDownload(item){
+    doStartDownload(item) {
       message.info('开始下载壁纸')
       const name = this.currentPaper.path.split('&')[1].slice(3)
       // item.percent = 0
@@ -473,7 +472,7 @@ export default defineComponent({
     },
 
     // 选择目录
-    async queryStart () {
+    async queryStart() {
       let savePath = await tsbApi.dialog.showOpenDialog({
         title: '选择目录', message: '请选择下载壁纸的目录', properties: [
           'openDirectory', 'createDirectory',
@@ -493,12 +492,13 @@ export default defineComponent({
 
 <style scoped>
 .s-icon svg {
- filter: none
+  filter: none
 }
 
 .s-text {
-    text-shadow: none;
+  text-shadow: none;
 }
+
 .play-icon {
   position: absolute;
   z-index: 99;

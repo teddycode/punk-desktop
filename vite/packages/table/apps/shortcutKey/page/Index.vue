@@ -1,5 +1,4 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
 import XtButton from "../../../ui/libs/Button/index.vue";
 import {SettingFilled} from "@ant-design/icons-vue";
 import {mapActions, mapWritableState} from "pinia";
@@ -21,12 +20,10 @@ export default {
       currentWindow: {},//当前窗口
       selectTab: '',
       menuList: [],
-      key:Date.now()
+      key: Date.now()
     }
   },
-  watch:{
-
-  },
+  watch: {},
   computed: {
     ...mapWritableState(keyStore, ['sessionList', 'executedApps', 'currentApp', 'settings']),
     ...mapWritableState(appStore, ['fullScreen']),
@@ -47,7 +44,7 @@ export default {
           icon: "shop",
           title: '创意市场',
           // img: "/icons/bg.png",
-          tab:'store',
+          tab: 'store',
           callBack: () => {
             this.$router.push({name: 'shortcutStore'})
           },
@@ -91,8 +88,8 @@ export default {
       let {rect, pid, MianPid, title} = Handle
       let path = win32.getProcessidFilePath(pid)
       let exeName = require('path').basename(path)
-      this.executedApps=this.executedApps.filter(item=>{
-        return item.exeName!==exeName
+      this.executedApps = this.executedApps.filter(item => {
+        return item.exeName !== exeName
       })
 
 
@@ -105,7 +102,7 @@ export default {
         title: title,
         path: path,
         lastFocus: Date.now(),
-        hide:software.hide,
+        hide: software.hide,
         exeName,
         inRep: software.id !== 'unknown',
         software
@@ -129,13 +126,13 @@ export default {
   <div :class="{'rounded-lg':!fullScreen}"
        class="flex h-full w-full   py-2" style="">
     <div class="w-full">
-      <xt-left-menu v-model:index="currentIndex" :list="leftMenu" last="2" end="2" class="w-full">
+      <xt-left-menu v-model:index="currentIndex" :list="leftMenu" class="w-full" end="2" last="2">
         <!--  -->
         <template #test>
           <setting-filled/>
         </template>
         <div class=" xt-text h-full rounded-lg flex-1 flex flex-col">
-          <div class="h-full" style="flex:1;height:0" v-if="currentApp">
+          <div v-if="currentApp" class="h-full" style="flex:1;height:0">
 
 
             <!--          <div   class="mb-2 s-bg rounded-md p-2" v-for="app in executedApps ">-->
@@ -161,7 +158,7 @@ export default {
             </keep-alive>
 
           </div>
-          <div class="h-full" style="flex:1;height:0" v-else>
+          <div v-else class="h-full" style="flex:1;height:0">
             <RouterView :key="key"></RouterView>
           </div>
 
@@ -174,6 +171,6 @@ export default {
 
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 
 </style>

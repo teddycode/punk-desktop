@@ -1,50 +1,53 @@
 <template>
-  <Widget :desk="desk" :options="options" :customIndex="customIndex" :menuList="menuList" ref="cardSlot">
+  <Widget ref="cardSlot" :customIndex="customIndex" :desk="desk" :menuList="menuList" :options="options">
     <!-- <div class="flex flex-col items-center"> -->
-    <div v-if="countDowntime.hours" style="display: flex;flex-direction: column;justify-content: space-between; "
-      class="mt-4">
+    <div v-if="countDowntime.hours" class="mt-4"
+         style="display: flex;flex-direction: column;justify-content: space-between; ">
       <div class="right-title" @click.stop="showDrawer" @contextmenu.stop="showDrawer">
-        <Icon icon="gengduo1" class="title-icon" style="cursor:pointer"></Icon>
+        <Icon class="title-icon" icon="gengduo1" style="cursor:pointer"></Icon>
       </div>
-      <div style="text-align: center;color: var(--primary-text);font-size:16px  ;" class="font-14">
-        <clockIcon icon="fluent:clock-12-regular" class="mr-2 title-icon"
-          style="cursor:pointer ;font-size: 20px;text-align: center; vertical-align: sub;">
+      <div class="font-14" style="text-align: center;color: var(--primary-text);font-size:16px  ;">
+        <clockIcon class="mr-2 title-icon" icon="fluent:clock-12-regular"
+                   style="cursor:pointer ;font-size: 20px;text-align: center; vertical-align: sub;">
         </clockIcon>
         计时器
       </div>
-      <div style="color: #FBAE17;font-size: 40px;font-weight:600;text-align: center; font-family: Oswald-SemiBold;"
-        class="mt-4 mb-4">
+      <div class="mt-4 mb-4"
+           style="color: #FBAE17;font-size: 40px;font-weight:600;text-align: center; font-family: Oswald-SemiBold;">
         {{ countDowntime.hours + ':' + countDowntime.minutes + ':' + countDowntime.seconds }}
       </div>
       <div style="display: flex;align-items: center;justify-content: space-between;padding: 0 6em;">
-        <clockIcon style="width: 2em; height: 2em;cursor:pointer;color: var(--primary-text);" icon="akar-icons:pause"
-          @click="closeCountDown" v-show="!countDownBtn"></clockIcon>
-        <clockIcon style="width: 2em; height: 2em;cursor:pointer;color: var(--primary-text);" icon="fluent:play-16-filled"
-          @click="startCountDown" v-show="countDownBtn"></clockIcon>
-        <clockIcon style="width: 2em; height: 2em;cursor:pointer;color: var(--primary-text);"
-          icon="fluent:dismiss-16-filled" @click="deleteCountDown"></clockIcon>
+        <clockIcon v-show="!countDownBtn" icon="akar-icons:pause"
+                   style="width: 2em; height: 2em;cursor:pointer;color: var(--primary-text);" @click="closeCountDown"></clockIcon>
+        <clockIcon v-show="countDownBtn"
+                   icon="fluent:play-16-filled"
+                   style="width: 2em; height: 2em;cursor:pointer;color: var(--primary-text);" @click="startCountDown"></clockIcon>
+        <clockIcon icon="fluent:dismiss-16-filled"
+                   style="width: 2em; height: 2em;cursor:pointer;color: var(--primary-text);" @click="deleteCountDown"></clockIcon>
       </div>
     </div>
-    <div class="flex flex-col text-center" v-else-if="clockEvent.length <= 0" style="width: 100%">
+    <div v-else-if="clockEvent.length <= 0" class="flex flex-col text-center" style="width: 100%">
       <div class="right-title" @click.stop="showDrawer" @contextmenu.stop="showDrawer">
-        <Icon icon="gengduo1" class="title-icon" style="cursor:pointer"></Icon>
+        <Icon class="title-icon" icon="gengduo1" style="cursor:pointer"></Icon>
       </div>
       <div class="flex flex-col items-center justify-center mt-10">
         <xt-button class="rounded-lg  w-[120px] h-[45px] xt-active-bg mb-4 border-0 p-0 font-16" type="primary"
-          @click="onSetup">添加闹钟</xt-button>
-        <xt-button type="text" class="rounded-lg  w-[120px] h-[45px]  border-0 p-0 warn-bg font-16"
-          @click="onSetCountDown">添加定时器</xt-button>
+                   @click="onSetup">添加闹钟
+        </xt-button>
+        <xt-button class="rounded-lg  w-[120px] h-[45px]  border-0 p-0 warn-bg font-16" type="text"
+                   @click="onSetCountDown">添加定时器
+        </xt-button>
       </div>
 
     </div>
-    <div @click="onSetup" class="flex flex-col mt-6 text-center cursor-pointer" v-else>
+    <div v-else class="flex flex-col mt-6 text-center cursor-pointer" @click="onSetup">
       <div class="right-title" @click.stop="showDrawer" @contextmenu.stop="showDrawer">
 
       </div>
-      <div style="text-align: center;font-family: PingFangSC-Regular !important;font-size: 16px;font-weight: 400; "
-        class="font-14">
-        <clockIcon icon="fluent:clock-alarm-16-filled" class="mr-2 title-icon"
-          style="cursor:pointer ;font-size: 20px;text-align: center; vertical-align: sub;">
+      <div class="font-14"
+           style="text-align: center;font-family: PingFangSC-Regular !important;font-size: 16px;font-weight: 400; ">
+        <clockIcon class="mr-2 title-icon" icon="fluent:clock-alarm-16-filled"
+                   style="cursor:pointer ;font-size: 20px;text-align: center; vertical-align: sub;">
         </clockIcon>
         下一个闹钟
       </div>
@@ -60,37 +63,39 @@
   </Widget>
   <!-- {{ topClockSettingVisible }} -->
   <!-- <clockDrawer v-if="topClockSettingVisible"></clockDrawer> -->
-  <a-drawer v-model:visible="topClockSettingVisible" class="custom-class xt-text" style="color: red" title="设置"
-    placement="right" :width="600" >
+  <a-drawer v-model:visible="topClockSettingVisible" :width="600" class="custom-class xt-text" placement="right"
+            style="color: red" title="设置">
     <div class="flex">
       <SetupClock></SetupClock>
     </div>
   </a-drawer>
-  <a-modal v-model:visible="custom" title="" @ok="() => { }" :footer="null" centered popupClassName="{popupClass}"
-    style="font-size: 8px;color: var(--primary-text);" :maskClosable="false">
+  <a-modal v-model:visible="custom" :footer="null" :maskClosable="false" centered popupClassName="{popupClass}" style="font-size: 8px;color: var(--primary-text);"
+           title="" @ok="() => { }">
     <div style="display: flex;flex-direction: column;align-items: center;">
       <div style="">自定义倒计时</div>
-      <a-space direction="vertical" style="margin: 14px" :popupStyle="{ zIndex: 9999999999999 }">
-        <a-time-picker v-model:value="value1" size="large" :popupStyle="{ zIndex: 9999999999999 }" :showNow="false" />
+      <a-space :popupStyle="{ zIndex: 9999999999999 }" direction="vertical" style="margin: 14px">
+        <a-time-picker v-model:value="value1" :popupStyle="{ zIndex: 9999999999999 }" :showNow="false" size="large"/>
       </a-space>
-      <xt-button type="primary" @click="addCustom"
-                        style="margin: 14px; background: var(--active-bg);">开始倒计时</xt-button>
+      <xt-button style="margin: 14px; background: var(--active-bg);" type="primary"
+                 @click="addCustom">开始倒计时
+      </xt-button>
     </div>
   </a-modal>
 </template>
 
 <script>
-import { mapWritableState, mapActions } from 'pinia'
-import { countDownStore } from '../../store/countDown'
-import { cardStore } from '../../store/card'
-import { topClockSettingStore } from '../../store/topClockSetting'
+import {mapActions, mapWritableState} from 'pinia'
+import {countDownStore} from '../../store/countDown'
+import {cardStore} from '../../store/card'
+import {topClockSettingStore} from '../../store/topClockSetting'
 import dayjs from 'dayjs'
 import Widget from '../card/Widget.vue'
-import { Icon as clockIcon } from '@iconify/vue'
+import {Icon as clockIcon} from '@iconify/vue'
 import SetupClock from './setClock.vue'
+
 export default {
   name: 'Clock',
-  components: { Widget, clockIcon, SetupClock },
+  components: {Widget, clockIcon, SetupClock},
   props: {
     customIndex: {
       type: Number,
@@ -116,27 +121,39 @@ export default {
         {
           newIcon: 'fluent:clock-12-regular',
           title: '3分钟',
-          fn: () => { this.onCountDown(3) }
+          fn: () => {
+            this.onCountDown(3)
+          }
         },
         {
           newIcon: 'fluent:clock-12-regular',
           title: '10分钟',
-          fn: () => { this.onCountDown(10) }
+          fn: () => {
+            this.onCountDown(10)
+          }
         },
         {
           newIcon: 'fluent:clock-12-regular',
           title: '30分钟',
-          fn: () => { this.onCountDown(30) }
+          fn: () => {
+            this.onCountDown(30)
+          }
         },
         {
           newIcon: 'fluent:clock-12-regular',
           title: '自定义',
-          fn: () => { this.onCountDown(300) }
+          fn: () => {
+            this.onCountDown(300)
+          }
         },
         {
           icon: 'shezhi1',
           title: '设置',
-          fn: () => { this.settingVisible = true; this.$refs.cardSlot.visible = false;this.changeSettingStatus() }
+          fn: () => {
+            this.settingVisible = true;
+            this.$refs.cardSlot.visible = false;
+            this.changeSettingStatus()
+          }
         },
       ],
       visibleDrawer: false,
@@ -159,7 +176,7 @@ export default {
 
     },
     onSetCountDown() {
-      this.$refs.cardSlot.menuVisible=true
+      this.$refs.cardSlot.menuVisible = true
     },
     showDrawer() {
       this.visible = true
@@ -186,13 +203,13 @@ export default {
     onCountDown(value) {
       switch (value) {
         case 3:
-          this.setCountDown({ hours: 0, minutes: 3, seconds: 0 })
+          this.setCountDown({hours: 0, minutes: 3, seconds: 0})
           break
         case 10:
-          this.setCountDown({ hours: 0, minutes: 10, seconds: 0 })
+          this.setCountDown({hours: 0, minutes: 10, seconds: 0})
           break
         case 30:
-          this.setCountDown({ hours: 0, minutes: 30, seconds: 0 })
+          this.setCountDown({hours: 0, minutes: 30, seconds: 0})
           break
         case 300:
           this.custom = true
@@ -229,7 +246,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .ant-dropdown-open {
   border-radius: 100%;
 }
@@ -270,10 +287,12 @@ font-16 {
 :deep(.anticon.ant-input-clear-icon) {
   color: var(--secondary-text);
 }
-.popupClass{
+
+.popupClass {
   background-color: var(--primary-bg);
 }
-:deep( .ant-picker-panel-container ){
+
+:deep( .ant-picker-panel-container ) {
   background-color: var(--primary-bg) !important;
 }
 </style>

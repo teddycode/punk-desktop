@@ -5,12 +5,13 @@
       <a-space :size="space">
         <div class="flex flex-wrap">
           <a-radio
-            class="xt-text"
-            v-for="(item, index) in list"
-            :key="item[`${value}`]"
-            :value="item[`${value}`]"
-            :style="[fontSizeStyle]"
-            >{{ item[`${name}`] }}</a-radio
+              v-for="(item, index) in list"
+              :key="item[`${value}`]"
+              :style="[fontSizeStyle]"
+              :value="item[`${value}`]"
+              class="xt-text"
+          >{{ item[`${name}`] }}
+          </a-radio
           >
         </div>
       </a-space>
@@ -80,10 +81,10 @@ export default {
       type: Array,
       default: () => {
         return [
-          { name: "2 x 2", value: "card small" },
-          { name: "2 x 4", value: "card" },
-          { name: "4 x 2", value: "card1" },
-          { name: "4 x 4", value: "card double" },
+          {name: "2 x 2", value: "card small"},
+          {name: "2 x 4", value: "card"},
+          {name: "4 x 2", value: "card1"},
+          {name: "4 x 4", value: "card double"},
         ];
       },
       validator: (val) => {
@@ -93,7 +94,7 @@ export default {
         }
 
         const res = val.every(
-          (item) => typeof item === "object" && item !== null
+            (item) => typeof item === "object" && item !== null
         );
         if (!res) {
           console.error(`list 包含的元素必须是对象`);

@@ -1,18 +1,18 @@
 <template>
   <div
-    class="header flex justify-between align-center"
-    style="width: 100%; height: 32px"
+      class="header flex justify-between align-center"
+      style="width: 100%; height: 32px"
   >
     <span style="color: #f3f3f3; font-size: 14px; margin-left: 10px"
-      >快捷面板</span
+    >快捷面板</span
     >
     <div
-      hidden
-      class="flex justify-between align-center"
-      style="margin-right: 10px"
+        class="flex justify-between align-center"
+        hidden
+        style="margin-right: 10px"
     >
       <div
-        style="
+          style="
           width: 90px;
           height: 22px;
           border-radius: 6px;
@@ -24,112 +24,113 @@
       >
         点击箭头切换
       </div>
-      <left-outlined />
-      <right-outlined />
+      <left-outlined/>
+      <right-outlined/>
     </div>
   </div>
   <div>
-    <a-row type="flex" justify="space-around" align="top" :gutter="[0, 16]">
-      <a-col hidden="" class="app" :span="23">
+    <a-row :gutter="[0, 16]" align="top" justify="space-around" type="flex">
+      <a-col :span="23" class="app" hidden="">
         <App></App>
       </a-col>
-      <a-col class="team" :span="23">
+      <a-col :span="23" class="team">
         <Team></Team>
       </a-col>
-      <a-col class="task" :span="11">
+      <a-col :span="11" class="task">
         <Task></Task>
       </a-col>
-      <a-col hidden class="achievement" :span="11">
+      <a-col :span="11" class="achievement" hidden>
         <Achievement></Achievement>
       </a-col>
-      <a-col class="internalStorage" :span="11">
+      <a-col :span="11" class="internalStorage">
         <InternalStorage></InternalStorage>
       </a-col>
-      <a-col hidden class="cache" :span="11">
+      <a-col :span="11" class="cache" hidden>
         <Cache></Cache>
       </a-col>
-      <a-col v-if="avatar" class="rank flex flex-direction" :span="23">
+      <a-col v-if="avatar" :span="23" class="rank flex flex-direction">
         <div class="flex">
           <div class="head">
             <a-avatar
-              @click="openUserSpace"
-              style="position: relative; cursor: pointer"
-              :size="55"
-              :src="avatar"
+                :size="55"
+                :src="avatar"
+                style="position: relative; cursor: pointer"
+                @click="openUserSpace"
             >
             </a-avatar>
           </div>
           <div
-            class="content"
-            @click="goDetail('grade')"
-            style="
+              class="content"
+              style="
               cursor: pointer;
               margin-left: 15px;
               width: 100%;
               height: 60px;
               margin-top: 5px;
             "
+              @click="goDetail('grade')"
           >
             <span style="color: #f3f3f3; font-size: 14px"
-              >在线等级：{{ lv }}级 &nbsp;&nbsp;
+            >在线等级：{{ lv }}级 &nbsp;&nbsp;
               <span v-if="this.lv > 0">
-                <span class="ts-grade-crown" v-for="item in onlineGrade.crown">
+                <span v-for="item in onlineGrade.crown" class="ts-grade-crown">
                   <img
-                    :src="item.icon"
-                    alt=""
-                    style="width: 20px; height: 20px"
+                      :src="item.icon"
+                      alt=""
+                      style="width: 20px; height: 20px"
                   />
                 </span>
-                <span class="ts-grade-sun" v-for="item in onlineGrade.sun">
+                <span v-for="item in onlineGrade.sun" class="ts-grade-sun">
                   <img
-                    :src="item.icon"
-                    alt=""
-                    style="width: 20px; height: 20px"
+                      :src="item.icon"
+                      alt=""
+                      style="width: 20px; height: 20px"
                   />
                 </span>
-                <span class="ts-grade-moon" v-for="item in onlineGrade.moon">
+                <span v-for="item in onlineGrade.moon" class="ts-grade-moon">
                   <img
-                    :src="item.icon"
-                    alt=""
-                    style="width: 20px; height: 20px"
+                      :src="item.icon"
+                      alt=""
+                      style="width: 20px; height: 20px"
                   />
                 </span>
-                <span class="ts-grade-star" v-for="item in onlineGrade.star">
+                <span v-for="item in onlineGrade.star" class="ts-grade-star">
                   <img
-                    :src="item.icon"
-                    alt=""
-                    style="width: 20px; height: 20px"
+                      :src="item.icon"
+                      alt=""
+                      style="width: 20px; height: 20px"
                   />
                 </span> </span
-            ></span>
+              ></span>
 
             <div class="flex" style="margin-top: 5px">
               <a-progress
-                strokeColor="#ffffff"
-                trailColor="#4d4d4d"
-                :percent="percentage"
-                :showInfo="false"
-                style="width: 165px"
+                  :percent="percentage"
+                  :showInfo="false"
+                  strokeColor="#ffffff"
+                  style="width: 165px"
+                  trailColor="#4d4d4d"
               />
               &nbsp; &nbsp;
               <a-tooltip>
                 <template #title
-                  >正在累计在线时长。<br />无需启动浏览器即可累计时长。</template
+                >正在累计在线时长。<br/>无需启动浏览器即可累计时长。
+                </template
                 >
                 <thunderbolt-filled
-                  class="thunder"
-                  style="
+                    class="thunder"
+                    style="
                     color: rgba(255, 140, 44, 0.98);
                     vertical-align: middle;
                   "
                 />
                 <span
-                  style="
+                    style="
                     color: #f3f3f3;
                     font-size: 12px;
                     vertical-align: middle;
                   "
-                  >{{ remainHour }}小时{{ remainMinute }}分后升级</span
+                >{{ remainHour }}小时{{ remainMinute }}分后升级</span
                 >
               </a-tooltip>
             </div>
@@ -142,7 +143,7 @@
           <!--            <span style="color: #f3f3f3;font-size: 14px">{{remainHour}}小时{{remainMinute}}分后升级</span>-->
           <!--          </div>-->
         </div>
-        <div hidden class="button flex">
+        <div class="button flex" hidden>
           <div class="work">工作模式</div>
           <div class="play">娱乐模式</div>
         </div>
@@ -153,8 +154,9 @@
             <div v-if="this.user.uid === -1">
               <p>请登录后查看用户等级信息</p>
               <p>
-                <a-button type="primary" @click="goLogin" size="small"
-                  >前往登录</a-button
+                <a-button size="small" type="primary" @click="goLogin"
+                >前往登录
+                </a-button
                 >
               </p>
             </div>
@@ -164,7 +166,7 @@
             <div v-else></div>
           </div>
           <div v-else>
-            <loading-outlined style="font-size: 32px; padding-top: 10px" />
+            <loading-outlined style="font-size: 32px; padding-top: 10px"/>
           </div>
         </div>
       </a-col>
@@ -180,15 +182,10 @@ import Achievement from "../compontents/Achievement.vue";
 import Cache from "../compontents/Cache.vue";
 import InternalStorage from "../compontents/InternalStorage.vue";
 
-import { mapState } from "vuex";
-import { defineComponent } from "vue";
+import {mapState} from "vuex";
+import {defineComponent} from "vue";
 
-import {
-  ThunderboltFilled,
-  LeftOutlined,
-  RightOutlined,
-  LoadingOutlined,
-} from "@ant-design/icons-vue";
+import {LeftOutlined, LoadingOutlined, RightOutlined, ThunderboltFilled,} from "@ant-design/icons-vue";
 
 // let grade
 // ipcRenderer.once('userInfo',(event,args)=>{
@@ -253,7 +250,7 @@ export default defineComponent({
       return lvSys;
     },
     goDetail(path) {
-      this.$router.push({ name: "detail", params: { path: path } });
+      this.$router.push({name: "detail", params: {path: path}});
     },
     loadUserInfo() {
       this.loading = true;
@@ -261,7 +258,7 @@ export default defineComponent({
     },
   },
   mounted() {
-    ipc.send("resizeTray", { width: 400, height: 435 });
+    ipc.send("resizeTray", {width: 400, height: 435});
     ipc.on("userInfo", (event, args) => {
       console.log(args);
       this.loading = false;
@@ -288,7 +285,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 @keyframes twinkling {
   0% {
     opacity: 0.5;
@@ -305,12 +302,15 @@ export default defineComponent({
     filter: alpha(opacity=50);
   }
 }
+
 .thunder {
   animation: twinkling 1.2s ease-in-out infinite;
 }
+
 .ts-grade-crown {
   display: inline-block;
 }
+
 .rank {
   width: 380px;
   height: 75px;

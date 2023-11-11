@@ -1,5 +1,5 @@
 <template>
-  <div class="apps flex flex-direction justify-between align-start" >
+  <div class="apps flex flex-direction justify-between align-start">
     <span class="text-grey">推荐</span>
     <div class="apps-content flex">
       <ul class="flex">
@@ -8,11 +8,11 @@
             class="flex flex-direction justify-around align-center"
             @click="executeApp(app)"
         >
-          <img style="cursor: pointer"
-               :src="app.logo"
+          <img :src="app.logo"
                alt=""
                onerror="this.src='../../icons/default.svg'"
                shape="circle"
+               style="cursor: pointer"
           />
           <span
               class="text-black sg-omit-sm flex justify-center align-center"
@@ -22,7 +22,7 @@
       </ul>
     </div>
   </div>
-  <div style="-webkit-app-region:no-drag;margin-top:-0.5em" v-if="true" class="gpt-tip-wrapper">
+  <div v-if="true" class="gpt-tip-wrapper" style="-webkit-app-region:no-drag;margin-top:-0.5em">
 
     <!--  tip!=='1'  -->
     欢迎使用全局搜索功能，目前已支持磐古跨链客户端标签搜索、轻应用搜索，其他功能正在添加中。默认快捷键Alf+F，您也可以在设置中修改。
@@ -32,11 +32,11 @@
       <img :src="gpt">
     </div>
     <!--  tip!=='1'  -->
-    按下ctrl+回车，或者无搜索结果将会询问ChatGPT，<strong @click="learn" style="color:#0a84ff;cursor: pointer">
+    按下ctrl+回车，或者无搜索结果将会询问ChatGPT，<strong style="color:#0a84ff;cursor: pointer" @click="learn">
     <bulb-outlined/>
     测试
     学习提问方式</strong>
-    <span @click="closeTip" style="float: right" class="close-btn">
+    <span class="close-btn" style="float: right" @click="closeTip">
                   <close-outlined/>
                 </span>
 

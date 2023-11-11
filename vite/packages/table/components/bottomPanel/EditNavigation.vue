@@ -1,34 +1,35 @@
 <template>
-  <div style="background: var(--main-mask-bg) !important;width: 100%;height:100%;" class="pt-6">
+  <div class="pt-6" style="background: var(--main-mask-bg) !important;width: 100%;height:100%;">
     <transition name="fade">
-      <div class="back pointer no-drag" @click="onBack" v-show="!editFlag">
+      <div v-show="!editFlag" class="back pointer no-drag" @click="onBack">
         <Icon icon="xiangzuo" style="color: var(--primary-text);height: 24px;width: 24px"></Icon>
       </div>
     </transition>
     <transition name="fade">
-      <div class="box-content" v-show="!editFlag" id="boxContent">
+      <div v-show="!editFlag" id="boxContent" class="box-content">
         <div class="box-center">
           <div style="width: 100px;">
-            <div class="side-nav" v-show="leftNav" id="leftBox">
-              <div style="width: 73px;overflow: hidden;" class="flex flex-col items-center w-full">
-                <div style="overflow: hidden;" id="sideNavList"
-                     class="flex flex-col items-center flex-nowrap scroll-content" ref="sideContent">
+            <div v-show="leftNav" id="leftBox" class="side-nav">
+              <div class="flex flex-col items-center w-full" style="width: 73px;overflow: hidden;">
+                <div id="sideNavList" ref="sideContent"
+                     class="flex flex-col items-center flex-nowrap scroll-content" style="overflow: hidden;">
                   <div v-for="item in sideNavigationList" :key="item.name" style="margin: 20px 0;">
                     <!-- {{ 11111 }} -->
                     <a-dropdown :trigger="['contextmenu']">
 
                       <div v-if="item.type==='systemApp'"
                            style="display: flex;justify-content: center;align-items: center;margin: 0 auto;border-radius: 12px">
-                           <!-- {{ item.icon }} -->
-                        <navIcon :icon="item.icon" style="width: 40px;height: 40px;color:var(--secondary-text)"></navIcon>
+                        <!-- {{ item.icon }} -->
+                        <navIcon :icon="item.icon"
+                                 style="width: 40px;height: 40px;color:var(--secondary-text)"></navIcon>
                       </div>
-                      <a-avatar v-else :size="40" shape="square" :src="renderIcon(item.icon)"></a-avatar>
+                      <a-avatar v-else :size="40" :src="renderIcon(item.icon)" shape="square"></a-avatar>
                     </a-dropdown>
                   </div>
                 </div>
               </div>
               <div>
-                <Icon icon="tianjia" style="width: 56px;height: 56px;color:var(--secondary-text);" class="pointer"
+                <Icon class="pointer" icon="tianjia" style="width: 56px;height: 56px;color:var(--secondary-text);"
                       @click="addEdit('left')"></Icon>
               </div>
             </div>
@@ -36,48 +37,50 @@
 
           <div class="center-text" style="transform: translateY(-20px)">
 
-            <div class="con-center" v-show="navText && !promptModal" style="width:800px">
-               <span class="mt-5 mb-4">本界面不支持触摸，请使用滚轮滚动，支持鼠标拖拽！</span>
-<!--              <div class="mb-2 ">
-                <div class="mb-2 xt-text-2">
-                  注意：侧边栏图标风格会自动调整
-                </div>
-                <div class="flex mb-2">
-                <span class="flex items-center justify-center mr-4">
-              <Icon icon="home" style="width: 30px;height: 30px;color:var(&#45;&#45;secondary-text);"></Icon>
-              <Icon icon="arrowright" style="width: 20px;height: 20px;"></Icon>
-              <Icon icon="shouye1" style="width: 30px;height: 30px;color:var(&#45;&#45;secondary-text);"></Icon>
-            </span>
-                  <Icon icon="thunderbolt" style="width: 30px;height: 30px;color:var(&#45;&#45;secondary-text);"></Icon>
-                  <Icon icon="arrowright" style="width: 20px;height: 20px;margin-top: 6px"></Icon>
-                  <Icon icon="kuaijie1" style="width: 30px;height: 30px;color:var(&#45;&#45;secondary-text);"></Icon>
-                </div>
+            <div v-show="navText && !promptModal" class="con-center" style="width:800px">
+              <span class="mt-5 mb-4">本界面不支持触摸，请使用滚轮滚动，支持鼠标拖拽！</span>
+              <!--              <div class="mb-2 ">
+                              <div class="mb-2 xt-text-2">
+                                注意：侧边栏图标风格会自动调整
+                              </div>
+                              <div class="flex mb-2">
+                              <span class="flex items-center justify-center mr-4">
+                            <Icon icon="home" style="width: 30px;height: 30px;color:var(&#45;&#45;secondary-text);"></Icon>
+                            <Icon icon="arrowright" style="width: 20px;height: 20px;"></Icon>
+                            <Icon icon="shouye1" style="width: 30px;height: 30px;color:var(&#45;&#45;secondary-text);"></Icon>
+                          </span>
+                                <Icon icon="thunderbolt" style="width: 30px;height: 30px;color:var(&#45;&#45;secondary-text);"></Icon>
+                                <Icon icon="arrowright" style="width: 20px;height: 20px;margin-top: 6px"></Icon>
+                                <Icon icon="kuaijie1" style="width: 30px;height: 30px;color:var(&#45;&#45;secondary-text);"></Icon>
+                              </div>
 
-              </div>-->
-              <xt-task  id='M0104' no='3'></xt-task>
+                            </div>-->
+              <xt-task id='M0104' no='3'></xt-task>
               <div class="mb-2 xt-text-2">必选功能（拖拽添加）</div>
-              <div class="main-nav" id="mainList" style="width: 320px;zoom:0.8">
+              <div id="mainList" class="main-nav" style="width: 320px;zoom:0.8">
                 <div v-for="item in mainNavList" :key="item.name" style="margin:5px">
                   <!-- {{ item.icon }} -->
-                  <div style="width: 100%;height: 100%;opacity: 0.3;" class="flex flex-col items-center justify-center">
+                  <div class="flex flex-col items-center justify-center" style="width: 100%;height: 100%;opacity: 0.3;">
                     <navIcon :icon="item.icon" style="width: 40px;height: 40px;color:var(--secondary-text);"></navIcon>
                     <span class="mt-2 xt-text-2">{{ item.name }}</span>
                   </div>
-                  <div class="add-toggle" v-if="item.addNav">
+                  <div v-if="item.addNav" class="add-toggle">
                     <icon icon="yixuan" style="font-size:32px;color: #52ff52"></icon>
                   </div>
                 </div>
               </div>
-              <div style="width: 600px;text-align: center;zoom: 0.8;display: flex;flex-direction: column;align-items:center;justify-content: center;justify-items: center;">
+              <div
+                  style="width: 600px;text-align: center;zoom: 0.8;display: flex;flex-direction: column;align-items:center;justify-content: center;justify-items: center;">
                 <div class="mt-2 mb-2" style="color:var(--secondary-text);">推荐功能（拖拽添加）</div>
-                <div class="main-nav" id="suggestList" style="width:430px;white-space: pre-wrap;flex-wrap: wrap;">
+                <div id="suggestList" class="main-nav" style="width:430px;white-space: pre-wrap;flex-wrap: wrap;">
                   <div v-for="item in suggestNavList" :key="item.name" style="margin:5px">
-                    <div style="width: 100%;height: 100%;opacity: 0.3;"
-                         class="flex flex-col items-center justify-center">
-                      <navIcon :icon="item.icon" style="width: 40px;height: 40px;color:var(--secondary-text);"></navIcon>
+                    <div class="flex flex-col items-center justify-center"
+                         style="width: 100%;height: 100%;opacity: 0.3;">
+                      <navIcon :icon="item.icon"
+                               style="width: 40px;height: 40px;color:var(--secondary-text);"></navIcon>
                       <span class="mt-2 xt-text-2">{{ item.name }}</span>
                     </div>
-                    <div class="add-toggle" v-if="item.addNav">
+                    <div v-if="item.addNav" class="add-toggle">
                       <icon icon="yixuan" style="font-size:32px;color: #52ff52"></icon>
                     </div>
                   </div>
@@ -85,7 +88,7 @@
               </div>
             </div>
 
-            <div class="nav-toggle" v-show="navText && !promptModal">
+            <div v-show="navText && !promptModal" class="nav-toggle">
               <div class="left-point">
                 <span class="mb-1 xt-text-2"><Icon icon="arrowleft"></Icon>左侧</span>
                 <div>
@@ -106,7 +109,7 @@
                 </div>
               </div>
             </div>
-            <div class="prompt-modal " v-show="promptModal ">
+            <div v-show="promptModal " class="prompt-modal ">
               <div class="flex flex-col items-center justify-center p-5 xt-modal" style="border-radius:16px">
                 <div>
                   <Icon icon="tishi-xianxing" style="font-size: 16px;color: orange"></Icon>
@@ -124,58 +127,59 @@
                 </div>
               </div>
             </div>
-            <div class="del-icon" id="delIcon" v-show="!navText && !promptModal">拖到此处删除图标</div>
+            <div v-show="!navText && !promptModal" id="delIcon" class="del-icon">拖到此处删除图标</div>
           </div>
-          <div style="width:100px;" class="flex justify-end">
-            <div class="side-nav" v-show="rightNav" id="rightBox">
-              <div style="width: 73px;overflow: hidden;" class="flex flex-col items-center w-full">
-                <div style="overflow: hidden;" id="rightNavList"
-                     class="flex flex-col items-center flex-nowrap scroll-content" ref="rightContent">
+          <div class="flex justify-end" style="width:100px;">
+            <div v-show="rightNav" id="rightBox" class="side-nav">
+              <div class="flex flex-col items-center w-full" style="width: 73px;overflow: hidden;">
+                <div id="rightNavList" ref="rightContent"
+                     class="flex flex-col items-center flex-nowrap scroll-content" style="overflow: hidden;">
                   <div v-for="item in rightNavigationList" :key="item.name" class="my-5 width: 56px;height: 56px;">
                     <a-dropdown :trigger="['contextmenu']">
                       <div v-if="item.type==='systemApp'"
                            style="display: flex;justify-content: center;align-items: center;margin: 0 auto;border-radius: 12px">
-                        <navIcon :icon="item.icon" style="width: 40px;height: 40px;color:var(--secondary-text);"></navIcon>
+                        <navIcon :icon="item.icon"
+                                 style="width: 40px;height: 40px;color:var(--secondary-text);"></navIcon>
                       </div>
-                      <a-avatar v-else :size="40" shape="square" :src="renderIcon(item.icon)"></a-avatar>
+                      <a-avatar v-else :size="40" :src="renderIcon(item.icon)" shape="square"></a-avatar>
                     </a-dropdown>
                   </div>
                 </div>
               </div>
               <div>
-                <Icon icon="tianjia" style="width: 56px;height: 56px;color:var(--secondary-text);" class="pointer"
+                <Icon class="pointer" icon="tianjia" style="width: 56px;height: 56px;color:var(--secondary-text);"
                       @click="addEdit('right')"></Icon>
               </div>
             </div>
           </div>
         </div>
         <!-- {{ foot }} -->
-        <div class="box-foot" v-show="footNav" id="footBox">
-          <div style="height: 73px;overflow: hidden;" class="flex flex-row items-center w-full pl-2">
-            <div style="overflow: hidden;" id="navList"
-                 class="flex flex-row items-center mr-2 flex-nowrap scroll-content" ref="content">
-              <div v-for="item in footNavigationList" style="margin: 4px 18px" :key="item.name">
+        <div v-show="footNav" id="footBox" class="box-foot">
+          <div class="flex flex-row items-center w-full pl-2" style="height: 73px;overflow: hidden;">
+            <div id="navList" ref="content"
+                 class="flex flex-row items-center mr-2 flex-nowrap scroll-content" style="overflow: hidden;">
+              <div v-for="item in footNavigationList" :key="item.name" style="margin: 4px 18px">
                 <!-- {{ item.type }} -->
                 <a-dropdown :trigger="['contextmenu']">
                   <div
-                    style="width: 56px;height: 56px;display: flex;justify-content: center;align-items: center;background: var(--secondary-bg);border-radius: 12px"
-                    v-if="item.type==='systemApp'" @click="clickNavigation(item)">
+                      v-if="item.type==='systemApp'"
+                      style="width: 56px;height: 56px;display: flex;justify-content: center;align-items: center;background: var(--secondary-bg);border-radius: 12px" @click="clickNavigation(item)">
                     <navIcon :icon="item.icon" style="width: 32px;height: 32px;color:var(--secondary-text);"></navIcon>
                   </div>
-                  <a-avatar :size="40" shape="square"  :src="renderIcon(item.icon)" v-else></a-avatar>
+                  <a-avatar v-else :size="40" :src="renderIcon(item.icon)" shape="square"></a-avatar>
                 </a-dropdown>
               </div>
             </div>
           </div>
           <div>
-            <xt-task  id='M0104' no='4'  @cb="addEdit('foot')">
-            <Icon icon="tianjia"
-                  style="width: 56px;height: 56px;color:var(--secondary-text);position:relative;top:2px;"
-                  class="mr-8 pointer" @click="addEdit('foot')"></Icon>
-           </xt-task>
+            <xt-task id='M0104' no='4' @cb="addEdit('foot')">
+              <Icon class="mr-8 pointer"
+                    icon="tianjia"
+                    style="width: 56px;height: 56px;color:var(--secondary-text);position:relative;top:2px;" @click="addEdit('foot')"></Icon>
+            </xt-task>
           </div>
-          <div style="border-left: 1px solid rgba(255, 255, 255, 0.4);"
-               class="flex items-center justify-center pl-6 mr-6 pointer">
+          <div class="flex items-center justify-center pl-6 mr-6 pointer"
+               style="border-left: 1px solid rgba(255, 255, 255, 0.4);">
             <navIcon icon="appstore-fill" style="width: 48px;height: 48px;color:var(--secondary-text);"></navIcon>
           </div>
         </div>
@@ -183,26 +187,26 @@
     </transition>
 
     <transition name="fade">
-      <Classification :navClassify="navClassify" v-if="editFlag" v-model:show="editFlag" @clickLeftList="clickItem">
+      <Classification v-if="editFlag" v-model:show="editFlag" :navClassify="navClassify" @clickLeftList="clickItem">
         <div v-show="nowClassify!=='localApp'" class="h-full">
           <a-input v-model:value="selectContent" class="h-10 rounded-lg no-drag" placeholder="搜索"
                    style="background: var(--secondary-bg)">
             <template #prefix>
-              <Icon icon="sousuo" class="text-gray-600"></Icon>
+              <Icon class="text-gray-600" icon="sousuo"></Icon>
             </template>
           </a-input>
           <vue-custom-scrollbar key="scrollbar" :settings="rightScrollbarSettings"
-         class="relative" style="height: calc(100% - 40px);padding: 5px 0">
-<template v-for="(item,index) in filterList">
-    <xt-task  id='M0104' no='6'  v-if="item.name == '主页'" @cb="clickRightListItem(item,index)">
+                                class="relative" style="height: calc(100% - 40px);padding: 5px 0">
+            <template v-for="(item,index) in filterList">
+              <xt-task v-if="item.name == '主页'" id='M0104' no='6' @cb="clickRightListItem(item,index)">
 
-            <listItem  :item="item"
-                      class="rounded-lg right-scroll-list" @click="clickRightListItem(item,index)"></listItem>
-                    </xt-task>
+                <listItem :item="item"
+                          class="rounded-lg right-scroll-list" @click="clickRightListItem(item,index)"></listItem>
+              </xt-task>
 
-                    <listItem v-else  :item="item"
-                      class="rounded-lg right-scroll-list" @click="clickRightListItem(item,index)"></listItem>
-</template>
+              <listItem v-else :item="item"
+                        class="rounded-lg right-scroll-list" @click="clickRightListItem(item,index)"></listItem>
+            </template>
 
 
           </vue-custom-scrollbar>
@@ -215,9 +219,10 @@
           <div>3. 支持批量添加</div>
           <div class="border-dashed w-full h-1/2 mt-2.5 rounded-lg flex flex-row justify-center items-center"
                @dragover.prevent="" @drop.prevent="drop">
-               <!-- class="add-icon" -->
-            <div class="flex items-center justify-center w-40 h-12 rounded-lg pointer add-style" @click="showOpenFileDialog">
-              <Icon icon="tianjia2" style="width:18px;height:18px;" class="mr-2"></Icon>
+            <!-- class="add-icon" -->
+            <div class="flex items-center justify-center w-40 h-12 rounded-lg pointer add-style"
+                 @click="showOpenFileDialog">
+              <Icon class="mr-2" icon="tianjia2" style="width:18px;height:18px;"></Icon>
               添加快捷方式
             </div>
           </div>
@@ -227,17 +232,17 @@
                 <!-- {{ item }} -->
                 <a-badge>
                   <template #count>
-                    <Icon icon="guanbi2" style="height: 24px;width: 24px;color: crimson" @click="deleteDropList(index)"
-                          class="pointer"></Icon>
+                    <Icon class="pointer" icon="guanbi2" style="height: 24px;width: 24px;color: crimson"
+                          @click="deleteDropList(index)"></Icon>
                   </template>
-                  <a-avatar :size="40" shape="square" :src="item.icon">
+                  <a-avatar :size="40" :src="item.icon" shape="square">
                   </a-avatar>
                 </a-badge>
               </div>
             </div>
           </ScrolX>
-          <div @click="clickRightListItem(dropList)"
-               class="flex items-center justify-center w-24 h-12 mt-2 rounded-lg pointer add-style">
+          <div class="flex items-center justify-center w-24 h-12 mt-2 rounded-lg pointer add-style"
+               @click="clickRightListItem(dropList)">
             确定添加
           </div>
         </div>
@@ -249,17 +254,18 @@
 <script>
 import vuuri from '../vuuriHome/Vuuri.vue'
 import listItem from './listItem.vue'
-import { mapActions, mapWritableState } from 'pinia'
-import { cardStore } from '../../store/card'
-import { navStore } from '../../store/nav'
+import {mapActions, mapWritableState} from 'pinia'
+import {cardStore} from '../../store/card'
+import {navStore} from '../../store/nav'
 import ScrolX from '../ScrolX.vue'
 import Sortable from 'sortablejs'
 import navigationData from '../../js/data/tableData'
 import Classification from '../comp/Classification.vue'
-import { Icon as navIcon } from '@iconify/vue'
-import { message } from 'ant-design-vue'
+import {Icon as navIcon} from '@iconify/vue'
+import {message} from 'ant-design-vue'
 import {renderIcon} from '../../js/common/common'
-const { appModel } = window.$models
+
+const {appModel} = window.$models
 
 const suggestNavigationList = [
 
@@ -267,24 +273,24 @@ const suggestNavigationList = [
     type: 'systemApp',
     icon: 'fluent:chat-16-regular',
     name: '社群(开发中)',
-    event:'chat',
-    tab:'community',
-   fn:()=>{
-     vm.$router.push({ name: 'chat' })
-   }
+    event: 'chat',
+    tab: 'community',
+    fn: () => {
+      vm.$router.push({name: 'chat'})
+    }
   },
   {
     type: 'systemApp',
     icon: 'fluent:document-bullet-list-multiple-24-regular',
     name: '办公',
-    tab:'work',
+    tab: 'work',
     event: 'work',
   },
   {
     type: 'systemApp',
     icon: 'fluent:games-16-regular',
     name: '游戏',
-    tab:'game',
+    tab: 'game',
     event: 'gameIndex'
   },
 
@@ -306,14 +312,14 @@ const suggestNavigationList = [
     type: 'systemApp',
     icon: 'fluent:image-multiple-16-regular',
     name: '壁纸',
-    tab:'paper',
+    tab: 'paper',
     event: 'my',
   },
 
 ]
 export default {
   name: 'EditNavigation',
-  data () {
+  data() {
     return {
       scrollbarSettings: {
         useBothWheelAxes: true,
@@ -363,8 +369,10 @@ export default {
     ...mapWritableState(cardStore, ['routeParams']),
     ...mapWritableState(navStore, ['mainNavigationList', 'sideNavigationList', 'footNavigationList', 'rightNavigationList', 'navigationToggle']),
 
-    filterList () {
-      return this.ClassifyData.filter(i => {return i.type === this.nowClassify && i.name.includes(this.selectContent)})
+    filterList() {
+      return this.ClassifyData.filter(i => {
+        return i.type === this.nowClassify && i.name.includes(this.selectContent)
+      })
     }
   },
   components: {
@@ -374,10 +382,10 @@ export default {
     Classification,
     navIcon
   },
-  created () {
+  created() {
     this.loadDeskIconApps()
   },
-  mounted () {
+  mounted() {
     this.leftNav = this.navigationToggle[0]
     this.rightNav = this.navigationToggle[1]
     this.footNav = this.navigationToggle[2]
@@ -405,49 +413,49 @@ export default {
       this.rightDrop()
       this.mainDrop()
     }),
-    // 替换原有图标
-    // console.log(this.ClassifyData);
-    navigationData.systemAppList.forEach((item) => {
-      this.ClassifyData.forEach((i) => {
-        if (item.name === i.name) {
-          i.icon=item.icon
-        }
-      })
-    })
+        // 替换原有图标
+        // console.log(this.ClassifyData);
+        navigationData.systemAppList.forEach((item) => {
+          this.ClassifyData.forEach((i) => {
+            if (item.name === i.name) {
+              i.icon = item.icon
+            }
+          })
+        })
     navigationData.systemFillAppList.forEach((item) => {
       this.sideNavigationList.forEach((i) => {
         if (item.name === i.name) {
-          i.icon=item.icon
+          i.icon = item.icon
         }
       })
     })
     navigationData.systemAppList.forEach((item) => {
       this.footNavigationList.forEach((i) => {
         if (item.name === i.name) {
-          i.icon=item.icon
+          i.icon = item.icon
         }
       })
     })
     navigationData.systemFillAppList.forEach((item) => {
       this.rightNavigationList.forEach((i) => {
         if (item.name === i.name) {
-          i.icon=item.icon
+          i.icon = item.icon
         }
       })
     })
   },
   methods: {
-    scrollNav (refVal, scrollDirection) {
+    scrollNav(refVal, scrollDirection) {
       let content = this.$refs[refVal]
       content.addEventListener('wheel', (event) => {
         event.preventDefault()
         content[scrollDirection] += event.deltaY
       })
     },
-    clickNavigation (type) {
+    clickNavigation(type) {
       console.log(type);
     },
-    navToggle (type) {
+    navToggle(type) {
       this.delMainItem = []
       switch (type) {
         case 'left':
@@ -579,7 +587,7 @@ export default {
     //   }
     // },
     ...mapActions(navStore, ['setFootNavigationList', 'sortFootNavigationList', 'removeFootNavigationList', 'setSideNavigationList', 'sortSideNavigationList', 'removeSideNavigationList', 'setRightNavigationList', 'sortRightNavigationList', 'removeRightNavigationList', 'setNavigationToggle']),
-    updateMainNav (addItem, type) {
+    updateMainNav(addItem, type) {
       this.mainNavList = this.mainNavigationList
       let sumNavList = this.sideNavigationList.concat(this.footNavigationList, this.rightNavigationList)
       if (type) {
@@ -599,7 +607,7 @@ export default {
         }
       }
     },
-    updateSuggestNav (addItem, type) {
+    updateSuggestNav(addItem, type) {
       this.suggestNavList = suggestNavigationList
       let sumNavList = this.sideNavigationList.concat(this.footNavigationList, this.rightNavigationList)
       if (type) {
@@ -619,7 +627,7 @@ export default {
         }
       }
     },
-    mainDrop () {
+    mainDrop() {
       let that = this
       let main = document.getElementById('mainList')
 
@@ -628,7 +636,7 @@ export default {
         animation: 150,
         removeCloneOnHide: true,
         forceFallback: false,
-        onStart (evt) {
+        onStart(evt) {
           that.darggingCore = true
           that.draggingArea('leftBox', evt.oldIndex, that.sideNavigationList, that.setSideNavigationList, that.mainNavigationList)
           that.draggingArea('rightBox', evt.oldIndex, that.rightNavigationList, that.setRightNavigationList, that.mainNavigationList)
@@ -643,7 +651,7 @@ export default {
         animation: 150,
         removeCloneOnHide: true,
         forceFallback: false,
-        onStart (evt) {
+        onStart(evt) {
           that.darggingCore = true
           that.draggingArea('leftBox', evt.oldIndex, that.sideNavigationList, that.setSideNavigationList, suggestNavigationList, false)
           that.draggingArea('rightBox', evt.oldIndex, that.rightNavigationList, that.setRightNavigationList, suggestNavigationList, false)
@@ -662,7 +670,7 @@ export default {
      * @param source 来源数据
      * @param compare 是否比对，排重
      */
-    draggingArea (id, oldIndex, NavigationList, setNavigationList, source, compare = true) {
+    draggingArea(id, oldIndex, NavigationList, setNavigationList, source, compare = true) {
       let that = this
       let slider = document.getElementById(id)
       slider.ondragover = function (ev) {
@@ -680,7 +688,7 @@ export default {
         }
       }
     },
-    delNavigation (sumList, oneNav, index, delMethod, type) {
+    delNavigation(sumList, oneNav, index, delMethod, type) {
       this.delMainItem = []
       if (!this.mainNavList.find(item => item.name === oneNav.name)) {
         //如果不是必须的
@@ -700,7 +708,7 @@ export default {
         }
       }
     },
-    delMainCore () {
+    delMainCore() {
       if (this.delNavType === 'delFoot') {
         this.removeFootNavigationList(this.delMainIndex)
       } else if (this.delNavType === 'delLeft') {
@@ -713,7 +721,7 @@ export default {
       this.updateMainNav(this.delMainItem[0], 'del')
       this.navText = true
     },
-    rowDrop () {
+    rowDrop() {
       let that = this
       let drop = document.getElementById('navList')
       Sortable.create(drop, {
@@ -759,7 +767,7 @@ export default {
         },
         onUpdate: function (event) {
           let newIndex = event.newIndex,
-            oldIndex = event.oldIndex
+              oldIndex = event.oldIndex
           let newItem = drop.children[newIndex]
           let oldItem = drop.children[oldIndex]
 
@@ -789,7 +797,7 @@ export default {
         // },
       })
     },
-    colDrop () {
+    colDrop() {
       let that = this
       let side = document.getElementById('sideNavList')
       Sortable.create(side, {
@@ -821,7 +829,7 @@ export default {
         },
         onUpdate: function (event) {
           let newIndex = event.newIndex,
-            oldIndex = event.oldIndex
+              oldIndex = event.oldIndex
           let newItem = side.children[newIndex]
           let oldItem = side.children[oldIndex]
           // 先删除移动的节点
@@ -839,7 +847,7 @@ export default {
         }
       })
     },
-    rightDrop () {
+    rightDrop() {
       let that = this
       let right = document.getElementById('rightNavList')
       Sortable.create(right, {
@@ -870,7 +878,7 @@ export default {
         },
         onUpdate: function (event) {
           let newIndex = event.newIndex,
-            oldIndex = event.oldIndex
+              oldIndex = event.oldIndex
           let newItem = right.children[newIndex]
           let oldItem = right.children[oldIndex]
           // 先删除移动的节点
@@ -888,10 +896,10 @@ export default {
         }
       })
     },
-    deleteDropList (index) {
+    deleteDropList(index) {
       this.dropList.splice(index, 1)
     },
-    async drop (e) {
+    async drop(e) {
       let files = e.dataTransfer.files
       let filesArr = []
       if (files && files.length > 0) {
@@ -899,14 +907,14 @@ export default {
           filesArr.push(files[i].path)
         }
       }
-      this.dropFiles = await ipc.sendSync('getFilesIcon', { files: JSON.parse(JSON.stringify(filesArr)) })
+      this.dropFiles = await ipc.sendSync('getFilesIcon', {files: JSON.parse(JSON.stringify(filesArr))})
       this.dropList.push(...this.dropFiles)
     },
-    clickItem (item) {
+    clickItem(item) {
       this.activeRightItem = 0
       this.nowClassify = item.name
     },
-    async loadDeskIconApps () {
+    async loadDeskIconApps() {
       const lightApps = await appModel.getAllApps()
       for (let i = 0; i < lightApps.length; i++) {
         lightApps[i].icon = lightApps[i].logo
@@ -918,20 +926,22 @@ export default {
       }
       this.ClassifyData.push(...desktopApps, ...lightApps)
     },
-    onBack () {
+    onBack() {
       this.$emit('setQuick')
-      this.routeParams.url && setTimeout(() => {this.$router.push({ name: 'app', params: this.routeParams })}, 400)
+      this.routeParams.url && setTimeout(() => {
+        this.$router.push({name: 'app', params: this.routeParams})
+      }, 400)
     },
-    addEdit (val) {
+    addEdit(val) {
       this.selectNav = val
       this.editFlag = true
       this.nowClassify = 'systemApp'
       this.dropList = []
     },
-    closeAdd () {
+    closeAdd() {
       this.editFlag = false
     },
-    clickRightListItem (item, index) {
+    clickRightListItem(item, index) {
       this.activeRightItem = index
       this.editFlag = false
       if (this.selectNav === 'foot') {
@@ -955,7 +965,7 @@ export default {
           this.setFootNavigationList(item)
           this.$nextTick(() => {
             let scrollElem = this.$refs.content
-            scrollElem.scrollTo({ left: scrollElem.scrollWidth, behavior: 'smooth' })
+            scrollElem.scrollTo({left: scrollElem.scrollWidth, behavior: 'smooth'})
           })
         }
       } else if (this.selectNav === 'left') {
@@ -979,7 +989,7 @@ export default {
           this.setSideNavigationList(item)
           this.$nextTick(() => {
             let scrollElem = this.$refs.sideContent
-            scrollElem.scrollTo({ top: scrollElem.scrollHeigth, behavior: 'smooth' })
+            scrollElem.scrollTo({top: scrollElem.scrollHeigth, behavior: 'smooth'})
           })
         }
       } else if (this.selectNav === 'right') {
@@ -1004,7 +1014,7 @@ export default {
         }
       }
     },
-    async showOpenFileDialog () {
+    async showOpenFileDialog() {
       let savePath = await tsbApi.dialog.showOpenDialog({
         title: '选择', message: '请选择文件', multiple: 'true', properties: [
           'openFile ',
@@ -1018,7 +1028,7 @@ export default {
             filesArr.push(savePath[i])
           }
         }
-        let dropFiles = await ipc.sendSync('getFilesIcon', { files: JSON.parse(JSON.stringify(filesArr)) })
+        let dropFiles = await ipc.sendSync('getFilesIcon', {files: JSON.parse(JSON.stringify(filesArr))})
         this.dropList.push(...dropFiles)
       } else {
         // console.log('取消选择')
@@ -1026,13 +1036,13 @@ export default {
     },
   },
   watch: {
-    leftNav (newVal) {
+    leftNav(newVal) {
       this.setNavigationToggle('left', newVal)
     },
-    rightNav (newVal) {
+    rightNav(newVal) {
       this.setNavigationToggle('right', newVal)
     },
-    footNav (newVal) {
+    footNav(newVal) {
       this.setNavigationToggle('foot', newVal)
     }
   },
@@ -1186,7 +1196,7 @@ export default {
   > div {
     display: flex;
     flex-direction: column;
-    padding:12px 12px;
+    padding: 12px 12px;
     text-align: center;
     background: var(--modal-bg);
     border-radius: 12px;
@@ -1340,24 +1350,28 @@ export default {
     }
   }
 }
-.add-icon{
+
+.add-icon {
   padding: 8px;
-  cursor:pointer;
+  cursor: pointer;
   display: flex;
   align-items: center;
   border: 1px solid;
   border-radius: 8px;
 }
-.add-icon:hover{
+
+.add-icon:hover {
   // border: 1px solid var(--active-bg);
   // color: #508BFE;
   opacity: 0.8;
 }
-.add-style{
+
+.add-style {
   background: var(--secondary-bg);
   color: var(--primary-text);
 }
-.add-style:hover{
+
+.add-style:hover {
   opacity: 0.8;
 }
 

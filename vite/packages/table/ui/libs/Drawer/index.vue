@@ -1,14 +1,14 @@
 <template>
   <div class="box">
     <a-drawer
-      v-if="visible"
-      :width="500"
-      :height="200"
-      :placement="placement"
-      style="z-index: 99999999"
-      v-model:visible="visible"
-      @close="close()"
-      :bodyStyle="{padding: '12px'}"
+        v-if="visible"
+        v-model:visible="visible"
+        :bodyStyle="{padding: '12px'}"
+        :height="200"
+        :placement="placement"
+        :width="500"
+        style="z-index: 99999999"
+        @close="close()"
     >
       <template #title>
         <slot name="title"></slot>

@@ -3,10 +3,11 @@ import twoColor from '../../../../public/iconLists/twoColor.json'
 import fruit from '../../../../public/iconLists/fruit.json'
 import animal from '../../../../public/iconLists/animal.json'
 import jingling from '../../../../public/iconLists/jingling.json'
-import {CloseOutlined,CheckOutlined} from '@ant-design/icons-vue'
+import {CheckOutlined, CloseOutlined} from '@ant-design/icons-vue'
+
 export default {
-  components: {CloseOutlined,CheckOutlined},
-  emits:['onSelect'],
+  components: {CloseOutlined, CheckOutlined},
+  emits: ['onSelect'],
   data() {
     return {
       activeKey: 'twoColor',
@@ -18,42 +19,38 @@ export default {
         jingling
       ],
       args: {
-        shape:'square',
-        text:false,
+        shape: 'square',
+        text: false,
       },
-      selectedIcon:{
-
+      selectedIcon: {},
+      defaultIcon: {
+        type: 'icon',
+        icon: {}
       },
-      defaultIcon:{
-        type:'icon',
-        icon:{
-
-        }
-      },
-      defaultText:'',
-      inputText:'',
-      changed:false,
-      originalIcon:'',
+      defaultText: '',
+      inputText: '',
+      changed: false,
+      originalIcon: '',
     }
   },
-  mounted(){
+  mounted() {
     //this.getCaller()
   },
   methods: {
-    close(){
+    close() {
 
     },
-    onChanged(){
-      if(this.inputText!==this.defaultText){
-        this.changed=true
+    onChanged() {
+      if (this.inputText !== this.defaultText) {
+        this.changed = true
       }
     },
-    clearIcon(){
-      this.selectedIcon={
-        type:'img',
-        url:this.originalIcon
+    clearIcon() {
+      this.selectedIcon = {
+        type: 'img',
+        url: this.originalIcon
       }
-      this.changed=true
+      this.changed = true
     },
     // getCaller(){
     //   this.changed=false
@@ -80,18 +77,18 @@ export default {
     //     })
     //   })
     // },
-    parseFontIcon(userIcon){
-      let iconPath=userIcon.split('.')
+    parseFontIcon(userIcon) {
+      let iconPath = userIcon.split('.')
       return {
-        list:iconPath[1],
-        type:'fontIcon',
-        name:iconPath[2]
+        list: iconPath[1],
+        type: 'fontIcon',
+        name: iconPath[2]
       }
     },
-    done(){
-      let icon={}
-      if(!!this.selectedIcon){
-        icon=JSON.parse(JSON.stringify(this.selectedIcon))
+    done() {
+      let icon = {}
+      if (!!this.selectedIcon) {
+        icon = JSON.parse(JSON.stringify(this.selectedIcon))
       }
       // ipc.sendTo(this.callerId, 'selectedIcon',{
       //   icon:icon,
@@ -99,16 +96,16 @@ export default {
       // })
       // ipc.send('closeSelf')
     },
-    selectIcon(icon,iconList) {
-      this.changed=true
-      let selectedIcon={
-        list:iconList.key,
-        name:icon.name,
-        type:'fontIcon',
-        alias:icon.alias
+    selectIcon(icon, iconList) {
+      this.changed = true
+      let selectedIcon = {
+        list: iconList.key,
+        name: icon.name,
+        type: 'fontIcon',
+        alias: icon.alias
       }
-      this.selectedIcon=selectedIcon
-      this.$emit('onSelect',selectedIcon)
+      this.selectedIcon = selectedIcon
+      this.$emit('onSelect', selectedIcon)
       // if(this.args.text){
       //   return
       // }else{
@@ -123,62 +120,63 @@ export default {
 </script>
 
 <template>
-  <div class="icon-selector" v-if="this.args.text" style="margin-bottom: 10px;padding-top: 10px;width: 100%">
-    <a-row  style="padding: 4px;" >
+  <div v-if="this.args.text" class="icon-selector" style="margin-bottom: 10px;padding-top: 10px;width: 100%">
+    <a-row style="padding: 4px;">
       <a-col class="set-icon" flex="60px" style="text-align: center">
         <a-avatar v-if="this.selectedIcon.type==='img'" :shape="args.shape" :src="selectedIcon.url"></a-avatar>
-        <svg v-else style="width: 30px;height: 30px" class="icon group-icon" aria-hidden="true">
+        <svg v-else aria-hidden="true" class="icon group-icon" style="width: 30px;height: 30px">
           <use v-bind:xlink:href="'#icon-'+this.selectedIcon.name"></use>
         </svg>
-        <div @click="clearIcon()" class="clear-mask" :class="{'square':this.args.shape==='square'}" style="" >
+        <div :class="{'square':this.args.shape==='square'}" class="clear-mask" style="" @click="clearIcon()">
           <close-outlined style="color: white;font-size: 18px;padding-top: 8px"></close-outlined>
         </div>
       </a-col>
       <a-col flex="1" style="padding-right:50px">
-        <a-input @change="onChanged" v-model:value="inputText" id="textInput" size="small" placeholder="输入名称" style="width: 200px"></a-input>
+        <a-input id="textInput" v-model:value="inputText" placeholder="输入名称" size="small" style="width: 200px"
+                 @change="onChanged"></a-input>
         &nbsp;
       </a-col>
       <a-col flex="40px" style="text-align: center">
-        <a-button v-if="changed" type="primary" @click="done"  shape="circle" size="small">
+        <a-button v-if="changed" shape="circle" size="small" type="primary" @click="done">
           <template #icon>
-            <CheckOutlined />
+            <CheckOutlined/>
           </template>
         </a-button>
-<!--        <a-button @click="close"  shape="circle" size="small">-->
-<!--          <template #icon>-->
-<!--            <CloseOutlined />-->
-<!--          </template>-->
-<!--        </a-button>-->
+        <!--        <a-button @click="close"  shape="circle" size="small">-->
+        <!--          <template #icon>-->
+        <!--            <CloseOutlined />-->
+        <!--          </template>-->
+        <!--        </a-button>-->
       </a-col>
     </a-row>
 
   </div>
-  <div class="card-container" :class="{'text':this.args.text}">
-    <a-tabs type="card" v-model:activeKey="activeKey">
-      <a-tab-pane :key="iconList.key" v-for="iconList in iconLists">
+  <div :class="{'text':this.args.text}" class="card-container">
+    <a-tabs v-model:activeKey="activeKey" type="card">
+      <a-tab-pane v-for="iconList in iconLists" :key="iconList.key">
         <template #tab>
         <span>
            <a-tooltip placement="bottom">
          <template #title>
             <span style="user-select: none">{{ iconList.alias }}</span>
           </template>
-          <svg class="icon group-icon" aria-hidden="true">
+          <svg aria-hidden="true" class="icon group-icon">
             <use v-bind:xlink:href="'#icon-'+iconList.icon"></use>
           </svg>
            </a-tooltip>
         </span>
         </template>
         <div class="group-items" style="display: flex;flex-wrap: wrap">
-          <a-tooltip placement="top" v-for="icon in iconList.list">
+          <a-tooltip v-for="icon in iconList.list" placement="top">
             <template #title>
               <span style="user-select: none">{{ icon.alias }}</span>
             </template>
-        <div @click="selectIcon(icon,iconList)">
-          <svg class="icon" aria-hidden="true">
-            <use v-bind:xlink:href="'#icon-'+icon.name"></use>
-          </svg>
-        </div>
-        </a-tooltip>
+            <div @click="selectIcon(icon,iconList)">
+              <svg aria-hidden="true" class="icon">
+                <use v-bind:xlink:href="'#icon-'+icon.name"></use>
+              </svg>
+            </div>
+          </a-tooltip>
         </div>
       </a-tab-pane>
       <!--      <a-tab-pane key="2">-->
@@ -197,120 +195,135 @@ export default {
 <style lang="scss">
 
 
-  .ant-tabs > .ant-tabs-nav .ant-tabs-nav-wrap, .ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-wrap{
-    margin-left: 20px;
-  }
-  .card-container p {
-    margin: 0;
-  }
-  .text.card-container > .ant-tabs-card .ant-tabs-content {
-    height: calc(100vh - 107px);
-  }
-  .card-container > .ant-tabs-card .ant-tabs-content {
-    height: calc(100vh - 220px);
-    margin-top: -16px;
-    overflow-y: auto;
-    background: #414141;
-    border-radius: 10px;
-  }
+.ant-tabs > .ant-tabs-nav .ant-tabs-nav-wrap, .ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-wrap {
+  margin-left: 20px;
+}
 
-  .card-container > .ant-tabs-card .ant-tabs-content > .ant-tabs-tabpane {
-    padding: 16px;
+.card-container p {
+  margin: 0;
+}
 
+.text.card-container > .ant-tabs-card .ant-tabs-content {
+  height: calc(100vh - 107px);
+}
+
+.card-container > .ant-tabs-card .ant-tabs-content {
+  height: calc(100vh - 220px);
+  margin-top: -16px;
+  overflow-y: auto;
+  background: #414141;
+  border-radius: 10px;
+}
+
+.card-container > .ant-tabs-card .ant-tabs-content > .ant-tabs-tabpane {
+  padding: 16px;
+
+}
+
+.card-container > .ant-tabs-card > .ant-tabs-nav::before {
+  display: none;
+}
+
+.card-container > .ant-tabs-card .ant-tabs-tab,
+[data-theme='compact'] .card-container > .ant-tabs-card .ant-tabs-tab {
+  background: transparent;
+  border-color: transparent;
+}
+
+.card-container > .ant-tabs-card .ant-tabs-tab-active,
+[data-theme='compact'] .card-container > .ant-tabs-card .ant-tabs-tab-active {
+  background: #414141;
+  border: none;
+
+}
+
+#components-tabs-demo-card-top .code-box-demo {
+  padding: 24px;
+  overflow: hidden;
+  background: #f5f5f5;
+}
+
+[data-theme='compact'] .card-container > .ant-tabs-card .ant-tabs-content {
+  height: 120px;
+  margin-top: -8px;
+}
+
+[data-theme='dark'] .card-container > .ant-tabs-card .ant-tabs-tab {
+  background: transparent;
+  border-color: transparent;
+}
+
+[data-theme='dark'] #components-tabs-demo-card-top .code-box-demo {
+  background: #000;
+}
+
+[data-theme='dark'] .card-container > .ant-tabs-card .ant-tabs-content > .ant-tabs-tabpane {
+  background: #141414;
+}
+
+[data-theme='dark'] .card-container > .ant-tabs-card .ant-tabs-tab-active {
+  background: #141414;
+  border-color: #141414;
+}
+
+.icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}
+
+.group-icon {
+  width: 1.6em;
+  height: 1.6em;
+  outline: none;
+}
+
+.group-items > div svg {
+  width: 2em;
+  height: 2em;
+  transition: all 0.6s;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.4);
   }
+}
 
-  .card-container > .ant-tabs-card > .ant-tabs-nav::before {
-    display: none;
-  }
+.group-items > div {
+  padding: 5px;
+}
 
-  .card-container > .ant-tabs-card .ant-tabs-tab,
-  [data-theme='compact'] .card-container > .ant-tabs-card .ant-tabs-tab {
-    background: transparent;
-    border-color: transparent;
-  }
+.scrollbar {
 
-  .card-container > .ant-tabs-card .ant-tabs-tab-active,
-  [data-theme='compact'] .card-container > .ant-tabs-card .ant-tabs-tab-active {
-    background: #414141;
-    border: none;
+}
 
-  }
-
-  #components-tabs-demo-card-top .code-box-demo {
-    padding: 24px;
-    overflow: hidden;
-    background: #f5f5f5;
-  }
-
-  [data-theme='compact'] .card-container > .ant-tabs-card .ant-tabs-content {
-    height: 120px;
-    margin-top: -8px;
-  }
-
-  [data-theme='dark'] .card-container > .ant-tabs-card .ant-tabs-tab {
-    background: transparent;
-    border-color: transparent;
-  }
-
-  [data-theme='dark'] #components-tabs-demo-card-top .code-box-demo {
-    background: #000;
-  }
-
-  [data-theme='dark'] .card-container > .ant-tabs-card .ant-tabs-content > .ant-tabs-tabpane {
-    background: #141414;
-  }
-
-  [data-theme='dark'] .card-container > .ant-tabs-card .ant-tabs-tab-active {
-    background: #141414;
-    border-color: #141414;
-  }
-  .icon {
-    width: 1em;
-    height: 1em;
-    vertical-align: -0.15em;
-    fill: currentColor;
-    overflow: hidden;
-  }
-
-  .group-icon {
-    width: 1.6em;
-    height: 1.6em;
-    outline: none;
-  }
-
-  .group-items > div svg {
-    width: 2em;
-    height: 2em;
-    transition: all 0.6s;
-    cursor: pointer;
-
-    &:hover {
-      transform: scale(1.4);
+.set-icon {
+  &:hover {
+    .clear-mask {
+      visibility: visible;
     }
   }
+}
 
-  .group-items > div {
-    padding: 5px;
+.clear-mask {
+  visibility: hidden;
+
+  &.square {
+    border-radius: 4px;
   }
 
-  .scrollbar {
+  border-radius: 50%;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.51);
+  width: 30px;
+  height: 30px;
+  top: 0;
+  left: calc(50% - 15px)
+}
 
-  }
-  .set-icon{
-    &:hover{
-      .clear-mask{
-        visibility: visible;
-      }
-    }
-  }
-  .clear-mask{
-    visibility: hidden;
-    &.square{
-      border-radius: 4px;
-    }
-    border-radius: 50%;
-    position:absolute;background:rgba(0,0,0,0.51);width: 30px;height: 30px;top: 0;left:calc(50% - 15px)
-  }
-  .icon-selector{}
+.icon-selector {
+}
 
 </style>

@@ -13,22 +13,23 @@
               <Icon icon="gengduo1" style="font-size: 1.75em;color:var(--primary-text);"></Icon>
             </div>
           </div>
-          <HorizontalCapture @click="refreshSource" :navList="captureType" v-model:selectType="defaultRecordingType"
-                             class="mb-4"></HorizontalCapture>
-          <div class="text-center" v-if="loading===true">
-            <icon class=" animate-spin " icon="shuaxin" style="font-size:24px;vertical-align: top"></icon> 捕获源获取中…
+          <HorizontalCapture v-model:selectType="defaultRecordingType" :navList="captureType" class="mb-4"
+                             @click="refreshSource"></HorizontalCapture>
+          <div v-if="loading===true" class="text-center">
+            <icon class=" animate-spin " icon="shuaxin" style="font-size:24px;vertical-align: top"></icon>
+            捕获源获取中…
           </div>
           <div v-else style="flex:1;height:0">
             <template v-if="defaultRecordingType.name === 'recordGame'">
-              <vue-custom-scrollbar @touchstart.stop @touchmove.stop @touchend.stop :settings="settingsScroller"
-                                    style="height:100%;">
+              <vue-custom-scrollbar :settings="settingsScroller" style="height:100%;" @touchstart.stop @touchmove.stop
+                                    @touchend.stop>
                 <div v-if="recordGameData.length === 0">
                   <a-empty :image="simpleImage"/>
                 </div>
-                <div class="flex justify-between flex-wrap" v-else>
+                <div v-else class="flex justify-between flex-wrap">
                   <div v-for="(item,index) in recordGameData"
-                       class="flex pointer flex-col capture-bg rounded-lg mb-4  record-game-item"
-                       @click="clickRecordGame(item,index)" :class="{'s-active':defaultIndex === index}"
+                       :class="{'s-active':defaultIndex === index}"
+                       class="flex pointer flex-col capture-bg rounded-lg mb-4  record-game-item" @click="clickRecordGame(item,index)"
                   >
                     <img :src="item.url" class="w-full rounded-t-lg h-full object-cover">
                     <div class="px-4 py-3">
@@ -39,15 +40,15 @@
               </vue-custom-scrollbar>
             </template>
             <template v-if="defaultRecordingType.name === 'recordFullScreen'">
-              <vue-custom-scrollbar @touchstart.stop @touchmove.stop @touchend.stop :settings="settingsScroller"
-                                    style="height:100%;">
+              <vue-custom-scrollbar :settings="settingsScroller" style="height:100%;" @touchstart.stop @touchmove.stop
+                                    @touchend.stop>
                 <div v-if="deskSource.length === 0">
                   <a-empty :image="simpleImage"/>
                 </div>
-                <div class="flex justify-between flex-wrap" v-else>
+                <div v-else class="flex justify-between flex-wrap">
                   <div v-for="(item,index) in  deskSource"
-                       class="flex flex-col capture-bg rounded-lg mb-4 pointer record-game-item"
-                       @click="chooseSource(item,index)" :class="{'s-active':defaultIndex === index}"
+                       :class="{'s-active':defaultIndex === index}"
+                       class="flex flex-col capture-bg rounded-lg mb-4 pointer record-game-item" @click="chooseSource(item,index)"
                   >
                     <img :src="'file://'+item.src" class="w-full rounded-t-lg h-full object-cover">
                     <div class="px-4 py-3">
@@ -58,15 +59,15 @@
               </vue-custom-scrollbar>
             </template>
             <template v-if="defaultRecordingType.name === 'logger'">
-              <vue-custom-scrollbar @touchstart.stop @touchmove.stop @touchend.stop :settings="settingsScroller"
-                                    style="height:100%;">
+              <vue-custom-scrollbar :settings="settingsScroller" style="height:100%;" @touchstart.stop @touchmove.stop
+                                    @touchend.stop>
                 <div v-if="windowSource.length === 0">
                   <a-empty :image="simpleImage"/>
                 </div>
-                <div class="flex justify-between flex-wrap" v-else>
+                <div v-else class="flex justify-between flex-wrap">
                   <div v-for="(item,index) in  windowSource"
-                       class="flex flex-col justify-between capture-bg rounded-lg mb-4 pointer record-game-item"
-                       @click="chooseSource(item,index)" :class="{'s-active':defaultIndex === index}"
+                       :class="{'s-active':defaultIndex === index}"
+                       class="flex flex-col justify-between capture-bg rounded-lg mb-4 pointer record-game-item" @click="chooseSource(item,index)"
                   >
                     <img :src="'file://'+item.src" class="w-full rounded-t-lg h-full object-cover">
                     <div class="px-4 py-3 truncate">
@@ -86,10 +87,11 @@
 
             </div>
             <div style="height: 5em;position: relative">
-              <back-btn @click="step=1" class="capture-bg capture-title" style="margin-top: -30px;margin-left: -20px"></back-btn>
+              <back-btn class="capture-bg capture-title" style="margin-top: -30px;margin-left: -20px"
+                        @click="step=1"></back-btn>
               <div class="capture-title" style="position: absolute;left:70px;top:10px;font-size: 16px">已选择：
-                <a-avatar v-if="currentSource.type==='window'" :size="24" shape="square"
-                          :src="'file://'+currentSource.icon"></a-avatar>
+                <a-avatar v-if="currentSource.type==='window'" :size="24" :src="'file://'+currentSource.icon"
+                          shape="square"></a-avatar>
                 {{ currentSource.name }}
               </div>
               <div style="position: absolute;right: 0.5em">
@@ -109,8 +111,8 @@
                 <div class="cp-text capture-title">截图</div>
               </div>
 
-              <div :class="{disable:!this.settings.videoSavePath}" v-if="!recording" @click="startRecording"
-                   class="cp-w cp-red-active cp-red-1 pointer flex-col rounded-lg mr-3 hover-btn">
+              <div v-if="!recording" :class="{disable:!this.settings.videoSavePath}" class="cp-w cp-red-active cp-red-1 pointer flex-col rounded-lg mr-3 hover-btn"
+                   @click="startRecording">
                 <div class="w-20 h-20 flex cp-red-2  items-center rounded-full justify-center mb-3">
                   <div class="rounded-full cp-red-full flex items-center justify-center cp-lw">
                     <Icon icon="record-circle-line" style="font-size: 2em;color:var(--primary-text);"></Icon>
@@ -118,7 +120,7 @@
                 </div>
                 <div class="cp-text capture-title">开始录制</div>
               </div>
-              <div v-else @click="stopRecording" class="cp-w cp-red-active cp-red-1 pointer flex-col rounded-lg mr-3">
+              <div v-else class="cp-w cp-red-active cp-red-1 pointer flex-col rounded-lg mr-3" @click="stopRecording">
                 <div class="w-20 h-20 flex cp-red-2  items-center rounded-full justify-center mb-3">
                   <div class="rounded-full cp-red-full flex items-center justify-center cp-lw">
                     <Icon icon="record-circle-line" style="font-size: 2em;color:var(--primary-text);"></Icon>
@@ -129,7 +131,7 @@
 
 
               <div @click="startMonitoring">
-                <div class="cp-w capture-bg pointer  flex-col rounded-lg " v-if="settings.enableInspector === false">
+                <div v-if="settings.enableInspector === false" class="cp-w capture-bg pointer  flex-col rounded-lg ">
                   <div class="w-20 h-20 flex  items-center rounded-full justify-center mb-3">
                     <div class="rounded-full dark-blue-full flex items-center justify-center cp-lw">
                       <AreaChartOutlined style="font-size: 2em;color:var(--primary-text);"></AreaChartOutlined>
@@ -137,7 +139,7 @@
                   </div>
                   <div class="cp-text capture-title">开启监控</div>
                 </div>
-                <div class="cp-w  dark-blue-1 pointer  flex-col rounded-lg" v-else>
+                <div v-else class="cp-w  dark-blue-1 pointer  flex-col rounded-lg">
                   <div class="w-20 h-20 flex dark-blue-2 items-center rounded-full justify-center mb-3">
                     <div class="rounded-full dark-blue-full flex items-center justify-center cp-lw">
                       <AreaChartOutlined style="font-size: 2em;color:var(--primary-text);"></AreaChartOutlined>
@@ -147,31 +149,31 @@
                 </div>
               </div>
             </div>
-            <div class="capture-bg rounded-md p-4 mb-3" v-if="isHeight === true">
+            <div v-if="isHeight === true" class="capture-bg rounded-md p-4 mb-3">
               <div class="flex items-center mb-5">
                 <div class="pointer" @click="clickMute">
-                  <Icon icon="yinliang" style="font-size: 1.5em;color:var(--primary-text);"
-                        v-if="!systemSound.muted"></Icon>
-                  <Icon icon="jingyin" v-else style="font-size: 1.5em;color:var(--primary-text);"></Icon>
+                  <Icon v-if="!systemSound.muted" icon="yinliang"
+                        style="font-size: 1.5em;color:var(--primary-text);"></Icon>
+                  <Icon v-else icon="jingyin" style="font-size: 1.5em;color:var(--primary-text);"></Icon>
                 </div>
                 <span class="mx-3" style="color:var(--primary-text);">系统声音</span>
                 <div style="width:331px;">
-                  <a-slider @afterChange="changeVolume" v-model:value="systemSound.volume"></a-slider>
+                  <a-slider v-model:value="systemSound.volume" @afterChange="changeVolume"></a-slider>
                 </div>
               </div>
               <div class="flex items-center">
                 <div class="pointer" @click="clickMicMute">
-                  <Icon icon="mic-on" style="font-size: 1.5em;color:var(--primary-text);"
-                        v-if="!systemMicrophone.muted"></Icon>
-                  <Icon icon="mic-off" style="font-size: 1.5em;color:var(--primary-text);" v-else></Icon>
+                  <Icon v-if="!systemMicrophone.muted" icon="mic-on"
+                        style="font-size: 1.5em;color:var(--primary-text);"></Icon>
+                  <Icon v-else icon="mic-off" style="font-size: 1.5em;color:var(--primary-text);"></Icon>
                 </div>
                 <span style="margin: 0 19px;color:var(--primary-text);">麦克风</span>
                 <div style="width:331px;">
-                  <a-slider @afterChange="changeMicVolume" v-model:value="systemMicrophone.volume"></a-slider>
+                  <a-slider v-model:value="systemMicrophone.volume" @afterChange="changeMicVolume"></a-slider>
                 </div>
               </div>
             </div>
-            <div style="text-align: center" v-if="recording">
+            <div v-if="recording" style="text-align: center">
               <icon icon="record-circle-line" style="color:red"></icon>
               正在录制视频：已录制{{ recordedTimeStr }}，
               码率：{{ (this.settings.videoBitsPerSecond / 1024 / 1024).toFixed(2) }}Mbps
@@ -184,10 +186,10 @@
                   {{ recentFileName }}
                 </div>
                 <div class="mb-2">
-                  <a-button @click="openRecent" class="mr-2">打开</a-button>
-                  <a-button @click="openPos" class="mr-2">浏览</a-button>
-                  <a-button @click="saveRecent" class="mr-2">另存为</a-button>
-                  <a-button @click="delRecent" type="danger" class="mr-2">删除</a-button>
+                  <a-button class="mr-2" @click="openRecent">打开</a-button>
+                  <a-button class="mr-2" @click="openPos">浏览</a-button>
+                  <a-button class="mr-2" @click="saveRecent">另存为</a-button>
+                  <a-button class="mr-2" type="danger" @click="delRecent">删除</a-button>
                 </div>
                 <VideoItem :key="recentKey" :options="{controls:true,loop:false}"
                            :url="'file://'+this.getRecentVideoPath()"></VideoItem>
@@ -198,13 +200,13 @@
                   {{ recentFileName }}
                 </div>
                 <div class="mb-2">
-                  <a-button @click="openRecent" class="mr-2">打开</a-button>
-                  <a-button @click="openPos" class="mr-2">浏览</a-button>
+                  <a-button class="mr-2" @click="openRecent">打开</a-button>
+                  <a-button class="mr-2" @click="openPos">浏览</a-button>
                   <!--                <a-button @click="editRecent" class="mr-2">编辑</a-button>-->
-                  <a-button @click="saveRecent" class="mr-2">另存为</a-button>
-                  <a-button @click="delRecent" type="danger" class="mr-2">删除</a-button>
+                  <a-button class="mr-2" @click="saveRecent">另存为</a-button>
+                  <a-button class="mr-2" type="danger" @click="delRecent">删除</a-button>
                 </div>
-                <a-image style="width: 100%;border-radius: 4px" :src="recentScreenShot"></a-image>
+                <a-image :src="recentScreenShot" style="width: 100%;border-radius: 4px"></a-image>
               </div>
             </div>
 
@@ -213,15 +215,15 @@
       </div>
 
     </div>
-    <div class="ml-3 rounded-md w-full flex flex-col cap-right " >
+    <div class="ml-3 rounded-md w-full flex flex-col cap-right ">
       <!--   监控部分   -->
-      <div class="capture-bg rounded-md mb-3 p-3" v-if="this.settings.enableInspector === true">
+      <div v-if="this.settings.enableInspector === true" class="capture-bg rounded-md mb-3 p-3">
         <div class="flex  justify-between justify-center mb-3">
           <div class="flex items-center ">
             <Icon icon="game" style="font-size: 1.5em;color:var(--primary-text);"></Icon>
             <span class="ml-2 monitor-text" style="color:var(--primary-text);">{{ monitorTitle }}</span>
           </div>
-          <div @click="openMonitorSet" class="flex items-center justify-center pointer">
+          <div class="flex items-center justify-center pointer" @click="openMonitorSet">
             <Icon icon="gengduo1" style="font-size: 1.5em;color:var(--primary-text);"></Icon>
           </div>
         </div>
@@ -294,23 +296,27 @@
             <Icon icon="gengduo1" style="font-size: 1.5em;color:var(--secondary-text);"></Icon>
           </div>
         </div>
-        <HorizontalCapture :navList="lastCapture" v-model:selectType="defaultLastCap" class="mb-3"></HorizontalCapture>
+        <HorizontalCapture v-model:selectType="defaultLastCap" :navList="lastCapture" class="mb-3"></HorizontalCapture>
 
         <div class="flex-1" style="height: 0">
           <template v-if="defaultLastCap.name === 'screenCap'">
-            <div class="p-2" v-if="!settings.imageSavePath">
+            <div v-if="!settings.imageSavePath" class="p-2">
               <div class="mb-3 fps-t mb-2 ">需先设置截屏保存位置：</div>
-              <div @click="setImageSavePath" class="text-center mb-3 py-3 s-item rounded-lg">设置截屏保存位置</div>
+              <div class="text-center mb-3 py-3 s-item rounded-lg" @click="setImageSavePath">设置截屏保存位置</div>
             </div>
-            <vue-custom-scrollbar v-else class="rounded-md" @touchstart.stop @touchmove.stop @touchend.stop
-                                  :settings="settingsScroller" style="height:100%;">
+            <vue-custom-scrollbar v-else :settings="settingsScroller" class="rounded-md" style="height:100%;" @touchstart.stop
+                                  @touchmove.stop @touchend.stop>
               <div class="flex flex-row flex-wrap content-game">
-                <div class="game-list-item my-game-content my-image" style="position: relative"
-                     v-for="item in pagedImages">
-                  <a-image :title="item.filename" style="object-fit: contain" :width="160" :height="90" :src="'file://'+item.path"
-                           class=" img"></a-image>
+                <div v-for="item in pagedImages" class="game-list-item my-game-content my-image"
+                     style="position: relative">
+                  <a-image :height="90" :src="'file://'+item.path" :title="item.filename" :width="160"
+                           class=" img"
+                           style="object-fit: contain"></a-image>
                   <a-tooltip :title="item.filename">
-                    <div style="position: absolute;width: 100%;bottom: 0;color: white;background: rgba(0,0,0,0.3);font-size: 12px" class="px-1 truncate">{{item.filename}}</div>
+                    <div
+                        class="px-1 truncate"
+                        style="position: absolute;width: 100%;bottom: 0;color: white;background: rgba(0,0,0,0.3);font-size: 12px">{{ item.filename }}
+                    </div>
                   </a-tooltip>
 
                 </div>
@@ -318,15 +324,15 @@
             </vue-custom-scrollbar>
           </template>
           <template v-else>
-            <div class="p-2" v-if="!settings.videoSavePath">
+            <div v-if="!settings.videoSavePath" class="p-2">
               <div class="mb-3 fps-t">需先设置录屏保存位置：</div>
-              <div @click="setVideoSavePath" class="text-center mb-3 py-3 s-item rounded-lg">设置录屏保存位置</div>
+              <div class="text-center mb-3 py-3 s-item rounded-lg" @click="setVideoSavePath">设置录屏保存位置</div>
             </div>
-            <vue-custom-scrollbar v-else class="rounded-md" @touchstart.stop @touchmove.stop @touchend.stop
-                                  :settings="settingsScroller" style="height:100%;">
+            <vue-custom-scrollbar v-else :settings="settingsScroller" class="rounded-md" style="height:100%;" @touchstart.stop
+                                  @touchmove.stop @touchend.stop>
               <div class="flex flex-row flex-wrap content-game ">
-                <div class="game-list-item px-1.5 pb-4 flex-shrink-0 my-game-content "
-                     v-for="item in pagedVideos">
+                <div v-for="item in pagedVideos"
+                     class="game-list-item px-1.5 pb-4 flex-shrink-0 my-game-content ">
                   <div class="relative  w-auto h-full s-item rounded-md overflow-hidden  pointer flex flex-col "
                        style="border-radius: 12px;">
                     <VideoItem :url="item.path"></VideoItem>
@@ -342,43 +348,44 @@
   </div>
 
   <!-- 抽屉 -->
-  <a-drawer width="500" title="设置" :bodyStyle="{ overflow: 'hidden' }" :placement="right"
-            v-model:visible="recordSetShow" @close="recordSetShow = false">
+  <a-drawer v-model:visible="recordSetShow" :bodyStyle="{ overflow: 'hidden' }" :placement="right" title="设置"
+            width="500" @close="recordSetShow = false">
     <div class="flex flex-col scroll-container">
       <div class="flex flex-col rounded-md p-4 mb-3" style="background: var(--secondary-bg);">
         <div class="flex items-center mb-3">
           <div class="pointer" @click="clickMute">
-            <Icon icon="yinliang" style="font-size: 1.5em;color:var(--primary-text);"
-                  v-if="!systemSound.muted"></Icon>
-            <Icon icon="jingyin" v-else style="font-size: 1.5em;color:var(--primary-text);"></Icon>
+            <Icon v-if="!systemSound.muted" icon="yinliang"
+                  style="font-size: 1.5em;color:var(--primary-text);"></Icon>
+            <Icon v-else icon="jingyin" style="font-size: 1.5em;color:var(--primary-text);"></Icon>
           </div>
           <span class="mx-3" style="color:var(--primary-text);">系统声音</span>
           <div style="width:310px;">
-            <a-slider @afterChange="changeVolume" v-model:value="systemSound.volume"></a-slider>
+            <a-slider v-model:value="systemSound.volume" @afterChange="changeVolume"></a-slider>
           </div>
         </div>
         <div class="flex items-center">
           <div class="pointer" @click="clickMicMute">
-            <Icon icon="mic-on" style="font-size: 1.5em;color:var(--primary-text);"
-                  v-if="!systemMicrophone.muted"></Icon>
-            <Icon icon="mic-off" style="font-size: 1.5em;color:var(--primary-text);" v-else></Icon>
+            <Icon v-if="!systemMicrophone.muted" icon="mic-on"
+                  style="font-size: 1.5em;color:var(--primary-text);"></Icon>
+            <Icon v-else icon="mic-off" style="font-size: 1.5em;color:var(--primary-text);"></Icon>
           </div>
           <span style="margin: 0 19px;color:var(--primary-text);">麦克风</span>
           <div style="width:310px;">
-            <a-slider @afterChange="changeMicVolume" v-model:value="systemMicrophone.volume"></a-slider>
+            <a-slider v-model:value="systemMicrophone.volume" @afterChange="changeMicVolume"></a-slider>
           </div>
         </div>
       </div>
       <span class="mb-3 fps-t">我的截屏保存地址</span>
-      <span @click="setImageSavePath" style="background: var(--secondary-bg);" class="text-center mb-3 py-3 s-item rounded-lg">{{
+      <span class="text-center mb-3 py-3 s-item rounded-lg" style="background: var(--secondary-bg);"
+            @click="setImageSavePath">{{
           settings.imageSavePath
         }}</span>
       <span class="mb-3 fps-t">我的录制保存地址</span>
-      <span @click="setVideoSavePath" style="background: var(--secondary-bg);" class="text-center mb-3 py-3 rounded-lg">{{
+      <span class="text-center mb-3 py-3 rounded-lg" style="background: var(--secondary-bg);" @click="setVideoSavePath">{{
           settings.videoSavePath
         }}</span>
       <span class="mb-3 fps-t ">视频码率</span>
-      <a-select  v-model:value="settings.videoBitsPerSecond">
+      <a-select v-model:value="settings.videoBitsPerSecond">
         <a-select-option :value="1.5e6">
           1.5Mbps
         </a-select-option>
@@ -395,32 +402,34 @@
           10.0Mbps
         </a-select-option>
       </a-select>
-<!--      <span class="mb-3 mt-3 fps-t">截屏快捷键</span>-->
-<!--      <div class="flex items-center  mb-3">-->
-<!--        <span class="rounded-lg p-2 s-item mr-3 w-2/3">{{ shortcutKey }}</span>-->
-<!--        <span class="mr-3 s-item rounded-lg p-2 drawer-active btn-text pointer">更换按键</span>-->
-<!--        <span class="rounded-lg s-item btn-text drawer-active p-2 pointer">重置</span>-->
-<!--      </div>-->
-<!--      <span class="mb-3 fps-t">录制快捷键</span>-->
-<!--      <div class="flex items-center mb-3">-->
-<!--        <span class="w-2/3 p-2 s-item rounded-lg mr-3">{{ recordKey }}</span>-->
-<!--        <span class="mr-3 s-item p-2 rounded-lg btn-text drawer-active pointer">更换按键</span>-->
-<!--        <span class="rounded-lg p-2 s-item btn-text drawer-active pointer">重置</span>-->
-<!--      </div>-->
-<!--      <span class="mb-3 fps-t">是否启用麦克风录制快捷键</span>-->
-<!--      <div class="flex items-center mb-3">-->
-<!--        <span class="w-2/3 p-2 s-item rounded-lg mr-3">{{ microphoneKey }}</span>-->
-<!--        <span class="mr-3 s-item p-2 rounded-lg btn-text drawer-active pointer">更换按键</span>-->
-<!--        <span class="rounded-lg p-2 s-item btn-text drawer-active pointer">重置</span>-->
-<!--      </div>-->
+      <!--      <span class="mb-3 mt-3 fps-t">截屏快捷键</span>-->
+      <!--      <div class="flex items-center  mb-3">-->
+      <!--        <span class="rounded-lg p-2 s-item mr-3 w-2/3">{{ shortcutKey }}</span>-->
+      <!--        <span class="mr-3 s-item rounded-lg p-2 drawer-active btn-text pointer">更换按键</span>-->
+      <!--        <span class="rounded-lg s-item btn-text drawer-active p-2 pointer">重置</span>-->
+      <!--      </div>-->
+      <!--      <span class="mb-3 fps-t">录制快捷键</span>-->
+      <!--      <div class="flex items-center mb-3">-->
+      <!--        <span class="w-2/3 p-2 s-item rounded-lg mr-3">{{ recordKey }}</span>-->
+      <!--        <span class="mr-3 s-item p-2 rounded-lg btn-text drawer-active pointer">更换按键</span>-->
+      <!--        <span class="rounded-lg p-2 s-item btn-text drawer-active pointer">重置</span>-->
+      <!--      </div>-->
+      <!--      <span class="mb-3 fps-t">是否启用麦克风录制快捷键</span>-->
+      <!--      <div class="flex items-center mb-3">-->
+      <!--        <span class="w-2/3 p-2 s-item rounded-lg mr-3">{{ microphoneKey }}</span>-->
+      <!--        <span class="mr-3 s-item p-2 rounded-lg btn-text drawer-active pointer">更换按键</span>-->
+      <!--        <span class="rounded-lg p-2 s-item btn-text drawer-active pointer">重置</span>-->
+      <!--      </div>-->
     </div>
   </a-drawer>
 
-  <a-drawer width="500" title="设置" :placement="right" v-model:visible="setShow">
+  <a-drawer v-model:visible="setShow" :placement="right" title="设置" width="500">
     <div class="flex flex-col">
       <div v-for="item in monitorSetData"
-           class="h-12 mb-2 flex rounded-lg pointer items-center justify-center" style="background: var(--secondary-bg);"
-           @click="selectMonitorItem(item)" :class="{'xt-active-bg cap-active':this.settings.inspectorIndex  === item.id}"
+           :class="{'xt-active-bg cap-active':this.settings.inspectorIndex  === item.id}"
+           class="h-12 mb-2 flex rounded-lg pointer items-center justify-center"
+           style="background: var(--secondary-bg);"
+           @click="selectMonitorItem(item)"
       >
         {{ item.name }}
       </div>
@@ -431,24 +440,23 @@
 
 <script>
 import _ from 'lodash-es'
-import { mapWritableState, mapActions, mapState } from 'pinia'
-import { AreaChartOutlined } from '@ant-design/icons-vue'
+import {mapActions, mapState, mapWritableState} from 'pinia'
+import {AreaChartOutlined} from '@ant-design/icons-vue'
 import HorizontalCapture from '../../components/HorizontalCaptrue.vue'
-import { inspectorStore } from '../../store/inspector'
+import {inspectorStore} from '../../store/inspector'
 import * as echarts from 'echarts'
-import { FPSOption } from '../../components/widgets/supervisory/echartOptions'
-import { captureStore } from '../../store/capture'
+import {FPSOption} from '../../components/widgets/supervisory/echartOptions'
+import {captureStore} from '../../store/capture'
 import BackBtn from '../../components/comp/BackBtn.vue'
-import { steamUserStore } from '../../store/steamUser'
+import {steamUserStore} from '../../store/steamUser'
 import VideoItem from '../../components/game/VideoItem.vue'
-import { useToast } from 'vue-toastification'
-import JumpNotice from '../../components/game/JumpNotice.vue'
+import {useToast} from 'vue-toastification'
 import SaveImage from '../../components/game/SaveImage.vue'
-import { message, Modal } from 'ant-design-vue'
-import { formatSeconds, timeStamp } from '../../util'
+import {message, Modal} from 'ant-design-vue'
+import {formatSeconds, timeStamp} from '../../util'
 import VueCustomScrollbar from '../../../../src/components/vue-scrollbar.vue'
 import filenamify from 'filenamify'
-import { getDefaultMic, getDefaultVolume, setDefaultVolume, setMicVolume } from '../../js/ext/audio/audio'
+import {getDefaultMic, getDefaultVolume, setDefaultVolume, setMicVolume} from '../../js/ext/audio/audio'
 
 const toast = useToast()
 export default {
@@ -461,7 +469,7 @@ export default {
     HorizontalCapture
   },
 
-  data () {
+  data() {
     return {
       loading: false,
       //1.选源 2.实操
@@ -476,16 +484,14 @@ export default {
       recordSetShow: false,
       setShow: false,
       isHeight: true,
-      systemMicrophone: {
-
-      }, // 麦克风
+      systemMicrophone: {}, // 麦克风
       captureType: [
         // {title:'录游戏',name:'recordGame'},
-        { title: '捕获窗口', name: 'logger' },
-        { title: '捕获全屏', name: 'recordFullScreen' },
+        {title: '捕获窗口', name: 'logger'},
+        {title: '捕获全屏', name: 'recordFullScreen'},
 
       ],
-      defaultRecordingType: { title: '录窗口', name: 'logger' },
+      defaultRecordingType: {title: '录窗口', name: 'logger'},
       settingsScroller: {
         useBothWheelAxes: true,
         swipeEasing: true,
@@ -493,10 +499,8 @@ export default {
         suppressScrollX: true,
         wheelPropagation: true
       },
-      recordGameData: [
-      ],
-      recordFullScreenData: [
-      ],
+      recordGameData: [],
+      recordFullScreenData: [],
       recordLogger: [
         // {url:'/public/img/test.png',name:'程序3'},
         // {url:'/public/img/test.png',name:'程序4'},
@@ -504,21 +508,21 @@ export default {
       defaultIndex: 0,
       simpleImage: '/public/img/test/not-data.png',
       lastCapture: [
-        { title: '截屏', name: 'screenCap' },
-        { title: '录制', name: 'record' }
+        {title: '截屏', name: 'screenCap'},
+        {title: '录制', name: 'record'}
       ],
-      defaultLastCap: { title: '截屏', name: 'screenCap' },
+      defaultLastCap: {title: '截屏', name: 'screenCap'},
       monitorTitle: 'FPS',
       monitorSetData: [
-        { title: 'FPS', name: '实时、平均、1%LOW帧数监测', id: 'f' },
-        { title: '性能', name: 'CPU占用、GPU占用、实时FPS监测', id: 'p' },
-        { title: '性能', name: '实时FPS监测', id: 's' }
+        {title: 'FPS', name: '实时、平均、1%LOW帧数监测', id: 'f'},
+        {title: '性能', name: 'CPU占用、GPU占用、实时FPS监测', id: 'p'},
+        {title: '性能', name: '实时FPS监测', id: 's'}
       ],
       CPUGPUData: {
-        useCPU: { value: 0 },
-        useGPU: { value: 0 },
-        useMemory: { value: 0 },
-        FPS: { value: 0 },
+        useCPU: {value: 0},
+        useGPU: {value: 0},
+        useMemory: {value: 0},
+        FPS: {value: 0},
         down: 0,
         up: 0
       },
@@ -549,41 +553,41 @@ export default {
 
   computed: {
     ...mapWritableState(inspectorStore, ['displayData']),
-    ...mapWritableState(captureStore, ['sources', 'settings', 'images', 'videos','currentSource']),
+    ...mapWritableState(captureStore, ['sources', 'settings', 'images', 'videos', 'currentSource']),
     ...mapState(steamUserStore, ['runningGame']),
-    deskSource () {
+    deskSource() {
       return this.sources.filter(s => {
         return s.type === 'screen'
       })
     },
-    windowSource () {
+    windowSource() {
       return this.sources.filter(s => {
         return s.type === 'window'
       })
     },
-    pagedImages () {
+    pagedImages() {
       let sorted = this.images.sort((img1, img2) => {
         return img2.stat.ctimeMs - img1.stat.ctimeMs
       })
       return sorted
     },
-    pagedVideos () {
+    pagedVideos() {
       let sorted = this.videos.sort((img1, img2) => {
         return img2.stat.ctimeMs - img1.stat.ctimeMs
       })
       return sorted
     },
-    recordedTimeStr () {
+    recordedTimeStr() {
 
       return formatSeconds(this.recordedSeconds)
     },
-    averageFps () {
+    averageFps() {
       if (this.fpsList.length === 0) {
         return 0
       }
       return _.mean(this.fpsList).toFixed(1)
     },
-    low1 () {
+    low1() {
 
       let sorted = this.fpsList.sort((a, b) => {
         return a - b
@@ -596,12 +600,12 @@ export default {
       return _.mean(_.take(sorted, getNum)).toFixed(1)
     }
   },
-  unmounted(){
-    if(this.recording){
+  unmounted() {
+    if (this.recording) {
       this.stopRecording()
     }
   },
-  async mounted () {
+  async mounted() {
 
     getDefaultVolume().then((defaultVolume) => {
       this.systemSound = {
@@ -637,8 +641,8 @@ export default {
 
   watch: {
     'displayData': {
-      handler (newVal, oldVal) {
-        let { useGPU, useMemory, useCPU, FPS, down, up } = this.displayData || {}
+      handler(newVal, oldVal) {
+        let {useGPU, useMemory, useCPU, FPS, down, up} = this.displayData || {}
         this.CPUGPUData = {
           useGPU: useGPU,
           useCPU: useCPU,
@@ -670,14 +674,14 @@ export default {
     /**
      * 重载列表
      */
-    reload () {
+    reload() {
       if (this.lastCapture === 'record') {
         this.loadVideos()
       } else {
         this.loadImages()
       }
     },
-    refreshSource (cb) {
+    refreshSource(cb) {
       this.sources = []
       this.loading = true
       this.getSource()
@@ -691,7 +695,7 @@ export default {
         }
       }, 500)
     },
-    async setImageSavePath () {
+    async setImageSavePath() {
       let savePath = await tsbApi.dialog.showOpenDialog({
         title: '选择目录', message: '请选择截屏保存位置', properties: [
           'openDirectory', 'createDirectory',
@@ -703,7 +707,7 @@ export default {
       } else {
       }
     },
-    async setVideoSavePath () {
+    async setVideoSavePath() {
       let savePath = await tsbApi.dialog.showOpenDialog({
         title: '选择目录', message: '请选择视频保存位置', properties: [
           'openDirectory', 'createDirectory',
@@ -716,20 +720,20 @@ export default {
       }
     },
 
-    async loadImages () {
+    async loadImages() {
       this.images = this.genFileList(this.settings.imageSavePath, ['.jpg', '.png', '.bmp', '.jpeg'])
     },
-    async loadVideos () {
-      this.videos = this.genFileList(this.settings.videoSavePath, ['.mp4', '.avi', '.mpg', 'rmvb','webm'])
+    async loadVideos() {
+      this.videos = this.genFileList(this.settings.videoSavePath, ['.mp4', '.avi', '.mpg', 'rmvb', 'webm'])
     },
     // 从目录开始
-    genFileList (path, extMap) {
+    genFileList(path, extMap) {
       let filesList = []
       this.readFile(path, filesList, extMap)
       return filesList
     },
     // 遍历读取文件
-    readFile (path, filesList, extMap) {
+    readFile(path, filesList, extMap) {
       let files = fs.readdirSync(path) // 需要用到同步读取
       files.forEach((file) => {
         let states = fs.statSync(path + '/' + file)
@@ -742,36 +746,36 @@ export default {
             const stat = fs.statSync(path + '/' + file)
             filesList.push({
               stat: stat,
-              filename:file,
+              filename: file,
               path: path + '/' + file
             })
           }
         }
       })
     },
-    clickMute () {
+    clickMute() {
       this.systemSound.muted = !this.systemSound.muted
       setDefaultVolume({
         muted: this.systemSound.muted
       })
     },
-    clickMicMute () {
+    clickMicMute() {
       this.systemMicrophone.muted = !this.systemMicrophone.muted
       setMicVolume({
         muted: this.systemMicrophone.muted
       })
     },
-    changeVolume () {
+    changeVolume() {
       setDefaultVolume({
         volume: this.systemSound.volume
       })
     },
-    changeMicVolume () {
+    changeMicVolume() {
       setMicVolume({
         volume: this.systemMicrophone.volume
       })
     },
-    getAllFiles (path, extMap, object, arr) {
+    getAllFiles(path, extMap, object, arr) {
       fs.readdir(path, (err, files) => {
         if (err) throw err
         files.forEach(file => {
@@ -797,19 +801,19 @@ export default {
      * 获取到最近捕获的文件路径
      * @returns {string}
      */
-    getRecentPath () {
+    getRecentPath() {
       return this.recentType === 'video' ? this.getRecentVideoPath() : this.getRecentImagePath()
     },
-    getRecentImagePath () {
+    getRecentImagePath() {
       return require('path').join(this.settings.imageSavePath, this.recentFileName)
     },
-    getRecentVideoPath () {
+    getRecentVideoPath() {
       return require('path').join(this.settings.videoSavePath, this.recentFileName)
     },
-    async saveRecent () {
-      let filters = { name: '图片', extensions: ['png'] }
+    async saveRecent() {
+      let filters = {name: '图片', extensions: ['png']}
       if (this.recentType === 'video') {
-        filters = { name: '视频', extensions: ['webm'] }
+        filters = {name: '视频', extensions: ['webm']}
       }
       let savePath = await tsbApi.dialog.showSaveDialog({
         title: '选择保存位置',
@@ -828,13 +832,13 @@ export default {
         }
       }
     },
-    openRecent () {
+    openRecent() {
       require('electron').shell.openPath(this.getRecentPath())
     },
-    openPos () {
+    openPos() {
       require('electron').shell.showItemInFolder(this.getRecentPath())
     },
-    delRecent () {
+    delRecent() {
       Modal.confirm({
         content: '删除此内容？',
         centered: true,
@@ -849,7 +853,7 @@ export default {
     /**
      * 查找源
      */
-    findWindow () {
+    findWindow() {
       if (!this.runningGame.chineseName) {
         return false
       }
@@ -860,14 +864,14 @@ export default {
       })
       return source
     },
-    chooseSource (source) {
+    chooseSource(source) {
       this.step = 2
       this.currentSource = source
     },
-    filterName (name) {
+    filterName(name) {
       return filenamify(name)
     },
-    callback (image) {
+    callback(image) {
       this.recentScreenShot = image
       let time = timeStamp(Date.now())
       const filename = this.filterName(this.currentSource.name) + '_' + time.year + '年' + time.month + '月' + time.day + '日' + time.hours + '时' + time.minutes + '分' + time.seconds + '秒' + '.png'
@@ -888,24 +892,24 @@ export default {
       })
 
     },
-    showToast (src) {
+    showToast(src) {
       toast(
-        {
-          component: SaveImage,
-          props: {
-            image: src
-          },
-        }, {
-          icon: false,
-          closeOnClick: false,
-          closeButton: false,
-          pauseOnFocusLoss: false,
-          pauseOnHover: false
-        }
+          {
+            component: SaveImage,
+            props: {
+              image: src
+            },
+          }, {
+            icon: false,
+            closeOnClick: false,
+            closeButton: false,
+            pauseOnFocusLoss: false,
+            pauseOnHover: false
+          }
       )
     },
     // 截图
-    screenshot () {
+    screenshot() {
       //ipc.send('captureImage',{source:this.currentSource})
       const handleStream = (stream) => {
         //document.body.style.cursor = oldCursor
@@ -987,7 +991,7 @@ export default {
       }
     },
     // 开始录制事件
-    async startRecording () {
+    async startRecording() {
       const videoSource = await navigator.mediaDevices.getUserMedia({
         audio: false, // 强行表示不录制音频，音频额外获取
         video: {
@@ -1057,7 +1061,7 @@ export default {
       recorder.onstop = () => {
         // 录屏停止并获取录屏文件
         // 触发时机一定在ondataavailable之后
-        const videoFile = new Blob(fileBits, { type: 'video/webm;codecs=vp9' })
+        const videoFile = new Blob(fileBits, {type: 'video/webm;codecs=vp9'})
         var reader = new FileReader()
         reader.onload = () => {
           var buffer = new Buffer(reader.result)
@@ -1103,7 +1107,7 @@ export default {
      * 设置一个录制定时器
      * @param start 是否是启动，否则自动清理定时器
      */
-    setRecordingTimer (start = true) {
+    setRecordingTimer(start = true) {
       if (!start) {
         //如果是取消
         if (this.recordingTimer) {
@@ -1116,14 +1120,14 @@ export default {
         this.recordedSeconds++
       }, 1000)
     },
-    stopRecording () {
+    stopRecording() {
       this.setRecordingTimer(false)
       this.recorder.stop()
       this.recording = false
       this.recordKey = Date.now()
     },
     // 开始监控事件
-    startMonitoring () {
+    startMonitoring() {
       this.settings.enableInspector = !this.settings.enableInspector
       if (this.settings.enableInspector) {
         this.startInspect()
@@ -1138,23 +1142,23 @@ export default {
     },
 
     // 打开录制设置入口
-    openRecordSet () {
+    openRecordSet() {
       this.recordSetShow = true
     },
-    clickRecordGame (item, index) {
+    clickRecordGame(item, index) {
       this.defaultIndex = index
     },
-    openMonitorSet () {
+    openMonitorSet() {
       this.setShow = true
     },
-    selectMonitorItem (v) {
-      this.settings.inspectorIndex  = v.id
+    selectMonitorItem(v) {
+      this.settings.inspectorIndex = v.id
       this.monitorTitle = v.title
       this.setShow = false
       this.fpsEcharts()
     },
     // FPS图形表
-    fpsEcharts () {
+    fpsEcharts() {
       this.$nextTick(() => {
         this.fpsInstance = echarts.init(this.$refs.fpsChart)
         this.fpsInstance.setOption({
@@ -1228,7 +1232,7 @@ export default {
         })
       })
     },
-    pageResize () {
+    pageResize() {
       if (window.innerHeight <= 700) {
         this.isHeight = false
       } else {
@@ -1240,17 +1244,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.capture-bg{
+.capture-bg {
   background: var(--primary-bg);
 }
 
-.cap-active{
+.cap-active {
   color: var(--active-text);
 }
 
-.capture-title{
-  color:var(--primary-text);
+.capture-title {
+  color: var(--primary-text);
 }
+
 .cp-w {
   display: flex;
   align-items: center;
@@ -1349,10 +1354,11 @@ export default {
   color: var(--primary-text);
   font-weight: 500;
 }
-.fps-sm{
+
+.fps-sm {
 
   font-size: 16px;
-  color:var(--secondary-text);
+  color: var(--secondary-text);
   letter-spacing: 1.14px;
   font-weight: 400;
 }

@@ -1,9 +1,9 @@
 <template>
   <div
-    class="droppable"
-    @mouseup="handleDrop"
-    @mouseleave="handleLeave"
-    @mouseover="handleHover"
+      class="droppable"
+      @mouseleave="handleLeave"
+      @mouseover="handleHover"
+      @mouseup="handleDrop"
   >
     <slot></slot>
   </div>

@@ -1,15 +1,16 @@
 <template>
-  <div class="evaluate" :class="[isH5 && 'evaluate-H5']">
+  <div :class="[isH5 && 'evaluate-H5']" class="evaluate">
     <i class="icon icon-evaluate" title="服务评价" @click.stop="toggleShow"></i>
-    <main class="evaluate-main" v-if="show && !isMute">
-      <div class="evaluate-main-content" ref="dialog">
+    <main v-if="show && !isMute" class="evaluate-main">
+      <div ref="dialog" class="evaluate-main-content">
         <header>
           <aside>
             <h1>{{ $t('Evaluate.请对本次服务进行评价') }}</h1>
             <p v-if="isH5">
-              {{ $t('Evaluate.服务评价工具') }}（{{ $t('Evaluate.使用')
+              {{ $t('Evaluate.服务评价工具') }}（{{
+                $t('Evaluate.使用')
               }}<a @click="openLink(Link.customMessage)">{{ $t(`Evaluate.${Link.customMessage.label}`) }}</a
-              >{{ $t('Evaluate.搭建') }}）
+            >{{ $t('Evaluate.搭建') }}）
             </p>
           </aside>
           <span v-if="isH5" class="close" @click.stop="toggleShow">关闭</span>
@@ -17,14 +18,14 @@
         <div class="evaluate-content">
           <ul class="evaluate-list">
             <li
-              class="evaluate-list-item"
-              :class="[index < num && 'small-padding', isH5 && 'evaluate-item']"
-              v-for="(item, index) in list"
-              :key="index"
-              @click.stop="select(item, index)"
+                v-for="(item, index) in list"
+                :key="index"
+                :class="[index < num && 'small-padding', isH5 && 'evaluate-item']"
+                class="evaluate-list-item"
+                @click.stop="select(item, index)"
             >
-              <i class="icon icon-star-light" v-if="index < num"></i>
-              <i class="icon icon-star" v-else></i>
+              <i v-if="index < num" class="icon icon-star-light"></i>
+              <i v-else class="icon icon-star"></i>
             </li>
           </ul>
           <textarea v-model="options.data.comment"></textarea>
@@ -33,9 +34,10 @@
           </div>
         </div>
         <footer v-if="!isH5">
-          {{ $t('Evaluate.服务评价工具') }}（{{ $t('Evaluate.使用')
+          {{ $t('Evaluate.服务评价工具') }}（{{
+            $t('Evaluate.使用')
           }}<a @click="openLink(Link.customMessage)">{{ $t(`Evaluate.${Link.customMessage.label}`) }}</a
-          >{{ $t('Evaluate.搭建') }}）
+        >{{ $t('Evaluate.搭建') }}）
         </footer>
       </div>
     </main>
@@ -43,11 +45,11 @@
 </template>
 
 <script lang="ts">
-import { onClickOutside } from '@vueuse/core';
-import { defineComponent, reactive, watchEffect, toRefs, ref } from 'vue';
+import {onClickOutside} from '@vueuse/core';
+import {defineComponent, reactive, ref, toRefs, watchEffect} from 'vue';
 import Link from '../../../../../utils/link';
 import constant from '../../../constant';
-import { handleOptions } from '../../utils/utils';
+import {handleOptions} from '../../utils/utils';
 
 const Evaluate = defineComponent({
   type: 'custom',
@@ -100,7 +102,7 @@ const Evaluate = defineComponent({
       if (data.show) {
         data.options = {
           data: {
-            ...handleOptions(constant.typeEvaluate, 1, { score: '', comment: '' }),
+            ...handleOptions(constant.typeEvaluate, 1, {score: '', comment: ''}),
           },
           description: '对本次的服务评价',
           extension: '对本次的服务评价',

@@ -1,15 +1,15 @@
 <template>
   <div
-    @click.stop
-    class="flex flex-row items-center justify-center w-full mb-3 bottom-panel"
-    style="text-align: center"
-    @contextmenu.stop="showMenu"
+      class="flex flex-row items-center justify-center w-full mb-3 bottom-panel"
+      style="text-align: center"
+      @click.stop
+      @contextmenu.stop="showMenu"
   >
     <!-- 用户信息 | 搜索 | 任务栏 | 社交网络 | AIAssistant -->
     <div
-      v-if="!simple || settings.enableChat"
-      class="flex flex-row common-panel user s-bg"
-      style="
+        v-if="!simple || settings.enableChat"
+        class="flex flex-row common-panel user s-bg"
+        style="
         vertical-align: top;
         margin-top: 0;
         background: var(--primary-bg);
@@ -24,9 +24,9 @@
 
     <!-- 快速搜索 底部栏区域 -->
     <div
-      v-show="navigationToggle[2]"
-      class="flex flex-row items-center pl-4 s-bg"
-      style="
+        v-show="navigationToggle[2]"
+        class="flex flex-row items-center pl-4 s-bg"
+        style="
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -42,7 +42,7 @@
       "
     >
       <div
-        style="
+          style="
           display: flex;
           flex-direction: row;
           width: 100%;
@@ -53,40 +53,40 @@
         "
       >
         <div
-          @contextmenu.stop="showMenu"
-          style="height: 56px; width: 100%; overflow: hidden"
+            style="height: 56px; width: 100%; overflow: hidden"
+            @contextmenu.stop="showMenu"
         >
           <div
-            class="mr-6 scroll-content"
-            style="overflow-y: hidden; overflow-x: auto; flex: 1; display: flex"
-            ref="content"
+              ref="content"
+              class="mr-6 scroll-content"
+              style="overflow-y: hidden; overflow-x: auto; flex: 1; display: flex"
           >
             <xt-task id="M0104" no="1" @cb="showMenu">
               <div
-                style="white-space: nowrap; display: flex; align-items: center"
-                id="bottomContent"
+                  id="bottomContent"
+                  style="white-space: nowrap; display: flex; align-items: center"
               >
                 <div v-if="footNavigationList.length <= 0" style=""></div>
                 <a-tooltip
-                  v-for="item in footNavigationList"
-                  :key="item.name"
-                  :title="item.name"
+                    v-for="item in footNavigationList"
+                    :key="item.name"
+                    :title="item.name"
                 >
                   <div
-                    @contextmenu.stop="enableDrag"
-                    class="mr-3 mr-6 pointer"
-                    style="white-space: nowrap; display: inline-block"
-                    @click.stop="clickNavigation(item)"
+                      class="mr-3 mr-6 pointer"
+                      style="white-space: nowrap; display: inline-block"
+                      @contextmenu.stop="enableDrag"
+                      @click.stop="clickNavigation(item)"
                   >
                     <div
-                      style="width: 56px; height: 56px"
-                      v-if="item.type === 'systemApp'"
-                      class="flex items-center justify-center rounded-lg s-item xt-bg-2"
+                        v-if="item.type === 'systemApp'"
+                        class="flex items-center justify-center rounded-lg s-item xt-bg-2"
+                        style="width: 56px; height: 56px"
                     >
                       <navIcon
-                        :icon="item.icon"
-                        class="test"
-                        style="
+                          :icon="item.icon"
+                          class="test"
+                          style="
                           width: 32px;
                           height: 32px;
                           fill: var(--primary-text);
@@ -94,14 +94,14 @@
                       ></navIcon>
                     </div>
                     <div
-                      v-else
-                      style="width: 45px; height: 45px"
-                      class="flex items-center justify-center"
+                        v-else
+                        class="flex items-center justify-center"
+                        style="width: 45px; height: 45px"
                     >
                       <a-avatar
-                        :size="40"
-                        shape="square"
-                        :src="renderIcon(item.icon)"
+                          :size="40"
+                          :src="renderIcon(item.icon)"
+                          shape="square"
                       ></a-avatar>
                     </div>
                   </div>
@@ -113,20 +113,20 @@
 
         <a-tooltip :title="showScreen ? '运行中的分屏' : '运行中的应用'">
           <div
-            @click="appChange"
-            v-if="isMain"
-            style="
+              v-if="isMain"
+              class="flex items-center justify-center h-2/3 pointer"
+              style="
               flex-shrink: 0;
               border-left: 1px solid var(--divider);
               width: 72px;
               height: 58px;
             "
-            class="flex items-center justify-center h-2/3 pointer"
+              @click="appChange"
           >
             <template v-if="!showScreen">
               <navIcon
-                icon="fluent:window-multiple-16-filled"
-                style="
+                  icon="fluent:window-multiple-16-filled"
+                  style="
                   width: 40px;
                   height: 40px;
                   margin-left: 5px;
@@ -134,7 +134,7 @@
                 "
               ></navIcon>
               <span
-                style="
+                  style="
                   position: absolute;
                   width: 48px;
                   height: 48px;
@@ -143,13 +143,13 @@
                   font-weight: bold;
                   font-size: 18px;
                 "
-                >{{ runningApps.length + runningTableApps.length }}</span
+              >{{ runningApps.length + runningTableApps.length }}</span
               >
             </template>
             <template v-else>
               <navIcon
-                icon="majesticons:monitor-line"
-                style="
+                  icon="majesticons:monitor-line"
+                  style="
                   width: 40px;
                   height: 40px;
                   margin-left: 2px;
@@ -157,7 +157,7 @@
                 "
               ></navIcon>
               <span
-                style="
+                  style="
                   position: absolute;
                   width: 48px;
                   height: 48px;
@@ -167,7 +167,7 @@
                   font-size: 18px;
                   margin-bottom: 6px;
                 "
-                >{{ runningScreen }}</span
+              >{{ runningScreen }}</span
               >
             </template>
           </div>
@@ -175,9 +175,9 @@
       </div>
     </div>
     <div
-      v-if="!simple || settings.enableChat"
-      class="flex flex-row common-panel user s-bg"
-      style="
+        v-if="!simple || settings.enableChat"
+        class="flex flex-row common-panel user s-bg"
+        style="
         vertical-align: top;
         margin-top: 0;
         background: var(--primary-bg);
@@ -193,9 +193,9 @@
   </div>
   <!-- to this -->
   <div
-    id="trans"
-    v-show="visibleTrans"
-    style="
+      v-show="visibleTrans"
+      id="trans"
+      style="
       position: fixed;
       left: 0;
       top: 0;
@@ -205,39 +205,39 @@
     "
   >
     <a-button
-      @click="visibleTrans = false"
-      style="position: fixed; left: 10px; top: 10px"
-      >取消
+        style="position: fixed; left: 10px; top: 10px"
+        @click="visibleTrans = false"
+    >取消
     </a-button>
     <iframe id="transFrame" style="width: 100vw; height: 100vh; border: none">
     </iframe>
   </div>
   <a-drawer
-    :contentWrapperStyle="{ backgroundColor: '#212121', height: '216px' }"
-    class="drawer"
-    :closable="true"
-    placement="bottom"
-    :visible="menuVisible"
-    @close="onClose"
+      :closable="true"
+      :contentWrapperStyle="{ backgroundColor: '#212121', height: '216px' }"
+      :visible="menuVisible"
+      class="drawer"
+      placement="bottom"
+      @close="onClose"
   >
     <a-row>
       <a-col>
-        <div @click="editNavigation" class="relative btn">
+        <div class="relative btn" @click="editNavigation">
           <xt-task id="M0104" no="2" @cb="editNavigation">
-            <Icon style="font-size: 3em" icon="tianjia1"></Icon>
+            <Icon icon="tianjia1" style="font-size: 3em"></Icon>
             <div><span>编辑导航</span></div>
           </xt-task>
         </div>
 
         <div
-          @click="clickNavigation(item)"
-          class="btn"
-          v-for="item in builtInFeatures"
-          :key="item.name"
+            v-for="item in builtInFeatures"
+            :key="item.name"
+            class="btn"
+            @click="clickNavigation(item)"
         >
           <navIcon
-            style="font-size: 3em; vertical-align: bottom"
-            :icon="item.icon"
+              :icon="item.icon"
+              style="font-size: 3em; vertical-align: bottom"
           ></navIcon>
           <div>
             <span>{{ item.name }}</span>
@@ -248,22 +248,22 @@
   </a-drawer>
 
   <transition name="fade">
-    <div class="fixed inset-0 home-blur" style="z-index: 999" v-if="quick">
+    <div v-if="quick" class="fixed inset-0 home-blur" style="z-index: 999">
       <EditNavigation @setQuick="setQuick"></EditNavigation>
     </div>
   </transition>
 
   <div
-    class="fixed inset-0 home-blur"
-    style="z-index: 999; background: var(--mask-background-color)"
-    v-if="changeFlag"
-    @click="closeChangeApp"
+      v-if="changeFlag"
+      class="fixed inset-0 home-blur"
+      style="z-index: 999; background: var(--mask-background-color)"
+      @click="closeChangeApp"
   >
     <ChangeApp
-      :tab="tab"
-      @closeChangeApp="closeChangeApp"
-      :full="full"
-      @setFull="setFull"
+        :full="full"
+        :tab="tab"
+        @closeChangeApp="closeChangeApp"
+        @setFull="setFull"
     ></ChangeApp>
   </div>
   <TeamTip :key="teamKey" v-model:visible="showTeamTip"></TeamTip>
@@ -271,38 +271,38 @@
 
 <script>
 import PanelButton from "./PanelButton.vue";
-import { appStore } from "../store";
-import { cardStore } from "../store/card";
-import { navStore } from "../store/nav";
-import { mapWritableState, mapActions } from "pinia";
+import {appStore} from "../store";
+import {cardStore} from "../store/card";
+import {navStore} from "../store/nav";
+import {mapActions, mapWritableState} from "pinia";
 import Template from "../../user/pages/Template.vue";
-import { ThunderboltFilled } from "@ant-design/icons-vue";
-import { Modal } from "ant-design-vue";
+import {ThunderboltFilled} from "@ant-design/icons-vue";
+import {message} from "ant-design-vue";
 import SidePanel from "./SidePanel.vue";
 import SecondPanel from "./SecondPanel.vue";
 import GradeSmallTip from "./GradeSmallTip.vue";
-import { isMain } from "../js/common/screenUtils";
+import {isMain} from "../js/common/screenUtils";
 
 import EditNavigation from "./bottomPanel/EditNavigation.vue";
 import ChangeApp from "./bottomPanel/ChangeApp.vue";
 import ScrolX from "./ScrolX.vue";
 
 import TeamTip from "./TeamTip.vue";
-import { teamStore } from "../store/team";
-import { messageStore } from "../store/message";
-import { appsStore } from "../store/apps";
-import { screenStore } from "../store/screen";
-import { toggleFullScreen, renderIcon } from "../js/common/common";
+import {teamStore} from "../store/team";
+import {messageStore} from "../store/message";
+import {appsStore} from "../store/apps";
+import {screenStore} from "../store/screen";
+import {renderIcon, toggleFullScreen} from "../js/common/common";
 import Sortable from "sortablejs";
-import { message } from "ant-design-vue";
 import TaskBox from "../apps/task/page/TaskBox.vue";
 import Emoji from "./comp/Emoji.vue";
 import ChatButton from "./bottomPanel/ChatButton.vue";
 import AIButton from "./bottomPanel/AIButton.vue";
 import UserEntry from "./bottomPanel/UserEntry.vue";
 import SearchButton from "./bottomPanel/SearchButton.vue";
-import { Icon as navIcon } from "@iconify/vue";
+import {Icon as navIcon} from "@iconify/vue";
 import navigationData from "../js/data/tableData";
+
 export default {
   name: "BottomPanel",
   emits: ["getDelIcon"],
@@ -513,7 +513,7 @@ export default {
       // })
     },
     goMy() {
-      this.$router.push({ name: "socialMy" });
+      this.$router.push({name: "socialMy"});
     },
     ...mapActions(appStore, ["setUser"]),
     setFull(value) {
@@ -523,30 +523,30 @@ export default {
       if (this.showScreen) {
         this.tab = "screen";
         this.routeParams.url &&
-          ipc.send("hideTableApp", {
-            app: JSON.parse(JSON.stringify(this.routeParams)),
-          });
+        ipc.send("hideTableApp", {
+          app: JSON.parse(JSON.stringify(this.routeParams)),
+        });
       } else {
         this.tab = "apps";
         this.routeParams.url &&
-          ipc.send("hideTableApp", {
-            app: JSON.parse(JSON.stringify(this.routeParams)),
-          });
+        ipc.send("hideTableApp", {
+          app: JSON.parse(JSON.stringify(this.routeParams)),
+        });
       }
       this.changeFlag = true;
     },
     closeChangeApp() {
       this.routeParams.url &&
-        setTimeout(() => {
-          this.$router.push({ name: "app", params: this.routeParams });
-        }, 400);
+      setTimeout(() => {
+        this.$router.push({name: "app", params: this.routeParams});
+      }, 400);
       this.changeFlag = false;
     },
     showMenu() {
       this.routeParams.url &&
-        ipc.send("hideTableApp", {
-          app: JSON.parse(JSON.stringify(this.routeParams)),
-        });
+      ipc.send("hideTableApp", {
+        app: JSON.parse(JSON.stringify(this.routeParams)),
+      });
       this.menuVisible = true;
     },
     hideMenu() {
@@ -554,7 +554,7 @@ export default {
     },
     onClose() {
       this.routeParams.url &&
-        this.$router.push({ name: "app", params: this.routeParams });
+      this.$router.push({name: "app", params: this.routeParams});
       this.menuVisible = false;
     },
     editNavigation() {
@@ -566,7 +566,7 @@ export default {
     },
 
     openSetting() {
-      this.$router.push({ name: "setting" });
+      this.$router.push({name: "setting"});
       this.hideMenu();
     },
     openStatus() {
@@ -574,21 +574,21 @@ export default {
       if (this.$route.path === "/status") {
         this.$router.go(-1);
       } else {
-        this.$router.push({ path: "/status" });
+        this.$router.push({path: "/status"});
       }
     },
 
     power() {
-      this.$router.push({ path: "/power" });
+      this.$router.push({path: "/power"});
     },
     lock() {
-      this.$router.push({ path: "/lock" });
+      this.$router.push({path: "/lock"});
     },
     transFile() {
       //this.visibleTrans=true
       //document.getElementById('transFrame').src='https://szfilehelper.weixin.qq.com/'
       // console.log('发送消息')
-      ipc.send("executeAppByPackage", { package: "com.thisky.fileHelper" });
+      ipc.send("executeAppByPackage", {package: "com.thisky.fileHelper"});
       this.$router.push({
         name: "app",
         params: {
@@ -622,7 +622,7 @@ export default {
             if (this.$route.path === "/status") {
               this.$router.go(-1);
             } else {
-              this.$router.push({ path: "/status" });
+              this.$router.push({path: "/status"});
             }
           } else if (item.data) {
             this.$router.push({
@@ -630,7 +630,7 @@ export default {
               params: item.data,
             });
           } else {
-            this.$router.push({ name: item.event });
+            this.$router.push({name: item.event});
           }
           break;
         case "coolApp":
@@ -643,7 +643,7 @@ export default {
           require("electron").shell.openPath(item.path);
           break;
         case "lightApp":
-          ipc.send("executeAppByPackage", { package: item.package });
+          ipc.send("executeAppByPackage", {package: item.package});
           break;
         default:
           require("electron").shell.openPath(item.path);
@@ -687,7 +687,7 @@ export default {
             // 判断其他导航栏是否是打开状态，是则获取功能列表
             if (that.leftNav && that.rightNav) {
               sumList = that.sideNavigationList.concat(
-                that.rightNavigationList
+                  that.rightNavigationList
               );
             } else if (that.leftNav && !that.rightNav) {
               sumList = that.sideNavigationList;
@@ -699,16 +699,16 @@ export default {
               return;
             }
             that.delNavigation(
-              sumList,
-              oneNav,
-              event.oldIndex,
-              that.removeFootNavigationList
+                sumList,
+                oneNav,
+                event.oldIndex,
+                that.removeFootNavigationList
             );
           };
         },
         onUpdate: function (event) {
           let newIndex = event.newIndex,
-            oldIndex = event.oldIndex;
+              oldIndex = event.oldIndex;
           let newItem = drop.children[newIndex];
           let oldItem = drop.children[oldIndex];
 

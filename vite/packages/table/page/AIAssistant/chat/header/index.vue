@@ -23,49 +23,50 @@
 
     <div class="flex">
       <XtButton
-        w="128"
-        v-if="0"
-        icon="tishi-xianxing"
-        text="订阅已过期"
-        type="warn"
-        class="mx-2"
-        @click="buyVisible = true"
+          v-if="0"
+          class="mx-2"
+          icon="tishi-xianxing"
+          text="订阅已过期"
+          type="warn"
+          w="128"
+          @click="buyVisible = true"
       ></XtButton>
 
-      <XtIcon icon="shezhi1" @click="openEdit()"> </XtIcon>
+      <XtIcon icon="shezhi1" @click="openEdit()"></XtIcon>
     </div>
   </div>
 
   <!-- 充值 -->
-  <xt-modal v-model="buyVisible" title="购买" :isFooter="false">
+  <xt-modal v-model="buyVisible" :isFooter="false" title="购买">
     <Store style="width: 440px"></Store>
   </xt-modal>
   <!-- 编辑 -->
-  <XtDrawer placement="right" v-model="settingVisible">
+  <XtDrawer v-model="settingVisible" placement="right">
     <template #title>
       <XtTitle type="header"
-        >设置
+      >设置
         <template #right>
           <XtButton
-            @click="saveEdit()"
-            text="保 存"
-            type="theme"
-            h="40"
-            w="80"
+              h="40"
+              text="保 存"
+              type="theme"
+              w="80"
+              @click="saveEdit()"
           ></XtButton>
         </template>
       </XtTitle>
     </template>
-    <Edit :data="topicList[selectTopicIndex]" ref="editRef" @del="del"></Edit>
+    <Edit ref="editRef" :data="topicList[selectTopicIndex]" @del="del"></Edit>
   </XtDrawer>
 </template>
 
 <script>
-import { defineAsyncComponent } from "vue";
+import {defineAsyncComponent} from "vue";
 import _ from "lodash-es";
-import { mapWritableState, mapActions } from "pinia";
-import { aiStore } from "../../../../store/ai";
-import { message } from "ant-design-vue";
+import {mapActions, mapWritableState} from "pinia";
+import {aiStore} from "../../../../store/ai";
+import {message} from "ant-design-vue";
+
 export default {
   computed: {
     ...mapWritableState(aiStore, [

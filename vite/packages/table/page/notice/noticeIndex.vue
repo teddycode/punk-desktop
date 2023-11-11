@@ -1,11 +1,12 @@
 <template>
   <div class="flex h-full">
-    <xt-left-menu :list="filterLeft" model="id" end="2"></xt-left-menu>
-    <div class="w-full" v-if="rightVisible !== 'setting'">
-      <NoticeRightTop  :appType="rightVisible" :list="appContentList" :appItem="topTitle" @updateNotice="updateNotice"></NoticeRightTop>
-      <AllNotice v-if="rightVisible === 'all'" @closeMessage="close" :list="appContentList"></AllNotice>
-      <NoticeDetail v-else :list="otherList" @closeMessage="close" ></NoticeDetail>
-       <!-- <AllMiddleTip v-if="appType === 'all'" :list="appContentList"></AllMiddleTip> -->
+    <xt-left-menu :list="filterLeft" end="2" model="id"></xt-left-menu>
+    <div v-if="rightVisible !== 'setting'" class="w-full">
+      <NoticeRightTop :appItem="topTitle" :appType="rightVisible" :list="appContentList"
+                      @updateNotice="updateNotice"></NoticeRightTop>
+      <AllNotice v-if="rightVisible === 'all'" :list="appContentList" @closeMessage="close"></AllNotice>
+      <NoticeDetail v-else :list="otherList" @closeMessage="close"></NoticeDetail>
+      <!-- <AllMiddleTip v-if="appType === 'all'" :list="appContentList"></AllMiddleTip> -->
     </div>
 
     <template v-else>
@@ -27,10 +28,10 @@
 </template>
 
 <script>
-import { defineComponent,ref,toRefs,reactive,computed,watch } from 'vue'
-import { appStore } from '../../store'
-import { noticeStore } from '../../store/notice'
-import { storeToRefs } from 'pinia'
+import {computed, defineComponent, reactive, ref, toRefs, watch} from 'vue'
+import {appStore} from '../../store'
+import {noticeStore} from '../../store/notice'
+import {storeToRefs} from 'pinia'
 import _ from 'lodash-es'
 import NoticeRightTop from '../../components/notice/noticeRightTop.vue'
 import AllNotice from '../../components/notice/allNotice.vue'
@@ -39,27 +40,27 @@ import NoticeDetail from './noticeDetail.vue'
 
 export default defineComponent({
 
-  components:{
+  components: {
     NoticeRightTop,
     AllNotice,
     AllMiddleTip,
     NoticeDetail
   },
 
-  setup(props,ctx){
+  setup(props, ctx) {
     const store = appStore();
     const notice = noticeStore()
-    const { settings } = storeToRefs(store)
+    const {settings} = storeToRefs(store)
 
     const data = reactive({
-      rightVisible:'all', // 切换消息
-      topTitle:'',
-      otherList:[],
-      promptStatus:settings.enablePlay
+      rightVisible: 'all', // 切换消息
+      topTitle: '',
+      otherList: [],
+      promptStatus: settings.enablePlay
     })
 
 
-    const enableNotice = () =>{
+    const enableNotice = () => {
       const enable = settings.noticeEnable = !settings.noticeEnable
       store.setNoticeOnOff(enable)
     }
@@ -68,37 +69,38 @@ export default defineComponent({
       data.rightVisible = item.alias
     }
 
-    const changeEnable = (evt)=>{
+    const changeEnable = (evt) => {
       store.setMessagePrompt(evt)
     }
 
     const selectTab = (item) => {
       data.rightVisible = item.alias
       data.topTitle = {
-        image:item.img,
-        title:item.title
+        image: item.img,
+        title: item.title
       }
     };
 
-    const close = () =>{
+    const close = () => {
       ctx.emit('closeMessage')
     }
 
 
-
-    const appContentList = computed(()=>{   // 通过计算属性获取消息通知历史数据
+    const appContentList = computed(() => {   // 通过计算属性获取消息通知历史数据
       return notice.$state.notice.messageContent
     })
 
-    watch(()=>data.rightVisible,(newVal)=>{  // 根据不同应用列表类型进行数据分类
-      if(newVal !== 'all'){
-        const index =  _.forEach(appContentList.value,function(o){ return o?.doc.appType === newVal })
+    watch(() => data.rightVisible, (newVal) => {  // 根据不同应用列表类型进行数据分类
+      if (newVal !== 'all') {
+        const index = _.forEach(appContentList.value, function (o) {
+          return o?.doc.appType === newVal
+        })
         data.otherList = index
-      }else{
+      } else {
         return;
       }
     })
-  
+
 
     const leftApp = ref([
       {
@@ -118,15 +120,15 @@ export default defineComponent({
         callBack: selectTab,
       },
       {
-        id:'notice',
-        icon:"notification",
+        id: 'notice',
+        icon: "notification",
         title: "通知",
         flag: true,
         callBack: enableNotice,
       },
       {
         icon: "shezhi",
-        alias:'setting',
+        alias: 'setting',
         title: "设置",
         flag: true,
         callBack: clickSetting,
@@ -134,30 +136,30 @@ export default defineComponent({
     ]);
 
 
-    const filterLeft = computed(()=>{
-      
+    const filterLeft = computed(() => {
+
       const copyList = [...leftApp.value]
-      if(settings.value.noticeEnable){
-    
-        const openList = copyList.map((item)=>{
-          return {...item,icon:item.id === 'notice' ? 'notification-off' : item.icon}
+      if (settings.value.noticeEnable) {
+
+        const openList = copyList.map((item) => {
+          return {...item, icon: item.id === 'notice' ? 'notification-off' : item.icon}
         })
         return openList
 
-      }else{
-        const closeList = copyList.map((item)=>{
-          return {...item,icon:item.id === 'notice' ? 'notification' : item.icon}
+      } else {
+        const closeList = copyList.map((item) => {
+          return {...item, icon: item.id === 'notice' ? 'notification' : item.icon}
         })
         return closeList
       }
 
     })
 
-    return{
-      filterLeft,appContentList,close,
-      ...toRefs(data),changeEnable,
+    return {
+      filterLeft, appContentList, close,
+      ...toRefs(data), changeEnable,
     }
-  
+
   }
 });
 

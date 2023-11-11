@@ -1,5 +1,4 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
 import {
   avatarBgColor,
   avatarGainMethodText,
@@ -15,7 +14,6 @@ import {appStore} from "../../store";
 import {teamStore} from "../../store/team";
 import FrameAvatar from "../avatar/FrameAvatar.vue";
 import Modal from "../Modal.vue";
-import html2canvas from "html2canvas";
 
 
 export default {
@@ -33,8 +31,8 @@ export default {
         wheelPropagation: true
       },
       frameList: [],
-      canvas:null,
-      ctx:null
+      canvas: null,
+      ctx: null
     }
   },
   computed: {
@@ -86,8 +84,8 @@ export default {
 
       drawHeaderImage(128, 128, 80, 128, item.image, this.userInfo.avatar, (canvas, ctx) => {
         document.getElementById('downloadContainer').appendChild(canvas)
-        this.canvas=canvas
-        this.ctx=ctx
+        this.canvas = canvas
+        this.ctx = ctx
       })
       this.downloadVisible = true
 
@@ -105,19 +103,21 @@ export default {
           'showOverwriteConfirmation'
         ]
       })
-      const base64 = this.canvas.toDataURL('image/png',1)
+      const base64 = this.canvas.toDataURL('image/png', 1)
+
       function dataURLToBlob(fileDataURL) {
         let arr = fileDataURL.split(','),
-          mime = arr[0].match(/:(.*?);/)[1],
-          bstr = atob(arr[1]),
-          n = bstr.length,
-          u8arr = new Uint8Array(n)
+            mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]),
+            n = bstr.length,
+            u8arr = new Uint8Array(n)
         while (n--) {
           u8arr[n] = bstr.charCodeAt(n)
         }
-        return new Blob([u8arr], { type: mime })
+        return new Blob([u8arr], {type: mime})
       }
-      require('fs').writeFile(savePath,Buffer.from(await dataURLToBlob(base64).arrayBuffer()), (err) => {
+
+      require('fs').writeFile(savePath, Buffer.from(await dataURLToBlob(base64).arrayBuffer()), (err) => {
         if (err) throw err;
         console.log('The file has been saved!');
       });
@@ -129,22 +129,22 @@ export default {
 
 <template>
   <div v-if="frameList.length===0">
-    <a-empty style="margin-top:40%" image="/img/test/load-ail.png" description="暂无可用头像框"/>
+    <a-empty description="暂无可用头像框" image="/img/test/load-ail.png" style="margin-top:40%"/>
   </div>
-  <vue-custom-scrollbar v-else @touchstart.stop @touchmove.stop @touchend.stop :settings="settingsScroller"
-                        style="flex:1;height: 0">
-    <div v-for="item in frameList" class="w-full mb-3 rounded-lg flex flex-col p-3"
-         :style="avatarBgColor(item.detail.rarity)">
+  <vue-custom-scrollbar v-else :settings="settingsScroller" style="flex:1;height: 0" @touchstart.stop @touchmove.stop
+                        @touchend.stop>
+    <div v-for="item in frameList" :style="avatarBgColor(item.detail.rarity)"
+         class="w-full mb-3 rounded-lg flex flex-col p-3">
       <div :id="'frameTop_'+item.nanoid" class="avatar-top flex mb-4">
-        <div style="width: 100px;height: 100px;" :id="'frame_'+item.nanoid" class="p-3">
-          <FrameAvatar :avatar-size="80" :frame-url="item.image" :avatar-url="userInfo.avatar"
-                       class="w-full h-full object-fill" alt=""></FrameAvatar>
+        <div :id="'frame_'+item.nanoid" class="p-3" style="width: 100px;height: 100px;">
+          <FrameAvatar :avatar-size="80" :avatar-url="userInfo.avatar" :frame-url="item.image"
+                       alt="" class="w-full h-full object-fill"></FrameAvatar>
         </div>
         <div class="flex flex-col justify-center ml-4">
-              <span class="avatar-font" :style="titleTagColor(item.detail.rarity)">
+              <span :style="titleTagColor(item.detail.rarity)" class="avatar-font">
                 {{ item.alias }}
               </span>
-          <span class="w-11 h-6 rank-font rounded my-2.5" :style="avatarTagColor(item.detail.rarity)">
+          <span :style="avatarTagColor(item.detail.rarity)" class="w-11 h-6 rank-font rounded my-2.5">
                 {{ textTag(item.detail.rarity) }}
               </span>
           <span class="get-way-font">
@@ -154,17 +154,17 @@ export default {
       </div>
       <a-row :gutter="10">
         <a-col :span="12">
-          <a-button v-if="!item.equipped" @click="equip(item)" type="primary" class="rounded-xl h-12 w-full"
-                    style="margin-right: 0;color: var(--active-text);">
+          <a-button v-if="!item.equipped" class="rounded-xl h-12 w-full" style="margin-right: 0;color: var(--active-text);" type="primary"
+                    @click="equip(item)">
             使用
           </a-button>
-          <a-button v-else @click="unequip(item)" class="rounded-xl h-12  w-full xt-text-2"
-                    style="margin-right: 0;color: var(--active-text);">
+          <a-button v-else class="rounded-xl h-12  w-full xt-text-2" style="margin-right: 0;color: var(--active-text);"
+                    @click="unequip(item)">
             使用中
           </a-button>
         </a-col>
         <a-col :span="12">
-          <a-button @click="download(item)" class="rounded-xl h-12  w-full xt-bg xt-text-2">
+          <a-button class="rounded-xl h-12  w-full xt-bg xt-text-2" @click="download(item)">
             下载头像
           </a-button>
         </a-col>
@@ -173,14 +173,14 @@ export default {
 
     </div>
   </vue-custom-scrollbar>
-  <Modal blur-flag="true" v-model:visible="downloadVisible" v-if="downloadVisible">
+  <Modal v-if="downloadVisible" v-model:visible="downloadVisible" blur-flag="true">
     <div class="p-5">
-      <div class="m-4" id="downloadContainer">
+      <div id="downloadContainer" class="m-4">
         <!--        <FrameAvatar id="downloadItem" :avatar-size="80"  :frame-url="currentItem.image" :avatar-url="userInfo.avatar" class="w-full h-full object-fill" alt=""></FrameAvatar>-->
 
       </div>
       <div class="mt-2">
-        <a-button @click="doDownload" block type="primary" class="rounded-full">
+        <a-button block class="rounded-full" type="primary" @click="doDownload">
           下载头像
         </a-button>
       </div>
@@ -190,7 +190,7 @@ export default {
   </Modal>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .avatar-font {
   font-family: Oswald;
   font-size: 16px;

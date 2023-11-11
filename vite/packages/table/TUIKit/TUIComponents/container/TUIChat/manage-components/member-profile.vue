@@ -2,9 +2,9 @@
   <div class="memeber-profile">
     <div class="memeber-profile-main">
       <img
-        class="avatar"
-        :src="userInfo?.avatar || 'https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'"
-        onerror="this.src='https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'"
+          :src="userInfo?.avatar || 'https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'"
+          class="avatar"
+          onerror="this.src='https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'"
       />
       <ul class="list">
         <h1>{{ userInfo?.nick || userInfo?.userID }}</h1>
@@ -19,7 +19,7 @@
       </ul>
     </div>
     <div class="memeber-profile-footer">
-      <div class="button" @click="enter(userInfo?.userID, 'C2C')" v-if="showEnter()">
+      <div v-if="showEnter()" class="button" @click="enter(userInfo?.userID, 'C2C')">
         {{ $t('TUIContact.发送消息') }}
       </div>
     </div>
@@ -27,7 +27,7 @@
 </template>
 <script lang="ts">
 import TIM from '../../../../TUICore/tim';
-import { reactive, toRefs, watch, watchEffect, defineComponent } from 'vue';
+import {defineComponent, reactive, toRefs, watch, watchEffect} from 'vue';
 import manage from './manage.vue';
 
 const memberProfile = defineComponent({
@@ -48,17 +48,17 @@ const memberProfile = defineComponent({
       data.self = props.self;
     });
     watch(
-      () => props.userInfo,
-      async (newVal: any, oldVal: any) => {
-        if (newVal === oldVal) return;
-        const res = await TUIServer.getUserProfile([props?.userInfo?.userID]);
-        data.userInfo = res?.data[0];
-        checkFriend();
-      },
-      {
-        deep: true,
-        immediate: true,
-      }
+        () => props.userInfo,
+        async (newVal: any, oldVal: any) => {
+          if (newVal === oldVal) return;
+          const res = await TUIServer.getUserProfile([props?.userInfo?.userID]);
+          data.userInfo = res?.data[0];
+          checkFriend();
+        },
+        {
+          deep: true,
+          immediate: true,
+        }
     );
     const enter = async (ID: any, type: string) => {
       const name = `${type}${ID}`;
@@ -89,29 +89,35 @@ export default memberProfile;
 <style lang="scss" scoped>
 @import url('../../../styles/common.scss');
 @import url('../../../styles/icon.scss');
+
 .memeber-profile {
   flex: 1;
   display: flex;
   flex-direction: column;
+
   &-main {
     display: flex;
     flex-direction: row;
     width: 100%;
     overflow: hidden;
+
     img {
       width: 60px;
       height: 60px;
       border-radius: 8px;
       margin: 20px 10px 20px 20px;
     }
+
     .list {
       flex: 1;
       overflow: hidden;
       margin: 20px 10px;
       font-weight: 400;
+
       li {
         color: #999999;
       }
+
       h1,
       li {
         overflow: hidden;
@@ -120,6 +126,7 @@ export default memberProfile;
       }
     }
   }
+
   &-footer {
     border-top: 10px solid #f4f5f9;
     padding: 14px;
@@ -127,6 +134,7 @@ export default memberProfile;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
     .button {
       width: 100px;
       font-size: 14px;

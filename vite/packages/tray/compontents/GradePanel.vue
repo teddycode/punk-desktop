@@ -4,24 +4,24 @@
       <a-col :span="24">
         <a-row>
           <a-col :span="10" style="text-align: right">
-            <a-avatar style="position: relative;cursor: pointer" :size="60"
-                      :src="user.avatar">
+            <a-avatar :size="60" :src="user.avatar"
+                      style="position: relative;cursor: pointer">
             </a-avatar>
           </a-col>
           <a-col :span="14" style="padding-left: 20px">
             <div style="font-size: 16px;font-weight: bold">{{ user.nickname }}</div>
             <div class="live-grade" style="cursor:pointer;">
-              <div class="ts-grade flex justify-start align-center" style="margin-top: 4px" v-if="grade.lv > 0">
-                <div class="ts-grade-crown" v-for="item in onlineGrade.crown">
+              <div v-if="grade.lv > 0" class="ts-grade flex justify-start align-center" style="margin-top: 4px">
+                <div v-for="item in onlineGrade.crown" class="ts-grade-crown">
                   <img :src="item.icon" alt="" style="width: 20px; height: 20px">
                 </div>
-                <div class="ts-grade-sun" v-for="item in onlineGrade.sun">
+                <div v-for="item in onlineGrade.sun" class="ts-grade-sun">
                   <img :src="item.icon" alt="" style="width: 20px; height: 20px">
                 </div>
-                <div class="ts-grade-moon" v-for="item in onlineGrade.moon">
+                <div v-for="item in onlineGrade.moon" class="ts-grade-moon">
                   <img :src="item.icon" alt="" style="width: 20px; height: 20px">
                 </div>
-                <div class="ts-grade-star" v-for="item in onlineGrade.star">
+                <div v-for="item in onlineGrade.star" class="ts-grade-star">
                   <img :src="item.icon" alt="" style="width: 20px; height: 20px">
                 </div>
               </div>
@@ -35,7 +35,7 @@
         <a-row>
           <div class="arrow-box" style="width:100%;line-height: 3">
             <div class="" style="line-height: 2;margin-bottom: 5px">在线等级: <span
-              style="font-size: 20px">{{ grade.lv }}</span>级
+                style="font-size: 20px">{{ grade.lv }}</span>级
               <div v-if="badge.rank < 300"
                    style="margin-top:7px;border-radius: 6px;padding: 2px 5px;position: absolute;display: inline-block;right: 65px;line-height: 18px"
               ><span>
@@ -45,15 +45,19 @@
 
             </div>
             <div class="text-grey" style="line-height: 2">升级剩余时长: {{ remainHour }}小时{{ remainMinute }}分</div>
-            <div class="tip text-grey">距离上一名 ： {{ distance }}  <span class="text-button" :disabled="this.times===0" @click="use" type="primary" style="margin-left:20px;margin-top: 10px">查看（{{ times }}次）</span></div>
+            <div class="tip text-grey">距离上一名 ： {{ distance }} <span :disabled="this.times===0" class="text-button"
+                                                                         style="margin-left:20px;margin-top: 10px" type="primary"
+                                                                         @click="use">查看（{{
+                times
+              }}次）</span></div>
             <div class="text-grey" style="line-height: 2">累计在线时长:
               {{ grade.cumulativeHours }}小时{{ grade.cumulativeMinutes }}分
             </div>
-            <div class="badge-box" :style="{'border-color':this.getBadge().color}">
+            <div :style="{'border-color':this.getBadge().color}" class="badge-box">
               <a-row>
                 <a-col :span="10">
-                  <img style="width: 75px;margin-top: 10px" :src="this.getPath+getBadge().badge+'.png'">
-                  <div v-if="badge.rank<100" class="badge-num" :style="{'background-color':this.getBadge().color}">
+                  <img :src="this.getPath+getBadge().badge+'.png'" style="width: 75px;margin-top: 10px">
+                  <div v-if="badge.rank<100" :style="{'background-color':this.getBadge().color}" class="badge-num">
                     {{ badge.rank }}
                   </div>
                 </a-col>
@@ -72,23 +76,23 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import {defineComponent} from 'vue'
 import {mapState} from 'vuex'
-import {message,Modal} from 'ant-design-vue'
-export default defineComponent( {
+import {message, Modal} from 'ant-design-vue'
+
+export default defineComponent({
   name: 'grade-panel',
-  props: {
-  },
-  computed:{
-      ...mapState(['user','onlineGrade']),
-    getPath(){
-        return 'file://' +window.globalArgs['app-path']+'/icons/badge/'
+  props: {},
+  computed: {
+    ...mapState(['user', 'onlineGrade']),
+    getPath() {
+      return 'file://' + window.globalArgs['app-path'] + '/icons/badge/'
     }
   },
-  data () {
+  data() {
     return {
 
-      grade:{},
+      grade: {},
 
       remainHour: '',
       remainMinute: '',
@@ -143,17 +147,15 @@ export default defineComponent( {
       }
     }
   },
-  mounted () {
+  mounted() {
     console.log('初始化')
     console.log(this.user)
 
-    this.grade=this.user.onlineGradeExtra
+    this.grade = this.user.onlineGradeExtra
 
 
     let lv = this.grade.lv
     let section = this.gradeTableGenerate(64)[lv + 1]
-
-
 
 
     let remain = section[0] * 60 - this.grade.cumulativeMinute
@@ -163,8 +165,8 @@ export default defineComponent( {
   },
 
   methods: {
-    getBadge () {
-      if(!this.grade.rank){
+    getBadge() {
+      if (!this.grade.rank) {
         return this.badge.t9999
       }
       let rank = this.grade.rank
@@ -184,23 +186,23 @@ export default defineComponent( {
       }
     },
 
-    getTimes () {
+    getTimes() {
       let str = this.getDateStr()
       let times = localStorage.getItem(str)
       times = Number(times === null ? 2 : times)
       this.times = times
       return times
     },
-    getDateStr () {
+    getDateStr() {
       let date = new Date(Date.now())
       let str = date.getFullYear() + '_' + (date.getMonth() + 1) + '_' + date.getDate() + '_' + this.user.uid
       return str
     },
-    setTimes (times) {
+    setTimes(times) {
       let str = this.getDateStr()
       localStorage.setItem(str, Number(times))
     },
-    use () {
+    use() {
       let times = this.getTimes()
       if (times <= 0) {
         message.error('剩余道具不足，无法使用。')
@@ -225,7 +227,7 @@ export default defineComponent( {
       }
     },
 
-    gradeTableGenerate (num) {
+    gradeTableGenerate(num) {
       let lvSys = {}
       for (let i = 0; i < num + 1; i++) {
         let arrLef = 0

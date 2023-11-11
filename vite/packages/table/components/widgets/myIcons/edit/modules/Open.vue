@@ -1,6 +1,6 @@
 <template>
-  <XtTitle> 链接/快捷方式 </XtTitle>
-  <div class="flex justify-between" v-if="edit.link == ''">
+  <XtTitle> 链接/快捷方式</XtTitle>
+  <div v-if="edit.link == ''" class="flex justify-between">
     <div class="xt-btn xt-text xt-hover h-12" style="width: 142px" @click="linkClick()">
       网页链接
     </div>
@@ -13,42 +13,42 @@
   </div>
   <!-- 链接方式 -->
   <template v-else-if="edit.link === 'link'">
-    <a-input @blur="leaveInput()" v-model:value="edit.open.value" placeholder="以http/https开头"
-      class="xt-bg-2 xt-border h-12 rounded-xl">
+    <a-input v-model:value="edit.open.value" class="xt-bg-2 xt-border h-12 rounded-xl" placeholder="以http/https开头"
+             @blur="leaveInput()">
       <template #suffix>
-        <div style="border-radius: 50%; padding: 5px"
-          class="xt-bg-2 flex justify-center items-center xt-hover cursor-pointer" @click="clear()">
+        <div class="xt-bg-2 flex justify-center items-center xt-hover cursor-pointer"
+             style="border-radius: 50%; padding: 5px" @click="clear()">
           <Icon class="icon xt-text no-drag" icon="guanbi"></Icon>
         </div>
       </template>
     </a-input>
-    <XtTitle> 浏览器打开方式 </XtTitle>
-    <XtRadio :list="linkList" v-model:data="edit.open.type" text=""></XtRadio>
+    <XtTitle> 浏览器打开方式</XtTitle>
+    <XtRadio v-model:data="edit.open.type" :list="linkList" text=""></XtRadio>
   </template>
   <!-- 快捷和应用 -->
   <template v-else>
-    <a-input v-model:value="title" placeholder="" class="xt-bg-2 xt-border h-12 rounded-xl" style="border: 0">
+    <a-input v-model:value="title" class="xt-bg-2 xt-border h-12 rounded-xl" placeholder="" style="border: 0">
       <template #suffix>
-        <div style="border-radius: 50%; padding: 5px; cursor: pointer"
-          class="xt-bg-2 flex justify-center items-center xt-hover" @click="clear()">
+        <div class="xt-bg-2 flex justify-center items-center xt-hover"
+             style="border-radius: 50%; padding: 5px; cursor: pointer" @click="clear()">
           <Icon class="icon xt-text no-drag" icon="guanbi"></Icon>
         </div>
       </template>
     </a-input>
   </template>
-  <FastNav v-if="edit.link != 'link' && edit.link != 'nav'" style="z-index: 999999999999999" @returnApp="returnApp"
-    ref="fastNavRef"></FastNav>
+  <FastNav v-if="edit.link != 'link' && edit.link != 'nav'" ref="fastNavRef" style="z-index: 999999999999999"
+           @returnApp="returnApp"></FastNav>
 
-  <input style="display: none" ref="fileRef" type="file" v-if="edit.link !== 'link' && edit.link !== 'fast'" />
+  <input v-if="edit.link !== 'link' && edit.link !== 'fast'" ref="fileRef" style="display: none" type="file"/>
 </template>
 
 <script>
 import FastNav from "../components/FastNav.vue";
-import { linkList } from "../hooks/config";
-import { getHostAddress } from "../hooks/getHostAddress";
+import {linkList} from "../hooks/config";
+import {getHostAddress} from "../hooks/getHostAddress";
 import editMixins from "../hooks/mixins";
 
-import { useBase64AsImage } from "../../../../card/hooks/base64";
+import {useBase64AsImage} from "../../../../card/hooks/base64";
 
 export default {
   mixins: [editMixins],
@@ -63,10 +63,10 @@ export default {
   computed: {
     title() {
       return (
-        this.edit.open.name ||
-        this.edit.linkValue.name ||
-        this.edit.linkValue ||
-        ""
+          this.edit.open.name ||
+          this.edit.linkValue.name ||
+          this.edit.linkValue ||
+          ""
       );
     },
   },
@@ -75,7 +75,7 @@ export default {
     clear() {
       this.edit.linkValue = "";
       this.edit.link = "";
-      this.edit.open = { value: "", type: "internal" };
+      this.edit.open = {value: "", type: "internal"};
     },
     leaveInput() {
       if (this.edit.src.length === 0) {
@@ -96,7 +96,7 @@ export default {
     async returnApp(item) {
       console.log('item :>> ', item);
       console.log('item.path :>> ', item.path);
-      let img = await tsbApi.system.extractFileIcon(item.path )
+      let img = await tsbApi.system.extractFileIcon(item.path)
       console.log('img :>> ', img);
       this.edit.open.name = item.name;
       // 当图片状态为空时
@@ -134,7 +134,7 @@ export default {
           type: "tableApp",
           value: item.path,
           name: item.name,
-          src:item.src
+          src: item.src
         };
         item = this.edit.open;
 

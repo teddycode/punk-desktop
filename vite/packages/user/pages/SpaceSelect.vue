@@ -9,24 +9,25 @@
           <a-dropdown>
             <template #overlay>
               <a-menu>
-                <a-menu-item @click.stop="()=>{}" v-if="this.user.uid===0">
-                  <a-checkbox @change="loadSpaces" @click.stop="()=>{}" v-model:checked="showBackup">显示离线空间</a-checkbox>
+                <a-menu-item v-if="this.user.uid===0" @click.stop="()=>{}">
+                  <a-checkbox v-model:checked="showBackup" @change="loadSpaces" @click.stop="()=>{}">显示离线空间
+                  </a-checkbox>
                 </a-menu-item>
-                <a-menu-item @click="importFromLocal" v-if="user.uid" key="1">
+                <a-menu-item v-if="user.uid" key="1" @click="importFromLocal">
                   <import-outlined/>
                   导入
                 </a-menu-item>
-                <a-menu-item v-if="user.uid!==0" @click="setEnterPwd()" key="2">
+                <a-menu-item v-if="user.uid!==0" key="2" @click="setEnterPwd()">
                   <LockOutlined/>
                   设置密码
                 </a-menu-item>
-                <a-menu-item v-if="user.uid!==0 && !user.is_current" @click="deleteAccount(user.uid)" key="3">
+                <a-menu-item v-if="user.uid!==0 && !user.is_current" key="3" @click="deleteAccount(user.uid)">
                   <logout-outlined/>
                   解绑帐号
                 </a-menu-item>
               </a-menu>
             </template>
-            <a-button size="small" @click="showCreateSpace" type="primary">
+            <a-button size="small" type="primary" @click="showCreateSpace">
               创建
               <DownOutlined/>
             </a-button>
@@ -37,8 +38,8 @@
       <div v-if="loading">
       </div>
       <vue-custom-scrollbar :settings="settings" style="position:relative;height: calc(100vh - 45px)">
-        <SpaceList :currentSpace="currentSpace" @reloadSpaces="loadSpaces" v-model:activeSpace="activeSpace"
-                   :spaces="spaces" :user="user" @setActive="setActive"></SpaceList>
+        <SpaceList v-model:activeSpace="activeSpace" :currentSpace="currentSpace" :spaces="spaces"
+                   :user="user" @reloadSpaces="loadSpaces" @setActive="setActive"></SpaceList>
       </vue-custom-scrollbar>
     </a-layout-sider>
     <a-layout>
@@ -70,7 +71,7 @@
             <a-dropdown>
               <template #overlay>
                 <a-menu>
-                  <a-menu-item @click="toggleHistory" key="history">
+                  <a-menu-item key="history" @click="toggleHistory">
                     <history-outlined/>
                     历史版本
                   </a-menu-item>
@@ -78,72 +79,74 @@
               </template>
 
             </a-dropdown>
-            <a-button @click="toggleHistory" type="text">
-              <history-outlined/> 版本历史
+            <a-button type="text" @click="toggleHistory">
+              <history-outlined/>
+              版本历史
             </a-button>
           </div>
         </div>
         <vue-custom-scrollbar :settings="settings" style="position:relative;height:calc(100vh - 50px);padding:10px">
-          <TaskList v-if="activeSpace.nanoid!==''" :list="spaceData.state.tasks"
-                    v-model:selectedKeys="selectedKeys"></TaskList>
+          <TaskList v-if="activeSpace.nanoid!==''" v-model:selectedKeys="selectedKeys"
+                    :list="spaceData.state.tasks"></TaskList>
         </vue-custom-scrollbar>
 
         <div>
           <a-modal
-            centered
-            v-model:visible="visibleCreate"
-            title="创建空间"
-            ok-text="创建"
-            cancel-text="取消"
-            width="300px"
-            @ok="doCreateSpace"
+              v-model:visible="visibleCreate"
+              cancel-text="取消"
+              centered
+              ok-text="创建"
+              title="创建空间"
+              width="300px"
+              @ok="doCreateSpace"
           >
             <p>输入空间名称</p>
             <p>
-              <a-input ref="spaceNameInput" @keyup.enter="doCreateSpace" v-model:value="newSpaceName"
-                       placeholder="空间名称"></a-input>
+              <a-input ref="spaceNameInput" v-model:value="newSpaceName" placeholder="空间名称"
+                       @keyup.enter="doCreateSpace"></a-input>
             </p>
             <p></p>
           </a-modal>
           <a-modal
-            centered
-            v-model:visible="visibleSetEnterPwd"
-            title="设置空间密码"
-            ok-text="设置"
-            cancel-text="取消"
-            width="300px"
-            @ok="doSetEnterPwd"
+              v-model:visible="visibleSetEnterPwd"
+              cancel-text="取消"
+              centered
+              ok-text="设置"
+              title="设置空间密码"
+              width="300px"
+              @ok="doSetEnterPwd"
           >
             <p>请设置新的空间密码，留空则不再使用空间密码。</p>
             <p>
-              <a-input-password ref="enterPwdInput" @keyup.enter="doSetEnterPwd" v-model:value="newEnterPwd"
-                                placeholder="留空不使用"></a-input-password>
+              <a-input-password ref="enterPwdInput" v-model:value="newEnterPwd" placeholder="留空不使用"
+                                @keyup.enter="doSetEnterPwd"></a-input-password>
             </p>
             <p></p>
           </a-modal>
           <a-modal
-            centered
-            v-model:visible="visibleImport"
-            title="导入本机空间"
-            ok-text="导入"
-            cancel-text="取消"
-            width="400px"
-            @ok="doImportSpaces"
+              v-model:visible="visibleImport"
+              cancel-text="取消"
+              centered
+              ok-text="导入"
+              title="导入本机空间"
+              width="400px"
+              @ok="doImportSpaces"
           >
-            <p>请选择本机空间导入，可一次导入多个空间。<br>注意：如果导入<strong>当前使用的空间</strong>，后续的改动<strong>不会被同步</strong>到新导入的云端空间。</p>
+            <p>请选择本机空间导入，可一次导入多个空间。<br>注意：如果导入<strong>当前使用的空间</strong>，后续的改动<strong>不会被同步</strong>到新导入的云端空间。
+            </p>
             <p>
               <a-select
-                mode="multiple"
-                placeholder="可多选"
-                style="width: 100%"
-                v-model:value="selectedImportSpaces"
-                :options="localOptions"
+                  v-model:value="selectedImportSpaces"
+                  :options="localOptions"
+                  mode="multiple"
+                  placeholder="可多选"
+                  style="width: 100%"
               ></a-select>
             </p>
           </a-modal>
         </div>
       </a-layout-content>
-      <a-layout-sider style="background: white;padding: 10px;box-shadow: 0 0 8px rgba(0,0,0,0.38)" v-if="showHistory">
+      <a-layout-sider v-if="showHistory" style="background: white;padding: 10px;box-shadow: 0 0 8px rgba(0,0,0,0.38)">
         <h3>
           <history-outlined/>
           备份版本 <span v-if="versions.length" style="font-size: 12px;color: grey">（{{ versions.length }}）</span>
@@ -155,7 +158,7 @@
           <br>系统仅备份不同的版本。
         </p>
         <vue-custom-scrollbar :settings="settings" style="position:relative;height: calc(100vh - 50px)">
-          <VersionList @restoreVersion="restoreVersion" @setActive="setTaskList" :versions="versions"></VersionList>
+          <VersionList :versions="versions" @restoreVersion="restoreVersion" @setActive="setTaskList"></VersionList>
         </vue-custom-scrollbar>
       </a-layout-sider>
     </a-layout>
@@ -167,24 +170,24 @@
 <script>
 
 import VersionList from '../components/VersionList.vue'
-
-const { userModel, spaceModel, spaceVersionModel } = window.$models
-import { message, Modal } from 'ant-design-vue'
+import {message, Modal} from 'ant-design-vue'
 import SpaceList from '../components/SpaceList.vue'
 import TaskList from '../components/TaskList.vue'
 
 import {
-  ZoomInOutlined,
-  SwapOutlined,
+  CloseOutlined,
   DownOutlined,
+  HistoryOutlined,
   ImportOutlined,
   LockOutlined,
   LogoutOutlined,
   MoreOutlined,
-  HistoryOutlined,
-  CloseOutlined
+  SwapOutlined,
+  ZoomInOutlined
 } from '@ant-design/icons-vue'
 import vueCustomScrollbar from '../../../src/components/vue-scrollbar.vue'
+
+const {userModel, spaceModel, spaceVersionModel} = window.$models
 
 export default {
   name: 'SpaceSelect',
@@ -203,7 +206,7 @@ export default {
     HistoryOutlined,
     CloseOutlined
   },
-  data () {
+  data() {
     return {
       versions: [],
       activeVersion: {},//当前版本
@@ -221,7 +224,7 @@ export default {
         user_info: {}
       },
       spaces: [],
-      activeSpace: { nanoid: '' },
+      activeSpace: {nanoid: ''},
       spaceData: {
         state: {
           tasks: []
@@ -254,65 +257,65 @@ export default {
       tipCopyRead: '0',
     }
   },
-  async beforeRouteUpdate (to, from) {
+  async beforeRouteUpdate(to, from) {
     this.init(to.params.uid)
   },
-  async mounted () {
+  async mounted() {
     let uid = Number(this.$route.params.uid)
     this.init(uid)
   },
   computed: {},
   methods: {
-    setTaskList (version) {
+    setTaskList(version) {
       console.log('选中', version)
       this.activeVersion = version
       this.spaceData = JSON.parse(version.data)
     },
-    restoreVersion(version){
-      if(this.currentSpace.spaceId===this.activeSpace.nanoid){
+    restoreVersion(version) {
+      if (this.currentSpace.spaceId === this.activeSpace.nanoid) {
         Modal.confirm({
-          content:'当前空间正在使用中，此操作将自动重启浏览器，请确认当前所有的网页内容均已保存。',
-          okText:'已保存，重启还原',
-          cancelText:'取消',
+          content: '当前空间正在使用中，此操作将自动重启浏览器，请确认当前所有的网页内容均已保存。',
+          okText: '已保存，重启还原',
+          cancelText: '取消',
           okType: 'danger',
-          type:'danger',
-          onOk:()=>{
+          type: 'danger',
+          onOk: () => {
             this.doRestoreVersion(version)
           }
         })
-      }else if(this.activeSpace.isUsing){
-          Modal.error('不可还原其他设备使用中的空间。请在其他设备上退出空间后，再尝试还原操作。')
-        }else {
-          Modal.confirm({
-            content:'确定还原此版本？',
-            okText:'还原版本',
-            cancelText:'取消',
-            okType: 'danger',
-            type:'danger',
-            onOk:()=>{
-              this.doRestoreVersion(version)
-            }
-          })
-        }
+      } else if (this.activeSpace.isUsing) {
+        Modal.error('不可还原其他设备使用中的空间。请在其他设备上退出空间后，再尝试还原操作。')
+      } else {
+        Modal.confirm({
+          content: '确定还原此版本？',
+          okText: '还原版本',
+          cancelText: '取消',
+          okType: 'danger',
+          type: 'danger',
+          onOk: () => {
+            this.doRestoreVersion(version)
+          }
+        })
+      }
 
     },
-    async doRestoreVersion (version) {
+    async doRestoreVersion(version) {
       if (this.activeSpace.type === 'local') {
         let rs = await spaceVersionModel.restore(this.activeSpace.nanoid, version.nanoid, 'local')
-        if(rs.status===1){
+        if (rs.status === 1) {
           this.loadSpaces()
           message.success('成功还原版本。')
         }
       } else {
         let rs = await spaceVersionModel.restore(this.activeSpace.nanoid, version.nanoid, 'cloud')
-        if(rs.status===1){
+        if (rs.status === 1) {
           this.loadSpaces()
           message.success('成功还原版本。')
         }
         console.log('是云空间', this.activeSpace, 'cloud')
       }
     },
-    async toggleHistory () {
+    async toggleHistory() {
       this.showHistory = !this.showHistory
       if (this.showHistory) {
         let rs = await spaceVersionModel.list(this.activeSpace.nanoid)
@@ -321,7 +324,7 @@ export default {
         }
       }
     },
-    async init (uid) {
+    async init(uid) {
       this.tipCopyRead = localStorage.getItem('tipCopyRead')
       let user = {}
       if (!Number(uid)) {
@@ -336,7 +339,7 @@ export default {
         this.user = user
       } else {
         //网络用户
-        user = await userModel.get({ uid: uid })
+        user = await userModel.get({uid: uid})
         if (user) {
           this.user = user
         } else {
@@ -357,13 +360,13 @@ export default {
       this.resetActive()
       this.loading = false
     },
-    setTipCopyRead () {
+    setTipCopyRead() {
       localStorage.setItem('tipCopyRead', '1')
     },
-    setEnterPwd () {
+    setEnterPwd() {
       this.visibleSetEnterPwd = true
     },
-    doSetEnterPwd () {
+    doSetEnterPwd() {
       if (this.newEnterPwd !== '') {
         Modal.confirm({
           title: '修改密码确认',
@@ -410,7 +413,7 @@ export default {
     /**
      * 导入本机空间
      */
-    async importFromLocal () {
+    async importFromLocal() {
       //todo loadLocalSpaces()
       let spaces = await spaceModel.getLocalSpaces()
       this.localOptions = []
@@ -437,7 +440,7 @@ export default {
      * 导入空间
      * @returns {Promise<void>}
      */
-    async doImportSpaces () {
+    async doImportSpaces() {
       let currentIndex = undefined
       try {
         let selectedSpaces = this.selectedImportSpaces.map(space => {
@@ -464,7 +467,10 @@ export default {
           this.selectedImportSpaces = []
           await this.loadSpaces()
           if (currentIndex) {
-            Modal.info({ title: '空间导入成功', content: '导入空间成功。导入的空间中包括当前使用中的空间，后续对当前空间的改动不会再影响到到导入后的云端空间。' })
+            Modal.info({
+              title: '空间导入成功',
+              content: '导入空间成功。导入的空间中包括当前使用中的空间，后续对当前空间的改动不会再影响到到导入后的云端空间。'
+            })
           } else {
             message.success('导入空间成功。')
           }
@@ -476,11 +482,11 @@ export default {
         message.error('导入空间失败。未知异常。')
       }
     },
-    async loadSpaces () {
+    async loadSpaces() {
       let spaces = []
       //下面开始获取用户空间
       try {
-        let result = await spaceModel.setUser(this.user).getUserSpaces({ showBackup: this.showBackup })
+        let result = await spaceModel.setUser(this.user).getUserSpaces({showBackup: this.showBackup})
 
         if (result.status === 1) {
           spaces = result.data
@@ -512,14 +518,14 @@ export default {
       // }
     }
     ,
-    goLogin () {
+    goLogin() {
       ipc.send('login')
       //https://s.apps.vip/login?response_type=code&client_id=10001&state=1
     }
     ,
-    async doCreateSpace () {
+    async doCreateSpace() {
       try {
-        let result = await spaceModel.setUser(this.user).addSpace({ name: this.newSpaceName })
+        let result = await spaceModel.setUser(this.user).addSpace({name: this.newSpaceName})
         if (result.status === 1) {
           this.newSpaceName = ''
           message.success('创建空间成功。')
@@ -547,18 +553,18 @@ export default {
       }
     }
     ,
-    showCreateSpace () {
+    showCreateSpace() {
       this.visibleCreate = true
       setTimeout(() => {
         this.$refs.spaceNameInput.input.focus()
       }, 200)
     },
-    resetActive () {
+    resetActive() {
       this.showHistory = false
       this.activeVersion = {}
-      this.activeSpace = { nanoid: '' }
+      this.activeSpace = {nanoid: ''}
     },
-    async setActive (space) {
+    async setActive(space) {
       this.showHistory = false
       this.activeSpace = space
       this.activeVersion = {}
@@ -581,7 +587,7 @@ export default {
       }
 
     },
-    deleteAccount (uid) {
+    deleteAccount(uid) {
       Modal.confirm({
         title: '解绑此帐号',
         content: '解绑帐号并不会影响帐号数据，仅仅是将本地帐号退出。但是退出后无法再使用此帐号下的所有空间。',
@@ -589,7 +595,7 @@ export default {
         okText: '确认',
         cancelText: '取消',
         onOk: () => {
-          userModel.delete({ uid: uid }).then(() => {
+          userModel.delete({uid: uid}).then(() => {
             message.success('解绑帐号成功。')
             this.$router.replace('/')
           }).catch(() => {
@@ -602,14 +608,15 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .close-btn {
   position: absolute;
   right: 10px;
   top: 10px;
   color: #ccc;
-  &:hover{
-    color:#999
+
+  &:hover {
+    color: #999
   }
 }
 </style>

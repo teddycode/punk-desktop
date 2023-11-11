@@ -1,24 +1,25 @@
 <template>
-<h3>应用信息</h3>
-  <p>此处的所有设置均不会影响到当前已经安装的应用，如需设置生效，可点击安装测试应用以此配置安装一个新的本地测试应用。所有模板设置均需点击保存方可生效，否则均会丢失。</p>
-  <a-form :model="formState" style="padding: 20px" :label-col="{span:5}" :wrdevApper-col="{span:19}">
+  <h3>应用信息</h3>
+  <p>
+    此处的所有设置均不会影响到当前已经安装的应用，如需设置生效，可点击安装测试应用以此配置安装一个新的本地测试应用。所有模板设置均需点击保存方可生效，否则均会丢失。</p>
+  <a-form :label-col="{span:5}" :model="formState" :wrdevApper-col="{span:19}" style="padding: 20px">
     <a-form-item label="应用ID">
-      <span>{{devApp.nanoid}}</span>
+      <span>{{ devApp.nanoid }}</span>
     </a-form-item>
     <a-form-item
-      label="应用名"
-      :rules="{ required: true, message: '应用名称，长度大于1，小于16' ,min:1,max:16 }"
+        :rules="{ required: true, message: '应用名称，长度大于1，小于16' ,min:1,max:16 }"
+        label="应用名"
     >
       <a-input v-model:value="devApp.name"
                placeholder="输入应用名称"
       />
     </a-form-item>
-    <a-form-item label="本地项目目录"
-                 :rules="{ message: '选择一个本地项目目录，用于输出manifest.json'  }"
+    <a-form-item :rules="{ message: '选择一个本地项目目录，用于输出manifest.json'  }"
+                 label="本地项目目录"
     >
       <a-input-group compact>
-        <a-input style="width:calc( 100% - 87px)" v-model:value="devApp.local_dir"
-                 placeholder="选择本地项目目录"
+        <a-input v-model:value="devApp.local_dir" placeholder="选择本地项目目录"
+                 style="width:calc( 100% - 87px)"
         >
         </a-input>
         <a-button @click="selectDir">
@@ -27,32 +28,32 @@
       </a-input-group>
       <DebugTip tip="local_dir"></DebugTip>
     </a-form-item>
-    <a-form-item label="应用图标"
-                 :rules="{ message: '选择一个本地项目目录，用于输出manifest.json'  }"
+    <a-form-item :rules="{ message: '选择一个本地项目目录，用于输出manifest.json'  }"
+                 label="应用图标"
     >
 
-        <a-avatar style="margin-right: 10px" shape="circle" :src="getLogo(this.devApp.logo)"></a-avatar>
-        <a-button size="small" @click="selectLogo">
-          选择图片
-        </a-button>
+      <a-avatar :src="getLogo(this.devApp.logo)" shape="circle" style="margin-right: 10px"></a-avatar>
+      <a-button size="small" @click="selectLogo">
+        选择图片
+      </a-button>
       <DebugTip tip="logo"></DebugTip>
     </a-form-item>
     <a-form-item v-if="debugMod"
-      label="包名"
-      :rules="{ message: '唯一的应用名，用于开发的时候应用身份确认，唯一' ,min:1,max:16 }"
+                 :rules="{ message: '唯一的应用名，用于开发的时候应用身份确认，唯一' ,min:1,max:16 }"
+                 label="包名"
     >
       <a-input-group compact>
-        <a-input style="width: 300px" v-model:value="devApp.package"
-                 placeholder="全网唯一包名，形如com.thisky.todo"
+        <a-input v-model:value="devApp.package" placeholder="全网唯一包名，形如com.thisky.todo"
+                 style="width: 300px"
         >
         </a-input>
-<!--        <a-button type="primary">注册包名</a-button>-->
+        <!--        <a-button type="primary">注册包名</a-button>-->
       </a-input-group>
-<DebugTip tip="package"></DebugTip>
+      <DebugTip tip="package"></DebugTip>
     </a-form-item>
 
     <a-form-item
-      label="应用起始地址：" >
+        label="应用起始地址：">
                     <span v-if="!debugMod" class="ant-form-text" style="text-overflow: ellipsis;
   white-space: nowrap;display: inline-block;word-break: break-all; overflow: hidden;">
         {{ this.devApp.url }}
@@ -60,25 +61,25 @@
       <a-input v-else v-model:value="devApp.url"/>
     </a-form-item>
     <a-form-item
-                  label="启用调试入口：">
+        label="启用调试入口：">
       <template #extra>
-        <DebugTip tip="use_debug_url" />
+        <DebugTip tip="use_debug_url"/>
       </template>
-      <a-switch  v-model:checked="devApp.use_debug_url"/>
+      <a-switch v-model:checked="devApp.use_debug_url"/>
     </a-form-item>
-    <a-form-item  v-if="devApp.use_debug_url"
-      label="应用调试地址：">
+    <a-form-item v-if="devApp.use_debug_url"
+                 label="应用调试地址：">
       <template #extra>
-      <DebugTip tip="debug_url" />
+        <DebugTip tip="debug_url"/>
       </template>
-        <a-input  v-model:value="devApp.debug_url"/>
+      <a-input v-model:value="devApp.debug_url"/>
     </a-form-item>
     <a-form-item
-      label="应用说明"
-      :rules="{  message: '请输入应用说明' }"
+        :rules="{  message: '请输入应用说明' }"
+        label="应用说明"
     >
       <a-textarea v-model:value="devApp.summary"
-        placeholder="输入应用说明"
+                  placeholder="输入应用说明"
       />
     </a-form-item>
     <a-form-item label="主题色">
@@ -87,7 +88,7 @@
           <template #content>
             <SketchPicker v-model="this.devApp.theme_colors"></SketchPicker>
           </template>
-          <span class="theme-color" :style="{'background-color':this.devApp.theme_colors.hex} "></span>
+          <span :style="{'background-color':this.devApp.theme_colors.hex} " class="theme-color"></span>
         </a-popover>
       </div>
     </a-form-item>
@@ -147,77 +148,80 @@
 </template>
 
 <script>
-import { message, Upload,Modal } from 'ant-design-vue';
-const formItemLayout = {
-  labelCol: { span: 6 },
-  wrdevApperCol: { span: 16 },
-}
-const formTailLayout = {
-  labelCol: { span: 4 },
-  wrdevApperCol: { span: 8, offset: 4 },
-}
-import { appStore } from '../../store'
-import { mapWritableState } from 'pinia'
+import {message, Modal} from 'ant-design-vue';
+import {appStore} from '../../store'
+import {mapWritableState} from 'pinia'
 import {Sketch} from '@lk77/vue3-color'
 import DebugTip from '../../components/DebugTip.vue'
 import {getLogo} from '../../util'
-const path=require('path')
-const fs=require('fs')
+
+const formItemLayout = {
+  labelCol: {span: 6},
+  wrdevApperCol: {span: 16},
+}
+const formTailLayout = {
+  labelCol: {span: 4},
+  wrdevApperCol: {span: 8, offset: 4},
+}
+
+const path = require('path')
+const fs = require('fs')
 export default {
   name: 'BaseInfo',
   computed: {
-    ...mapWritableState(appStore, ['devApp','debugMod'])
+    ...mapWritableState(appStore, ['devApp', 'debugMod'])
   },
-  components:{
-    DebugTip,'SketchPicker':Sketch
+  components: {
+    DebugTip, 'SketchPicker': Sketch
   },
-  methods:{
+  methods: {
     getLogo,
-    getExtra(type){
-      let tip=`&nbsp;调试&nbsp;`
-      switch (type){
+    getExtra(type) {
+      let tip = `&nbsp;调试&nbsp;`
+      switch (type) {
         case 'debug_url':
-          return tip+`调试入口，仅调试模式下生效，可根据开关启用调试入口`
+          return tip + `调试入口，仅调试模式下生效，可根据开关启用调试入口`
       }
     },
-    async selectLogo(){
-      if(!this.devApp.local_dir){
+    async selectLogo() {
+      if (!this.devApp.local_dir) {
         message.error('请先选择项目目录，方可选择应用图标')
         return
       }
-      let file=ipc.sendSync('selectFile')
-      function copyFile(dir){
-        let dest=path.join(dir,'logo.png')
-        fs.copyFileSync(file[0],dest)
-        return 'local|'+dest+'?t='+Date.now()
+      let file = ipc.sendSync('selectFile')
+
+      function copyFile(dir) {
+        let dest = path.join(dir, 'logo.png')
+        fs.copyFileSync(file[0], dest)
+        return 'local|' + dest + '?t=' + Date.now()
       }
 
-      if(file){
-        if(fs.existsSync(path.join(this.devApp.local_dir,'logo.png'))){
-        Modal.confirm({
-          content:'是否确认覆盖应用图标？',
-          centered:true,
-          onOk:()=>{
-            this.devApp.logo=copyFile(this.devApp.local_dir)
-          }
-        })
-        }else{
-          this.devApp.logo=copyFile(this.devApp.local_dir)
+      if (file) {
+        if (fs.existsSync(path.join(this.devApp.local_dir, 'logo.png'))) {
+          Modal.confirm({
+            content: '是否确认覆盖应用图标？',
+            centered: true,
+            onOk: () => {
+              this.devApp.logo = copyFile(this.devApp.local_dir)
+            }
+          })
+        } else {
+          this.devApp.logo = copyFile(this.devApp.local_dir)
         }
       }
     },
-    async selectDir(){
-      let  dir=ipc.sendSync('selectDir')
-      if(dir){
-        this.devApp.local_dir=dir[0]
+    async selectDir() {
+      let dir = ipc.sendSync('selectDir')
+      if (dir) {
+        this.devApp.local_dir = dir[0]
       }
     }
   },
-  mounted () {
+  mounted() {
     this.formState.name = this.devApp
     let optimizeValues = ['keepRunning', 'theme', 'desktop', 'showInSideBar', 'alwaysTop', 'autoRun', 'noFrame']
     let optimize = []
-    if(this.devApp.settings){
+    if (this.devApp.settings) {
       optimizeValues.forEach(item => {
         if (this.devApp.settings[item]) {
           optimize.push(item)
@@ -233,7 +237,7 @@ export default {
     // })
 
   },
-  data () {
+  data() {
     return {
       formItemLayout,
       formTailLayout,
@@ -243,7 +247,7 @@ export default {
         theme_color: '',
         optimize: '',
         user_theme_colors: {
-          hex:'#ffffff'
+          hex: '#ffffff'
         }
       },
     }

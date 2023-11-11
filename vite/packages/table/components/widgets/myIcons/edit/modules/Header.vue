@@ -1,10 +1,10 @@
 <template>
   <XtTab
-    style="height: 52px"
-    boxClass="p-1 xt-bg-2"
-    v-model="selectTab"
-    :list="tabList"
-    name="title"
+      v-model="selectTab"
+      :list="tabList"
+      boxClass="p-1 xt-bg-2"
+      name="title"
+      style="height: 52px"
   ></XtTab>
 </template>
 

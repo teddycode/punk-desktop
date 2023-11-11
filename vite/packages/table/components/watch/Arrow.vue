@@ -8,6 +8,7 @@
 
 <script>
 import dataHelper from '../../js/watch/dataHelper'
+
 let standard = {
   like: 4,
   coin: 1,
@@ -20,10 +21,10 @@ export default {
   name: 'Arrow',
   props: ['type', 'value'],
   computed: {
-    stand () {
+    stand() {
       return dataHelper.aboveStandard(this.type, this.value, standard)
     },
-    getStand(){
+    getStand() {
       return (standard[this.type]).toFixed(1)
     }
   }

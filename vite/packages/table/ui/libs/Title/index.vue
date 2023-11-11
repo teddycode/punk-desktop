@@ -1,11 +1,11 @@
 <template>
   <div
-    class="flex justify-between items-center relative"
-    :class="[titleClass, typeClass]"
+      :class="[titleClass, typeClass]"
+      class="flex justify-between items-center relative"
   >
     <div
-      class="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 text-lg"
-      v-if="title"
+        v-if="title"
+        class="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 text-lg"
     >
       {{ title }}
     </div>

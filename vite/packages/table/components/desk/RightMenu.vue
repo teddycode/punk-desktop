@@ -1,14 +1,15 @@
 <template>
-  <Menu :menus="menus" name="name" fn="fn" :start="menuState" :model="model">
+  <Menu :menus="menus" :model="model" :start="menuState" fn="fn" name="name">
     <slot></slot>
   </Menu>
 </template>
 
 <script setup>
-import { ref, computed, toRefs } from "vue";
-import { storeToRefs } from "pinia";
-import { useWidgetStore } from "../card/store.ts";
+import {computed} from "vue";
+import {storeToRefs} from "pinia";
+import {useWidgetStore} from "../card/store.ts";
 import Menu from "../../ui/components/Menu/index.vue";
+
 const props = defineProps({
   menus: {},
   model: {
@@ -17,7 +18,7 @@ const props = defineProps({
 });
 const widgetStore = useWidgetStore();
 
-const { rightModel } = storeToRefs(widgetStore);
+const {rightModel} = storeToRefs(widgetStore);
 const menuState = computed(() => {
   return rightModel.value == "follow";
 });

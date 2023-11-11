@@ -1,19 +1,19 @@
 <template>
   <a-row class="w-full h-full">
-    <a-col  class="flex flex-col h-full px-3 find-left" v-if="isFloat === false"
-     style=" border-right:1px solid var(--divider);"
+    <a-col v-if="isFloat === false" class="flex flex-col h-full px-3 find-left"
+           style=" border-right:1px solid var(--divider);"
     >
       <!-- :style="doubleCol ? { width:'336px !important' } :{ width:'240px !important'}" -->
       <!-- flex=" 0 1 300px" -->
 
-      <CategoryFloat :float="false" :communityID="routeData"
-      @updateColumn="updateColumn" @createCategory="clickEmptyButton" @clickItem="currentItem"
+      <CategoryFloat :communityID="routeData" :float="false"
+                     @clickItem="currentItem" @createCategory="clickEmptyButton" @updateColumn="updateColumn"
       ></CategoryFloat>
 
     </a-col>
 
 
-    <a-col flex=" 1 1 200px" v-if="currentChannel" class="flex flex-col h-full">
+    <a-col v-if="currentChannel" class="flex flex-col h-full" flex=" 1 1 200px">
       <div class="px-4 mb-0 line-title flex items-center ">
         <div class="flex items-center justify-center">
           <template v-if="currentChannel.type === 'group'">
@@ -33,11 +33,11 @@
         <ValidateModal :data="group"></ValidateModal>
       </div>
 
-      <div style="height: 0;flex:1;position:relative;" v-else>
+      <div v-else style="height: 0;flex:1;position:relative;">
         <template v-if="!currentChannel.name && channelList.length>0">
           <div class="flex flex-col items-center justify-center h-full">
-            <div style="width:64px;height:64px;" class="rounded-full mb-6">
-              <img src="/icons/logo128.png" class="w-full h-full object-cover rounded-full"/>
+            <div class="rounded-full mb-6" style="width:64px;height:64px;">
+              <img class="w-full h-full object-cover rounded-full" src="/icons/logo128.png"/>
             </div>
             <span class="font-24-500" style="color:var(--primary-text);">欢迎加入，磐古跨链客户端官方社群</span>
             <div class="mt-4 flex justify-center items-center" style="width:362px;">
@@ -55,23 +55,25 @@
         <Commun v-else-if="currentChannel.type === 'forum'" :forum-id="currentChannel.props.props.id "/>
         <TUIChat v-else-if="currentChannel.type==='group'"></TUIChat>
         <template v-else-if="currentChannel.type==='link'">
-          <div v-if="currentChannel.name !== 'Roadmap' && currentChannel.props.openMethod !== 'currentPage'" class="flex items-center justify-center" style="text-align: center;margin-top: 30%">
+          <div v-if="currentChannel.name !== 'Roadmap' && currentChannel.props.openMethod !== 'currentPage'"
+               class="flex items-center justify-center" style="text-align: center;margin-top: 30%">
 
             <span class="category-16-400" style="color:var(--primary-text);">当前频道需要浏览器打开。</span>
-            <communityIcon icon="fluent:open-20-filled"  style="font-size: 24px"/>
+            <communityIcon icon="fluent:open-20-filled" style="font-size: 24px"/>
           </div>
 
-          <iframe ref="iframe" v-else :src="currentChannel.props.url"  class="m-2"  sandbox="allow-same-origin allow-forms allow-scripts"
-          style="border: none;background: none;border-radius: 4px;width: calc(100% - 10px);height: calc(100% - 10px)">
+          <iframe v-else ref="iframe" :src="currentChannel.props.url" class="m-2"
+                  sandbox="allow-same-origin allow-forms allow-scripts"
+                  style="border: none;background: none;border-radius: 4px;width: calc(100% - 10px);height: calc(100% - 10px)">
 
           </iframe>
-          <div  style="position: absolute;top: -35px;right: 0px">
-            <xt-button @click="openLink(currentChannel.props.url)" :w="120" :h="40">浏览器打开</xt-button>
+          <div style="position: absolute;top: -35px;right: 0px">
+            <xt-button :h="40" :w="120" @click="openLink(currentChannel.props.url)">浏览器打开</xt-button>
           </div>
         </template>
 
-        <a-col v-else flex=" 1 1 200px" class="h-full flex flex-col">
-           <!-- 空状态，取文章 -->
+        <a-col v-else class="h-full flex flex-col" flex=" 1 1 200px">
+          <!-- 空状态，取文章 -->
           <div class="community-article h-full">
             <!-- <vue-custom-scrollbar class="h-full" :settings=" {
               default: {
@@ -99,19 +101,18 @@
   <Modal v-if="addShow" v-model:visible="addShow" :blurFlag="true">
     <CreateNewChannel v-if="type === 'addChannel'" :no="routeData" @close="addShow = false"></CreateNewChannel>
     <CreateNewGroup v-if="type === 'addNewGroup' " :no="routeData" @close="addShow = false"></CreateNewGroup>
-    <InviteOther v-if="type === 'inviteOther'" :no="routeData" @close="addShow = false" />
+    <InviteOther v-if="type === 'inviteOther'" :no="routeData" @close="addShow = false"/>
   </Modal>
 </template>
 
 <script>
-import { mapActions,mapWritableState } from 'pinia'
-import { communityStore } from '../store/communityStore'
-import { chatStore } from '../../../store/chat'
-import _ from 'lodash-es'
+import {mapWritableState} from 'pinia'
+import {communityStore} from '../store/communityStore'
+import {chatStore} from '../../../store/chat'
 import articleService from '../../../js/service/articleService'
 import browser from '../../../js/common/browser'
-import { checkGroupShip } from '../../../js/common/sns'
-import { Icon as CommunityIcon } from '@iconify/vue'
+import {checkGroupShip} from '../../../js/common/sns'
+import {Icon as CommunityIcon} from '@iconify/vue'
 
 import Modal from '../../../components/Modal.vue'
 import CreateNewChannel from '../components/CreateNewChannels.vue'
@@ -123,15 +124,15 @@ import Commun from '../Commun.vue'
 import InviteOther from '../components/InviteOthers.vue'
 
 export default {
-  components:{
-    CategoryFloat,Modal,CreateNewChannel,
-    CreateNewGroup,VueCustomScrollbar,CommunityIcon,Article,Commun,InviteOther
+  components: {
+    CategoryFloat, Modal, CreateNewChannel,
+    CreateNewGroup, VueCustomScrollbar, CommunityIcon, Article, Commun, InviteOther
   },
 
-  computed:{
-    ...mapWritableState(communityStore,['']),
-    ...mapWritableState(chatStore,['settings']),
-    isFloat(){
+  computed: {
+    ...mapWritableState(communityStore, ['']),
+    ...mapWritableState(chatStore, ['settings']),
+    isFloat() {
       return this.settings.enableHide
     },
     // doubleCol(){
@@ -139,93 +140,96 @@ export default {
     // }
   },
 
-  async mounted(){
+  async mounted() {
     // console.log('启动')
     const rs = await articleService.getOne('community_after_created_empty')
     this.emptyArticle = rs
     // console.log(rs)
   },
 
-  data(){
-    return{
+  data() {
+    return {
       emptyArticle: {
         title: '',
         content: ''
       },
       type: '',
       addShow: false, // 点击按钮弹窗
-      channelList:{},
+      channelList: {},
       currentChannel: {},
-      isChat:'yes',
-      group:[],
+      isChat: 'yes',
+      group: [],
       //文章名称
-      artName:'community_after_created_empty',
-      routeData:1,
+      artName: 'community_after_created_empty',
+      routeData: 1,
     }
   },
 
-  methods:{
-    updateColumn(){},
+  methods: {
+    updateColumn() {
+    },
 
     // 当前点击
-    async currentItem(item){
+    async currentItem(item) {
       // 链接
-      if(item.type === 'link' && item.name !== 'Roadmap'){
+      if (item.type === 'link' && item.name !== 'Roadmap') {
         const data = JSON.parse(item.props)
         // 暂时实现通过磐古跨链客户端打开和电脑系统默认的浏览器打开,当前页面助手无法实现
-        switch (data.openMethod){
+        switch (data.openMethod) {
           case 'userSelect':
-           browser.openInUserSelect(data.url)
-           break;
+            browser.openInUserSelect(data.url)
+            break;
           case 'systemSelect':
-           browser.openInSystem(data.url)
-           break;
+            browser.openInSystem(data.url)
+            break;
         }
       }
 
       // 群聊
-      if(item.type === 'group'){
+      if (item.type === 'group') {
         const changeData = JSON.parse(item.props)[0] !== undefined ? JSON.parse(item.props)[0] : JSON.parse(item.props)
         const groups = window.$TUIKit.store.store.TUIGroup.groupList
-        const index = groups.findIndex((findItem)=>{ return findItem.groupID === changeData.groupID })
+        const index = groups.findIndex((findItem) => {
+          return findItem.groupID === changeData.groupID
+        })
         const enableGroup = await checkGroupShip([`${changeData.groupID}`]) // 有没有添加群聊
         this.isChat = enableGroup[0]
 
         // console.log('获取数据',groups[index].type === 'Private');
 
-        if(groups[index].type === 'Private'){
+        if (groups[index].type === 'Private') {
           const isDisable = groups[index].joinOption === "DisableApply"
-          if(enableGroup[0] === 'yes'){
-            const name = `GROUP${changeData.groupID}`
-            window.TUIKitTUICore.TUIServer.TUIConversation.getConversationProfile(name).then((imResponse) => {
-             // 通知 TUIConversation 添加当前会话
-             // Notify TUIConversation to toggle the current conversation
-             window.TUIKitTUICore.TUIServer.TUIConversation.handleCurrentConversation(imResponse.data.conversation)
-            })
-          }else{
-            if(isDisable){
-              this.group = groups[index]
-            }else{
-              message.warn('该群禁止加入')
-            }
-          }
-
-        }else{
-          const res = await window.$chat.searchGroupByID(changeData.groupID)
-          const isDisable = res.data.group.joinOption !== 'DisableApply'
-          // 判断有没有加入社群, yes表示已经加入, not表示没有加入
-          if (enableGroup[0] === 'yes'){
+          if (enableGroup[0] === 'yes') {
             const name = `GROUP${changeData.groupID}`
             window.TUIKitTUICore.TUIServer.TUIConversation.getConversationProfile(name).then((imResponse) => {
               // 通知 TUIConversation 添加当前会话
               // Notify TUIConversation to toggle the current conversation
               window.TUIKitTUICore.TUIServer.TUIConversation.handleCurrentConversation(imResponse.data.conversation)
             })
-          }else{
+          } else {
+            if (isDisable) {
+              this.group = groups[index]
+            } else {
+              message.warn('该群禁止加入')
+            }
+          }
+
+        } else {
+          const res = await window.$chat.searchGroupByID(changeData.groupID)
+          const isDisable = res.data.group.joinOption !== 'DisableApply'
+          // 判断有没有加入社群, yes表示已经加入, not表示没有加入
+          if (enableGroup[0] === 'yes') {
+            const name = `GROUP${changeData.groupID}`
+            window.TUIKitTUICore.TUIServer.TUIConversation.getConversationProfile(name).then((imResponse) => {
+              // 通知 TUIConversation 添加当前会话
+              // Notify TUIConversation to toggle the current conversation
+              window.TUIKitTUICore.TUIServer.TUIConversation.handleCurrentConversation(imResponse.data.conversation)
+            })
+          } else {
             // isDisable判断群聊是否禁止加入
             if (isDisable) {
-             this.group = res.data.group
-             // data.showModal = true
+              this.group = res.data.group
+              // data.showModal = true
             } else {
               message.warn('该群禁止加入')
             }
@@ -235,33 +239,32 @@ export default {
       }
 
       // 其他
-      this.currentChannel = {...item,props:JSON.parse(item.props)}
+      this.currentChannel = {...item, props: JSON.parse(item.props)}
 
     },
 
-    clickEmptyButton(item){
+    clickEmptyButton(item) {
       this.type = item.type
       this.addShow = true
     },
-    openLink(url){
+    openLink(url) {
       browser.openInSystem(url)
-     // browser.openInSystem(this.$refs.iframe.contentWindow.location.href) 此次方法跨域
+      // browser.openInSystem(this.$refs.iframe.contentWindow.location.href) 此次方法跨域
     }
   },
 
 
-
-  watch:{
+  watch: {
     // 通过监听方式获取社群号
-    '$route':{
-      handler(to,from){
-      //  console.log('参数1::>>',to.params.no);
-       //  console.log('参数2::>>',from);
-       this.routeData = to.params.no
+    '$route': {
+      handler(to, from) {
+        //  console.log('参数1::>>',to.params.no);
+        //  console.log('参数2::>>',from);
+        this.routeData = to.params.no
 
       },
-      immediate:true,
-      deep:true,
+      immediate: true,
+      deep: true,
     }
   }
 }

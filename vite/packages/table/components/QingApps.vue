@@ -1,8 +1,8 @@
 <template>
   <div style="padding: 1em;width: 100%">
     <vue-custom-scrollbar :settings="outerSettings" style="position:relative;height:calc(100vh - 14em); width: 100% ">
-      <a-dropdown :trigger="['contextmenu']" v-for="app in apps">
-        <div @click="executeApp(app)" class="app">
+      <a-dropdown v-for="app in apps" :trigger="['contextmenu']">
+        <div class="app" @click="executeApp(app)">
           <a-avatar :size="50" :src="app.logo"></a-avatar>
           <div class="name text-more">
             {{ app.name }}
@@ -21,16 +21,15 @@
 </template>
 
 <script>
-import { mapWritableState } from 'pinia'
-import { Modal } from 'ant-design-vue'
+import {Modal} from 'ant-design-vue'
 
-const { appModel } = window.$models
+const {appModel} = window.$models
 export default {
   name: 'QingApps',
   computed: {
     // ...mapWritableState(apps,['myApps','qingApps'])
   },
-  data () {
+  data() {
     return {
       apps: [],
       outerSettings: {
@@ -42,47 +41,47 @@ export default {
       },
     }
   },
-  async mounted () {
+  async mounted() {
     this.apps = await appModel.getAllApps()
   },
   methods: {
-    executeApp (app) {
-      ipc.send('executeApp', { app: JSON.parse(JSON.stringify(app)) })
+    executeApp(app) {
+      ipc.send('executeApp', {app: JSON.parse(JSON.stringify(app))})
     },
-    uninstall (app) {
+    uninstall(app) {
       let that = this
       let appId = app.nanoid
       Modal.confirm({
         centered: true,
         title: '确定卸载此应用？',
         content:
-          '此操作将卸载应用并清空所有应用数据，且无法还原。请谨慎操作。',
+            '此操作将卸载应用并清空所有应用数据，且无法还原。请谨慎操作。',
         okText: '确认',
         okType: 'danger',
         cancelText: '取消',
-        onOk () {
+        onOk() {
           appModel.uninstall(app.nanoid).then(
-            (success) => {
-              for (let i = 0; i < that.apps.length; i++) {
-                if (that.apps[i].nanoid === appId) {
-                  that.apps.splice(i, 1)
+              (success) => {
+                for (let i = 0; i < that.apps.length; i++) {
+                  if (that.apps[i].nanoid === appId) {
+                    that.apps.splice(i, 1)
+                  }
                 }
+                ipc.send('message', {
+                  type: 'success',
+                  config: {content: '卸载应用成功。'},
+                })
+                ipc.send('deleteApp', {nanoid: appId})
+              },
+              (err) => {
+                ipc.send('message', {
+                  type: 'success',
+                  config: {content: '卸载失败。'},
+                })
               }
-              ipc.send('message', {
-                type: 'success',
-                config: { content: '卸载应用成功。' },
-              })
-              ipc.send('deleteApp', { nanoid: appId })
-            },
-            (err) => {
-              ipc.send('message', {
-                type: 'success',
-                config: { content: '卸载失败。' },
-              })
-            }
           )
         },
-        onCancel () {
+        onCancel() {
         },
       })
     }
@@ -90,7 +89,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .app {
   cursor: pointer;
   text-align: center;

@@ -1,25 +1,18 @@
 // 注册磐古客户端状态
-import currentEnv, { isWeb, isClient ,isMac} from "./ui/hooks/env";
-window.$currentEnv = currentEnv;
-window.$isWeb = isWeb;
-window.$isClient = isClient;
-window.$isMac = isMac;
+import currentEnv, {isClient, isMac, isWeb} from "./ui/hooks/env";
 import {createApp} from 'vue'
 import Antd from 'ant-design-vue';
 // import 'ant-design-vue/dist/antd.less';
 import App from './App.vue'
 import ColorPicker from 'colorpicker-v3'
 import 'colorpicker-v3/style.css'
-import {createRouter, createWebHashHistory} from 'vue-router'
 import {createPinia} from 'pinia'
 import 'dayjs/locale/zh-cn';
 import './index.css'
-import {cardStore} from "./store/card";
 import vueCustomScrollbar from "../../src/components/vue-scrollbar.vue";
 
 import VueTippy from 'vue-tippy'
 import 'tippy.js/dist/tippy.css' // optional for styling
-
 import Icon from './components/Icon.vue'
 import PanelButton from './components/PanelButton.vue'
 import BackBtn from './components/comp/BackBtn.vue'
@@ -65,21 +58,24 @@ import "../../public/css/toast.scss"
 import "../../public/css/category.scss"
 
 import {router} from './router'
-import routerTab from "./js/common/routerTab";
 
 //腾讯IM部分
 import {loadChat, TUIKit} from './chat'
-loadChat()
-
-
 //socket部分
-import {initSocket} from './js/socket/socket'
 // initSocket()
-
 import {Notifications} from './js/common/sessionNotice'
 
 
 import WujieVue from 'wujie-vue3'
+
+window.$currentEnv = currentEnv;
+window.$isWeb = isWeb;
+window.$isClient = isClient;
+window.$isMac = isMac;
+
+loadChat()
+
+
 // const { bus, setupApp, preloadApp, destroyApp } = WujieVue;
 // Your SDKAppID
 // init TUIKit
@@ -113,18 +109,18 @@ pinia.use(piniaPersist)
 window.$ = $
 const options: PluginOptions = {}
 const $app = app.use(pinia).use(Antd).use(ColorPicker).use(router).use(VueViewer).use(setupCalendar, {}).use(
-  VueTippy,
-  // optional
-  {
-    directive: 'tippy', // => v-tippy
-    component: 'tippy', // => <tippy/>
-    componentSingleton: 'tippy-singleton', // => <tippy-singleton/>,
-    defaultProps: {
-      placement: 'auto-end',
-      allowHTML: true,
-      trigger: "mouseenter click"
-    }, // => Global default options * see all props
-  }
+    VueTippy,
+    // optional
+    {
+        directive: 'tippy', // => v-tippy
+        component: 'tippy', // => <tippy/>
+        componentSingleton: 'tippy-singleton', // => <tippy-singleton/>,
+        defaultProps: {
+            placement: 'auto-end',
+            allowHTML: true,
+            trigger: "mouseenter click"
+        }, // => Global default options * see all props
+    }
 ).use(Toast, options).use(TUIKit).use(WujieVue).use(VueShepherdPlugin).mount('#app')
 registerXTUI(app)
 
@@ -138,5 +134,5 @@ window.USER_DATA_PATH = window.globalArgs['user-data-dir']//挂载一个用户�
 window.$app = $app
 
 export {
-  router
+    router
 };

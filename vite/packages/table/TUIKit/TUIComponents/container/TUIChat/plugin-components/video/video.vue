@@ -1,13 +1,13 @@
 <template>
   <span class="upload-btn icon icon-video">
-      <input title="视频" v-if="!isMute" type="file" data-type="video" accept="video/*" @change="sendUploadMessage" />
-      <slot />
+      <input v-if="!isMute" accept="video/*" data-type="video" title="视频" type="file" @change="sendUploadMessage"/>
+      <slot/>
   </span>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs, watchEffect } from 'vue';
-import { handleErrorPrompts } from '../../../utils';
+import {defineComponent, reactive, toRefs, watchEffect} from 'vue';
+import {handleErrorPrompts} from '../../../utils';
 
 
 const Video = defineComponent({
@@ -25,7 +25,7 @@ const Video = defineComponent({
       default: () => false,
     },
   },
-  setup(props:any, ctx:any) {
+  setup(props: any, ctx: any) {
     const data = reactive({
       isMute: false,
     });
@@ -34,7 +34,7 @@ const Video = defineComponent({
       data.isMute = props.isMute;
     });
     // 发送需要上传的消息：视频
-    const sendUploadMessage = async (e:any) => {
+    const sendUploadMessage = async (e: any) => {
       if (e.target.files.length > 0) {
         try {
           await Video.TUIServer.sendVideoMessage(e.target);
@@ -57,8 +57,10 @@ export default Video;
 <style lang="scss" scoped>
 @import url('../../../../styles/common.scss');
 @import url('../../../../styles/icon.scss');
+
 .upload-btn {
   position: relative;
+
   input {
     position: absolute;
     cursor: pointer;

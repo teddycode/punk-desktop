@@ -6,9 +6,10 @@
     <!--        <span style="margin-left: 0.5em;" class="s-text text-base">{{ item.title }}</span>-->
     <!--      </div>-->
     <!--    </div>-->
-    <SecondPanel v-if="!fullScreen" :search="true" :goHome="goHome" :menus="menus" :gallery="gallery"
-      style="padding: 1em 0; text-align: left; " @changeTab="changeTab"></SecondPanel>
-    <div class="flex-1  content-view mb-2" style="padding-top: 1em;height: 99%;display: flex;flex-direction: column;width: 0">
+    <SecondPanel v-if="!fullScreen" :gallery="gallery" :goHome="goHome" :menus="menus" :search="true"
+                 style="padding: 1em 0; text-align: left; " @changeTab="changeTab"></SecondPanel>
+    <div class="flex-1  content-view mb-2"
+         style="padding-top: 1em;height: 99%;display: flex;flex-direction: column;width: 0">
       <router-view></router-view>
     </div>
   </div>
@@ -16,8 +17,9 @@
 
 <script>
 import SecondPanel from "../../components/SecondPanel.vue";
-import { mapWritableState } from 'pinia'
-import { appStore } from '../../store'
+import {mapWritableState} from 'pinia'
+import {appStore} from '../../store'
+
 export default {
   name: "gameAssistant",
   components: {
@@ -32,43 +34,43 @@ export default {
           title: '游戏桌面',
           icon: 'desktop',
           route:
-          {
-            name: 'gameIndex'
-          }
+              {
+                name: 'gameIndex'
+              }
         },
         {
           index: 'm',
           title: '我的游戏',
           icon: 'wanggeshitu',
           route:
-          {
-            name: 'myGame'
-          }
+              {
+                name: 'myGame'
+              }
         },
         {
           index: 'm',
           title: '游戏攻略',
           icon: 'trophy',
           route:
-          {
-            name: 'gameIntroduction'
-          }
+              {
+                name: 'gameIntroduction'
+              }
         },
         {
           index: 'm',
           title: '折扣推荐',
           icon: 'star',
           route:
-          {
-            name: 'recommend'
-          }
+              {
+                name: 'recommend'
+              }
         },
         {
-          index:'z',
-          title:'捕获',
-          icon:'video',
-          route:{
-            name:'GameCapture'
+          index: 'z',
+          title: '捕获',
+          icon: 'video',
+          route: {
+            name: 'GameCapture'
           },
         },
         // {
@@ -94,15 +96,15 @@ export default {
           title: '设置',
           icon: 'setting',
           route:
-          {
-            name: 'gameSetting'
-          }
+              {
+                name: 'gameSetting'
+              }
         },
       ],
     }
   },
-  computed:{
-    ...mapWritableState(appStore,['fullScreen'])
+  computed: {
+    ...mapWritableState(appStore, ['fullScreen'])
   },
   methods: {
     changeTab(args) {

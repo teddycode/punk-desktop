@@ -1,4 +1,4 @@
-const  EventEmitter= require('events');
+const EventEmitter = require('events');
 
 const SymbolEvents = Symbol('events');
 const SymbolArray = Symbol('array');
@@ -6,7 +6,7 @@ const SymbolArray = Symbol('array');
 function emitSet(target, value, prevValue) {
     const emitter = target[SymbolEvents];
     if (!emitter.paused) {
-        const updates = { added: [], removed: [] };
+        const updates = {added: [], removed: []};
         if (prevValue) {
             emitter.emit('remove', prevValue, target);
             updates.removed.push(prevValue);
@@ -25,7 +25,7 @@ function emitRemoved(target, removed) {
         for (const item of removed) {
             emitter.emit('remove', item, target);
         }
-        emitter.emit('change', { added: [], removed }, target);
+        emitter.emit('change', {added: [], removed}, target);
     }
 }
 
@@ -75,8 +75,8 @@ class Collection {
         emitter.setMaxListeners(100);
 
         const properties = {
-            [SymbolEvents]: { value: emitter },
-            [SymbolArray]: { value: [] }
+            [SymbolEvents]: {value: emitter},
+            [SymbolArray]: {value: []}
         };
 
         Object.defineProperties(this, properties);
@@ -115,7 +115,7 @@ class Collection {
             for (const item of items) {
                 this[SymbolEvents].emit('add', item, this);
             }
-            this[SymbolEvents].emit('change', { added: items, removed: [] }, this);
+            this[SymbolEvents].emit('change', {added: items, removed: []}, this);
         }
     }
 
@@ -125,7 +125,7 @@ class Collection {
         this[SymbolEvents].paused = false;
         if (item) {
             this[SymbolEvents].emit('remove', item, this);
-            this[SymbolEvents].emit('change', { added: [], removed: [item] }, this);
+            this[SymbolEvents].emit('change', {added: [], removed: [item]}, this);
         }
         return item;
     }
@@ -136,7 +136,7 @@ class Collection {
         this[SymbolEvents].paused = false;
         if (item) {
             this[SymbolEvents].emit('remove', item, this);
-            this[SymbolEvents].emit('change', { added: [], removed: [item] }, this);
+            this[SymbolEvents].emit('change', {added: [], removed: [item]}, this);
         }
         return item;
     }
@@ -152,7 +152,7 @@ class Collection {
             for (const item of items) {
                 this[SymbolEvents].emit('add', item, this);
             }
-            this[SymbolEvents].emit('change', { added: items, removed: [] }, this);
+            this[SymbolEvents].emit('change', {added: items, removed: []}, this);
         }
     }
 
@@ -170,7 +170,7 @@ class Collection {
             this[SymbolEvents].emit('add', item, this);
         }
         if (removed.length || items.length) {
-            this[SymbolEvents].emit('change', { added: items, removed }, this);
+            this[SymbolEvents].emit('change', {added: items, removed}, this);
         }
     }
 
@@ -248,4 +248,4 @@ for (const method of ProxiedArrayMethods) {
     });
 }
 
-module.exports=Collection
+module.exports = Collection

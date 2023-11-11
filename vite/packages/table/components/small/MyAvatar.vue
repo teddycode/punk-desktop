@@ -1,14 +1,13 @@
 <script>
-import { ThunderboltFilled } from "@ant-design/icons-vue";
-import Template from "../../../user/pages/Template.vue";
+import {ThunderboltFilled} from "@ant-design/icons-vue";
 import BorderAvatar from "../avatar/BorderAvatar.vue";
 import FrameAvatar from "../avatar/FrameAvatar.vue";
-import { mapWritableState } from "pinia";
-import { messageStore } from "../../store/message";
-import { appStore } from "../../store";
-import { Modal } from "ant-design-vue";
+import {mapWritableState} from "pinia";
+import {messageStore} from "../../store/message";
+import {appStore} from "../../store";
+import {Modal} from "ant-design-vue";
 import Emoji from "../comp/Emoji.vue";
-import { isMain } from "../../js/common/screenUtils";
+import {isMain} from "../../js/common/screenUtils";
 
 export default {
   components: {
@@ -107,7 +106,7 @@ export default {
       // } else {
       //
       // }
-      this.$router.push({ name: "socialMy" });
+      this.$router.push({name: "socialMy"});
     },
   },
 };
@@ -115,7 +114,7 @@ export default {
 
 <template>
   <div v-if="!userInfo">
-    <div @click="login" style="padding: 0.5em">
+    <div style="padding: 0.5em" @click="login">
       <a-avatar :size="size || 54" class="xt-text">未登录</a-avatar>
       <div></div>
       <div></div>
@@ -125,54 +124,54 @@ export default {
   <div v-else-if="!simple" :style="{ width: '11em' }">
     <div class="pointer" @click="social">
       <div
-        v-if="!simple"
-        class="user-info"
-        :span="24"
-        style="padding: 0.6em; position: relative"
+          v-if="!simple"
+          :span="24"
+          class="user-info"
+          style="padding: 0.6em; position: relative"
       >
-        <a-row style="text-align: left" :gutter="10">
+        <a-row :gutter="10" style="text-align: left">
           <a-col :span="12" :style="{ paddingLeft: simple ? '20px' : '5px' }">
             <FrameAvatar
-              class="frame"
-              :avatarUrl="userInfo.avatar"
-              :avatarSize="size || 50"
-              :frameUrl="userInfo.frame"
+                :avatarSize="size || 50"
+                :avatarUrl="userInfo.avatar"
+                :frameUrl="userInfo.frame"
+                class="frame"
             ></FrameAvatar>
           </a-col>
           <!-- 等级 -->
           <a-col
-            :span="12"
-            v-if="!simple && level"
-            @click.stop="goMy()"
-            style="position: relative"
+              v-if="!simple && level"
+              :span="12"
+              style="position: relative"
+              @click.stop="goMy()"
           >
             <span ref="minute" class="tip">+1</span>
             <div class="xt-text" style="padding-top: 0.1em; min-height: 50px">
-              <span style="font-size: 0.8em"></span> {{ lvInfo.lv }}级 <br />
+              <span style="font-size: 0.8em"></span> {{ lvInfo.lv }}级 <br/>
               <span>
                 <a-tooltip>
                   <a-progress
-                    strokeColor="var(--active-bg)"
-                    trailColor="var(--secondary-bg)"
-                    :percent="lvInfo.percentage"
-                    :showInfo="false"
-                    style="width: 4em"
+                      :percent="lvInfo.percentage"
+                      :showInfo="false"
+                      strokeColor="var(--active-bg)"
+                      style="width: 4em"
+                      trailColor="var(--secondary-bg)"
                   />
                   <template #title>
                     <thunderbolt-filled
-                      class="thunder"
-                      style="
+                        class="thunder"
+                        style="
                         color: rgba(255, 140, 44, 0.98);
                         vertical-align: middle;
                       "
                     />
                     <span
-                      style="
+                        style="
                         color: #f3f3f3;
                         font-size: 12px;
                         vertical-align: middle;
                       "
-                      >{{ lvInfo.remainHour }}小时{{
+                    >{{ lvInfo.remainHour }}小时{{
                         lvInfo.remainMinute
                       }}分后升级</span
                     >
@@ -186,19 +185,19 @@ export default {
     </div>
   </div>
   <template v-else>
-    <div class="btn" v-if="isMain()" @click="social">
+    <div v-if="isMain()" class="btn" @click="social">
       <FrameAvatar
-        class="frame"
-        :avatarUrl="userInfo.avatar"
-        :avatarSize="size || 33"
-        :frameUrl="userInfo.frame"
+          :avatarSize="size || 33"
+          :avatarUrl="userInfo.avatar"
+          :frameUrl="userInfo.frame"
+          class="frame"
       ></FrameAvatar>
       <div>我的</div>
     </div>
   </template>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .level-badge {
   left: 0;
   bottom: 0;

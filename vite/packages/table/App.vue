@@ -1,10 +1,10 @@
 <template>
-    <!-- Your Drag-and-Drop Application -->
+  <!-- Your Drag-and-Drop Application -->
 
-  <div style="z-index:9999" v-if="settings.down.enable" v-for="item of settings.down.count" :key="item"
-       :class="settings.down.type + 'flake'"></div>
+  <div v-for="item of settings.down.count" v-if="settings.down.enable" :key="item" :class="settings.down.type + 'flake'"
+       style="z-index:9999"></div>
   <a-config-provider :locale="locale">
-    <div class="a-container " :class="{ dark: settings ? settings.darkMod : '', 'horse_run': this.settings.houserun }">
+    <div :class="{ dark: settings ? settings.darkMod : '', 'horse_run': this.settings.houserun }" class="a-container ">
       <DndProvider :backend="HTML5Backend">
         <router-view></router-view>
       </DndProvider>
@@ -38,14 +38,14 @@
     </template>
   </a-modal> -->
   <audio ref="clock" src="/sound/clock.mp3"></audio>
-  <div class="fixed inset-0 video-container " v-if="backgroundImage.runpath && !settings.transparent">
-    <video class="fullscreen-video" playsinline="" autoplay="" muted="" loop="" ref="backgroundVideo">
-      <source :src="videoPath" type="video/mp4" id="bgVid">
+  <div v-if="backgroundImage.runpath && !settings.transparent" class="fixed inset-0 video-container ">
+    <video ref="backgroundVideo" autoplay="" class="fullscreen-video" loop="" muted="" playsinline="">
+      <source id="bgVid" :src="videoPath" type="video/mp4">
     </video>
 
   </div>
   <div v-else-if="backgroundImage.path && !settings.transparent" class="fixed inset-0 video-container ">
-    <img style="object-fit: cover;width: 100%;height: 100%" :src="backgroundImage.path">
+    <img :src="backgroundImage.path" style="object-fit: cover;width: 100%;height: 100%">
   </div>
   <div class="fixed inset-0 background-img-blur-light" style="z-index: -1"></div>
 
@@ -54,28 +54,28 @@
     {{ screenDetail.title || '主屏' }}
   </div>
 
-  <Modal style="z-index:999" v-model:visible="userCardVisible" v-if="userCardVisible" animationName="b-t"
-         :blurFlag="true">
+  <Modal v-if="userCardVisible" v-model:visible="userCardVisible" :blurFlag="true" animationName="b-t"
+         style="z-index:999">
     <slot>
       <UserCard :key="userCardUid" :uid="userCardUid" :userInfo="userCardUserInfo"></UserCard>
     </slot>
   </Modal>
-  <Modal v-model:visible="frameStoreVisible" v-if="frameStoreVisible" animationName="b-t"
-         :blurFlag="true">
+  <Modal v-if="frameStoreVisible" v-model:visible="frameStoreVisible" :blurFlag="true"
+         animationName="b-t">
     <slot>
-    <div class="mr-3 card half" style="padding:0;width: 370px;background: var(--primary-bg);max-height: 550px;height: 550px;z-index: 9999999;position: relative;overflow: hidden">
-      <FrameStoreWidget></FrameStoreWidget>
-    </div>
+      <div class="mr-3 card half"
+           style="padding:0;width: 370px;background: var(--primary-bg);max-height: 550px;height: 550px;z-index: 9999999;position: relative;overflow: hidden">
+        <FrameStoreWidget></FrameStoreWidget>
+      </div>
     </slot>
   </Modal>
-
 
 
 </template>
 
 <script lang="ts">
 import zhCN from "ant-design-vue/es/locale/zh_CN";
-import {mapActions, mapState, mapWritableState} from "pinia";
+import {mapActions, mapWritableState} from "pinia";
 import {cardStore} from "./store/card"
 import {appStore} from "./store";
 import Barrage from "./components/comp/Barrage.vue";
@@ -88,31 +88,27 @@ import browser from './js/common/browser';
 import UserCard from "./components/small/UserCard.vue";
 import Modal from './components/Modal.vue'
 import {timerStore} from "./store/timer";
-import {Modal as antModal} from 'ant-design-vue'
 import {toggleFullScreen} from "./js/common/common";
 // improt "/vite/src/util/"
-import {
-  initStyle
-} from "./components/card/hooks/styleSwitch/";
-import {
-  initTheme
-} from "./components/card/hooks/themeSwitch/";
+import {initStyle} from "./components/card/hooks/styleSwitch/";
+import {initTheme} from "./components/card/hooks/themeSwitch/";
 import FrameStoreWidget from "./components/team/FrameStoreWidget.vue";
 
-import { DndProvider } from 'vue3-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
+import {DndProvider} from 'vue3-dnd'
+import {HTML5Backend} from 'react-dnd-html5-backend'
+
 window.browser = browser
 const {appModel} = window.$models
 let startX,
-  startY,
-  moveEndX,
-  moveEndY,
-  X,
-  Y = 0;
+    startY,
+    moveEndX,
+    moveEndY,
+    X,
+    Y = 0;
 const distX = 80; //滑动感知最小距离
 const distY = 80; //滑动感知最小距离
 export default {
-  components: {FrameStoreWidget, Modal, UserCard, Barrage,DndProvider},
+  components: {FrameStoreWidget, Modal, UserCard, Barrage, DndProvider},
   data() {
     return {
       HTML5Backend,
@@ -122,16 +118,16 @@ export default {
       visible: false,
       dialogVisible: false,
       videoPath: '',
-      frameStoreVisible:false
+      frameStoreVisible: false
     };
   },
 
   async mounted() {
     initTheme()
     initStyle()
-    window.toggleFrameStore=()=>{
-      this.frameStoreVisible=!this.frameStoreVisible
-      this.userCardVisible=false
+    window.toggleFrameStore = () => {
+      this.frameStoreVisible = !this.frameStoreVisible
+      this.userCardVisible = false
     }
 
     window.addEventListener("keydown", this.KeyDown, true)// 监听按键事件
@@ -176,7 +172,7 @@ export default {
   computed: {
     ...mapWritableState(cardStore, ["customComponents", "clockEvent", "clockFlag"]),
     ...mapWritableState(timerStore, ["appDate"]),
-    ...mapWritableState(appStore, ['userCardVisible','fullScreen', 'userCardUid', 'userCardUserInfo', 'settings', 'routeUpdateTime', 'userInfo', 'init', 'backgroundImage']),
+    ...mapWritableState(appStore, ['userCardVisible', 'fullScreen', 'userCardUid', 'userCardUserInfo', 'settings', 'routeUpdateTime', 'userInfo', 'init', 'backgroundImage']),
     ...mapWritableState(codeStore, ['myCode']),
     ...mapWritableState(appsStore, ['runningApps', 'runningAppsInfo', 'runningTableApps']),
     ...mapWritableState(screenStore, ['taggingScreen', 'screenDetail']),
@@ -193,9 +189,9 @@ export default {
         event.preventDefault()
         event.stopPropagation()
       }
-      if(this.fullScreen){
-        if(event.keyCode===27){
-          this.fullScreen=false
+      if (this.fullScreen) {
+        if (event.keyCode === 27) {
+          this.fullScreen = false
           event.preventDefault()
           event.stopPropagation()
         }
@@ -204,13 +200,13 @@ export default {
     bindTouchEvents() {
       $(".a-container").on("touchstart", (e) => {
         startX = e.originalEvent.changedTouches[0].pageX,
-          startY = e.originalEvent.changedTouches[0].pageY;
+            startY = e.originalEvent.changedTouches[0].pageY;
       });
       $(".a-container").on("touchend", (e) => {
         moveEndX = e.originalEvent.changedTouches[0].pageX,
-          moveEndY = e.originalEvent.changedTouches[0].pageY,
-          X = moveEndX - startX,
-          Y = moveEndY - startY;
+            moveEndY = e.originalEvent.changedTouches[0].pageY,
+            X = moveEndX - startX,
+            Y = moveEndY - startY;
 
         if (X > distX) {
           console.log("向右滑", distX);
@@ -262,8 +258,8 @@ export default {
         this.sortClock()
         try {
           if (
-            this.appDate.minutes === this.clockEvent[0].dateValue.minutes &&
-            this.appDate.hours === this.clockEvent[0].dateValue.hours && this.clockEvent[0].flag === undefined
+              this.appDate.minutes === this.clockEvent[0].dateValue.minutes &&
+              this.appDate.hours === this.clockEvent[0].dateValue.hours && this.clockEvent[0].flag === undefined
           ) {
             this.visible = true;
             setTimeout(() => {
@@ -280,8 +276,8 @@ export default {
       handler(newVal, oldVal) {
         try {
           if (
-            this.appDate.minutes === this.clockEvent[0].dateValue.minutes &&
-            this.appDate.hours === this.clockEvent[0].dateValue.hours && this.clockEvent[0].flag === undefined
+              this.appDate.minutes === this.clockEvent[0].dateValue.minutes &&
+              this.appDate.hours === this.clockEvent[0].dateValue.hours && this.clockEvent[0].flag === undefined
           ) {
             this.visible = true;
             setTimeout(() => {

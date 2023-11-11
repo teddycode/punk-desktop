@@ -2,11 +2,11 @@
 
   <div class="p-3 flex" style="height: 100%;display: flex;">
 
-<!--    <div>-->
-<!--      <SecondPanel :menus="menus">-->
+    <!--    <div>-->
+    <!--      <SecondPanel :menus="menus">-->
 
-<!--      </SecondPanel>-->
-<!--    </div>-->
+    <!--      </SecondPanel>-->
+    <!--    </div>-->
     <div class="ml-10" style="flex: 1;height: 100%;display: flex;flex-direction: column;">
       <router-view></router-view>
     </div>
@@ -19,25 +19,23 @@ import SecondPanel from '../components/SecondPanel.vue'
 
 export default {
   name: 'Team',
-  components: { SecondPanel },
-  data(){
+  components: {SecondPanel},
+  data() {
     return {
 
       menus: [
         {
           index: 'hall',
           title: '大厅',
-          icon:'team',
+          icon: 'team',
           route:
-            {
-              name: 'hall'
-            }
+              {
+                name: 'hall'
+              }
         },
       ],
     }
-  },methods:{
-
-  },async mounted () {
+  }, methods: {}, async mounted() {
 
   }
 }

@@ -1,5 +1,5 @@
 <template>
-学习
+  学习
 </template>
 
 <script>

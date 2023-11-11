@@ -51,6 +51,7 @@ export default {
 .clock {
   height: 150px;
   position: relative;
+
   :deep(.clock3) {
     transform: scale(0.34, 0.34);
     position: absolute;

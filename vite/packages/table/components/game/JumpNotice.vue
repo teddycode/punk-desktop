@@ -1,17 +1,20 @@
 <template>
   <div ref="description">
-    <img style="width: 280px;" class="rounded-md mb-2" :src="getCover(game.appid)" />
+    <img :src="getCover(game.appid)" class="rounded-md mb-2" style="width: 280px;"/>
     <p style="width: 280px">
       <div>正在启动游戏…</div>
       <div v-if="getDesk()">将自动进入
-        <div ><img class="rounded-md" style="width: 24px" :src="getClientIcon(game.appid,game.clientIcon)"/> <strong>{{ game.name }}</strong> 桌面</div></div>
+        <div><img :src="getClientIcon(game.appid,game.clientIcon)" class="rounded-md" style="width: 24px"/>
+          <strong>{{ game.name }}</strong> 桌面
+        </div>
+      </div>
       <div v-else>
         将跳转主桌面
       </div>
     </p>
     <p>
-      <div @click="stop" type="button"
-              class="mt-3 pointer block text-center  w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
+      <div class="mt-3 pointer block text-center  w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto" type="button"
+           @click="stop">
         停止跳转
       </div>
 
@@ -21,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, h} from "vue";
+import {defineComponent} from "vue";
 import {getClientIcon, getCover, getIcon} from "../../js/common/game";
 import {mapWritableState} from "pinia";
 import {steamUserStore} from "../../store/steamUser";
@@ -31,30 +34,30 @@ export default defineComponent({
   data() {
     return {
       key: Date.now(),
-      timer:null
+      timer: null
     }
   },
-  computed:{
-    ...mapWritableState(steamUserStore,['desks','deskList'])
+  computed: {
+    ...mapWritableState(steamUserStore, ['desks', 'deskList'])
   },
   mounted() {
-   this.timer= setTimeout(()=>{
-     this.$emit('jump',{game:this.game})
-    },5000)
+    this.timer = setTimeout(() => {
+      this.$emit('jump', {game: this.game})
+    }, 5000)
   },
   methods: {
     getClientIcon,
     getIcon,
-    stop(){
+    stop() {
       clearTimeout(this.timer)
       this.$emit('close-toast')
     },
     getCover,
     switchToDesk() {
     },
-    getDesk(){
-      let found= this.deskList.find(desk=>{
-        return desk.id===this.game.appid
+    getDesk() {
+      let found = this.deskList.find(desk => {
+        return desk.id === this.game.appid
       })
       return found && found?.cards.length > 0;
     }
@@ -100,6 +103,6 @@ export default defineComponent({
 </script>
 
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 
 </style>

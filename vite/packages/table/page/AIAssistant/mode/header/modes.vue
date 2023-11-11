@@ -2,20 +2,20 @@
   <div class="flex justify-between">
     <div class="flex items-center">
       <XtTab
-        style="width: 320px; height: 48px"
-        boxClass="p-1 xt-bg-2"
-        :list="modelList"
-        v-model="mode"
+          v-model="mode"
+          :list="modelList"
+          boxClass="p-1 xt-bg-2"
+          style="width: 320px; height: 48px"
       ></XtTab>
       <XtInput
-        class="ml-4"
-        style="width: 288px; height: 48px"
-        v-model="searchValue"
+          v-model="searchValue"
+          class="ml-4"
+          style="width: 288px; height: 48px"
       >
         <Icon
-          icon="sousuo"
-          style="font-size: 20px"
-          class="cursor-pointer"
+            class="cursor-pointer"
+            icon="sousuo"
+            style="font-size: 20px"
         ></Icon>
       </XtInput>
     </div>
@@ -33,8 +33,9 @@
 </template>
 <script>
 import edit from "./edit.vue";
-import { mapWritableState } from "pinia";
-import { aiStore } from "../../../../store/ai";
+import {mapWritableState} from "pinia";
+import {aiStore} from "../../../../store/ai";
+
 export default {
   computed: {
     ...mapWritableState(aiStore, ["mode"]),

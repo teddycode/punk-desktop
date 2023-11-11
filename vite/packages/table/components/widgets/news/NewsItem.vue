@@ -1,39 +1,40 @@
 <template>
-  <div class="card-item" :style="{ marginBottom:copyNum==12?'20px':'12px'}">
+  <div :style="{ marginBottom:copyNum==12?'20px':'12px'}" class="card-item">
 
-    <div class="left" :style="{ width: showImg == false ? '260px' : '' }" >
-      <div class="title" @click="goNews" style="color: var(--primary-text);" >
+    <div :style="{ width: showImg == false ? '260px' : '' }" class="left">
+      <div class="title" style="color: var(--primary-text);" @click="goNews">
         {{ newsMsgList.newsMsgList.title }}
       </div>
-      <div class="bottom" >
-        <div class="flex date" style="text-align: left; flex-shrink: 0;" >
+      <div class="bottom">
+        <div class="flex date" style="text-align: left; flex-shrink: 0;">
           <!-- <span style="color: var(--secondary-text); ">{{ timer[0] }} {{ timer[1] }}</span> -->
           <div v-for="(item,index) in timer" class="xt-text-2 " style="margin-right: 2px;">{{ item }}</div>
         </div>
         <div class="name">
-          <span style="color: var(--secondary-text);" >{{ newsMsgList.newsMsgList.author_name }}</span>
+          <span style="color: var(--secondary-text);">{{ newsMsgList.newsMsgList.author_name }}</span>
         </div>
       </div>
 
     </div>
-    <div class="right" :style="{ backgroundImage: img ? `url(${img})` : '' }" v-if="showImg" @click="goNews">
+    <div v-if="showImg" :style="{ backgroundImage: img ? `url(${img})` : '' }" class="right" @click="goNews">
       <!-- <img :src="img" alt="" class="image"> -->
     </div>
 
   </div>
 </template>
 
-<script setup lang='ts'>
-import { ref, reactive, computed } from 'vue'
+<script lang='ts' setup>
+import {computed, ref} from 'vue'
 // vite\packages\table\js\common\browser.ts
 import browser from '../../../js/common/browser'
+
 let showImg = ref(true)
 const newsMsgList = defineProps({
   newsMsgList: {
     type: Object,
   },
-  copyNum:{
-    type:Number
+  copyNum: {
+    type: Number
   }
 
 })
@@ -72,6 +73,7 @@ const img = computed(() => {
   .left {
     width: 145px;
     position: relative;
+
     .title {
       width: 100%;
       height: auto;
@@ -108,6 +110,7 @@ const img = computed(() => {
           font-size: 12px;
           font-weight: 400;
         }
+
         &:after {
           content: '·';
           text-align: center;
@@ -120,6 +123,7 @@ const img = computed(() => {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+
         span {
 
           font-size: 12px;

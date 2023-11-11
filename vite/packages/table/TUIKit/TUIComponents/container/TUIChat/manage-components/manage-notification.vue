@@ -2,18 +2,18 @@
   <main class="notification">
     <textarea v-if="isEdit" v-model="input" @keyup.enter="updateProfile"></textarea>
     <section v-else>
-      <p v-if="!groupProfile.notification">{{$t(`TUIChat.manage.暂无公告`)}}</p>
-      <article v-else>{{groupProfile.notification}}</article>
+      <p v-if="!groupProfile.notification">{{ $t(`TUIChat.manage.暂无公告`) }}</p>
+      <article v-else>{{ groupProfile.notification }}</article>
     </section>
     <footer v-if="isAuth">
-      <button class="btn" v-if="isEdit" @click="updateProfile">{{$t(`TUIChat.manage.发布`)}}</button>
-      <button class="btn" v-else @click="isEdit = !isEdit">{{$t(`TUIChat.manage.编辑`)}}</button>
+      <button v-if="isEdit" class="btn" @click="updateProfile">{{ $t(`TUIChat.manage.发布`) }}</button>
+      <button v-else class="btn" @click="isEdit = !isEdit">{{ $t(`TUIChat.manage.编辑`) }}</button>
     </footer>
   </main>
 </template>
 
 <script lang="ts">
-import { defineComponent, watchEffect, reactive, toRefs } from 'vue';
+import {defineComponent, reactive, toRefs, watchEffect} from 'vue';
 
 const ManageNotification = defineComponent({
   props: {
@@ -26,8 +26,8 @@ const ManageNotification = defineComponent({
       default: false,
     },
   },
-  setup(props:any, ctx:any) {
-    const data:any = reactive({
+  setup(props: any, ctx: any) {
+    const data: any = reactive({
       groupProfile: {},
       input: '',
       isEdit: false,
@@ -41,7 +41,7 @@ const ManageNotification = defineComponent({
     // 更新群资料
     const updateProfile = async () => {
       if (data.input && data.input !== data.groupProfile.notification) {
-        ctx.emit('update', { key: 'notification', value: data.input });
+        ctx.emit('update', {key: 'notification', value: data.input});
         data.groupProfile.notification = data.input;
         data.input = '';
       }
@@ -60,19 +60,23 @@ export default ManageNotification;
 <style lang="scss" scoped>
 @import url('../../../styles/common.scss');
 @import url('../../../styles/icon.scss');
+
 .notification {
   flex: 1;
   padding: 20px;
   display: flex;
   flex-direction: column;
+
   section {
     flex: 1;
     font-size: 14px;
+
     p {
       text-align: center;
       padding-bottom: 20px;
     }
   }
+
   textarea {
     margin-bottom: 20px;
     flex: 1;
@@ -82,12 +86,14 @@ export default ManageNotification;
     resize: none;
     font-size: 14px;
   }
+
   footer {
     display: flex;
     justify-content: flex-end;
     padding: 10px;
   }
 }
+
 .btn {
   background: #3370FF;
   border: 0 solid #2F80ED;
@@ -97,6 +103,7 @@ export default ManageNotification;
   color: #FFFFFF;
   line-height: 24px;
   border-radius: 4px;
+
   &-cancel {
     background: #FFFFFF;
     border: 1px solid #DDDDDD;

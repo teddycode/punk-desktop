@@ -5,8 +5,8 @@ const mobiles = [ // {view,window,newName}
 
 let mobileCount = 0
 const initSize = {
-  width: 480,
-  height: 800
+    width: 480,
+    height: 800
 }
 
 /**
@@ -15,238 +15,240 @@ const initSize = {
  * @param height
  * @returns {{width: number, height: number}}
  */
-function computeSize (width = initSize.width, height = initSize.height) {
-  if (process.platform === 'darwin') {
-    // mac不做处理
-  } else if (process.platform === 'win32') {
-    // todo 不知道为什么windows上获取到的尺寸有16，10个像素的差距
-    width -= 16
-    height -= 10
-  } else {
-  }
-  return {
-    width: width,
-    height: height
-  }
+function computeSize(width = initSize.width, height = initSize.height) {
+    if (process.platform === 'darwin') {
+        // mac不做处理
+    } else if (process.platform === 'win32') {
+        // todo 不知道为什么windows上获取到的尺寸有16，10个像素的差距
+        width -= 16
+        height -= 10
+    } else {
+    }
+    return {
+        width: width,
+        height: height
+    }
 }
 
 const mobileMod = {
 
-  getPos () {
-    const space = 10
-    const { screen } = require('electron')
-    const maxWidth = screen.getPrimaryDisplay().workAreaSize.width
-    const sourcePoint = {
-      x: mainWindow.getBounds().x + 300,
-      y: mainWindow.getBounds().y + 300
-    }
-    if (sourcePoint.x + (mobileCount + 1) * initSize.width < maxWidth) {
-      return { x: sourcePoint.x + mobileCount * (initSize.width + space), y: sourcePoint.y }
-    } else {
-      return { x: sourcePoint.x + mobileCount * space, y: sourcePoint.y + mobileCount * space }
-    }
-  },
-  getBounds (mobileWindow) {
-    const size = computeSize(mobileWindow.getBounds().width, mobileWindow.getBounds().height - 70)
-    const bounds = {
-      x: 0,
-      y: 40,
-      width: size.width,
-      height: size.height
-    }
-    if (process.platform === 'darwin') {
-      bounds.y = 70 // 修正mac上的y位置
-    }
-    return bounds
-  },
-  add (option) {
-    let id = ''
-    do {
-      id = String(Math.floor((Math.random() * 10000) + 1))
-    } while (typeof mobileViews[id] !== 'undefined')
-    const pos = mobileMod.getPos()
-    const mobileWindow = new BrowserWindow({
-      frame: true,
-      backgroundColor: 'white',
-      modal: false,
-      hasShadow: true,
-      x: pos.x,
-      y: pos.y,
-      width: initSize.width,
-      autoHideMenuBar: true,
-      height: initSize.height,
-      resizable: true,
-      acceptFirstMouse: true,
-      maximizable: true,
-      visualEffectState: 'active',
-      alwaysOnTop: true,
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-        additionalArguments: [
-          '--user-data-path=' + userDataPath,
-          '--app-version=' + app.getVersion(),
-          '--app-name=' + app.getName(),
-          ...((isDevelopmentMode ? ['--development-mode'] : []))
-        ]
-      }
-    })
-    mobileWindow.setAlwaysOnTop(true, 'screen-saver')
-    const view = new BrowserView({
-      width: computeSize().width,
-      height: computeSize().height - 70,
-      webPreferences: {
-        nodeIntegration: false,
-        nodeIntegrationInSubFrames: true,
-        scrollBounce: true,
-        safeDialogs: true,
-        safeDialogsMessage: '阻止此页面弹窗',
-        preload: __dirname + '/dist/preload.js',
-        contextIsolation: true,
-        sandbox: true,
-        enableRemoteModule: false,
-        allowPopups: false,
-        partition: option.partition ? option.partition : 'persist:webcontent',
-        enableWebSQL: false,
-        autoplayPolicy: (settings.get('enableAutoplay') ? 'no-user-gesture-required' : 'user-gesture-required')
-        // partition:'persist:webcontent',
-        // preload: path.join(__dirname, '/dist/preload.js'),
-        // additionalArguments: [
-        //   '--user-data-path=' + userDataPath,
-        //   '--app-version=' + app.getVersion(),
-        //   '--app-name=' + app.getName(),
-        //   ...((isDevelopmentMode ? ['--development-mode'] : [])),
-        // ]
-      }
-    })
-    mobileWindow.setBrowserView(view)
-
-    view.setBounds(mobileMod.getBounds(mobileWindow))
-    mobileWindow.webContents.send('init', {
-      windowId: mobileWindow.id,
-      url: option.url,
-      id: id,
-      partition: option.partition,
-      newName: option.newName
-    })
-    view.webContents.setUserAgent('Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1')
-    view.webContents.loadURL(option.url)
-    view.webContents.on('did-navigate-in-page', (event, url) => {
-      mobileWindow.webContents.send('updateView', {
-        url: url,
-        canGoBack: view.webContents.canGoBack(),
-        canGoForward: view.webContents.canGoForward()
-      })
-    })
-    view.webContents.on('did-navigate', (event, url) => {
-      mobileWindow.webContents.send('updateView', {
-        url: url,
-        canGoBack: view.webContents.canGoBack(),
-        canGoForward: view.webContents.canGoForward()
-      })
-    })
-    view.webContents.on('new-window', (event, url) => {
-      event.preventDefault()
-      view.webContents.loadURL(url)
-      mobileWindow.webContents.send('updateView', {
-        url: url,
-        canGoBack: view.webContents.canGoBack(),
-        canGoForward: view.webContents.canGoForward()
-      })
-    })
-    function loadDevtool (input) {
-      if (input.key.toLowerCase() === 'f12') {
-        view.webContents.openDevTools({
-          mode: 'detach'
+    getPos() {
+        const space = 10
+        const {screen} = require('electron')
+        const maxWidth = screen.getPrimaryDisplay().workAreaSize.width
+        const sourcePoint = {
+            x: mainWindow.getBounds().x + 300,
+            y: mainWindow.getBounds().y + 300
+        }
+        if (sourcePoint.x + (mobileCount + 1) * initSize.width < maxWidth) {
+            return {x: sourcePoint.x + mobileCount * (initSize.width + space), y: sourcePoint.y}
+        } else {
+            return {x: sourcePoint.x + mobileCount * space, y: sourcePoint.y + mobileCount * space}
+        }
+    },
+    getBounds(mobileWindow) {
+        const size = computeSize(mobileWindow.getBounds().width, mobileWindow.getBounds().height - 70)
+        const bounds = {
+            x: 0,
+            y: 40,
+            width: size.width,
+            height: size.height
+        }
+        if (process.platform === 'darwin') {
+            bounds.y = 70 // 修正mac上的y位置
+        }
+        return bounds
+    },
+    add(option) {
+        let id = ''
+        do {
+            id = String(Math.floor((Math.random() * 10000) + 1))
+        } while (typeof mobileViews[id] !== 'undefined')
+        const pos = mobileMod.getPos()
+        const mobileWindow = new BrowserWindow({
+            frame: true,
+            backgroundColor: 'white',
+            modal: false,
+            hasShadow: true,
+            x: pos.x,
+            y: pos.y,
+            width: initSize.width,
+            autoHideMenuBar: true,
+            height: initSize.height,
+            resizable: true,
+            acceptFirstMouse: true,
+            maximizable: true,
+            visualEffectState: 'active',
+            alwaysOnTop: true,
+            webPreferences: {
+                nodeIntegration: true,
+                contextIsolation: false,
+                additionalArguments: [
+                    '--user-data-path=' + userDataPath,
+                    '--app-version=' + app.getVersion(),
+                    '--app-name=' + app.getName(),
+                    ...((isDevelopmentMode ? ['--development-mode'] : []))
+                ]
+            }
         })
-      }
+        mobileWindow.setAlwaysOnTop(true, 'screen-saver')
+        const view = new BrowserView({
+            width: computeSize().width,
+            height: computeSize().height - 70,
+            webPreferences: {
+                nodeIntegration: false,
+                nodeIntegrationInSubFrames: true,
+                scrollBounce: true,
+                safeDialogs: true,
+                safeDialogsMessage: '阻止此页面弹窗',
+                preload: __dirname + '/dist/preload.js',
+                contextIsolation: true,
+                sandbox: true,
+                enableRemoteModule: false,
+                allowPopups: false,
+                partition: option.partition ? option.partition : 'persist:webcontent',
+                enableWebSQL: false,
+                autoplayPolicy: (settings.get('enableAutoplay') ? 'no-user-gesture-required' : 'user-gesture-required')
+                // partition:'persist:webcontent',
+                // preload: path.join(__dirname, '/dist/preload.js'),
+                // additionalArguments: [
+                //   '--user-data-path=' + userDataPath,
+                //   '--app-version=' + app.getVersion(),
+                //   '--app-name=' + app.getName(),
+                //   ...((isDevelopmentMode ? ['--development-mode'] : [])),
+                // ]
+            }
+        })
+        mobileWindow.setBrowserView(view)
+
+        view.setBounds(mobileMod.getBounds(mobileWindow))
+        mobileWindow.webContents.send('init', {
+            windowId: mobileWindow.id,
+            url: option.url,
+            id: id,
+            partition: option.partition,
+            newName: option.newName
+        })
+        view.webContents.setUserAgent('Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1')
+        view.webContents.loadURL(option.url)
+        view.webContents.on('did-navigate-in-page', (event, url) => {
+            mobileWindow.webContents.send('updateView', {
+                url: url,
+                canGoBack: view.webContents.canGoBack(),
+                canGoForward: view.webContents.canGoForward()
+            })
+        })
+        view.webContents.on('did-navigate', (event, url) => {
+            mobileWindow.webContents.send('updateView', {
+                url: url,
+                canGoBack: view.webContents.canGoBack(),
+                canGoForward: view.webContents.canGoForward()
+            })
+        })
+        view.webContents.on('new-window', (event, url) => {
+            event.preventDefault()
+            view.webContents.loadURL(url)
+            mobileWindow.webContents.send('updateView', {
+                url: url,
+                canGoBack: view.webContents.canGoBack(),
+                canGoForward: view.webContents.canGoForward()
+            })
+        })
+
+        function loadDevtool(input) {
+            if (input.key.toLowerCase() === 'f12') {
+                view.webContents.openDevTools({
+                    mode: 'detach'
+                })
+            }
+        }
+
+        view.webContents.on('before-input-event', (event, input) => {
+                loadDevtool(input)
+            }
+        )
+        mobileWindow.webContents.setUserAgent(oldAgent)
+        mobileWindow.loadURL('file://' + __dirname + '/pages/mobile/index.html')
+        mobileWindow.on('resize', () => {
+            view.setBounds(mobileMod.getBounds(mobileWindow))
+        })
+
+        mobileWindow.webContents.on('before-input-event', (event, input) => {
+                loadDevtool(input)
+            }
+        )
+
+        mobileWindow.on('closed', () => {
+            mobileViews[id].webContents.destroy() //销毁内部的网页
+            mobileViews[id] = undefined
+            mobileWindows[id] = undefined
+            const found = mobiles.findIndex(mob => {
+                return mob.id === id
+            })
+            delete mobileViews[id]
+            mobiles.splice(found, 1)
+            mobileCount--
+        })
+
+        mobileViews[id] = view
+        mobileWindows[id] = mobileWindow
+        mobiles.push({
+            id,
+            window: mobileWindow,
+            view: view,
+            partition: option.partition,
+            newName: option.newName
+        })
+        mobileCount++
+        // var view=viewMap[data.id]
+        // var index=emulationViews.indexOf(data.id)
+        // if(index!=-1){
+        // 	view.webContents.setUserAgent(oldAgent)
+        // 	view.webContents.disableDeviceEmulation()
+        // 	view.webContents.reload()
+        // 	emulationViews.splice(index,1)
+        //
+        // }else{
+        // 	oldAgent=view.webContents.getUserAgent()
+        // 	view.setBackgroundColor("#d1d1d1")
+        // 	view.webContents.setUserAgent('Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A403 Safari/8536.25')
+        // 	view.webContents.enableDeviceEmulation({
+        // 		 screenPosition: 'mobile',
+        // 		 screenSize: { width: 480, height: 812 },
+        // 		 deviceScaleFactor: 0,
+        // 		 viewPosition: { x: 10, y: 0 },
+        // 		 viewSize: { width: 600, height: 812 },
+        // 		 fitToView: false,
+        // 		 offset: { x: 10, y: 0 }
+        // 	})
+        //
+        // 	emulationViews.push(data.id)
+        // 	view.webContents.reload()
+        // }
+
+        // view.webContents.openDevTools({
+        // 	 mode: 'bottom'
+        // })
     }
-    view.webContents.on('before-input-event', (event, input) => {
-      loadDevtool(input)
-    }
-    )
-    mobileWindow.webContents.setUserAgent(oldAgent)
-    mobileWindow.loadURL('file://' + __dirname + '/pages/mobile/index.html')
-    mobileWindow.on('resize', () => {
-      view.setBounds(mobileMod.getBounds(mobileWindow))
-    })
-
-    mobileWindow.webContents.on('before-input-event', (event, input) => {
-      loadDevtool(input)
-    }
-    )
-
-    mobileWindow.on('closed', () => {
-      mobileViews[id].webContents.destroy() //销毁内部的网页
-      mobileViews[id] = undefined
-      mobileWindows[id] = undefined
-      const found = mobiles.findIndex(mob => {
-        return mob.id === id
-      })
-      delete mobileViews[id]
-      mobiles.splice(found, 1)
-      mobileCount--
-    })
-
-    mobileViews[id] = view
-    mobileWindows[id] = mobileWindow
-    mobiles.push({
-      id,
-      window: mobileWindow,
-      view: view,
-      partition: option.partition,
-      newName: option.newName
-    })
-    mobileCount++
-    // var view=viewMap[data.id]
-    // var index=emulationViews.indexOf(data.id)
-    // if(index!=-1){
-    // 	view.webContents.setUserAgent(oldAgent)
-    // 	view.webContents.disableDeviceEmulation()
-    // 	view.webContents.reload()
-    // 	emulationViews.splice(index,1)
-    //
-    // }else{
-    // 	oldAgent=view.webContents.getUserAgent()
-    // 	view.setBackgroundColor("#d1d1d1")
-    // 	view.webContents.setUserAgent('Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A403 Safari/8536.25')
-    // 	view.webContents.enableDeviceEmulation({
-    // 		 screenPosition: 'mobile',
-    // 		 screenSize: { width: 480, height: 812 },
-    // 		 deviceScaleFactor: 0,
-    // 		 viewPosition: { x: 10, y: 0 },
-    // 		 viewSize: { width: 600, height: 812 },
-    // 		 fitToView: false,
-    // 		 offset: { x: 10, y: 0 }
-    // 	})
-    //
-    // 	emulationViews.push(data.id)
-    // 	view.webContents.reload()
-    // }
-
-    // view.webContents.openDevTools({
-    // 	 mode: 'bottom'
-    // })
-  }
 
 }
 
 app.whenReady().then(() => {
-  ipc.on('mobileGoBack', (event, args) => {
-    mobileViews[args.id].webContents.goBack()
-  })
+    ipc.on('mobileGoBack', (event, args) => {
+        mobileViews[args.id].webContents.goBack()
+    })
 
-  ipc.on('mobileGoForward', (event, args) => {
-    mobileViews[args.id].webContents.goForward()
-  })
+    ipc.on('mobileGoForward', (event, args) => {
+        mobileViews[args.id].webContents.goForward()
+    })
 
-  ipc.on('mobileRefresh', (event, args) => {
-    mobileViews[args.id].webContents.reload()
-  })
+    ipc.on('mobileRefresh', (event, args) => {
+        mobileViews[args.id].webContents.reload()
+    })
 
-  ipc.on('mobileResetSize', (event, args) => {
-    mobileWindows[args.id].setSize(initSize.width, initSize.height)
-  })
+    ipc.on('mobileResetSize', (event, args) => {
+        mobileWindows[args.id].setSize(initSize.width, initSize.height)
+    })
 })
 
 module.exports = mobileMod

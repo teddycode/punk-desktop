@@ -1,22 +1,22 @@
 <template>
   <!-- 快捷键列表 -->
-  <vue-custom-scrollbar :settings="settingsScroller" style="width:100%;height:100%;border-radius: 12px;"
-                        :style="keyBoxStyle">
-    <div class="key-box" id="keyBox">
+  <vue-custom-scrollbar :settings="settingsScroller" :style="keyBoxStyle"
+                        style="width:100%;height:100%;border-radius: 12px;">
+    <div id="keyBox" class="key-box">
       <div v-for="(item,index) in keyList" :key="item.id">
         <!-- 分组名称 -->
-        <div class="key-item border-right" v-if="item.groupName">
-          <span class="truncate"><div class="color-dot" :style="{backgroundColor:getColor(keyList,index)}"></div>  {{
+        <div v-if="item.groupName" class="key-item border-right">
+          <span class="truncate"><div :style="{backgroundColor:getColor(keyList,index)}" class="color-dot"></div>  {{
               item.groupName
             }}</span>
         </div>
         <!-- 快捷键 -->
-        <div v-else class="border-right key-item" :style="{backgroundColor:getColor(keyList,index)}"
+        <div v-else :style="{backgroundColor:getColor(keyList,index)}" class="border-right key-item"
              @click="toggleKey(item.id)">
           <div class="flex">
             <div v-for="i in item.keys" :key="i" class="flex">
-              <span style="min-width:32px;padding:0 8px;"
-                    class="xt-mask h-8 flex items-center rounded-lg justify-center mr-3">{{ i }}</span>
+              <span class="xt-mask h-8 flex items-center rounded-lg justify-center mr-3"
+                    style="min-width:32px;padding:0 8px;">{{ i }}</span>
             </div>
           </div>
           <div class="key-title truncate">{{ item.title }}</div>
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { getColor } from '../lib/lib'
+import {getColor} from '../lib/lib'
 
 export default {
   name: 'ShortcutKeyList',
@@ -48,7 +48,8 @@ export default {
     // 列表样式
     keyBoxStyle: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
     //是否显示编辑
     showEdit: {
@@ -56,7 +57,7 @@ export default {
       default: false
     }
   },
-  data () {
+  data() {
     return {
       settingsScroller: {
         useBothWheelAxes: true,
@@ -69,11 +70,11 @@ export default {
   },
   methods: {
     getColor,
-    toggleKey (id) {
+    toggleKey(id) {
       this.$emit('setKeyItem', id)
     },
   },
-  mounted () {
+  mounted() {
   },
 }
 </script>

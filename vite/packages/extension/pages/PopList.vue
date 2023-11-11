@@ -1,19 +1,20 @@
 <script lang="ts">
 import extension from '../../../src/util/extension'
-import { createVNode } from 'vue';
+import {createVNode} from 'vue';
 import {
-  PlusOutlined,
   AppstoreAddOutlined,
-  FolderOpenOutlined,
   ChromeOutlined,
-  EyeOutlined,
-  EllipsisOutlined,
-  EyeInvisibleOutlined,
-  GoogleOutlined,
   DeleteOutlined,
-  ExclamationCircleOutlined
+  EllipsisOutlined,
+  ExclamationCircleOutlined,
+  EyeInvisibleOutlined,
+  EyeOutlined,
+  FolderOpenOutlined,
+  GoogleOutlined,
+  PlusOutlined
 } from '@ant-design/icons-vue '
-import { Modal } from 'ant-design-vue';
+import {Modal} from 'ant-design-vue';
+
 const path = eval('require')('path')
 const fs = eval('require')('fs')
 export default {
@@ -51,7 +52,7 @@ export default {
     this.getList()
   },
   methods: {
-    remove(ext){
+    remove(ext) {
       Modal.confirm({
         title: '确认卸载插件？',
         icon: createVNode(ExclamationCircleOutlined),
@@ -59,18 +60,18 @@ export default {
         okText: '删除',
         okType: 'danger',
         cancelText: '取消',
-        onOk:() =>{
-          this.ipc.send('removeExtension',{baseName:ext.baseName})
+        onOk: () => {
+          this.ipc.send('removeExtension', {baseName: ext.baseName})
         },
         onCancel() {
         },
       });
     },
-    changeEnable(ext){
-      if(ext.enable===true){
-        ext.hide=false
+    changeEnable(ext) {
+      if (ext.enable === true) {
+        ext.hide = false
       }
-      this.ipc.send('setExtensionEnable',{baseName:ext.baseName,enable:ext.enable})
+      this.ipc.send('setExtensionEnable', {baseName: ext.baseName, enable: ext.enable})
     },
     async getList() {
       this.installedExts = await this.ipc.invoke('getInstalledExtensions')
@@ -86,9 +87,9 @@ export default {
             ext.id = installed.id //id不靠谱
             ext.hide = installed.hide
             ext.installed = true
-            if(installed.id){
+            if (installed.id) {
               ext.enable = true
-            }else{
+            } else {
               ext.enable = false
             }
           } else {
@@ -130,7 +131,7 @@ export default {
         name
       })
     },
-    installFold(){
+    installFold() {
       ipc.send('installExtensionFolder')
     },
     close() {
@@ -167,23 +168,24 @@ export default {
             </a-menu-item>
           </a-menu>
         </template>
-        <a-button type="text" style="position: absolute;right: 10px" size="small">
+        <a-button size="small" style="position: absolute;right: 10px" type="text">
           <plus-outlined/>
           安装
         </a-button>
       </a-dropdown>
 
     </h3>
-    <div id="extensionList" class="scroller-wrapper plugins-list" style="padding: 10px;padding-top: 0;padding-bottom: 0">
+    <div id="extensionList" class="scroller-wrapper plugins-list"
+         style="padding: 10px;padding-top: 0;padding-bottom: 0">
 
-      <browser-action-list style="display: none" partition="persist:webcontent" id="actions"></browser-action-list>
+      <browser-action-list id="actions" partition="persist:webcontent" style="display: none"></browser-action-list>
 
-      <a-empty description="暂无插件" v-if="exts.length===0" style="margin-top: 80px"></a-empty>
-      <a-row style="border-bottom: 1px dashed rgba(211,211,211,0.57)" class="item-line" v-else
-             v-for="(ext,index) in exts">
+      <a-empty v-if="exts.length===0" description="暂无插件" style="margin-top: 80px"></a-empty>
+      <a-row v-for="(ext,index) in exts" v-else class="item-line"
+             style="border-bottom: 1px dashed rgba(211,211,211,0.57)">
         <!--         @contextmenu="onContextMenu(index)"-->
         <a-col style="width: 50px;text-align: center">
-          <a-avatar shape="square" :src="'file://'+ext.displayIcon"></a-avatar>
+          <a-avatar :src="'file://'+ext.displayIcon" shape="square"></a-avatar>
         </a-col>
         <a-col style="width: 210px">
           <div style="padding-right: 10px">
@@ -191,14 +193,14 @@ export default {
           </div>
         </a-col>
         <a-col style="padding-top: 5px">
-          <a-switch @change="changeEnable(ext)" title="是否启用" v-model:checked="ext.enable" size="small"></a-switch>
+          <a-switch v-model:checked="ext.enable" size="small" title="是否启用" @change="changeEnable(ext)"></a-switch>
         </a-col>
         <a-col style="width: 120px;text-align: right">
           <div v-show="ext.enable">
-            <a-button title="当前：显示到工具栏" v-if="!ext.hide" type="text" @click.stop="hide(ext)">
+            <a-button v-if="!ext.hide" title="当前：显示到工具栏" type="text" @click.stop="hide(ext)">
               <eye-outlined/>
             </a-button>
-            <a-button title="当前：不显示到工具栏" style="color: red" v-else type="text" @click.stop="show(ext)">
+            <a-button v-else style="color: red" title="当前：不显示到工具栏" type="text" @click.stop="show(ext)">
               <EyeInvisibleOutlined/>
             </a-button>
             <a-dropdown @click.stop="()=>{}">
@@ -221,14 +223,14 @@ export default {
 
     <div style="text-align: right;padding-top:0px;width: 100%;border-top: 1px solid #f1f1f1">
       <a-row type="flex">
-        <a-col style="text-align: center" flex="50">
-          <a-button @click="openShop('chrome')" type="text">
+        <a-col flex="50" style="text-align: center">
+          <a-button type="text" @click="openShop('chrome')">
             <GoogleOutlined/>
             去Chrome商店安装
           </a-button>
         </a-col>
-        <a-col style="text-align: center" flex="50">
-          <a-button @click="openShop('crxsoso')" type="text">
+        <a-col flex="50" style="text-align: center">
+          <a-button type="text" @click="openShop('crxsoso')">
             <ChromeOutlined/>
             去Crx搜搜安装
           </a-button>
@@ -243,7 +245,7 @@ html, body {
   overflow: hidden !important;
 }
 </style>
-<style scoped lang="scss">
+<style lang="scss" scoped>
 
 .plugins-list {
   overflow-y: auto;

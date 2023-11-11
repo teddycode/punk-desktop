@@ -1,76 +1,77 @@
 <template>
- <div class="collapse-container" style="position: relative;">
-   <div class="header mb-2 flex  px-1 justify-between rounded-md h-8" @click.stop="toggleCollapse">
-     <div class="flex items-center">
-      <div class="flex items-center justify-center" :class="['icon', { 'rotate': !collapsed }]">
-        <CaretRightOutlined style="font-size: 1em;"/>
-      </div>
-      <span class="font-14 ml-2" style="color:var(--secondary-text);">
+  <div class="collapse-container" style="position: relative;">
+    <div class="header mb-2 flex  px-1 justify-between rounded-md h-8" @click.stop="toggleCollapse">
+      <div class="flex items-center">
+        <div :class="['icon', { 'rotate': !collapsed }]" class="flex items-center justify-center">
+          <CaretRightOutlined style="font-size: 1em;"/>
+        </div>
+        <span class="font-14 ml-2" style="color:var(--secondary-text);">
        {{ title }}
       </span>
-     </div>
-   </div>
-
-   <div style="position:absolute; top:6px;right:10px;" v-if="no !== 1">
-    <ChatDropDown :no="no" :data="content"  :list="dorpList"></ChatDropDown>
-   </div>
-   <transition name="collapse">
-    <!-- class="content" -->
-    <div v-if="!collapsed" >
-      <slot></slot>
+      </div>
     </div>
-   </transition>
- </div>
+
+    <div v-if="no !== 1" style="position:absolute; top:6px;right:10px;">
+      <ChatDropDown :data="content" :list="dorpList" :no="no"></ChatDropDown>
+    </div>
+    <transition name="collapse">
+      <!-- class="content" -->
+      <div v-if="!collapsed">
+        <slot></slot>
+      </div>
+    </transition>
+  </div>
 </template>
 
 <script>
-import { ref,reactive } from 'vue';
-import { CaretRightOutlined } from '@ant-design/icons-vue';
+import {ref} from 'vue';
+import {CaretRightOutlined} from '@ant-design/icons-vue';
 import ChatDropDown from './ChatsDropDown.vue';
-import { categoryMenu } from '../../../../js/data/chatList'
+import {categoryMenu} from '../../../../js/data/chatList'
 
 export default {
- props:['title','content','show','no'],
- components: {
-   CaretRightOutlined,ChatDropDown
- },
- setup() {
-   const collapsed = ref(false);
-   const dorpShow = ref(false)
-   const dorpList = ref(categoryMenu)
+  props: ['title', 'content', 'show', 'no'],
+  components: {
+    CaretRightOutlined, ChatDropDown
+  },
+  setup() {
+    const collapsed = ref(false);
+    const dorpShow = ref(false)
+    const dorpList = ref(categoryMenu)
 
-   const toggleCollapse = () => {
-     collapsed.value = !collapsed.value;
-   };
+    const toggleCollapse = () => {
+      collapsed.value = !collapsed.value;
+    };
 
-   return {
-     collapsed,dorpShow,dorpList,
-     toggleCollapse
-   };
- }
+    return {
+      collapsed, dorpShow, dorpList,
+      toggleCollapse
+    };
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 .collapse-container {
- margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .header {
- cursor: pointer;
- display: flex;
- align-items: center;
- &:hover{
-  background: var(--active-secondary-bg);
- }
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    background: var(--active-secondary-bg);
+  }
 }
 
 .icon {
- transition: transform 0.3s;  /* 添加过渡效果 */
+  transition: transform 0.3s; /* 添加过渡效果 */
 }
 
 .rotate {
- transform: rotate(90deg);  /* 旋转图标 */
+  transform: rotate(90deg); /* 旋转图标 */
 }
 
 /**
@@ -93,8 +94,8 @@ export default {
   opacity: 0;
 }
 
-.font-14{
- font-size: 14px;
- font-weight: 400;
+.font-14 {
+  font-size: 14px;
+  font-weight: 400;
 }
 </style>

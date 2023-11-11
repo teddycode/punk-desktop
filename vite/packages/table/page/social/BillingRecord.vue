@@ -1,17 +1,17 @@
 <template>
- <div class="ml-4">
-  <div style="width: 328px;" class="mb-3">
-    <HorizontalPanel :navList="recordType" v-model:selectType="defaultRecord"></HorizontalPanel>
+  <div class="ml-4">
+    <div class="mb-3" style="width: 328px;">
+      <HorizontalPanel v-model:selectType="defaultRecord" :navList="recordType"></HorizontalPanel>
+    </div>
+    <template v-if="defaultRecord.name === 'check'">
+      <CheckRecord></CheckRecord>
+    </template>
+    <template v-else>
+      <GiftRecord></GiftRecord>
+    </template>
   </div>
-  <template v-if="defaultRecord.name === 'check'">
-    <CheckRecord></CheckRecord>
-  </template>
-  <template v-else>
-    <GiftRecord></GiftRecord>
-  </template>
- </div>
- 
- 
+
+
 </template>
 
 <script>
@@ -20,27 +20,27 @@ import GiftRecord from './record/GiftRecord.vue'
 import CheckRecord from './record/CheckRecord.vue'
 
 export default {
-  name:'BillingRecord',
+  name: 'BillingRecord',
 
-  components:{
+  components: {
     HorizontalPanel,
     GiftRecord,
     CheckRecord,
   },
 
-  data(){
-    return{
-      recordType:[
-        {title:'账单记录',name:'check'},
-        {title:'礼物记录',name:'gift'}
+  data() {
+    return {
+      recordType: [
+        {title: '账单记录', name: 'check'},
+        {title: '礼物记录', name: 'gift'}
       ],
-      defaultRecord:{title:'账单记录',name:'check'},
+      defaultRecord: {title: '账单记录', name: 'check'},
     }
-  }, 
+  },
 
-  watch:{
-    defaultRecord:{
-      handler(){
+  watch: {
+    defaultRecord: {
+      handler() {
         this.defaultRecord = this.defaultRecord
       }
     }
@@ -49,7 +49,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-:deep(.nav-item){
+:deep(.nav-item) {
   border-radius: 7px !important;
 }
 </style>

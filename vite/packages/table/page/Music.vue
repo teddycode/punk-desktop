@@ -16,14 +16,15 @@
         <div class="music-player" style="max-width:500px; height: 410px; display: inline-block">
           <div class="pointer" @click="enterMusic">
             <a-avatar :class="{ playing: status.music.playing }" :size="120" :src="status.music.cover"
-              style="margin: 16px; border: 3px solid #6b6b6b">点击选歌播放</a-avatar>
+                      style="margin: 16px; border: 3px solid #6b6b6b">点击选歌播放
+            </a-avatar>
           </div>
           <div style="font-size: 1.8em">{{ status.music.title }}</div>
-          <div style="font-size: 1.1em; color: #7c7c7c" class="singer">
+          <div class="singer" style="font-size: 1.1em; color: #7c7c7c">
             {{ status.music.singer }}
           </div>
-          <div style="max-width: 400px; margin: auto" class="player px-3">
-            <a-slider v-model:value="status.music.percent" />
+          <div class="player px-3" style="max-width: 400px; margin: auto">
+            <a-slider v-model:value="status.music.percent"/>
           </div>
           <div style="font-size: 1.5em">
             {{ status.music.progress }} / {{ status.music.total }}
@@ -31,16 +32,16 @@
           <div :style="{ zoom: tab === 'player' ? 1 : 0.5 }" style="text-align: center; margin-top: 0.8em">
             <div style="width: 250px; margin: auto">
               <a-row>
-                <a-col @click="doAction('prev')" :span="8" style="padding-top: 1em">
+                <a-col :span="8" style="padding-top: 1em" @click="doAction('prev')">
                   <Icon class="player-icon" icon="shangyishou"></Icon>
                 </a-col>
-                <a-col @click="doAction('pause')" v-if="status.music.playing" :span="8">
-                  <Icon class="player-icon" style="font-size: 6em" icon="zanting"></Icon>
+                <a-col v-if="status.music.playing" :span="8" @click="doAction('pause')">
+                  <Icon class="player-icon" icon="zanting" style="font-size: 6em"></Icon>
                 </a-col>
-                <a-col @click="doAction('play')" v-else :span="8">
-                  <Icon class="player-icon" style="font-size: 6em" icon="bofang"></Icon>
+                <a-col v-else :span="8" @click="doAction('play')">
+                  <Icon class="player-icon" icon="bofang" style="font-size: 6em"></Icon>
                 </a-col>
-                <a-col @click="doAction('next')" :span="8" style="padding-top: 1em">
+                <a-col :span="8" style="padding-top: 1em" @click="doAction('next')">
                   <Icon class="player-icon" icon="xiayishou"></Icon>
                 </a-col>
               </a-row>
@@ -48,35 +49,34 @@
           </div>
         </div>
       </a-col>
-      <a-col :span="12" v-if="showPrompt" style="align-items: center; display: flex">
+      <a-col v-if="showPrompt" :span="12" style="align-items: center; display: flex">
         <div style="
             background: var(--primary-bg);
             border-radius: 1em;
             display: flex;
             align-items: center;
           ">
-          <div v-html="prompt" id="prompt" class="listlyric j-flag" style="color:var(--primary-text)"></div>
+          <div id="prompt" class="listlyric j-flag" style="color:var(--primary-text)" v-html="prompt"></div>
         </div>
       </a-col>
     </a-row>
   </div>
 
-  <div @click="togglePrompt" style="position: absolute; right: 3em; top: 43vh; z-index: 99">
+  <div style="position: absolute; right: 3em; top: 43vh; z-index: 99" @click="togglePrompt">
     <Icon icon="zimu" style="font-size: 4em;color: var(--primary-text);"></Icon>
   </div>
 </template>
 
 <script>
-import { mapWritableState, mapActions } from "pinia";
-import { appStore } from "../store";
+import {mapWritableState} from "pinia";
+import {appStore} from "../store";
 import SecondPanel from "../components/SecondPanel.vue";
-import { SystemApps } from "../consts";
-import { message } from "ant-design-vue";
+import {SystemApps} from "../consts";
 
 let fs = require("fs");
 export default {
   name: "Apps",
-  components: { SecondPanel },
+  components: {SecondPanel},
   computed: {
     ...mapWritableState(appStore, ["status"]),
   },
@@ -143,7 +143,7 @@ export default {
       });
     },
     doAction(action) {
-      require("electron").ipcRenderer.send("wyyAction", { action });
+      require("electron").ipcRenderer.send("wyyAction", {action});
     },
 
     getPercent() {
@@ -151,7 +151,7 @@ export default {
       let current;
       if (currentText.length === 2) {
         current = new Date(
-          "2023/1/1 00:" + currentText[0] + ":" + currentText[1]
+            "2023/1/1 00:" + currentText[0] + ":" + currentText[1]
         );
       }
       let totalText = this.status.music.total.split(":");
@@ -161,16 +161,16 @@ export default {
       }
 
       let totalSeconds =
-        total.getHours() * 60 * 60 +
-        total.getMinutes() * 60 +
-        total.getSeconds();
+          total.getHours() * 60 * 60 +
+          total.getMinutes() * 60 +
+          total.getSeconds();
       let currentSeconds =
-        current.getHours() * 60 * 60 +
-        current.getMinutes() * 60 +
-        current.getSeconds();
+          current.getHours() * 60 * 60 +
+          current.getMinutes() * 60 +
+          current.getSeconds();
       this.status.music.percent = (
-        (currentSeconds / totalSeconds) *
-        100
+          (currentSeconds / totalSeconds) *
+          100
       ).toFixed(0);
     },
 
@@ -233,7 +233,7 @@ export default {
   margin-bottom: 0;
 }
 </style>
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .player-icon {
   font-size: 4em;
   vertical-align: middle;

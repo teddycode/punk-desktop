@@ -11,18 +11,18 @@
 
     <div class="flex">
       <XtInput
-        class="xt-bg-2 xt-border rounded-xl overflow-hidden"
-        :limit="{ number: true, space: true }"
-        style="height: 48px"
-        v-model="timeStamp"
-        @keyup="timeStampKeyup()"
-        @change="timeStampKeyup()"
-        @input="timeStampKeyup()"
+          v-model="timeStamp"
+          :limit="{ number: true, space: true }"
+          class="xt-bg-2 xt-border rounded-xl overflow-hidden"
+          style="height: 48px"
+          @change="timeStampKeyup()"
+          @input="timeStampKeyup()"
+          @keyup="timeStampKeyup()"
       >
         <template #addonBefore>
           <div
-            class="text-base xt-text flex justify-center items-center"
-            style="
+              class="text-base xt-text flex justify-center items-center"
+              style="
               width: 80px;
               height: 46px;
               background: rgba(255, 255, 255, 0.4);
@@ -39,15 +39,15 @@
     </div>
     <div class="flex">
       <XtInput
-        class="xt-bg-2 xt-border rounded-xl overflow-hidden"
-        style="height: 48px"
-        v-model="time"
-        @keyup="timeKeyup()"
+          v-model="time"
+          class="xt-bg-2 xt-border rounded-xl overflow-hidden"
+          style="height: 48px"
+          @keyup="timeKeyup()"
       >
         <template #addonBefore>
           <div
-            class="text-base xt-text flex justify-center items-center h-full"
-            style="
+              class="text-base xt-text flex justify-center items-center h-full"
+              style="
               width: 80px;
               height: 100%;
               background: rgba(255, 255, 255, 0.4);
@@ -58,7 +58,7 @@
         </template>
         <template #suffix>
           <div style="width: 125px">
-            <a-date-picker v-model:value="datePicker" />
+            <a-date-picker v-model:value="datePicker"/>
           </div>
         </template>
       </XtInput>
@@ -71,8 +71,8 @@
 <script>
 import dayjs from "../../../../table/components/card/hooks/day";
 
-import { timeConversion } from "../../../store/timeConversion";
-import { mapWritableState, mapActions } from "pinia";
+import {timeConversion} from "../../../store/timeConversion";
+import {mapActions, mapWritableState} from "pinia";
 
 export default {
   data() {
@@ -123,6 +123,7 @@ export default {
 :deep(.ant-picker-input) {
   font-size: 22px;
 }
+
 :deep(.ant-picker-focused) {
   box-shadow: none !important;
 }

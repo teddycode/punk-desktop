@@ -1,21 +1,21 @@
 <template>
   <div>
-    <div class="forward" :class="[isH5 ? 'forward-h5' : '']" v-if="show" ref="dialog">
+    <div v-if="show" ref="dialog" :class="[isH5 ? 'forward-h5' : '']" class="forward">
       <Transfer
-        title="转发"
-        :list="list"
-        :isSearch="false"
-        :isH5="isH5"
-        :isCustomItem="true"
-        :resultShow="true"
-        @submit="handleForWordMessage"
-        @cancel="toggleShow"
+          :isCustomItem="true"
+          :isH5="isH5"
+          :isSearch="false"
+          :list="list"
+          :resultShow="true"
+          title="转发"
+          @cancel="toggleShow"
+          @submit="handleForWordMessage"
       >
         <template #left="{ data }">
-          <slot name="left" :data="data" />
+          <slot :data="data" name="left"/>
         </template>
         <template #right="{ data }">
-          <slot name="right" :data="data" />
+          <slot :data="data" name="right"/>
         </template>
       </Transfer>
     </div>
@@ -23,10 +23,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, watchEffect, toRefs, ref } from 'vue';
+import {defineComponent, reactive, ref, toRefs, watchEffect} from 'vue';
 import Transfer from '../../../../components/transfer/index.vue';
-import { handleErrorPrompts } from '../../../utils';
-import { onClickOutside } from '@vueuse/core';
+import {handleErrorPrompts} from '../../../utils';
+import {onClickOutside} from '@vueuse/core';
 
 const Forward = defineComponent({
   components: {
@@ -104,6 +104,7 @@ export default Forward;
 <style lang="scss" scoped>
 @import url('../../../../styles/common.scss');
 @import url('../../../../styles/icon.scss');
+
 .forward {
   position: absolute;
   z-index: 5;
@@ -116,11 +117,13 @@ export default Forward;
   flex-direction: column;
   justify-content: center;
   box-shadow: 0 11px 20px 0 rgba(0, 0, 0, 0.3);
+
   header {
     padding: 20px;
     display: flex;
     justify-content: space-between;
   }
+
   .list {
     box-sizing: border-box;
     margin: 0;
@@ -130,13 +133,16 @@ export default Forward;
     background: #ffffff;
     overflow-y: auto;
     list-style: none;
+
     &-item {
       display: flex;
       align-items: center;
       padding: 10px;
+
       &:hover {
         background: #dddddd;
       }
+
       .avatar {
         width: 36px;
         height: 36px;
@@ -148,12 +154,14 @@ export default Forward;
       }
     }
   }
+
   footer {
     display: flex;
     justify-content: space-around;
     padding: 20px 0;
   }
 }
+
 .forward-h5 {
   position: fixed;
   top: 0;

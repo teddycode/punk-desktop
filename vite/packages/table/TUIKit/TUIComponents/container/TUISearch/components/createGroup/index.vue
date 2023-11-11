@@ -3,15 +3,16 @@
     <div class="flex items-center justify-between">
       <div class="font-16 flex items-center justify-center" style="color:var(--primary-text);width: 95%;">加入群聊</div>
       <div class="flex rounded-lg active-button pointer items-center w-12 h-12 justify-center"
-        style="background: var(--secondary-bg);" @click="closeJoinGroup"
+           style="background: var(--secondary-bg);" @click="closeJoinGroup"
       >
         <Icon icon="guanbi" style="color: var(--primary-text);width: 24px;height: 24px;"></Icon>
       </div>
     </div>
 
-    <div style="margin: 24px 0;" >
-      <a-input placeholder="输入群ID搜索" :spellcheck="false" v-model:value="searchId" class="h-12" style="border-radius: 12px;"
-        @keyup.enter="searchGroup"
+    <div style="margin: 24px 0;">
+      <a-input v-model:value="searchId" :spellcheck="false" class="h-12" placeholder="输入群ID搜索"
+               style="border-radius: 12px;"
+               @keyup.enter="searchGroup"
       >
         <template #suffix>
           <SearchOutlined @click="searchGroup"/>
@@ -19,25 +20,26 @@
       </a-input>
     </div>
 
-    <div class="flex items-center  justify-center" style="color: var(--primary-text);margin-top: 50px;"  v-if="searchResult.length === 0">
+    <div v-if="searchResult.length === 0" class="flex items-center  justify-center"
+         style="color: var(--primary-text);margin-top: 50px;">
       <a-empty :image="simpleImage"/>
     </div>
 
     <template v-else>
       <vue-custom-scrollbar :settings="settingsScroller" style="height:100%; margin-bottom: 16px;">
-        <div class="flex justify-between items-center" v-for="item in searchResult" style="margin-bottom: 8px;">
+        <div v-for="item in searchResult" class="flex justify-between items-center" style="margin-bottom: 8px;">
           <div class="flex">
-            <a-avatar shape="square" :size="48" :src="item.avatar"></a-avatar>
+            <a-avatar :size="48" :src="item.avatar" shape="square"></a-avatar>
             <div class="flex flex-col" style="margin-left:16px;">
               <span style="color: var(--primary-text);">{{ item.name }}</span>
               <span style="color: var(--primary-text);">{{ total }}人</span>
             </div>
           </div>
           <div class="flex items-center rounded-lg pointer  justify-center active-button"
-           style="padding: 9px 18px; color: var(--active-text);background: var(--active-bg);"
-           @click="joinGroup(item)"
+               style="padding: 9px 18px; color: var(--active-text);background: var(--active-bg);"
+               @click="joinGroup(item)"
           >
-           加入
+            加入
           </div>
         </div>
       </vue-custom-scrollbar>
@@ -142,12 +144,11 @@
     </div> -->
 
 </template>
-<script >
-import { computed, defineComponent, reactive, toRefs,watch } from 'vue';
+<script>
+import {defineComponent, reactive, toRefs, watch} from 'vue';
 // import Link from '../../../../../utils/link';
-import { SearchOutlined } from '@ant-design/icons-vue'
-import _ from 'lodash-es'
-import { message } from 'ant-design-vue';
+import {SearchOutlined} from '@ant-design/icons-vue'
+import {message} from 'ant-design-vue';
 import {chatStore} from '../../../../../../store/chat'
 
 const TUISearch = defineComponent({
@@ -159,25 +160,25 @@ const TUISearch = defineComponent({
     },
   },
 
-  components:{
+  components: {
     SearchOutlined,
   },
 
-  setup(props,ctx){
+  setup(props, ctx) {
 
     // const TUIServer = TUISearch?.TUIServer?.TUICore.TUIServer.TUIGroup;
     const TUIServer = window.$chat
-    const { t } = window.$TUIKit.config.i18n.useI18n();
+    const {t} = window.$TUIKit.config.i18n.useI18n();
     const Server = window.$TUIKit
 
     const chat = chatStore()
 
     const data = reactive({
-      searchId:'',
+      searchId: '',
       currentGroup: null,
       env: Server.TUIEnv,
-      searchResult:[],
-      simpleImage:'/img/state/null.png',
+      searchResult: [],
+      simpleImage: '/img/state/null.png',
       settingsScroller: {  // 滚动条配置
         useBothWheelAxes: true,
         swipeEasing: true,
@@ -185,58 +186,58 @@ const TUISearch = defineComponent({
         suppressScrollX: true,
         wheelPropagation: true
       },
-      total:chat.$state.limitTotal
+      total: chat.$state.limitTotal
     })
 
-    const closeJoinGroup = () =>{  // 关闭加入群聊弹窗
+    const closeJoinGroup = () => {  // 关闭加入群聊弹窗
       ctx.emit('close')
     }
 
-    const searchGroup = () =>{  // 根据群组id进行群组搜索
-      TUIServer.searchGroupByID(data.searchId).then((res=>{
-        if(data.searchResult.some(item => item.groupID === res.data.group.groupID)){
-         return
-        }else{
-         data.searchResult.push(res.data.group)
+    const searchGroup = () => {  // 根据群组id进行群组搜索
+      TUIServer.searchGroupByID(data.searchId).then((res => {
+        if (data.searchResult.some(item => item.groupID === res.data.group.groupID)) {
+          return
+        } else {
+          data.searchResult.push(res.data.group)
         }
-      })).catch(error=>{
+      })).catch(error => {
         message.warn('该群聊为私群,不支持搜索')
         console.error(error)
       })
     }
 
-    const joinGroup = async(group) =>{ // 加入群组方法
+    const joinGroup = async (group) => { // 加入群组方法
       // console.log('排查问题::>>',group)
       const disabledJoin = group.joinOption === 'DisableApply'
-      if(disabledJoin){
+      if (disabledJoin) {
         message.warn('群管理员开启了禁止加群设置')
         ctx.emit('close')
-      }else{
+      } else {
         const options = {
-         groupID: group.groupID,
-         applyMessage: group.applyMessage ||  t('TUIContact.加群'),
-         // t('TUIContact.加群')
-         type: group?.type,
+          groupID: group.groupID,
+          applyMessage: group.applyMessage || t('TUIContact.加群'),
+          // t('TUIContact.加群')
+          type: group?.type,
         }
         const res = await TUIServer.joinGroup(options);
         // console.log('检测::>>',res);
-        if(res.data.status === 'WaitAdminApproval'){
-         message.success('入群申请已发出,等待群主和管理员审核')
-         data.currentGroup = { apply:true }
+        if (res.data.status === 'WaitAdminApproval') {
+          message.success('入群申请已发出,等待群主和管理员审核')
+          data.currentGroup = {apply: true}
         }
         ctx.emit('close')
       }
 
     }
 
-    watch(()=>data.searchId,(newVal)=>{
-      if(newVal === ''){
+    watch(() => data.searchId, (newVal) => {
+      if (newVal === '') {
         data.searchResult = []
       }
     })
 
-    return{
-      closeJoinGroup,...toRefs(data),searchGroup,joinGroup,
+    return {
+      closeJoinGroup, ...toRefs(data), searchGroup, joinGroup,
     }
 
   }
@@ -379,37 +380,40 @@ export default TUISearch;
 <style lang="scss" scoped src="./style/index.scss"></style>
 
 <style lang="scss" scoped>
-.font-16{
+.font-16 {
 
   font-size: 16px;
   font-weight: 500
 }
 
-.active-button{
-  &:active{
+.active-button {
+  &:active {
     filter: brightness(0.8);
     opacity: 0.8;
   }
-  &:hover{
+
+  &:hover {
     opacity: 0.8;
   }
 }
 
-:deep(.ant-input){
+:deep(.ant-input) {
   color: var(--secondary-text) !important;
   font-size: 1.15em;
-  &::placeholder{
+
+  &::placeholder {
     color: var(--secondary-text) !important;
   }
 }
-:deep(.ant-input-suffix){
+
+:deep(.ant-input-suffix) {
   color: var(--secondary-text) !important;
   font-size: 1.5em;
   cursor: pointer;
 }
 
-:deep(.ant-empty-image){
-  width:80px;
-  height:80px;
+:deep(.ant-empty-image) {
+  width: 80px;
+  height: 80px;
 }
 </style>

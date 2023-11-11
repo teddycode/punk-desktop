@@ -2,13 +2,13 @@
 import "@vue/runtime-core";
 
 declare module "*.vue" {
-  import { DefineComponent } from "vue";
-  const component: DefineComponent<{}, {}, any>;
-  export default component;
+    import {DefineComponent} from "vue";
+    const component: DefineComponent<{}, {}, any>;
+    export default component;
 }
 
 declare module "@vue/runtime-core" {
-  export interface GlobalComponents {
-    XtTab: typeof import("./Tab/index.vue")["default"];
-  }
+    export interface GlobalComponents {
+        XtTab: typeof import("./Tab/index.vue")["default"];
+    }
 }

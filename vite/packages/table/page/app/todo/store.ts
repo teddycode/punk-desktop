@@ -1,9 +1,6 @@
 import {defineStore} from "pinia";
-import {ITaskInfo as TaskInfo,IListInfo as ListInfo} from './interfaces'
-import {nanoid} from 'nanoid'
-import _ from 'lodash-es'
-import {DataSourceTypes, MenuState, sortType} from './consts'
-import {Menu} from "ant-design-vue";
+import {IListInfo as ListInfo, ITaskInfo as TaskInfo} from './interfaces'
+import {DataSourceTypes, sortType} from './consts'
 import {listStore} from './stores/list'
 import {taskStore} from './stores/task';
 import {configStore} from './stores/config'
@@ -35,8 +32,8 @@ export const databaseStore = defineStore('database', {
                     this.database = {
                         tasks: [],
                         config: {},
-                        lists:[],
-                        activeList:null
+                        lists: [],
+                        activeList: null
                     }
                 }
                 this.loadTasks()
@@ -58,8 +55,8 @@ export const databaseStore = defineStore('database', {
         async loadConfigs() {
             await this.loadTablesObject('config')
             configStore().config = this.database.config
-            if(!this.database.config.sort){
-                configStore().config.sort=sortType.TIME
+            if (!this.database.config.sort) {
+                configStore().config.sort = sortType.TIME
             }
         },
         async loadLists() {
@@ -85,5 +82,5 @@ export const databaseStore = defineStore('database', {
 })
 
 export {
-    taskStore,listStore,configStore
+    taskStore, listStore, configStore
 }

@@ -1,27 +1,27 @@
 <!-- 带头像框组件 -->
 <template>
   <tippy
-    :z-index="9999999"
-    :append-to="docBody"
-    v-if="frameUrl"
-    :trigger="frame.name ? 'mouseenter' : ''"
-    :placement="framePlacement"
-    :interactive="true"
+      v-if="frameUrl"
+      :append-to="docBody"
+      :interactive="true"
+      :placement="framePlacement"
+      :trigger="frame.name ? 'mouseenter' : ''"
+      :z-index="9999999"
   >
     <div
-      style="position: relative !important; display: inline-block; zoom: 0.8"
-      :style="{ width: avatarSize + 'px', height: avatarSize + 'px' }"
+        :style="{ width: avatarSize + 'px', height: avatarSize + 'px' }"
+        style="position: relative !important; display: inline-block; zoom: 0.8"
     >
       <transition name="fade">
         <a-avatar
-          shape="square"
-          :style="{ zoom: zoom }"
-          :size="avatarSize + 49"
-          :src="frameUrl"
-          v-if="frameUrl"
-          class="w-full h-full object-cover frame-position"
-          style=""
-          alt=""
+            v-if="frameUrl"
+            :size="avatarSize + 49"
+            :src="frameUrl"
+            :style="{ zoom: zoom }"
+            alt=""
+            class="w-full h-full object-cover frame-position"
+            shape="square"
+            style=""
         ></a-avatar>
         <!--        <RayMedal medalStyle="transform:scale(250%) !important"  :size="120"  style="transform: translateX(-20%) " :src="frameUrl">-->
 
@@ -30,53 +30,53 @@
 
       <transition name="fade">
         <a-avatar
-          :src="avatarUrl"
-          :style="{ zoom: zoom }"
-          :size="avatarSize + 8"
-          class="avatar-position"
+            :size="avatarSize + 8"
+            :src="avatarUrl"
+            :style="{ zoom: zoom }"
+            class="avatar-position"
         ></a-avatar>
       </transition>
     </div>
     <template #content>
-      <div class="p-2" v-if="frame?.name" style="width: 250px">
+      <div v-if="frame?.name" class="p-2" style="width: 250px">
         <div class="mb-2">
           <a-row>
             <a-col :span="9">
               <template v-if="frame?.detail.rarity === 4">
                 <RayMedal
-                  medalStyle="transform:scale(250%) !important"
-                  :size="120"
-                  style="transform: translateX(-20%)"
-                  :src="frameUrl"
+                    :size="120"
+                    :src="frameUrl"
+                    medalStyle="transform:scale(250%) !important"
+                    style="transform: translateX(-20%)"
                 >
                 </RayMedal>
               </template>
               <a-avatar
-                v-else
-                shape="square"
-                :size="70"
-                :src="frameUrl"
-                class="w-full h-full object-cover"
-                style=""
-                alt=""
+                  v-else
+                  :size="70"
+                  :src="frameUrl"
+                  alt=""
+                  class="w-full h-full object-cover"
+                  shape="square"
+                  style=""
               ></a-avatar>
             </a-col>
-            <a-col class="text-left" :span="15">
+            <a-col :span="15" class="text-left">
               <div class="mt-2">
                 <span
-                  class="avatar-font mr-2 font-bold"
-                  :style="titleTagColor(frame?.detail.rarity)"
+                    :style="titleTagColor(frame?.detail.rarity)"
+                    class="avatar-font mr-2 font-bold"
                 >
                   {{ frame?.alias }}
                 </span>
                 <span
-                  class="w-11 h-6 rank-font rounded my-2.5 px-1"
-                  :style="avatarTagColor(frame?.detail.rarity)"
+                    :style="avatarTagColor(frame?.detail.rarity)"
+                    class="w-11 h-6 rank-font rounded my-2.5 px-1"
                 >
                   {{ textTag(frame?.detail.rarity) }}
                 </span>
               </div>
-              <div style="font-size: 12px" class="xt-text-2 mt-1">
+              <div class="xt-text-2 mt-1" style="font-size: 12px">
                 {{ frame?.summary }}
               </div>
             </a-col>
@@ -87,23 +87,24 @@
           获得方式：{{ avatarGainMethodText(frame?.detail.gainMethod) }}
         </div>
 
-        <a-button @click="toggleStore" class="rounded-full" type="primary" block
-          >头像框商店</a-button
+        <a-button block class="rounded-full" type="primary" @click="toggleStore"
+        >头像框商店
+        </a-button
         >
       </div>
     </template>
   </tippy>
 
   <div
-    v-else
-    :style="{ width: avatarSize + 'px', height: avatarSize + 'px' }"
-    style="display: inline-block"
+      v-else
+      :style="{ width: avatarSize + 'px', height: avatarSize + 'px' }"
+      style="display: inline-block"
   >
     <a-avatar
-      :src="avatarUrl"
-      :style="{ zoom: zoom }"
-      :size="avatarSize"
-      class=""
+        :size="avatarSize"
+        :src="avatarUrl"
+        :style="{ zoom: zoom }"
+        class=""
     ></a-avatar>
   </div>
 
@@ -117,16 +118,11 @@
 <script>
 // import FrameStoreWidget from '../team/FrameStoreWidget.vue'
 import Modal from "../Modal.vue";
-import {
-  avatarGainMethodText,
-  avatarTagColor,
-  textTag,
-  titleTagColor,
-} from "../../js/common/avatar";
+import {avatarGainMethodText, avatarTagColor, textTag, titleTagColor,} from "../../js/common/avatar";
 import RayMedal from "../small/RayMedal.vue";
 
 export default {
-  components: { RayMedal, Modal },
+  components: {RayMedal, Modal},
   props: {
     framePlacement: {
       type: String,

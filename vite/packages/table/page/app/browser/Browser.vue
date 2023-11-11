@@ -1,12 +1,12 @@
 <template>
-<router-view></router-view>
+  <router-view></router-view>
 </template>
 
 <script>
 
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .app-btn {
   display: inline-block;
   cursor: pointer;

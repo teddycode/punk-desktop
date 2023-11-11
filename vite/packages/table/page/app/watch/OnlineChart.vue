@@ -6,25 +6,25 @@
 
 import * as echarts from 'echarts'
 import _ from 'lodash-es'
-import { getDateTime } from '../../../util'
+import {getDateTime} from '../../../util'
 
 export default {
   name: 'OnlineChart',
   props: ['data'],
-  data () {
+  data() {
     return {
       xData: [],
       yData: [],
       myChart: null,
     }
   },
-  mounted () {
+  mounted() {
 
     this.initChart()
   },
   watch: {
     'data': {
-      handler (newVal) {
+      handler(newVal) {
         if (this.myChart) {
           this.formatData()
           this.myChart.setOption({
@@ -40,9 +40,9 @@ export default {
     }
   },
   methods: {
-    formatOnline (num) {
+    formatOnline(num) {
       let str = String(num).replace('+', '')
-      let rs=num
+      let rs = num
       if (str.indexOf('万') > -1) {
         str = str.replace('万', '')
         rs = Number(str) * 10000
@@ -52,10 +52,10 @@ export default {
       }
       return rs
     },
-    formatData () {
+    formatData() {
       this.xData = this.data.map(d => {
-        const time=getDateTime(new Date(d.time))
-        return time.month+'/'+time.day+' '+time.hours+':'+time.minutes
+        const time = getDateTime(new Date(d.time))
+        return time.month + '/' + time.day + ' ' + time.hours + ':' + time.minutes
       })
       this.yData = this.data.map(d => {
         return this.formatOnline(d.online)
@@ -63,7 +63,7 @@ export default {
       _.reverse(this.xData)
       _.reverse(this.yData)
     },
-    initChart () {
+    initChart() {
       var myChart = echarts.init(document.getElementById('ec'), 'dark')
       this.myChart = myChart
       myChart.setOption({
@@ -74,7 +74,7 @@ export default {
         toolbox: {
           show: true,
           feature: {
-            magicType: { type: ['line', 'bar'] },
+            magicType: {type: ['line', 'bar']},
 
             saveAsImage: {}
           }
@@ -91,7 +91,7 @@ export default {
         yAxis: {
           splitLine: false,
           type: 'value',
-         // boundaryGap: ['20%', '20%'],
+          // boundaryGap: ['20%', '20%'],
           show: true,
 
         },
@@ -118,16 +118,16 @@ export default {
             smooth: true,
             areaStyle: {},
             data: this.yData,
-            label: { show: false, fontSize: 15, color: '#FFFFFF', formatter: '{c}' },
-            itemStyle: { color: 'rgba(72,210,1,0.78)' },
+            label: {show: false, fontSize: 15, color: '#FFFFFF', formatter: '{c}'},
+            itemStyle: {color: 'rgba(72,210,1,0.78)'},
             markPoint: {
               data: [
-                { type: 'max', name: 'Max' }
+                {type: 'max', name: 'Max'}
               ]
             },
             markLine: {
               data: [
-                { type: 'average', name: 'Avg' },
+                {type: 'average', name: 'Avg'},
               ]
             }
             // markLine: {

@@ -1,31 +1,32 @@
 <template>
-  <div class="face" id="face" style="padding-left:5px;">
-     <!-- 重新将UI结构样式进行修改调整 -->
-    <a-tooltip title="表情"  @click="toggleShow">
+  <div id="face" class="face" style="padding-left:5px;">
+    <!-- 重新将UI结构样式进行修改调整 -->
+    <a-tooltip title="表情" @click="toggleShow">
       <icon icon="smile" style="width: 24px;height: 24px;color: var(--secondary-text) !important;"></icon>
     </a-tooltip>
 
     <!--    <i class="icon icon-face" title="表情" ></i>-->
 
-    <main class="face-main" :class="[isH5 && 'face-H5-main']" v-show="show" ref="dialog">
-      <ul class="face-list" v-for="(item, index) in list" :key="index" v-show="currentIndex === index">
+    <main v-show="show" ref="dialog" :class="[isH5 && 'face-H5-main']" class="face-main">
+      <ul v-for="(item, index) in list" v-show="currentIndex === index" :key="index" class="face-list">
         <li
-          class="face-list-item"
-          v-for="(childrenItem, childrenIndex) in item"
-          :key="childrenIndex"
-          @click="select(childrenItem, childrenIndex)"
+            v-for="(childrenItem, childrenIndex) in item"
+            :key="childrenIndex"
+            class="face-list-item"
+            @click="select(childrenItem, childrenIndex)"
         >
-          <img v-if="index === 0" :src="emojiUrl + emojiMap[childrenItem]" />
-          <img class="face-img" v-else :src="faceUrl + childrenItem + '@2x.png'" />
+          <img v-if="index === 0" :src="emojiUrl + emojiMap[childrenItem]"/>
+          <img v-else :src="faceUrl + childrenItem + '@2x.png'" class="face-img"/>
         </li>
       </ul>
       <ul class="face-tab">
         <li class="face-tab-item" style="background: var();" @click="selectFace(0)">
-          <Icon icon="smile" style="margin-top: 12px !important; width: 30px !important;height: 30px !important;"></Icon>
+          <Icon icon="smile"
+                style="margin-top: 12px !important; width: 30px !important;height: 30px !important;"></Icon>
           <!-- <i class="icon icon-face"></i> -->
         </li>
-        <li class="face-tab-item" v-for="(item, index) in bigEmojiList" :key="index" @click="selectFace(index + 1)">
-          <img :src="faceUrl + item.list[0] + '@2x.png'" />
+        <li v-for="(item, index) in bigEmojiList" :key="index" class="face-tab-item" @click="selectFace(index + 1)">
+          <img :src="faceUrl + item.list[0] + '@2x.png'"/>
         </li>
       </ul>
     </main>
@@ -33,10 +34,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, watchEffect, toRefs, computed, ref } from 'vue';
-import { emojiUrl, emojiMap, emojiName, faceUrl, bigEmojiList } from '../../utils/emojiMap';
-import { onClickOutside } from '@vueuse/core';
-import { handleErrorPrompts } from '../../../utils';
+import {computed, defineComponent, reactive, ref, toRefs, watchEffect} from 'vue';
+import {bigEmojiList, emojiMap, emojiName, emojiUrl, faceUrl} from '../../utils/emojiMap';
+import {onClickOutside} from '@vueuse/core';
+import {handleErrorPrompts} from '../../../utils';
 
 const Face = defineComponent({
   props: {
@@ -63,7 +64,7 @@ const Face = defineComponent({
       emojiMap,
       emojiName,
       faceUrl,
-      bigEmojiList:(window as any)?.TUIKitTUICore?.isOfficial && bigEmojiList || [],
+      bigEmojiList: (window as any)?.TUIKitTUICore?.isOfficial && bigEmojiList || [],
       show: false,
       currentIndex: 0,
       isMute: false,
@@ -157,27 +158,31 @@ export default Face;
 
 <style lang="scss" scoped src="./style/index.scss"></style>
 <style lang="scss" scoped>
-:deep(.face-list){
+:deep(.face-list) {
   background: var(--secondary-bg) !important;
-  &::-webkit-scrollbar{
+
+  &::-webkit-scrollbar {
     width: 4px !important;
   }
+
   &::-webkit-scrollbar-track {
     background-color: #f1f1f1 !important;
   }
+
   &::-webkit-scrollbar-track {
     background-color: #f1f1f1 !important;
   }
+
   &::-webkit-scrollbar-thumb {
     background-color: #888 !important;
   }
-  
+
   &::-webkit-scrollbar-thumb:hover {
     background-color: #555 !important;
   }
 }
 
-:deep(.face-main){
+:deep(.face-main) {
   background: var(--secondary-bg) !important;
   padding-right: 0 !important;
 }

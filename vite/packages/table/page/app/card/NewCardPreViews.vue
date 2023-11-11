@@ -5,30 +5,30 @@
         <xt-task :modelValue="M01013" to="" @cb="addNewCard(item)">
           <div>
             <div class="box xt-bg-2" style="z-index: 99999999999">
-              <div class="add no-drag" @click="addNewCard(item)" v-if="item.option.length <= 1">
+              <div v-if="item.option.length <= 1" class="add no-drag" @click="addNewCard(item)">
                 <div class="icons">
                   <Icon icon="tianjia2" style="color: #000"></Icon>
                 </div>
               </div>
-              <div class="add no-drag" @click="addNewCard(item)" v-else>
+              <div v-else class="add no-drag" @click="addNewCard(item)">
                 <div class="text" style="color: #fff">· · ·</div>
               </div>
               <div class="left no-drag" @click="fullScreen(item)">
                 <template v-if="item.option.length > 1">
                   <div class="top">
-                    <img :style="[{ zoom: item.option[0].zoom + '%' }]" :src="getImg(item.option[0].name)" alt="" />
+                    <img :src="getImg(item.option[0].name)" :style="[{ zoom: item.option[0].zoom + '%' }]" alt=""/>
                   </div>
                   <div class="bottom">
-                    <img  class="small-cover"  v-for="i in item.option" :src="getImg(i.name)" alt="" />
+                    <img v-for="i in item.option" :src="getImg(i.name)" alt="" class="small-cover"/>
                   </div>
                 </template>
-                <img v-else:src="getImg(item.option[0].name)" alt="" :style="[
+                <img v-else:src="getImg(item.option[0].name)" :style="[
                   {
                     zoom: item.option[0].zoom
                       ? item.option[0].zoom + '%'
                       : '11%',
                   },
-                ]" />
+                ]" alt=""/>
               </div>
               <div class="right" style="">
                 <div class="title" style="color: var(--primary-text)">
@@ -38,17 +38,17 @@
                   {{ item.detail }}
                 </div>
                 <div class="icon">
-                  <div class="icon-box xt-active-bg-2" v-for="i in item.sizes" :key="i"
-                    style="color: var(--secondary-text)" :class="i === '社区分享' ? 'share' : ''">
+                  <div v-for="i in item.sizes" :key="i" :class="i === '社区分享' ? 'share' : ''"
+                       class="icon-box xt-active-bg-2" style="color: var(--secondary-text)">
                     {{ i }}
                   </div>
                 </div>
                 <div class="data">
-                  <Icon icon="xiazai" class="icons" style="color: #508bfe; margin: 0; width: 20px"></Icon>
+                  <Icon class="icons" icon="xiazai" style="color: #508bfe; margin: 0; width: 20px"></Icon>
                   <div class="data-box">
                     {{ item.download }}
                   </div>
-                  <Icon icon="shijian" class="icons" style="color: #52c41a; margin: 0; width: 20px"></Icon>
+                  <Icon class="icons" icon="shijian" style="color: #52c41a; margin: 0; width: 20px"></Icon>
                   <div class="data-box">{{ formatTimestamp(item.time) }}</div>
                 </div>
               </div>
@@ -58,26 +58,26 @@
       </template>
       <div v-else>
         <div class="box xt-bg-2">
-          <div class="add no-drag" @click="addNewCard(item)" v-if="item.option.length <= 1">
+          <div v-if="item.option.length <= 1" class="add no-drag" @click="addNewCard(item)">
             <div class="icons">
               <Icon icon="tianjia2" style="color: #000"></Icon>
             </div>
           </div>
-          <div class="add no-drag" @click="addNewCard(item)" v-else>
+          <div v-else class="add no-drag" @click="addNewCard(item)">
             <div class="text" style="color: #fff">· · ·</div>
           </div>
           <div class="left no-drag" @click="fullScreen(item)">
             <template v-if="item.option.length > 1">
               <div class="top">
-                <img :style="[{ zoom: item.option[0].zoom + '%' }]" :src="getImg(item.option[0].name)" alt="" />
+                <img :src="getImg(item.option[0].name)" :style="[{ zoom: item.option[0].zoom + '%' }]" alt=""/>
               </div>
               <div class="bottom">
-                <img  class="small-cover" v-for="i in item.option" :src="getImg(i.name)" alt="" />
+                <img v-for="i in item.option" :src="getImg(i.name)" alt="" class="small-cover"/>
               </div>
             </template>
-            <img v-else style="" :src="getImg(item.option[0].name)" alt="" :style="[
+            <img v-else :src="getImg(item.option[0].name)" :style="[
               { zoom: item.option[0].zoom ? item.option[0].zoom + '%' : '11%' },
-            ]" />
+            ]" alt="" style=""/>
           </div>
           <div class="right" style="">
             <div class="title" style="color: var(--primary-text)">
@@ -87,17 +87,17 @@
               {{ item.detail }}
             </div>
             <div class="icon">
-              <div class="icon-box xt-active-bg-2" v-for="i in item.sizes" :key="i" style="color: var(--secondary-text)"
-                :class="i === '社区分享' ? 'share' : ''">
+              <div v-for="i in item.sizes" :key="i" :class="i === '社区分享' ? 'share' : ''" class="icon-box xt-active-bg-2"
+                   style="color: var(--secondary-text)">
                 {{ i }}
               </div>
             </div>
             <div class="data">
-              <Icon icon="xiazai" class="icons" style="color: #508bfe; margin: 0; width: 20px"></Icon>
+              <Icon class="icons" icon="xiazai" style="color: #508bfe; margin: 0; width: 20px"></Icon>
               <div class="data-box">
                 {{ item.download }}
               </div>
-              <Icon icon="shijian" class="icons" style="color: #52c41a; margin: 0; width: 20px"></Icon>
+              <Icon class="icons" icon="shijian" style="color: #52c41a; margin: 0; width: 20px"></Icon>
               <div class="data-box">{{ formatTimestamp(item.time) }}</div>
             </div>
           </div>
@@ -107,23 +107,24 @@
 
     <div class="box" style="opacity: 0; height: 1px"></div>
   </div>
-  <NewPreviewCardDetails v-if="isCardDetails" @addCardAchieve="addCardAchieve" @closeCardDetails="closeCardDetails"
-    :cardDetails="cardDetails">
+  <NewPreviewCardDetails v-if="isCardDetails" :cardDetails="cardDetails" @addCardAchieve="addCardAchieve"
+                         @closeCardDetails="closeCardDetails">
   </NewPreviewCardDetails>
   <edit v-if="settingVisible" @close="settingVisible = false" @save="save()"></edit>
-  <RemoteMarket :openRemote="openRemote" :custom="remoteContent" :desk="desk" @closeMarket="closeMarket"></RemoteMarket>
+  <RemoteMarket :custom="remoteContent" :desk="desk" :openRemote="openRemote" @closeMarket="closeMarket"></RemoteMarket>
 </template>
 
 <script>
-import { mapActions, mapWritableState } from "pinia";
-import { cardStore } from "../../../store/card";
-import { message } from "ant-design-vue";
+import {mapActions, mapWritableState} from "pinia";
+import {cardStore} from "../../../store/card";
+import {message} from "ant-design-vue";
 import NewPreviewCardDetails from "./NewPreviewCardDetails.vue";
 import Edit from "../../../components/widgets/myIcons/edit/index.vue";
 import RemoteMarket from "./RemoteMarket.vue";
-import { myIcons } from "../../../store/myIcons.ts";
+import {myIcons} from "../../../store/myIcons.ts";
 import _ from "lodash-es";
-import { taskStore } from "../../../apps/task/store";
+import {taskStore} from "../../../apps/task/store";
+
 export default {
   emits: ["close", "addSuccess"],
   props: {
@@ -137,7 +138,8 @@ export default {
     desk: {
       type: Object,
       required: true,
-      default: () => { },
+      default: () => {
+      },
     },
   },
   computed: {
@@ -188,12 +190,12 @@ export default {
       if (this.edit.src.length === 0) return message.error("图标不能为空");
       this.settingVisible = false;
       this.addCard(
-        {
-          name: "myIcons",
-          id: Date.now(),
-          customData: { iconList: [{ ...this.edit }] },
-        },
-        this.desk
+          {
+            name: "myIcons",
+            id: Date.now(),
+            customData: {iconList: [{...this.edit}]},
+          },
+          this.desk
       );
       this.edit = {};
       this.$emit("addSuccess");
@@ -260,8 +262,8 @@ export default {
       index = index ?? this.carouselIndex;
 
       this.addCard(
-        { name: item.option[index].name, id: Date.now(), customData: {} },
-        this.desk
+          {name: item.option[index].name, id: Date.now(), customData: {}},
+          this.desk
       );
       this.$emit("addSuccess");
       message.success("添加成功！");
@@ -354,7 +356,7 @@ export default {
 
       img {
 
-        zoom: 0.07 ;
+        zoom: 0.07;
         border-radius: 8px;
         object-fit: contain;
       }
@@ -366,15 +368,16 @@ export default {
     }
 
     .bottom {
-      .small-cover{
+      .small-cover {
         width: 90%;
         height: 90%;
       }
+
       width: 100%;
       height: 62px;
       border-radius: 0px 0px 0px 12px;
       display: flex;
-      gap:5px;
+      gap: 5px;
       justify-content: space-around;
       padding: 10px;
 

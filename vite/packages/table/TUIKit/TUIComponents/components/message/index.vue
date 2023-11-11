@@ -1,14 +1,15 @@
 <template>
   <transition name="fade" @before-leave="onClose" @after-leave="$emit('destroy')">
-    <div class="message" :class="[handleStyle(type), isH5 && 'message-h5']" :style="customStyle" v-show="visible">
+    <div v-show="visible" :class="[handleStyle(type), isH5 && 'message-h5']" :style="customStyle" class="message">
       <p v-if="!isH5">{{ message }}</p>
       <span v-if="isH5">{{ message }}</span>
     </div>
   </transition>
 </template>
 <script lang="ts">
-import { useTimeoutFn } from '@vueuse/core';
-import { computed, CSSProperties, defineComponent, onMounted, ref, watch } from 'vue';
+import {useTimeoutFn} from '@vueuse/core';
+import {computed, CSSProperties, defineComponent, onMounted, ref, watch} from 'vue';
+
 export default defineComponent({
   name: 'TUIMessage',
   props: {
@@ -56,7 +57,7 @@ export default defineComponent({
 
     function startTimer() {
       if (props.duration > 0) {
-        ({ stop: stopTimer } = useTimeoutFn(() => {
+        ({stop: stopTimer} = useTimeoutFn(() => {
           if (visible.value) close();
         }, props.duration));
       }
@@ -71,11 +72,11 @@ export default defineComponent({
     }
 
     watch(
-      () => props.repeatNum,
-      () => {
-        clearTimer();
-        startTimer();
-      }
+        () => props.repeatNum,
+        () => {
+          clearTimer();
+          startTimer();
+        }
     );
 
     const customStyle = computed<CSSProperties>(() => ({
@@ -104,6 +105,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import url('../../styles/common.scss');
 @import url('../../styles/icon.scss');
+
 .message {
   position: fixed;
   left: 0;
@@ -113,6 +115,7 @@ export default defineComponent({
   width: fit-content;
   justify-content: center;
   align-items: center;
+
   p {
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.2);
     border-radius: 3px;
@@ -121,6 +124,7 @@ export default defineComponent({
     word-break: break-all;
   }
 }
+
 .message-h5 {
   position: absolute;
   top: 300px !important;
@@ -132,6 +136,7 @@ export default defineComponent({
   align-items: center;
   border-radius: 5px;
   padding: 10px 15px;
+
   span {
 
     font-weight: 400;
@@ -147,16 +152,19 @@ export default defineComponent({
   background: #f2f9ec;
   color: #7ebf50;
 }
+
 .error {
   border: 1px solid #fde2e2;
   background: #fef0f0;
   color: #f46c6e;
 }
+
 .normal {
   border: 1px solid #e9e9eb;
   background: #f4f4f5;
   color: #909398;
 }
+
 .warning {
   border: 1px solid #faf0e2;
   background: #fdf8f1;

@@ -1,5 +1,5 @@
 <template>
-  <div class="text-base my-3" v-if="title">{{ title }}颜色</div>
+  <div v-if="title" class="text-base my-3">{{ title }}颜色</div>
   <div>自定义</div>
   <div style="margin: 9.5px">
     <XtBaseColor v-model:data="colorData"></XtBaseColor>
@@ -8,20 +8,21 @@
   <div>系统预设</div>
   <div class="flex flex-wrap">
     <div
-      @click="colorData = colorList[`${'color' + i}`]"
-      v-for="i in colorLength"
-      :style="{ background: colorList[`${'color' + i}`] }"
-      style="margin: 9.5px"
-      class="w-14 h-14 rounded-xl cursor-pointer"
+        v-for="i in colorLength"
+        :style="{ background: colorList[`${'color' + i}`] }"
+        class="w-14 h-14 rounded-xl cursor-pointer"
+        style="margin: 9.5px"
+        @click="colorData = colorList[`${'color' + i}`]"
     ></div>
   </div>
-  <XtButton v-if="btnText" @click="btnClick()" w="150" class="my-2">
+  <XtButton v-if="btnText" class="my-2" w="150" @click="btnClick()">
     恢复默认主题颜色
   </XtButton>
 </template>
 
 <script>
-import { colorList } from "./color";
+import {colorList} from "./color";
+
 export default {
   name: "XtColor",
 
@@ -70,6 +71,7 @@ export default {
   width: 56px;
   height: 56px;
 }
+
 :deep(.zs-color-picker-btn-color) {
   border-radius: 12px;
 }

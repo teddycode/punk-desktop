@@ -52,7 +52,7 @@ const fluentEmojis = {
 // 用于在动态和评论中使用的表情
 // str.replace(/\[([^(\]|\[)]*)\]/g,(item,index) => {})
 // https://sad.apps.vip/public/static/emoji/emojistatic/
-const emojiReplace=(str)=>{
+const emojiReplace = (str) => {
     let result = str.replace(/\[([^(\]|\[)]*)\]/g, (item, index) => {
         let emojiValue;
         Object.entries(fluentEmojis).forEach(([key, value]) => {
@@ -73,4 +73,3 @@ const emojiReplace=(str)=>{
 }
 
 export default emojiReplace
-    

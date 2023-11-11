@@ -4,7 +4,7 @@
       <Search></Search>
     </div>
     <div
-      class="p-3 h-full flex-grow overflow-hidden overflow-y-auto xt-scrollbar no-darg"
+        class="p-3 h-full flex-grow overflow-hidden overflow-y-auto xt-scrollbar no-darg"
     >
       <router-view></router-view>
     </div>
@@ -14,8 +14,9 @@
 <script>
 import Search from "./search.vue";
 import Tools from "./tools.vue";
-import { main } from "../../store/main";
-import { mapWritableState } from "pinia";
+import {main} from "../../store/main";
+import {mapWritableState} from "pinia";
+
 export default {
   computed: {
     ...mapWritableState(main, ["useTool"]),

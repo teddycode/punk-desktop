@@ -3,25 +3,26 @@
     <div>{{ cardType.cname }}</div>
     <div>{{ cardType.detail }}</div>
     <div>
-      <a-carousel arrows v-if="cardType.images.length > 1" :after-change="imgChang" style="width: 200px;height: 295.86px;"
-        effect="fade">
+      <a-carousel v-if="cardType.images.length > 1" :after-change="imgChang" arrows
+                  effect="fade"
+                  style="width: 200px;height: 295.86px;">
 
 
         <template #prevArrow>
           <div class="custom-slick-arrow" style=" z-index: 1;left: -89px">
-            <Icon icon="left-circle-fill" class="carousel-icon"></Icon>
+            <Icon class="carousel-icon" icon="left-circle-fill"></Icon>
           </div>
         </template>
         <template #nextArrow>
           <div class="custom-slick-arrow" style="right: -66px">
-            <Icon icon="right-circle-fill" class="carousel-icon"></Icon>
+            <Icon class="carousel-icon" icon="right-circle-fill"></Icon>
           </div>
         </template>
 
-        <img :src="getImg(i)" style="" alt="" v-for="i in cardType.images">
+        <img v-for="i in cardType.images" :src="getImg(i)" alt="" style="">
       </a-carousel>
-      <div class="one-img" v-else>
-        <img :src="getImg(cardType.images)" style="height: 100%;border-radius: 8px" alt="">
+      <div v-else class="one-img">
+        <img :src="getImg(cardType.images)" alt="" style="height: 100%;border-radius: 8px">
       </div>
     </div>
     <div class="add-button pointer" @click="addCard">
@@ -36,10 +37,11 @@
 </template>
 
 <script>
-import { mapActions, mapWritableState } from "pinia";
-import { cardStore } from "../../../store/card";
-import { message } from "ant-design-vue";
-import { LeftCircleOutlined, RightCircleOutlined } from '@ant-design/icons-vue';
+import {mapActions} from "pinia";
+import {cardStore} from "../../../store/card";
+import {message} from "ant-design-vue";
+import {LeftCircleOutlined, RightCircleOutlined} from '@ant-design/icons-vue';
+
 export default {
   data() {
     return {
@@ -57,12 +59,14 @@ export default {
   props: {
     cardType: {
       type: Object,
-      default: () => { }
+      default: () => {
+      }
     },
-    desk:{
-      type:Object,
-      required:true,
-      default:()=>{}
+    desk: {
+      type: Object,
+      required: true,
+      default: () => {
+      }
     }
   },
 
@@ -72,7 +76,7 @@ export default {
         return this.cardType.size[0]
       }
     },
-    getImg(url){
+    getImg(url) {
       return '/img/homeComponent/' + url + '.png'
     }
   },
@@ -88,7 +92,7 @@ export default {
     },
 
     addCard() {
-      this.addCard({ name: this.cardType.images[this.carouselIndex], id: Date.now(), data: {} },this.desk);
+      this.addCard({name: this.cardType.images[this.carouselIndex], id: Date.now(), data: {}}, this.desk);
       this.$emit("addSuccess")
       // this.$router.push({
       //   name: "home",
@@ -111,23 +115,25 @@ export default {
   align-items: center;
   position: relative;
 
-  >:nth-child(1) {
+  > :nth-child(1) {
     font-size: 18px;
     font-weight: 400;
     margin-top: 10px;
     color: rgba(255, 255, 255, 0.85);
   }
 
-  >:nth-child(2) {
+  > :nth-child(2) {
     margin-top: 5px;
     color: rgba(255, 255, 255, 0.6);
     font-size: 17px;
     font-weight: 400;
   }
 
-  >:nth-child(3) {}
+  > :nth-child(3) {
+  }
 
-  >:nth-child(4) {}
+  > :nth-child(4) {
+  }
 }
 
 .one-img {

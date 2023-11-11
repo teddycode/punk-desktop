@@ -14,7 +14,7 @@ export default {
   emits: ['loaded', 'relationshipChanged'],
   computed: {
     ...mapState(appStore, {
-    'myUserInfo': 'userInfo'
+      'myUserInfo': 'userInfo'
     }),
   },
   async mounted() {
@@ -58,13 +58,13 @@ export default {
 </script>
 
 <template>
-  <XtButton @click="addFriend" type="theme" style="width: 100%"
-            class="rounded-full w-full">
-    <icon style="font-size: 16px" class="mr-1" icon="tianjia1"></icon>
+  <XtButton class="rounded-full w-full" style="width: 100%" type="theme"
+            @click="addFriend">
+    <icon class="mr-1" icon="tianjia1" style="font-size: 16px"></icon>
     加为好友
   </XtButton>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 
 </style>

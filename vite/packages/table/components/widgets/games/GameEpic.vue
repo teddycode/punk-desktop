@@ -1,39 +1,42 @@
 <template>
-  <Widget :options="options" :customIndex="customIndex" :desk="desk">
-    <HorizontalPanel style="min-width: 100%" :navList="epicTips" v-model:selectType="epicType" class="mt-2 drawer-item-bg"></HorizontalPanel>
+  <Widget :customIndex="customIndex" :desk="desk" :options="options">
+    <HorizontalPanel v-model:selectType="epicType" :navList="epicTips" class="mt-2 drawer-item-bg"
+                     style="min-width: 100%"></HorizontalPanel>
     <template v-if="epicType.name === 'week'">
-      <div class="w-full" v-if="detailShow === false">
-        <div class="flex items-center  justify-center my-10" v-if="weekEpic.length === 0">
-          <a-empty :image="simpleImage" />
+      <div v-if="detailShow === false" class="w-full">
+        <div v-if="weekEpic.length === 0" class="flex items-center  justify-center my-10">
+          <a-empty :image="simpleImage"/>
         </div>
-        <div v-else class="week-image rounded-lg relative cursor-pointer" v-for="weekItem in weekEpic"
+        <div v-for="weekItem in weekEpic" v-else class="week-image rounded-lg relative cursor-pointer"
              @click="enterWeek(weekItem)">
-          <img class="rounded-lg" :src="weekItem.keyImages[0].url" alt=""
+          <img :src="weekItem.keyImages[0].url" alt="" class="rounded-lg"
                style="width:100%;height:100%;object-fit: cover;">
           <div class="remainder-day" style="color: var(--active-text);font-family: Oswald;">
             剩余{{ remainderDay(weekItem.promotions.promotionalOffers[0].promotionalOffers[0].endDate) }}天
           </div>
-          <div class="stablish-province" style="font-family: Oswald;">立省 {{ weekItem.price.totalPrice.fmtPrice.originalPrice }}</div>
+          <div class="stablish-province" style="font-family: Oswald;">立省
+            {{ weekItem.price.totalPrice.fmtPrice.originalPrice }}
+          </div>
         </div>
       </div>
-      <EpicDetail :detailOptions="detailList" :detailType="epicType" v-else @update:backShow="detailBack"></EpicDetail>
+      <EpicDetail v-else :detailOptions="detailList" :detailType="epicType" @update:backShow="detailBack"></EpicDetail>
     </template>
     <template v-else>
-      <div class="w-full" v-if="detailShow === false">
-        <div class="flex items-center  justify-center my-10" v-if="nextWeekEpic.length === 0">
-          <a-empty :image="simpleImage" />
+      <div v-if="detailShow === false" class="w-full">
+        <div v-if="nextWeekEpic.length === 0" class="flex items-center  justify-center my-10">
+          <a-empty :image="simpleImage"/>
         </div>
-        <div v-else class="week-image rounded-lg relative cursor-pointer" v-for="weekItem in nextWeekEpic"
+        <div v-for="weekItem in nextWeekEpic" v-else class="week-image rounded-lg relative cursor-pointer"
              @click="enterWeek(weekItem)">
-          <img class="rounded-lg" :src="weekItem.keyImages[0].url" alt=""
+          <img :src="weekItem.keyImages[0].url" alt="" class="rounded-lg"
                style="width:100%;height:100%;object-fit: cover;">
           <div class="remainder-day">
             还有{{ remainderDay(weekItem.promotions.upcomingPromotionalOffers[0].promotionalOffers[0].endDate) }}天
           </div>
-          <div class="stablish-province ">立省{{weekItem.price.totalPrice.fmtPrice.originalPrice}}</div>
+          <div class="stablish-province ">立省{{ weekItem.price.totalPrice.fmtPrice.originalPrice }}</div>
         </div>
       </div>
-      <EpicDetail :detailOptions="detailList" :detailType="epicType" v-else @update:backShow="detailBack"></EpicDetail>
+      <EpicDetail v-else :detailOptions="detailList" :detailType="epicType" @update:backShow="detailBack"></EpicDetail>
     </template>
 
   </Widget>
@@ -42,7 +45,7 @@
 <script>
 import Widget from '../../card/Widget.vue'
 import HorizontalPanel from '../../HorizontalPanel.vue'
-import { sendRequest, startOfNextWeek, startOfWeek, remainderDay } from '../../../js/axios/api'
+import {remainderDay, sendRequest, startOfNextWeek, startOfWeek} from '../../../js/axios/api'
 import EpicDetail from './EpicDetail.vue'
 import _ from 'lodash-es'
 
@@ -58,11 +61,11 @@ export default {
       type: Number,
       default: 0
     },
-    desk:{
-      type:Object
+    desk: {
+      type: Object
     }
   },
-  data () {
+  data() {
     return {
       options: {
         className: 'card',
@@ -72,10 +75,10 @@ export default {
         epicShow: true,
       },
       epicTips: [
-        { title: '本周免费', name: 'week' },
-        { title: '下周预告', name: 'next' }
+        {title: '本周免费', name: 'week'},
+        {title: '下周预告', name: 'next'}
       ],
-      epicType: { title: '本周免费', name: 'week' },
+      epicType: {title: '本周免费', name: 'week'},
       epicWeek: [], // 本周数据
       epicNext: [],  // 下周数据
       epicList: [],
@@ -85,14 +88,14 @@ export default {
     }
   },
   computed: {
-    weekEpic () {
+    weekEpic() {
       try {
         const weekEpicIndex = this.epicList.filter(el => {
           if (el.promotions.promotionalOffers.length !== 0 && el.price.totalPrice.discountPrice === 0) {
             const startPromotions = el.promotions.promotionalOffers[0]
             const startDate = new Date(startPromotions.promotionalOffers[0].startDate)
             const endDate = new Date(startPromotions.promotionalOffers[0].endDate)
-            return startOfWeek(startDate,endDate)
+            return startOfWeek(startDate, endDate)
           }
         })
         if (weekEpicIndex.length > 2) {
@@ -105,14 +108,14 @@ export default {
       }
 
     },
-    nextWeekEpic () {
+    nextWeekEpic() {
       try {
         const nextWeekEpicIndex = this.epicList.filter(el => {
           if (el.promotions.upcomingPromotionalOffers.length !== 0 && el.price.totalPrice.discountPrice === 0) {
             const nextPromotions = el.promotions.upcomingPromotionalOffers[0]
             const nextStartDate = new Date(nextPromotions.promotionalOffers[0].startDate)
             const nextEndDate = new Date(nextPromotions.promotionalOffers[0].endDate)
-            return startOfNextWeek(nextStartDate,nextEndDate)
+            return startOfNextWeek(nextStartDate, nextEndDate)
           }
         })
         if (nextWeekEpicIndex.length > 2) {
@@ -126,19 +129,19 @@ export default {
 
     },
   },
-  mounted () {
+  mounted() {
     this.getEpicData()
   },
   methods: {
     remainderDay,
-    getEpicData () {
-      sendRequest('https://store-site-backend-static-ipv4.ak.epicgames.com/freeGamesPromotions?locale=zh-CN&country=CN&allowCountries=CN',{},{
-        localCache:true,
-        localTtl:60*12*60
+    getEpicData() {
+      sendRequest('https://store-site-backend-static-ipv4.ak.epicgames.com/freeGamesPromotions?locale=zh-CN&country=CN&allowCountries=CN', {}, {
+        localCache: true,
+        localTtl: 60 * 12 * 60
       }).then(res => {
-        if(!res){
-          this.epicList =[]
-        }else{
+        if (!res) {
+          this.epicList = []
+        } else {
           const epicData = res.data.data.Catalog.searchStore.elements
           // 根据promotions判断Epic是否免费
           const epicIndex = epicData.filter(el => {
@@ -148,7 +151,7 @@ export default {
         }
       })
     },
-    enterWeek (item) {
+    enterWeek(item) {
       this.detailShow = true
       if (item.promotions.promotionalOffers.length !== 0) {
         const promotions = item.promotions.promotionalOffers[0].promotionalOffers[0]
@@ -172,13 +175,13 @@ export default {
         }
       }
     },
-    detailBack () {
+    detailBack() {
       this.detailShow = false
     },
 
   },
   watch: {
-    epicType () {
+    epicType() {
       this.detailShow = false
     }
   }
@@ -226,11 +229,11 @@ export default {
   padding: 3px 6px 2px 6px;
   text-align: center;
   width: 80px;
-  background:var(--secondary-bg);
+  background: var(--secondary-bg);
   border-bottom-left-radius: 6px;
   font-size: 13px;
   font-weight: 400;
-  color:var(--primary-text);
+  color: var(--primary-text);
 }
 
 .epic-detail-image {

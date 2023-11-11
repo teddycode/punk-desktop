@@ -42,7 +42,7 @@ export default defineComponent({
       }
     },
     ext() {
-      return require('path').extname(this.previewContent.path||this.previewContent.filepath)
+      return require('path').extname(this.previewContent.path || this.previewContent.filepath)
     },
     isSingleFile() {
       return this.previewContent.type === 'image' || this.previewContent.type === 'video' || this.previewContent.type === 'audio'
@@ -70,7 +70,7 @@ export default defineComponent({
   </div>
   <div v-if="isSingleFile" class="flex justify-between mb-6">
     <span class="type-text">格式</span>
-    <span class="type-right" >{{ ext }}</span>
+    <span class="type-right">{{ ext }}</span>
   </div>
   <div class="flex justify-between mb-6">
     <span class="type-text">时间</span>
@@ -82,12 +82,12 @@ export default defineComponent({
   </div>
   <div v-if="isSingleFile" class="flex justify-between flex-col mb-6">
     <span class="type-text">路径</span>
-    <span class="type-right" v-if="previewContent.type === 'image'">
+    <span v-if="previewContent.type === 'image'" class="type-right">
                       {{ previewContent.path }}
                     </span>
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 
 </style>

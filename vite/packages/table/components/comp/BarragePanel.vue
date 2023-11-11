@@ -1,9 +1,15 @@
 <template>
   <div class="px-3 py-2" style="display: flex;flex-direction: column;height: 100%">
-    <div><HorizontalPanel  :height="44" :navList="channelList" v-model:select-type="currentChannel"></HorizontalPanel>
+    <div>
+      <HorizontalPanel v-model:select-type="currentChannel" :height="44" :navList="channelList"></HorizontalPanel>
     </div>
-    <div style="flex: 1;height:0;padding-top: 10px"><TeamBarrage :loading="loading" :key="key" :barrages="barrages"></TeamBarrage></div>
-    <div class="mt-2"><BarrageSender @loadAllBarrages="loadAllBarrages" @loadTeamBarrage="loadTeamBarrage" :currentChannel="currentChannel"></BarrageSender></div>
+    <div style="flex: 1;height:0;padding-top: 10px">
+      <TeamBarrage :key="key" :barrages="barrages" :loading="loading"></TeamBarrage>
+    </div>
+    <div class="mt-2">
+      <BarrageSender :currentChannel="currentChannel" @loadAllBarrages="loadAllBarrages"
+                     @loadTeamBarrage="loadTeamBarrage"></BarrageSender>
+    </div>
   </div>
 </template>
 
@@ -11,17 +17,17 @@
 import BarrageSender from './BarrageSender.vue'
 import TeamBarrage from './TeamBarrage.vue'
 import HorizontalPanel from '../HorizontalPanel.vue'
-import { mapActions, mapState } from 'pinia'
-import { teamStore } from '../../store/team'
-import { appStore } from '../../store'
+import {mapActions, mapState} from 'pinia'
+import {teamStore} from '../../store/team'
+import {appStore} from '../../store'
 
 export default {
   name: 'BarragePanel',
-  components: { HorizontalPanel, TeamBarrage, BarrageSender },
-  props:['channels','defaultChannel'],
-  data(){
+  components: {HorizontalPanel, TeamBarrage, BarrageSender},
+  props: ['channels', 'defaultChannel'],
+  data() {
     return {
-      loading:false,
+      loading: false,
       channelList: [
         {
           title: '全网',
@@ -33,39 +39,39 @@ export default {
       ],
       currentChannel: {
         name: 'all',
-        title:'全网'
+        title: '全网'
       },
       barragesAll: [],
       barragesTeam: [],
-      key:Date.now()
+      key: Date.now()
     }
   },
-  mounted () {
-    this.loading=true
+  mounted() {
+    this.loading = true
     this.CONST = tsbApi.barrage.CONST
-    if(this.defaultChannel==='team'){
-      this.channelList=this.channelList.reverse()
-      this.currentChannel={name:'team',title:'小队'}
+    if (this.defaultChannel === 'team') {
+      this.channelList = this.channelList.reverse()
+      this.currentChannel = {name: 'team', title: '小队'}
     }
     this.loadAllBarrages().then()
-    if(this.userInfo.uid){
-      this.loadTeamBarrage().then(()=>{
-        this.loading =false
+    if (this.userInfo.uid) {
+      this.loadTeamBarrage().then(() => {
+        this.loading = false
       })
     }
   },
-  watch:{
-    currentChannel:{
-      handler(){
-        this.loading=true
-        this.key=Date.now()
+  watch: {
+    currentChannel: {
+      handler() {
+        this.loading = true
+        this.key = Date.now()
       }
     }
   },
-  computed:{
-    ...mapState(appStore,['userInfo']),
-    ...mapState(teamStore, ['my','myTeamNo','myTeam']),
-    barrages () {
+  computed: {
+    ...mapState(appStore, ['userInfo']),
+    ...mapState(teamStore, ['my', 'myTeamNo', 'myTeam']),
+    barrages() {
       if (this.currentChannel.name === 'all') {
         return this.barragesAll
       } else {
@@ -73,12 +79,12 @@ export default {
       }
     }
   },
-  methods:{
-    ...mapActions(teamStore,['updateMy']),
-    async loadAllBarrages () {
-      this.loading=true
+  methods: {
+    ...mapActions(teamStore, ['updateMy']),
+    async loadAllBarrages() {
+      this.loading = true
       tsbApi.barrage.getList(this.CONST.CHANNEL.PUBLIC, 'table').then(rs => {
-        this.loading=false
+        this.loading = false
         if (rs.status) {
           rs.data.forEach(item => {
             item.create_time_text = tsbApi.util.friendlyDate(item.create_time)
@@ -88,12 +94,12 @@ export default {
         }
       })
     },
-    async loadTeamBarrage () {
+    async loadTeamBarrage() {
       await this.updateMy()
       if (this.myTeamNo) {
-        this.loading=true
+        this.loading = true
         tsbApi.barrage.getList(this.CONST.CHANNEL.TEAM, this.myTeamNo).then(rs => {
-          this.loading=false
+          this.loading = false
           if (rs.status) {
             rs.data.forEach(item => {
               item.create_time_text = tsbApi.util.friendlyDate(item.create_time)

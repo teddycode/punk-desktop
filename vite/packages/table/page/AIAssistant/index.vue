@@ -20,14 +20,14 @@ import Caht from "./chat/main/index.vue";
 import MainView from "./core/MainView.vue";
 import ChatLeft from "./chat/left/index.vue";
 import LeftTab from "./leftTab/index.vue";
-import { mapWritableState } from "pinia";
-import { aiStore } from "../../store/ai";
+import {mapWritableState} from "pinia";
+import {aiStore} from "../../store/ai";
 
 export default {
   computed: {
     ...mapWritableState(aiStore, ["isFull", "selectTab"]),
   },
-  components: { LeftTab, HeaderView, MainView, ChatLeft, Caht },
+  components: {LeftTab, HeaderView, MainView, ChatLeft, Caht},
 };
 </script>
 

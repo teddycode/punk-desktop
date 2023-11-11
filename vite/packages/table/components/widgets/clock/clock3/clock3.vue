@@ -1,7 +1,7 @@
 <template>
   <div class="clock3">
     <div class="coolClockWrap">
-      <canvas :id="'canvas_' + this.elementId" :width="canvas.width" :height="canvas.height"></canvas>
+      <canvas :id="'canvas_' + this.elementId" :height="canvas.height" :width="canvas.width"></canvas>
     </div>
   </div>
 </template>

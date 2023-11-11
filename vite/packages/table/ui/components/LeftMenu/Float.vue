@@ -1,19 +1,19 @@
 <template>
   <!-- 文字层 -->
   <a-tooltip
-    :title="data.title"
-    placement="right"
-    @click.stop="onItemClick(data)"
+      :title="data.title"
+      placement="right"
+      @click.stop="onItemClick(data)"
   >
     <!-- 点击层 -->
     <a-dropdown :trigger="['click']" placement="top">
-      <template #overlay v-if="data.children">
+      <template v-if="data.children" #overlay>
         <div class="xt-modal rounded-xl p-1 xt-b">
           <template v-for="item in data.children">
             <div
-              @click="onItemClick(item)"
-              class="flex items-center pl-3 cursor-pointer box text-base xt-text"
-              style="width: 184px; height: 44px; border-radius: 10px"
+                class="flex items-center pl-3 cursor-pointer box text-base xt-text"
+                style="width: 184px; height: 44px; border-radius: 10px"
+                @click="onItemClick(item)"
             >
               <xt-base-icon :icon="item.icon" class="mr-3"></xt-base-icon>
               {{ item.name }}
@@ -25,26 +25,29 @@
       <template v-if="data.float">
         <!-- 拓展 -->
         <tippy
-          placement="right"
-          :trigger="trigger"
-          :interactive="true"
-          :arrow="false"
+            :arrow="false"
+            :interactive="true"
+            :trigger="trigger"
+            placement="right"
         >
           <!-- 鼠标经过层 -->
           <template #content>
-            <slot name="content"> </slot>
+            <slot name="content"></slot>
           </template>
           <!-- 默认层 -->
           <slot></slot>
         </tippy>
       </template>
-      <template v-else> <slot></slot></template>
+      <template v-else>
+        <slot></slot>
+      </template>
     </a-dropdown>
   </a-tooltip>
 </template>
 
 <script setup>
-import { computed } from "vue";
+import {computed} from "vue";
+
 const props = defineProps({
   data: {},
 });

@@ -1,22 +1,22 @@
 <template>
   <div
-    class="xt-active xt-base-btn"
-    :style="[customStyle]"
-    :class="[typeClass]"
-    @click="copyToClipboard()"
+      :class="[typeClass]"
+      :style="[customStyle]"
+      class="xt-active xt-base-btn"
+      @click="copyToClipboard()"
   >
     <template v-if="iconPosition == 'prefix'">
       <XtBaseIcon
-        v-if="icon"
-        :icon="icon"
-        :class="[icon ? 'mr-1' : '']"
-        :style="iconSize"
+          v-if="icon"
+          :class="[icon ? 'mr-1' : '']"
+          :icon="icon"
+          :style="iconSize"
       ></XtBaseIcon>
       <xt-new-icon
-        v-if="newIicon"
-        :icon="newIicon"
-        :class="[newIicon ? 'mr-1' : '']"
-        :style="iconSize"
+          v-if="newIicon"
+          :class="[newIicon ? 'mr-1' : '']"
+          :icon="newIicon"
+          :style="iconSize"
       />
     </template>
     <div :style="textSize">
@@ -24,17 +24,18 @@
     </div>
     <template v-if="iconPosition == 'postfix'">
       <xt-new-icon
-        v-if="newIicon"
-        :icon="newIicon"
-        :class="[newIicon ? 'ml-1' : '']"
-        :style="iconSize"
+          v-if="newIicon"
+          :class="[newIicon ? 'ml-1' : '']"
+          :icon="newIicon"
+          :style="iconSize"
       />
     </template>
   </div>
 </template>
 
 <script>
-import { copyMixins } from "../../common/copyMixins";
+import {copyMixins} from "../../common/copyMixins";
+
 export default {
   name: "XtButton",
   mixins: [copyMixins],

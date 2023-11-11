@@ -3,13 +3,13 @@
   <!-- <test :data="data" :role="role"></test> -->
   <!-- <CPULineChart></CPULineChart> -->
   <component
-    :desk="currentDesk"
-    class="box"
-    :style="{ backgroundColor }"
-    :role="role"
-    :is="data?.name"
-    :customIndex="data?.id"
-    :customData="data?.customData"
+      :is="data?.name"
+      :customData="data?.customData"
+      :customIndex="data?.id"
+      :desk="currentDesk"
+      :role="role"
+      :style="{ backgroundColor }"
+      class="box"
   ></component>
   <!-- </div> -->
 </template>

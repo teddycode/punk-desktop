@@ -1,28 +1,28 @@
 <template>
   <div class="flex justify-between">
     <div class="flex items-center h-12">
-      <XtMenu :menus="menus" :data="index" v-for="(item, index) in colorList">
+      <XtMenu v-for="(item, index) in colorList" :data="index" :menus="menus">
         <colorPicker
-          class="mr-3"
-          style="margin-top: 6px"
-          v-model:hex="colorList[index]"
-          @click="selectColor(index)"
-          :style="{
+            v-model:hex="colorList[index]"
+            :style="{
             border: index == selectIndex ? '4px solid var(--active-bg)' : '',
           }"
+            class="mr-3"
+            style="margin-top: 6px"
+            @click="selectColor(index)"
         />
       </XtMenu>
 
       <XtBaseIcon
-        @click="addColor()"
-        icon="guanbi2"
-        class="xt-theme-text"
-        style="transform: rotate(45deg); font-size: 24px"
+          class="xt-theme-text"
+          icon="guanbi2"
+          style="transform: rotate(45deg); font-size: 24px"
+          @click="addColor()"
       ></XtBaseIcon>
     </div>
     <div
-      @click="getColor()"
-      class="flex items-center xt-theme-text cursor-pointer"
+        class="flex items-center xt-theme-text cursor-pointer"
+        @click="getColor()"
     >
       <XtBaseIcon icon="icon-checkin"></XtBaseIcon>
       <div class="ml-1">屏幕取色</div>
@@ -31,14 +31,14 @@
   <div>
     <div class="flex my-2 h-12" style="">
       <!-- rgb -->
-      <XtInput class="xt-bg-2 flex-1 relative" v-model="RGB">
+      <XtInput v-model="RGB" class="xt-bg-2 flex-1 relative">
         <template #addonBefore>
           <div
-            class="h-full flex items-center xt-text justify-between px-4 relative left-box"
+              class="h-full flex items-center xt-text justify-between px-4 relative left-box"
           ></div>
           <div
-            class="absolute xt-text top-1/2 -translate-y-1/2 text-base"
-            style="left: 10px"
+              class="absolute xt-text top-1/2 -translate-y-1/2 text-base"
+              style="left: 10px"
           >
             RGB
           </div>
@@ -46,31 +46,31 @@
       </XtInput>
       <XtIcon :copy="RGB" icon="fuzhi" size="28" type=""></XtIcon>
       <!-- hex -->
-      <XtInput class="xt-bg-2 flex-1" v-model="HEX">
+      <XtInput v-model="HEX" class="xt-bg-2 flex-1">
         <template #addonBefore>
           <div
-            class="h-full flex items-center xt-text justify-between px-4 relative left-box"
+              class="h-full flex items-center xt-text justify-between px-4 relative left-box"
           ></div>
           <div
-            class="absolute xt-text top-1/2 -translate-y-1/2 text-base"
-            style="left: 10px"
+              class="absolute xt-text top-1/2 -translate-y-1/2 text-base"
+              style="left: 10px"
           >
             HEX
           </div>
         </template>
       </XtInput>
-      <XtIcon :copy="HEX" icon="fuzhi" size="28" type=""> </XtIcon>
+      <XtIcon :copy="HEX" icon="fuzhi" size="28" type=""></XtIcon>
     </div>
     <div class="flex my-2 h-12">
       <!-- HSV/HSB -->
-      <XtInput class="xt-bg-2 flex-1" v-model="HSV">
+      <XtInput v-model="HSV" class="xt-bg-2 flex-1">
         <template #addonBefore>
           <div
-            class="h-full flex items-center xt-text justify-between px-4 relative left-box"
+              class="h-full flex items-center xt-text justify-between px-4 relative left-box"
           ></div>
           <div
-            class="absolute xt-text top-1/2 -translate-y-1/2 text-base"
-            style="left: 10px"
+              class="absolute xt-text top-1/2 -translate-y-1/2 text-base"
+              style="left: 10px"
           >
             HSV
           </div>
@@ -78,14 +78,14 @@
       </XtInput>
       <XtIcon :copy="HSV" icon="fuzhi" size="28" type=""></XtIcon>
       <!-- HSL -->
-      <XtInput class="xt-bg-2 flex-1" v-model="HSL">
+      <XtInput v-model="HSL" class="xt-bg-2 flex-1">
         <template #addonBefore>
           <div
-            class="h-full flex items-center xt-text justify-between px-4 relative left-box"
+              class="h-full flex items-center xt-text justify-between px-4 relative left-box"
           ></div>
           <div
-            class="absolute xt-text top-1/2 -translate-y-1/2 text-base"
-            style="left: 10px"
+              class="absolute xt-text top-1/2 -translate-y-1/2 text-base"
+              style="left: 10px"
           >
             HSL
           </div>
@@ -99,10 +99,10 @@
 <script>
 import ColorPicker from "colorpicker-v3";
 import "colorpicker-v3/style.css";
-import { defineAsyncComponent } from "vue";
+import {defineAsyncComponent} from "vue";
 import tinycolor from "tinycolor2";
-import { colorSelection } from "../../../store/colorSelection";
-import { mapWritableState } from "pinia";
+import {colorSelection} from "../../../store/colorSelection";
+import {mapWritableState} from "pinia";
 
 export default {
   components: {
@@ -116,7 +116,7 @@ export default {
       HSL: "",
       HEX: "",
       HSV: "",
-      menus: [{ label: "删除", callBack: this.delColor }],
+      menus: [{label: "删除", callBack: this.delColor}],
     };
   },
   computed: {
@@ -153,13 +153,13 @@ export default {
       const eyeDropper = new EyeDropper();
 
       eyeDropper
-        .open()
-        .then((result) => {
-          this.colorList[this.selectIndex] = result.sRGBHex;
-        })
-        .catch((e) => {
-          console.log("e :>> ", e);
-        });
+          .open()
+          .then((result) => {
+            this.colorList[this.selectIndex] = result.sRGBHex;
+          })
+          .catch((e) => {
+            console.log("e :>> ", e);
+          });
     },
 
     addColor() {
@@ -210,6 +210,7 @@ export default {
   top: -30px !important;
   right: -215px !important;
 }
+
 :deep(.zs-color-picker-panel) {
   position: absolute;
   top: -30px !important;
@@ -228,6 +229,7 @@ export default {
   border-radius: 50% !important;
   border: 0 !important;
 }
+
 :deep(.zs-color-picker) {
   border-radius: 100px !important;
 }

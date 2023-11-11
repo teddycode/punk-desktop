@@ -1,41 +1,41 @@
 <template>
-  <div style="height: 60px" class="xt-bg-2 xt-text flex items-center">
+  <div class="xt-bg-2 xt-text flex items-center" style="height: 60px">
     <template v-if="useTool">
       <XtIcon
-        @click="back()"
-        class="mx-2"
-        icon="xiangzuo"
-        type=""
-        w="26"
-        h="26"
-        size="24"
+          class="mx-2"
+          h="26"
+          icon="xiangzuo"
+          size="24"
+          type=""
+          w="26"
+          @click="back()"
       ></XtIcon>
       <div class="xt-active-bg-2 xt-base-btn px-2 w-auto" style="height: 44px">
         <img
-          :src="'/tools/' + useTool.img + '.png'"
-          style="width: 32px; height: 32px"
-          class="mr-2"
-          alt=""
+            :src="'/tools/' + useTool.img + '.png'"
+            alt=""
+            class="mr-2"
+            style="width: 32px; height: 32px"
         />
         <div style="white-space: nowrap">{{ useTool.name }}</div>
       </div>
     </template>
 
     <XtInput
-      :focus="true"
-      v-model="search"
-      placeholder="试试输入、粘贴、拖放内容到此处"
-      @enter="searchEnter()"
+        v-model="search"
+        :focus="true"
+        placeholder="试试输入、粘贴、拖放内容到此处"
+        @enter="searchEnter()"
     >
-      <template #suffix v-if="search">
+      <template v-if="search" #suffix>
         <XtIcon
-          @click="clear()"
-          type=""
-          class="xt-text"
-          icon="guanbi"
-          w="24"
-          h="24"
-          size="24"
+            class="xt-text"
+            h="24"
+            icon="guanbi"
+            size="24"
+            type=""
+            w="24"
+            @click="clear()"
         ></XtIcon>
       </template>
     </XtInput>
@@ -43,15 +43,17 @@
 </template>
 
 <script>
-import { mapWritableState, mapActions } from "pinia";
-import { main } from "../../store/main";
-import { calculator } from "../../store/calculator";
-import { translate } from "../../store/translate";
-import { timeConversion } from "../../store/timeConversion";
-import { currencyExchange } from "../../store/currencyExchange";
-import { QRCodeGeneration } from "../../store/QRCodeGeneration";
+import {mapActions, mapWritableState} from "pinia";
+import {main} from "../../store/main";
+import {calculator} from "../../store/calculator";
+import {translate} from "../../store/translate";
+import {timeConversion} from "../../store/timeConversion";
+import {currencyExchange} from "../../store/currencyExchange";
+import {QRCodeGeneration} from "../../store/QRCodeGeneration";
+
 export default {
-  mounted() {},
+  mounted() {
+  },
   computed: {
     ...mapWritableState(main, ["useTool"]),
     ...mapWritableState(calculator, ["computeList", "selectIndex"]),
@@ -129,6 +131,7 @@ input {
   border: none;
   background: none;
 }
+
 .ant-input:focus {
   box-shadow: none !important;
 }

@@ -16,19 +16,20 @@
     <!--                />-->
     <!--              </a>-->
     <!--            </lightgallery>-->
-    <div data-fit="cover" class="spotlight-group" data-control="autofit,page,fullscreen,close,zoom" data-play="true"
-      data-autoslide="true" data-infinite="true" id="container">
+    <div id="container" class="spotlight-group" data-autoslide="true" data-control="autofit,page,fullscreen,close,zoom"
+         data-fit="cover" data-infinite="true" data-play="true">
       <template v-for="dayImages  in bingImages">
         <div>{{ dayImages.day }}</div>
-        <a class="spotlight " v-for="img in dayImages.images" :data-lg-size='img.lgSize' :href="img.src">
-          <img :src="img.src" data-animation="my-rotate" />
+        <a v-for="img in dayImages.images" :data-lg-size='img.lgSize' :href="img.src" class="spotlight ">
+          <img :src="img.src" data-animation="my-rotate"/>
         </a>
       </template>
 
     </div>
     <template v-for="dayImages  in bingImages">
-      <div style="color: var(--primary-text);text-align: left;font-size: 20px;font-weight: bold;"
-        class="mt-3 mb-3 text-white s-text"> - 第 {{ dayImages.day }} 天 -</div>
+      <div class="mt-3 mb-3 text-white s-text"
+           style="color: var(--primary-text);text-align: left;font-size: 20px;font-weight: bold;"> - 第 {{ dayImages.day }} 天 -
+      </div>
       <PaperList :list="dayImages.images"></PaperList>
     </template>
 
@@ -37,15 +38,14 @@
 
 <script>
 import axios from 'axios'
-import Spotlight from 'spotlight.js'
 import justifiedGallery from 'justifiedGallery'
-import { mapActions } from 'pinia'
+import {mapActions} from 'pinia'
 import PaperList from '../../components/comp/PaperList.vue'
-import { paperStore } from '../../store/paper'
+import {paperStore} from '../../store/paper'
 
 export default {
   name: 'Bing',
-  components: { PaperList },
+  components: {PaperList},
   data() {
     return {
       page: 1,
@@ -134,7 +134,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 @import 'justifiedGallery/dist/css/justifiedGallery.min.css';
 
 .s-text {

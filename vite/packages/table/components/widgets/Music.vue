@@ -1,27 +1,28 @@
 <template>
-  <Widget :options="options" :customIndex="customIndex" :desk="desk">
+  <Widget :customIndex="customIndex" :desk="desk" :options="options">
     <div
-      @click="enterMusic"
-      class="pointer"
-      style="text-align: center; padding: 2em"
+        class="pointer"
+        style="text-align: center; padding: 2em"
+        @click="enterMusic"
     >
       <a-avatar
-        :size="100"
-        :class="{ playing: status.music.playing }"
-        style="border: 3px solid #999"
-        :src="status.music.cover || 'https://a.apps.vip/icons/wyy.png'"
+          :class="{ playing: status.music.playing }"
+          :size="100"
+          :src="status.music.cover || 'https://a.apps.vip/icons/wyy.png'"
+          style="border: 3px solid #999"
       ></a-avatar>
     </div>
     <a-row :gutter="10">
-      <a-col :span="12"> </a-col>
-      <a-col :span="12"> </a-col>
+      <a-col :span="12"></a-col>
+      <a-col :span="12"></a-col>
     </a-row>
   </Widget>
 </template>
 <script>
-import { appStore } from "../../store";
-import { mapWritableState } from "pinia";
+import {appStore} from "../../store";
+import {mapWritableState} from "pinia";
 import Widget from "../card/Widget.vue";
+
 export default {
   name: "Music",
   props: {
@@ -31,10 +32,11 @@ export default {
     },
     customData: {
       type: Object,
-      default: () => {},
+      default: () => {
+      },
     },
-    desk:{
-      type:Object
+    desk: {
+      type: Object
     }
   },
   data() {

@@ -1,70 +1,70 @@
 <template>
-  <xt-zoom v-model:width="w" v-model:height="h" :style="[size]">
+  <xt-zoom v-model:height="h" v-model:width="w" :style="[size]">
     <div
-      class="xt-bg xt-shadow rounded-xl xt-text relative controller"
-      :style="[size]"
+        :style="[size]"
+        class="xt-bg xt-shadow rounded-xl xt-text relative controller"
     >
       <XtBaseIcon
-        @click="iconsRightClick()"
-        icon="gengduo1"
-        class="absolute icon"
-        style="right: 8px; top: 4px"
+          class="absolute icon"
+          icon="gengduo1"
+          style="right: 8px; top: 4px"
+          @click="iconsRightClick()"
       ></XtBaseIcon>
       <div
-        class="text-center cursor-pointer mx-auto truncate"
-        :style="[titleSize]"
-        @click="titleVisible = true"
+          :style="[titleSize]"
+          class="text-center cursor-pointer mx-auto truncate"
+          @click="titleVisible = true"
       >
         {{ groupTitle }}
       </div>
       <div class="flex flex-wrap justify-between">
         <div v-for="i in count" @contextmenu.prevent.stop="rightClick(i - 1)">
           <Icon
-            v-if="iconList[i - 1]"
-            v-bind="iconList[i - 1]"
-            :index="i - 1"
-            :size="icons"
-            :data-index="i - 1"
-            :state="true"
+              v-if="iconList[i - 1]"
+              :data-index="i - 1"
+              :index="i - 1"
+              :size="icons"
+              :state="true"
+              v-bind="iconList[i - 1]"
           >
           </Icon>
         </div>
         <div
-          :style="[iconsState]"
-          class="flex justify-center items-center flex-col cursor-pointer xt-hover rounded-xl"
-          @click="fullScreenClick($event)"
-          v-if="iconList.length > count"
+            v-if="iconList.length > count"
+            :style="[iconsState]"
+            class="flex justify-center items-center flex-col cursor-pointer xt-hover rounded-xl"
+            @click="fullScreenClick($event)"
         >
           <XtIcon icon="gengduo1" w="38"></XtIcon>
           <div
-            class="truncate w-full text-center text-xs"
-            style="margin-top: 6px"
+              class="truncate w-full text-center text-xs"
+              style="margin-top: 6px"
           >
             更多
           </div>
         </div>
         <!-- 占位 -->
         <div
-          v-for="i in blankLabel"
-          :key="`placeholder-${i}`"
-          style="width: 93px; height: 99px"
+            v-for="i in blankLabel"
+            :key="`placeholder-${i}`"
+            style="width: 93px; height: 99px"
         ></div>
       </div>
     </div>
   </xt-zoom>
   <XtDrawer v-model="visible">
     <Set
-      @editIcons="editIcons(index)"
-      @deleteIcons="deleteIcons(index)"
-      v-model:data="visible"
+        v-model:data="visible"
+        @deleteIcons="deleteIcons(index)"
+        @editIcons="editIcons(index)"
     ></Set>
   </XtDrawer>
   <Teleport to="body">
     <xt-modal
-      v-model="titleVisible"
-      @close="titleVisible = false"
-      title="修改分组名"
-      :isFooter="false"
+        v-model="titleVisible"
+        :isFooter="false"
+        title="修改分组名"
+        @close="titleVisible = false"
     >
       <div class="h-12" style="width: 400px">
         <XtInput v-model="title" @blur="titleBlur()"></XtInput>
@@ -77,15 +77,17 @@
 import Icon from "../components/icon.vue";
 import Set from "./Set.vue";
 import XtZoom from "../../../../ui/components/Zoom/index.vue";
-import { sizeValues } from "../components/iconConfig";
-import { message } from "ant-design-vue";
+import {sizeValues} from "../components/iconConfig";
+import {message} from "ant-design-vue";
+
 export default {
   props: {
     width: {},
     height: {},
     iconList: {
       type: Object,
-      default: () => {},
+      default: () => {
+      },
     },
     groupTitle: {
       type: String,
@@ -207,6 +209,7 @@ export default {
 .icon {
   display: none;
 }
+
 .controller:hover .icon {
   display: block !important;
 }

@@ -1,27 +1,27 @@
 <!-- 处理右键菜单内容 -->
 <template>
   <Menu
-    name="title"
-    fn="fn"
-    v-model:trigger="trigger"
-    :menus="menuList"
-    :model="model"
-    :start="menuState"
-    @closeMenu="close"
+      v-model:trigger="trigger"
+      :menus="menuList"
+      :model="model"
+      :start="menuState"
+      fn="fn"
+      name="title"
+      @closeMenu="close"
   >
     <div
-      @contextmenu="rightMenuState()"
+        @contextmenu="rightMenuState()"
 
     >
       <slot></slot>
     </div>
-    <template #cardSize v-if="sizes.length > 0">
+    <template v-if="sizes.length > 0" #cardSize>
       <div class="flex flex-wrap mb-2 ml-3 my-1">
         <div
-          v-for="item in sizes"
-          class="h-8 w-12 xt-bg-2 text-sm xt-base-btn mr-3"
-          style="border-radius: 16px"
-          @click="updateCardSize(item)"
+            v-for="item in sizes"
+            class="h-8 w-12 xt-bg-2 text-sm xt-base-btn mr-3"
+            style="border-radius: 16px"
+            @click="updateCardSize(item)"
         >
           {{ item.title }}
         </div>
@@ -30,37 +30,37 @@
   </Menu>
 
   <a-drawer
-    :width="120"
-    height="auto"
-    class="drawer"
-    :closable="true"
-    placement="bottom"
-    v-model:visible="menuVisible"
-    @close="menuVisible = false"
+      v-model:visible="menuVisible"
+      :closable="true"
+      :width="120"
+      class="drawer"
+      height="auto"
+      placement="bottom"
+      @close="menuVisible = false"
   >
     <div
-      class="flex flex-row items-center mb-3 ml-4"
-      v-if="sizes && sizes.length > 0"
+        v-if="sizes && sizes.length > 0"
+        class="flex flex-row items-center mb-3 ml-4"
     >
       <div class="mr-4">小组件尺寸</div>
       <HorizontalPanel
-        :navList="sizes"
-        v-model:selectType="cardSize"
-        bgColor="drawer-item-select-bg"
+          v-model:selectType="cardSize"
+          :navList="sizes"
+          bgColor="drawer-item-select-bg"
       />
       <slot name="old"></slot>
     </div>
     <hr
-      style="border: none; border-top: 1px solid rgba(255, 255, 255, 0.1)"
-      class="my-8 ml-4 mr-4"
-      v-if="sizes && sizes.length > 0"
+        v-if="sizes && sizes.length > 0"
+        class="my-8 ml-4 mr-4"
+        style="border: none; border-top: 1px solid rgba(255, 255, 255, 0.1)"
     />
     <div class="flex flex-row">
       <slot name="menuExtra"></slot>
       <BottomEdit
-        :menuList="menuList"
-        @close="menuVisible = false"
-        @removeCard="doRemoveCard"
+          :menuList="menuList"
+          @close="menuVisible = false"
+          @removeCard="doRemoveCard"
       />
       <!--      <div class="w-24 h-24 ml-4 option" @click="onCopy"-->
       <!--           v-if="options.type.includes('CPU') || options.type.includes('GPU')">-->
@@ -72,9 +72,9 @@
 </template>
 
 <script setup>
-import { ref, toRefs, computed, watch } from "vue";
-import { storeToRefs } from "pinia";
-import { useWidgetStore } from "./store.ts";
+import {computed, ref, toRefs, watch} from "vue";
+import {storeToRefs} from "pinia";
+import {useWidgetStore} from "./store.ts";
 import Menu from "../../ui/components/Menu/index.vue";
 import BottomEdit from "./BottomEdit.vue";
 import HorizontalPanel from "../HorizontalPanel.vue";
@@ -101,10 +101,10 @@ const props = defineProps({
   oldMenuVisible: {},
   sizeType: {},
 });
-const { menus, sizes, oldMenuVisible, currentEvent, event } = toRefs(props);
+const {menus, sizes, oldMenuVisible, currentEvent, event} = toRefs(props);
 
 const widgetStore = useWidgetStore();
-const { rightModel } = storeToRefs(widgetStore);
+const {rightModel} = storeToRefs(widgetStore);
 
 // 新版右键和点击事件切换
 const model = ref("contextmenu");

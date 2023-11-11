@@ -1,31 +1,31 @@
 <template>
   <Teleport to="body">
     <div
-      class="h-full w-full xt-mask fixed top-0 left-0 flex"
-      style="z-index: 99990"
+        class="h-full w-full xt-mask fixed top-0 left-0 flex"
+        style="z-index: 99990"
     >
       <div
-        style="z-index: 999901"
-        class="flex-grow flex justify-center items-center"
+          class="flex-grow flex justify-center items-center"
+          style="z-index: 999901"
       >
         <MyIcon v-bind="edit"></MyIcon>
       </div>
-      <div style="width: 500px; z-index: 999999" class="xt-modal flex flex-col">
+      <div class="xt-modal flex flex-col" style="width: 500px; z-index: 999999">
         <div class="p-4 flex justify-between items-center">
           <div class="h-12 w-12 rounded-lg xt-btn no-drag" @click="close()">
             <Icon class="icon text-xl" icon="guanbi1"></Icon>
           </div>
           <div class="text-lg">设置</div>
           <div
-            class="xt-active-btn h-12 w-12 rounded-lg no-drag"
-            @click="save()"
+              class="xt-active-btn h-12 w-12 rounded-lg no-drag"
+              @click="save()"
           >
             保存
           </div>
         </div>
         <div
-          style="width: 500px"
-          class="px-4 flex-grow overflow-hidden overflow-y-auto scrollbar"
+            class="px-4 flex-grow overflow-hidden overflow-y-auto scrollbar"
+            style="width: 500px"
         >
           <Edit></Edit>
         </div>
@@ -39,7 +39,8 @@ import MyIcon from "../components/icon.vue";
 import Edit from "./edit.vue";
 
 import mixins from "./hooks/mixins";
-const { fs } = window.$models;
+
+const {fs} = window.$models;
 
 export default {
   mixins: [mixins],

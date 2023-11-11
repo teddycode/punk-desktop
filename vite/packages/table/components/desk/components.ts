@@ -1,4 +1,4 @@
-import { defineAsyncComponent } from "vue";
+import {defineAsyncComponent} from "vue";
 
 import Vuuri from "../vuuriHome/Vuuri.vue";
 import CPULineChart from "../widgets/supervisory/CPULineChart.vue";
@@ -46,10 +46,6 @@ import ShortChart from "../widgets/shortTalk/page/ShortChart.vue";
 
 import TimerChart from "../../apps/tomato/page/Chart.vue";
 import TimerClock from "../../apps/tomato/page/Clock.vue";
-
-const NewAddCard = defineAsyncComponent(
-  () => import("../../page/app/card/NewAddCard.vue")
-);
 import MyIcons from "../widgets/myIcons/index.vue";
 import AggregateSearch from "../widgets/aggregate/AggregateSearch.vue";
 import AggregateSearchFullScreen from "../widgets/aggregate/AggregateSearchFullScreen.vue";
@@ -64,77 +60,80 @@ import SmallRank from "../widgets/SmallRank.vue";
 import Todo from "../widgets/todo/Todo.vue";
 import EatToday from "../widgets/eat/EatToday.vue";
 import HotSearch from "../widgets/HotSearch.vue";
-import CoolWidget from "../card/CoolWidget.vue";
 import AIaides from "../widgets/AIaides.vue";
 import OilPrices from "../widgets/OilPrices.vue";
 import yuanCommunity from "../widgets/yuanCommunity/YuanCommunity.vue";
 import RightMenu from "./RightMenu.vue";
 import FreeDesk from "./free/index";
 
+const NewAddCard = defineAsyncComponent(
+    () => import("../../page/app/card/NewAddCard.vue")
+);
+
 export default {
-  components: {
-    FreeDesk,
-    RightMenu,
-    GameInformation,
-    HistoryInfo,
-    ShortcutKey,
-    ClipBoard,
-    Guider,
-    ShortTodo,
-    Dashboard,
-    ShortChart,
-    TimerChart,
-    TimerClock,
-    News,
-    Template,
-    HorizontalPanel,
-    VueCustomScrollbar,
-    Vuuri,
-    CPUFourCard,
-    CPULineChart,
-    InternalList,
-    SmallCPUCard,
-    SmallGPUCard,
-    DiscountPercentage,
-    GamesDiscount,
-    GameEpic,
-    Music,
-    Stock,
-    Dou,
-    Fish,
-    CustomTimer,
-    SmallCountdownDay,
-    Clock,
-    CountdownDay,
-    Timer,
-    Weather,
-    SteamFriends,
-    Remote,
-    SignIn,
-    SingleFilm,
-    ManyFilm,
-    CaptureNewCard,
-    Voice,
-    Audio,
-    Capture,
-    CustomAssembly,
-    MyGameSmall,
-    SmallWallpaper,
-    MiddleWallpaper,
-    NewAddCard,
-    Clocks,
-    Notes,
-    GameStrategy,
-    AggregateSearch,
-    AggregateSearchFullScreen,
-    MyIcons,
-    AddIcon,
-    SmallRank,
-    Todo,
-    EatToday,
-    HotSearch,
-    AIaides,
-    OilPrices,
-    yuanCommunity,
-  },
+    components: {
+        FreeDesk,
+        RightMenu,
+        GameInformation,
+        HistoryInfo,
+        ShortcutKey,
+        ClipBoard,
+        Guider,
+        ShortTodo,
+        Dashboard,
+        ShortChart,
+        TimerChart,
+        TimerClock,
+        News,
+        Template,
+        HorizontalPanel,
+        VueCustomScrollbar,
+        Vuuri,
+        CPUFourCard,
+        CPULineChart,
+        InternalList,
+        SmallCPUCard,
+        SmallGPUCard,
+        DiscountPercentage,
+        GamesDiscount,
+        GameEpic,
+        Music,
+        Stock,
+        Dou,
+        Fish,
+        CustomTimer,
+        SmallCountdownDay,
+        Clock,
+        CountdownDay,
+        Timer,
+        Weather,
+        SteamFriends,
+        Remote,
+        SignIn,
+        SingleFilm,
+        ManyFilm,
+        CaptureNewCard,
+        Voice,
+        Audio,
+        Capture,
+        CustomAssembly,
+        MyGameSmall,
+        SmallWallpaper,
+        MiddleWallpaper,
+        NewAddCard,
+        Clocks,
+        Notes,
+        GameStrategy,
+        AggregateSearch,
+        AggregateSearchFullScreen,
+        MyIcons,
+        AddIcon,
+        SmallRank,
+        Todo,
+        EatToday,
+        HotSearch,
+        AIaides,
+        OilPrices,
+        yuanCommunity,
+    },
 };

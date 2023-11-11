@@ -2,22 +2,22 @@
   <div class="medal-wrapper">
     <div class="badge-box" style="border:none;background: none;zoom: 0.5;margin: 0">
       <div style="width: 100px;height: 100px;position: relative">
-        <img style="width: 75px;margin-top: 10px" :src="this.getPath+getBadge().badge+'.png'">
-        <div v-if="badge.rank<100" class="badge-num" style="right: 33px;bottom: 20px"
-             :style="{'background-color':this.getBadge().color}">
+        <img :src="this.getPath+getBadge().badge+'.png'" style="width: 75px;margin-top: 10px">
+        <div v-if="badge.rank<100" :style="{'background-color':this.getBadge().color}" class="badge-num"
+             style="right: 33px;bottom: 20px">
           {{ badge.rank }}
         </div>
       </div>
     </div>
-    <div  style="position: absolute;width: 250px" class="badge-box big ">
+    <div class="badge-box big " style="position: absolute;width: 250px">
       <a-row>
         <a-col :span="10">
-          <img style="width: 75px;margin-top: 10px" :src="this.getPath+getBadge().badge+'.png'">
-          <div v-if="badge.rank<100" class="badge-num" :style="{'background-color':this.getBadge().color}">
+          <img :src="this.getPath+getBadge().badge+'.png'" style="width: 75px;margin-top: 10px">
+          <div v-if="badge.rank<100" :style="{'background-color':this.getBadge().color}" class="badge-num">
             {{ badge.rank }}
           </div>
         </a-col>
-        <a-col style="line-height: 2" :span="14">
+        <a-col :span="14" style="line-height: 2">
           <div style="font-size: 16px;font-weight: bold;">{{ getBadge().title }}</div>
           <div class="text-grey">{{ getBadge().summaryNames }}</div>
           <div class="text-grey" style="font-size: 0.8em">{{ getBadge().summaryDes }}</div>
@@ -32,7 +32,7 @@
 <script>
 export default {
   name: 'OnlineMedal',
-  data () {
+  data() {
     return {
       badge: {
         t9999: {
@@ -84,12 +84,12 @@ export default {
   },
   props: ['rank'],
   computed: {
-    getPath () {
+    getPath() {
       return 'file://' + window.globalArgs['app-dir_name'] + '/../../icons/badge/'
     }
   },
   methods: {
-    getBadge () {
+    getBadge() {
       if (!this.rank) {
         return this.badge.t9999
       }
@@ -114,16 +114,18 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .medal-wrapper {
   display: inline-block;
+
   &:hover {
-    .big{
-      opacity:1;
+    .big {
+      opacity: 1;
 
     }
   }
-  .big{
+
+  .big {
     transition: opacity 0.3s ease 0.3s;
     opacity: 0;
     background: rgba(37, 37, 37, 0.6);

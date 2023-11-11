@@ -1,6 +1,6 @@
 <template>
-  <div class="call pl-2" hidden="" id="call" v-if="handleShowCallIcon(conversation, isH5)" >
-     <!-- 重新将UI结构以及样式进行修改 -->
+  <div v-if="handleShowCallIcon(conversation, isH5)" id="call" class="call pl-2" hidden="">
+    <!-- 重新将UI结构以及样式进行修改 -->
     <a-tooltip title="通话" @click="toggleShowSelectDialog">
       <Icon icon="phonecall" style="height: 24px;width: 24px;color: var(--secondary-text) !important;"></Icon>
       <Icon icon="downarrow" style="height: 15px;width: 15px;color: var(--secondary-text) !important;"></Icon>
@@ -11,14 +11,14 @@
       <i class="icon icon-down-arrow" title="通话"></i>
     </div> -->
 
-    <div class="call-main" :class="[isH5 && 'call-main-h5']" v-show="showSelectDialog">
-      <div class="call-main-content" ref="dialog">
+    <div v-show="showSelectDialog" :class="[isH5 && 'call-main-h5']" class="call-main">
+      <div ref="dialog" class="call-main-content">
         <div class="call-main-voice call-main-font" @click="onClickCall(1)">
-          <i class="icon icon-call-voice" v-if="isH5"></i>
+          <i v-if="isH5" class="icon icon-call-voice"></i>
           {{ $t('TUIChat.语音通话') }}
         </div>
         <div class="call-main-video call-main-font" @click="onClickCall(2)">
-          <i class="icon icon-call-video " v-if="isH5"></i>
+          <i v-if="isH5" class="icon icon-call-video "></i>
           {{ $t('TUIChat.视频通话') }}
         </div>
         <footer>
@@ -28,33 +28,33 @@
     </div>
 
     <Dialog
-      :show="showGroupUserDialog"
-      :isH5="isH5"
-      :isHeaderShow="false"
-      :isFooterShow="false"
-      :background="false"
-      @update:show="(e: boolean) => (showGroupUserDialog = e)"
+        :background="false"
+        :isFooterShow="false"
+        :isH5="isH5"
+        :isHeaderShow="false"
+        :show="showGroupUserDialog"
+        @update:show="(e: boolean) => (showGroupUserDialog = e)"
     >
       <Transfer
-        :isSearch="true"
-        :title="showTitle"
-        :list="searchUserList"
-        :isH5="isH5"
-        :isRadio="conversation?.type === 'isC2C'"
-        @search="handleSearch"
-        @submit="submit"
-        @cancel="cancle"
+          :isH5="isH5"
+          :isRadio="conversation?.type === 'isC2C'"
+          :isSearch="true"
+          :list="searchUserList"
+          :title="showTitle"
+          @cancel="cancle"
+          @search="handleSearch"
+          @submit="submit"
       />
     </Dialog>
 
     <Dialog
-      :show="showUnsupportDialog"
-      :isH5="isH5"
-      :isHeaderShow="true"
-      :isFooterShow="true"
-      :background="true"
-      :title="$t('TUIChat.欢迎使用TUICallKit')"
-      @update:show="(e: boolean) => (showUnsupportDialog = e)"
+        :background="true"
+        :isFooterShow="true"
+        :isH5="isH5"
+        :isHeaderShow="true"
+        :show="showUnsupportDialog"
+        :title="$t('TUIChat.欢迎使用TUICallKit')"
+        @update:show="(e: boolean) => (showUnsupportDialog = e)"
     >
       <div>
         <div class="uncall-dialog-body">
@@ -73,13 +73,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, watchEffect, toRefs, ref, watch } from 'vue';
-import { onClickOutside } from '@vueuse/core';
-import { Conversation } from '../../../TUIConversation/interface';
+import {defineComponent, reactive, ref, toRefs, watch, watchEffect} from 'vue';
+import {onClickOutside} from '@vueuse/core';
+import {Conversation} from '../../../TUIConversation/interface';
 import Dialog from '../../../../components/dialog';
 import Transfer from '../../../../components/transfer';
 import Link from '../../../../../utils/link/index';
-import { useStore } from 'vuex';
+import {useStore} from 'vuex';
 
 const Call = defineComponent({
   props: {
@@ -105,7 +105,7 @@ const Call = defineComponent({
     Transfer,
   },
   setup(props: any, ctx: any) {
-    const { t } = Call.TUIServer.TUICore.config.i18n.useI18n();
+    const {t} = Call.TUIServer.TUICore.config.i18n.useI18n();
     const VuexStore = ((window as any)?.TUIKitTUICore?.isOfficial && useStore && useStore()) || {};
     const data = reactive({
       showSelectDialog: false,
@@ -134,13 +134,13 @@ const Call = defineComponent({
     });
 
     watch(
-      () => data.showCall,
-      (newVal: boolean, oldVal: boolean) => {
-        if (newVal === oldVal) return;
-        if (data.showCall) {
-          handleCallDialogPosition();
+        () => data.showCall,
+        (newVal: boolean, oldVal: boolean) => {
+          if (newVal === oldVal) return;
+          if (data.showCall) {
+            handleCallDialogPosition();
+          }
         }
-      }
     );
 
     const toggleShowSelectDialog = () => {
@@ -212,8 +212,8 @@ const Call = defineComponent({
       // 目前暂不支持群通话 / GROUP_CALL is not currently supported
       // if (conversation.type === Call.TUIServer.TUICore.TIM.TYPES.CONV_GROUP) return false;
       if (
-        conversation.type === Call.TUIServer.TUICore.TIM.TYPES.CONV_C2C &&
-        conversation?.userProfile?.userID ===
+          conversation.type === Call.TUIServer.TUICore.TIM.TYPES.CONV_C2C &&
+          conversation?.userProfile?.userID ===
           Call?.TUIServer?.TUICore?.TUIServer?.TUIProfile?.currentStore?.profile?.userID
       ) {
         return false;
@@ -313,7 +313,7 @@ export default Call;
 
 <style lang="scss" scoped src="./style/index.scss"></style>
 <style lang="scss" scoped>
-.call-main{
+.call-main {
   background: var(--secondary-bg) !important;
   top: 28px !important;
   left: calc(-50% + -6px) !important;
@@ -322,7 +322,8 @@ export default Call;
   border-radius: 8px !important;
   border: 1px solid var(--divider) !important;
   box-shadow: 0px 0px 20px 0px var(--divider) !important;
-  &::before{
+
+  &::before {
     content: "";
     position: absolute;
     bottom: 100%;
@@ -331,7 +332,8 @@ export default Call;
     border-right: 6px solid transparent;
     border-bottom: 6px solid var(--secondary-bg) !important;
   }
-  &::after{
+
+  &::after {
     content: "";
     position: absolute;
     bottom: 100%;
@@ -341,13 +343,15 @@ export default Call;
     border-bottom: 6px solid var(--secondary-bg) !important;
   }
 }
-.call-main-font{
+
+.call-main-font {
 
   font-size: 16px;
   color: var(--primary-text);
   font-weight: 400;
   border-radius: 8px !important;
-  &:hover{
+
+  &:hover {
     background: var(--active-secondary-bg) !important;
   }
 }
