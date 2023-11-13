@@ -50,8 +50,8 @@ export default defineComponent({
           type: "prop",
         },
         {
-          img: "/img/bottomPanel/contact.png",
-          title: "联系人列表",
+          img: "/img/bottomPanel/keymgr.png",
+          title: "密钥管理",
           type: "task",
         },
         {

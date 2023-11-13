@@ -375,9 +375,10 @@ export default {
     }
   },
   mounted() {
-    this.timerRunning = setInterval(() => {
-      this.showScreen = !this.showScreen;
-    }, 5000);
+    // TODO 删掉分屏管理
+    // this.timerRunning = setInterval(() => {
+    //   this.showScreen = !this.showScreen;
+    // }, 5000);
     // let inserted=localStorage.getItem('insertBird')
     // if(!inserted){
     //   this.navigationList.unshift( {
