@@ -24,55 +24,122 @@
 ## 项目代码结构
 
 ```shell
-├── build  // 构建安装包所使用的静态资源
-├── docs   // 项目文档
-├── logs   // 运行日志
-├── public  // 公开访问的资源
-├── release   // 项目打包及安装包生成目录
-├── src
-│   ├── main        // electron主进程
-│   │   ├── assets  // 静态依赖文件 TODO[分离到打包后应用程序的资源的目录:./resources/app]
-│   │   ├── modules   // 主进程逻辑模块
-│   │   ├── windows   // 主进程窗口定义
-│   │   └── main.js   // 主进程程序入口
-│   └── renderer    // 渲染进程
-│       ├── api       // 后端APi接口定义
-│       ├── mock       // 模拟API服务
-│       ├── assets     // 静态资源
-│       ├── components // 封装的组件
-│       ├── store      // 状态存储
-│       ├── utils      // 统一工具类
-│       ├── router     // 页面路由配置
-│       │   └── modules  // 各个模块的路由定义 
-│       ├── main.js    // 渲染进程入口
-│       ├── App.vue   // 渲染进程主界面
-│       └── views      // 页面实现
-│           ├── Collections    // 数藏页面
-│           ├── Computing      // 计算组页面 
-│           ├── Consensus      // 共识组页面 
-│           ├── Crypto         // 密码组页面
-│           ├── Desktop        // 桌面管理页面
-│           ├── Governance     // 治理组页面
-│           ├── Home           // 大屏页面
-│           ├── Network        // 网络组页面
-│           ├── SocialNet      // 社交网络模块
-│           ├── Storage        // 存储组页面
-│           ├── Exchange    // 交易组页面
-│           ├── Transfers      // 转账组页面
-│           └── Users          // 用户相关页面
-├── webpack.config.js   // idea读取的配置
-└── vue.config.js  // vue配置文件
+├── api   // 自定义桌面模版
+├── build // webpack打包脚本
+├── css   // 样式资源 
+├── db    // 本地数据库定义
+├── dist  // 语言包打包资源
+├── docs  // 项目文档
+├── ext   // 第三方扩展包
+├── icons // 图标资源包
+├── img   // 一些图片包
+├── js    // js脚本支持
+├── localization // 多语言支持 
+├── main  // 主进程代码
+├── packages // 第三方支持包
+│   ├── dragula
+│   ├── electron-chrome-context-menu
+│   ├── electron-chrome-extensions  // chrome插件
+│   ├── loudness
+│   ├── spotlight
+│   ├── vue-shepherd
+│   └── wallpaper
+├── pages  // 主进程页面（底层是浏览器）
+│   ├── apps
+│   ├── appStore
+│   ├── circle
+│   ├── com
+│   ├── download
+│   ├── error
+│   ├── fav
+│   ├── globalSearch
+│   ├── group
+│   ├── guide
+│   ├── import
+│   ├── lanuchBar
+│   ├── messageCenterSetting
+│   ├── mobile
+│   ├── mvideo
+│   ├── newtab
+│   ├── pdfViewerFull
+│   ├── phishing
+│   ├── prompt
+│   ├── saApp
+│   ├── selectTask
+│   ├── sessionRestoreError
+│   ├── settings
+│   ├── sidebar
+│   ├── siteCard
+│   ├── switch
+│   ├── toolBar
+│   ├── update
+│   ├── user
+│   ├── userScript
+│   └── util
+├── reader  // 未知
+├── res     // 二进制资源包
+├── resources  // 脚本资源包
+├── scripts // 开发构建脚本
+├── src     // 主程序代码包
+│   ├── api
+│   ├── appPreload
+│   ├── appWatch
+│   ├── browserApi
+│   ├── main // 又是js代码包
+│   ├── model // 主进程存储相关
+│   ├── preload
+│   ├── rpc
+│   ├── tableApi // 封装的桌面功能接口定义
+│   ├── tsApi  // 封装的接口定义
+│   ├── util  
+│   └── watchPreload
+├── tsbSdk // 未知sdk
+└── vite   // 桌面进程代码
+    ├── dist // 编译打包的资源
+    ├── html // 静态html
+    ├── packages // 第三方依赖包
+    │   ├── app
+    │   ├── barrage
+    │   ├── extension
+    │   ├── frame
+    │   ├── icon
+    │   ├── index
+    │   ├── kee
+    │   ├── search
+    │   ├── selectIcon
+    │   ├── settings
+    │   ├── table // 桌面主要页面逻辑
+    │   ├── task
+    │   ├── toolbox
+    │   ├── tray
+    │   └── user
+    ├── public // 公共文件
+    ├── script // 开发脚本支持
+    └── src // 未知代码区
+   
 
 ```
 
 
 ## 开发调试
 
-1.安装nodejs-16版本（建议使用nvm管理node版本）
+1.安装nodejs-16版本（建议使用nvm管理node版本，亲测node16.15.0对本项目正常使用）
 
 2.在管路员终端安装win sdk工具`npm install --g --production windows-build-tools`
 
-3.安装python3.10或以上版本，并设置环境变量
+3.安装python3.10或以上版本，并设置yarn环境变量
+> 参考可运行的完整yarn环境变量
+![img.png](./docs/npmenv.png)
+项目推荐使用的环境变量：
+```shell
+electron_mirror=https://npm.taobao.org/mirrors/electron/
+ELECTRON_BUILDER_BINARIES_MIRROR=http://npm.taobao.org/mirrors/electron-builder-binaries/
+node_sqlite3_binary_host_mirror=http://npm.taobao.org/mirrors/
+sass_binary_site=https://npm.taobao.org/mirrors/node-sass/
+PYTHON_MIRROR=http://npm.taobao.org/mirrors/python
+profiler_binary_host_mirror=http://npm.taobao.org/mirrors/node-inspector/
+registry=https://registry.npm.taobao.org
+```
 
 4.在根目录运行yarn命令
 

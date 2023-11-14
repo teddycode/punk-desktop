@@ -1,4 +1,4 @@
-var settings = require('util/settings/settings.js')
+const settings = require('util/settings/settings.js');
 
 function initialize () {
   if (settings.get('useSeparateTitlebar') === true) {

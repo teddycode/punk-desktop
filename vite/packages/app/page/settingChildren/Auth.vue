@@ -62,8 +62,6 @@
             </a-col>
           </a-row>
         </div>
-
-
       </div>
     </a-tab-pane>
   </a-tabs>

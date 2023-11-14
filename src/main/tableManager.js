@@ -78,7 +78,8 @@ class TableManager {
                         '--app-path=' + app.getPath('exe'),
                         '--app-dir_name=' + __dirname,
                     ]
-                }
+                },
+                // fullscreen: true,
             })
 
             tableWin.window.webContents.session.webRequest.onHeadersReceived({urls: ['*://*/*']}, (d, c) => {
@@ -118,7 +119,6 @@ class TableManager {
                     console.error(
                         `The application tried to request permission for '${permission}'. This permission was not whitelisted and has been blocked.`
                     )
-
                     callback(false) // Deny
                 }
             })

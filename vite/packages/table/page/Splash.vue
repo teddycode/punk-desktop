@@ -1,7 +1,7 @@
 <template>
   <div
-      class="drag"
-      style="display:flex;height: 100vh;text-align: center;align-content: center;align-items: center;background:#333;justify-content: center">
+    class="drag"
+    style="display:flex;height: 100vh;text-align: center;align-content: center;align-items: center;background:#33 3;justify-content: center">
     <div v-if="launching" style="margin: auto;">
       <div class="mb-5 animate-bounce ">
         <a-avatar :size="60"
@@ -148,7 +148,6 @@ export default {
 
     this.getUserInfo()
     this.sortClock()
-
   },
   computed: {
     ...mapWritableState(codeStore, ['myCode', 'serialHash']),
@@ -183,6 +182,7 @@ export default {
       clearTimeout(this.timeoutHandler)//清理掉超时提示
       chatStore().login()
       if (localStorage.getItem('wizarded')) {
+        tsbApi.window.setFullScreen(true) // default fullscreen when app launched
         const currentRoute = appStore().currentRoute
         if (currentRoute) {
           if (['lock', 'power'].includes(currentRoute.name)) {
