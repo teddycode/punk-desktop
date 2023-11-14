@@ -228,9 +228,10 @@ export default {
     ...mapActions(cardStore, ['removeClock', 'changeClock']),
     enter(closeSpot = true) {
       if (closeSpot && !this.singleLively) {
+        // BUG 壁纸加载不出来
         window.Spotlight.close()
       }
-      console.log('处罚顶层返回')
+      console.log('触发顶层返回')
       this.$router.go(-1)
     },
     enterSetting() {

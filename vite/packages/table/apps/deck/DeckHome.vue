@@ -8,7 +8,8 @@
   <template v-else>
     <div v-if="this.grids.length === 0" class=" box p-5" style="max-height: 100%">
       <a-result class="s-bg rounded-lg " status="success"
-                style="background: var(--primary-bg);color: var(--primary-text);" sub-title="快捷指令功能，我们又称之为Dreamdeck，此功能的使用需要有一定的计算机基础知识。"
+                style="background: var(--primary-bg);color: var(--primary-text);"
+                sub-title="快捷指令功能，我们又称之为Dreamdeck，此功能的使用需要有一定的计算机基础知识。"
                 title="使用快捷指令">
         <template #extra>
           <div class="item-content">
@@ -65,21 +66,21 @@
     </a-row>
   </div>
   <div :class="{ sharing: sharing }">
-    <vue-custom-scrollbar :settings="scrollbarSettings" style="position:relative;width:calc(100vw - 9em);  border-radius: 8px;height: calc(100vh - 12em)"
+    <vue-custom-scrollbar :settings="scrollbarSettings"
+                          style="position:relative;width:calc(100vw - 9em);  border-radius: 8px;height: calc(100vh - 12em)"
                           @contextmenu.stop="showMenu(-1, undefined, 'wrapper')">
-
       <div style="width: auto;white-space: nowrap">
-        <div v-for="(grid, index) in            grids           " :style="{ width: getWidth(grid.cols) }" style="display: inline-block"
+        <div v-for="(grid, index) in  grids  " :style="{ width: getWidth(grid.cols) }"
+             style="display: inline-block"
              @contextmenu.stop="showMenu(grid.id)">
           <h3 v-if="sharing" class="pointer text-more">
             <a-checkbox v-model:checked="selectedGridIds[grid.id]">{{ grid.title }}</a-checkbox>
           </h3>
           <template v-else>
             <h3 v-if="editing" class="pointer text-more">
-              <span v-if="editing"><span style="margin-left: 0.8em"><left-square-outlined v-if="index !== 0"
-                                                                                          class="mr-3"
-                                                                                          @click.stop="moveGrid(-1, index)"/> <right-square-outlined
-                  v-if="index !== this.grids.length - 1" @click.stop="moveGrid(1, index)"/></span>
+              <span v-if="editing"><span style="margin-left: 0.8em">
+                <left-square-outlined v-if="index !== 0" class="mr-3" @click.stop="moveGrid(-1, index)"/> <right-square-outlined
+                v-if="index !== this.grids.length - 1" @click.stop="moveGrid(1, index)"/></span>
                 <span class="pl-5"></span> {{ grid.title }}</span>
             </h3>
             <h3 v-else class="pointer text-more xt-text" style="padding-left: 0.8em;margin-bottom: 0em"
@@ -89,10 +90,10 @@
           </template>
 
           <div>
-            <!--      <div style="min-height: 3em" @contextmenu.stop="showMenu(index)" :id="'board-'+board.id" class="grid"-->
-            <!--           v-for="(board,index) in decks">-->
-            <!--        <DeckItem :id="item.id" :item="item" v-for="item in board.children"></DeckItem>-->
-            <!--      </div>-->
+            <div style="min-height: 3em" @contextmenu.stop="showMenu(index)" :id="'board-'+board.id" class="grid"
+                 v-for="(board,index) in decks">
+              <DeckItem :id="item.id" :item="item" v-for="item in board.children"></DeckItem>
+            </div>
             <div v-if="grid.children.length === 0 && editing === false"
                  :style="{ width: getVuuriWidth(grid.cols) }"
                  class="grid" style="text-align: center;padding-top: 0.3em;padding-bottom: 0.3em">
@@ -105,13 +106,15 @@
 
             <vuuri v-show="grid.children.length !== 0 || editing" :key="key"
                    :ref="'grid' + grid.id"
-                   v-model="grid.children" :drag-enabled="editing" :get-item-height="getIconSize" :get-item-width="getIconSize"
+                   v-model="grid.children" :drag-enabled="editing" :get-item-height="getIconSize"
+                   :get-item-width="getIconSize"
                    :style="{ width: getVuuriWidth(grid.cols) }"
                    class="grid s-bg" group-id="grid.id" item-key="id"
                    style="min-height: 3em">
               <template #item="{ item }">
                 <Widget :item="item" :resizable="true"
-                        :showDelete="true" :title="item.title" :uniqueKey="String(item.id)" @contextmenu.stop="showMenu(item.id, { item, grid }, 'item')">
+                        :showDelete="true" :title="item.title" :uniqueKey="String(item.id)"
+                        @contextmenu.stop="showMenu(item.id, { item, grid }, 'item')">
                   <DeckItem :id="item.id" :item="item"></DeckItem>
                 </Widget>
               </template>
@@ -208,7 +211,8 @@
                   style="width: 100%;height: 22em"></a-textarea>
     </div>
     <div class="line">
-      <a-button :disabled="this.importJsonTxt === ''" class="mr-5" style="background: var(--primary-bg);color: var(--primary-text);" type="primary"
+      <a-button :disabled="this.importJsonTxt === ''" class="mr-5"
+                style="background: var(--primary-bg);color: var(--primary-text);" type="primary"
                 @click="importCode">导入分享代码
       </a-button>
       <a-button style="background: var(--primary-bg);color: var(--primary-text);" @click="importFile">导入文件
@@ -284,7 +288,9 @@
         <div class="btn" @click="toggleEditing">
           <Icon v-if="!this.editing" icon="bofang" style="font-size: 3em"></Icon>
           <Icon v-else icon="tingzhi" style="font-size: 3em;color: orange"></Icon>
-          <div><span v-if="!this.editing">调整布局</span><span v-else style="color: orange">停止调整</span></div>
+          <div>
+            <span v-if="!this.editing">调整布局</span>
+            <span v-else style="color: orange">停止调整</span></div>
         </div>
       </a-col>
       <a-col>
@@ -323,22 +329,22 @@
 
 <script>
 import DeckItem from '../../components/muuri/DeckItem.vue'
-import {appStore} from '../../store'
-import {mapActions, mapWritableState} from 'pinia'
+import { appStore } from '../../store'
+import { mapActions, mapWritableState } from 'pinia'
 import Template from '../../../user/pages/Template.vue'
 import DeckAdd from './DeckAdd.vue'
-import {message, Modal} from 'ant-design-vue'
-import {deckStore} from './store'
+import { message, Modal } from 'ant-design-vue'
+import { deckStore } from './store'
 import Widget from '../../components/muuri/Widget.vue'
 import vuuri from '../../components/vuuri/Vuuri.vue'
 import Prompt from '../../components/comp/Prompt.vue'
 import BackBtn from '../../components/comp/BackBtn.vue'
-import {LeftSquareOutlined, PlusOutlined, RightSquareOutlined} from '@ant-design/icons-vue'
-import GradeSmallTip from "../../components/GradeSmallTip.vue";
-import {powerState} from '../../js/watch/grade'
+import { LeftSquareOutlined, PlusOutlined, RightSquareOutlined } from '@ant-design/icons-vue'
+import GradeSmallTip from '../../components/GradeSmallTip.vue'
+import { powerState } from '../../js/watch/grade'
 import _ from 'lodash-es'
-import {isWin} from '../../js/common/screenUtils'
-import {Icon as Iconify} from '@iconify/vue';
+import { isWin } from '../../js/common/screenUtils'
+import { Icon as Iconify } from '@iconify/vue'
 
 export default {
   name: 'Deck',
@@ -354,7 +360,7 @@ export default {
     GradeSmallTip,
     Iconify
   },
-  data() {
+  data () {
     return {
       //分享相关的组
       selectedGridIds: {},//分享选中的组
@@ -403,7 +409,7 @@ export default {
   computed: {
     ...mapWritableState(appStore, ['fullScreen']),
     ...mapWritableState(deckStore, ['grids', 'editing', 'settings']),
-    selectedGrids() {
+    selectedGrids () {
       let selectedIds = Object.keys(this.selectedGridIds).filter(key => {
         return this.selectedGridIds[key]
       })
@@ -412,8 +418,8 @@ export default {
       })
     }
   },
-  mounted() {
-    const {superiorLimit} = this.powerState('quickInstructions', lv)
+  mounted () {
+    const { superiorLimit } = this.powerState('quickInstructions', lv)
     this.superiorLimit = superiorLimit
     //进来之后就把存储的部分和初始化部分完全脱钩，这样，可以随意变更按钮，并即时存储，而不会影响到我们界面上的部分。
     //this.displayGrids=_.cloneDeep(this.grids)
@@ -425,32 +431,31 @@ export default {
   methods: {
     isWin,
     powerState,
-    limitTip() {
+    limitTip () {
       this.$refs.smallTip.clickTip()
       this.$refs.smallTip.limitFlag = true
     },
-    toggleEditGrid() {
+    toggleEditGrid () {
       if (!this.currentGrid.cols) {
         this.currentGrid.cols = 2
       }
       this.editGridVisible = true
     },
-    getWidth(col) {
+    getWidth (col) {
       if (!col) {
         col = 2
       }
       return col * 90 + 25 + 'px'
 
     },
-    getVuuriWidth(col) {
+    getVuuriWidth (col) {
       if (!col) {
         col = 2
       }
       return col * 90 + 10 + 'px'
-
     },
     ...mapActions(deckStore, ['initGrids']),
-    importCode() {
+    importCode () {
       if (this.importJsonTxt === '') {
         message.error('请粘贴分享代码后导入。')
         return
@@ -471,28 +476,28 @@ export default {
       }
 
     },
-    async importFile() {
+    async importFile () {
       let openPath = await tsbApi.dialog.showOpenDialog({
         title: '选择导入的代码',
-        filters: [{name: 'deck存档', extensions: ['deck']}],
+        filters: [{ name: 'deck存档', extensions: ['deck'] }],
       })
       if (!openPath) {
         return
       }
       this.importJsonTxt = require('fs').readFileSync(openPath[0], 'utf-8')
     },
-    copyCode() {
+    copyCode () {
       require('electron').clipboard.writeText(this.getShareJson())
       this.toggleSharing()
       this.shareMenuJsonVisible = false
       message.success('已为您复制到剪切板，赶紧去分享给其他小伙伴吧！')
     },
-    async saveFile() {
+    async saveFile () {
       let savePath = await tsbApi.dialog.showSaveDialog({
         title: '选择保存位置',
         defaultPath: '我的分享.deck',
         message: '选择保存分享代码位置',
-        filters: [{name: 'deck存档', extensions: ['deck']}],
+        filters: [{ name: 'deck存档', extensions: ['deck'] }],
         properties: [
           'createDirectory',
           'showOverwriteConfirmation'
@@ -508,13 +513,13 @@ export default {
           require('electron').shell.showItemInFolder(savePath)
           this.toggleSharing()
           this.shareMenuJsonVisible = false
-          return
+
         } else {
           message.error('导出失败，请确认文件权限。')
         }
       })
     },
-    ensureShare() {
+    ensureShare () {
       if (this.selectedGrids.length === 0) {
         message.error('您至少选择一个组。')
         return
@@ -525,10 +530,10 @@ export default {
         this.shareMenuJsonVisible = true
       }
     },
-    getShareJson() {
+    getShareJson () {
       return JSON.stringify(this.selectedGrids)
     },
-    clean() {
+    clean () {
       Modal.confirm({
         centered: true,
         content: '是否删除全部指令？此操作不可还原。',
@@ -538,11 +543,11 @@ export default {
         }
       })
     },
-    toggleImport() {
+    toggleImport () {
       this.importJsonTxt = ''
       this.importMenuJsonVisible = !this.importMenuJsonVisible
     },
-    toggleSharing() {
+    toggleSharing () {
       if (this.editing) {
         //互斥
         this.toggleEditing()
@@ -552,7 +557,7 @@ export default {
       this.fullScreen = this.sharing
       this.menuVisible = false
     },
-    toggleEditing() {
+    toggleEditing () {
       if (this.sharing) {
         //互斥
         this.toggleSharing()
@@ -571,7 +576,7 @@ export default {
      * @param step
      * @param index
      */
-    moveGrid(step, index) {
+    moveGrid (step, index) {
       let tmp = this.grids[index]
       this.grids.splice(index, 1)
       if (step === -1) {
@@ -580,11 +585,11 @@ export default {
         this.grids.splice(index + 1, 0, tmp)
       }
     },
-    showEditTitle(grid) {
+    showEditTitle (grid) {
       this.visiblePromptTitle = true
       this.editGrid = grid
     },
-    changeTitle(title) {
+    changeTitle (title) {
       if (title.value.length > 0) {
         this.editGrid.title = title.value
         this.visiblePromptTitle = false
@@ -593,7 +598,7 @@ export default {
       }
 
     },
-    changeSize(size) {
+    changeSize (size) {
       this.settings.iconSize = size
       this.menuVisible = false
       Object.keys(this.$refs).forEach(key => {
@@ -604,12 +609,12 @@ export default {
     /**
      * 手动刷新全部Grids
      */
-    updateAllGrids() {
+    updateAllGrids () {
       Object.keys(this.$refs).forEach(key => {
         this.$refs[key][0].update()
       })
     },
-    getIconSize() {
+    getIconSize () {
       let width = 80
       switch (this.settings.iconSize) {
         case 'small':
@@ -627,10 +632,10 @@ export default {
       return width + 'px'
     },
 
-    onClose() {
+    onClose () {
       this.menuVisible = false
     },
-    remove() {
+    remove () {
       Modal.confirm({
         content: '确定删除按钮【' + this.currentItem.title + '】？此操作不可还原。请谨慎操作。',
         okText: '确认删除',
@@ -643,7 +648,7 @@ export default {
       })
 
     },
-    edit() {
+    edit () {
       this.visibleAdd = true
       this.$router.push({
         name: 'deckAdd',
@@ -653,7 +658,7 @@ export default {
         }
       })
     },
-    clone() {
+    clone () {
       let cloneItem = _.cloneDeep(this.currentItem)
       cloneItem.id = window.$models.nanoid.nanoid(8)
       this.currentGrid.children.unshift(cloneItem)
@@ -661,7 +666,7 @@ export default {
       this.key += 1
       message.success('复制按钮成功')
     },
-    add(currentGrid) {
+    add (currentGrid) {
 
       let params = {}
       if (currentGrid) {
@@ -682,7 +687,7 @@ export default {
         params: params
       })
     },
-    showMenu(id, data = {}, type = 'grid') {
+    showMenu (id, data = {}, type = 'grid') {
       this.menuVisible = true
       if (type === 'grid') {
         this.menuType = 'grid'
@@ -700,7 +705,7 @@ export default {
         this.menuType = 'wrapper'
       }
     },
-    removeGrid(id) {
+    removeGrid (id) {
       Modal.confirm({
         content: '是否确认删除分组？此操作无法恢复。',
         okText: '确认删除',
@@ -716,7 +721,7 @@ export default {
       })
 
     },
-    addBoard() {
+    addBoard () {
       if (this.superiorLimit <= this.grids.length) {
         this.limitTip()
         return
