@@ -1,5 +1,6 @@
 let vite=require("vite")
 let vue=require("@vitejs/plugin-vue")
+const path = require('path')
 let dev={
   server:null,
   serverPort:1600,
@@ -10,7 +11,16 @@ let dev={
       server:{
         port:this.serverPort
       },
-      plugins:[vue()]
+      plugins:[vue()],
+      resolve: {
+        alias: {
+          "@package": path.resolve("./packages"),
+          "@table": path.resolve("./packages/table"),
+          "@page": path.resolve("./packages/table/page"),
+          "@store": path.resolve("./packages/table/store"),
+          "@route": path.resolve("./packages/table/route"),
+        },
+      },
     }
     this.server=await vite.createServer(options)
     await this.server.listen()

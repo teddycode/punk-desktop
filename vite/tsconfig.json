@@ -14,9 +14,27 @@
     "skipLibCheck": true,
     "types": [
 //      "pinia-plugin-persist",
-     // "ts-api-types"
-    ]
+//      "ts-api-types",
+    ],
+    "baseUrl": "./vite",
+    "paths": {
+      "@package/*": [
+        "packages/*"
+      ],
+      "@page/*": [
+        "packages/table/page/*"
+      ],
+      "@table/*": [
+        "packages/table/*"
+      ],
+      "@store/*": [
+        "packages/table/store/*"
+      ],
+      "@route/*": [
+        "packages/table/route/*"
+      ]
+    }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "packages/**/*.d.ts"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "packages/**/*.d.ts","env.d.ts"],
+  "references": [{ "path": "./tsconfig.node.json" }],
 }
