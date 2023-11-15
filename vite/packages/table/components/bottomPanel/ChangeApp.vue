@@ -2,23 +2,26 @@
   <div>
     <div
         class="m-3"
-        style="width: 320px; margin: auto; text-align: center; margin-top: 1em"
+        style="width: 320px; margin: auto; text-align: center; margin-top: 1.5em; margin-bottom: 0.5em"
     >
-      <HorizontalPanel
-          v-model:selectType="currentTab"
-          :navList="tabs"
-          class="no-drag"
-          @changed="this.key = Date.now()"
-          @click.stop
-      ></HorizontalPanel>
+      <a-text strong style="font-size: 20px; color: black;">任务管理器</a-text>
+      <!--      <HorizontalPanel-->
+      <!--          v-model:selectType="currentTab"-->
+      <!--          :navList="tabs"-->
+      <!--          class="no-drag"-->
+      <!--          @changed="this.key = Date.now()"-->
+      <!--          @click.stop-->
+      <!--      ></HorizontalPanel>-->
+
     </div>
   </div>
-  <div v-if="currentTab.name === 'screen'">
-    <div style="max-width: 740px; margin: auto">
-      <ScreenManage></ScreenManage>
-    </div>
-  </div>
-  <div v-else>
+  <!--  <div v-if="currentTab.name === 'screen'">-->
+  <!--    <div style="max-width: 740px; margin: auto">-->
+  <!--      <ScreenManage></ScreenManage>-->
+  <!--    </div>-->
+  <!--  </div>-->
+  <!--  <div v-else>-->
+  <div>
     <div style="max-width: 1200px; margin: auto">
       <RunningApps/>
     </div>
@@ -45,70 +48,70 @@
 </template>
 
 <script>
-import navigationData from "../../js/data/tableData";
-import {appsStore} from "../../store/apps";
-import {mapWritableState} from "pinia";
-import ScreenManage from "./ScreenManage.vue";
-import RunningApps from "./RunningApps.vue";
-import HorizontalPanel from "../HorizontalPanel.vue";
+import navigationData from '../../js/data/tableData'
+import { appsStore } from '../../store/apps'
+import { mapWritableState } from 'pinia'
+import ScreenManage from './ScreenManage.vue'
+import RunningApps from './RunningApps.vue'
+import HorizontalPanel from '../HorizontalPanel.vue'
 
 export default {
-  name: "ChangeApp",
-  components: {HorizontalPanel, RunningApps, ScreenManage},
-  data() {
+  name: 'ChangeApp',
+  components: { HorizontalPanel, RunningApps, ScreenManage },
+  data () {
     return {
       tabs: [
         {
-          name: "screen",
-          title: "分屏",
+          name: 'screen',
+          title: '分屏',
         },
         {
-          name: "apps",
-          title: "应用",
+          name: 'apps',
+          title: '应用',
         },
       ],
       currentTab: {
-        name: "screen",
-        title: "分屏",
+        name: 'screen',
+        title: '分屏',
       },
-    };
+    }
   },
   props: {
     tab: {
       type: String,
-      default: "screen",
+      default: 'screen',
     },
     full: {
       type: Boolean,
       default: false,
     },
   },
-  created() {
-    navigationData.sendThis(this);
+  created () {
+    navigationData.sendThis(this)
   },
-  mounted() {
-    if (this.tab === "screen") {
+  mounted () {
+    if (this.tab === 'screen') {
       this.currentTab = {
-        name: "screen",
-        title: "分屏",
-      };
+        name: 'screen',
+        title: '分屏',
+      }
     } else {
       this.currentTab = {
-        name: "apps",
-        title: "应用",
-      };
+        name: 'apps',
+        title: '应用',
+      }
     }
   },
   computed: {
     ...mapWritableState(appsStore, [
-      "runningApps",
-      "runningAppsInfo",
-      "runningTableApps",
+      'runningApps',
+      'runningAppsInfo',
+      'runningTableApps',
     ]),
-    listData() {
-      return navigationData.systemAppList.slice(0, 5);
+    listData () {
+      return navigationData.systemAppList.slice(0, 5)
     },
   },
   methods: {},
-};
+}
 </script>

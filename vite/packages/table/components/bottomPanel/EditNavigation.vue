@@ -38,23 +38,23 @@
           <div class="center-text" style="transform: translateY(-20px)">
 
             <div v-show="navText && !promptModal" class="con-center" style="width:800px">
-              <span class="mt-5 mb-4">本界面不支持触摸，请使用滚轮滚动，支持鼠标拖拽！</span>
-              <!--              <div class="mb-2 ">
-                              <div class="mb-2 xt-text-2">
-                                注意：侧边栏图标风格会自动调整
-                              </div>
-                              <div class="flex mb-2">
-                              <span class="flex items-center justify-center mr-4">
-                            <Icon icon="home" style="width: 30px;height: 30px;color:var(&#45;&#45;secondary-text);"></Icon>
-                            <Icon icon="arrowright" style="width: 20px;height: 20px;"></Icon>
-                            <Icon icon="shouye1" style="width: 30px;height: 30px;color:var(&#45;&#45;secondary-text);"></Icon>
-                          </span>
-                                <Icon icon="thunderbolt" style="width: 30px;height: 30px;color:var(&#45;&#45;secondary-text);"></Icon>
-                                <Icon icon="arrowright" style="width: 20px;height: 20px;margin-top: 6px"></Icon>
-                                <Icon icon="kuaijie1" style="width: 30px;height: 30px;color:var(&#45;&#45;secondary-text);"></Icon>
-                              </div>
+              <span class="mt-5 mb-4">本界面支持鼠标拖拽应用图标！</span>
+              <div class="mb-2 ">
+                <div class="mb-2 xt-text-2">
+                  注意：侧边栏图标风格会自动调整
+                </div>
+                <div class="flex mb-2">
+                          <span class="flex items-center justify-center mr-4">
+                        <Icon icon="home" style="width: 30px;height: 30px;color:var(--secondary-text);"></Icon>
+                        <Icon icon="arrowright" style="width: 20px;height: 20px;"></Icon>
+                        <Icon icon="shouye1" style="width: 30px;height: 30px;color:var(--secondary-text);"></Icon>
+                      </span>
+                  <Icon icon="thunderbolt" style="width: 30px;height: 30px;color:var(--secondary-text);"></Icon>
+                  <Icon icon="arrowright" style="width: 20px;height: 20px;margin-top: 6px"></Icon>
+                  <Icon icon="kuaijie1" style="width: 30px;height: 30px;color:var(--secondary-text);"></Icon>
+                </div>
 
-                            </div>-->
+              </div>
               <xt-task id='M0104' no='3'></xt-task>
               <div class="mb-2 xt-text-2">必选功能（拖拽添加）</div>
               <div id="mainList" class="main-nav" style="width: 320px;zoom:0.8">
@@ -70,7 +70,7 @@
                 </div>
               </div>
               <div
-                  style="width: 600px;text-align: center;zoom: 0.8;display: flex;flex-direction: column;align-items:center;justify-content: center;justify-items: center;">
+                style="width: 600px;text-align: center;zoom: 0.8;display: flex;flex-direction: column;align-items:center;justify-content: center;justify-items: center;">
                 <div class="mt-2 mb-2" style="color:var(--secondary-text);">推荐功能（拖拽添加）</div>
                 <div id="suggestList" class="main-nav" style="width:430px;white-space: pre-wrap;flex-wrap: wrap;">
                   <div v-for="item in suggestNavList" :key="item.name" style="margin:5px">
@@ -92,7 +92,6 @@
               <div class="left-point">
                 <span class="mb-1 xt-text-2"><Icon icon="arrowleft"></Icon>左侧</span>
                 <div>
-                  <!-- <a-switch v-model:checked="leftNav" @change="navToggle(sideNavigationList,'left')"/> -->
                   <a-switch v-model:checked="leftNav" @change="navToggle('left')"/>
                 </div>
               </div>
@@ -120,10 +119,8 @@
                 「{{ item.name }}」
               </span>
               入口，以保持功能完整性。</span>
-                <!-- <span class="my-5">在导航栏中至少保留一个「{{delMainItem.name}}」入口，以保持功能完整性。</span> -->
                 <div class="modal-btn">
                   <div class="mr-3 rounded-lg cursor-pointer xt-bg-2" @click="promptModal = false">好的</div>
-                  <!-- <div @click="delMainCore">移除</div> -->
                 </div>
               </div>
             </div>
@@ -153,7 +150,7 @@
             </div>
           </div>
         </div>
-        <!-- {{ foot }} -->
+        <!-- 底部导航栏，暂时关闭 -->
         <div v-show="footNav" id="footBox" class="box-foot">
           <div class="flex flex-row items-center w-full pl-2" style="height: 73px;overflow: hidden;">
             <div id="navList" ref="content"
@@ -162,8 +159,9 @@
                 <!-- {{ item.type }} -->
                 <a-dropdown :trigger="['contextmenu']">
                   <div
-                      v-if="item.type==='systemApp'"
-                      style="width: 56px;height: 56px;display: flex;justify-content: center;align-items: center;background: var(--secondary-bg);border-radius: 12px" @click="clickNavigation(item)">
+                    v-if="item.type==='systemApp'"
+                    style="width: 56px;height: 56px;display: flex;justify-content: center;align-items: center;background: var(--secondary-bg);border-radius: 12px"
+                    @click="clickNavigation(item)">
                     <navIcon :icon="item.icon" style="width: 32px;height: 32px;color:var(--secondary-text);"></navIcon>
                   </div>
                   <a-avatar v-else :size="40" :src="renderIcon(item.icon)" shape="square"></a-avatar>
@@ -175,7 +173,8 @@
             <xt-task id='M0104' no='4' @cb="addEdit('foot')">
               <Icon class="mr-8 pointer"
                     icon="tianjia"
-                    style="width: 56px;height: 56px;color:var(--secondary-text);position:relative;top:2px;" @click="addEdit('foot')"></Icon>
+                    style="width: 56px;height: 56px;color:var(--secondary-text);position:relative;top:2px;"
+                    @click="addEdit('foot')"></Icon>
             </xt-task>
           </div>
           <div class="flex items-center justify-center pl-6 mr-6 pointer"
@@ -199,11 +198,9 @@
                                 class="relative" style="height: calc(100% - 40px);padding: 5px 0">
             <template v-for="(item,index) in filterList">
               <xt-task v-if="item.name == '主页'" id='M0104' no='6' @cb="clickRightListItem(item,index)">
-
                 <listItem :item="item"
                           class="rounded-lg right-scroll-list" @click="clickRightListItem(item,index)"></listItem>
               </xt-task>
-
               <listItem v-else :item="item"
                         class="rounded-lg right-scroll-list" @click="clickRightListItem(item,index)"></listItem>
             </template>
@@ -254,29 +251,29 @@
 <script>
 import vuuri from '../vuuriHome/Vuuri.vue'
 import listItem from './listItem.vue'
-import {mapActions, mapWritableState} from 'pinia'
-import {cardStore} from '../../store/card'
-import {navStore} from '../../store/nav'
+import { mapActions, mapWritableState } from 'pinia'
+import { cardStore } from '../../store/card'
+import { navStore } from '../../store/nav'
 import ScrolX from '../ScrolX.vue'
 import Sortable from 'sortablejs'
 import navigationData from '../../js/data/tableData'
 import Classification from '../comp/Classification.vue'
-import {Icon as navIcon} from '@iconify/vue'
-import {message} from 'ant-design-vue'
-import {renderIcon} from '../../js/common/common'
+import { Icon as navIcon } from '@iconify/vue'
+import { message } from 'ant-design-vue'
+import { renderIcon } from '../../js/common/common'
 
-const {appModel} = window.$models
+const { appModel } = window.$models
 
 const suggestNavigationList = [
 
   {
     type: 'systemApp',
     icon: 'fluent:chat-16-regular',
-    name: '社群(开发中)',
+    name: '社交',
     event: 'chat',
     tab: 'community',
     fn: () => {
-      vm.$router.push({name: 'chat'})
+      vm.$router.push({ name: 'chat' })
     }
   },
   {
@@ -319,7 +316,7 @@ const suggestNavigationList = [
 ]
 export default {
   name: 'EditNavigation',
-  data() {
+  data () {
     return {
       scrollbarSettings: {
         useBothWheelAxes: true,
@@ -369,7 +366,7 @@ export default {
     ...mapWritableState(cardStore, ['routeParams']),
     ...mapWritableState(navStore, ['mainNavigationList', 'sideNavigationList', 'footNavigationList', 'rightNavigationList', 'navigationToggle']),
 
-    filterList() {
+    filterList () {
       return this.ClassifyData.filter(i => {
         return i.type === this.nowClassify && i.name.includes(this.selectContent)
       })
@@ -382,10 +379,10 @@ export default {
     Classification,
     navIcon
   },
-  created() {
+  created () {
     this.loadDeskIconApps()
   },
-  mounted() {
+  mounted () {
     this.leftNav = this.navigationToggle[0]
     this.rightNav = this.navigationToggle[1]
     this.footNav = this.navigationToggle[2]
@@ -413,15 +410,15 @@ export default {
       this.rightDrop()
       this.mainDrop()
     }),
-        // 替换原有图标
-        // console.log(this.ClassifyData);
-        navigationData.systemAppList.forEach((item) => {
-          this.ClassifyData.forEach((i) => {
-            if (item.name === i.name) {
-              i.icon = item.icon
-            }
-          })
+      // 替换原有图标
+      // console.log(this.ClassifyData);
+      navigationData.systemAppList.forEach((item) => {
+        this.ClassifyData.forEach((i) => {
+          if (item.name === i.name) {
+            i.icon = item.icon
+          }
         })
+      })
     navigationData.systemFillAppList.forEach((item) => {
       this.sideNavigationList.forEach((i) => {
         if (item.name === i.name) {
@@ -445,17 +442,17 @@ export default {
     })
   },
   methods: {
-    scrollNav(refVal, scrollDirection) {
+    scrollNav (refVal, scrollDirection) {
       let content = this.$refs[refVal]
       content.addEventListener('wheel', (event) => {
         event.preventDefault()
         content[scrollDirection] += event.deltaY
       })
     },
-    clickNavigation(type) {
-      console.log(type);
+    clickNavigation (type) {
+      console.log(type)
     },
-    navToggle(type) {
+    navToggle (type) {
       this.delMainItem = []
       switch (type) {
         case 'left':
@@ -587,7 +584,7 @@ export default {
     //   }
     // },
     ...mapActions(navStore, ['setFootNavigationList', 'sortFootNavigationList', 'removeFootNavigationList', 'setSideNavigationList', 'sortSideNavigationList', 'removeSideNavigationList', 'setRightNavigationList', 'sortRightNavigationList', 'removeRightNavigationList', 'setNavigationToggle']),
-    updateMainNav(addItem, type) {
+    updateMainNav (addItem, type) {
       this.mainNavList = this.mainNavigationList
       let sumNavList = this.sideNavigationList.concat(this.footNavigationList, this.rightNavigationList)
       if (type) {
@@ -607,7 +604,7 @@ export default {
         }
       }
     },
-    updateSuggestNav(addItem, type) {
+    updateSuggestNav (addItem, type) {
       this.suggestNavList = suggestNavigationList
       let sumNavList = this.sideNavigationList.concat(this.footNavigationList, this.rightNavigationList)
       if (type) {
@@ -627,7 +624,7 @@ export default {
         }
       }
     },
-    mainDrop() {
+    mainDrop () {
       let that = this
       let main = document.getElementById('mainList')
 
@@ -636,7 +633,7 @@ export default {
         animation: 150,
         removeCloneOnHide: true,
         forceFallback: false,
-        onStart(evt) {
+        onStart (evt) {
           that.darggingCore = true
           that.draggingArea('leftBox', evt.oldIndex, that.sideNavigationList, that.setSideNavigationList, that.mainNavigationList)
           that.draggingArea('rightBox', evt.oldIndex, that.rightNavigationList, that.setRightNavigationList, that.mainNavigationList)
@@ -651,7 +648,7 @@ export default {
         animation: 150,
         removeCloneOnHide: true,
         forceFallback: false,
-        onStart(evt) {
+        onStart (evt) {
           that.darggingCore = true
           that.draggingArea('leftBox', evt.oldIndex, that.sideNavigationList, that.setSideNavigationList, suggestNavigationList, false)
           that.draggingArea('rightBox', evt.oldIndex, that.rightNavigationList, that.setRightNavigationList, suggestNavigationList, false)
@@ -670,7 +667,7 @@ export default {
      * @param source 来源数据
      * @param compare 是否比对，排重
      */
-    draggingArea(id, oldIndex, NavigationList, setNavigationList, source, compare = true) {
+    draggingArea (id, oldIndex, NavigationList, setNavigationList, source, compare = true) {
       let that = this
       let slider = document.getElementById(id)
       slider.ondragover = function (ev) {
@@ -688,7 +685,7 @@ export default {
         }
       }
     },
-    delNavigation(sumList, oneNav, index, delMethod, type) {
+    delNavigation (sumList, oneNav, index, delMethod, type) {
       this.delMainItem = []
       if (!this.mainNavList.find(item => item.name === oneNav.name)) {
         //如果不是必须的
@@ -708,7 +705,7 @@ export default {
         }
       }
     },
-    delMainCore() {
+    delMainCore () {
       if (this.delNavType === 'delFoot') {
         this.removeFootNavigationList(this.delMainIndex)
       } else if (this.delNavType === 'delLeft') {
@@ -721,7 +718,7 @@ export default {
       this.updateMainNav(this.delMainItem[0], 'del')
       this.navText = true
     },
-    rowDrop() {
+    rowDrop () {
       let that = this
       let drop = document.getElementById('navList')
       Sortable.create(drop, {
@@ -767,7 +764,7 @@ export default {
         },
         onUpdate: function (event) {
           let newIndex = event.newIndex,
-              oldIndex = event.oldIndex
+            oldIndex = event.oldIndex
           let newItem = drop.children[newIndex]
           let oldItem = drop.children[oldIndex]
 
@@ -797,7 +794,7 @@ export default {
         // },
       })
     },
-    colDrop() {
+    colDrop () {
       let that = this
       let side = document.getElementById('sideNavList')
       Sortable.create(side, {
@@ -829,7 +826,7 @@ export default {
         },
         onUpdate: function (event) {
           let newIndex = event.newIndex,
-              oldIndex = event.oldIndex
+            oldIndex = event.oldIndex
           let newItem = side.children[newIndex]
           let oldItem = side.children[oldIndex]
           // 先删除移动的节点
@@ -847,7 +844,7 @@ export default {
         }
       })
     },
-    rightDrop() {
+    rightDrop () {
       let that = this
       let right = document.getElementById('rightNavList')
       Sortable.create(right, {
@@ -878,7 +875,7 @@ export default {
         },
         onUpdate: function (event) {
           let newIndex = event.newIndex,
-              oldIndex = event.oldIndex
+            oldIndex = event.oldIndex
           let newItem = right.children[newIndex]
           let oldItem = right.children[oldIndex]
           // 先删除移动的节点
@@ -896,10 +893,10 @@ export default {
         }
       })
     },
-    deleteDropList(index) {
+    deleteDropList (index) {
       this.dropList.splice(index, 1)
     },
-    async drop(e) {
+    async drop (e) {
       let files = e.dataTransfer.files
       let filesArr = []
       if (files && files.length > 0) {
@@ -907,14 +904,14 @@ export default {
           filesArr.push(files[i].path)
         }
       }
-      this.dropFiles = await ipc.sendSync('getFilesIcon', {files: JSON.parse(JSON.stringify(filesArr))})
+      this.dropFiles = await ipc.sendSync('getFilesIcon', { files: JSON.parse(JSON.stringify(filesArr)) })
       this.dropList.push(...this.dropFiles)
     },
-    clickItem(item) {
+    clickItem (item) {
       this.activeRightItem = 0
       this.nowClassify = item.name
     },
-    async loadDeskIconApps() {
+    async loadDeskIconApps () {
       const lightApps = await appModel.getAllApps()
       for (let i = 0; i < lightApps.length; i++) {
         lightApps[i].icon = lightApps[i].logo
@@ -926,22 +923,22 @@ export default {
       }
       this.ClassifyData.push(...desktopApps, ...lightApps)
     },
-    onBack() {
+    onBack () {
       this.$emit('setQuick')
       this.routeParams.url && setTimeout(() => {
-        this.$router.push({name: 'app', params: this.routeParams})
+        this.$router.push({ name: 'app', params: this.routeParams })
       }, 400)
     },
-    addEdit(val) {
+    addEdit (val) {
       this.selectNav = val
       this.editFlag = true
       this.nowClassify = 'systemApp'
       this.dropList = []
     },
-    closeAdd() {
+    closeAdd () {
       this.editFlag = false
     },
-    clickRightListItem(item, index) {
+    clickRightListItem (item, index) {
       this.activeRightItem = index
       this.editFlag = false
       if (this.selectNav === 'foot') {
@@ -965,7 +962,7 @@ export default {
           this.setFootNavigationList(item)
           this.$nextTick(() => {
             let scrollElem = this.$refs.content
-            scrollElem.scrollTo({left: scrollElem.scrollWidth, behavior: 'smooth'})
+            scrollElem.scrollTo({ left: scrollElem.scrollWidth, behavior: 'smooth' })
           })
         }
       } else if (this.selectNav === 'left') {
@@ -989,7 +986,7 @@ export default {
           this.setSideNavigationList(item)
           this.$nextTick(() => {
             let scrollElem = this.$refs.sideContent
-            scrollElem.scrollTo({top: scrollElem.scrollHeigth, behavior: 'smooth'})
+            scrollElem.scrollTo({ top: scrollElem.scrollHeigth, behavior: 'smooth' })
           })
         }
       } else if (this.selectNav === 'right') {
@@ -1014,7 +1011,7 @@ export default {
         }
       }
     },
-    async showOpenFileDialog() {
+    async showOpenFileDialog () {
       let savePath = await tsbApi.dialog.showOpenDialog({
         title: '选择', message: '请选择文件', multiple: 'true', properties: [
           'openFile ',
@@ -1028,7 +1025,7 @@ export default {
             filesArr.push(savePath[i])
           }
         }
-        let dropFiles = await ipc.sendSync('getFilesIcon', {files: JSON.parse(JSON.stringify(filesArr))})
+        let dropFiles = await ipc.sendSync('getFilesIcon', { files: JSON.parse(JSON.stringify(filesArr)) })
         this.dropList.push(...dropFiles)
       } else {
         // console.log('取消选择')
@@ -1036,13 +1033,13 @@ export default {
     },
   },
   watch: {
-    leftNav(newVal) {
+    leftNav (newVal) {
       this.setNavigationToggle('left', newVal)
     },
-    rightNav(newVal) {
+    rightNav (newVal) {
       this.setNavigationToggle('right', newVal)
     },
-    footNav(newVal) {
+    footNav (newVal) {
       this.setNavigationToggle('foot', newVal)
     }
   },
