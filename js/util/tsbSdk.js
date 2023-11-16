@@ -278,7 +278,10 @@ const tsbSdk = {
           }
         })
         if (result.code === 1000) {
-          tsbSdk.bridgeToWeb({ eventName: 'receivePermission', resInfo: { code: 200, msg: '成功', data: Object.assign(result.data, args.returnData.userInfo) } })
+          tsbSdk.bridgeToWeb({
+            eventName: 'receivePermission',
+            resInfo: { code: 200, msg: '成功', data: Object.assign(result.data, args.returnData.userInfo) }
+          })
           ipc.send('closePermissionWin')
         } else {
           tsbSdk.bridgeToWeb({ eventName: 'receivePermission', resInfo: { code: 500, msg: '授权登录失败' } })

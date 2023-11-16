@@ -48,8 +48,10 @@
                 <span v-else>未使用</span>
               </template>
               <template v-else-if="column.key === 'key'">
-            <span :style="{background:isMarked(record.key)?'#35ad03':'transparent',textDecoration:record.status===2?'line-through':'none'}" class="mr-3"
-                  style="padding-left: 2px;padding-right: 2px">
+            <span
+                :style="{background:isMarked(record.key)?'#35ad03':'transparent',textDecoration:record.status===2?'line-through':'none'}"
+                class="mr-3"
+                style="padding-left: 2px;padding-right: 2px">
               {{ record.key }}
             </span>
                 <a-button class="pointer mr-1" size="small" @click="copy(record.key)">复制</a-button>
@@ -121,19 +123,19 @@
 </template>
 
 <script>
-import {appStore} from '../../store'
-import {mapActions, mapState, mapWritableState} from 'pinia'
+import { appStore } from '../../store'
+import { mapActions, mapState, mapWritableState } from 'pinia'
 import Template from '../../../user/pages/Template.vue'
-import {message, Modal} from 'ant-design-vue'
-import {codeStore} from '../../store/code'
+import { message, Modal } from 'ant-design-vue'
+import { codeStore } from '../../store/code'
 import HorizontalPanel from '../../components/HorizontalCaptrue.vue'
 import RayMedal from '../../components/small/RayMedal.vue'
 
 export default {
   name: 'Invite',
-  components: {RayMedal, HorizontalPanel, Template},
+  components: { RayMedal, HorizontalPanel, Template },
 
-  data() {
+  data () {
     return {
       code: '',
       tabs: [{
@@ -189,7 +191,7 @@ export default {
       ]
     }
   },
-  mounted() {
+  mounted () {
     this.loadCodes().then()
     if (this.$route.params.tab) {
       this.tab = {
@@ -202,20 +204,20 @@ export default {
   computed: {
     ...mapState(appStore, ['userInfo']),
     ...mapWritableState(codeStore, ['verified']),
-    totalHours() {
+    totalHours () {
       return (this.userInfo.onlineGradeExtra.cumulativeHours)
     },
 
-    canExchange() {
+    canExchange () {
       return (this.userInfo.onlineGradeExtra.cumulativeHours / 200).toFixed(0)
     },
-    exchanged() {
+    exchanged () {
       return this.codes.length
     },
-    leave() {
+    leave () {
       return this.canExchange - this.exchanged
     },
-    invitedUsers() {
+    invitedUsers () {
       let invited = this.codes.filter(code => {
         return code.uid
       })
@@ -228,12 +230,12 @@ export default {
   methods: {
     ...mapActions(codeStore, ['exchange', 'listCodes', 'verify', 'active']),
     ...mapActions(appStore, ['showUserCard']),
-    goToMy() {
+    goToMy () {
       this.$router.push({
         name: 'socialMy'
       })
     },
-    async activeCode() {
+    async activeCode () {
       if (!this.code) {
         message.error('请输入邀请码')
         return
@@ -251,15 +253,15 @@ export default {
         message.error('激活失败。' + rs.info)
       }
     },
-    showCard(uid, userInfo) {
+    showCard (uid, userInfo) {
       this.showUserCard(uid, userInfo)
     },
     friendlyDate: tsbApi.util.friendlyDate,
-    copy(text) {
+    copy (text) {
       require('electron').clipboard.writeText(text)
       message.success('复制邀请码成功。')
     },
-    mark(key) {
+    mark (key) {
       let found = this.marked.indexOf(key)
       let mark = false
       if (found > -1) {
@@ -271,13 +273,13 @@ export default {
       }
       localStorage.setItem('marked', JSON.stringify(this.marked))
       if (mark) {
-        message.success({content: '已为您标记此邀请码，再次标记取消', key: 'mark'})
+        message.success({ content: '已为您标记此邀请码，再次标记取消', key: 'mark' })
       } else {
-        message.success({content: '已为您取消标记', key: 'mark'})
+        message.success({ content: '已为您取消标记', key: 'mark' })
       }
 
     },
-    async loadCodes() {
+    async loadCodes () {
       let rs = await this.listCodes()
       if (rs.status) {
         this.codes = rs.data
@@ -294,10 +296,10 @@ export default {
       }
       this.marked = marked
     },
-    isMarked(key) {
+    isMarked (key) {
       return this.marked.indexOf(key) > -1
     },
-    confirmExchange() {
+    confirmExchange () {
       Modal.confirm({
         content: '确认使用200小时在线时长兑换1枚邀请码？此操作无法撤回。兑换并不会减少你的在线时长以及影响你的在线等级，请放心。',
         okText: '确认兑换',

@@ -52,7 +52,8 @@ const systemType = {
     } else if (systemType.platform() === 'darwin') {
       if (sysVersion.startsWith('13.')) {
         return 'Ventura'
-      } if (sysVersion.startsWith('12.')) {
+      }
+      if (sysVersion.startsWith('12.')) {
         return 'Monterey'
       } else if (sysVersion.startsWith('11.6.2')) {
         return 'Big Sur'

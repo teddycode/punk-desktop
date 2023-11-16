@@ -1,4 +1,3 @@
-
 var defaultKeyMap = {
   quitMin: 'mod+q',
   addTab: 'mod+t',
@@ -32,8 +31,9 @@ var defaultKeyMap = {
   fillPassword: 'mod+\\',
   toggleTabAudio: 'shift+mod+m',
   showHistory: 'shift+mod+h',
-  globalSearch:'alt+f'
+  globalSearch: 'alt+f'
 }
+
 /* Utility function to override default mapping with user settings */
 function userKeyMap (settings) {
   var keyMapCopy = Object.assign({}, defaultKeyMap)
@@ -47,4 +47,5 @@ function userKeyMap (settings) {
   }
   return keyMapCopy
 }
-export  {defaultKeyMap,userKeyMap}
+
+export { defaultKeyMap, userKeyMap }

@@ -19,7 +19,7 @@
 
 <script>
 export default {
-  name: "ScrolX",
+  name: 'ScrolX',
   props: {
     height: {
       type: Number,

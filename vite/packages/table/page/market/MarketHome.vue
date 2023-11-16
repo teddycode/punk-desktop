@@ -38,16 +38,16 @@
 </template>
 
 <script>
-import {mapWritableState} from "pinia";
-import NewAddCard from "../app/card/NewAddCard.vue"
-import {appStore} from '../../store';
-import {cardStore} from '../../store/card'
+import { mapWritableState } from 'pinia'
+import NewAddCard from '../app/card/NewAddCard.vue'
+import { appStore } from '../../store'
+import { cardStore } from '../../store/card'
 
 export default {
   components: {
     NewAddCard
   },
-  data() {
+  data () {
     return {
       marketList: [
         {
@@ -101,11 +101,11 @@ export default {
     }
   },
   methods: {
-    onBack() {
+    onBack () {
       this.fullScreen = false
       this.$router.go(-1)
     },
-    jumpMarket(val, market) {
+    jumpMarket (val, market) {
       switch (val) {
         case 'route':
           this.fullScreen = false
@@ -113,58 +113,58 @@ export default {
           //   window.toggleFrameStore()
           // }
           this.$router.push(market.route)
-          break;
+          break
         case 'card':
           this.panelIndex = 0
           this.fullScreen = false
           this.visibleAdd = true
-          break;
+          break
         case 'desk':
           this.fullScreen = false
           this.panelIndex = 1
-          this.visibleAdd = true;
-          this.addDeskVisible = false;
-          break;
+          this.visibleAdd = true
+          this.addDeskVisible = false
+          break
       }
     },
-    newAddCard() {
+    newAddCard () {
       this.panelIndex = 0
-      this.visibleAdd = true;
-      this.menuVisible = false;
+      this.visibleAdd = true
+      this.menuVisible = false
     },
-    hideAddCard() {
+    hideAddCard () {
       this.fullScreen = true
       this.visibleAdd = false
     },
   },
-  mounted() {
+  mounted () {
     this.fullScreen = true
   },
   computed: {
     ...mapWritableState(appStore, ['fullScreen']),
     ...mapWritableState(cardStore, [
-      "settings",
-      "desks",
-      "currentDeskIndex",
+      'settings',
+      'desks',
+      'currentDeskIndex',
     ]),
-    currentDesk() {
+    currentDesk () {
       let find = this.desks.find((desk) => {
-        return desk.nanoid === this.currentDeskIndex.name;
-      });
+        return desk.nanoid === this.currentDeskIndex.name
+      })
       if (find) {
         find.cards.forEach((e) => {
           if (!e.data) {
-            e.data = {};
+            e.data = {}
           }
           if (!e.customData) {
             e.customData = {}
           }
-        });
-        return find;
+        })
+        return find
       } else {
         return {
           cards: [],
-        };
+        }
       }
     },
   },

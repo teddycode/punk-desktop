@@ -49,7 +49,7 @@ const userScriptModel = {
    * 删除脚本
    */
   deleteScript (filename) {
-    const filePath = userScriptModel.scriptsPath+filename
+    const filePath = userScriptModel.scriptsPath + filename
     fs.rmSync(filePath)
     return !fs.existsSync(filePath)
   },
@@ -60,7 +60,7 @@ const userScriptModel = {
     let scriptsNum = 0
     for (var i = 0; i < files.length; i++) {
       let filename = files[i]
-      if(filename.endsWith('.js')) {
+      if (filename.endsWith('.js')) {
         scriptsNum += 1
       }
     }
@@ -100,7 +100,7 @@ const userScriptModel = {
           script.version = !!!features.version ? '-' : features.version.join('')
           script.include = !!!features.include ? '-' : features.include.join('<br>')
           script.runat = !!!features['run-at'] ? '-' : features['run-at'].join('<br>')
-          script.match=!!!features.match?'-':features['match'].join('<br>')
+          script.match = !!!features.match ? '-' : features['match'].join('<br>')
           script.description = `
 <h4>脚本属性</h4>
               文件名：${script.filename}<br>

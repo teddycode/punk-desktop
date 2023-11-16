@@ -39,16 +39,16 @@ const props = defineProps({
     default: true,
   },
   text: {},
-});
+})
 
-const emits = defineEmits(["ok", "no"]);
+const emits = defineEmits(['ok', 'no'])
 
 const onNo = () => {
-  emits("no");
-};
+  emits('no')
+}
 const onOk = () => {
-  emits("ok");
-};
+  emits('ok')
+}
 </script>
 
 <style lang="scss" scoped></style>

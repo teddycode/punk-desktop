@@ -19,7 +19,9 @@
       </a-row>
     </div>
     <div class="password-bank-input" @click.stop="()=>{}">
-      <a-input-password id="pwdInput" v-model:value="password" :placeholder="this.bankValue?'请输入「'+this.bankValue+'」的密码':'请先选择一个密码库'" class="bank-input"
+      <a-input-password id="pwdInput" v-model:value="password"
+                        :placeholder="this.bankValue?'请输入「'+this.bankValue+'」的密码':'请先选择一个密码库'"
+                        class="bank-input"
                         @keypress.enter="openDb">
 
       </a-input-password>
@@ -96,18 +98,18 @@
 </template>
 
 <script>
-import {CloseOutlined, FolderAddOutlined, FolderOpenOutlined, KeyOutlined, UnlockFilled} from '@ant-design/icons-vue'
-import {message, Modal} from 'ant-design-vue'
+import { CloseOutlined, FolderAddOutlined, FolderOpenOutlined, KeyOutlined, UnlockFilled } from '@ant-design/icons-vue'
+import { message, Modal } from 'ant-design-vue'
 import vueCustomScrollbar from '../../../src/components/vue-scrollbar.vue'
-import {mapActions, mapWritableState} from 'pinia'
-import {appStore} from '../store'
+import { mapActions, mapWritableState } from 'pinia'
+import { appStore } from '../store'
 
 export default {
   components: {
     vueCustomScrollbar,
     UnlockFilled, FolderOpenOutlined, CloseOutlined, KeyOutlined, FolderAddOutlined
   },
-  data() {
+  data () {
     return {
       settings: {
         swipeEasing: true,
@@ -129,7 +131,7 @@ export default {
   computed: {
     ...mapWritableState(appStore, ['dbList', 'filterInfo'])
   },
-  mounted() {
+  mounted () {
     let bank = this.$route.params
     if (bank.name) {
       message.info('请输入密码库的登录信息，回车进入。')
@@ -143,12 +145,12 @@ export default {
   },
   methods: {
     ...mapActions(appStore, ['setDb', 'loadDbList', 'saveDbList']),
-    create() {
+    create () {
       this.visibleInputPwd = true
       // const filePath=ipc.sendSync('selectKdbx')
       // kdbxModel.create('kdb',filePath)
     },
-    setInnerDb() {
+    setInnerDb () {
       Modal.confirm({
         content: '设置为内置密码库时，部分功能将被禁用。',
         okText: '确定',
@@ -158,11 +160,11 @@ export default {
             name: '内部密码库',
             type: 'builtin'
           })
-          this.$router.push({name: 'passwords', params: {value: '', type: 'all'}})
+          this.$router.push({ name: 'passwords', params: { value: '', type: 'all' } })
         }
       })
     },
-    selectDb() {
+    selectDb () {
       let filePath = ipc.sendSync('selectKdbx')
       if (!filePath) {
         return
@@ -189,7 +191,7 @@ export default {
       }, 300)
 
     },
-    openDb() {
+    openDb () {
       if (!this.selectedItem.path) {
         message.error('请先选择密码库')
       }
@@ -213,27 +215,27 @@ export default {
                 tags: dbInfo.tags,
                 name: dbInfo.name
               })
-              this.$router.push({name: 'passwords', params: {value: '', type: 'all'}})
+              this.$router.push({ name: 'passwords', params: { value: '', type: 'all' } })
             }
           })
         }
       })
     },
-    selectKey() {
+    selectKey () {
       const keyPath = ipc.sendSync('selectKey')
       if (keyPath)
         this.keyPath = keyPath
     },
-    removeKey() {
+    removeKey () {
       this.keyPath = ''
     },
-    doCreate() {
+    doCreate () {
       if (!this.newPassword) {
         message.error('请输入密码库主密码。')
         return
       }
 
-      const filePath = ipc.sendSync('createKdbx', {name: this.newName})
+      const filePath = ipc.sendSync('createKdbx', { name: this.newName })
       if (!filePath) {
         return
       }
@@ -253,10 +255,10 @@ export default {
         this.saveHistory()
       })
     },
-    saveHistory() {
+    saveHistory () {
       this.saveDbList()
     },
-    removeBank(index) {
+    removeBank (index) {
       Modal.confirm({
         centered: true,
         content: '是否移除记录？此行为不会删除密码库。',
@@ -267,14 +269,14 @@ export default {
       })
 
     },
-    unselectBankItem() {
+    unselectBankItem () {
       // 点击选中的状态
       this.bankIndex = 0
       // 将点击选中的内容放入输入框中
       this.bankValue = ''
     },
     // 选中每一项内容放入输入框中
-    selectBankItem(v) {
+    selectBankItem (v) {
       // 点击选中的状态
       this.bankIndex = v.id
       // 将点击选中的内容放入输入框中

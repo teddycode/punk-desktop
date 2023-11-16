@@ -1,5 +1,3 @@
-
-
 const appTpl = `
 <div>
   <a-dropdown :trigger="['contextmenu']" >
@@ -115,23 +113,21 @@ const appTpl = `
       </a-modal>
 </div>
   `
-const saAppModel=require('../../src/model/appModel.js')
+const saAppModel = require('../../src/model/appModel.js')
 saAppModel.initDb()
 const swatches = window['vue-swatches']
 Vue.component('app', {
   template: appTpl,
   name: 'app',
-  props: ['item', 'groupId', 'selectedMenuVisible','groups'],
+  props: ['item', 'groupId', 'selectedMenuVisible', 'groups'],
   components: {
     'v-swatches': swatches
   },
   data () {
     return {
-      saApp:{
-
-      },
+      saApp: {},
       visibleEdit: false,
-      iconLoading:false,
+      iconLoading: false,
       labelCol: { span: 4 },
       wrapperCol: { span: 14 },
 
@@ -141,7 +137,7 @@ Vue.component('app', {
         name: '',
         useBg: false,
         color: '#00000000',
-        icon:'',
+        icon: '',
 
         useTextBg: false,
         textColor: '#00000000',
@@ -159,26 +155,26 @@ Vue.component('app', {
   },
   computed: {},
   async mounted () {
-    this.saApp=await saAppModel.get(this.item.element.data.appId)
+    this.saApp = await saAppModel.get(this.item.element.data.appId)
   },
   methods: {
-    moveAppTo(group){
+    moveAppTo (group) {
       group.element.data.push(this.item)
-      for(let i=0;i<appVue.layout.length;i++){
-        if(appVue.layout[i].i===this.item.i){
-          appVue.layout.splice(i,1)
+      for (let i = 0; i < appVue.layout.length; i++) {
+        if (appVue.layout[i].i === this.item.i) {
+          appVue.layout.splice(i, 1)
           break
         }
       }
     },
-    moveAppsTo(group){
-      for(let selectedI=0;selectedI<appVue.selectedElements.length;selectedI++){
-        let item=appVue.selectedElements[selectedI]
-        for(let i=0;i<appVue.layout.length;i++){
-          if(appVue.layout[i].i===Number(item)){
+    moveAppsTo (group) {
+      for (let selectedI = 0; selectedI < appVue.selectedElements.length; selectedI++) {
+        let item = appVue.selectedElements[selectedI]
+        for (let i = 0; i < appVue.layout.length; i++) {
+          if (appVue.layout[i].i === Number(item)) {
             console.log(item)
             group.element.data.push(appVue.layout[i])
-            appVue.layout.splice(i,1)
+            appVue.layout.splice(i, 1)
             break
           }
         }
@@ -189,15 +185,15 @@ Vue.component('app', {
 // filepath 是文件下载的本地目录
 // name 是下载后的文件名
     async downloadFile (url, filepath, name) {
-      const fs=require('fs')
-      const path=require('path')
+      const fs = require('fs')
+      const path = require('path')
       if (!fs.existsSync(filepath)) {
         fs.mkdirSync(filepath)
       }
       const mypath = path.resolve(filepath, name)
       const writer = fs.createWriteStream(mypath)
-      const axios=require('axios')
-      let {data} = await axios({
+      const axios = require('axios')
+      let { data } = await axios({
         url,
         method: 'get',
         responseType: 'arraybuffer',
@@ -207,7 +203,7 @@ Vue.component('app', {
       // fs.closeSync(fd)
       console.log(data)
 
-      fs.writeFileSync(filepath+name,new DataView(data))
+      fs.writeFileSync(filepath + name, new DataView(data))
       //response.data.pipe(writer)
       return true
       // return new Promise((resolve, reject) => {
@@ -216,27 +212,28 @@ Vue.component('app', {
       // })
     },
     restoreIcon () {
-      let icon=this.formEdit.element.data.icon
+      let icon = this.formEdit.element.data.icon
       this.formEdit.icon = icon
     },
     async getIcon () {
-      function hash(str){
-        const crypto =require('crypto')
+      function hash (str) {
+        const crypto = require('crypto')
         const shasum = crypto.createHash('sha1')
-        shasum.update(str);
+        shasum.update(str)
         return shasum.digest('hex')
       }
-      this.iconLoading=true
-      let domain=this.formEdit.url.slice(this.formEdit.url.indexOf('://')+3)
+
+      this.iconLoading = true
+      let domain = this.formEdit.url.slice(this.formEdit.url.indexOf('://') + 3)
       let iconUrl = 'https://favicon.cccyun.cc/' + domain
-      let localPath=window.globalArgs['user-data-dir']+'/favicons/'
-      let filename=hash(iconUrl)
-      this.downloadFile(iconUrl,localPath,filename).then(()=>{
-        this.formEdit.icon=localPath+filename
-        this.iconLoading=false
-      }).catch((err)=>{
+      let localPath = window.globalArgs['user-data-dir'] + '/favicons/'
+      let filename = hash(iconUrl)
+      this.downloadFile(iconUrl, localPath, filename).then(() => {
+        this.formEdit.icon = localPath + filename
+        this.iconLoading = false
+      }).catch((err) => {
         console.log(err)
-        this.iconLoading=false
+        this.iconLoading = false
       })
     },
     selectedElementsLength () {
@@ -279,14 +276,14 @@ Vue.component('app', {
       this.visibleEdit = false
     },
     async openUrl () {
-      if(this.item.element.data.type==='saApp'){
-        let saApp=await saAppModel.get(this.saApp.nanoid)
-        if(saApp){
-          ipc.send('executeApp',{app:saApp})
-        }else{
-          appVue.$message.error({content:'此应用已经被卸载。无法打开。'})
+      if (this.item.element.data.type === 'saApp') {
+        let saApp = await saAppModel.get(this.saApp.nanoid)
+        if (saApp) {
+          ipc.send('executeApp', { app: saApp })
+        } else {
+          appVue.$message.error({ content: '此应用已经被卸载。无法打开。' })
         }
-      }else{
+      } else {
         this.$emit('open-url')
       }
 

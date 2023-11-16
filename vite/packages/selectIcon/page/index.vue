@@ -1,7 +1,8 @@
 <template>
   <div
       id="selectIcon"
-      class="float-icon" style='width:400px;height:400px;background: #212121;border: 1px solid rgba(255,255,255,0.1);box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);border-radius: 10px;top: 175px;'>
+      class="float-icon"
+      style='width:400px;height:400px;background: #212121;border: 1px solid rgba(255,255,255,0.1);box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);border-radius: 10px;top: 175px;'>
     <!--  -->
     <div class="top-icon flex">
       <div class="type-select flex">
@@ -48,7 +49,8 @@
           <div class="ml-4 mt-1">系统预设</div>
           <div class="flex flex-wrap">
             <div v-for="(item,index) in bgColor.slice(0,6)" :class="selBgColor == index ? 'sel-active':''"
-                 class="flex justify-center items-center pointer mt-2 ml-3" style='width: 40px;height:40px;border-radius: 10px;'
+                 class="flex justify-center items-center pointer mt-2 ml-3"
+                 style='width: 40px;height:40px;border-radius: 10px;'
                  @click="changeBgColor(index)">
               <div :style="{background:bgColor[index]}" class="circle"></div>
             </div>
@@ -66,10 +68,13 @@
         <a-tooltip>
           <template #title>{{ item.alias }}</template>
           <a-avatar v-show="selIndex==1" :alt="item.alias"
-                    :src="'https://a.apps.vip/icons/iconSelect/emoji/'+item.name+'.svg'" height="32" width="32"></a-avatar>
+                    :src="'https://a.apps.vip/icons/iconSelect/emoji/'+item.name+'.svg'" height="32"
+                    width="32"></a-avatar>
           <a-avatar v-show="selIndex==2"
                     :alt="item.alias"
-                    :src="'https://a.apps.vip/icons/iconSelect/icon/'+item.name+'.svg'" :style="{'filter': `drop-shadow(${bgColor[selBgColor]} 80px 0)`,transform:'translateX(-80px)'}" height="20"
+                    :src="'https://a.apps.vip/icons/iconSelect/icon/'+item.name+'.svg'"
+                    :style="{'filter': `drop-shadow(${bgColor[selBgColor]} 80px 0)`,transform:'translateX(-80px)'}"
+                    height="20"
                     width="20"></a-avatar>
         </a-tooltip>
       </div>
@@ -97,7 +102,9 @@
           <template #title>{{ item.alias }}</template>
           <div>
             <a-avatar :alt="item.alias"
-                      :src="'https://a.apps.vip/icons/iconSelect/icon/'+item.name+'.svg'" :style="{'filter': `drop-shadow(${bgColor[selBgColor]} 80px 0)`,transform:'translateX(-80px)'}" height="20"
+                      :src="'https://a.apps.vip/icons/iconSelect/icon/'+item.name+'.svg'"
+                      :style="{'filter': `drop-shadow(${bgColor[selBgColor]} 80px 0)`,transform:'translateX(-80px)'}"
+                      height="20"
                       width="20"></a-avatar>
           </div>
         </a-tooltip>
@@ -105,7 +112,8 @@
     </div>
     <div v-else class="flex pl-1 pr-1 items-center flex-wrap flex-col" style="height:330px;">
       <input id="groupFileID" style="display:none;" type="file" @change="getFileInfo($event)">
-      <div v-if="!avatarUrl" class="pointer flex justify-center items-center" style="margin-top: 98px;height: 64px;width: 64px;background: #2A2A2A;border: 1px dashed rgba(255,255,255,0.1);border-radius: 6px;"
+      <div v-if="!avatarUrl" class="pointer flex justify-center items-center"
+           style="margin-top: 98px;height: 64px;width: 64px;background: #2A2A2A;border: 1px dashed rgba(255,255,255,0.1);border-radius: 6px;"
            @click="updateGroupAvatar()">
         <Icon :icon="icons.add16Filled" height="20" width="20"/>
       </div>
@@ -124,13 +132,13 @@
 <script>
 import icon from '../components/IconListData/icon'
 import emojis from '../components/IconListData/emojis'
-import {fileUpload} from '../../table/components/card/hooks/imageProcessing'
-import {Icon} from '@iconify/vue';
-import arrowSync20Filled from '@iconify-icons/fluent/arrow-sync-20-filled';
-import add16Filled from '@iconify-icons/fluent/add-16-filled';
+import { fileUpload } from '../../table/components/card/hooks/imageProcessing'
+import { Icon } from '@iconify/vue'
+import arrowSync20Filled from '@iconify-icons/fluent/arrow-sync-20-filled'
+import add16Filled from '@iconify-icons/fluent/add-16-filled'
 
 export default {
-  name: "SelectIcon",
+  name: 'SelectIcon',
   components: {
     Icon,
     emojis,
@@ -143,7 +151,7 @@ export default {
   },
 
   computed: {
-    searchIcon() {
+    searchIcon () {
       let tmpList = []
       if (this.selIndex == 1) {
         this.emojisList.forEach((value, index) => {
@@ -162,7 +170,7 @@ export default {
       return this.searchList
     },
   },
-  data() {
+  data () {
     return {
       // 上传头像
       avatarUrl: '',
@@ -187,21 +195,21 @@ export default {
 
     }
   },
-  mounted() {
-    this.topHeight = document.getElementById('selectIcon').getBoundingClientRect().top;
-    console.log(111111111111);
+  mounted () {
+    this.topHeight = document.getElementById('selectIcon').getBoundingClientRect().top
+    console.log(111111111111)
   },
 
   methods: {
     // 选择图标类型
-    onSelChange(n) {
+    onSelChange (n) {
       this.selIndex = n
       this.selectIcon = -1
       this.searchValue = ''
     },
 
     // 选择图标
-    onSelectIcon(n, type, url) {
+    onSelectIcon (n, type, url) {
       this.selectIcon = n
       if (this.selIndex == 1) {
         this.$emit('getAvatar', 'https://a.apps.vip/icons/iconSelect/emoji/' + url + '.svg')
@@ -214,10 +222,10 @@ export default {
     },
 
     //随机图标
-    onRandom() {
+    onRandom () {
       let randomLength = this.selIndex == 1 ? this.emojisList.length : this.iconList.length
-      let randomNum = Math.round(Math.random() * randomLength);
-      this.selectIcon = randomNum;
+      let randomNum = Math.round(Math.random() * randomLength)
+      this.selectIcon = randomNum
       if (this.selIndex == 1) {
         this.$emit('getAvatar', 'https://a.apps.vip/icons/iconSelect/emoji/' + this.emojisList[randomNum].name + '.svg')
       } else {
@@ -226,7 +234,7 @@ export default {
     },
 
     // 改变颜色
-    changeBgColor(n) {
+    changeBgColor (n) {
       this.selBgColor = n
       if (this.selIndex == 2) {
         this.$emit('getAvatar', 'https://a.apps.vip/icons/iconSelect/icon/' + this.iconList[this.selectIcon].name + '.svg?color=' + this.bgColor[this.selBgColor])
@@ -234,7 +242,7 @@ export default {
     },
 
     // 上传文件
-    async getFileInfo(evt) {
+    async getFileInfo (evt) {
       const files = evt.target.files[0]
       const res = await fileUpload(files)
       this.avatarUrl = res
@@ -242,18 +250,18 @@ export default {
     },
 
     // 更换头像
-    async updateGroupAvatar() {
+    async updateGroupAvatar () {
       document.querySelector('#groupFileID').click()
     },
 
     // 清楚已上传信息
-    clearAvatar() {
+    clearAvatar () {
       this.avatarUrl = ''
       this.$emit('getAvatar', 'https://jxxt-1257689580.cos.ap-chengdu.myqcloud.com/jmPD-I__T-SMyc-LMzn')
 
     },
     // 确认
-    changeAvatar() {
+    changeAvatar () {
       this.$emit('getAvatar', this.avatarUrl)
 
       this.$emit('isIconShow')

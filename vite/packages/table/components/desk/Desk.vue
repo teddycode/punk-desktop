@@ -4,7 +4,8 @@
     <div v-if="currentDesk.cards.length === 0" :class="notTrigger ? 'trigger' : '' " class="m-auto"
          style="width: 100%;height: 100%;">
       <div style="width: 100%;height: 100%">
-        <a-result class="m-auto rounded-lg s-bg" status="success" style="margin: auto" sub-title="您可以长按空白处、右键添加小组件。"
+        <a-result class="m-auto rounded-lg s-bg" status="success" style="margin: auto"
+                  sub-title="您可以长按空白处、右键添加小组件。"
                   title="使用卡片桌面">
           <template #extra>
             <a-button key="console" class="mr-10 xt-active-bg" style="color: var(--active-text);" type="primary"
@@ -56,7 +57,8 @@
           /*align-content: center;*/
         "
         >
-          <vuuri v-if=" currentDesk.cards && !hide" :key="key" ref="grid" v-model="currentDesk.cards" :drag-enabled="editing" :get-item-margin="() => {
+          <vuuri v-if=" currentDesk.cards && !hide" :key="key" ref="grid" v-model="currentDesk.cards"
+                 :drag-enabled="editing" :get-item-margin="() => {
             return usingSettings.cardMargin * this.adjustZoom  + 'px';
           }
 
@@ -272,13 +274,13 @@
 <script>
 
 import Muuri from 'muuri'
-import {message, Modal} from 'ant-design-vue'
-import {mapActions, mapWritableState} from 'pinia'
-import {appStore} from '../../store'
+import { message, Modal } from 'ant-design-vue'
+import { mapActions, mapWritableState } from 'pinia'
+import { appStore } from '../../store'
 
-import {useWidgetStore} from "../card/store.ts"
-import {useFreeDeskStore} from './free/store'
-import componentsMinis from "./components.ts"
+import { useWidgetStore } from '../card/store.ts'
+import { useFreeDeskStore } from './free/store'
+import componentsMinis from './components.ts'
 
 export default {
   name: 'Desk',
@@ -304,7 +306,7 @@ export default {
           type: Object,
           required: true,
           default: () => {
-            return {cards: []}
+            return { cards: [] }
           }
 
         },
@@ -369,10 +371,10 @@ export default {
   ,
 
   watch: {
-    freeDeskState(newV) {
+    freeDeskState (newV) {
       this.renewFreeDeskState(this.currentDesk.id)
     },
-    currentDesk(newVal) {
+    currentDesk (newVal) {
       newVal.layoutSize = this.getLayoutSize()
       // if (!newVal.settings) {
       //   newVal.settings=
@@ -387,7 +389,7 @@ export default {
     },
 
     'currentDesk.settings': {
-      handler(newVal) {
+      handler (newVal) {
         console.log('更改了方向')
         console.log()
         if (!newVal) {
@@ -407,7 +409,7 @@ export default {
       immediate: true,
     },
     'currentDesk.settings.vDirection': {
-      handler(newVal) {
+      handler (newVal) {
         console.log('更新了方向，重载')
         this.key = Date.now()
         console.log(this.muuriOptions.layout, 'murri参数')
@@ -418,38 +420,38 @@ export default {
   computed: {
     ...mapWritableState(appStore, ['fullScreen']),
     ...mapWritableState(useWidgetStore, ['rightModel']),
-    deskGroupMenus() {
+    deskGroupMenus () {
       if (this.deskGroupMenu && this.deskGroupMenu.length > 1) {
-        let arr = [...this.deskGroupMenu[1].children];
-        let exists = arr.some(item => item.id === 4);
+        let arr = [...this.deskGroupMenu[1].children]
+        let exists = arr.some(item => item.id === 4)
         if (!exists) {
           arr.push({
             id: 4,
-            newIcon: "fluent:circle-off-16-regular",
-            name: "清空桌面",
+            newIcon: 'fluent:circle-off-16-regular',
+            name: '清空桌面',
             fn: this.clear
-          });
+          })
         }
-        arr.sort((a, b) => a.id - b.id);
+        arr.sort((a, b) => a.id - b.id)
         let deskGroupMenu = [...this.deskGroupMenu]
         deskGroupMenu[1].children = [...arr]
-        return deskGroupMenu;
+        return deskGroupMenu
       }
       return []
     },
 
-    deskMenus() {
+    deskMenus () {
       return [
         {
           id: 1,
-          newIcon: "fluent:add-16-filled",
-          name: "添加图标",
+          newIcon: 'fluent:add-16-filled',
+          name: '添加图标',
           fn: this.newAddIcon,
         },
         {
           id: 2,
-          newIcon: "fluent:collections-add-24-regular",
-          name: "添加小组件",
+          newIcon: 'fluent:collections-add-24-regular',
+          name: '添加小组件',
           fn: this.newAddCard,
         },
         {
@@ -458,14 +460,14 @@ export default {
         },
         {
           id: 5,
-          newIcon: this.editing ? "fluent:record-stop-16-regular" : "fluent:window-new-16-regular",
+          newIcon: this.editing ? 'fluent:record-stop-16-regular' : 'fluent:window-new-16-regular',
           name: this.editing ? '停止调整' : '调整桌面布局',
           fn: this.toggleEditing,
         },
         {
           id: 6,
-          newIcon: this.hide ? 'fluent:eye-16-regular' : "fluent:eye-off-16-regular",
-          name: this.hide ? '显示小组件' : "隐藏小组件",
+          newIcon: this.hide ? 'fluent:eye-16-regular' : 'fluent:eye-off-16-regular',
+          name: this.hide ? '显示小组件' : '隐藏小组件',
           fn: this.hide ? this.showDesk : this.hideDesk
         },
         {
@@ -474,18 +476,18 @@ export default {
         },
         {
           id: 8,
-          newIcon: "fluent:settings-16-regular",
-          name: "桌面设置",
+          newIcon: 'fluent:settings-16-regular',
+          name: '桌面设置',
           fn: this.showSetting,
         },
       ]
     },
-    dropdownMenu() {
-      let arr = [...this.deskGroupMenus, ...this.deskMenus];
-      arr.sort((a, b) => a.id - b.id);
-      return arr;
+    dropdownMenu () {
+      let arr = [...this.deskGroupMenus, ...this.deskMenus]
+      arr.sort((a, b) => a.id - b.id)
+      return arr
     },
-    usingSettings() {
+    usingSettings () {
       if (this.settings.enableZoom) {
         return this.settings
       } else {
@@ -493,10 +495,10 @@ export default {
       }
     }
   },
-  data() {
+  data () {
     return {
       freeDeskState: false,
-      stashBound: {width: 0, height: 0, zoom: 0},
+      stashBound: { width: 0, height: 0, zoom: 0 },
       adjustZoom: 1,
       iconVisible: false,
       settingVisible: false,
@@ -513,14 +515,14 @@ export default {
         currentItemId: -1,
       },
       settingsTab: [
-        {name: '通用桌面设置', value: 'all'},
-        {name: '当前桌面设置', value: 'current'}
+        { name: '通用桌面设置', value: 'all' },
+        { name: '当前桌面设置', value: 'current' }
       ],
       currentSettingTab: 'all',
       resizeHandler: null
     }
   },
-  mounted() {
+  mounted () {
     this.resizeHandler = () => {
       this.currentDesk.layoutSize = this.getLayoutSize()
     }
@@ -528,24 +530,24 @@ export default {
 
     window.addEventListener('resize', this.resizeHandler)
   },
-  unmounted() {
+  unmounted () {
     window.removeEventListener('resize', this.resizeHandler)
   },
   methods: {
     ...mapActions(useFreeDeskStore, ['addFreeDeskState', 'getFreeDeskState', 'delFreeDeskState', 'renewFreeDeskState']),
-    learn() {
+    learn () {
       browser.openInTable('https://www.bilibili.com/video/BV1Th4y1o7SZ/?vd_source=2b7e342ffb60104849f5db6262bb1e0b')
     },
-    update() {
+    update () {
       if (this.$refs.grid) {
         this.$refs.grid.update()
       }
 
     },
-    hideMenu() {
+    hideMenu () {
       this.menuVisible = false
     },
-    toggleEditing() {
+    toggleEditing () {
 
       if (this.editing) {
         message.info('已关闭拖拽调整')
@@ -558,23 +560,23 @@ export default {
       this.key = Date.now()
       console.log(this.muuriOptions, 'ediingt输出')
     },
-    showSetting() {
+    showSetting () {
       this.settingVisible = true
       this.menuVisible = false
     },
-    hideDesk() {
+    hideDesk () {
       this.hide = !this.hide
       this.menuVisible = false
     },
-    iconHide() {
+    iconHide () {
       this.iconVisible = false
     },
 
-    showDesk() {
+    showDesk () {
       this.hide = !this.hide
       this.menuVisible = false
     },
-    clear() {
+    clear () {
       this.menuVisible = false
       let desk = this.currentDesk
       if (desk) {
@@ -589,29 +591,29 @@ export default {
         })
       }
     },
-    newAddCard() {
+    newAddCard () {
       this.addCardVisible = true
       // addCardVisible
       this.menuVisible = false
     },
-    hideAddCard() {
+    hideAddCard () {
       this.addCardVisible = false
     },
-    onClose() {
+    onClose () {
       this.menuVisible = false
     },
-    showMenu() {
+    showMenu () {
       if (!this.notTrigger && this.rightModel !== 'follow') this.menuVisible = true
     },
     // 添加图标
-    newAddIcon() {
+    newAddIcon () {
       this.iconVisible = true
       this.menuVisible = false
     },
     /**
      * 暂存布局，与restore结对使用。
      */
-    stashLayout() {
+    stashLayout () {
       let bound = {
         width: this.$refs.deskContainer.clientWidth,
         height: this.$refs.deskContainer.clientHeight
@@ -621,7 +623,7 @@ export default {
     /**
      * 恢复布局
      */
-    restoreLayout(rate = 0) {
+    restoreLayout (rate = 0) {
       if (rate) {
         this.adjustZoom = 1
         this.update()
@@ -639,13 +641,13 @@ export default {
      * 获取当前布局的宽高
      * @returns {{width: number, height: number}}
      */
-    getLayoutSize() {
+    getLayoutSize () {
       this.currentDesk.layoutSize = {
         width: this.$refs.deskContainer.clientWidth,
         height: this.$refs.deskContainer.clientHeight
       }
       if (this.currentDesk?.settings?.preparing) {
-        message.loading({content: '此桌面为首次使用，正在为您适配您的桌面…', key: 'preparing'})
+        message.loading({ content: '此桌面为首次使用，正在为您适配您的桌面…', key: 'preparing' })
         this.setFullScreen(true, () => {
           setTimeout(() => {
             this.$nextTick(() => {
@@ -658,7 +660,7 @@ export default {
               settings.cardZoom = (settings.cardZoom * fullLayoutSize.height / oldLayoutSize.height / this.adjustZoom).toFixed()
               settings.cardMargin = (settings.cardMargin * fullLayoutSize.height / oldLayoutSize.height / this.adjustZoom).toFixed()
               //todo竖屏界面不一样
-              message.success({content: '此桌面为首次使用，已为您适配您的当前窗口。', key: 'preparing'})
+              message.success({ content: '此桌面为首次使用，已为您适配您的当前窗口。', key: 'preparing' })
               settings.preparing = false
               this.setFullScreen(false)
               delete settings.layoutSize
@@ -670,7 +672,7 @@ export default {
 
       return this.currentDesk.layoutSize
     },
-    setFullScreen(flag, cb) {
+    setFullScreen (flag, cb) {
       this.stashLayout()
       this.fullScreen = flag
       this.$nextTick(() => {
@@ -683,7 +685,7 @@ export default {
 
       })
     },
-    getAdjustZoom() {
+    getAdjustZoom () {
       return this.adjustZoom
     }
   }

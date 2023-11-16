@@ -33,8 +33,7 @@
 
 <script>
 
-import {QuestionCircleOutlined,} from '@ant-design/icons-vue';
-
+import { QuestionCircleOutlined, } from '@ant-design/icons-vue'
 
 export default {
   name: 'Promotion',
@@ -42,7 +41,7 @@ export default {
     QuestionCircleOutlined
   },
   computed: {},
-  data() {
+  data () {
     return {
 
       // 滚动条配置
@@ -54,58 +53,58 @@ export default {
         wheelPropagation: true
       },
       inviteList: {
-        title: "邀请数据",
+        title: '邀请数据',
         data: [
           {
-            title: "邀请总数",
+            title: '邀请总数',
             num: 1293,
-            tooltip: "",
+            tooltip: '',
             key: 1,
           },
           {
-            title: "激活总数",
+            title: '激活总数',
             num: 600,
-            tooltip: "完成主线任务第一章为激活用户",
+            tooltip: '完成主线任务第一章为激活用户',
             key: 2,
           },
           {
-            title: "待激活总数",
+            title: '待激活总数',
             num: 693,
-            tooltip: "完成主线任务第一章为激活用户",
+            tooltip: '完成主线任务第一章为激活用户',
             key: 3,
           },
         ]
       },
       incomeList: {
-        title: "收益数据",
+        title: '收益数据',
         data: [
           {
-            title: "总收益",
+            title: '总收益',
             num: 222299.5,
             key: 1,
           },
           {
-            title: "当日收益",
+            title: '当日收益',
             num: 122131.5,
             key: 2,
           },
           {
-            title: "昨日收益",
+            title: '昨日收益',
             num: 23213123.55,
             key: 3,
           },
           {
-            title: "下级代理当月总收益",
+            title: '下级代理当月总收益',
             num: 232139.0,
             key: 4,
           },
           {
-            title: "下级代理当日收益",
+            title: '下级代理当日收益',
             num: 23123.0,
             key: 5,
           },
           {
-            title: "下级代理昨日收益",
+            title: '下级代理昨日收益',
             num: 2310.0,
             key: 6,
           },
@@ -114,7 +113,7 @@ export default {
 
     }
   },
-  mounted() {
+  mounted () {
 
   },
   watch: {},

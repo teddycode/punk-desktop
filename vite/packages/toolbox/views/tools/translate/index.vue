@@ -85,45 +85,45 @@
 </template>
 
 <script>
-import {translate} from "../../../store/translate";
-import {mapActions, mapWritableState} from "pinia";
-import {message} from "ant-design-vue";
-import {lang} from "./lang";
+import { translate } from '../../../store/translate'
+import { mapActions, mapWritableState } from 'pinia'
+import { message } from 'ant-design-vue'
+import { lang } from './lang'
 
 export default {
-  data() {
+  data () {
     return {
       lang,
-    };
+    }
   },
-  beforeRouteLeave(to, from, next) {
-    this.inputValue = "";
-    this.resultValue = "";
-    this.selectLang = this.lang[1];
-    next();
+  beforeRouteLeave (to, from, next) {
+    this.inputValue = ''
+    this.resultValue = ''
+    this.selectLang = this.lang[1]
+    next()
   },
   computed: {
     ...mapWritableState(translate, [
-      "fromLang",
-      "toLang",
-      "inputValue",
-      "resultValue",
+      'fromLang',
+      'toLang',
+      'inputValue',
+      'resultValue',
     ]),
   },
   methods: {
-    ...mapActions(translate, ["startTranslation"]),
-    translateSwitch() {
-      if (this.fromLang.lang === "auto") {
-        message.warn("自动检测无法切换");
-        return;
+    ...mapActions(translate, ['startTranslation']),
+    translateSwitch () {
+      if (this.fromLang.lang === 'auto') {
+        message.warn('自动检测无法切换')
+        return
       }
-      [this.toLang, this.fromLang] = [this.fromLang, this.toLang];
+      [this.toLang, this.fromLang] = [this.fromLang, this.toLang]
     },
-    async translate() {
-      this.startTranslation();
+    async translate () {
+      this.startTranslation()
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

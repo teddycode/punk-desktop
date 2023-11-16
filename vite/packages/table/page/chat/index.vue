@@ -16,16 +16,16 @@
 </template>
 
 <script>
-import {defineComponent} from 'vue'
+import { defineComponent } from 'vue'
 import SecondPanel from '../../components/SecondPanel.vue'
-import {chatStore} from '../../store/chat'
-import {mapActions, mapState} from 'pinia'
-import {appStore} from '../../store'
+import { chatStore } from '../../store/chat'
+import { mapActions, mapState } from 'pinia'
+import { appStore } from '../../store'
 
 export default defineComponent({
   name: 'index',
-  components: {SecondPanel},
-  data() {
+  components: { SecondPanel },
+  data () {
     return {
       menus: [
         // {
@@ -35,7 +35,7 @@ export default defineComponent({
         {
           title: '聊天', index: 'chat', icon: 'message',
           tab: 'chat',
-          route: {name: 'chat'}
+          route: { name: 'chat' }
         },
         // {
         //   title: '通讯录',index: 'contact',icon:'team',
@@ -43,23 +43,23 @@ export default defineComponent({
         // },
         {
           title: '小队', index: 'team', icon: 'smile',
-          route: {name: 'hall'},
+          route: { name: 'hall' },
           tab: 'team'
         },
         {
           title: '社区', index: 'channel', icon: 'star',
-          route: {name: 'channel'},
+          route: { name: 'channel' },
           tab: 'channel'
         },
         {
           title: '弹幕', index: 'barrage', icon: 'text-align-left',
-          route: {name: 'barrage'},
+          route: { name: 'barrage' },
           tab: 'barrage'
         },
       ]
     }
   },
-  mounted() {
+  mounted () {
     chatStore().login()
   },
   computed: {
@@ -67,7 +67,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(chatStore, ['login']),
-    changeTab(args) {
+    changeTab (args) {
       this.$router.push(args.menu.route)
       this.tab = args.index
     },

@@ -32,11 +32,11 @@
 </template>
 
 <script>
-import {defineComponent,} from 'vue'
-import {mapActions, mapWritableState} from 'pinia'
-import {formatTime} from '../../util'
-import {noticeStore} from '../../store/notice'
-import {appStore} from '../../store'
+import { defineComponent, } from 'vue'
+import { mapActions, mapWritableState } from 'pinia'
+import { formatTime } from '../../util'
+import { noticeStore } from '../../store/notice'
+import { appStore } from '../../store'
 
 export default defineComponent({
   props: ['message', 'messageType', 'isPlay'],
@@ -52,7 +52,7 @@ export default defineComponent({
 
   watch: {
     'messageType': {
-      handler(newVal) {
+      handler (newVal) {
         if (this.isPlay && newVal === 'message') {
           this.setMessagePlay()
           if (this.settings.messagePlay) {
@@ -72,7 +72,7 @@ export default defineComponent({
 
   },
 
-  setup(props, ctx) {
+  setup (props, ctx) {
     const talkLater = () => {  // 点击稍后再说按钮
       ctx.emit('closeToast')
       ctx.emit('nowCheck')
@@ -82,7 +82,6 @@ export default defineComponent({
       ctx.emit('closeToast')
       ctx.emit('examine')
     }
-
 
     return {
       formatTime,

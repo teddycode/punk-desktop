@@ -118,7 +118,9 @@ export default defineComponent({
       </div>
       <div v-else style="flex:1;height: 0">
         <template v-if="defaultRecordingType.name === 'recordFullScreen'">
-          <vue-custom-scrollbar :settings="settingsScroller" style="max-height:450px;position:relative;height: 450px;padding-right: 15px" @touchstart.stop @touchmove.stop
+          <vue-custom-scrollbar :settings="settingsScroller"
+                                style="max-height:450px;position:relative;height: 450px;padding-right: 15px"
+                                @touchstart.stop @touchmove.stop
                                 @touchend.stop>
             <div v-if="deskSource.length === 0">
               <a-empty :image="simpleImage"/>
@@ -126,7 +128,8 @@ export default defineComponent({
             <div v-else class="flex justify-between flex-wrap">
               <div v-for="(item,index) in  deskSource"
                    :class="{'s-active':defaultIndex === index}"
-                   class="flex flex-col capture-bg rounded-lg mb-4 pointer record-game-item" @click="chooseSource(item,index)"
+                   class="flex flex-col capture-bg rounded-lg mb-4 pointer record-game-item"
+                   @click="chooseSource(item,index)"
               >
                 <img :src="'file://'+item.src" class="w-full rounded-t-lg h-full object-cover">
                 <div class="px-4 py-3">
@@ -137,7 +140,9 @@ export default defineComponent({
           </vue-custom-scrollbar>
         </template>
         <template v-if="defaultRecordingType.name === 'logger'">
-          <vue-custom-scrollbar :settings="settingsScroller" style="max-height:450px;position:relative;height:450px;padding-right: 15px" @touchstart.stop @touchmove.stop
+          <vue-custom-scrollbar :settings="settingsScroller"
+                                style="max-height:450px;position:relative;height:450px;padding-right: 15px"
+                                @touchstart.stop @touchmove.stop
                                 @touchend.stop>
             <div v-if="windowSource.length === 0">
               <a-empty :image="simpleImage"/>
@@ -145,7 +150,8 @@ export default defineComponent({
             <div v-else class="flex justify-between flex-wrap">
               <div v-for="(item,index) in  windowSource"
                    :class="{'s-active':defaultIndex === index}"
-                   class="flex flex-col justify-between capture-bg rounded-lg mb-4 pointer record-game-item" @click="chooseSource(item,index)"
+                   class="flex flex-col justify-between capture-bg rounded-lg mb-4 pointer record-game-item"
+                   @click="chooseSource(item,index)"
               >
                 <img :src="'file://'+item.src" class="w-full rounded-t-lg h-full object-cover">
                 <div class="px-4 py-3 truncate">

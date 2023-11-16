@@ -10,15 +10,15 @@
 </template>
 
 <script setup>
-import {nextTick, ref, watch} from "vue";
-import {aiStore} from "../../../../store/ai";
+import { nextTick, ref, watch } from 'vue'
+import { aiStore } from '../../../../store/ai'
 
-const store = aiStore();
+const store = aiStore()
 
-const contentRef = ref(null);
+const contentRef = ref(null)
 
-const shouldScrollToBottom = ref(true); // 添加一个标志变量，初始值为 true
-const isAtBottom = ref(true);
+const shouldScrollToBottom = ref(true) // 添加一个标志变量，初始值为 true
+const isAtBottom = ref(true)
 
 const props = defineProps({
   data: {
@@ -27,35 +27,35 @@ const props = defineProps({
   height: {
     type: Number,
   },
-});
+})
 
-function handleScroll() {
-  const content = contentRef.value;
-  const scrollHeight = content.scrollHeight;
-  const clientHeight = content.clientHeight;
-  const scrollTop = content.scrollTop;
+function handleScroll () {
+  const content = contentRef.value
+  const scrollHeight = content.scrollHeight
+  const clientHeight = content.clientHeight
+  const scrollTop = content.scrollTop
 
   // 定义一个阈值，以确定页面是否在底部
-  const threshold = 10; // 调整此值以满足您的需求
+  const threshold = 10 // 调整此值以满足您的需求
 
   // 如果滚动位置接近内容底部，表示页面在底部
-  isAtBottom.value = scrollHeight - scrollTop - clientHeight <= threshold;
+  isAtBottom.value = scrollHeight - scrollTop - clientHeight <= threshold
 
   // 根据滚动位置是否在底部来更新标志变量
-  shouldScrollToBottom.value = isAtBottom.value;
+  shouldScrollToBottom.value = isAtBottom.value
 }
 
 // 首次加载定位到底部
 watch(() => store.selectTopicIndex, (newV) => {
   nextTick(() => {
     setTimeout(() => {
-      const content = contentRef.value;
-      content.scrollTo(0, content.scrollHeight);
+      const content = contentRef.value
+      content.scrollTo(0, content.scrollHeight)
     }, 100)
   })
 }, {
   immediate: true
-});
+})
 // 滚动操作
 watch(() => props.data, (newV) => {
   // if (shouldScrollToBottom.value) { // 只有当标志变量为 true 时才触发滚动
@@ -64,6 +64,6 @@ watch(() => props.data, (newV) => {
   // }
 }, {
   deep: true
-});
+})
 
 </script>

@@ -61,59 +61,59 @@
 </template>
 
 <script>
-import {defineAsyncComponent} from "vue";
-import _ from "lodash-es";
-import {mapActions, mapWritableState} from "pinia";
-import {aiStore} from "../../../../store/ai";
-import {message} from "ant-design-vue";
+import { defineAsyncComponent } from 'vue'
+import _ from 'lodash-es'
+import { mapActions, mapWritableState } from 'pinia'
+import { aiStore } from '../../../../store/ai'
+import { message } from 'ant-design-vue'
 
 export default {
   computed: {
     ...mapWritableState(aiStore, [
-      "serachTopic",
-      "selectTopicIndex",
-      "topicList",
-      "selectTitle",
+      'serachTopic',
+      'selectTopicIndex',
+      'topicList',
+      'selectTitle',
     ]),
-    getSelectTopic() {
-      return this.topicList.find((item) => item.id === this.selectTopicIndex);
+    getSelectTopic () {
+      return this.topicList.find((item) => item.id === this.selectTopicIndex)
     },
   },
   components: {
-    Edit: defineAsyncComponent(() => import("./edit.vue")),
+    Edit: defineAsyncComponent(() => import('./edit.vue')),
   },
-  data() {
+  data () {
     return {
       createChatVisible: false,
       buyVisible: false,
-      searchValue: "",
+      searchValue: '',
       settingVisible: false,
-    };
+    }
   },
   methods: {
-    ...mapActions(aiStore, ["delTopic"]),
-    del() {
-      this.settingVisible = false;
-      this.delTopic();
-      message.success("删除成功");
+    ...mapActions(aiStore, ['delTopic']),
+    del () {
+      this.settingVisible = false
+      this.delTopic()
+      message.success('删除成功')
     },
-    openEdit() {
+    openEdit () {
       if (this.topicList[this.selectTopicIndex] !== undefined) {
-        this.settingVisible = true;
+        this.settingVisible = true
       } else {
-        message.error("你还未选择对话，请先创建会话");
+        message.error('你还未选择对话，请先创建会话')
       }
     },
-    searchTopic() {
-      this.serachTopic = this.searchValue;
+    searchTopic () {
+      this.serachTopic = this.searchValue
     },
-    saveEdit() {
-      let editRef = this.$refs.editRef;
-      this.topicList[this.selectTopicIndex] = _.cloneDeep(editRef.value);
-      this.settingVisible = false;
+    saveEdit () {
+      let editRef = this.$refs.editRef
+      this.topicList[this.selectTopicIndex] = _.cloneDeep(editRef.value)
+      this.settingVisible = false
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

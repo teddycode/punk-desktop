@@ -12,11 +12,11 @@
 </template>
 
 <script>
-import {computed, onMounted, onUnmounted, reactive, ref, toRefs} from 'vue';
+import { computed, onMounted, onUnmounted, reactive, ref, toRefs } from 'vue'
 
 export default {
   props: ['eatList'],
-  setup(props, ctx) {
+  setup (props, ctx) {
     const eatList = props.eatList
     const state = reactive({
       isRunning: false, // 是否正在转动
@@ -24,7 +24,6 @@ export default {
       prizeId: 0, // 选中id
     })
     const prizeWrap = ref(null)
-
 
     const rotateAngle = computed(() => {
       const _degree = 360 / eatList?.length

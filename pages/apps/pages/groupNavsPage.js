@@ -1,4 +1,4 @@
-const groupNavsTpl=`
+const groupNavsTpl = `
 <div style="width: 100%">
   <a-layout>
     <a-layout-header style="background: #fff; padding: 0">
@@ -29,34 +29,32 @@ const CloudNavsComp = require('../comp/cloudNavsComp.js')
 module.exports = Vue.component('group-navs-page', {
   name: 'group-navs-page',
   template: groupNavsTpl,
-  component: {CloudNavsComp},
-  beforeRouteEnter(to, from, next) {
+  component: { CloudNavsComp },
+  beforeRouteEnter (to, from, next) {
     next(async vm => {
       vm.groupClouds = []
       vm.groupId = Number(to.query.id)
-      await vm.load(vm, to.query.id);
-    });
+      await vm.load(vm, to.query.id)
+    })
   },
-  async beforeRouteUpdate(to, from, next) {
+  async beforeRouteUpdate (to, from, next) {
     this.groupId = Number(to.query.id)
-    await this.load(this, to.query.id);
+    await this.load(this, to.query.id)
   },
   data () {
     return {
-      groupClouds:[],
+      groupClouds: [],
       groupId: Number
     }
   },
-  computed: {
-
-  },
+  computed: {},
   mounted () {
   },
   beforeCreate () {
 
   },
   methods: {
-    async load(vm, params) {
+    async load (vm, params) {
       await this.$store.dispatch('getAppGroupNavs', params)
       vm.groupClouds = vm.$store.getters.getAppGroupNavs
       vm.groupClouds.forEach(e => {

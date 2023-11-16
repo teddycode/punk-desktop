@@ -38,49 +38,49 @@
 <script>
 export default {
   props: {},
-  data() {
+  data () {
     return {
       appList: [
         {
-          name: "桌面应用快捷启动",
-          img: "",
-          info: "一键导入系统桌面图标，即可在工作台中整理和启动。",
+          name: '桌面应用快捷启动',
+          img: '',
+          info: '一键导入系统桌面图标，即可在工作台中整理和启动。',
         },
         {
-          name: "效率助手",
-          img: "",
-          info: "同步Steam游戏库，一键启动游戏，游戏专属桌面搭建。",
+          name: '效率助手',
+          img: '',
+          info: '同步Steam游戏库，一键启动游戏，游戏专属桌面搭建。',
         },
         {
-          name: "游戏助手",
-          img: "",
-          info: "剪贴板历史记录、自定义系统快捷键指令，各类效率小工具任你选择。",
+          name: '游戏助手',
+          img: '',
+          info: '剪贴板历史记录、自定义系统快捷键指令，各类效率小工具任你选择。',
         },
         {
-          name: "系统性能监控",
-          img: "",
-          info: "配合AIDA64，即可实现工作台实时监控系统性能指标。",
+          name: '系统性能监控',
+          img: '',
+          info: '配合AIDA64，即可实现工作台实时监控系统性能指标。',
         },
       ],
-    };
+    }
   },
   methods: {
-    download() {
-      window.open("https://www.apps.vip/download/");
-      this.close();
+    download () {
+      window.open('https://www.apps.vip/download/')
+      this.close()
     },
-    close() {
-      this.$emit("close");
+    close () {
+      this.$emit('close')
     },
-    check() {
-      let noWebAppList = ["音频", "捕获", "系统性能监控", "网易云"];
+    check () {
+      let noWebAppList = ['音频', '捕获', '系统性能监控', '网易云']
       if (noWebAppList.includes(item.cname)) {
-        return true;
+        return true
       }
-      return false;
+      return false
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

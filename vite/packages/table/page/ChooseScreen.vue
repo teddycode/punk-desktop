@@ -10,7 +10,8 @@
             <div :class="{'primary':display.workArea.x===0}" :style="{
 										left:getPosX(display.bounds.x)+'px',
 										top:getPosY(display.bounds.y)+'px',
-										width:getWidth(display.bounds.width)+'px',height:getHeight(display.bounds.height)+'px',display:'inline-block'}" class="screen"
+										width:getWidth(display.bounds.width)+'px',height:getHeight(display.bounds.height)+'px',display:'inline-block'}"
+                 class="screen"
                  @click="setToScreen(display)"
                  @mouseenter="display.enter=true"
                  @mouseleave="display.enter=false">
@@ -29,12 +30,12 @@
 </template>
 
 <script>
-import {appStore} from '../store'
-import {mapWritableState} from 'pinia'
+import { appStore } from '../store'
+import { mapWritableState } from 'pinia'
 
 export default {
   name: 'ChooseScreen',
-  data() {
+  data () {
     return {
       displays: [],
       maxWidth: 0,
@@ -43,12 +44,12 @@ export default {
       displayHeight: 0,
     }
   },
-  async mounted() {
+  async mounted () {
     this.displays = await tsbApi.screen.getAllDisplays()
     this.getMaxWidth()
   },
   methods: {
-    async setToScreen(display) {
+    async setToScreen (display) {
       let bounds = {
         x: display.bounds.x,
         y: display.bounds.y,
@@ -64,7 +65,7 @@ export default {
       }, 1000)
 
     },
-    getMaxWidth() {
+    getMaxWidth () {
       this.maxWidth = 0
       this.maxHeight = 0
       this.displays.forEach(display => {
@@ -77,19 +78,19 @@ export default {
       })
 
     },
-    getWidth(width) {
+    getWidth (width) {
       return (width / this.maxWidth * this.displayWidth).toFixed(0)
     },
-    getHeight(height) {
+    getHeight (height) {
       return (height / this.maxHeight * this.displayHeight).toFixed(0)
     },
-    getPosX(x) {
+    getPosX (x) {
       return (x / this.maxWidth * this.displayWidth).toFixed(0)
     },
-    getPosY(y) {
+    getPosY (y) {
       return (y / this.maxHeight * this.displayHeight).toFixed(0)
     },
-    getText(display) {
+    getText (display) {
       if (display.enter) {
         return '使用'
       } else {

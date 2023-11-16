@@ -32,34 +32,34 @@
   </XtPopup> -->
 </template>
 <script>
-import edit from "./edit.vue";
-import {mapWritableState} from "pinia";
-import {aiStore} from "../../../../store/ai";
+import edit from './edit.vue'
+import { mapWritableState } from 'pinia'
+import { aiStore } from '../../../../store/ai'
 
 export default {
   computed: {
-    ...mapWritableState(aiStore, ["mode"]),
+    ...mapWritableState(aiStore, ['mode']),
   },
   components: {
     edit,
   },
-  data() {
+  data () {
     return {
-      addModelVisible: "",
-      searchValue: "",
+      addModelVisible: '',
+      searchValue: '',
       modelList: [
         {
-          value: "Default",
-          name: "系统预设",
+          value: 'Default',
+          name: '系统预设',
         },
         {
-          value: "User",
-          name: "我的模板",
+          value: 'User',
+          name: '我的模板',
         },
       ],
-    };
+    }
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

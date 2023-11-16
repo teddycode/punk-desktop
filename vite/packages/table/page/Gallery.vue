@@ -12,7 +12,7 @@
 
 <script>
 import VueCustomScrollbar from '../../../src/components/vue-scrollbar.vue'
-import GradeSmallTip from "../components/GradeSmallTip.vue";
+import GradeSmallTip from '../components/GradeSmallTip.vue'
 import SecondPanel from '../components/SecondPanel.vue'
 
 export default {
@@ -95,9 +95,9 @@ export default {
     images: [],//当前相册图片
     gallery: true,
   }),
-  async mounted() {
+  async mounted () {
     $('#galleryContainer').on('touchend', (e) => {
-      e.stopPropagation();
+      e.stopPropagation()
     })
     // this.$router.push({name:'my'})
     // justifiedGallery()
@@ -110,15 +110,15 @@ export default {
 
   },
   methods: {
-    changeTab(args) {
+    changeTab (args) {
       this.$router.push(args.menu.route)
       this.tab = args.index
     },
-    goLock() {
+    goLock () {
       this.$router.push('/lock')
     },
 
-    play() {
+    play () {
       window.Spotlight.show(this.bingImages, {
         control: 'autofit,page,fullscreen,close,zoom,prev,next',
         play: true,
@@ -128,7 +128,7 @@ export default {
         title: false
       })
     },
-    goHome() {
+    goHome () {
       this.$router.push({
         name: 'setting'
       })

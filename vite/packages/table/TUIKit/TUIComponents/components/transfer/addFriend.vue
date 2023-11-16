@@ -69,11 +69,11 @@
 </template>
 
 <script>
-import {mapWritableState} from 'pinia'
-import {Icon as CloseIcon} from '@iconify/vue'
-import {appStore} from '../../../../store'
+import { mapWritableState } from 'pinia'
+import { Icon as CloseIcon } from '@iconify/vue'
+import { appStore } from '../../../../store'
 import _ from 'lodash-es'
-import {message} from 'ant-design-vue'
+import { message } from 'ant-design-vue'
 
 import CreateChatGroup from './CreateChatGroup.vue'
 
@@ -83,7 +83,7 @@ export default {
     CloseIcon,
   },
 
-  data() {
+  data () {
     return {
       friendList: [],  // 好友列表
       selectList: [], // 右侧选中列表
@@ -104,15 +104,15 @@ export default {
     ...mapWritableState(appStore, ['userInfo'])
   },
 
-  async mounted() {
+  async mounted () {
     await this.getFriendList()
   },
 
   methods: {
     // 获取好友数据
-    async getFriendList() {
+    async getFriendList () {
       const res = await this.server.tim.getFriendList()
-      const list = [];
+      const list = []
       for (let i = 0; i < res.data.length; i++) {
         if (parseInt(res.data[i].userID) !== this.userInfo.uid) {
           list.push(res.data[i])
@@ -122,17 +122,17 @@ export default {
     },
 
     // 关闭
-    closeContact() {
+    closeContact () {
       this.$emit('close')
     },
 
     // 选中状态
-    isSelected(index) {
+    isSelected (index) {
       return this.selectList.includes(this.friendList[index])
     },
 
     // 点击当前选中
-    selectUser(item) {
+    selectUser (item) {
       const index = _.findIndex(this.selectList, function (o) {
         return o.userID === item.userID
       })
@@ -144,7 +144,7 @@ export default {
     },
 
     // 清除已选中用户
-    clearSelect(item) {
+    clearSelect (item) {
       const index = _.findIndex(this.selectList, function (o) {
         return o.userID === item.userID
       })
@@ -152,16 +152,15 @@ export default {
     },
 
     // 选择下一步
-    enterNextStep(evt) {
+    enterNextStep (evt) {
       if (this.selectList.length !== 0) {
         this.isNextShow = true
       } else {
         message.warn('您还没有选择用户')
-        evt.preventDefault();
+        evt.preventDefault()
         this.isNextShow = false
       }
     }
-
 
   }
 }

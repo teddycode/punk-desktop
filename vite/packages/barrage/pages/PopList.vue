@@ -468,8 +468,9 @@ export default {
             </transition>
     </div>
             </span></a-button>
-            <span v-if="this.currentBarrageData.uid===this.user.user_info.uid || [4].indexOf(this.user.user_info.uid)>-1 "
-                  class="btn-margin">
+            <span
+                v-if="this.currentBarrageData.uid===this.user.user_info.uid || [4].indexOf(this.user.user_info.uid)>-1 "
+                class="btn-margin">
                  <a-button type="danger" @click="doDelete(this.currentBarrageData.nanoid)">
                  <span v-if="this.currentBarrageData.uid===this.user.user_info.uid">
                    <delete-outlined/> 撤回

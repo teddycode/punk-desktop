@@ -59,14 +59,14 @@
 </template>
 
 <script>
-import Widget from "../../../card/Widget.vue";
-import {Icon} from '@iconify/vue';
-import RadioTab from "../components/RadioTab.vue"
-import * as echarts from "echarts";
-import {cardStore} from "../../../../store/card";
-import {mapActions, mapWritableState} from "pinia";
-import {shortTalkStore} from '../store'
-import {useToast} from "vue-toastification";
+import Widget from '../../../card/Widget.vue'
+import { Icon } from '@iconify/vue'
+import RadioTab from '../components/RadioTab.vue'
+import * as echarts from 'echarts'
+import { cardStore } from '../../../../store/card'
+import { mapActions, mapWritableState } from 'pinia'
+import { shortTalkStore } from '../store'
+import { useToast } from 'vue-toastification'
 import Unusual from '../../Unusual.vue'
 
 const toast = useToast()
@@ -103,7 +103,7 @@ export default {
   computed: {
     ...mapWritableState(shortTalkStore, ['access', 'interact', 'access_token', 'baseUrl', 'setVisible']),
   },
-  data() {
+  data () {
     return {
       settings: {
         swipeEasing: true,
@@ -114,58 +114,58 @@ export default {
       settingVisible: false,
       // 设置中的数组
       dataType: [
-        {title: '社区访问数据', name: 'visit'},
-        {title: '社区互动数据', name: 'interact'},
+        { title: '社区访问数据', name: 'visit' },
+        { title: '社区互动数据', name: 'interact' },
       ],
-      defaultDataType: {title: '社区访问数据', name: 'visit'},
+      defaultDataType: { title: '社区访问数据', name: 'visit' },
       timeType: [
-        {title: '每日', name: 'day'},
-        {title: '每周', name: 'week'},
-        {title: '每月', name: 'month'},
+        { title: '每日', name: 'day' },
+        { title: '每周', name: 'week' },
+        { title: '每月', name: 'month' },
       ],
-      defaultTimeType: {title: '每日', name: 'day'},
+      defaultTimeType: { title: '每日', name: 'day' },
       platType: [
-        {title: '全部', name: 'all'},
-        {title: 'H5', name: 'h5'},
-        {title: 'PC', name: 'pc'},
-        {title: '小程序', name: 'xcx'},
-        {title: 'APP', name: 'app'},
+        { title: '全部', name: 'all' },
+        { title: 'H5', name: 'h5' },
+        { title: 'PC', name: 'pc' },
+        { title: '小程序', name: 'xcx' },
+        { title: 'APP', name: 'app' },
       ],
-      defaultPlatType: {title: '全部', name: 'all'},
+      defaultPlatType: { title: '全部', name: 'all' },
       // 设置
       menuList: [
         {
           icon: 'shezhi1',
           title: '设置',
           fn: () => {
-            this.settingVisible = true;
+            this.settingVisible = true
             this.$refs.dataSlot.visible = false
             this.setVisible = false
           }
         },
       ],
       options: {
-        className: "card double",
-        title: "社区访问数据/每日/全部",
-        icon: "iconamoon:history-fill",
-        rightIcon: "fluent:open-20-filled",
+        className: 'card double',
+        title: '社区访问数据/每日/全部',
+        icon: 'iconamoon:history-fill',
+        rightIcon: 'fluent:open-20-filled',
       },
       // 网格数据
       myChartStyle: {
-        float: "left",
-        width: "600px",
-        height: "400px",
-        position: "relative",
-        left: "-12px",
-        top: "3px"
+        float: 'left',
+        width: '600px',
+        height: '400px',
+        position: 'relative',
+        left: '-12px',
+        top: '3px'
       },
       // 密钥和地址
       accToken: '',
       accUrl: '',
 
-    };
+    }
   },
-  async mounted() {
+  async mounted () {
     this.accToken = this.access_token
     this.accUrl = this.baseUrl
     this.init()
@@ -173,13 +173,13 @@ export default {
   methods: {
     ...mapActions(cardStore, ['updateCustomData']),
     ...mapActions(shortTalkStore, ['getChartData', 'changeAccToken']),
-    init() {
+    init () {
       // 初始
       if (!this.customData.defaultDataType) {
         this.updateCustomData(this.customIndex, {
-          "defaultDataType": this.defaultDataType,
-          "defaultTimeType": this.defaultTimeType,
-          "defaultPlatType": this.defaultPlatType,
+          'defaultDataType': this.defaultDataType,
+          'defaultTimeType': this.defaultTimeType,
+          'defaultPlatType': this.defaultPlatType,
         }, this.desk)
       } else {
         this.defaultDataType = this.customData.defaultDataType
@@ -198,7 +198,7 @@ export default {
 
     },
     // 初始化柱状图
-    initEcharts() {
+    initEcharts () {
       // 多列柱状图
       const mulColumnZZTData = {
         xAxis: {
@@ -207,14 +207,14 @@ export default {
         // 图例属性
         legend: {
           data: this.legend,
-          top: "0%",
+          top: '0%',
           itemHeight: 10,
           itemWidth: 10,
-          x: "left",
+          x: 'left',
           left: 10,
           textStyle: {
-            color: "rgba(255,255,255,0.85)",
-            fontSize: "12"
+            color: 'rgba(255,255,255,0.85)',
+            fontSize: '12'
           }
         },
         // y轴线条
@@ -224,63 +224,63 @@ export default {
             lineStyle: {
               type: 'solid',
               color: '#FCFCFC',//网格颜色
-              opacity: "0.3"
+              opacity: '0.3'
             }
           }
         },
         // 内部属性
         series: this.series,
       }
-      const myChart = echarts.init(document.getElementById("mychart"))
+      const myChart = echarts.init(document.getElementById('mychart'))
       // myChart.setOption(mulColumnZZTData);
       myChart.clear()
-      myChart.setOption(mulColumnZZTData);
-      window.addEventListener("resize", () => {
-        myChart.resize();
+      myChart.setOption(mulColumnZZTData)
+      window.addEventListener('resize', () => {
+        myChart.resize()
       })
     },
     // 修改柱状图数据
-    changeBarChart() {
+    changeBarChart () {
       // 社区访问数据
       if (this.defaultDataType.name == 'visit') {
         // 内部属性
         this.series = [
           {
-            type: "bar",
+            type: 'bar',
             data: this.access.visit.series,
-            name: "访问次数",
+            name: '访问次数',
             label: {
               show: true,
-              position: "top",
+              position: 'top',
               // 修改柱状条上方数据
               textStyle: {
-                color: "rgba(255,255,255,0.85)",
+                color: 'rgba(255,255,255,0.85)',
                 fontSize: 10,
               },
             },
             itemStyle: {
-              color: "rgba(91,143,249,0.85)"
+              color: 'rgba(91,143,249,0.85)'
             }
           },
           {
-            type: "bar",
+            type: 'bar',
             data: this.access.login.series,
-            name: "访问人数",
+            name: '访问人数',
             label: {
               show: true,
-              position: "top",
+              position: 'top',
               textStyle: {
-                color: "rgba(255,255,255,0.85)",
+                color: 'rgba(255,255,255,0.85)',
                 fontSize: 10,
               },
             },
             itemStyle: {
-              color: "rgba(90,216,166,0.85)",
+              color: 'rgba(90,216,166,0.85)',
             },
           },
         ],
             // 图例
-            this.legend = ["访问次数", "访问人数"]
+            this.legend = ['访问次数', '访问人数']
 
         // x轴
         this.xData = this.interact.post.xAxis
@@ -288,79 +288,79 @@ export default {
       } else {
         this.series = [
           {
-            type: "bar",
+            type: 'bar',
             data: this.interact.post.series,
-            name: "发布",
+            name: '发布',
             label: {
               show: true,
-              position: "top",
+              position: 'top',
               // 修改柱状条上方数据
               textStyle: {
-                color: "rgba(255,255,255,0.85)",
+                color: 'rgba(255,255,255,0.85)',
                 fontSize: 10,
               },
             },
             itemStyle: {
-              color: "rgba(91,143,249,0.85)"
+              color: 'rgba(91,143,249,0.85)'
             }
           },
           {
-            type: "bar",
+            type: 'bar',
             data: this.interact.support.series,
-            name: "点赞",
+            name: '点赞',
             label: {
               show: true,
-              position: "top",
+              position: 'top',
               textStyle: {
-                color: "rgba(255,255,255,0.85)",
+                color: 'rgba(255,255,255,0.85)',
                 fontSize: 10,
               },
             },
             itemStyle: {
-              color: "rgba(90,216,166,0.85)",
+              color: 'rgba(90,216,166,0.85)',
             },
           },
           {
-            type: "bar",
+            type: 'bar',
             data: this.interact.thread.series,
-            name: "评论",
+            name: '评论',
             label: {
               show: true,
-              position: "top",
+              position: 'top',
               textStyle: {
-                color: "rgba(255,255,255,0.85)",
+                color: 'rgba(255,255,255,0.85)',
                 fontSize: 10,
               },
             },
             itemStyle: {
-              color: "rgba(93,112,146,0.85)",
+              color: 'rgba(93,112,146,0.85)',
             },
           },
         ],
             // 图例
-            this.legend = ["发布", "点赞", "评论"]
+            this.legend = ['发布', '点赞', '评论']
         // x轴
         this.xData = this.interact.post.xAxis
       }
       this.initEcharts()
     },
     // 设置保存后修改
-    changeCharts(boolean) {
-      this.options.title = this.defaultDataType.title + "/" + this.defaultTimeType.title + (this.defaultDataType.name == "visit" ? "/" + this.defaultPlatType.title : "");
+    changeCharts (boolean) {
+      this.options.title = this.defaultDataType.title + '/' + this.defaultTimeType.title + (this.defaultDataType.name == 'visit' ? '/' + this.defaultPlatType.title : '')
       this.updateCustomData(this.customIndex, {
-        "defaultDataType": this.defaultDataType,
-        "defaultTimeType": this.defaultTimeType,
-        "defaultPlatType": this.defaultPlatType,
+        'defaultDataType': this.defaultDataType,
+        'defaultTimeType': this.defaultTimeType,
+        'defaultPlatType': this.defaultPlatType,
       }, this.desk)
       if (boolean) {
-        toast.success("保存成功");
+        toast.success('保存成功')
       }
       this.settingVisible = false
       setTimeout(() => {
         this.init()
       }, 500)
     },
-    back() {
+    back () {
       this.settingVisible = true
     }
 
@@ -368,7 +368,7 @@ export default {
   watch: {
     // 监听token 跟 url
     'access_token': {
-      handler(newVal, oldVal) {
+      handler (newVal, oldVal) {
         this.accToken = this.access_token
         this.getChartData(this.customData)
             .then(() => {
@@ -377,7 +377,7 @@ export default {
       }
     },
     'baseUrl': {
-      handler(newVal, oldVal) {
+      handler (newVal, oldVal) {
         this.accUrl = this.baseUrl
         this.getChartData(this.customData)
             .then(() => {
@@ -386,7 +386,7 @@ export default {
       }
     },
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

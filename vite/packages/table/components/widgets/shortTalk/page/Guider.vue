@@ -20,10 +20,10 @@
 </template>
 
 <script>
-import Widget from "../../../card/Widget.vue";
+import Widget from '../../../card/Widget.vue'
 // import {mapActions, mapState,mapWritableState} from "pinia";
 // import { shortTalkStore } from '../store'
-import {Icon} from '@iconify/vue';
+import { Icon } from '@iconify/vue'
 
 export default {
   components: {
@@ -51,50 +51,50 @@ export default {
       type: Boolean,
     },
   },
-  data() {
+  data () {
     return {
       options: {
-        className: "card",
-        title: "社区助手",
+        className: 'card',
+        title: '社区助手',
         // icon: "bianji",
         // icon: "shezhi1",
-        icon: "iconamoon:history-fill",
-        rightIcon: "fluent:open-20-filled",
+        icon: 'iconamoon:history-fill',
+        rightIcon: 'fluent:open-20-filled',
         // icon: "games-16-filled",
       },
       dataList: [
         {
-          title: "短说社区客服",
+          title: '短说社区客服',
           icon: 'fluent-emoji-flat:globe-with-meridians',
         },
         {
-          title: "短说通用版V4版本使用手册sdadsad",
+          title: '短说通用版V4版本使用手册sdadsad',
           icon: 'fluent-emoji-flat:thought-balloon',
         },
         {
-          title: "短说PC版V2版本使用手册",
+          title: '短说PC版V2版本使用手册',
           icon: 'fluent-emoji-flat:thought-balloon',
         },
         {
-          title: "短说企业版差异部分手册",
+          title: '短说企业版差异部分手册',
           icon: 'fluent-emoji-flat:thought-balloon',
         },
         {
-          title: "短说二次开发技术文档",
+          title: '短说二次开发技术文档',
           icon: 'fluent-emoji-flat:thought-balloon',
         },
         {
-          title: "短说企业文化社区解决方案",
+          title: '短说企业文化社区解决方案',
           icon: 'fluent-emoji-flat:thought-balloon',
         },
       ]
-    };
+    }
   },
-  async mounted() {
+  async mounted () {
 
   },
   methods: {}
-};
+}
 </script>
 
 <style lang="scss" scoped>

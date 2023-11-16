@@ -1,5 +1,6 @@
 <template>
-  <vueCustomScrollbar :settings="scrollbarSettings" style="padding: 15px;white-space: nowrap;height: 100%" @touchstart.stop @touchmove.stop
+  <vueCustomScrollbar :settings="scrollbarSettings" style="padding: 15px;white-space: nowrap;height: 100%"
+                      @touchstart.stop @touchmove.stop
                       @touchend.stop>
 
     <div class="card half mr-3"
@@ -41,19 +42,19 @@ import ComActionPanel from '../../components/comp/ComActionPanel.vue'
 import GroupPanel from '../../components/comp/GroupPanel.vue'
 import UserCard from '../../components/small/UserCard.vue'
 import UpdateMyInfo from '../../components/comp/UpdateMyInfo.vue'
-import {mapActions, mapState} from 'pinia'
-import {appStore} from '../../store'
+import { mapActions, mapState } from 'pinia'
+import { appStore } from '../../store'
 import FrameStoreWidget from '../../components/team/FrameStoreWidget.vue'
-import {defaultAvatar} from '../../js/common/teamAvatar'
+import { defaultAvatar } from '../../js/common/teamAvatar'
 import _ from 'lodash-es'
 
 export default {
   name: 'My',
-  components: {UserCard, GroupPanel, ComActionPanel, ComPanel, GradePanel, FrameStoreWidget, UpdateMyInfo},
+  components: { UserCard, GroupPanel, ComActionPanel, ComPanel, GradePanel, FrameStoreWidget, UpdateMyInfo },
   computed: {
     ...mapState(appStore, ['userInfo', 'secondaryVisible'])
   },
-  data() {
+  data () {
     return {
       frameStoreVisible: false,
       hideAdmin: false,
@@ -67,11 +68,11 @@ export default {
       key: Date.now()
     }
   },
-  mounted() {
+  mounted () {
     this.$nextTick(() => {
       if (!this.secondaryVisible) {
         const avatar = this.userInfo.avatar
-        const regex = new RegExp(avatar.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+        const regex = new RegExp(avatar.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
         const isUrlExists = _.some(defaultAvatar, function (o) {
           return regex.test(o.default_url)
         })
@@ -79,13 +80,13 @@ export default {
           this.$refs.myInfoRef.openMyInfo()
         }
       } else {
-        return
+
       }
     })
   },
   watch: {
     'updateInfoVisible': {
-      handler(newVal) {
+      handler (newVal) {
         if (newVal === false) {
           console.log('更新用户卡片')
           setTimeout(() => {
@@ -97,10 +98,10 @@ export default {
   },
   methods: {
     ...mapActions(appStore, ['setSecondaryVisible']),
-    toggleFrameStore() {
+    toggleFrameStore () {
       window.toggleFrameStore()
     },
-    infoUpdated() {
+    infoUpdated () {
       this.key = Date.now()
     }
   },

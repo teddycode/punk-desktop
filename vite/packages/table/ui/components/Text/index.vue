@@ -16,25 +16,25 @@
 </template>
 
 <script setup>
-import {computed} from "vue";
+import { computed } from 'vue'
 
 const props = defineProps({
   type: {
     default: 1,
   },
   title: {
-    default: "",
+    default: '',
   },
-});
+})
 
 const textClass = computed(() => {
   const types = {
-    1: "xt-text text-base",
-    2: "xt-text-2 text-sm",
-  };
-  types[props.type];
-  return types[props.type];
-});
+    1: 'xt-text text-base',
+    2: 'xt-text-2 text-sm',
+  }
+  types[props.type]
+  return types[props.type]
+})
 </script>
 
 <style lang="scss" scoped></style>

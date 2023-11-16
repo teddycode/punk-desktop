@@ -1,8 +1,8 @@
-import { passwordManager, passwordManagers } from './passwordManager'
-import { searchEnginePage, searchEngine } from './searchEngine.js'
+import { passwordManager } from './passwordManager'
+import { searchEnginePage } from './searchEngine.js'
 
 import theme from './theme.js'
-import { defaultKeyMap, userKeyMap } from './keyMap'
+import { userKeyMap } from './keyMap'
 
 const settingPage = {
   callSetDefaultBrowser () {
@@ -23,7 +23,6 @@ const settingPage = {
     var autoPlayCheckbox = document.getElementById('checkbox-enable-autoplay')
     var userAgentCheckbox = document.getElementById('checkbox-user-agent')
     var userAgentInput = document.getElementById('input-user-agent')
-
 
     function showRestartRequiredBanner () {
       banner.hidden = false
@@ -436,10 +435,10 @@ const settingPage = {
       }
       for (var searchEngine in searchEngines) {
         var item = document.createElement('option')
-        item.value=searchEngines[searchEngine].name
-        item.setAttribute('id','searchEngine_'+searchEngines[searchEngine].name)
-        let displayName= searchEngines[searchEngine].alias!==searchEngines[searchEngine].name?"（"+searchEngines[searchEngine].name+"）":''
-        item.textContent = searchEngines[searchEngine].alias +displayName
+        item.value = searchEngines[searchEngine].name
+        item.setAttribute('id', 'searchEngine_' + searchEngines[searchEngine].name)
+        let displayName = searchEngines[searchEngine].alias !== searchEngines[searchEngine].name ? '（' + searchEngines[searchEngine].name + '）' : ''
+        item.textContent = searchEngines[searchEngine].alias + displayName
 
         if (searchEngines[searchEngine].name === currentSearchEngine.name) {
 
@@ -452,8 +451,8 @@ const settingPage = {
       // add custom option
       item = document.createElement('option')
       item.textContent = '自定义'
-      item.setAttribute('id','searchEngine_custom')
-      item.value='custom'
+      item.setAttribute('id', 'searchEngine_custom')
+      item.value = 'custom'
       if (currentSearchEngine.custom) {
         item.setAttribute('selected', 'true')
       }
@@ -576,7 +575,6 @@ const settingPage = {
       })
     }
 
-
     // settings.listen('passwordManager', function (value) {
     //   keychainViewLink.hidden = !(currentPasswordManager.name === 'Built-in password manager')
     // })
@@ -593,7 +591,7 @@ const settingPage = {
 
     const setProxy = (key, value) => {
       settings.get('proxy', (proxy = {}) => {
-        console.log(proxy,'proxy')
+        console.log(proxy, 'proxy')
         proxy[key] = value
         settings.set('proxy', proxy)
       })
@@ -601,8 +599,8 @@ const settingPage = {
 
     settings.get('proxy', (proxy = {}) => {
       toggleProxyOptions(proxy.type)
-      if(proxy.type===undefined){
-        proxy.type=3
+      if (proxy.type === undefined) {
+        proxy.type = 3
       }
       proxyTypeInput.options.selectedIndex = proxy.type
       proxyInputs.forEach(item => item.value = proxy[item.name] || '')
@@ -719,20 +717,20 @@ const settingPage = {
   /**
    * 监听手势
    */
-  watchGesture(){
-    this.watchCheckBox('gestureBack','true')
-    this.watchCheckBox('gestureZoom','true')
+  watchGesture () {
+    this.watchCheckBox('gestureBack', 'true')
+    this.watchCheckBox('gestureZoom', 'true')
   },
   /**
    * watch一个配置项，id为配置项的名称，页面元素需和配置项同名
    * @param id
    * @param defaultValue
    */
-  watchCheckBox(id,defaultValue='true'){
+  watchCheckBox (id, defaultValue = 'true') {
     const ele = document.getElementById(id)
     settings.get(id, (value) => {
-      if(value===undefined){
-        value=defaultValue
+      if (value === undefined) {
+        value = defaultValue
       }
       if (value === 'true') {
         ele.checked = true

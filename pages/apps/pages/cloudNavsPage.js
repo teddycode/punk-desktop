@@ -1,4 +1,4 @@
-const cloudNavsTpl=`
+const cloudNavsTpl = `
 <div style="width: 100%">
   <template v-if=" uid > 0">
     <a-layout>
@@ -42,25 +42,23 @@ const { ipcRenderer: ipc } = require('electron')
 module.exports = Vue.component('cloud-navs-page', {
   name: 'cloud-navs-page',
   template: cloudNavsTpl,
-  component: {CloudNavsComp},
-  beforeRouteEnter(to, from, next) {
+  component: { CloudNavsComp },
+  beforeRouteEnter (to, from, next) {
     next(async vm => {
       vm.myClouds = []
-      await vm.load(vm);
-    });
+      await vm.load(vm)
+    })
   },
-  async beforeRouteUpdate(to, from, next) {
-    await this.load(this);
+  async beforeRouteUpdate (to, from, next) {
+    await this.load(this)
   },
   data () {
     return {
       uid: Number,
-      myClouds:[]
+      myClouds: []
     }
   },
-  computed: {
-
-  },
+  computed: {},
   async mounted () {
     await this.$store.dispatch('getCurrentUser')
     this.uid = this.$store.getters.getCurrentUser.value.uid
@@ -69,13 +67,13 @@ module.exports = Vue.component('cloud-navs-page', {
 
   },
   methods: {
-    async load(vm) {
+    async load (vm) {
       await this.$store.dispatch('getAppUserNavs')
       vm.myClouds = vm.$store.getters.getAppUserNavs
     },
-    Login() {
+    Login () {
       //location.href = api.getUrl(api.API_URL.user.login)
-      ipc.send('addTab',{url:api.getUrl(api.API_URL.user.login)})
+      ipc.send('addTab', { url: api.getUrl(api.API_URL.user.login) })
     }
   }
 })

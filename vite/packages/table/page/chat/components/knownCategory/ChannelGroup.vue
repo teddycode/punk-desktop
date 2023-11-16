@@ -13,7 +13,8 @@
     </div>
 
     <div class="px-6 flex-col mt-4">
-      <div v-for="item in list" :class="{'select-bg':listIndex === item.type}" class="flex flex-col p-4 mb-4 rounded-lg pointer"
+      <div v-for="item in list" :class="{'select-bg':listIndex === item.type}"
+           class="flex flex-col p-4 mb-4 rounded-lg pointer"
            style="background: var(--secondary-bg);" @click="selectChannel(item)">
         <span class="category-16-400 mb-2.5" style="color:var(--primary-text);">{{ item.title }}</span>
         <span class="category-14-400" style="color:var(--secondary-text);">{{ item.summary }}</span>
@@ -37,7 +38,7 @@
 </template>
 
 <script>
-import {Icon as ChannelIcon} from '@iconify/vue'
+import { Icon as ChannelIcon } from '@iconify/vue'
 import ChannelGroupChat from './ChannelGroupChat.vue'
 import ChannelNewGroup from './ChannelNewGroup.vue'
 
@@ -48,30 +49,30 @@ export default {
 
   props: ['no', 'id'],
 
-  data() {
+  data () {
     return {
       chatShow: false,
       list: [
-        {title: '创建新群聊', summary: '选择你的联系人，创建一个新的群聊关联到社群中。', type: 'create'},
-        {title: '添加已有群聊', summary: '选择你已经创建的群聊，将他们批量关联到社群中。', type: 'already'}
+        { title: '创建新群聊', summary: '选择你的联系人，创建一个新的群聊关联到社群中。', type: 'create' },
+        { title: '添加已有群聊', summary: '选择你已经创建的群聊，将他们批量关联到社群中。', type: 'already' }
       ],
       listIndex: 'create',
     }
   },
 
   methods: {
-    closeChannel() {
+    closeChannel () {
       this.$emit('close')
     },
-    backChannel() {
+    backChannel () {
       this.$emit('back')
     },
 
-    selectChannel(item) {
+    selectChannel (item) {
       this.listIndex = item.type
     },
 
-    selectSubmit() {
+    selectSubmit () {
       this.chatShow = true
     }
 

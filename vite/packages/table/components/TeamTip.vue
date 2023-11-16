@@ -4,7 +4,8 @@
     <back-btn @click="hide()"></back-btn>
     <div v-if="step===1" class="flex flex-row items-center justify-center w-full h-full" style="position: relative">
 
-      <div class="w-1/2  h-82 max-w-lg rounded-lg flex flex-col  pt-6  mr-10 p-10 px-15" style="background: rgba(33, 33, 33, 1);"
+      <div class="w-1/2  h-82 max-w-lg rounded-lg flex flex-col  pt-6  mr-10 p-10 px-15"
+           style="background: rgba(33, 33, 33, 1);"
            @click.stop="()=>{}">
         <div>
           <a-row :gutter="20">
@@ -41,7 +42,8 @@
               <a-input v-model:value="teamNo" class="h-10 rounded-lg text-center" placeholder="小队号"></a-input>
             </a-col>
             <a-col :span="12">
-              <div :style="{'background':!teamNo?'#343434':'#535bf2'}" class="rounded-lg relative h-10 w-100 flex justify-center items-center pointer"
+              <div :style="{'background':!teamNo?'#343434':'#535bf2'}"
+                   class="rounded-lg relative h-10 w-100 flex justify-center items-center pointer"
                    style="color: white" @click="join">
                 加入
                 <GradeSmallTip powerType="team"></GradeSmallTip>
@@ -64,16 +66,16 @@
 </template>
 
 <script>
-import {message, Modal} from 'ant-design-vue'
-import {mapActions, mapWritableState} from 'pinia'
-import {UsergroupAddOutlined} from '@ant-design/icons-vue'
-import CreateTeam from "./CreateTeam.vue";
-import BackBtn from "./comp/BackBtn.vue";
-import {teamStore} from '../store/team'
+import { message, Modal } from 'ant-design-vue'
+import { mapActions, mapWritableState } from 'pinia'
+import { UsergroupAddOutlined } from '@ant-design/icons-vue'
+import CreateTeam from './CreateTeam.vue'
+import BackBtn from './comp/BackBtn.vue'
+import { teamStore } from '../store/team'
 import GradeSmallTip from './GradeSmallTip.vue'
 
 export default {
-  name: "TeamTip",
+  name: 'TeamTip',
   components: {
     GradeSmallTip,
     BackBtn,
@@ -85,37 +87,37 @@ export default {
   computed: {
     ...mapWritableState(teamStore, ['teamVisible', 'team'])
   },
-  data() {
+  data () {
     return {
       step: 1,
       teamNo: '',
     }
   },
-  mounted() {
+  mounted () {
     this.step = 1
   },
   methods: {
     ...mapActions(teamStore, ['joinByNo', 'updateTeamShip', 'updateMy']),
-    created() {
+    created () {
       this.$emit(
           'update:visible', false
       )
       this.teamVisible = true
     },
-    goHall() {
-      this.$router.push({name: 'hall'})
+    goHall () {
+      this.$router.push({ name: 'hall' })
       this.$emit(
           'update:visible', false
       )
     },
-    more() {
+    more () {
       Modal.info({
         title: '小队说明',
         centered: true,
         content: '创建、加入一个小队的好处：您可以获得每位小队成员5%的在线时长累计加成，加速等级提升，同时体验次时代的小团队协作模式（陆续上线）'
       })
     },
-    async join() {
+    async join () {
       if (!this.teamNo) {
         message.error('请在左侧输入小队号。')
         return
@@ -125,14 +127,14 @@ export default {
         let result = rs.data
         if (result.status) {
           this.team = result.data
-          Modal.success({content: '加入小队成功。', centered: true})
+          Modal.success({ content: '加入小队成功。', centered: true })
           await this.updateMy(0)
           this.$emit(
               'update:visible', false
           )
           this.teamVisible = true
         } else {
-          Modal.error({content: result.info, centered: true})
+          Modal.error({ content: result.info, centered: true })
         }
 
       }
@@ -141,7 +143,7 @@ export default {
       //   centered: true
       // })
     },
-    hide() {
+    hide () {
       if (this.step !== 1) {
 
         this.step = 1

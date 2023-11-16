@@ -6,7 +6,7 @@ and then resolves the promise with gathered data.
 
 const { spawn, spawnSync } = require('child_process')
 
-const path=__dirname.indexOf('util')>-1?require('path').join(__dirname,'processWorker.js'):require('path').join(__dirname, 'js','util','processWorker.js')
+const path = __dirname.indexOf('util') > -1 ? require('path').join(__dirname, 'processWorker.js') : require('path').join(__dirname, 'js', 'util', 'processWorker.js')
 const worker = new Worker(path)
 
 console.log(path)
@@ -59,7 +59,12 @@ class ProcessSpawner {
   }
 
   executeSync (input) {
-    const process = spawnSync(this.command, this.args, { input: input, encoding: 'utf8', env: this.env, maxBuffer: maxBufferSize })
+    const process = spawnSync(this.command, this.args, {
+      input: input,
+      encoding: 'utf8',
+      env: this.env,
+      maxBuffer: maxBufferSize
+    })
     return process.output[1].slice(0, -1)
   }
 

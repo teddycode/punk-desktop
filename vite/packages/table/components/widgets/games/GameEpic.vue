@@ -45,7 +45,7 @@
 <script>
 import Widget from '../../card/Widget.vue'
 import HorizontalPanel from '../../HorizontalPanel.vue'
-import {remainderDay, sendRequest, startOfNextWeek, startOfWeek} from '../../../js/axios/api'
+import { remainderDay, sendRequest, startOfNextWeek, startOfWeek } from '../../../js/axios/api'
 import EpicDetail from './EpicDetail.vue'
 import _ from 'lodash-es'
 
@@ -65,7 +65,7 @@ export default {
       type: Object
     }
   },
-  data() {
+  data () {
     return {
       options: {
         className: 'card',
@@ -75,10 +75,10 @@ export default {
         epicShow: true,
       },
       epicTips: [
-        {title: '本周免费', name: 'week'},
-        {title: '下周预告', name: 'next'}
+        { title: '本周免费', name: 'week' },
+        { title: '下周预告', name: 'next' }
       ],
-      epicType: {title: '本周免费', name: 'week'},
+      epicType: { title: '本周免费', name: 'week' },
       epicWeek: [], // 本周数据
       epicNext: [],  // 下周数据
       epicList: [],
@@ -88,7 +88,7 @@ export default {
     }
   },
   computed: {
-    weekEpic() {
+    weekEpic () {
       try {
         const weekEpicIndex = this.epicList.filter(el => {
           if (el.promotions.promotionalOffers.length !== 0 && el.price.totalPrice.discountPrice === 0) {
@@ -108,7 +108,7 @@ export default {
       }
 
     },
-    nextWeekEpic() {
+    nextWeekEpic () {
       try {
         const nextWeekEpicIndex = this.epicList.filter(el => {
           if (el.promotions.upcomingPromotionalOffers.length !== 0 && el.price.totalPrice.discountPrice === 0) {
@@ -129,12 +129,12 @@ export default {
 
     },
   },
-  mounted() {
+  mounted () {
     this.getEpicData()
   },
   methods: {
     remainderDay,
-    getEpicData() {
+    getEpicData () {
       sendRequest('https://store-site-backend-static-ipv4.ak.epicgames.com/freeGamesPromotions?locale=zh-CN&country=CN&allowCountries=CN', {}, {
         localCache: true,
         localTtl: 60 * 12 * 60
@@ -151,7 +151,7 @@ export default {
         }
       })
     },
-    enterWeek(item) {
+    enterWeek (item) {
       this.detailShow = true
       if (item.promotions.promotionalOffers.length !== 0) {
         const promotions = item.promotions.promotionalOffers[0].promotionalOffers[0]
@@ -175,13 +175,13 @@ export default {
         }
       }
     },
-    detailBack() {
+    detailBack () {
       this.detailShow = false
     },
 
   },
   watch: {
-    epicType() {
+    epicType () {
       this.detailShow = false
     }
   }

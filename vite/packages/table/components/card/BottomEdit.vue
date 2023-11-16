@@ -8,15 +8,15 @@
 </template>
 
 <script setup>
-import BottomEditItem from "./BottomEditItem.vue";
+import BottomEditItem from './BottomEditItem.vue'
 
 const props = defineProps({
   menuList: {},
-});
-const emits = defineEmits(["close"]);
+})
+const emits = defineEmits(['close'])
 const close = () => {
-  emits("close");
-};
+  emits('close')
+}
 </script>
 
 <style lang="scss" scoped></style>

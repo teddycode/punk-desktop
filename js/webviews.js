@@ -28,30 +28,25 @@ function captureCurrentTab (options) {
   })
 }
 
-
-
-
-
 // called whenever a new page starts loading, or an in-page navigation occurs
 function onPageURLChange (tab, url) {
 
-
-  ipc.send('changeUrl',{url:urlParser.getSourceURL(url)})
-    //增加了ts开头的页面的安全提示，避免提示不安全
-    webviews.updateToolBarStatus(tabs.get(tab))
-    if (url.indexOf('https://') === 0 || url.indexOf('about:') === 0 || url.indexOf('chrome:') === 0 || url.indexOf('file://') === 0 || url.indexOf('ts://') === 0) {
-      tabs.update(tab, {
-        secure: true,
-        url: url
-      })
-      webviews.updateToolbarSecure(true)
-    } else {
-      tabs.update(tab, {
-        secure: false,
-        url: url
-      })
-      webviews.updateToolbarSecure(false)
-    }
+  ipc.send('changeUrl', { url: urlParser.getSourceURL(url) })
+  //增加了ts开头的页面的安全提示，避免提示不安全
+  webviews.updateToolBarStatus(tabs.get(tab))
+  if (url.indexOf('https://') === 0 || url.indexOf('about:') === 0 || url.indexOf('chrome:') === 0 || url.indexOf('file://') === 0 || url.indexOf('ts://') === 0) {
+    tabs.update(tab, {
+      secure: true,
+      url: url
+    })
+    webviews.updateToolbarSecure(true)
+  } else {
+    tabs.update(tab, {
+      secure: false,
+      url: url
+    })
+    webviews.updateToolbarSecure(false)
+  }
 }
 
 // called whenever a navigation finishes
@@ -151,38 +146,37 @@ const webviews = {
       fn: fn
     })
   },
-  viewMargins: [document.getElementById('toolbar').hidden?0:document.getElementById('third-toolbar').hidden?40:80, 0, 0, 45], // top, right, bottom, left
-  autoAdjustMargin: function() {
-    let top=0
-    let left=0
+  viewMargins: [document.getElementById('toolbar').hidden ? 0 : document.getElementById('third-toolbar').hidden ? 40 : 80, 0, 0, 45], // top, right, bottom, left
+  autoAdjustMargin: function () {
+    let top = 0
+    let left = 0
 
-    if(window.$toolbar.layoutMod==='min'){
-      top=0
-      left=0
-    }else{
-     top= document.getElementById("toolbar").hidden
+    if (window.$toolbar.layoutMod === 'min') {
+      top = 0
+      left = 0
+    } else {
+      top = document.getElementById('toolbar').hidden
         ? 0
-        : document.getElementById("third-toolbar").hidden
+        : document.getElementById('third-toolbar').hidden
           ? 40
           : 80
-      left=  window.sideBar.mod === "close"
+      left = window.sideBar.mod === 'close'
         ? 45
-        : window.sideBar.mod === "open"
+        : window.sideBar.mod === 'open'
           ? 145
           : 45
     }
-
 
     const currentMargins = [
       top,
       0,
       0,
       left,
-    ];
+    ]
     for (var i = 0; i < currentMargins.length; i++) {
-      webviews.viewMargins[i] = currentMargins[i];
+      webviews.viewMargins[i] = currentMargins[i]
     }
-    webviews.resize();
+    webviews.resize()
   },
   adjustMargin: function (margins) {
     for (var i = 0; i < margins.length; i++) {
@@ -228,131 +222,129 @@ const webviews = {
 
     // if the tab is private, we want to partition it. See http://electron.atom.io/docs/v0.34.0/api/web-view-tag/#partition
     // since tab IDs are unique, we can use them as partition names
-    var partition=tasks.getSelected().partition
-    if(tabData.partition){
-      partition=tabData.partition
+    var partition = tasks.getSelected().partition
+    if (tabData.partition) {
+      partition = tabData.partition
     }
     if (tabData.private === true) {
-      partition= tabId.toString() // options.tabId is a number, which remote.session.fromPartition won't accept. It must be converted to a string first
+      partition = tabId.toString() // options.tabId is a number, which remote.session.fromPartition won't accept. It must be converted to a string first
     }
 
+    /*对特殊的内部webview做处理，增加一些额外的权限*/
+    let webPreferences = {}
+    let sourceUrl = urlParser.getSourceURL(tabData.url)
+    if (sourceUrl == 'ts://apps') {
+      //仅仅对apps页面单独开启权限
+      webPreferences = {
+        preload: __dirname + '/pages/apps/preload.js',
+        nodeIntegration: true,
+        contextIsolation: false,
+        enableRemoteModule: true,
+        scrollBounce: false,
+        sandbox: false,
+        safeDialogs: false,
+        safeDialogsMessage: false,
+        additionalArguments: [
+          '--user-data-path=' + window.globalArgs['user-data-path'],
+          '--app-version=' + window.globalArgs['app-version'],
+          '--app-name=' + window.globalArgs['app-name'],
+          //'--is-Dev='+window.globalArgs['development--mode']
+        ],
+        allowPopups: true
+      }
+    } else if (sourceUrl == 'ts://newtab') {
+      //仅仅对apps页面单独开启权限
+      webPreferences = {
+        preload: __dirname + '/pages/newtab/preload.js',
+        nodeIntegration: true, //node集成开高了
+        contextIsolation: false,
+        enableRemoteModule: true,
+        scrollBounce: false,
+        sandbox: false,
+        safeDialogs: false,
+        safeDialogsMessage: false,
+        additionalArguments: [
+          '--user-data-path=' + window.globalArgs['user-data-path'],
+          '--app-version=' + window.globalArgs['app-version'],
+          '--app-name=' + window.globalArgs['app-name'],
+          //'--is-Dev='+window.globalArgs['development--mode']
+        ],
+        allowPopups: true
+      }
+    } else if (sourceUrl == 'ts://guide') {
+      webPreferences = {
+        preload: __dirname + '/pages/guide/preload.js',
+        nodeIntegration: true, //node集成开高了
+        contextIsolation: false,
+        enableRemoteModule: true,
+        scrollBounce: false,
+        sandbox: false,
+        safeDialogs: false,
+        safeDialogsMessage: false,
+        additionalArguments: [
+          '--user-data-path=' + window.globalArgs['user-data-path'],
+          '--app-version=' + window.globalArgs['app-version'],
+          '--app-name=' + window.globalArgs['app-name'],
+          //'--is-Dev='+window.globalArgs['development--mode']
+        ],
+        allowPopups: true
+      }
+    }
+      //   else if(sourceUrl.startsWith('http://localhost:5008/' )) {
+      //   webPreferences={
+      //     preload: __dirname + '/pages/appStore/preload.js',
+      //     nodeIntegration: true, //node集成开高了
+      //     contextIsolation:false,
+      //     enableRemoteModule: true,
+      //     scrollBounce: false,
+      //     sandbox: false,
+      //     safeDialogs:false,
+      //     safeDialogsMessage:false,
+      //     additionalArguments: [
+      //       '--user-data-path=' + window.globalArgs['user-data-path'],
+      //       '--app-version=' + window.globalArgs['app-version'],
+      //       '--app-name=' +  window.globalArgs['app-name'],
+      //       //'--is-Dev='+window.globalArgs['development--mode']
+      //     ],
+      //     allowPopups:true
+      //   }
+    // }
+    else if (sourceUrl.startsWith('http://localhost:8080')) {
+      webPreferences = {
+        preload: __dirname + '/pages/guide/preload.js',
+        nodeIntegration: true, //node集成开高了
+        contextIsolation: false,
+        enableRemoteModule: true,
+        scrollBounce: false,
+        sandbox: false,
+        safeDialogs: false,
+        safeDialogsMessage: false,
+        additionalArguments: [
+          '--user-data-path=' + window.globalArgs['user-data-path'],
+          '--app-version=' + window.globalArgs['app-version'],
+          '--app-name=' + window.globalArgs['app-name'],
+          //'--is-Dev='+window.globalArgs['development--mode']
+        ],
+        allowPopups: true
+      }
+    } else if (urlParser.isInternalURL(sourceUrl)) {
+      webPreferences = {
+        nodeIntegration: true, //node集成开高了
+        contextIsolation: false,
+        enableRemoteModule: true,
+        scrollBounce: false,
+        sandbox: false,
+        webSecurity: false,
+      }
+    }
 
-	/*对特殊的内部webview做处理，增加一些额外的权限*/
-	let webPreferences={}
-	let sourceUrl=urlParser.getSourceURL(tabData.url)
-	if(sourceUrl=='ts://apps')
-	{
-		//仅仅对apps页面单独开启权限
-		webPreferences={
-			preload: __dirname + '/pages/apps/preload.js',
-			nodeIntegration: true,
-			contextIsolation:false,
-			enableRemoteModule: true,
-			scrollBounce: false,
-			sandbox: false,
-			safeDialogs:false,
-			safeDialogsMessage:false,
-			additionalArguments: [
-				'--user-data-path=' + window.globalArgs['user-data-path'],
-				'--app-version=' + window.globalArgs['app-version'],
-				'--app-name=' +  window.globalArgs['app-name'],
-				//'--is-Dev='+window.globalArgs['development--mode']
-			],
-			allowPopups:true
-		}
-  }else if(sourceUrl=='ts://newtab'  ){
-    //仅仅对apps页面单独开启权限
-    webPreferences={
-      preload: __dirname + '/pages/newtab/preload.js',
-      nodeIntegration: true, //node集成开高了
-      contextIsolation:false,
-      enableRemoteModule: true,
-      scrollBounce: false,
-      sandbox: false,
-      safeDialogs:false,
-      safeDialogsMessage:false,
-      additionalArguments: [
-        '--user-data-path=' + window.globalArgs['user-data-path'],
-        '--app-version=' + window.globalArgs['app-version'],
-        '--app-name=' +  window.globalArgs['app-name'],
-        //'--is-Dev='+window.globalArgs['development--mode']
-      ],
-      allowPopups:true
-    }
-  } else if(sourceUrl == 'ts://guide') {
-    webPreferences={
-      preload: __dirname + '/pages/guide/preload.js',
-      nodeIntegration: true, //node集成开高了
-      contextIsolation:false,
-      enableRemoteModule: true,
-      scrollBounce: false,
-      sandbox: false,
-      safeDialogs:false,
-      safeDialogsMessage:false,
-      additionalArguments: [
-        '--user-data-path=' + window.globalArgs['user-data-path'],
-        '--app-version=' + window.globalArgs['app-version'],
-        '--app-name=' +  window.globalArgs['app-name'],
-        //'--is-Dev='+window.globalArgs['development--mode']
-      ],
-      allowPopups:true
-    }
-  }
-  //   else if(sourceUrl.startsWith('http://localhost:5008/' )) {
-  //   webPreferences={
-  //     preload: __dirname + '/pages/appStore/preload.js',
-  //     nodeIntegration: true, //node集成开高了
-  //     contextIsolation:false,
-  //     enableRemoteModule: true,
-  //     scrollBounce: false,
-  //     sandbox: false,
-  //     safeDialogs:false,
-  //     safeDialogsMessage:false,
-  //     additionalArguments: [
-  //       '--user-data-path=' + window.globalArgs['user-data-path'],
-  //       '--app-version=' + window.globalArgs['app-version'],
-  //       '--app-name=' +  window.globalArgs['app-name'],
-  //       //'--is-Dev='+window.globalArgs['development--mode']
-  //     ],
-  //     allowPopups:true
-  //   }
-  // }
-    else if(sourceUrl.startsWith('http://localhost:8080') ) {
-    webPreferences={
-      preload: __dirname + '/pages/guide/preload.js',
-      nodeIntegration: true, //node集成开高了
-      contextIsolation:false,
-      enableRemoteModule: true,
-      scrollBounce: false,
-      sandbox: false,
-      safeDialogs:false,
-      safeDialogsMessage:false,
-      additionalArguments: [
-        '--user-data-path=' + window.globalArgs['user-data-path'],
-        '--app-version=' + window.globalArgs['app-version'],
-        '--app-name=' +  window.globalArgs['app-name'],
-        //'--is-Dev='+window.globalArgs['development--mode']
-      ],
-      allowPopups:true
-    }
-  }else if(urlParser.isInternalURL(sourceUrl)){
-    webPreferences= {
-      nodeIntegration: true, //node集成开高了
-      contextIsolation:false,
-      enableRemoteModule: true,
-      scrollBounce: false,
-      sandbox: false,
-      webSecurity:false,
-    }
-  }
-
-    if(sourceUrl==='ts://apps' || sourceUrl ==='ts://newtab'){
-      webPreferences.partition=null
-    }else{
+    if (sourceUrl === 'ts://apps' || sourceUrl === 'ts://newtab') {
+      webPreferences.partition = null
+    } else {
       webPreferences.partition = partition || 'persist:webcontent' //网页的分区
     }
 
-	/*特殊处理部分结束*/
+    /*特殊处理部分结束*/
 
     ipc.send('createView', {
       existingViewId,
@@ -361,7 +353,6 @@ const webviews = {
       boundsString: JSON.stringify(webviews.getViewBounds()),
       events: webviews.events.map(e => e.event).filter((i, idx, arr) => arr.indexOf(i) === idx)
     })
-
 
     if (!existingViewId) {
       if (tabData.url) {
@@ -396,7 +387,7 @@ const webviews = {
       focus: !options || options.focus !== false
     })
     //当切换选中的view的时候要同步一下信息
-    ipc.send('barrage.changeUrl',{url:urlParser.getSourceURL(tabs.get(id).url)})
+    ipc.send('barrage.changeUrl', { url: urlParser.getSourceURL(tabs.get(id).url) })
     webviews.updateToolBarStatus(tabs.get(id))
     webviews.emitEvent('view-shown', id)
   },
@@ -404,39 +395,39 @@ const webviews = {
    * 更新一下工具栏的状态
    * @param tabData tab的信息
    */
-  updateToolBarStatus(tabData){
-    if(tabData.id===tabs.getSelected()){
+  updateToolBarStatus (tabData) {
+    if (tabData.id === tabs.getSelected()) {
       require('js/navbar/tabEditor').updateUrl(urlParser.getSourceURL(tabData.url))
       webviews.updateToolbarSecure(tabData.secure)
       require('./navbar/tabEditor').updateTool(tabData.id)
       webviews.updateAppStatus(tabData)
       $toolbar.updateStartPage()
-      if(urlParser.getSourceURL(tabData.url).startsWith('ts://')){
+      if (urlParser.getSourceURL(tabData.url).startsWith('ts://')) {
         $toolbar.setPwdCanUse(false)
         $toolbar.setMobileCanUse(false)
         $toolbar.setCanRead(false)
-      }else{
+      } else {
         $toolbar.setPwdCanUse(true)
         $toolbar.setMobileCanUse(true)
         $toolbar.setCanRead(true)
       }
-    }else{
+    } else {
       //console.log('update了一个非选中的tab信息')
     }
   },
-  updateAppStatus(tabData){
+  updateAppStatus (tabData) {
     // 添加密码数量显示
-    if($toolbar){
+    if ($toolbar) {
       $toolbar.loadPwdCount(tabData.url)
       $toolbar.updateScriptsCountTip(tabData.id)
     }
 
   },
-  updateToolbarSecure(secure){
-    if(secure){
-      document.getElementById('site-card').setAttribute('src','./icons/svg/safe.svg')
-    }else{
-      document.getElementById('site-card').setAttribute('src','./icons/svg/unsafe.svg')
+  updateToolbarSecure (secure) {
+    if (secure) {
+      document.getElementById('site-card').setAttribute('src', './icons/svg/safe.svg')
+    } else {
+      document.getElementById('site-card').setAttribute('src', './icons/svg/unsafe.svg')
     }
   },
   update: function (id, url) {
@@ -490,11 +481,11 @@ const webviews = {
       // multiple things can request a placeholder at the same time, but we should only show the view again if nothing requires a placeholder anymore
       if (webviews.viewList.includes(webviews.selectedId)) {
         //如果是吸附模式，还需要还原主tab
-        if( typeof window.attachedTab !=='undefined'){
+        if (typeof window.attachedTab !== 'undefined') {
           ipc.send('addView', {
             id: window.mainTab.id,
             bounds: webviews.getViewBounds(),
-            focus:false
+            focus: false
           })
         }
         ipc.send('setView', {
@@ -585,8 +576,6 @@ ipc.on('leave-full-screen', function () {
   }
 })
 
-
-
 webviews.bindEvent('enter-html-full-screen', function (tabId) {
   webviews.viewFullscreenMap[tabId] = true
   webviews.resize()
@@ -620,7 +609,7 @@ ipc.on('leave-full-screen', function () {
 //触发下载后地址会被重新定向，判断为下载网页，将地址改回原地址，可能会有bug。
 let reUrl
 let reId
-ipc.on('isDownload',()=>{
+ipc.on('isDownload', () => {
   tabs.update(reId, {
     url: reUrl
   })
@@ -628,22 +617,23 @@ ipc.on('isDownload',()=>{
 
 webviews.bindEvent('did-start-navigation', willNavigate)
 webviews.bindEvent('will-redirect', onNavigate)
-function willNavigate(tabId, url, isInPlace, isMainFrame, frameProcessId, frameRoutingId){
-tabs.tabs.forEach((e)=>{
-  if(e.selected === true){
-    reUrl = e.url
-    reId = e.id
-  }
-})
 
-  const currentTab=tabs.get(tabId)
-  if(currentTab.url===urlParser.parse('ts://newtab') && url!==urlParser.parse('ts://newtab')){
+function willNavigate (tabId, url, isInPlace, isMainFrame, frameProcessId, frameRoutingId) {
+  tabs.tabs.forEach((e) => {
+    if (e.selected === true) {
+      reUrl = e.url
+      reId = e.id
+    }
+  })
+
+  const currentTab = tabs.get(tabId)
+  if (currentTab.url === urlParser.parse('ts://newtab') && url !== urlParser.parse('ts://newtab')) {
     var newTab = tabs.add({
       url: url,
       private: currentTab.private,
-      partition:currentTab.partition,
-      newName:currentTab.newName,
-      backgroundColor:currentTab.backgroundColor||'#fff'
+      partition: currentTab.partition,
+      newName: currentTab.newName,
+      backgroundColor: currentTab.backgroundColor || '#fff'
     })
     require('./browserUI.js').addTab(newTab, {
       enterEditMode: false
@@ -652,8 +642,8 @@ tabs.tabs.forEach((e)=>{
     //如果是当前newtab页输入了网址，则关闭当前标签并新开一个标签，给页面降降权，同时可以防止出现js污染
     require('./browserUI.js').closeTab(tabId)
     //todo 过早关闭tab导致后面有报错，但是不影响使用，后面再修正
-  }else{
-      onNavigate(tabId, url, isInPlace, isMainFrame, frameProcessId, frameRoutingId)
+  } else {
+    onNavigate(tabId, url, isInPlace, isMainFrame, frameProcessId, frameRoutingId)
   }
 }
 
@@ -661,11 +651,10 @@ webviews.bindEvent('did-navigate', function (tabId, url, httpResponseCode, httpS
   onPageURLChange(tabId, url)
 })
 
-webviews.bindEvent('did-navigate-in-page',(tabId)=>{
-  const tabData=tabs.get(tabId)
+webviews.bindEvent('did-navigate-in-page', (tabId) => {
+  const tabData = tabs.get(tabId)
   webviews.updateToolBarStatus(tabData)
 })
-
 
 webviews.bindEvent('did-finish-load', onPageLoad)
 
@@ -676,7 +665,7 @@ webviews.bindEvent('page-title-updated', function (tabId, title, explicitSet) {
 })
 
 webviews.bindEvent('did-fail-load', function (tabId, errorCode, errorDesc, validatedURL, isMainFrame) {
-  console.log(errorCode,errorDesc,'错误信息')
+  console.log(errorCode, errorDesc, '错误信息')
   if (errorCode && errorCode !== -3 && isMainFrame && validatedURL) {
     webviews.update(tabId, webviews.internalPages.error + '?ec=' + encodeURIComponent(errorCode) + '&url=' + encodeURIComponent(validatedURL))
   }
@@ -698,20 +687,19 @@ webviews.bindEvent('crashed', function (tabId, isKilled) {
   }
 })
 
-
 settings.listen(function () {
   tasks.forEach(function (task) {
     task.tabs.forEach(function (tab) {
       if (urlParser.isInternalURL(tab.url)) {
         try {
-          const systemType=require('./util/systemType.js')
-          const systemInfo={
-            platformAlias:systemType.platformAlias(),
-            versionAlias:systemType.versionAlias(),
-            platform:systemType.platform(),
-            systemVersion:systemType.systemVersion()
+          const systemType = require('./util/systemType.js')
+          const systemInfo = {
+            platformAlias: systemType.platformAlias(),
+            versionAlias: systemType.versionAlias(),
+            platform: systemType.platform(),
+            systemVersion: systemType.systemVersion()
           }
-          settings.list.systemInfo=systemInfo
+          settings.list.systemInfo = systemInfo
           webviews.callAsync(tab.id, 'send', ['receiveSettingsData', settings.list])
         } catch (e) {
           // webview might not actually exist
@@ -728,36 +716,34 @@ webviews.bindIPC('scroll-position-change', function (tabId, args) {
 })
 
 ipc.on('view-event', function (e, args) {
-  let originalId;
+  let originalId
   webviews.emitEvent(args.event, args.viewId, args.args)
   originalId = args.viewId
 
-  setTimeout(()=>{
-    tabs.tabs.forEach((e)=>{
-      if(e.id === originalId){
-        ipc.send('originalPage',e.url)
+  setTimeout(() => {
+    tabs.tabs.forEach((e) => {
+      if (e.id === originalId) {
+        ipc.send('originalPage', e.url)
       }
     })
-  },50)
+  }, 50)
 })
 
-ipc.on('closeEmptyPage',(event,args)=>{
+ipc.on('closeEmptyPage', (event, args) => {
   let closeGuideTab
-  tabs.tabs.forEach((e)=>{
-      for(let i=0;i<args.length;i++){
-        if(args[i]===e.url){
-          closeGuideTab = e.id
-        }
+  tabs.tabs.forEach((e) => {
+    for (let i = 0; i < args.length; i++) {
+      if (args[i] === e.url) {
+        closeGuideTab = e.id
       }
+    }
   })
   require('browserUI.js').closeTab(closeGuideTab)
 })
 
-
-ipc.on('closeTab',(event,args)=>{
-    require('browserUI.js').closeTab(args.id)
+ipc.on('closeTab', (event, args) => {
+  require('browserUI.js').closeTab(args.id)
 })
-
 
 ipc.on('async-call-result', function (e, args) {
   webviews.asyncCallbacks[args.callId](args.error, args.result)
@@ -777,11 +763,10 @@ ipc.on('view-ipc', function (e, args) {
 })
 
 //在当前页面打开emulation
-ipc.on('openMobile',function(e,args){
-  let tabData=tabs.get(webviews.selectedId)
-	ipc.send('enableEmulation',{id:webviews.selectedId,partition:tabData.partition,newName:tabData.newName})
+ipc.on('openMobile', function (e, args) {
+  let tabData = tabs.get(webviews.selectedId)
+  ipc.send('enableEmulation', { id: webviews.selectedId, partition: tabData.partition, newName: tabData.newName })
 })
-
 
 setInterval(function () {
   captureCurrentTab()
@@ -802,7 +787,6 @@ ipc.on('windowFocus', function () {
     webviews.focus()
   }
 })
-
 
 module.exports = webviews
 

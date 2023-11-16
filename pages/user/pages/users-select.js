@@ -154,7 +154,11 @@ const UsersSelect = {
         } catch (e) {
           console.warn(e)
           if (e.code && e.code === 'ECONNREFUSED') {
-            window.antd.Modal.info({title:'服务器维护',content:'服务器维护中，建议10分钟后再试。您可以先工作在本地空间。后续可手动导入本地空间到云端。',okText:'确定'})
+            window.antd.Modal.info({
+              title: '服务器维护',
+              content: '服务器维护中，建议10分钟后再试。您可以先工作在本地空间。后续可手动导入本地空间到云端。',
+              okText: '确定'
+            })
             return
           }
           if (e.response && e.response.data.code === 1001) {

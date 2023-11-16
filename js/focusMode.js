@@ -1,6 +1,6 @@
-var  isFocusMode = false
-var  isGuideMode= false
-var  isFirstGuideMode = false
+var isFocusMode = false
+var isGuideMode = false
+var isFirstGuideMode = false
 
 ipc.on('enterFocusMode', function () {
   isFocusMode = true
@@ -15,7 +15,6 @@ ipc.on('exitFocusMode', function () {
   isFocusMode = false
   document.body.classList.remove('is-focus-mode')
 })
-
 
 // ipc.on('enterFirstGuide',()=>{
 //   isFocusMode = true
@@ -32,28 +31,27 @@ ipc.on('exitFocusMode', function () {
 ipc.on('enterGuide', function () {
   isFocusMode = true
   document.body.classList.add('is-focus-mode')
-  isGuideMode=true
+  isGuideMode = true
 })
 
 ipc.on('exitGuide', function () {
   isFocusMode = false
-  isGuideMode= false
+  isGuideMode = false
   document.body.classList.remove('is-focus-mode')
 })
-
 
 module.exports = {
   enabled: function () {
     return isFocusMode
   },
   warn: function () {
-    if(isGuideMode===false&&isFirstGuideMode===false){
+    if (isGuideMode === false && isFirstGuideMode === false) {
       ipc.invoke('showFocusModeDialog2')
     }
-    if(isFirstGuideMode===true){
+    if (isFirstGuideMode === true) {
       ipc.invoke('showFirstGuideDialog')
     }
-    if(isGuideMode===true) {
+    if (isGuideMode === true) {
       ipc.invoke('showGuideDialog')
     }
   }

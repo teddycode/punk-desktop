@@ -16,7 +16,7 @@
 <script setup>
 const props = defineProps({
   item: {},
-});
+})
 </script>
 
 <style lang="scss" scoped></style>

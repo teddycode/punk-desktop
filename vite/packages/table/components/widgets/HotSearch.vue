@@ -12,7 +12,8 @@
       <vue-custom-scrollbar :settings="settingsScroller" style="height: 100%;" @touchstart.stop @touchmove.stop
                             @touchend.stop>
 
-        <div v-for="item in hotList" :key="item.id" class="w-full flex items-center rounded-lg justify-between pointer set-type"
+        <div v-for="item in hotList" :key="item.id"
+             class="w-full flex items-center rounded-lg justify-between pointer set-type"
              style="margin: 8px 0 8px;"
              @click="jump(item.title)">
           <span class="sort">{{ item.id }}</span>
@@ -34,10 +35,10 @@
 
 <script>
 import Widget from '../card/Widget.vue'
-import {mapActions, mapWritableState} from 'pinia'
-import {hotStore} from '../../store/hot'
+import { mapActions, mapWritableState } from 'pinia'
+import { hotStore } from '../../store/hot'
 import browser from '../../js/common/browser'
-import {message} from 'ant-design-vue'
+import { message } from 'ant-design-vue'
 
 export default {
   name: 'HotSearch',
@@ -58,7 +59,7 @@ export default {
       type: Object
     }
   },
-  data() {
+  data () {
     return {
       settingsScroller: {
         useBothWheelAxes: true,
@@ -67,33 +68,38 @@ export default {
         suppressScrollX: true,
         wheelPropagation: true
       },
-      options: {className: 'card', title: '微博热搜', icon: 'weibo1', type: 'hotSearch'},
-      sizeList: [{title: '2x4', height: 2, width: 1, name: '1x2'}, {title: '4x4', height: 2, width: 2, name: '2x2'}],
+      options: { className: 'card', title: '微博热搜', icon: 'weibo1', type: 'hotSearch' },
+      sizeList: [{ title: '2x4', height: 2, width: 1, name: '1x2' }, {
+        title: '4x4',
+        height: 2,
+        width: 2,
+        name: '2x2'
+      }],
       hotList: []
     }
   },
   computed: {
     ...mapWritableState(hotStore, ['data'])
   },
-  async mounted() {
+  async mounted () {
     await this.getData()
     this.hotList = this.data
 
   },
   methods: {
     ...mapActions(hotStore, ['getData', 'refresh']),
-    jump(words) {
+    jump (words) {
       browser.openInUserSelect('https://s.weibo.com/weibo?q=' + words)
     },
-    refreshNow() {
+    refreshNow () {
       this.$refs.refreshButton.classList.add('animate-spin')
       setTimeout(() => {
         this.$refs.refreshButton.classList.remove('animate-spin')
-        message.success({content: '刷新榜单成功', key: 'refreshWeibo'})
+        message.success({ content: '刷新榜单成功', key: 'refreshWeibo' })
       }, 500)
       this.refresh()
     },
-    fix(heat) {
+    fix (heat) {
       const display = heat.split(' ')
       if (display.length === 1) {
         return heat

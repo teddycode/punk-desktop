@@ -27,22 +27,22 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
-      w: "280px",
-      h: "204px",
-    };
+      w: '280px',
+      h: '204px',
+    }
   },
   watch: {
     w: {
-      handler(newV) {
-        this.$emit("update:width", newV);
+      handler (newV) {
+        this.$emit('update:width', newV)
       },
       // immediate: true,
     },
     h: {
-      handler(newV) {
-        this.$emit("update:height", newV);
+      handler (newV) {
+        this.$emit('update:height', newV)
       },
       // immediate: true,
     },
@@ -51,61 +51,61 @@ export default {
     width: {},
     hieght: {},
   },
-  mounted() {
-    this.drag();
+  mounted () {
+    this.drag()
   },
   methods: {
-    dragCallBack(e) {
-      let str = e.split(",");
-      let width = Math.round(str[0] / 280);
-      let height = Math.round(str[1] / 205);
+    dragCallBack (e) {
+      let str = e.split(',')
+      let width = Math.round(str[0] / 280)
+      let height = Math.round(str[1] / 205)
       // this.w = width * 280 + (width - 1) * 10 - 30 + "px";
       // this.h = height * 205 + (height - 1) * 10 - 60 + "px";
-      this.w = width * 280 + (width - 1) * 10 + "px";
-      this.h = height * 204 + (height - 1) * 10 + "px";
+      this.w = width * 280 + (width - 1) * 10 + 'px'
+      this.h = height * 204 + (height - 1) * 10 + 'px'
     },
-    drag() {
-      let that = this;
-      let boxRef = this.$refs.boxRef;
-      let dragRef = this.$refs.dragRef;
-      let name = "";
+    drag () {
+      let that = this
+      let boxRef = this.$refs.boxRef
+      let dragRef = this.$refs.dragRef
+      let name = ''
       dragRef.addEventListener(
-          "mousedown",
+          'mousedown',
           (el) => {
-            el.stopPropagation();
-            el.preventDefault();
-            let oldX = el.clientX;
-            let oldY = el.clientY;
-            let h = boxRef.clientHeight;
-            let w = boxRef.clientWidth;
-            let width, height;
+            el.stopPropagation()
+            el.preventDefault()
+            let oldX = el.clientX
+            let oldY = el.clientY
+            let h = boxRef.clientHeight
+            let w = boxRef.clientWidth
+            let width, height
             document.onmousemove = function (e) {
-              e.stopPropagation();
-              let x = e.clientX;
-              let y = e.clientY;
-              width = x - oldX + w;
-              height = h - oldY + y;
-              if (width > 260) that.w = `${width}px`;
-              if (height > 204) that.h = `${height}px`;
-              width = width > 260 ? width : 260;
-              height = height > 204 ? height : 204;
-              name = `${width},${height}`;
+              e.stopPropagation()
+              let x = e.clientX
+              let y = e.clientY
+              width = x - oldX + w
+              height = h - oldY + y
+              if (width > 260) that.w = `${width}px`
+              if (height > 204) that.h = `${height}px`
+              width = width > 260 ? width : 260
+              height = height > 204 ? height : 204
+              name = `${width},${height}`
               // 与外界同步窗口
               // that.$emit("reSizeInit", `${width},${height}`);
-            };
+            }
             // 结束拖拽
             document.onmouseup = function (e) {
-              e.stopPropagation();
-              document.onmousemove = null;
-              document.onmouseup = null;
-              that.dragCallBack(name);
-            };
+              e.stopPropagation()
+              document.onmousemove = null
+              document.onmouseup = null
+              that.dragCallBack(name)
+            }
           },
-          {capture: true}
-      );
+          { capture: true }
+      )
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

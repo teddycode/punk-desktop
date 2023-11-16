@@ -25,7 +25,8 @@
             <div class="flex items-center justify-center">
               <HorizontalPanel v-model:selectType="defaultText" :navList="textType"></HorizontalPanel>
               <div v-if="defaultText.name === 'code'"
-                   class="flex ml-3 py-3 px-4 pointer items-center rounded-lg justify-center" style="background: var(--secondary-bg);" @click="openCodeLanguage"
+                   class="flex ml-3 py-3 px-4 pointer items-center rounded-lg justify-center"
+                   style="background: var(--secondary-bg);" @click="openCodeLanguage"
               >
                 <span class="mr-5 type-right">
                   {{ language.title }}
@@ -204,19 +205,19 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from 'pinia'
-import {clipboardStore} from '../../store'
-import {codeLanguage} from '../../../../js/data/clipTheme'
+import { mapActions, mapWritableState } from 'pinia'
+import { clipboardStore } from '../../store'
+import { codeLanguage } from '../../../../js/data/clipTheme'
 import ClipCodemirror from './ClipCodemirror.vue'
 import HorizontalPanel from '../../../../components/HorizontalPanel.vue'
 import textCodeMirror from './textCodeMirror.vue'
 import HorizontalDrawer from '../../../../components/HorizontalDrawer.vue'
 import ClipVideo from '../parser/ClipVideo.vue'
 import ClipAudio from '../parser/ClipAudio.vue'
-import {message, Modal} from 'ant-design-vue'
+import { message, Modal } from 'ant-design-vue'
 import ImageEditor from './ImageEditor.vue'
 import XtButton from '../../../../ui/libs/Button/index.vue'
-import {EditOutlined} from '@ant-design/icons-vue'
+import { EditOutlined } from '@ant-design/icons-vue'
 import ClipMenuList from '../ClipMenuList.vue'
 import PreviewDetail from '../previewDetail.vue'
 
@@ -242,16 +243,16 @@ export default {
     }
   },
 
-  data() {
+  data () {
     return {
       editImage: false,
       // 预览代码块类型切换
       textType: [
-        {title: '纯文本', name: 'plainText'},
-        {title: '代码块', name: 'code'}
+        { title: '纯文本', name: 'plainText' },
+        { title: '代码块', name: 'code' }
       ],
       // 默认的预览代码块类型
-      defaultText: {title: '纯文本', name: 'plainText'},
+      defaultText: { title: '纯文本', name: 'plainText' },
       // 代码块语言包选项
       codeLanguage,
       defaultTitle: '语言',
@@ -263,7 +264,7 @@ export default {
             message.success('复制成功。')
           }
         },
-        {title: '打开链接', key: 'Ctrl + O', id: 'co'},
+        { title: '打开链接', key: 'Ctrl + O', id: 'co' },
         {
           title: '添加收藏', key: 'Ctrl + S', id: 'cs', fn: (item) => {
             this.addToCollection(item)
@@ -279,18 +280,18 @@ export default {
       ],
       // 其他文件预览快捷键
       fileClipKey: [
-        {title: '复制', key: 'Ctrl + C', id: 'cs'},
-        {title: '打开', key: 'Ctrl + O', id: 'co'},
+        { title: '复制', key: 'Ctrl + C', id: 'cs' },
+        { title: '打开', key: 'Ctrl + O', id: 'co' },
         {
           title: '编辑', key: 'Ctrl + e', id: 'ed',
           fn: (item) => {
             this.doEditImage()
           }
         },
-        {title: '复制路径', key: 'Ctrl + Alt + C', id: 'cas'},
-        {title: '在资源管理器中打开', key: 'Ctrl + Enter', id: 'ce'},
-        {title: '添加收藏', key: 'Ctrl + S', id: 'cs'},
-        {title: '删除', key: 'Delete', id: 'd'}
+        { title: '复制路径', key: 'Ctrl + Alt + C', id: 'cas' },
+        { title: '在资源管理器中打开', key: 'Ctrl + Enter', id: 'ce' },
+        { title: '添加收藏', key: 'Ctrl + S', id: 'cs' },
+        { title: '删除', key: 'Delete', id: 'd' }
       ],
       settingsScroller: {
         useBothWheelAxes: true,
@@ -305,25 +306,25 @@ export default {
   computed: {
     ...mapWritableState(clipboardStore, ['settings', 'previewShow', 'clipMode']),
 
-    language() {
+    language () {
       const index = this.codeLanguage.find(el => {
         return el.abbr === this.settings.clipMode
       })
       return index
     },
-    ext() {
+    ext () {
       return require('path').extname(this.previewContent.path)
     }
   },
 
-  mounted() {
+  mounted () {
   },
 
   methods: {
     ...mapActions(clipboardStore, ['isOpenPreview', 'changeClipMode', 'addToCollection', 'remove']),
 
     // 关闭预览全屏窗口
-    closePreview() {
+    closePreview () {
       if (this.editImage) {
         Modal.confirm({
           content: '退出预览会丢弃未保存的编辑内容，是否确定？',
@@ -339,21 +340,21 @@ export default {
 
     },
     // 打开语言包选项配置
-    openCodeLanguage() {
+    openCodeLanguage () {
       this.$refs.previewRef.openDrawer()
     },
-    getArea(v) {
+    getArea (v) {
       this.changeClipMode(v.abbr)
       // this.$refs.myClipCodeMirror.$forceUpdate()
     },
-    doEditImage() {
+    doEditImage () {
       this.editImage = true
     }
   },
 
   watch: {
     'defaultText': {
-      handler() {
+      handler () {
         this.defaultText = this.defaultText
       },
       immediate: true

@@ -52,11 +52,11 @@
 </template>
 
 <script>
-import {mapActions} from 'pinia'
-import {Icon as LinkIcon} from '@iconify/vue'
-import {channelClass} from '../../../../js/chat/createChannelClass'
-import {communityStore} from '../../store/communityStore'
-import {message} from 'ant-design-vue'
+import { mapActions } from 'pinia'
+import { Icon as LinkIcon } from '@iconify/vue'
+import { channelClass } from '../../../../js/chat/createChannelClass'
+import { communityStore } from '../../store/communityStore'
+import { message } from 'ant-design-vue'
 
 import RadioTab from '../../../../components/RadioTab.vue'
 
@@ -68,25 +68,25 @@ export default {
     LinkIcon, RadioTab,
   },
 
-  data() {
+  data () {
     return {
       requestProtocol: 'https',
       linkType: [
-        {title: '内部浏览器', name: 'inter', openMethod: 'userSelect'},
-        {title: '系统浏览器', name: 'system', openMethod: 'systemSelect'}
+        { title: '内部浏览器', name: 'inter', openMethod: 'userSelect' },
+        { title: '系统浏览器', name: 'system', openMethod: 'systemSelect' }
       ],
       openType: [
-        {title: '当前页面直接打开', name: 'current', openMethod: 'currentPage'},
-        {title: '外部跳转打开', name: 'outer', openMethod: 'outerOpen'},
+        { title: '当前页面直接打开', name: 'current', openMethod: 'currentPage' },
+        { title: '外部跳转打开', name: 'outer', openMethod: 'outerOpen' },
       ],
-      defaultType: {title: '内部浏览器', name: 'inter', openMethod: 'userSelect'},
-      defaultOpen: {title: '当前页面直接打开', name: 'current', openMethod: 'currentPage'},
+      defaultType: { title: '内部浏览器', name: 'inter', openMethod: 'userSelect' },
+      defaultOpen: { title: '当前页面直接打开', name: 'current', openMethod: 'currentPage' },
       link: '',
       linkName: '',
     }
   },
 
-  mounted() {
+  mounted () {
     this.$nextTick(() => {
       const nameRef = this.$refs.linkNameRef
       // const linkRef = this.$refs.linkRef
@@ -98,14 +98,14 @@ export default {
   methods: {
     ...mapActions(communityStore, ['getCategoryData', 'getChannelList']),
 
-    backChannel() {
+    backChannel () {
       this.$emit('back')
     },
-    closeChannel() {
+    closeChannel () {
       this.$emit('close')
     },
 
-    async submitSelect(evt) {
+    async submitSelect (evt) {
       if (this.link !== '' && this.linkName !== '') {
         const option = {
           type: 'link', id: this.id, no: this.no,
@@ -126,18 +126,17 @@ export default {
           this.closeChannel()
         }
       } else {
-        evt.preventDefault();
+        evt.preventDefault()
       }
     }
   },
 
-
   watch: {
-    defaultType(newVal) {
+    defaultType (newVal) {
       console.log('监听数据变化', newVal)
       this.defaultType = newVal
     },
-    defaultOpen(newVal) {
+    defaultOpen (newVal) {
       console.log('监听数据变化', newVal)
       this.defaultOpen = newVal
     }

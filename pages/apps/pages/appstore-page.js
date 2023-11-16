@@ -1,5 +1,5 @@
 const appstoreTpl =
- ` <div style="width: 100%"><a-layout>
+  ` <div style="width: 100%"><a-layout>
     <a-layout-header style="background: #fff; padding: 0">
 
       <template>
@@ -207,12 +207,12 @@ module.exports = Vue.component('appstore-page', {
       visibleCart: false,
       quickDrawerVisible: false,
       btnText: '添加收藏',
-      app:{}
+      app: {}
     }
   },
   computed: {
     allApps: {
-      get: function() {
+      get: function () {
         if (typeof window.$appsApiData == 'undefined' || window.$appsApiData == null) {
           return window.nativeData.allApps
         }
@@ -220,7 +220,7 @@ module.exports = Vue.component('appstore-page', {
       }
     },
     appUpdateTime: {
-      get: function() {
+      get: function () {
         if (typeof window.$appsApiData == 'undefined' || window.$appsApiData == null) {
           return window.nativeData.updateTime
         } else {
@@ -247,31 +247,31 @@ module.exports = Vue.component('appstore-page', {
       //   this.myApps = []
       // })
     },
-    showDrawer(app) {
+    showDrawer (app) {
       this.drawerApp = null
       this.drawerApp = app
       console.log(this.drawerApp)
-      this.drawerVisible = true;
+      this.drawerVisible = true
     },
-    showDrawerCart() {
+    showDrawerCart () {
       this.visibleCart = true
     },
-    onClose() {
+    onClose () {
       this.drawerVisible = false
     },
-    onCloseCart() {
+    onCloseCart () {
       this.visibleCart = false
     },
     //移入app时的菜单显示
-    show(app) {
+    show (app) {
       this.currentApp = app
       this.btnText = this.isInMyApps(app) == -1 ? '添加收藏' : '移出收藏'
     },
-    hide(obj) {
+    hide (obj) {
       this.currentApp = null
     },
     //添加到购物车
-    addAppToCart(app) {
+    addAppToCart (app) {
       if (this.shopcartApps.indexOf(app) == -1)
         //如果不在，就添加
         this.shopcartApps.push(app)
@@ -281,7 +281,7 @@ module.exports = Vue.component('appstore-page', {
       }
     },
     //判断是否是我的应用
-    isInMyApps() {
+    isInMyApps () {
 
       if (this.currentApp == null) {
         return -1
@@ -289,7 +289,7 @@ module.exports = Vue.component('appstore-page', {
       let apps = this.myApps
       let app = this.currentApp
       let findIndex = -1
-      apps.forEach(function(item, index) {
+      apps.forEach(function (item, index) {
         if (item.name == app.name)
           findIndex = index
       })
@@ -297,30 +297,30 @@ module.exports = Vue.component('appstore-page', {
 
     },
     //检查是否在dexie的myapp中
-    checkInMyApps(app) {
-      if(typeof  this.myApps =='undefined')
+    checkInMyApps (app) {
+      if (typeof this.myApps == 'undefined')
         return -1
       let apps = this.myApps
       let findIndex = -1
-      apps.forEach(function(item, index) {
+      apps.forEach(function (item, index) {
         if (item.name == app.name)
           findIndex = index
       })
       return findIndex
     },
     //收藏app
-    addApp(app) {
-      app.listId=0
+    addApp (app) {
+      app.listId = 0
       this.currentApp = app
       this.addCurrentApp()
     },
-    addShopcartApps() {
+    addShopcartApps () {
       let addCount = 0
       let hasCount = 0
       let that = this
-      this.shopcartApps.forEach(function(app) {
+      this.shopcartApps.forEach(function (app) {
         if (that.isInMyApps(app) == -1) {
-          app.listId=0
+          app.listId = 0
           that.myApps.push(app)
           window.$appsRestore.addApp(app)
           addCount++
@@ -333,12 +333,12 @@ module.exports = Vue.component('appstore-page', {
         text = '选中' + that.shopcartApps.length + '个应用。由于购物车中' + hasCount + '个应用已经存在，实际添加了' +
           addCount + '个应用。'
       }
-      this.shopcartApps=[]
-      this.visibleCart=false
+      this.shopcartApps = []
+      this.visibleCart = false
       that.$message.success(text)
     },
     //收藏移除app dexie操作
-    addCurrentApp() {
+    addCurrentApp () {
       let that = this
       let app = this.currentApp
       let index = this.isInMyApps(app)
@@ -348,17 +348,17 @@ module.exports = Vue.component('appstore-page', {
         window.$appsRestore.deleteApp(app.name)
         this.btnText = '添加收藏'
       } else {
-        let apps = this.myApps;
+        let apps = this.myApps
         apps.unshift(app)
         this.myApps = apps
         this.btnText = '移出收藏'
-        app.listId=0
+        app.listId = 0
         window.$appsRestore.addApp(app)
         this.$message.success('添加了应用：' + app.name)
       }
     },
     //添加应用到任务栏
-    addTask(app) {
+    addTask (app) {
       postMessage({
         message: 'addTask',
         name: app.name,
@@ -368,13 +368,13 @@ module.exports = Vue.component('appstore-page', {
       this.$message.success('成功在左侧栏添加了应用：' + app.name + '。')
     },
     //发送消息给preload，调取selectTask的窗体
-    selectTask() {
+    selectTask () {
       postMessage({
         'message': 'selectTask',
         tabs: this.shopcartApps
       })
     },
-    openShopcart() {
+    openShopcart () {
       postMessage({
         message: 'addTaskTabs',
         tabs: this.shopcartApps

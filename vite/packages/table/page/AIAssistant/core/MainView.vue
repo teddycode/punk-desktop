@@ -3,20 +3,20 @@
 </template>
 
 <script>
-import {defineAsyncComponent} from "vue";
-import {mapWritableState} from "pinia";
-import {aiStore} from "../../../store/ai";
+import { defineAsyncComponent } from 'vue'
+import { mapWritableState } from 'pinia'
+import { aiStore } from '../../../store/ai'
 
 export default {
   computed: {
-    ...mapWritableState(aiStore, ["selectTab"]),
+    ...mapWritableState(aiStore, ['selectTab']),
   },
   components: {
-    Chat: defineAsyncComponent(() => import("../chat/index.vue")),
+    Chat: defineAsyncComponent(() => import('../chat/index.vue')),
     // Model: defineAsyncComponent(() => import("../model/index.vue")),
-    Mode: defineAsyncComponent(() => import("../mode/index.vue")),
+    Mode: defineAsyncComponent(() => import('../mode/index.vue')),
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

@@ -51,11 +51,11 @@
 </template>
 
 <script>
-import {defineComponent, reactive, toRefs, watchEffect} from 'vue'
-import {chatStore} from '../../../../store/chat'
-import {Icon as DorpIcon} from '@iconify/vue'
-import {communityStore} from '../../store/communityStore'
-import {message, Modal as DownModal} from 'ant-design-vue'
+import { defineComponent, reactive, toRefs, watchEffect } from 'vue'
+import { chatStore } from '../../../../store/chat'
+import { Icon as DorpIcon } from '@iconify/vue'
+import { communityStore } from '../../store/communityStore'
+import { message, Modal as DownModal } from 'ant-design-vue'
 
 import Modal from '../../../../components/Modal.vue'
 import CreateNewCategory from '../CreateNewCategory.vue'
@@ -72,7 +72,7 @@ export default defineComponent({
 
   props: ['list', 'no', 'data', 'id'],
 
-  setup(props, ctx) {
+  setup (props, ctx) {
 
     const chat = chatStore()
     const community = communityStore()
@@ -90,34 +90,34 @@ export default defineComponent({
 
     const selectMenuItem = async (item, index) => {
       // data.dropDownIndex = index;
-      data.type = item.type;
+      data.type = item.type
       switch (item.type) {
         case 'change':
           chat.setDouble()
           //  console.log('测试',11)
           ctx.emit('updatePage')
-          break;
+          break
         case 'show':
           chat.setFloatVisible(false)
-          break;
+          break
         case 'hidden':
           chat.setFloatVisible(true)
-          break;
+          break
         case 'apply':
           setTimeout(() => {
             data.categoryShow = true
           }, 350)
-          break;
+          break
         case 'category':
           setTimeout(() => {
             data.categoryShow = true
           }, 350)
-          break;
+          break
         case 'invited':
           setTimeout(() => {
             data.categoryShow = true
           }, 350)
-          break;
+          break
         case 'deletePacket':
           DownModal.confirm({
             content: '删除分类操作不可撤销，分类被删除后，子应用将被移动到顶层。是否确定删除？',
@@ -132,19 +132,18 @@ export default defineComponent({
             }
           })
 
-
-          break;
+          break
         case 'packetSet':
           setTimeout(() => {
             data.categoryShow = true
             console.log('获取data', props.data)
           }, 350)
-          break;
+          break
         case 'addNewApp':
           setTimeout(() => {
             data.categoryShow = true
           }, 350)
-          break;
+          break
       }
 
     }

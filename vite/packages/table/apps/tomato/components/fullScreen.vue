@@ -38,11 +38,11 @@
   </teleport>
 </template>
 <script>
-import {tomatoStore} from '../store'
-import {appStore} from '../../../store'
+import { tomatoStore } from '../store'
+import { appStore } from '../../../store'
 
-import {Icon} from '@iconify/vue';
-import {mapActions, mapState, mapWritableState} from "pinia";
+import { Icon } from '@iconify/vue'
+import { mapActions, mapState, mapWritableState } from 'pinia'
 
 export default {
   components: {
@@ -55,17 +55,17 @@ export default {
     ...mapState(appStore, ['userInfo', 'backgroundImage'])
 
   },
-  mounted() {
+  mounted () {
 
   },
-  data() {
+  data () {
     return {
       optAction: false,
       autoTime: null,
-      src: "",
-      blurs: "blur(10px}",
-      zoom: "100%",
-    };
+      src: '',
+      blurs: 'blur(10px}',
+      zoom: '100%',
+    }
   },
   methods: {
     ...mapActions(tomatoStore, ['onPlay', 'onStop', 'onPause', 'onPlay', 'exit']),
@@ -73,7 +73,7 @@ export default {
     //     this.$emit("exit");
     // },
     // 时间格式
-    displayNum(num) {
+    displayNum (num) {
       if (num < 10) {
         return '0' + num
       } else {
@@ -81,7 +81,7 @@ export default {
       }
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

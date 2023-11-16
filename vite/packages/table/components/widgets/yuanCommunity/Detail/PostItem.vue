@@ -78,7 +78,8 @@
 
 
           </a-upload>
-          <a-button v-show="coverList.length > 0" class="xt-text" size="small" style="color: var(--secondary-text) !important;" type="text"
+          <a-button v-show="coverList.length > 0" class="xt-text" size="small"
+                    style="color: var(--secondary-text) !important;" type="text"
                     @click="removeCover">
             <template #icon>
               <newIcon class="text-xl xt-text-2" icon="akar-icons:trash-can"

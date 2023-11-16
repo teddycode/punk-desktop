@@ -66,24 +66,24 @@
 import SidePanel from '../components/SidePanel.vue'
 import TopPanel from '../components/TopPanel.vue'
 import BottomPanel from '../components/BottomPanel.vue'
-import {mapActions, mapWritableState} from 'pinia'
-import {appStore} from '../store'
+import { mapActions, mapWritableState } from 'pinia'
+import { appStore } from '../store'
 import TeamPanel from '../components/team/TeamPanel.vue'
-import {teamStore} from '../store/team'
-import {isMain} from '../js/common/screenUtils'
-import {navStore} from '../store/nav'
+import { teamStore } from '../store/team'
+import { isMain } from '../js/common/screenUtils'
+import { navStore } from '../store/nav'
 import fullScreen from '../components/widgets/myIcons/icons/fullScreen.vue'
 
 export default {
   name: 'Main',
-  components: {TeamPanel, BottomPanel, TopPanel, SidePanel},
-  mounted() {
+  components: { TeamPanel, BottomPanel, TopPanel, SidePanel },
+  mounted () {
     this.$router.afterEach((to, from) => {
       this.routeUpdateTime = Date.now()
     })
   },
   computed: {
-    fullScreen() {
+    fullScreen () {
       return fullScreen
     },
     ...mapWritableState(appStore, ['routeUpdateTime', 'fullScreen', 'settings', 'init']),
@@ -91,7 +91,7 @@ export default {
     ...mapWritableState(navStore, ['sideNavigationList', 'rightNavigationList', 'navigationToggle', 'footNavigationList']),
     isMain
   },
-  data() {
+  data () {
     return {
       scrollbarSettings: {
         useBothWheelAxes: true,
@@ -104,11 +104,11 @@ export default {
     }
   },
   methods: {
-    marginLeft() {
+    marginLeft () {
       return marginLeft
     },
     ...mapActions(navStore, ['sortSideNavigationList', 'removeSideNavigationList', 'sortRightNavigationList', 'removeRightNavigationList']),
-    getDelIcon(val) {
+    getDelIcon (val) {
       this.delZone = val
     }
   }

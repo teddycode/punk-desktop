@@ -2,7 +2,8 @@
   <Widget :desk="desk" :menu-list="menuList" :options="options">
     <div class="content pointer" style="color:var(--primary-text)" @click="go">
       <div>
-        <a-progress :percent="CPUData.useCPU.value" :strokeWidth="10" :width="105" stroke-color="#FF9C00" style="margin-top: 28px"
+        <a-progress :percent="CPUData.useCPU.value" :strokeWidth="10" :width="105" stroke-color="#FF9C00"
+                    style="margin-top: 28px"
                     type="circle">
           <template #format="percent">
             <div style="color:var(--primary-text);font-size: 24px;font-weight: 700;">{{ CPUData.useCPU.value }}%</div>
@@ -42,16 +43,16 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from 'pinia'
-import {initCanvas} from "../../../util";
-import Widget from "../../card/Widget.vue";
-import {appStore} from '../../../store'
-import {inspectorStore} from '../../../store/inspector'
-import {message} from 'ant-design-vue'
+import { mapActions, mapWritableState } from 'pinia'
+import { initCanvas } from '../../../util'
+import Widget from '../../card/Widget.vue'
+import { appStore } from '../../../store'
+import { inspectorStore } from '../../../store/inspector'
+import { message } from 'ant-design-vue'
 
 export default {
-  name: "SmallCPUCard",
-  data() {
+  name: 'SmallCPUCard',
+  data () {
     return {
       options: {
         className: 'card small',
@@ -60,9 +61,9 @@ export default {
         type: 'smallCPUCard'
       },
       CPUData: {
-        useCPU: {value: 0},
-        warmCPU: {value: 0},
-        useMemory: {value: 0},
+        useCPU: { value: 0 },
+        warmCPU: { value: 0 },
+        useMemory: { value: 0 },
       },
       CPUList: [999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999],
       menuList: [
@@ -88,24 +89,24 @@ export default {
   computed: {
     ...mapWritableState(inspectorStore, ['displayData', 'aidaData']),
     ...mapWritableState(appStore, ['saving'])
-  }, mounted() {
+  }, mounted () {
     this.startInspect()
   },
-  unmounted() {
+  unmounted () {
     this.stopInspect()
   },
   watch: {
-    "displayData": {
-      handler(newVal, oldVal) {
-        let {useMemory, useCPU, warmCPU} = this.displayData || {}
+    'displayData': {
+      handler (newVal, oldVal) {
+        let { useMemory, useCPU, warmCPU } = this.displayData || {}
         this.CPUData = {
           useCPU: useCPU,
           useMemory: useMemory,
           warmCPU: warmCPU
         }
         this.CPUData.useCPU.value && this.CPUList.push(this.CPUData.useCPU.value)
-        this.CPUList.shift();
-        this.initCanvas('myCPUCanvas', this.CPUList, 6, 12, "#515151", "#3B8FFA")
+        this.CPUList.shift()
+        this.initCanvas('myCPUCanvas', this.CPUList, 6, 12, '#515151', '#3B8FFA')
       },
       deep: true,
     },
@@ -113,8 +114,8 @@ export default {
   methods: {
     ...mapActions(inspectorStore, ['startInspect', 'stopInspect']),
     initCanvas,
-    go() {
-      this.$router.push({name: 'inspector'})
+    go () {
+      this.$router.push({ name: 'inspector' })
     }
   }
 }

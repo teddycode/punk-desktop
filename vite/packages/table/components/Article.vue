@@ -33,7 +33,7 @@ export default {
     // VueCustomScrollbar
   },
   computed: {},
-  data() {
+  data () {
     return {
       settingsScroller: {
         useBothWheelAxes: true,
@@ -45,12 +45,12 @@ export default {
       article: []
     }
   },
-  mounted() {
+  mounted () {
     this.onMounted()
   },
   watch: {},
   methods: {
-    async onMounted() {
+    async onMounted () {
       if (this.artName) {
         const rs = await articleService.getOne(this.artName)
         this.article.push(rs)
@@ -58,7 +58,7 @@ export default {
         let rs = await articleService.getMany(this.artNames)
         rs.forEach(e => {
           this.article.push(e)
-        });
+        })
       }
     }
   },

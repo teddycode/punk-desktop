@@ -106,13 +106,13 @@
 </template>
 
 <script>
-import {mapWritableState} from 'pinia'
-import {communityStore} from '../store/communityStore'
-import {chatStore} from '../../../store/chat'
+import { mapWritableState } from 'pinia'
+import { communityStore } from '../store/communityStore'
+import { chatStore } from '../../../store/chat'
 import articleService from '../../../js/service/articleService'
 import browser from '../../../js/common/browser'
-import {checkGroupShip} from '../../../js/common/sns'
-import {Icon as CommunityIcon} from '@iconify/vue'
+import { checkGroupShip } from '../../../js/common/sns'
+import { Icon as CommunityIcon } from '@iconify/vue'
 
 import Modal from '../../../components/Modal.vue'
 import CreateNewChannel from '../components/CreateNewChannels.vue'
@@ -132,7 +132,7 @@ export default {
   computed: {
     ...mapWritableState(communityStore, ['']),
     ...mapWritableState(chatStore, ['settings']),
-    isFloat() {
+    isFloat () {
       return this.settings.enableHide
     },
     // doubleCol(){
@@ -140,14 +140,14 @@ export default {
     // }
   },
 
-  async mounted() {
+  async mounted () {
     // console.log('启动')
     const rs = await articleService.getOne('community_after_created_empty')
     this.emptyArticle = rs
     // console.log(rs)
   },
 
-  data() {
+  data () {
     return {
       emptyArticle: {
         title: '',
@@ -166,11 +166,11 @@ export default {
   },
 
   methods: {
-    updateColumn() {
+    updateColumn () {
     },
 
     // 当前点击
-    async currentItem(item) {
+    async currentItem (item) {
       // 链接
       if (item.type === 'link' && item.name !== 'Roadmap') {
         const data = JSON.parse(item.props)
@@ -178,10 +178,10 @@ export default {
         switch (data.openMethod) {
           case 'userSelect':
             browser.openInUserSelect(data.url)
-            break;
+            break
           case 'systemSelect':
             browser.openInSystem(data.url)
-            break;
+            break
         }
       }
 
@@ -198,7 +198,7 @@ export default {
         // console.log('获取数据',groups[index].type === 'Private');
 
         if (groups[index].type === 'Private') {
-          const isDisable = groups[index].joinOption === "DisableApply"
+          const isDisable = groups[index].joinOption === 'DisableApply'
           if (enableGroup[0] === 'yes') {
             const name = `GROUP${changeData.groupID}`
             window.TUIKitTUICore.TUIServer.TUIConversation.getConversationProfile(name).then((imResponse) => {
@@ -239,25 +239,24 @@ export default {
       }
 
       // 其他
-      this.currentChannel = {...item, props: JSON.parse(item.props)}
+      this.currentChannel = { ...item, props: JSON.parse(item.props) }
 
     },
 
-    clickEmptyButton(item) {
+    clickEmptyButton (item) {
       this.type = item.type
       this.addShow = true
     },
-    openLink(url) {
+    openLink (url) {
       browser.openInSystem(url)
       // browser.openInSystem(this.$refs.iframe.contentWindow.location.href) 此次方法跨域
     }
   },
 
-
   watch: {
     // 通过监听方式获取社群号
     '$route': {
-      handler(to, from) {
+      handler (to, from) {
         //  console.log('参数1::>>',to.params.no);
         //  console.log('参数2::>>',from);
         this.routeData = to.params.no

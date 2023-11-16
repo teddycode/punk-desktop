@@ -22,8 +22,9 @@
           </div>
         </div>
         <div class="flex-1">
-          <div class="flex btn-active items-center voice-hover btn-hover rounded-full pointer justify-center px-3 py-3 s-item xt-bg-2"
-               @click.stop="clickMute">
+          <div
+              class="flex btn-active items-center voice-hover btn-hover rounded-full pointer justify-center px-3 py-3 s-item xt-bg-2"
+              @click.stop="clickMute">
             <Icon v-if="muteShow === true" icon="yinliang" style="font-size: 2.286em;"></Icon>
             <Icon v-else icon="jingyin" style="font-size: 2.286em;"></Icon>
           </div>
@@ -41,8 +42,10 @@
         <div class="mr-4 flex items-center justify-center" style="width: 180px;">
           <a-progress :percent="audioTest" :showInfo="false"/>
         </div>
-        <div class="flex items-center voice-hover btn-active rounded-full pointer justify-center px-3 py-3 s-item xt-bg-2" style=""
-             @click="closeMicrophone">
+        <div
+            class="flex items-center voice-hover btn-active rounded-full pointer justify-center px-3 py-3 s-item xt-bg-2"
+            style=""
+            @click="closeMicrophone">
           <Icon v-if="microphoneShow === true" icon="mic-on" style="font-size: 2.286em;"></Icon>
           <Icon v-else icon="mic-off" style="font-size: 2.286em"></Icon>
         </div>
@@ -67,10 +70,10 @@
 import Widget from '../../card/Widget.vue'
 import VoiceInputDetail from './VoiceInputDetail.vue'
 import VoiceOutputDetail from './VoiceOutputDetail.vue'
-import {mapActions, mapWritableState} from 'pinia'
-import {inspectorStore} from '../../../store/inspector'
-import {getDefaultMic, getDefaultVolume, setDefaultVolume, setMicVolume} from '../../../js/ext/audio/audio'
-import {appStore} from '../../../store'
+import { mapActions, mapWritableState } from 'pinia'
+import { inspectorStore } from '../../../store/inspector'
+import { getDefaultMic, getDefaultVolume, setDefaultVolume, setMicVolume } from '../../../js/ext/audio/audio'
+import { appStore } from '../../../store'
 
 export default {
   name: 'Voice',
@@ -93,7 +96,7 @@ export default {
       type: Object
     }
   },
-  data() {
+  data () {
     return {
       defaultMic: {},
       defaultOutput: {},
@@ -116,7 +119,7 @@ export default {
     ...mapWritableState(inspectorStore, ['audioTest']),
     ...mapWritableState(appStore, ['settings'])
   },
-  async mounted() {
+  async mounted () {
     this.defaultOutput = await getDefaultVolume()
     this.defaultMic = await getDefaultMic()
     this.muteShow = !this.defaultOutput.muted
@@ -136,28 +139,28 @@ export default {
   },
   methods: {
     ...mapActions(inspectorStore, ['startListenAudioTest', 'stopListenerAudioTest']),
-    selectOutputVoice() {
+    selectOutputVoice () {
       this.outputShow = true
     },
-    selectInputVoice() {
+    selectInputVoice () {
       this.inputShow = true
     },
-    receiveOutput(val) {
+    receiveOutput (val) {
       this.outputContent = val.name
       this.outputShow = false
     },
-    receiveInput(v) {
+    receiveInput (v) {
       this.inputContent = v.name
       this.inputShow = false
     },
-    async gua() {
+    async gua () {
       if (!this.settings.duck) {
         return
       }
       let audioSpeaker = document.getElementById('speakerAudio')
       audioSpeaker.play()
     },
-    clickMute() {
+    clickMute () {
       this.muteShow = !this.muteShow
       setDefaultVolume({
         volume: this.defaultOutput.volume,
@@ -169,26 +172,25 @@ export default {
         }, 800)
       }
     },
-    closeMicrophone() {
+    closeMicrophone () {
       this.microphoneShow = !this.microphoneShow
-      setMicVolume({muted: !this.microphoneShow})
+      setMicVolume({ muted: !this.microphoneShow })
     },
-    changeVolume() {
+    changeVolume () {
       setDefaultVolume({
         volume: this.defaultOutput.volume
       })
       this.gua()
     },
-    goStatus() {
+    goStatus () {
       this.$router.push({
         name: 'status'
       })
     }
   },
-  unmounted() {
+  unmounted () {
     this.stopListenerAudioTest()
   },
-
 
 }
 </script>

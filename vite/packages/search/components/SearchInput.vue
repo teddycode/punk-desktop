@@ -34,9 +34,9 @@
 </template>
 
 <script>
-import {mapWritableState} from 'pinia'
-import {appStore} from '../store'
-import {SearchOutlined} from '@ant-design/icons-vue'
+import { mapWritableState } from 'pinia'
+import { appStore } from '../store'
+import { SearchOutlined } from '@ant-design/icons-vue'
 
 export default {
   name: 'SearchInput',
@@ -48,7 +48,7 @@ export default {
   },
 
   methods: {
-    handleInput(e) {
+    handleInput (e) {
       this.searchWord = e.target.value
       this.contentLoading = true
       let path = this.$route.path
@@ -66,8 +66,8 @@ export default {
         }
       }
     },
-    openAppstore() {
-      ipc.send('executeAppByPackage', {package: 'com.thisky.appStore'})
+    openAppstore () {
+      ipc.send('executeAppByPackage', { package: 'com.thisky.appStore' })
     },
   }
 }

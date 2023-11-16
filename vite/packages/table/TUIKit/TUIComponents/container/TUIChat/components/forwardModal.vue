@@ -71,10 +71,10 @@
 </template>
 
 <script>
-import {defineComponent, onMounted, reactive, toRefs} from 'vue'
-import {CloseOutlined, MinusCircleOutlined, SearchOutlined} from '@ant-design/icons-vue'
+import { defineComponent, onMounted, reactive, toRefs } from 'vue'
+import { CloseOutlined, MinusCircleOutlined, SearchOutlined } from '@ant-design/icons-vue'
 import _ from 'lodash-es'
-import {message} from 'ant-design-vue'
+import { message } from 'ant-design-vue'
 
 export default defineComponent({
   components: {
@@ -84,8 +84,7 @@ export default defineComponent({
 
   props: ['content'],
 
-  setup(props, ctx) {
-
+  setup (props, ctx) {
 
     const data = reactive({
       list: [],
@@ -125,7 +124,7 @@ export default defineComponent({
       if (index === -1) {
         data.rightSelectList.push(item)
       } else {
-        return;
+
       }
     }
 
@@ -135,7 +134,6 @@ export default defineComponent({
     //  // const indexStatus = _.findIndex(data.rightSelectList,function(o){ return o.conversationID === data.list[index].conversationID })
     //  // return indexStatus
     // }
-
 
     // 点击右侧取消选中
     const cancelSelect = (item) => {
@@ -154,7 +152,7 @@ export default defineComponent({
         ctx.emit('close')
       } else {
         message.warn('请选择需要转发的群和用户')
-        e.preventDefault();
+        e.preventDefault()
       }
     }
 
@@ -174,7 +172,7 @@ export default defineComponent({
       data.list = []
       let searchResult = []
       if (data.forwardText === '') {
-        e.stopPropagation();
+        e.stopPropagation()
         // return;
       }
 
@@ -206,7 +204,7 @@ export default defineComponent({
       if (data.forwardText.trim() === '') {
         getForwardList()
       } else {
-        return;
+
       }
     }
 

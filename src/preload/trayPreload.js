@@ -4,8 +4,8 @@ const spaceModel = require('../model/spaceModel')
 window.ipc = require('electron').ipcRenderer
 window.tsbApi = api
 window.$models = {
-    messageModel,
-    spaceModel
+  messageModel,
+  spaceModel
 }
 
 

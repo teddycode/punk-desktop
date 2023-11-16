@@ -42,6 +42,7 @@ var readerView = {
         readerView.enter(tabId)
       }
     }
+
     readerView.currentTabId = tabId
     buttonToolbar.removeEventListener('click', readerView.onClickToolbar)
     buttonToolbar.addEventListener('click', readerView.onClickToolbar)
@@ -52,7 +53,7 @@ var readerView = {
     return button
   },
   updateButton: function (tabId, button) {
-    readerView.currentTabId=tabId
+    readerView.currentTabId = tabId
     var tab = tabs.get(tabId)
     if ($toolbar.expanded) {
       let button = document.getElementById('read-toolbar')

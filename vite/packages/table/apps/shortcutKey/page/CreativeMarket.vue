@@ -49,8 +49,8 @@
 import MarketList from './MarketList.vue'
 import Search from '../../../components/Search.vue'
 import NavMenu from '../../../components/NavMenu.vue'
-import {mapWritableState} from 'pinia'
-import {keyStore} from '../store'
+import { mapWritableState } from 'pinia'
+import { keyStore } from '../store'
 import HorizontalPanel from '../../../components/HorizontalCaptrue.vue'
 import axios from 'axios'
 import LocalSchemeList from '../components/LocalSchemeList.vue'
@@ -64,7 +64,7 @@ export default {
     Search,
     NavMenu
   },
-  data() {
+  data () {
     return {
 
       tab: '',
@@ -74,9 +74,9 @@ export default {
       sort: '综合排序',
       keywords: '',//搜索内容
       sortType: [
-        {value: '综合排序', name: '综合排序'},
-        {value: '下载次数', name: '下载次数'},
-        {value: '更新时间', name: '更新时间'},
+        { value: '综合排序', name: '综合排序' },
+        { value: '下载次数', name: '下载次数' },
+        { value: '更新时间', name: '更新时间' },
       ],
       tabList: [
         {
@@ -88,7 +88,7 @@ export default {
           title: '创意市场'
         }
       ],
-      currentTab: {name: 'official'},
+      currentTab: { name: 'official' },
       officialSchemes: [],//官方方案
       // marketList: [
       //   {
@@ -591,33 +591,32 @@ export default {
     ...mapWritableState(keyStore, ['marketList']),
   },
   methods: {
-    changeTab(args) {
+    changeTab (args) {
       this.tab = args.index
     },
-    onBack() {
+    onBack () {
       this.$router.go(-1)
     },
-    updateNavIndex({index}) {
+    updateNavIndex ({ index }) {
       this.navIndex = index
     },
     //跳转到分享页
-    share() {
-      this.$router.push({name: 'shareKey'})
+    share () {
+      this.$router.push({ name: 'shareKey' })
     },
-    changeSelect(event) {
+    changeSelect (event) {
       // console.log('选择下拉',event)
       this.sort = event
     },
-    changeInput(event) {
+    changeInput (event) {
       // console.log('输入框',event)
     },
   },
-  mounted() {
+  mounted () {
     axios.get('https://a.apps.vip/download/shortcut.keys?t=' + Date.now()).then(data => {
       this.officialSchemes = data.data
       console.log(this.officialSchemes, '官方方案')
     })
-
 
     // this.$router.push({name: 'marketList'})
   },

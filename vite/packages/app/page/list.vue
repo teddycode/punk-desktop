@@ -89,7 +89,7 @@ export default {
   components: {
     AppItem, vueCustomScrollbar
   },
-  data() {
+  data () {
     return {
       type: 'all',
       apps: [],
@@ -126,13 +126,13 @@ export default {
     }
   },
   watch: {
-    async searchWords() {
+    async searchWords () {
       if (this.searchWords !== '')
-        this.searchResult = await appModel.find(this.searchWords, {order: 'last_execute_time'})
+        this.searchResult = await appModel.find(this.searchWords, { order: 'last_execute_time' })
     }
   },
   computed: {
-    filteredApps() {
+    filteredApps () {
       if (this.type === 'all') {
         return this.apps
       } else if (this.type === 'system') {
@@ -150,45 +150,45 @@ export default {
       }
     }
   },
-  async mounted() {
+  async mounted () {
     window.$refesh = this.refresh
     await appModel.initDb()
     this.refresh()
   },
   methods: {
-    uninstall(app, list) {
+    uninstall (app, list) {
       appModel.uninstall(app.nanoid).then(success => {
         list.splice(list.findIndex(item => {
           return item === app
         }), 1)
-        ipc.send('message', {type: 'success', config: {content: '卸载应用成功。'}})
-        ipc.send('deleteApp', {nanoid: app.nanoid})
+        ipc.send('message', { type: 'success', config: { content: '卸载应用成功。' } })
+        ipc.send('deleteApp', { nanoid: app.nanoid })
         this.refresh()
       }, err => {
-        ipc.send('message', {type: 'success', config: {content: '卸载失败。'}})
+        ipc.send('message', { type: 'success', config: { content: '卸载失败。' } })
       })
     },
-    async addNew() {
-      ipc.send('executeApp', {app: await appModel.get({package: 'com.thisky.appStore'})})
+    async addNew () {
+      ipc.send('executeApp', { app: await appModel.get({ package: 'com.thisky.appStore' }) })
     },
-    async manage() {
+    async manage () {
       ipc.send('openAppManage')
     },
-    onSearch(value) {
+    onSearch (value) {
       this.searchWords = value
     },
-    refresh() {
-      appModel.getAllApps({order: 'create_time'}).then((data) => {
+    refresh () {
+      appModel.getAllApps({ order: 'create_time' }).then((data) => {
         this.apps = data
       })
       this.refreshFav()
-      appModel.getAllApps({order: 'last_execute_time'}).then((data) => {
+      appModel.getAllApps({ order: 'last_execute_time' }).then((data) => {
         this.appsRecently = data
       })
 
     },
-    refreshFav() {
-      appModel.getAllApps({where: {is_fav: true}}).then((data) => {
+    refreshFav () {
+      appModel.getAllApps({ where: { is_fav: true } }).then((data) => {
         this.appsFav = data
       })
     }

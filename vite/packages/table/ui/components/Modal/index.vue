@@ -52,7 +52,7 @@
 </template>
 
 <script setup>
-import {onBeforeUnmount, onMounted} from "vue";
+import { onBeforeUnmount, onMounted } from 'vue'
 
 const props = defineProps({
   // 遮罩层级
@@ -65,7 +65,7 @@ const props = defineProps({
   },
   // 标题
   title: {
-    default: "默认标题",
+    default: '默认标题',
   },
   // 窗口显示状态
   modelValue: {
@@ -83,37 +83,37 @@ const props = defineProps({
   isHeader: {
     default: true,
   },
-});
-const emits = defineEmits(["close", "ok", "modelValue"]);
+})
+const emits = defineEmits(['close', 'ok', 'modelValue'])
 
 // 关闭
 const colseClick = () => {
-  emits("update:modelValue", false);
-  emits("close");
-};
+  emits('update:modelValue', false)
+  emits('close')
+}
 
 // 完成
 const okClick = () => {
-  emits("update:modelValue", false);
-  emits("ok");
-};
+  emits('update:modelValue', false)
+  emits('ok')
+}
 
 // esc关闭
 const handleEscKeyPressed = (event) => {
   if (props.esc && event.keyCode === 27) {
-    colseClick();
+    colseClick()
   }
-};
+}
 onMounted(() => {
-  window.addEventListener("keydown", handleEscKeyPressed, {
+  window.addEventListener('keydown', handleEscKeyPressed, {
     capture: true,
-  });
-});
+  })
+})
 onBeforeUnmount(() => {
-  window.removeEventListener("keydown", handleEscKeyPressed, {
+  window.removeEventListener('keydown', handleEscKeyPressed, {
     capture: true,
-  });
-});
+  })
+})
 </script>
 
 <style lang="scss" scoped></style>

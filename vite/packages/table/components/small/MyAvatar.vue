@@ -1,13 +1,13 @@
 <script>
-import {ThunderboltFilled} from "@ant-design/icons-vue";
-import BorderAvatar from "../avatar/BorderAvatar.vue";
-import FrameAvatar from "../avatar/FrameAvatar.vue";
-import {mapWritableState} from "pinia";
-import {messageStore} from "../../store/message";
-import {appStore} from "../../store";
-import {Modal} from "ant-design-vue";
-import Emoji from "../comp/Emoji.vue";
-import {isMain} from "../../js/common/screenUtils";
+import { ThunderboltFilled } from '@ant-design/icons-vue'
+import BorderAvatar from '../avatar/BorderAvatar.vue'
+import FrameAvatar from '../avatar/FrameAvatar.vue'
+import { mapWritableState } from 'pinia'
+import { messageStore } from '../../store/message'
+import { appStore } from '../../store'
+import { Modal } from 'ant-design-vue'
+import Emoji from '../comp/Emoji.vue'
+import { isMain } from '../../js/common/screenUtils'
 
 export default {
   components: {
@@ -16,20 +16,20 @@ export default {
     BorderAvatar,
     FrameAvatar,
   },
-  data() {
+  data () {
     return {
       messages: [],
-      myFrameUrl: "",
-    };
+      myFrameUrl: '',
+    }
   },
-  props: ["size", "chat", "level"],
+  props: ['size', 'chat', 'level'],
   computed: {
-    ...mapWritableState(messageStore, ["messageIndex", "totalCount"]),
-    ...mapWritableState(appStore, ["userInfo", "settings", "lvInfo", "simple"]),
+    ...mapWritableState(messageStore, ['messageIndex', 'totalCount']),
+    ...mapWritableState(appStore, ['userInfo', 'settings', 'lvInfo', 'simple']),
   },
-  mounted() {
-    this.lastTime = Number(localStorage.getItem("lastBarrageMessageTime"));
-    this.setMinute();
+  mounted () {
+    this.lastTime = Number(localStorage.getItem('lastBarrageMessageTime'))
+    this.setMinute()
     // this.loadMessages()
     // setInterval(() => {
     //   this.loadMessages()
@@ -37,26 +37,26 @@ export default {
   },
   methods: {
     isMain,
-    setMinute() {
+    setMinute () {
       setInterval(() => {
-        this.$refs.minute?.classList.add("move");
-        this.lvInfo.remainMinute--;
+        this.$refs.minute?.classList.add('move')
+        this.lvInfo.remainMinute--
         if (this.lvInfo.remainMinute <= 0) {
-          this.lvInfo.remainHour--;
+          this.lvInfo.remainHour--
           if (this.lvInfo.remainHour < 0 && this.tipped === false) {
-            this.tipped = true;
-            ipc.send("getDetailUserInfo");
+            this.tipped = true
+            ipc.send('getDetailUserInfo')
             Modal.info({
-              title: "升级提示",
-              content: "恭喜您等级提升",
-            });
+              title: '升级提示',
+              content: '恭喜您等级提升',
+            })
           }
-          this.lvInfo.remainMinute = 59;
+          this.lvInfo.remainMinute = 59
         }
         this.timer = setTimeout(() => {
-          this.$refs.minute?.classList.remove("move");
-        }, 1000);
-      }, 60000);
+          this.$refs.minute?.classList.remove('move')
+        }, 1000)
+      }, 60000)
     },
     // async loadMessages() {
     //   this.messages = await messageModel.allList()
@@ -95,21 +95,21 @@ export default {
     //   }
     //
     // },
-    login() {
+    login () {
       tsbApi.user.login((data) => {
-        ipc.send("getDetailUserInfo");
-      });
+        ipc.send('getDetailUserInfo')
+      })
     },
-    social() {
+    social () {
       // if (this.totalCount) {
       //   this.$router.push({name: 'message'})
       // } else {
       //
       // }
-      this.$router.push({name: "socialMy"});
+      this.$router.push({ name: 'socialMy' })
     },
   },
-};
+}
 </script>
 
 <template>

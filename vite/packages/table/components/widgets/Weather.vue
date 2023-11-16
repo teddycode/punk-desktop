@@ -77,15 +77,15 @@
 </template>
 <script>
 
-import {mapState} from 'pinia'
-import {getDateTime} from '../../../../src/util/dateTime'
-import {weatherStore} from '../../store/weather'
-import Widget from "../card/Widget.vue";
-import HorizontalDrawer from '../HorizontalDrawer.vue';
+import { mapState } from 'pinia'
+import { getDateTime } from '../../../../src/util/dateTime'
+import { weatherStore } from '../../store/weather'
+import Widget from '../card/Widget.vue'
+import HorizontalDrawer from '../HorizontalDrawer.vue'
 import XtButton from '../../ui/libs/Button/index.vue'
 
 export default {
-  name: "Weather",
+  name: 'Weather',
   props: {
     customIndex: {
       type: Number,
@@ -100,9 +100,9 @@ export default {
       type: Object
     }
   },
-  data() {
+  data () {
     return {
-      today: "",
+      today: '',
       options: {
         className: 'card small',
         title: '',
@@ -111,7 +111,7 @@ export default {
       },
       defaultValue: '',
       drawerTitle: '常用天气位置'
-    };
+    }
   },
 
   components: {
@@ -128,7 +128,7 @@ export default {
     //     return {}
     //   }
     // },
-    defaultCity() {
+    defaultCity () {
       if (this.customData && this.customData.id) {
         const found = this.cities.find(el => {
           return el.id === this.customData.id
@@ -141,32 +141,32 @@ export default {
     }
 
   },
-  mounted() {
+  mounted () {
     this.reloadAll()
-    this.today = getDateTime();
+    this.today = getDateTime()
     if (this.cities.length !== 0) this.defaultValue = this.defaultCity.id
-    if (this.cities.length) this.options.icon = 'position';
+    if (this.cities.length) this.options.icon = 'position'
   },
   methods: {
-    openWeatherDrawer() {
+    openWeatherDrawer () {
       this.$refs.regionDrawer.openDrawer()
     },
-    enterWeather() {
-      this.$router.push({name: "weather"});
+    enterWeather () {
+      this.$router.push({ name: 'weather' })
     },
-    add() {
+    add () {
       this.$router.push({
-        name: "weather",
+        name: 'weather',
         params: {
-          add: "1",
+          add: '1',
         },
-      });
+      })
     },
-    getDefaultWeather(e) {
+    getDefaultWeather (e) {
       this.customData.id = e.id
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

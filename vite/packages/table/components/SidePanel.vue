@@ -28,7 +28,8 @@
   </div>
 
 
-  <a-drawer :closable="true" :contentWrapperStyle="{ backgroundColor: '#212121', height: '216px' }" :visible="menuVisible"
+  <a-drawer :closable="true" :contentWrapperStyle="{ backgroundColor: '#212121', height: '216px' }"
+            :visible="menuVisible"
             class="drawer" placement="bottom" @close="onClose">
     <a-row>
       <a-col>
@@ -53,15 +54,15 @@
 </template>
 
 <script>
-import {mapWritableState} from 'pinia';
-import EditNavigation from './bottomPanel/EditNavigation.vue';
-import {navStore} from "../store/nav";
-import {cardStore} from '../store/card';
-import Sortable from 'sortablejs';
-import {message} from 'ant-design-vue';
+import { mapWritableState } from 'pinia'
+import EditNavigation from './bottomPanel/EditNavigation.vue'
+import { navStore } from '../store/nav'
+import { cardStore } from '../store/card'
+import Sortable from 'sortablejs'
+import { message } from 'ant-design-vue'
 import routerTab from '../js/common/routerTab'
-import {Icon as navIcon} from '@iconify/vue';
-import {renderIcon} from '../js/common/common'
+import { Icon as navIcon } from '@iconify/vue'
+import { renderIcon } from '../js/common/common'
 
 export default {
   name: 'SidePanel',
@@ -69,7 +70,7 @@ export default {
     EditNavigation,
     navIcon
   },
-  data() {
+  data () {
     return {
       menuVisible: false,
       quick: false,
@@ -133,27 +134,27 @@ export default {
     ...mapWritableState(navStore, ['builtInFeatures', 'mainNavigationList']),
     ...mapWritableState(cardStore, ['routeParams']),
   },
-  mounted() {
+  mounted () {
     this.colDrop()
     // this.scrollNav('sideContent', 'scrollTop')
   },
   watch: {
-    delZone(val) {
+    delZone (val) {
       this.delNav = val
     }
   },
   methods: {
     renderIcon,
-    disableDrag() {
+    disableDrag () {
       if (this.sortable) {
         document.removeEventListener('click', this.disableDrag)
         this.sortable.destroy()
         this.sortable = null
         message.info('已中止侧栏调整')
-        return
+
       }
     },
-    enableDrag() {
+    enableDrag () {
       if (this.sortable) {
         return
       }
@@ -218,7 +219,7 @@ export default {
       })
       message.success('开始拖拽调整侧边栏。调整完毕后点击外部即可终止。')
     },
-    current(item) {
+    current (item) {
       if (item.tab) {
         return routerTab.isActive(item.tab, 1)
       }
@@ -230,7 +231,7 @@ export default {
         return false
       }
     },
-    clickNavigation(item) {
+    clickNavigation (item) {
       switch (item.type) {
         case 'systemApp':
           if (item.event === 'fullscreen') {
@@ -245,7 +246,7 @@ export default {
             if (this.$route.path === '/status') {
               this.$router.go(-1)
             } else {
-              this.$router.push({path: '/status'})
+              this.$router.push({ path: '/status' })
             }
           } else if (item.data) {
             this.$router.push({
@@ -253,7 +254,7 @@ export default {
               params: item.data
             })
           } else {
-            this.$router.push({name: item.event})
+            this.$router.push({ name: item.event })
           }
           break
         case 'coolApp':
@@ -266,7 +267,7 @@ export default {
           require('electron').shell.openPath(item.path)
           break
         case 'lightApp':
-          ipc.send('executeAppByPackage', {package: item.package})
+          ipc.send('executeAppByPackage', { package: item.package })
           break
         default:
           require('electron').shell.openPath(item.path)
@@ -280,28 +281,28 @@ export default {
     //   //   content[scrollDirection] += event.deltaY
     //   // });
     // },
-    closeDrawer() {
+    closeDrawer () {
       this.menuVisible = false
     },
-    editNavigation() {
+    editNavigation () {
       this.quick = true
       this.menuVisible = false
     },
-    showMenu() {
-      this.routeParams.url && ipc.send('hideTableApp', {app: JSON.parse(JSON.stringify(this.routeParams))})
+    showMenu () {
+      this.routeParams.url && ipc.send('hideTableApp', { app: JSON.parse(JSON.stringify(this.routeParams)) })
       this.menuVisible = true
     },
-    setQuick() {
+    setQuick () {
       this.quick = false
     },
-    onClose() {
-      this.routeParams.url && this.$router.push({name: 'app', params: this.routeParams})
+    onClose () {
+      this.routeParams.url && this.$router.push({ name: 'app', params: this.routeParams })
       this.menuVisible = false
     },
-    colDrop() {
+    colDrop () {
 
     },
-    delNavigation(sumList, oneNav, index, delMethod) {
+    delNavigation (sumList, oneNav, index, delMethod) {
       if (!this.mainNavigationList.find(item => item.name === oneNav.name)) {
         //如果不是必须的
         delMethod(index)

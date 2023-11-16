@@ -30,7 +30,8 @@
       </div>
       <vue-custom-scrollbar ref="gameScroll"
                             :settings="settingsScroller" class="pt-3 mr-3"
-                            style="height: calc(100vh - 15.8em);padding-right: 5px;padding-left: 1em" @scroll="scrollList($event)">
+                            style="height: calc(100vh - 15.8em);padding-right: 5px;padding-left: 1em"
+                            @scroll="scrollList($event)">
         <div v-if="gameType.name==='other'&&myGameList.length>0" class="flex flex-row flex-wrap -ml-3 ">
           <!--   导入的外部游戏，非steam   -->
           <div v-for="(item,index) in myGameList" class="pb-3 pl-3 game-list-local flex-shrink-0 my-game-content">
@@ -124,7 +125,8 @@
           <div class="pointer h-12 w-48 rounded-lg flex justify-center items-center"
                style="background: var(--active-bg);color:var(--active-text);" @click.stop="openLocal">选择游戏
           </div>
-          <div class="my-title pointer h-12 w-12 rounded-lg flex justify-center items-center ml-3" style="background: var(--secondary-bg);"
+          <div class="my-title pointer h-12 w-12 rounded-lg flex justify-center items-center ml-3"
+               style="background: var(--secondary-bg);"
                @click="openModal">
             <Icon icon="yiwen-xianxing" style=""></Icon>
           </div>
@@ -237,22 +239,22 @@
 import HorizontalPanel from '../../components/HorizontalPanel.vue'
 import Modal from '../../components/Modal.vue'
 import MyFullScreenGame from './MyFullScreenGame.vue'
-import {mapActions, mapWritableState} from 'pinia'
-import {appStore} from '../../store'
-import {steamUserStore} from '../../store/steamUser'
-import {getDateTime} from '../../util'
-import {runExec} from '../../js/common/exec'
-import {message, Modal as AntModal} from 'ant-design-vue'
-import {getClientIcon, steamProtocol} from '../../js/common/game'
+import { mapActions, mapWritableState } from 'pinia'
+import { appStore } from '../../store'
+import { steamUserStore } from '../../store/steamUser'
+import { getDateTime } from '../../util'
+import { runExec } from '../../js/common/exec'
+import { message, Modal as AntModal } from 'ant-design-vue'
+import { getClientIcon, steamProtocol } from '../../js/common/game'
 import JumpNotice from '../../components/game/JumpNotice.vue'
-import {useToast} from 'vue-toastification'
+import { useToast } from 'vue-toastification'
 import cache from '../../components/card/hooks/cache'
 import Menu from '../../ui/components/Menu/index.vue'
 import XtButton from '../../ui/libs/Button/index.vue'
-import {MoreOutlined, ShopOutlined} from '@ant-design/icons-vue'
+import { MoreOutlined, ShopOutlined } from '@ant-design/icons-vue'
 import ShareToChat from '../../ui/chat/ShareToChat.vue'
 
-import {completeTask} from "../../apps/task/page/branch/task.ts"
+import { completeTask } from '../../apps/task/page/branch/task.ts'
 
 const toast = useToast()
 export default {
@@ -268,7 +270,7 @@ export default {
     MoreOutlined,
     ShopOutlined
   },
-  data() {
+  data () {
     return {
       shareVisible: false,//分享组件可见
       gameMenus: [
@@ -299,10 +301,10 @@ export default {
         wheelPropagation: true
       },
       selectName: '',
-      gameNavList: [{title: 'Steam游戏', name: 'steam'}, {title: '其他游戏', name: 'other'}],
-      gameType: {title: 'Steam游戏', name: 'steam'},
-      sortList: [{title: '最近游玩', name: 'timer'}, {title: 'A-Z', name: 'letter'}],
-      sortType: {title: '最近游玩', name: 'timer'},
+      gameNavList: [{ title: 'Steam游戏', name: 'steam' }, { title: '其他游戏', name: 'other' }],
+      gameType: { title: 'Steam游戏', name: 'steam' },
+      sortList: [{ title: '最近游玩', name: 'timer' }, { title: 'A-Z', name: 'letter' }],
+      sortType: { title: '最近游玩', name: 'timer' },
       steamGameList: [],
       modalVisibility: false,
       gameRun: false,
@@ -317,7 +319,7 @@ export default {
       screenShow: false,
     }
   },
-  mounted() {
+  mounted () {
     this.steamGameList = this.gameList
     if (this.gameList.length > 0) {
       if (this.gameList[0].appinfo) {
@@ -330,7 +332,7 @@ export default {
   computed: {
     ...mapWritableState(steamUserStore, ['gameList', 'myGameList', 'runningGame', 'showTime', 'deskList']),
     ...mapWritableState(appStore, ['fullScreen']),
-    selectSteamList() {
+    selectSteamList () {
       if (this.selectName.trim() !== '') {
         this.steamGameList.filter((i) => {
           if (i.appInfo) {
@@ -342,7 +344,7 @@ export default {
       } else
         return this.steamGameList
     },
-    shareContent() {
+    shareContent () {
       return {
         description: 'steam游戏',
         data: JSON.stringify({
@@ -359,16 +361,16 @@ export default {
   methods: {
     getClientIcon,
     ...mapActions(steamUserStore, ['setGameList', 'playGame', 'getClient', 'updateGameTime']),
-    goBind() {
-      this.$router.push({name: 'gameSetting'})
+    goBind () {
+      this.$router.push({ name: 'gameSetting' })
     },
-    openMyGame(item) {
+    openMyGame (item) {
       require('electron').shell.openPath(item.path)
     },
-    async openLocal() {
+    async openLocal () {
       let openPath = await tsbApi.dialog.showOpenDialog({
         title: '选择导入的代码',
-        filters: [{name: '全部', extensions: ['*']}],
+        filters: [{ name: '全部', extensions: ['*'] }],
         properties: ['multiSelections'],
       })
       if (!openPath) {
@@ -382,14 +384,14 @@ export default {
         this.myGameList.unshift(game)
       })
     },
-    stopGame() {
+    stopGame () {
       steamProtocol._run('stopstreaming')
       this.runningGame = {}
     },
     /**
      * 开始steam游戏游玩
      */
-    playSteamGame() {
+    playSteamGame () {
       // 支线任务点
       completeTask('Z0102')
       this.playGame(this.currentSteam)
@@ -425,13 +427,13 @@ export default {
         pauseOnHover: false
       })
     },
-    deleteGame() {
+    deleteGame () {
       steamProtocol.uninstall(this.currentSteam.appid)
     },
-    showMyGameDir() {
+    showMyGameDir () {
       require('electron').shell.showItemInFolder(this.currentGame.path)
     },
-    deleteMyGame() {
+    deleteMyGame () {
       AntModal.confirm({
         centered: true,
         content: '是否确认删除游戏？此操作不可还原。',
@@ -445,11 +447,11 @@ export default {
       })
 
     },
-    shareSteamGame() {
+    shareSteamGame () {
       this.steamShow = false
       this.shareVisible = true
     },
-    goDetail() {
+    goDetail () {
       console.log(this.currentSteam)
       this.$router.push({
         name: 'GameDiscountDetail',
@@ -458,11 +460,11 @@ export default {
         }
       })
     },
-    openDetail() {
+    openDetail () {
       message.info('正在为定位到Steam游戏库')
       runExec('start steam://nav/games/details/' + this.currentSteam.appid)
     },
-    getDateMyTime(time) {
+    getDateMyTime (time) {
       if (time) {
         const timer = getDateTime(new Date(parseInt(time.rtime_last_played) * 1000))
         return time.rtime_last_played !== 0 ? timer.year + '-' + timer.month + '-' + timer.day : '0'
@@ -471,36 +473,36 @@ export default {
       }
 
     },
-    twoWeekTime(time) {
+    twoWeekTime (time) {
       return time ? (time.playtime_2weeks / 60).toFixed(1) : 0
     },
-    totalTime(time) {
+    totalTime (time) {
       return time ? (time.playtime_forever / 60).toFixed(1) : 0
     },
-    scrollList(e) {
+    scrollList (e) {
       if (e.target.scrollTop < 13) {
         this.$refs.gameScroll.$el.style.marginTop = e.target.scrollTop + 'px'
       } else {
         this.$refs.gameScroll.$el.style.marginTop = '13px'
       }
     },
-    mouseOn(e) {
+    mouseOn (e) {
       this.hoverIndex = e
     },
-    mouseClose() {
+    mouseClose () {
       this.hoverIndex = -1
     },
-    openModal() {
+    openModal () {
       this.modalVisibility = true
     },
-    openDrawer() {
+    openDrawer () {
       this.drawerVisible = true
     },
-    runGame() {
+    runGame () {
       this.gameRun = !this.gameRun
     },
 
-    openSteamDetail(item) {
+    openSteamDetail (item) {
       this.currentSteam = item
       this.steamShow = true
       this.getClient().getPlayerCount(this.currentSteam.appid, (err, online) => {
@@ -510,22 +512,22 @@ export default {
         this.currentSteam.online = online
       })
     },
-    openOtherDetail(item) {
+    openOtherDetail (item) {
       console.log(item)
       this.currentGame = item
       this.otherShow = true
     },
-    openScreen() {
+    openScreen () {
       this.fullScreen = true
       // document.querySelector('.content-view').style = 'margin:0;padding:0;'
     },
-    closeScreen() {
+    closeScreen () {
       this.fullScreen = false
     },
   },
   watch: {
     'sortType': {
-      handler() {
+      handler () {
         if (this.sortType.name === 'letter') {
           this.selectSteamList.sort((a, b) => a.name.localeCompare(b.name))
         } else {
@@ -545,7 +547,7 @@ export default {
       immediate: true
     },
     'showTime': {
-      handler(newVal) {
+      handler (newVal) {
         cache.set('game_duration', newVal)
       }
     }

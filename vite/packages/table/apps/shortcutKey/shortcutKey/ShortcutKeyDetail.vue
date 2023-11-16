@@ -25,8 +25,9 @@
       <div class="flex">
         <a-tooltip placement="left">
           <template #title>展开或收起分类栏</template>
-          <div class="pointer button-active xt-mask-2 xt-text h-12 w-12 flex items-center rounded-lg justify-center mr-3"
-               @click="toggleSlide">
+          <div
+              class="pointer button-active xt-mask-2 xt-text h-12 w-12 flex items-center rounded-lg justify-center mr-3"
+              @click="toggleSlide">
             <Icon icon="outdent" style="font-size: 1.5em;"></Icon>
           </div>
         </a-tooltip>
@@ -63,7 +64,8 @@
 
           <div v-for="(item,index) in filteredKeyList" :key="item.id">
             <!-- 分组名称 -->
-            <div v-if="item.groupName" :id="'groupId_' + item.id" :style="item.id === currentGroup.id ? activeGroup : ''"
+            <div v-if="item.groupName" :id="'groupId_' + item.id"
+                 :style="item.id === currentGroup.id ? activeGroup : ''"
                  class="key-item border-right "
                  style="margin-top: 15px">
               <span class="truncate font-bold">  <div :style="{backgroundColor:getColor(this.filteredKeyList,index)}"
@@ -72,7 +74,8 @@
                 }}</span>
             </div>
             <!-- 快捷键 -->
-            <div v-else :class="{active:keyIndex === item.id,'rounded-top':isGroupFirst(this.filteredKeyList,index) ,'rounded-bottom':isGroupLast(this.filteredKeyList,index)}"
+            <div v-else
+                 :class="{active:keyIndex === item.id,'rounded-top':isGroupFirst(this.filteredKeyList,index) ,'rounded-bottom':isGroupLast(this.filteredKeyList,index)}"
                  :style="{backgroundColor:getColor(this.filteredKeyList,index)}"
                  class="border-right key-item"
                  @click="setKeyItem(item.id)">
@@ -190,12 +193,12 @@
 import NotShortcutKey from '../page/NotShortcutKey.vue'
 // import ShortcutKeyList from '../../components/shortcutKey/ShortcutKeyList.vue'
 import Search from '../../../components/Search.vue'
-import {mapActions, mapWritableState} from 'pinia'
-import {keyStore} from '../store'
-import {message, Modal} from 'ant-design-vue'
-import {isGroupFirst, isGroupLast} from '../lib/lib'
+import { mapActions, mapWritableState } from 'pinia'
+import { keyStore } from '../store'
+import { message, Modal } from 'ant-design-vue'
+import { isGroupFirst, isGroupLast } from '../lib/lib'
 import XtButton from '../../../ui/libs/Button/index.vue'
-import {isWin} from '../../../js/common/screenUtils'
+import { isWin } from '../../../js/common/screenUtils'
 
 export default {
   name: 'ShortcutKeyDetail',
@@ -205,7 +208,7 @@ export default {
     // ShortcutKeyList,
     Search
   },
-  data() {
+  data () {
     return {
       navIndex: 0,
       keyIndex: 1,
@@ -237,7 +240,7 @@ export default {
   },
   computed: {
     ...mapWritableState(keyStore, ['recentlyUsedList', 'currentApp', 'settings', 'currentScheme', 'settings']),
-    filteredKeyList() {
+    filteredKeyList () {
       if (this.keywords) {
         var regExp = new RegExp(this.keywords, 'i')
         return this.keyList.filter(key => {
@@ -251,12 +254,12 @@ export default {
       }
     }
   },
-  mounted() {
+  mounted () {
     this.getData()
   },
   watch: {
     currentApp: {
-      async handler() {
+      async handler () {
         if (this.settings.enableAutoEnter) {
           this.shortcutSchemeList = await this.loadShortcutSchemes(this.currentApp.exeName)
           if (this.shortcutSchemeList.length > 0) {
@@ -273,7 +276,7 @@ export default {
   methods: {
     ...mapActions(keyStore, ['removeShortcutKeyList', 'setMarketList', 'loadShortcutSchemes', 'setRecentlyUsedList', 'saveScheme']),
     isWin, isGroupLast, isGroupFirst,
-    getColor(array, index, field = 'groupName') {
+    getColor (array, index, field = 'groupName') {
       for (let i = index; i >= 0; i--) {
         if (array[i][field]) {
           //是组
@@ -285,19 +288,19 @@ export default {
     /**
      * 切换侧边导航是否显示
      */
-    toggleSlide() {
+    toggleSlide () {
       this.currentScheme.showSide = !this.currentScheme.showSide
       this.saveScheme(this.currentScheme)
     },
-    getData() {
+    getData () {
       this.schemeList = this.recentlyUsedList
       if (this.schemeList.length === 0) {
-        this.$router.replace({name: 'home'})
+        this.$router.replace({ name: 'home' })
         return
       }
       this.currentScheme = this.schemeList[0]
       if (!!!this.currentScheme) {
-        this.$router.replace({name: 'home'})
+        this.$router.replace({ name: 'home' })
         return
       }
 
@@ -320,7 +323,7 @@ export default {
      * 切换方案
      * @param index
      * @param item
-     */ async switchScheme(index, item) {
+     */ async switchScheme (index, item) {
       await this.setRecentlyUsedList(item)
       this.currentScheme = item
       this.navIndex = index
@@ -333,17 +336,17 @@ export default {
       this.navIndex = 0
 
     },
-    setKeyItem(id) {
+    setKeyItem (id) {
       this.keyIndex = id
     },
-    onBack() {
+    onBack () {
       this.$router.go(-1)
     },
-    btnEdit() {
+    btnEdit () {
       this.openSet = false
-      this.$router.push({name: 'shareKey', params: {id: this.appContent.id}})
+      this.$router.push({ name: 'shareKey', params: { id: this.appContent.id } })
     },
-    async btnDel() {
+    async btnDel () {
       Modal.confirm({
         centered: true,
         content: '是否删除此方案？此操作不可恢复。',
@@ -355,7 +358,7 @@ export default {
       })
 
     },
-    updateNavIndex(item, index) {
+    updateNavIndex (item, index) {
       let groupId = document.getElementById('groupId_' + item.id)
       this.currentIndex = index
       this.currentGroup = item
@@ -368,7 +371,7 @@ export default {
       let marginLeft = getComputedStyle(groupId, null).marginLeft
       document.getElementById('scrollCus').scrollLeft = groupId.offsetLeft - parseInt(marginLeft.split('p')[0])
     },
-    share() {
+    share () {
       if (!this.appContent.keyList.length) return message.info('无快捷键列表，请前往编辑')
       this.appContent.isShare = true
       this.setMarketList(this.appContent)

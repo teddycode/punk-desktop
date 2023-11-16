@@ -9,8 +9,10 @@
       </a-space>
     </template>
     <div class="title">选择分享桌面</div>
-    <a-select v-model:value="deskId" :bordered="false" :dropdownStyle="{ 'z-index': 9999, backgroundColor: 'var(--secondary-bg)' }"
-              class="input rounded-lg  text-xs flex items-center " size="large" style="height:48px; border:none;margin-bottom: 10px"
+    <a-select v-model:value="deskId" :bordered="false"
+              :dropdownStyle="{ 'z-index': 9999, backgroundColor: 'var(--secondary-bg)' }"
+              class="input rounded-lg  text-xs flex items-center " size="large"
+              style="height:48px; border:none;margin-bottom: 10px"
               @change="setSelectVal">
       <template #suffixIcon>
         <Icon class="h-4 w-4" icon="xiangyou" @click="delLabel(index)"></Icon>
@@ -45,7 +47,9 @@
       <a-textarea v-model:value="summary" aria-placeholder="font-size: 16px;" class="input xt-text" placeholder="请输入"
                   spellcheck="false" style="height: 100px;"/>
       <span class="title">分类</span>
-      <a-select v-model:value="categoryId" :bordered="false" :dropdownStyle="{ 'z-index': 9999, backgroundColor: 'var(--secondary-bg)' }" class="input rounded-lg  text-xs flex items-center"
+      <a-select v-model:value="categoryId" :bordered="false"
+                :dropdownStyle="{ 'z-index': 9999, backgroundColor: 'var(--secondary-bg)' }"
+                class="input rounded-lg  text-xs flex items-center"
                 size="large"
                 style="height:48px;border:none;">
         <template #suffixIcon>
@@ -82,16 +86,16 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from 'pinia'
-import {deskStore} from '../../store/desk'
-import {message} from 'ant-design-vue'
+import { mapActions, mapWritableState } from 'pinia'
+import { deskStore } from '../../store/desk'
+import { message } from 'ant-design-vue'
 import ShareModal from '../ShareModal.vue'
-import {cardStore} from '../../store/card'
+import { cardStore } from '../../store/card'
 import RadioTab from '../RadioTab.vue'
-import {marketStore} from '../../store/market'
-import {pathUpload} from '../card/hooks/imageProcessing'
+import { marketStore } from '../../store/market'
+import { pathUpload } from '../card/hooks/imageProcessing'
 
-import {completeTask} from "../../apps/task/page/branch/task.ts"
+import { completeTask } from '../../apps/task/page/branch/task.ts'
 
 export default {
   name: 'ShareDesk',
@@ -99,7 +103,7 @@ export default {
     ShareModal,
     RadioTab
   },
-  data() {
+  data () {
     return {
       posting: false,//正在上传中
       capture: '',
@@ -117,15 +121,15 @@ export default {
 
       secretSwitch: true,
       dataType: [
-        {title: '保留数据', name: 'data'},
-        {title: '不保留数据', name: 'notData'}
+        { title: '保留数据', name: 'data' },
+        { title: '不保留数据', name: 'notData' }
       ],
-      defaultType: {title: '不保留数据', name: 'notData'},
+      defaultType: { title: '不保留数据', name: 'notData' },
       sharingDesk: [],
       categoryId: 0,
       categories: [],
-      layoutSize: {width: 0, height: 0},//当前桌面的尺寸
-      shareFullLayoutSize: {width: 0, height: 0},
+      layoutSize: { width: 0, height: 0 },//当前桌面的尺寸
+      shareFullLayoutSize: { width: 0, height: 0 },
       capturing: false//正在抓图
     }
   },
@@ -147,7 +151,7 @@ export default {
     ...mapWritableState(cardStore, ['settings', 'deskSize', 'countdownDay']),
   },
   watch: {
-    openDrawer(newV) {
+    openDrawer (newV) {
       this.showDrawer = newV
       if (this.showDrawer) {
         this.assortList = this.apiList.map(item => item.cname)
@@ -159,7 +163,7 @@ export default {
       }
     },
   },
-  async mounted() {
+  async mounted () {
     let cats = await this.getCategories('desk')
 
     this.categories = cats
@@ -172,10 +176,10 @@ export default {
   methods: {
     ...mapActions(deskStore, ['setDeskList']),
     ...mapActions(marketStore, ['getCategories', 'addDesk']),
-    update() {
+    update () {
       this.deskId = this.$parent.currentDeskId
     },
-    getPreview() {
+    getPreview () {
       this.capturing = true
       return new Promise(resolve => {
         this.close()
@@ -203,11 +207,11 @@ export default {
         }, 500)
       })
     },
-    close() {
+    close () {
       this.$emit('closeShare', false)
       this.setInitialData()
     },
-    addLabel() {
+    addLabel () {
       if (this.tagList.length >= 4) return message.info('最多添加四个')
       if (this.tagList.includes(this.labelVal.trim())) return message.info('不可添加重复标签')
       if (this.labelVal.trim()) {
@@ -215,10 +219,10 @@ export default {
         this.labelVal = ''
       }
     },
-    delLabel(index) {
+    delLabel (index) {
       this.tagList.splice(index, 1)
     },
-    async addPlan() {
+    async addPlan () {
       if (this.shareName.trim() === '') return message.info('请输入新桌面名称')
       if (this.shareName.length >= 16) return message.error('新桌面名称长度不可超过16')
       if (!this.categoryId) return message.info('请选择分类')
@@ -245,7 +249,6 @@ export default {
       } else {
         settings = this.settings
       }
-
 
       settings.cardZoom = Number(settings.cardZoom) * Number(this.shareFullCardZoom)
       settings.cardMargin = Number(settings.cardMargin) * Number(this.shareFullCardZoom)
@@ -277,7 +280,7 @@ export default {
       }
 
     },
-    setInitialData() {
+    setInitialData () {
       if (this.capturing) {
         return
       }
@@ -285,12 +288,12 @@ export default {
       this.blurb = ''
       this.tagList = []
       this.secretSwitch = true
-      this.defaultType = {title: '不保留数据', icon: 'yuanquan', name: 'notData'}
+      this.defaultType = { title: '不保留数据', icon: 'yuanquan', name: 'notData' }
     },
-    closeShare(val) {
+    closeShare (val) {
       this.shareModal = val
     },
-    setSelectVal(id) {
+    setSelectVal (id) {
       this.deskList.forEach(desk => {
         if (desk.id === id) {
           this.sharingDesk = desk

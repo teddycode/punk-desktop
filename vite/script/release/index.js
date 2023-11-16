@@ -1,16 +1,18 @@
-let vite=require("vite")
+let vite = require('vite')
 const vue = require('@vitejs/plugin-vue')
-const path=require('path')
-async function buildRender(){
-  let options={
-    root :process.cwd(),
-    build:{
-      enableEsbuild:true,
-      minify:true,
-      outDir:path.join(process.cwd(),"release/bundled")
+const path = require('path')
+
+async function buildRender () {
+  let options = {
+    root: process.cwd(),
+    build: {
+      enableEsbuild: true,
+      minify: true,
+      outDir: path.join(process.cwd(), 'release/bundled')
     },
-    plugins:[vue()]
+    plugins: [vue()]
   }
   await vite.build(options)
 }
+
 buildRender()

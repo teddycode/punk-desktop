@@ -3,8 +3,9 @@
     <div v-for="item in list" class="p-3 pointer dropdown-item rounded-md flex items-center "
          @click.stop="selectItem(item)">
       <DropIcon :icon="item.icon" style="font-size: 1.25rem;"></DropIcon>
-      <span :style="item.type === 'deletePacket' || item.type === 'deleteApp' ? {color:'var(--error)'} :{color:'var(--primary-text)'}"
-            class="pl-3 category-16-400">{{
+      <span
+          :style="item.type === 'deletePacket' || item.type === 'deleteApp' ? {color:'var(--error)'} :{color:'var(--primary-text)'}"
+          class="pl-3 category-16-400">{{
           item.title
         }}</span>
     </div>
@@ -22,16 +23,15 @@
 </template>
 
 <script>
-import {mapActions} from 'pinia'
-import {Icon as DropIcon} from '@iconify/vue'
-import {message, Modal as DropModal} from 'ant-design-vue'
-import {communityStore} from '../../store/communityStore'
+import { mapActions } from 'pinia'
+import { Icon as DropIcon } from '@iconify/vue'
+import { message, Modal as DropModal } from 'ant-design-vue'
+import { communityStore } from '../../store/communityStore'
 
 import PacketSetting from '../knownCategory/PacketSettings.vue'
 import Modal from '../../../../components/Modal.vue'
 import AddLeftChildChannel from '../AddLeftChildChannel.vue'
 import LinkSetting from '../knownCategory/LinkSetting.vue'
-
 
 export default {
   props: ['list', 'id', 'no', 'position', 'item'],
@@ -40,7 +40,7 @@ export default {
     DropIcon, PacketSetting, Modal, AddLeftChildChannel, LinkSetting
   },
 
-  data() {
+  data () {
     return {
       menuDropShow: false,
       type: '',
@@ -50,15 +50,15 @@ export default {
   methods: {
     ...mapActions(communityStore, ['removeCategory', 'getCategoryData', 'getChannelList']),
 
-    selectItem(item) {
+    selectItem (item) {
       this.type = item.type
       switch (item.type) {
         case 'packetSet':
           this.menuDropShow = true
-          break;
+          break
         case 'linkSet':
           this.menuDropShow = true
-          break;
+          break
         case 'deleteApp':
           //  console.log('获取id::>>',this.id);
           DropModal.confirm({
@@ -74,7 +74,7 @@ export default {
               }
             }
           })
-          break;
+          break
         case 'deletePacket':
           //  console.log('查看id',this.id);
           DropModal.confirm({
@@ -89,12 +89,11 @@ export default {
               }
             }
           })
-          break;
+          break
         case 'addNewApp':
           this.menuDropShow = true
-          break;
+          break
       }
-
 
     }
   }

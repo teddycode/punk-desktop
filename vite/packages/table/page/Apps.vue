@@ -3,7 +3,7 @@
   <div style="display: flex;height: 100%;color: var(--primary-text)">
     <SecondPanel :menus="menus" :search="true" logo="https://up.apps.vip/logo/favicon.svg" @change-tab="changeTab">
     </SecondPanel>
-  <!--  本地应用 -->
+    <!--  本地应用 -->
     <div v-show="currentIndex === 'my'" class="app-content s-bg" style="margin: 1em;background: var(--primary-bg);"
          @dragover.prevent="dragOver"
          @drop.prevent="drop">
@@ -23,9 +23,9 @@
           <AddIcon v-if="iconVisible" :navList="[
               { name: '桌面图标', component: 'Desktop' },
             ]"
-                 navName="Desktop"
-                 @close="iconHide"
-                 @getSelectApps="getSelectApps"
+                   navName="Desktop"
+                   @close="iconHide"
+                   @getSelectApps="getSelectApps"
           >
           </AddIcon>
         </Teleport>
@@ -123,29 +123,29 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from 'pinia'
-import {appStore} from '../store'
+import { mapActions, mapWritableState } from 'pinia'
+import { appStore } from '../store'
 import SecondPanel from '../components/SecondPanel.vue'
 import QingApps from '../components/QingApps.vue'
 import MyApps from '../components/MyApps.vue'
-import {appsStore} from '../store/apps'
-import {message} from 'ant-design-vue'
-import {runExec} from '../js/common/exec'
+import { appsStore } from '../store/apps'
+import { message } from 'ant-design-vue'
+import { runExec } from '../js/common/exec'
 import Template from '../../user/pages/Template.vue'
-import {FolderOpenOutlined, NotificationOutlined} from '@ant-design/icons-vue'
+import { FolderOpenOutlined, NotificationOutlined } from '@ant-design/icons-vue'
 import browser from '../js/common/browser'
 import AddIcon from '../page/app/addIcon/index.vue'
 import Desktop from '../page/app/addIcon/modules/Desktop.vue'
 
-let {fs} = window.$models
+let { fs } = window.$models
 export default {
   name: 'Apps',
-  components: {AddIcon, Desktop, Template, MyApps, QingApps, SecondPanel, NotificationOutlined, FolderOpenOutlined},
+  components: { AddIcon, Desktop, Template, MyApps, QingApps, SecondPanel, NotificationOutlined, FolderOpenOutlined },
   computed: {
     ...mapWritableState(appStore, ['appData']),
     ...mapWritableState(appsStore, ['myApps'])
   },
-  data() {
+  data () {
     return {
       iconVisible: false,
       settings: {
@@ -488,39 +488,39 @@ export default {
   },
   methods: {
     ...mapActions(appsStore, ['addApps']),
-    getSelectApps(data) {
+    getSelectApps (data) {
       this.addApps(data['default'])
     },
-    executeApp(appData) {
+    executeApp (appData) {
       this.$router.push({
         name: 'app',
         params: appData
       })
     },
-    open(app) {
+    open (app) {
       require('electron').shell.openPath(app.path)
     },
-    iconHide() {
+    iconHide () {
       this.iconVisible = false
     },
-    async loadDeskIconApps() {
+    async loadDeskIconApps () {
       this.iconVisible = true
       // const desktopApps = await ipc.sendSync('getDeskApps')
       // this.desktopApps = desktopApps
       // this.addApps(this.desktopApps)
     },
-    dragOver() {
+    dragOver () {
 
     },
-    changeTab(data) {
+    changeTab (data) {
       this.currentIndex = data.index
     },
-    checkInstalled(checkApp) {
+    checkInstalled (checkApp) {
       if (fs.existsSync(checkApp.installPath)) {
         return true
       }
     },
-    executeLocalApp(app) {
+    executeLocalApp (app) {
       runExec('"' + app.installPath + '"')
     },
     /**
@@ -528,43 +528,43 @@ export default {
      * @param app
      * @param path
      */
-    setup(app, path, silent = true) {
-      message.success({content: '正在为您安装', key: 'install'})
+    setup (app, path, silent = true) {
+      message.success({ content: '正在为您安装', key: 'install' })
       app.installing = true
       if (silent) {
         runExec('start /wait ' + path + ' /S', require('path').dirname(path)).then(rs => {
-          message.success({content: '安装成功，并为您运行此软件', key: 'install'})
+          message.success({ content: '安装成功，并为您运行此软件', key: 'install' })
           this.executeLocalApp(app)
           app.installed = true
         }, (rs) => {
-          message.error({content: '安装失败', key: 'install'})
+          message.error({ content: '安装失败', key: 'install' })
         }).catch((err) => {
-          message.error({content: '安装错误', key: 'install'})
+          message.error({ content: '安装错误', key: 'install' })
         }).finally(() => {
           app.installing = false
         })
       } else {
         runExec('start /wait ' + path, require('path').dirname(path)).then(rs => {
-          message.success({content: '安装成功，并为您运行此软件', key: 'install'})
+          message.success({ content: '安装成功，并为您运行此软件', key: 'install' })
           this.executeLocalApp(app)
           app.installed = true
         }, (rs) => {
-          message.error({content: '安装失败', key: 'install'})
+          message.error({ content: '安装失败', key: 'install' })
         }).catch((err) => {
-          message.error({content: '安装错误', key: 'install'})
+          message.error({ content: '安装错误', key: 'install' })
         }).finally(() => {
           app.installing = false
         })
       }
 
     },
-    becomeDeveloper() {
+    becomeDeveloper () {
       browser.openInUserSelect('https://www.yuque.com/tswork/mqon1y/hugtrbdiax9863ug')
     },
-    openDir() {
+    openDir () {
       require('electron').shell.openPath(require('path').join(window.globalArgs['user-data-dir'], 'download'))
     },
-    install(app) {
+    install (app) {
       if (app.downloading) {
         return
       }
@@ -601,7 +601,7 @@ export default {
         }
       })
     },
-    async drop(e) {
+    async drop (e) {
       let files = e.dataTransfer.files
 
       let filesArr = []

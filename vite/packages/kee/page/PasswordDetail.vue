@@ -185,7 +185,8 @@
       <div class="share-header">
            <span>
             <svg class="icon" height="128" p-id="978" t="1668734179161" version="1.1"
-                 viewBox="0 0 1024 1024" width="128" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                 viewBox="0 0 1024 1024" width="128" xmlns="http://www.w3.org/2000/svg"
+                 xmlns:xlink="http://www.w3.org/1999/xlink">
               <path
                   d="M639.9 351.9C639.9 192.9 511.1 64 352 64S64.2 192.8 64.2 351.9c0 158.9 128.8 287.9 287.9 287.9 158.9-0.1 287.8-128.9 287.8-287.9z m-367.4 16.4c-50.4 0-91.3-40.9-91.3-91.3s40.9-91.3 91.3-91.3 91.3 40.9 91.3 91.3-40.9 91.3-91.3 91.3z"
                   fill="#FFFFFF" p-id="979"></path><path
@@ -269,14 +270,14 @@ import {
   ShareAltOutlined,
   UnlockFilled
 } from '@ant-design/icons-vue'
-import {message, Modal} from 'ant-design-vue';
-import {createVNode} from 'vue'
-import {appStore} from '../store'
-import {mapActions, mapWritableState} from 'pinia'
+import { message, Modal } from 'ant-design-vue'
+import { createVNode } from 'vue'
+import { appStore } from '../store'
+import { mapActions, mapWritableState } from 'pinia'
 import _ from 'lodash-es'
-import vueCustomScrollbar from "../../../src/components/vue-scrollbar.vue";
+import vueCustomScrollbar from '../../../src/components/vue-scrollbar.vue'
 import ColorImg from '../components/ColorImg.vue'
-import {getBgColorFromEntry} from '../util.js'
+import { getBgColorFromEntry } from '../util.js'
 
 export default {
   name: 'PasswordDetail',
@@ -292,11 +293,11 @@ export default {
   },
   computed: {
     ...mapWritableState(appStore, ['passwordItem', 'currentIndex', 'currentDb']),
-    getColor() {
+    getColor () {
       return getBgColorFromEntry(this.passwordItem.originData)
     },
   },
-  data() {
+  data () {
     return {
       settings: {
         swipeEasing: true,
@@ -404,13 +405,13 @@ export default {
       passwordType: 'password'
     }
   },
-  mounted() {
+  mounted () {
   },
-  updated() {
+  updated () {
     this.updateForm()
   },
   methods: {
-    createPwd() {
+    createPwd () {
       alert('a')
       this.createEntry(entry => {
         this.saveDb(result => {
@@ -418,7 +419,7 @@ export default {
         })
       })
     },
-    updateForm() {
+    updateForm () {
       this.formState.passwordAccount = this.passwordItem.title
       this.formState.username = this.passwordItem.username
       this.formState.websiteValue = this.passwordItem.domain
@@ -426,21 +427,21 @@ export default {
       this.formState.siteValue = this.passwordItem.site_1
     },
     ...mapActions(appStore, ['removeEntry', 'saveDb', 'clearPasswordItem', 'changeEntry', 'getAllPasswords', 'createEntry']),
-    openUrl(url) {
-      ipc.send('addTab', {url})
+    openUrl (url) {
+      ipc.send('addTab', { url })
     },
     // 打开分享
-    openShare() {
+    openShare () {
       // 使用一个值控制弹窗
       this.shareVisible = true
     },
     // 删除事件
-    shareDelete(uuid) {
+    shareDelete (uuid) {
       Modal.confirm({
-        title: "确定要删除当前密码吗，后续您可以在回收站中进行恢复和彻底删除操作?",
+        title: '确定要删除当前密码吗，后续您可以在回收站中进行恢复和彻底删除操作?',
         icon: createVNode(ExclamationCircleOutlined),
-        okText: "确定",
-        cancelText: "取消",
+        okText: '确定',
+        cancelText: '取消',
         onOk: () => {
           this.removeEntry(uuid, (result) => {
             if (result) {
@@ -458,14 +459,14 @@ export default {
             }
           })
         },
-        onCancel() {
+        onCancel () {
 
         }
-      });
+      })
     },
 
     // 添加创建tag
-    addTag(e) {
+    addTag (e) {
       // 校验手机号
       const reg = /^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-79])|(?:5[0-35-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[1589]))\d{8}$/
       if (this.mobileValue != '' && reg.test(this.mobileValue)) {
@@ -480,24 +481,24 @@ export default {
       }
     },
     // 移除手机号
-    removeTag(e) {
+    removeTag (e) {
       this.mobileTag.forEach((item, i, arr) => {
         if (item == e) {
-          arr.splice(i, 1);
+          arr.splice(i, 1)
         }
       })
     },
     // 打开编辑模式
-    openEdit() {
+    openEdit () {
       this.editShow = true
       this.isMouse = false
     },
-    fillClick(item) {
+    fillClick (item) {
       message.success('已为您填充密码，如遇部分页面无法填充，请手动复制。')
-      ipc.send('fillPassword', {password: _.cloneDeep(item)})
+      ipc.send('fillPassword', { password: _.cloneDeep(item) })
     },
     // 保存修改
-    saveChange() {
+    saveChange () {
       this.editShow = false
       this.isMouse = true
       this.changeEntry(this.passwordItem.uuid, {
@@ -521,53 +522,53 @@ export default {
     },
     /*鼠标悬浮事件开始*/
     // 用户名称
-    openUsernameHover() {
+    openUsernameHover () {
       this.usernameVisible = true
-      this.$refs.usernameRef.style = "background:rgba(80, 139, 254, 0.25);"
+      this.$refs.usernameRef.style = 'background:rgba(80, 139, 254, 0.25);'
     },
     // 密码
-    opPasswordHover() {
+    opPasswordHover () {
       this.passwordVisible = true
-      this.$refs.passwordRef.style = "background:rgba(80, 139, 254, 0.25);"
+      this.$refs.passwordRef.style = 'background:rgba(80, 139, 254, 0.25);'
     },
     // 网站
-    openWebsiteHover() {
+    openWebsiteHover () {
       this.websiteShow = true
-      this.$refs.webSiteRef.style = "background:rgba(80, 139, 254, 0.25);border-radius:6px;"
+      this.$refs.webSiteRef.style = 'background:rgba(80, 139, 254, 0.25);border-radius:6px;'
     },
     /*鼠标悬浮事件结束*/
     /** 鼠标移出事件开始**/
     // 用户名称
-    closeUsernameHover() {
+    closeUsernameHover () {
       this.usernameVisible = false
-      this.$refs.usernameRef.style = "background:rgba(255, 255, 255, 1);"
+      this.$refs.usernameRef.style = 'background:rgba(255, 255, 255, 1);'
     },
     // 密码
-    closePasswordHover() {
+    closePasswordHover () {
       this.passwordVisible = false
-      this.$refs.passwordRef.style = "background:rgba(255, 255, 255, 1);"
+      this.$refs.passwordRef.style = 'background:rgba(255, 255, 255, 1);'
     },
     // 网站
-    closeWebsiteHover() {
+    closeWebsiteHover () {
       this.websiteShow = false
-      this.$refs.webSiteRef.style = "background:rgba(255, 255, 255, 1);"
+      this.$refs.webSiteRef.style = 'background:rgba(255, 255, 255, 1);'
     },
     /** 鼠标移出事件结束**/
-    copyText(text) {
+    copyText (text) {
       message.success('复制成功。')
       require('electron').clipboard.writeText(text)
     },
-    openFillClick() {
-      ipc.send('openTabFill', {password: _.cloneDeep(this.passwordItem)})
+    openFillClick () {
+      ipc.send('openTabFill', { password: _.cloneDeep(this.passwordItem) })
     },
     // 密码显示和隐藏事件
-    passwordShowClick(item) {
+    passwordShowClick (item) {
       if (item.showCopy == false) {
         item.showCopy = true
-        item.passwordType = "text"
+        item.passwordType = 'text'
       } else {
         item.showCopy = false
-        item.passwordType = "password"
+        item.passwordType = 'password'
       }
     }
   }

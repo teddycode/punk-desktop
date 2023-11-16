@@ -87,14 +87,13 @@
 </template>
 
 <script>
-import {mapWritableState} from 'pinia'
-import {chatList, memberDropList, memberShowList} from '../../../../js/data/chatList'
-import {chatStore} from '../../../../store/chat'
-import {Icon as CommunityIcon} from '@iconify/vue'
+import { mapWritableState } from 'pinia'
+import { chatList, memberDropList, memberShowList } from '../../../../js/data/chatList'
+import { chatStore } from '../../../../store/chat'
+import { Icon as CommunityIcon } from '@iconify/vue'
 
 import ChatDropDown from './ChatsDropDown.vue'
 import ChatFold from './ChatFolds.vue'
-
 
 export default {
   props: ['float'],
@@ -103,7 +102,7 @@ export default {
     ChatDropDown, ChatFold, CommunityIcon
   },
 
-  data() {
+  data () {
     return {
       defaultCategory: {
         name: chatList[0]?.name,
@@ -122,16 +121,15 @@ export default {
         wheelPropagation: true
       },
 
-
     }
   },
 
   computed: {
     ...mapWritableState(chatStore, ['settings']),
-    isDoubleColumn() {
+    isDoubleColumn () {
       return this.settings.showDouble
     },
-    floatList() {
+    floatList () {
       if (this.float && this.settings.enableHide) {
         return memberShowList
       } else {
@@ -141,11 +139,10 @@ export default {
   },
 
   methods: {
-    currentItem(item) {
+    currentItem (item) {
       this.currentID = item.id
       this.$emit('clickItem', item)
     },
-
 
   }
 

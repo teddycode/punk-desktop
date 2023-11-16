@@ -11,7 +11,7 @@ import KeySetting from '../../components/comp/KeySetting.vue'
 
 export default {
   name: 'Key',
-  components: {KeySetting},
+  components: { KeySetting },
 
 }
 </script>

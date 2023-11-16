@@ -175,17 +175,17 @@
 </template>
 
 <script>
-import Team from "../compontents/Team.vue";
-import Task from "../compontents/Task.vue";
-import App from "../compontents/App.vue";
-import Achievement from "../compontents/Achievement.vue";
-import Cache from "../compontents/Cache.vue";
-import InternalStorage from "../compontents/InternalStorage.vue";
+import Team from '../compontents/Team.vue'
+import Task from '../compontents/Task.vue'
+import App from '../compontents/App.vue'
+import Achievement from '../compontents/Achievement.vue'
+import Cache from '../compontents/Cache.vue'
+import InternalStorage from '../compontents/InternalStorage.vue'
 
-import {mapState} from "vuex";
-import {defineComponent} from "vue";
+import { mapState } from 'vuex'
+import { defineComponent } from 'vue'
 
-import {LeftOutlined, LoadingOutlined, RightOutlined, ThunderboltFilled,} from "@ant-design/icons-vue";
+import { LeftOutlined, LoadingOutlined, RightOutlined, ThunderboltFilled, } from '@ant-design/icons-vue'
 
 // let grade
 // ipcRenderer.once('userInfo',(event,args)=>{
@@ -194,7 +194,7 @@ import {LeftOutlined, LoadingOutlined, RightOutlined, ThunderboltFilled,} from "
 // })
 
 export default defineComponent({
-  name: "Home",
+  name: 'Home',
   components: {
     Cache,
     InternalStorage,
@@ -207,82 +207,82 @@ export default defineComponent({
     RightOutlined,
     LoadingOutlined,
   },
-  data() {
+  data () {
     return {
       loading: false,
-      lv: "",
-      avatar: "",
-      remainHour: "",
-      remainMinute: "",
-      minute: "",
-      percentage: "",
-    };
+      lv: '',
+      avatar: '',
+      remainHour: '',
+      remainMinute: '',
+      minute: '',
+      percentage: '',
+    }
   },
   computed: {
-    ...mapState(["onlineGrade", "user"]),
+    ...mapState(['onlineGrade', 'user']),
   },
   methods: {
-    openUserSpace() {
-      tsbApi.user.openSpace(this.user.uid);
+    openUserSpace () {
+      tsbApi.user.openSpace(this.user.uid)
     },
-    goLogin() {
-      ipc.send("login");
+    goLogin () {
+      ipc.send('login')
       window.loginCallback = () => {
-        ipc.send("getTrayUserInfo");
-      };
+        ipc.send('getTrayUserInfo')
+      }
     },
 
-    gradeTableGenerate(num) {
-      let lvSys = {};
+    gradeTableGenerate (num) {
+      let lvSys = {}
       for (let i = 0; i < num + 1; i++) {
-        let arrLef = 0;
-        let arrRg = 0;
+        let arrLef = 0
+        let arrRg = 0
         for (let j = 0; j < i; j++) {
-          arrLef += 10 * (j + 2);
+          arrLef += 10 * (j + 2)
         }
         for (let k = 0; k < i + 1; k++) {
-          arrRg += 10 * (k + 2);
+          arrRg += 10 * (k + 2)
         }
-        arrRg -= 1;
-        lvSys[`${i}`] = [arrLef, arrRg];
+        arrRg -= 1
+        lvSys[`${i}`] = [arrLef, arrRg]
       }
-      delete lvSys["lv0"];
-      return lvSys;
+      delete lvSys['lv0']
+      return lvSys
     },
-    goDetail(path) {
-      this.$router.push({name: "detail", params: {path: path}});
+    goDetail (path) {
+      this.$router.push({ name: 'detail', params: { path: path } })
     },
-    loadUserInfo() {
-      this.loading = true;
-      ipc.send("getDetailUserInfo");
+    loadUserInfo () {
+      this.loading = true
+      ipc.send('getDetailUserInfo')
     },
   },
-  mounted() {
-    ipc.send("resizeTray", {width: 400, height: 435});
-    ipc.on("userInfo", (event, args) => {
-      console.log(args);
-      this.loading = false;
-      this.$store.commit("setUser", args.data);
-      this.lv = args.data.onlineGradeExtra.lv;
-      this.avatar = args.data.avatar;
-      let section = this.gradeTableGenerate(64)[this.lv + 1];
-      let remain = section[0] * 60 - args.data.onlineGradeExtra.minutes;
-      this.remainHour = Math.floor(remain / 60);
-      this.remainMinute = remain - Math.floor(remain / 60) * 60;
-      this.minute = args.data.onlineGradeExtra.minutes;
-      this.percentage = (this.minute / (section[0] * 60)) * 100;
-    });
-    ipc.send("getMemory");
-    this.loadUserInfo();
+  mounted () {
+    ipc.send('resizeTray', { width: 400, height: 435 })
+    ipc.on('userInfo', (event, args) => {
+      console.log(args)
+      this.loading = false
+      this.$store.commit('setUser', args.data)
+      this.lv = args.data.onlineGradeExtra.lv
+      this.avatar = args.data.avatar
+      let section = this.gradeTableGenerate(64)[this.lv + 1]
+      let remain = section[0] * 60 - args.data.onlineGradeExtra.minutes
+      this.remainHour = Math.floor(remain / 60)
+      this.remainMinute = remain - Math.floor(remain / 60) * 60
+      this.minute = args.data.onlineGradeExtra.minutes
+      this.percentage = (this.minute / (section[0] * 60)) * 100
+    })
+    ipc.send('getMemory')
+    this.loadUserInfo()
     setInterval(() => {
-      ipc.send("getMemory");
-    }, 2000);
+      ipc.send('getMemory')
+    }, 2000)
     setInterval(() => {
-      this.loadUserInfo();
-    }, 60000);
+      this.loadUserInfo()
+    }, 60000)
   },
   // this.memoryUsage = await osu.mem.info()
-});
+})
 </script>
 
 <style lang="scss" scoped>

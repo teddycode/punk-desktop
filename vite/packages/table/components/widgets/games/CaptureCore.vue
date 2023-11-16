@@ -103,7 +103,8 @@ export default defineComponent({
       <a-avatar :size="20" :src="'file://'+currentSource.icon" shape="square" style="vertical-align: top"></a-avatar>
       {{ currentSource.name }}
     </div>
-    <div :class="{disable:!this.settings.imageSavePath}" class="flex justify-center pointer  items-center mr-6 flex-col ml-6"
+    <div :class="{disable:!this.settings.imageSavePath}"
+         class="flex justify-center pointer  items-center mr-6 flex-col ml-6"
          @click="captureScreen">
               <span class="px-4 voice-hover py-4 btn-active rounded-full mb-3" style="background: var(--secondary-bg);">
                 <Icon icon="camera" style="font-size: 2em;"></Icon>
@@ -111,14 +112,16 @@ export default defineComponent({
       <span>截屏</span>
     </div>
 
-    <div v-if="!recording" :class="{disable:!this.settings.videoSavePath}" class="flex justify-center pointer items-center mr-6 flex-col"
+    <div v-if="!recording" :class="{disable:!this.settings.videoSavePath}"
+         class="flex justify-center pointer items-center mr-6 flex-col"
          @click="startRecord">
             <span class="px-4 voice-hover py-4  btn-active rounded-full mb-3" style="background: var(--secondary-bg);">
               <Icon icon="record-circle-line" style="font-size: 2em;"></Icon>
             </span>
       <span>录制</span>
     </div>
-    <div v-else :class="{disable:!this.settings.videoSavePath}" class="flex justify-center pointer items-center mr-6 flex-col"
+    <div v-else :class="{disable:!this.settings.videoSavePath}"
+         class="flex justify-center pointer items-center mr-6 flex-col"
          @click="stopRecord">
             <span class="px-4 voice-hover py-4  btn-active rounded-full mb-3" style="background: var(--secondary-bg);">
               <Icon icon="record-circle-line" style="font-size: 2em;color:red"></Icon>

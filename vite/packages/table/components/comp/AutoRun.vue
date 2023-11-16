@@ -7,16 +7,16 @@
 <script>
 export default {
   name: 'AutoRun',
-  data() {
+  data () {
     return {
       isAutoRun: false,
     }
   },
-  async mounted() {
+  async mounted () {
     this.isAutoRun = await tsbApi.settings.get('autoRun')
   },
   methods: {
-    async setAutoRun() {
+    async setAutoRun () {
       await tsbApi.settings.setAutoRun(this.isAutoRun)
     },
   }

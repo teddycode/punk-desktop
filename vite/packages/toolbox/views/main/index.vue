@@ -12,40 +12,40 @@
 </template>
 
 <script>
-import Search from "./search.vue";
-import Tools from "./tools.vue";
-import {main} from "../../store/main";
-import {mapWritableState} from "pinia";
+import Search from './search.vue'
+import Tools from './tools.vue'
+import { main } from '../../store/main'
+import { mapWritableState } from 'pinia'
 
 export default {
   computed: {
-    ...mapWritableState(main, ["useTool"]),
+    ...mapWritableState(main, ['useTool']),
   },
   components: {
     Search,
     Tools,
   },
-  mounted() {
-    document.documentElement.classList.add("dark-model");
+  mounted () {
+    document.documentElement.classList.add('dark-model')
 
-    window.addEventListener("keydown", this.handleEscKeyPressed, {
+    window.addEventListener('keydown', this.handleEscKeyPressed, {
       capture: true,
-    });
+    })
   },
-  beforeDestroy() {
-    window.removeEventListener("keydown", this.handleEscKeyPressed, {
+  beforeDestroy () {
+    window.removeEventListener('keydown', this.handleEscKeyPressed, {
       capture: true,
-    });
+    })
   },
   methods: {
-    handleEscKeyPressed(event) {
+    handleEscKeyPressed (event) {
       if (event.keyCode === 27) {
-        this.$router.push("/");
-        this.useTool = "";
+        this.$router.push('/')
+        this.useTool = ''
       }
     },
   },
-};
+}
 </script>
 
 <style lang="scss"></style>

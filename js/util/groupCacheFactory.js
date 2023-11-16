@@ -12,14 +12,14 @@
  * @constructor
  */
 function Group () {
-  var queue = new Array()
+  var queue = []
 
   /**
-     * 缓存一个对象
-     * @param key
-     * @param object
-     * @param second 默认为 0 永久有效
-     */
+   * 缓存一个对象
+   * @param key
+   * @param object
+   * @param second 默认为 0 永久有效
+   */
   this.push = function (key, object, second) {
     second = second || 0
     queue.unshift({
@@ -60,9 +60,9 @@ function Group () {
   }
 
   /**
-     * 获取一个对象,先进先出
-     * @returns {*}
-     */
+   * 获取一个对象,先进先出
+   * @returns {*}
+   */
   this.poll = function () {
     var cache = queue.pop()
     if (cache && cache.isExpire()) {
@@ -73,9 +73,9 @@ function Group () {
   }
 
   /**
-     * 获取一个对象,并放到末尾,先进先出
-     * @returns {*}
-     */
+   * 获取一个对象,并放到末尾,先进先出
+   * @returns {*}
+   */
   this.rPoll = function () {
     var cache = queue.pop()
     if (cache && cache.isExpire()) {
@@ -88,9 +88,9 @@ function Group () {
   }
 
   /**
-     * 删除一个key
-     * @param key
-     */
+   * 删除一个key
+   * @param key
+   */
   this.delete = function (key) {
     var index = find(key)
     if (index != -1) {
@@ -99,10 +99,10 @@ function Group () {
   }
 
   /**
-     * 寻找指定项的索引
-     * @param key
-     * @returns {*}
-     */
+   * 寻找指定项的索引
+   * @param key
+   * @returns {*}
+   */
   var find = function (key) {
     for (var i in queue) {
       var item = queue[i]
@@ -114,10 +114,10 @@ function Group () {
   }
 
   /**
-     * 通过key获取
-     * @param key
-     * @returns {*}
-     */
+   * 通过key获取
+   * @param key
+   * @returns {*}
+   */
   this.getValue = function (key) {
     var index = find(key)
     if (index != -1) {
@@ -130,9 +130,9 @@ function Group () {
   }
 
   /**
-     * 获取所有有效的cache
-     * @returns {Array}
-     */
+   * 获取所有有效的cache
+   * @returns {Array}
+   */
   var getCacheEntitys = function () {
     var entitys = []
     for (var i in queue) {
@@ -145,8 +145,8 @@ function Group () {
   }
 
   /**
-     * 获取key
-     */
+   * 获取key
+   */
   this.getKeys = function () {
     var keys = []
     var caches = getCacheEntitys()
@@ -158,8 +158,8 @@ function Group () {
   }
 
   /**
-     * 获取值
-     */
+   * 获取值
+   */
   this.getValues = function () {
     var values = []
     var caches = getCacheEntitys()
@@ -171,9 +171,9 @@ function Group () {
   }
 
   /**
-     * 获取元素剩余时间
-     * @param key
-     */
+   * 获取元素剩余时间
+   * @param key
+   */
   this.ttl = function (key) {
     var index = find(key)
 
@@ -186,9 +186,9 @@ function Group () {
   }
 
   /**
-     * 获取第一项的值
-     * @returns {null}
-     */
+   * 获取第一项的值
+   * @returns {null}
+   */
   this.peek = function () {
     var values = this.getValues()
     if (values.length > 0) {
@@ -198,10 +198,10 @@ function Group () {
   }
 
   /**
-     * 设置元素失效时间
-     * @param key
-     * @param second
-     */
+   * 设置元素失效时间
+   * @param key
+   * @param second
+   */
   this.expire = function (key, second) {
     var index = find(key)
     if (index != -1) {
@@ -213,25 +213,25 @@ function Group () {
   }
 
   /**
-     * 检测元素是否存在
-     * @param key
-     */
+   * 检测元素是否存在
+   * @param key
+   */
   this.exist = function (key) {
     return find(key) != -1
   }
 
   /**
-     * 判断group是否为空
-     * @returns {boolean}
-     */
+   * 判断group是否为空
+   * @returns {boolean}
+   */
   this.isEmpty = function () {
     return this.getKeys().length == 0
   }
 
   /**
-     * 获取group有效元素的大小
-     * @returns {*}
-     */
+   * 获取group有效元素的大小
+   * @returns {*}
+   */
   this.size = function () {
     return this.getKeys().length
   }

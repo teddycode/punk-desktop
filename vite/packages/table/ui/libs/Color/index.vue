@@ -21,21 +21,21 @@
 </template>
 
 <script>
-import {colorList} from "./color";
+import { colorList } from './color'
 
 export default {
-  name: "XtColor",
+  name: 'XtColor',
 
-  data() {
+  data () {
     return {
       colorList,
       colorData: this.color,
-    };
+    }
   },
   props: {
     color: {
       type: String,
-      default: "",
+      default: '',
     },
     title: {
       type: String,
@@ -44,26 +44,26 @@ export default {
       type: String,
     },
   },
-  mounted() {
-    if (this.color == "none") this.colorData = "";
-    else this.colorData = this.color;
+  mounted () {
+    if (this.color == 'none') this.colorData = ''
+    else this.colorData = this.color
   },
   computed: {
-    colorLength() {
-      return Object.keys(this.colorList).length;
+    colorLength () {
+      return Object.keys(this.colorList).length
     },
   },
   watch: {
-    colorData(newV) {
-      this.$emit("update:color", newV);
+    colorData (newV) {
+      this.$emit('update:color', newV)
     },
   },
   methods: {
-    btnClick() {
-      this.$emit("onBtnClick", this.color);
+    btnClick () {
+      this.$emit('onBtnClick', this.color)
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

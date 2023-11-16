@@ -15,7 +15,8 @@
         </div>
         <template v-else>
           <iframe ref="myIframe" :src="customData.url"
-                  allowtransparency="true" sandbox="allow-forms allow-modals allow-popups allow-same-origin allow-scripts"
+                  allowtransparency="true"
+                  sandbox="allow-forms allow-modals allow-popups allow-same-origin allow-scripts"
                   style="width: 100%;height: 100%;border: none;border-radius: 8px">
           </iframe>
         </template>
@@ -53,28 +54,28 @@
 
 <script>
 import Widget from '../../card/Widget.vue'
-import {message} from 'ant-design-vue'
-import {taskStore} from "../../../apps/task/store"
-import {mapWritableState} from 'pinia';
+import { message } from 'ant-design-vue'
+import { taskStore } from '../../../apps/task/store'
+import { mapWritableState } from 'pinia'
 
 // import RemoteShare from '../../card/remote/RemoteShare.vue';
-function loadScript(src, id, callback) {
-  const s = document.createElement("script", id);
-  s.type = "text/javascript";
-  s.src = src;
+function loadScript (src, id, callback) {
+  const s = document.createElement('script', id)
+  s.type = 'text/javascript'
+  s.src = src
   s.id = id
   s.onload = s.onreadystatechange = function () {
-    if (!this.readyState || this.readyState === "loaded" || this.readyState === "complete") {
-      callback && callback();
-      s.onload = s.onreadystatechange = null;
+    if (!this.readyState || this.readyState === 'loaded' || this.readyState === 'complete') {
+      callback && callback()
+      s.onload = s.onreadystatechange = null
     }
-  };
-  document.body.appendChild(s);
+  }
+  document.body.appendChild(s)
 }
 
 export default {
   name: 'Remote',
-  components: {Widget},
+  components: { Widget },
   props: {
     customIndex: {
       type: Number,
@@ -94,7 +95,7 @@ export default {
       default: false
     }
   },
-  data() {
+  data () {
     return {
       url: '',
       width: 2,
@@ -113,17 +114,17 @@ export default {
       },
       menuList: [
         {
-          icon: "shop",
+          icon: 'shop',
           title: '发现',
           fn: () => {
             this.$router.push({
               name: 'remoteCommunity',
-              params: {id: this.desk.id, cardId: this.customIndex, size: JSON.stringify(this.cardSize)}
+              params: { id: this.desk.id, cardId: this.customIndex, size: JSON.stringify(this.cardSize) }
             })
           }
         },
         {
-          icon: "fenxiang",
+          icon: 'fenxiang',
           title: '分享',
           fn: () => {
             this.$router.push({
@@ -139,10 +140,10 @@ export default {
           }
         },
         {
-          icon: "shezhi1",
+          icon: 'shezhi1',
           title: '设置',
           fn: () => {
-            this.panelVisible = true;
+            this.panelVisible = true
             this.$refs.remote.visible = false
           }
         }
@@ -150,25 +151,25 @@ export default {
     }
   },
   watch: {
-    width(newWidth) {
-      this.width = this.ensureEvenNumber(newWidth);
+    width (newWidth) {
+      this.width = this.ensureEvenNumber(newWidth)
     },
-    height(newHeight) {
-      this.height = this.ensureEvenNumber(newHeight);
+    height (newHeight) {
+      this.height = this.ensureEvenNumber(newHeight)
     }
   },
   methods: {
-    openRightMenu() {
+    openRightMenu () {
       this.$refs.remote.menuVisible = true
     },
-    closeModal(val) {
+    closeModal (val) {
       this.showCommunity = val
     },
-    ensureEvenNumber(value) {
-      const parsedValue = parseInt(value);
-      return Math.ceil(parsedValue / 2) * 2;
+    ensureEvenNumber (value) {
+      const parsedValue = parseInt(value)
+      return Math.ceil(parsedValue / 2) * 2
     },
-    save() {
+    save () {
       this.$refs.remote.visible = false
       this.panelVisible = false
       this.customData.width = this.width / 2
@@ -177,10 +178,10 @@ export default {
       message.success('修改成功')
 
     },
-    closeShare(val) {
+    closeShare (val) {
       this.openShare = val
     },
-    setUA() {
+    setUA () {
       //暂时没有办法实现此处展现为移动端的界面
     }
     //   let contentWindow=this.$refs.myIframe.contentWindow
@@ -208,22 +209,22 @@ export default {
     // }
   },
   computed: {
-    ...mapWritableState(taskStore, ["taskID", "step"]),
-    m03031() {
-      return this.customData.task && this.taskID == "M0303" && this.step == 1;
+    ...mapWritableState(taskStore, ['taskID', 'step']),
+    m03031 () {
+      return this.customData.task && this.taskID == 'M0303' && this.step == 1
     },
-    customSize() {
+    customSize () {
       return {
         width: (this.customData.width || 1) * 280 + (this.customData.width - 1) * 10 + 'px',
         height: (this.customData.height || 2) * 205 + (this.customData.height - 1) * 10 + 'px'
       }
     },
-    cardSize() {
-      const {width, height} = this.$refs.cardSize.getBoundingClientRect();
-      return {width, height};
+    cardSize () {
+      const { width, height } = this.$refs.cardSize.getBoundingClientRect()
+      return { width, height }
     }
   },
-  mounted() {
+  mounted () {
     // if(this.customData.url){
     //   this.setUA()
     // }
@@ -245,7 +246,7 @@ export default {
     //   window.customElements.upgrade(document.getElementById('my'))
     // })
   },
-  unmounted() {
+  unmounted () {
     // document.getElementById(this.id).remove()
   }
 }

@@ -12,7 +12,8 @@
        style="background: var(--secondary-bg);">
     <div v-for="(item,index) in navList" :class="activeIndex===index ? 'xt-active-btn':''"
          :style="btnStyle"
-         class="nav-box h-full panel-icon flex btn-active items-center relative rounded-lg pointer" @click.stop="clickNav(item,index)">
+         class="nav-box h-full panel-icon flex btn-active items-center relative rounded-lg pointer"
+         @click.stop="clickNav(item,index)">
       <div :class="activeIndex === index ? 'round-dot' : 'circle'"></div>
       <span class="flex justify-center panel-title" style="flex:1;color:var(--primary-text);">{{ item.title }}</span>
       <div v-if="item.state === true" class="state-dot ml-2"></div>
@@ -51,29 +52,29 @@ export default {
       default: ''
     }
   },
-  data() {
+  data () {
     return {
       activeIndex: 0
     }
   },
   computed: {
-    itemHeight() {
+    itemHeight () {
       return this.height + 'px'
     }
   },
   watch: {
     'selectType': {
-      handler() {
+      handler () {
         this.posType()
       }
 
     }
   },
-  mounted() {
+  mounted () {
     this.posType()
   },
   methods: {
-    posType() {
+    posType () {
       if (this.selectType) {
         if (this.selectType.name && this.navList.length > 0) {
           this.activeIndex = this.navList.findIndex(item => {
@@ -83,7 +84,7 @@ export default {
       }
 
     },
-    clickNav(item, index) {
+    clickNav (item, index) {
       this.activeIndex = index
       item.state = false  // 将消息未读状态隐藏
       this.$emit('update:selectType', item)

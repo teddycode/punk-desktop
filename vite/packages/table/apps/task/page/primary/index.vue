@@ -5,21 +5,21 @@
 </template>
 
 <script setup>
-import {ref} from "vue";
-import Primary from "./Primary.vue";
-import Complete from "./Complete.vue";
+import { ref } from 'vue'
+import Primary from './Primary.vue'
+import Complete from './Complete.vue'
 
-const currentTab = ref("Primary");
+const currentTab = ref('Primary')
 const list = ref([
   {
-    name: "主线任务",
-    value: "Primary",
+    name: '主线任务',
+    value: 'Primary',
   },
   {
-    name: "已完成",
-    value: "Complete",
+    name: '已完成',
+    value: 'Complete',
   },
-]);
+])
 </script>
 
 <style lang="scss" scoped></style>

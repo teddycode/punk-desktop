@@ -92,20 +92,20 @@
 </template>
 
 <script>
-import {message} from 'ant-design-vue'
-import {mapActions, mapWritableState} from 'pinia'
-import {appStore} from '../../store'
+import { message } from 'ant-design-vue'
+import { mapActions, mapWritableState } from 'pinia'
+import { appStore } from '../../store'
 import Desk from './Desk.vue'
-import {cardStore} from '../../store/card'
-import {marketStore} from '../../store/market'
-import {taskStore} from '../../apps/task/store'
+import { cardStore } from '../../store/card'
+import { marketStore } from '../../store/market'
+import { taskStore } from '../../apps/task/store'
 
 export default {
   name: 'DeskPreview',
   components: {
     Desk
   },
-  data() {
+  data () {
     return {
       // 添加
       openDrawer: false,
@@ -144,26 +144,26 @@ export default {
   },
   computed: {
     ...mapWritableState(appStore, ['fullScreen', 'userInfo']),
-    ...mapWritableState(taskStore, ["taskID", "step"]),
-    m03026() {
-      return this.taskID == "M0302" && this.step == 6
+    ...mapWritableState(taskStore, ['taskID', 'step']),
+    m03026 () {
+      return this.taskID == 'M0302' && this.step == 6
     },
-    tagList() {
+    tagList () {
       if (this.scheme.tags) {
         return this.scheme.tags.split(',')
       } else {
         return []
       }
     },
-    layoutSize() {
+    layoutSize () {
       return JSON.parse(this.scheme.layoutSize)
     },
-    template() {
+    template () {
       return JSON.parse(this.scheme.template)
     }
   },
   watch: {
-    showModal(newVal) {
+    showModal (newVal) {
       if (newVal) this.fullScreen = true
       if (this.fullScreen) {
         this.cardZoom = this.template.settings.cardZoom
@@ -202,7 +202,7 @@ export default {
   methods: {
     ...mapActions(cardStore, ['addShareDesk', 'setDeskSize']),
     ...mapActions(marketStore, ['incSupport']),
-    async doIncSupport() {
+    async doIncSupport () {
       const rs = await this.incSupport(this.displayScheme.dataNanoid)
       if (rs && rs.msg.includes('取消')) {
         this.displayScheme.support = rs.supportCount
@@ -213,7 +213,7 @@ export default {
         message.success('感谢您的支持，您的支持是对作者最大的鼓励。')
       }
     },
-    addPlan() {
+    addPlan () {
       this.close()
       this.addShareDesk({
         ...this.displayScheme,
@@ -237,12 +237,12 @@ export default {
       //   this.cardsHeight = cardsHeight
       // }, 300)
     },
-    close() {
+    close () {
       // this.cards.settings.cardZoom = this.cardZoom
       this.$emit('closePreview', false)
       this.fullScreen = false
     },
-    getPreviewHeight() {
+    getPreviewHeight () {
       this.$nextTick(() => {
         if (this.fullScreen) {
           //计算得出修正后的缩放率
@@ -257,7 +257,7 @@ export default {
     }
 
   },
-  mounted() {
+  mounted () {
   },
 }
 </script>

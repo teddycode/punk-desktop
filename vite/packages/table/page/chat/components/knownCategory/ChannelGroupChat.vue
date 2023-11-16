@@ -72,12 +72,12 @@
 </template>
 
 <script>
-import {mapActions} from 'pinia'
+import { mapActions } from 'pinia'
 import _ from 'lodash-es'
-import {channelClass} from '../../../../js/chat/createChannelClass'
-import {message} from 'ant-design-vue'
-import {communityStore} from '../../store/communityStore'
-import {Icon as ChatIcon} from '@iconify/vue'
+import { channelClass } from '../../../../js/chat/createChannelClass'
+import { message } from 'ant-design-vue'
+import { communityStore } from '../../store/communityStore'
+import { Icon as ChatIcon } from '@iconify/vue'
 
 export default {
   components: {
@@ -86,8 +86,7 @@ export default {
 
   props: ['no', 'id'],
 
-
-  data() {
+  data () {
     return {
       settingsScroller: {
         useBothWheelAxes: true,
@@ -107,7 +106,7 @@ export default {
 
   computed: {},
 
-  mounted() {
+  mounted () {
     this.getList()
     this.$nextTick(() => {
       this.$refs.searchRef.focus()
@@ -117,15 +116,15 @@ export default {
   methods: {
     ...mapActions(communityStore, ['getCategoryData']),
     // 返回和关闭
-    backChannel() {
+    backChannel () {
       this.$emit('back')
     },
-    closeGroup() {
+    closeGroup () {
       this.$emit('close')
     },
 
     // 获取默认群聊数据
-    getList() {
+    getList () {
       const list = this.server.TUIServer.TUIGroup.store.groupList
       const arr = _.filter(list, function (o) {
         return o.selfInfo.role !== 'Member'
@@ -134,7 +133,7 @@ export default {
     },
 
     // 点击左侧选中
-    leftListClick(item) {
+    leftListClick (item) {
       const index = _.findIndex(this.selectGroup, function (o) {
         return o.groupID === item.groupID
       })
@@ -146,12 +145,12 @@ export default {
     },
 
     // 判断是否选中状态
-    isSelected(index) {
+    isSelected (index) {
       return this.selectGroup.includes(this.filterList[index])
     },
 
     // 清除选中的群聊
-    removeGroup(item) {
+    removeGroup (item) {
       const index = _.findIndex(this.selectGroup, function (o) {
         return o.groupID === item.groupID
       })
@@ -159,8 +158,8 @@ export default {
     },
 
     // 创建子频道数据
-    async submit() {
-      const option = {type: 'group', id: this.id, no: this.no}
+    async submit () {
+      const option = { type: 'group', id: this.id, no: this.no }
       if (this.selectGroup.length > 1) {
         // console.log('关联多个群聊');
         const resultStatus = {}
@@ -207,16 +206,16 @@ export default {
     },
 
     // 搜索
-    async searchGroup(evt) {
+    async searchGroup (evt) {
       /**
        * 此处需要做两种判断
        * 第一种:过滤社群中是否关联过得去群聊,需要通过后台接口进行检测
        * 第二种:过滤自自己是成员的群聊
        * **/
       if (this.searchKeyWord !== '') {
-        this.filterList = [];
+        this.filterList = []
 
-        const chineseRegex = /[\u4e00-\u9fa5]/;
+        const chineseRegex = /[\u4e00-\u9fa5]/
 
         // 判断搜索是否为中文
         if (chineseRegex.test(this.searchKeyWord)) {
@@ -235,7 +234,6 @@ export default {
           // console.log('获取搜索的群聊',res);
           this.filterList = [res?.data?.group]
         }
-
 
       } else {
         this.title = '我创建的群聊'

@@ -43,12 +43,12 @@
 </template>
 
 <script>
-import {mapWritableState} from 'pinia'
-import {appStore} from '../../store'
+import { mapWritableState } from 'pinia'
+import { appStore } from '../../store'
 
 export default {
   name: 'ZoomUI',
-  data() {
+  data () {
     return {
       timer: null,
       inputZoom: 100,
@@ -60,7 +60,7 @@ export default {
       timeout: 10,
     }
   },
-  async mounted() {
+  async mounted () {
     this.newZoom = await tsbApi.window.getZoomFactor() * 100
     this.oldZoom = this.newZoom
     this.inputZoom = +(this.newZoom).toFixed(0)
@@ -68,14 +68,14 @@ export default {
     this.getSize()
   },
   methods: {
-    inputEnter() {
+    inputEnter () {
       if (!this.inputZoom) {
         this.inputZoom = 30
       }
       this.newZoom = this.inputZoom
       this.setZoomFactor(this.inputZoom)
     },
-    async reset() {
+    async reset () {
       this.showRestore = false
       await tsbApi.window.setZoomFactor(1)
       setTimeout(() => {
@@ -88,7 +88,7 @@ export default {
         this.getSize()
       }, 300)
     },
-    async restore() {
+    async restore () {
 
       this.oldZoom = this.settings.zoomFactor
       this.newZoom = this.oldZoom
@@ -98,7 +98,7 @@ export default {
         this.getSize()
       }, 300)
     },
-    sure() {
+    sure () {
       this.clearTimer()
       this.settings.zoomFactor = this.newZoom
       this.oldZoom = this.settings.zoomFactor
@@ -106,12 +106,12 @@ export default {
       this.timeout = 10
       this.showRestore = false
     },
-    clearTimer() {
+    clearTimer () {
       clearInterval(this.timer)
       this.timer = null
       this.timeout = 10
     },
-    setTimer() {
+    setTimer () {
       if (this.timer) {
         this.clearTimer()
       }
@@ -127,11 +127,11 @@ export default {
         }, 1000)
       }
     },
-    getSize() {
+    getSize () {
       this.currentWidth = document.body.offsetWidth
       this.currentHeight = document.body.offsetHeight
     },
-    async setZoomFactor(zoom = this.newZoom) {
+    async setZoomFactor (zoom = this.newZoom) {
       zoom = +zoom.toFixed(0)
       this.inputZoom = zoom
       this.oldZoom = this.settings.zoomFactor
@@ -147,7 +147,7 @@ export default {
   computed: {
 
     ...mapWritableState(appStore, ['settings']),
-    fitWidth() {
+    fitWidth () {
       const width = Number(this.currentWidth)
       if (width < 800) {
         return {
@@ -169,7 +169,7 @@ export default {
         }
       }
     },
-    fitHeight() {
+    fitHeight () {
       const height = Number(this.currentHeight)
       if (height < 480) {
         return {

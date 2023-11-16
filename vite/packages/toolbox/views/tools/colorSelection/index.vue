@@ -9,23 +9,23 @@
 </template>
 
 <script>
-import {defineAsyncComponent} from "vue";
+import { defineAsyncComponent } from 'vue'
 
 export default {
   components: {
-    Convert: defineAsyncComponent(() => import("./Convert.vue")),
-    Extract: defineAsyncComponent(() => import("./Extract.vue")),
+    Convert: defineAsyncComponent(() => import('./Convert.vue')),
+    Extract: defineAsyncComponent(() => import('./Extract.vue')),
   },
-  data() {
+  data () {
     return {
-      selectNav: "Convert",
+      selectNav: 'Convert',
       list: [
-        {name: "颜色转换", value: "Convert"},
-        {name: "颜色提取", value: "Extract"},
+        { name: '颜色转换', value: 'Convert' },
+        { name: '颜色提取', value: 'Extract' },
       ],
-    };
+    }
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

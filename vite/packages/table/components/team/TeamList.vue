@@ -39,24 +39,24 @@
 <script>
 
 import OnlineTag from '../small/OnlineTag.vue'
-import {mapActions} from 'pinia'
-import {appStore} from '../../store'
+import { mapActions } from 'pinia'
+import { appStore } from '../../store'
 
 export default {
   name: 'TeamList',
-  components: {OnlineTag},
+  components: { OnlineTag },
   props: ['list'],
   emits: ['showAction'],
-  data() {
+  data () {
     return {}
   },
   methods: {
     ...mapActions(appStore, ['showUserCard']),
-    onAction(team) {
-      this.$emit('showAction', {team})
+    onAction (team) {
+      this.$emit('showAction', { team })
     }
   },
-  async mounted() {
+  async mounted () {
 
   }
 }

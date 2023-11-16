@@ -28,10 +28,10 @@
 </template>
 
 <script>
-import {computed, defineComponent, reactive, ref, toRefs, watch} from 'vue'
-import {appStore} from '../../store'
-import {noticeStore} from '../../store/notice'
-import {storeToRefs} from 'pinia'
+import { computed, defineComponent, reactive, ref, toRefs, watch } from 'vue'
+import { appStore } from '../../store'
+import { noticeStore } from '../../store/notice'
+import { storeToRefs } from 'pinia'
 import _ from 'lodash-es'
 import NoticeRightTop from '../../components/notice/noticeRightTop.vue'
 import AllNotice from '../../components/notice/allNotice.vue'
@@ -47,10 +47,10 @@ export default defineComponent({
     NoticeDetail
   },
 
-  setup(props, ctx) {
-    const store = appStore();
+  setup (props, ctx) {
+    const store = appStore()
     const notice = noticeStore()
-    const {settings} = storeToRefs(store)
+    const { settings } = storeToRefs(store)
 
     const data = reactive({
       rightVisible: 'all', // 切换消息
@@ -58,7 +58,6 @@ export default defineComponent({
       otherList: [],
       promptStatus: settings.enablePlay
     })
-
 
     const enableNotice = () => {
       const enable = settings.noticeEnable = !settings.noticeEnable
@@ -79,12 +78,11 @@ export default defineComponent({
         image: item.img,
         title: item.title
       }
-    };
+    }
 
     const close = () => {
       ctx.emit('closeMessage')
     }
-
 
     const appContentList = computed(() => {   // 通过计算属性获取消息通知历史数据
       return notice.$state.notice.messageContent
@@ -97,44 +95,42 @@ export default defineComponent({
         })
         data.otherList = index
       } else {
-        return;
+
       }
     })
 
-
     const leftApp = ref([
       {
-        id: "all",
-        icon: "appstore",
-        img: "",
-        alias: "all",
-        title: "全部消息通知",
+        id: 'all',
+        icon: 'appstore',
+        img: '',
+        alias: 'all',
+        title: '全部消息通知',
         callBack: selectTab,
       },
       {
-        id: "IM",
-        icon: "",
-        img: "/icons/IM.png",
-        alias: "teamChat",
-        title: "社交网络",
+        id: 'IM',
+        icon: '',
+        img: '/icons/IM.png',
+        alias: 'teamChat',
+        title: '社交网络',
         callBack: selectTab,
       },
       {
         id: 'notice',
-        icon: "notification",
-        title: "通知",
+        icon: 'notification',
+        title: '通知',
         flag: true,
         callBack: enableNotice,
       },
       {
-        icon: "shezhi",
+        icon: 'shezhi',
         alias: 'setting',
-        title: "设置",
+        title: '设置',
         flag: true,
         callBack: clickSetting,
       },
-    ]);
-
+    ])
 
     const filterLeft = computed(() => {
 
@@ -142,13 +138,13 @@ export default defineComponent({
       if (settings.value.noticeEnable) {
 
         const openList = copyList.map((item) => {
-          return {...item, icon: item.id === 'notice' ? 'notification-off' : item.icon}
+          return { ...item, icon: item.id === 'notice' ? 'notification-off' : item.icon }
         })
         return openList
 
       } else {
         const closeList = copyList.map((item) => {
-          return {...item, icon: item.id === 'notice' ? 'notification' : item.icon}
+          return { ...item, icon: item.id === 'notice' ? 'notification' : item.icon }
         })
         return closeList
       }
@@ -161,7 +157,7 @@ export default defineComponent({
     }
 
   }
-});
+})
 
 
 </script>

@@ -20,11 +20,11 @@
 </template>
 
 <script>
-import CreateTopic from "../chat/left/createTopic.vue";
-import {mapWritableState} from "pinia";
-import {aiStore} from "../../../store/ai";
-import Edit from "./edit.vue";
-import {SettingFilled} from "@ant-design/icons-vue";
+import CreateTopic from '../chat/left/createTopic.vue'
+import { mapWritableState } from 'pinia'
+import { aiStore } from '../../../store/ai'
+import Edit from './edit.vue'
+import { SettingFilled } from '@ant-design/icons-vue'
 
 export default {
   components: {
@@ -35,22 +35,22 @@ export default {
   },
   computed: {
     ...mapWritableState(aiStore, [
-      "selectTab",
-      "isFull",
-      "temperature",
-      "count",
+      'selectTab',
+      'isFull',
+      'temperature',
+      'count',
     ]),
   },
-  data() {
+  data () {
     return {
       showRightPanel: false,
-      select: "Chat",
+      select: 'Chat',
       menuList: [
         {
-          icon: "message",
+          icon: 'message',
           // float: 'test',
           callBack: () => {
-            this.selectTab = "Chat";
+            this.selectTab = 'Chat'
           },
         },
         // {
@@ -65,25 +65,25 @@ export default {
         },
         {
           flag: true,
-          icon: "tianjia2",
+          icon: 'tianjia2',
           callBack: () => {
-            this.createChatVisible = true;
+            this.createChatVisible = true
           },
         },
 
         {
           flag: true,
-          icon: "setting",
+          icon: 'setting',
           callBack: () => {
-            this.setVisible = true;
+            this.setVisible = true
           },
         },
       ],
       setVisible: false,
       createChatVisible: false,
-    };
+    }
   },
-};
+}
 </script>
 <style lang="scss" scoped>
 </style>

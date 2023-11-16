@@ -1,20 +1,20 @@
-if(typeof ipc ==='undefined'){
-  window.ipc=require('electron').ipcRenderer
+if (typeof ipc === 'undefined') {
+  window.ipc = require('electron').ipcRenderer
 }
 
-if (typeof fs === "undefined") {
-  var fs = require("fs");
+if (typeof fs === 'undefined') {
+  var fs = require('fs')
 }
 var statsh = {
   filePath:
-    window.globalArgs["user-data-path"] +
-    (process.platform === "win32" ? "\\" : "/") +
-    "statsh.json",
+    window.globalArgs['user-data-path'] +
+    (process.platform === 'win32' ? '\\' : '/') +
+    'statsh.json',
   list: {},
   get: function (key) {
-    return statsh.list[key];
+    return statsh.list[key]
   },
-  getAll: function() {
+  getAll: function () {
     return statsh.list
   },
   /**
@@ -24,55 +24,55 @@ var statsh = {
    */
   do: function (buryObj) {
     if (
-      !buryObj.hasOwnProperty("action") ||
-      !buryObj.hasOwnProperty("key") ||
-      !buryObj.hasOwnProperty("value")
+      !buryObj.hasOwnProperty('action') ||
+      !buryObj.hasOwnProperty('key') ||
+      !buryObj.hasOwnProperty('value')
     )
-      return;
+      return
     if (
-      buryObj.hasOwnProperty("action") &&
-      buryObj.action === "increase" &&
+      buryObj.hasOwnProperty('action') &&
+      buryObj.action === 'increase' &&
       typeof buryObj.value !== 'number'
     )
-      return;
-    if (buryObj.hasOwnProperty("action") && buryObj.action === "increase") {
+      return
+    if (buryObj.hasOwnProperty('action') && buryObj.action === 'increase') {
       let prevValue = statsh.get(buryObj.key) ?? 0
-      statsh.list[buryObj.key] = prevValue + buryObj.value;
+      statsh.list[buryObj.key] = prevValue + buryObj.value
     }
-    if (buryObj.hasOwnProperty("action") && buryObj.action === "set") {
-      statsh.list[buryObj.key] = buryObj.value;
+    if (buryObj.hasOwnProperty('action') && buryObj.action === 'set') {
+      statsh.list[buryObj.key] = buryObj.value
     }
 
-    ipc.send("statshChanged", buryObj);
+    ipc.send('statshChanged', buryObj)
   },
   reset: function () {
     statsh.list = {}
     ipc.send('statshReset')
   },
   initialize: function () {
-    var fileData;
+    var fileData
     try {
-      fileData = fs.readFileSync(statsh.filePath, "utf-8");
+      fileData = fs.readFileSync(statsh.filePath, 'utf-8')
     } catch (e) {
-      if (e.code !== "ENOENT") {
-        console.warn(e);
+      if (e.code !== 'ENOENT') {
+        console.warn(e)
       }
     }
     if (fileData) {
-      statsh.list = JSON.parse(fileData);
+      statsh.list = JSON.parse(fileData)
     }
 
     //这里是在子进程中接收来自主进程的同步
-    ipc.on("statshChanged", function (e, buryObj) {
-      if (buryObj.hasOwnProperty("action") && buryObj.action === "increase") {
-        statsh.list[buryObj.key] = statsh.get(buryObj.key) + buryObj.value;
+    ipc.on('statshChanged', function (e, buryObj) {
+      if (buryObj.hasOwnProperty('action') && buryObj.action === 'increase') {
+        statsh.list[buryObj.key] = statsh.get(buryObj.key) + buryObj.value
       }
-      if (buryObj.hasOwnProperty("action") && buryObj.action === "set") {
-        statsh.list[buryObj.key] = buryObj.value;
+      if (buryObj.hasOwnProperty('action') && buryObj.action === 'set') {
+        statsh.list[buryObj.key] = buryObj.value
       }
-    });
+    })
   },
-};
+}
 
-statsh.initialize();
-module.exports = statsh;
+statsh.initialize()
+module.exports = statsh

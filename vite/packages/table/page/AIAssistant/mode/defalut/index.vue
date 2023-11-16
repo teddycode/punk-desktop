@@ -17,26 +17,26 @@
 </template>
 
 <script>
-import {dafalutData} from "./dafalutData";
+import { dafalutData } from './dafalutData'
 
-import {mapWritableState} from "pinia";
-import {aiStore} from "../../../../store/ai";
+import { mapWritableState } from 'pinia'
+import { aiStore } from '../../../../store/ai'
 
 export default {
   computed: {
-    ...mapWritableState(aiStore, ["isMode"]),
+    ...mapWritableState(aiStore, ['isMode']),
   },
-  data() {
+  data () {
     return {
       dafalutData,
-    };
+    }
   },
   methods: {
-    useDome() {
-      this.isMode = !this.isMode;
+    useDome () {
+      this.isMode = !this.isMode
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

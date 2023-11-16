@@ -147,112 +147,112 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from "pinia";
-import {screenStore} from "../../store/screen";
-import {EditOutlined} from "@ant-design/icons-vue";
-import {mainIPC} from "../../js/common/screenIPC";
-import {Modal} from "ant-design-vue";
+import { mapActions, mapWritableState } from 'pinia'
+import { screenStore } from '../../store/screen'
+import { EditOutlined } from '@ant-design/icons-vue'
+import { mainIPC } from '../../js/common/screenIPC'
+import { Modal } from 'ant-design-vue'
 
 export default {
-  name: "ScreenManage",
-  data() {
+  name: 'ScreenManage',
+  data () {
     return {
       currentScreen: {},
       editing: false,
-      newTitle: "",
-    };
+      newTitle: '',
+    }
   },
-  components: {EditOutlined},
+  components: { EditOutlined },
   computed: {
-    ...mapWritableState(screenStore, ["screens"]),
+    ...mapWritableState(screenStore, ['screens']),
   },
 
-  mounted() {
+  mounted () {
     this.screens.forEach((s) => {
       if (!s.settings) {
-        s.settings = {};
+        s.settings = {}
       }
-    });
+    })
     this.screens.map((s) => {
       if (s.active) {
-        this.currentScreen = s;
+        this.currentScreen = s
       }
-    });
+    })
   },
   methods: {
     ...mapActions(screenStore, [
-      "startupScreen",
-      "tagScreen",
-      "stopScreen",
-      "add",
+      'startupScreen',
+      'tagScreen',
+      'stopScreen',
+      'add',
     ]),
-    addScreen() {
-      let s = this.add();
-      this.select(s.key);
+    addScreen () {
+      let s = this.add()
+      this.select(s.key)
     },
-    toggleScreen(checked) {
+    toggleScreen (checked) {
       if (checked) {
-        this.startupScreen(this.currentScreen.key);
+        this.startupScreen(this.currentScreen.key)
       } else {
-        this.stopScreen(this.currentScreen.key);
-        this.currentScreen.running = false;
+        this.stopScreen(this.currentScreen.key)
+        this.currentScreen.running = false
       }
     },
-    toggleEdit() {
-      if (this.currentScreen.key === "main") return;
-      this.editing = !this.editing;
+    toggleEdit () {
+      if (this.currentScreen.key === 'main') return
+      this.editing = !this.editing
       if (this.editing) {
-        this.newTitle = "";
+        this.newTitle = ''
       }
     },
-    setTitle() {
-      this.currentScreen.title = this.newTitle;
-      this.toggleEdit();
-      mainIPC.sendToSub(this.currentScreen.key, "updateDetail", {
+    setTitle () {
+      this.currentScreen.title = this.newTitle
+      this.toggleEdit()
+      mainIPC.sendToSub(this.currentScreen.key, 'updateDetail', {
         detail: JSON.parse(JSON.stringify(this.currentScreen)),
-      });
+      })
     },
-    dblclick(screen) {
-      if (screen.key !== "main") this.startupScreen(screen.key);
+    dblclick (screen) {
+      if (screen.key !== 'main') this.startupScreen(screen.key)
     },
-    restore() {
-      mainIPC.sendToSub(this.currentScreen.key, "restore");
+    restore () {
+      mainIPC.sendToSub(this.currentScreen.key, 'restore')
     },
-    select(key) {
+    select (key) {
       this.screens.map((s) => {
-        s.active = false;
+        s.active = false
         if (s.key === key) {
-          this.currentScreen = s;
-          s.active = true;
+          this.currentScreen = s
+          s.active = true
         }
-      });
+      })
     },
-    remove() {
+    remove () {
       Modal.confirm({
         centered: true,
         content:
-            "确认删除分屏？此操作不可恢复，将丢失分屏全部的设置，请谨慎操作。",
+            '确认删除分屏？此操作不可恢复，将丢失分屏全部的设置，请谨慎操作。',
         onOk: () => {
           this.screens.splice(
               this.screens.findIndex((s) => {
-                return s.key === this.currentScreen.key;
+                return s.key === this.currentScreen.key
               }),
               1
-          );
-          this.select("main");
+          )
+          this.select('main')
         },
-        okText: "确认删除",
-      });
+        okText: '确认删除',
+      })
     },
-    click(screen) {
-      this.currentScreen = screen;
+    click (screen) {
+      this.currentScreen = screen
       this.screens.forEach((s) => {
-        s.active = false;
-      });
-      screen.active = true;
+        s.active = false
+      })
+      screen.active = true
     },
   },
-};
+}
 </script>
 <style lang="scss">
 .btn {

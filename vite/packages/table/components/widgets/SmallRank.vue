@@ -6,7 +6,8 @@
       :menuList="toggleRankingList"
       :options="options"
       :sizeList="sizeList">
-    <div class="bg-mask rounded-lg px-3 py-1 pointer" style="position: absolute;left: 45px;top:10px;background: var(--primary-bg);color:var(--primary-text)"
+    <div class="bg-mask rounded-lg px-3 py-1 pointer"
+         style="position: absolute;left: 45px;top:10px;background: var(--primary-bg);color:var(--primary-text)"
          @click="showDrawer">
       {{ rankingType[rankIndex].title }}
     </div>
@@ -54,9 +55,9 @@
 
 <script>
 import Widget from '../card/Widget.vue'
-import {mapActions} from 'pinia'
-import {appStore} from '../../store'
-import {inviteList, onLineList, signInList, teamList} from "../../js/rank"
+import { mapActions } from 'pinia'
+import { appStore } from '../../store'
+import { inviteList, onLineList, signInList, teamList } from '../../js/rank'
 import RankList from '../rank/RankList.vue'
 
 export default {
@@ -79,10 +80,15 @@ export default {
       type: Object
     }
   },
-  data() {
+  data () {
     return {
-      options: {className: 'card small', title: '', icon: 'linechart', type: 'smallRank'},
-      sizeList: [{title: '1x1', height: 1, width: 1, name: '1x1'}, {title: '1x2', height: 2, width: 1, name: '1x2'},],
+      options: { className: 'card small', title: '', icon: 'linechart', type: 'smallRank' },
+      sizeList: [{ title: '1x1', height: 1, width: 1, name: '1x1' }, {
+        title: '1x2',
+        height: 2,
+        width: 1,
+        name: '1x2'
+      },],
       //在线时长榜
       onLineList,
       // 小队榜
@@ -94,38 +100,38 @@ export default {
       middleShow: false,
       toggleRankingList: [{
         icon: 'shezhi1', title: '设置', fn: () => {
-          this.middleShow = true;
+          this.middleShow = true
           this.$refs.rankingSmallSlot.visible = false
         }
       }],
       rankingType: [
-        {title: '总在线时长榜', name: 'total'},
-        {title: '净在线时长榜', name: 'net'},
-        {title: '小队榜', name: 'team'},
-        {title: '邀请榜', name: 'invite'},
-        {title: '今日签到榜', name: 'today'},
-        {title: '累计签到榜', name: 'accrue'},
-        {title: '连续签到榜', name: 'series'},
+        { title: '总在线时长榜', name: 'total' },
+        { title: '净在线时长榜', name: 'net' },
+        { title: '小队榜', name: 'team' },
+        { title: '邀请榜', name: 'invite' },
+        { title: '今日签到榜', name: 'today' },
+        { title: '累计签到榜', name: 'accrue' },
+        { title: '连续签到榜', name: 'series' },
       ],
       rankIndex: 0
     }
   },
-  mounted() {
+  mounted () {
     if (this.customData?.id) {
       this.rankIndex = this.customData.id
     }
   },
   methods: {
     ...mapActions(appStore, ['showUserCard']),
-    showCard(uid) {
+    showCard (uid) {
       this.showUserCard(uid)
     },
-    getRankingType(item, index) {
+    getRankingType (item, index) {
       this.customData.id = index
       this.rankIndex = this.customData.id
       this.middleShow = false
     },
-    showDrawer() {
+    showDrawer () {
       this.middleShow = true
       this.$refs.rankingSmallSlot.visible = false
     }

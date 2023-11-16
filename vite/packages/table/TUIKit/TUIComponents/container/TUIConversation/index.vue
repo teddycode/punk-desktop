@@ -17,13 +17,13 @@
   </div>
 </template>
 <script>
-import {computed, defineComponent, defineExpose, nextTick, onMounted, reactive, toRefs, watch} from 'vue';
-import TUIConversationList from './components/list';
-import {caculateTimeago, isArrayEqual} from '../utils';
-import {handleAt, handleAvatar, handleName, handleShowLastMessage} from '../TUIChat/utils/utils';
-import {message} from "ant-design-vue";
-import {useRouter} from 'vue-router'
-import {chatStore} from '../../../../store/chat'
+import { computed, defineComponent, defineExpose, nextTick, onMounted, reactive, toRefs, watch } from 'vue'
+import TUIConversationList from './components/list'
+import { caculateTimeago, isArrayEqual } from '../utils'
+import { handleAt, handleAvatar, handleName, handleShowLastMessage } from '../TUIChat/utils/utils'
+import { message } from 'ant-design-vue'
+import { useRouter } from 'vue-router'
+import { chatStore } from '../../../../store/chat'
 
 const TUIConversation = defineComponent({
   name: 'TUIConversation',
@@ -37,8 +37,8 @@ const TUIConversation = defineComponent({
       default: false,
     },
   },
-  setup(props, ctx) {
-    const TUIServer = TUIConversation?.TUIServer;
+  setup (props, ctx) {
+    const TUIServer = TUIConversation?.TUIServer
     const router = useRouter()
 
     const chat = chatStore()
@@ -53,9 +53,9 @@ const TUIConversation = defineComponent({
         handleShowMessage: (item) => handleShowLastMessage(item),
         handleItemTime: (time) => {
           if (time > 0) {
-            return caculateTimeago(time * 1000);
+            return caculateTimeago(time * 1000)
           }
-          return '';
+          return ''
         },
       },
       userIDList: [],
@@ -63,11 +63,11 @@ const TUIConversation = defineComponent({
       env: TUIServer?.TUICore?.TUIEnv,
       displayOnlineStatus: false,
       userStatusList: new Map(),
-    });
+    })
 
-    TUIServer.bind(data);
+    TUIServer.bind(data)
 
-    TUIConversationList.TUIServer = TUIServer;
+    TUIConversationList.TUIServer = TUIServer
 
     watch(() => data.conversationData.list,
         (newVal) => {
@@ -77,38 +77,38 @@ const TUIConversation = defineComponent({
             let bIndex = b.isPinned ? 1 : 0
             return bIndex - aIndex
           })
-        });
+        })
 
     watch(
         () => data.currentConversationID,
         (newVal) => {
-          ctx.emit('current', newVal);
+          ctx.emit('current', newVal)
         },
         {
           deep: true,
         }
-    );
+    )
 
     watch(
         () => props.displayOnlineStatus,
         async (newVal, oldVal) => {
-          if (newVal === oldVal) return;
-          data.displayOnlineStatus = newVal;
-          TUIServer.TUICore.TUIServer.TUIContact.handleUserStatus(data.displayOnlineStatus, [...data.userIDList]);
+          if (newVal === oldVal) return
+          data.displayOnlineStatus = newVal
+          TUIServer.TUICore.TUIServer.TUIContact.handleUserStatus(data.displayOnlineStatus, [...data.userIDList])
         },
-        {immediate: true}
-    );
+        { immediate: true }
+    )
 
     watch(
         () => [...data.userIDList],
         async (newVal, oldVal) => {
-          if (isArrayEqual(newVal, oldVal)) return;
-          TUIServer.TUICore.TUIServer.TUIContact.handleUserStatus(data.displayOnlineStatus, [...data.userIDList]);
+          if (isArrayEqual(newVal, oldVal)) return
+          TUIServer.TUICore.TUIServer.TUIContact.handleUserStatus(data.displayOnlineStatus, [...data.userIDList])
         },
         {
           deep: true,
         }
-    );
+    )
 
     const updateList = () => {
       TUIServer.TUICore.TUIServer.TUIConversationList.handleConversationListUpdate(data)
@@ -119,14 +119,14 @@ const TUIConversation = defineComponent({
     })
 
     const isNetwork = computed(() => {
-      const disconnected = data.netWork === TUIServer.TUICore.TIM.TYPES.NET_STATE_DISCONNECTED;
-      const connecting = data.netWork === TUIServer.TUICore.TIM.TYPES.NET_STATE_CONNECTING;
-      return disconnected || connecting;
-    });
+      const disconnected = data.netWork === TUIServer.TUICore.TIM.TYPES.NET_STATE_DISCONNECTED
+      const connecting = data.netWork === TUIServer.TUICore.TIM.TYPES.NET_STATE_CONNECTING
+      return disconnected || connecting
+    })
 
     const handleCurrentConversation = (value) => {
-      TUIServer.handleCurrentConversation(value);
-    };
+      TUIServer.handleCurrentConversation(value)
+    }
 
     onMounted(() => {
       // 检测会话列表是不是为空列表
@@ -135,39 +135,38 @@ const TUIConversation = defineComponent({
         const isEmptyList = window.$TUIKit.TUIServer?.TUIConversation.currentStore?.conversationData?.list
         if (isEmptyList.length !== 0) {
           if (isEmptySting !== '') {
-            data.currentConversationID = isEmptySting;
+            data.currentConversationID = isEmptySting
             window.$TUIKit.TUIServer.TUIConversation.getConversationProfile(isEmptySting).then((imResponse) => {
               // 通知 TUIConversation 添加当前会话
               // Notify TUIConversation to toggle the current conversation
-              window.$TUIKit.TUIServer.TUIConversation.handleCurrentConversation(imResponse.data.conversation);
+              window.$TUIKit.TUIServer.TUIConversation.handleCurrentConversation(imResponse.data.conversation)
             })
           } else {
             // console.log('缓存为空数据',status);
             const name = isEmptyList[0].conversationID
-            data.currentConversationID = name;
+            data.currentConversationID = name
             window.$TUIKit.TUIServer.TUIConversation.getConversationProfile(name).then((imResponse) => {
               // 通知 TUIConversation 添加当前会话
               // Notify TUIConversation to toggle the current conversation
-              window.$TUIKit.TUIServer.TUIConversation.handleCurrentConversation(imResponse.data.conversation);
+              window.$TUIKit.TUIServer.TUIConversation.handleCurrentConversation(imResponse.data.conversation)
             })
           }
         } else {
           message.warn('温馨提示,当前聊天页没有对话,进入发现页创建聊天会话或者点击左侧栏底部添加按钮创建')
-          router.push({name: 'chatFind'})
+          router.push({ name: 'chatFind' })
         }
       })
     })
-
 
     return {
       ...toRefs(data),
       handleCurrentConversation,
       updateList,
       isNetwork,
-    };
+    }
   },
-});
-export default TUIConversation;
+})
+export default TUIConversation
 </script>
 
 <style lang="scss" scoped src="./style/index.scss"></style>

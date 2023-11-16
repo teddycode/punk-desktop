@@ -55,16 +55,16 @@
 </template>
 
 <script>
-import Widget from '../../card/Widget.vue';
-import NewsItem from './NewsItem.vue';
-import {mapActions, mapWritableState} from 'pinia'
-import DataStatu from "../DataStatu.vue"
-import {newsStore} from '../../../store/news.ts'
-import NewsCardDrawer from "./NewsCardDrawer.vue";
-import {FileSearchOutlined, HolderOutlined, LeftOutlined, RightOutlined} from '@ant-design/icons-vue'
+import Widget from '../../card/Widget.vue'
+import NewsItem from './NewsItem.vue'
+import { mapActions, mapWritableState } from 'pinia'
+import DataStatu from '../DataStatu.vue'
+import { newsStore } from '../../../store/news.ts'
+import NewsCardDrawer from './NewsCardDrawer.vue'
+import { FileSearchOutlined, HolderOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons-vue'
 
 export default {
-  name: "News",
+  name: 'News',
   props: {
     customIndex: {
       type: Number,
@@ -89,7 +89,7 @@ export default {
     HolderOutlined,
     FileSearchOutlined
   },
-  data() {
+  data () {
     return {
       settingVisible: false,
       sizeList: [
@@ -124,7 +124,7 @@ export default {
           icon: 'shezhi1',
           title: '设置',
           fn: () => {
-            this.settingVisible = true;
+            this.settingVisible = true
             this.$refs.cardSlot.visible = false
           }
         },
@@ -200,20 +200,20 @@ export default {
     }
   },
   methods: {
-    setCurrentIndex(index) {
+    setCurrentIndex (index) {
       this.currentIndex = index
       this.customData.index = this.currentIndex
       this.getNewsData()
       this.customData.newsList = this.newsMsgList
       // console.log(this.customData.newsList,'newsList')
-      console.log(this.customData, 'customData');
+      console.log(this.customData, 'customData')
     },
-    setSortedList(arrList) {
+    setSortedList (arrList) {
       // 获取拖拽排序后数据
       this.customData.sortList = arrList
     },
     ...mapActions(newsStore, ['getNewsMsg']),
-    getNewsData() {
+    getNewsData () {
       let tag = this.showList[this.currentIndex].tag
       this.customData.tag = tag
       this.getNewsMsg(this.customData.tag)
@@ -224,7 +224,7 @@ export default {
   },
   computed: {
 
-    aggList() {
+    aggList () {
       if (this.customData && this.customData.sortList) {
         return this.customData.sortList
       } else {
@@ -232,18 +232,18 @@ export default {
       }
     },
     ...mapWritableState(newsStore, ['newsMsgList']),
-    showList() {
+    showList () {
       return this.aggList.slice(0, this.copyItem)
     },
     // 判断尺寸大小
-    showSize() {
+    showSize () {
       if (this.customData && this.customData.width && this.customData.height) {
-        return {width: this.customData.width, height: this.customData.height}
+        return { width: this.customData.width, height: this.customData.height }
       }
       return this.sizeList[0]
     },
     // 判断不同高度返回不同个数
-    copyNum() {
+    copyNum () {
       // return this.showSize.height == 2 ? 6 : 10
       if (this.showSize.width == 1) {
         return 4
@@ -252,11 +252,11 @@ export default {
 
     },
     // 判断top-bar需要几个标签
-    copyItem() {
+    copyItem () {
       return this.showSize.width == 1 ? 3 : 8
     },
     // 通过接口返回的数据进行裁切，返回适合页面长度的数据
-    newsItemList() {
+    newsItemList () {
       if (this.customData && this.customData.newsList?.length) {
         // console.log(this.customData.newsList,'newsList');
         if (this.customData.newsList.tag) {
@@ -268,14 +268,14 @@ export default {
       return this.newsMsgList.slice(0, this.copyNum)
 
     },
-    currentTag() {
+    currentTag () {
       if (this.customData && this.customData.index) {
         return this.showList[this.customData.index].title
       }
       return this.showList[this.currentIndex].title
     }
   },
-  async mounted() {
+  async mounted () {
     this.isLoading = true
     await this.getNewsMsg(this.showList[this.currentIndex].tag)
     // await this.getNewsData()

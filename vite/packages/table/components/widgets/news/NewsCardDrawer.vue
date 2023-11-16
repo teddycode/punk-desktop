@@ -23,8 +23,8 @@
 </template>
 
 <script>
-import {HolderOutlined} from '@ant-design/icons-vue'
-import Sortable from 'sortablejs';
+import { HolderOutlined } from '@ant-design/icons-vue'
+import Sortable from 'sortablejs'
 
 export default {
   props: {
@@ -36,7 +36,7 @@ export default {
   components: {
     HolderOutlined
   },
-  mounted() {
+  mounted () {
     const el = this.$refs.aggDropRef
     new Sortable(el, {
       group: 'sortableGroup',
@@ -45,7 +45,7 @@ export default {
   },
   methods: {
 
-    onSortEnd(evt) {
+    onSortEnd (evt) {
       let newIndex = evt.newIndex, oldIndex = evt.oldIndex
       let newItem = this.$refs.aggDropRef.children[newIndex]
       let oldItem = this.$refs.aggDropRef.children[oldIndex]
@@ -66,7 +66,6 @@ export default {
     }
 
   }
-
 
 }
 </script>

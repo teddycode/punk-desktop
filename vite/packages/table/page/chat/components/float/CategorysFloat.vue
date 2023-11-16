@@ -66,13 +66,16 @@
               </template>
             </div>
             <span class="font-16 ml-2 truncate" style="color: var(--primary-text);">{{ item.name || item.title }}</span>
-            <communityIcon v-if="item.type === 'link' && item.name !== 'Roadmap' && JSON.parse(item.props)?.openMethod !== 'currentPage'" class="ml-1 xt-text-2 flip " icon="fluent:open-20-filled"
-                           style="font-size: 24px"/>
+            <communityIcon
+                v-if="item.type === 'link' && item.name !== 'Roadmap' && JSON.parse(item.props)?.openMethod !== 'currentPage'"
+                class="ml-1 xt-text-2 flip " icon="fluent:open-20-filled"
+                style="font-size: 24px"/>
           </template>
         </div>
       </div>
       <transition name="slide-fade">
-        <MenuDropdown v-if="showTopMenu" :id="currentID" :item="categoryItem" :list="listType === 'link' ? channelMenu : [channelMenu[1]]"
+        <MenuDropdown v-if="showTopMenu" :id="currentID" :item="categoryItem"
+                      :list="listType === 'link' ? channelMenu : [channelMenu[1]]"
                       :no="categoryList.no" :position="position"
                       class="dropdown-menu"></MenuDropdown>
       </transition>
@@ -97,8 +100,10 @@
               </template>
             </div>
             <span class="font-16 ml-2 truncate" style="color: var(--primary-text);">{{ item.name || item.title }}</span>
-            <communityIcon v-if="item.type === 'link' && item.name !== 'Roadmap' && JSON.parse(item.props)?.openMethod !== 'currentPage'" class="ml-1 xt-text-2 flip " icon="fluent:open-20-filled"
-                           style="font-size: 24px"/>
+            <communityIcon
+                v-if="item.type === 'link' && item.name !== 'Roadmap' && JSON.parse(item.props)?.openMethod !== 'currentPage'"
+                class="ml-1 xt-text-2 flip " icon="fluent:open-20-filled"
+                style="font-size: 24px"/>
           </template>
         </div>
       </div>
@@ -137,8 +142,10 @@
               <span class="font-16 ml-2 truncate" style="color: var(--primary-text);">{{
                   item.name || item.title
                 }}</span>
-              <communityIcon v-if="item.type === 'link' && item.name !== 'Roadmap' && JSON.parse(item.props)?.openMethod !== 'currentPage' " class="ml-1 xt-text-2 flip " icon="fluent:open-20-filled"
-                             style="font-size: 24px"/>
+              <communityIcon
+                  v-if="item.type === 'link' && item.name !== 'Roadmap' && JSON.parse(item.props)?.openMethod !== 'currentPage' "
+                  class="ml-1 xt-text-2 flip " icon="fluent:open-20-filled"
+                  style="font-size: 24px"/>
             </template>
 
           </div>
@@ -167,8 +174,10 @@
                   item.name || item.title
                 }}</span>
 
-              <communityIcon v-if="item.type === 'link' && item.name !== 'Roadmap' && JSON.parse(item.props)?.openMethod !== 'currentPage'" class="ml-1 xt-text-2 flip " icon="fluent:open-20-filled"
-                             style="font-size: 24px"/>
+              <communityIcon
+                  v-if="item.type === 'link' && item.name !== 'Roadmap' && JSON.parse(item.props)?.openMethod !== 'currentPage'"
+                  class="ml-1 xt-text-2 flip " icon="fluent:open-20-filled"
+                  style="font-size: 24px"/>
             </template>
           </div>
         </div>
@@ -187,9 +196,9 @@
 </template>
 
 <script>
-import {mapWritableState} from 'pinia'
-import {chatStore} from '../../../../store/chat'
-import {communityStore} from '../../store/communityStore'
+import { mapWritableState } from 'pinia'
+import { chatStore } from '../../../../store/chat'
+import { communityStore } from '../../store/communityStore'
 import {
   categoryMenu,
   channelMenu,
@@ -198,9 +207,9 @@ import {
   memberShowList,
   showDropList
 } from '../../../../js/data/chatList'
-import {Icon as CommunityIcon} from '@iconify/vue'
+import { Icon as CommunityIcon } from '@iconify/vue'
 
-import ChatDropDown from './ChatsDropDown.vue';
+import ChatDropDown from './ChatsDropDown.vue'
 import ChatFold from './ChatFolds.vue'
 import MenuDropdown from './MenuDropdowns.vue'
 
@@ -211,12 +220,12 @@ export default {
     CommunityIcon, ChatDropDown, ChatFold, MenuDropdown,
   },
 
-  data() {
+  data () {
     return {
       emptyList: [
-        {icon: 'fluent:people-add-16-regular', name: '邀请其他人', type: 'inviteOther'},
-        {icon: 'fluent:apps-add-in-20-filled', name: '添加新应用', type: 'addChannel'},
-        {icon: 'fluent:add-16-filled', name: '添加新分组', type: 'addNewGroup'},
+        { icon: 'fluent:people-add-16-regular', name: '邀请其他人', type: 'inviteOther' },
+        { icon: 'fluent:apps-add-in-20-filled', name: '添加新应用', type: 'addChannel' },
+        { icon: 'fluent:add-16-filled', name: '添加新分组', type: 'addNewGroup' },
       ],
       currentID: '',
       settingsScroller: {
@@ -227,7 +236,7 @@ export default {
         wheelPropagation: true
       },
       emptyImage: '/img/state/null.png',
-      position: {x: 0, y: 0},
+      position: { x: 0, y: 0 },
       categoryShowMenu: false,
       showTopMenu: false,
       showMenuIndex: -1,
@@ -238,17 +247,17 @@ export default {
     }
   },
 
-  mounted() {
-    document.addEventListener('click', this.hideDropdown);
+  mounted () {
+    document.addEventListener('click', this.hideDropdown)
   },
 
   computed: {
     ...mapWritableState(communityStore, ['categoryList']),
     ...mapWritableState(chatStore, ['settings']),
-    isDoubleColumn() {
+    isDoubleColumn () {
       return this.settings.showDouble
     },
-    floatList() {
+    floatList () {
       if (this.float) {
         if (this.communityID.no === 1) {
           return memberShowList
@@ -272,7 +281,7 @@ export default {
       }
     },
 
-    channelList() {
+    channelList () {
       // console.log('获取数据::>>111',this.categoryList.tree.length);
       if (this.categoryList.tree !== undefined) {
         const list = this.categoryList.tree.filter((item) => {
@@ -285,7 +294,7 @@ export default {
 
     },
 
-    categoryFilterList() {
+    categoryFilterList () {
       // console.log('获取数据::>>222',this.categoryList.tree.length);
       if (this.categoryList.tree !== undefined) {
         const list = this.categoryList.tree.filter((item) => {
@@ -300,44 +309,43 @@ export default {
   },
 
   methods: {
-    clickEmptyButton(item) {
+    clickEmptyButton (item) {
       this.$emit('createCategory', item)
     },
-    currentItem(item) {
+    currentItem (item) {
       // console.log('排查当前点击::>',item);
       this.currentID = item.id
       this.$emit('clickItem', item)
     },
 
     // 顶级频道鼠标右键点击
-    topChannel(evt, item) {
+    topChannel (evt, item) {
       // console.log('顶级频道::>',item);
       this.listType = item.type
       this.currentID = item.id
       this.categoryItem = item
       this.showTopMenu = true
-      this.position = {x: evt.clientX - 50, y: evt.clientY + 25};
+      this.position = { x: evt.clientX - 50, y: evt.clientY + 25 }
     },
 
     // 带有子级的频道的一级目录
-    topCategory(evt, item) {
+    topCategory (evt, item) {
       //  console.log('带父级的的频道目录',item.id)
       this.currentID = item.id
       this.categoryItem = item
       this.categoryShowMenu = true
-      this.position = {x: evt.clientX - 50, y: evt.clientY + 10};
+      this.position = { x: evt.clientX - 50, y: evt.clientY + 10 }
     },
 
-
     // 隐藏下拉菜单
-    hideDropdown(evt) {
-      evt.preventDefault();
+    hideDropdown (evt) {
+      evt.preventDefault()
       this.showTopMenu = false
       this.categoryShowMenu = false
     },
 
     // 检测群聊是否为好友工作群
-    isWorkGroup(item) {
+    isWorkGroup (item) {
       // const data = JSON.parse(item.props);
       // const list = window.$TUIKit.store.store.TUIGroup.groupList
       // const index = list.findIndex((findItem)=>{
@@ -349,11 +357,10 @@ export default {
       return true
     }
 
-
   },
 
-  destroyed() {
-    document.removeEventListener('click', this.hideDropdown);
+  destroyed () {
+    document.removeEventListener('click', this.hideDropdown)
   },
 }
 

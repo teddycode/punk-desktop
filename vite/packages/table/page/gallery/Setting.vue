@@ -134,9 +134,9 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from 'pinia'
-import {paperStore} from '../../store/paper'
-import {Icon as iconify} from '@iconify/vue'
+import { mapActions, mapWritableState } from 'pinia'
+import { paperStore } from '../../store/paper'
+import { Icon as iconify } from '@iconify/vue'
 
 export default {
   name: 'Setting',
@@ -146,7 +146,7 @@ export default {
   components: {
     iconify
   },
-  data() {
+  data () {
     return {
       settingsScroller: {
         useBothWheelAxes: true,
@@ -158,14 +158,14 @@ export default {
 
     }
   },
-  mounted() {
+  mounted () {
     if (!this.settings) {
       this.resetPapersSettings()
     }
   },
   methods: {
     ...mapActions(paperStore, ['resetPapersSettings']),
-    async showSaveDialog() {
+    async showSaveDialog () {
       let savePath = await tsbApi.dialog.showOpenDialog({
         title: '选择目录', message: '请选择下载壁纸的目录', properties: [
           'openDirectory', 'createDirectory',
@@ -176,11 +176,10 @@ export default {
       } else {
       }
     },
-    selectSource(source) {
+    selectSource (source) {
       this.settings.wallSource = source
     }
   },
-
 
 }
 </script>

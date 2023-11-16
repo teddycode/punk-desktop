@@ -84,10 +84,9 @@
 import NotShortcutKey from './NotShortcutKey.vue'
 import ShortcutKeyDetail from '../shortcutKey/ShortcutKeyDetail.vue'
 import Search from '../../../components/Search.vue'
-import {mapActions, mapWritableState} from 'pinia'
-import {keyStore} from '../store'
+import { mapActions, mapWritableState } from 'pinia'
+import { keyStore } from '../store'
 import XtButton from '../../../ui/libs/Button/index.vue'
-
 
 export default {
   name: 'ShortcutKey',
@@ -97,7 +96,7 @@ export default {
     Search,
     NotShortcutKey
   },
-  data() {
+  data () {
     return {
 
       // 跳转详情
@@ -185,32 +184,31 @@ export default {
   computed: {
     ...mapWritableState(keyStore, ['shortcutKeyList', 'schemeList', 'currentApp']),
   },
-  mounted() {
+  mounted () {
     this.detailToggle = false
     this.loadShortcutSchemes()
 
   },
 
-
   methods: {
     ...mapActions(keyStore, ['setRecentlyUsedList', 'loadShortcutSchemes']),
     //点击跳转到详情页
-    btnDetail(item) {
+    btnDetail (item) {
       this.setRecentlyUsedList(item)
       this.detailToggle = true
     },
-    detailShow(val) {
+    detailShow (val) {
       this.detailToggle = val
     },
     //跳转到分享页
-    share() {
-      this.$router.push({name: 'shareKey'})
+    share () {
+      this.$router.push({ name: 'shareKey' })
     },
     // 跳转到创意市场
-    market() {
-      this.$router.push({name: 'creativeMarket'})
+    market () {
+      this.$router.push({ name: 'creativeMarket' })
     },
-    changeInput(event) {
+    changeInput (event) {
       // console.log('输入框',event)
     },
   },

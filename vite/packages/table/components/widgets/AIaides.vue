@@ -90,14 +90,14 @@
 </template>
 
 <script>
-import Widget from "../card/Widget.vue";
-import {MessageOutlined, RobotOutlined, SendOutlined,} from "@ant-design/icons-vue";
-import DataStatu from "./DataStatu.vue";
-import {aiStore} from "../../store/ai";
-import {mapWritableState} from "pinia";
+import Widget from '../card/Widget.vue'
+import { MessageOutlined, RobotOutlined, SendOutlined, } from '@ant-design/icons-vue'
+import DataStatu from './DataStatu.vue'
+import { aiStore } from '../../store/ai'
+import { mapWritableState } from 'pinia'
 
 export default {
-  name: "AIaides",
+  name: 'AIaides',
   components: {
     Widget,
     MessageOutlined,
@@ -119,55 +119,55 @@ export default {
       type: Object,
     },
   },
-  data() {
+  data () {
     return {
       sizeList: [
-        {title: "2x2", height: 1, width: 1, name: "2x2"},
-        {title: "2x4", height: 2, width: 1, name: "2x4"},
+        { title: '2x2', height: 1, width: 1, name: '2x2' },
+        { title: '2x4', height: 2, width: 1, name: '2x4' },
       ],
       options: {
-        className: "card small ",
-        title: "AI助手",
-        icon: "",
-        type: "AIaides",
+        className: 'card small ',
+        title: 'AI助手',
+        icon: '',
+        type: 'AIaides',
       },
       currentIndex: 0,
       settingVisible: false,
-      inputValue: "",
-    };
+      inputValue: '',
+    }
   },
   methods: {
     // 跳转至AI，并创建新对话
-    enterMsg() {
-      if (this.inputValue == "") {
-        return;
+    enterMsg () {
+      if (this.inputValue == '') {
+        return
       }
 
-      this.$router.push({name: "ai", params: {value: this.inputValue}});
-      this.inputValue = "";
+      this.$router.push({ name: 'ai', params: { value: this.inputValue } })
+      this.inputValue = ''
     },
     // 跳转至具体会话
-    goPage(index) {
-      console.log(index);
-      this.selectTopicIndex = this.recentList[index].id;
-      this.$router.push({name: "ai"});
+    goPage (index) {
+      console.log(index)
+      this.selectTopicIndex = this.recentList[index].id
+      this.$router.push({ name: 'ai' })
     },
   },
   computed: {
-    ...mapWritableState(aiStore, ["recentList", "selectTopicIndex"]),
+    ...mapWritableState(aiStore, ['recentList', 'selectTopicIndex']),
     // 判断尺寸大小
-    showSize() {
+    showSize () {
       if (this.customData && this.customData.width && this.customData.height) {
-        return {width: this.customData.width, height: this.customData.height};
+        return { width: this.customData.width, height: this.customData.height }
       }
-      return this.sizeList[0];
+      return this.sizeList[0]
     },
     // 判断不同高度返回不同具体会话个数
-    copyNum() {
-      return this.showSize.height == 1 ? 1 : this.recentList?.slice(0, 4).length;
+    copyNum () {
+      return this.showSize.height == 1 ? 1 : this.recentList?.slice(0, 4).length
     },
   },
-};
+}
 </script>
 <style lang="scss" scoped>
 .content {

@@ -13,7 +13,8 @@
                 <template #actions>
                   <div v-if="!item.target && item.href">
 
-                    <a-progress v-if="item.hasPercent" :format="()=>{return ''}" :percent="item.percent()" :strokeWidth="20"
+                    <a-progress v-if="item.hasPercent" :format="()=>{return ''}" :percent="item.percent()"
+                                :strokeWidth="20"
                                 :width="20" style="margin-right: 10px"
                                 type="circle"></a-progress>
                     <a @click="go(item.href)">{{ item.hrefText || '去设置' }}</a>
@@ -45,22 +46,22 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from 'pinia'
-import {appStore} from '../../store'
-import {CodeTwoTone} from '@ant-design/icons-vue'
+import { mapActions, mapWritableState } from 'pinia'
+import { appStore } from '../../store'
+import { CodeTwoTone } from '@ant-design/icons-vue'
 
 export default {
   name: 'develop',
   components: {
     CodeTwoTone
   },
-  data() {
+  data () {
     return {
       currentStep: '',
       steps: []
     }
   },
-  mounted() {
+  mounted () {
     const steps = [
       {
         title: '基础设置',
@@ -187,11 +188,11 @@ export default {
   },
   methods: {
     ...mapActions(appStore, ['toggleDebug']),
-    go(path) {
-      this.$router.push({path})
+    go (path) {
+      this.$router.push({ path })
     },
-    addTab(url) {
-      ipc.send('addTab', {url: url})
+    addTab (url) {
+      ipc.send('addTab', { url: url })
     }
   }
 }

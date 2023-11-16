@@ -1,21 +1,21 @@
-const {config} = require('../../server-config.js')
+const { config } = require('../../server-config.js')
 const serverConfig = {
 
-    apiUrl: {
-        user: {
-            login: "/login",
-            home: '/',
-            profile: '/user/info',
-            account: "/user/account-info"
-        },
-        group: {
-            index: "/groups",
-
-        }
+  apiUrl: {
+    user: {
+      login: '/login',
+      home: '/',
+      profile: '/user/info',
+      account: '/user/account-info'
     },
-    getUrl(path) {
-        return config.SERVER_BASE_URL + path
+    group: {
+      index: '/groups',
+
     }
+  },
+  getUrl (path) {
+    return config.SERVER_BASE_URL + path
+  }
 
 }
 

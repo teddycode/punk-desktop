@@ -37,110 +37,110 @@
 
 <script>
 export default {
-  name: "XtTab",
-  data() {
+  name: 'XtTab',
+  data () {
     return {
-      valueData: "", // 选中值
-    };
+      valueData: '', // 选中值
+    }
   },
-  mounted() {
+  mounted () {
     // 在组件挂载时设置初始选中值
-    this.valueData = this.modelValue || this.list[0][`${this.value}`] || "";
+    this.valueData = this.modelValue || this.list[0][`${this.value}`] || ''
   },
   watch: {
-    valueData(newV) {
+    valueData (newV) {
       // 监听选中值的变化，触发事件向父组件传递选中值
-      this.$emit("update:modelValue", newV);
+      this.$emit('update:modelValue', newV)
     },
   },
   props: {
     active: {
       type: String,
-      default: "xt-active-btn",
+      default: 'xt-active-btn',
     },
     placement: {
-      default: "top",
+      default: 'top',
     },
     // 动态添加外层盒子类名
     boxClass: {
       type: String,
-      default: "",
+      default: '',
     },
     boxStyle: {
       default: () => {
-        return {};
+        return {}
       },
     },
     // 动态添加子项盒子类名
     itemClass: {
       type: String,
-      default: "",
+      default: '',
     },
     itemStyle: {
       default: () => {
-        return {};
+        return {}
       },
     },
     // 调整 tab 的排列
     mode: {
       type: String,
-      default: "row",
+      default: 'row',
       validator: (val) => {
-        if (val !== "row" && val !== "col") {
-          console.error("mode 必须是 row 或者 col");
-          return false;
+        if (val !== 'row' && val !== 'col') {
+          console.error('mode 必须是 row 或者 col')
+          return false
         }
-        return val;
+        return val
       },
     },
     modelValue: {
       type: String,
-      default: "card small",
+      default: 'card small',
     },
     // 自定义绑定数组显示的内容字段名
     name: {
       type: String,
-      default: "name",
+      default: 'name',
     },
     // 自定义绑定的值字段名
     value: {
       type: String,
-      default: "value",
+      default: 'value',
     },
     // 自定义绑定的 icon 名称字段名
     icon: {
       type: String,
-      default: "icon",
+      default: 'icon',
     },
     // 自定义绑定的 icon 名称字段名
     tip: {
       type: String,
-      default: "tip",
+      default: 'tip',
     },
     list: {
       type: Array,
       default: () => [
-        {name: "2 x 2", value: "card small"},
-        {name: "2 x 4", value: "card"},
-        {name: "4 x 2", value: "card1"},
-        {name: "4 x 4", value: "card double"},
+        { name: '2 x 2', value: 'card small' },
+        { name: '2 x 4', value: 'card' },
+        { name: '4 x 2', value: 'card1' },
+        { name: '4 x 4', value: 'card double' },
       ],
       validator: (val) => {
         if (!Array.isArray(val)) {
-          console.error("list 必须是一个数组");
-          return false;
+          console.error('list 必须是一个数组')
+          return false
         }
         const res = val.every(
-            (item) => typeof item === "object" && item !== null
-        );
+            (item) => typeof item === 'object' && item !== null
+        )
         if (!res) {
-          console.error("list 包含的元素必须是对象");
+          console.error('list 包含的元素必须是对象')
         }
-        return res;
+        return res
       },
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

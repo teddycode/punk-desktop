@@ -22,7 +22,7 @@ export default {
       }
     }
   },
-  data() {
+  data () {
     return {
       navIndex: 0,
     }
@@ -30,18 +30,18 @@ export default {
 
   watch: {
     'activeType': {
-      handler() {
+      handler () {
         this.defaultSelect()
       }
     }
   },
 
-  mounted() {
+  mounted () {
     this.defaultSelect()
   },
 
   methods: {
-    defaultSelect() {
+    defaultSelect () {
       if (this.activeType) {
         if (this.activeType.textname && this.navList.length > 0) {
           this.navIndex = this.navList.findIndex(item => {
@@ -50,7 +50,7 @@ export default {
         }
       }
     },
-    clickNav(item, index) {
+    clickNav (item, index) {
       this.navIndex = index
       item.state = false  // 将消息未读状态隐藏
       this.$emit('update:activeType', item)

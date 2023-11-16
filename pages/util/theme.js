@@ -76,8 +76,8 @@ const wallPaper = {
     figure.appendChild(img)
     document.body.appendChild(figure)
     progressively.init({
-      delay:0,
-      throttle:500
+      delay: 0,
+      throttle: 500
     })
     if (!!!bg) {
       //背景不存在

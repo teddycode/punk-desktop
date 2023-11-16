@@ -27,21 +27,19 @@
 </template>
 
 <script>
-import {defineComponent, reactive, toRefs} from 'vue'
+import { defineComponent, reactive, toRefs } from 'vue'
 import UserCard from '../../../../../components/small/UserCard.vue'
 import FriendModal from '../../../../../components/Modal.vue'
-import {appStore} from '../../../../../store'
+import { appStore } from '../../../../../store'
 
 export default defineComponent({
   props: ['list'],
-
 
   components: {
     UserCard, FriendModal,
   },
 
-
-  setup() {
+  setup () {
 
     const data = reactive({
       settingsScroller: {  // 滚动条配置

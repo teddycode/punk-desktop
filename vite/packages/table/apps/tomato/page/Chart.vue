@@ -20,12 +20,12 @@
 </template>
 
 <script>
-import Widget from "../../../components/card/Widget.vue";
-import {mapActions, mapWritableState} from "pinia";
-import {tomatoStore} from '../store'
+import Widget from '../../../components/card/Widget.vue'
+import { mapActions, mapWritableState } from 'pinia'
+import { tomatoStore } from '../store'
 // import * as echarts from "echarts";
 export default {
-  name: "TimerChart",
+  name: 'TimerChart',
   components: {
     Widget,
     // echarts,
@@ -47,7 +47,7 @@ export default {
   computed: {
     ...mapWritableState(tomatoStore, ['tomatoList', 'weekTime', 'maxTomato']),
   },
-  data() {
+  data () {
     return {
       options: {
         className: 'card small',
@@ -55,30 +55,30 @@ export default {
         icon: '',
         type: 'timer',
         noTitle: true,
-        background: "#24B284",
+        background: '#24B284',
       },
       activeIndex: 0,
       week: ['日', '一', '二', '三', '四', '五', '六']
     }
   },
-  mounted() {
-    this.getTomatoNum();
+  mounted () {
+    this.getTomatoNum()
     this.activeIndex = new Date().getDay()
   },
   methods: {
     ...mapActions(tomatoStore, ['getTomatoNum']),
-    onChangeActive(n) {
+    onChangeActive (n) {
       this.activeIndex = n
     },
     // 计算今日番茄时间
-    countToday(num) {
-      let totalTime = num * 25;
+    countToday (num) {
+      let totalTime = num * 25
       let hour = totalTime / 60
       let min = totalTime % 60
       return Math.trunc(hour) + 'h' + min + 'm'
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

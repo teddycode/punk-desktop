@@ -7,7 +7,7 @@ import Source from '../capture/Source.vue'
 
 export default {
   name: 'GameMedia',
-  components: {Source}
+  components: { Source }
 }
 </script>
 

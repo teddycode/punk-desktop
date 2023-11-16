@@ -38,59 +38,59 @@
 </template>
 
 <script setup>
-import StatrTask from "./StatrTask.vue";
+import StatrTask from './StatrTask.vue'
 
-import {tasks} from "./Primary";
-import {taskStore} from "../../store";
-import {computed} from "vue";
+import { tasks } from './Primary'
+import { taskStore } from '../../store'
+import { computed } from 'vue'
 
 /**
  * 处理主线任务
  */
 const test = () => {
-  store.taskID = "M0302";
-  store.success = false;
-  store.step = -1;
-};
-const store = taskStore();
+  store.taskID = 'M0302'
+  store.success = false
+  store.step = -1
+}
+const store = taskStore()
 
 // 获取当前章节的所有任务
 let chapter = computed(() => {
   if (!store.taskID) {
-    return "";
+    return ''
   }
   return tasks.find((item) => {
     return item.tasks.find((task) => {
       if (store.taskID == task.id) {
-        return task;
+        return task
       }
-    });
-  });
-});
+    })
+  })
+})
 
 // 获取当前任务的下标
 const stage = computed(() => {
-  let index = 0;
+  let index = 0
   chapter.value.tasks.find((item) => {
     if (store.taskID === item.id) {
-      return true;
+      return true
     }
-    index++;
-    return false;
-  });
-  return index;
-});
+    index++
+    return false
+  })
+  return index
+})
 
 // 获取任务进度
 const progress = computed(() => {
-  let res = (stage.value / chapter.value.tasks.length) * 100;
-  return res;
-});
+  let res = (stage.value / chapter.value.tasks.length) * 100
+  return res
+})
 
 // 获取当前任务
 const currentTask = computed(() => {
-  return chapter.value.tasks[stage.value];
-});
+  return chapter.value.tasks[stage.value]
+})
 </script>
 
 <style lang="scss" scoped></style>

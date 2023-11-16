@@ -9,7 +9,8 @@
             <!--头像 -->
             <!-- <a-avatar shape="square" :size="64" :src="avatarUrl"></a-avatar> -->
             <div class="overflow-hidden">
-              <a-avatar :size="64" :src="avatar" :style="{'filter': bgColor?`drop-shadow(#${bgColor} 80px 0)`:'',transform:bgColor?'translateX(-80px)':''}"
+              <a-avatar :size="64" :src="avatar"
+                        :style="{'filter': bgColor?`drop-shadow(#${bgColor} 80px 0)`:'',transform:bgColor?'translateX(-80px)':''}"
                         style="height:64px;width: 64px;border-radius: 0;"></a-avatar>
             </div>
             <UpdateIcon color="var(--secondary-text)" height="20" icon="akar-icons:cloud-upload"
@@ -26,8 +27,9 @@
       <a-input ref="groupRef" v-model:value="groupName" :spellcheck="false"
                style="color: var(--primary-text); text-align: center; border-radius: 12px !important;"></a-input>
 
-      <xt-button style="background: var(--active-bg); width: 100%; height: 48px; margin-top: 24px;border-radius: 12px !important;"
-                 @click="saveGroupName">
+      <xt-button
+          style="background: var(--active-bg); width: 100%; height: 48px; margin-top: 24px;border-radius: 12px !important;"
+          @click="saveGroupName">
         保存
       </xt-button>
     </template>
@@ -44,9 +46,9 @@
 </template>
 
 <script>
-import {Icon as UpdateIcon} from '@iconify/vue'
+import { Icon as UpdateIcon } from '@iconify/vue'
 import SelectIcon from '../../../../../../selectIcon/page/index.vue'
-import {fileUpload} from '../../../../../components/card/hooks/imageProcessing'
+import { fileUpload } from '../../../../../components/card/hooks/imageProcessing'
 
 export default {
   props: ['info'],
@@ -55,7 +57,7 @@ export default {
     UpdateIcon, SelectIcon
   },
 
-  data() {
+  data () {
     return {
       avatar: this.info.avatar,
       iconVisible: false,
@@ -67,17 +69,17 @@ export default {
     }
   },
 
-  mounted() {
+  mounted () {
     this.$nextTick(() => {
       if (this.isAdmin) {
-        console.log('查看问题', this.$refs.groupRef);
+        console.log('查看问题', this.$refs.groupRef)
         this.$refs.groupRef.focus()
       }
     })
   },
 
   computed: {
-    isAdmin() {
+    isAdmin () {
       if (this.info) {
         return this.info.role !== 'Member'
       }
@@ -85,13 +87,13 @@ export default {
   },
 
   methods: {
-    onShowSelect() {
+    onShowSelect () {
       this.iconVisible = !this.iconVisible
       this.innerHeight = window.innerHeight
     },
 
     // 获取头像
-    getAvatar(avatar) {
+    getAvatar (avatar) {
       if (avatar.indexOf('color=') >= 0) {
         let color = avatar.substr(avatar.indexOf('color=') + 7, 6)
         this.bgColor = color
@@ -102,18 +104,17 @@ export default {
     },
 
     // 更换头像
-    async updateGroupAvatar() {
+    async updateGroupAvatar () {
       document.querySelector('#groupFileID').click()
     },
-    async getFileInfo(evt) {
+    async getFileInfo (evt) {
       const files = evt.target.files[0]
       const res = await fileUpload(files)
       this.avatar = res
     },
 
-
     // 保存进行更改
-    async saveGroupName() {
+    async saveGroupName () {
       const option = {
         groupID: this.info.groupID,
         name: this.groupName,
@@ -129,7 +130,7 @@ export default {
 
   watch: {
     'info': {
-      handler(newVal) {
+      handler (newVal) {
         // console.log('排查props参数变化',newVal);
         this.avatar = newVal.avatar,
             this.groupName = newVal.groupName

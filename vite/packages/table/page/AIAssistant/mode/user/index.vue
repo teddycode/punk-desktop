@@ -14,26 +14,26 @@
 </template>
 
 <script>
-import {userData} from "./userData";
+import { userData } from './userData'
 
-import {mapWritableState} from "pinia";
-import {aiStore} from "../../../../store/ai";
+import { mapWritableState } from 'pinia'
+import { aiStore } from '../../../../store/ai'
 
 export default {
   computed: {
-    ...mapWritableState(aiStore, ["isMode"]),
+    ...mapWritableState(aiStore, ['isMode']),
   },
-  data() {
+  data () {
     return {
       userData,
-    };
+    }
   },
   methods: {
-    useDome() {
-      this.isMode = !this.isMode;
+    useDome () {
+      this.isMode = !this.isMode
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

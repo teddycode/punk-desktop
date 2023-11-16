@@ -70,7 +70,8 @@
                     </div>
                   </div>
 
-                  <a-button v-if="!item.equipped" class="rounded-xl h-12 w-full" style="margin-right: 0;color: var(--active-text);" type="primary"
+                  <a-button v-if="!item.equipped" class="rounded-xl h-12 w-full"
+                            style="margin-right: 0;color: var(--active-text);" type="primary"
                             @click="equip(item)">
                     使用
                   </a-button>

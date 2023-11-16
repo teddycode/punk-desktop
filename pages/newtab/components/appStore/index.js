@@ -10,5 +10,5 @@ Vue.component('app-dialog', {
       type: Array,
     }
   },
-	template:'#appstore'
+  template: '#appstore'
 })

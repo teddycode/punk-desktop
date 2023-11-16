@@ -23,9 +23,9 @@
 
 <script>
 export default {
-  name: "ModalList",
+  name: 'ModalList',
   props: ['visible', 'title', 'imgList'],
-  data() {
+  data () {
     return {
       ScrollbarSettings: {
         useBothWheelAxes: true,
@@ -37,10 +37,10 @@ export default {
     }
   },
   methods: {
-    closeModal() {
+    closeModal () {
       this.$emit('update:visible', false)
     },
-    fileImageExtension(filePath) {
+    fileImageExtension (filePath) {
       const fileExtensions = filePath.src.split('.').pop()
       const extensions = ['mp4', 'mpeg', 'avi', 'rmvb']
       if (extensions.indexOf(fileExtensions) !== -1) {
@@ -49,7 +49,7 @@ export default {
         return false
       }
     },
-    addImg(img) {
+    addImg (img) {
       this.$emit('sendImg', img)
       this.$emit('update:visible', false)
     },

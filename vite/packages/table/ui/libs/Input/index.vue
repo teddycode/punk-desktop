@@ -32,22 +32,22 @@
 
 <script>
 export default {
-  name: "XtInput",
+  name: 'XtInput',
   computed: {
-    typeCalss() {
+    typeCalss () {
       if (this.type) {
-        return "xt-bg-2  rounded-xl";
+        return 'xt-bg-2  rounded-xl'
       }
     },
   },
-  data() {
+  data () {
     return {
       searchValue: this.modelValue,
-    };
+    }
   },
   props: {
     type: {
-      default: "default",
+      default: 'default',
     },
     // 测试输入框状态
     text: {
@@ -58,78 +58,78 @@ export default {
     },
     modelValue: {},
     placeholder: {
-      default: "",
+      default: '',
     },
     limit: {
       default: () => {
         return {
           space: false, // 去除空格
           number: false, // 只能输入数字
-        };
+        }
       },
     },
   },
-  mounted() {
+  mounted () {
     if (this.focus) {
       this.$nextTick(() => {
-        this.$refs.inputRef.focus();
-      });
+        this.$refs.inputRef.focus()
+      })
     }
   },
   methods: {
-    limitNumber(event) {
-      this.searchValue = event.target.value.replace(/\D/g, "");
+    limitNumber (event) {
+      this.searchValue = event.target.value.replace(/\D/g, '')
     },
-    limitSpace(event) {
-      this.searchValue = event.target.value.replace(/\s/g, "");
+    limitSpace (event) {
+      this.searchValue = event.target.value.replace(/\s/g, '')
     },
-    handleInput(event) {
+    handleInput (event) {
       if (this.limit.space) {
-        this.limitSpace(event);
+        this.limitSpace(event)
       }
       if (this.limit.number) {
-        this.limitNumber(event);
+        this.limitNumber(event)
       }
 
       if (this.text) {
       }
-      this.$emit("input", event);
+      this.$emit('input', event)
     },
-    handleEnter(event) {
+    handleEnter (event) {
       if (this.text) {
       }
-      this.$emit("enter", event);
+      this.$emit('enter', event)
     },
-    handleFocus(event) {
+    handleFocus (event) {
       if (this.text) {
       }
-      this.$emit("focus", event);
+      this.$emit('focus', event)
     },
-    handleBlur(event) {
+    handleBlur (event) {
       if (this.text) {
       }
-      this.$emit("blur", event);
+      this.$emit('blur', event)
     },
-    handleChange(event) {
+    handleChange (event) {
       if (this.text) {
       }
-      this.$emit("change", event);
+      this.$emit('change', event)
     },
-    handleKeyUp(event) {
+    handleKeyUp (event) {
       if (this.text) {
       }
-      this.$emit("keyup", event);
+      this.$emit('keyup', event)
     },
   },
   watch: {
-    searchValue(newV) {
-      this.$emit("update:modelValue", newV);
+    searchValue (newV) {
+      this.$emit('update:modelValue', newV)
     },
-    modelValue(newV) {
-      this.searchValue = newV;
+    modelValue (newV) {
+      this.searchValue = newV
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

@@ -41,12 +41,16 @@
         <div class="flex justify-between items-center mt-4">
           <span style="font-size: 16px; font-weight: 400; color: var(--secondary-text);">发行商</span>
           <span
-              style="font-size: 16px; font-weight: 400; color: var(--primary-text);">{{ discountDetail.publisher }}</span>
+              style="font-size: 16px; font-weight: 400; color: var(--primary-text);">{{
+              discountDetail.publisher
+            }}</span>
         </div>
         <div class="flex justify-between items-center mt-4">
           <span style="font-size: 16px; font-weight: 400; color:var(--secondary-text);">开发商</span>
           <span
-              style="font-size: 16px; font-weight: 400; color: var(--primary-text);">{{ discountDetail.developers }}</span>
+              style="font-size: 16px; font-weight: 400; color: var(--primary-text);">{{
+              discountDetail.developers
+            }}</span>
         </div>
         <span class="w-1/3 mt-1" style="font-size: 16px; font-weight: 400; color: var(--secondary-text);">标签</span>
         <div class="flex items-center mt-1">
@@ -71,7 +75,9 @@
               }}</span>
             <div>
               <span class="mr-2 rounded-lg oswald-font"
-                    style="color:var(--active-text); padding: 2px 4px 5px 4px;background: rgba(255, 77, 79, 1);"> -{{ discountDetail.percent }}%</span>
+                    style="color:var(--active-text); padding: 2px 4px 5px 4px;background: rgba(255, 77, 79, 1);"> -{{
+                  discountDetail.percent
+                }}%</span>
               <span class="oswald-font" style="font-size: 18px;color:rgba(255, 77, 79, 1);font-weight: 500;">{{
                   discountDetail.newPrice
                 }}</span>
@@ -97,12 +103,12 @@
 </template>
 
 <script>
-import {regionRange} from '../../js/axios/api';
+import { regionRange } from '../../js/axios/api'
 import WheelCastingUnit from '../../components/WheelCastingUnit.vue'
-import HorizontalDrawer from '../../components/HorizontalDrawer.vue';
+import HorizontalDrawer from '../../components/HorizontalDrawer.vue'
 import browser from '../../js/common/browser'
-import {mapActions, mapWritableState} from 'pinia';
-import {steamStore} from '../../store/steam';
+import { mapActions, mapWritableState } from 'pinia'
+import { steamStore } from '../../store/steam'
 import ShareToChat from '../../ui/chat/ShareToChat.vue'
 import XtButton from '../../ui/libs/Button/index.vue'
 
@@ -126,7 +132,7 @@ export default {
     WheelCastingUnit,
     HorizontalDrawer
   },
-  data() {
+  data () {
     return {
       shareVisible: false,//分享组件可见
       loading: true,
@@ -147,12 +153,12 @@ export default {
   },
   computed: {
     ...mapWritableState(steamStore, ['discountDetail']),
-    wheelData() {
+    wheelData () {
       if (this.discountDetail && this.discountDetail.movie_image) {
         return this.discountDetail.movie_image
       }
     },
-    shareContent() {
+    shareContent () {
       return {
         description: 'steam游戏',
         data: JSON.stringify({
@@ -165,7 +171,7 @@ export default {
       }
     }
   },
-  mounted() {
+  mounted () {
     this.loading = true
     this.getDiscountDetail(this.id, this.defaultDetailRegion.id).then(() => {
       this.loading = false
@@ -173,27 +179,27 @@ export default {
   },
   methods: {
     ...mapActions(steamStore, ['getDiscountDetail']),
-    goBack() {
+    goBack () {
       this.$router.go(-1)
     },
-    shareSteamGame() {
+    shareSteamGame () {
       this.shareVisible = true
     },
-    enterSteamStore() {
+    enterSteamStore () {
       browser.openInUserSelect(`https://store.steampowered.com/app/${this.id}`)
     },
-    acquisitionDate(val) {
+    acquisitionDate (val) {
       const expireDate = new Date(parseInt(val) * 1000)
       let m = expireDate.getMonth() + 1 // 月
       let d = expireDate.getDate() // 日
       return m + '月' + d + '日'
     },
     // 打开详情区服选项
-    openDetailDrawer() {
+    openDetailDrawer () {
       this.$refs.regionDrawer.openDrawer()
     },
     // 获取地区状态和选中情况
-    getArea(v) {
+    getArea (v) {
       this.defaultDetailRegion = v
       this.getDetailVal()
     }

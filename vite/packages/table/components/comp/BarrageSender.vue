@@ -1,6 +1,7 @@
 <template>
   <a-input-group compact>
-    <a-input v-model:value="postContent" :placeholder="'发送至'+currentChannel.title+'频道'" style="width:calc(100% - 70px);"
+    <a-input v-model:value="postContent" :placeholder="'发送至'+currentChannel.title+'频道'"
+             style="width:calc(100% - 70px);"
              @keyup.enter="postBarrage">
       <template #addonBefore>
         <span style="color:var(--primary-text)">{{ currentChannel.title }}</span>
@@ -11,22 +12,22 @@
 </template>
 
 <script>
-import {message} from 'ant-design-vue'
-import {mapActions, mapState} from 'pinia'
-import {teamStore} from '../../store/team'
-import {completeTask} from "../../apps/task/page/branch/task.ts"
+import { message } from 'ant-design-vue'
+import { mapActions, mapState } from 'pinia'
+import { teamStore } from '../../store/team'
+import { completeTask } from '../../apps/task/page/branch/task.ts'
 
 export default {
   name: 'BarrageSender',
   props: ['currentChannel'],
   emits: ['loadTeamBarrage', 'loadAllBarrages'],
-  data() {
+  data () {
     return {
       postContent: '',
       CONST: []
     }
   },
-  mounted() {
+  mounted () {
     this.CONST = tsbApi.barrage.CONST
   },
   computed: {
@@ -34,11 +35,11 @@ export default {
   },
   methods: {
     ...mapActions(teamStore, ['updateMy']),
-    async postBarrage() {
+    async postBarrage () {
 
       if (!this.postContent) {
         message.error('请输入弹幕内容')
-        return
+
       } else {
         completeTask('Z0501')
         let channelType = this.CONST.CHANNEL.PUBLIC
@@ -66,7 +67,7 @@ export default {
           if (!this.hideAdmin) {
             this.hideAdmin = true
           }
-          console.log('33233333 :>> ', 33233333);
+          console.log('33233333 :>> ', 33233333)
           message.success('弹幕发送成功')
           setTimeout(() => {
             if (this.currentChannel.name === 'all') {

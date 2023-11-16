@@ -13,10 +13,10 @@
   </xt-button>
 </template>
 <script>
-import {tomatoStore} from '../store'
-import {mapActions, mapWritableState} from 'pinia'
+import { tomatoStore } from '../store'
+import { mapActions, mapWritableState } from 'pinia'
 import TomatoTimer from '../page/Clock.vue'
-import {Icon} from '@iconify/vue'
+import { Icon } from '@iconify/vue'
 
 export default {
   name: 'Promotion',
@@ -27,17 +27,17 @@ export default {
   computed: {
     ...mapWritableState(tomatoStore, ['hours', 'minutes', 'seconds', 'isColor', 'isState', 'running', 'isFullState']),
   },
-  data() {
+  data () {
     return {}
   },
-  mounted() {
+  mounted () {
 
   },
   watch: {},
   methods: {
     ...mapActions(tomatoStore, ['onChangeFull']),
     // 时间格式
-    displayNum(num) {
+    displayNum (num) {
       if (num < 10) {
         return '0' + num
       } else {

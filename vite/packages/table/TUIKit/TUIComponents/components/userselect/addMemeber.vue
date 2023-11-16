@@ -48,13 +48,13 @@
 </template>
 
 <script>
-import {computed, defineComponent, reactive, toRefs} from 'vue'
+import { computed, defineComponent, reactive, toRefs } from 'vue'
 import _ from 'lodash-es'
 
 export default defineComponent({
   props: ['type', 'list', 'groupID', 'updateGroup'],
 
-  setup(props, ctx) {
+  setup (props, ctx) {
     const tim = window.$chat
 
     const data = reactive({
@@ -75,7 +75,7 @@ export default defineComponent({
       if (index === -1) {
         data.adminList.push(item)
       } else {
-        return;
+
       }
     }
 
@@ -91,7 +91,7 @@ export default defineComponent({
         case 'remove':
           const keys = data.adminList.map((item) => {
             return item.userID
-          });
+          })
           const removeMemberOption = {
             groupID: props.groupID,
             userIDList: keys,
@@ -99,11 +99,11 @@ export default defineComponent({
           await tim.deleteGroupMember(removeMemberOption)
           props.updateGroup()
           ctx.emit('closeUser')
-          break;
+          break
         case 'add':
           const userList = data.adminList.map((item) => {
             return item.userID
-          });
+          })
           const addOption = {
             groupID: props.groupID,
             userIDList: userList,
@@ -111,12 +111,11 @@ export default defineComponent({
           await tim.addGroupMember(addOption)
           props.updateGroup()
           ctx.emit('closeUser')
-          break;
+          break
         default:
-          break;
+          break
       }
     }
-
 
     const userList = computed(() => {  // 通过计算属性将群主去掉,不作为群管理员的候选人
       const list = []
@@ -135,7 +134,6 @@ export default defineComponent({
     const isSelected = (index) => {
       return data.adminList.includes(userList.value[index])
     }
-
 
     return {
       userList,

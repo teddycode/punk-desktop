@@ -3,7 +3,7 @@ const Bitwarden = require('../../../js/passwordManager/bitwarden.js')
 const OnePassword = require('../../../js/passwordManager/onePassword.js')
 const Keychain = require('../../../js/passwordManager/keychain.js')
 const { ipcRenderer } = require('electron')
-const tools=require('../util').tools
+const tools = require('../util').tools
 const PasswordModel = {
   managers: [
     new Bitwarden(),
@@ -78,23 +78,23 @@ const PasswordModel = {
     //获取到真实在用的密码管理器
     PasswordModel.activeManager = await PasswordModel.getConfiguredPasswordManager()
   },
-  async getAllPwds(){
+  async getAllPwds () {
     await PasswordModel.initialize()
-    const domain=tools.getDomainFromUrl(siteUrl)
-    const rootDomain=tools.getRootDomain(siteUrl)
-    let pwds= {
-      item:[],
-      rootItem:[]
+    const domain = tools.getDomainFromUrl(siteUrl)
+    const rootDomain = tools.getRootDomain(siteUrl)
+    let pwds = {
+      item: [],
+      rootItem: []
     }
     return pwds
   },
-  getSiteCredit :async function(siteUrl,includeRoot=false) {
+  getSiteCredit: async function (siteUrl, includeRoot = false) {
     await PasswordModel.initialize()
-    const domain=tools.getDomainFromUrl(siteUrl)
-    const rootDomain=tools.getRootDomain(siteUrl)
-    let pwds= {
-      item:[],
-      rootItem:[]
+    const domain = tools.getDomainFromUrl(siteUrl)
+    const rootDomain = tools.getRootDomain(siteUrl)
+    let pwds = {
+      item: [],
+      rootItem: []
     }
 
     let result
@@ -104,16 +104,16 @@ const PasswordModel = {
       result = []
     }
 
-    if(!!!result){
+    if (!!!result) {
       return []
     }
-    result.forEach((pwd)=>{
-      if(pwd.domain===domain){
+    result.forEach((pwd) => {
+      if (pwd.domain === domain) {
         pwds.item.push(pwd)
       }
-      if(includeRoot){
-        if(pwd.domain){
-          if(pwd.domain.indexOf(rootDomain)>-1){
+      if (includeRoot) {
+        if (pwd.domain) {
+          if (pwd.domain.indexOf(rootDomain) > -1) {
             pwds.rootItem.push(pwd)
           }
         }

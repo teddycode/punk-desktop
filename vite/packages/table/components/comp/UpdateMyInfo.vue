@@ -46,7 +46,9 @@
           </div>
         </div>
         <div class="flex w-full items-center justify-center mt-6">
-          <a-button class="h-48 rounded-xl mr-3" style="width:120px;color: var(--primary-text);border:none;background: var(--secondary-bg);" type="primary"
+          <a-button class="h-48 rounded-xl mr-3"
+                    style="width:120px;color: var(--primary-text);border:none;background: var(--secondary-bg);"
+                    type="primary"
                     @click="closeUpdateMyInfo">
             稍后设置
           </a-button>
@@ -61,15 +63,15 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from 'pinia'
-import {message} from 'ant-design-vue'
+import { mapActions, mapWritableState } from 'pinia'
+import { message } from 'ant-design-vue'
 import Modal from '../Modal.vue'
 import UploadImage from '../UploadImage.vue'
 import HorizontalPanel from '../HorizontalPanel.vue'
-import {avatarNumber} from '../../js/common/teamAvatar'
+import { avatarNumber } from '../../js/common/teamAvatar'
 import browser from '../../js/common/browser'
-import {frameStore} from '../../store/avatarFrame'
-import {appStore} from '../../store'
+import { frameStore } from '../../store/avatarFrame'
+import { appStore } from '../../store'
 
 const screenname = '灵魂虐杀,浅寐,夏微凉っ゛,鱼哭了,陌屿,彼岸,青山独归晚,温唇,忻芝兰,喵咕嘟,皂白七'
 export default {
@@ -84,7 +86,7 @@ export default {
       default: false
     }
   },
-  data() {
+  data () {
     return {
       key: Date.now(),
       updateInfoVisible: this.updateVisible,
@@ -97,9 +99,9 @@ export default {
       },
       avatarNumber,
       sexType: [    // 性别类型
-        {title: '保密', sex: 0},
-        {title: '男', sex: 1},
-        {title: '女', sex: 2}
+        { title: '保密', sex: 0 },
+        { title: '男', sex: 1 },
+        { title: '女', sex: 2 }
       ],
       gender: '', // 接收切换到的性别
       areaValue: '',  // 接收文本输入框值
@@ -115,7 +117,7 @@ export default {
     ...mapWritableState(appStore, ['userInfo']),
     ...mapWritableState(frameStore, ['frameData'])
   },
-  mounted() {
+  mounted () {
     if (this.userInfo) {
       this.randomNickname = this.userInfo.nickname
       this.areaValue = this.userInfo.signature
@@ -124,13 +126,13 @@ export default {
   methods: {
     ...mapActions(appStore, ['editPresetAvatar', 'setInfoVisible', 'setSecondaryVisible', 'getUserInfo']),
     ...mapActions(frameStore, ['updateMyinfo']),
-    openMyInfo() {
+    openMyInfo () {
       this.key = Date.now()
       this.updateInfoVisible = true
 
     },
     // 随机筛选
-    roll(animate = true) {
+    roll (animate = true) {
       if (animate) {
         if (this.timer) {
           clearTimeout(this.timer)
@@ -145,7 +147,7 @@ export default {
       }
 
     },
-    rollName() {  // 掷骰子随机昵称
+    rollName () {  // 掷骰子随机昵称
       let groups = screenname.split(',')
       let j = Math.ceil((Math.random() * groups.length)) - 1
       if (this.j === j) {
@@ -156,16 +158,16 @@ export default {
       this.randomNickname = groups[j]
     },
     // 预设头像拼接
-    getAvatarUrl(item) {
+    getAvatarUrl (item) {
       return 'https://up.apps.vip/avatar/' + item + '.png'
     },
     // 点击选中预设头像
-    selectPreset(item) {
+    selectPreset (item) {
       this.presetIndex = item.id
       this.frameData.avatar_url = this.getAvatarUrl(item.id)
     },
     // 点击保存
-    async comSave() {
+    async comSave () {
       const saveUpdateMyInfo = {
         nickname: this.randomNickname,
         sex: this.gender.sex,
@@ -189,10 +191,10 @@ export default {
       }
 
     },
-    go(url) {
+    go (url) {
       browser.openInInner(url)
     },
-    closeUpdateMyInfo() {
+    closeUpdateMyInfo () {
       this.updateInfoVisible = false
       this.setInfoVisible(false)
       this.setSecondaryVisible(true)
@@ -200,7 +202,7 @@ export default {
   },
   watch: {
     'gender': {
-      handler(newVal) {
+      handler (newVal) {
         this.gender = newVal
       }
     }

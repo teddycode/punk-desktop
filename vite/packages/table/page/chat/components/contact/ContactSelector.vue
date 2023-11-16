@@ -1,7 +1,8 @@
 <template>
   <div class="flex px-6">
     <div class="flex flex-col" style="width:293px;">
-      <a-input ref="searchRef" v-model:value="searchKeyword" class="h-11" placeholder="搜索" style="border-radius: 10px;"
+      <a-input ref="searchRef" v-model:value="searchKeyword" class="h-11" placeholder="搜索"
+               style="border-radius: 10px;"
                @input="search" @pressEnter="search">
         <template #suffix>
           <DirectlyIcon icon="fluent:search-20-filled" style="font-size: 1.5rem;cursor: pointer;" @click="search"/>
@@ -134,9 +135,9 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from 'pinia'
-import {appStore} from '../../../../store'
-import {Icon as DirectlyIcon} from '@iconify/vue'
+import { mapActions, mapWritableState } from 'pinia'
+import { appStore } from '../../../../store'
+import { Icon as DirectlyIcon } from '@iconify/vue'
 
 import FriendCrumb from '../crumb/FriendCrumb.vue'
 import EmptyStatus from '../empty/EmptyStatus.vue'
@@ -150,7 +151,7 @@ export default {
     EmptyStatus
   },
 
-  data() {
+  data () {
     return {
       searchKeyword: '',
       selectedList: [],
@@ -166,7 +167,6 @@ export default {
       ],
       teamList: this.list.teamData,
       teamTitle: this.title,
-
 
       // 滚动条配置
       settingsScroller: {
@@ -187,7 +187,7 @@ export default {
 
   },
 
-  mounted() {
+  mounted () {
     this.$nextTick(() => {
       this.$refs.searchRef.focus()
     })
@@ -196,7 +196,7 @@ export default {
   methods: {
     ...mapActions(appStore, ['setAllSelectStatus']),
     // 点击选择当前联系人
-    selectCurrentContact(item) {
+    selectCurrentContact (item) {
       if (item.userInfo) {
         const findIndex = this.selectedList.findIndex((findItem) => {
           return findItem.userInfo.uid === item.userInfo.uid
@@ -242,7 +242,7 @@ export default {
     },
 
     // 清除已经选中的联系人
-    deleteSelected(item) {
+    deleteSelected (item) {
       if (item.userInfo) {
 
         const mapList = this.selectedList.map((item) => {
@@ -274,17 +274,17 @@ export default {
     },
 
     // 判断有没有选中
-    isSelect(index) {
+    isSelect (index) {
       // console.log('查看是否选中',this.selectedList.includes(this.list[index]));
       return this.selectedList.includes(this.teamList[index])
     },
 
     // 搜索
-    search() {
+    search () {
       // 直接邀请的方式
       if (this.inviteMode === 'direct') {
         if (this.searchKeyword !== '') {
-          const regex = new RegExp(this.searchKeyword, "i")
+          const regex = new RegExp(this.searchKeyword, 'i')
           this.teamTitle = '搜索结果'
           const list = this.list.friendData
           const filterList = list.filter((item) => {
@@ -300,7 +300,7 @@ export default {
         // 邀请加入的方式
         if (this.searchKeyword !== '') {
           this.teamTitle = '搜索结果'
-          const regex = new RegExp(this.searchKeyword, "i")
+          const regex = new RegExp(this.searchKeyword, 'i')
           const groupList = window.$TUIKit.store.store.TUIGroup.groupList
           const arrMerge = groupList.concat(this.list.friendData)
           const filterLists = arrMerge.filter((item) => {
@@ -316,18 +316,18 @@ export default {
     },
 
     // 全选和反选
-    handleSelectAllChange(evt) {
+    handleSelectAllChange (evt) {
       // console.log('获取选中状态',evt.target.checked);
       this.setAllSelectStatus(evt.target.checked)
     },
 
     // 开启面包屑
-    openCrumbs(item) {
+    openCrumbs (item) {
       this.crumbsType = item.type
       this.crumbsShow = true
     },
 
-    updateList(data) {
+    updateList (data) {
       // console.log('获取更新的数据',data);
       this.selectedList = data
     }
@@ -336,7 +336,7 @@ export default {
 
   watch: {
     'settings.isAllSelected': {
-      handler(newVal) {
+      handler (newVal) {
         if (newVal) {
           if (!this.crumbsShow) {
             this.selectedList = this.teamList
@@ -349,7 +349,7 @@ export default {
       immediate: true,
     },
     'selectedList': {
-      handler(newVal) {
+      handler (newVal) {
         // console.log('获取',newVal.length === 0);
         if (newVal.length === 0) {
           this.setAllSelectStatus(false)

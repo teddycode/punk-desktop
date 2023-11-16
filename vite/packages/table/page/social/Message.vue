@@ -47,7 +47,8 @@
                 </div>
                 <div class="flex flex-col ml-4 " style="flex:1">
                   <div class="flex">
-                    <span class="pr-1 truncate pointer interact-name" style="max-width: 84px; font-size: 16px;color: var(--primary-text);font-weight: 600;"
+                    <span class="pr-1 truncate pointer interact-name"
+                          style="max-width: 84px; font-size: 16px;color: var(--primary-text);font-weight: 600;"
                           @click="clickInteract(item)">
                       {{ item.title }}
                     </span>
@@ -94,7 +95,8 @@
             <vueCustomScrollbar :settings="scrollbarSettings" class="pt-4" style="height: calc(100vh - 18em)">
               <!-- 数据空状态 -->
               <a-list v-if="systemNotice.length === 0" :data-source="[]"/>
-              <div v-for="item in systemNotice" v-else class="px-4 pointer interact-hover rounded-lg py-4  flex items-center"
+              <div v-for="item in systemNotice" v-else
+                   class="px-4 pointer interact-hover rounded-lg py-4  flex items-center"
                    style="color: var(--primary-text)"
                    @click="openSystem(item)">
                 <div class="w-10 h-10 flex items-center  justify-center s-bg rounded-full"
@@ -143,7 +145,8 @@
             <vueCustomScrollbar :settings="scrollbarSettings" class="pt-4" style="height: calc(100vh - 18em)">
               <!-- 数据空状态 -->
               <a-list v-if="customNotice.length === 0" :data-source="[]"/>
-              <div v-for="item in customNotice" v-else class="px-4 pointer interact-hover rounded-lg py-4 mb-3 flex items-center"
+              <div v-for="item in customNotice" v-else
+                   class="px-4 pointer interact-hover rounded-lg py-4 mb-3 flex items-center"
                    style="color: var(--primary-text)"
                    @click="clickDetail(item)">
                 <div class="w-10 h-10 flex items-center  justify-center s-bg rounded-full" style="width: 120px">
@@ -168,8 +171,10 @@
       <a-col v-show="selectedUid !== 0" id="userDetail" :lg="10">
         <div style="display: flex;justify-content: center;flex-direction: column;height: 100%">
           <div class=" mb-5">
-            <div class="btn-active mt-4 h-12 flex justify-center cursor-pointer rounded-md items-center text-white text-white" style="background: rgb(80, 139, 254); font-size: 16px; font-weight: 400;"
-                 @click="openDetail">
+            <div
+                class="btn-active mt-4 h-12 flex justify-center cursor-pointer rounded-md items-center text-white text-white"
+                style="background: rgb(80, 139, 254); font-size: 16px; font-weight: 400;"
+                @click="openDetail">
               <ExportOutlined class="mr-3"/>
               查看消息详情
             </div>
@@ -184,13 +189,13 @@
 
 <script>
 import HorizontalPanel from '../../components/HorizontalPanel.vue'
-import {messageStore} from '../../store/message'
-import {mapActions, mapState} from 'pinia'
+import { messageStore } from '../../store/message'
+import { mapActions, mapState } from 'pinia'
 import _ from 'lodash-es'
 import UserCard from '../../components/small/UserCard.vue'
-import {ExportOutlined} from '@ant-design/icons-vue'
+import { ExportOutlined } from '@ant-design/icons-vue'
 import browser from '../../js/common/browser'
-import {appStore} from '../../store'
+import { appStore } from '../../store'
 
 export default {
   name: 'Message',
@@ -199,20 +204,20 @@ export default {
     HorizontalPanel,
     ExportOutlined
   },
-  data() {
+  data () {
     return {
       currentSubTab: 'all',
       // category这个数组后期需要从后端数据库获取数据
       // category数组中的state是模拟消息未读状态
       category: [
-        {title: '互动', name: 'interact', state: false}, {title: '关注', name: 'attention', state: false},
-        {title: '系统', name: 'system', state: false}, {
+        { title: '互动', name: 'interact', state: false }, { title: '关注', name: 'attention', state: false },
+        { title: '系统', name: 'system', state: false }, {
           title: '推送',
           name: 'push',
           state: false
-        }, {title: '自定义', name: 'custom', state: false}
+        }, { title: '自定义', name: 'custom', state: false }
       ],
-      categoryType: {title: '互动', name: 'interact'},
+      categoryType: { title: '互动', name: 'interact' },
       scrollbarSettings: {
         useBothWheelAxes: true,
         swipeEasing: true,
@@ -227,7 +232,7 @@ export default {
   },
   computed: {
     ...mapState(messageStore, ['newFollower', 'systemNotice', 'customNotice', 'push', 'comment', 'mention', 'support']),
-    interact() {
+    interact () {
       const interact = _.concat(this.comment, this.mention, this.support)
       let sorted = interact.sort((item1, item2) => {
         return item2.send_time - item1.send_time
@@ -248,14 +253,14 @@ export default {
       })
     }
   },
-  mounted() {
+  mounted () {
     this.navChanged()
   },
   methods: {
     ...mapActions(messageStore, ['getNewFollower', 'getSystemNotice', 'getCustomNotice', 'getPush',
       'getComment', 'getInteract']),
     ...mapActions(appStore, ['showUserCard']),
-    navChanged() {
+    navChanged () {
       switch (this.categoryType.name) {
         case 'attention':
           this.getNewFollower().then()
@@ -274,7 +279,7 @@ export default {
           break
       }
     },
-    getUrl(item) {
+    getUrl (item) {
       let id = 0
       if (item.title === '邀请回答') {
         id = item.link_id
@@ -292,7 +297,7 @@ export default {
 
       return 'https://s.apps.vip/post/' + id
     },
-    openSystem(item) {
+    openSystem (item) {
       let url = ''
       if (item.route === 'thread') {
         url = 'https://s.apps.vip/post/' + item.link_id
@@ -310,7 +315,7 @@ export default {
       browser.openInInner(url)
 
     },
-    showCard(item) {
+    showCard (item) {
       if (item.from_uid) {
         this.selectedUid = Number(item.from_uid)
         this.selectedUserInfo = {
@@ -320,29 +325,29 @@ export default {
       }
       this.showUserCard(this.selectedUid, this.selectedUserInfo)
     },
-    clickInteract(item) {
+    clickInteract (item) {
       this.detailUrl = this.getUrl(item)
       this.openDetail()
     },
     // 系统消息列表点击事件
-    systemItemClick() {
+    systemItemClick () {
     },
     // 推送消息列表item点击事件
-    clickPushDetail() {
+    clickPushDetail () {
       //this.getNewFollower().then()
 
     },
     // 推送消息列表查看详情点击事件
-    openDetail() {
+    openDetail () {
       browser.openInInner(this.detailUrl)
     },
-    setCurrentSubTab(tab) {
+    setCurrentSubTab (tab) {
       this.currentSubTab = tab
     },
-    clickDetail(item) {
+    clickDetail (item) {
       browser.openInInner('https://s.apps.vip/post/' + item.tid)
     },
-    goYuan() {
+    goYuan () {
       browser.openInInner('https://s.apps.vip/user/message')
     }
   }

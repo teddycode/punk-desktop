@@ -28,149 +28,149 @@
 </template>
 
 <script>
-import {getSelect} from "../api/api";
-import syncSelected from "../hooks/syncSelected";
-import cache from "../../../../components/card/hooks/cache";
-import {scrollable} from "../hooks/scrollable";
+import { getSelect } from '../api/api'
+import syncSelected from '../hooks/syncSelected'
+import cache from '../../../../components/card/hooks/cache'
+import { scrollable } from '../hooks/scrollable'
 
 export default {
-  inject: ["height"],
+  inject: ['height'],
   mixins: [syncSelected],
   props: {
     type: {},
   },
   watch: {
     type: {
-      handler(newV) {
+      handler (newV) {
         this.appList[this.selectName].forEach((item) => {
-          item.open.type = this.type;
-        });
+          item.open.type = this.type
+        })
       },
     },
   },
-  data() {
+  data () {
     return {
       webBtn: [
         {
-          label: "设计工具",
-          name: "design",
+          label: '设计工具',
+          name: 'design',
           checked: true,
         },
         {
-          label: "即时通讯",
-          name: "message",
+          label: '即时通讯',
+          name: 'message',
           checked: false,
         },
         {
-          label: "文档表单",
-          name: "docx",
+          label: '文档表单',
+          name: 'docx',
           checked: false,
         },
         {
-          label: "常用邮箱",
-          name: "email",
+          label: '常用邮箱',
+          name: 'email',
           checked: false,
         },
         {
-          label: "资讯门户",
-          name: "information",
+          label: '资讯门户',
+          name: 'information',
           checked: false,
         },
         {
-          label: "效率工具",
-          name: "effect",
+          label: '效率工具',
+          name: 'effect',
           checked: false,
         },
         {
-          label: "媒体运营",
-          name: "media",
+          label: '媒体运营',
+          name: 'media',
           checked: false,
         },
         {
-          label: "SAAS服务",
-          name: "saas",
+          label: 'SAAS服务',
+          name: 'saas',
           checked: false,
         },
         {
-          label: "程序开发",
-          name: "code",
+          label: '程序开发',
+          name: 'code',
           checked: false,
         },
         {
-          label: "休闲娱乐",
-          name: "game",
+          label: '休闲娱乐',
+          name: 'game',
           checked: false,
         },
         {
-          label: "学习成长",
-          name: "learning",
+          label: '学习成长',
+          name: 'learning',
           checked: false,
         },
         {
-          label: "企业采购",
-          name: "copurchase",
+          label: '企业采购',
+          name: 'copurchase',
           checked: false,
         },
         {
-          label: "企业信息",
-          name: "coinfo",
+          label: '企业信息',
+          name: 'coinfo',
           checked: false,
         },
       ],
       appList: {},
       selectIndex: 0,
-      selectName: "",
-    };
+      selectName: '',
+    }
   },
   directives: {
     scrollable,
   },
-  async mounted() {
-    this.getData(this.selectIndex);
+  async mounted () {
+    this.getData(this.selectIndex)
   },
   computed: {
-    heightStyle() {
+    heightStyle () {
       return {
-        height: this.height() + 60 + "px",
-      };
+        height: this.height() + 60 + 'px',
+      }
     },
   },
   methods: {
-    async getData(index) {
-      index = this.webBtn[index].name;
-      let appList = cache.get(`link-${index}`);
+    async getData (index) {
+      index = this.webBtn[index].name
+      let appList = cache.get(`link-${index}`)
       if (!appList) {
-        appList = [];
+        appList = []
         let res = await getSelect({
           applicationType: index,
-        });
+        })
         res.data[0].forEach((item) => {
           appList.push({
-            link: "link",
-            icon: item.app.version.logo256 || "",
-            name: item.app.version.name || "",
+            link: 'link',
+            icon: item.app.version.logo256 || '',
+            name: item.app.version.name || '',
             open: {
-              value: item.app.version.url || "",
+              value: item.app.version.url || '',
               type: this.type,
             },
-          });
-        });
-        cache.set(`link-${index}`, appList, 2 * 24 * 60 * 60 * 1000);
+          })
+        })
+        cache.set(`link-${index}`, appList, 2 * 24 * 60 * 60 * 1000)
       } else {
         appList.forEach((item) => {
-          item.open.type = this.type;
-        });
+          item.open.type = this.type
+        })
       }
 
-      this.appList[index] = appList;
-      this.selectName = index;
+      this.appList[index] = appList
+      this.selectName = index
     },
-    handleChange(index) {
-      this.selectIndex = index;
-      this.getData(this.selectIndex);
+    handleChange (index) {
+      this.selectIndex = index
+      this.getData(this.selectIndex)
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

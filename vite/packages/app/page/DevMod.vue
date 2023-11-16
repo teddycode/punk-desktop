@@ -1,7 +1,8 @@
 <template>
   <a-layout-header
       class="header"
-      style="background: rgb(255,255,255);box-shadow: 0 0 8px rgba(63,63,63,0.2);z-index: 1;padding-left: 20px;padding-right: 20px;" theme="light">
+      style="background: rgb(255,255,255);box-shadow: 0 0 8px rgba(63,63,63,0.2);z-index: 1;padding-left: 20px;padding-right: 20px;"
+      theme="light">
     <div style="display: flex">
       <div>
         <div class="logo" style="font-size: 16px;margin-right: 20px;font-weight: 700">
@@ -53,7 +54,7 @@
           <template #overlay>
             <a-menu>
               <a-menu-item>
-                <a href="javascript:;">打开应用市场</a>
+                <a href="javascript:">打开应用市场</a>
               </a-menu-item>
             </a-menu>
           </template>
@@ -176,12 +177,12 @@ import {
   SettingOutlined,
   SmileOutlined
 } from '@ant-design/icons-vue'
-import {appStore} from '../store'
-import {mapActions, mapState, mapWritableState} from 'pinia'
-import {message, Modal} from 'ant-design-vue'
-import {getLogo} from '../util'
+import { appStore } from '../store'
+import { mapActions, mapState, mapWritableState } from 'pinia'
+import { message, Modal } from 'ant-design-vue'
+import { getLogo } from '../util'
 
-let {appModel, devAppModel} = window.$models
+let { appModel, devAppModel } = window.$models
 let appId =
     window.globalArgs['app-id']
 
@@ -194,10 +195,10 @@ export default {
     ...mapState(appStore, ['app', 'debugMod', 'devApp']),
     ...mapWritableState(appStore, ['user']),
   },
-  beforeRouteUpdate() {
+  beforeRouteUpdate () {
     this.routeUpdateTime = Date.now()
   },
-  data() {
+  data () {
     return {
       currentDevApp: [],
       routeUpdateTime: 0,
@@ -237,7 +238,7 @@ export default {
     }
   },
 
-  async mounted() {
+  async mounted () {
     this.devApps = await devAppModel.getAll()
     let userRs = await tsbApi.user.get()
     if (userRs.status) {
@@ -256,11 +257,10 @@ export default {
       })
     }
 
-
   },
   methods: {
     getLogo,
-    installAndRun() {
+    installAndRun () {
       Modal.confirm({
         centered: true,
         content: '首次运行测试应用需要安装此应用，是否以当前配置安装并运行测试应用？此操作将保存全部的配置。',
@@ -283,20 +283,20 @@ export default {
     /**
      * 重装兵运行
      */
-    reInstallAndRun() {
+    reInstallAndRun () {
       Modal.confirm({
         centered: true,
         content: '是否以当前配置重新安装并运行测试应用？此操作将保存全部的配置并删除之前的测试应用。',
         onOk: async () => {
           try {
-            let debugApp = await appModel.get({nanoid: this.devApp.debug_app_nanoid})
+            let debugApp = await appModel.get({ nanoid: this.devApp.debug_app_nanoid })
             console.log(debugApp, '调试应用=')
             message.info(this.devApp.debug_app_nanoid)
             if (!!!debugApp) {
               message.error('调试应用不存在，忽略')
             } else {
               await appModel.uninstall(this.devApp.debug_app_nanoid)
-              ipc.sendSync('deleteApp', {nanoid: this.devApp.debug_app_nanoid})
+              ipc.sendSync('deleteApp', { nanoid: this.devApp.debug_app_nanoid })
             }
             this.devApp.debug_app_nanoid = ''
             let app = await this.saveAndInstall()
@@ -310,14 +310,14 @@ export default {
      * 保存当前设置并安装
      * @returns {Promise<*>}
      */
-    async saveAndInstall() {
+    async saveAndInstall () {
       await this.saveDevApp()
       let appJson = await devAppModel.get(this.devApp.nanoid)
       appJson.is_debug = true
       // let appNanoid = await appModel.installDebugAppFromJson(appJson)
-      let installResult = ipc.sendSync('installAppConfirm', {background: false, appJson: appJson})
+      let installResult = ipc.sendSync('installAppConfirm', { background: false, appJson: appJson })
       if (installResult.result) {
-        let app = await appModel.get({nanoid: installResult.nanoid})
+        let app = await appModel.get({ nanoid: installResult.nanoid })
         this.devApp.debug_app_nanoid = app.nanoid
         await this.saveDevApp()
         return app
@@ -326,11 +326,11 @@ export default {
       }
 
     },
-    async run() {
+    async run () {
       if (!this.devApp.debug_app_nanoid) {
         this.installAndRun()
       } else {
-        let app = await appModel.get({nanoid: this.devApp.debug_app_nanoid})
+        let app = await appModel.get({ nanoid: this.devApp.debug_app_nanoid })
         if (!app) {
           this.installAndRun()
         } else {
@@ -340,66 +340,66 @@ export default {
         }
       }
     },
-    goDoc() {
-      ipc.send('addTab', {url: 'https://a.apps.vip/docs'})
+    goDoc () {
+      ipc.send('addTab', { url: 'https://a.apps.vip/docs' })
     },
-    login() {
+    login () {
       tsbApi.user.login()
     },
-    goALl() {
+    goALl () {
       this.devMod = false
       this.$router.push('/allDevapps')
     },
     ...mapActions(appStore, ['reloadDevApp', 'saveDevApp', 'setDevApp']),
-    async loadDevApp(devApp) {
+    async loadDevApp (devApp) {
       await this.setDevApp(devApp)
       this.$router.push('/dev/')
     },
-    goDevelop() {
-      this.$router.push({path: 'develop'})
+    goDevelop () {
+      this.$router.push({ path: 'develop' })
     },
-    userThemeColorChanged(input) {
-      appModel.update(this.appId, {user_theme_color: input})
+    userThemeColorChanged (input) {
+      appModel.update(this.appId, { user_theme_color: input })
       this.tipSave()
     },
-    tipSave() {
-      appVue.$message.info({content: '保存成功，此处设置修改需浏览器重启后生效。', key: 'save'})
+    tipSave () {
+      appVue.$message.info({ content: '保存成功，此处设置修改需浏览器重启后生效。', key: 'save' })
     },
-    uninstall(appId) {
+    uninstall (appId) {
       this.$confirm({
         title: '确定卸载此应用？',
         content: '此操作将卸载应用并清空所有应用数据，且无法还原。请谨慎操作。',
         okText: '确认',
         okType: 'danger',
         cancelText: '取消',
-        onOk() {
+        onOk () {
           appModel.uninstall(appId).then(success => {
-            ipc.send('message', {type: 'success', config: {content: '卸载应用成功。'}})
-            ipc.send('deleteApp', {nanoid: appId})
+            ipc.send('message', { type: 'success', config: { content: '卸载应用成功。' } })
+            ipc.send('deleteApp', { nanoid: appId })
           }, err => {
-            ipc.send('message', {type: 'success', config: {content: '卸载失败。'}})
+            ipc.send('message', { type: 'success', config: { content: '卸载失败。' } })
           })
         },
-        onCancel() {
+        onCancel () {
           console.log('Cancel')
         },
       })
 
     },
-    check() {
+    check () {
       this.form.validateFields(err => {
         if (!err) {
           console.info('success')
         }
       })
     },
-    handleChange(e) {
+    handleChange (e) {
       this.checkNick = e.target.checked
       this.$nextTick(() => {
-        this.form.validateFields(['nickname'], {force: true})
+        this.form.validateFields(['nickname'], { force: true })
       })
     },
-    reset() {
+    reset () {
       Modal.confirm({
         content: '是否放弃当前所有改动重载之前的配置？',
         onOk: () => {
@@ -408,7 +408,7 @@ export default {
         }
       })
     },
-    async save() {
+    async save () {
       try {
         await this.saveDevApp()
         message.success('保存成功。')

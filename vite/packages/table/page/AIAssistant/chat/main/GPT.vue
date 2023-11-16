@@ -9,24 +9,24 @@
 </template>
 
 <script setup>
-import {MdPreview} from "md-editor-v3";
-import "md-editor-v3/lib/style.css";
+import { MdPreview } from 'md-editor-v3'
+import 'md-editor-v3/lib/style.css'
 
 const props = defineProps({
   // Markdown 文本数据
   content: {
     type: String,
-    default: "",
+    default: '',
   },
   // 跟随光标
   showCursor: {
     type: Boolean,
     default: false,
   },
-});
-const theme = "dark";
-const previewTheme = "default";
-const codeTheme = "github";
+})
+const theme = 'dark'
+const previewTheme = 'default'
+const codeTheme = 'github'
 </script>
 
 <style lang="scss" scoped>

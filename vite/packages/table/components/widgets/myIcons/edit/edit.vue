@@ -15,15 +15,15 @@
 </template>
 
 <script>
-import Header from "../edit/modules/Header.vue";
-import Size from "../edit/modules/Size.vue";
-import Open from "../edit/modules/Open.vue";
-import Name from "../edit/modules/Name.vue";
-import ImgUpload from "../edit/modules/ImgUpload.vue";
-import ImgState from "../edit/modules/ImgState.vue";
-import ImgRadius from "../edit/modules/ImgRadius.vue";
-import BgColor from "../edit/modules/BgColor.vue";
-import ImgShape from "../edit/modules/ImgShape.vue";
+import Header from '../edit/modules/Header.vue'
+import Size from '../edit/modules/Size.vue'
+import Open from '../edit/modules/Open.vue'
+import Name from '../edit/modules/Name.vue'
+import ImgUpload from '../edit/modules/ImgUpload.vue'
+import ImgState from '../edit/modules/ImgState.vue'
+import ImgRadius from '../edit/modules/ImgRadius.vue'
+import BgColor from '../edit/modules/BgColor.vue'
+import ImgShape from '../edit/modules/ImgShape.vue'
 
 export default {
   components: {
@@ -37,12 +37,12 @@ export default {
     BgColor,
     ImgShape,
   },
-  data() {
+  data () {
     return {
-      selectTab: "config",
-    };
+      selectTab: 'config',
+    }
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

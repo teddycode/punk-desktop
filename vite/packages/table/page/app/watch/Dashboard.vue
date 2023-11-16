@@ -445,12 +445,12 @@
 </template>
 
 <script>
-import {Modal} from 'ant-design-vue'
+import { Modal } from 'ant-design-vue'
 import BackBtn from '../../../components/comp/BackBtn.vue'
 import dataHelper from '../../../js/watch/dataHelper'
 import Arrow from '../../../components/watch/Arrow.vue'
 import bili from '../../../js/watch/bili'
-import {fixHttp, formatSeconds} from '../../../util'
+import { fixHttp, formatSeconds } from '../../../util'
 import Template from '../../../../user/pages/Template.vue'
 import OnlineChart from './OnlineChart.vue'
 import html2canvas from 'html2canvas'
@@ -458,8 +458,8 @@ import browser from '../../../js/common/browser'
 
 export default {
   name: 'Dashboard',
-  components: {OnlineChart, Template, Arrow, BackBtn},
-  data() {
+  components: { OnlineChart, Template, Arrow, BackBtn },
+  data () {
     return {
       previewVisible: false,
 
@@ -494,7 +494,7 @@ export default {
     }
 
   },
-  mounted() {
+  mounted () {
     let nanoid = this.$route.params['nanoid']
     this.nanoid = nanoid
     this.loadTaskInfo(nanoid, () => {
@@ -509,11 +509,11 @@ export default {
     }, 1000)
 
   },
-  unmounted() {
+  unmounted () {
     clearInterval(this.updateExecutedTimer)
   },
   computed: {
-    suggestions() {
+    suggestions () {
       let suggestion = []
       let data = this.data
       let score = this.score
@@ -541,7 +541,7 @@ export default {
       }
       return suggestion
     },
-    caculateData() {
+    caculateData () {
       let data = {}
       let view = this.stage.data.view
       let videoRate = this.data.rate
@@ -551,7 +551,7 @@ export default {
       })
       return data
     },
-    score() {
+    score () {
       let score = {}
       let data = this.data
       if (!data) {
@@ -567,11 +567,11 @@ export default {
     }
   },
   methods: {
-    setVisible(visible) {
+    setVisible (visible) {
       this.previewVisible = visible
     },
-    async getData() {
-      let data = await tableApi.watch.getTaskData({task_id: this.task.nanoid, type: 'interval'}, 10000)
+    async getData () {
+      let data = await tableApi.watch.getTaskData({ task_id: this.task.nanoid, type: 'interval' }, 10000)
       let chartData = []
       try {
         chartData = data.map(d => {
@@ -587,8 +587,8 @@ export default {
       this.chartData = chartData
       //this.chartKey=Date.now()
     },
-    loadTaskInfo(nanoid, cb) {
-      tableApi.watch.getTask({nanoid: nanoid}).then(task => {
+    loadTaskInfo (nanoid, cb) {
+      tableApi.watch.getTask({ nanoid: nanoid }).then(task => {
         this.task = task
         this.data = task.data
         let data = this.data
@@ -610,7 +610,7 @@ export default {
         if (cb) cb(task)
       })
     },
-    handleButtonClick() {
+    handleButtonClick () {
       if (!this.task.running) {
         tableApi.watch.startTask(this.task)
         this.task.running = true
@@ -620,30 +620,30 @@ export default {
       }
     },
     fixHttp: fixHttp,
-    updateExecutedTime() {
+    updateExecutedTime () {
       this.task.executed_time_until_now = this.formatSeconds((Date.now() - this.task.last_execute_time) / 1000)
     },
     formatSeconds: formatSeconds,
     format: dataHelper.format,
     getRate: dataHelper.getRate,
     convertWan: dataHelper.convertWan,
-    refresh() {
+    refresh () {
       tableApi.watch.refreshTask(this.task)
     },
-    showTask() {
+    showTask () {
       tableApi.watch.showTask(this.task)
     },
-    stopTask() {
+    stopTask () {
       tableApi.watch.stopTask(this.task)
     },
-    openUrl() {
+    openUrl () {
       browser.openInUserSelect(this.task.url)
     },
-    share() {
+    share () {
       Modal.info({
         content: '点击生成报告',
         onOk: () => {//allowTaint: true,
-          html2canvas(document.querySelector('#report'), {useCORS: true}).then(canvas => {
+          html2canvas(document.querySelector('#report'), { useCORS: true }).then(canvas => {
             document.querySelector('#report').appendChild(canvas)
             let ctx = canvas.getContext('2d')
             var img = new Image()

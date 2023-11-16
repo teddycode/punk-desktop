@@ -3,25 +3,28 @@ $dark-second-bg: rgb(63, 63, 63);
 $dark-primary-color: rgb(210, 210, 210);
 
 .dark-mode {
-  .bottomBar{
+  .bottomBar {
 
-    .ant-btn{
+    .ant-btn {
       background: none !important;
       border: none !important;
-      svg{
-        path{
+
+      svg {
+        path {
           fill: $dark-primary-color;
         }
       }
     }
-    .anticon{
-      svg{
-        path{
+
+    .anticon {
+      svg {
+        path {
           fill: $dark-primary-color;
         }
       }
     }
   }
+
   .ant-btn:hover {
     color: #9f9f9f;
     background-color: $dark-second-bg !important;
@@ -71,46 +74,55 @@ $dark-primary-color: rgb(210, 210, 210);
     background-color: $dark-primary-color;
   }
 
-  .user-panel{
-    .mg-content .mg-content-btn .cb-top{
+  .user-panel {
+    .mg-content .mg-content-btn .cb-top {
       border-bottom: none;
     }
 
-    .info-num{
+    .info-num {
       color: $dark-primary-color;
     }
-    .cb-top-word{
+
+    .cb-top-word {
       color: $dark-primary-color;
     }
-    .my-info-panel{
+
+    .my-info-panel {
       border: $dark-primary-color;
       background: $dark-second-bg;
     }
-    .title-my-group{
+
+    .title-my-group {
       color: $dark-primary-color;
     }
-    .nickname{
+
+    .nickname {
       color: $dark-primary-color;
     }
-    [data-icon="close"]{
+
+    [data-icon="close"] {
       path {
         fill: $dark-primary-color !important;
         color: $dark-primary-color;
       }
     }
   }
+
   .user-panel .ant-drawer-body {
     background-color: $dark-bg !important;
   }
-  .mg-content .mg-content-btn{
-    .ant-btn{
-      &:hover{
+
+  .mg-content .mg-content-btn {
+    .ant-btn {
+      &:hover {
         border: none;
       }
+
       border: none;
     }
+
     background: $dark-second-bg;
-    border:none;
+    border: none;
   }
 
 

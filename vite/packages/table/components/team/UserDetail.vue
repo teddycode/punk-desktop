@@ -2,7 +2,8 @@
   <div style="padding-top: 20px;padding-left: 20px">
     <a-row :gutter="20">
       <a-col :span="6">
-        <FrameAvatar :avatar-size="50" :avatar-url="userInfo.avatar" :frame-url="userInfo.equippedItems?.frameDetail.image"
+        <FrameAvatar :avatar-size="50" :avatar-url="userInfo.avatar"
+                     :frame-url="userInfo.equippedItems?.frameDetail.image"
                      :size="50" class="mt-3 ml-3 cursor-pointer" @click="showCard"></FrameAvatar>
       </a-col>
       <a-col :span="18">
@@ -43,19 +44,19 @@
 </template>
 
 <script>
-import {mapActions} from 'pinia'
-import {teamStore} from '../../store/team'
+import { mapActions } from 'pinia'
+import { teamStore } from '../../store/team'
 import OnlineGradeDisplay from './OnlineGradeDisplay.vue'
 import OnlineMedal from './OnlineMedal.vue'
 import Medal from './Medal.vue'
 import FrameAvatar from '../avatar/FrameAvatar.vue'
-import {appStore} from '../../store'
+import { appStore } from '../../store'
 
 export default {
   name: 'UserDetail',
-  components: {FrameAvatar, Medal, OnlineMedal, OnlineGradeDisplay},
+  components: { FrameAvatar, Medal, OnlineMedal, OnlineGradeDisplay },
   props: ['userInfo', 'isLeader', 'memberInfo', 'joinedTime'],
-  data() {
+  data () {
     return {
       grade: {},
       key: '',
@@ -70,7 +71,7 @@ export default {
   },
   watch: {
     'userInfo': {
-      handler() {
+      handler () {
         this.updateUserInfo().then(() => {
           this.key = Date.now()
         })
@@ -78,13 +79,13 @@ export default {
       deep: true
     }
   },
-  async mounted() {
+  async mounted () {
     this.updateUserInfo().then()
   },
   methods: {
     ...mapActions(teamStore, ['getMemberGrade', 'getUserMedal']),
     ...mapActions(appStore, ['showUserCard']),
-    async updateUserInfo() {
+    async updateUserInfo () {
       this.getUserMedal(this.userInfo.uid).then(result => {
         if (result) {
           this.medals = result
@@ -104,7 +105,7 @@ export default {
       this.daily_h = (this.daily_minutes / 60).toFixed(0)
       this.daily_m = (this.daily_minutes % 60).toFixed(0)
     },
-    showCard() {
+    showCard () {
       this.showUserCard(this.userInfo.uid, this.userInfo)
     }
   },

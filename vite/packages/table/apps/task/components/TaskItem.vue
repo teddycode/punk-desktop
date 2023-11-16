@@ -49,39 +49,39 @@
 </template>
 
 <script setup>
-import {StarFilled} from "@ant-design/icons-vue";
-import {taskStore} from "../store";
-import {useRouter} from "vue-router";
-import {guide} from "../../../ui/components/Task/guide";
+import { StarFilled } from '@ant-design/icons-vue'
+import { taskStore } from '../store'
+import { useRouter } from 'vue-router'
+import { guide } from '../../../ui/components/Task/guide'
 
-const router = useRouter();
-const task = taskStore();
+const router = useRouter()
+const task = taskStore()
 const props = defineProps({
   currentStage: {},
   currentTaskId: {},
-});
+})
 // 引导任务
-const emits = defineEmits(["close"]);
+const emits = defineEmits(['close'])
 
 const taskGuide = () => {
   // 重置任务步骤
-  task.step = 1;
-  task.taskID = props.currentTaskId;
-  let currentTask = guide[props.currentTaskId][0];
+  task.step = 1
+  task.taskID = props.currentTaskId
+  let currentTask = guide[props.currentTaskId][0]
   switch (currentTask.type) {
-    case "router":
+    case 'router':
       router.push({
         name: currentTask.value,
-      });
-      break;
+      })
+      break
     default:
-      break;
+      break
   }
 
-  task.isTaskDrawer = false;
-};
+  task.isTaskDrawer = false
+}
 
-console.log('object :>> ', props.currentStage);
+console.log('object :>> ', props.currentStage)
 // 获取当前任务的下标;
 // const stage = computed(() => {
 //   let index = 0;

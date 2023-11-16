@@ -9,45 +9,45 @@
 </template>
 
 <script>
-import Dialog from "../components/Dialog.vue";
-import {mapWritableState} from "pinia";
-import {aiStore} from "../../../../store/ai";
+import Dialog from '../components/Dialog.vue'
+import { mapWritableState } from 'pinia'
+import { aiStore } from '../../../../store/ai'
 
 export default {
   computed: {
     ...mapWritableState(aiStore, [
-      "defaultData",
-      "topicList",
-      "selectTopicIndex",
-      "chatList",
+      'defaultData',
+      'topicList',
+      'selectTopicIndex',
+      'chatList',
     ]),
   },
   components: {
     Dialog,
   },
-  data() {
+  data () {
     return {
-      icon: "",
-      name: "",
-    };
+      icon: '',
+      name: '',
+    }
   },
   methods: {
-    close() {
-      this.$emit("close");
+    close () {
+      this.$emit('close')
     },
-    add() {
-      let obj = {...this.defaultData};
-      obj.id = Date.now();
-      obj.time = Date.now();
-      obj.name = this.name;
-      obj.icon = {...this.icon};
-      this.selectTopicIndex = obj.id;
-      this.topicList[obj.id] = obj;
-      this.chatList[obj.id] = [];
-      this.close();
+    add () {
+      let obj = { ...this.defaultData }
+      obj.id = Date.now()
+      obj.time = Date.now()
+      obj.name = this.name
+      obj.icon = { ...this.icon }
+      this.selectTopicIndex = obj.id
+      this.topicList[obj.id] = obj
+      this.chatList[obj.id] = []
+      this.close()
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

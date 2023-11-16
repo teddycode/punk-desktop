@@ -52,22 +52,22 @@
 
 <script>
 import RadioTab from '../RadioTab.vue'
-import {cardStore} from '../../store/card'
-import {mapWritableState} from 'pinia'
-import {message} from 'ant-design-vue'
+import { cardStore } from '../../store/card'
+import { mapWritableState } from 'pinia'
+import { message } from 'ant-design-vue'
 
 export default {
-  name: "ExportDesk",
+  name: 'ExportDesk',
   components: {
     RadioTab
   },
-  data() {
+  data () {
     return {
       dataType: [
-        {title: '保留数据', name: 'data'},
-        {title: '不保留数据', name: 'notData'}
+        { title: '保留数据', name: 'data' },
+        { title: '不保留数据', name: 'notData' }
       ],
-      defaultType: {title: '不保留数据', name: 'notData'},
+      defaultType: { title: '不保留数据', name: 'notData' },
       deskType: [],
       desk: [0],
       selectedDesk: []
@@ -88,7 +88,7 @@ export default {
   },
   computed: {
     ...mapWritableState(cardStore, ['settings', 'deskSize', 'countdownDay', 'currentDeskIndex']),
-    displaySize() {
+    displaySize () {
       if (this.layoutSize) {
         return this.layoutSize
       } else {
@@ -97,10 +97,10 @@ export default {
     }
   },
   methods: {
-    close() {
+    close () {
       this.$emit('closeExport', false)
     },
-    onChange(val) {
+    onChange (val) {
       this.selectedDesk = []
       const deskSize = this.layoutSize || this.deskSize //取出布局尺寸
       let desks = JSON.parse(JSON.stringify(this.desks))
@@ -116,7 +116,7 @@ export default {
           settings = item.settings
         } else {
           // settings = this.settings
-          settings = {...this.settings, enableZoom: true}
+          settings = { ...this.settings, enableZoom: true }
         }
         item.deskHeight = deskSize.height //新版导出修正命名
         item.settings = settings
@@ -128,21 +128,21 @@ export default {
         })
       })
     },
-    setData(cards) {
+    setData (cards) {
       cards.cards.forEach((item, index) => {
         switch (item.name) {
           case 'notes':
             if (item.customData) {
               item.customData.text = ''
             }
-            break;
+            break
           case 'countdownDay':
             item.customData.notRetain = true
-            break;
+            break
           case 'AggregateSearch':
             item.customData.sortType = 'work'
             delete item.customData.sortList
-            break;
+            break
           case 'myIcons':
             item.customData.iconList[0].backgroundColor = ''
             item.customData.iconList[0].backgroundIndex = 0
@@ -152,11 +152,11 @@ export default {
             item.customData.iconList[0].isRadius = true
             item.customData.iconList[0].radius = 5
             item.customData.iconList[0].size = 'mini'
-            break;
+            break
         }
       })
     },
-    async exportBtn() {
+    async exportBtn () {
       if (!this.selectedDesk.length) {
         message.error('您至少选择一个桌面。')
         return
@@ -168,7 +168,7 @@ export default {
         title: '选择保存位置',
         defaultPath: '我的桌面分享.desk',
         message: '选择保存分享代码位置',
-        filters: [{name: 'desk存档', extensions: ['desk']}],
+        filters: [{ name: 'desk存档', extensions: ['desk'] }],
         properties: [
           'createDirectory',
           'showOverwriteConfirmation'
@@ -183,24 +183,24 @@ export default {
           message.success('导出成功。为您的分享精神点赞！')
           require('electron').shell.showItemInFolder(savePath)
           this.close()
-          return
+
         } else {
           message.error('导出失败，请确认文件权限。')
         }
       })
     },
-    getShareJson() {
+    getShareJson () {
       return JSON.stringify(this.selectedDesk)
     },
   },
-  mounted() {
+  mounted () {
   },
   watch: {
-    openModal(val) {
+    openModal (val) {
       if (val) {
         this.selectedDesk = []
         this.deskType = this.desks.map(item => item.name)
-        this.defaultType = {title: '不保留数据', icon: 'yuanquan', name: 'notData'}
+        this.defaultType = { title: '不保留数据', icon: 'yuanquan', name: 'notData' }
         this.desks.map((item, index) => {
           if (item.nanoid === this.currentDeskIndex.name) {
             this.desk = [index]

@@ -16,7 +16,8 @@
     <template v-else>
       <template v-if="detailShow === false">
         <div class='w-full'>
-          <swiper :autoplay="{ delay: 2500,disableOnInteraction: false,}" :loop="true" :modules="modules" :pagination="{clickable:true}" :spaceBetween="30"
+          <swiper :autoplay="{ delay: 2500,disableOnInteraction: false,}" :loop="true" :modules="modules"
+                  :pagination="{clickable:true}" :spaceBetween="30"
                   class="mySwiper" @touchstart.stop
                   @touchmove.stop @touchend.stop>
             <swiper-slide v-for="item in list">
@@ -57,11 +58,15 @@
           </div>
           <div class="truncate" style="font-size: 18px;font-weight: 500;">{{ dpList.name }}</div>
           <span class="content-introduction"
-                style="color:var(--secondary-text);font-size: 16px;font-weight: 400;">{{ dpList.short_description }}</span>
+                style="color:var(--secondary-text);font-size: 16px;font-weight: 400;">{{
+              dpList.short_description
+            }}</span>
           <div class="flex" style="margin-bottom: 8px;">
             <span v-for="item in dpList.genres"
                   class="discount-description rounded-md"
-                  style="background:var(--secondary-bg);color: var(--secondary-text);font-size: 12px;font-weight: 500;">{{ item.description }}</span>
+                  style="background:var(--secondary-bg);color: var(--secondary-text);font-size: 12px;font-weight: 500;">{{
+                item.description
+              }}</span>
           </div>
           <span class="line-through" style="font-family: Oswald-Regular;font-size: 12px;">
             {{ dpList.price_overview.initial_formatted }}
@@ -79,7 +84,8 @@
             </div>
           </div>
           <div class="flex items-center justify-around">
-            <div class=" change pointer rounded-lg w-12 h-12 flex items-center justify-center" style="background: var(--primary-bg);"
+            <div class=" change pointer rounded-lg w-12 h-12 flex items-center justify-center"
+                 style="background: var(--primary-bg);"
                  @click="discountBack()">
               <Icon icon="xiangzuo" style="font-size: 1.715em;color:var(--primary-text);"></Icon>
             </div>
@@ -104,16 +110,16 @@
 </template>
 
 <script>
-import Widget from "../../card/Widget.vue";
-import HorizontalDrawer from "../../HorizontalDrawer.vue";
-import {regionRange, sendRequest} from '../../../js/axios/api'
-import {mapActions, mapWritableState} from 'pinia'
-import {steamStore} from '../../../store/steam'
-import {cardStore} from "../../../store/card";
-import {Swiper, SwiperSlide} from 'swiper/vue';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import {Autoplay, Pagination} from 'swiper';
+import Widget from '../../card/Widget.vue'
+import HorizontalDrawer from '../../HorizontalDrawer.vue'
+import { regionRange, sendRequest } from '../../../js/axios/api'
+import { mapActions, mapWritableState } from 'pinia'
+import { steamStore } from '../../../store/steam'
+import { cardStore } from '../../../store/card'
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import 'swiper/css'
+import 'swiper/css/pagination'
+import { Autoplay, Pagination } from 'swiper'
 import Template from '../../../../user/pages/Template.vue'
 import _ from 'lodash-es'
 import browser from '../../../js/common/browser'
@@ -142,7 +148,7 @@ export default {
     SwiperSlide,
     HorizontalDrawer
   },
-  data() {
+  data () {
     return {
       fail: false,
       key: Date.now(),
@@ -165,28 +171,27 @@ export default {
       id: '',
       isLoading: false,
       detailBar: [{
-        icon: "shezhi1", title: '设置', fn: () => {
-          this.$refs.regionDrawer.detailDisplay = true;
+        icon: 'shezhi1', title: '设置', fn: () => {
+          this.$refs.regionDrawer.detailDisplay = true
           this.$refs.detailSlot.visible = false
         }
       }]
     }
   },
-  mounted() {
+  mounted () {
     this.isLoading = true
     if (this.customData && this.customData.id) {
       this.defaultRegion = this.customData.id
     }
-
 
     this.getRegion().then(() => {
 
     })
   },
   computed: {
-    ...mapWritableState(steamStore, ["data", "dataDetail", 'getData']),
-    ...mapWritableState(cardStore, ["customComponents", "updateCustomData"]),
-    region() {
+    ...mapWritableState(steamStore, ['data', 'dataDetail', 'getData']),
+    ...mapWritableState(cardStore, ['customComponents', 'updateCustomData']),
+    region () {
       if (this.customData && this.customData.id) {
         let found = this.regionRange.find(re => {
           return re.id === this.customData.id
@@ -198,20 +203,20 @@ export default {
       return this.regionRange[0]
 
     },
-    list() {
+    list () {
       if (this.key) {
 
       }
       let myCustomData = this.data[this.customData.id]
       if (myCustomData) {
         let waitUse = _.cloneDeep(myCustomData.list)
-        let groups = [];
+        let groups = []
         for (let i = 0; i < 5; i++) {
-          groups.push([]);
+          groups.push([])
         }
         // 随机获取两条数据，放入五个数组中
         for (let i = 0; i < groups.length; i++) {
-          const index = _.sampleSize(waitUse, 2);
+          const index = _.sampleSize(waitUse, 2)
           waitUse = _.without(waitUse, ...index)
           groups[i].push(index)
         }
@@ -222,20 +227,20 @@ export default {
     }
   },
   methods: {
-    ...mapActions(steamStore, ["setGameDetail", "updateGameData", "setGameData", 'getRandomList']),
+    ...mapActions(steamStore, ['setGameDetail', 'updateGameData', 'setGameData', 'getRandomList']),
     // 按钮触发右侧抽屉弹窗
-    showRegionSelect() {
+    showRegionSelect () {
       this.$refs.regionDrawer.openDrawer()
     },
 
-    retry() {
+    retry () {
       this.getRegion().then(() => {
       }).catch(() => this.fail = true).finally(() => {
         this.isLoading = false
       })
     },
     // 海报进入详情
-    goToGameAppDetails(item, cc) {
+    goToGameAppDetails (item, cc) {
       this.detailShow = true
       this.isLoading = true
       this.fail = false
@@ -279,7 +284,7 @@ export default {
 
     },
     // 按钮点击切换
-    discountChange() {
+    discountChange () {
       this.reloadShow = true
       setTimeout(() => {
         this.key = Date.now()
@@ -287,15 +292,15 @@ export default {
       }, 300)
     },
     // 返回
-    discountBack() {
+    discountBack () {
       this.detailShow = false
       window.localStorage.removeItem('detail')
     },
     // 打开steam官网
-    openSteam(id) {
+    openSteam (id) {
       browser.openInUserSelect(`https://store.steampowered.com/app/${id}`)
     },
-    async getRegion() {
+    async getRegion () {
 
       this.fail = false
       this.isLoading = true
@@ -312,22 +317,22 @@ export default {
       })
     },
 
-    getArea(v) {
+    getArea (v) {
       this.defaultRegion = v.id
       this.getRegion()
     },
 
-    enterDiscountDetail() {
-      this.$router.push({name: 'recommend', params: {id: this.customData.id}})
+    enterDiscountDetail () {
+      this.$router.push({ name: 'recommend', params: { id: this.customData.id } })
     },
-    enterGameDetail(v) {
-      this.$router.push({name: 'GameDiscountDetail', params: {id: v}})
+    enterGameDetail (v) {
+      this.$router.push({ name: 'GameDiscountDetail', params: { id: v } })
     }
   },
-  setup() {
+  setup () {
     return {
       modules: [Pagination, Autoplay],
-    };
+    }
   },
 }
 </script>

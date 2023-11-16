@@ -44,7 +44,8 @@
           <div v-if="qrCode.alipay " class="w-full h-full rounded-sm" style="background: white;padding: 10px;">
             <iframe
                 id="alipayCode"
-                class=" object-cover" scrolling="no" style="border: none;background: transparent;width: 120px;height: 120px;overflow: hidden;transform: scale(1.3);margin-left: 30px;margin-top: 30px"></iframe>
+                class=" object-cover" scrolling="no"
+                style="border: none;background: transparent;width: 120px;height: 120px;overflow: hidden;transform: scale(1.3);margin-left: 30px;margin-top: 30px"></iframe>
           </div>
           <a-avatar v-else alt="" class="w-full h-full object-cover" shape="square"></a-avatar>
         </div>
@@ -64,9 +65,9 @@
 
 <script>
 import HorzontanlPanelIcon from '../HorzontanlPanelIcon.vue'
-import {message, Modal} from 'ant-design-vue'
-import {mapActions} from 'pinia'
-import {frameStore} from '../../store/avatarFrame'
+import { message, Modal } from 'ant-design-vue'
+import { mapActions } from 'pinia'
+import { frameStore } from '../../store/avatarFrame'
 
 export default {
   name: 'CollectionCodeModal',
@@ -87,14 +88,14 @@ export default {
   components: {
     HorzontanlPanelIcon
   },
-  data() {
+  data () {
     return {
       error: false,
       payMethod: [   // 头像框购买的支付方式数据
-        {icon: 'weixinzhifu', title: '微信支付', type: 'wechat'},
-        {icon: 'zhifubao', title: '支付宝', type: 'alipay'}
+        { icon: 'weixinzhifu', title: '微信支付', type: 'wechat' },
+        { icon: 'zhifubao', title: '支付宝', type: 'alipay' }
       ],
-      payWeixin: {icon: 'weixinzhifu', title: '微信支付', type: 'wechat'}, // 默认微信支付
+      payWeixin: { icon: 'weixinzhifu', title: '微信支付', type: 'wechat' }, // 默认微信支付
       qrCode: {//二维码
         wechat: '',
         alipay: ''
@@ -106,39 +107,39 @@ export default {
   },
   watch: {
     'payWeixin': {
-      handler(newVal) {
+      handler (newVal) {
         this.generateQrcode(newVal.type)
       },
       immediate: true,
     },
     'order': {
-      handler(newVal) {
+      handler (newVal) {
         this.generateQrcode(this.payWeixin.type)
       }
     }
   },
-  mounted() {
+  mounted () {
     this.startTimer()
   },
-  unmounted() {
+  unmounted () {
     this.closeTimer()
   },
   methods: {
     ...mapActions(frameStore, ['getQrcode', 'checkOrderPaid']),
-    startTimer() {
+    startTimer () {
       if (!this.checkTimer) {
         this.checkTimer = setInterval(() => {
           this.checkOrderPaidStatus()
         }, 1000)
       }
     },
-    closeTimer() {
+    closeTimer () {
       if (this.checkTimer) {
         clearInterval(this.checkTimer)
         this.checkTimer = null
       }
     },
-    async checkOrderPaidStatus() {
+    async checkOrderPaidStatus () {
       if (this.order) {
         let rs = await this.checkOrderPaid(this.order.nanoid)
         if (rs.status) {
@@ -157,7 +158,7 @@ export default {
         }
       }
     },
-    generateQrcode(payment) {
+    generateQrcode (payment) {
       if (!this.order.nanoid) {
         return
       }
@@ -167,7 +168,7 @@ export default {
         this.getAlipay()
       }
     },
-    getWechat() {
+    getWechat () {
       this.qrCode.wechat = ''
       this.error = false
       this.getQrcode(this.order.nanoid, 'wechat').then((rs) => {
@@ -178,10 +179,10 @@ export default {
         }
         this.error = true
         message.error('获取微信订单二维码失败，请稍后再试。')
-        return
+
       })
     },
-    copyOrder(text) {
+    copyOrder (text) {
       try {
         require('electron').clipboard.writeText(text)
         //Navigator.clipboard.writeText(text)
@@ -190,7 +191,7 @@ export default {
 
       }
     },
-    getAlipay() {
+    getAlipay () {
       this.qrCode.alipay = ''
       this.error = false
       this.getQrcode(this.order.nanoid, 'alipay').then((rs) => {
@@ -210,7 +211,7 @@ export default {
         }
         this.error = true
         message.error('获取支付宝订单二维码失败，请稍后再试。')
-        return
+
       })
     },
   }

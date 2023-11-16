@@ -32,7 +32,8 @@
     </div>
   </vue-custom-scrollbar>
 
-  <a-menu v-if="toggle" :style="{position: 'fixed',top:`${contextMenuPosition.y}px`,left:`${contextMenuPosition.x}px`,zIndex: '999'}"
+  <a-menu v-if="toggle"
+          :style="{position: 'fixed',top:`${contextMenuPosition.y}px`,left:`${contextMenuPosition.x}px`,zIndex: '999'}"
           class="dropdown-menu rounded-lg flex flex-col items-center justify-center"
           style="width: 120px;">
     <a-menu-item v-for="(item,index) in rightMenuControls" class="active-button" style="color:var(--secondary-text);"
@@ -44,16 +45,15 @@
 </template>
 
 <script>
-import {defineComponent, reactive, ref, toRefs} from 'vue'
-import {formatTime} from '../../util'
-import {noticeStore} from '../../store/notice'
-import {useRouter} from 'vue-router'
+import { defineComponent, reactive, ref, toRefs } from 'vue'
+import { formatTime } from '../../util'
+import { noticeStore } from '../../store/notice'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   props: ['list'],
 
-
-  setup(props, ctx) {
+  setup (props, ctx) {
     const store = noticeStore()
     const router = useRouter()
 
@@ -66,37 +66,35 @@ export default defineComponent({
         wheelPropagation: true
       },
       toggle: false, // 控制右键下拉菜单
-      contextMenuPosition: {x: 0, y: 0}, // 右键菜单的位置
-      rightMenuControls: [{title: '打开应用', name: 'Open'}, {title: '删除通知', name: 'remove'}],
+      contextMenuPosition: { x: 0, y: 0 }, // 右键菜单的位置
+      rightMenuControls: [{ title: '打开应用', name: 'Open' }, { title: '删除通知', name: 'remove' }],
       removeDoc: '',// 需要删除的数据
     })
 
     const dialog = ref()
     const content = ref()
 
-
     // 鼠标右键点击
     const handleRightKey = (item, e) => {
-      e.preventDefault();
+      e.preventDefault()
       data.toggle = true
       data.removeDoc = item
 
       // 获取鼠标点击位置
-      const x = e.clientX;
-      const y = e.clientY;
+      const x = e.clientX
+      const y = e.clientY
 
       // 设置右键菜单的位置和可见状态
-      data.contextMenuPosition = {x, y};
+      data.contextMenuPosition = { x, y }
 
       // 点击其他地方时隐藏右键菜单
-      document.addEventListener('click', removeContextmenu);
+      document.addEventListener('click', removeContextmenu)
     }
 
     const removeContextmenu = () => {  // 移除隐藏鼠标右键下拉菜单
       data.toggle = false
-      document.removeEventListener('click', removeContextmenu);
+      document.removeEventListener('click', removeContextmenu)
     }
-
 
     const handleMenuItemClick = (item, index) => {
       if (item.name === 'remove') {
@@ -107,16 +105,14 @@ export default defineComponent({
       }
     }
 
-
     // 根据指定消息通知进行删除
     const delNotice = (item) => {
       store.removeIMChatData(item)
       store.loadNoticeDB()
     }
 
-
     const noticeDetail = () => {
-      router.push({name: 'chatMain'})
+      router.push({ name: 'chatMain' })
       ctx.emit('closeMessage')
     }
 
@@ -129,7 +125,6 @@ export default defineComponent({
   }
 
 })
-
 
 // import { mapActions } from 'pinia'
 // import { noticeStore } from '../../store/notice'
@@ -165,7 +160,6 @@ export default defineComponent({
 //     noticeMenu(index,evt){  // 鼠标右键显示下拉菜单
 //       evt.preventDefault();
 //       this.delId = index
-
 
 //     },
 

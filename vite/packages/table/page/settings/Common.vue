@@ -40,27 +40,27 @@
 
 <script>
 import ZoomUI from '../../components/comp/ZoomUI.vue'
-import {appStore} from '../../store'
-import {mapWritableState} from 'pinia'
+import { appStore } from '../../store'
+import { mapWritableState } from 'pinia'
 import AutoRun from '../../components/comp/AutoRun.vue'
-import {isMain} from '../../js/common/screenUtils'
+import { isMain } from '../../js/common/screenUtils'
 import Template from '../../../user/pages/Template.vue'
-import {useWidgetStore} from "../../components/card/store.ts"
+import { useWidgetStore } from '../../components/card/store.ts'
 
 export default {
   name: 'Common',
-  components: {Template, AutoRun, ZoomUI},
-  data() {
+  components: { Template, AutoRun, ZoomUI },
+  data () {
     return {
       trayOpen: '',
       showInTaskBar: false,
       rightMenuList: [
         {
-          name: "下拉菜单",
+          name: '下拉菜单',
           value: 'follow'
         },
         {
-          name: "抽屉菜单",
+          name: '抽屉菜单',
           value: 'default'
         }
       ]
@@ -71,7 +71,7 @@ export default {
     ...mapWritableState(useWidgetStore, ['rightModel']),
     isMain
   },
-  async mounted() {
+  async mounted () {
     this.trayOpen = await tsbApi.settings.get('trayOpen') || 'table'
     let showInTaskBar = await tsbApi.settings.get('showInTaskBar')
     if (showInTaskBar === undefined) {

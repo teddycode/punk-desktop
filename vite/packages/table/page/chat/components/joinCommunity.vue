@@ -89,21 +89,19 @@
 </template>
 
 <script>
-import {computed, defineComponent, reactive, toRefs} from 'vue'
-import {CloseOutlined, SearchOutlined} from '@ant-design/icons-vue'
-import {communityStore} from '../store/communityStore'
-import {message} from 'ant-design-vue'
+import { computed, defineComponent, reactive, toRefs } from 'vue'
+import { CloseOutlined, SearchOutlined } from '@ant-design/icons-vue'
+import { communityStore } from '../store/communityStore'
+import { message } from 'ant-design-vue'
 import _ from 'lodash-es'
-
 
 export default defineComponent({
   components: {
     CloseOutlined, SearchOutlined
   },
-  setup(props, ctx) {
+  setup (props, ctx) {
 
     const myCom = communityStore()
-
 
     const data = reactive({
       settingsScroller: {
@@ -117,7 +115,6 @@ export default defineComponent({
       searchResult: [],
     })
 
-
     // 关闭加入弹窗
     const closeJoinCom = () => {
       ctx.emit('close')
@@ -130,13 +127,13 @@ export default defineComponent({
           data.searchResult = result.data.list
         })
       } else {
-        evt.preventDefault();
+        evt.preventDefault()
       }
     }
 
     // 加入社群
     const nowJoin = (item) => {
-      myCom.joinCommunity({no: item.no}).then(res => {
+      myCom.joinCommunity({ no: item.no }).then(res => {
         if (res.status === 1) {
           myCom.getMyCommunity()
           message.success(`${res.info}`)
@@ -164,13 +161,12 @@ export default defineComponent({
     const filterRecommendList = computed(() => {
       const list = Object.values(myCom.recommendCommunityList.reduce((acc, curr) => {
         if (!acc[curr.id]) {
-          acc[curr.id] = curr;
+          acc[curr.id] = curr
         }
-        return acc;
-      }, {}));
+        return acc
+      }, {}))
       return list
     })
-
 
     return {
       filterRecommendList,

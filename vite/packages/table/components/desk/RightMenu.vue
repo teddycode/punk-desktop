@@ -5,23 +5,23 @@
 </template>
 
 <script setup>
-import {computed} from "vue";
-import {storeToRefs} from "pinia";
-import {useWidgetStore} from "../card/store.ts";
-import Menu from "../../ui/components/Menu/index.vue";
+import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useWidgetStore } from '../card/store.ts'
+import Menu from '../../ui/components/Menu/index.vue'
 
 const props = defineProps({
   menus: {},
   model: {
-    default: "contextmenu",
+    default: 'contextmenu',
   },
-});
-const widgetStore = useWidgetStore();
+})
+const widgetStore = useWidgetStore()
 
-const {rightModel} = storeToRefs(widgetStore);
+const { rightModel } = storeToRefs(widgetStore)
 const menuState = computed(() => {
-  return rightModel.value == "follow";
-});
+  return rightModel.value == 'follow'
+})
 </script>
 
 <style lang="scss" scoped></style>

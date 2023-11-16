@@ -62,17 +62,17 @@
 </template>
 
 <script>
-import {message} from "ant-design-vue";
-import {mapActions, mapWritableState} from "pinia";
-import {cardStore} from "../../store/card";
-import {transDate} from "../../../../src/util/dateTime";
-import Widget from "../card/Widget.vue";
-import {timeStamp} from "../../util";
-import {timerStore} from '../../store/timer'
+import { message } from 'ant-design-vue'
+import { mapActions, mapWritableState } from 'pinia'
+import { cardStore } from '../../store/card'
+import { transDate } from '../../../../src/util/dateTime'
+import Widget from '../card/Widget.vue'
+import { timeStamp } from '../../util'
+import { timerStore } from '../../store/timer'
 import XtButton from '../../ui/libs/Button/index.vue'
 
 export default {
-  name: "SmallCountdownDay",
+  name: 'SmallCountdownDay',
   props: {
     customIndex: {
       type: Number,
@@ -82,8 +82,8 @@ export default {
       type: Object
     }
   },
-  components: {XtButton, Widget},
-  data() {
+  components: { XtButton, Widget },
+  data () {
     return {
       simpleImage: '/public/img/test/load-ail.png',
       visible: false,
@@ -94,64 +94,64 @@ export default {
         icon: '',
         type: 'smallCountDownDay'
       },
-      eventValue: "",
+      eventValue: '',
       dateValue: null,
       settingVisible: false
-    };
+    }
   },
-  created() {
+  created () {
     this.selectMy()
   },
   computed: {
-    ...mapWritableState(cardStore, ["countdownDay"]),
+    ...mapWritableState(cardStore, ['countdownDay']),
     ...mapWritableState(timerStore, ['appDate']),
-    differenceDay() {
+    differenceDay () {
       return transDate(
-          this.appDate.year + "-" + this.appDate.month + "-" + this.appDate.day,
+          this.appDate.year + '-' + this.appDate.month + '-' + this.appDate.day,
           this.myCountdownDay[0].dateValue.year +
-          "-" +
+          '-' +
           this.myCountdownDay[0].dateValue.month +
-          "-" +
+          '-' +
           this.myCountdownDay[0].dateValue.day
       )
     },
   },
   methods: {
     transDate,
-    ...mapActions(cardStore, ["removeCountdownDay", 'addCountdownDay', 'sortCountdown']),
-    onSetup() {
+    ...mapActions(cardStore, ['removeCountdownDay', 'addCountdownDay', 'sortCountdown']),
+    onSetup () {
       this.settingVisible = true
     },
-    selectMy() {
+    selectMy () {
       this.myCountdownDay = this.countdownDay.filter(i => {
         return i.customIndex == this.customIndex
       })
     },
-    closeSettingVisible() {
+    closeSettingVisible () {
       this.settingVisible = false
     },
-    addEvent() {
-      if (this.eventValue === "" || this.dateValue === null) {
-        message.info("不可为空！");
+    addEvent () {
+      if (this.eventValue === '' || this.dateValue === null) {
+        message.info('不可为空！')
         return
       }
       this.addCountdownDay({
         eventValue: this.eventValue,
         dateValue: timeStamp(this.dateValue.valueOf()),
         customIndex: this.customIndex
-      });
-      this.eventValue = ""
+      })
+      this.eventValue = ''
       this.dateValue = null
-      message.info("添加成功！");
+      message.info('添加成功！')
       this.selectMy()
       this.settingVisible = false
     }
   },
 
-  mounted() {
+  mounted () {
     this.sortCountdown()
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

@@ -63,13 +63,13 @@
 </template>
 
 <script>
-import {appStore} from '../../../store';
-import {mapActions, mapWritableState} from "pinia";
-import {keyStore} from '../store'
-import Preview from '../components/Preview.vue';
+import { appStore } from '../../../store'
+import { mapActions, mapWritableState } from 'pinia'
+import { keyStore } from '../store'
+import Preview from '../components/Preview.vue'
 
 export default {
-  name: "NotShortcutKey",
+  name: 'NotShortcutKey',
   components: {
     Preview
   },
@@ -88,7 +88,7 @@ export default {
     //   default: []
     // }
   },
-  data() {
+  data () {
     return {
       notAppList: [],
       keyScheme: {},
@@ -100,35 +100,35 @@ export default {
   },
   methods: {
     ...mapActions(appStore, ['showUserCard']),
-    showCard(id) {
+    showCard (id) {
       this.showUserCard(id)
     },
     //跳转到分享页
-    share() {
+    share () {
       this.$emit('createScheme')
     },
     // 跳转到创意市场
-    market() {
-      this.$router.push({name: 'creativeMarket'})
+    market () {
+      this.$router.push({ name: 'creativeMarket' })
     },
     // 返回
-    onBack() {
+    onBack () {
       this.$router.go(-1)
     },
-    previewKay(item) {
+    previewKay (item) {
       this.keyScheme = item
       this.showModal = true
     },
-    closePreview(val) {
+    closePreview (val) {
       this.showModal = val
     },
-    goDownload() {
+    goDownload () {
       this.$router.push({
-        name: "shortcutStore"
+        name: 'shortcutStore'
       })
     }
   },
-  mounted() {
+  mounted () {
     if (this.detailJump) {
       this.notAppList = this.marketList[0].children.slice(0, 3)
     } else {

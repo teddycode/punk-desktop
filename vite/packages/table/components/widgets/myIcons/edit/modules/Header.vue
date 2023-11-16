@@ -10,28 +10,28 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
-      selectTab: "config",
+      selectTab: 'config',
       tabList: [
         {
-          title: "配置",
-          value: "config",
+          title: '配置',
+          value: 'config',
         },
         {
-          title: "样式",
-          value: "style",
+          title: '样式',
+          value: 'style',
         },
       ],
-    };
+    }
   },
   watch: {
-    selectTab(newV) {
-      console.log("newV :>> ", newV);
-      this.$emit("update:data", newV);
+    selectTab (newV) {
+      console.log('newV :>> ', newV)
+      this.$emit('update:data', newV)
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

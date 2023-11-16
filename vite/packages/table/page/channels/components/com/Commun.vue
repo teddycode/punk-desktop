@@ -22,14 +22,17 @@
         <div class="flex  w-[200px] h-[40px] justify-center xt-bg rounded-lg">
           <div v-for="(item, index) in menuList" :key="index"
                :class="[{ action: currentIndex == index }]"
-               class="w-[64px] h-[32px]  mt-1 mb-1 text-center leading-8 font-16" style="cursor: pointer;" @click="setCurrentIndex(index)">{{
+               class="w-[64px] h-[32px]  mt-1 mb-1 text-center leading-8 font-16" style="cursor: pointer;"
+               @click="setCurrentIndex(index)">{{
               item.name
             }}
           </div>
         </div>
         <div class="xt-bg w-[115px] h-[40px] text-center ml-3 leading-10 rounded-lg font-16" style="cursor: pointer">
-          <a-dropdown overlayStyle="background-color: var(--primary-bg); padding-left:3px ;padding-right:3px; width: 100px;" placement="bottom"
-                      trigger="click">
+          <a-dropdown
+              overlayStyle="background-color: var(--primary-bg); padding-left:3px ;padding-right:3px; width: 100px;"
+              placement="bottom"
+              trigger="click">
             <span class=" ant-dropdown-link" @click.prevent>
               {{ checkMenuList[checkMenuCurrentIndex].type }}
               <DownOutlined class="text-sm"/>
@@ -82,7 +85,8 @@
                    style="margin-top: 30%;"></a-empty>
           <template v-else>
             <ComCard v-for="(card, index) in comCards.list" :key="index" :cardData="card" :detailVisible="detailVisible"
-                     :style="{ backgroundColor: selectedIndex === index ? 'var(--active-secondary-bg) !important' : 'var(--primary-bg) !important', flex: 1 }" class="xt-bg"
+                     :style="{ backgroundColor: selectedIndex === index ? 'var(--active-secondary-bg) !important' : 'var(--primary-bg) !important', flex: 1 }"
+                     class="xt-bg"
                      @click="showDetail(index)">
             </ComCard>
             <a-pagination v-model:current="current" :total="totalPost" class="xt-text-2" simple @change="changePage"/>
@@ -93,7 +97,8 @@
       <!-- <DataStatu v-else imgDisplay="/img/test/load-ail.png" :btnToggle="false" textPrompt="暂无数据"></DataStatu> -->
       <!-- 右侧详情区域 -->
       <vue-custom-scrollbar v-if="detailVisible" :key="selectedIndex" :settings="settingsScroller"
-                            :style="{ width: detailVisible ? '55%' : '40%' }" class="ml-2 rounded-lg thread-detail xt-bg"
+                            :style="{ width: detailVisible ? '55%' : '40%' }"
+                            class="ml-2 rounded-lg thread-detail xt-bg"
                             style="height: 100%;">
         <div v-if="detailVisible" class="h-full detail">
           <DetailCard :cardData="detailText" @closeDetail="closeDetail"></DetailCard>

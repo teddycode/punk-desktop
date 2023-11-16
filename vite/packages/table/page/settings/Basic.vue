@@ -15,9 +15,9 @@
 
 <script>
 import SecondPanel from '../../components/SecondPanel.vue'
-import {isMain} from '../../js/common/screenUtils'
-import {taskStore} from '../../apps/task/store'
-import {mapWritableState} from 'pinia'
+import { isMain } from '../../js/common/screenUtils'
+import { taskStore } from '../../apps/task/store'
+import { mapWritableState } from 'pinia'
 
 const menus = [
   {
@@ -84,14 +84,14 @@ const subMenus = [
 ]
 export default {
   name: 'Basic',
-  components: {SecondPanel},
-  data() {
+  components: { SecondPanel },
+  data () {
     return {
       menus: isMain() ? menus : subMenus,
       currentMenu: 'common'
     }
   },
-  mounted() {
+  mounted () {
     // this.$router.replace({
     //       name:'key'
     //     })
@@ -102,16 +102,16 @@ export default {
   },
   computed: {
     isMain,
-    ...mapWritableState(taskStore, ["taskID", "step"]),
+    ...mapWritableState(taskStore, ['taskID', 'step']),
   },
   watch: {
     taskID: {
-      handler(newV) {
+      handler (newV) {
         if (this.taskID === 'M0401' && this.step == 2) {
           let obj = {
-            "menu": {
-              "route": {
-                "name": "key"
+            'menu': {
+              'route': {
+                'name': 'key'
               }
             },
           }
@@ -122,16 +122,16 @@ export default {
     }
   },
   methods: {
-    change(tab) {
+    change (tab) {
       this.$router.push(tab.menu.route)
     },
-    setMenu(menu) {
+    setMenu (menu) {
       this.currentMenu = menu.name
       if (menu.route) {
         this.$router.push(menu.route)
       }
     },
-    setKeyStatus(keyCode, status) {
+    setKeyStatus (keyCode, status) {
       switch (keyCode) {
         case 16:
           this.shift = status

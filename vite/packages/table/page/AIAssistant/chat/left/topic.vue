@@ -32,20 +32,20 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from "pinia";
-import {aiStore} from "../../../../store/ai";
-import dayjs from "dayjs";
+import { mapActions, mapWritableState } from 'pinia'
+import { aiStore } from '../../../../store/ai'
+import dayjs from 'dayjs'
 
 export default {
-  data() {
+  data () {
     return {
       menus: [
         {
-          icon: "Pushpin",
-          label: this.data.top ? "取消置顶" : "置顶",
+          icon: 'Pushpin',
+          label: this.data.top ? '取消置顶' : '置顶',
           callBack: this.handleTop,
         },
-        {icon: "shanchu", label: "删除", callBack: this.handleDel},
+        { icon: 'shanchu', label: '删除', callBack: this.handleDel },
         // {
         //   newIcon: "fluent-emoji:star",
         //   label: " 新删除",
@@ -64,77 +64,77 @@ export default {
         //   },
         // },
       ],
-    };
+    }
   },
   computed: {
     ...mapWritableState(aiStore, [
-      "topicList",
-      "selectTopicIndex",
-      "chatList",
-      "searchState",
+      'topicList',
+      'selectTopicIndex',
+      'chatList',
+      'searchState',
     ]),
-    text() {
-      return this.getData().content || "暂无数据";
+    text () {
+      return this.getData().content || '暂无数据'
     },
-    time() {
-      let timestamp = this.getData().time; // 假设您已经获取了时间戳
+    time () {
+      let timestamp = this.getData().time // 假设您已经获取了时间戳
       if (!timestamp) {
-        timestamp = this.topicList[this.data.id].time;
+        timestamp = this.topicList[this.data.id].time
       }
 
-      const targetDate = dayjs(timestamp);
-      const now = dayjs();
-      const diffMinutes = now.diff(targetDate, "minute");
+      const targetDate = dayjs(timestamp)
+      const now = dayjs()
+      const diffMinutes = now.diff(targetDate, 'minute')
 
       if (diffMinutes < 3) {
-        return "刚刚";
+        return '刚刚'
       } else if (diffMinutes < 60) {
-        return `${diffMinutes}分钟前`;
+        return `${diffMinutes}分钟前`
       } else if (diffMinutes < 1440) {
-        const diffHours = Math.floor(diffMinutes / 60);
-        return `${diffHours}小时前`;
-      } else if (now.isSame(targetDate, "day")) {
-        return `今天 ${targetDate.format("HH:mm")}`;
-      } else if (now.subtract(1, "day").isSame(targetDate, "day")) {
-        return `昨天 ${targetDate.format("HH:mm")}`;
+        const diffHours = Math.floor(diffMinutes / 60)
+        return `${diffHours}小时前`
+      } else if (now.isSame(targetDate, 'day')) {
+        return `今天 ${targetDate.format('HH:mm')}`
+      } else if (now.subtract(1, 'day').isSame(targetDate, 'day')) {
+        return `昨天 ${targetDate.format('HH:mm')}`
       } else {
-        return targetDate.format("MM-DD");
+        return targetDate.format('MM-DD')
       }
     },
   },
-  mounted() {
+  mounted () {
   },
   methods: {
-    ...mapActions(aiStore, ["delTopic"]),
-    getData() {
+    ...mapActions(aiStore, ['delTopic']),
+    getData () {
       let obj = {
         ...this.chatList[this.data.id][this.chatList[this.data.id].length - 2],
-      };
-      return obj;
+      }
+      return obj
     },
-    handleTop() {
-      let id = this.data.id;
+    handleTop () {
+      let id = this.data.id
       for (let key in this.topicList) {
-        let item = this.topicList[key];
+        let item = this.topicList[key]
 
         if (item.id == id) {
-          item.top = !item.top;
+          item.top = !item.top
         }
       }
     },
-    handleDel() {
-      this.selectTopicIndex = this.data.id;
-      this.delTopic();
+    handleDel () {
+      this.selectTopicIndex = this.data.id
+      this.delTopic()
     },
-    handleIndex() {
-      this.searchState = false;
-      this.selectTopicIndex = this.data.id;
+    handleIndex () {
+      this.searchState = false
+      this.selectTopicIndex = this.data.id
     },
   },
   props: {
     data: {},
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

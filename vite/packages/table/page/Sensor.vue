@@ -5,12 +5,12 @@
 <script>
 export default {
   name: 'Sensor',
-  data() {
+  data () {
     return {
       data: ''
     }
   },
-  mounted() {
+  mounted () {
 
     if (process.platform === 'win32') {
       const readAida64 = window.readAida64

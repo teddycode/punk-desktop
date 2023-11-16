@@ -42,11 +42,11 @@
 </template>
 
 <script>
-import SupervisorySlot from "./SupervisorySlot.vue";
+import SupervisorySlot from './SupervisorySlot.vue'
 
 export default {
-  name: "InternalList",
-  data() {
+  name: 'InternalList',
+  data () {
     return {
       options: {
         className: 'card',

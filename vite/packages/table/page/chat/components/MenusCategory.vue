@@ -47,9 +47,9 @@
 </template>
 
 <script>
-import {defineComponent, reactive, toRefs} from 'vue'
-import {Icon as MenuIcon} from '@iconify/vue'
-import {CloseOutlined} from '@ant-design/icons-vue'
+import { defineComponent, reactive, toRefs } from 'vue'
+import { Icon as MenuIcon } from '@iconify/vue'
+import { CloseOutlined } from '@ant-design/icons-vue'
 
 import SelectGroupChat from './channelSelect/ChannelGroupChat.vue'
 import SelectMenuWebLink from './channelSelect/ChannelWebLink.vue'
@@ -64,13 +64,13 @@ export default defineComponent({
 
   props: ['no'],
 
-  setup(props, ctx) {
+  setup (props, ctx) {
     const data = reactive({
       channelList: [
         // { icon:'fluent-emoji-flat:desktop-computer',name:'桌面',type:'desk'},
-        {icon: 'fluent-emoji-flat:placard', name: '社区', type: 'community'},
-        {icon: 'fluent-emoji-flat:thought-balloon', name: '群聊', type: 'chat'},
-        {icon: 'fluent-emoji-flat:globe-with-meridians', name: '网页链接', type: 'link'}
+        { icon: 'fluent-emoji-flat:placard', name: '社区', type: 'community' },
+        { icon: 'fluent-emoji-flat:thought-balloon', name: '群聊', type: 'chat' },
+        { icon: 'fluent-emoji-flat:globe-with-meridians', name: '网页链接', type: 'link' }
       ],
 
       selectIndex: 'community',
@@ -81,12 +81,10 @@ export default defineComponent({
 
     })
 
-
     // 关闭
     const closeChannel = () => {
       ctx.emit('close')
     }
-
 
     // 选择频道
     const selectChannel = (item) => {
@@ -94,12 +92,10 @@ export default defineComponent({
       data.type = item.type
     }
 
-
     // 选择完进入下一步
     const selectSubmit = () => {
       data.nextShow = true
     }
-
 
     return {
       ...toRefs(data), closeChannel, selectChannel, selectSubmit

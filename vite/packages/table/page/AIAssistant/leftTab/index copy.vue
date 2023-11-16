@@ -13,53 +13,53 @@
 <script>
 export default {
   computed: {
-    test() {
+    test () {
       return [
         {
-          icon: "message",
-          float: this.a ? "test" : "",
+          icon: 'message',
+          float: this.a ? 'test' : '',
         },
         {
-          icon: "message",
+          icon: 'message',
           children: [
             {
-              icon: "message",
-              name: "test1",
+              icon: 'message',
+              name: 'test1',
             },
             {
-              icon: "message",
-              name: "test2",
+              icon: 'message',
+              name: 'test2',
             },
             {
-              icon: "message",
-              name: "test3",
+              icon: 'message',
+              name: 'test3',
             },
           ],
         },
         {
           flag: true,
-          icon: "tianjia2",
+          icon: 'tianjia2',
         },
         {
           full: true,
         },
         {
-          icon: "message",
+          icon: 'message',
           children: [
             {
-              icon: "message",
-              name: "test",
+              icon: 'message',
+              name: 'test',
             },
           ],
         },
-      ];
+      ]
     },
   },
-  data() {
+  data () {
     return {
       a: true,
-    };
+    }
   },
-};
+}
 </script>
 <style lang="scss" scoped></style>

@@ -27,12 +27,12 @@ export default {
     }
   },
 
-  mounted() {
+  mounted () {
     this.loadXgPlayer()
   },
   methods: {
     // 初始化西瓜视频播放器
-    loadXgPlayer() {
+    loadXgPlayer () {
       const url = this.url
       this.$nextTick(() => {
         window.$xgplayer = new Player({

@@ -112,19 +112,19 @@ CPU:
 Vue.component('app-manager', {
   template: appManagerTpl,
   name: 'app-manager',
-  props:{
-    apps:{
-      type:Array,
-      default:[]
+  props: {
+    apps: {
+      type: Array,
+      default: []
     },
-    runningApps:{
-      type:Array,
-      default:[]
+    runningApps: {
+      type: Array,
+      default: []
     }
   },
   data () {
     return {
-      setted:false,
+      setted: false,
       timer: 0
     }
   },
@@ -134,69 +134,68 @@ Vue.component('app-manager', {
 
   methods: {
 
-    startStat(id){
-      if(!this.setted){
-        window.tickId=id
-       this.timer= setInterval(()=>{
-         ipc.send('getAppRunningInfo',{nanoid:window.tickId})
-       },1000)
-        this.setted=true
+    startStat (id) {
+      if (!this.setted) {
+        window.tickId = id
+        this.timer = setInterval(() => {
+          ipc.send('getAppRunningInfo', { nanoid: window.tickId })
+        }, 1000)
+        this.setted = true
       }
 
     },
-    stopStat(){
+    stopStat () {
       clearInterval(this.timer)
-      this.setted=false
+      this.setted = false
     },
     destroyed () {
       // 销毁定时器
       clearInterval(this.timer)
     },
-    executeApp(app){
+    executeApp (app) {
       // if(!!!app.processing){
       //   ipc.send('executeApp',{app:app})
       // }
       // 判断单例的问题留给主进程处理
-      ipc.send('executeApp',{app:app})
+      ipc.send('executeApp', { app: app })
     },
-    getApp(nanoid){
-      let defaultMemoryUsage={
-        cpu:{
-          percentCPUUsage:0
+    getApp (nanoid) {
+      let defaultMemoryUsage = {
+        cpu: {
+          percentCPUUsage: 0
         },
-        memory:{
-          workingSetSize:0
+        memory: {
+          workingSetSize: 0
         }
       }
-      let currentApp={
-        name:'',
-        nanoid:'',
-        logo:'',
-        capture:'',
-        memoryUsage:defaultMemoryUsage
+      let currentApp = {
+        name: '',
+        nanoid: '',
+        logo: '',
+        capture: '',
+        memoryUsage: defaultMemoryUsage
       }
-      appVue.$refs.sidePanel.apps.forEach((app)=>{
-        if(app.nanoid===nanoid)
-        {
-          if(!!!app.memoryUsage){
-            app.memoryUsage=defaultMemoryUsage
+      appVue.$refs.sidePanel.apps.forEach((app) => {
+        if (app.nanoid === nanoid) {
+          if (!!!app.memoryUsage) {
+            app.memoryUsage = defaultMemoryUsage
           }
-          if(!!!app.capture){
-            app.capture=''
+          if (!!!app.capture) {
+            app.capture = ''
           }
-          currentApp=app
+          currentApp = app
         }
 
       })
       return currentApp
     },
-    closeApp(appId){
-        ipc.send('closeApp',{nanoid:appId})
+    closeApp (appId) {
+      ipc.send('closeApp', { nanoid: appId })
     },
-    openSetting(appId){
-      ipc.send('saAppOpenSetting',{nanoid:appId})
+    openSetting (appId) {
+      ipc.send('saAppOpenSetting', { nanoid: appId })
     },
-    showAllSaApps(){
+    showAllSaApps () {
       ipc.send('showAllSaApps')
     }
   },

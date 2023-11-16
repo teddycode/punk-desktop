@@ -16,16 +16,16 @@
 </template>
 
 <script>
-import SecondPanel from "../../components/SecondPanel.vue";
-import {mapWritableState} from 'pinia'
-import {appStore} from '../../store'
+import SecondPanel from '../../components/SecondPanel.vue'
+import { mapWritableState } from 'pinia'
+import { appStore } from '../../store'
 
 export default {
-  name: "gameAssistant",
+  name: 'gameAssistant',
   components: {
     SecondPanel
   },
-  data() {
+  data () {
     return {
       gallery: false,
       menus: [
@@ -107,11 +107,11 @@ export default {
     ...mapWritableState(appStore, ['fullScreen'])
   },
   methods: {
-    changeTab(args) {
+    changeTab (args) {
       this.$router.push(args.menu.route)
       this.tab = args.index
     },
-    goHome() {
+    goHome () {
       this.$router.push({
         name: 'home'
       })

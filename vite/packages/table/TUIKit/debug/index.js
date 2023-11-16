@@ -1,3 +1,3 @@
-import {EXPIRETIME, genTestUserSig} from './GenerateTestUserSig';
+import { EXPIRETIME, genTestUserSig } from './GenerateTestUserSig'
 
-export {genTestUserSig, EXPIRETIME};
+export { genTestUserSig, EXPIRETIME }

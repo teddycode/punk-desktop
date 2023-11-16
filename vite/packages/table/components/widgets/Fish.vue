@@ -2,7 +2,8 @@
   <Widget :customIndex="customIndex" :desk="desk" :options="options">
     <div style="display: flex;flex-direction: column">
       <div style="flex:1;margin-right: 20px;margin-left: 20px">
-        <div ref="fish" class="fish" style="display: flex;align-items: center;align-content: center;height: 205px;width: 100%;justify-content: center;position: relative;cursor: pointer;"
+        <div ref="fish" class="fish"
+             style="display: flex;align-items: center;align-content: center;height: 205px;width: 100%;justify-content: center;position: relative;cursor: pointer;"
              @click="click">
           <img ref="wooden" :src="fish" class="wooden" style="width: 120px;height:120px;margin-top: -30px">
           <img ref="bing" :src="bing" class="bing "
@@ -23,8 +24,8 @@
 import Widget from '../card/Widget.vue'
 import fish from '../../assets/img/fish/muyu.svg'
 import bing from '../../assets/img/fish/bing.svg'
-import {fishStore} from '../../store/fish'
-import {mapWritableState} from 'pinia'
+import { fishStore } from '../../store/fish'
+import { mapWritableState } from 'pinia'
 
 export default {
   name: 'Fish',
@@ -42,7 +43,7 @@ export default {
       type: Object
     }
   },
-  data() {
+  data () {
     return {
       clicking: false,
       options: {
@@ -58,14 +59,14 @@ export default {
   },
   computed: {
     ...mapWritableState(fishStore, ['days', 'total']),
-    getToday() {
+    getToday () {
       let now = new Date()
       if (!this.days[now.getFullYear() + '-' + now.getMonth() + '-' + now.getDay()]) {
         return 0
       }
       return this.days[now.getFullYear() + '-' + now.getMonth() + '-' + now.getDay()]
     },
-    getTotal() {
+    getTotal () {
       let total = 0
       Object.keys(this.days).forEach(key => {
         total += this.days[key]
@@ -77,7 +78,7 @@ export default {
     Widget
   },
   methods: {
-    addToday() {
+    addToday () {
       let now = new Date()
       if (!this.days[now.getFullYear() + '-' + now.getMonth() + '-' + now.getDay()]) {
         this.days[now.getFullYear() + '-' + now.getMonth() + '-' + now.getDay()] = 0
@@ -85,7 +86,7 @@ export default {
       this.days[now.getFullYear() + '-' + now.getMonth() + '-' + now.getDay()]++
     },
 
-    click() {
+    click () {
       if (this.clicking) {
         return
       }

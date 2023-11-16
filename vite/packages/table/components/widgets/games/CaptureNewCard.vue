@@ -6,11 +6,13 @@
 
 
     <div class="flex flex-col items-center justify-center">
-      <span :class="{disable:!this.settings.imageSavePath}" class="mb-3 s-item w-full pointer btn-active voice-hover text-center rounded-lg py-3"
+      <span :class="{disable:!this.settings.imageSavePath}"
+            class="mb-3 s-item w-full pointer btn-active voice-hover text-center rounded-lg py-3"
             @click="showImages">我的截屏({{
           images.length
         }})</span>
-      <span :class="{disable:!this.settings.videoSavePath}" class="mb-3 s-item w-full pointer btn-active voice-hover text-center rounded-lg py-3"
+      <span :class="{disable:!this.settings.videoSavePath}"
+            class="mb-3 s-item w-full pointer btn-active voice-hover text-center rounded-lg py-3"
             @click="showVideos">我的录制({{
           videos.length
         }})</span>
@@ -38,8 +40,8 @@ import CaptureCore from './CaptureCore.vue'
 import SourceSelector from '../../modal/SourceSelector.vue'
 import CaptureSettings from '../../modal/CaptureSettings.vue'
 import Modal from '../../Modal.vue'
-import {captureStore} from '../../../store/capture'
-import {mapActions, mapState} from 'pinia'
+import { captureStore } from '../../../store/capture'
+import { mapActions, mapState } from 'pinia'
 
 export default {
   name: 'CaptureNewCard',
@@ -62,7 +64,7 @@ export default {
       type: Object
     }
   },
-  data() {
+  data () {
     return {
       visibleSettings: false,
       visibleSource: false,
@@ -93,7 +95,7 @@ export default {
       microphoneShow: false,
     }
   },
-  mounted() {
+  mounted () {
     this.reloadAll()
   },
   computed: {
@@ -101,19 +103,19 @@ export default {
   },
   methods: {
     ...mapActions(captureStore, ['reloadAll']),
-    closeMicrophone() {
+    closeMicrophone () {
       this.microphoneShow = !this.microphoneShow
     },
-    choosenSource() {
+    choosenSource () {
       this.visibleSource = false
     },
-    openDir(dir) {
+    openDir (dir) {
       require('electron').shell.openPath(dir)
     },
-    showImages() {
+    showImages () {
       this.openDir(this.settings.imageSavePath)
     },
-    showVideos() {
+    showVideos () {
       this.openDir(this.settings.videoSavePath)
     }
   }

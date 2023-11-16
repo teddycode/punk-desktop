@@ -9,25 +9,29 @@ const pageTranslations = require('pageTranslations.js')
 
 const remoteMenu = require('remoteMenuRenderer.js')
 
-function setWallPaper(mediaURL,tip=true){
-  require('../pages/util/theme').wallPaper.setUrlWallPaper(mediaURL).then(()=>{
-    if(tip)
-      ipc.send('message',{type:'success',config:{content:'设置新标签页默认壁纸成功，可在新建标签中查看效果。（如果当前桌面有壁纸，则仍然显示原壁纸）'}})
-  }).catch(err=>{
+function setWallPaper (mediaURL, tip = true) {
+  require('../pages/util/theme').wallPaper.setUrlWallPaper(mediaURL).then(() => {
+    if (tip)
+      ipc.send('message', {
+        type: 'success',
+        config: { content: '设置新标签页默认壁纸成功，可在新建标签中查看效果。（如果当前桌面有壁纸，则仍然显示原壁纸）' }
+      })
+  }).catch(err => {
     console.warn(err)
   })
 }
-ipc.on('setNewTabWallPaper',(event,args)=>{
-  setWallPaper(args.wallPaper,args.tip)
+
+ipc.on('setNewTabWallPaper', (event, args) => {
+  setWallPaper(args.wallPaper, args.tip)
 })
 /**
  * 回调消息
  */
-ipc.on('setWallPaper',(event,args)=>{
-  if(args.status===1){
-    ipc.send('message',{type:'success',config:{content:'设置为桌面壁纸成功。',key:'wallpaper'}})
-  }else{
-    ipc.send('message',{type:'error',config:{content:'设置为桌面壁纸失败，请检查网络。',key:'wallpaper'}})
+ipc.on('setWallPaper', (event, args) => {
+  if (args.status === 1) {
+    ipc.send('message', { type: 'success', config: { content: '设置为桌面壁纸成功。', key: 'wallpaper' } })
+  } else {
+    ipc.send('message', { type: 'error', config: { content: '设置为桌面壁纸失败，请检查网络。', key: 'wallpaper' } })
   }
 })
 const webviewMenu = {
@@ -104,14 +108,15 @@ const webviewMenu = {
         }
       ]
 
-
-
-
-      if(currentTab.partition && currentTab.partition.startsWith('persist:webcontent_')){
+      if (currentTab.partition && currentTab.partition.startsWith('persist:webcontent_')) {
         linkActions.push({
           label: '当前小号内打开新标签(默认)',
           click: function () {
-            browserUI.addTab(tabs.add({ url: link ,partition:currentTab.partition ,newName:currentTab.newName}), { enterEditMode: false, openInBackground: openInBackground })
+            browserUI.addTab(tabs.add({
+              url: link,
+              partition: currentTab.partition,
+              newName: currentTab.newName
+            }), { enterEditMode: false, openInBackground: openInBackground })
           }
         })
       }
@@ -126,7 +131,10 @@ const webviewMenu = {
       linkActions.push({
         label: l('openInNewPrivateTab'),
         click: function () {
-          browserUI.addTab(tabs.add({ url: link, private: true }), { enterEditMode: false, openInBackground: openInBackground })
+          browserUI.addTab(tabs.add({ url: link, private: true }), {
+            enterEditMode: false,
+            openInBackground: openInBackground
+          })
         }
       })
 
@@ -168,53 +176,58 @@ const webviewMenu = {
       imageActions.push({
         label: l('openImageInNewPrivateTab'),
         click: function () {
-          browserUI.addTab(tabs.add({ url: mediaURL, private: true }), { enterEditMode: false, openInBackground: openInBackground })
+          browserUI.addTab(tabs.add({ url: mediaURL, private: true }), {
+            enterEditMode: false,
+            openInBackground: openInBackground
+          })
         }
       })
 
-
       imageActions.push(
         {
-          label:'添加到收藏夹…',
-          icon:__dirname+'/pages/fav/fav.png',
-          click:()=>{
-              ipc.send('getFavContent',{
-                content:{
-                  src:mediaURL,
-                  type:'img',
-                  alt:'',
-                  title:tabs.get(tabs.getSelected()).title,
-                  href:tabs.get(tabs.getSelected()).url
-                }
-              })
+          label: '添加到收藏夹…',
+          icon: __dirname + '/pages/fav/fav.png',
+          click: () => {
+            ipc.send('getFavContent', {
+              content: {
+                src: mediaURL,
+                type: 'img',
+                alt: '',
+                title: tabs.get(tabs.getSelected()).title,
+                href: tabs.get(tabs.getSelected()).url
+              }
+            })
           }
         })
 
       imageActions.push({
-        label:'更多…',
-        submenu:[
+        label: '更多…',
+        submenu: [
           {
-            label: "设为【新标签页】的【默认壁纸】",
+            label: '设为【新标签页】的【默认壁纸】',
             click: async function () {
               setWallPaper(mediaURL)
             }
           },
           {
-            label: "添加到【收藏夹】并设置为【桌面壁纸】",
+            label: '添加到【收藏夹】并设置为【桌面壁纸】',
             click: async function () {
-              ipc.send('message',{type:'info',config:{content:'正在下载并保存至收藏夹，请稍候…',key:'wallpaper'}})
-              ipc.send('downloadAndSetWallpaper',{url:mediaURL})
+              ipc.send('message', {
+                type: 'info',
+                config: { content: '正在下载并保存至收藏夹，请稍候…', key: 'wallpaper' }
+              })
+              ipc.send('downloadAndSetWallpaper', { url: mediaURL })
             }
           },
           {
-            label:'使用【编辑器】处理图片',
-            click:async function (){
+            label: '使用【编辑器】处理图片',
+            click: async function () {
               //const localCacheManager=require('./main/localCacheManager')
               //let imagePath=await localCacheManager.getWithoutCache(mediaURL)
-              if(mediaURL){
-                ipc.send('handleFileAssign',{type:'image',args:{filePath:mediaURL}})
-              }else{
-                ipc.send('message',{type:'error',config:{content:'编辑图片失败。'}})
+              if (mediaURL) {
+                ipc.send('handleFileAssign', { type: 'image', args: { filePath: mediaURL } })
+              } else {
+                ipc.send('message', { type: 'error', config: { content: '编辑图片失败。' } })
               }
               //console.log(localCacheManager.urlToFilePath(mediaURL))
               // appManager.protocolManager.handleFileAssign('image',{})
@@ -234,7 +247,6 @@ const webviewMenu = {
         },
 
       ])
-
 
     }
 
@@ -258,9 +270,9 @@ const webviewMenu = {
           }
         }
       ]
-      if(selection.startsWith('http://')|| selection.startsWith('https://')){
-        textActions.push( {
-          label: '访问 '+encodeURI((selection.length > 60) ? selection.substring(0, 50) + '...' : selection),
+      if (selection.startsWith('http://') || selection.startsWith('https://')) {
+        textActions.push({
+          label: '访问 ' + encodeURI((selection.length > 60) ? selection.substring(0, 50) + '...' : selection),
           click: function () {
             var newTab = tabs.add({
               url: encodeURI(selection),
@@ -354,9 +366,9 @@ const webviewMenu = {
         }
       }
     ]
-    if(currentTab.attached){
-      let item={
-        label:'还原到主屏…',
+    if (currentTab.attached) {
+      let item = {
+        label: '还原到主屏…',
         click: function () {
           try {
             browserUI.detachTab(currentTab.id)
@@ -373,10 +385,10 @@ const webviewMenu = {
         label: l('viewSource'),
         click: function () {
           const newTab = tabs.add({
-            url:"view-source:"+ tabs.get(tabs.getSelected()).url,
+            url: 'view-source:' + tabs.get(tabs.getSelected()).url,
             private: tabs.get(tabs.getSelected()).private
           })
-          browserUI.addTab(newTab,{ enterEditMode: false, openInBackground: false })
+          browserUI.addTab(newTab, { enterEditMode: false, openInBackground: false })
         }
       },
       {
@@ -414,7 +426,7 @@ const webviewMenu = {
     }
 
     var translateMenu = {
-      label: l("translatePage"),
+      label: l('translatePage'),
       submenu: []
     }
 

@@ -10,111 +10,135 @@
 //   "updateTime": 1641286442216
 // }
 // deskLayout 复杂的结构，详见api文档
-const fs= require('fs')
-const deskModel={
-  initialize(){
+const fs = require('fs')
+const deskModel = {
+  initialize () {
     //兼容老版本，将home转为一个普通桌面
-    const homeDeskLayout=deskModel.getDeskLayout(0)
-    if(!!homeDeskLayout){
+    const homeDeskLayout = deskModel.getDeskLayout(0)
+    if (!!homeDeskLayout) {
       console.log(homeDeskLayout)
       //自动在首部生成一个桌面
-      let allDesk=deskModel.getAllDeskInfo()
-      let homeDesk={
-        id:Date.now(),
-        name:'主页',
-        createTime:Date.now(),
-        updateTime:Date.now(),
-        icon:'home',
-        layout:[]
+      let allDesk = deskModel.getAllDeskInfo()
+      let homeDesk = {
+        id: Date.now(),
+        name: '主页',
+        createTime: Date.now(),
+        updateTime: Date.now(),
+        icon: 'home',
+        layout: []
       }
       allDesk.unshift(homeDesk)
       deskModel.saveAllDeskInfo(allDesk)
-      localStorage.setItem('bkHome',JSON.stringify(homeDeskLayout))
-      deskModel.updateDeskLayout(homeDesk.id,deskModel.getDeskLayout(0))
+      localStorage.setItem('bkHome', JSON.stringify(homeDeskLayout))
+      deskModel.updateDeskLayout(homeDesk.id, deskModel.getDeskLayout(0))
       localStorage.removeItem('desk_0')
 
       console.log('发现老桌面')
     }
   },
- // livingNewtabUUID:'livingNewtabUUID',//uuid方式已废弃
-  selectedDesk:'selectedDesk',
-  saveAll(desks){
+  // livingNewtabUUID:'livingNewtabUUID',//uuid方式已废弃
+  selectedDesk: 'selectedDesk',
+  saveAll (desks) {
   },
-  getCurrentDeskLayout(){
-    let currentDesk=deskModel.getCurrentDeskId()
+  getCurrentDeskLayout () {
+    let currentDesk = deskModel.getCurrentDeskId()
     return deskModel.getDeskLayout(currentDesk)
   },
 
-  getCurrentDeskId(){
-    let currentDesk=localStorage.getItem(deskModel.selectedDesk)
-    if(!!!currentDesk){
-      currentDesk=0
+  getCurrentDeskId () {
+    let currentDesk = localStorage.getItem(deskModel.selectedDesk)
+    if (!!!currentDesk) {
+      currentDesk = 0
     }
     return currentDesk
   },
   /**
    * 获取当前桌面的信息
    */
-  getCurrentDeskInfo(){
-    let deskInfo=deskModel.getDeskInfo(deskModel.getCurrentDeskId())
-    if(!!!deskInfo.updateTime)
-    {
+  getCurrentDeskInfo () {
+    let deskInfo = deskModel.getDeskInfo(deskModel.getCurrentDeskId())
+    if (!!!deskInfo.updateTime) {
       //如果找到的deskInfo不存在updateTime
-     deskInfo=  deskModel.refreshDeskInfoUpdateTime(deskModel.getCurrentDeskId())
+      deskInfo = deskModel.refreshDeskInfoUpdateTime(deskModel.getCurrentDeskId())
     }
     return deskInfo
   },
-  getDeskLayout(deskId){
-    let desk=[]
-    try{
-      desk=JSON.parse(localStorage.getItem('desk_'+deskId.toString()))
-    }catch (e){
+  getDeskLayout (deskId) {
+    let desk = []
+    try {
+      desk = JSON.parse(localStorage.getItem('desk_' + deskId.toString()))
+    } catch (e) {
       console.log(e)
     }
-    return  desk
+    return desk
   },
-  getDeskInfo(id){
-    let desks=deskModel.getAllDeskInfo()
-    let deskInfo={}
-    desks.forEach((item)=>{
-      if(Number(item.id)===Number(id)){
-        deskInfo=item
+  getDeskInfo (id) {
+    let desks = deskModel.getAllDeskInfo()
+    let deskInfo = {}
+    desks.forEach((item) => {
+      if (Number(item.id) === Number(id)) {
+        deskInfo = item
       }
     })
     return deskInfo
   },
-  getAllDeskInfo(){
-    let desks=[]
-    try{
-     desks= JSON.parse(localStorage.getItem('desks'))
-    }catch (e){
+  getAllDeskInfo () {
+    let desks = []
+    try {
+      desks = JSON.parse(localStorage.getItem('desks'))
+    } catch (e) {
       console.log(e)
     }
-    if(!!!desks){
-      defaultDesks=[{"icon":"bulb","name":"新桌面","id":1644396372459,"layout":[],"createTime":1644396372459,"updateTime":1644396404065,"wallPaper":'../../img/wallpaper.jpeg'}]
-      defaultDesk=[{"x":6,"y":1,"w":4,"h":1,"i":1644397673066,"isResizable":true,"maxH":1,"element":{"type":"search","data":{}},"moved":false},{"x":3,"y":1,"w":3,"h":1,"i":1644397677136,"element":{"type":"clock","data":{"type":2,"color":"black"}},"moved":false}]
-      localStorage.setItem('desks',JSON.stringify(defaultDesks))
-      localStorage.setItem('desk_1644396372459',JSON.stringify(defaultDesk))
-      localStorage.setItem('selectedDesk','1644396372459')
-      desks=defaultDesks
+    if (!!!desks) {
+      defaultDesks = [{
+        'icon': 'bulb',
+        'name': '新桌面',
+        'id': 1644396372459,
+        'layout': [],
+        'createTime': 1644396372459,
+        'updateTime': 1644396404065,
+        'wallPaper': '../../img/wallpaper.jpeg'
+      }]
+      defaultDesk = [{
+        'x': 6,
+        'y': 1,
+        'w': 4,
+        'h': 1,
+        'i': 1644397673066,
+        'isResizable': true,
+        'maxH': 1,
+        'element': { 'type': 'search', 'data': {} },
+        'moved': false
+      }, {
+        'x': 3,
+        'y': 1,
+        'w': 3,
+        'h': 1,
+        'i': 1644397677136,
+        'element': { 'type': 'clock', 'data': { 'type': 2, 'color': 'black' } },
+        'moved': false
+      }]
+      localStorage.setItem('desks', JSON.stringify(defaultDesks))
+      localStorage.setItem('desk_1644396372459', JSON.stringify(defaultDesk))
+      localStorage.setItem('selectedDesk', '1644396372459')
+      desks = defaultDesks
       //desks不存在,则初始化一个空对象
     }
-	if(desks.length===0)
-{
-     localStorage.setItem('desks',JSON.stringify([]))
-}
+    if (desks.length === 0) {
+      localStorage.setItem('desks', JSON.stringify([]))
+    }
 
     return desks
   },
-  saveAllDeskInfo(allDeskInfo){
-    localStorage.setItem('desks',JSON.stringify(allDeskInfo))
+  saveAllDeskInfo (allDeskInfo) {
+    localStorage.setItem('desks', JSON.stringify(allDeskInfo))
   },
-  updateDeskInfo(id,deskInfo){
-    let desks=deskModel.getAllDeskInfo()
-    for(let i=0;i<desks.length;i++){
-      if(desks[i].id===deskInfo.id){
-        deskInfo.updateTime=Date.now()
-        desks[i]=deskInfo
+  updateDeskInfo (id, deskInfo) {
+    let desks = deskModel.getAllDeskInfo()
+    for (let i = 0; i < desks.length; i++) {
+      if (desks[i].id === deskInfo.id) {
+        deskInfo.updateTime = Date.now()
+        desks[i] = deskInfo
 
         //deskModel.updateDeskInfo(deskInfo.id,deskInfo)
       }
@@ -127,16 +151,16 @@ const deskModel={
    * 刷新一个桌面的最后更新时间
    * @param id
    */
-  refreshDeskInfoUpdateTime(id){
-    return deskModel.updateDeskInfo(id,deskModel.getDeskInfo(id))//更新一下deskInfo最后更新时间
+  refreshDeskInfoUpdateTime (id) {
+    return deskModel.updateDeskInfo(id, deskModel.getDeskInfo(id))//更新一下deskInfo最后更新时间
   },
   /**
    * 更新一个桌面的布局
    * @param id 桌面id
    * @param layout 布局数据
    */
-  updateDeskLayout(id,layout){
-    localStorage.setItem('desk_'+id.toString(),JSON.stringify(layout))
+  updateDeskLayout (id, layout) {
+    localStorage.setItem('desk_' + id.toString(), JSON.stringify(layout))
     deskModel.refreshDeskInfoUpdateTime(id)//刷新一下桌面更新时间
     // deskModel.getDeskCapture(id)
     //localStorage.setItem(deskModel.livingNewtabUUID,deskModel.generateUUID())//重新生成uuid，代表已变更
@@ -144,22 +168,22 @@ const deskModel={
   /**
    * 生成一个uuid
    */
-  generateUUID(){
-    var d = new Date().getTime();
-    if (window.performance && typeof window.performance.now === "function") {
-      d += performance.now(); //use high-precision timer if available
+  generateUUID () {
+    var d = new Date().getTime()
+    if (window.performance && typeof window.performance.now === 'function') {
+      d += performance.now() //use high-precision timer if available
     }
-    var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
-      var r = (d + Math.random() * 16) % 16 | 0;
-      d = Math.floor(d / 16);
-      return (c == "x" ? r : (r & 0x3) | 0x8).toString(16);
-    });
-    return uuid;
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = (d + Math.random() * 16) % 16 | 0
+      d = Math.floor(d / 16)
+      return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16)
+    })
+    return uuid
   },
-  addElementToDesk(element,deskId){
-    let desk=deskModel.getDeskLayout(deskId)
+  addElementToDesk (element, deskId) {
+    let desk = deskModel.getDeskLayout(deskId)
     desk.push(element)
-    deskModel.updateDeskLayout(deskId,desk)
+    deskModel.updateDeskLayout(deskId, desk)
   },
   /**
    * 创建一个桌面元素用于添加
@@ -167,7 +191,7 @@ const deskModel={
    * @param posElement 位置属性，形如{x,y,w,h,i}
    * @returns {{w, x: number, h, y: number, i: number, isResizable: *}}
    */
-  createElementPos(element, posElement = null){
+  createElementPos (element, posElement = null) {
     const sizes = {
       card: {
         w: 2, h: 1,
@@ -188,9 +212,9 @@ const deskModel={
         w: 4, h: 1,
         isResizable: true,
       },
-      video:{
-        w:2,h:1,
-        isResizable:true,
+      video: {
+        w: 2, h: 1,
+        isResizable: true,
       }
     }
 
@@ -210,26 +234,26 @@ const deskModel={
     pos.element = element
     return pos
   },
-  createDesk(deskInfo,layout){
-    let allDeskInfo=deskModel.getAllDeskInfo()
+  createDesk (deskInfo, layout) {
+    let allDeskInfo = deskModel.getAllDeskInfo()
     allDeskInfo.push(deskInfo)
     deskModel.saveAllDeskInfo(allDeskInfo)
-    deskModel.updateDeskLayout(deskInfo.id,layout)
+    deskModel.updateDeskLayout(deskInfo.id, layout)
 
   },
-  getDeskCapture(id){
-    let deskEl=document.getElementById('desktop-content')
-    let bounds={
-      x:deskEl.offsetLeft,
-      y:deskEl.offsetTop+20,
-      width:deskEl.offsetWidth,
-      height:deskEl.offsetHeight-100
+  getDeskCapture (id) {
+    let deskEl = document.getElementById('desktop-content')
+    let bounds = {
+      x: deskEl.offsetLeft,
+      y: deskEl.offsetTop + 20,
+      width: deskEl.offsetWidth,
+      height: deskEl.offsetHeight - 100
     }
-    setTimeout(()=>{
-      ipc.send('captureDeskScreen',{desk: { id:id },bounds:bounds})
-    },0)
+    setTimeout(() => {
+      ipc.send('captureDeskScreen', { desk: { id: id }, bounds: bounds })
+    }, 0)
   },
-  getCurrentDeskCapture(){
+  getCurrentDeskCapture () {
     deskModel.getDeskCapture(deskModel.getCurrentDeskId())
   },
   /**
@@ -237,31 +261,31 @@ const deskModel={
    * @param files 文件数组，tsbk结尾
    * @returns {{data: {count: number}, status, info: string}}
    */
-  importDesk(files){
-    let successCount=0
-    files.forEach((file)=>{
-      try{
-       const desk= JSON.parse( fs.readFileSync(file,{encoding:'utf8'}))
-       if(!!!desk || !!!desk.name || !!!desk.createTime){
-         return {status:false,info:'文件格式错误。'}
-       }
-       const newDesk={
-         name:desk.name,
-         icon:desk.icon,
-         wallPaper:desk.wallPaper,
-         id:Date.now(),
-         createTime:desk.createTime,
-         updateTime:desk.updateTime
-       }
-       deskModel.createDesk(newDesk,desk.layout)
+  importDesk (files) {
+    let successCount = 0
+    files.forEach((file) => {
+      try {
+        const desk = JSON.parse(fs.readFileSync(file, { encoding: 'utf8' }))
+        if (!!!desk || !!!desk.name || !!!desk.createTime) {
+          return { status: false, info: '文件格式错误。' }
+        }
+        const newDesk = {
+          name: desk.name,
+          icon: desk.icon,
+          wallPaper: desk.wallPaper,
+          id: Date.now(),
+          createTime: desk.createTime,
+          updateTime: desk.updateTime
+        }
+        deskModel.createDesk(newDesk, desk.layout)
         successCount++
-      }catch (e) {
+      } catch (e) {
         console.log(e)
-        return {status:false,info:'意外终止。'}
+        return { status: false, info: '意外终止。' }
       }
     })
-    return {status:true,info:'成功导入。',data:{count:successCount} }
+    return { status: true, info: '成功导入。', data: { count: successCount } }
   }
 }
 
-module.exports=deskModel
+module.exports = deskModel

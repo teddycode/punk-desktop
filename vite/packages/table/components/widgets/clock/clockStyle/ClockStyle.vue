@@ -15,14 +15,14 @@
 </template>
 
 <script>
-import clock1 from "../clock1/clock1.vue";
-import clock2 from "../clock2/clock2.vue";
-import clock3 from "../clock3/clock3.vue";
-import clock4 from "../clock4/clock4.vue";
+import clock1 from '../clock1/clock1.vue'
+import clock2 from '../clock2/clock2.vue'
+import clock3 from '../clock3/clock3.vue'
+import clock4 from '../clock4/clock4.vue'
 
 export default {
-  data() {
-    return {};
+  data () {
+    return {}
   },
   components: {
     clock1,
@@ -31,11 +31,11 @@ export default {
     clock4,
   },
   methods: {
-    updateClockStyle(e) {
-      this.$emit("updateClockStyle", e);
+    updateClockStyle (e) {
+      this.$emit('updateClockStyle', e)
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

@@ -31,109 +31,109 @@
 </template>
 
 <script>
-import {mapActions} from 'pinia'
-import {cardStore} from '../../../store/card'
+import { mapActions } from 'pinia'
+import { cardStore } from '../../../store/card'
 import CardPreview from './CardPreview.vue'
 
 export default {
-  name: "AddCard",
-  components: {CardPreview},
+  name: 'AddCard',
+  components: { CardPreview },
   props: ['desk'],
   emits: ['onBack'],
-  data() {
+  data () {
     return {
       cardList: [
         {
-          name: "wallpaper",
-          cname: "壁纸",
-          icon: "image",
-          detail: "发现新壁纸，浏览我收藏的壁纸",
-          images: ["middleWallpaper", "smallWallpaper"],
-          size: ["2x2"],
+          name: 'wallpaper',
+          cname: '壁纸',
+          icon: 'image',
+          detail: '发现新壁纸，浏览我收藏的壁纸',
+          images: ['middleWallpaper', 'smallWallpaper'],
+          size: ['2x2'],
         },
         {
-          name: "customTimer",
-          cname: "日历",
-          icon: "rili3",
-          detail: "追踪当月日期，查看临近节日",
-          images: ["customTimer"],
-          size: ["1x2"],
+          name: 'customTimer',
+          cname: '日历',
+          icon: 'rili3',
+          detail: '追踪当月日期，查看临近节日',
+          images: ['customTimer'],
+          size: ['1x2'],
         },
         {
-          name: "countdownDay",
-          cname: "纪念日",
-          icon: "rili2",
-          detail: "设置你的纪念日、考试日等等，支持正/倒数",
-          images: ["countdownDay", "smallCountdownDay"],
-          size: ["1x1"],
+          name: 'countdownDay',
+          cname: '纪念日',
+          icon: 'rili2',
+          detail: '设置你的纪念日、考试日等等，支持正/倒数',
+          images: ['countdownDay', 'smallCountdownDay'],
+          size: ['1x1'],
         },
         {
-          name: "clock",
-          cname: "闹钟",
-          icon: "naozhong",
-          detail: "设置你的闹钟",
-          images: ["clock"],
-          size: ["1x1"],
+          name: 'clock',
+          cname: '闹钟',
+          icon: 'naozhong',
+          detail: '设置你的闹钟',
+          images: ['clock'],
+          size: ['1x1'],
         },
         {
-          name: "supervisory",
-          cname: "性能",
-          icon: "xingneng",
-          detail: "监控系统状态，查看游戏帧数",
+          name: 'supervisory',
+          cname: '性能',
+          icon: 'xingneng',
+          detail: '监控系统状态，查看游戏帧数',
           images: [
-            "CPULineChart",
-            "CPUFourCard",
-            "SmallCPUCard",
-            "SmallGPUCard",
+            'CPULineChart',
+            'CPUFourCard',
+            'SmallCPUCard',
+            'SmallGPUCard',
           ],
         },
         {
-          name: "music",
-          cname: "网易云",
-          icon: "naozhong",
-          detail: "快捷播放，我的喜欢，我的歌单",
-          images: ["music"],
-          size: ["1x1"],
+          name: 'music',
+          cname: '网易云',
+          icon: 'naozhong',
+          detail: '快捷播放，我的喜欢，我的歌单',
+          images: ['music'],
+          size: ['1x1'],
         },
         {
-          name: "timer",
-          cname: "番茄钟",
-          icon: "naozhong",
-          detail: "快速开启番茄钟时刻，记录每天专注成果",
-          images: ["timer"],
-          size: ["1x1"],
+          name: 'timer',
+          cname: '番茄钟',
+          icon: 'naozhong',
+          detail: '快速开启番茄钟时刻，记录每天专注成果',
+          images: ['timer'],
+          size: ['1x1'],
         },
         {
-          name: "weather",
-          cname: "天气",
-          icon: "naozhong",
-          detail: "查看某地当前的天气状况和预报",
-          images: ["weather"],
-          size: ["1x1"],
+          name: 'weather',
+          cname: '天气',
+          icon: 'naozhong',
+          detail: '查看某地当前的天气状况和预报',
+          images: ['weather'],
+          size: ['1x1'],
         },
         {
-          name: "fish",
-          cname: "木鱼",
-          icon: "naozhong",
-          detail: "休闲减压神器，积攒功德",
-          images: ["fish"],
-          size: ["1x1"],
+          name: 'fish',
+          cname: '木鱼',
+          icon: 'naozhong',
+          detail: '休闲减压神器，积攒功德',
+          images: ['fish'],
+          size: ['1x1'],
         },
 
         {
-          name: "games",
-          cname: "游戏折扣推荐",
-          icon: "steam",
-          detail: "Steam、Epic折扣推荐",
-          images: ["GamesDiscount", "DiscountPercentage", "GameEpic"],
+          name: 'games',
+          cname: '游戏折扣推荐',
+          icon: 'steam',
+          detail: 'Steam、Epic折扣推荐',
+          images: ['GamesDiscount', 'DiscountPercentage', 'GameEpic'],
         },
         {
 
-          name: "gameAssis",
-          cname: "游戏助手",
-          icon: "steam",
-          detail: "各种游戏工具",
-          images: ["MyGameSmall", "SteamFriends"],
+          name: 'gameAssis',
+          cname: '游戏助手',
+          icon: 'steam',
+          detail: '各种游戏工具',
+          images: ['MyGameSmall', 'SteamFriends'],
         },
         {
           name: 'capture',
@@ -200,7 +200,7 @@ export default {
         {
           name: 'news',
           cname: '新闻资讯',
-          icon: "time-circle",
+          icon: 'time-circle',
           detail: '头条（推荐），国内，娱乐，体育，军事，科技，财经，时尚等新闻信息',
           images: ['news'],
           size: ['4x4']
@@ -208,7 +208,7 @@ export default {
         {
           name: 'AIaides',
           cname: 'AI助手',
-          icon: "time-circle",
+          icon: 'time-circle',
           detail: '你的专属AI助手,内置数个预设模板供你使用。',
           images: ['AIaides'],
           size: ['2x2']
@@ -216,7 +216,7 @@ export default {
         {
           name: 'OilPrices',
           cname: '今日油价',
-          icon: "time-circle",
+          icon: 'time-circle',
           detail: '时刻关注你所在的城市的92号，96号，98号，0号油价',
           images: ['OilPrices'],
           size: ['2x4']
@@ -224,7 +224,7 @@ export default {
         {
           name: 'yuanCommunity',
           cname: '元社区动态',
-          icon: "time-circle",
+          icon: 'time-circle',
           detail: '元社区里又发了什么好玩的事情？时刻关注热门和最新动态。',
           images: ['yuanCommunity'],
           size: ['4x4']
@@ -241,56 +241,56 @@ export default {
         currentItemId: -1,
         timer: null,
       },
-      selectContent: "",
-    };
+      selectContent: '',
+    }
   },
 
-  mounted() {
+  mounted () {
   },
   computed: {
-    filterList() {
+    filterList () {
       return this.cardList.filter((i) => {
         return (
             i.cname.toLowerCase().includes(this.selectContent.toLowerCase()) ||
             i.detail.toLowerCase().includes(this.selectContent.toLowerCase())
-        );
-      });
+        )
+      })
     },
-    count() {
-      let i = 0;
+    count () {
+      let i = 0
       this.cardList.forEach((c) => {
-        i += c.images.length;
-      });
-      return i;
+        i += c.images.length
+      })
+      return i
     },
   },
   methods: {
-    ...mapActions(cardStore, ["addCard"]),
-    addAssembly(item) {
+    ...mapActions(cardStore, ['addCard']),
+    addAssembly (item) {
       switch (item.name) {
-        case "customTimer":
-          this.cardType = this.cardList[0];
-          break;
-        case "countdownDay":
-          this.cardType = this.cardList[1];
-          break;
-        case "clock":
-          this.cardType = this.cardList[2];
-          break;
-        case "supervisory":
-          this.cardType = this.cardList[3];
-          break;
-        case "games":
-          this.cardType = this.cardList[8];
-          break;
+        case 'customTimer':
+          this.cardType = this.cardList[0]
+          break
+        case 'countdownDay':
+          this.cardType = this.cardList[1]
+          break
+        case 'clock':
+          this.cardType = this.cardList[2]
+          break
+        case 'supervisory':
+          this.cardType = this.cardList[3]
+          break
+        case 'games':
+          this.cardType = this.cardList[8]
+          break
       }
-      this.show = true;
+      this.show = true
     },
-    onBack() {
-      this.$emit("onBack", false);
+    onBack () {
+      this.$emit('onBack', false)
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

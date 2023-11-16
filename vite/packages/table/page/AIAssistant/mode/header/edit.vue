@@ -22,13 +22,13 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
-      search: "",
-      text: "",
-    };
+      search: '',
+      text: '',
+    }
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

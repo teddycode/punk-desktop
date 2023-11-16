@@ -9,7 +9,7 @@
 <script setup>
 const props = defineProps({
   cards: {},
-});
+})
 </script>
 
 <style lang="scss" scoped></style>

@@ -37,7 +37,8 @@
                      style="margin-top: 30%;"></a-empty>
             <template v-else>
               <ComList v-for="(card, index) in comCards.list" :key="index" :cardData="card"
-                       :style="{ backgroundColor: selectedIndex === index ? 'var(--active-secondary-bg) !important' : 'var(--primary-bg) !important', flex: 1 }" class="xt-bg"
+                       :style="{ backgroundColor: selectedIndex === index ? 'var(--active-secondary-bg) !important' : 'var(--primary-bg) !important', flex: 1 }"
+                       class="xt-bg"
                        @click="showDetail(index)">
               </ComList>
               <!-- <ComList v-for="(card, index) in comCards.list" :key="index" :cardData="card"

@@ -43,19 +43,19 @@
 <script>
 import Template from '../../../user/pages/Template.vue'
 import _ from 'lodash-es'
-import {message} from 'ant-design-vue'
+import { message } from 'ant-design-vue'
 
 export default {
   name: 'ActionBuilder',
-  components: {Template},
+  components: { Template },
   props: ['actions', 'group'],
-  data() {
+  data () {
     return {
       current: '',
       currentAction: {},
     }
   },
-  mounted() {
+  mounted () {
     this.current = this.actions[0].name
     this.actions.forEach(action => {
       action.data = action.defaultValue
@@ -65,14 +65,14 @@ export default {
     })
   },
   methods: {
-    setActionData(data) {
+    setActionData (data) {
       this.current = data.name
       let action = this.actions.find(ac => {
         return ac.name === this.current
       })
       action.data = _.cloneDeep(data.args)
     },
-    getActionData() {
+    getActionData () {
       let actionData = {}
       let action
       action = this.actions.find(ac => {
@@ -91,7 +91,7 @@ export default {
       }
       return actionData
     },
-    validate(action) {
+    validate (action) {
       let message = ''
       if (!action.inputs) {
         //如果没有任何输入的直接返回成功即可
@@ -123,7 +123,7 @@ export default {
         }
       }
     },
-    getShow(action, input, type) {
+    getShow (action, input, type) {
       let assign = true
       if (input.assign) {
         let conditions = Object.keys(input.assign)
@@ -136,14 +136,14 @@ export default {
       }
       return input.type === type && assign
     },
-    isActive(key) {
+    isActive (key) {
       return this.current === key
     },
-    setActive(action) {
+    setActive (action) {
       this.current = action.name
       this.currentAction = action
     },
-    async showOpenFileDialog(action, input) {
+    async showOpenFileDialog (action, input) {
       let savePath = await tsbApi.dialog.showOpenDialog({
         title: '选择', message: '请选择文件', properties: [
           'openFile ',

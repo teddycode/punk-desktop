@@ -145,11 +145,11 @@
 
 </template>
 <script>
-import {defineComponent, reactive, toRefs, watch} from 'vue';
+import { defineComponent, reactive, toRefs, watch } from 'vue'
 // import Link from '../../../../../utils/link';
-import {SearchOutlined} from '@ant-design/icons-vue'
-import {message} from 'ant-design-vue';
-import {chatStore} from '../../../../../../store/chat'
+import { SearchOutlined } from '@ant-design/icons-vue'
+import { message } from 'ant-design-vue'
+import { chatStore } from '../../../../../../store/chat'
 
 const TUISearch = defineComponent({
   name: 'group',
@@ -164,11 +164,11 @@ const TUISearch = defineComponent({
     SearchOutlined,
   },
 
-  setup(props, ctx) {
+  setup (props, ctx) {
 
     // const TUIServer = TUISearch?.TUIServer?.TUICore.TUIServer.TUIGroup;
     const TUIServer = window.$chat
-    const {t} = window.$TUIKit.config.i18n.useI18n();
+    const { t } = window.$TUIKit.config.i18n.useI18n()
     const Server = window.$TUIKit
 
     const chat = chatStore()
@@ -196,7 +196,7 @@ const TUISearch = defineComponent({
     const searchGroup = () => {  // 根据群组id进行群组搜索
       TUIServer.searchGroupByID(data.searchId).then((res => {
         if (data.searchResult.some(item => item.groupID === res.data.group.groupID)) {
-          return
+
         } else {
           data.searchResult.push(res.data.group)
         }
@@ -219,11 +219,11 @@ const TUISearch = defineComponent({
           // t('TUIContact.加群')
           type: group?.type,
         }
-        const res = await TUIServer.joinGroup(options);
+        const res = await TUIServer.joinGroup(options)
         // console.log('检测::>>',res);
         if (res.data.status === 'WaitAdminApproval') {
           message.success('入群申请已发出,等待群主和管理员审核')
-          data.currentGroup = {apply: true}
+          data.currentGroup = { apply: true }
         }
         ctx.emit('close')
       }
@@ -372,9 +372,9 @@ const TUISearch = defineComponent({
   //     groupTypeDetail,
   //   };
   // },
-});
+})
 
-export default TUISearch;
+export default TUISearch
 </script>
 
 <style lang="scss" scoped src="./style/index.scss"></style>

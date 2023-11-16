@@ -1,16 +1,16 @@
 <script>
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import {message, Modal} from "ant-design-vue";
+import { message, Modal } from 'ant-design-vue'
 
-const {userModel, spaceModel} = window.$models;
+const { userModel, spaceModel } = window.$models
 
 export default {
   components: {},
-  data() {
+  data () {
     return {
-      currentTab: {name: "home"},
-      tip: "",
+      currentTab: { name: 'home' },
+      tip: '',
       loaded: false,
       users: [
         // {
@@ -27,146 +27,146 @@ export default {
         // },
       ],
       showOnStart: false,
-    };
+    }
   },
-  async mounted() {
-    tsbApi.window.setZoomFactor(1);
-    this.users = await userModel.getAll();
+  async mounted () {
+    tsbApi.window.setZoomFactor(1)
+    this.users = await userModel.getAll()
     this.users.forEach((user) => {
-      const date = new Date(user.expire_time);
+      const date = new Date(user.expire_time)
       user.expire_time_text =
-          date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate();
-    });
-    this.loaded = true;
-    if (window.globalArgs["tip"]) {
-      this.tip = window.globalArgs["tip"];
-      console.log("提示信息是=", this.tip);
+          date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate()
+    })
+    this.loaded = true
+    if (window.globalArgs['tip']) {
+      this.tip = window.globalArgs['tip']
+      console.log('提示信息是=', this.tip)
     }
-    if (window.globalArgs["modal"] === "true") {
+    if (window.globalArgs['modal'] === 'true') {
       Modal.warn({
-        title: window.globalArgs["title"],
-        content: window.globalArgs["description"],
+        title: window.globalArgs['title'],
+        content: window.globalArgs['description'],
         centered: true,
-      });
+      })
     }
-    if (this.tip.indexOf("重新登录") > -1) {
+    if (this.tip.indexOf('重新登录') > -1) {
       //掉登录
-      this.tipExpired();
+      this.tipExpired()
     }
     // 从登陆页面登陆成功
-    window.ipc.on("loginCallback", async (e, args) => {
-      message.success("成功添加帐号。");
-      this.users = await userModel.getAll();
+    window.ipc.on('loginCallback', async (e, args) => {
+      message.success('成功添加帐号。')
+      this.users = await userModel.getAll()
       this.users.forEach((user) => {
-        const date = new Date(user.expire_time);
+        const date = new Date(user.expire_time)
         user.expire_time_text =
             date.getFullYear() +
-            "/" +
+            '/' +
             (date.getMonth() + 1) +
-            "/" +
-            date.getDate();
-      });
-      this.enterAccount({uid: args.data.userInfo.uid});
-    });
+            '/' +
+            date.getDate()
+      })
+      this.enterAccount({ uid: args.data.userInfo.uid })
+    })
   },
   methods: {
-    tipExpired() {
+    tipExpired () {
       Modal.confirm({
-        content: "账号登录信息已过期，请重新登录。",
-        okText: "重新登录",
-        onOk() {
-          ipc.send("login");
+        content: '账号登录信息已过期，请重新登录。',
+        okText: '重新登录',
+        onOk () {
+          ipc.send('login')
         },
-        cancelText: "取消",
-      });
+        cancelText: '取消',
+      })
     },
-    goAddAccount() {
-      this.currentTab = {name: "add"};
-      this.$router.push("/add");
+    goAddAccount () {
+      this.currentTab = { name: 'add' }
+      this.$router.push('/add')
     },
-    goTemplate() {
-      this.currentTab = {name: "template"};
-      this.$router.push({name: "template"});
+    goTemplate () {
+      this.currentTab = { name: 'template' }
+      this.$router.push({ name: 'template' })
     },
-    doDelete(uid) {
-      console.error("即将删除UID:", uid)
-      userModel.delete({uid: uid}).then(() => {
-        message.success("解绑帐号成功。");
+    doDelete (uid) {
+      console.error('即将删除UID:', uid)
+      userModel.delete({ uid: uid }).then(() => {
+        message.success('解绑帐号成功。')
         this.users.forEach((user, index) => {
           if (user.uid === uid) {
-            this.users.splice(index, 1);
-            return false;
+            this.users.splice(index, 1)
+            return false
           }
-        });
+        })
       }).catch(() => {
-        message.error("解绑帐号失败。");
-      });
+        message.error('解绑帐号失败。')
+      })
     },
-    deleteAccount(uid) {
+    deleteAccount (uid) {
       Modal.confirm({
-        title: "解绑此帐号",
+        title: '解绑此帐号',
         content:
-            "解绑帐号并不会影响帐号数据，仅仅是将本地帐号退出。但是退出后无法再使用此帐号下的所有空间。",
+            '解绑帐号并不会影响帐号数据，仅仅是将本地帐号退出。但是退出后无法再使用此帐号下的所有空间。',
         centered: true,
-        okText: "确认",
-        cancelText: "取消",
+        okText: '确认',
+        cancelText: '取消',
         onOk: () => {
           this.doDelete(uid)
         }
-      });
+      })
     },
-    async enterAccount(user) {
+    async enterAccount (user) {
       //todo 先获取账号信息，确认账号可正常登录
       //网络用户
       if (user.uid) {
         try {
-          let userInfo = await userModel.get({uid: user.uid});
+          let userInfo = await userModel.get({ uid: user.uid })
           if (userInfo) {
             let spacesResult = await spaceModel
                 .setUser(userInfo)
-                .getUserSpaces();
+                .getUserSpaces()
             if (spacesResult.status !== 1) {
-              message.error("服务器繁忙，获取用户空间失败，请10分钟后后再试。");
-              return;
+              message.error('服务器繁忙，获取用户空间失败，请10分钟后后再试。')
+              return
             }
             //走到此处是没有异常了，可以正常执行下去
           } else {
-            console.warn(user);
+            console.warn(user)
             message.error(
-                "获取用户信息失败，登录信息过期或用户帐号异常。请尝试解绑用户后重新登陆帐号。"
-            );
-            return; //如果异常，退回上一页，防止后续出错
+                '获取用户信息失败，登录信息过期或用户帐号异常。请尝试解绑用户后重新登陆帐号。'
+            )
+            return //如果异常，退回上一页，防止后续出错
           }
         } catch (e) {
-          console.warn(e);
-          if (e.code && e.code === "ECONNREFUSED") {
+          console.warn(e)
+          if (e.code && e.code === 'ECONNREFUSED') {
             window.antd.Modal.info({
-              title: "服务器维护",
+              title: '服务器维护',
               content:
-                  "服务器维护中，建议10分钟后再试。您可以先工作在本地空间。后续可手动导入本地空间到云端。",
-              okText: "确定",
-            });
-            return;
+                  '服务器维护中，建议10分钟后再试。您可以先工作在本地空间。后续可手动导入本地空间到云端。',
+              okText: '确定',
+            })
+            return
           }
           if (e.response && e.response.data.code === 1001) {
-            this.tipExpired();
-            return;
+            this.tipExpired()
+            return
           }
-          message.error("意外错误。");
-          return;
+          message.error('意外错误。')
+          return
         }
       }
       if (!!!user.password) {
-        this.currentTab = {name: "user_" + user.uid};
-        this.$router.push({name: "space", params: {uid: user.uid}});
+        this.currentTab = { name: 'user_' + user.uid }
+        this.$router.push({ name: 'space', params: { uid: user.uid } })
       } else {
-        this.currentTab = {name: "user_" + user.uid};
-        this.$router.push({name: "pwd", params: {uid: user.uid}});
+        this.currentTab = { name: 'user_' + user.uid }
+        this.$router.push({ name: 'pwd', params: { uid: user.uid } })
       }
     },
-    goHome() {
-      this.currentTab = {name: "home"};
-      this.$router.push({name: "home"});
+    goHome () {
+      this.currentTab = { name: 'home' }
+      this.$router.push({ name: 'home' })
     },
   },
 }

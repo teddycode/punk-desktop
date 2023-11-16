@@ -101,13 +101,13 @@
 </template>
 
 <script>
-import {countDownStore} from '../store/countDown'
-import {cardStore} from '../store/card'
-import {mapActions, mapState, mapWritableState} from 'pinia'
-import {Modal} from 'ant-design-vue'
-import {paperStore} from '../store/paper'
+import { countDownStore } from '../store/countDown'
+import { cardStore } from '../store/card'
+import { mapActions, mapState, mapWritableState } from 'pinia'
+import { Modal } from 'ant-design-vue'
+import { paperStore } from '../store/paper'
 import axios from 'axios'
-import {Icon as iconify} from '@iconify/vue'
+import { Icon as iconify } from '@iconify/vue'
 
 const spotConfig = {
   control: '',
@@ -123,7 +123,7 @@ export default {
   components: {
     iconify
   },
-  data() {
+  data () {
     return {
       playing: [],
       singleLively: false,
@@ -183,7 +183,7 @@ export default {
       ]
     }
   },
-  mounted() {
+  mounted () {
     this.$nextTick(() => {
       $('#displayMiddle').css('top', 'calc(50vh - ' + $('#displayMiddle').height() / 2 + 'px)')
     })
@@ -203,17 +203,17 @@ export default {
       }, 1000)
     }
   },
-  beforeUnmount() {
+  beforeUnmount () {
     clearInterval(this.timer)
   },
   computed: {
     ...mapState(paperStore, ['myPapers', 'settings', 'activePapers']),
     ...mapWritableState(cardStore, ['clockEvent', 'appDate',]),
     ...mapWritableState(countDownStore, ['countDowndate', 'countDowntime', 'countDownBtn']),
-    videoPath() {
+    videoPath () {
       return this.playing[0]['src-mp4']
     },
-    config() {
+    config () {
       return {
         ...spotConfig,
         ...{
@@ -226,7 +226,7 @@ export default {
   methods: {
     ...mapActions(countDownStore, ['setCountDown', 'stopCountDown', 'openCountDown', 'dCountDown']),
     ...mapActions(cardStore, ['removeClock', 'changeClock']),
-    enter(closeSpot = true) {
+    enter (closeSpot = true) {
       if (closeSpot && !this.singleLively) {
         // BUG 壁纸加载不出来
         window.Spotlight.close()
@@ -234,7 +234,7 @@ export default {
       console.log('触发顶层返回')
       this.$router.go(-1)
     },
-    enterSetting() {
+    enterSetting () {
       if (!this.singleLively) {
         window.Spotlight.close()
       }
@@ -245,7 +245,7 @@ export default {
         })
       }, 200)
     },
-    enterGallery() {
+    enterGallery () {
       if (!this.singleLively) {
         window.Spotlight.close()
       }
@@ -256,13 +256,13 @@ export default {
         })
       }, 200)
     },
-    handleOk() {
+    handleOk () {
       this.visible = false
       this.removeClock(0)
       this.$refs.clock.currentTime = 0
       this.$refs.clock.pause()
     },
-    tick() {
+    tick () {
       let weeks = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日']
       var date = new Date()
       this.year = date.getFullYear()
@@ -279,7 +279,7 @@ export default {
       this.loaded = true
     },
 
-    playAll() {
+    playAll () {
       let LockArr = []
       if (this.settings.wallSource == 'my') {
         // 我的收藏
@@ -287,7 +287,7 @@ export default {
           this.$router.replace({
             name: 'my'
           })
-          Modal.error({content: '请添加我的壁纸后重新锁屏。'})
+          Modal.error({ content: '请添加我的壁纸后重新锁屏。' })
           return
         }
         this.myPapers.map(el => {
@@ -329,12 +329,12 @@ export default {
             })
             window.Spotlight.show(LockArr, this.config)
           } else {
-            Modal.error({content: '网络加载错误，请检查设备后重试'})
-            return
+            Modal.error({ content: '网络加载错误，请检查设备后重试' })
+
           }
         }, rej => {
-          Modal.error({content: '网络加载错误，请检查设备后重试'})
-          return
+          Modal.error({ content: '网络加载错误，请检查设备后重试' })
+
         }).catch((err) => {
           console.log(err)
         })
@@ -353,23 +353,23 @@ export default {
             })
             window.Spotlight.show(LockArr, this.config)
           } else {
-            return
+
           }
         }, rej => {
-          Modal.error({content: '网络加载错误，请检查设备后重试'})
-          return
+          Modal.error({ content: '网络加载错误，请检查设备后重试' })
+
         }).catch((err) => {
           console.log(err)
         })
       }
     },
-    playActive() {
+    playActive () {
       console.log('playActive')
       if (this.activePapers.length === 0) {
         this.$router.replace({
           name: 'my'
         })
-        Modal.error({content: '请激活壁纸后重新使用激活壁纸模式。'})
+        Modal.error({ content: '请激活壁纸后重新使用激活壁纸模式。' })
         return
       }
       let lockActive = []
@@ -399,17 +399,17 @@ export default {
       }
       window.Spotlight.show(lockActive, this.config)
     },
-    closeCountDown() {
+    closeCountDown () {
       this.stopCountDown()
     },
-    startCountDown() {
+    startCountDown () {
       this.openCountDown()
     },
-    deleteCountDown() {
+    deleteCountDown () {
       this.dCountDown()
     },
     // 判断文件是否为图片
-    fileImageExtension(filePath) {
+    fileImageExtension (filePath) {
       const fileExtensions = filePath.src.split('.').pop()
       const extensions = ['mp4', 'mpeg', 'avi', 'rmvb']
       if (extensions.indexOf(fileExtensions) !== -1) {
@@ -421,7 +421,7 @@ export default {
   },
   watch: {
     'appDate.minutes': {
-      handler(newVal, oldVal) {
+      handler (newVal, oldVal) {
         try {
           if (
               this.appDate.minutes === this.clockEvent[0].dateValue.minutes &&

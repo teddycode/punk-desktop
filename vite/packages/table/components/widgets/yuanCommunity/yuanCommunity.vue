@@ -50,7 +50,8 @@
       <DataStatu v-else :btnToggle="false" imgDisplay="/img/test/load-ail.png" textPrompt="暂无数据"
                  @click="this.settingVisible = true; this.$refs.cardSlot.visible = false"></DataStatu>
 
-      <xt-button v-if="false" :h="40" :w="40" style="flex-shrink: 0;position: absolute;right: 20px;bottom: 10px" type="theme"
+      <xt-button v-if="false" :h="40" :w="40" style="flex-shrink: 0;position: absolute;right: 20px;bottom: 10px"
+                 type="theme"
                  @click="publishModalVisible">
         <YuanIcon class="text-lg xt-text " icon="fluent:add-16-filled"
                   style="vertical-align: sub;font-size: 20px;"/>
@@ -116,14 +117,14 @@
   </div>
 </template>
 <script>
-import Widget from '../../card/Widget.vue';
-import {Icon as YuanIcon} from '@iconify/vue'
+import Widget from '../../card/Widget.vue'
+import { Icon as YuanIcon } from '@iconify/vue'
 import communItem from './CommunItem.vue'
-import RadioTab from '../../RadioTab.vue';
-import {mapActions, mapWritableState} from 'pinia';
-import {yuanCommunityStore} from '../../../store/yuanCommunity.ts'
-import DataStatu from "../DataStatu.vue"
-import YuanPublishModal from './YuanPublishModal.vue';
+import RadioTab from '../../RadioTab.vue'
+import { mapActions, mapWritableState } from 'pinia'
+import { yuanCommunityStore } from '../../../store/yuanCommunity.ts'
+import DataStatu from '../DataStatu.vue'
+import YuanPublishModal from './YuanPublishModal.vue'
 import YuanHorizontalPanel from './YuanHorizontalPanel.vue'
 import detailModal from './DetailModal.vue'
 
@@ -153,7 +154,7 @@ export default {
       type: Object
     }
   },
-  data() {
+  data () {
     return {
       sizeList: [
         {
@@ -181,7 +182,7 @@ export default {
           icon: 'shezhi1',
           title: '设置',
           fn: () => {
-            this.settingVisible = true;
+            this.settingVisible = true
             this.$refs.cardSlot.visible = false
           }
         },
@@ -190,8 +191,8 @@ export default {
       currentIndex: 0,
       isLoading: false,
       pageToggle: true,
-      dataType: [{title: '社区频道', name: 'channel'}, {title: '我加入的圈子', name: 'circle'}],
-      defaultType: {title: '我加入的圈子', name: 'circle'},
+      dataType: [{ title: '社区频道', name: 'channel' }, { title: '我加入的圈子', name: 'circle' }],
+      defaultType: { title: '我加入的圈子', name: 'circle' },
       selectForumList: [],
       browserUrl: 'https://s.apps.vip/post/',
       showPublishModal: false,
@@ -205,8 +206,8 @@ export default {
         wheelPropagation: true,
       },
       showDetailModal: false,
-      openWay: [{title: '弹窗形式打开', name: "popup"}, {title: '在元社区主应用中打开', name: "main"}],
-      defaultOpenWay: {title: '弹窗形式打开', name: "popup"},
+      openWay: [{ title: '弹窗形式打开', name: 'popup' }, { title: '在元社区主应用中打开', name: 'main' }],
+      defaultOpenWay: { title: '弹窗形式打开', name: 'popup' },
       cardData: null,
     }
   },
@@ -221,76 +222,76 @@ export default {
     //     await this.getCommunityPost(item.id)
     // },
     // 刷新圈子
-    async refreshPost() {
+    async refreshPost () {
       this.isLoading = true
       await this.getCommunityPost(this.defaultForum.value?.id)
       this.isLoading = false
     },
     // 查看内容详情
-    showDetail(item) {
+    showDetail (item) {
       // browser.openInUserSelect(`${this.browserUrl}${item.id}`)
       this.showDetailModal = true
       this.cardData = item
-      console.log(this.cardData);
+      console.log(this.cardData)
     },
-    closeDetail(value) {
+    closeDetail (value) {
       this.showDetailModal = value
     },
     // 选择板块
-    handleChange(value) {
+    handleChange (value) {
       value.forEach((item) => {
         // console.log(item);
         const newItem = {
           index: item,
           value: this.forumList[item]
-        };
+        }
 
         if (!this.selectList.some((el) => el.value === newItem.value)) {
-          this.selectList.push(newItem);
+          this.selectList.push(newItem)
         }
-      });
+      })
       // console.log(this.selectList);
-      let temp = this.selectList;
-      this.customData.selectList = temp;
+      let temp = this.selectList
+      this.customData.selectList = temp
     },
     // 显示发布页是否可见
-    publishModalVisible() {
+    publishModalVisible () {
       this.showPublishModal = !this.showPublishModal
     },
     // 回调
-    modalVisible(val) {
+    modalVisible (val) {
       this.showPublishModal = val
     },
     // 删除选择的板块
-    handleDeselect(val) {
+    handleDeselect (val) {
       this.selectList = this.selectList.filter((item) => {
-        return val.includes(item.index); // 过滤掉 val 中包含的索引的项目
-      });
+        return val.includes(item.index) // 过滤掉 val 中包含的索引的项目
+      })
       this.selectList = this.selectList.filter((item, index) => {
         return item.value !== undefined
       })
       let temp = this.selectList
       this.customData.selectList = temp
     },
-    saveSetting() {
+    saveSetting () {
       this.settingVisible = false
     }
   },
   computed: {
     ...mapWritableState(yuanCommunityStore, ['communityPost', 'myForumList']),
     // 判断尺寸大小
-    showSize() {
+    showSize () {
       if (this.customData && this.customData.width && this.customData.height) {
-        return {width: this.customData.width, height: this.customData.height}
+        return { width: this.customData.width, height: this.customData.height }
       }
       return this.sizeList[0]
     },
     // 判断不同高度返回不同个数
-    copyNum() {
+    copyNum () {
       return this.showSize.height == 2 ? 3 : 5
 
     },
-    forumList() {
+    forumList () {
       // this.customData.forumList = this.myForumList.joined
       // return this.customData.forumList
       if (this.customData && this.customData.forumList) {
@@ -298,17 +299,17 @@ export default {
       }
       return this.myForumList.joined
     },
-    showForumList() {
+    showForumList () {
       if (this.customData && this.customData.selectList) {
         return this.customData.selectList?.slice(0, 5)
       }
       return this.selectList.slice(0, 5)
     },
-    async forumPost() {
+    async forumPost () {
       this.customData.forumPost = await this.communityPost.list
       return this.customData.forumPost
     },
-    showForumPost() {
+    showForumPost () {
       if (this.customData && this.customData.forumPost) {
         return this.customData.forumPost?.slice(0, 10)
       }
@@ -321,7 +322,7 @@ export default {
     //     }
     // }
   },
-  async mounted() {
+  async mounted () {
     this.isLoading = true
     await this.getMyForumList()
     // await this.getCommunityPost(this.showForumList[0].id)
@@ -330,43 +331,43 @@ export default {
     if (this.customData && this.customData.defaultForum) {
       this.defaultForum = this.customData.defaultForum
     }
-    console.log(this.defaultForum, this.customData.defaultForum, 'this.customData.defaultForum');
+    console.log(this.defaultForum, this.customData.defaultForum, 'this.customData.defaultForum')
     this.isLoading = false
     // console.log(this.options.title);
   },
   watch: {
-    showForumList(newValue) {
+    showForumList (newValue) {
       this.isLoading = true
       if (this.showForumList.length > 0) {
         this.getCommunityPost(this.showForumList[0].value.id)
       }
       setTimeout(() => {
         this.isLoading = false
-      });
+      })
 
     },
-    defaultForum(newValue) {
+    defaultForum (newValue) {
       this.customData.defaultForum = newValue
       this.getCommunityPost(this.customData.defaultForum.value?.id)
     },
     immediate: true,
     // 切换频道和圈子时触发获取
-    defaultType(newValue) {
+    defaultType (newValue) {
       // console.log(newValue.name);
       if (newValue.name == 'circle') {
         this.getMyForumList()
       } else {
-        return
+
       }
     },
     'customData.selectList': {
-      handler(newValue, oldValue) {
+      handler (newValue, oldValue) {
         if (newValue.length === 1) {
           this.options.title = newValue[0].value.name
           // console.log(this.options.title)
         } else if (newValue.length > 1 || newValue.length < 1) {
           this.options.title = '元社区'
-          console.log(this.options.title);
+          console.log(this.options.title)
         }
 
       }

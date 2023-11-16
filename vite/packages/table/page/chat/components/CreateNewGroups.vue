@@ -108,7 +108,8 @@
       <a-input v-model:value="groupName" :spellcheck="false" placeholder="群名称"
                style="margin-top: 16px; text-align: center; width: 320px;color: var(--primary-text); border-radius: 12px; height: 48px;margin-bottom: 16px;"/>
 
-      <a-input v-model:value="groupID" :spellcheck="false" :style="validateChinese !== true ? {marginBottom:'16px'}: {marginBottom:'8px'}"
+      <a-input v-model:value="groupID" :spellcheck="false"
+               :style="validateChinese !== true ? {marginBottom:'16px'}: {marginBottom:'8px'}"
                placeholder="群ID"
                style="margin-top: 16px; text-align: center; width: 320px;color: var(--primary-text); border-radius: 12px; height: 48px;"/>
 
@@ -120,7 +121,8 @@
       <a-select v-model:value="public.type"
                 :bordered="false"
                 :dropdownStyle="{boxShadow:'none !important',borderRadius:'12px',color:'var(--secondary-text)'}"
-                :showArrow="true" style="width: 320px; border-radius: 12px; color: var(--secondary-text);" @change="getGroupType($event)"
+                :showArrow="true" style="width: 320px; border-radius: 12px; color: var(--secondary-text);"
+                @change="getGroupType($event)"
       >
         <a-select-option v-for="(item,index) in groupType" :key="index" :value="item.type">{{ item.text }}
         </a-select-option>
@@ -148,15 +150,15 @@
 </template>
 
 <script>
-import {computed, defineComponent, onMounted, reactive, ref, toRefs} from 'vue'
-import {message} from 'ant-design-vue';
-import {CameraOutlined} from '@ant-design/icons-vue';
-import {appStore} from '../../../store'
+import { computed, defineComponent, onMounted, reactive, ref, toRefs } from 'vue'
+import { message } from 'ant-design-vue'
+import { CameraOutlined } from '@ant-design/icons-vue'
+import { appStore } from '../../../store'
 import _ from 'lodash-es'
-import {fileUpload} from '../../../components/card/hooks/imageProcessing'
-import {Icon as NewGroupIcon} from '@iconify/vue'
+import { fileUpload } from '../../../components/card/hooks/imageProcessing'
+import { Icon as NewGroupIcon } from '@iconify/vue'
 
-import ChannelClassification from './channelSelect/ChannelClassification.vue';
+import ChannelClassification from './channelSelect/ChannelClassification.vue'
 
 export default defineComponent({
   components: {
@@ -165,7 +167,7 @@ export default defineComponent({
 
   props: ['no'],
 
-  setup(props, ctx) {
+  setup (props, ctx) {
     const server = window.$TUIKit
 
     const store = appStore()
@@ -177,7 +179,7 @@ export default defineComponent({
       simpleImage: '/img/state/null.png', // 空状态图片
       groupName: '', // 接收群名称
       groupID: '', // 接收群ID
-      public: {type: server.TIM.TYPES.GRP_PUBLIC}, // 获取默认的群组类型
+      public: { type: server.TIM.TYPES.GRP_PUBLIC }, // 获取默认的群组类型
       settingsScroller: {  // 滚动条配置
         useBothWheelAxes: true,
         swipeEasing: true,
@@ -219,7 +221,7 @@ export default defineComponent({
 
     const getFriendList = async () => {  // 获取好友列表数据
       const res = await server.tim.getFriendList()
-      const list = [];
+      const list = []
       for (let i = 0; i < res.data.length; i++) {
         if (parseInt(res.data[i].userID) !== store.$state.userInfo.uid) {
           list.push(res.data[i])
@@ -235,10 +237,9 @@ export default defineComponent({
       if (index === -1) {
         data.selectList.push(item)
       } else {
-        return;
+
       }
     }
-
 
     const enterNextStep = () => {  // 进入下一步
       if (data.selectList.length !== 0) {
@@ -252,7 +253,6 @@ export default defineComponent({
       })
       data.selectList.splice(index, 1)
     }
-
 
     const goBack = () => {  // 返回上一步
       data.isNextShow = false
@@ -272,21 +272,19 @@ export default defineComponent({
       return index
     })
 
-
     const closeContact = () => {  // 关闭弹窗
       ctx.emit('close')
     }
 
     // 通过计算属性判断群ID是否为中文
     const validateChinese = computed(() => {
-      const chineseReg = /^[\u4e00-\u9fa5]+$/;
+      const chineseReg = /^[\u4e00-\u9fa5]+$/
       return chineseReg.test(data.groupID)
     })
 
-
     const submit = async () => {  // 点击创建群聊
       if (validateChinese.value) {
-        return
+
       } else {
         const option = {
           type: data.public.type,
@@ -298,7 +296,7 @@ export default defineComponent({
 
         const res = await server.tim.createGroup(option)
 
-        console.log('是否创建成功', res);
+        console.log('是否创建成功', res)
 
         if (res.code === 0) {
           message.success(`${res.data.group.name}创建成功`)
@@ -336,7 +334,6 @@ export default defineComponent({
     const backButton = () => {
       ctx.emit('back')
     }
-
 
     onMounted(getFriendList)
 

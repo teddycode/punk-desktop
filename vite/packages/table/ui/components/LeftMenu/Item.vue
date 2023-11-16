@@ -45,12 +45,12 @@
 </template>
 
 <script setup>
-import {computed, ref} from "vue";
-import {storeToRefs} from "pinia";
-import {appStore} from "../../../store";
+import { computed, ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { appStore } from '../../../store'
 
-const store = appStore();
-const {fullScreen} = storeToRefs(store);
+const store = appStore()
+const { fullScreen } = storeToRefs(store)
 const props = defineProps({
   item: {},
   id: {},
@@ -61,38 +61,38 @@ const props = defineProps({
     default: 20,
   },
   type: {
-    default: "default",
+    default: 'default',
   },
   newType: {
-    default: "base",
+    default: 'base',
   },
   bg: {
-    default: "var(--secondary-bg)",
+    default: 'var(--secondary-bg)',
   },
   full: {},
-});
+})
 
 // 图片大小
 const imgSize = computed(() => {
   return {
-    width: props.w + "px",
-    height: props.w + "px",
-  };
-});
+    width: props.w + 'px',
+    height: props.w + 'px',
+  }
+})
 
 // 全屏控制
-const data = ref(false);
+const data = ref(false)
 const full = computed(() => {
-  fullScreen.value = data.value ? true : false;
+  fullScreen.value = data.value ? true : false
   return data.value
-      ? "fluent:full-screen-minimize-16-filled"
-      : "fluent:full-screen-maximize-16-filled";
-});
+      ? 'fluent:full-screen-minimize-16-filled'
+      : 'fluent:full-screen-maximize-16-filled'
+})
 const itemClick = () => {
   if (props.item.full) {
-    data.value = !data.value;
+    data.value = !data.value
   }
-};
+}
 
 // const route = useRoute();
 // const currentPage = ref(route.path);

@@ -17,37 +17,37 @@
 </template>
 
 <script setup>
-import {reactive, watch} from "vue";
+import { reactive, watch } from 'vue'
 
 const props = defineProps({
   modelValue: {
-    default: "默认排序",
+    default: '默认排序',
   },
   list: {
     default: () => {
       return [
-        {value: "默认排序", name: "默认排序"},
-        {value: "下载次数", name: "下载次数"},
-        {value: "更新时间", name: "更新时间"},
-      ];
+        { value: '默认排序', name: '默认排序' },
+        { value: '下载次数', name: '下载次数' },
+        { value: '更新时间', name: '更新时间' },
+      ]
     },
   },
-});
+})
 
-let data = reactive(props.modelValue);
-const emits = defineEmits(["update:modelValue"]);
+let data = reactive(props.modelValue)
+const emits = defineEmits(['update:modelValue'])
 
 const handleChange = (value) => {
-  emits("update:modelValue", value);
-};
+  emits('update:modelValue', value)
+}
 
 watch(
     () => props.modelValue,
     (newV) => {
       // data = newV;
-      data = newV;
+      data = newV
     }
-);
+)
 </script>
 
 <style lang="scss" scoped></style>

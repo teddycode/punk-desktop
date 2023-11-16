@@ -4,8 +4,8 @@
 </template>
 
 <script>
-import {mapWritableState} from 'pinia'
-import {clipboardStore} from '../../store';
+import { mapWritableState } from 'pinia'
+import { clipboardStore } from '../../store'
 import CodeMirror from 'codemirror'
 
 export default {
@@ -17,8 +17,8 @@ export default {
   computed: {
     ...mapWritableState(clipboardStore, ['settings']),
   },
-  mounted() {
-    const {clipMode, clipTheme, previewShow, showLineNumber, clipSize} = this.settings
+  mounted () {
+    const { clipMode, clipTheme, previewShow, showLineNumber, clipSize } = this.settings
     this.myClipRefs = CodeMirror(this.$refs.myClip, {
       value: this.editorContent,
       theme: clipTheme,
@@ -27,7 +27,7 @@ export default {
       indentWithTabs: true,
       lineWrapping: true,
       lineNumbers: showLineNumber,
-      direction: "ltr",
+      direction: 'ltr',
       singleCursorHeightPerLine: true,
       autocorrect: true,
       viewportMargin: 10,

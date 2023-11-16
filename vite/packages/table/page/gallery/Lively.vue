@@ -65,11 +65,11 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from 'pinia'
+import { mapActions, mapWritableState } from 'pinia'
 import Player from 'xgplayer/dist/simple_player'
-import {message, Modal} from 'ant-design-vue'
+import { message, Modal } from 'ant-design-vue'
 import Template from '../../../user/pages/Template.vue'
-import {paperStore} from '../../store/paper'
+import { paperStore } from '../../store/paper'
 
 const lively = [
   {
@@ -117,9 +117,9 @@ let fs = require('fs')
 let path = require('path')
 export default {
   name: 'Lively',
-  components: {Template},
+  components: { Template },
 
-  data() {
+  data () {
     return {
       settingsScroller: {
         useBothWheelAxes: true,
@@ -134,7 +134,7 @@ export default {
       timer: null
     }
   },
-  mounted() {
+  mounted () {
     this.list = [...lively]
     this.savePath = this.settings.savePath
 
@@ -165,12 +165,12 @@ export default {
   },
   computed: {
     ...mapWritableState(paperStore, ['settings']),
-    displayList() {
+    displayList () {
       return this.list.sort((a, b) => {
         return b.done - a.done
       })
     },
-    savePath() {
+    savePath () {
       if (!this.settings.savePath) {
         return ''
       }
@@ -180,17 +180,17 @@ export default {
   },
   methods: {
     ...mapActions(paperStore, ['addToMyPaper']),
-    getCover(item) {
+    getCover (item) {
       let filename = item.name.substring(0, item.name.lastIndexOf('.'))
       filename = `https://up.apps.vip/lively/${filename}.jpg`
       return filename
     },
-    getVideo(item) {
+    getVideo (item) {
       let filename = item.name
       filename = `https://up.apps.vip/lively/${filename}`
       return filename
     },
-    getWidth(item) {
+    getWidth (item) {
       if (this.settings.savePath === '') {
         return 100
       } else {
@@ -205,17 +205,17 @@ export default {
         }
       }
     },
-    isInActive() {
+    isInActive () {
       return false
     },
-    closePreview() {
+    closePreview () {
       this.previewVideoVisible = false
       if (window.$xgplayer) {
         window.$xgplayer.destroy()
         window.$xgplayer = null
       }
     },
-    async queryStart() {
+    async queryStart () {
       let savePath = await tsbApi.dialog.showOpenDialog({
         title: '选择目录', message: '请选择下载壁纸的目录', properties: [
           'openDirectory', 'createDirectory',
@@ -227,11 +227,11 @@ export default {
       } else {
       }
     },
-    startDownload() {
+    startDownload () {
       if (this.savePath === '') {
         Modal.confirm({
           centered: true,
-          style: {'z-index': 999999},
+          style: { 'z-index': 999999 },
           content: '您尚未设置壁纸保存目录，请设置目录，设置目录后下载将自动开始。',
           onOk: async () => {
             await this.queryStart()
@@ -241,7 +241,7 @@ export default {
         this.doStartDownload(this.currentItem)
       }
     },
-    doStartDownload(item) {
+    doStartDownload (item) {
       message.info('开始下载壁纸')
       item.percent = 0
       tsbApi.download.start({
@@ -262,7 +262,7 @@ export default {
       })
       this.previewVideoVisible = false
     },
-    previewVideo(item) {
+    previewVideo (item) {
       $('#actions').show()
       this.timer = setTimeout(() => {
         $('#actions').fadeOut()
@@ -295,7 +295,7 @@ export default {
       })
 
     },
-    clickDownload(item) {
+    clickDownload (item) {
       this.currentItem = item
       this.startDownload()
     }

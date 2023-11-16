@@ -65,14 +65,14 @@
 </template>
 
 <script>
-import {giftColumns, testData} from '../../../js/data/tableData'
+import { giftColumns, testData } from '../../../js/data/tableData'
 import Modal from '../../../components/Modal.vue'
 
 export default {
   components: {
     Modal
   },
-  data() {
+  data () {
     return {
       testData,
       giftColumns,
@@ -82,7 +82,7 @@ export default {
     }
   },
   methods: {
-    receiveGift(record) {
+    receiveGift (record) {
       this.giftDetailShow = true
       this.giftData.frame_url = record.frame_url
       this.giftData.frame_name = record.name

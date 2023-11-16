@@ -53,149 +53,148 @@ export default {
   name: 'Promotion',
   components: {},
   computed: {},
-  data() {
+  data () {
     return {
       visible: false,
       incomeList: {
-        title: "我的钱包",
+        title: '我的钱包',
         data: [
           {
-            title: "可体现余额",
-            content: "可提现余额为上个月收益（以及之前没提取的收益综合）。",
-            num: "1293",
+            title: '可体现余额',
+            content: '可提现余额为上个月收益（以及之前没提取的收益综合）。',
+            num: '1293',
           },
           {
-            title: "当月收益 ",
-            content: "当月收益为本月1日到今天的收益，不可提现，直到下个月转为上月收益才可提现。",
-            num: "71 ",
+            title: '当月收益 ',
+            content: '当月收益为本月1日到今天的收益，不可提现，直到下个月转为上月收益才可提现。',
+            num: '71 ',
           },
         ]
       },
       detailList: {
-        title: "提现明细",
+        title: '提现明细',
         // 搜索条件
-        time: "",
-        state: "",
+        time: '',
+        state: '',
         data: [
           {
-            time: "2018-08-03 20:13",
-            amount: "100.0",
-            commission: "0.5",
-            Alipay: "12354156",
-            state: "完成",
-            remark: "-"
+            time: '2018-08-03 20:13',
+            amount: '100.0',
+            commission: '0.5',
+            Alipay: '12354156',
+            state: '完成',
+            remark: '-'
           },
           {
-            time: "2018-08-03 18:13",
-            amount: "100.0",
-            commission: "0.5",
-            Alipay: "12354156",
-            state: "取消",
-            remark: "账号错误"
+            time: '2018-08-03 18:13',
+            amount: '100.0',
+            commission: '0.5',
+            Alipay: '12354156',
+            state: '取消',
+            remark: '账号错误'
           },
           {
-            time: "2018-08-03 18:13",
-            amount: "100.0",
-            commission: "0.5",
-            Alipay: "12354156",
-            state: "取消",
-            remark: "账号错误"
+            time: '2018-08-03 18:13',
+            amount: '100.0',
+            commission: '0.5',
+            Alipay: '12354156',
+            state: '取消',
+            remark: '账号错误'
           },
           {
-            time: "2018-08-03 18:13",
-            amount: "100.0",
-            commission: "0.5",
-            Alipay: "12354156",
-            state: "取消",
-            remark: "账号错误"
+            time: '2018-08-03 18:13',
+            amount: '100.0',
+            commission: '0.5',
+            Alipay: '12354156',
+            state: '取消',
+            remark: '账号错误'
           },
           {
-            time: "2018-08-03 18:13",
-            amount: "100.0",
-            commission: "0.5",
-            Alipay: "12354156",
-            state: "取消",
-            remark: "账号错误"
+            time: '2018-08-03 18:13',
+            amount: '100.0',
+            commission: '0.5',
+            Alipay: '12354156',
+            state: '取消',
+            remark: '账号错误'
           },
           {
-            time: "2018-08-03 18:13",
-            amount: "100.0",
-            commission: "0.5",
-            Alipay: "12354156",
-            state: "取消",
-            remark: "账号错误"
+            time: '2018-08-03 18:13',
+            amount: '100.0',
+            commission: '0.5',
+            Alipay: '12354156',
+            state: '取消',
+            remark: '账号错误'
           },
           {
-            time: "2018-08-03 18:13",
-            amount: "100.0",
-            commission: "0.5",
-            Alipay: "12354156",
-            state: "取消",
-            remark: "账号错误"
+            time: '2018-08-03 18:13',
+            amount: '100.0',
+            commission: '0.5',
+            Alipay: '12354156',
+            state: '取消',
+            remark: '账号错误'
           },
           {
-            time: "2018-08-03 18:13",
-            amount: "100.0",
-            commission: "0.5",
-            Alipay: "12354156",
-            state: "取消",
-            remark: "账号错误"
+            time: '2018-08-03 18:13',
+            amount: '100.0',
+            commission: '0.5',
+            Alipay: '12354156',
+            state: '取消',
+            remark: '账号错误'
           },
           {
-            time: "2018-08-03 18:13",
-            amount: "100.0",
-            commission: "0.5",
-            Alipay: "12354156",
-            state: "取消",
-            remark: "账号错误"
+            time: '2018-08-03 18:13',
+            amount: '100.0',
+            commission: '0.5',
+            Alipay: '12354156',
+            state: '取消',
+            remark: '账号错误'
           },
           {
-            time: "2018-08-03 18:13",
-            amount: "100.0",
-            commission: "0.5",
-            Alipay: "12354156",
-            state: "取消",
-            remark: "账号错误"
+            time: '2018-08-03 18:13',
+            amount: '100.0',
+            commission: '0.5',
+            Alipay: '12354156',
+            state: '取消',
+            remark: '账号错误'
           },
         ]
-
 
       },
       detailCol: [
         {
-          title: "提现时间",
-          dataIndex: "time",
-          key: "time"
+          title: '提现时间',
+          dataIndex: 'time',
+          key: 'time'
         },
         {
-          title: "提现金额（元）",
-          dataIndex: "amount",
-          key: "amount"
+          title: '提现金额（元）',
+          dataIndex: 'amount',
+          key: 'amount'
         },
         {
-          title: "手续费（元）",
-          dataIndex: "commission",
-          key: "commission"
+          title: '手续费（元）',
+          dataIndex: 'commission',
+          key: 'commission'
         },
         {
-          title: "支付宝账号",
-          dataIndex: "Alipay",
-          key: "Alipay"
+          title: '支付宝账号',
+          dataIndex: 'Alipay',
+          key: 'Alipay'
         },
         {
-          title: "状态",
-          dataIndex: "state",
-          key: "state"
+          title: '状态',
+          dataIndex: 'state',
+          key: 'state'
         },
         {
-          title: "备注",
-          dataIndex: "remark",
-          key: "remark"
+          title: '备注',
+          dataIndex: 'remark',
+          key: 'remark'
         },
       ]
     }
   },
-  mounted() {
+  mounted () {
 
   },
   watch: {},

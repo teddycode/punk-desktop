@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <!-- copied from https://www.svgrepo.com/svg/255881/text -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 16 16" style="enable-background:new 0 0 16 16;" xml:space="preserve">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px"
+     y="0px"
+     viewBox="0 0 16 16" style="enable-background:new 0 0 16 16;" xml:space="preserve">
 <g>
 	<g transform="scale(0.03125)">
 		<path d="M405.787,43.574H8.17c-4.513,0-8.17,3.658-8.17,8.17v119.83c0,4.512,3.657,8.17,8.17,8.17h32.681
@@ -14,7 +15,7 @@
 			V51.745C413.957,47.233,410.3,43.574,405.787,43.574z"/>
 	</g>
 </g>
-<g>
+    <g>
 	<g transform="scale(0.03125)">
 		<path d="M503.83,452.085h-24.511V59.915h24.511c4.513,0,8.17-3.658,8.17-8.17s-3.657-8.17-8.17-8.17h-65.362
 			c-4.513,0-8.17,3.658-8.17,8.17s3.657,8.17,8.17,8.17h24.511v392.17h-24.511c-4.513,0-8.17,3.658-8.17,8.17s3.657,8.17,8.17,8.17

@@ -29,20 +29,20 @@ export default {
       default: true,
     },
     to: {
-      default: "body",
+      default: 'body',
     },
   },
   computed: {
-    zIndexValue() {
-      return this.modelValue ? 999999999 : null;
+    zIndexValue () {
+      return this.modelValue ? 999999999 : null
     },
   },
   methods: {
-    close() {
+    close () {
       // 在这里处理关闭逻辑
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

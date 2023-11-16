@@ -14,30 +14,30 @@
 </template>
 
 <script>
-import {mapWritableState} from "pinia";
-import {main} from "../../store/main";
+import { mapWritableState } from 'pinia'
+import { main } from '../../store/main'
 
 export default {
   computed: {
-    ...mapWritableState(main, ["useTool"]),
+    ...mapWritableState(main, ['useTool']),
   },
-  data() {
+  data () {
     return {
       toolsList: [
-        {name: "计算器", img: "calculator", route: "calculator"},
-        {name: "时间戳转换", img: "timeConversion", route: "timeConversion"},
-        {name: "翻译", img: "translate", route: "translate"},
+        { name: '计算器', img: 'calculator', route: 'calculator' },
+        { name: '时间戳转换', img: 'timeConversion', route: 'timeConversion' },
+        { name: '翻译', img: 'translate', route: 'translate' },
         {
-          name: "汇率转换",
-          img: "currencyExchange",
-          route: "currencyExchange",
+          name: '汇率转换',
+          img: 'currencyExchange',
+          route: 'currencyExchange',
         },
         {
-          name: "二维码生成",
-          img: "QRCodeGeneration",
-          route: "QRCodeGeneration",
+          name: '二维码生成',
+          img: 'QRCodeGeneration',
+          route: 'QRCodeGeneration',
         },
-        {name: "一键取色", img: "colorSelection", route: "colorSelection"},
+        { name: '一键取色', img: 'colorSelection', route: 'colorSelection' },
         // { name: "搜索网格", img: "searchTools", route: "searchTools" },
         // { name: "文件分享", img: "fileFhare", route: "fileFhare" },
 
@@ -60,15 +60,15 @@ export default {
         // },
         // { name: "emoji搜索", img: "emojiSearch", route: "emojiSearch" },
       ],
-    };
+    }
   },
   methods: {
-    toolClick(tool) {
-      this.$router.push(tool.route);
-      this.useTool = tool;
+    toolClick (tool) {
+      this.$router.push(tool.route)
+      this.useTool = tool
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

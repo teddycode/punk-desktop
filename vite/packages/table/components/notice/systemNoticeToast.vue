@@ -40,10 +40,10 @@
 </template>
 
 <script>
-import {defineComponent,} from 'vue'
-import {mapActions, mapWritableState} from 'pinia'
-import {formatTime} from '../../util'
-import {appStore} from '../../store'
+import { defineComponent, } from 'vue'
+import { mapActions, mapWritableState } from 'pinia'
+import { formatTime } from '../../util'
+import { appStore } from '../../store'
 
 export default defineComponent({
   props: ['content', 'noticeType', 'isPlay'],
@@ -56,7 +56,7 @@ export default defineComponent({
   },
   watch: {
     'noticeType': {
-      handler(newVal) {
+      handler (newVal) {
         if (this.noticeType === 'notice' && this.isPlay) {
           this.setNoticePlay()
           if (this.settings.noticePlay) {
@@ -75,7 +75,7 @@ export default defineComponent({
     }
   },
 
-  setup(props, ctx) {
+  setup (props, ctx) {
 
     const talkLater = () => {  // 点击稍后再说按钮
       ctx.emit('closeToast')

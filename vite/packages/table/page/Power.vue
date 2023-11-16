@@ -32,28 +32,28 @@
 
 <script>
 import BackBtn from '../components/comp/BackBtn.vue'
-import {message, Modal} from 'ant-design-vue'
-import {runNir} from '../js/common/exec'
-import {getSign, isMain} from '../js/common/screenUtils'
+import { message, Modal } from 'ant-design-vue'
+import { runNir } from '../js/common/exec'
+import { getSign, isMain } from '../js/common/screenUtils'
 
 const execShell = require('child_process').exec
 export default {
   name: 'Power',
-  components: {BackBtn},
+  components: { BackBtn },
   methods: {
 
-    exit() {
+    exit () {
       if (isMain()) {
         ipc.send('exitTable')
       } else {
-        ipc.send('closeScreen', {fullDomain: getSign()})
+        ipc.send('closeScreen', { fullDomain: getSign() })
       }
 
     },
-    shutdown() {
+    shutdown () {
       Modal.confirm({
         content: '关闭系统？请保存文件后确认。',
-        onOk() {
+        onOk () {
           let shell = 'shutdown -s -t 00'
           if (require('os').platform() != 'win32') {
             shell = 'shutdown now'
@@ -66,10 +66,10 @@ export default {
         }
       })
     },
-    logout() {
+    logout () {
       Modal.confirm({
         content: '注销系统？',
-        onOk() {
+        onOk () {
           let shell = 'shutdown -l'
           let command = execShell(shell, (err, stdout, stderr) => {
             if (err || stderr) {
@@ -79,18 +79,18 @@ export default {
         }
       })
     },
-    sleep() {
+    sleep () {
       Modal.confirm({
         content: '休眠系统？',
-        onOk() {
+        onOk () {
           runNir('standby')
         }
       })
     },
-    reboot() {
+    reboot () {
       Modal.confirm({
         content: '重启系统？请保存文件后确认。',
-        onOk() {
+        onOk () {
           let shell = 'shutdown -r -t 0'
           if (require('os').platform() != 'win32') {
             shell = 'shutdown -r now'

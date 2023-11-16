@@ -45,7 +45,8 @@ export default defineComponent({
 <template>
 
   <div :class="{'full-screen':fullScreen}" class="model-preview">
-    <xt-button :h="30" :w="30" class="pointer xt-bg-2 " size="mini" style="position:absolute;right: 10px;top: 10px;border-radius: 4px"
+    <xt-button :h="30" :w="30" class="pointer xt-bg-2 " size="mini"
+               style="position:absolute;right: 10px;top: 10px;border-radius: 4px"
                @click="setFullScreen">
       <FullscreenOutlined v-if="!fullScreen"/>
       <template v-else>

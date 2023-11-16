@@ -52,7 +52,8 @@
                   </a-col>
                   <a-col :span="12">
                     <a-button block
-                              class="xt-bg-2 xt-text" @click="openTab('https://www.yuque.com/tswork/mqon1y/ldt3ll8lqoedpo07')">前端实习
+                              class="xt-bg-2 xt-text"
+                              @click="openTab('https://www.yuque.com/tswork/mqon1y/ldt3ll8lqoedpo07')">前端实习
                     </a-button>
                   </a-col>
                 </a-row>
@@ -96,24 +97,24 @@
 <script>
 import GradePanel from '../../components/comp/GradePanel.vue'
 import axios from 'axios'
-import {Server} from '../../consts'
+import { Server } from '../../consts'
 import vuuri from '../../components/vuuriHome/Vuuri.vue'
 import HorizontalPanel from '../../components/HorizontalPanel.vue'
 import VueCustomScrollbar from '../../../../src/components/vue-scrollbar.vue'
 import SingIn from '../../components/widgets/SignIn.vue'
-import {teamStore} from '../../store/team'
-import {mapActions, mapState} from 'pinia'
+import { teamStore } from '../../store/team'
+import { mapActions, mapState } from 'pinia'
 import browser from '../../js/common/browser'
-import {appStore} from '../../store'
+import { appStore } from '../../store'
 import FrameAvatar from '../../components/avatar/FrameAvatar.vue'
 
 export default {
   name: 'Com',
-  components: {FrameAvatar, SingIn, VueCustomScrollbar, HorizontalPanel, GradePanel, vuuri},
-  data() {
+  components: { FrameAvatar, SingIn, VueCustomScrollbar, HorizontalPanel, GradePanel, vuuri },
+  data () {
     return {
 
-      currentTab: {name: 'com'},
+      currentTab: { name: 'com' },
       scrollbarSettings: {
         useBothWheelAxes: true,
         swipeEasing: true,
@@ -129,7 +130,7 @@ export default {
   computed: {
     ...mapState(teamStore, ['my', 'myTeamNo', 'myTeam']),
   },
-  mounted() {
+  mounted () {
     this.appVersion = tsbApi.runtime.appVersion
     axios.get('https://a.apps.vip/download/updateLog.json?t=' + Date.now()).then(data => {
       this.updateLog = data.data
@@ -139,20 +140,20 @@ export default {
     ...mapActions(appStore, ['showUserCard']),
 
     ...mapActions(teamStore, ['updateMy']),
-    checkUpdate() {
+    checkUpdate () {
       ipc.send('checkUpdate')
     },
-    openTab(url) {
+    openTab (url) {
       browser.openInInner(url)
     },
-    async getOnline() {
+    async getOnline () {
       axios.get(Server.baseUrl + '/app/open/usageStats/online').then((rs) => {
         if (rs.data.code === 1000) {
           this.online = rs.data.data
         }
       })
     },
-    goUrl(url) {
+    goUrl (url) {
       browser.openInInner(url)
     },
   }

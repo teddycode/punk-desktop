@@ -17,15 +17,15 @@
 import BarrageSender from './BarrageSender.vue'
 import TeamBarrage from './TeamBarrage.vue'
 import HorizontalPanel from '../HorizontalPanel.vue'
-import {mapActions, mapState} from 'pinia'
-import {teamStore} from '../../store/team'
-import {appStore} from '../../store'
+import { mapActions, mapState } from 'pinia'
+import { teamStore } from '../../store/team'
+import { appStore } from '../../store'
 
 export default {
   name: 'BarragePanel',
-  components: {HorizontalPanel, TeamBarrage, BarrageSender},
+  components: { HorizontalPanel, TeamBarrage, BarrageSender },
   props: ['channels', 'defaultChannel'],
-  data() {
+  data () {
     return {
       loading: false,
       channelList: [
@@ -46,12 +46,12 @@ export default {
       key: Date.now()
     }
   },
-  mounted() {
+  mounted () {
     this.loading = true
     this.CONST = tsbApi.barrage.CONST
     if (this.defaultChannel === 'team') {
       this.channelList = this.channelList.reverse()
-      this.currentChannel = {name: 'team', title: '小队'}
+      this.currentChannel = { name: 'team', title: '小队' }
     }
     this.loadAllBarrages().then()
     if (this.userInfo.uid) {
@@ -62,7 +62,7 @@ export default {
   },
   watch: {
     currentChannel: {
-      handler() {
+      handler () {
         this.loading = true
         this.key = Date.now()
       }
@@ -71,7 +71,7 @@ export default {
   computed: {
     ...mapState(appStore, ['userInfo']),
     ...mapState(teamStore, ['my', 'myTeamNo', 'myTeam']),
-    barrages() {
+    barrages () {
       if (this.currentChannel.name === 'all') {
         return this.barragesAll
       } else {
@@ -81,7 +81,7 @@ export default {
   },
   methods: {
     ...mapActions(teamStore, ['updateMy']),
-    async loadAllBarrages() {
+    async loadAllBarrages () {
       this.loading = true
       tsbApi.barrage.getList(this.CONST.CHANNEL.PUBLIC, 'table').then(rs => {
         this.loading = false
@@ -94,7 +94,7 @@ export default {
         }
       })
     },
-    async loadTeamBarrage() {
+    async loadTeamBarrage () {
       await this.updateMy()
       if (this.myTeamNo) {
         this.loading = true

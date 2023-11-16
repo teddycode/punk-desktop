@@ -5,5 +5,5 @@ const util = require('../util/util.js')
 const tools = util.tools
 
 window.$models = {
-    tools: tools
+  tools: tools
 }

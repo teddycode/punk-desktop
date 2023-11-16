@@ -50,7 +50,7 @@ const server = {
         this.login()
         break
       default:
-        // console.log('在server网站下，但未命中任何预加载处理路径:'+path)
+      // console.log('在server网站下，但未命中任何预加载处理路径:'+path)
     }
   },
   login () {

@@ -59,7 +59,8 @@
             </div>
             <div class="tip text-grey mt-2">距离上一名 ： {{ distance }} <span :disabled="this.times===0"
                                                                               class="text-button"
-                                                                              style="margin-left:20px;margin-top: 10px" type="primary"
+                                                                              style="margin-left:20px;margin-top: 10px"
+                                                                              type="primary"
                                                                               @click="use">查看（{{
                 times
               }}次）</span></div>
@@ -90,23 +91,23 @@
 </template>
 
 <script>
-import {defineComponent} from 'vue'
-import {mapActions, mapState} from 'pinia'
-import {message, Modal} from 'ant-design-vue'
-import {appStore} from '../../store'
+import { defineComponent } from 'vue'
+import { mapActions, mapState } from 'pinia'
+import { message, Modal } from 'ant-design-vue'
+import { appStore } from '../../store'
 import FrameAvatar from '../avatar/FrameAvatar.vue'
 
 export default defineComponent({
   name: 'grade-panel',
-  components: {FrameAvatar},
+  components: { FrameAvatar },
   props: {},
   computed: {
     ...mapState(appStore, ['userInfo']),
-    getPath() {
+    getPath () {
       return 'file://' + window.globalArgs['app-dir_name'] + '/../../icons/badge/'
     }
   },
-  data() {
+  data () {
     return {
 
       grade: {},
@@ -164,7 +165,7 @@ export default defineComponent({
       }
     }
   },
-  mounted() {
+  mounted () {
     this.getUserInfo()
     this.onlineGrade = this.userInfo.onlineGrade
     this.grade = this.userInfo.onlineGradeExtra
@@ -178,10 +179,10 @@ export default defineComponent({
 
   methods: {
     ...mapActions(appStore, ['getUserInfo']),
-    openTip() {
+    openTip () {
       this.$emit('openGradeTip')
     },
-    getBadge() {
+    getBadge () {
       if (!this.grade.rank) {
         return this.badge.t9999
       }
@@ -202,23 +203,23 @@ export default defineComponent({
       }
     },
 
-    getTimes() {
+    getTimes () {
       let str = this.getDateStr()
       let times = localStorage.getItem(str)
       times = Number(times === null ? 2 : times)
       this.times = times
       return times
     },
-    getDateStr() {
+    getDateStr () {
       let date = new Date(Date.now())
       let str = date.getFullYear() + '_' + (date.getMonth() + 1) + '_' + date.getDate() + '_' + this.userInfo.uid
       return str
     },
-    setTimes(times) {
+    setTimes (times) {
       let str = this.getDateStr()
       localStorage.setItem(str, Number(times))
     },
-    use() {
+    use () {
       let times = this.getTimes()
       if (times <= 0) {
         message.error('剩余道具不足，无法使用。')
@@ -243,7 +244,7 @@ export default defineComponent({
       }
     },
 
-    gradeTableGenerate(num) {
+    gradeTableGenerate (num) {
       let lvSys = {}
       for (let i = 0; i < num + 1; i++) {
         let arrLef = 0

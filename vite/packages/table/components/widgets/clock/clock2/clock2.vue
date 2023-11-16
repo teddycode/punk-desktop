@@ -7,22 +7,22 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
-      time: "",
-      min: "",
-      date: "",
+      time: '',
+      min: '',
+      date: '',
       timerID: 0,
       week: [
-        "星期天",
-        "星期一",
-        "星期二",
-        "星期三",
-        "星期四",
-        "星期五",
-        "星期六",
+        '星期天',
+        '星期一',
+        '星期二',
+        '星期三',
+        '星期四',
+        '星期五',
+        '星期六',
       ],
-    };
+    }
   },
   props: {
     isSnow: {
@@ -30,41 +30,41 @@ export default {
       default: true,
     },
   },
-  mounted() {
-    this.timerID = setInterval(this.updateTime, 1000);
-    this.updateTime();
+  mounted () {
+    this.timerID = setInterval(this.updateTime, 1000)
+    this.updateTime()
   },
   methods: {
-    zeroPadding(num, digit) {
-      let zero = "";
+    zeroPadding (num, digit) {
+      let zero = ''
       for (let i = 0; i < digit; i++) {
-        zero += "0";
+        zero += '0'
       }
-      return (zero + num).slice(-digit);
+      return (zero + num).slice(-digit)
     },
-    updateTime() {
-      let cd = new Date();
+    updateTime () {
+      let cd = new Date()
       this.time =
           this.zeroPadding(cd.getHours(), 2) +
-          ":" +
+          ':' +
           this.zeroPadding(cd.getMinutes(), 2)
-      this.min = ":" +
-          this.zeroPadding(cd.getSeconds(), 2);
+      this.min = ':' +
+          this.zeroPadding(cd.getSeconds(), 2)
       this.date =
           this.zeroPadding(cd.getFullYear(), 4) +
-          "年" +
+          '年' +
           this.zeroPadding(cd.getMonth() + 1, 2) +
-          "月" +
+          '月' +
           this.zeroPadding(cd.getDate(), 2) +
-          "日 " +
-          this.week[cd.getDay()];
+          '日 ' +
+          this.week[cd.getDay()]
     },
   },
-  destroyed() {
+  destroyed () {
 
-    clearInterval(this.timerID);   //  销毁定时器
+    clearInterval(this.timerID)   //  销毁定时器
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

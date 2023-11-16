@@ -70,7 +70,7 @@
                 </div>
               </div>
               <div
-                style="width: 600px;text-align: center;zoom: 0.8;display: flex;flex-direction: column;align-items:center;justify-content: center;justify-items: center;">
+                  style="width: 600px;text-align: center;zoom: 0.8;display: flex;flex-direction: column;align-items:center;justify-content: center;justify-items: center;">
                 <div class="mt-2 mb-2" style="color:var(--secondary-text);">推荐功能（拖拽添加）</div>
                 <div id="suggestList" class="main-nav" style="width:430px;white-space: pre-wrap;flex-wrap: wrap;">
                   <div v-for="item in suggestNavList" :key="item.name" style="margin:5px">
@@ -159,9 +159,9 @@
                 <!-- {{ item.type }} -->
                 <a-dropdown :trigger="['contextmenu']">
                   <div
-                    v-if="item.type==='systemApp'"
-                    style="width: 56px;height: 56px;display: flex;justify-content: center;align-items: center;background: var(--secondary-bg);border-radius: 12px"
-                    @click="clickNavigation(item)">
+                      v-if="item.type==='systemApp'"
+                      style="width: 56px;height: 56px;display: flex;justify-content: center;align-items: center;background: var(--secondary-bg);border-radius: 12px"
+                      @click="clickNavigation(item)">
                     <navIcon :icon="item.icon" style="width: 32px;height: 32px;color:var(--secondary-text);"></navIcon>
                   </div>
                   <a-avatar v-else :size="40" :src="renderIcon(item.icon)" shape="square"></a-avatar>
@@ -410,15 +410,15 @@ export default {
       this.rightDrop()
       this.mainDrop()
     }),
-      // 替换原有图标
-      // console.log(this.ClassifyData);
-      navigationData.systemAppList.forEach((item) => {
-        this.ClassifyData.forEach((i) => {
-          if (item.name === i.name) {
-            i.icon = item.icon
-          }
+        // 替换原有图标
+        // console.log(this.ClassifyData);
+        navigationData.systemAppList.forEach((item) => {
+          this.ClassifyData.forEach((i) => {
+            if (item.name === i.name) {
+              i.icon = item.icon
+            }
+          })
         })
-      })
     navigationData.systemFillAppList.forEach((item) => {
       this.sideNavigationList.forEach((i) => {
         if (item.name === i.name) {
@@ -764,7 +764,7 @@ export default {
         },
         onUpdate: function (event) {
           let newIndex = event.newIndex,
-            oldIndex = event.oldIndex
+              oldIndex = event.oldIndex
           let newItem = drop.children[newIndex]
           let oldItem = drop.children[oldIndex]
 
@@ -826,7 +826,7 @@ export default {
         },
         onUpdate: function (event) {
           let newIndex = event.newIndex,
-            oldIndex = event.oldIndex
+              oldIndex = event.oldIndex
           let newItem = side.children[newIndex]
           let oldItem = side.children[oldIndex]
           // 先删除移动的节点
@@ -875,7 +875,7 @@ export default {
         },
         onUpdate: function (event) {
           let newIndex = event.newIndex,
-            oldIndex = event.oldIndex
+              oldIndex = event.oldIndex
           let newItem = right.children[newIndex]
           let oldItem = right.children[oldIndex]
           // 先删除移动的节点

@@ -45,16 +45,16 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from 'pinia'
-import {Modal} from 'ant-design-vue'
-import {appsStore} from '../store/apps'
-import {renderIcon} from '../js/common/common'
+import { mapActions, mapWritableState } from 'pinia'
+import { Modal } from 'ant-design-vue'
+import { appsStore } from '../store/apps'
+import { renderIcon } from '../js/common/common'
 
-const {fs} = window.$models
+const { fs } = window.$models
 
 export default {
   name: 'MyApps',
-  data() {
+  data () {
     return {
       menuVisible: false,
       outerSettings: {
@@ -73,10 +73,10 @@ export default {
   methods: {
     ...mapActions(appsStore, ['deleteApp']),
     renderIcon,
-    addIcons() {
-      this.$emit("addIcons")
+    addIcons () {
+      this.$emit('addIcons')
     },
-    open(app) {
+    open (app) {
       // if(fs.lstatSync(app.path).isDirectory()){
       //   require('electron').shell.openPath(app.path.replaceAll('/','\\'))
       // }else{
@@ -84,7 +84,7 @@ export default {
       // }
       require('electron').shell.openPath(require('path').normalize(app.path))
     },
-    deleteAnApp(app) {
+    deleteAnApp (app) {
       Modal.confirm({
         content: '是否删除应用快捷方式？此操作不会删除物理文件。',
         onOk: () => {
@@ -94,10 +94,10 @@ export default {
         }
       })
     },
-    showInFolder(app) {
+    showInFolder (app) {
       require('electron').shell.showItemInFolder(app.path)
     },
-    clear() {
+    clear () {
       this.menuVisible = false
       Modal.confirm({
         centered: true,

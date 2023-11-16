@@ -82,9 +82,9 @@
 </template>
 
 <script>
-import {appStore} from '../../../store'
-import {mapActions, mapWritableState} from 'pinia'
-import {taskStore} from '../../../apps/task/store'
+import { appStore } from '../../../store'
+import { mapActions, mapWritableState } from 'pinia'
+import { taskStore } from '../../../apps/task/store'
 // import DeskPreview from '../../../components/desk/DeskPreview.vue';
 export default {
   name: 'DeskMarket',
@@ -92,12 +92,12 @@ export default {
     // DeskPreview
   },
   computed: {
-    ...mapWritableState(taskStore, ["taskID", "step"]),
-    m03025() {
-      return this.taskID == "M0302" && this.step == 5
+    ...mapWritableState(taskStore, ['taskID', 'step']),
+    m03025 () {
+      return this.taskID == 'M0302' && this.step == 5
     }
   },
-  data() {
+  data () {
     return {
       displayItems: [],
       // 方案
@@ -130,7 +130,7 @@ export default {
   watch: {
     items: {
       immediate: true,
-      handler() {
+      handler () {
         let items = JSON.parse(JSON.stringify(this.items))
         this.displayItems = items.map(item => {
           let itemNew = {
@@ -146,10 +146,10 @@ export default {
   },
   methods: {
     ...mapActions(appStore, ['showUserCard']),
-    showCard(id) {
+    showCard (id) {
       this.showUserCard(id)
     },
-    mySort(data, property, asc) {
+    mySort (data, property, asc) {
       let datas = [...data]
       return datas.sort(function (a, b) {
         a = a[property]
@@ -158,7 +158,7 @@ export default {
         else return b - a
       })
     },
-    previewKay(item) {
+    previewKay (item) {
       console.log(item)
       this.$emit('openPreview', {
         scheme: {
@@ -169,7 +169,7 @@ export default {
       // this.scheme = item
       // this.showModal = true
     },
-    closePreview() {
+    closePreview () {
       // this.showModal = false
     }
   }

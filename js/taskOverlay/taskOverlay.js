@@ -17,6 +17,7 @@ var taskSwitcherButton = document.getElementById('switch-task-button')
 var addTaskButton = document.getElementById('add-task')
 var addTaskLabel = addTaskButton.querySelector('span')
 var taskOverlayNavbar = document.getElementById('task-overlay-navbar')
+
 function addTaskFromMenu () {
   /* new tasks can't be created in modal mode */
   if (modalMode.enabled()) {
@@ -37,6 +38,7 @@ function addTaskFromMenu () {
   //   tabEditor.show(tabs.getSelected())
   // }, 600)
 }
+
 function addSingleTask () {
   if (modalMode.enabled()) {
     return
@@ -50,6 +52,7 @@ function addSingleTask () {
 
   browserUI.addSingleTask()
 }
+
 function getTaskContainer (id) {
   return document.querySelector('.task-container[data-task="{id}"]'.replace('{id}', id))
 }
@@ -243,7 +246,10 @@ var taskOverlay = {
 
     input.placeholder = l('tasksSearchTabs') + ' (T)'
 
-    container.addEventListener('click', e => { e.stopPropagation(); input.focus() })
+    container.addEventListener('click', e => {
+      e.stopPropagation()
+      input.focus()
+    })
 
     taskOverlay.overlayElement.addEventListener('keyup', function (e) {
       if (e.key.toLowerCase() === 't' && document.activeElement.tagName !== 'INPUT') {

@@ -30,10 +30,10 @@ const PasswordManagers = {
     if (managerSetting == null) {
       return PasswordManagers.managers.find(mgr => mgr.name === 'Built-in password manager')
     }
-    let pm=PasswordManagers.managers.find(mgr => mgr.name === managerSetting.name)
-    if(pm.name==='file'){
-      pm.filePath=managerSetting.filePath
-      pm.dbName=managerSetting.dbName
+    let pm = PasswordManagers.managers.find(mgr => mgr.name === managerSetting.name)
+    if (pm.name === 'file') {
+      pm.filePath = managerSetting.filePath
+      pm.dbName = managerSetting.dbName
     }
     return pm
   },
@@ -130,28 +130,28 @@ const PasswordManagers = {
                 topLevelDomain = topLevelDomain.slice(4)
               }
               if (domain !== topLevelDomain) {
-                console.warn("autofill isn't supported for 3rd-party frames")
+                console.warn('autofill isn\'t supported for 3rd-party frames')
                 return
               }
               webviews.callAsync(tab, 'sendToFrame', [frameId, 'password-autofill-match', {
                 credentials,
-                manager:PasswordManagers.getActivePasswordManager(),
+                manager: PasswordManagers.getActivePasswordManager(),
                 hostname
               }])
-              if(global.passwordToFill){
-                webviews.callAsync(tab,'sendToFrame',[frameId,'fill-password',{
-                  passwordToFill:global.passwordToFill
+              if (global.passwordToFill) {
+                webviews.callAsync(tab, 'sendToFrame', [frameId, 'fill-password', {
+                  passwordToFill: global.passwordToFill
                 }])
               }
             })
             webviews.callAsync(tab, 'sendToFrame', [frameId, 'password-autofill-match', {
               credentials,
-              manager:PasswordManagers.getActivePasswordManager(),
+              manager: PasswordManagers.getActivePasswordManager(),
               hostname
             }])
-            if(global.passwordToFill){
-              webviews.callAsync(tab,'sendToFrame',[frameId,'fill-password',{
-                passwordToFill:global.passwordToFill
+            if (global.passwordToFill) {
+              webviews.callAsync(tab, 'sendToFrame', [frameId, 'fill-password', {
+                passwordToFill: global.passwordToFill
               }])
             }
             // webviews.callAsync(tab, 'sendToFrame', [frameId, 'password-autofill-match', {
@@ -161,9 +161,12 @@ const PasswordManagers = {
 
           }
         }).catch(e => {
-          if(manager.name==='file' && !manager.filePath){
-            ipc.send('message', { type: 'error', config: { content: '使用外部密码库时，必须设置密码库。请到 设置-密码设置 中进行设置。' } })
-          }else{
+          if (manager.name === 'file' && !manager.filePath) {
+            ipc.send('message', {
+              type: 'error',
+              config: { content: '使用外部密码库时，必须设置密码库。请到 设置-密码设置 中进行设置。' }
+            })
+          } else {
             ipc.send('message', { type: 'error', config: { content: '获取自动填充密码失败。' } })
           }
           console.error('Failed to get password suggestions: ' + e.message)
@@ -185,15 +188,15 @@ const PasswordManagers = {
       return PasswordManagers.getActivePasswordManager().name
     })
   },
-  fillPassword(data){
+  fillPassword (data) {
     //处理密码填充，转发到对应的webviews
-    global.passwordToFill=data.password
-    webviews.callAsync(tabs.getSelected(), 'send', ['fill-password',{
-      passwordToFill:{password:data.password}
+    global.passwordToFill = data.password
+    webviews.callAsync(tabs.getSelected(), 'send', ['fill-password', {
+      passwordToFill: { password: data.password }
     }])
   }
 }
-ipc.on('fillPassword',(event,args)=>{
+ipc.on('fillPassword', (event, args) => {
   PasswordManagers.fillPassword(args)
 })
 module.exports = PasswordManagers

@@ -12,7 +12,8 @@
     <div v-if="isFiltrate && showSort" class="ml-3">
       <a-select v-model:value="orderData"
                 :bordered="false"
-                :dropdownStyle="{ 'z-index': 999999999999, backgroundColor: 'var(--mask-bg)' }" :style="selectStyle" class="select rounded-lg  s-item flex items-center text-center"
+                :dropdownStyle="{ 'z-index': 999999999999, backgroundColor: 'var(--mask-bg)' }" :style="selectStyle"
+                class="select rounded-lg  s-item flex items-center text-center"
                 size="large"
                 @change="changeSelect($event)">
         <a-select-option v-for="item in sortType" :key="item" :value="item.value" class="no-drag">{{
@@ -73,11 +74,11 @@ export default {
     },
 
   },
-  mounted() {
+  mounted () {
     this.keywordsData = this.keywords
     this.orderData = this.order
   },
-  data() {
+  data () {
     return {
       keywordsData: '',
       orderData: '',
@@ -85,12 +86,12 @@ export default {
     }
   },
   watch: {
-    keywords(newVal) {
+    keywords (newVal) {
       this.keywordsData = newVal
     },
     defaultSelect: {
       immediate: true,
-      handler(newValue, oldValue) {
+      handler (newValue, oldValue) {
         if (newValue != oldValue) {
           this.selectValue = this.defaultSelect
         }
@@ -98,17 +99,17 @@ export default {
     }
   },
   methods: {
-    doSearch() {
+    doSearch () {
       this.$emit('search')
     },
 
     //下拉值改变
-    changeSelect(event) {
+    changeSelect (event) {
       this.$emit('update:order', event)
       this.$emit('search')
     },
     //输入框值改变
-    changeInput(event) {
+    changeInput (event) {
       this.$emit('update:keywords', event.target.value)
     }
   }

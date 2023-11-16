@@ -28,7 +28,9 @@
     </div>
     <template v-for="dayImages  in bingImages">
       <div class="mt-3 mb-3 text-white s-text"
-           style="color: var(--primary-text);text-align: left;font-size: 20px;font-weight: bold;"> - 第 {{ dayImages.day }} 天 -
+           style="color: var(--primary-text);text-align: left;font-size: 20px;font-weight: bold;"> - 第 {{
+          dayImages.day
+        }} 天 -
       </div>
       <PaperList :list="dayImages.images"></PaperList>
     </template>
@@ -39,14 +41,14 @@
 <script>
 import axios from 'axios'
 import justifiedGallery from 'justifiedGallery'
-import {mapActions} from 'pinia'
+import { mapActions } from 'pinia'
 import PaperList from '../../components/comp/PaperList.vue'
-import {paperStore} from '../../store/paper'
+import { paperStore } from '../../store/paper'
 
 export default {
   name: 'Bing',
-  components: {PaperList},
-  data() {
+  components: { PaperList },
+  data () {
     return {
       page: 1,
       isLoading: false,
@@ -61,7 +63,7 @@ export default {
     }
 
   },
-  mounted() {
+  mounted () {
     $('.image-wrapper').on('touchmove', (e) => {
       e.stopPropagation()
     })
@@ -88,7 +90,7 @@ export default {
   methods: {
     ...mapActions(paperStore, ['addToMyPaper']),
 
-    getBingWallPaper(page, cb) {
+    getBingWallPaper (page, cb) {
       if (page > 7) {
         return
       }

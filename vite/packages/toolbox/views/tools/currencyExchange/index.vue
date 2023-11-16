@@ -120,53 +120,53 @@
 </template>
 
 <script>
-import dayjs from "dayjs";
-import {currencyExchange} from "../../../store/currencyExchange";
-import {mapActions, mapWritableState} from "pinia";
-import axios from "axios";
-import {currencies} from "./currencies";
+import dayjs from 'dayjs'
+import { currencyExchange } from '../../../store/currencyExchange'
+import { mapActions, mapWritableState } from 'pinia'
+import axios from 'axios'
+import { currencies } from './currencies'
 
 export default {
-  data() {
+  data () {
     return {
       currencies,
       flag: false,
-    };
+    }
   },
-  async mounted() {
-    this.getCurrency(this.selectFromCurrency.id);
-    this.getCurrency(this.selectToCurrency.id);
+  async mounted () {
+    this.getCurrency(this.selectFromCurrency.id)
+    this.getCurrency(this.selectToCurrency.id)
   },
   watch: {
-    async selectFromCurrency(newV) {
-      if (this.flag) return;
-      await this.getCurrency(newV.id);
-      this.toCurrencyRate();
+    async selectFromCurrency (newV) {
+      if (this.flag) return
+      await this.getCurrency(newV.id)
+      this.toCurrencyRate()
     },
-    async selectToCurrency(newV) {
-      if (this.flag) return;
-      await this.getCurrency(newV.id);
+    async selectToCurrency (newV) {
+      if (this.flag) return
+      await this.getCurrency(newV.id)
 
-      this.fromCurrencyRate();
+      this.fromCurrencyRate()
     },
   },
   computed: {
     ...mapWritableState(currencyExchange, [
-      "currencyRateList",
-      "fromCurrency",
-      "toCurrency",
-      "selectFromCurrency",
-      "selectToCurrency",
-      "fromRate",
-      "toRate",
+      'currencyRateList',
+      'fromCurrency',
+      'toCurrency',
+      'selectFromCurrency',
+      'selectToCurrency',
+      'fromRate',
+      'toRate',
     ]),
   },
   methods: {
-    ...mapActions(currencyExchange, ["fromCurrencyRate", "toCurrencyRate"]),
-    getDate() {
-      return dayjs().format("YYYY-MM-DD");
+    ...mapActions(currencyExchange, ['fromCurrencyRate', 'toCurrencyRate']),
+    getDate () {
+      return dayjs().format('YYYY-MM-DD')
     },
-    swap() {
+    swap () {
       this.flag = true;
       [this.fromCurrency, this.toCurrency] = [
         this.toCurrency,
@@ -175,26 +175,26 @@ export default {
       [this.selectFromCurrency, this.selectToCurrency] = [
         this.selectToCurrency,
         this.selectFromCurrency,
-      ];
+      ]
       setTimeout(() => {
-        this.flag = false;
-      }, 1000);
+        this.flag = false
+      }, 1000)
     },
-    async getCurrency(id) {
-      let currencyState = this.$cache.get("currencyState");
+    async getCurrency (id) {
+      let currencyState = this.$cache.get('currencyState')
       if (!currencyState) {
-        this.currencyRateList = [];
-        this.$cache.set("currencyState", true, "today");
+        this.currencyRateList = []
+        this.$cache.set('currencyState', true, 'today')
       }
       if (!this.currencyRateList[id]) {
-        let toUrl = `https://60s.viki.moe/ex-rates?c=` + id;
-        let toRes = await axios.get(toUrl);
-        this.toCurrencyRateList = toRes.data.data;
-        this.currencyRateList[id] = {...toRes.data.data};
+        let toUrl = `https://60s.viki.moe/ex-rates?c=` + id
+        let toRes = await axios.get(toUrl)
+        this.toCurrencyRateList = toRes.data.data
+        this.currencyRateList[id] = { ...toRes.data.data }
       }
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

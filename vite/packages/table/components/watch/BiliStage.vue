@@ -25,7 +25,7 @@ export default {
     'stage',
     'size'
   ],
-  mounted() {
+  mounted () {
 
   },
   methods: {
@@ -33,7 +33,7 @@ export default {
     guessStage: bili.guessStage,
   },
   computed: {
-    getSize() {
+    getSize () {
       if (!this.size) {
         return 'small'
       }

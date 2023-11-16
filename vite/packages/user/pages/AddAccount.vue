@@ -26,10 +26,10 @@
 <script>
 export default {
   name: 'AddAccount',
-  mounted() {
+  mounted () {
   },
   methods: {
-    goLogin() {
+    goLogin () {
       ipc.send('login')
       //https://s.apps.vip/login?response_type=code&client_id=10001&state=1
     }

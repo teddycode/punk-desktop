@@ -108,7 +108,8 @@
       <a-input v-model:value="groupName" :spellcheck="false" placeholder="群名称"
                style="margin-top: 16px; text-align: center; width: 320px;color: var(--primary-text); border-radius: 12px; height: 48px;margin-bottom: 16px;"/>
 
-      <a-input v-model:value="groupID" :spellcheck="false" :style="validateChinese !== true ? {marginBottom:'16px'}: {marginBottom:'8px'}"
+      <a-input v-model:value="groupID" :spellcheck="false"
+               :style="validateChinese !== true ? {marginBottom:'16px'}: {marginBottom:'8px'}"
                placeholder="群ID"
                style="margin-top: 16px; text-align: center; width: 320px;color: var(--primary-text); border-radius: 12px; height: 48px;"/>
 
@@ -120,7 +121,8 @@
       <a-select v-model:value="public.type"
                 :bordered="false"
                 :dropdownStyle="{boxShadow:'none !important',borderRadius:'12px',color:'var(--secondary-text)'}"
-                :showArrow="true" style="width: 320px; border-radius: 12px; color: var(--secondary-text);" @change="getGroupType($event)"
+                :showArrow="true" style="width: 320px; border-radius: 12px; color: var(--secondary-text);"
+                @change="getGroupType($event)"
       >
         <a-select-option v-for="(item,index) in groupType" :key="index" :value="item.type">{{ item.text }}
         </a-select-option>
@@ -147,15 +149,15 @@
 
 <script>
 // import { mapActions,mapWritableState } from 'pinia'
-import {computed, onMounted, reactive, ref, toRefs} from 'vue'
-import {message} from 'ant-design-vue';
-import {CameraOutlined} from '@ant-design/icons-vue';
-import {appStore} from '../../../../store'
-import {communityStore} from '../../store/communityStore'
+import { computed, onMounted, reactive, ref, toRefs } from 'vue'
+import { message } from 'ant-design-vue'
+import { CameraOutlined } from '@ant-design/icons-vue'
+import { appStore } from '../../../../store'
+import { communityStore } from '../../store/communityStore'
 import _ from 'lodash-es'
-import {fileUpload} from '../../../../components/card/hooks/imageProcessing'
-import {Icon as NewGroupIcon} from '@iconify/vue'
-import {channelClass} from '../../../../js/chat/createChannelClass'
+import { fileUpload } from '../../../../components/card/hooks/imageProcessing'
+import { Icon as NewGroupIcon } from '@iconify/vue'
+import { channelClass } from '../../../../js/chat/createChannelClass'
 
 export default {
   components: {
@@ -164,7 +166,7 @@ export default {
 
   props: ['no', 'id'],
 
-  setup(props, ctx) {
+  setup (props, ctx) {
     const server = window.$TUIKit
 
     const store = appStore()
@@ -177,7 +179,7 @@ export default {
       simpleImage: '/img/state/null.png', // 空状态图片
       groupName: '', // 接收群名称
       groupID: '', // 接收群ID
-      public: {type: server.TIM.TYPES.GRP_PUBLIC}, // 获取默认的群组类型
+      public: { type: server.TIM.TYPES.GRP_PUBLIC }, // 获取默认的群组类型
       settingsScroller: {  // 滚动条配置
         useBothWheelAxes: true,
         swipeEasing: true,
@@ -219,7 +221,7 @@ export default {
 
     const getFriendList = async () => {  // 获取好友列表数据
       const res = await server.tim.getFriendList()
-      const list = [];
+      const list = []
       for (let i = 0; i < res.data.length; i++) {
         if (parseInt(res.data[i].userID) !== store.$state.userInfo.uid) {
           list.push(res.data[i])
@@ -235,10 +237,9 @@ export default {
       if (index === -1) {
         data.selectList.push(item)
       } else {
-        return;
+
       }
     }
-
 
     const enterNextStep = () => {  // 进入下一步
       if (data.selectList.length !== 0) {
@@ -252,7 +253,6 @@ export default {
       })
       data.selectList.splice(index, 1)
     }
-
 
     const goBack = () => {  // 返回上一步
       data.isNextShow = false
@@ -272,21 +272,19 @@ export default {
       return index
     })
 
-
     const closeContact = () => {  // 关闭弹窗
       ctx.emit('close')
     }
 
     // 通过计算属性判断群ID是否为中文
     const validateChinese = computed(() => {
-      const chineseReg = /^[\u4e00-\u9fa5]+$/;
+      const chineseReg = /^[\u4e00-\u9fa5]+$/
       return chineseReg.test(data.groupID)
     })
 
-
     const submit = async () => {  // 点击创建群聊
       if (validateChinese.value) {
-        return
+
       } else {
         const option = {
           type: data.public.type,
@@ -307,11 +305,11 @@ export default {
             type: 'group',
             id: props.id,
             no: props.no,
-            content: {name: data.name, props: {groupID: data.groupID, avatar: data.avatar}}
+            content: { name: data.name, props: { groupID: data.groupID, avatar: data.avatar } }
           }
           const result = await channelClass.secondaryChannel(option)
 
-          console.log('查看返回状态', result);
+          console.log('查看返回状态', result)
 
           if (result?.status === 1) {
             message.success(`${result?.info}`)
@@ -322,7 +320,6 @@ export default {
         }
       }
     }
-
 
     // 点击群聊头像更换
     const updateGroupAvatar = async () => {
@@ -344,7 +341,6 @@ export default {
     const backButton = () => {
       ctx.emit('back')
     }
-
 
     onMounted(getFriendList)
 

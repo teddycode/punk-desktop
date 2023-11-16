@@ -18,8 +18,8 @@ function enableDarkMode () {
     window.dispatchEvent(new CustomEvent('themechange'))
   })
   window.postMessage({
-    message:'themeChange',
-    status:'enable'
+    message: 'themeChange',
+    status: 'enable'
   })
 }
 
@@ -30,8 +30,8 @@ function disableDarkMode () {
     window.dispatchEvent(new CustomEvent('themechange'))
   })
   window.postMessage({
-    message:'themeChange',
-    status:'disable'
+    message: 'themeChange',
+    status: 'disable'
   })
 
 }
@@ -59,7 +59,7 @@ function initialize () {
 
     // 2, undefined, or false: automatic dark mode following system
     //移除undefined和false
-    if (value === 2 ) {
+    if (value === 2) {
       if (systemShouldEnableDarkMode()) {
         enableDarkMode()
       } else {
@@ -98,6 +98,7 @@ function initialize () {
       disableDarkMode()
     }
   }
+
   settings.listen('darkMode', themeSettingsChanged)
   settings.listen('systemShouldUseDarkColors', function () {
     // the settings API differs between the UI process and tabs
@@ -110,7 +111,7 @@ function initialize () {
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = { initialize ,enableDarkMode,disableDarkMode}
+  module.exports = { initialize, enableDarkMode, disableDarkMode }
 } else {
   initialize()
 }

@@ -1,7 +1,7 @@
 const webviews = require('webviews.js')
 const urlParser = require('util/urlParser.js')
 const settings = require('../util/settings/settings.js')
-window.$pwdCount={}
+window.$pwdCount = {}
 const sideBar = {
   minSizeCss: '45px',
   maxSizeCss: '145px',
@@ -125,6 +125,7 @@ const sideBar = {
   }
 }
 window.sideBar = sideBar
+
 function showToolbar () {
   document.getElementById('password-capture-bar').style.top = -36 + 'px'
   if (sideBar.mod === 'close' || sideBar.mod === 'auto') {
@@ -155,9 +156,11 @@ function showToolbar () {
     webviews.autoAdjustMargin()
   }
 }
+
 ipc.on('openToolbar', () => {
   showToolbar()
 })
+
 function hideToolbar () {
   if (sideBar.mod === 'close' || sideBar.mod === 'auto') {
     toolbar.expanded = false
@@ -180,6 +183,7 @@ function hideToolbar () {
     document.getElementById('toolbar-navigation-buttons').hidden = false
   }
 }
+
 ipc.on('hideToolbar', () => {
   hideToolbar()
 })
@@ -255,19 +259,19 @@ const toolbar = {
       pwdEl.style.pointerEvents = 'auto'
     }
   },
-  loadPwdCount(url){
-    if(url){
-      let count= window.$pwdCount[url]?window.$pwdCount[url]:0
-      toolbar.setPwdCount(count,url)
+  loadPwdCount (url) {
+    if (url) {
+      let count = window.$pwdCount[url] ? window.$pwdCount[url] : 0
+      toolbar.setPwdCount(count, url)
     }
   },
-  setPwdCount(count,url){
-    try{
-      const pwdCountEl=document.getElementById('pwdCount')
-      pwdCountEl.innerText=count>9? 9 : count
-      pwdCountEl.hidden = count === 0;
-      window.$pwdCount[url]=count
-    }catch (e) {
+  setPwdCount (count, url) {
+    try {
+      const pwdCountEl = document.getElementById('pwdCount')
+      pwdCountEl.innerText = count > 9 ? 9 : count
+      pwdCountEl.hidden = count === 0
+      window.$pwdCount[url] = count
+    } catch (e) {
       console.warn(e)
     }
 
@@ -322,17 +326,16 @@ const toolbar = {
       require('browserUI.js').addTab(tabs.add({}))
     })
     toolbar.refreshButton.addEventListener('click', () => {
-      if (urlParser.isInternalURL(tabs.get(tabs.getSelected()).url)) {
-        // 如果是内部网页，则获取源网址（会自动取得url参数)之后，让窗体的url改为源网址，实现刷新
-        const sourceUrl = urlParser.getSourceURL(tabs.get(tabs.getSelected()).url)
-        webviews.callAsync(tabs.getSelected(), 'executeJavaScript', `
+        if (urlParser.isInternalURL(tabs.get(tabs.getSelected()).url)) {
+          // 如果是内部网页，则获取源网址（会自动取得url参数)之后，让窗体的url改为源网址，实现刷新
+          const sourceUrl = urlParser.getSourceURL(tabs.get(tabs.getSelected()).url)
+          webviews.callAsync(tabs.getSelected(), 'executeJavaScript', `
           window.location='${sourceUrl}'
          `)
-      } else {
-        webviews.callAsync(tabs.getSelected(), 'reload')
+        } else {
+          webviews.callAsync(tabs.getSelected(), 'reload')
+        }
       }
-    }
-
     )
 
     toolbar.forwardButton.addEventListener('click', function () {
@@ -476,7 +479,7 @@ if (settings.get('thirdToolbar') === 'show') {
   webviews.autoAdjustMargin()
 }
 
-ipc.on('setPwdCount',(e,a)=>{
-  toolbar.setPwdCount(a.count,a.url)
+ipc.on('setPwdCount', (e, a) => {
+  toolbar.setPwdCount(a.count, a.url)
 })
 module.exports = toolbar

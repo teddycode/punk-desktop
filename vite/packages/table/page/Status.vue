@@ -23,7 +23,8 @@
               </a-col>
               <a-col id="scroller" :span="21">
                 <a-slider v-model:value="vol" @touchstart.stop="() => { log('1') }"
-                          @touchmove.stop="() => { log('2') }" @touchend.stop="() => { log('3') }" @after-change="setVol"></a-slider>
+                          @touchmove.stop="() => { log('2') }" @touchend.stop="() => { log('3') }"
+                          @after-change="setVol"></a-slider>
               </a-col>
             </a-row>
             <div>
@@ -96,11 +97,11 @@
 </template>
 
 <script>
-import {appStore} from '../store'
-import {getResPathJoin} from '../js/common/exec'
+import { appStore } from '../store'
+import { getResPathJoin } from '../js/common/exec'
 // const {listOutputs,setAsDefault} =require('@josephuspaye/win-audio-outputs')
-import {listInputs, listOutputs, setAsDefault} from '../js/ext/audio/audio'
-import {mapWritableState} from 'pinia'
+import { listInputs, listOutputs, setAsDefault } from '../js/ext/audio/audio'
+import { mapWritableState } from 'pinia'
 import BackBtn from '../components/comp/BackBtn.vue'
 
 const loudness = window.loudness
@@ -108,8 +109,8 @@ const brightness = window.brightness
 
 export default {
   name: 'Status',
-  components: {BackBtn},
-  data() {
+  components: { BackBtn },
+  data () {
     return {
       muted: false,
       vol: 50,
@@ -131,7 +132,7 @@ export default {
   computed: {
     ...mapWritableState(appStore, ['settings']),
   },
-  async mounted() {
+  async mounted () {
     this.micList = await listInputs()
 
     // $('#scroller').on('touchstart',()=>{
@@ -180,13 +181,13 @@ export default {
     }, 2000)
 
   },
-  beforeUnmount() {
+  beforeUnmount () {
     clearInterval(this.timer)
   },
   methods: {
-    log(info) {
+    log (info) {
     },
-    async getSpeakerList() {
+    async getSpeakerList () {
       listOutputs().then((devices) => {
         let list = []
         devices.forEach((device) => {
@@ -199,20 +200,20 @@ export default {
             console.error(err.name + ': ' + err.message)
           })
     },
-    async getVals() {
+    async getVals () {
       this.muted = await loudness.getMuted()
       this.vol = await loudness.getVolume()
       this.bright = (await brightness.get()) * 100
     },
-    async setVol() {
+    async setVol () {
       await loudness.setVolume(Number(this.vol))
       this.gua()
     },
-    async setBright() {
+    async setBright () {
       await brightness.set((Number(this.bright) / 100))
       console.log((Number(this.bright) / 100).toFixed(1))
     },
-    async setAudio(audio, list) {
+    async setAudio (audio, list) {
       await setAsDefault(audio)
       list.forEach(li => {
         li.isDefaultForMultimedia = false
@@ -220,24 +221,24 @@ export default {
       audio.isDefaultForMultimedia = true
       // navigator.mediaDevices.selectAudioOutput()
     },
-    async gua() {
+    async gua () {
       if (!this.settings.duck) {
         return
       }
       let audioSpeaker = document.getElementById('speakerAudio')
       audioSpeaker.play()
     },
-    async setMuted() {
+    async setMuted () {
       await loudness.setMuted(true)
       this.muted = true
     },
-    async cancelMuted() {
+    async cancelMuted () {
       await loudness.setMuted(false)
       this.muted = false
       this.gua()
     },
-    async shell(cmd, cb) {
-      let rs = await ipc.invoke('shell', {cmd})
+    async shell (cmd, cb) {
+      let rs = await ipc.invoke('shell', { cmd })
       if (rs) {
         cb(rs)
       }

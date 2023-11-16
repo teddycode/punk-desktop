@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from 'pinia'
-import {noticeStore} from '../../store/notice'
+import { mapActions, mapWritableState } from 'pinia'
+import { noticeStore } from '../../store/notice'
 
 export default {
   props: ['appType', 'appItem', 'list'],
@@ -35,11 +35,10 @@ export default {
 
   methods: {
     ...mapActions(noticeStore, ['clean', 'loadNoticeDB']),
-    clear() {  // 清空历史消息通知记录
+    clear () {  // 清空历史消息通知记录
       this.clean()
       this.$emit('updateNotice')
     },
-
 
   }
 }

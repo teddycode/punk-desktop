@@ -80,9 +80,9 @@
 
 </template>
 <script>
-import {Icon} from '@iconify/vue';
-import arrowCounterclockwise20Filled from '@iconify-icons/fluent/arrow-counterclockwise-20-filled';
-import dismiss16Filled from '@iconify-icons/fluent/dismiss-16-filled';
+import { Icon } from '@iconify/vue'
+import arrowCounterclockwise20Filled from '@iconify-icons/fluent/arrow-counterclockwise-20-filled'
+import dismiss16Filled from '@iconify-icons/fluent/dismiss-16-filled'
 
 export default {
   name: 'Promotion',
@@ -90,7 +90,7 @@ export default {
     Icon
   },
   computed: {},
-  data() {
+  data () {
     return {
 
       promptVisible: false,
@@ -101,10 +101,10 @@ export default {
       },
       dataNum: 123,
       search: {
-        promoterId: "",
-        keyCode: "",
-        higherId: "",
-        agency: "",
+        promoterId: '',
+        keyCode: '',
+        higherId: '',
+        agency: '',
 
       },
 
@@ -117,119 +117,119 @@ export default {
       //   wheelPropagation: true
       // },
       detailList: {
-        title: "提现明细",
+        title: '提现明细',
         // 搜索条件
-        time: "",
-        state: "",
+        time: '',
+        state: '',
         data: [
           {
-            user: "jojo",
-            amount: "100.0",
-            commission: "100.0",
-            alipay: "15868888688",
-            alipayName: "jojo",
-            appTime: "2023-08-06 13:12",
-            comTime: "2023-08-06 13:12",
-            type: "通过",
-            remark: "-",
+            user: 'jojo',
+            amount: '100.0',
+            commission: '100.0',
+            alipay: '15868888688',
+            alipayName: 'jojo',
+            appTime: '2023-08-06 13:12',
+            comTime: '2023-08-06 13:12',
+            type: '通过',
+            remark: '-',
           },
           {
-            user: "jojo",
-            amount: "100.0",
-            commission: "100.0",
-            alipay: "15868888688",
-            alipayName: "jojo",
-            appTime: "2023-08-06 13:12",
-            comTime: "2023-08-06 13:12",
-            type: "通过",
-            remark: "-",
+            user: 'jojo',
+            amount: '100.0',
+            commission: '100.0',
+            alipay: '15868888688',
+            alipayName: 'jojo',
+            appTime: '2023-08-06 13:12',
+            comTime: '2023-08-06 13:12',
+            type: '通过',
+            remark: '-',
           },
           {
-            user: "jojo",
-            amount: "100.0",
-            commission: "100.0",
-            alipay: "15868888688",
-            alipayName: "jojo",
-            appTime: "2023-08-06 13:12",
-            comTime: "2023-08-06 13:12",
-            type: "驳回",
-            remark: "账号和姓名不匹配",
+            user: 'jojo',
+            amount: '100.0',
+            commission: '100.0',
+            alipay: '15868888688',
+            alipayName: 'jojo',
+            appTime: '2023-08-06 13:12',
+            comTime: '2023-08-06 13:12',
+            type: '驳回',
+            remark: '账号和姓名不匹配',
           },
           {
-            user: "jojo",
-            amount: "100.0",
-            commission: "100.0",
-            alipay: "15868888688",
-            alipayName: "jojo",
-            appTime: "2023-08-06 13:12",
-            comTime: "2023-08-06 13:12",
-            type: "通过",
-            remark: "-",
+            user: 'jojo',
+            amount: '100.0',
+            commission: '100.0',
+            alipay: '15868888688',
+            alipayName: 'jojo',
+            appTime: '2023-08-06 13:12',
+            comTime: '2023-08-06 13:12',
+            type: '通过',
+            remark: '-',
           },
           {
-            user: "jojo",
-            amount: "100.0",
-            commission: "100.0",
-            alipay: "15868888688",
-            alipayName: "jojo",
-            appTime: "2023-08-06 13:12",
-            comTime: "2023-08-06 13:12",
-            type: "通过",
-            remark: "-",
+            user: 'jojo',
+            amount: '100.0',
+            commission: '100.0',
+            alipay: '15868888688',
+            alipayName: 'jojo',
+            appTime: '2023-08-06 13:12',
+            comTime: '2023-08-06 13:12',
+            type: '通过',
+            remark: '-',
           },
         ]
       },
       detailCol: [
         {
-          title: "用户",
-          dataIndex: "user",
-          key: "user"
+          title: '用户',
+          dataIndex: 'user',
+          key: 'user'
         },
         {
-          title: "提现金额",
-          dataIndex: "amount",
-          key: "amount"
+          title: '提现金额',
+          dataIndex: 'amount',
+          key: 'amount'
         },
         {
-          title: "手续费",
-          dataIndex: "commission",
-          key: "commission"
+          title: '手续费',
+          dataIndex: 'commission',
+          key: 'commission'
         },
         {
-          title: "支付宝账号",
-          dataIndex: "alipay",
-          key: "alipay"
+          title: '支付宝账号',
+          dataIndex: 'alipay',
+          key: 'alipay'
         },
         {
-          title: "支付宝名称",
-          dataIndex: "alipayName",
-          key: "alipayName"
+          title: '支付宝名称',
+          dataIndex: 'alipayName',
+          key: 'alipayName'
         },
         {
-          title: "申请时间",
-          dataIndex: "appTime",
-          key: "appTime"
+          title: '申请时间',
+          dataIndex: 'appTime',
+          key: 'appTime'
         },
         {
-          title: "完成时间",
-          dataIndex: "comTime",
-          key: "comTime",
+          title: '完成时间',
+          dataIndex: 'comTime',
+          key: 'comTime',
           // className:!this.tableStatus ? 'tableShow':'tableHidden',
           // colSpan:!this.tableStatus ? 1:0
         },
         {
-          title: "类型",
-          dataIndex: "type",
-          key: "type"
+          title: '类型',
+          dataIndex: 'type',
+          key: 'type'
         },
         {
-          title: "备注",
-          dataIndex: "remark",
-          key: "remark"
+          title: '备注',
+          dataIndex: 'remark',
+          key: 'remark'
         },
         {
-          title: "操作",
-          key: "action",
+          title: '操作',
+          key: 'action',
           fixed: 'right',
           // className:'tableHidden',
           // className:this.tableStatus ? 'tableShow':'tableHidden',
@@ -248,12 +248,12 @@ export default {
       ]
     }
   },
-  mounted() {
+  mounted () {
 
   },
   watch: {},
   methods: {
-    test() {
+    test () {
       // console.log('表格列表')
       // console.log(this.detailCol)
       // console.log(this.tableStatus)

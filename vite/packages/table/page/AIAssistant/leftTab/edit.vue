@@ -46,46 +46,46 @@
 </template>
 
 <script>
-import {aiStore} from "../../../store/ai";
-import {mapWritableState} from "pinia";
-import {balance} from "../service/api/ai";
+import { aiStore } from '../../../store/ai'
+import { mapWritableState } from 'pinia'
+import { balance } from '../service/api/ai'
 
 export default {
   computed: {
-    ...mapWritableState(aiStore, ["temperature", "count", "key", "url", "gpt"]),
-    state() {
+    ...mapWritableState(aiStore, ['temperature', 'count', 'key', 'url', 'gpt']),
+    state () {
       if (this.url && this.key) {
-        this.getMoney();
-        return true;
+        this.getMoney()
+        return true
       }
-      return false;
+      return false
     },
   },
   methods: {
-    async getMoney() {
-      let {data} = await balance();
-      this.money = data.total_available;
+    async getMoney () {
+      let { data } = await balance()
+      this.money = data.total_available
     },
-    resetting() {
-      this.count = "4";
-      this.temperature = "1";
-      this.gpt = "gpt-3.5-turbo";
+    resetting () {
+      this.count = '4'
+      this.temperature = '1'
+      this.gpt = 'gpt-3.5-turbo'
     },
   },
-  data() {
+  data () {
     return {
       gptList: [
-        {value: "gpt-3.5-turbo", name: "gpt-3.5"},
+        { value: 'gpt-3.5-turbo', name: 'gpt-3.5' },
         {
-          value: "gpt-4",
-          name: "gpt-4",
+          value: 'gpt-4',
+          name: 'gpt-4',
         },
-        {value: "gpt-4-32k", name: "gpt-4 稳定版"},
+        { value: 'gpt-4-32k', name: 'gpt-4 稳定版' },
       ],
-      money: "",
-    };
+      money: '',
+    }
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

@@ -84,12 +84,12 @@
 </template>
 
 <script>
-import Widget from "../../../card/Widget.vue";
-import {Icon} from '@iconify/vue';
-import {defineComponent} from 'vue';
-import {cardStore} from "../../../../store/card";
-import {mapActions, mapWritableState} from "pinia";
-import {shortTalkStore} from '../store'
+import Widget from '../../../card/Widget.vue'
+import { Icon } from '@iconify/vue'
+import { defineComponent } from 'vue'
+import { cardStore } from '../../../../store/card'
+import { mapActions, mapWritableState } from 'pinia'
+import { shortTalkStore } from '../store'
 import Unusual from '../../Unusual.vue'
 
 export default {
@@ -123,7 +123,7 @@ export default {
   computed: {
     ...mapWritableState(shortTalkStore, ['mockData', 'access_token', 'baseUrl', 'setVisible']),
   },
-  data() {
+  data () {
     return {
       settings: {
         swipeEasing: true,
@@ -147,49 +147,48 @@ export default {
       ],
       settingVisible: false,
       // 密钥和地址
-      secKey: "",
-      secAdd: "",
+      secKey: '',
+      secAdd: '',
       menuList: [
         {
           icon: 'shezhi1',
           title: '设置',
           fn: () => {
-            this.settingVisible = true;
+            this.settingVisible = true
             this.$refs.cardSlot.visible = false
             this.setVisible = false
           }
         },
       ],
       options: {
-        className: "card",
-        title: "社区数据",
+        className: 'card',
+        title: '社区数据',
         // 左侧图标
         // icon: "iconamoon:history-fill",
-        rightIcon: "fluent:open-20-filled",
+        rightIcon: 'fluent:open-20-filled',
       },
       targetKeys: [1, 2, 3, 4, 5, 6, 7, 8, 9],
       // 密钥和地址
       accToken: '',
       accUrl: '',
 
-    };
+    }
   },
-  mounted() {
+  mounted () {
     // 初始化
     this.accToken = this.access_token
     this.accUrl = this.baseUrl
     this.init()
 
-
   },
   methods: {
     ...mapActions(cardStore, ['updateCustomData']),
     ...mapActions(shortTalkStore, ['getBoardData', 'changeAccToken']),
-    init() {
+    init () {
       // 初始化设置数组
       if (!this.customData.targetKeys) {
         this.updateCustomData(this.customIndex, {
-          "targetKeys": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+          'targetKeys': [1, 2, 3, 4, 5, 6, 7, 8, 9],
         }, this.desk)
       } else {
         this.targetKeys = this.customData.targetKeys
@@ -197,7 +196,7 @@ export default {
       // 初始化名称
       if (!this.customData.optionTitle) {
         this.updateCustomData(this.customIndex, {
-          "optionTitle": '社区数据',
+          'optionTitle': '社区数据',
         }, this.desk)
       } else {
         this.options.title = this.customData.optionTitle
@@ -205,24 +204,23 @@ export default {
       // 初始化获取详细数据
       this.getBoardData()
 
-
     },
     // 修改设置的数组
-    handleChange(keys, direction, moveKeys) {
+    handleChange (keys, direction, moveKeys) {
       this.updateCustomData(this.customIndex, {
         'mockData': this.mockData,
-        "targetKeys": keys,
+        'targetKeys': keys,
       }, this.desk)
 
     },
     // 修改小组件名称
-    changeName() {
+    changeName () {
       this.updateCustomData(this.customIndex, {
-        "optionTitle": this.options.title,
+        'optionTitle': this.options.title,
       }, this.desk)
     },
 
-    back() {
+    back () {
       this.settingVisible = true
       this.setVisible = true
     }
@@ -231,19 +229,19 @@ export default {
   watch: {
     // 监听token 跟 url
     'access_token': {
-      handler(newVal, oldVal) {
+      handler (newVal, oldVal) {
         this.accToken = this.access_token
         this.init()
       }
     },
     'baseUrl': {
-      handler(newVal, oldVal) {
+      handler (newVal, oldVal) {
         this.accUrl = this.baseUrl
         this.init()
       }
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

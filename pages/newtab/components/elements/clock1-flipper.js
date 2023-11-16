@@ -4,8 +4,8 @@ const tplFlipClock = `
 <div class="digital back" :class="_textClass(backTextFromData)"></div>
 </div>`
 Vue.component('Flipper', {
-  template:tplFlipClock,
-  name:'Flipper',
+  template: tplFlipClock,
+  name: 'Flipper',
   data () {
     return {
       isFlipping: false,

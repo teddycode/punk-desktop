@@ -20,13 +20,13 @@
 export default {
   name: 'LevelIcon',
   props: ['level'],
-  data() {
+  data () {
     return {
       grade: {}
     }
   },
   computed: {
-    onlineGradeIcons() {
+    onlineGradeIcons () {
       if (this.grade) {
         let icons = {}
         Object.keys(this.grade).forEach(v => {
@@ -38,28 +38,28 @@ export default {
       }
     }
   },
-  mounted() {
+  mounted () {
     this.calcGrade(this.level)
   },
   methods: {
-    calcGrade(lv) {
+    calcGrade (lv) {
       if (Math.floor(lv / 64) > 0) {
-        this.grade.crown = Math.floor(lv / 64);
-        this.calcGrade(lv - 64 * this.grade.crown);
+        this.grade.crown = Math.floor(lv / 64)
+        this.calcGrade(lv - 64 * this.grade.crown)
       } else if (Math.floor(lv / 16) > 0) {
-        this.grade.sun = Math.floor(lv / 16);
-        this.calcGrade(lv - 16 * this.grade.sun);
+        this.grade.sun = Math.floor(lv / 16)
+        this.calcGrade(lv - 16 * this.grade.sun)
       } else if (Math.floor(lv / 4) > 0) {
-        this.grade.moon = Math.floor(lv / 4);
-        this.calcGrade(lv - 4 * this.grade.moon);
+        this.grade.moon = Math.floor(lv / 4)
+        this.calcGrade(lv - 4 * this.grade.moon)
       } else {
-        this.grade.star = lv;
+        this.grade.star = lv
       }
     },
-    handleGrade(name) {
+    handleGrade (name) {
       let icons = []
       for (let i = 0; i < this.grade[name]; i++) {
-        icons.push({icon: 'file://' + window.globalArgs['app-dir_name'] + `/../../icons/grade/${name}.svg`})
+        icons.push({ icon: 'file://' + window.globalArgs['app-dir_name'] + `/../../icons/grade/${name}.svg` })
       }
       return icons
     },

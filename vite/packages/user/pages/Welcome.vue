@@ -43,23 +43,23 @@
 </template>
 
 <script>
-import {CloseOutlined, DesktopOutlined} from '@ant-design/icons-vue'
+import { CloseOutlined, DesktopOutlined } from '@ant-design/icons-vue'
 
-const {configModel, spaceModel} = window.$models
+const { configModel, spaceModel } = window.$models
 const appName = window.globalArgs['app-name']
 const appVersion = window.globalArgs['app-version']
 
 export default {
   name: 'Welcome',
-  components: {CloseOutlined, DesktopOutlined},
-  async mounted() {
+  components: { CloseOutlined, DesktopOutlined },
+  async mounted () {
     this.showOnStart = await configModel.getShowOnStart()
     this.clientId = tsbApi.runtime.clientId
     this.clientName = tsbApi.runtime.clientName
     this.hideTrialTip = localStorage.getItem('hideTrialTip') || 'false'
 
   },
-  data() {
+  data () {
     return {
       appName,
       appVersion,
@@ -71,26 +71,26 @@ export default {
     }
   },
   methods: {
-    hideTrial() {
+    hideTrial () {
       localStorage.setItem('hideTrialTip', 'true')
       this.hideTrialTip = 'true'
     },
-    reName() {
+    reName () {
     },
-    getClientName() {
+    getClientName () {
       if (this.clientName) {
         return this.clientName
       } else {
         return this.clientId
       }
     },
-    showTrial() {
-      this.$router.push({name: 'trial'})
+    showTrial () {
+      this.$router.push({ name: 'trial' })
     },
-    switchShowOnStart() {
+    switchShowOnStart () {
       configModel.setShowOnStart(this.showOnStart)
     },
-    startApp() {
+    startApp () {
       window.ipc.send('startApp')
     }
   }

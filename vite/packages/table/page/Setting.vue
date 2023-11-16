@@ -206,37 +206,37 @@ import {
   delSecondaryBgColor,
   delTextColor,
   delWallpaperColor,
-} from "./../components/card/hooks/styleSwitch/delStyle";
-import {getBgColor, getTextColor, getWallpaperColor,} from "./../components/card/hooks/styleSwitch/getStyle";
+} from './../components/card/hooks/styleSwitch/delStyle'
+import { getBgColor, getTextColor, getWallpaperColor, } from './../components/card/hooks/styleSwitch/getStyle'
 import {
   setBgColor,
   setSecondaryBgColor,
   setTextColor,
   setWallpaperColor,
-} from "./../components/card/hooks/styleSwitch/setStyle";
-import {setThemeSwitch} from "./../components/card/hooks/themeSwitch/";
-import ChooseScreen from "./ChooseScreen.vue";
-import {appStore} from "../store";
-import {mapActions, mapWritableState} from "pinia";
-import {message, Modal} from "ant-design-vue";
-import {codeStore} from "../store/code";
-import SecondPanel from "../components/SecondPanel.vue";
-import GradeSmallTip from "../components/GradeSmallTip.vue";
-import {isMain, isWin} from "../js/common/screenUtils";
-import MyAvatar from "../components/small/MyAvatar.vue";
-import {noticeStore} from '../store/notice'
+} from './../components/card/hooks/styleSwitch/setStyle'
+import { setThemeSwitch } from './../components/card/hooks/themeSwitch/'
+import ChooseScreen from './ChooseScreen.vue'
+import { appStore } from '../store'
+import { mapActions, mapWritableState } from 'pinia'
+import { message, Modal } from 'ant-design-vue'
+import { codeStore } from '../store/code'
+import SecondPanel from '../components/SecondPanel.vue'
+import GradeSmallTip from '../components/GradeSmallTip.vue'
+import { isMain, isWin } from '../js/common/screenUtils'
+import MyAvatar from '../components/small/MyAvatar.vue'
+import { noticeStore } from '../store/notice'
 import EditNavigation from '../components/bottomPanel/EditNavigation.vue'
-import {taskStore} from "../apps/task/store";
-import {Icon as Iconify} from '@iconify/vue'
+import { taskStore } from '../apps/task/store'
+import { Icon as Iconify } from '@iconify/vue'
 
 export default {
-  name: "Setting",
-  components: {EditNavigation, MyAvatar, SecondPanel, ChooseScreen, GradeSmallTip, Iconify},
-  data() {
+  name: 'Setting',
+  components: { EditNavigation, MyAvatar, SecondPanel, ChooseScreen, GradeSmallTip, Iconify },
+  data () {
     return {
-      bgColor: "",
-      textColor: "",
-      wallpaperColor: "",
+      bgColor: '',
+      textColor: '',
+      wallpaperColor: '',
       styleVisible: false,
       visibleChooseScreen: false,
       scrollbarSettings: {
@@ -247,191 +247,191 @@ export default {
         wheelPropagation: true,
       },
       editNavigationVisible: false,
-    };
+    }
   },
   watch: {
-    bgColor(newV) {
-      if (!newV) return;
-      setBgColor(newV);
-      setSecondaryBgColor(newV);
+    bgColor (newV) {
+      if (!newV) return
+      setBgColor(newV)
+      setSecondaryBgColor(newV)
     },
-    textColor(newV) {
-      if (!newV) return;
-      setTextColor(newV);
+    textColor (newV) {
+      if (!newV) return
+      setTextColor(newV)
     },
-    wallpaperColor(newV) {
-      setWallpaperColor(newV);
+    wallpaperColor (newV) {
+      setWallpaperColor(newV)
     },
   },
-  mounted() {
-    this.bgColor = getBgColor();
-    this.textColor = getTextColor();
-    this.wallpaperColor = getWallpaperColor();
+  mounted () {
+    this.bgColor = getBgColor()
+    this.textColor = getTextColor()
+    this.wallpaperColor = getWallpaperColor()
   },
   computed: {
     ...mapWritableState(appStore, [
-      "settings",
-      "saving",
-      "simple",
-      "styles",
-      "style",
-      "showWindowController",
+      'settings',
+      'saving',
+      'simple',
+      'styles',
+      'style',
+      'showWindowController',
     ]),
-    ...mapWritableState(appStore, ["userInfo"]),
+    ...mapWritableState(appStore, ['userInfo']),
     ...mapWritableState(noticeStore, ['noticeSettings']),
-    ...mapWritableState(taskStore, ["taskID", "step"]),
+    ...mapWritableState(taskStore, ['taskID', 'step']),
 
-    m03011() {
-      return this.taskID == "M0301" && this.step == 1;
+    m03011 () {
+      return this.taskID == 'M0301' && this.step == 1
     },
-    m03012() {
-      return this.taskID == "M0301" && this.step == 2;
+    m03012 () {
+      return this.taskID == 'M0301' && this.step == 2
     },
-    m04011() {
-      return this.taskID == "M0401" && this.step == 1;
+    m04011 () {
+      return this.taskID == 'M0401' && this.step == 1
     },
   },
   methods: {
     ...mapActions(noticeStore, ['setNoticeOnOff']),
-    ...mapActions(codeStore, ["verify", "create", "myCode"]),
+    ...mapActions(codeStore, ['verify', 'create', 'myCode']),
     isMain: isMain, isWin,
-    goApps() {
+    goApps () {
       this.$router.push({
         name: 'apps'
       })
     },
-    editNavigation() {
+    editNavigation () {
       this.editNavigationVisible = true
     },
-    clearBgColor() {
-      delBgColor();
-      delSecondaryBgColor();
+    clearBgColor () {
+      delBgColor()
+      delSecondaryBgColor()
     },
-    clearTextColor() {
-      delTextColor();
+    clearTextColor () {
+      delTextColor()
     },
-    clearWallpaperColor() {
-      delWallpaperColor();
+    clearWallpaperColor () {
+      delWallpaperColor()
     },
-    themeSwitch() {
-      setThemeSwitch(this.styles);
-    },
-
-    tipSaving() {
-      Modal.info({
-        content:
-            "使用性能模式后，将关闭各种界面动画，同时尽可能清理掉滞留内存中的进程。可能导致打开界面效果折损或者应用切换缓慢。但可以显著降低内存、CPU、GPU占用。",
-        centered: true,
-      });
-    },
-    tipSimple() {
-      Modal.info({
-        content:
-            "使用极简模式后，将隐藏部分娱乐、社交类的功能，例如小队功能。",
-        centered: true,
-      });
-    },
-    power() {
-      this.$router.push({path: "/power"});
+    themeSwitch () {
+      setThemeSwitch(this.styles)
     },
 
-    invite() {
-      this.$router.push({
-        name: "invite",
-      });
+    tipSaving () {
+      Modal.info({
+        content:
+            '使用性能模式后，将关闭各种界面动画，同时尽可能清理掉滞留内存中的进程。可能导致打开界面效果折损或者应用切换缓慢。但可以显著降低内存、CPU、GPU占用。',
+        centered: true,
+      })
     },
-    verify() {
+    tipSimple () {
+      Modal.info({
+        content:
+            '使用极简模式后，将隐藏部分娱乐、社交类的功能，例如小队功能。',
+        centered: true,
+      })
+    },
+    power () {
+      this.$router.push({ path: '/power' })
+    },
+
+    invite () {
       this.$router.push({
-        name: "invite",
+        name: 'invite',
+      })
+    },
+    verify () {
+      this.$router.push({
+        name: 'invite',
         params: {
-          tab: "verify",
+          tab: 'verify',
         },
-      });
+      })
     },
 
-    async verifyCode() {
+    async verifyCode () {
       if (!this.myCode) {
         Modal.confirm({
           content:
-              "您还没有通过邀请码受邀，点击“接受邀请”，进入验证邀请码界面。",
-          okText: "接受邀请",
+              '您还没有通过邀请码受邀，点击“接受邀请”，进入验证邀请码界面。',
+          okText: '接受邀请',
           centered: true,
           onOk: () => {
             this.$router.push({
-              name: "invite",
+              name: 'invite',
               params: {
-                tab: "verify",
+                tab: 'verify',
               },
-            });
+            })
           },
-        });
-        return;
+        })
+        return
       }
-      let rs = await this.verify(this.userInfo.uid);
+      let rs = await this.verify(this.userInfo.uid)
       if (rs) {
         Modal.info({
-          content: "验证邀请码成功。您可在小队个人信息界面查收勋章。",
+          content: '验证邀请码成功。您可在小队个人信息界面查收勋章。',
           centered: true,
-        });
+        })
       } else {
         Modal.error({
-          content: "邀请码已失效。",
+          content: '邀请码已失效。',
           centered: true,
-        });
+        })
       }
     },
-    async createCodes() {
+    async createCodes () {
       this.create().then((rs) => {
-        message.success("生成激活码10个");
-      });
+        message.success('生成激活码10个')
+      })
     },
-    async setTouch() {
-      await tsbApi.window.setAlwaysOnTop(false);
-      let cp = require("child_process");
-      cp.exec("MultiDigiMon.exe -touch", async (err) => {
-        await tsbApi.window.setAlwaysOnTop(true);
-      });
+    async setTouch () {
+      await tsbApi.window.setAlwaysOnTop(false)
+      let cp = require('child_process')
+      cp.exec('MultiDigiMon.exe -touch', async (err) => {
+        await tsbApi.window.setAlwaysOnTop(true)
+      })
     },
-    async setPen() {
-      await tsbApi.window.setAlwaysOnTop(false);
-      let cp = require("child_process");
-      cp.exec("MultiDigiMon.exe -pen", async (err) => {
-        await tsbApi.window.setAlwaysOnTop(true);
-      });
+    async setPen () {
+      await tsbApi.window.setAlwaysOnTop(false)
+      let cp = require('child_process')
+      cp.exec('MultiDigiMon.exe -pen', async (err) => {
+        await tsbApi.window.setAlwaysOnTop(true)
+      })
     },
-    subscreen() {
-      this.$router.push({name: "subscreen"});
+    subscreen () {
+      this.$router.push({ name: 'subscreen' })
     },
-    chooseScreen() {
-      this.visibleChooseScreen = true;
+    chooseScreen () {
+      this.visibleChooseScreen = true
     },
-    wizard() {
-      this.$router.push("/wizard");
+    wizard () {
+      this.$router.push('/wizard')
     },
-    barrage() {
+    barrage () {
       this.$router.push({
-        name: "barrageSetting",
-      });
+        name: 'barrageSetting',
+      })
     },
-    papersSettings() {
+    papersSettings () {
       this.$router.push({
-        name: "my",
-      });
+        name: 'my',
+      })
     },
-    basic() {
+    basic () {
       this.$router.push({
-        name: "common",
-      });
+        name: 'common',
+      })
     },
-    switchBarrage(value) {
+    switchBarrage (value) {
       if (value) {
-        window.$manager.show();
+        window.$manager.show()
       } else {
-        window.$manager.hidden();
+        window.$manager.hidden()
       }
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

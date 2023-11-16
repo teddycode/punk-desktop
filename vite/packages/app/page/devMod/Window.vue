@@ -296,15 +296,15 @@
 
 <script>
 const formItemLayout = {
-  labelCol: {span: 6},
-  wrapperCol: {span: 16},
+  labelCol: { span: 6 },
+  wrapperCol: { span: 16 },
 }
 const formTailLayout = {
-  labelCol: {span: 4},
-  wrapperCol: {span: 8, offset: 4},
+  labelCol: { span: 4 },
+  wrapperCol: { span: 8, offset: 4 },
 }
-import {appStore} from '../../store'
-import {mapWritableState} from 'pinia'
+import { appStore } from '../../store'
+import { mapWritableState } from 'pinia'
 import DebugTip from '../../components/DebugTip.vue'
 
 export default {
@@ -316,7 +316,7 @@ export default {
   components: {
     DebugTip
   },
-  data() {
+  data () {
     return {
       activeKey: 'frame_window',
       formItemLayout,
@@ -374,7 +374,7 @@ export default {
     }
   },
   methods: {
-    getExtra(type) {
+    getExtra (type) {
       let tip = `&nbsp;调试&nbsp;`
       switch (type) {
         case 'debug_url':
@@ -382,7 +382,7 @@ export default {
       }
     }
   },
-  mounted() {
+  mounted () {
     this.devApp.window = Object.assign(this.windowDefaultConfigs, this.devApp.window)
     this.windowConfigs = this.devApp.window
   }

@@ -1,27 +1,27 @@
 /**
-Simple username/password field detector and auto-filler.
+ Simple username/password field detector and auto-filler.
 
-When page is loaded, we try to find any input fields with specific name
-attributes. If we find something useful, we dispatch an IPC event
-'password-autofill' to signal that we want to check if there is auto-fill data
-available.
+ When page is loaded, we try to find any input fields with specific name
+ attributes. If we find something useful, we dispatch an IPC event
+ 'password-autofill' to signal that we want to check if there is auto-fill data
+ available.
 
-When we receive back an IPC event 'password-autofill-match' with auto-fill
-data, we do one of two things:
+ When we receive back an IPC event 'password-autofill-match' with auto-fill
+ data, we do one of two things:
 
-- If there's a single credentials match, we fill the input fields with that
-  data.
+ - If there's a single credentials match, we fill the input fields with that
+ data.
 
-- If there's more than one match, we add a focus event listener on the
-  username/email fields that will display a small overlay div with available
-  options. When user selects one of the options, we fill the input fields with
-  credentials data from the selection.
+ - If there's more than one match, we add a focus event listener on the
+ username/email fields that will display a small overlay div with available
+ options. When user selects one of the options, we fill the input fields with
+ credentials data from the selection.
 
-This code doesn't work with JS-based forms. We don't listen to all DOM changes,
-we expect the login form to be present in the HTML code at page load. We can
-add a MutationObserver to the document, or DOMNodeInserted listener, but I
-wanted to keep it lightweight and not impact browser performace too much.
-*/
+ This code doesn't work with JS-based forms. We don't listen to all DOM changes,
+ we expect the login form to be present in the HTML code at page load. We can
+ add a MutationObserver to the document, or DOMNodeInserted listener, but I
+ wanted to keep it lightweight and not impact browser performace too much.
+ */
 
 // 密码识别难度分级
 // 基础级别：
@@ -66,53 +66,60 @@ wanted to keep it lightweight and not impact browser performace too much.
  * @param params 参数对象
  * @returns {*}
  */
-function getUrl (url,params) {
+function getUrl (url, params) {
   let protocolUrl
   protocolUrl = `tsbapp://./${url}` //todo 需要验证正式环境的协议情况
-  isDevelopmentMode= 'development-mode' in window.globalArgs
+  isDevelopmentMode = 'development-mode' in window.globalArgs
   if (isDevelopmentMode) {
     protocolUrl = `http://localhost:1600/html/${url}`
   }
-  if(params){
-    let url= new URL(protocolUrl)
+  if (params) {
+    let url = new URL(protocolUrl)
     //拼装参数
-    Object.keys(params).forEach(key=>{
-      url.searchParams.set(key,params[key])
+    Object.keys(params).forEach(key => {
+      url.searchParams.set(key, params[key])
     })
 
-    protocolUrl=url.toString()
+    protocolUrl = url.toString()
   }
   return protocolUrl
 }
-function toBase64(str){
-  return window.btoa(str.replace(/[\u00A0-\u2666]/g, c => `&#${c.charCodeAt(0)};`));
+
+function toBase64 (str) {
+  return window.btoa(str.replace(/[\u00A0-\u2666]/g, c => `&#${c.charCodeAt(0)};`))
 }
 
-function openPwdRemark(e,uuid){
-  ipc.send('openPwdManager', {pos:{
-      x:e.target.x,y:e.target.y+e.target.offsetHeight
-    }, uuid,target:'remark'})
+function openPwdRemark (e, uuid) {
+  ipc.send('openPwdManager', {
+    pos: {
+      x: e.target.x, y: e.target.y + e.target.offsetHeight
+    }, uuid, target: 'remark'
+  })
 }
 
-function openPwd(e){
+function openPwd (e) {
   // params.tab='Password'
   // ipc.send('openSetting',params)
-  ipc.send('openPwdManager', { pos:{
-      x:e.target.x,y:e.target.y+e.target.offsetHeight
-    }})
+  ipc.send('openPwdManager', {
+    pos: {
+      x: e.target.x, y: e.target.y + e.target.offsetHeight
+    }
+  })
 }
 
 // "carbon:password"
-let keyIconSvg=`<?xml version="1.0" encoding="UTF-8"?><svg version="1.1" width="366px" height="366px" viewBox="0 0 366.0 366.0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><filter id="i0" x="-3.82513661%" y="-3.27868852%" filterUnits="userSpaceOnUse" width="105.464481%" height="105.464481%"><feDropShadow stdDeviation="2" dx="0" dy="2" flood-color="rgba(0, 0, 0, 0.5)"></feDropShadow></filter><clipPath id="i1"><path d="M179,0 C277.85897,0 358,80.1410298 358,179 C358,277.85897 277.85897,358 179,358 C80.1410298,358 0,277.85897 0,179 C0,80.1410298 80.1410298,0 179,0 Z"></path></clipPath><clipPath id="i2"><path d="M112.5,0 C174.632034,0 225,50.3679656 225,112.5 C225,174.632034 174.632034,225 112.5,225 C50.3679656,225 0,174.632034 0,112.5 C0,50.3679656 50.3679656,0 112.5,0 Z M112.5375,40.9852261 C94.9417033,40.9852261 79.7122667,53.2193179 75.9191711,70.4014158 C72.1260756,87.5835137 80.7895454,105.09217 96.75,112.5 L85.8,165.675 C84.9134809,170.129585 86.0930855,174.745955 89.0079281,178.229192 C91.9227706,181.712429 96.2588972,183.687358 100.8,183.6 L123.9,183.6 C128.441103,183.687358 132.777229,181.712429 135.692072,178.229192 C138.606914,174.745955 139.786519,170.129585 138.9,165.675 L128.25,112.5 L128.325,112.5 C144.285455,105.09217 152.948924,87.5835137 149.155829,70.4014158 C145.362733,53.2193179 130.133297,40.9852261 112.5375,40.9852261 Z"></path></clipPath></defs><g transform="translate(4.0 2.0)"><g filter="url(#i0)"><g clip-path="url(#i1)"><polygon points="0,0 358,0 358,358 0,358 0,0" stroke="none" fill="#4F8BFE"></polygon></g><g clip-path="url(#i1)"><polygon points="0,0 358,0 358,358 0,358 0,0" stroke="none" fill="#4F8BFE"></polygon></g><g transform="translate(150.0 130.0)"><path d="M0.5,0.5 L56.5,0.5" stroke="#508AFE" stroke-width="17" fill="none" stroke-linecap="round" stroke-miterlimit="10"></path></g><g transform="translate(67.0 67.0)"><g clip-path="url(#i2)"><polygon points="0,0 225,0 225,225 0,225 0,0" stroke="none" fill="#FFFFFF"></polygon></g></g></g></g></svg>`
-keyIconSvg=toBase64(keyIconSvg)
+let keyIconSvg = `<?xml version="1.0" encoding="UTF-8"?><svg version="1.1" width="366px" height="366px" viewBox="0 0 366.0 366.0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><filter id="i0" x="-3.82513661%" y="-3.27868852%" filterUnits="userSpaceOnUse" width="105.464481%" height="105.464481%"><feDropShadow stdDeviation="2" dx="0" dy="2" flood-color="rgba(0, 0, 0, 0.5)"></feDropShadow></filter><clipPath id="i1"><path d="M179,0 C277.85897,0 358,80.1410298 358,179 C358,277.85897 277.85897,358 179,358 C80.1410298,358 0,277.85897 0,179 C0,80.1410298 80.1410298,0 179,0 Z"></path></clipPath><clipPath id="i2"><path d="M112.5,0 C174.632034,0 225,50.3679656 225,112.5 C225,174.632034 174.632034,225 112.5,225 C50.3679656,225 0,174.632034 0,112.5 C0,50.3679656 50.3679656,0 112.5,0 Z M112.5375,40.9852261 C94.9417033,40.9852261 79.7122667,53.2193179 75.9191711,70.4014158 C72.1260756,87.5835137 80.7895454,105.09217 96.75,112.5 L85.8,165.675 C84.9134809,170.129585 86.0930855,174.745955 89.0079281,178.229192 C91.9227706,181.712429 96.2588972,183.687358 100.8,183.6 L123.9,183.6 C128.441103,183.687358 132.777229,181.712429 135.692072,178.229192 C138.606914,174.745955 139.786519,170.129585 138.9,165.675 L128.25,112.5 L128.325,112.5 C144.285455,105.09217 152.948924,87.5835137 149.155829,70.4014158 C145.362733,53.2193179 130.133297,40.9852261 112.5375,40.9852261 Z"></path></clipPath></defs><g transform="translate(4.0 2.0)"><g filter="url(#i0)"><g clip-path="url(#i1)"><polygon points="0,0 358,0 358,358 0,358 0,0" stroke="none" fill="#4F8BFE"></polygon></g><g clip-path="url(#i1)"><polygon points="0,0 358,0 358,358 0,358 0,0" stroke="none" fill="#4F8BFE"></polygon></g><g transform="translate(150.0 130.0)"><path d="M0.5,0.5 L56.5,0.5" stroke="#508AFE" stroke-width="17" fill="none" stroke-linecap="round" stroke-miterlimit="10"></path></g><g transform="translate(67.0 67.0)"><g clip-path="url(#i2)"><polygon points="0,0 225,0 225,225 0,225 0,0" stroke="none" fill="#FFFFFF"></polygon></g></g></g></g></svg>`
+keyIconSvg = toBase64(keyIconSvg)
 const keyIcon = `<img style="width: 20px;height:20px;margin-top: 3px" src="data:image/svg+xml;base64, ${keyIconSvg}"/>`
 const lockIcon = `<img style="width: 18px;height: 18px;vertical-align: text-top" src="data:image/svg+xml;base64, ${keyIconSvg}"/>`
 // Ref to added unlock button.
 var currentUnlockButton = null
 var currentAutocompleteList = null
+
 function log (text) {
   if (0) { console.log(text) }
 }
+
 // Creates an unlock button element.
 // 创建一个解锁按钮元素
 // - input: Input element to 'attach' unlock button to.
@@ -295,6 +302,7 @@ function fillCredentials (credentials) {
 // - credentials:一个{username, password}对象的数组
 function addFocusListener (element, credentials) {
   const inputRect = element.getBoundingClientRect()
+
   // Creates an options list container.
   function buildContainer () {
     const suggestionsDiv = document.createElement('div')
@@ -313,52 +321,54 @@ function addFocusListener (element, credentials) {
     })
     return suggestionsDiv
   }
-  function getIcon(color){
-    const width=18
-    const src='http://a.apps.vip/kee/key.svg'
-    let svg=`<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1668578537389" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1277" xmlns:xlink="http://www.w3.org/1999/xlink" width="128" height="128"><path d="M639.9 351.9C639.9 192.9 511.1 64 352 64S64.2 192.8 64.2 351.9c0 158.9 128.8 287.9 287.9 287.9 158.9-0.1 287.8-128.9 287.8-287.9z m-367.4 16.4c-50.4 0-91.3-40.9-91.3-91.3s40.9-91.3 91.3-91.3 91.3 40.9 91.3 91.3-40.9 91.3-91.3 91.3z" p-id="1278"></path><path d="M930 732.3L663.8 455l-43 71.6h0.7l253.4 266.3-1.8 27.6-45.9 1.8-237.7-250.4c-39.1 46-85.6 70.5-85.6 70.5l5.5 112 53.3 58.8H706L704.2 949l126.7 11s12.9-12.9 91.9-90c78.9-77.1 7.2-137.7 7.2-137.7z" p-id="1279"></path></svg>`
-    svg=toBase64(svg)
-   const style= `filter: drop-shadow(${width}px 0px 0px ${color});left: -${width}px; width:${width}px; position:relative;`
-    const html=`<span class="img" style="margin-left:5px;margin-top: 5px;overflow: hidden;width:${width};height:${width};position:relative;display: inline-block;vertical-align: top">
+
+  function getIcon (color) {
+    const width = 18
+    const src = 'http://a.apps.vip/kee/key.svg'
+    let svg = `<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1668578537389" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1277" xmlns:xlink="http://www.w3.org/1999/xlink" width="128" height="128"><path d="M639.9 351.9C639.9 192.9 511.1 64 352 64S64.2 192.8 64.2 351.9c0 158.9 128.8 287.9 287.9 287.9 158.9-0.1 287.8-128.9 287.8-287.9z m-367.4 16.4c-50.4 0-91.3-40.9-91.3-91.3s40.9-91.3 91.3-91.3 91.3 40.9 91.3 91.3-40.9 91.3-91.3 91.3z" p-id="1278"></path><path d="M930 732.3L663.8 455l-43 71.6h0.7l253.4 266.3-1.8 27.6-45.9 1.8-237.7-250.4c-39.1 46-85.6 70.5-85.6 70.5l5.5 112 53.3 58.8H706L704.2 949l126.7 11s12.9-12.9 91.9-90c78.9-77.1 7.2-137.7 7.2-137.7z" p-id="1279"></path></svg>`
+    svg = toBase64(svg)
+    const style = `filter: drop-shadow(${width}px 0px 0px ${color});left: -${width}px; width:${width}px; position:relative;`
+    const html = `<span class="img" style="margin-left:5px;margin-top: 5px;overflow: hidden;width:${width};height:${width};position:relative;display: inline-block;vertical-align: top">
            <img style="${style}"
                 src="data:image/svg+xml;base64, ${svg}" alt="">
             </span>`
     return html
   }
+
   // Adds an option row to the list container.
   // 添加一个选择行到列表容器
   function addOption (parent, cred) {
     const suggestionItem = document.createElement('div')
-    let remark=''
-    if(!cred.title){
-      cred.title='未命名'
+    let remark = ''
+    if (!cred.title) {
+      cred.title = '未命名'
     }
     let viewRemark
-    let hasRemark=false
-    let svg=`<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1671529956138" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="19227" width="16" height="16" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M66.782609 772.541217h196.051478a58.835478 58.835478 0 0 1 58.768696 58.768696v117.359304l235.78713-165.442782c9.928348-6.989913 21.615304-10.685217 33.747478-10.685218H957.217391V89.043478H66.782609v683.475479zM313.61113 1022.886957a58.768696 58.768696 0 0 1-58.768695-58.768696v-124.794435H58.724174A58.813217 58.813217 0 0 1 0 780.55513V81.029565A58.835478 58.835478 0 0 1 58.768696 22.26087h906.462608A58.835478 58.835478 0 0 1 1024 81.029565v699.503305a58.835478 58.835478 0 0 1-58.768696 58.768695H593.697391L347.336348 1012.201739c-10.106435 7.101217-21.904696 10.685217-33.725218 10.685218z" fill="#4A4A4A" p-id="19228"></path><path d="M761.878261 326.032696h-499.756522a33.391304 33.391304 0 0 1 0-66.782609h499.756522a33.391304 33.391304 0 1 1 0 66.782609M761.878261 567.652174h-499.756522a33.391304 33.391304 0 0 1 0-66.782609h499.756522a33.391304 33.391304 0 1 1 0 66.782609" fill="#FA4E4E" p-id="19229"></path></svg>`
-    svg=toBase64(svg)
-    if(cred.originData){
+    let hasRemark = false
+    let svg = `<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1671529956138" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="19227" width="16" height="16" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M66.782609 772.541217h196.051478a58.835478 58.835478 0 0 1 58.768696 58.768696v117.359304l235.78713-165.442782c9.928348-6.989913 21.615304-10.685217 33.747478-10.685218H957.217391V89.043478H66.782609v683.475479zM313.61113 1022.886957a58.768696 58.768696 0 0 1-58.768695-58.768696v-124.794435H58.724174A58.813217 58.813217 0 0 1 0 780.55513V81.029565A58.835478 58.835478 0 0 1 58.768696 22.26087h906.462608A58.835478 58.835478 0 0 1 1024 81.029565v699.503305a58.835478 58.835478 0 0 1-58.768696 58.768695H593.697391L347.336348 1012.201739c-10.106435 7.101217-21.904696 10.685217-33.725218 10.685218z" fill="#4A4A4A" p-id="19228"></path><path d="M761.878261 326.032696h-499.756522a33.391304 33.391304 0 0 1 0-66.782609h499.756522a33.391304 33.391304 0 1 1 0 66.782609M761.878261 567.652174h-499.756522a33.391304 33.391304 0 0 1 0-66.782609h499.756522a33.391304 33.391304 0 1 1 0 66.782609" fill="#FA4E4E" p-id="19229"></path></svg>`
+    svg = toBase64(svg)
+    if (cred.originData) {
       //必须是存在原始数据的
-      if(cred.originData.fields.get('Notes')){
-          remark= `<img class="__remark-icon" style="width: 18px;height:18px;margin-top: 5px;margin-right:5px;" src="data:image/svg+xml;base64, ${svg}"> `
+      if (cred.originData.fields.get('Notes')) {
+        remark = `<img class="__remark-icon" style="width: 18px;height:18px;margin-top: 5px;margin-right:5px;" src="data:image/svg+xml;base64, ${svg}"> `
         viewRemark = document.createElement('div')
-        viewRemark.classList='__pwd-tip-remark'
-        viewRemark.style.minWidth='80px'
-        viewRemark.innerText='查看备注'
-        hasRemark=true
+        viewRemark.classList = '__pwd-tip-remark'
+        viewRemark.style.minWidth = '80px'
+        viewRemark.innerText = '查看备注'
+        hasRemark = true
         //viewRemark=`<div class="__pwd-tip-remark">查看备注</div> `
 
       }
     }
 
-    let  icon= getIcon(cred.originData?cred.originData.bgColor:'black')//如果不存在originData则直接黑色
+    let icon = getIcon(cred.originData ? cred.originData.bgColor : 'black')//如果不存在originData则直接黑色
 
-    const template=  `<div style="display:flex;">
+    const template = `<div style="display:flex;">
 <div style="width:30px;min-width: 30px;">${icon}</div>
 <div style="flex:1"><div style="font-size:14px;font-weight:bold;line-height: 18px;white-space:nowrap;text-overflow: ellipsis;overflow: hidden;word-break: break-all;max-width:90%">${cred.title}</div><div style="color: grey;line-height: 18px;max-width:90%;white-space:nowrap;text-overflow: ellipsis;overflow: hidden;word-break: break-all">${cred.username}&nbsp;</div></div><div>${remark}</div></div>`
-    suggestionItem.classList='__pwd-item'
-    suggestionItem.innerHTML=template
-    suggestionItem.style="margin:8px;padding: 5px; cursor: pointer; width: 100%; border-radius: 8px;"
+    suggestionItem.classList = '__pwd-item'
+    suggestionItem.innerHTML = template
+    suggestionItem.style = 'margin:8px;padding: 5px; cursor: pointer; width: 100%; border-radius: 8px;'
     // Hover.
     suggestionItem.addEventListener('mouseenter', (event) => {
       suggestionItem.style.backgroundColor = '#f1f1f1'
@@ -367,10 +377,10 @@ function addFocusListener (element, credentials) {
       suggestionItem.style.backgroundColor = '#fff'
     })
 
-    if(hasRemark){
+    if (hasRemark) {
       suggestionItem.children[0].children[2].appendChild(viewRemark)
-      viewRemark.addEventListener('click',(event) =>{
-        openPwdRemark(event,cred.originData.uuid.id)
+      viewRemark.addEventListener('click', (event) => {
+        openPwdRemark(event, cred.originData.uuid.id)
         event.stopPropagation()
       })
     }
@@ -392,26 +402,26 @@ function addFocusListener (element, credentials) {
     removeAutocompleteList()
     const container = buildContainer()
     const inputWidth = e.target.offsetWidth
-    container.id='__pwdContainer'
-    container.style.width=`${inputWidth}px`
-    let name='内置密码库'
-    if(currentManager.name==='file'){
-      name=currentManager.dbName
+    container.id = '__pwdContainer'
+    container.style.width = `${inputWidth}px`
+    let name = '内置密码库'
+    if (currentManager.name === 'file') {
+      name = currentManager.dbName
     }
     container.innerHTML = `<div style="position:relative;padding: 8px;color: grey;"> ${lockIcon} <span style="font-size: 13px">${name}</span></div>`
-    let all=document.createElement('span')
-    all.innerHTML=`<a target="_blank" style="position: absolute;top: 8px;right: 8px;font-size: 13px">全部密码</a>`
+    let all = document.createElement('span')
+    all.innerHTML = `<a target="_blank" style="position: absolute;top: 8px;right: 8px;font-size: 13px">全部密码</a>`
     container.appendChild(all)
-    all.addEventListener('click',(e)=>{
+    all.addEventListener('click', (e) => {
       openPwd(e)
     })
 
-    let wrapper=document.createElement('div')
-    wrapper.id='__pwdWrapper'
-    wrapper.style.maxHeight='350px'
-    wrapper.style.overflowY='auto'
-    wrapper.style.overflowX='hidden'
-    wrapper.style.paddingRight='15px'
+    let wrapper = document.createElement('div')
+    wrapper.id = '__pwdWrapper'
+    wrapper.style.maxHeight = '350px'
+    wrapper.style.overflowY = 'auto'
+    wrapper.style.overflowX = 'hidden'
+    wrapper.style.paddingRight = '15px'
     for (const cred of credentials) {
       addOption(wrapper, cred)
     }
@@ -478,18 +488,19 @@ function handleBlur (event) {
     currentUnlockButton = null
   }
 }
+
 window.onload = () => {
   setTimeout(requestAutofill, 1000)
 }
-var currentManager={}
+var currentManager = {}
 // Handle credentials fetched from the backend. Credentials are expected to be
 // an array of { username, password, manager } objects.
 ipc.on('password-autofill-match', (event, data) => {
-  currentManager=data.manager
+  currentManager = data.manager
   if (data.hostname !== window.location.hostname) {
     throw new Error('password origin must match current page origin')
   }
-  ipc.send('setPwdCount',{count:data.credentials.length,url:window.location.href})
+  ipc.send('setPwdCount', { count: data.credentials.length, url: window.location.href })
   if (data.credentials.length === 0) {
     if (currentUnlockButton && currentUnlockButton.children.length > 0) {
       currentUnlockButton.children[0].style.color = 'rgb(180, 0, 0)'
@@ -509,7 +520,7 @@ ipc.on('password-autofill-match', (event, data) => {
   }
 })
 
-ipc.on('fill-password',(event,args)=>{
+ipc.on('fill-password', (event, args) => {
   fillCredentials(args.passwordToFill.password)
 })
 

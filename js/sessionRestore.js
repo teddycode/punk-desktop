@@ -14,14 +14,15 @@ const ipc = require('electron').ipcRenderer
 const statistics = require('./statistics')
 const statsh = require('util/statsh/statsh.js')
 const spaceVersionModel = require('../src/model/spaceVersionModel')
-let isLoadedSpaceSuccess=false//是否成功读入空间，如果读入失败，则不做自动保存和关闭前保存，防止丢失空间
+let isLoadedSpaceSuccess = false//是否成功读入空间，如果读入失败，则不做自动保存和关闭前保存，防止丢失空间
 
 let SYNC_INTERVAL = 30 //普通模式下，同步间隔为30秒
-let safeClose=false
+let safeClose = false
 if ('development-mode' in window.globalArgs) {
   SYNC_INTERVAL = 10 //开发模式下，间隔改为5，方便调试和暴露问题
 }
 let autoSaver = null
+
 /**
  * 致命中断
  * @param options
@@ -31,35 +32,36 @@ function fatalStop (options) {
   sessionRestore.stopAutoSave()//如果是致命问题，则不再自动保存了，否则还是容易出错。
 }
 
-function setLoadedSuccess(info='200.载入成功，默认信息'){
+function setLoadedSuccess (info = '200.载入成功，默认信息') {
   console.info(info)
-  isLoadedSpaceSuccess=true
+  isLoadedSpaceSuccess = true
 }
+
 /**
  * 设为离线
  * @param options
  */
-let disconnectTimes=0 //允许失败两次
-const disconnectTryLimit=2 //重试两次失败，则提示离线
+let disconnectTimes = 0 //允许失败两次
+const disconnectTryLimit = 2 //重试两次失败，则提示离线
 function disconnect (options) {
-  if(disconnectTimes<disconnectTryLimit){
+  if (disconnectTimes < disconnectTryLimit) {
     disconnectTimes++
     return
   }
-  disconnectTimes=0
+  disconnectTimes = 0
   if (backupSpaceModel.getOfflineUse(options.spaceId)) {
     //如果是离线使用
   } else {
     //如果还未设置离线使用
-    let dontShowConfig=configModel.get('dontShowDisconnect')
-    if(dontShowConfig===false || typeof dontShowConfig==='undefined') {
+    let dontShowConfig = configModel.get('dontShowDisconnect')
+    if (dontShowConfig === false || typeof dontShowConfig === 'undefined') {
       //如果已经设置了不提示，则手动处理
       backupSpaceModel.setOfflineUse(options.spaceId)
       ipc.send('showUserWindow', options)
       ipc.send('disconnect')
-    }else{
+    } else {
       backupSpaceModel.setOfflineUse(options.spaceId)
-      ipc.send('message',{type:'warn',config:{content:'与服务器失去连接，自动转入离线空间'}})
+      ipc.send('message', { type: 'warn', config: { content: '与服务器失去连接，自动转入离线空间' } })
     }
   }
 }
@@ -92,7 +94,7 @@ function getSaveData (data) {
  * @param data
  * @returns {*}
  */
-function filterPrivateTabs(data){
+function filterPrivateTabs (data) {
   for (var i = 0; i < data.state.tasks.length; i++) {
     data.state.tasks[i].tabs = data.state.tasks[i].tabs.filter(function (tab) {
       return !tab.private
@@ -105,17 +107,17 @@ const sessionRestore = {
   adapter: {},
   currentSpace: {},
   save: async function (forceSave = false, sync = true) { //默认关闭强制保存
-    if(!isLoadedSpaceSuccess){
+    if (!isLoadedSpaceSuccess) {
       console.warn('不保存空间，因为当前读入空间失败')
       return
     }
-    sessionRestore.currentSpace=await spaceModel.getCurrent()
-    const currentSpace=sessionRestore.currentSpace
-    if(typeof currentSpace.space.data==='string')
-      currentSpace.space.data=JSON.parse(currentSpace.space.data)
-    currentSpace.userInfo=await userModel.get({uid:currentSpace.uid})
-    currentSpace.userInfo.clientId=userModel.getClientId()
-    let currentState=tasks.getStringifyableState()
+    sessionRestore.currentSpace = await spaceModel.getCurrent()
+    const currentSpace = sessionRestore.currentSpace
+    if (typeof currentSpace.space.data === 'string')
+      currentSpace.space.data = JSON.parse(currentSpace.space.data)
+    currentSpace.userInfo = await userModel.get({ uid: currentSpace.uid })
+    currentSpace.userInfo.clientId = userModel.getClientId()
+    let currentState = tasks.getStringifyableState()
     var stateString = JSON.stringify(currentState)
     // save all tabs that aren't private
     var data = {
@@ -123,14 +125,14 @@ const sessionRestore = {
       state: JSON.parse(stateString),
       saveTime: Date.now()
     }
-    data=filterPrivateTabs(data) //过滤掉隐私标签
+    data = filterPrivateTabs(data) //过滤掉隐私标签
     let saveData = getSaveData(data)
 
     if (forceSave === true || stateString !== sessionRestore.previousState) {
       let uid = sessionRestore.currentSpace.uid
       let space = {
         id: sessionRestore.currentSpace.spaceId,
-        nanoid:sessionRestore.currentSpace.spaceId,
+        nanoid: sessionRestore.currentSpace.spaceId,
         name: sessionRestore.currentSpace.name,
         uid: uid,
         type: sessionRestore.currentSpace.spaceType
@@ -141,23 +143,23 @@ const sessionRestore = {
         if (sessionRestore.currentSpace.spaceType === 'cloud') {
           //如果是云端，则存入备份空间
           await backupSpaceModel.save(space, saveData)
-        } else{
+        } else {
           //如果是本地，则存入本地空间
           await localSpaceModel.save(space, saveData)
         }
       }
-      if(stateString !== sessionRestore.previousState){
-        let rsVersion=await spaceVersionModel.save(space.nanoid,saveData) //存储一个版本
+      if (stateString !== sessionRestore.previousState) {
+        let rsVersion = await spaceVersionModel.save(space.nanoid, saveData) //存储一个版本
       }
       //如果是云端，还需去云端同步
       try {
         if (sessionRestore.currentSpace.spaceType === 'cloud') {
           let cloudResult = await sessionRestore.adapter.save(sessionRestore.currentSpace.spaceId, saveData)
           if (cloudResult.status === 1) {
-            saveData.sync_time=Date.now()
-            backupSpaceModel.save(space,saveData) //更新一下最后保存时间
+            saveData.sync_time = Date.now()
+            backupSpaceModel.save(space, saveData) //更新一下最后保存时间
             ipc.send('saving')
-            disconnectTimes=0
+            disconnectTimes = 0
           } else {
             if (cloudResult.data.action === 'fatal') {
               fatalStop(cloudResult.data.option)
@@ -167,13 +169,13 @@ const sessionRestore = {
               console.warn('保存至云端失败，但无需紧张')
               disconnect(cloudResult.data.option)
             } else {
-              console.error('2382.保存至云端失败,接口返回错误cloudResult=',cloudResult)
+              console.error('2382.保存至云端失败,接口返回错误cloudResult=', cloudResult)
             }
           }
 
         }
       } catch (e) {
-        throw('云端保存失败，接口访问不到')
+        throw ('云端保存失败，接口访问不到')
         //todo 走备份空间流程
       }
       sessionRestore.previousState = stateString //存储上一次的样本
@@ -184,11 +186,11 @@ const sessionRestore = {
     try {
       //恢复空间数据
 
-      let currentSpace=sessionRestore.currentSpace
+      let currentSpace = sessionRestore.currentSpace
 
-      if(currentSpace.spaceType==='cloud'){
-        savedStringData = await cloudAdapter.restore(currentSpace.spaceId,currentSpace.uid)
-      }else{
+      if (currentSpace.spaceType === 'cloud') {
+        savedStringData = await cloudAdapter.restore(currentSpace.spaceId, currentSpace.uid)
+      } else {
         savedStringData = await localAdapter.restore(currentSpace.spaceId)
       }
 
@@ -209,7 +211,7 @@ const sessionRestore = {
           console.warn('当远端无法获取，尝试从本地备份空间恢复时意外报错')
           console.warn(e)
         }
-      }else{
+      } else {
         console.log('本地次运行1')
       }
     } catch (e) {
@@ -222,7 +224,7 @@ const sessionRestore = {
       // first run, show the tour
       //首次运行，显示官方网站
       var data = JSON.parse(savedStringData)
-      if (data=== false || data.state.tasks.length===0) {
+      if (data === false || data.state.tasks.length === 0) {
         tasks.setSelected(tasks.add()) // create a new task
 
         var newTab = tasks.getSelected().tabs.add({
@@ -343,10 +345,10 @@ const sessionRestore = {
   },
   async init () {
     //如果是则判断是否是老浏览器，如果是则从老空间恢复，否则直接插入一个新空间。
-    let currentSpace =await spaceModel.getCurrent()
+    let currentSpace = await spaceModel.getCurrent()
     console.log(currentSpace)
 
-    if(currentSpace===false){
+    if (currentSpace === false) {
       //todo 初始化数据库结构
       // todo 如果存在本地的空间，则转移本地空间到sqlite
       await localSpaceModel.insertDefaultSpace()
@@ -372,7 +374,7 @@ const sessionRestore = {
     await sessionRestore.init()
     let currentSpace = {}
     currentSpace = await spaceModel.getCurrent()
-    console.log('currentSpace',currentSpace)
+    console.log('currentSpace', currentSpace)
     let space = {}
     if (currentSpace.spaceType === 'cloud') {
       cloudSpaceModel.setUser(currentSpace.userInfo)
@@ -537,10 +539,10 @@ const sessionRestore = {
         }, 2000)
       }
       //打开需要打开的网页
-      let  timer=setInterval(()=>{
-        if(window.waitOpenTabs && window.waitOpenTabs.length>0){
-          if(tabs){
-            window.waitOpenTabs.forEach((url)=>{
+      let timer = setInterval(() => {
+        if (window.waitOpenTabs && window.waitOpenTabs.length > 0) {
+          if (tabs) {
+            window.waitOpenTabs.forEach((url) => {
               var newTab = tabs.add({
                 url: url || ''
               })
@@ -549,20 +551,17 @@ const sessionRestore = {
                 enterEditMode: !url // only enter edit mode if the new tab is empty
               })
             })
-            window.waitOpenTabs=[]
+            window.waitOpenTabs = []
             clearInterval(timer)
           }
         }
-      },1000)
-
-
-
+      }, 1000)
 
     } else {
       //此处为本地空间的初始化逻辑
       space = await localSpaceModel.getSpace(currentSpace.spaceId) //先尝试获取一次最新的空间
       //如果还不存在备份空间，应该是老版本，从未保存本地备份，这种场景可以不处理，下次自动保存一次就好了
-      if(space)
+      if (space)
         space.userInfo = currentSpace.userInfo
     }
 
@@ -604,9 +603,9 @@ const sessionRestore = {
     sessionRestore.startAutoSave()
     window.onbeforeunload = function (e) {
       //这里只是用于意外关闭的情况，由于unload事件无法保证全部执行完毕，所以这个方法不被依赖，仅用于意外情况下的补救。正常的关闭走ipc的safeClose消息或者主进程对应的safeCloseMainWindow()
-      if(safeClose===false){
+      if (safeClose === false) {
         sessionRestore.stopAutoSave()
-        sessionRestore.save(true, true).then(()=>{
+        sessionRestore.save(true, true).then(() => {
           if (sessionRestore.currentSpace.spaceType === 'cloud') {
             spaceModel.setUser(sessionRestore.currentSpace.userInfo).clientOffline()
           }
@@ -622,24 +621,26 @@ const sessionRestore = {
     clearInterval(autoSaver)
   }
 }
-async function safeCloseSave() {
+
+async function safeCloseSave () {
   //这里的关闭特意做成同步方法，避免顺序错误导致无法保存
   sessionRestore.stopAutoSave()
   await sessionRestore.save(true, true)
   if (sessionRestore.currentSpace.spaceType === 'cloud') {
     await spaceModel.setUser(sessionRestore.currentSpace.userInfo).clientOffline()
   }
-  safeClose=true
+  safeClose = true
 }
-var errorClose=false
-ipc.on('safeClose', async (event,args) => {
-  if(errorClose){
+
+var errorClose = false
+ipc.on('safeClose', async (event, args) => {
+  if (errorClose) {
     //错误强制关闭
-    ipc.send('closeMainWindow',{isExit:args.isExit})
+    ipc.send('closeMainWindow', { isExit: args.isExit })
     return
   }
   //安全关闭，先完成保存后再关闭
-  try{
+  try {
     //statsh 插入关闭浏览器统计
     statsh.do({
       action: 'set',
@@ -650,30 +651,30 @@ ipc.on('safeClose', async (event,args) => {
     await safeCloseSave()
     //关闭前上报数据
     await statistics.upload()
-  }catch (e) {
-    errorClose=true
-    ipc.send('errorClose',{error:e})
+  } catch (e) {
+    errorClose = true
+    ipc.send('errorClose', { error: e })
     console.warn('存储失败')
   }
-  ipc.send('closeMainWindow',{isExit:args.isExit})
+  ipc.send('closeMainWindow', { isExit: args.isExit })
 })
 
-ipc.on('safeQuitApp',async ()=>{
-  try{
-    await  safeCloseSave()
-  }catch (e) {
+ipc.on('safeQuitApp', async () => {
+  try {
+    await safeCloseSave()
+  } catch (e) {
   }
   ipc.send('quitApp')
 })
 module.exports = sessionRestore
 
-ipc.on('logout',async ()=>{
+ipc.on('logout', async () => {
   await userModel.logout() //更改到本地
-  if((await spaceModel.getCurrent()).spaceType==='cloud'){
+  if ((await spaceModel.getCurrent()).spaceType === 'cloud') {
     //当前为云空间，则需要关闭主界面，并切换掉空间
     await safeCloseSave()
     ipc.send('closeMainWindow')
-  }else{
+  } else {
     //当前为本地空间，则只需要保存一下就可以了。
     await sessionRestore.save(true, true)
   }

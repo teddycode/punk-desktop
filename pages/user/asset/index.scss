@@ -63,27 +63,31 @@
 }
 
 .other-using {
-  &:hover{
+  &:hover {
     border: solid red 1px;
     background-color: rgba(255, 0, 0, 0.05);
   }
+
   border: solid red 1px;
   background-color: rgba(255, 0, 0, 0.05);
-  .using-bandage{
-      color:red
+
+  .using-bandage {
+    color: red
   }
 
 }
 
 .self-using {
-  &:hover{
+  &:hover {
     border: solid #02c022 1px;
     background-color: rgba(2, 192, 34, 0.05);
   }
+
   border: solid #02c022 1px;
   background-color: rgba(2, 192, 34, 0.05);
-  .using-bandage{
-    color:#02c022
+
+  .using-bandage {
+    color: #02c022
   }
 
 }

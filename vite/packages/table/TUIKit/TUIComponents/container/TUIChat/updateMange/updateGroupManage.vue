@@ -72,7 +72,8 @@
   <Modal v-if="isMemeberShow" v-model:visible="isMemeberShow" :blurFlag="true">
     <UserSelect
         :groupID="groupManageInfo.groupID"
-        :list="type === 'addAdmin' ? addList : type === 'delAdmin' ?  userList  : type === 'addMuteUser' ?  addList : clearMute  " :server="server"
+        :list="type === 'addAdmin' ? addList : type === 'delAdmin' ?  userList  : type === 'addMuteUser' ?  addList : clearMute  "
+        :server="server"
         :type="type" @close="close" @closeUser="isMemeberShow = false"
     >
     </UserSelect>
@@ -80,8 +81,8 @@
 </template>
 
 <script>
-import {computed, defineComponent, reactive, toRefs} from 'vue'
-import Modal from '../../../../../components/Modal.vue';
+import { computed, defineComponent, reactive, toRefs } from 'vue'
+import Modal from '../../../../../components/Modal.vue'
 import UserSelect from '../../../components/userselect/index.vue'
 
 export default defineComponent({
@@ -91,7 +92,7 @@ export default defineComponent({
     Modal, UserSelect
   },
 
-  setup(props, ctx) {
+  setup (props, ctx) {
     const tim = props.server.TUICore.tim
     const TIM = props.server.TUICore.TIM
 
@@ -103,14 +104,13 @@ export default defineComponent({
       clearMute: [], // 清除禁言人员
     })
 
-
     const addAdmin = (type) => {  // 添加和删除群聊管理员
       switch (type) {
         case 'addAdmin':
           data.isMemeberShow = true
           data.type = type
           data.addList = props.groupManageInfo.list
-          break;
+          break
         case 'delAdmin':
 
           if (isAdminList.value.length !== 0) {
@@ -121,9 +121,9 @@ export default defineComponent({
             data.isMemeberShow = false
           }
 
-          break;
+          break
         default:
-          break;
+          break
       }
     }
 
@@ -151,7 +151,7 @@ export default defineComponent({
     const isAdminList = computed(() => {
       const list = []
       for (let i = 0; i < props.groupManageInfo.list.length; i++) {
-        if (props.groupManageInfo.list[i].role === "Admin") {
+        if (props.groupManageInfo.list[i].role === 'Admin') {
           list.push(props.groupManageInfo.list[i])
         }
       }
@@ -159,8 +159,8 @@ export default defineComponent({
     })
 
     const muteList = computed(() => {
-      const time = new Date().getTime();
-      const list = props.groupManageInfo.list.filter((item) => item?.muteUntil * 1000 - time > 0);
+      const time = new Date().getTime()
+      const list = props.groupManageInfo.list.filter((item) => item?.muteUntil * 1000 - time > 0)
       return list
     })
 

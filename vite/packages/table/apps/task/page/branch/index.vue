@@ -33,32 +33,32 @@
 </template>
 
 <script setup>
-import {reactive, ref} from "vue";
-import Task from "./Task.vue";
-import Progress from "../../components/progress/index.vue";
+import { reactive, ref } from 'vue'
+import Task from './Task.vue'
+import Progress from '../../components/progress/index.vue'
 
 const props = defineProps({
   tasks: {},
   icon: {},
-});
+})
 
 const menus = reactive([
   {
-    label: "固定到左侧",
+    label: '固定到左侧',
     callBack: () => {
-      console.log("111111111 :>> ", 111111111);
+      console.log('111111111 :>> ', 111111111)
     },
   },
-]);
+])
 
-const currentTask = ref(null);
+const currentTask = ref(null)
 const taskClick = (task) => {
-  currentTask.value = task;
-};
+  currentTask.value = task
+}
 
 const back = () => {
-  currentTask.value = null;
-};
+  currentTask.value = null
+}
 </script>
 
 <style lang="scss" scoped></style>

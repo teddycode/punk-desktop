@@ -49,16 +49,16 @@
   </div>
 </template>
 <script setup>
-import GPT from "./GPT.vue";
-import {appStore} from "../../../../store";
+import GPT from './GPT.vue'
+import { appStore } from '../../../../store'
 
-const store = appStore();
-let img = store.userInfo.avatar ? store.userInfo.avatar : "/img/user.png";
+const store = appStore()
+let img = store.userInfo.avatar ? store.userInfo.avatar : '/img/user.png'
 const props = defineProps({
   chatList: {
     type: Array,
   },
-});
+})
 </script>
 
 <style lang="scss" scoped></style>

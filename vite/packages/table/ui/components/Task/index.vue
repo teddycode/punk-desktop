@@ -19,20 +19,20 @@
 </template>
 
 <script>
-import {defineComponent} from "vue";
-import {guide} from "./guide";
-import {taskStore} from "../../../apps/task/store";
-import {mapWritableState} from "pinia";
+import { defineComponent } from 'vue'
+import { guide } from './guide'
+import { taskStore } from '../../../apps/task/store'
+import { mapWritableState } from 'pinia'
 
 export default defineComponent({
-  data() {
+  data () {
     return {
       tour: null,
-    };
+    }
   },
   props: {
     slot: {
-      default: "default",
+      default: 'default',
     },
     modelValue: {
       default: false,
@@ -42,86 +42,86 @@ export default defineComponent({
     no: {},
   },
   computed: {
-    ...mapWritableState(taskStore, ["taskID", "step", "success"]),
-    task() {
-      return guide[this.taskID][this.step];
+    ...mapWritableState(taskStore, ['taskID', 'step', 'success']),
+    task () {
+      return guide[this.taskID][this.step]
     },
-    zIndexValue() {
-      return this.state ? true : null;
+    zIndexValue () {
+      return this.state ? true : null
     },
-    currentStep() {
-      let length = this.taskID ? guide[this.taskID]?.length - 2 : 0;
-      let next = this.step == length ? "完成" : this.task?.next || "下一步";
-      return `${next} ${this.step} / ${length}`;
+    currentStep () {
+      let length = this.taskID ? guide[this.taskID]?.length - 2 : 0
+      let next = this.step == length ? '完成' : this.task?.next || '下一步'
+      return `${next} ${this.step} / ${length}`
     },
     //
-    state() {
+    state () {
       if (this.id && this.no) {
-        let flag = this.taskID == this.id && this.step == this.no;
-        if (flag) this.start();
-        return flag;
+        let flag = this.taskID == this.id && this.step == this.no
+        if (flag) this.start()
+        return flag
       } else {
-        return this.modelValue;
+        return this.modelValue
       }
     },
   },
   watch: {
     modelValue: {
-      handler(newV) {
+      handler (newV) {
         this.$nextTick(() => {
           if (newV) {
-            this.start();
+            this.start()
           } else {
             if (this.tour) {
               // this.tour.destroy();
             }
           }
-        });
+        })
       },
       immediate: true,
     },
   },
   methods: {
-    next(event) {
-      if (!this.modelValue) return;
-      this.action();
-      event.stopPropagation(); // 阻止事件冒泡
+    next (event) {
+      if (!this.modelValue) return
+      this.action()
+      event.stopPropagation() // 阻止事件冒泡
     },
-    action() {
-      this.$emit("cb");
-      this.tour.next();
-      this.step++;
+    action () {
+      this.$emit('cb')
+      this.tour.next()
+      this.step++
       if (this.task.success) {
-        this.success = true;
+        this.success = true
         // 发奖励
       }
     },
-    start() {
+    start () {
       this.$nextTick(() => {
         setTimeout(() => {
-          this.createTour();
-          this.tour.start();
-        }, this.task?.time ?? 0);
-      });
+          this.createTour()
+          this.tour.start()
+        }, this.task?.time ?? 0)
+      })
     },
-    createTour() {
+    createTour () {
       this.tour = this.$shepherd({
         useModalOverlay: true,
-      });
+      })
 
       this.tour.addStep({
-        attachTo: {element: this.$refs.el, on: this.task?.position ?? "top"},
+        attachTo: { element: this.$refs.el, on: this.task?.position ?? 'top' },
         text: this.task?.text,
         title: this.task?.title,
         buttons: [
           {
             text: this.currentStep,
             action: (tour) => {
-              this.action();
+              this.action()
             },
           },
         ],
-      });
+      })
       // this.tour.addSteps([
       //   {
       //     canClickTarget: false,
@@ -170,9 +170,9 @@ export default defineComponent({
     },
   },
 
-  mounted() {
+  mounted () {
   },
-});
+})
 </script>
 
 <style>

@@ -10,13 +10,13 @@ var findinpage = {
   next: document.getElementById('findinpage-next-match'),
   endButton: document.getElementById('findinpage-end'),
   activeTab: null,
-  sendIPC(event,args){
-    args.id=window.id
-    ipc.send(event,args)
+  sendIPC (event, args) {
+    args.id = window.id
+    ipc.send(event, args)
   },
   start: function () {
     //webviews.releaseFocus()
-    findinpage.sendIPC('releaseFocus',{})
+    findinpage.sendIPC('releaseFocus', {})
     findinpage.input.placeholder = '在页面内搜索'
     findinpage.input.focus()
 
@@ -29,12 +29,12 @@ var findinpage = {
     // }
 
     findinpage.counter.textContent = ''
-    findinpage.container.style.display='flex'
+    findinpage.container.style.display = 'flex'
     findinpage.input.focus()
     findinpage.input.select()
-    document.getElementById('titleBar').style.display='none'
+    document.getElementById('titleBar').style.display = 'none'
     if (findinpage.input.value) {
-      findinpage.sendIPC('saAppFindInPage',{'text':findinpage.input.value,findNext:true})
+      findinpage.sendIPC('saAppFindInPage', { 'text': findinpage.input.value, findNext: true })
       //webviews.callAsync(findinpage.activeTab, 'findInPage', findinpage.input.value)
     }
   },
@@ -42,12 +42,12 @@ var findinpage = {
     options = options || {}
     var action = options.action || 'keepSelection'
 
-    findinpage.container.style.display='none'
-    document.getElementById('titleBar').style.display='flex'
+    findinpage.container.style.display = 'none'
+    document.getElementById('titleBar').style.display = 'flex'
 
     if (findinpage.activeTab) {
       console.log('satstowad')
-      findinpage.sendIPC('saAppStopFindInPage',{'action':action})
+      findinpage.sendIPC('saAppStopFindInPage', { 'action': action })
       //webviews.callAsync(findinpage.activeTab, 'stopFindInPage', action)
 
       /* special case for PDF viewer */
@@ -55,7 +55,7 @@ var findinpage = {
       //   PDFViewer.endFindInPage(findinpage.activeTab)
       // }
 
-      findinpage.sendIPC('saAppFocusView',{})
+      findinpage.sendIPC('saAppFocusView', {})
       //webviews.callAsync(findinpage.activeTab, 'focus')
     }
 
@@ -73,14 +73,14 @@ findinpage.endButton.addEventListener('click', function () {
 
 findinpage.input.addEventListener('input', function (e) {
   if (this.value) {
-    findinpage.sendIPC('saAppFindInPage',{'text':findinpage.input.value,findNext:false})
+    findinpage.sendIPC('saAppFindInPage', { 'text': findinpage.input.value, findNext: false })
     //webviews.callAsync(findinpage.activeTab, 'findInPage', findinpage.input.value)
   }
 })
 
 findinpage.input.addEventListener('keypress', function (e) {
   if (e.keyCode === 13) { // Return/Enter key
-    findinpage.sendIPC('saAppFindInPage',{'text':findinpage.input.value,forward:!e.shiftKey,findNext:false})
+    findinpage.sendIPC('saAppFindInPage', { 'text': findinpage.input.value, forward: !e.shiftKey, findNext: false })
     // webviews.callAsync(findinpage.activeTab, 'findInPage', [findinpage.input.value, {
     //   forward: !e.shiftKey, // find previous if Shift is pressed
     //   findNext: false
@@ -93,7 +93,7 @@ findinpage.previous.addEventListener('click', function (e) {
   //   forward: false,
   //   findNext: false
   // }])
-  findinpage.sendIPC('saAppFindInPage',{'text':findinpage.input.value,forward:false,findNext:false})
+  findinpage.sendIPC('saAppFindInPage', { 'text': findinpage.input.value, forward: false, findNext: false })
   findinpage.input.focus()
 })
 
@@ -102,7 +102,7 @@ findinpage.next.addEventListener('click', function (e) {
   //   forward: true,
   //   findNext: false
   // }])
-  findinpage.sendIPC('saAppFindInPage',{'text':findinpage.input.value,forward:true,findNext:false})
+  findinpage.sendIPC('saAppFindInPage', { 'text': findinpage.input.value, forward: true, findNext: false })
   findinpage.input.focus()
 })
 
@@ -119,7 +119,7 @@ findinpage.next.addEventListener('click', function (e) {
 // })
 //
 
-ipc.on('found-in-page',(event,args)=>{
+ipc.on('found-in-page', (event, args) => {
   if (args.data.matches !== undefined) {
     var text
     if (args.data.matches === 1) {

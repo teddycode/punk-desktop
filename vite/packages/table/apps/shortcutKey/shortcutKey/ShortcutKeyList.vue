@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import {getColor} from '../lib/lib'
+import { getColor } from '../lib/lib'
 
 export default {
   name: 'ShortcutKeyList',
@@ -57,7 +57,7 @@ export default {
       default: false
     }
   },
-  data() {
+  data () {
     return {
       settingsScroller: {
         useBothWheelAxes: true,
@@ -70,11 +70,11 @@ export default {
   },
   methods: {
     getColor,
-    toggleKey(id) {
+    toggleKey (id) {
       this.$emit('setKeyItem', id)
     },
   },
-  mounted() {
+  mounted () {
   },
 }
 </script>

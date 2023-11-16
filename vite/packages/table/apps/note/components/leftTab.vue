@@ -13,8 +13,8 @@
 // import { aiStore } from "../../../store/ai";
 // import Edit from "./edit.vue";
 // import { SettingFilled } from "@ant-design/icons-vue";
-import {mapActions, mapWritableState} from "pinia";
-import {noteStore} from '../store'
+import { mapActions, mapWritableState } from 'pinia'
+import { noteStore } from '../store'
 
 export default {
   components: {
@@ -26,12 +26,12 @@ export default {
   computed: {
     ...mapWritableState(noteStore, ['isSelTab', 'selNote']),
   },
-  data() {
+  data () {
     return {
       menuList: [
         {
           // flag: true,
-          newIcon: "fluent:notepad-12-regular",
+          newIcon: 'fluent:notepad-12-regular',
           // isSel:this.isSelTab,
           isSel: false,
           callBack: () => {
@@ -47,7 +47,7 @@ export default {
         },
         {
           // flag: true,
-          newIcon: "akar-icons:trash-can",
+          newIcon: 'akar-icons:trash-can',
           isSel: false,
           callBack: () => {
             // console.log('回收站');
@@ -64,21 +64,21 @@ export default {
         },
       ],
 
-    };
+    }
   },
   methods: {
 
     ...mapActions(noteStore, ['getNotes']),
-    formatTimestamp(timestamp) {
-      var date = new Date(timestamp * 1000);
-      var year = date.getFullYear();
-      var month = ("0" + (date.getMonth() + 1)).slice(-2);
-      var day = ("0" + date.getDate()).slice(-2);
-      return year + "-" + month + "-" + day;
+    formatTimestamp (timestamp) {
+      var date = new Date(timestamp * 1000)
+      var year = date.getFullYear()
+      var month = ('0' + (date.getMonth() + 1)).slice(-2)
+      var day = ('0' + date.getDate()).slice(-2)
+      return year + '-' + month + '-' + day
     },
 
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 </style>

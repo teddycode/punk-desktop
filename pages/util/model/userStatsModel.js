@@ -1,9 +1,9 @@
 const db = require('../../../js/util/database.js').db
 
 const userStatsModel = {
-  async initialize() {
+  async initialize () {
     const result = await db.userStats.count()
-    if(result === 0) {
+    if (result === 0) {
       await userStatsModel.init()
     }
   },
@@ -13,13 +13,12 @@ const userStatsModel = {
    * @param {Number} id
    * @returns
    */
-  async get(id) {
+  async get (id) {
     await userStatsModel.setLocalApp()
     return await db.userStats.get(id)
   },
 
-
-  async setLocalApp() {
+  async setLocalApp () {
     const appListRes = await db.appList.count()
     const myAppsRes = await db.myApps.count()
     await userStatsModel.setValue('appList', appListRes)
@@ -31,7 +30,7 @@ const userStatsModel = {
    * @param {String} fieldName 设置的对象属性名
    * @param {Number} val 设置的对象属性值
    */
-  async setValue(fieldName, val) {
+  async setValue (fieldName, val) {
     // await db.userStats.where(fieldName).first().modify({
     //   value: val
     // })
@@ -44,7 +43,7 @@ const userStatsModel = {
    * userStatsModel对象属性值+1
    * @param {String} fieldName 设置的对象属性名
    */
-  async incrementValue(fieldName) {
+  async incrementValue (fieldName) {
     const result = await db.userStats.get(1)
     result[`${fieldName}`] += 1
     await db.userStats.put(result, 1)
@@ -54,7 +53,7 @@ const userStatsModel = {
    * userStatsModel对象属性值-1
    * @param {String} fieldName 设置的对象属性名
    */
-  async decreseValue(fieldName) {
+  async decreseValue (fieldName) {
     const result = await db.userStats.get(1)
     result[`${fieldName}`] -= 1
     await db.userStats.put(result, 1)
@@ -64,12 +63,12 @@ const userStatsModel = {
    * 获取此次统计的使用时间
    * @returns 返回时间数，毫秒级
    */
-  async getUseTime() {
+  async getUseTime () {
     const result = await db.userStats.get(1)
     return Date.now() - result.startTime
   },
 
-  async init() {
+  async init () {
     const obj = {
       scripts: 0, //mark插入对scripts的数据统计
       apps: 0,  //mark插入对apps的数据统计
@@ -92,7 +91,7 @@ const userStatsModel = {
   /**
    * 重置userStatsModel对象属性
    */
-  async reset() {
+  async reset () {
     const obj = {
       scripts: 0,
       apps: 0,
@@ -112,6 +111,5 @@ const userStatsModel = {
     await db.userStats.update(1, obj)
   }
 }
-
 
 module.exports = userStatsModel

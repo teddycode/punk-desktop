@@ -109,7 +109,7 @@ Vue.component('search', {
     clklogo () {
       location.href = this.sfrontLink + this.searchWord
     },
-    removeElement(){
+    removeElement () {
       this.$emit('remove-element')
     },
     enterSubmit () {

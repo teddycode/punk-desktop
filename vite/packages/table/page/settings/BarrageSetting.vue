@@ -48,9 +48,9 @@
 </template>
 
 <script>
-import {appStore} from '../../store'
-import {mapWritableState} from 'pinia'
-import {message, Modal} from 'ant-design-vue'
+import { appStore } from '../../store'
+import { mapWritableState } from 'pinia'
+import { message, Modal } from 'ant-design-vue'
 
 export default {
   name: 'BarrageSetting',
@@ -58,7 +58,7 @@ export default {
     ...mapWritableState(appStore, ['settings'])
   },
   methods: {
-    refresh() {
+    refresh () {
       if (!this.settings.enableBarrage) {
         Modal.confirm({
           centered: true,

@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import {defineComponent} from 'vue'
-import {CloseOutlined, LeftOutlined} from '@ant-design/icons-vue'
+import { defineComponent } from 'vue'
+import { CloseOutlined, LeftOutlined } from '@ant-design/icons-vue'
 
 export default defineComponent({
 
@@ -28,7 +28,7 @@ export default defineComponent({
     CloseOutlined, LeftOutlined,
   },
 
-  setup(props, ctx) {
+  setup (props, ctx) {
 
     // 关闭
     const closeChannel = () => {

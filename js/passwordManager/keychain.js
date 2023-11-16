@@ -41,17 +41,17 @@ class Keychain {
     })
   }
 
-  saveCredential (domain, username, password, name = '',uuid) {
-    ipcRenderer.invoke('credentialStoreSetPassword', { domain, username, password, name , uuid })
+  saveCredential (domain, username, password, name = '', uuid) {
+    ipcRenderer.invoke('credentialStoreSetPassword', { domain, username, password, name, uuid })
   }
 
   //创建密码
-  createCredential(domain,username,password,name){
-    ipcRenderer.invoke('credentialStoreCreatePassword', { domain, username, password, name  })
+  createCredential (domain, username, password, name) {
+    ipcRenderer.invoke('credentialStoreCreatePassword', { domain, username, password, name })
   }
 
-  deleteCredential (domain, username,uuid) {
-    ipcRenderer.invoke('credentialStoreDeletePassword', { domain, username,uuid })
+  deleteCredential (domain, username, uuid) {
+    ipcRenderer.invoke('credentialStoreDeletePassword', { domain, username, uuid })
   }
 
   getAllCredentials () {

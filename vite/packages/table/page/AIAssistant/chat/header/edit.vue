@@ -12,15 +12,15 @@
 </template>
 
 <script>
-import {mapWritableState} from "pinia";
-import {message, Modal} from "ant-design-vue";
-import {aiStore} from "../../../../store/ai";
+import { mapWritableState } from 'pinia'
+import { message, Modal } from 'ant-design-vue'
+import { aiStore } from '../../../../store/ai'
 
-import Dialog from "../components/Dialog.vue";
+import Dialog from '../components/Dialog.vue'
 
 export default {
   computed: {
-    ...mapWritableState(aiStore, ["selectTopicIndex", "chatList"]),
+    ...mapWritableState(aiStore, ['selectTopicIndex', 'chatList']),
   },
   components: {
     Dialog,
@@ -28,39 +28,39 @@ export default {
   props: {
     data: {},
   },
-  data() {
-    return {visible: true, value: {...this.data}};
+  data () {
+    return { visible: true, value: { ...this.data } }
   },
   methods: {
-    clear() {
+    clear () {
       Modal.info({
         centered: true,
-        title: "确认删除",
-        content: "点击确认会无视保存进行清空",
-        okText: "确认",
+        title: '确认删除',
+        content: '点击确认会无视保存进行清空',
+        okText: '确认',
         maskClosable: true,
         zIndex: 999999999999999,
         onOk: () => {
-          this.chatList[this.selectTopicIndex] = [];
-          message.success("已清空对话记录");
+          this.chatList[this.selectTopicIndex] = []
+          message.success('已清空对话记录')
         },
-      });
+      })
     },
-    del() {
+    del () {
       Modal.info({
         centered: true,
-        title: "确认删除",
-        content: "点击确认删除整个对话",
-        okText: "确认",
+        title: '确认删除',
+        content: '点击确认删除整个对话',
+        okText: '确认',
         maskClosable: true,
         zIndex: 999999999999999,
         onOk: () => {
-          this.$emit("del", this.value.id);
+          this.$emit('del', this.value.id)
         },
-      });
+      })
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

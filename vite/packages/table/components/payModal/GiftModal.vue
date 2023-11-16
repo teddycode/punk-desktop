@@ -1,5 +1,6 @@
 <template>
-  <a-modal v-model:visible="giftVisible" :bodyStyle="{borderRadius:'12px',padding:'12px',}" :closable="false" :footer="null"
+  <a-modal v-model:visible="giftVisible" :bodyStyle="{borderRadius:'12px',padding:'12px',}" :closable="false"
+           :footer="null"
            :header="null" :height="0" :width="480"
   >
     <!-- 赠送方式 -->
@@ -148,7 +149,7 @@ export default {
     }
   },
 
-  data() {
+  data () {
     return {
       giftVisible: false,
       giftShow: false, // 选择赠送方式
@@ -163,25 +164,25 @@ export default {
   },
 
   methods: {
-    openGiftModal() {
+    openGiftModal () {
       this.giftVisible = true
     },
-    pointPay() {  // 积分方式赠送
+    pointPay () {  // 积分方式赠送
       this.giftShow = true
       this.billingWay = 1
     },
-    cashPay() {  // 现金方式赠送
+    cashPay () {  // 现金方式赠送
       this.giftShow = true
       this.billingWay = 0
     },
-    searchGiftUser() {  // 搜索需要将头像赠送的用户回调事件
+    searchGiftUser () {  // 搜索需要将头像赠送的用户回调事件
       if (this.userNickName !== '') {
         this.isSearch = true
       } else {
         this.isSearch = false
       }
     },
-    giftTeamMember(user) {
+    giftTeamMember (user) {
       this.teamIndex = user.uid
       this.isBilling = true
       this.uid.url = user.userInfo.avatar

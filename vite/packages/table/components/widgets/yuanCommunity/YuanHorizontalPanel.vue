@@ -10,7 +10,8 @@
 
       <div
           :class="activeIndex === index ? 'xt-active-btn' : ''"
-          :data-index="index" :data-item="JSON.stringify(item)" class="relative flex items-center justify-center flex-1 h-full rounded-lg nav-item btn-active pointer "
+          :data-index="index" :data-item="JSON.stringify(item)"
+          class="relative flex items-center justify-center flex-1 h-full rounded-lg nav-item btn-active pointer "
           @click.stop="clickNav(item, index)">
         <span>{{ item.value.name }}</span>
         <div v-if="item.state === true" class="ml-2 state-dot"></div>
@@ -43,28 +44,28 @@ export default {
       default: 48
     }
   },
-  data() {
+  data () {
     return {
       activeIndex: 0,
     }
   },
   computed: {
-    itemHeight() {
+    itemHeight () {
       return this.height + 'px'
     }
   },
   watch: {
     'selectType': {
-      handler() {
+      handler () {
         this.posType()
       }
     },
   },
-  mounted() {
+  mounted () {
     this.posType()
   },
   methods: {
-    posType() {
+    posType () {
       if (this.selectType) {
         if (this.selectType.name && this.navList.length > 0) {
           this.activeIndex = this.navList.findIndex(item => {
@@ -74,7 +75,7 @@ export default {
       }
 
     },
-    clickNav(item, index) {
+    clickNav (item, index) {
       this.activeIndex = index
       item.state = false  // 将消息未读状态隐藏
       this.$emit('update:selectType', item)

@@ -127,21 +127,21 @@ let searchEnginePage = {
         } catch (e) {}
         currentSearchEngine = {
           name: searchDomain || 'custom',
-          alias:'自定义',
+          alias: '自定义',
           searchURL: value.url,
           custom: true
         }
       } else {
         currentSearchEngine = searchEngines[defaultSearchEngine]
       }
-      window.currentSearchEngine=currentSearchEngine
-      searchEnginePage.updateSelect(searchEngines,currentSearchEngine)
+      window.currentSearchEngine = currentSearchEngine
+      searchEnginePage.updateSelect(searchEngines, currentSearchEngine)
     })
 
   },
-  updateSelect(searchEngines,currentSearchEngine){
-    if(currentSearchEngine.name==='custom'){
-      let item=document.getElementById('searchEngine_custom')
+  updateSelect (searchEngines, currentSearchEngine) {
+    if (currentSearchEngine.name === 'custom') {
+      let item = document.getElementById('searchEngine_custom')
       if (item) {
         item.setAttribute('selected', 'true')
         var searchEngineInput = document.getElementById('custom-search-engine')
@@ -151,7 +151,7 @@ let searchEnginePage = {
       return
     }
     for (var searchEngine in searchEngines) {
-      var item = document.getElementById('searchEngine_'+searchEngines[searchEngine].name)
+      var item = document.getElementById('searchEngine_' + searchEngines[searchEngine].name)
       if (searchEngines[searchEngine].name === currentSearchEngine.name && item) {
         item.setAttribute('selected', 'true')
       }

@@ -48,21 +48,21 @@
 </template>
 
 <script>
-import {mapActions} from 'pinia'
-import {teamStore} from '../../store/team'
+import { mapActions } from 'pinia'
+import { teamStore } from '../../store/team'
 import Medal from '../team/Medal.vue'
 import OnlineMedal from '../team/OnlineMedal.vue'
 import OnlineGradeDisplay from '../team/OnlineGradeDisplay.vue'
-import {appStore} from '../../store'
+import { appStore } from '../../store'
 import FrameAvatar from '../avatar/FrameAvatar.vue'
 import FrameStoreWidget from '../team/FrameStoreWidget.vue'
 
 export default {
   name: 'PropPreview',
-  components: {FrameStoreWidget, FrameAvatar, Medal, OnlineMedal, OnlineGradeDisplay},
+  components: { FrameStoreWidget, FrameAvatar, Medal, OnlineMedal, OnlineGradeDisplay },
   props: ['uid', 'visible', 'userInfo', 'frameImage'],
   emits: ['visibleChanged'],
-  data() {
+  data () {
     return {
       grade: {},
       medals: [],
@@ -72,7 +72,7 @@ export default {
   },
   watch: {
     'uid': {
-      async handler() {
+      async handler () {
         this.updateUserInfo()
         this.updateUserMedal()
         this.grade = await this.getMemberGrade(this.uid)
@@ -81,7 +81,7 @@ export default {
     }
   },
   computed: {
-    displayUserInfo() {
+    displayUserInfo () {
       // console.log(this.userCardUserInfo)
       if (this.userCardUserInfo) {
         return {
@@ -95,7 +95,7 @@ export default {
       }
     }
   },
-  async mounted() {
+  async mounted () {
     if (this.userInfo) {
       //如果存在用户数据，则使用此数据显示卡片
       this.userCardUserInfo = this.userInfo
@@ -110,7 +110,7 @@ export default {
   methods: {
     ...mapActions(teamStore, ['getMemberGrade', 'getUserMedal']),
     ...mapActions(appStore, ['getUserCard']),
-    async updateUserInfo() {
+    async updateUserInfo () {
       let response = await this.getUserCard(this.uid)
       // console.log(response, '用户信息')
       if (response.code === 200) {
@@ -127,7 +127,7 @@ export default {
       }
       // console.log(this.userCardUserInfo)
     },
-    updateUserMedal() {
+    updateUserMedal () {
       this.getUserMedal(this.uid).then(result => {
         if (result) {
           this.medals = result

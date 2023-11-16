@@ -32,7 +32,7 @@
 export default {
   name: 'Medal',
   props: ['medal'],
-  data() {
+  data () {
     return {
       title: '',
       summary: '',
@@ -42,7 +42,7 @@ export default {
     }
   },
   components: [],
-  mounted() {
+  mounted () {
     let medal = this.medal
     this.title = medal.medal.alias
     this.summary = medal.medal.summary

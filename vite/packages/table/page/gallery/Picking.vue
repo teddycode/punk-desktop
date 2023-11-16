@@ -18,7 +18,8 @@
         <Icon icon="filter" style="font-size: 1.715em;"></Icon>
         <span class="s-text" style="font-size: 1.15em; ">筛选</span>
       </div>
-      <div class="w-12 h-12 flex items-center rounded-lg cursor-pointer justify-center s-icon" style="margin-left: 12px;"
+      <div class="w-12 h-12 flex items-center rounded-lg cursor-pointer justify-center s-icon"
+           style="margin-left: 12px;"
            @click="openInfo">
         <InfoCircleOutlined style="font-size: 1.715em;"/>
       </div>
@@ -67,7 +68,8 @@
     <div class="w-full h-12  flex rounded-lg"
          style="border:1px solid rgba(255, 255, 255, 0.1);margin-bottom:1.714289em;">
       <div v-for=" item  in  filterOption "
-           :class="filterIndex === item.index ? 'active' : ''" class="w-1/3 h-100 flex items-center justify-center filter-item"
+           :class="filterIndex === item.index ? 'active' : ''"
+           class="w-1/3 h-100 flex items-center justify-center filter-item"
            style="border-right:1px solid rgba(255, 255, 255, 0.1);" @click="filterOptionClick(item)">
         {{ item.title }}
       </div>
@@ -107,7 +109,8 @@
     </div>
   </a-drawer>
 
-  <a-drawer v-model:visible="pickInfoShow" :footer-style="{ border: 'none' }" class="no-drag" style="text-align: center !important;"
+  <a-drawer v-model:visible="pickInfoShow" :footer-style="{ border: 'none' }" class="no-drag"
+            style="text-align: center !important;"
             title="信息">
     <div class="flex w-full   justify-center items-center flex-col">
       <div class="flex-col flex justify-start mx-2 my-40">
@@ -170,16 +173,16 @@
 </template>
 
 <script>
-import {defineComponent, ref} from 'vue';
-import {InfoCircleOutlined} from '@ant-design/icons-vue'
-import axios from 'axios';
-import {paperStore} from "../../store/paper";
-import {mapActions, mapState, mapWritableState} from "pinia";
-import {message, Modal} from 'ant-design-vue'
-import GradeSmallTip from "../../components/GradeSmallTip.vue";
-import {appStore} from "../../store";
+import { defineComponent, ref } from 'vue'
+import { InfoCircleOutlined } from '@ant-design/icons-vue'
+import axios from 'axios'
+import { paperStore } from '../../store/paper'
+import { mapActions, mapState, mapWritableState } from 'pinia'
+import { message, Modal } from 'ant-design-vue'
+import GradeSmallTip from '../../components/GradeSmallTip.vue'
+import { appStore } from '../../store'
 import browser from '../../js/common/browser'
-import {taskStore} from '../../apps/task/store';
+import { taskStore } from '../../apps/task/store'
 
 export default defineComponent({
   name: 'Picking',
@@ -187,16 +190,16 @@ export default defineComponent({
     InfoCircleOutlined, GradeSmallTip
   },
   computed: {
-    ...mapState(paperStore, ["myPapers", "settings"]),
+    ...mapState(paperStore, ['myPapers', 'settings']),
     ...mapWritableState(taskStore, ['taskID', 'step']),
-    m01036() {
-      return this.step === 6 && this.taskID == "M0103"
+    m01036 () {
+      return this.step === 6 && this.taskID == 'M0103'
     },
-    m01037() {
-      return this.taskID == "M0103" && this.step == 7
+    m01037 () {
+      return this.taskID == 'M0103' && this.step == 7
     }
   },
-  data() {
+  data () {
     return {
       isLoading: false,
       pickChecked: false,
@@ -242,12 +245,12 @@ export default defineComponent({
           synopsis: 'The best wallpapers on the Net'
         }
       ],
-      defaultSynopsis: {title: '拾光', name: '/timeline/v2', synopsis: '时光如歌,岁月如诗'}
+      defaultSynopsis: { title: '拾光', name: '/timeline/v2', synopsis: '时光如歌,岁月如诗' }
     }
   },
-  mounted() {
-    $("#pick-wrapper").scroll(() => {
-      if ($("#pick-wrapper").scrollTop() + $("#pick-wrapper").height() + 20 >= $("#pick-images").prop("scrollHeight") && this.isLoading === false) {
+  mounted () {
+    $('#pick-wrapper').scroll(() => {
+      if ($('#pick-wrapper').scrollTop() + $('#pick-wrapper').height() + 20 >= $('#pick-images').prop('scrollHeight') && this.isLoading === false) {
         const newTime = new Date()
         this.dateTime = this.formatDateTime(newTime)
         this.score = this.pickImageData.sort((a, b) => {
@@ -264,10 +267,10 @@ export default defineComponent({
     this.getWallOption()
   },
   methods: {
-    ...mapActions(paperStore, ["removeToMyPaper"]),
-    ...mapActions(appStore, ["setBackgroundImage"]),
+    ...mapActions(paperStore, ['removeToMyPaper']),
+    ...mapActions(appStore, ['setBackgroundImage']),
     // 获取拾光壁纸数据
-    getPickingData(e) {
+    getPickingData (e) {
       const api = 'https://api.nguaduot.cn'
       const cate = this.pickFilterValue === '/wallhaven/v2' ? this.wallValue :
           this.pickFilterValue === '/timeline/v2' ? this.classValue : ''
@@ -282,11 +285,11 @@ export default defineComponent({
           if (res.data.data.length !== 1) {
             let pickImage = res.data.data
             this.count = res.data.count
-            let animations = ["ani-gray", "bowen", "ani-rotate"];
+            let animations = ['ani-gray', 'bowen', 'ani-rotate']
             if (pickImage) {
               pickImage.forEach(img => {
                 if (img.thumburl !== null) {
-                  let randomIndex = Math.floor(Math.random() * animations.length);
+                  let randomIndex = Math.floor(Math.random() * animations.length)
                   const image = {
                     title: false,
                     src: img.thumburl,
@@ -301,23 +304,23 @@ export default defineComponent({
               })
             }
           } else {
-            return
+
           }
         })
             .finally(() => {
               this.$nextTick(() => {
-                this.isLoading = false;
-              });
+                this.isLoading = false
+              })
             })
       }
     },
-    setAppPaper() {
+    setAppPaper () {
       message.info('正在为您设置壁纸')
       this.setBackgroundImage(this.currentPaper)
       this.visibleMenu = false
     },
     // 获取拾光壁纸分类
-    getClassOption() {
+    getClassOption () {
       const apiUrl = 'https://api.nguaduot.cn/timeline/cate'
       axios.get(apiUrl).then(res => {
         this.classOption = res.data.data
@@ -325,14 +328,14 @@ export default defineComponent({
     },
 
     // 获取wallheaven壁纸分类
-    getWallOption() {
+    getWallOption () {
       const url = 'https://api.nguaduot.cn/wallhaven/cate'
       axios.get(url).then(res => {
         this.wallFilterOption = res.data.data
       })
     },
 
-    pickFilterChange(e) {
+    pickFilterChange (e) {
       this.pickFilterValue = e
       const index = this.paperSourceOption.findIndex(v => {
         return v.name === e
@@ -342,39 +345,39 @@ export default defineComponent({
       this.getPickingData(e)
     },
     // 重置筛选
-    restFilter() {
+    restFilter () {
       this.filterValue = 'date'
       this.pickChecked = false
       this.classValue = 'landscape'
       this.filterIndex = 'D'
     },
-    formatDateTime(date) {
-      var y = date.getFullYear();
-      var m = date.getMonth() + 1;
-      m = m < 10 ? ('0' + m) : m;
-      var d = date.getDate();
-      d = d < 10 ? ('0' + d) : d;
+    formatDateTime (date) {
+      var y = date.getFullYear()
+      var m = date.getMonth() + 1
+      m = m < 10 ? ('0' + m) : m
+      var d = date.getDate()
+      d = d < 10 ? ('0' + d) : d
       return y + m + d
     },
-    addToMy(img) {
-      this.removeToMyPaper(img);
+    addToMy (img) {
+      this.removeToMyPaper(img)
     },
-    isInMyPapers(image) {
+    isInMyPapers (image) {
       return (
           this.myPapers.findIndex((img) => {
-            return image.src === img.src;
+            return image.src === img.src
           }) > -1
-      );
+      )
     },
 
-    pickShow(item) {
-      console.log('11111 :>> ', 11111);
+    pickShow (item) {
+      console.log('11111 :>> ', 11111)
       this.currentPaper = item
       this.visibleMenu = true
     },
 
     // 下载壁纸
-    add() {
+    add () {
       if (this.settings.savePath === '') {
         Modal.confirm({
           centered: true,
@@ -389,7 +392,7 @@ export default defineComponent({
     },
 
     //开始下载文件
-    doStartDownload(item) {
+    doStartDownload (item) {
       message.info('开始下载壁纸')
       const name = item.split('/')
       const fileName = name[name.length - 1]
@@ -405,7 +408,7 @@ export default defineComponent({
     },
 
     // 用户没有选中指定文件时需要提示选中文件
-    async queryStart() {
+    async queryStart () {
       let savePath = await tsbApi.dialog.showOpenDialog({
         title: '选择目录', message: '请选择下载壁纸的目录', properties: [
           'openDirectory', 'createDirectory',
@@ -418,7 +421,7 @@ export default defineComponent({
       }
     },
 
-    setDesktopPaper() {
+    setDesktopPaper () {
       Modal.confirm({
         content: '确定将此壁纸设置为系统桌面壁纸？注意，此处设置不是工作台的壁纸。',
         okText: '设置桌面壁纸',
@@ -430,12 +433,12 @@ export default defineComponent({
       })
     },
 
-    closeFilter() {
+    closeFilter () {
       this.pickImageData = []
       this.getPickingData(this.pickFilterValue)
     }
   },
-  setup() {
+  setup () {
     const pickFilterValue = ref('/timeline/v2')
     const pickInfoShow = ref(false)
     const pickFilterShow = ref(false)
@@ -460,7 +463,6 @@ export default defineComponent({
     let filterIndex = ref('D')
     let filterValue = ref('date')
     let wallValue = ref('general')
-
 
     // 右侧打开拾光壁纸官网信息
     const openInfo = () => {

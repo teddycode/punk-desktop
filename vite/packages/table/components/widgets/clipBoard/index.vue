@@ -8,13 +8,15 @@
       <div class="top-col">
         <div class="col-left">
                 <span :class="['item', { action: actionIndex == 1 }]"
-                      class="flex-1 h-full nav-item flex justify-center items-center relative pointer span-flex" @click="onChangeTopIndex(1)">
+                      class="flex-1 h-full nav-item flex justify-center items-center relative pointer span-flex"
+                      @click="onChangeTopIndex(1)">
                     <div class="span-icon">
                         <clock-circle-outlined/>
                     </div>
                     剪贴板历史</span>
           <span :class="['item', { action: actionIndex == 2 }]"
-                class="flex-1 h-full nav-item flex justify-center items-center relative pointer span-flex" @click="onChangeTopIndex(2)">
+                class="flex-1 h-full nav-item flex justify-center items-center relative pointer span-flex"
+                @click="onChangeTopIndex(2)">
                     <div class="span-icon">
                         <star-outlined/>
                     </div>
@@ -118,7 +120,7 @@
 </template>
 
 <script>
-import Widget from "../../card/Widget.vue";
+import Widget from '../../card/Widget.vue'
 import {
   AlignLeftOutlined,
   AppstoreOutlined,
@@ -130,15 +132,15 @@ import {
   SearchOutlined,
   StarOutlined,
   VideoCameraOutlined
-} from '@ant-design/icons-vue';
+} from '@ant-design/icons-vue'
 
 // video组件
-import ClipVideo from "./ClipVideo.vue"
+import ClipVideo from './ClipVideo.vue'
 // audio组件
-import ClipAudio from "./ClipAudio.vue"
+import ClipAudio from './ClipAudio.vue'
 // 文件组件
 // import VueCustomScrollbar from "../../../../../../../src/components/vue-scrollbar.vue";
-import VueCustomScrollbar from "../../../../../src/components/vue-scrollbar.vue";
+import VueCustomScrollbar from '../../../../../src/components/vue-scrollbar.vue'
 // 导入剪贴板测试数据
 
 export default {
@@ -179,51 +181,51 @@ export default {
       type: Boolean,
     },
   },
-  data() {
+  data () {
     return {
       settingVisible: false,
       options: {
-        className: "card double",
-        title: "剪贴板",
+        className: 'card double',
+        title: '剪贴板',
         // icon: "shezhi1",
       },
       actionIndex: 1,
       // 设置数组参数
       todoList: [
         {
-          title: "全部",
-          icon: "AppstoreOutlined",
+          title: '全部',
+          icon: 'AppstoreOutlined',
           id: 1,
         },
         {
-          title: "文本",
-          icon: "AlignLeftOutlined",
+          title: '文本',
+          icon: 'AlignLeftOutlined',
           id: 2,
         },
         {
-          title: "图片",
-          icon: "PictureOutlined",
+          title: '图片',
+          icon: 'PictureOutlined',
           id: 3,
         },
         {
-          title: "文件",
-          icon: "FileOutlined",
+          title: '文件',
+          icon: 'FileOutlined',
           id: 4,
         },
         {
-          title: "视频",
-          icon: "VideoCameraOutlined",
+          title: '视频',
+          icon: 'VideoCameraOutlined',
           id: 5,
         },
         {
-          title: "音频",
-          icon: "CustomerServiceOutlined",
+          title: '音频',
+          icon: 'CustomerServiceOutlined',
           id: 6,
         },
       ],
       selectTodo: {
-        title: "全部",
-        icon: "clock-circle-outlined",
+        title: '全部',
+        icon: 'clock-circle-outlined',
         id: 1,
       },
       // 测试数据 全部数据
@@ -260,28 +262,28 @@ export default {
           time: '17秒前',
           capacity: '1.2MB',
           content: '磐古跨链客户端概念图.pdf',
-          imageUrl: "//n.sinaimg.cn/games/transform/639/w400h239/20220624/ba99-9f5b6cb9c1cd9eaabec96eaf44a5bf14.jpg",
+          imageUrl: '//n.sinaimg.cn/games/transform/639/w400h239/20220624/ba99-9f5b6cb9c1cd9eaabec96eaf44a5bf14.jpg',
           type: 'image'
         }
 
       ]
-    };
+    }
   },
-  async mounted() {
+  async mounted () {
 
   },
   methods: {
     // 切换组件 剪贴板历史 和 收藏
-    onChangeTopIndex(index) {
-      this.actionIndex = index;
+    onChangeTopIndex (index) {
+      this.actionIndex = index
     },
     // 切换设置 剪贴板类型
-    onChangeTodo(index) {
-      this.selectTodo = this.todoList[index - 1];
+    onChangeTodo (index) {
+      this.selectTodo = this.todoList[index - 1]
       this.settingVisible = false
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

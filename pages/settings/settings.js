@@ -15,6 +15,7 @@ function showRestartRequiredBanner () {
   banner.hidden = false
   settings.set('restartNow', true)
 }
+
 settings.get('restartNow', (value) => {
   if (value === true) {
     showRestartRequiredBanner()
@@ -35,9 +36,9 @@ var browserTabContainer = document.querySelector('.tab-choose')
 var browserTabOptions = Array.from(document.querySelectorAll('input[name=tabChoosed]'))
 var browserTabExceptionsInput = document.querySelector('#tab-text-input')
 
-function changeBrowserTab(tabIdx) {
+function changeBrowserTab (tabIdx) {
   settings.get('browserTab', (value) => {
-    if(!value) {
+    if (!value) {
       value = {}
     }
     value.tabIdx = tabIdx
@@ -46,11 +47,11 @@ function changeBrowserTab(tabIdx) {
   })
 }
 
-function updateBrowserTabUI(tabIdx) {
+function updateBrowserTabUI (tabIdx) {
   var radio = browserTabOptions[tabIdx]
   radio.checked = true
 
-  if(tabIdx === 4) {
+  if (tabIdx === 4) {
     browserTabExceptionsInput.hidden = false
   } else {
     browserTabExceptionsInput.hidden = true
@@ -62,29 +63,28 @@ function updateBrowserTabUI(tabIdx) {
   radio.parentNode.classList.add('selected')
 }
 
-settings.get("browserTab", (value) => {
-  if(!value) {
+settings.get('browserTab', (value) => {
+  if (!value) {
     settings.set('browserTab', {
       tabIdx: 0
     })
-    updateBrowserTabUI(0);
+    updateBrowserTabUI(0)
   }
 
   if (value && value.tabIdx !== undefined) {
-    updateBrowserTabUI(value.tabIdx);
+    updateBrowserTabUI(value.tabIdx)
   }
-});
+})
 
-settings.get("customTabUrl", (value) => {
+settings.get('customTabUrl', (value) => {
   if (value) {
     document.querySelector('#tab-text-input').value = value      //update UI
   }
-});
+})
 
 browserTabExceptionsInput.addEventListener('input', (event) => {
   settings.set('customTabUrl', event.target.value)
 })
-
 
 browserTabOptions.forEach((item, idx) => {
   item.addEventListener('change', () => {
@@ -94,12 +94,14 @@ browserTabOptions.forEach((item, idx) => {
 
 /* 起始页 */
 
-
 settings.listen('filteringBlockedCount', function (value) {
   var valueStr
   var count = value || 0
   if (count > 50000) {
-    valueStr = new Intl.NumberFormat(navigator.locale, { notation: 'compact', maximumSignificantDigits: 4 }).format(count)
+    valueStr = new Intl.NumberFormat(navigator.locale, {
+      notation: 'compact',
+      maximumSignificantDigits: 4
+    }).format(count)
   } else {
     valueStr = new Intl.NumberFormat().format(count)
   }
@@ -258,7 +260,7 @@ settings.get('darkMode', function (value) {
   darkModeNever.checked = (value === -1 || value === undefined || value === false)
   darkModeNight.checked = (value === 0)
   darkModeAlways.checked = (value === 1 || value === true)
-  darkModeSystem.checked = (value === 2 )
+  darkModeSystem.checked = (value === 2)
 })
 
 darkModeNever.addEventListener('change', function (e) {
@@ -349,7 +351,7 @@ openTabsInForegroundCheckbox.addEventListener('change', function (e) {
 
 settings.get('enableAutoplay', function (value) {
 
-  autoPlayCheckbox.checked = value===undefined?true:value
+  autoPlayCheckbox.checked = value === undefined ? true : value
 })
 
 autoPlayCheckbox.addEventListener('change', function (e) {
@@ -465,14 +467,15 @@ searchEngineInput.addEventListener('input', function (e) {
 
 /* 默认浏览器设置 */
 //每秒钟循环询问主进程，我是不是默认浏览器，先发消息到渲染preload.js渲染进程
-setInterval(function(){
-	postMessage({message:'getIsDefaulBrowser'})
-},1000)
+setInterval(function () {
+  postMessage({ message: 'getIsDefaulBrowser' })
+}, 1000)
 
 //先发消息到渲染preload.js渲染进程，因为页面本身无法直接发送ipc消息
-function callSetDefaultBrowser(){
-	postMessage({ message: 'callSetOrRemoveDefaultBrowser' })
+function callSetDefaultBrowser () {
+  postMessage({ message: 'callSetOrRemoveDefaultBrowser' })
 }
+
 /*默认浏览器结束*/
 
 //
@@ -482,7 +485,6 @@ function callSetDefaultBrowser(){
 //         clearInterval(myVar)
 //       }
 // },1000)
-
 
 /* key map settings */
 
@@ -640,29 +642,28 @@ settings.get('customBangs', (value) => {
     })
   }
 })
-const dolEle=document.getElementById('dropOpenLink')
-settings.get('dropOpenLink',(value)=>{
-  if(value==='true'){
-    dolEle.checked=true
-  }else{
-    dolEle.checked=false
+const dolEle = document.getElementById('dropOpenLink')
+settings.get('dropOpenLink', (value) => {
+  if (value === 'true') {
+    dolEle.checked = true
+  } else {
+    dolEle.checked = false
   }
 })
 dolEle.addEventListener('change', e => {
-  settings.set('dropOpenLink',e.target.checked===true?"true":'false')
+  settings.set('dropOpenLink', e.target.checked === true ? 'true' : 'false')
 })
-const dccEle=document.getElementById('dbClickClose')
-settings.get('dbClickClose',(value)=>{
-  if(value==='true'){
-    dccEle.checked=true
-  }else{
-    dccEle.checked=false
+const dccEle = document.getElementById('dbClickClose')
+settings.get('dbClickClose', (value) => {
+  if (value === 'true') {
+    dccEle.checked = true
+  } else {
+    dccEle.checked = false
   }
 })
 dccEle.addEventListener('change', e => {
-  settings.set('dbClickClose',e.target.checked===true?"true":'false')
+  settings.set('dbClickClose', e.target.checked === true ? 'true' : 'false')
 })
-
 
 document.getElementById('add-custom-bang').addEventListener('click', function () {
   const bangslist = document.getElementById('custom-bangs')
@@ -676,6 +677,7 @@ function createBang (bang, snippet, redirect) {
   var redirectInput = document.createElement('input')
   var xButton = document.createElement('button')
   var current = { phrase: bang ?? '', snippet: snippet ?? '', redirect: redirect ?? '' }
+
   function update (key, input) {
     settings.get('customBangs', function (d) {
       const filtered = d ? d.filter((bang) => bang.phrase !== current.phrase && (key !== 'phrase' || bang.phrase !== input.value)) : []

@@ -57,12 +57,12 @@
 </template>
 
 <script>
-import Widget from "../../card/Widget.vue";
-import DataStatu from "../DataStatu.vue"
-import {cacheRequest} from '../../../js/axios/api'
+import Widget from '../../card/Widget.vue'
+import DataStatu from '../DataStatu.vue'
+import { cacheRequest } from '../../../js/axios/api'
 
 export default {
-  name: "ManyFilm",
+  name: 'ManyFilm',
   components: {
     Widget,
     DataStatu
@@ -86,7 +86,7 @@ export default {
       default: 0
     },
   },
-  data() {
+  data () {
     return {
       options: {
         className: 'card',
@@ -97,10 +97,10 @@ export default {
       detailMovie: {},
       pageToggle: true,
       isLoading: false
-    };
+    }
   },
   methods: {
-    setDetail() {
+    setDetail () {
       this.detailMovie.image = this.detailMovie.img.replace('2500x2500', '240x354')
       this.detailMovie.members = this.detailMovie.star.replace(/,/g, ' / ')
       this.detailMovie.filmType = this.detailMovie.cat.replace(/,/g, ' / ')
@@ -108,12 +108,12 @@ export default {
       this.detailMovie.score = this.priceFormat(this.detailMovie.sc)
       this.detailMovie.starRating = this.detailMovie.score / 2
     },
-    priceFormat(num) {
+    priceFormat (num) {
       if (!isNaN(num)) {
-        return ((num + '').indexOf('.') != -1) ? num : num.toFixed(1);
+        return ((num + '').indexOf('.') != -1) ? num : num.toFixed(1)
       }
     },
-    async getfilmDetail() {
+    async getfilmDetail () {
       let detail = await cacheRequest(`https://m.maoyan.com/ajax/detailmovie?movieId=${this.detailId}`, {}, {
         localCache: true,
         localTtl: 60 * 60 * 12
@@ -121,30 +121,30 @@ export default {
       if (detail.data.code) {
         this.pageToggle = false
         this.detailMovie = detail.data
-        return
+
       } else {
         this.detailMovie = detail.data.detailMovie
         await this.setDetail()
       }
     },
-    stripDay(url) {
+    stripDay (url) {
       window.browser.openInUserSelect(url)
     },
-    notData(val) {
+    notData (val) {
       this.$emit('detailBack', val)
     },
-    discountBack(val) {
+    discountBack (val) {
       this.$emit('detailBack', val)
     },
   },
-  async mounted() {
+  async mounted () {
     this.isLoading = true
     await this.getfilmDetail()
     setTimeout(() => {
       this.isLoading = false
     })
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

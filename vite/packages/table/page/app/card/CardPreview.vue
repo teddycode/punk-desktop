@@ -37,25 +37,25 @@
 </template>
 
 <script>
-import {mapActions} from "pinia";
-import {cardStore} from "../../../store/card";
-import {message} from "ant-design-vue";
-import {LeftCircleOutlined, RightCircleOutlined} from '@ant-design/icons-vue';
+import { mapActions } from 'pinia'
+import { cardStore } from '../../../store/card'
+import { message } from 'ant-design-vue'
+import { LeftCircleOutlined, RightCircleOutlined } from '@ant-design/icons-vue'
 
 export default {
-  data() {
+  data () {
     return {
       visibility: false,
       carouselIndex: 0
     }
   },
-  mounted() {
+  mounted () {
   },
   components: {
     LeftCircleOutlined,
     RightCircleOutlined
   },
-  name: "CardPreview",
+  name: 'CardPreview',
   props: {
     cardType: {
       type: Object,
@@ -71,29 +71,29 @@ export default {
   },
 
   computed: {
-    getSize() {
+    getSize () {
       if (this.cardType.images.length === 1) {
         return this.cardType.size[0]
       }
     },
-    getImg(url) {
+    getImg (url) {
       return '/img/homeComponent/' + url + '.png'
     }
   },
 
   methods: {
-    ...mapActions(cardStore, ["addCard"]),
-    imgChang(i) {
-      this.carouselIndex = i;
+    ...mapActions(cardStore, ['addCard']),
+    imgChang (i) {
+      this.carouselIndex = i
     },
-    onBack() {
-      this.$emit("onBack")
-      this.show = true;
+    onBack () {
+      this.$emit('onBack')
+      this.show = true
     },
 
-    addCard() {
-      this.addCard({name: this.cardType.images[this.carouselIndex], id: Date.now(), data: {}}, this.desk);
-      this.$emit("addSuccess")
+    addCard () {
+      this.addCard({ name: this.cardType.images[this.carouselIndex], id: Date.now(), data: {} }, this.desk)
+      this.$emit('addSuccess')
       // this.$router.push({
       //   name: "home",
       //   params: {
@@ -101,7 +101,7 @@ export default {
       //     cname: this.cardType.cname,
       //   },
       // });
-      message.info("添加成功！");
+      message.info('添加成功！')
     }
   }
 

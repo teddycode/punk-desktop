@@ -25,14 +25,14 @@ function checkShortcutCanRun (combo, cb) {
   if (/^(shift)?\+?\w$/.test(combo) || combo === 'mod+left' || combo === 'mod+right') {
     webviews.callAsync(tabs.getSelected(), 'isFocused', function (err, isFocused) {
       if (err || !tabs.get(tabs.getSelected()).url || !isFocused) {
-      // check whether an input is focused in the browser UI
+        // check whether an input is focused in the browser UI
         if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') {
           cb(false)
         } else {
           cb(true)
         }
       } else {
-      // check whether an input is focused in the webview
+        // check whether an input is focused in the webview
         webviews.callAsync(tabs.getSelected(), 'executeJavaScript', `
           document.activeElement.tagName === "INPUT"
           || document.activeElement.tagName === "TEXTAREA"
@@ -133,18 +133,18 @@ function initialize () {
       shortcut.keys.forEach(function (key) {
         if (!(
           key === input.key.toLowerCase() ||
-        key === input.code.replace('Digit', '') ||
-        (key === 'esc' && input.key === 'Escape') ||
-        (key === 'left' && input.key === 'ArrowLeft') ||
-        (key === 'right' && input.key === 'ArrowRight') ||
-        (key === 'up' && input.key === 'ArrowUp') ||
-        (key === 'down' && input.key === 'ArrowDown') ||
-        (key === 'alt' && (input.alt || input.key === 'Alt')) ||
-        (key === 'option' && (input.alt || input.key === 'Alt')) ||
-        (key === 'shift' && (input.shift || input.key === 'Shift')) ||
-        (key === 'ctrl' && (input.control || input.key === 'Control')) ||
-        (key === 'mod' && window.platformType === 'mac' && (input.meta || input.key === 'Meta')) ||
-        (key === 'mod' && window.platformType !== 'mac' && (input.control || input.key === 'Control'))
+          key === input.code.replace('Digit', '') ||
+          (key === 'esc' && input.key === 'Escape') ||
+          (key === 'left' && input.key === 'ArrowLeft') ||
+          (key === 'right' && input.key === 'ArrowRight') ||
+          (key === 'up' && input.key === 'ArrowUp') ||
+          (key === 'down' && input.key === 'ArrowDown') ||
+          (key === 'alt' && (input.alt || input.key === 'Alt')) ||
+          (key === 'option' && (input.alt || input.key === 'Alt')) ||
+          (key === 'shift' && (input.shift || input.key === 'Shift')) ||
+          (key === 'ctrl' && (input.control || input.key === 'Control')) ||
+          (key === 'mod' && window.platformType === 'mac' && (input.meta || input.key === 'Meta')) ||
+          (key === 'mod' && window.platformType !== 'mac' && (input.control || input.key === 'Control'))
         )
         ) {
           matches = false

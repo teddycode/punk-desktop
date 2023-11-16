@@ -18,12 +18,15 @@
       </div>
       <div style="display: flex;align-items: center;justify-content: space-between;padding: 0 6em;">
         <clockIcon v-show="!countDownBtn" icon="akar-icons:pause"
-                   style="width: 2em; height: 2em;cursor:pointer;color: var(--primary-text);" @click="closeCountDown"></clockIcon>
+                   style="width: 2em; height: 2em;cursor:pointer;color: var(--primary-text);"
+                   @click="closeCountDown"></clockIcon>
         <clockIcon v-show="countDownBtn"
                    icon="fluent:play-16-filled"
-                   style="width: 2em; height: 2em;cursor:pointer;color: var(--primary-text);" @click="startCountDown"></clockIcon>
+                   style="width: 2em; height: 2em;cursor:pointer;color: var(--primary-text);"
+                   @click="startCountDown"></clockIcon>
         <clockIcon icon="fluent:dismiss-16-filled"
-                   style="width: 2em; height: 2em;cursor:pointer;color: var(--primary-text);" @click="deleteCountDown"></clockIcon>
+                   style="width: 2em; height: 2em;cursor:pointer;color: var(--primary-text);"
+                   @click="deleteCountDown"></clockIcon>
       </div>
     </div>
     <div v-else-if="clockEvent.length <= 0" class="flex flex-col text-center" style="width: 100%">
@@ -69,7 +72,8 @@
       <SetupClock></SetupClock>
     </div>
   </a-drawer>
-  <a-modal v-model:visible="custom" :footer="null" :maskClosable="false" centered popupClassName="{popupClass}" style="font-size: 8px;color: var(--primary-text);"
+  <a-modal v-model:visible="custom" :footer="null" :maskClosable="false" centered popupClassName="{popupClass}"
+           style="font-size: 8px;color: var(--primary-text);"
            title="" @ok="() => { }">
     <div style="display: flex;flex-direction: column;align-items: center;">
       <div style="">自定义倒计时</div>
@@ -84,18 +88,18 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from 'pinia'
-import {countDownStore} from '../../store/countDown'
-import {cardStore} from '../../store/card'
-import {topClockSettingStore} from '../../store/topClockSetting'
+import { mapActions, mapWritableState } from 'pinia'
+import { countDownStore } from '../../store/countDown'
+import { cardStore } from '../../store/card'
+import { topClockSettingStore } from '../../store/topClockSetting'
 import dayjs from 'dayjs'
 import Widget from '../card/Widget.vue'
-import {Icon as clockIcon} from '@iconify/vue'
+import { Icon as clockIcon } from '@iconify/vue'
 import SetupClock from './setClock.vue'
 
 export default {
   name: 'Clock',
-  components: {Widget, clockIcon, SetupClock},
+  components: { Widget, clockIcon, SetupClock },
   props: {
     customIndex: {
       type: Number,
@@ -106,7 +110,7 @@ export default {
     },
 
   },
-  data() {
+  data () {
     return {
       simpleImage: '/public/img/test/load-ail.png',
       visible: false,
@@ -150,8 +154,8 @@ export default {
           icon: 'shezhi1',
           title: '设置',
           fn: () => {
-            this.settingVisible = true;
-            this.$refs.cardSlot.visible = false;
+            this.settingVisible = true
+            this.$refs.cardSlot.visible = false
             this.changeSettingStatus()
           }
         },
@@ -172,19 +176,19 @@ export default {
     ...mapActions(cardStore, ['removeCard']),
     ...mapActions(countDownStore, ['setCountDown', 'stopCountDown', 'openCountDown', 'dCountDown']),
     ...mapActions(topClockSettingStore, ['changeSettingStatus']),
-    onContextMenuClick(e) {
+    onContextMenuClick (e) {
 
     },
-    onSetCountDown() {
+    onSetCountDown () {
       this.$refs.cardSlot.menuVisible = true
     },
-    showDrawer() {
+    showDrawer () {
       this.visible = true
     },
-    onClose() {
+    onClose () {
       this.visible = false
     },
-    onSetup() {
+    onSetup () {
       // this.topClockSettingVisible = true
       this.changeSettingStatus()
       // this.$router.push({
@@ -195,21 +199,21 @@ export default {
       //   },
       // })
     },
-    removeClock() {
+    removeClock () {
       this.removeCard(this.customIndex)
       this.dCountDown()
       this.visible = false
     },
-    onCountDown(value) {
+    onCountDown (value) {
       switch (value) {
         case 3:
-          this.setCountDown({hours: 0, minutes: 3, seconds: 0})
+          this.setCountDown({ hours: 0, minutes: 3, seconds: 0 })
           break
         case 10:
-          this.setCountDown({hours: 0, minutes: 10, seconds: 0})
+          this.setCountDown({ hours: 0, minutes: 10, seconds: 0 })
           break
         case 30:
-          this.setCountDown({hours: 0, minutes: 30, seconds: 0})
+          this.setCountDown({ hours: 0, minutes: 30, seconds: 0 })
           break
         case 300:
           this.custom = true
@@ -217,23 +221,23 @@ export default {
       }
       this.$refs.cardSlot.hideMenu()
       this.countDownBtn = false
-    }, closeCountDown() {
+    }, closeCountDown () {
 
       this.stopCountDown()
 
     },
-    startCountDown() {
+    startCountDown () {
 
       this.openCountDown()
 
     },
-    deleteCountDown() {
+    deleteCountDown () {
       this.dCountDown()
     },
-    closeCustom() {
+    closeCustom () {
       this.custom = false
     },
-    addCustom() {
+    addCustom () {
       this.setCountDown({
         hours: parseFloat(this.value1.$H),
         minutes: parseFloat(this.value1.$m),

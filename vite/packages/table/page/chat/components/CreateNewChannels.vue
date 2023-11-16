@@ -47,10 +47,9 @@
 </template>
 
 <script>
-import {defineComponent, reactive, toRefs} from 'vue'
+import { defineComponent, reactive, toRefs } from 'vue'
 //  import { CloseOutlined } from '@ant-design/icons-vue'
-import {Icon as ChannelIcon} from '@iconify/vue'
-
+import { Icon as ChannelIcon } from '@iconify/vue'
 
 import Modal from '../../../components/Modal.vue'
 // import SelectDesk from './channelSelect/selectDesk.vue'
@@ -69,14 +68,14 @@ export default defineComponent({
 
   props: ['no'],
 
-  setup(props, ctx) {
+  setup (props, ctx) {
 
     const data = reactive({
       channelList: [
         // { icon:'fluent-emoji-flat:desktop-computer',name:'桌面',type:'desk'},
-        {icon: 'fluent-emoji-flat:placard', name: '社区', type: 'community'},
-        {icon: 'fluent-emoji-flat:thought-balloon', name: '群聊', type: 'group'},
-        {icon: 'fluent-emoji-flat:globe-with-meridians', name: '网页链接', type: 'link'}
+        { icon: 'fluent-emoji-flat:placard', name: '社区', type: 'community' },
+        { icon: 'fluent-emoji-flat:thought-balloon', name: '群聊', type: 'group' },
+        { icon: 'fluent-emoji-flat:globe-with-meridians', name: '网页链接', type: 'link' }
       ],
       selectIndex: 'community',
       nextShow: false, // 选择完第一步的是否进入第二步
@@ -98,7 +97,6 @@ export default defineComponent({
     const selectSubmit = () => {
       data.nextShow = true
     }
-
 
     return {
       ...toRefs(data), closeChannel, selectChannel, selectSubmit,

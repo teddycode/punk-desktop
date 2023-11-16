@@ -9,7 +9,7 @@
 
 <script>
 
-import {CodeTwoTone} from '@ant-design/icons-vue'
+import { CodeTwoTone } from '@ant-design/icons-vue'
 
 const tipMap = {
   'debug_url': {
@@ -55,11 +55,11 @@ export default {
     tip: String
   },
 
-  mounted() {
+  mounted () {
 
   },
   computed: {
-    getTip() {
+    getTip () {
       return tipMap[this.tip]
     }
   }

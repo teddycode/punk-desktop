@@ -63,7 +63,8 @@
       <vue-custom-scrollbar :settings="settingsScroller" style="height: 100%;">
         <div class="primary-title" style="color: var(--primary-text);">选择地区</div>
         <div v-for="(item) in city" :class="defaultCityIndex === item.id ? 'drawer-active' : ''"
-             class="flex items-center justify-center w-full h-12 my-4 rounded-lg pointer s-list" @click="selectedAreaSuit(item)">
+             class="flex items-center justify-center w-full h-12 my-4 rounded-lg pointer s-list"
+             @click="selectedAreaSuit(item)">
           <!-- {{ defaultCityIndex }} -->
           <!-- {{ item.id }} -->
           {{ item.city }}
@@ -76,10 +77,10 @@
 
 <script>
 import Widget from '../card/Widget.vue'
-import {CaretDownOutlined, LineChartOutlined} from '@ant-design/icons-vue'
+import { CaretDownOutlined, LineChartOutlined } from '@ant-design/icons-vue'
 import city from '../../js/axios/city.ts'
-import {mapActions, mapState} from 'pinia'
-import {oilStore} from '../../store/store.ts'
+import { mapActions, mapState } from 'pinia'
+import { oilStore } from '../../store/store.ts'
 
 export default {
   name: 'OilPrices',
@@ -102,7 +103,7 @@ export default {
       type: Object
     }
   },
-  data() {
+  data () {
     return {
       fail: false,
       options: {
@@ -116,7 +117,7 @@ export default {
           icon: 'shezhi1',
           title: '设置',
           fn: () => {
-            this.settingVisible = true;
+            this.settingVisible = true
             this.$refs.cardSlot.visible = false
           }
         },
@@ -140,7 +141,7 @@ export default {
     }
   },
   methods: {
-    selectedAreaSuit(item) {
+    selectedAreaSuit (item) {
       this.defaultCityIndex = (item.id - 1)
       this.settingVisible = false
 
@@ -152,35 +153,34 @@ export default {
       // this.showCity()
       this.cityOil(this.customData.city)
     },
-    showCity() {
+    showCity () {
       if (this.currentCity.p !== this.customData.city) {
         this.currentCity.p = this.customData.city
       }
     },
-    showMenu() {
+    showMenu () {
       this.settingVisible = true
     },
     ...mapActions(oilStore, ['getCityOilData', 'getCity', 'cityOil']),
-    retry() {
+    retry () {
       this.cityOil(this.city[this.defaultCityIndex].city).then(() => {
       }).catch(() => this.fail = true).finally(() => {
         this.isLoading = false
       })
     },
 
-
   },
   computed: {
     ...mapState(oilStore, ['cityOilData', 'currentCity', 'cityOilList']),
     // 获取当前组件省市的油价信息
-    showOilData() {
+    showOilData () {
       let cityMsg = this.cityOilData.filter((item) => {
         return item.city == this.customData.city
       })
       return cityMsg
     }
   },
-  async mounted() {
+  async mounted () {
     this.isLoading = true
     await this.getCity()
     //  console.log(this.currentCity);
@@ -208,7 +208,7 @@ export default {
     }
     setTimeout(() => {
       this.isLoading = false
-    }, 0);
+    }, 0)
   }
 
 }

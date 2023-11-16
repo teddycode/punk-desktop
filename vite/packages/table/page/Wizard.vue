@@ -168,20 +168,20 @@
 
 <script>
 import ChooseScreen from './ChooseScreen.vue'
-import {appStore} from '../store'
-import {mapActions, mapWritableState} from 'pinia'
+import { appStore } from '../store'
+import { mapActions, mapWritableState } from 'pinia'
 import KeyInput from '../components/comp/KeyInput.vue'
-import {message} from 'ant-design-vue'
-import {BulbFilled, PlayCircleFilled} from '@ant-design/icons-vue'
+import { message } from 'ant-design-vue'
+import { BulbFilled, PlayCircleFilled } from '@ant-design/icons-vue'
 import ZoomUI from '../components/comp/ZoomUI.vue'
 import AutoRun from '../components/comp/AutoRun.vue'
 import browser from '../js/common/browser'
 import navigationData from '../js/data/tableData'
-import {navStore} from '../store/nav'
+import { navStore } from '../store/nav'
 import KeySetting from '../components/comp/KeySetting.vue'
-import {useWidgetStore} from '../components/card/store'
+import { useWidgetStore } from '../components/card/store'
 
-const {settings} = window.$models
+const { settings } = window.$models
 export default {
   name: 'Wizard',
   components: {
@@ -195,7 +195,7 @@ export default {
     ...mapWritableState(navStore, ['sideNavigationList', 'footNavigationList', 'rightNavigationList']),
     ...mapWritableState(appStore, ['settings', 'init']),
     ...mapWritableState(useWidgetStore, ['rightModel']),
-    fitWidth() {
+    fitWidth () {
       const width = Number(this.currentWidth)
       if (width < 800) {
         return {
@@ -217,7 +217,7 @@ export default {
         }
       }
     },
-    fitHeight() {
+    fitHeight () {
       const height = Number(this.currentHeight)
       if (height < 480) {
         return {
@@ -240,7 +240,7 @@ export default {
       }
     }
   },
-  data() {
+  data () {
     return {
       screenSettingTab: 'none',
       currentWidth: '-',
@@ -290,7 +290,7 @@ export default {
       ]
     }
   },
-  async mounted() {
+  async mounted () {
     let keyMap = await tsbApi.settings.get('keyMap')
     if (keyMap?.table) {
       this.shortKeysTable = keyMap.table
@@ -303,34 +303,34 @@ export default {
     this.getSize()
 
   },
-  unmounted() {
+  unmounted () {
   },
 
   methods: {
     ...mapActions(appStore, ['finishWizard', 'settings']),
 
-    async restore() {
+    async restore () {
       await tsbApi.window.setZoomFactor(1)
       setTimeout(() => {
         this.settings.zoomFactor = 100
         this.getSize()
       }, 300)
     },
-    getSize() {
+    getSize () {
       this.currentWidth = document.body.offsetWidth
       this.currentHeight = document.body.offsetHeight
     },
-    async setZoomFactor() {
+    async setZoomFactor () {
       await tsbApi.window.setZoomFactor(+this.settings.zoomFactor / 100)
       setTimeout(() => {
         this.getSize()
       }, 300)
     },
-    openVideo() {
+    openVideo () {
       browser.openInUserSelect('https://www.bilibili.com/video/BV17t4y127no/?spm_id_from=333.337.search-card.all.click')
     },
-    setTableKeys(args) {
-      let rs = ipc.sendSync('setTableShortcut', {shortcut: args.keys})
+    setTableKeys (args) {
+      let rs = ipc.sendSync('setTableShortcut', { shortcut: args.keys })
       if (!rs) {
         message.error('设置快捷键失败，请更换快捷键')
 
@@ -339,24 +339,24 @@ export default {
         this.shortKeysTable = args.keys
       }
     },
-    setSearchKeys(args) {
+    setSearchKeys (args) {
       this.shortKeysSearch = args.keys
     },
-    async startAdjust() {
+    async startAdjust () {
       await tsbApi.window.setAlwaysOnTop(false)
       let cp = require('child_process')
       cp.exec('MultiDigiMon.exe -touch', async (err) => {
         await tsbApi.window.setAlwaysOnTop(true)
       })
     },
-    async adjustPen() {
+    async adjustPen () {
       await tsbApi.window.setAlwaysOnTop(false)
       let cp = require('child_process')
       cp.exec('MultiDigiMon.exe -pen', async (err) => {
         await tsbApi.window.setAlwaysOnTop(true)
       })
     },
-    prevStep() {
+    prevStep () {
       if (this.mod === 'second-screen') {
         this.steps = this.stepsSecond
       } else {
@@ -364,7 +364,7 @@ export default {
       }
       this.step--
     },
-    nextStep() {
+    nextStep () {
       if (this.mod === 'second-screen') {
         this.rightModel = 'default'
         this.steps = this.stepsSecond
@@ -374,11 +374,11 @@ export default {
       }
       this.step++
     },
-    finish() {
+    finish () {
       this.finishWizard()
-      this.$router.replace({name: 'home'})
+      this.$router.replace({ name: 'home' })
     },
-    getKeys(e) {
+    getKeys (e) {
       let key = ''
       if (e.ctrlKey) {
         key += 'ctrl+'
@@ -392,7 +392,7 @@ export default {
       key += e.code
       return key
     },
-    replaceIcon() {
+    replaceIcon () {
       navigationData.systemFillAppList.forEach((item) => {
         this.sideNavigationList.forEach((i) => {
           if (item.name === i.name) {

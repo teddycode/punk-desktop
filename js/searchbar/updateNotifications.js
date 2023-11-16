@@ -49,8 +49,8 @@ function getAvailableUpdates () {
       .then(function (response) {
         console.info('got response from update check', response)
         if (response.version &&
-            compareVersions(window.globalArgs['app-version'], response.version) > 0 &&
-            (!response.availabilityPercent || getUpdateRandomNum() < response.availabilityPercent)) {
+          compareVersions(window.globalArgs['app-version'], response.version) > 0 &&
+          (!response.availabilityPercent || getUpdateRandomNum() < response.availabilityPercent)) {
           console.info('an update is available')
           localStorage.setItem('availableUpdate', JSON.stringify(response))
         } else {
@@ -77,6 +77,7 @@ function showUpdateNotification (text, input, event) {
       icon: 'carbon:renew'
     }, { allowDuplicates: true })
   }
+
   // is there an update?
   var update = JSON.parse(localStorage.getItem('availableUpdate'))
   if (update) {

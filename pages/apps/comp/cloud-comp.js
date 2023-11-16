@@ -46,7 +46,7 @@ Vue.component('cloud-comp', {
   name: 'cloud-comp',
   template: cloudTpl,
   props: {},
-  data() {
+  data () {
     return {
       //创建列表的弹窗可见
       createListVisible: false,
@@ -71,7 +71,7 @@ Vue.component('cloud-comp', {
       ],
     }
   },
-  async mounted() {
+  async mounted () {
     window.$trees.push({
       name: 'cloud',
       comp: this,
@@ -80,9 +80,9 @@ Vue.component('cloud-comp', {
     console.log(this.myAppsLists)
   },
   methods: {
-    async refreshNavs() {
+    async refreshNavs () {
       await this.$store.dispatch('getAppUserNavs')
-      if(this.myAppsLists[0].children.length > 0 ) {
+      if (this.myAppsLists[0].children.length > 0) {
         this.myAppsLists[0].children = []   //重置
         this.$store.getters.getAppUserNavs.forEach((element) => {
           this.myAppsLists[0].children.push(appListModel.convertTreeNode(element))
@@ -93,12 +93,12 @@ Vue.component('cloud-comp', {
         })
       }
     },
-    onSelect(selectedKeys, info) {
+    onSelect (selectedKeys, info) {
       console.log(selectedKeys, '__selectedKeys__')
       console.log(info, 'info')
-      if(selectedKeys.length > 0) {
-        if(selectedKeys[0] === 'cloud') {
-          this.$router.push({ name: 'cloudNavs', query: {t: Date.now()}})
+      if (selectedKeys.length > 0) {
+        if (selectedKeys[0] === 'cloud') {
+          this.$router.push({ name: 'cloudNavs', query: { t: Date.now() } })
           resetOtherTree('cloud', selectedKeys)
         } else {
           let jump = Number(selectedKeys[0])
@@ -112,7 +112,10 @@ Vue.component('cloud-comp', {
               summary = item.summary
             }
           })
-          this.$router.push({ name: 'cloud', query: { listId: jump, t: Date.now(), type: type, name: name, summary: summary } })
+          this.$router.push({
+            name: 'cloud',
+            query: { listId: jump, t: Date.now(), type: type, name: name, summary: summary }
+          })
           resetOtherTree('cloud', selectedKeys)
         }
       } else {
@@ -121,7 +124,7 @@ Vue.component('cloud-comp', {
       }
 
     },
-    onContextMenuClick(treeKey, menuKey) {
+    onContextMenuClick (treeKey, menuKey) {
       if (menuKey === 'createList') {
         //创建列表菜单
         this.handleMenuCreateList(treeKey)
@@ -131,7 +134,7 @@ Vue.component('cloud-comp', {
         this.handleMenuDeleteList(treeKey)
       }
     },
-    createList(callback = () => {}, value = '', title = '') {
+    createList (callback = () => {}, value = '', title = '') {
       this.createTitle = title
       this.createListVisible = true
       this.handleNameInput = callback
@@ -139,7 +142,7 @@ Vue.component('cloud-comp', {
         document.getElementById('nameInput').value = value
       })
     },
-    handleMenuDeleteList(treeKey) {
+    handleMenuDeleteList (treeKey) {
       let that = this
       const { list } = treeUtil.findTreeNode(treeKey, this.myAppsLists[0].children)
       this.$confirm({
@@ -147,9 +150,9 @@ Vue.component('cloud-comp', {
         content: `删除后无法撤销，请谨慎操作！`,
         okText: '确认删除，不后悔',
         cancelText: '保留',
-        async onOk() {
+        async onOk () {
           const result = await that.$store.dispatch('deleteAppUserNav', { ids: [treeKey] })
-          if(result.code === 1000) {
+          if (result.code === 1000) {
             that.createListVisible = false
             await that.refreshNavs()
             appVue.$message.success({ content: '列表删除成功' })
@@ -157,7 +160,7 @@ Vue.component('cloud-comp', {
             appVue.$message.error({ content: '列表删除失败!' })
           }
         },
-        onCancel() {
+        onCancel () {
           console.log('Cancel')
         },
       })
@@ -166,22 +169,22 @@ Vue.component('cloud-comp', {
      * 处理菜单的重命名列表事件
      * @param treeKey
      */
-    handleMenuRenameList(treeKey) {
+    handleMenuRenameList (treeKey) {
       console.log(treeKey)
       const { list } = treeUtil.findTreeNode(treeKey, this.myAppsLists[0].children)
-      this.createList(async ()=> {
+      this.createList(async () => {
         const name = getNameInputValue()
         if (!!!name) {
           appVue.$message.error({ content: '请输入列表名称。' })
           return
         }
-        const data =  {
+        const data = {
           id: treeKey,
           name: name,
           summary: '云端导航列表的描述'
         }
         const result = await this.$store.dispatch('updateAppUserNav', data)
-        if(result.code === 1000) {
+        if (result.code === 1000) {
           this.createListVisible = false
           await this.refreshNavs()
           appVue.$message.success({ content: '重命名列表成功' })
@@ -193,7 +196,7 @@ Vue.component('cloud-comp', {
     /**
      * 处理菜单的创建列表事件
      */
-    handleMenuCreateList(treeKey) {
+    handleMenuCreateList (treeKey) {
       this.createList(
         async () => {
           let list = {
@@ -205,7 +208,7 @@ Vue.component('cloud-comp', {
             return
           }
           const result = await this.$store.dispatch('addAppUserNav', list)
-          if(result.code === 1000) {
+          if (result.code === 1000) {
             this.createListVisible = false
             await this.refreshNavs()
             appVue.$message.success({ content: '添加列表成功。' })
@@ -223,8 +226,8 @@ Vue.component('cloud-comp', {
      * @param visible
      * @param treeKey
      */
-    checkMenuDisable(visible, treeKey) {
-      if(treeKey === 'cloud') {
+    checkMenuDisable (visible, treeKey) {
+      if (treeKey === 'cloud') {
         this.disableCreate = false
         this.disableRename = true
         this.disableDelete = true
@@ -235,22 +238,22 @@ Vue.component('cloud-comp', {
       }
     },
     // 拖拽元素放置到了目的地元素上面
-    allowDrop(e, key) {
+    allowDrop (e, key) {
       console.log(key, '拖拽key～～～')
     },
-    dragEnter(e) {
+    dragEnter (e) {
       console.log('enter')
       console.log(e)
       e.target.classList.add('canDrag')
     },
-    dragLeave(e) {
+    dragLeave (e) {
       console.log('leave')
       console.log(e)
       e.target.classList.remove('canDrag')
     },
 
     // 拖拽元素结束了操作
-    async drop(e, key) {
+    async drop (e, key) {
       e.target.classList.remove('canDrag')
       if (key === 'cloud' || key === window.$listId) {
         e.preventDefault()
@@ -260,12 +263,12 @@ Vue.component('cloud-comp', {
         window.$selectedApps.forEach(e => {
           ids.push(Number(e))
         })
-        const data  = {
+        const data = {
           ids,
           list_id: Number(key),
         }
         const result = await this.$store.dispatch('updateUserNavApps', data)
-        if(result.code === 1000){
+        if (result.code === 1000) {
           window.$selectedApps = []
           window.$removeApps()
           appVue.$message.success({ content: '移动应用成功。' })

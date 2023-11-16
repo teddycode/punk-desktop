@@ -19,17 +19,17 @@
 </template>
 
 <script>
-import {debounce, differenceWith} from 'lodash-es'
+import { debounce, differenceWith } from 'lodash-es'
 import Muuri from 'muuri'
-import {v4 as uuidv4} from 'uuid'
-import {GridEvent} from './GridEvent'
+import { v4 as uuidv4 } from 'uuid'
+import { GridEvent } from './GridEvent'
 import GridStore from './GridStore'
-import {ItemDragHandle, ItemKey, ItemSize} from './constants'
+import { ItemDragHandle, ItemKey, ItemSize } from './constants'
 
 export default {
   name: 'Vuuri',
-  date() {
-    currentDragGrid:''
+  date () {
+    ''
   },
   props: {
     /**
@@ -116,7 +116,7 @@ export default {
       required: false
     }
   },
-  data() {
+  data () {
     return {
       /**
        * Deep copy of props items
@@ -137,7 +137,7 @@ export default {
   watch: {
     modelValue: {
       deep: true,
-      handler(newItems, oldValue) {
+      handler (newItems, oldValue) {
         if (!this.internallySet) {
           this._sync(newItems, this.copiedItems)
         }
@@ -145,7 +145,7 @@ export default {
     },
     'settings.iconSize': {
       deep: true,
-      handler() {
+      handler () {
         if (!this.internallySet) {
           this.update()
         }
@@ -153,7 +153,7 @@ export default {
     }
   },
   computed: {
-    selector() {
+    selector () {
       return `.${this.className}`
     }
   },
@@ -161,7 +161,7 @@ export default {
     /**
      * Manually update the items in the muuri grid
      */
-    update() {
+    update () {
       this.$nextTick(() => {
         this.muuri
             .refreshItems()
@@ -172,7 +172,7 @@ export default {
      * Prepares the muuri instance
      * @private
      */
-    _setup() {
+    _setup () {
       this.muuri = new Muuri(this.selector, {
         ...this.muuriOptions,
         // dragStartPredicate: function (item, e) {
@@ -204,7 +204,7 @@ export default {
     /**
      * @private
      */
-    _setupNonReactiveProps() {
+    _setupNonReactiveProps () {
       /**
        * @type {Muuri}
        */
@@ -222,9 +222,9 @@ export default {
      * Creates the options object for Muuri
      * @private
      */
-    _setupOptions() {
+    _setupOptions () {
       if (this.dragEnabled) {
-        this.muuriOptions = {...this._generateDragOptions(), ...this.muuriOptions}
+        this.muuriOptions = { ...this._generateDragOptions(), ...this.muuriOptions }
       }
       if (this.groupId || this.groupIds) {
         let groupIds = []
@@ -238,12 +238,12 @@ export default {
           return GridStore.getGrids(groupIds)
         }
       }
-      this.muuriOptions = {...this.options, ...this.muuriOptions}
+      this.muuriOptions = { ...this.options, ...this.muuriOptions }
     },
     /**
      * @private
      */
-    _generateDragOptions() {
+    _generateDragOptions () {
       return {
         dragEnabled: true,
         dragHandle: this.dragHandle,
@@ -255,7 +255,7 @@ export default {
         },
         dragPlaceholder: {
           enabled: true,
-          createElement(item) {
+          createElement (item) {
             return item.getElement().cloneNode(true)
           },
         },
@@ -274,7 +274,7 @@ export default {
      * Registers Muuri events
      * @private
      */
-    _registerEvents() {
+    _registerEvents () {
       Object.values(GridEvent).forEach(event => {
         this.events[event] = (...args) => {
           this.$emit(event, ...args)
@@ -304,7 +304,7 @@ export default {
      * Unregister Muuri events
      * @private
      */
-    _unregisterEvents() {
+    _unregisterEvents () {
       Object.values(GridEvent).forEach(event => {
         this.muuri.off(event, this.events[event])
         delete this.events[event]
@@ -315,15 +315,15 @@ export default {
      * @type {Muuri.Item} item
      * @private
      */
-    _onDragStart(item) {
+    _onDragStart (item) {
       GridStore.setDraggingGridItem(item)
       this.currentDragGrid = item.getGrid()
     },
-    _onDragReleaseEnd(item) {
+    _onDragReleaseEnd (item) {
       if (this.currentDragGrid) {
 
         this.muuri.send(item, this.currentDragGrid, -1)
-        this.currentDragGrid = null;
+        this.currentDragGrid = null
       }
     },
     /**
@@ -331,7 +331,7 @@ export default {
      * @type {Muuri.Item} item
      * @private
      */
-    _onItemMove({item}) {
+    _onItemMove ({ item }) {
       const value = this._reOrderWithItem(item)
       this._emitValue(value)
     },
@@ -340,7 +340,7 @@ export default {
      * @type {Muuri.Item} item
      * @private
      */
-    _onItemSend({item}) {
+    _onItemSend ({ item }) {
       const index = this.modelValue.findIndex(value => value[this.itemKey] == item.getElement().dataset.itemKey)
       const removedItem = this.modelValue.splice(index, 1)[0]
       GridStore.setDraggingItem(removedItem)
@@ -350,7 +350,7 @@ export default {
      * Listener when item enters a new grid
      * @private
      */
-    _onItemReceive() {
+    _onItemReceive () {
       const vuuriItem = GridStore.getDraggingItem()
       this.modelValue.push(vuuriItem)
       const value = this._reOrderWithItem(GridStore.getDraggingGridItem())
@@ -359,7 +359,7 @@ export default {
     /**
      * Listener when dragging ends
      */
-    _onDragEnd() {
+    _onDragEnd () {
       GridStore.setDraggingGridItem(null)
       GridStore.setDraggingItem(null)
     },
@@ -368,7 +368,7 @@ export default {
      * @type {Muuri.Item} item
      * @private
      */
-    _reOrderWithItem(item) {
+    _reOrderWithItem (item) {
       const $grid = item.getGrid()
       let i = 0
       const itemKeys = $grid.getItems().reduce((accum, item) => {
@@ -386,7 +386,7 @@ export default {
      * Styles for each grid item
      * @private
      */
-    _getItemStyles(item) {
+    _getItemStyles (item) {
       return {
         width: this.getItemWidth(item),
         height: this.getItemHeight(item),
@@ -400,7 +400,7 @@ export default {
      * @returns {string}
      * @private
      */
-    _generateItemKey(item) {
+    _generateItemKey (item) {
       item._$muuri_id = uuidv4()
     },
     /**
@@ -419,7 +419,7 @@ export default {
      * @returns {Array<*>}
      * @private
      */
-    _getDiff(newValue, oldValue) {
+    _getDiff (newValue, oldValue) {
       return differenceWith(newValue, oldValue, (a, b) => {
         return a[this.itemKey] === b[this.itemKey]
       })
@@ -430,7 +430,7 @@ export default {
      * @param {?Array<*>} oldItems
      * @private
      */
-    _sync(newItems = null, oldItems = null) {
+    _sync (newItems = null, oldItems = null) {
       if (!newItems || !oldItems) {
         return
       }
@@ -448,7 +448,7 @@ export default {
      * @returns {Promise<void>}
      * @private
      */
-    _remove(newItems, oldItems) {
+    _remove (newItems, oldItems) {
       const valuesToRemove = this._getDiff(oldItems, newItems)
       if (!valuesToRemove.length) {
         return Promise.resolve()
@@ -487,7 +487,7 @@ export default {
      * @param oldItems
      * @private
      */
-    _add(newItems, oldItems) {
+    _add (newItems, oldItems) {
       let valuesToAdd = this._getDiff(newItems, oldItems)
       valuesToAdd = this._getDiff(valuesToAdd, this.copiedItems) // sync from setup and watch may overlap
       if (!valuesToAdd.length) {
@@ -509,7 +509,7 @@ export default {
         this.muuri.filter(() => true)
       })
     },
-    _emitValue(value) {
+    _emitValue (value) {
       this.internallySet = true
       this.$emit('update:modelValue', value)
       this.$nextTick(() => {
@@ -518,15 +518,15 @@ export default {
       })
     }
   },
-  created() {
+  created () {
     this._setupNonReactiveProps()
     this._setupOptions()
   },
-  mounted() {
+  mounted () {
     this._setup()
     this._registerEvents()
   },
-  beforeDestroy() {
+  beforeDestroy () {
     this._unregisterEvents()
     this.$emit('on-destroy', this)
   }

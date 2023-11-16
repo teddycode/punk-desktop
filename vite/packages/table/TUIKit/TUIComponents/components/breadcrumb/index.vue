@@ -16,12 +16,12 @@
 </template>
 
 <script>
-import {defineComponent} from 'vue'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   props: ['title', 'show', 'threeTitle'],
 
-  setup(props, ctx) {
+  setup (props, ctx) {
 
     const go = () => {  // 点击联系人返回
       ctx.emit('back')
@@ -30,7 +30,6 @@ export default defineComponent({
     const backJunior = () => {
       ctx.emit('superiors')
     }
-
 
     return {
       go, backJunior,

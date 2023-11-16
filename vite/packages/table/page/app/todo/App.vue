@@ -151,7 +151,8 @@ export default {
                 </div>
               </div>
               <div class="mt-6 mb-8">
-                <a-input v-model:value="newList.title" aria-placeholder="font-size: 16px;" class="input" placeholder="清单名称"
+                <a-input v-model:value="newList.title" aria-placeholder="font-size: 16px;" class="input"
+                         placeholder="清单名称"
                          spellcheck="false" style="height: 48px;"/>
               </div>
               <div class="modal-btn">

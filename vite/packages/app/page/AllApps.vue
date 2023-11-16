@@ -48,12 +48,12 @@
 </template>
 
 <script>
-import {EditOutlined, EllipsisOutlined, SettingOutlined} from '@ant-design/icons-vue'
-import {mapActions} from 'pinia'
-import {appStore} from '../store'
-import {message, Modal} from 'ant-design-vue'
+import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons-vue'
+import { mapActions } from 'pinia'
+import { appStore } from '../store'
+import { message, Modal } from 'ant-design-vue'
 
-const {appModel} = window.$models
+const { appModel } = window.$models
 export default {
   name: 'AllApps',
   components: {
@@ -61,23 +61,23 @@ export default {
     EditOutlined,
     EllipsisOutlined,
   },
-  data() {
+  data () {
     return {
       apps: []
     }
   },
-  async mounted() {
-    this.apps = await appModel.getAll({order: "create_time"})
+  async mounted () {
+    this.apps = await appModel.getAll({ order: 'create_time' })
 
   },
   methods: {
-    async addNew() {
-      ipc.send('executeApp', {app: await appModel.get({package: 'com.thisky.appStore'})})
+    async addNew () {
+      ipc.send('executeApp', { app: await appModel.get({ package: 'com.thisky.appStore' }) })
     },
-    async loadApp(app) {
-      await this.$router.push({path: '/setting/' + app.nanoid})
+    async loadApp (app) {
+      await this.$router.push({ path: '/setting/' + app.nanoid })
     },
-    deleteApp(app) {
+    deleteApp (app) {
       Modal.confirm({
         title: '确定卸载「' + app.name + '」？',
         content: '此操作将卸载应用并清空所有应用数据，且无法还原。请谨慎操作。',
@@ -86,13 +86,13 @@ export default {
         cancelText: '取消',
         onOk: async () => {
           await appModel.uninstall(app.nanoid)
-          ipc.sendSync('deleteApp', {nanoid: app.nanoid})
+          ipc.sendSync('deleteApp', { nanoid: app.nanoid })
           this.apps.splice(this.apps.findIndex(a => {
             return app === a
           }), 1)
           message.success('卸载应用成功。')
         },
-        onCancel() {
+        onCancel () {
           console.log('Cancel')
         },
       })

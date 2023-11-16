@@ -69,49 +69,49 @@
 </template>
 
 <script>
-import dayjs from "../../../../table/components/card/hooks/day";
+import dayjs from '../../../../table/components/card/hooks/day'
 
-import {timeConversion} from "../../../store/timeConversion";
-import {mapActions, mapWritableState} from "pinia";
+import { timeConversion } from '../../../store/timeConversion'
+import { mapActions, mapWritableState } from 'pinia'
 
 export default {
-  data() {
+  data () {
     return {
       currentTimeStamp: 0,
-      currentTimeStampTimer: "",
-      datePicker: "",
-    };
+      currentTimeStampTimer: '',
+      datePicker: '',
+    }
   },
   computed: {
-    ...mapWritableState(timeConversion, ["time", "timeStamp"]),
+    ...mapWritableState(timeConversion, ['time', 'timeStamp']),
   },
-  mounted() {
-    this.updateCurrentTimeStamp();
-    this.currentTimeStampTimer = setInterval(this.updateCurrentTimeStamp, 1000);
+  mounted () {
+    this.updateCurrentTimeStamp()
+    this.currentTimeStampTimer = setInterval(this.updateCurrentTimeStamp, 1000)
   },
-  beforeRouteLeave(to, from, next) {
-    clearInterval(this.currentTimeStampTimer);
-    next();
+  beforeRouteLeave (to, from, next) {
+    clearInterval(this.currentTimeStampTimer)
+    next()
   },
   watch: {
-    datePicker(newV) {
-      let date = dayjs(newV).format("YYYY-MM-DD HH:mm:ss");
-      this.time = date;
-      this.timeKeyup();
+    datePicker (newV) {
+      let date = dayjs(newV).format('YYYY-MM-DD HH:mm:ss')
+      this.time = date
+      this.timeKeyup()
     },
   },
   methods: {
-    ...mapActions(timeConversion, ["timeKeyup", "timeStampKeyup"]),
-    updateCurrentTimeStamp() {
-      const now = new Date();
-      this.currentTimeStamp = now.getTime();
+    ...mapActions(timeConversion, ['timeKeyup', 'timeStampKeyup']),
+    updateCurrentTimeStamp () {
+      const now = new Date()
+      this.currentTimeStamp = now.getTime()
     },
-    getDate() {
-      let time = dayjs().format("YYYY-MM-DD HH:mm:ss");
-      return time;
+    getDate () {
+      let time = dayjs().format('YYYY-MM-DD HH:mm:ss')
+      return time
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

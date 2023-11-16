@@ -49,96 +49,96 @@
 </template>
 
 <script>
-import {message} from "ant-design-vue";
-import {calculator} from "../../../store/calculator";
-import {mapWritableState} from "pinia";
-import Mexp from "math-expression-evaluator";
+import { message } from 'ant-design-vue'
+import { calculator } from '../../../store/calculator'
+import { mapWritableState } from 'pinia'
+import Mexp from 'math-expression-evaluator'
 
 export default {
   computed: {
     ...mapWritableState(calculator, [
-      "computeList",
-      "countList",
-      "calculators",
-      "selectIndex",
+      'computeList',
+      'countList',
+      'calculators',
+      'selectIndex',
     ]),
   },
   watch: {
     computeList: {
-      handler() {
-        let formula = this.computeList[this.selectIndex];
-        formula = this.pretreatment(formula);
+      handler () {
+        let formula = this.computeList[this.selectIndex]
+        formula = this.pretreatment(formula)
         try {
-          const mexp = new Mexp();
-          const lexed = mexp.lex(formula); // 对表达式进行词法分析
-          const postfixed = mexp.toPostfix(lexed); // 将词法分析得到的结果转换为后缀表达式
-          const result = mexp.postfixEval(postfixed); // 使用后缀表达式求值
-          this.countList[this.selectIndex] = result;
+          const mexp = new Mexp()
+          const lexed = mexp.lex(formula) // 对表达式进行词法分析
+          const postfixed = mexp.toPostfix(lexed) // 将词法分析得到的结果转换为后缀表达式
+          const result = mexp.postfixEval(postfixed) // 使用后缀表达式求值
+          this.countList[this.selectIndex] = result
         } catch (error) {
-          this.countList[this.selectIndex] = formula;
+          this.countList[this.selectIndex] = formula
         }
-        this.handleChange();
+        this.handleChange()
       },
       deep: true,
     },
   },
   methods: {
-    delCalculator() {
-      this.computeList = [""];
-      this.countList = [""];
-      this.calculators = 1;
-      this.selectIndex = 0;
+    delCalculator () {
+      this.computeList = ['']
+      this.countList = ['']
+      this.calculators = 1
+      this.selectIndex = 0
     },
     // 复制状态显示
-    showCopy() {
-      const resCopy = document.querySelector(".res-copy");
-      resCopy.style.display = "block";
+    showCopy () {
+      const resCopy = document.querySelector('.res-copy')
+      resCopy.style.display = 'block'
     },
-    hideCopy() {
-      const resCopy = document.querySelector(".res-copy");
-      resCopy.style.display = "none";
+    hideCopy () {
+      const resCopy = document.querySelector('.res-copy')
+      resCopy.style.display = 'none'
     },
-    pretreatment(str) {
+    pretreatment (str) {
       str = str.replace(/[（）]/g, (match) => {
-        if (match === "（") return "(";
-        if (match === "）") return ")";
-        return match;
-      });
+        if (match === '（') return '('
+        if (match === '）') return ')'
+        return match
+      })
 
-      return str; // 返回预处理后的字符串
+      return str // 返回预处理后的字符串
     },
-    copyToClipboard(text) {
+    copyToClipboard (text) {
       navigator.clipboard
           .writeText(text)
           .then(() => {
-            message.success("已成功复制到剪切板");
+            message.success('已成功复制到剪切板')
           })
           .catch((err) => {
-          });
+          })
     },
-    handleFocus(i) {
-      this.selectIndex = i;
+    handleFocus (i) {
+      this.selectIndex = i
     },
-    handleBlur(index) {
+    handleBlur (index) {
       if (
-          this.computeList[index] === "" &&
+          this.computeList[index] === '' &&
           index !== this.computeList.length - 1
       ) {
-        this.computeList.splice(index, 1);
-        this.countList.splice(index, 1);
-        this.calculators--;
+        this.computeList.splice(index, 1)
+        this.countList.splice(index, 1)
+        this.calculators--
       }
     },
-    handleChange() {
-      let computeList = this.computeList;
-      if (computeList[computeList.length - 1] !== "") {
-        this.computeList.push("");
-        this.countList.push("");
-        this.calculators++;
+    handleChange () {
+      let computeList = this.computeList
+      if (computeList[computeList.length - 1] !== '') {
+        this.computeList.push('')
+        this.countList.push('')
+        this.calculators++
       }
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

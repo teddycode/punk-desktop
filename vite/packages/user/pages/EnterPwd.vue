@@ -23,10 +23,10 @@
 </template>
 
 <script>
-const {userModel} = window.$models
+const { userModel } = window.$models
 export default {
   name: 'EnterPwd',
-  data() {
+  data () {
     return {
       user: {
         user_info: {}
@@ -35,8 +35,8 @@ export default {
       shake: 0
     }
   },
-  async mounted() {
-    let user = await userModel.get({uid: this.$route.params.uid})
+  async mounted () {
+    let user = await userModel.get({ uid: this.$route.params.uid })
     if (user) {
       this.user = user
     } else {
@@ -47,25 +47,25 @@ export default {
     }, 200)
   },
   methods: {
-    async doEnter() {
+    async doEnter () {
       let right = await userModel.compareEnterPwd(this.pwd, this.user.uid)
       if (right) {
-        this.$router.replace({name: 'space', params: {uid: this.user.uid}})
+        this.$router.replace({ name: 'space', params: { uid: this.user.uid } })
       } else {
         let timer
         let i = 0
         timer = setInterval(() => {
-          this.shake = ((i % 3) - 1) * 60;
+          this.shake = ((i % 3) - 1) * 60
           i++
           if (i === 5) {
-            clearInterval(timer);
+            clearInterval(timer)
           }
-        }, 50);
+        }, 50)
 
       }
     },
 
-    goLogin() {
+    goLogin () {
       ipc.send('login')
     }
   }

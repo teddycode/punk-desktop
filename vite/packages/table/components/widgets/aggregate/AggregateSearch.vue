@@ -70,15 +70,15 @@
 </template>
 
 <script>
-import {mapActions} from 'pinia';
-import {cardStore} from '../../../store/card'
+import { mapActions } from 'pinia'
+import { cardStore } from '../../../store/card'
 
-import Widget from "../../card/Widget.vue";
-import Modal from "../../Modal.vue";
-import AggregateSearchFullScreen from "./AggregateSearchFullScreen.vue";
-import AggregateSearchDrawer from "./AggregateSearchDrawer.vue";
+import Widget from '../../card/Widget.vue'
+import Modal from '../../Modal.vue'
+import AggregateSearchFullScreen from './AggregateSearchFullScreen.vue'
+import AggregateSearchDrawer from './AggregateSearchDrawer.vue'
 
-import {AggregateList} from "../../../js/data/searchData";
+import { AggregateList } from '../../../js/data/searchData'
 
 export default {
   components: {
@@ -105,7 +105,7 @@ export default {
     },
   },
 
-  data() {
+  data () {
     return {
       options: {
         className: 'card small',
@@ -118,7 +118,7 @@ export default {
       searchVisible: false, // 显示模态弹窗
       AggregateList, // 没有排序过的聚合搜索数据
 
-      bottomSizeList: [{title: '2x2', width: 1, height: 1, name: '1x1'}, {
+      bottomSizeList: [{ title: '2x2', width: 1, height: 1, name: '1x1' }, {
         title: '4x2',
         width: 2,
         height: 1,
@@ -126,7 +126,7 @@ export default {
       }], // 底部设置中尺寸大小切换
       gameMiddleBare: [{
         icon: 'shezhi1', title: '设置', fn: () => {
-          this.aggSearchShow = true;
+          this.aggSearchShow = true
           this.$refs.aggregateSearchSlot.visible = false
         }
       }],
@@ -140,9 +140,9 @@ export default {
       },
 
       linkType: [  // 设置中打开方式类型
-        {name: '工作台内打开', value: 'work'},
-        {name: '磐古跨链客户端', value: 'thisky'},
-        {name: '系统默认浏览器', value: 'system'}
+        { name: '工作台内打开', value: 'work' },
+        { name: '磐古跨链客户端', value: 'thisky' },
+        { name: '系统默认浏览器', value: 'system' }
       ],
       defaultLink: this.updateLink,
 
@@ -151,43 +151,43 @@ export default {
   },
 
   computed: {
-    aggList() {
+    aggList () {
       if (this.customData && this.customData.sortList) {
         return this.customData.sortList
       } else {
         return this.AggregateList
       }
     },
-    showSize() {
+    showSize () {
       if (this.customData && this.customData.width && this.customData.height) {
-        return {width: this.customData.width, height: this.customData.height}
+        return { width: this.customData.width, height: this.customData.height }
       }
       return this.bottomSizeList[0]
     },
-    aggInputValue() {
+    aggInputValue () {
       return this.aggList[0].icon
     },
   },
 
-  mounted() {
+  mounted () {
     if (this.customData.sortType === undefined) {
-      let setData = {};
-      setData.sortType = 'work'; // 初始化分组名称
-      this.updateCustomData(this.customIndex, setData, this.desk);
+      let setData = {}
+      setData.sortType = 'work' // 初始化分组名称
+      this.updateCustomData(this.customIndex, setData, this.desk)
     }
   },
 
   methods: {
-    setSortedList(arrList) { // 获取拖拽排序后数据
+    setSortedList (arrList) { // 获取拖拽排序后数据
       this.customData.sortList = arrList
     },
     ...mapActions(cardStore, ['updateCustomData']),
-    enterSearchEngine() {  // 点击展开弹窗
+    enterSearchEngine () {  // 点击展开弹窗
       this.searchVisible = true
       this.openId = 0
     },
 
-    clickSearchItem(index) { // 点击选中打开
+    clickSearchItem (index) { // 点击选中打开
       this.searchVisible = true
       this.openId = index
     },

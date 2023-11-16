@@ -43,87 +43,87 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from "pinia";
-import {main} from "../../store/main";
-import {calculator} from "../../store/calculator";
-import {translate} from "../../store/translate";
-import {timeConversion} from "../../store/timeConversion";
-import {currencyExchange} from "../../store/currencyExchange";
-import {QRCodeGeneration} from "../../store/QRCodeGeneration";
+import { mapActions, mapWritableState } from 'pinia'
+import { main } from '../../store/main'
+import { calculator } from '../../store/calculator'
+import { translate } from '../../store/translate'
+import { timeConversion } from '../../store/timeConversion'
+import { currencyExchange } from '../../store/currencyExchange'
+import { QRCodeGeneration } from '../../store/QRCodeGeneration'
 
 export default {
-  mounted() {
+  mounted () {
   },
   computed: {
-    ...mapWritableState(main, ["useTool"]),
-    ...mapWritableState(calculator, ["computeList", "selectIndex"]),
-    ...mapWritableState(translate, ["inputValue"]),
-    ...mapWritableState(timeConversion, ["time", "timeStamp"]),
-    ...mapWritableState(currencyExchange, ["fromCurrency"]),
-    ...mapWritableState(QRCodeGeneration, ["text"]),
+    ...mapWritableState(main, ['useTool']),
+    ...mapWritableState(calculator, ['computeList', 'selectIndex']),
+    ...mapWritableState(translate, ['inputValue']),
+    ...mapWritableState(timeConversion, ['time', 'timeStamp']),
+    ...mapWritableState(currencyExchange, ['fromCurrency']),
+    ...mapWritableState(QRCodeGeneration, ['text']),
   },
-  data() {
+  data () {
     return {
-      search: "",
-    };
+      search: '',
+    }
   },
   methods: {
-    ...mapActions(translate, ["startTranslation"]),
-    ...mapActions(timeConversion, ["timeKeyup", "timeStampKeyup"]),
-    ...mapActions(currencyExchange, ["fromCurrencyRate"]),
-    back() {
-      this.$router.push("/");
-      this.useTool = "";
+    ...mapActions(translate, ['startTranslation']),
+    ...mapActions(timeConversion, ['timeKeyup', 'timeStampKeyup']),
+    ...mapActions(currencyExchange, ['fromCurrencyRate']),
+    back () {
+      this.$router.push('/')
+      this.useTool = ''
     },
-    clear() {
-      this.search = "";
+    clear () {
+      this.search = ''
     },
     // 计算器联动
-    useCalculator() {
-      this.selectIndex = this.computeList.length - 1;
-      this.computeList[this.computeList.length - 1] = this.search;
-      this.clear();
+    useCalculator () {
+      this.selectIndex = this.computeList.length - 1
+      this.computeList[this.computeList.length - 1] = this.search
+      this.clear()
     },
     // 翻译
-    useTranslate() {
-      this.inputValue = this.search;
-      this.startTranslation();
-      this.clear();
+    useTranslate () {
+      this.inputValue = this.search
+      this.startTranslation()
+      this.clear()
     },
     // 时间戳转换
-    useTimeConversion() {
-      this.timeStamp = this.search;
-      this.timeStampKeyup();
-      this.clear();
+    useTimeConversion () {
+      this.timeStamp = this.search
+      this.timeStampKeyup()
+      this.clear()
     },
     // 汇率转换
-    useCurrencyExchange() {
-      this.fromCurrency = this.search;
-      this.fromCurrencyRate();
-      this.clear();
+    useCurrencyExchange () {
+      this.fromCurrency = this.search
+      this.fromCurrencyRate()
+      this.clear()
     },
     // 二维码
-    useQRCodeGeneration() {
-      this.text = this.search;
-      this.clear();
+    useQRCodeGeneration () {
+      this.text = this.search
+      this.clear()
     },
     // 搜索回车
-    searchEnter() {
-      let name = this.useTool.route;
-      if (name === "calculator") {
-        this.useCalculator();
-      } else if (name === "translate") {
-        this.useTranslate();
-      } else if (name === "timeConversion") {
-        this.useTimeConversion();
-      } else if (name === "currencyExchange") {
-        this.useCurrencyExchange();
-      } else if (name === "QRCodeGeneration") {
-        this.useQRCodeGeneration();
+    searchEnter () {
+      let name = this.useTool.route
+      if (name === 'calculator') {
+        this.useCalculator()
+      } else if (name === 'translate') {
+        this.useTranslate()
+      } else if (name === 'timeConversion') {
+        this.useTimeConversion()
+      } else if (name === 'currencyExchange') {
+        this.useCurrencyExchange()
+      } else if (name === 'QRCodeGeneration') {
+        this.useQRCodeGeneration()
       }
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

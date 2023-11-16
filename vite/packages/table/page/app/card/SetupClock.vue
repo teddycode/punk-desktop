@@ -63,11 +63,11 @@
                     <span v-if="item.type">还有</span>
                     <span v-else>已过</span> {{
                       transDate(
-                          appDate.year + "-" + appDate.month + "-" + appDate.day,
+                          appDate.year + '-' + appDate.month + '-' + appDate.day,
                           item.dateValue.year +
-                          "-" +
+                          '-' +
                           item.dateValue.month +
-                          "-" +
+                          '-' +
                           item.dateValue.day
                       )
                     }}天
@@ -141,11 +141,11 @@
                   <div>
                     {{
                       transDate(
-                          appDate.year + "-" + appDate.month + "-" + appDate.day,
+                          appDate.year + '-' + appDate.month + '-' + appDate.day,
                           item.dateValue.year +
-                          "-" +
+                          '-' +
                           item.dateValue.month +
-                          "-" +
+                          '-' +
                           item.dateValue.day
                       )
                     }}天
@@ -265,19 +265,19 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from "pinia";
-import {cardStore} from "../../../store/card";
-import {timeStamp, transDate} from "../../../util";
-import {message} from "ant-design-vue";
-import dayjs from "dayjs";
+import { mapActions, mapWritableState } from 'pinia'
+import { cardStore } from '../../../store/card'
+import { timeStamp, transDate } from '../../../util'
+import { message } from 'ant-design-vue'
+import dayjs from 'dayjs'
 import BackBtn from '../../../components/comp/BackBtn.vue'
-import {getDateTime} from '../../../../../src/util/dateTime'
+import { getDateTime } from '../../../../../src/util/dateTime'
 
 export default {
-  name: "SetupCard",
-  components: {BackBtn},
+  name: 'SetupCard',
+  components: { BackBtn },
 
-  data() {
+  data () {
     return {
       outerSettings: {
         useBothWheelAxes: true,
@@ -286,11 +286,11 @@ export default {
         suppressScrollX: true,
         wheelPropagation: true,
       },
-      title: "",
-      countdownDayType: "大",
-      clockType: "不重复",
+      title: '',
+      countdownDayType: '大',
+      clockType: '不重复',
 
-      eventValue: "未命名",
+      eventValue: '未命名',
       dateValue: null,
       clockDate: null,
       flag: true,
@@ -301,69 +301,69 @@ export default {
 
       dateTime: {},//当前时间
       timer: null //当前时间更新计时器
-    };
+    }
   },
 
-  mounted() {
-    if (this.$route.params["name"]) {
+  mounted () {
+    if (this.$route.params['name']) {
       // console.log(this.$route.params);
-      this.title = this.$route.params["cname"];
-      this.cardType = this.$route.params["name"];
-      this.customIndex = this.$route.params["customIndex"];
+      this.title = this.$route.params['cname']
+      this.cardType = this.$route.params['name']
+      this.customIndex = this.$route.params['customIndex']
     }
     this.updateTime()
     this.timer = setInterval(() => {
       this.updateTime()
     }, 1000)
   },
-  unmounted() {
+  unmounted () {
     clearInterval(this.timer)
   },
   computed: {
-    ...mapWritableState(cardStore, ["countdownDay", "appDate", "clockEvent"]),
+    ...mapWritableState(cardStore, ['countdownDay', 'appDate', 'clockEvent']),
   },
   methods: {
     dayjs,
     transDate,
     ...mapActions(cardStore, [
-      "addCountdownDay",
-      "addClock",
-      "addCard",
-      "removeCountdownDay",
-      "removeClock",
+      'addCountdownDay',
+      'addClock',
+      'addCard',
+      'removeCountdownDay',
+      'removeClock',
     ]),
-    updateTime() {
+    updateTime () {
       this.dateTime = getDateTime()
     },
-    addCard() {
-      if (this.eventValue === "" || this.dateValue === null) {
-        if (this.flag !== true) return;
-        this.flag = false;
+    addCard () {
+      if (this.eventValue === '' || this.dateValue === null) {
+        if (this.flag !== true) return
+        this.flag = false
         setTimeout(() => {
-          message.info("不可为空！");
-          this.flag = true;
-        }, 500);
-        return;
+          message.info('不可为空！')
+          this.flag = true
+        }, 500)
+        return
       }
       this.addCountdownDay({
         eventValue: this.eventValue,
         dateValue: timeStamp(this.dateValue.valueOf()),
         customIndex: this.customIndex
-      });
+      })
       // this.$router.push({
       //   name: "home",
       // });
-      message.success("添加成功！");
+      message.success('添加成功！')
     },
-    addSettingClock() {
-      if (this.eventValue === "") {
-        if (this.flag !== true) return;
-        this.flag = false;
-        message.info("闹钟名称不可为空！");
+    addSettingClock () {
+      if (this.eventValue === '') {
+        if (this.flag !== true) return
+        this.flag = false
+        message.info('闹钟名称不可为空！')
         setTimeout(() => {
-          this.flag = true;
-        }, 500);
-        return;
+          this.flag = true
+        }, 500)
+        return
       }
 
       let date = new Date(Date.now())
@@ -377,26 +377,25 @@ export default {
       }
       let dateSpan = timeStamp(timeSpan)
 
-
       this.addClock({
         clockType: this.clockType,
         eventValue: this.eventValue,
         dateValue: timeSpan,
         clockTimeStamp: timeSpan
-      });
+      })
       // this.$router.push({
       //   name: "home",
       // });
-      message.success("添加成功！");
+      message.success('添加成功！')
     },
-    onContextMenuClick(e, index) {
-      this.removeCountdownDay(index);
+    onContextMenuClick (e, index) {
+      this.removeCountdownDay(index)
     },
-    onClockMenuClick(e, index) {
-      this.removeClock(index, 1);
+    onClockMenuClick (e, index) {
+      this.removeClock(index, 1)
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

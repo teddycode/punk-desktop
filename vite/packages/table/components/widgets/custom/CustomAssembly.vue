@@ -295,21 +295,21 @@
 
 
 <script>
-import Widget from "../../card/Widget.vue";
-import HorizontalPanel from "../../HorizontalPanel.vue";
-import Classification from "../../comp/Classification.vue";
-import navigationData from "../../../js/data/tableData";
-import listItem from "../../../components/bottomPanel/listItem.vue";
-import ModalList from "../../comp/ModalList.vue";
-import {mapActions, mapWritableState} from "pinia";
-import {paperStore} from "../../../store/paper";
-import Template from "../../../../user/pages/Template.vue";
-import {cardStore} from "../../../store/card";
-import {message} from "ant-design-vue";
+import Widget from '../../card/Widget.vue'
+import HorizontalPanel from '../../HorizontalPanel.vue'
+import Classification from '../../comp/Classification.vue'
+import navigationData from '../../../js/data/tableData'
+import listItem from '../../../components/bottomPanel/listItem.vue'
+import ModalList from '../../comp/ModalList.vue'
+import { mapActions, mapWritableState } from 'pinia'
+import { paperStore } from '../../../store/paper'
+import Template from '../../../../user/pages/Template.vue'
+import { cardStore } from '../../../store/card'
+import { message } from 'ant-design-vue'
 
-const {appModel} = window.$models;
+const { appModel } = window.$models
 export default {
-  name: "CustomAssembly",
+  name: 'CustomAssembly',
   components: {
     Template,
     Widget,
@@ -332,15 +332,15 @@ export default {
       type: Object
     }
   },
-  data() {
+  data () {
     return {
       dropList: [],
       imgState: true,
       myImgShow: false,
       sizeList: [
-        {title: "1x1", className: "small", name: "1x1"},
-        {title: "1x2", className: "", name: "1x2"},
-        {title: "2x2", className: "double", name: "2x2"},
+        { title: '1x1', className: 'small', name: '1x1' },
+        { title: '1x2', className: '', name: '1x2' },
+        { title: '2x2', className: 'double', name: '2x2' },
       ],
       navClassify: [...navigationData.navigationClassify],
       editFlag: false,
@@ -352,17 +352,17 @@ export default {
         suppressScrollX: true,
         wheelPropagation: true,
       },
-      nowClassify: "systemApp",
-      selectContent: "",
+      nowClassify: 'systemApp',
+      selectContent: '',
       showName: false,
-      mySize: {title: "1x1", className: "small"},
-      myData: {title: "", link: undefined, img: {}},
+      mySize: { title: '1x1', className: 'small' },
+      myData: { title: '', link: undefined, img: {} },
       panelVisible: false,
       options: {
-        className: "card small",
-        title: "",
-        icon: "",
-        type: "remote",
+        className: 'card small',
+        title: '',
+        icon: '',
+        type: 'remote',
         noTitle: true,
       },
       ClassifyData: [
@@ -371,220 +371,220 @@ export default {
       ],
       menuList: [
         {
-          icon: "shezhi1",
-          title: "设置",
+          icon: 'shezhi1',
+          title: '设置',
           fn: () => {
-            this.panelVisible = true;
-            this.$refs.customAssembly.visible = false;
+            this.panelVisible = true
+            this.$refs.customAssembly.visible = false
           },
         },
       ],
-    };
+    }
   },
   computed: {
-    ...mapWritableState(paperStore, ["settings", "myPapers"]),
-    filterList() {
+    ...mapWritableState(paperStore, ['settings', 'myPapers']),
+    filterList () {
       return this.ClassifyData.filter((i) => {
         return (
             i.type === this.nowClassify && i.name.includes(this.selectContent)
-        );
-      });
+        )
+      })
     },
-    title() {
-      return this.myData.link.name || this.myData.link;
+    title () {
+      return this.myData.link.name || this.myData.link
     },
   },
-  created() {
-    this.loadDeskIconApps();
+  created () {
+    this.loadDeskIconApps()
   },
   methods: {
-    ...mapActions(cardStore, ["updateCustomData"]),
-    async loadDeskIconApps() {
-      const lightApps = await appModel.getAllApps();
+    ...mapActions(cardStore, ['updateCustomData']),
+    async loadDeskIconApps () {
+      const lightApps = await appModel.getAllApps()
       for (let i = 0; i < lightApps.length; i++) {
-        lightApps[i].icon = lightApps[i].logo;
-        lightApps[i].type = "lightApp";
+        lightApps[i].icon = lightApps[i].logo
+        lightApps[i].type = 'lightApp'
       }
-      const desktopApps = await ipc.sendSync("getDeskApps");
+      const desktopApps = await ipc.sendSync('getDeskApps')
       for (let i = 0; i < desktopApps.length; i++) {
-        desktopApps[i].type = "tableApp";
+        desktopApps[i].type = 'tableApp'
       }
-      this.ClassifyData.push(...desktopApps, ...lightApps);
+      this.ClassifyData.push(...desktopApps, ...lightApps)
     },
-    showAppNav() {
-      this.editFlag = true;
+    showAppNav () {
+      this.editFlag = true
     },
-    deleteApp() {
-      this.myData.link = undefined;
+    deleteApp () {
+      this.myData.link = undefined
     },
-    deleteImg() {
-      this.myData.img = {};
+    deleteImg () {
+      this.myData.img = {}
     },
-    clickItem(item) {
-      this.activeRightItem = 0;
-      this.nowClassify = item.name;
+    clickItem (item) {
+      this.activeRightItem = 0
+      this.nowClassify = item.name
     },
-    async drop(e) {
-      let files = e.dataTransfer.files;
-      let filesArr = [];
+    async drop (e) {
+      let files = e.dataTransfer.files
+      let filesArr = []
       if (files && files.length > 0) {
         for (let i = 0; i < files.length; i++) {
-          filesArr.push(files[i].path);
+          filesArr.push(files[i].path)
         }
       }
-      this.dropFiles = await ipc.sendSync("getFilesIcon", {
+      this.dropFiles = await ipc.sendSync('getFilesIcon', {
         files: JSON.parse(JSON.stringify(filesArr)),
-      });
-      this.dropList.push(...this.dropFiles);
+      })
+      this.dropList.push(...this.dropFiles)
     },
-    deleteDropList(index) {
-      this.dropList.splice(index, 1);
+    deleteDropList (index) {
+      this.dropList.splice(index, 1)
     },
-    clickRightListItem(item, index) {
-      this.activeRightItem = index;
-      this.editFlag = false;
+    clickRightListItem (item, index) {
+      this.activeRightItem = index
+      this.editFlag = false
       if (item instanceof Array) {
-        this.myData.link = item[0];
-        this.dropList = [];
+        this.myData.link = item[0]
+        this.dropList = []
       } else {
-        this.myData.link = item;
+        this.myData.link = item
       }
     },
-    async importFile() {
+    async importFile () {
       let openPath = await tsbApi.dialog.showOpenDialog({
-        title: "选择导入的代码",
+        title: '选择导入的代码',
         filters: [
-          {name: "图片", extensions: ["png", "jpg", "jpeg", "bmp", "gif"]},
+          { name: '图片', extensions: ['png', 'jpg', 'jpeg', 'bmp', 'gif'] },
           {
-            name: "视频",
-            extensions: ["mp4", "mpeg", "avi", "rmvb"],
+            name: '视频',
+            extensions: ['mp4', 'mpeg', 'avi', 'rmvb'],
           },
-          {name: "全部", extensions: ["*"]},
+          { name: '全部', extensions: ['*'] },
         ],
-        properties: ["multiSelections"],
-      });
+        properties: ['multiSelections'],
+      })
       if (!openPath) {
-        return;
+
       } else {
-        const imgReg = /.(jpg|jpeg|gif|bmp|png)$/; // 匹配图片正则
-        const videoReg = /.(mp4|mpeg|avi|rmvb)$/; // 匹配视频正则
-        this.myData.img = {};
+        const imgReg = /.(jpg|jpeg|gif|bmp|png)$/ // 匹配图片正则
+        const videoReg = /.(mp4|mpeg|avi|rmvb)$/ // 匹配视频正则
+        this.myData.img = {}
         if (imgReg.test(openPath[0])) {
-          this.myData.img.src = openPath[0];
+          this.myData.img.src = openPath[0]
         } else if (videoReg.test(openPath[0])) {
-          this.myData.img.srcProtocol = openPath[0];
+          this.myData.img.srcProtocol = openPath[0]
           this.$nextTick(() => {
-            this.$refs.wallpaperVideo.load();
+            this.$refs.wallpaperVideo.load()
             this.$refs.wallpaperVideo.play().catch((err) => {
-            });
-          });
+            })
+          })
         }
       }
     },
-    sendImg(img) {
-      this.myData.img = img;
+    sendImg (img) {
+      this.myData.img = img
     },
-    async customClick() {
+    async customClick () {
       let openPath = await tsbApi.dialog.showOpenDialog({
-        title: "选择导入的代码",
-        filters: [{name: "全部", extensions: ["*"]}],
-        properties: ["multiSelections"],
-      });
+        title: '选择导入的代码',
+        filters: [{ name: '全部', extensions: ['*'] }],
+        properties: ['multiSelections'],
+      })
       if (!openPath) {
-        return;
+
       } else {
-        this.myData.link = openPath[0];
+        this.myData.link = openPath[0]
       }
     },
-    openMy() {
-      this.myImgShow = true;
+    openMy () {
+      this.myImgShow = true
     },
-    openApp() {
-      if (typeof this.myData.link === "object" && this.myData.link.type) {
+    openApp () {
+      if (typeof this.myData.link === 'object' && this.myData.link.type) {
         switch (this.myData.link.type) {
-          case "systemApp":
-            if (this.myData.link.event === "fullscreen") {
+          case 'systemApp':
+            if (this.myData.link.event === 'fullscreen') {
               if (this.full) {
-                this.full = false;
-                tsbApi.window.setFullScreen(false);
+                this.full = false
+                tsbApi.window.setFullScreen(false)
               } else {
-                this.full = true;
-                tsbApi.window.setFullScreen(true);
+                this.full = true
+                tsbApi.window.setFullScreen(true)
               }
-            } else if (this.myData.link.event === "/status") {
-              if (this.$route.path === "/status") {
-                this.$router.go(-1);
+            } else if (this.myData.link.event === '/status') {
+              if (this.$route.path === '/status') {
+                this.$router.go(-1)
               } else {
-                this.$router.push({path: "/status"});
+                this.$router.push({ path: '/status' })
               }
             } else if (this.myData.link.data) {
               this.$router.push({
-                name: "app",
+                name: 'app',
                 params: this.myData.link.data,
-              });
+              })
             } else {
-              this.$router.push({name: this.myData.link.event});
+              this.$router.push({ name: this.myData.link.event })
             }
-            break;
-          case "coolApp":
+            break
+          case 'coolApp':
             this.$router.push({
-              name: "app",
+              name: 'app',
               params: this.myData.link.data,
-            });
-            break;
-          case "localApp":
-            require("electron").shell.openPath(this.myData.link.path);
-            break;
-          case "lightApp":
-            ipc.send("executeAppByPackage", {
+            })
+            break
+          case 'localApp':
+            require('electron').shell.openPath(this.myData.link.path)
+            break
+          case 'lightApp':
+            ipc.send('executeAppByPackage', {
               package: this.myData.link.package,
-            });
-            break;
+            })
+            break
           default:
-            require("electron").shell.openPath(this.myData.link.path);
+            require('electron').shell.openPath(this.myData.link.path)
         }
       } else if (this.myData.link) {
         this.myData.link.path
-            ? require("electron").shell.openPath(this.myData.link.path)
-            : require("electron").shell.openPath(
-                require("path").normalize(this.myData.link)
-            );
+            ? require('electron').shell.openPath(this.myData.link.path)
+            : require('electron').shell.openPath(
+                require('path').normalize(this.myData.link)
+            )
       }
     },
-    saveData() {
+    saveData () {
       if (!Object.keys(this.myData.img).length > 0) {
-        message.warning("未添加小组件封面");
-        return;
+        message.warning('未添加小组件封面')
+        return
       }
       this.updateCustomData(this.customIndex, {
         showName: this.showName,
         mySize: this.mySize,
         myData: this.myData,
-      }, this.desk);
-      message.success("保存成功");
-      this.panelVisible = false;
+      }, this.desk)
+      message.success('保存成功')
+      this.panelVisible = false
     },
-    imgError() {
-      this.imgState = false;
+    imgError () {
+      this.imgState = false
     },
   },
-  mounted() {
-    const {showName, mySize, myData} = this.customData;
-    if (showName) this.showName = showName;
-    if (mySize) this.mySize = {...this.mySize, ...mySize};
-    if (myData) this.myData = {...this.myData, ...myData};
+  mounted () {
+    const { showName, mySize, myData } = this.customData
+    if (showName) this.showName = showName
+    if (mySize) this.mySize = { ...this.mySize, ...mySize }
+    if (myData) this.myData = { ...this.myData, ...myData }
   },
   watch: {
     mySize: {
-      handler(newV) {
-        this.options.className = "card" + " " + this.mySize.className;
-        this.$emit("customEvent");
+      handler (newV) {
+        this.options.className = 'card' + ' ' + this.mySize.className
+        this.$emit('customEvent')
       },
       immediate: true,
       deep: true
     },
   },
-};
+}
 </script>
 
 <style scoped></style>

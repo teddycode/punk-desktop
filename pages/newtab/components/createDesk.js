@@ -22,7 +22,7 @@ const createDeskTpl = `
   </div>
 </div>
   `
-const iconSelector=require('./components/icon-selector.js')
+const iconSelector = require('./components/icon-selector.js')
 Vue.component('createDesk', {
   template: createDeskTpl,
   name: 'createDesk',
@@ -37,17 +37,15 @@ Vue.component('createDesk', {
     }
   },
   components: {
-    'icon-selector':iconSelector
+    'icon-selector': iconSelector
   },
   data () {
     return {
-      name:'新桌面',
-      icon:'bulb',
+      name: '新桌面',
+      icon: 'bulb',
     }
   },
-  computed: {
-
-  },
+  computed: {},
   mounted () {
   },
   methods: {
@@ -55,20 +53,20 @@ Vue.component('createDesk', {
     visibleChange () {
       this.$emit('changeVisible', !this.visible)
     },
-    changeName(e){
-      this.name=e.target.value
+    changeName (e) {
+      this.name = e.target.value
     },
     handleOk () {
-      if(!!!this.icon){
+      if (!!!this.icon) {
         this.$message.error('必须选择图标')
         return
       }
-      if(!!!this.name){
+      if (!!!this.name) {
         this.$message.error('必须输入桌面名称')
         return
       }
       this.visibleChange()
-      this.$emit('add-desk',{icon:this.icon,name:this.name})
+      this.$emit('add-desk', { icon: this.icon, name: this.name })
     },
     handleCancel () {
       this.$emit('changeVisible', false)

@@ -75,14 +75,14 @@
 </template>
 
 <script>
-import {checkColumns, testData} from '../../../js/data/tableData'
+import { checkColumns, testData } from '../../../js/data/tableData'
 import Modal from '../../../components/Modal.vue'
 
 export default {
   components: {
     Modal
   },
-  data() {
+  data () {
     return {
       testData,
       checkColumns,
@@ -92,7 +92,7 @@ export default {
     }
   },
   methods: {
-    goDetails(record) {
+    goDetails (record) {
       this.checkDetailShow = true
       this.checkDetailsData.frame_url = record.frame_url
       this.checkDetailsData.frame_name = record.name

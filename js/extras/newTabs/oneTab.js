@@ -8,17 +8,17 @@ const oneTab = {
     'https://go.itab.link/?t=2'
   ],
 
-  selectOnetab() {
+  selectOnetab () {
     let selected = ''
     const browserTab = settings.get('browserTab')
     const customTabUrl = settings.get('customTabUrl')
 
-    if(browserTab && browserTab.tabIdx < this.newtabList.length) {
+    if (browserTab && browserTab.tabIdx < this.newtabList.length) {
       selected = this.newtabList.find((v, index) => index === browserTab.tabIdx)
     }
 
-    if(browserTab && browserTab.tabIdx === this.newtabList.length) {
-      if(customTabUrl) {
+    if (browserTab && browserTab.tabIdx === this.newtabList.length) {
+      if (customTabUrl) {
         selected = customTabUrl
       }
     }
@@ -28,26 +28,25 @@ const oneTab = {
   },
 
   //处理来自其他页面的设置
-  handleSettings(tabName) {
-    if(tabName === 'tstab') {
+  handleSettings (tabName) {
+    if (tabName === 'tstab') {
       settings.set('browserTab', {
         tabIdx: 0
       })
-    } else if(tabName === 'qntab') {
+    } else if (tabName === 'qntab') {
       settings.set('browserTab', {
         tabIdx: 1
       })
-    } else if(tabName === 'inftab') {
+    } else if (tabName === 'inftab') {
       settings.set('browserTab', {
         tabIdx: 2
       })
-    } else if(tabName === 'itab') {
+    } else if (tabName === 'itab') {
       settings.set('browserTab', {
         tabIdx: 3
       })
     }
   }
 }
-
 
 module.exports = oneTab

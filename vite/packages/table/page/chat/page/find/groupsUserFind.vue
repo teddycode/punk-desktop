@@ -76,9 +76,9 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from 'pinia'
-import {chatStore} from '../../../../store/chat'
-import {appStore} from '../../../../store'
+import { mapActions, mapWritableState } from 'pinia'
+import { chatStore } from '../../../../store/chat'
+import { appStore } from '../../../../store'
 // import { useRouter, useRoute } from 'vue-router'
 import AddFindButton from '../../../../components/sns/AddFindButton.vue'
 import SendMessageButton from '../../../../components/sns/SendMessageButton.vue'
@@ -95,7 +95,7 @@ export default {
     UserCard
   },
 
-  data() {
+  data () {
     return {
       cardVisible: false,
       userCardUid: '',
@@ -114,31 +114,30 @@ export default {
   computed: {
     ...mapWritableState(chatStore, ['groupList', 'refUser', 'settings', 'memberList', 'limitTotal', 'isLoading', 'recommendData']),
     ...mapWritableState(appStore, ['userCardUserInfo', 'userInfo']),
-    isGroup() {
+    isGroup () {
       const uid = this.userInfo.uid
       return this.memberList.some(member => parseInt(member.userID) === uid)
     }
   },
 
-  async mounted() {
+  async mounted () {
     await this.getReferData()
     // await this.getMember()
   },
   methods: {
     ...mapActions(chatStore, ['getReferData', 'loadGroupRelationship', 'updateConversation']),
-    openUserCard(uid) {
+    openUserCard (uid) {
       this.cardVisible = true
       this.userCardUid = uid
     },
 
-    updateRelationship(e, item) {
+    updateRelationship (e, item) {
       item.relationship = e.relationship
     },
 
-
     // 加入推荐群聊
-    async addGroup(id) {
-      this.$router.push({name: 'chatMain'})
+    async addGroup (id) {
+      this.$router.push({ name: 'chatMain' })
       const option = {
         groupID: id,
       }
@@ -147,7 +146,7 @@ export default {
     },
 
     // 进入群聊
-    async enterGroup(item) {
+    async enterGroup (item) {
       // console.log('排查数据',item);
       if (item.uid) {
         this.updateConversation(`C2C${item.uid}`)
@@ -157,7 +156,7 @@ export default {
           // Notify TUIConversation to toggle the current conversation
           window.$TUIKit.TUIServer.TUIConversation.handleCurrentConversation(imResponse.data.conversation)
         })
-        this.$router.push({name: 'chatMain'})
+        this.$router.push({ name: 'chatMain' })
       } else {
         const conversationID = `GROUP${item.groupID}`
         window.$TUIKit.TUIServer.TUIConversation.getConversationProfile(conversationID).then((imResponse) => {
@@ -165,7 +164,7 @@ export default {
           // Notify TUIConversation to toggle the current conversation
           window.$TUIKit.TUIServer.TUIConversation.handleCurrentConversation(imResponse.data.conversation)
         })
-        this.$router.push({name: 'chatMain'})
+        this.$router.push({ name: 'chatMain' })
       }
     }
 

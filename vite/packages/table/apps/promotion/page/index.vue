@@ -45,30 +45,29 @@
 //   GiftOutlined,
 //   ClusterOutlined,
 // } from '@ant-design/icons-vue';
-import {Icon} from '@iconify/vue';
-import Agent from "../components/agent.vue";
-import Dashboard from "../components/dashboard.vue";
-import Explain from "../components/explain.vue";
-import Income from "../components/income.vue";
-import Invite from "../components/invite.vue";
-import Promoter from "../components/promoter.vue";
-import Records from "../components/records.vue";
-import Withdrawal from "../components/withdrawal.vue";
-import {mapActions, mapState} from "pinia";
-import {appStore} from '../../../store'
-import VueCustomScrollbar from "../../../../../src/components/vue-scrollbar.vue";
+import { Icon } from '@iconify/vue'
+import Agent from '../components/agent.vue'
+import Dashboard from '../components/dashboard.vue'
+import Explain from '../components/explain.vue'
+import Income from '../components/income.vue'
+import Invite from '../components/invite.vue'
+import Promoter from '../components/promoter.vue'
+import Records from '../components/records.vue'
+import Withdrawal from '../components/withdrawal.vue'
+import { mapActions, mapState } from 'pinia'
+import { appStore } from '../../../store'
+import VueCustomScrollbar from '../../../../../src/components/vue-scrollbar.vue'
 
+import dataPie24Regular from '@iconify-icons/fluent/data-pie-24-regular'
+import peopleAdd16Regular from '@iconify-icons/fluent/people-add-16-regular'
+import arrowTrendingLines20Filled from '@iconify-icons/fluent/arrow-trending-lines-20-filled'
+import gift16Regular from '@iconify-icons/fluent/gift-16-regular'
+import documentBulletListMultiple24Regular from '@iconify-icons/fluent/document-bullet-list-multiple-24-regular'
+import appsListDetail24Regular from '@iconify-icons/fluent/apps-list-detail-24-regular'
+import peopleCommunity16Regular from '@iconify-icons/fluent/people-community-16-regular'
+import money16Regular from '@iconify-icons/fluent/money-16-regular'
 
-import dataPie24Regular from '@iconify-icons/fluent/data-pie-24-regular';
-import peopleAdd16Regular from '@iconify-icons/fluent/people-add-16-regular';
-import arrowTrendingLines20Filled from '@iconify-icons/fluent/arrow-trending-lines-20-filled';
-import gift16Regular from '@iconify-icons/fluent/gift-16-regular';
-import documentBulletListMultiple24Regular from '@iconify-icons/fluent/document-bullet-list-multiple-24-regular';
-import appsListDetail24Regular from '@iconify-icons/fluent/apps-list-detail-24-regular';
-import peopleCommunity16Regular from '@iconify-icons/fluent/people-community-16-regular';
-import money16Regular from '@iconify-icons/fluent/money-16-regular';
-
-const {appModel} = window.$models
+const { appModel } = window.$models
 
 export default {
   name: 'Promotion',
@@ -94,7 +93,7 @@ export default {
     ...mapState(appStore, ['userInfo']),
 
   },
-  data() {
+  data () {
     return {
       icons: {
         dataPie24Regular,
@@ -117,50 +116,50 @@ export default {
       dataList: [
         {
           icon: dataPie24Regular,
-          title: "数据总览",
+          title: '数据总览',
           key: 1,
           isAdmin: false,
         },
         {
           icon: peopleAdd16Regular,
-          title: "我的邀请",
+          title: '我的邀请',
           key: 2,
           isAdmin: false,
         },
         {
           icon: arrowTrendingLines20Filled,
-          title: "下级代理收益",
+          title: '下级代理收益',
           key: 3,
           isAdmin: false,
         },
         {
           icon: gift16Regular,
-          title: "我的收益",
+          title: '我的收益',
           key: 4,
           isAdmin: false,
         },
         {
           icon: documentBulletListMultiple24Regular,
-          title: "推广说明",
+          title: '推广说明',
           key: 5,
           isAdmin: false,
         },
         {
           icon: appsListDetail24Regular,
-          title: "推广记录",
+          title: '推广记录',
           key: 6,
           isAdmin: true,
 
         },
         {
           icon: peopleCommunity16Regular,
-          title: "推广员管理",
+          title: '推广员管理',
           key: 7,
           isAdmin: true,
         },
         {
           icon: money16Regular,
-          title: "提现管理",
+          title: '提现管理',
           key: 8,
           isAdmin: true,
         },
@@ -168,14 +167,14 @@ export default {
 
     }
   },
-  mounted() {
+  mounted () {
 
     this.getUserInfo()
     // this.apps = await appModel.getAll({order:"create_time"})
   },
   watch: {},
   methods: {
-    onChangeList(key) {
+    onChangeList (key) {
       // console.log(key);s
       this.indexKey = key
     },

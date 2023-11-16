@@ -22,10 +22,22 @@ function execRefreshToken (config) {
       })
       refreshFuncList = []
     } else {
-      ipc ? ipc.send('message', { type: 'error', config: { content: '登录信息过期，请重新登录', key: Date.now() } }) : sidePanel.get().webContents.send('message', { type: 'error', config: { content: '登录信息过期，请重新登录', key: Date.now() } })
+      ipc ? ipc.send('message', {
+        type: 'error',
+        config: { content: '登录信息过期，请重新登录', key: Date.now() }
+      }) : sidePanel.get().webContents.send('message', {
+        type: 'error',
+        config: { content: '登录信息过期，请重新登录', key: Date.now() }
+      })
     }
   }).catch(err => {
-    ipc ? ipc.send('message', { type: 'error', config: { content: '登录信息过期，请重新登录', key: Date.now() } }) : sidePanel.get().webContents.send('message', { type: 'error', config: { content: '登录信息过期，请重新登录', key: Date.now() } })
+    ipc ? ipc.send('message', {
+      type: 'error',
+      config: { content: '登录信息过期，请重新登录', key: Date.now() }
+    }) : sidePanel.get().webContents.send('message', {
+      type: 'error',
+      config: { content: '登录信息过期，请重新登录', key: Date.now() }
+    })
   }).finally(() => {
     isRefreshing = false
   })
@@ -112,7 +124,10 @@ axios.interceptors.response.use(
               ipc.send('message', { type: 'error', config: { content: response.data.message, key: Date.now() } })
             }
           } else {
-            sidePanel.get().webContents.send('message', { type: 'error', config: { content: response.data.message, key: Date.now() } })
+            sidePanel.get().webContents.send('message', {
+              type: 'error',
+              config: { content: response.data.message, key: Date.now() }
+            })
           }
           return Promise.reject(response.data)
         } catch (err) {

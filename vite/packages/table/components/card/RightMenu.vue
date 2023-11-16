@@ -72,26 +72,26 @@
 </template>
 
 <script setup>
-import {computed, ref, toRefs, watch} from "vue";
-import {storeToRefs} from "pinia";
-import {useWidgetStore} from "./store.ts";
-import Menu from "../../ui/components/Menu/index.vue";
-import BottomEdit from "./BottomEdit.vue";
-import HorizontalPanel from "../HorizontalPanel.vue";
+import { computed, ref, toRefs, watch } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useWidgetStore } from './store.ts'
+import Menu from '../../ui/components/Menu/index.vue'
+import BottomEdit from './BottomEdit.vue'
+import HorizontalPanel from '../HorizontalPanel.vue'
 
-const emits = defineEmits(["removeCard", "sizeType"]);
+const emits = defineEmits(['removeCard', 'sizeType'])
 
 const props = defineProps({
   // 右键菜单数据
   menus: {
     default: () => {
-      return [];
+      return []
     },
   },
   // 卡片大小数据
   sizes: {
     default: () => {
-      return [];
+      return []
     },
   },
   //
@@ -100,77 +100,77 @@ const props = defineProps({
   },
   oldMenuVisible: {},
   sizeType: {},
-});
-const {menus, sizes, oldMenuVisible, currentEvent, event} = toRefs(props);
+})
+const { menus, sizes, oldMenuVisible, currentEvent, event } = toRefs(props)
 
-const widgetStore = useWidgetStore();
-const {rightModel} = storeToRefs(widgetStore);
+const widgetStore = useWidgetStore()
+const { rightModel } = storeToRefs(widgetStore)
 
 // 新版右键和点击事件切换
-const model = ref("contextmenu");
+const model = ref('contextmenu')
 // 是否启动跟随菜单
 const menuState = computed(() => {
-  return rightModel.value == "follow" ? true : false;
-});
+  return rightModel.value == 'follow' ? true : false
+})
 
 // 处理不同右键模式的菜单数据
 const menuList = computed(() => {
-  if (rightModel.value == "follow" && sizes.value.length > 0) {
+  if (rightModel.value == 'follow' && sizes.value.length > 0) {
     let array = [
       {
-        slot: "cardSize",
-        title: "小组件尺寸",
-        newIcon: "fluent:resize-large-16-regular",
+        slot: 'cardSize',
+        title: '小组件尺寸',
+        newIcon: 'fluent:resize-large-16-regular',
       },
       {
         divider: true,
       },
       ...menus.value,
-    ];
-    return array;
+    ]
+    return array
   }
-  return menus.value;
-});
+  return menus.value
+})
 
 // 卡片大小监听
-const cardSize = ref(props.sizeType);
+const cardSize = ref(props.sizeType)
 watch(cardSize, (newV) => {
-  emits("update:sizeType", newV);
-});
+  emits('update:sizeType', newV)
+})
 // 旧版菜单展示
-const menuVisible = ref(false);
-const menuRef = ref();
+const menuVisible = ref(false)
+const menuRef = ref()
 // 旧版右键监听
-const trigger = ref(false);
+const trigger = ref(false)
 const close = () => {
-  trigger.value = false;
-};
+  trigger.value = false
+}
 watch(oldMenuVisible, (newV) => {
   // 如果不处于主应用模式
-  if (!menuState.value) menuVisible.value = newV;
+  if (!menuState.value) menuVisible.value = newV
   else if (menuState.value) {
-    trigger.value = true;
-    emits("update:oldMenuVisible", false);
+    trigger.value = true
+    emits('update:oldMenuVisible', false)
   }
-});
+})
 watch(menuVisible, (newV) => {
-  emits("update:oldMenuVisible", newV);
-  oldMenuVisible.value = newV;
-});
+  emits('update:oldMenuVisible', newV)
+  oldMenuVisible.value = newV
+})
 
 // 更新卡片大小
 const updateCardSize = (item) => {
-  cardSize.value = item;
+  cardSize.value = item
 
-  emits("update:sizeType", item);
-};
+  emits('update:sizeType', item)
+}
 // 删除卡片
 const removeCard = () => {
-  emits("removeCard");
-};
+  emits('removeCard')
+}
 const rightMenuState = () => {
-  if (!menuState.value) menuVisible.value = true;
-};
+  if (!menuState.value) menuVisible.value = true
+}
 </script>
 
 <style lang="scss" scoped></style>

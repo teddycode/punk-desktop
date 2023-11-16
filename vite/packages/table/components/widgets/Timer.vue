@@ -25,10 +25,10 @@
 </template>
 
 <script>
-import Widget from "../card/Widget.vue";
+import Widget from '../card/Widget.vue'
 
 export default {
-  name: "Timer",
+  name: 'Timer',
   props: {
     customIndex: {
       type: Number,
@@ -43,7 +43,7 @@ export default {
       type: Object,
     }
   },
-  data() {
+  data () {
     return {
       options: {
         className: 'card small',
@@ -58,15 +58,15 @@ export default {
     Widget
   },
   methods: {
-    start() {
+    start () {
       this.$router.push(
           {
             name: 'tomatoStart'
           }
-      );
+      )
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

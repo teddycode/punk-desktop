@@ -1,7 +1,8 @@
 <template>
   <div class="flex flex-col memberinfo-main">
     <div class="flex" style="margin:25px !important;">
-      <FrameAvatar :avatarSize="50" :avatarUrl="info.userinfo?.avatar" :frame="info.eq?.frameDetail" :frameUrl="info.eq?.frameDetail?.image"
+      <FrameAvatar :avatarSize="50" :avatarUrl="info.userinfo?.avatar" :frame="info.eq?.frameDetail"
+                   :frameUrl="info.eq?.frameDetail?.image"
                    class="frame"></FrameAvatar>
 
       <div class="flex flex-col" style="margin-left: 30px;">
@@ -44,7 +45,7 @@
 </template>
 
 <script>
-import {defineComponent, reactive, toRefs} from 'vue'
+import { defineComponent, reactive, toRefs } from 'vue'
 import FrameAvatar from '../../../../../components/avatar/FrameAvatar.vue'
 import LevelIcon from '../../../../../components/small/LevelIcon.vue'
 import Medal from '../../../../../components/team/Medal.vue'
@@ -62,7 +63,7 @@ const memberInfo = defineComponent({
     FrameAvatar, LevelIcon, Medal, OnlineMedal
   },
 
-  setup(props, ctx) {
+  setup (props, ctx) {
     const data = reactive({})
 
     const initiateChat = () => {  // 发起聊天

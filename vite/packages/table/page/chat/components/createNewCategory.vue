@@ -22,25 +22,25 @@
 </template>
 
 <script>
-import {mapActions} from 'pinia'
-import {Icon as CategoryIcon} from '@iconify/vue'
-import {communityStore} from '../store/communityStore'
-import {message} from 'ant-design-vue'
+import { mapActions } from 'pinia'
+import { Icon as CategoryIcon } from '@iconify/vue'
+import { communityStore } from '../store/communityStore'
+import { message } from 'ant-design-vue'
 
 export default {
-  props: ["no"],
+  props: ['no'],
 
   components: {
     CategoryIcon
   },
 
-  data() {
+  data () {
     return {
       categoryName: '',
     }
   },
 
-  mounted() {
+  mounted () {
     this.$nextTick(() => {
       const inputDom = document.querySelector('.search')
       inputDom.focus()
@@ -50,12 +50,12 @@ export default {
   methods: {
     ...mapActions(communityStore, ['createChannel', 'getCategoryData']),
     // 关闭弹窗
-    closeNewGroup() {
+    closeNewGroup () {
       this.$emit('close')
     },
 
     // 创建完成
-    async submitCategory() {
+    async submitCategory () {
       if (this.categoryName !== '' && this.no !== '1') {
         const option = {
           name: this.categoryName, communityNo: this.no,

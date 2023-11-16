@@ -273,20 +273,20 @@ import {
   TagFilled,
   UnlockFilled,
   UpOutlined
-} from "@ant-design/icons-vue";
-import {appStore} from "../store";
-import {mapActions, mapState, mapWritableState} from "pinia";
-import vueCustomScrollbar from "../../../src/components/vue-scrollbar.vue";
-import {Empty, message} from "ant-design-vue";
+} from '@ant-design/icons-vue'
+import { appStore } from '../store'
+import { mapActions, mapState, mapWritableState } from 'pinia'
+import vueCustomScrollbar from '../../../src/components/vue-scrollbar.vue'
+import { Empty, message } from 'ant-design-vue'
 import ColorImg from '../components/ColorImg.vue'
-import {getBgColorFromEntry} from '../util'
+import { getBgColorFromEntry } from '../util'
 import _ from 'lodash-es'
 
-let {appModel, devAppModel} = window.$models;
-let appId = window.globalArgs["app-id"];
-const {passwordModel} = window.$models
+let { appModel, devAppModel } = window.$models
+let appId = window.globalArgs['app-id']
+const { passwordModel } = window.$models
 export default {
-  name: "Passwords",
+  name: 'Passwords',
   components: {
     vueCustomScrollbar,
     SettingOutlined, LaptopOutlined,
@@ -300,7 +300,7 @@ export default {
     DownOutlined, CheckOutlined,
     ApiFilled, ColorImg
   },
-  data() {
+  data () {
     return {
       settings: {
         swipeEasing: true,
@@ -309,9 +309,7 @@ export default {
         wheelPropagation: false
       },
 
-
       url: '',//当前标签页的url
-
 
       importStep: 0,
       importVisible: false,
@@ -328,8 +326,7 @@ export default {
         pushCount: 0//推版本数量
       },
 
-
-      activeNav: ["base"],
+      activeNav: ['base'],
       user: {
         user_info: {},
       },
@@ -343,13 +340,13 @@ export default {
       simpleImage: Empty.PRESENTED_IMAGE_SIMPLE,
       // 列表默认下标
       checkNick: false,
-      size: "large",
+      size: 'large',
       sideDrawerVisible: false,
 
       // 筛选菜单列表下标
       selectDrawerIndex: 1,
       totalOpen: true,
-      contextItems: "",
+      contextItems: '',
       // 当前网站
       noWebIndex: '',
       state: appStore(),
@@ -372,7 +369,7 @@ export default {
 
     ...mapState(appStore, ['displayPasswords']),
     ...mapWritableState(appStore, ['passwordItem', 'dbList', 'currentTab', 'tags', 'filterInfo', 'siteCard', 'searchKey', 'currentIndex']),
-    listHeight() {
+    listHeight () {
       let height = ''
       if (this.filterInfo.type === 'tab') {
         if (this.contentControlShow) {
@@ -385,7 +382,7 @@ export default {
       }
       return 'calc( 100vh - ' + height + 'px)'
     },
-    displayTags() {
+    displayTags () {
       return this.tags.map((tag, index) => {
         return {
           id: tag,
@@ -395,7 +392,7 @@ export default {
         }
       })
     },
-    myDbList() {
+    myDbList () {
       let i = 0
 
       return this.dbList.filter(item => {
@@ -406,7 +403,7 @@ export default {
         i++
       })
     },
-    selectMenuList() {
+    selectMenuList () {
 
       return [{
         id: 1001,
@@ -430,7 +427,7 @@ export default {
           icon: 'LinkOutlined',
           divider: 1,
           onClick: () => {
-            this.setFilter('TAB', {url: this.url})
+            this.setFilter('TAB', { url: this.url })
             console.log('选择当前网站', this.url)
           }
         },
@@ -448,7 +445,7 @@ export default {
 
   },
 
-  async mounted() {
+  async mounted () {
     this.getTabData()
     //获取到前面5个最近的库
     this.selectMenuList.children = this.dbList.map(item => {
@@ -461,7 +458,7 @@ export default {
     if (params.type === 'url') {
       this.url = params.value
       await this.loadCurrentDb()
-      this.setFilter('TAB', {url: this.url})
+      this.setFilter('TAB', { url: this.url })
       //todo是路径方式
       await this.getAllPasswords()
       if (this.$route.params.uuid && this.$route.params.target === 'remark' && !window.redirected) {
@@ -528,7 +525,6 @@ export default {
       //
       // })
 
-
     } else if (params.type === 'all') {
       //是直接查看全部的密码
       this.setFilter('ALL')
@@ -536,23 +532,23 @@ export default {
     }
   },
   methods: {
-    createPwd() {
+    createPwd () {
       this.createEntry()
       this.saveDb(result => {
         message.success('新建密码成功。')
       })
     },
-    goRemark(params) {
-      this.$router.push({name: 'remark', params: {uuid: params.uuid}})
+    goRemark (params) {
+      this.$router.push({ name: 'remark', params: { uuid: params.uuid } })
     },
-    getColor(data) {
+    getColor (data) {
       return getBgColorFromEntry(data)
     },
     ...mapActions(appStore, ['getTabData', 'importPasswords', 'getAllPasswords', 'setFilter', 'loadCurrentDb', 'createEntry', 'saveDb']),
-    showImport() {
+    showImport () {
       this.importVisible = true
     },
-    async doImportNext() {
+    async doImportNext () {
       switch (this.importStep) {
         case 0:
           //todo验证密码
@@ -560,7 +556,7 @@ export default {
           this.importGroupName = '导入密码_' + (new Date(Date.now())).toLocaleString()
           console.log(this.innerPasswords)
           this.importStep++
-          break;
+          break
         case 1:
           //todo 导入密码
           if (this.importGroup) {
@@ -573,26 +569,26 @@ export default {
           } else {
             message.error('导入遇到意外错误。')
           }
-          break;
+          break
         case 2:
-          this.importVisible = false;
+          this.importVisible = false
           this.importStep = 0
       }
     },
-    doImportPasswords() {
+    doImportPasswords () {
       this.importResult = this.importPasswords(this.innerPasswords, this.importGroup ? this.importGroupName : undefined, this.existAction, this.importDelete ? 'delete' : 'none')
       return true
     },
     // 搜索触发做的事情
-    searchClick() {
+    searchClick () {
     },
     // 开启抽屉式的选项
-    selectOptions() {
-      this.sideDrawerVisible = true;
+    selectOptions () {
+      this.sideDrawerVisible = true
     },
     // 左侧列表点击
-    leftDescription(item) {
-      this.currentIndex = item.id;
+    leftDescription (item) {
+      this.currentIndex = item.id
       this.passwordItem = item
       this.$router.push({
         name: 'detail',
@@ -602,7 +598,7 @@ export default {
       })
     },
     // 筛选菜单中子项选中
-    selectListItem(v) {
+    selectListItem (v) {
       this.filterText = v.text
       this.selectDrawerIndex = v.id
       this.filterIcon = v.icon
@@ -610,15 +606,15 @@ export default {
       this.sideDrawerVisible = false
       document.querySelector('.drawer-main-application-open').classList.remove('active-drawer')
     },
-    selectMyPassword(v) {
+    selectMyPassword (v) {
       this.filterText = v.text
       this.selectDrawerIndex = v.id
       this.filterIcon = v.icon
       this.filterId = v.id
     },
     // 当前网站点击
-    currentDescription(item) {
-      this.currentIndex = v.id;
+    currentDescription (item) {
+      this.currentIndex = v.id
       this.passwordItem = item
       this.$router.push({
         name: 'detail'
@@ -626,54 +622,54 @@ export default {
     },
 
     // 主应用打开跳转到对应的路由地址
-    openMainApplication() {
+    openMainApplication () {
       document.querySelector('.drawer-main-application-open').classList.add('active-drawer')
       this.selectDrawerIndex = ''
       this.sideDrawerVisible = false
     },
     // 鼠标移入开始
-    passwordHover() {
-      document.querySelector(".password-select").style =
-          "background:rgba(80, 139, 254, 0.1);";
+    passwordHover () {
+      document.querySelector('.password-select').style =
+          'background:rgba(80, 139, 254, 0.1);'
     },
-    passwordItemsHover(v) {
-      v.showTip = true;
+    passwordItemsHover (v) {
+      v.showTip = true
     },
     // 鼠标移入结束
     // 鼠标移出开始
-    passwordRemove() {
-      document.querySelector(".password-select").style =
-          "background:rgba(255, 255, 255, 1);";
+    passwordRemove () {
+      document.querySelector('.password-select').style =
+          'background:rgba(255, 255, 255, 1);'
     },
-    passwordItemRemove(v) {
-      v.showTip = false;
+    passwordItemRemove (v) {
+      v.showTip = false
     },
     // 鼠标移出结束
     // 筛选列表点击
-    getDrawerItem() {
+    getDrawerItem () {
 
     },
     // 当前网站点击
-    currentWebSiteClick(v) {
+    currentWebSiteClick (v) {
       this.noWebIndex = v.id
       this.state.$patch({
         passwordItem: v
       })
     },
     // 控制当前网站内容的形式和隐藏
-    currentContentControl() {
+    currentContentControl () {
       this.contentControlShow = !this.contentControlShow
     },
     // 打开填充按钮
-    openFillClick(item) {
-      ipc.send('openTabFill', {password: _.cloneDeep(item)})
+    openFillClick (item) {
+      ipc.send('openTabFill', { password: _.cloneDeep(item) })
     },
-    openSubTabFillClick(item) {
-      ipc.send('openSubTabFillClick', {password: _.cloneDeep(item)})
+    openSubTabFillClick (item) {
+      ipc.send('openSubTabFillClick', { password: _.cloneDeep(item) })
     }
 
   }
-};
+}
 </script>
 <style lang="scss">
 .full-modal {

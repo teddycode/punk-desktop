@@ -24,8 +24,8 @@
 
 <script>
 export default {
-  name: "Classification",
-  data() {
+  name: 'Classification',
+  data () {
     return {
       activeItem: 0,
     }
@@ -33,11 +33,11 @@ export default {
   computed: {},
   props: ['navClassify', 'show'],
   methods: {
-    closeAdd() {
-      this.$emit("update:show", false);
+    closeAdd () {
+      this.$emit('update:show', false)
     },
-    clickItem(item, index) {
-      this.activeItem = index;
+    clickItem (item, index) {
+      this.activeItem = index
       this.$emit('clickLeftList', item)
     }
   },

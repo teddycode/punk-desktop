@@ -9,10 +9,10 @@ export default {
   name: 'BackBtn',
   props: ['onClick'],
   emits: ['click'],
-  mounted() {
+  mounted () {
 
   }, methods: {
-    click() {
+    click () {
       if (!this.onClick) {
         console.log(this.$route)
         console.log(window.history)

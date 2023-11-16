@@ -67,7 +67,8 @@
             <!-- 循环类型 -->
             <div v-for="(item,index) in keyList"
                  :key="item.id"
-                 :style="{backgroundColor:!item.groupName?getColor(currentKeyList,index+(page-1)*12) :'' }" class=" key-wrapper">
+                 :style="{backgroundColor:!item.groupName?getColor(currentKeyList,index+(page-1)*12) :'' }"
+                 class=" key-wrapper">
               <!-- 标题 -->
               <div v-if="item.groupName" class="key-item">
                 <div class="key-name truncate">
@@ -116,13 +117,13 @@
 
 <script>
 import Widget from '../../../components/card/Widget.vue'
-import {Icon} from '@iconify/vue'
+import { Icon } from '@iconify/vue'
 import RadioTab from '../../../components/RadioTab.vue'
-import {defineComponent} from 'vue'
-import {LeftOutlined, RightOutlined} from '@ant-design/icons-vue'
-import {keyStore} from '../store'
-import {mapActions, mapState} from 'pinia'
-import {getColor} from '../lib/lib'
+import { defineComponent } from 'vue'
+import { LeftOutlined, RightOutlined } from '@ant-design/icons-vue'
+import { keyStore } from '../store'
+import { mapActions, mapState } from 'pinia'
+import { getColor } from '../lib/lib'
 // import BottomEdit from "..";
 export default {
   components: {
@@ -154,7 +155,7 @@ export default {
       type: Boolean,
     },
   },
-  data() {
+  data () {
     return {
       selectedScheme: null,
       page: 1,
@@ -164,10 +165,10 @@ export default {
       // 选择快捷键方案
       // 需要在小组件显示的数据
       dataType: [
-        {title: '最近使用列表', name: 'recent'},
-        {title: '指定快捷键详情', name: 'showDetail'}
+        { title: '最近使用列表', name: 'recent' },
+        { title: '指定快捷键详情', name: 'showDetail' }
       ],
-      defaultType: {title: '最近使用列表', name: 'recent'},
+      defaultType: { title: '最近使用列表', name: 'recent' },
       options: {
         className: 'card double',
         title: '快捷键',
@@ -477,26 +478,26 @@ export default {
   },
   watch: {
     defaultType: {
-      handler() {
+      handler () {
         this.saveData()
       }
     },
     selValue: {
-      handler() {
+      handler () {
         this.saveData()
       }
     }
   },
   computed: {
     ...mapState(keyStore, ['recentlyUsedList']),
-    displayList() {
+    displayList () {
       if (this.recentlyUsedList) {
         return this.recentlyUsedList.slice(0, 6)
       } else {
         return []
       }
     },
-    selectOptions() {
+    selectOptions () {
       return this.recentlyUsedList.map(item => {
         return {
           value: item.id,
@@ -504,7 +505,7 @@ export default {
         }
       })
     },
-    keyList() {
+    keyList () {
       let found = this.recentlyUsedList.find(item => {
         console.log(item, this.selValue)
         return item.id === this.selValue
@@ -517,10 +518,10 @@ export default {
         return []
       }
     },
-    hasNext() {
+    hasNext () {
       return this.currentKeyList.slice(this.page * 12, (this.page + 1) * 12).length > 0
     },
-    selectedScheme() {
+    selectedScheme () {
       let found = this.recentlyUsedList.find(item => {
         return item.id === this.selValue
       })
@@ -531,17 +532,17 @@ export default {
       }
     }
   },
-  async mounted() {
+  async mounted () {
     this.loadData()
   },
   methods: {
     getColor,
     ...mapActions(keyStore, ['setRecentlyUsedList']),
-    saveData() {
+    saveData () {
       this.customData.defaultType = this.defaultType
       this.customData.selctedSchemeId = this.selValue
     },
-    loadData() {
+    loadData () {
       if (this.customData.defaultType) {
         this.defaultType = this.customData.defaultType
       }
@@ -550,14 +551,14 @@ export default {
       }
 
     },
-    enterDetail(item) {
+    enterDetail (item) {
       this.setRecentlyUsedList(item)
       this.$router.push({
         name: 'schemeDetail'
       })
     },
     // 换页
-    onChangePage(type) {
+    onChangePage (type) {
       // type
       if (type === 'next') {
         if (this.hasNext) {
@@ -571,10 +572,10 @@ export default {
       }
     },
 
-    handleChange(value) {
+    handleChange (value) {
       console.log(`selected ${value}`)
     },
-    filterOption(input, option) {
+    filterOption (input, option) {
       return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
     },
 

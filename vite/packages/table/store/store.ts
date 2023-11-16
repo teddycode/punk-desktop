@@ -12,6 +12,7 @@ const agent = new https.Agent({
     rejectUnauthorized: false
 })
 
+// @ts-ignore
 export const oilStore = defineStore("OilPrices", {
     state: () => ({
         cityOilData: [],
@@ -75,7 +76,6 @@ export const oilStore = defineStore("OilPrices", {
 
             }
         }
-
     },
     persist: {
         enabled: true,

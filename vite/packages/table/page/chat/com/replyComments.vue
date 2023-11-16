@@ -48,7 +48,8 @@
         </a-tooltip>
       </a-upload>
     </div>
-    <xt-button class=" reply xt-text" style="color: var(--secondary-text) !important; border-radius: 8px;width: 68px; height: 32px;background: var(--active-bg) !important;"
+    <xt-button class=" reply xt-text"
+               style="color: var(--secondary-text) !important; border-radius: 8px;width: 68px; height: 32px;background: var(--active-bg) !important;"
                type="primary"
                @click="addComment">回复
     </xt-button>

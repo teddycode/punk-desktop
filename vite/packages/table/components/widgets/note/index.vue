@@ -65,13 +65,13 @@
 </template>
 
 <script>
-import Widget from "../../card/Widget.vue";
-import cardSizeHook from "../../card/hooks/cardSizeHook";
-import cardDrag from "../../card/hooks/cardDrag.vue";
-import cardDragHook from "../../card/hooks/cardDragHook";
-import {message} from "ant-design-vue";
-import {Icon} from '@iconify/vue';
-import notepad12Regular from '@iconify-icons/fluent/notepad-12-regular';
+import Widget from '../../card/Widget.vue'
+import cardSizeHook from '../../card/hooks/cardSizeHook'
+import cardDrag from '../../card/hooks/cardDrag.vue'
+import cardDragHook from '../../card/hooks/cardDragHook'
+import { message } from 'ant-design-vue'
+import { Icon } from '@iconify/vue'
+import notepad12Regular from '@iconify-icons/fluent/notepad-12-regular'
 
 export default {
   name: '便签',
@@ -104,35 +104,35 @@ export default {
   directives: {
     // reSize,
   },
-  data() {
+  data () {
     return {
-      fontColors: ["white", "black", "red", "green", "blue"],
-      fontColor: "white",
+      fontColors: ['white', 'black', 'red', 'green', 'blue'],
+      fontColor: 'white',
       options: {
-        className: "card",
-        title: "桌面便签",
-        icon: "",
+        className: 'card',
+        title: '桌面便签',
+        icon: '',
         // icon: "bianji",
-        type: "games",
+        type: 'games',
         isEdit: true,
       },
       settingVisible: false,
       menuList: [
         {
-          icon: "shezhi1",
-          title: "设置",
+          icon: 'shezhi1',
+          title: '设置',
           fn: () => {
-            this.$refs.homelSlotRef.visible = false;
-            this.settingVisible = true;
+            this.$refs.homelSlotRef.visible = false
+            this.settingVisible = true
           },
         },
       ],
       color: {
-        color1: "linear-gradient(-33deg, #545454 0%, #AC9555 1%, #A3625D 100%)",
-        color2: "linear-gradient(-53deg, #545454 0%, #ACA955 1%, #A3865D 100%)",
-        color3: "linear-gradient(-33deg, #545454 0%, #90AC55 1%, #5DA36D 100%)",
-        color4: "linear-gradient(-53deg, #545454 0%, #5564AC 1%, #7E5DA3 100%)",
-        color5: "linear-gradient(-64deg, #545454 0%, #55A2AC 1%, #5D7BA3 100%)",
+        color1: 'linear-gradient(-33deg, #545454 0%, #AC9555 1%, #A3625D 100%)',
+        color2: 'linear-gradient(-53deg, #545454 0%, #ACA955 1%, #A3865D 100%)',
+        color3: 'linear-gradient(-33deg, #545454 0%, #90AC55 1%, #5DA36D 100%)',
+        color4: 'linear-gradient(-53deg, #545454 0%, #5564AC 1%, #7E5DA3 100%)',
+        color5: 'linear-gradient(-64deg, #545454 0%, #55A2AC 1%, #5D7BA3 100%)',
 
         // color1: "linear-gradient(-45deg, #545454 0%, #C1E65B 0%, #71E293 100%)",
         // color2: "linear-gradient(-45deg, #545454 0%, #51E191 0%, #42CAAB 100%)",
@@ -150,103 +150,103 @@ export default {
         // color14:"linear-gradient(-45deg, #545454 0%, #F9F8F9 0%, #F2F1F2 100%)",
         // color15:"linear-gradient(-45deg, #252A31 0%, #30373F 0%, #15161A 100%)",
       },
-      text: "",
-      background: "",
+      text: '',
+      background: '',
       icons: {
         notepad12Regular,
       },
-    };
+    }
   },
-  created() {
-    let setData = {};
+  created () {
+    let setData = {}
     if (!this.customData.background) {
-      setData.background = this.color.color1;
+      setData.background = this.color.color1
     }
     if (!this.customData.text) {
-      setData.text = "";
+      setData.text = ''
     }
     if (!this.customData.color) {
-      setData.colors = "#ffffff";
+      setData.colors = '#ffffff'
     }
     if (this.customData.fontColor) {
-      this.fontColor = this.customData.fontColor;
+      this.fontColor = this.customData.fontColor
     }
     if (Object.keys(setData)) {
-      this.updateCustomData(this.customIndex, setData, this.desk);
+      this.updateCustomData(this.customIndex, setData, this.desk)
     }
   },
-  mounted() {
-    this.text = this.customData.text;
-    this.background = this.customData.background;
-    this.colors = this.customData.color;
+  mounted () {
+    this.text = this.customData.text
+    this.background = this.customData.background
+    this.colors = this.customData.color
     if (!this.customData.fontColor) {
-      this.fontColor = "white";
+      this.fontColor = 'white'
     }
   },
 
   methods: {
-    updateText() {
+    updateText () {
       this.updateCustomData(
           this.customIndex,
           {
             text: this.text,
           },
           this.desk
-      );
+      )
     },
-    updateBackground(backgroundColor) {
+    updateBackground (backgroundColor) {
       message.success({
-        content: "设置卡片背景成功",
-        key: "bg",
-      });
+        content: '设置卡片背景成功',
+        key: 'bg',
+      })
       this.updateCustomData(
           this.customIndex,
           {
             background: backgroundColor,
           },
           this.desk
-      );
-      this.background = backgroundColor;
+      )
+      this.background = backgroundColor
       if (
           backgroundColor ==
-          "linear-gradient(-45deg, #545454 0%, #F9F8F9 0%, #F2F1F2 100%)"
+          'linear-gradient(-45deg, #545454 0%, #F9F8F9 0%, #F2F1F2 100%)'
       ) {
         this.updateCustomData(
             this.customIndex,
             {
-              color: "#000000",
+              color: '#000000',
             },
             this.desk
-        );
-        this.colors = "#000000";
+        )
+        this.colors = '#000000'
       } else {
         this.updateCustomData(
             this.customIndex,
             {
-              color: "#ffffff",
+              color: '#ffffff',
             },
             this.desk
-        );
-        this.colors = "#ffffff";
+        )
+        this.colors = '#ffffff'
       }
     },
-    updateFontColor(color) {
+    updateFontColor (color) {
       message.success({
-        content: "设置字体颜色成功",
-        key: "color",
-      });
+        content: '设置字体颜色成功',
+        key: 'color',
+      })
       this.updateCustomData(
           this.customIndex,
           {
             fontColor: color,
           },
           this.desk
-      );
-      this.fontColor = color;
+      )
+      this.fontColor = color
     },
 
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

@@ -24,15 +24,15 @@
 </template>
 
 <script>
-import {DashboardOutlined, RocketOutlined} from '@ant-design/icons-vue'
-import {defineComponent} from "vue";
+import { DashboardOutlined, RocketOutlined } from '@ant-design/icons-vue'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   components: {
     DashboardOutlined,
     RocketOutlined
   },
-  data() {
+  data () {
     return {
       usage: '',
       free: '',
@@ -43,11 +43,11 @@ export default defineComponent({
     }
   },
   methods: {
-    release() {
+    release () {
       ipc.send('toolbar.speedup')
     }
   },
-  mounted() {
+  mounted () {
     ipc.on('getMemory', (event, args) => {
       this.usage = (args.mem.mem.usedMemMb / 1024).toFixed(1)
       this.total = (args.mem.mem.totalMemMb / 1024).toFixed(1)

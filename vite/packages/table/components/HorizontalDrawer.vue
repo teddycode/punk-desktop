@@ -6,7 +6,8 @@
     <vue-custom-scrollbar :settings="settingsScroller" style="height: 86vh;" @touchstart.stop @touchmove.stop
                           @touchend.stop>
       <div v-for="(item,index) in rightSelect"
-           :class="defaultGameIndex === index ? 'drawer-active':''" class="w-full h-12 flex items-center  justify-center pointer my-4 rounded-lg s-list"
+           :class="defaultGameIndex === index ? 'drawer-active':''"
+           class="w-full h-12 flex items-center  justify-center pointer my-4 rounded-lg s-list"
            @click="selectedAreaSuit(item,index)"
       >
         {{ item.name }}
@@ -25,7 +26,7 @@ export default {
     },
     selectRegion: String,
   },
-  data() {
+  data () {
     return {
       detailDisplay: false,
       settingsScroller: {
@@ -38,26 +39,26 @@ export default {
       defaultGameIndex: 0,
     }
   },
-  mounted() {
+  mounted () {
     this.posRegion()
   },
   watch: {
     'selectRegion': {
-      handler() {
+      handler () {
         this.posRegion()
       }
     }
   },
   methods: {
-    openDrawer() {
+    openDrawer () {
       this.detailDisplay = true
     },
-    selectedAreaSuit(item, index) {
+    selectedAreaSuit (item, index) {
       this.$emit('getArea', item)
       this.defaultGameIndex = index
       this.detailDisplay = false
     },
-    posRegion() {
+    posRegion () {
       if (this.selectRegion) {
         if (this.selectRegion && this.rightSelect.length > 0) {
           this.defaultGameIndex = this.rightSelect.findIndex(el => {

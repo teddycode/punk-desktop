@@ -41,23 +41,23 @@ text-overflow:ellipsis; ">
 </template>
 
 <script>
-import {message, Modal} from 'ant-design-vue'
+import { message, Modal } from 'ant-design-vue'
 
 const appModel = window.$models.appModel
 export default {
   name: 'AppItem',
   props: ['app'],
-  data() {
+  data () {
 
   },
   methods: {
-    executeApp(app) {
-      console.log('启动app', {app: JSON.parse(JSON.stringify(app))})
-      ipc.send('executeApp', {app: JSON.parse(JSON.stringify(app))})
+    executeApp (app) {
+      console.log('启动app', { app: JSON.parse(JSON.stringify(app)) })
+      ipc.send('executeApp', { app: JSON.parse(JSON.stringify(app)) })
       //this.searchWords=''
       this.searchWords = ''
     },
-    uninstall(app) {
+    uninstall (app) {
       Modal.confirm({
         title: '确定卸载此应用？',
         content: '此操作将卸载应用并清空所有应用数据，且无法还原。请谨慎操作。',
@@ -67,21 +67,21 @@ export default {
         onOk: () => {
           this.$emit('uninstall', app)
         },
-        onCancel() {
+        onCancel () {
           console.log('Cancel')
         },
       })
     },
-    openSetting(appId) {
-      ipc.send('saAppOpenSetting', {nanoid: appId})
+    openSetting (appId) {
+      ipc.send('saAppOpenSetting', { nanoid: appId })
     },
-    async addFav(app) {
+    async addFav (app) {
       await appModel.addFav(app.nanoid)
       app.is_fav = true
       this.$emit('favUpdated')
       message.success('成功添加到收藏列表')
     },
-    async removeFav(app) {
+    async removeFav (app) {
       await appModel.removeFav(app.nanoid)
       this.$emit('favUpdated')
       app.is_fav = false

@@ -150,8 +150,8 @@
   </vueCustomScrollbar>
 </template>
 <script>
-import {Icon} from '@iconify/vue';
-import dismiss16Filled from '@iconify-icons/fluent/dismiss-16-filled';
+import { Icon } from '@iconify/vue'
+import dismiss16Filled from '@iconify-icons/fluent/dismiss-16-filled'
 
 export default {
   name: 'Promotion',
@@ -159,7 +159,7 @@ export default {
     Icon
   },
   computed: {},
-  data() {
+  data () {
     return {
       promptVisible: false,
       // 推广员 or 待审核
@@ -169,10 +169,10 @@ export default {
       },
       dataNum: 123,
       search: {
-        promoterId: "",
-        keyCode: "",
-        higherId: "",
-        agency: "",
+        promoterId: '',
+        keyCode: '',
+        higherId: '',
+        agency: '',
 
       },
 
@@ -185,123 +185,123 @@ export default {
         wheelPropagation: true
       },
       detailList: {
-        title: "提现明细",
+        title: '提现明细',
         // 搜索条件
-        time: "",
-        state: "",
+        time: '',
+        state: '',
         data: [
           {
-            user: "jojo",
-            keyCode: "jojo666",
-            total: "1898.0",
-            agentNum: "-",
-            agentIncome: "-",
-            balance: "916",
-            monthIncome: "916",
-            dayIncome: "916",
-            activationRate: "98%",
-            agencyLevel: "二级",
-            cooTime: "2023-08-06 18:12",
+            user: 'jojo',
+            keyCode: 'jojo666',
+            total: '1898.0',
+            agentNum: '-',
+            agentIncome: '-',
+            balance: '916',
+            monthIncome: '916',
+            dayIncome: '916',
+            activationRate: '98%',
+            agencyLevel: '二级',
+            cooTime: '2023-08-06 18:12',
           },
           {
-            user: "jojo",
-            keyCode: "jojo777",
-            total: "1898.0",
-            agentNum: "-",
-            agentIncome: "-",
-            balance: "916",
-            monthIncome: "916",
-            dayIncome: "916",
-            activationRate: "98%",
-            agencyLevel: "二级",
-            cooTime: "2023-08-06 18:12",
+            user: 'jojo',
+            keyCode: 'jojo777',
+            total: '1898.0',
+            agentNum: '-',
+            agentIncome: '-',
+            balance: '916',
+            monthIncome: '916',
+            dayIncome: '916',
+            activationRate: '98%',
+            agencyLevel: '二级',
+            cooTime: '2023-08-06 18:12',
           },
           {
-            user: "jojo",
-            keyCode: "jojo888",
-            total: "1898.0",
-            agentNum: "-",
-            agentIncome: "-",
-            balance: "916",
-            monthIncome: "916",
-            dayIncome: "916",
-            activationRate: "98%",
-            agencyLevel: "二级",
-            cooTime: "2023-08-06 18:12",
+            user: 'jojo',
+            keyCode: 'jojo888',
+            total: '1898.0',
+            agentNum: '-',
+            agentIncome: '-',
+            balance: '916',
+            monthIncome: '916',
+            dayIncome: '916',
+            activationRate: '98%',
+            agencyLevel: '二级',
+            cooTime: '2023-08-06 18:12',
           },
           {
-            user: "jojo",
-            keyCode: "jojo999",
-            total: "1898.0",
-            agentNum: "-",
-            agentIncome: "-",
-            balance: "916",
-            monthIncome: "916",
-            dayIncome: "916",
-            activationRate: "98%",
-            agencyLevel: "二级",
-            cooTime: "2023-08-06 18:12",
+            user: 'jojo',
+            keyCode: 'jojo999',
+            total: '1898.0',
+            agentNum: '-',
+            agentIncome: '-',
+            balance: '916',
+            monthIncome: '916',
+            dayIncome: '916',
+            activationRate: '98%',
+            agencyLevel: '二级',
+            cooTime: '2023-08-06 18:12',
           },
         ]
       },
       detailCol: [
         {
-          title: "用户",
-          dataIndex: "user",
-          key: "user"
+          title: '用户',
+          dataIndex: 'user',
+          key: 'user'
         },
         {
-          title: "口令",
-          dataIndex: "keyCode",
-          key: "keyCode"
+          title: '口令',
+          dataIndex: 'keyCode',
+          key: 'keyCode'
         },
         {
-          title: "总收益",
-          dataIndex: "total",
-          key: "total",
+          title: '总收益',
+          dataIndex: 'total',
+          key: 'total',
           width: 80,
         },
         {
-          title: "下级代理数",
-          dataIndex: "agentNum",
-          key: "agentNum",
+          title: '下级代理数',
+          dataIndex: 'agentNum',
+          key: 'agentNum',
           width: 80,
         },
         {
-          title: "下级代理收益",
-          dataIndex: "agentIncome",
-          key: "agentIncome",
+          title: '下级代理收益',
+          dataIndex: 'agentIncome',
+          key: 'agentIncome',
           width: 80,
         },
         {
-          title: "钱包余额",
-          dataIndex: "balance",
-          key: "balance"
+          title: '钱包余额',
+          dataIndex: 'balance',
+          key: 'balance'
         },
         {
-          title: "当月收益",
-          dataIndex: "monthIncome",
-          key: "monthIncome"
+          title: '当月收益',
+          dataIndex: 'monthIncome',
+          key: 'monthIncome'
         },
         {
-          title: "当日收益",
-          dataIndex: "dayIncome",
-          key: "dayIncome"
+          title: '当日收益',
+          dataIndex: 'dayIncome',
+          key: 'dayIncome'
         },
         {
-          title: "总激活率",
-          dataIndex: "activationRate",
-          key: "activationRate"
+          title: '总激活率',
+          dataIndex: 'activationRate',
+          key: 'activationRate'
         },
         {
-          title: "代理层级",
-          dataIndex: "agencyLevel",
-          key: "agencyLevel"
+          title: '代理层级',
+          dataIndex: 'agencyLevel',
+          key: 'agencyLevel'
         },
         {
-          title: "合作时间",
-          dataIndex: "cooTime",
-          key: "cooTime",
+          title: '合作时间',
+          dataIndex: 'cooTime',
+          key: 'cooTime',
           width: 180,
         },
         {
@@ -313,28 +313,28 @@ export default {
       ],
       keyCodeCol: [
         {
-          title: "口令",
-          dataIndex: "keyCode",
-          key: "keyCode"
+          title: '口令',
+          dataIndex: 'keyCode',
+          key: 'keyCode'
         },
         {
-          title: "有效期",
-          dataIndex: "validity",
-          key: "validity",
+          title: '有效期',
+          dataIndex: 'validity',
+          key: 'validity',
         },
         {
-          title: "推广数",
-          dataIndex: "promoNum",
-          key: "promoNum",
+          title: '推广数',
+          dataIndex: 'promoNum',
+          key: 'promoNum',
         },
         {
-          title: "激活率",
-          dataIndex: "activationRate",
-          key: "activationRate",
+          title: '激活率',
+          dataIndex: 'activationRate',
+          key: 'activationRate',
         },
         {
-          title: "操作",
-          key: "action",
+          title: '操作',
+          key: 'action',
         },
       ],
       keyCodeList: [
@@ -390,7 +390,7 @@ export default {
 
     }
   },
-  mounted() {
+  mounted () {
 
   },
   watch: {},

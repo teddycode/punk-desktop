@@ -44,11 +44,11 @@
 </template>
 
 <script>
-import {mapActions} from "pinia";
-import {cardStore} from "../../../store/card";
-import {message} from "ant-design-vue";
-import NewPreviewCardDetails from "./NewPreviewCardDetails.vue";
-import Market from "../../../components/card/remote/Market.vue";
+import { mapActions } from 'pinia'
+import { cardStore } from '../../../store/card'
+import { message } from 'ant-design-vue'
+import NewPreviewCardDetails from './NewPreviewCardDetails.vue'
+import Market from '../../../components/card/remote/Market.vue'
 
 export default {
   components: {
@@ -72,7 +72,7 @@ export default {
       },
     },
   },
-  data() {
+  data () {
     return {
       carouselIndex: 0,
       isCardDetails: false,
@@ -83,46 +83,46 @@ export default {
     }
   },
   methods: {
-    ...mapActions(cardStore, ["addCard"]),
-    close() {
+    ...mapActions(cardStore, ['addCard']),
+    close () {
       this.$emit('closeMarket', false)
     },
-    getImg(url) {
-      return "/img/addCard/" + url + ".png";
+    getImg (url) {
+      return '/img/addCard/' + url + '.png'
     },
-    addNewCard(item) {
+    addNewCard (item) {
       if (item.option[1] != undefined) {
-        this.fullScreen(item);
+        this.fullScreen(item)
       } else {
-        this.addCardAchieve(item);
+        this.addCardAchieve(item)
       }
     },
-    addCardAchieve(item, i) {
-      this.add(item, i);
+    addCardAchieve (item, i) {
+      this.add(item, i)
     },
-    fullScreen(item) {
-      this.cardDetails = item;
-      this.isCardDetails = true;
+    fullScreen (item) {
+      this.cardDetails = item
+      this.isCardDetails = true
     },
-    add(item, index = 0) {
-      console.log('item :>> ', item);
-      console.log(' item.option[index].name :>> ', item.option[index].name);
-      index = index ?? this.carouselIndex;
+    add (item, index = 0) {
+      console.log('item :>> ', item)
+      console.log(' item.option[index].name :>> ', item.option[index].name)
+      index = index ?? this.carouselIndex
       this.addCard(
-          {name: item.option[index].name, id: Date.now(), customData: {}},
+          { name: item.option[index].name, id: Date.now(), customData: {} },
           this.desk
-      );
-      this.$emit("closeMarket", false);
-      message.success("添加成功！");
+      )
+      this.$emit('closeMarket', false)
+      message.success('添加成功！')
     },
-    closeCardDetails() {
-      this.isCardDetails = false;
+    closeCardDetails () {
+      this.isCardDetails = false
     },
-    scrollBox(val) {
-      let scroll = document.getElementById('scroll-box');
+    scrollBox (val) {
+      let scroll = document.getElementById('scroll-box')
       // console.log(scroll.scrollHeight - scroll.scrollTop == scroll.clientHeight)
-      let nav = document.getElementById('nav');
-      let navList = document.getElementById('navList');
+      let nav = document.getElementById('nav')
+      let navList = document.getElementById('navList')
       if (scroll.scrollTop > 120) {
         nav.classList.add('suspension-r-nav')
         navList.classList.add('classList-contnet')
@@ -133,7 +133,7 @@ export default {
     }
   },
   watch: {
-    openRemote(val) {
+    openRemote (val) {
       if (val) {
 
       }

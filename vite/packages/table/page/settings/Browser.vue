@@ -14,18 +14,18 @@
 
 export default {
   name: 'Browser',
-  data() {
+  data () {
     return {
       openUrlBrowser: 'inner'
     }
   },
   computed: {},
-  async mounted() {
+  async mounted () {
     this.openUrlBrowser = await tsbApi.settings.get('openUrlBrowser') || 'inner'
   },
   watch: {
     openUrlBrowser: {
-      handler() {
+      handler () {
         tsbApi.settings.set('openUrlBrowser', this.openUrlBrowser)
       }
     }

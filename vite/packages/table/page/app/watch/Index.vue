@@ -16,7 +16,8 @@
                    class="monitor">
               <template #item="{ item }">
                 <Widget :uniqueKey="item.nanoid">
-                  <div class="p-2 bili-card" style="background: var(--primary-bg);color: var(--primary-text);" @click="goDashboard(item.nanoid)"
+                  <div class="p-2 bili-card" style="background: var(--primary-bg);color: var(--primary-text);"
+                       @click="goDashboard(item.nanoid)"
                        @contextmenu.stop="showMenu(item)">
                     <div class="text-more text-base mb-4 text-left">
                       <!--               <a-avatar :src="item.task.icon"></a-avatar> -->
@@ -121,7 +122,8 @@
                    class="monitor">
               <template #item="{ item }">
                 <Widget :uniqueKey="item.id">
-                  <div class="p-2 bili-card" style="background: var(--primary-bg);color: var(--primary-text);" @click="goDashboard(item.nanoid)"
+                  <div class="p-2 bili-card" style="background: var(--primary-bg);color: var(--primary-text);"
+                       @click="goDashboard(item.nanoid)"
                        @contextmenu.stop="showMenu(item)">
                     <div class="text-more text-base mb-4 text-left">
                       <!--               <a-avatar :src="item.task.icon"></a-avatar> -->
@@ -353,7 +355,8 @@
     </a-row>
 
   </a-drawer>
-  <a-modal v-model:visible="clickTipShow" :centered="true" :closable="false" :footer="null" :maskClosable="false" style="font-size: 8px"
+  <a-modal v-model:visible="clickTipShow" :centered="true" :closable="false" :footer="null" :maskClosable="false"
+           style="font-size: 8px"
            title="" @ok="()=>{}">
     <div class="flex flex-col items-center rounded-lg h-44 w-96 justify-evenly text-sm text-white mx-auto"
          style="background: rgba(33, 33, 33, 1);">
@@ -376,13 +379,13 @@
 </template>
 
 <script>
-import {message, Modal} from 'ant-design-vue'
+import { message, Modal } from 'ant-design-vue'
 import Vuuri from '../../../components/vuuri/Vuuri.vue'
 import Widget from '../../../components/muuri/Widget.vue'
 import bili from '../../../js/watch/bili'
 import BiliStage from '../../../components/watch/BiliStage.vue'
-import {fixHttp, formatSeconds} from '../../../util'
-import {powerState} from '../../../js/watch/grade'
+import { fixHttp, formatSeconds } from '../../../util'
+import { powerState } from '../../../js/watch/grade'
 
 export default {
   name: 'Index',
@@ -391,7 +394,7 @@ export default {
     Widget,
     Vuuri,
   },
-  data() {
+  data () {
     return {
       scrollbarSettings: {
         useBothWheelAxes: true,
@@ -436,9 +439,9 @@ export default {
     }
   },
   computed: {},
-  mounted() {
+  mounted () {
     this.lv = lv
-    const {blocking, superiorLimit, powerAlias, powerLv} = this.powerState('dataMonitoring', lv)
+    const { blocking, superiorLimit, powerAlias, powerLv } = this.powerState('dataMonitoring', lv)
     this.superiorLimit = superiorLimit
     this.blocking = blocking
     this.powerAlias = powerAlias
@@ -449,25 +452,25 @@ export default {
       this.updateExecutedTime()
     }, 1000)
   },
-  unmounted() {
+  unmounted () {
     tableApi.watch.setTaskUpdateHandler(null)//卸载处理器，防止不在这个页面上也执行这个处理方法
     this.cleanTaskIntervals()
     clearInterval(this.updateExecutedTimer)
   },
   methods: {
     powerState,
-    closeTip() {
+    closeTip () {
       this.clickTipShow = false
     },
-    goGrade() {
+    goGrade () {
       this.closeTip()
-      this.$router.push({name: 'grade'})
+      this.$router.push({ name: 'grade' })
     },
-    showMenu(task) {
+    showMenu (task) {
       this.currentTask = task
       this.menuVisible = true
     },
-    delTask() {
+    delTask () {
       this.menuVisible = false
       if (!this.currentTask) {
         console.warn('不存在任务', this.currentTask)
@@ -488,7 +491,7 @@ export default {
       })
     },
     fixHttp: fixHttp,
-    removeFromTasks(taskId) {
+    removeFromTasks (taskId) {
       let foundTasks = this.tasks.findIndex(t => {
         return t.nanoid === taskId
       })
@@ -511,16 +514,16 @@ export default {
         this.stoppedTasksKey = Date.now()
       }
     },
-    updateExecutedTime() {
+    updateExecutedTime () {
       this.runningTasks.forEach(task => {
         task.executed_time_until_now = this.formatSeconds((Date.now() - task.last_execute_time) / 1000)
       })
     },
     formatSeconds: formatSeconds,
-    friendlyDate(time) {
+    friendlyDate (time) {
       return tsbApi.util.friendlyDate(time)
     },
-    sortTasks() {
+    sortTasks () {
       this.runningTasks = this.tasks.filter(task => {
         return task.running
       })
@@ -532,14 +535,14 @@ export default {
     /**
      * 设置任务状态更新处理方法
      */
-    setUpTaskUpdateHandler() {
+    setUpTaskUpdateHandler () {
       tableApi.watch.setTaskUpdateHandler(this.taskUpdateHandler)
     },
     /**
      * 任务状态更新的处理器
      * @param task
      */
-    taskUpdateHandler(task) {
+    taskUpdateHandler (task) {
       this.tasks.forEach((t, index) => {
         if (t.nanoid === task.nanoid) {
           this.tasks.splice(index, 1)
@@ -548,7 +551,7 @@ export default {
       })
       this.sortTasks()
     },
-    startTask(task) {
+    startTask (task) {
       if (this.superiorLimit <= this.runningTasks.length || this.blocking === false) {
         this.clickTipShow = true
         return
@@ -556,10 +559,10 @@ export default {
       task.last_execute_time = Date.now()
       tableApi.watch.startTask(task)
     },
-    stopTask(task) {
+    stopTask (task) {
       tableApi.watch.stopTask(task)
     },
-    goDashboard(nanoid) {
+    goDashboard (nanoid) {
       this.$router.push({
         name: 'dashboard',
         params: {
@@ -567,7 +570,7 @@ export default {
         }
       })
     },
-    cleanTaskIntervals() {
+    cleanTaskIntervals () {
       try {
         let keys = Object.keys(this.taskIntervals)
         keys.forEach(key => {
@@ -578,7 +581,7 @@ export default {
         console.warn('清理计时器错误')
       }
     },
-    setupInterval(task) {
+    setupInterval (task) {
       if (!task.interval) {
         console.warn('task的interval不存在，默认赋值10s')
         task.interval = 10
@@ -590,7 +593,7 @@ export default {
         }
       }, task.interval * 1000)
     },
-    updateTask(id, info) {
+    updateTask (id, info) {
       this.tasks.forEach((t, index) => {
         if (t.nanoid === id) {
           this.tasks.splice(index, 1)
@@ -617,13 +620,13 @@ export default {
       })
     },
 
-    async updateTaskLatestData(task) {
+    async updateTaskLatestData (task) {
       let lastInfo = await tableApi.watch.getLatestData(task)
       if (lastInfo) {
         this.updateTask(task.nanoid, lastInfo)
       }
     },
-    async loadAllTasks() {
+    async loadAllTasks () {
       this.cleanTaskIntervals()
       let tasks = await tableApi.watch.listAllTasks()
       tasks.forEach((task) => {
@@ -646,10 +649,10 @@ export default {
 
       this.sortTasks()
     },
-    addVideo() {
+    addVideo () {
       this.addTaskVisible = true
     },
-    async doAddTask() {
+    async doAddTask () {
       let addTask = this.addTask
       if (!addTask.title.trim()) {
         message.error('必须输入一个标题')
@@ -676,25 +679,25 @@ export default {
       }
 
     },
-    test() {
+    test () {
       if (this.addTask.url === '' || !this.addTask.url.startsWith('http')) {
         message.error('请输入正确的网页链接')
         return
       }
       this.currentTaskId = Date.now()
-      message.info({content: '开始测试', key: 'test'})
+      message.info({ content: '开始测试', key: 'test' })
       tableApi.watch.testTask({
         id: this.currentTaskId,
         url: this.addTask.url
       }, (data) => {
         this.addTaskInfo = data.data
-        message.success({content: '测试成功。', key: 'test'})
+        message.success({ content: '测试成功。', key: 'test' })
       }, () => {
         this.addTaskInfo = {}
-        Modal.info({'content': '测试未能成功返回，请稍后再试。', key: 'test'})
+        Modal.info({ 'content': '测试未能成功返回，请稍后再试。', key: 'test' })
       }, () => {
         this.addTaskInfo = {}
-        Modal.info({content: '测试超时，请稍后再试。', key: 'test'})
+        Modal.info({ content: '测试超时，请稍后再试。', key: 'test' })
       }, 10)
     }
   }

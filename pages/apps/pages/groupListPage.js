@@ -1,4 +1,4 @@
-groupListTpl=`
+groupListTpl = `
 <div style="width: 100%">
   <template v-if=" uid > 0">
     <a-layout>
@@ -41,25 +41,23 @@ const { ipcRenderer: ipc } = require('electron')
 module.exports = Vue.component('group-list-page', {
   name: 'group-list-page',
   template: groupListTpl,
-  component: {GroupListComp},
-  beforeRouteEnter(to, from, next) {
+  component: { GroupListComp },
+  beforeRouteEnter (to, from, next) {
     next(async vm => {
       vm.myGroups = []
-      await vm.load(vm);
-    });
+      await vm.load(vm)
+    })
   },
-  async beforeRouteUpdate(to, from, next) {
-    await this.load(this);
+  async beforeRouteUpdate (to, from, next) {
+    await this.load(this)
   },
   data () {
     return {
       uid: Number,
-      myGroups:[]
+      myGroups: []
     }
   },
-  computed: {
-
-  },
+  computed: {},
   async mounted () {
     await this.$store.dispatch('getCurrentUser')
     this.uid = this.$store.getters.getCurrentUser.value.uid
@@ -68,13 +66,13 @@ module.exports = Vue.component('group-list-page', {
 
   },
   methods: {
-    async load(vm) {
+    async load (vm) {
       await this.$store.dispatch('getMyGroups')
       vm.myGroups = vm.$store.getters.getMyGroups
     },
-    Login() {
+    Login () {
       //location.href = api.getUrl(api.API_URL.user.login)
-      ipc.send('addTab',{url:api.getUrl(api.API_URL.user.login)})
+      ipc.send('addTab', { url: api.getUrl(api.API_URL.user.login) })
     }
   }
 })

@@ -52,12 +52,12 @@
 </template>
 
 <script>
-import {EditOutlined, EllipsisOutlined, SettingOutlined} from '@ant-design/icons-vue'
-import {mapActions} from 'pinia'
-import {appStore} from '../store'
-import {message, Modal} from 'ant-design-vue'
+import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons-vue'
+import { mapActions } from 'pinia'
+import { appStore } from '../store'
+import { message, Modal } from 'ant-design-vue'
 
-const {devAppModel, appModel} = window.$models
+const { devAppModel, appModel } = window.$models
 export default {
   name: 'AllDevApps',
   components: {
@@ -65,12 +65,12 @@ export default {
     EditOutlined,
     EllipsisOutlined,
   },
-  data() {
+  data () {
     return {
       devApps: []
     }
   },
-  async mounted() {
+  async mounted () {
     this.devApps = await devAppModel.getAll()
 
     this.devApps.forEach(devApp => {
@@ -79,7 +79,7 @@ export default {
 
       devApp.assignAppsInfo = []
       assignApps.forEach(async appId => {
-        let assignApp = await appModel.get({nanoid: appId})
+        let assignApp = await appModel.get({ nanoid: appId })
         if (assignApp) {
           devApp.assignAppsInfo.push(assignApp)
         }
@@ -88,15 +88,15 @@ export default {
 
   },
   methods: {
-    async createNew() {
+    async createNew () {
       this.setDevApp(await devAppModel.create())
       this.$router.push('/dev/')
     },
-    async loadDevApp(devApp) {
+    async loadDevApp (devApp) {
       await this.setDevApp(devApp)
       this.$router.push('/dev/')
     },
-    deleteDevApp(app) {
+    deleteDevApp (app) {
       Modal.confirm({
         centered: true,
         content: `是否删除「${app.name}」ID：${app.nanoid}？删除后无法还原，请谨慎操作。`,

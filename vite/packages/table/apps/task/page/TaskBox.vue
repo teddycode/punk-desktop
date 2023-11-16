@@ -32,12 +32,12 @@
 </template>
 
 <script setup>
-import {computed, reactive, ref} from "vue";
-import {taskStore} from "../store";
-import {tasks} from "../page/primary/Primary";
-import Task from "./Task.vue";
+import { computed, reactive, ref } from 'vue'
+import { taskStore } from '../store'
+import { tasks } from '../page/primary/Primary'
+import Task from './Task.vue'
 
-const store = taskStore();
+const store = taskStore()
 
 /**
  * 首次引导任务
@@ -53,45 +53,45 @@ const store = taskStore();
  * 回归主线任务
  */
 const resetting = () => {
-  store.firstTask = true;
-  store.taskID = "M0101";
-  store.step = -9;
+  store.firstTask = true
+  store.taskID = 'M0101'
+  store.step = -9
   // firstTask.value = false;
-};
+}
 // 主线任务进展
-let width = ref();
+let width = ref()
 
 const progress = computed(() => {
-  let currentCount = ref(0);
-  let count = ref(0);
-  let flag = ref(true);
+  let currentCount = ref(0)
+  let count = ref(0)
+  let flag = ref(true)
   tasks.forEach((item) => {
     item.tasks.forEach((task) => {
-      if (task.id == "firstTask") return;
+      if (task.id == 'firstTask') return
       if (store.taskID == task.id) {
-        flag.value = false;
+        flag.value = false
       }
       if (flag.value) {
-        currentCount.value++;
+        currentCount.value++
       }
-      count.value++;
-    });
-  });
-  let res = (currentCount.value / count.value) * 100;
-  width.value = Math.round(res);
+      count.value++
+    })
+  })
+  let res = (currentCount.value / count.value) * 100
+  width.value = Math.round(res)
   return {
-    width: res + "%",
-  };
-});
+    width: res + '%',
+  }
+})
 
 const menus = reactive([
   {
-    label: "关闭任务中心",
+    label: '关闭任务中心',
     callBack: () => {
-      store.isTask = false;
+      store.isTask = false
     },
   },
-]);
+])
 </script>
 
 <style lang="scss" scoped></style>

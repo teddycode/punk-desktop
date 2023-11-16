@@ -119,16 +119,16 @@
 import IconList from '../../components/comp/IconList.vue'
 import CustomIcon from '../../components/comp/CustomIcon.vue'
 import DeckAction from './DeckAction.vue'
-import {message} from 'ant-design-vue'
-import VueCustomScrollbar from "../../../../src/components/vue-scrollbar.vue";
-import BackBtn from "../../components/comp/BackBtn.vue";
-import {deckStore} from "./store";
-import {mapActions, mapWritableState} from 'pinia'
+import { message } from 'ant-design-vue'
+import VueCustomScrollbar from '../../../../src/components/vue-scrollbar.vue'
+import BackBtn from '../../components/comp/BackBtn.vue'
+import { deckStore } from './store'
+import { mapActions, mapWritableState } from 'pinia'
 
 export default {
   name: 'DeckAdd',
   emits: ['add'],
-  data() {
+  data () {
     return {
       currentGrid: {},
       settings: {
@@ -157,7 +157,7 @@ export default {
 
     }
   },
-  mounted() {
+  mounted () {
     this.currentGrid = this.grids.find(g => {
       return String(g.id) === String(this.$route.params.gridId)
     })
@@ -192,16 +192,16 @@ export default {
       this.data = data
     }
   },
-  components: {BackBtn, VueCustomScrollbar, DeckAction, CustomIcon, IconList},
+  components: { BackBtn, VueCustomScrollbar, DeckAction, CustomIcon, IconList },
   computed: {
     ...mapWritableState(deckStore, ['grids'])
   },
   methods: {
     ...mapActions(deckStore, ['addButton']),
-    removeAction(index) {
+    removeAction (index) {
       this.actions.splice(index, 1)
     },
-    editAction(action) {
+    editAction (action) {
       this.tab = 'action'
       this.editingAction = action
       this.$nextTick(() => {
@@ -209,7 +209,7 @@ export default {
 
       })
     },
-    addAction() {
+    addAction () {
       this.tab = 'action'
       this.editingAction = undefined
       this.$nextTick(() => {
@@ -217,8 +217,8 @@ export default {
       })
 
     },
-    doAddAction(actionData) {
-      this.tab = 'input';
+    doAddAction (actionData) {
+      this.tab = 'input'
       if (this.editingAction) {
         if (actionData) {
           let foundIndex = this.actions.findIndex(a => {
@@ -234,13 +234,12 @@ export default {
         }
       }
 
-
     },
-    setIcon(icon) {
+    setIcon (icon) {
       this.icon = icon
       this.tab = 'input'
     },
-    doAdd() {
+    doAdd () {
       if (!this.title) {
         message.error('请输入按钮名称')
         return
@@ -277,7 +276,7 @@ export default {
         this.$router.go(-1)
       }
     },
-    syncTitle(value) {
+    syncTitle (value) {
       this.iconText = this.title
     }
   }

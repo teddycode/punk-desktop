@@ -1,6 +1,5 @@
-const SettingModel=require('../../../src/model/settingModel')
-settingModel=new SettingModel()
-
+const SettingModel = require('../../../src/model/settingModel')
+settingModel = new SettingModel()
 
 var settings = {
   //filePath: window.globalArgs['user-data-path'] + (process.platform === 'win32' ? '\\' : '/') + 'settings.json',
@@ -57,12 +56,12 @@ var settings = {
     ipc.on('returnIsDefaultBrowser', function (e, value) {
       //console.log(value)
     })
-    if(cb){
+    if (cb) {
       cb()
     }
   }
 }
-settingModel.initDb().then(async ()=>{
+settingModel.initDb().then(async () => {
   {
     await settings.initialize()
   }

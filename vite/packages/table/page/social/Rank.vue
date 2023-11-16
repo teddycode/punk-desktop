@@ -22,7 +22,8 @@
       <!-- 切换时长 -->
       <div class="toggle-duration" hidden="">
         <a-select v-model:value="selectValue"
-                  :bordered="false" :dropdownStyle="{ 'z-index': 9, backgroundColor: 'var(--secondary-bg)' }" :style="selectStyle"
+                  :bordered="false" :dropdownStyle="{ 'z-index': 9, backgroundColor: 'var(--secondary-bg)' }"
+                  :style="selectStyle"
                   class="select rounded-lg  text-xs flex items-center" size="large">
           <a-select-option v-for="item in sortType" :key="item" :value="item.value" class="no-drag">{{
               item.name
@@ -48,7 +49,8 @@
             <MedalNo :no="item.no"></MedalNo>
             <span class="mx-4">
               <FrameAvatar :avatar-size="50"
-                           :avatar-url="item.userInfo.avatar" :frame-url="item.userInfo.equippedItems.frameDetail?.image"></FrameAvatar>
+                           :avatar-url="item.userInfo.avatar"
+                           :frame-url="item.userInfo.equippedItems.frameDetail?.image"></FrameAvatar>
             </span>
             <span class="xt-text truncate" style="font-size: 16px;">{{ item.userInfo.nickname }}</span>
           </a-col>
@@ -200,7 +202,8 @@
       <!-- 切换签到日期 -->
       <div class="toggle-duration">
         <a-select v-model:value="selectSignInValue"
-                  :bordered="false" :dropdownStyle="{ 'z-index': 9, backgroundColor: 'var(--secondary-bg)' }" :style="selectStyle"
+                  :bordered="false" :dropdownStyle="{ 'z-index': 9, backgroundColor: 'var(--secondary-bg)' }"
+                  :style="selectStyle"
                   class="select rounded-lg  text-xs s-item flex items-center"
                   size="large">
           <a-select-option v-for="item in sortSignInType" :key="item" :value="item.value" class="no-drag">{{
@@ -344,13 +347,13 @@
 </template>
 
 <script>
-import {mapActions, mapState} from 'pinia'
-import {appStore} from '../../store'
-import {inviteList, myInvite, myRanking, mySignIn, myTeam, onLineList, signInList, teamList} from '../../js/rank'
+import { mapActions, mapState } from 'pinia'
+import { appStore } from '../../store'
+import { inviteList, myInvite, myRanking, mySignIn, myTeam, onLineList, signInList, teamList } from '../../js/rank'
 import ThreeRank from '../../components/rank/ThreeRank.vue'
-import {rankStore} from '../../store/rank'
+import { rankStore } from '../../store/rank'
 import Template from '../../../user/pages/Template.vue'
-import {teamStore} from '../../store/team'
+import { teamStore } from '../../store/team'
 import MedalNo from './MedalNo.vue'
 import FrameAvatar from '../../components/avatar/FrameAvatar.vue'
 
@@ -362,7 +365,7 @@ export default {
     Template,
     ThreeRank
   },
-  data() {
+  data () {
     return {
       page: 1,//分页
       onLineList,// 在线榜
@@ -381,31 +384,31 @@ export default {
       paging: 1,
       // 榜单tab
       navList: [
-        {title: '在线榜', icon: '../../../../public/img/rankingList/rocket.png', name: 'onlineUser'},
-        {title: '小队榜', icon: '../../../../public/img/rankingList/tiny_spot.png', name: 'onlineTeamSum'},
+        { title: '在线榜', icon: '../../../../public/img/rankingList/rocket.png', name: 'onlineUser' },
+        { title: '小队榜', icon: '../../../../public/img/rankingList/tiny_spot.png', name: 'onlineTeamSum' },
         // { title: '邀请榜', icon: '../../../../public/img/rankingList/handshake.png', name: 'invite' },
         // { title: '签到榜', icon: '../../../../public/img/rankingList/mantelpiece.png', name: 'signIn' }
       ],
       // 默认选中
-      defaultNavList: {title: '在线榜', icon: '../../../../public/img/rankingList/rocket.png', name: 'onlineUser'},
+      defaultNavList: { title: '在线榜', icon: '../../../../public/img/rankingList/rocket.png', name: 'onlineUser' },
       activeIndex: 0,
       onLineListTitle: ['用户', '总在线时长', '净在线时长', '小队'],
       selectValue: 'sum',
       sortType: [
-        {name: '总在线时长', value: 'sum'},
-        {name: '净在线时长', value: 'pure'},
+        { name: '总在线时长', value: 'sum' },
+        { name: '净在线时长', value: 'pure' },
       ],
       selectSignInValue: '今日签到榜',
       sortSignInType: [
-        {name: '今日签到榜', value: '今日签到榜'},
-        {name: '累计签到榜', value: '累计签到榜'},
-        {name: '连续签到榜', value: '连续签到榜'},
+        { name: '今日签到榜', value: '今日签到榜' },
+        { name: '累计签到榜', value: '累计签到榜' },
+        { name: '连续签到榜', value: '连续签到榜' },
       ],
       teamListTitle: ['用户', '在线时长', '小队成员'],
       onLineLists: []
     }
   },
-  mounted() {
+  mounted () {
     this.page = 1
     this.reload()
     this.reloadMy()
@@ -417,7 +420,7 @@ export default {
      * 榜单英文名
      * @returns {string}
      */
-    rankName() {
+    rankName () {
       if (this.defaultNavList.name === 'onlineUser') {
         if (this.selectValue === 'sum') {
           return 'onlineUserSum'
@@ -430,7 +433,7 @@ export default {
      * 翻页信息
      * @returns {*}
      */
-    pageInfo() {
+    pageInfo () {
       if (this.pageInfos) {
         return this.pageInfos[this.rankName]
       } else {
@@ -444,13 +447,13 @@ export default {
      * 主数据列表
      * @returns {*}
      */
-    list() {
+    list () {
       if (this.rankLists[this.rankName]) {
         return this.rankLists[this.rankName][this.page]
       }
       return []
     },
-    myRank() {
+    myRank () {
       if (this.myRanks[this.rankName]) {
         return this.myRanks[this.rankName]
       }
@@ -460,31 +463,31 @@ export default {
   methods: {
     ...mapActions(appStore, ['showUserCard']),
     ...mapActions(rankStore, ['getRank', 'getMy']),
-    homePage() {
+    homePage () {
       this.page = 1
       this.reload()
     },
-    prevPage() {
+    prevPage () {
       if (this.page > 1) {
         this.page--
         this.reload()
       }
     },
-    endPage() {
+    endPage () {
       this.page = this.pageInfo.pages
       this.reload()
     },
-    nextPage() {
+    nextPage () {
       if (this.page >= this.pageInfo.pages) {
         return
       }
       this.page++
       this.reload()
     },
-    reloadMy() {
+    reloadMy () {
       this.getMy(this.rankName)
     },
-    getTop3FromUserSumRank() {
+    getTop3FromUserSumRank () {
       let top3 = [
         {
           ...this.rankLists.onlineUserSum[1][0],
@@ -510,8 +513,8 @@ export default {
       top3[2].total = this.parseHours(top3[2].totalTime)
       return top3
     },
-    reload() {
-      this.getRank(this.rankName, this.page, {withTeam: 1}).then(() => {
+    reload () {
+      this.getRank(this.rankName, this.page, { withTeam: 1 }).then(() => {
         if (this.rankName === 'onlineUserSum') {
           this.top3['onlineUserSum'] = this.getTop3FromUserSumRank()
         } else if (this.rankName === 'onlineTeamSum') {
@@ -544,7 +547,7 @@ export default {
       })
 
     },
-    getExtraClass(no) {
+    getExtraClass (no) {
       if (no === 1) {
         return 'first'
       }
@@ -555,18 +558,18 @@ export default {
         return 'third'
       }
     },
-    parseHours(minutes, fixed = 0) {
+    parseHours (minutes, fixed = 0) {
       return (minutes / 60).toFixed(fixed)
     },
-    clickNav(item, index) {
+    clickNav (item, index) {
       this.activeIndex = index
       item.state = false  // 将消息未读状态隐藏
       this.defaultNavList = item
     },
-    showCard(uid, userInfo) {
+    showCard (uid, userInfo) {
       this.showUserCard(uid, userInfo)
     },
-    mySort(data, property, asc) {
+    mySort (data, property, asc) {
       let datas = [...data]
       return datas.sort(function (a, b) {
         a = a[property]
@@ -578,7 +581,7 @@ export default {
   },
   watch: {
     'defaultNavList.name': {
-      handler(newVal) {
+      handler (newVal) {
         this.page = 1
         this.reload()
         this.reloadMy()
@@ -588,7 +591,7 @@ export default {
     selectValue: {
       immediate: true,
       deep: true,
-      handler(newV, oldV) {
+      handler (newV, oldV) {
         if (newV == '总在线时长') this.onLineLists = this.mySort(this.onLineList, 'totalDuration')
         else if (newV == '更新时间') this.onLineLists = this.mySort(this.onLineList, 'netDuration')
         else this.onLineLists = this.onLineList

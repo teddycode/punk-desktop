@@ -33,10 +33,10 @@
 </template>
 
 <script>
-import {ResizeObserver} from 'vue3-resize'
+import { ResizeObserver } from 'vue3-resize'
 import 'vue3-resize/dist/vue3-resize.css'
-import {deckStore} from '../../apps/deck/store'
-import {mapState} from 'pinia'
+import { deckStore } from '../../apps/deck/store'
+import { mapState } from 'pinia'
 
 export default {
   name: 'Widget',
@@ -64,7 +64,7 @@ export default {
   },
   computed: {
     ...mapState(deckStore, ['editing', 'settings']),
-    getClass() {
+    getClass () {
       let classList = {
         //muuriResizable: this.resizable != null ? this.resizable : this.$parent.resizable,
 
@@ -74,16 +74,16 @@ export default {
     },
 
   },
-  data() {
+  data () {
     return {
       showModal: false,
     }
   },
   methods: {
-    handleDelete() {
+    handleDelete () {
       //this.$parent.handleDelete(this.uniqueKey);
     },
-    handleResize() {
+    handleResize () {
       // this.$parent.handleResize();
     },
   },

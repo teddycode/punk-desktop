@@ -37,14 +37,14 @@
 </template>
 
 <script>
-import {captureStore} from '../../store/capture'
-import {mapActions, mapState} from 'pinia'
+import { captureStore } from '../../store/capture'
+import { mapActions, mapState } from 'pinia'
 import VueCustomScrollbar from '../../../../src/components/vue-scrollbar.vue'
 
 export default {
   name: 'Source',
-  components: {VueCustomScrollbar},
-  data() {
+  components: { VueCustomScrollbar },
+  data () {
     return {
       scrollbarSettings: {
         useBothWheelAxes: false,
@@ -58,9 +58,8 @@ export default {
     }
   },
 
-  mounted() {
+  mounted () {
     this.getSource()
-
 
   },
   computed: {

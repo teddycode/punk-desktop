@@ -31,43 +31,43 @@
 </template>
 
 <script setup>
-import {ref, watch} from "vue";
+import { ref, watch } from 'vue'
 
-const emits = defineEmits(["onSearch"]);
-const isScrollbar = ref(false);
-const initHeight = ref(true);
-const search = ref("");
+const emits = defineEmits(['onSearch'])
+const isScrollbar = ref(false)
+const initHeight = ref(true)
+const search = ref('')
 
 const props = defineProps({
   isSearch: {
     type: Boolean,
     required: true,
   },
-});
+})
 watch(search, (newV) => {
   if (newV) {
-    initHeight.value = true;
+    initHeight.value = true
   }
-});
+})
 const test = () => {
-};
+}
 // 输入框 动态高度 以及 滚动条状态 处理
 const onInput = (e) => {
-  const textarea = e.target;
-  textarea.style.height = "auto";
-  textarea.style.height = textarea.scrollHeight + "px";
-  isScrollbar.value = textarea.scrollHeight >= 200;
-};
+  const textarea = e.target
+  textarea.style.height = 'auto'
+  textarea.style.height = textarea.scrollHeight + 'px'
+  isScrollbar.value = textarea.scrollHeight >= 200
+}
 
 // 搜索
 const onSearch = () => {
   if (props.isSearch && search.value.trim()) {
-    initHeight.value = false;
-    isScrollbar.value = false;
-    emits("onSearch", search.value);
-    search.value = "";
+    initHeight.value = false
+    isScrollbar.value = false
+    emits('onSearch', search.value)
+    search.value = ''
   }
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

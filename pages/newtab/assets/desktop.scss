@@ -109,14 +109,16 @@
 
 
 }
-.app.sa-app{
-  .icon-wrapper img{
+
+.app.sa-app {
+  .icon-wrapper img {
     border-radius: 50%;
-    padding:2px;
-    border:3px solid #ccc;
+    padding: 2px;
+    border: 3px solid #ccc;
     background-color: white;
   }
 }
+
 .app {
   .icon-wrapper {
     display: inline-block;
@@ -402,7 +404,7 @@
   width: calc(100% - 20px);
   flex: 1;
   background: linear-gradient(
-      33deg, var(--gradient-start), var(--gradient-end));
+                  33deg, var(--gradient-start), var(--gradient-end));
   word-break: break-all;
   max-width: 100%;
   overflow: hidden;
@@ -642,6 +644,7 @@
 
       .more {
         position: relative;
+
         img {
           left: 11px;
           top: 3px;
@@ -651,7 +654,8 @@
           position: absolute;
           border-radius: 3px;
         }
-        .app-name{
+
+        .app-name {
           margin-top: 28px;
         }
 

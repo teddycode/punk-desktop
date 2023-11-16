@@ -5,14 +5,14 @@ const axios = require('../src/util/axios')
 const userStatsModel = require('../pages/util/model/userStatsModel')
 
 //处理nodeList至URL
-function handleURL(qlist) {
+function handleURL (qlist) {
   let str = ''
-  for(let i = 0; i < qlist.length; i++) {
-    qlist[i].replace("\n", "")
-    if(i === 0 ) {
+  for (let i = 0; i < qlist.length; i++) {
+    qlist[i].replace('\n', '')
+    if (i === 0) {
       str = str + qlist[i]
-    } else{
-      str = str + "\n" + qlist[i]
+    } else {
+      str = str + '\n' + qlist[i]
     }
   }
   return str
@@ -26,7 +26,7 @@ const pageTranslations = {
       name: '简体中文',
       code: 'zh'
     },
-	  {
+    {
       name: '英文',
       code: 'en'
     },
@@ -110,7 +110,7 @@ const pageTranslations = {
   },
   //翻译请求接口
   makeTranslationRequest: async function (tab, data) {
-    let result = {translatedText: []}
+    let result = { translatedText: [] }
     const requestOptions = {
       toLang: data[0].lang,
       queryStr: handleURL(data[0].query)
@@ -127,10 +127,10 @@ const pageTranslations = {
     })
 
     //1000毫秒发起一次请求
-    setTimeout(()=> {
+    setTimeout(() => {
       axios.post('/app/translate', requestOptions).then(res => {
-        if(res.code === 1000) {
-          for(let i = 0; i < res.data.trans_result.length; i++) {
+        if (res.code === 1000) {
+          for (let i = 0; i < res.data.trans_result.length; i++) {
             result.translatedText[i] = res.data.trans_result[i].dst
           }
           webviews.callAsync(tab, 'send', ['translation-response-' + data[0].requestId, {
@@ -139,11 +139,11 @@ const pageTranslations = {
         }
       }).catch(err => {
         //只有错误码列表中的错误，才会进行重新翻译请求
-        if(pageTranslations.baiduError.indexOf(err.message.slice(8)) !== -1) {
+        if (pageTranslations.baiduError.indexOf(err.message.slice(8)) !== -1) {
           console.warn('retrying translation request')
-          setTimeout(()=> {
+          setTimeout(() => {
             axios.post('/app/translate', requestOptions).then(res => {
-              for(let i = 0; i < res.data.trans_result.length; i++) {
+              for (let i = 0; i < res.data.trans_result.length; i++) {
                 result.translatedText[i] = res.data.trans_result[i].dst
               }
               webviews.callAsync(tab, 'send', ['translation-response-' + data[0].requestId, {

@@ -1,7 +1,7 @@
-const path=eval('require')('path')
-const fs=eval('require')('fs')
-const promises=fs.promises
-const extension ={
+const path = eval('require')('path')
+const fs = eval('require')('fs')
+const promises = fs.promises
+const extension = {
   async loadAllExtensions (dir) {
     const manifestExists = async (dirPath) => {
       if (!dirPath) return false
@@ -41,36 +41,35 @@ const extension ={
         })
     )
     const results = []
-    for(let i=0;i<extensionDirectories.length;i++){
+    for (let i = 0; i < extensionDirectories.length; i++) {
       results.push(await extension.loadExtension(extensionDirectories[i]))
     }
     return results
   },
-  getName(manifest,extensionPath){
-    const fs=eval('require')('fs')
-    const path=eval('require')('path')
-    let name=manifest['name']
-    let cnName='zh_CN'
-    let localePath=path.resolve(extensionPath,'_locales')
-    if(name.startsWith('__MSG_')){
-      name=name.substring(6,name.length-2)
-      let messageName=''
-      if(fs.existsSync(path.join(localePath,cnName)))
-      {
-        messageName=path.join(localePath,cnName,'messages.json')
+  getName (manifest, extensionPath) {
+    const fs = eval('require')('fs')
+    const path = eval('require')('path')
+    let name = manifest['name']
+    let cnName = 'zh_CN'
+    let localePath = path.resolve(extensionPath, '_locales')
+    if (name.startsWith('__MSG_')) {
+      name = name.substring(6, name.length - 2)
+      let messageName = ''
+      if (fs.existsSync(path.join(localePath, cnName))) {
+        messageName = path.join(localePath, cnName, 'messages.json')
         //存在中文语言包
-      }else{
-        messageName=path.join(localePath,manifest['default_locale'],'messages.json')
+      } else {
+        messageName = path.join(localePath, manifest['default_locale'], 'messages.json')
       }
-      let locale= JSON.parse(fs.readFileSync(messageName,'utf8'))
+      let locale = JSON.parse(fs.readFileSync(messageName, 'utf8'))
       return locale[name]['message']
-    }else{
+    } else {
       return name
     }
   },
-  getIcon(manifest,extensionPath){
-    let icons=Object.values(manifest.icons)
-    return path.join(extensionPath, icons[icons.length-1])
+  getIcon (manifest, extensionPath) {
+    let icons = Object.values(manifest.icons)
+    return path.join(extensionPath, icons[icons.length - 1])
   },
   async loadExtension (dir) {
     try {
@@ -78,10 +77,10 @@ const extension ={
       let extensionInfo = JSON.parse(
         await promises.readFile(manifestPath, 'utf8'),
       )
-      extensionInfo.path=dir
-      extensionInfo.baseName=path.basename(dir)
-      extensionInfo.localeName=extension.getName(extensionInfo,dir)
-      extensionInfo.displayIcon=extension.getIcon(extensionInfo,dir)
+      extensionInfo.path = dir
+      extensionInfo.baseName = path.basename(dir)
+      extensionInfo.localeName = extension.getName(extensionInfo, dir)
+      extensionInfo.displayIcon = extension.getIcon(extensionInfo, dir)
       return extensionInfo
     } catch (e) {
       return null
@@ -91,20 +90,20 @@ const extension ={
    * 将permission数组转化为中文表达
    * @param permissions
    */
-  convertPermissionsToText(permissions){
-    return permissions.map(p=>{
-      switch (p){
+  convertPermissionsToText (permissions) {
+    return permissions.map(p => {
+      switch (p) {
         case 'activeTab':
           return '激活标签'
         case 'contextMenus':
           return '网页菜单'
         case 'storage':
           return '存储'
-        case "clipboardWrite":
+        case 'clipboardWrite':
           return '读写剪切板'
         case 'unlimitedStorage':
           return '完全存储'
-        case "notifications":
+        case 'notifications':
           return '消息通知'
         case 'webRequest':
           return '网络请求'

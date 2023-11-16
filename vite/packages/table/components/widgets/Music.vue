@@ -19,12 +19,12 @@
   </Widget>
 </template>
 <script>
-import {appStore} from "../../store";
-import {mapWritableState} from "pinia";
-import Widget from "../card/Widget.vue";
+import { appStore } from '../../store'
+import { mapWritableState } from 'pinia'
+import Widget from '../card/Widget.vue'
 
 export default {
-  name: "Music",
+  name: 'Music',
   props: {
     customIndex: {
       type: Number,
@@ -39,28 +39,28 @@ export default {
       type: Object
     }
   },
-  data() {
+  data () {
     return {
       options: {
-        className: "card small",
-        title: "网易云",
-        icon: "customerservice",
-        type: "music",
+        className: 'card small',
+        title: '网易云',
+        icon: 'customerservice',
+        type: 'music',
       },
-    };
+    }
   },
   components: {
     Widget,
   },
   computed: {
-    ...mapWritableState(appStore, ["status"]),
+    ...mapWritableState(appStore, ['status']),
   },
   methods: {
-    enterMusic() {
-      this.$router.push("/music");
+    enterMusic () {
+      this.$router.push('/music')
     },
   },
-};
+}
 </script>
 
 <style scoped></style>

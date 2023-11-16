@@ -13,9 +13,8 @@
 </template>
 
 <script>
-import browser from '../../../../js/common/browser';
-import EmptyStatus from '@page/chat/components/empty/EmptyStatus.vue';
-
+import browser from '../../../../js/common/browser'
+import EmptyStatus from '@page/chat/components/empty/EmptyStatus.vue'
 
 export default {
   props: ['list'],
@@ -24,7 +23,7 @@ export default {
   },
 
   methods: {
-    openUrl(url) {
+    openUrl (url) {
       browser.openInTable(url)
     }
   }

@@ -6,9 +6,9 @@ const spaceModel = eval('require')('../model/spaceModel')
 const spaceVersionModel = require('../model/spaceVersionModel')
 window.ipc = require('electron').ipcRenderer
 window.$models = {
-    userModel,
-    configModel,
-    spaceModel,
-    spaceVersionModel
+  userModel,
+  configModel,
+  spaceModel,
+  spaceVersionModel
 }
 window.tsbApi = require('../browserApi/baseApi.js')

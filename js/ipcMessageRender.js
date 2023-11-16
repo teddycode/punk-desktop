@@ -1,5 +1,3 @@
-const ipcMessageRender={
+const ipcMessageRender = {}
 
-}
-
-module.exports=ipcMessageRender
+module.exports = ipcMessageRender

@@ -43,36 +43,36 @@
 </template>
 
 <script setup>
-import {computed} from "vue";
-import {storeToRefs} from "pinia";
-import {taskStore} from "../../store.ts";
-import StatrTask from "./StatrTask.vue";
+import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
+import { taskStore } from '../../store.ts'
+import StatrTask from './StatrTask.vue'
 
-const sotre = taskStore();
-const {list} = storeToRefs(sotre);
+const sotre = taskStore()
+const { list } = storeToRefs(sotre)
 
 const props = defineProps({
   task: {},
   completedTask: {},
-});
+})
 
 const getCompletedTasks = computed(() => {
-  let array = [];
-  let count = 0;
+  let array = []
+  let count = 0
   props.task.tasks.forEach((item) => {
     if (list.value.includes(item.id)) {
-      array.push(item);
+      array.push(item)
     }
-  });
+  })
 
-  return array;
-});
+  return array
+})
 
-const emits = defineEmits(["back"]);
+const emits = defineEmits(['back'])
 const back = () => {
-  console.log("111 :>> ", 111);
-  emits("back");
-};
+  console.log('111 :>> ', 111)
+  emits('back')
+}
 </script>
 
 <style lang="scss" scoped></style>

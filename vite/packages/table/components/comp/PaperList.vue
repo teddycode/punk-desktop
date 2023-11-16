@@ -42,11 +42,11 @@
 </template>
 
 <script>
-import {mapActions, mapState} from 'pinia'
-import {appStore} from '../../store'
-import {paperStore} from '../../store/paper'
-import GradeSmallTip from "../GradeSmallTip.vue";
-import {message, Modal} from 'ant-design-vue'
+import { mapActions, mapState } from 'pinia'
+import { appStore } from '../../store'
+import { paperStore } from '../../store/paper'
+import GradeSmallTip from '../GradeSmallTip.vue'
+import { message, Modal } from 'ant-design-vue'
 
 export default {
   name: 'PaperList',
@@ -54,7 +54,7 @@ export default {
   components: {
     GradeSmallTip
   },
-  data() {
+  data () {
     return {
       options: {
         url: 'data-source',
@@ -64,28 +64,28 @@ export default {
     }
   },
 
-  mounted() {
+  mounted () {
   },
   methods: {
     ...mapActions(paperStore, ['removeToMyPaper']),
     ...mapActions(appStore, ['setBackgroundImage']),
-    addToMy(img) {
+    addToMy (img) {
       let image = {
         src: img.src,
         path: img.src
       }
       this.removeToMyPaper(image)
     },
-    isInMyPapers(image) {
+    isInMyPapers (image) {
       return this.myPapers.findIndex(img => {
         return image.src === img.src
       }) > -1
     },
-    paperShowMenu(item) {
+    paperShowMenu (item) {
       this.paperCurrent = item
       this.visibleMenu = true
     },
-    setDesktopPaper() {
+    setDesktopPaper () {
       Modal.confirm({
         content: '确定将此壁纸设置为系统桌面壁纸？注意，此处设置不是工作台的壁纸。',
         okText: '设置桌面壁纸',
@@ -96,16 +96,16 @@ export default {
         }
       })
     },
-    setAppPaper() {
+    setAppPaper () {
       message.info('正在为您设置壁纸')
       this.setBackgroundImage(this.paperCurrent)
       this.visibleMenu = false
     },
-    add() {
+    add () {
       if (this.settings.savePath === '') {
         Modal.confirm({
           centered: true,
-          style: {'z-index': 999999},
+          style: { 'z-index': 999999 },
           content: '您尚未设置壁纸保存目录，请设置目录，设置目录后下载将自动开始。',
           onOk: async () => {
             await this.queryStart()
@@ -119,7 +119,7 @@ export default {
     },
 
     // 开始下载
-    doStartDownload(item) {
+    doStartDownload (item) {
       message.info('开始下载壁纸')
       const name = item.split('&')[1].slice(3)
       tsbApi.download.start({
@@ -133,7 +133,7 @@ export default {
     },
 
     // 选择目录
-    async queryStart() {
+    async queryStart () {
       let savePath = await tsbApi.dialog.showOpenDialog({
         title: '选择目录', message: '请选择下载壁纸的目录', properties: [
           'openDirectory', 'createDirectory',
@@ -145,7 +145,6 @@ export default {
       } else {
       }
     },
-
 
   },
   computed: {

@@ -1,14 +1,15 @@
 const oneTab = require('../extras/newTabs/oneTab.js')
+
 class TabList {
+
+  static temporaryProperties = ['hasAudio', 'previewImage', 'loaded']
+
+  //tab properties that shouldn't be saved to disk
 
   constructor (tabs, parentTaskList) {
     this.tabs = tabs || []
     this.parentTaskList = parentTaskList
   }
-
-  //tab properties that shouldn't be saved to disk
-
-  static temporaryProperties = ['hasAudio', 'previewImage', 'loaded']
 
   add (tab = {}, options = {}, index) {
     var tabId = String(tab.id || Math.round(Math.random() * 100000000000000000)) // you can pass an id that will be used, or a random one will be generated.
@@ -31,8 +32,8 @@ class TabList {
       selected: tab.selected || false,
       muted: tab.muted || false,
       loaded: tab.loaded || false,
-      partition:tab.partition,
-      newName:tab.newName,
+      partition: tab.partition,
+      newName: tab.newName,
       hasAudio: false,
       previewImage: '',
       isFileView: false,
@@ -139,7 +140,7 @@ class TabList {
     return this.tabs[index] || undefined
   }
 
-  setSelected (id,emitEvent=true) {
+  setSelected (id, emitEvent = true) {
     if (!this.has(id)) {
       throw new ReferenceError('Attempted to select a tab that does not exist.')
     }
@@ -152,7 +153,7 @@ class TabList {
         this.tabs[i].lastActivity = Date.now()
       }
     }
-    if(emitEvent){
+    if (emitEvent) {
       //同时触发tab选中事件
       this.parentTaskList.emit('tab-selected', id)
     }
@@ -198,11 +199,11 @@ class TabList {
     //removes temporary properties of the tab that are lost on page reload
 
     let result = {}
-      Object.keys(tab)
+    Object.keys(tab)
       .filter(key => !TabList.temporaryProperties.includes(key))
       .forEach(key => result[key] = tab[key])
 
-      return result
+    return result
   }
 
   getStringifyableState () {

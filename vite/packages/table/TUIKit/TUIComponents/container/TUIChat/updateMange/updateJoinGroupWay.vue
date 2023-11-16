@@ -3,24 +3,24 @@
 </template>
 
 <script>
-import {defineComponent, reactive, toRefs, watch} from 'vue'
-import RadioTab from "../../../../../components/RadioTab.vue";
-import {message} from "ant-design-vue";
+import { defineComponent, reactive, toRefs, watch } from 'vue'
+import RadioTab from '../../../../../components/RadioTab.vue'
+import { message } from 'ant-design-vue'
 
 export default defineComponent({
-  components: {RadioTab},
-  props: ["updateGroupInfo"],
+  components: { RadioTab },
+  props: ['updateGroupInfo'],
 
-  setup(props, ctx) {
+  setup (props, ctx) {
     const types = window.$TUIKit.TIM.TYPES
 
     const data = reactive({
       dataType: [
-        {title: '需要验证', name: types.JOIN_OPTIONS_NEED_PERMISSION},
-        {title: '自由邀请', name: types.JOIN_OPTIONS_FREE_ACCESS},
-        {title: '禁止加群', name: types.JOIN_OPTIONS_DISABLE_APPLY}
+        { title: '需要验证', name: types.JOIN_OPTIONS_NEED_PERMISSION },
+        { title: '自由邀请', name: types.JOIN_OPTIONS_FREE_ACCESS },
+        { title: '禁止加群', name: types.JOIN_OPTIONS_DISABLE_APPLY }
       ],
-      defaultType: {title: props.updateGroupInfo.title, name: props.updateGroupInfo.conversation.joinOption}
+      defaultType: { title: props.updateGroupInfo.title, name: props.updateGroupInfo.conversation.joinOption }
     })
 
     watch(() => data.defaultType, (newVal) => {

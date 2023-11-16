@@ -71,8 +71,8 @@
 
 <script>
 export default {
-  name: "Stock",
-};
+  name: 'Stock',
+}
 </script>
 
 <style scoped>

@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import {Icon as WebLinKIcon} from '@iconify/vue'
+import { Icon as WebLinKIcon } from '@iconify/vue'
 import RadioTab from '../../../../components/RadioTab.vue'
 import SelectClassification from './ChannelClassification.vue'
 
@@ -67,18 +67,18 @@ export default {
     RadioTab, SelectClassification, WebLinKIcon,
   },
 
-  data() {
+  data () {
     return {
       linkType: [
-        {title: '内部浏览器', name: 'inter', openMethod: 'userSelect'},
-        {title: '系统浏览器', name: 'system', openMethod: 'systemSelect'}
+        { title: '内部浏览器', name: 'inter', openMethod: 'userSelect' },
+        { title: '系统浏览器', name: 'system', openMethod: 'systemSelect' }
       ],
       openType: [
-        {title: '当前页面直接打开', name: 'current', openMethod: 'currentPage'},
-        {title: '外部跳转打开', name: 'outer', openMethod: 'outerOpen'},
+        { title: '当前页面直接打开', name: 'current', openMethod: 'currentPage' },
+        { title: '外部跳转打开', name: 'outer', openMethod: 'outerOpen' },
       ],
-      defaultType: {title: '内部浏览器', name: 'inter', openMethod: 'userSelect'},
-      defaultOpen: {title: '当前页面直接打开', name: 'current', openMethod: 'currentPage'},
+      defaultType: { title: '内部浏览器', name: 'inter', openMethod: 'userSelect' },
+      defaultOpen: { title: '当前页面直接打开', name: 'current', openMethod: 'currentPage' },
       link: '',
       linkName: '',
       classShow: false,
@@ -87,7 +87,7 @@ export default {
     }
   },
 
-  mounted() {
+  mounted () {
     this.$nextTick(() => {
       const nameRef = this.$refs.linkNameRef
       // const linkRef = this.$refs.linkRef
@@ -98,43 +98,41 @@ export default {
 
   methods: {
     // 返回
-    backChannel() {
+    backChannel () {
       this.$emit('back')
     },
 
     // 关闭
-    closeChannel() {
+    closeChannel () {
       this.$emit('close')
     },
 
     // 选择分类
-    submitSelect() {
+    submitSelect () {
       // console.log(this.defaultOpen,this.defaultType);
       if (this.link !== '' && this.linkName !== '') {
         // console.log('获取参数',data.defaultOpen,data.defaultType)
         if (this.defaultOpen.openMethod === 'outerOpen') {
           //  console.log('外部打开')
-          this.webLink = {url: `${this.requestProtocol}://${this.link}`, openMethod: this.defaultType.openMethod}
+          this.webLink = { url: `${this.requestProtocol}://${this.link}`, openMethod: this.defaultType.openMethod }
           this.classShow = true
         } else {
           //  console.log('当前页面打开')
-          this.webLink = {url: `${this.requestProtocol}://${this.link}`, openMethod: this.defaultOpen.openMethod}
+          this.webLink = { url: `${this.requestProtocol}://${this.link}`, openMethod: this.defaultOpen.openMethod }
           this.classShow = true
         }
-
 
       }
     }
 
-
   },
 
   watch: {
-    defaultType(newVal) {
+    defaultType (newVal) {
       console.log('监听数据变化', newVal)
       this.defaultType = newVal
     },
-    defaultOpen(newVal) {
+    defaultOpen (newVal) {
       console.log('监听数据变化', newVal)
       this.defaultOpen = newVal
     }

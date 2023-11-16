@@ -11,7 +11,8 @@
     <div v-else class="dash-board">
       <div v-for="(item, index) in this.todoList"
            :key="index"
-           :class="item.num == 0 || item.num == undefined ? 'green' : item.num < 100 ? 'yellow' : 'red'" class="dash-cell pointer" @click="jumpUrl(this.admin_url)">
+           :class="item.num == 0 || item.num == undefined ? 'green' : item.num < 100 ? 'yellow' : 'red'"
+           class="dash-cell pointer" @click="jumpUrl(this.admin_url)">
         <div class="cell-title">{{ item.title }}</div>
         <div class="cell-num" style="font-family: 'Oswald-Medium';">{{ item.num == undefined ? '-' : item.num }}</div>
       </div>
@@ -45,11 +46,11 @@
 </template>
 
 <script>
-import Widget from "../../../card/Widget.vue";
-import {Icon} from '@iconify/vue';
-import {mapActions, mapWritableState} from "pinia";
-import {shortTalkStore} from '../store'
-import {cardStore} from "../../../../store/card";
+import Widget from '../../../card/Widget.vue'
+import { Icon } from '@iconify/vue'
+import { mapActions, mapWritableState } from 'pinia'
+import { shortTalkStore } from '../store'
+import { cardStore } from '../../../../store/card'
 import browser from '../../../../js/common/browser'
 import Unusual from '../../Unusual.vue'
 
@@ -83,7 +84,7 @@ export default {
   computed: {
     ...mapWritableState(shortTalkStore, ['todoList', 'access_token', 'baseUrl', 'admin_url']),
   },
-  data() {
+  data () {
     return {
       settings: {
         swipeEasing: true,
@@ -93,10 +94,10 @@ export default {
       },
       // 标题样式
       options: {
-        className: "card",
-        title: "社区待办",
-        icon: "iconamoon:history-fill",
-        rightIcon: "fluent:open-20-filled",
+        className: 'card',
+        title: '社区待办',
+        icon: 'iconamoon:history-fill',
+        rightIcon: 'fluent:open-20-filled',
         // icon: "games-16-filled",
       },
       // 设置
@@ -105,7 +106,7 @@ export default {
           icon: 'shezhi1',
           title: '设置',
           fn: () => {
-            this.settingVisible = true;
+            this.settingVisible = true
             this.$refs.dataSlot.visible = false
           }
         },
@@ -114,9 +115,9 @@ export default {
       accToken: '',
       accUrl: '',
       settingVisible: false,
-    };
+    }
   },
-  mounted() {
+  mounted () {
     // 初始化
     this.accToken = this.access_token
     this.accUrl = this.baseUrl
@@ -125,33 +126,33 @@ export default {
   methods: {
     ...mapActions(cardStore, ['updateCustomData']),
     ...mapActions(shortTalkStore, ['getTodoData', 'changeAccToken']),
-    changeVisible() {
+    changeVisible () {
       this.settingVisible = false
       this.changeAccToken(this.accToken, this.accUrl)
     },
-    jumpUrl(url) {
+    jumpUrl (url) {
       browser.openInUserSelect(url)
     },
-    back() {
+    back () {
       this.settingVisible = true
     }
   },
   watch: {
     // 监听token 跟 url
     'access_token': {
-      handler(newVal, oldVal) {
+      handler (newVal, oldVal) {
         this.accToken = this.access_token
         this.getTodoData()
       }
     },
     'baseUrl': {
-      handler(newVal, oldVal) {
+      handler (newVal, oldVal) {
         this.accUrl = this.baseUrl
         this.getTodoData()
       }
     },
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

@@ -1,6 +1,7 @@
 <template>
   <div class="team-module">
-    <div class="common-panel s-bg pointer " style="margin-left: 0;padding:0.6em !important;color:var(--primary-text);background: var(--primary-bg);"
+    <div class="common-panel s-bg pointer "
+         style="margin-left: 0;padding:0.6em !important;color:var(--primary-text);background: var(--primary-bg);"
          @click="toggleTeam">
       <emoji icon="glassface" style="width: 52px;height:52px"></emoji>
     </div>
@@ -17,21 +18,21 @@
 
 <script>
 import TeamTip from '../TeamTip.vue'
-import {mapActions, mapWritableState} from 'pinia'
-import {teamStore} from '../../store/team'
+import { mapActions, mapWritableState } from 'pinia'
+import { teamStore } from '../../store/team'
 import MyProp from '../team/MyProp.vue'
 import Emoji from '../comp/Emoji.vue'
-import {taskStore} from '../../apps/task/store'
+import { taskStore } from '../../apps/task/store'
 
 export default {
-  name: "Team",
+  name: 'Team',
   components: {
     Emoji,
     TeamTip,
     MyProp
   },
   props: {},
-  data() {
+  data () {
     return {
       teamList: [
         {
@@ -86,11 +87,11 @@ export default {
   },
   methods: {
     ...mapActions(teamStore, ['updateMy']),
-    async jump(type, val) {
+    async jump (type, val) {
       switch (type) {
         case 'route':
           this.$router.push(val.route)
-          break;
+          break
         case 'team':
           await this.updateMy(0)
           if (this.team.status === false) {
@@ -99,20 +100,20 @@ export default {
           } else {
             this.teamVisible = !this.teamVisible
           }
-          break;
+          break
         case 'prop':
           this.showMyProp = true
-          break;
+          break
         case 'task':
           this.isTaskDrawer = true
-          break;
+          break
       }
       this.openTeam = false
     },
-    toggleTeam() {
+    toggleTeam () {
       this.openTeam = !this.openTeam
     },
-    closeMyProp(val) {
+    closeMyProp (val) {
       this.showMyProp = val
     }
   },

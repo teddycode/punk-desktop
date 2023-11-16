@@ -85,17 +85,17 @@
 </template>
 
 <script>
-import {CPUOption, GPUOption} from './echartOptions'
-import * as echarts from "echarts";
-import {mapActions, mapWritableState} from "pinia";
-import Widget from "../../card/Widget.vue";
-import {appStore} from '../../../store'
-import {inspectorStore} from '../../../store/inspector'
-import {message} from 'ant-design-vue'
+import { CPUOption, GPUOption } from './echartOptions'
+import * as echarts from 'echarts'
+import { mapActions, mapWritableState } from 'pinia'
+import Widget from '../../card/Widget.vue'
+import { appStore } from '../../../store'
+import { inspectorStore } from '../../../store/inspector'
+import { message } from 'ant-design-vue'
 
 export default {
   props: ['desk'],
-  data() {
+  data () {
     return {
       options: {
         className: 'card',
@@ -106,9 +106,9 @@ export default {
       CPUOption,
       GPUOption,
       CPUData: {
-        useGPU: {value: 0},
-        useCPU: {value: 0},
-        useMemory: {value: 0},
+        useGPU: { value: 0 },
+        useCPU: { value: 0 },
+        useMemory: { value: 0 },
         down: 0,
         up: 0
       },
@@ -129,31 +129,31 @@ export default {
     }
   },
 
-  name: "CPULineChart",
+  name: 'CPULineChart',
   components: {
     Widget
   },
   computed: {
     ...mapWritableState(appStore, ['saving']),
     ...mapWritableState(inspectorStore, ['displayData', 'aidaData']),
-    lastDown() {
+    lastDown () {
       return this.CPUData.down < 1000 ? this.CPUData.down + 'KB/S' : this.CPUData.down < 1024000 ? (this.CPUData.down / 1024).toFixed(2) + 'MB/S' : (this.CPUData.down / 1024 / 1024).toFixed(2) + 'GB/S'
     },
-    lastUp() {
+    lastUp () {
       return this.CPUData.up < 1000 ? this.CPUData.up + 'KB/S' : this.CPUData.up < 1024000 ? (this.CPUData.up / 1024).toFixed(2) + 'MB/S' : (this.CPUData.up / 1024 / 1024).toFixed(2) + 'GB/S'
     }
   },
-  mounted() {
-    this.CPUEcharts();
+  mounted () {
+    this.CPUEcharts()
     this.startInspect()
   },
-  unmounted() {
+  unmounted () {
     this.stopInspect()
   },
   watch: {
-    "displayData": {
-      handler(newVal, oldVal) {
-        let {useGPU, warmGPU, useMemory, useCPU, warmCPU, FPS, videoStorage, down, up} = this.displayData || {}
+    'displayData': {
+      handler (newVal, oldVal) {
+        let { useGPU, warmGPU, useMemory, useCPU, warmCPU, FPS, videoStorage, down, up } = this.displayData || {}
         this.CPUData = {
           useGPU: useGPU,
           useCPU: useCPU,
@@ -163,11 +163,11 @@ export default {
         }
         if (this.CPUData.useCPU.value !== 0) {
           this.CPUList.push(this.CPUData.useCPU.value)
-          this.CPUList.shift();
+          this.CPUList.shift()
         }
         if (this.CPUData.useGPU.value !== 0) {
           this.GPUList.push(this.CPUData.useGPU.value)
-          this.GPUList.shift();
+          this.GPUList.shift()
         }
         //this.CPUEcharts()
         this.echartsInstance.setOption({
@@ -210,7 +210,7 @@ export default {
               },
             },
           ]
-        });
+        })
         this.echartsGPUInstance.setOption({
           series: [
             {
@@ -258,11 +258,11 @@ export default {
   },
   methods: {
     ...mapActions(inspectorStore, ['startInspect', 'stopInspect']),
-    go() {
-      this.$router.push({name: 'inspector'})
+    go () {
+      this.$router.push({ name: 'inspector' })
     },
-    CPUEcharts() {
-      this.echartsInstance = echarts.init(this.$refs.cpuChart);
+    CPUEcharts () {
+      this.echartsInstance = echarts.init(this.$refs.cpuChart)
       this.echartsInstance.setOption({
         title: {
           text: ''
@@ -273,10 +273,10 @@ export default {
           data: ['normal'],
         },
         grid: { // 让图表占满容器
-          top: "0px",
-          left: "0px",
-          right: "0px",
-          bottom: "0px"
+          top: '0px',
+          left: '0px',
+          right: '0px',
+          bottom: '0px'
         },
         xAxis: [
           {
@@ -332,7 +332,7 @@ export default {
           },
         ]
       })
-      this.echartsGPUInstance = echarts.init(this.$refs.gpuChart);
+      this.echartsGPUInstance = echarts.init(this.$refs.gpuChart)
       this.echartsGPUInstance.setOption({
         animation: false,
         title: {
@@ -343,10 +343,10 @@ export default {
           data: ['normal'],
         },
         grid: { // 让图表占满容器
-          top: "0px",
-          left: "0px",
-          right: "0px",
-          bottom: "0px"
+          top: '0px',
+          left: '0px',
+          right: '0px',
+          bottom: '0px'
         },
         xAxis: [
           {

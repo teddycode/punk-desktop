@@ -231,18 +231,19 @@ myappTpl =
 </div>
 
 `
-const ipc=require("electron").ipcRenderer
+const ipc = require('electron').ipcRenderer
+
 function parseNumber (str) {
   const num = Number(str)
   return isNaN(num) ? 0 : num
 }
 
 const appListModel = require('../../util/model/appListModel.js').appListModel
-const VueSelecto=require('vue-selecto')
+const VueSelecto = require('vue-selecto')
 module.exports = Vue.component('myapp-page', {
   name: 'myapp-page',
   template: myappTpl,
-  components:{
+  components: {
     VueSelecto
   },
   beforeRouteEnter (to, from, next) {
@@ -250,26 +251,26 @@ module.exports = Vue.component('myapp-page', {
       vm.myApps = []
       console.log('before enter' + to.query.listId)
       vm.listId = parseNumber(to.query.listId)// 通过 `vm` 访问组件实例
-      window.$listId=vm.listId
+      window.$listId = vm.listId
       vm.load()
     })
   },
   beforeRouteUpdate (to, from, next) {
     this.listId = parseNumber(to.query.listId)
-    window.$listId=this.listId
+    window.$listId = this.listId
     this.load()
   },
   data () {
     return {
       //selecto
-      selectedElements:[],
-      selected:[],
+      selectedElements: [],
+      selected: [],
       //selecto end
-      pagination:{
+      pagination: {
         onChange: page => {
         },
         pageSize: 10,
-        hideOnSinglePage:true
+        hideOnSinglePage: true
       },
       listId: this.$route.query.listId,
       visible: false,
@@ -432,16 +433,16 @@ module.exports = Vue.component('myapp-page', {
       })
       console.log(this.listId)
       if (this.listId === 0) {
-         appListModel.getDefaultList().then(defaultList=>{
-          if(!!!defaultList){
+        appListModel.getDefaultList().then(defaultList => {
+          if (!!!defaultList) {
             this.appList = {
-              id:0,
+              id: 0,
               name: '默认列表',
-              type: "0"
+              type: '0'
             }
-          }else{
-            this.appList=defaultList.value
-            this.appList.type=String(this.appList.type)
+          } else {
+            this.appList = defaultList.value
+            this.appList.type = String(this.appList.type)
           }
         })
       } else {
@@ -449,27 +450,27 @@ module.exports = Vue.component('myapp-page', {
         data.then(data => {
           this.appList = null
           this.appList = data
-          this.appList.type=String(this.appList.type)
+          this.appList.type = String(this.appList.type)
         })
       }
     },
     onListTypeChange (e) {
-      this.appList.type=e.target.value
-      let saveData={}
-      Object.assign(saveData,this.appList)
-      saveData.type=Number(saveData.type)
-      if(this.appList.id!==0){
+      this.appList.type = e.target.value
+      let saveData = {}
+      Object.assign(saveData, this.appList)
+      saveData.type = Number(saveData.type)
+      if (this.appList.id !== 0) {
         appListModel.put(saveData).then().catch()
-      }else{
-          appListModel.putDefaultList(saveData)
+      } else {
+        appListModel.putDefaultList(saveData)
       }
       //todo 去保存appList的type
     },
-    openUrl(url){
+    openUrl (url) {
       window.open(url)
     },
-    addTab(url){
-      ipc.send('addTab',{url:url})
+    addTab (url) {
+      ipc.send('addTab', { url: url })
     },
     //selecto
     onSelect (e) {
@@ -484,30 +485,30 @@ module.exports = Vue.component('myapp-page', {
     },
     // 框选结束存储数据
     selectEnd (e) {
-      this.selectedElements=[]
-      window.$selectedApps=[]
+      this.selectedElements = []
+      window.$selectedApps = []
       e.selected.map(item => {
         this.selectedElements.push(item)
         this.selected.push(item.id)
       })
-      window.$selectedApps=this.selected
+      window.$selectedApps = this.selected
     },
 
     //selecto end
 
     //drag
-    dragStart (e,app) {
-       if(!!!window.$selectedApps){
-         window.$selectedApps=[String(app.id)]
-      }else if(window.$selectedApps.length===0  ){
+    dragStart (e, app) {
+      if (!!!window.$selectedApps) {
+        window.$selectedApps = [String(app.id)]
+      } else if (window.$selectedApps.length === 0) {
         window.$selectedApps.push(String(app.id))
       }
-       window.$removeApps=()=>{
-         this.selected=[]
-         this.selectedElements.forEach(el => {
-           el.classList.remove('selected')
-         })
-         this.load()
+      window.$removeApps = () => {
+        this.selected = []
+        this.selectedElements.forEach(el => {
+          el.classList.remove('selected')
+        })
+        this.load()
       }
     },
     //drag end
@@ -515,11 +516,11 @@ module.exports = Vue.component('myapp-page', {
     /***
      * 分享整组
      */
-    shareList(){
-      let apps=this.myApps
-      let filterList =  apps.filter(e => !e.url.startsWith('file:///'))    //过滤掉file层面的tab
+    shareList () {
+      let apps = this.myApps
+      let filterList = apps.filter(e => !e.url.startsWith('file:///'))    //过滤掉file层面的tab
       let args = []
-      for(let i = 0; i < filterList.length; i++) {
+      for (let i = 0; i < filterList.length; i++) {
         const obj = {
           url: filterList[i].url,
           favicon: filterList[i].icon,
@@ -532,10 +533,10 @@ module.exports = Vue.component('myapp-page', {
     /***
      * 分享整个列表
      */
-    openList(){
-        this.myApps.forEach(app=>{
-          ipc.send('addTab',{url:app.url});
-        })
+    openList () {
+      this.myApps.forEach(app => {
+        ipc.send('addTab', { url: app.url })
+      })
     }
   }
 })

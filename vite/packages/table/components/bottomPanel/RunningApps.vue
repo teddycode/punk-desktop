@@ -8,53 +8,53 @@
           runningApps.length + runningTableApps.length
         }}</span>
       <a-button
-        :type="type === 'all' ? 'primary' : 'default'"
-        class="mr-3"
-        @click.stop="setType('all')"
+          :type="type === 'all' ? 'primary' : 'default'"
+          class="mr-3"
+          @click.stop="setType('all')"
       >全部应用
       </a-button
       >
       <a-button
-        :type="type === 'qing' ? 'primary' : 'default'"
-        class="mr-3"
-        style="background: var(--primary-bg); color: var(--primary-text)"
-        @click.stop="setType('qing')"
+          :type="type === 'qing' ? 'primary' : 'default'"
+          class="mr-3"
+          style="background: var(--primary-bg); color: var(--primary-text)"
+          @click.stop="setType('qing')"
       >Web3应用
       </a-button
       >
       <a-button
-        :type="type === 'table' ? 'primary' : 'default'"
-        style="background: var(--primary-bg); color: var(--primary-text)"
-        @click.stop="setType('table')"
+          :type="type === 'table' ? 'primary' : 'default'"
+          style="background: var(--primary-bg); color: var(--primary-text)"
+          @click.stop="setType('table')"
       >本地应用
       </a-button
       >
     </div>
     <div
-      class="h-10 w-28 bg-gray-800 rounded-lg flex justify-evenly items-center pointer"
-      style="background: var(--primary-bg); color: var(--primary-text)"
-      @click.stop="closeAll()"
+        class="h-10 w-28 bg-gray-800 rounded-lg flex justify-evenly items-center pointer"
+        style="background: var(--primary-bg); color: var(--primary-text)"
+        @click.stop="closeAll()"
     >
       <Icon icon="minus-circle-fill "></Icon>
       全部关闭
     </div>
   </div>
   <vue-custom-scrollbar
-    :settings="settings"
-    style="position: relative; height: 250px; border-radius: 8px"
+      :settings="settings"
+      style="position: relative; height: 250px; border-radius: 8px"
   >
     <div class="mt-2" style="white-space: nowrap">
       <a-empty
-        v-if="!runningApps.length && !runningTableApps.length"
-        class="mt-10 mb-10"
-        description="暂无运行中的应用"
+          v-if="!runningApps.length && !runningTableApps.length"
+          class="mt-10 mb-10"
+          description="暂无运行中的应用"
       >
       </a-empty>
       <div
-        v-for="item in runningTableApps"
-        v-if="['all', 'table'].indexOf(this.type) > -1"
-        class="w-1/3 open-app pointer mb-10 mt-5"
-        @click="openApp(item)"
+          v-for="item in runningTableApps"
+          v-if="['all', 'table'].indexOf(this.type) > -1"
+          class="w-1/3 open-app pointer mb-10 mt-5"
+          @click="openApp(item)"
       >
         <div class="flex flex-row items-center w-1/2">
           <div class="h-8 w-8 rounded-lg flex justify-evenly items-center mr-2">
@@ -64,10 +64,10 @@
         </div>
       </div>
       <div
-        v-for="item in runningAppsInfo"
-        v-if="['all', 'qing'].indexOf(this.type) > -1"
-        class="w-1/3 open-app pointer mb-10 mt-5"
-        @click="openApp(item)"
+          v-for="item in runningAppsInfo"
+          v-if="['all', 'qing'].indexOf(this.type) > -1"
+          class="w-1/3 open-app pointer mb-10 mt-5"
+          @click="openApp(item)"
       >
         <div class="flex flex-row items-center w-1/2 xt-text">
           <div class="h-8 w-8 rounded-lg flex justify-evenly items-center mr-2">
@@ -76,10 +76,10 @@
           {{ item.name }}
         </div>
         <a-avatar
-          :src="'file://' + item.capture"
-          alt=""
-          class="w-2/3 h-full object-contain mt-3"
-          shape="square"
+            :src="'file://' + item.capture"
+            alt=""
+            class="w-2/3 h-full object-contain mt-3"
+            shape="square"
         ></a-avatar>
       </div>
     </div>
@@ -89,14 +89,14 @@
       <a-text strong>最近使用</a-text>
     </div>
     <vue-custom-scrollbar
-      :settings="settings"
-      style="position: relative; height: 150px; border-radius: 8px"
+        :settings="settings"
+        style="position: relative; height: 150px; border-radius: 8px"
     >
       <div class="" style="position: relative; white-space: nowrap">
         <div
-          v-for="item in recently"
-          class="mt-6 last-app app-small pointer"
-          @click="openApp(item)"
+            v-for="item in recently"
+            class="mt-6 last-app app-small pointer"
+            @click="openApp(item)"
         >
           <div class="rounded-lg p-3 flex flex-row">
             <div>

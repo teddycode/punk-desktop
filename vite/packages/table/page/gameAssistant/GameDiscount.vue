@@ -10,7 +10,8 @@
 
     <template v-if="leftTitleType.name === 'steam' ">
       <a-spin v-if="isLoading === true"/>
-      <vue-custom-scrollbar v-else :settings="settingsScroller" class="mt-3 px-3" style="height: calc(100vh - 16.5em)" @touchstart.stop
+      <vue-custom-scrollbar v-else :settings="settingsScroller" class="mt-3 px-3" style="height: calc(100vh - 16.5em)"
+                            @touchstart.stop
                             @touchmove.stop @touchend.stop>
         <div class="steam-top-content w-full mb-4">
           <div v-for="item in steamList.slice(0,2)" class="steam-top-item rounded-lg flex pointer flex-col discount-bg"
@@ -30,7 +31,8 @@
           </div>
         </div>
         <div class="steam-bottom-content">
-          <div v-for="item in steamList.slice(2)" class="steam-bottom-item discount-bg pointer rounded-lg flex flex-col mr-2"
+          <div v-for="item in steamList.slice(2)"
+               class="steam-bottom-item discount-bg pointer rounded-lg flex flex-col mr-2"
                @click="enterDiscountDetail(item)"
           >
             <img :src="item.header_image" alt="" class="rounded-t-lg mb-3"
@@ -46,7 +48,8 @@
     </template>
 
     <template v-else>
-      <vue-custom-scrollbar :settings="settingsScroller" style="height: calc(100vh - 15.8em)" @touchstart.stop @touchmove.stop
+      <vue-custom-scrollbar :settings="settingsScroller" style="height: calc(100vh - 15.8em)" @touchstart.stop
+                            @touchmove.stop
                             @touchend.stop>
         <div class="flex epic-container">
           <div v-for="item in epicList" class="mr-4 mb-4 discount-bg pointer flex flex-col rounded-lg"
@@ -85,22 +88,22 @@
 </template>
 
 <script>
-import {currencyFormat, regionRange, remainderDay, sendRequest} from '../../js/axios/api';
-import HorizontalPanel from '../../components/HorizontalPanel.vue';
-import HorizontalDrawer from '../../components/HorizontalDrawer.vue';
+import { currencyFormat, regionRange, remainderDay, sendRequest } from '../../js/axios/api'
+import HorizontalPanel from '../../components/HorizontalPanel.vue'
+import HorizontalDrawer from '../../components/HorizontalDrawer.vue'
 import browser from '../../js/common/browser'
 import _ from 'lodash-es'
 
 export default {
-  name: "GameDiscount",
+  name: 'GameDiscount',
   components: {
     HorizontalPanel,
     HorizontalDrawer
   },
-  data() {
+  data () {
     return {
-      leftTitle: [{title: 'Steam折扣', name: 'steam'}, {title: 'Epic喜加一', name: 'epic'}],
-      leftTitleType: {title: 'Steam折扣', name: 'steam'},
+      leftTitle: [{ title: 'Steam折扣', name: 'steam' }, { title: 'Epic喜加一', name: 'epic' }],
+      leftTitleType: { title: 'Steam折扣', name: 'steam' },
       rightSelect: regionRange,
       placeName: {
         name: '国区',
@@ -122,7 +125,7 @@ export default {
       drawerTitle: '地区'
     }
   },
-  mounted() {
+  mounted () {
     this.getSteamData(this.placeName.id)
     this.getEpicData()
   },
@@ -130,30 +133,30 @@ export default {
     remainderDay,
     currencyFormat,
     // 打开右侧抽屉事件
-    openRightDrawer() {
+    openRightDrawer () {
       this.$refs.regionDrawer.openDrawer()
     },
     // 打开右侧抽屉区服选中事件
-    getArea(v) {
+    getArea (v) {
       this.placeName = v
       this.getSteamData(v.id)
     },
     // 进入详情
-    enterDiscountDetail(val) {
+    enterDiscountDetail (val) {
       if (val.type === 1) {  //  解决steam折扣列表，type1 组合包问题
         const storeUrl = `https://store.steampowered.com/sub/${val.id}/`
         browser.openInInner(storeUrl)
       } else {
-        this.$router.push({name: 'GameDiscountDetail', params: {id: val.id, exTime: val.discount_expiration}})
+        this.$router.push({ name: 'GameDiscountDetail', params: { id: val.id, exTime: val.discount_expiration } })
       }
     },
 
     // 获取特惠数据
-    getSteamData(v) {
+    getSteamData (v) {
       if (!this.isLoading) {
         this.isLoading = true
         const url = `https://store.steampowered.com/api/featuredcategories/?cc=${v}&l=${v}`
-        sendRequest(url, {}, {localCache: true, localTtl: 60 * 12 * 60}).then((result) => {
+        sendRequest(url, {}, { localCache: true, localTtl: 60 * 12 * 60 }).then((result) => {
           const listData = result.data.specials.items
           this.steamList = listData
         }).finally(() => {
@@ -165,40 +168,40 @@ export default {
     },
 
     // 获取epic数据
-    async getEpicData() {
+    async getEpicData () {
       const url = 'https://store-site-backend-static-ipv4.ak.epicgames.com/freeGamesPromotions?'
       const locale = `locale=${this.placeName.defaultLocale}&`
       const country = `country=${this.placeName.id.toLocaleUpperCase()}&`
       const allowCountries = `allowCountries=${this.placeName.id.toLocaleUpperCase()}`
       const allUrl = url + locale + country + allowCountries
-      const data = await sendRequest(allUrl, {}, {localCache: true, localTtl: 60 * 12 * 60})
+      const data = await sendRequest(allUrl, {}, { localCache: true, localTtl: 60 * 12 * 60 })
       const result = data.data.data.Catalog.searchStore.elements
       const noResultNull = _.filter(result, function (o) {
         return o.promotions !== null
-      });
+      })
       this.epicList = noResultNull
     },
 
-    openEpicStore(v) {
+    openEpicStore (v) {
       if (v.urlSlug !== null) {
         browser.openInInner(`https://store.epicgames.com/zh-CN/p/${v.urlSlug}`)
       } else {
         browser.openInInner(`https://store.epicgames.com/zh-CN`)
       }
     },
-    deadline(value) {
-      const date = new Date(typeof value === 'string' ? `${value}` : parseInt(value) * 1000);
-      const month = date.getMonth() + 1;
-      const day = date.getDate();
-      const hour = date.getHours();
-      const minute = date.getMinutes();
-      const ampm = hour >= 12 ? '下午' : '上午'; // 判断上午或下午
-      const formattedDate = `${month}月${day}日 ${ampm} ${hour % 12}:${minute.toString().padStart(2, '0')}`;
+    deadline (value) {
+      const date = new Date(typeof value === 'string' ? `${value}` : parseInt(value) * 1000)
+      const month = date.getMonth() + 1
+      const day = date.getDate()
+      const hour = date.getHours()
+      const minute = date.getMinutes()
+      const ampm = hour >= 12 ? '下午' : '上午' // 判断上午或下午
+      const formattedDate = `${month}月${day}日 ${ampm} ${hour % 12}:${minute.toString().padStart(2, '0')}`
       return formattedDate
     },
 
     // 获取指定需要的图片
-    getSpecifiedPicture(arr) {
+    getSpecifiedPicture (arr) {
       const newArr = _.filter(arr, function (o) {
         return o.type === 'OfferImageWide'
       })

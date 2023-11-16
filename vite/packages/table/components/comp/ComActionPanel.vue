@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import {ApiFilled, BellFilled, GoldFilled, IdcardFilled, LockFilled, ScheduleFilled} from '@ant-design/icons-vue'
+import { ApiFilled, BellFilled, GoldFilled, IdcardFilled, LockFilled, ScheduleFilled } from '@ant-design/icons-vue'
 import browser from '../../js/common/browser'
 import UpdateMyInfo from './UpdateMyInfo.vue'
 import Emoji from './Emoji.vue'
@@ -59,16 +59,16 @@ export default {
     UpdateMyInfo
   },
   methods: {
-    openUpdateMyInfo() {
+    openUpdateMyInfo () {
       this.$refs.myInfoRef.openMyInfo()
     },
-    edit() {
-      browser.openInInner("https://s.apps.vip/user/info")
+    edit () {
+      browser.openInInner('https://s.apps.vip/user/info')
     },
-    go(url) {
+    go (url) {
       browser.openInInner(url)
     },
-    infoUpdated() {
+    infoUpdated () {
       this.$emit('infoUpdated')
     }
   }

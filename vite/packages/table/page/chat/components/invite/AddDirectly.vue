@@ -19,10 +19,10 @@
 </template>
 
 <script>
-import {mapWritableState} from 'pinia'
-import {Icon as DirectlyIcon} from '@iconify/vue'
-import {teamStore} from '../../../../store/team'
-import {appStore} from '../../../../store'
+import { mapWritableState } from 'pinia'
+import { Icon as DirectlyIcon } from '@iconify/vue'
+import { teamStore } from '../../../../store/team'
+import { appStore } from '../../../../store'
 
 import ContactSelector from '../contact/ContactSelector.vue'
 
@@ -33,7 +33,7 @@ export default {
 
   props: ['no'],
 
-  data() {
+  data () {
     return {
       friendData: []
     }
@@ -43,7 +43,7 @@ export default {
     ...mapWritableState(teamStore, ['teamMembers', 'teamLeader', 'my', 'team']),
     ...mapWritableState(appStore, ['userInfo']),
     // 将小队中的自己进行过滤
-    teamData() {
+    teamData () {
       // console.log('查看小队成员数据',);
       // console.log('查看小队队长数据', Object.keys(this.teamLeader.userInfo).length !== 0);
       if (Object.keys(this.teamMembers).length !== 0 && Object.keys(this.teamLeader.userInfo).length !== 0) {
@@ -58,20 +58,19 @@ export default {
 
   },
 
-  mounted() {
+  mounted () {
     this.getFriend()
   },
 
-
   methods: {
-    backButton() {
+    backButton () {
       this.$emit('back')
     },
-    closeButton() {
+    closeButton () {
       this.$emit('close')
     },
 
-    async getFriend() {
+    async getFriend () {
       const server = window.$TUIKit.tim
       const res = await server.getFriendList()
       // console.log('获取数据',res?.data);

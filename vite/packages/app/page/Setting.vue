@@ -86,12 +86,12 @@
 
 <script>
 import vueCustomScrollbar from '../../../src/components/vue-scrollbar.vue'
-import {CodeTwoTone, DownOutlined, LaptopOutlined, SettingOutlined, SmileOutlined} from '@ant-design/icons-vue'
-import {appStore} from '../store'
-import {mapActions, mapState} from 'pinia'
-import {message, Modal} from 'ant-design-vue'
+import { CodeTwoTone, DownOutlined, LaptopOutlined, SettingOutlined, SmileOutlined } from '@ant-design/icons-vue'
+import { appStore } from '../store'
+import { mapActions, mapState } from 'pinia'
+import { message, Modal } from 'ant-design-vue'
 
-let {appModel, devAppModel} = window.$models
+let { appModel, devAppModel } = window.$models
 let appId =
     window.globalArgs['app-id']
 
@@ -103,7 +103,7 @@ export default {
   computed: {
     ...mapState(appStore, ['app', 'debugMod', 'devApp'])
   },
-  data() {
+  data () {
     return {
       activeNav: ['base'],
       user: {
@@ -120,7 +120,7 @@ export default {
     }
   },
 
-  async mounted() {
+  async mounted () {
     this.appId = appId
     console.log(this.$route.params)
     if (this.$route.params.appId) {
@@ -133,75 +133,75 @@ export default {
     }
   },
   methods: {
-    login() {
+    login () {
       tsbApi.user.login()
     },
-    goALl() {
+    goALl () {
       this.devMod = false
       this.$router.push('/allApps')
     },
     ...mapActions(appStore, ['reloadAppSetting', 'saveAppSetting', 'setApp', 'restoreAppSetting']),
-    goDevelop() {
-      this.$router.push({path: '/dev/'})
+    goDevelop () {
+      this.$router.push({ path: '/dev/' })
     },
-    restore() {
+    restore () {
       Modal.confirm({
         content: '是否还原应用的全部设置？这将丢失所有的设置内容，还原到首次安装时的设置状态。',
         onOk: () => {
           this.restoreAppSetting()
-          this.$router.replace({path: '/setting/' + this.app.nanoid})
+          this.$router.replace({ path: '/setting/' + this.app.nanoid })
           this.activeNav = ['base']
           message.success('还原设置成功。')
         }
       })
     },
-    uninstall(appId) {
+    uninstall (appId) {
       this.$confirm({
         title: '确定卸载此应用？',
         content: '此操作将卸载应用并清空所有应用数据，且无法还原。请谨慎操作。',
         okText: '确认',
         okType: 'danger',
         cancelText: '取消',
-        onOk() {
+        onOk () {
           appModel.uninstall(appId).then(success => {
-            ipc.send('message', {type: 'success', config: {content: '卸载应用成功。'}})
-            ipc.send('deleteApp', {nanoid: appId})
+            ipc.send('message', { type: 'success', config: { content: '卸载应用成功。' } })
+            ipc.send('deleteApp', { nanoid: appId })
           }, err => {
-            ipc.send('message', {type: 'success', config: {content: '卸载失败。'}})
+            ipc.send('message', { type: 'success', config: { content: '卸载失败。' } })
           })
         },
-        onCancel() {
+        onCancel () {
           console.log('Cancel')
         },
       })
 
     },
-    check() {
+    check () {
       this.form.validateFields(err => {
         if (!err) {
           console.info('success')
         }
       })
     },
-    handleChange(e) {
+    handleChange (e) {
       this.checkNick = e.target.checked
       this.$nextTick(() => {
-        this.form.validateFields(['nickname'], {force: true})
+        this.form.validateFields(['nickname'], { force: true })
       })
     },
-    reset() {
+    reset () {
       Modal.confirm({
         content: '是否放弃当前所有改动重载之前的配置？',
         onOk: () => {
           this.reloadAppSetting()
-          this.$router.replace({path: '/setting/' + this.app.nanoid})
+          this.$router.replace({ path: '/setting/' + this.app.nanoid })
           this.activeNav = ['base']
           message.success('已为您重置当前应用的信息。')
 
         }
       })
     },
-    async save() {
+    async save () {
       try {
         await this.saveAppSetting()
         message.success('保存成功。')

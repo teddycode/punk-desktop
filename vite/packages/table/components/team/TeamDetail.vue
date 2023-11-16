@@ -55,31 +55,31 @@
 
 <script>
 import LevelIcon from '../small/LevelIcon.vue'
-import {mapActions, mapState, mapWritableState} from 'pinia'
-import {appStore} from '../../store'
-import {message, Modal} from 'ant-design-vue'
-import {teamStore} from '../../store/team'
+import { mapActions, mapState, mapWritableState } from 'pinia'
+import { appStore } from '../../store'
+import { message, Modal } from 'ant-design-vue'
+import { teamStore } from '../../store/team'
 import grade from '../../js/common/grade'
 
 export default {
   name: 'TeamDetail',
-  components: {LevelIcon},
+  components: { LevelIcon },
   props: ['team', 'teamLeader', 'online', 'effect'],
   computed: {
     ...mapState(appStore, ['userInfo']),
     ...mapWritableState(teamStore, ['team'])
   },
-  mounted() {
+  mounted () {
     this.updateTeam(this.team.no, false, true)
   },
   methods: {
     ...mapActions(teamStore, ['updateTeamShip', 'quitByNo', 'updateMy', 'closeTeam', 'updateTeam', 'cleanTeam', 'disbandByNo']),
-    parseHours(minutes, fixed = 0) {
+    parseHours (minutes, fixed = 0) {
       return (minutes / 60).toFixed(fixed)
     },
     getRemain: grade.getRemain,
 
-    async dismiss() {
+    async dismiss () {
       Modal.confirm({
         content: '您确定要解散团队？此操作不可撤销。此操作将清退小队全部队员，且未领取的小队收益将被清空。建议先提醒小队成员领取后再解散。',
         okText: '解散团队',
@@ -98,14 +98,14 @@ export default {
         }
       })
     },
-    goHall() {
-      this.$router.push({name: 'hall'})
+    goHall () {
+      this.$router.push({ name: 'hall' })
       this.$emit('closeDetail')
     },
-    receiveTeamEarnings() {
+    receiveTeamEarnings () {
       this.$emit('onReceiveTeamEarnings')
     },
-    quit() {
+    quit () {
       Modal.confirm({
         content: '退出小队后，您将无法再为小队做出贡献，但是历史贡献记录将被保留，以便您回到队伍后继承。',
         centered: true,
@@ -116,16 +116,16 @@ export default {
             if (rs.data.status) {
               this.updateMy().then()
               await this.closeTeam()
-              Modal.info({content: '退出小队成功', centered: true})
+              Modal.info({ content: '退出小队成功', centered: true })
             } else {
               await this.closeTeam()
               this.updateMy().then()
-              Modal.error({content: '退出小队失败', centered: true})
+              Modal.error({ content: '退出小队失败', centered: true })
             }
           } else {
             this.updateMy().then()
             await this.closeTeam()
-            Modal.error({content: '退出小队意外失败', centered: true})
+            Modal.error({ content: '退出小队意外失败', centered: true })
           }
         }
       })

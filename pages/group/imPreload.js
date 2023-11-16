@@ -9,20 +9,20 @@ window.$tsVersion = 'v1'
 
 let href = window.location.href
 
-let isDevelopmentMode = process.argv.some(arg=>arg==='--development-mode')
+let isDevelopmentMode = process.argv.some(arg => arg === '--development-mode')
 
 const server = {
-  beforeInit(host) {
+  beforeInit (host) {
     //先检测node是否登录
     ipc.send('checkLogin')
     ipc.on('callback-checkLogin', (event, args) => {
-      if(args) {
+      if (args) {
         ipc.send('imAutoLogin')
         ipc.on('callback-imAutoLogin', (event, args) => {
-          if(args.code === 1000) {
+          if (args.code === 1000) {
             window.location.href = `${host}${config.IM.AUTO_LOGIN}?code=${args.data.code}`
           } else {
-            ipc.send('message',{type:'error',config:{content: args.message, key: Date.now()}})
+            ipc.send('message', { type: 'error', config: { content: args.message, key: Date.now() } })
           }
         })
       } else {
@@ -43,7 +43,7 @@ ipc.invoke('imPreloadReady').then((args) => {
   })
   tsbSdk.listener(args, DepList)
 
-  if(href === config.IM.FRONT_URL_DEV + config.IM.AUTO_LOGIN) {
+  if (href === config.IM.FRONT_URL_DEV + config.IM.AUTO_LOGIN) {
     server.beforeInit(config.IM.FRONT_URL_DEV)
   } else if (href === config.IM.FRONT_URL + config.IM.AUTO_LOGIN) {
     server.beforeInit(config.IM.FRONT_URL)

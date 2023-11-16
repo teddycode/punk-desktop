@@ -31,8 +31,8 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from 'pinia'
-import {appStore} from '../../store'
+import { mapActions, mapWritableState } from 'pinia'
+import { appStore } from '../../store'
 import {
   BookOutlined,
   CloudUploadOutlined,
@@ -52,8 +52,8 @@ export default {
   },
   methods: {
     ...mapActions(appStore, ['toggleDebug']),
-    openDoc() {
-      window.ipc.send('addTab', {url: 'https://a.apps.vip/docs'})
+    openDoc () {
+      window.ipc.send('addTab', { url: 'https://a.apps.vip/docs' })
     }
   }
 }

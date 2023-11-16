@@ -6,19 +6,19 @@ const fs = require('fs')
 window.globalArgs = {}
 
 let loaded = false
-process.argv.forEach(function(arg) {
-	if (arg.startsWith('--')) {
-		var key = arg.split('=')[0].replace('--', '')
-		var value = arg.split('=')[1]
-		globalArgs[key] = value
-	}
+process.argv.forEach(function (arg) {
+  if (arg.startsWith('--')) {
+    var key = arg.split('=')[0].replace('--', '')
+    var value = arg.split('=')[1]
+    globalArgs[key] = value
+  }
 })
 if (navigator.platform === 'MacIntel') {
-	window.platformType = 'mac'
+  window.platformType = 'mac'
 } else if (navigator.platform === 'Win32') {
-	window.platformType = 'windows'
+  window.platformType = 'windows'
 } else {
-	window.platformType = 'linux'
+  window.platformType = 'linux'
 }
 var settings = {
   filePath: window.globalArgs['user-data-path'] + (process.platform === 'win32' ? '\\' : '/') + 'settings.json',
@@ -71,10 +71,10 @@ var settings = {
       settings.list[key] = value
       settings.runChangeCallbacks(key)
     })
-	
-	ipc.on('returnIsDefaultBrowser',function(e,value){
-		console.log(value)
-	})
+
+    ipc.on('returnIsDefaultBrowser', function (e, value) {
+      console.log(value)
+    })
   }
 }
 

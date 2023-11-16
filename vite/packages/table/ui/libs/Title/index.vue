@@ -21,32 +21,32 @@
 <script>
 export default {
   computed: {
-    typeClass() {
+    typeClass () {
       let typeList = {
-        default: "xt-text text-base ",
-        header: "xt-text text-lg ",
-        text: "xt-text-2 text-sm",
-      };
-      return typeList[this.type] + ` ${this.m + "-" + this.spacing}`;
+        default: 'xt-text text-base ',
+        header: 'xt-text text-lg ',
+        text: 'xt-text-2 text-sm',
+      }
+      return typeList[this.type] + ` ${this.m + '-' + this.spacing}`
     },
   },
   props: {
     title: {},
     m: {
-      default: "my",
+      default: 'my',
     },
     spacing: {
       type: String,
       default: 3,
     },
     titleClass: {
-      default: "",
+      default: '',
     },
     type: {
-      default: "default",
+      default: 'default',
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

@@ -1,10 +1,13 @@
 <template>
   <div class="w-full h-full">
     <Toolbar :defaultConfig="toolbarConfig"
-             :editor="editorRef" :mode="mode" style="border-bottom: 1px solid var(--divider);background-color: var(--primary-bg) !important;"/>
+             :editor="editorRef" :mode="mode"
+             style="border-bottom: 1px solid var(--divider);background-color: var(--primary-bg) !important;"/>
 
     <Editor v-model="valueHtml"
-            :defaultConfig="editorConfig" :mode="mode" style="height: 100% ; overflow-y: hidden;background-color: var(--primary-bg) !important;" @onCreated="handleCreated"/>
+            :defaultConfig="editorConfig" :mode="mode"
+            style="height: 100% ; overflow-y: hidden;background-color: var(--primary-bg) !important;"
+            @onCreated="handleCreated"/>
   </div>
 </template>
 

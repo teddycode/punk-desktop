@@ -75,9 +75,11 @@
 
     <div class="rounded-lg pointer"
          style="background: var(--secondary-bg);padding: 14px 16px !important;margin-bottom: 16px !important;">
-      <div v-if="conversation?.selfInfo?.role !== 'Member' && conversation.type !== 'AVChatRoom' && conversation.type !== 'Private'" class="flex items-center justify-between"
-           style="margin-bottom: 11px;"
-           @click="enterGroupManage">
+      <div
+          v-if="conversation?.selfInfo?.role !== 'Member' && conversation.type !== 'AVChatRoom' && conversation.type !== 'Private'"
+          class="flex items-center justify-between"
+          style="margin-bottom: 11px;"
+          @click="enterGroupManage">
         <span class="font-14" style="color: var(--primary-text);">群管理</span>
         <Icon icon="xiangyou"></Icon>
       </div>
@@ -186,24 +188,24 @@
 </template>
 
 <script>
-import {defineComponent, onMounted, reactive, toRefs} from 'vue';
-import useClipboard from 'vue-clipboard3';
-import {message, Modal} from 'ant-design-vue'
-import ChangeModal from '../../../../../components/Modal.vue';
+import { defineComponent, onMounted, reactive, toRefs } from 'vue'
+import useClipboard from 'vue-clipboard3'
+import { message, Modal } from 'ant-design-vue'
+import ChangeModal from '../../../../../components/Modal.vue'
 import UserSelect from '../../../components/userselect/index.vue'
 import AddMemeber from '../../../components/userselect/addMemeber.vue'
 import _ from 'lodash-es'
-import {appStore} from '../../../../../store'
+import { appStore } from '../../../../../store'
 
 const manage = defineComponent({
   props: ['manageData', 'conversation', 'memberList', 'openGroup'],
 
-  components: {ChangeModal, UserSelect, AddMemeber},
+  components: { ChangeModal, UserSelect, AddMemeber },
 
-  setup(props, ctx) {
+  setup (props, ctx) {
     const types = window.$TUIKit.TIM.TYPES
-    const {GroupServer} = manage;
-    const {t} = window.$TUIKit.config.i18n.useI18n();
+    const { GroupServer } = manage
+    const { t } = window.$TUIKit.config.i18n.useI18n()
     const state = appStore()
 
     const data = reactive({
@@ -228,10 +230,10 @@ const manage = defineComponent({
     })
 
     const handleGroupIDCopy = async () => {  // 复制群组id
-      const {toClipboard} = useClipboard();
-      const res = await toClipboard(props.conversation.groupID);
-      if (res.text !== "") {
-        message.success('群聊ID成功复制');
+      const { toClipboard } = useClipboard()
+      const res = await toClipboard(props.conversation.groupID)
+      if (res.text !== '') {
+        message.success('群聊ID成功复制')
       }
     }
 
@@ -289,13 +291,12 @@ const manage = defineComponent({
 
     }
 
-
     const exitGroupChat = () => {  // 退出群聊
       Modal.confirm({
         content: '确定退出该群聊吗',
         okText: '确认',
         cancelText: '取消',
-        onOk() {
+        onOk () {
           quit()
           ctx.emit('close')
         }
@@ -304,9 +305,8 @@ const manage = defineComponent({
 
     const quit = async () => {
       await GroupServer.TUICore.tim.quitGroup(`${props.conversation.groupID}`)
-      manage.TUIServer.store.conversation = {};
+      manage.TUIServer.store.conversation = {}
     }
-
 
     const deleteMember = (type) => {  // 删除群组成员
       if (props.memberList.length > 1) {
@@ -322,7 +322,7 @@ const manage = defineComponent({
         content: '是否确认操作',
         okText: '确认',
         cancelText: '取消',
-        onOk() {
+        onOk () {
           dismissGroup()
           ctx.emit('close')
         }
@@ -381,7 +381,6 @@ const manage = defineComponent({
       data.friendList = newList
     }
 
-
     const updateGroupJoinWay = () => {  // 修改加群方式
       ctx.emit('updateName', {
         title: '修改加群方式', id: 5, info: {
@@ -415,10 +414,9 @@ const manage = defineComponent({
     }
   }
 
-
 })
 
-export default manage;
+export default manage
 </script>
 
 

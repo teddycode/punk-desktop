@@ -19,7 +19,8 @@
       <div class="flex items-center justify-between">
         <span class="font-400"
               style="color:var(--secondary-text);">{{ formatTime(parseInt(item.doc.content.time) * 1000) }}</span>
-        <div class="font-14 rounded-lg pointer px-3.5 py-1.5 active-button" style="color:var(--active-bg);background: var(--active-secondary-bg);"
+        <div class="font-14 rounded-lg pointer px-3.5 py-1.5 active-button"
+             style="color:var(--active-bg);background: var(--active-secondary-bg);"
              @click="noticeDetail">
           查看
         </div>
@@ -40,19 +41,18 @@
 
 <script>
 
-import {mapActions} from 'pinia'
-import {noticeStore} from '../../store/notice'
-import {formatTime} from '../../util'
-
+import { mapActions } from 'pinia'
+import { noticeStore } from '../../store/notice'
+import { formatTime } from '../../util'
 
 export default {
   props: ['list'],
 
-  data() {
+  data () {
     return {
       showMenu: false, // 是否显示
-      contextMenuPosition: {x: 0, y: 0}, // 右键菜单的位置
-      rightMenuControls: [{title: '打开应用', name: 'Open'}, {title: '删除通知', name: 'remove'}],
+      contextMenuPosition: { x: 0, y: 0 }, // 右键菜单的位置
+      rightMenuControls: [{ title: '打开应用', name: 'Open' }, { title: '删除通知', name: 'remove' }],
       delItem: '',  // 接收单个消息通知删除下标
       settingsScroller: {
         useBothWheelAxes: true,
@@ -67,34 +67,34 @@ export default {
   methods: {
     ...mapActions(noticeStore, ['removeIMChatData', 'loadNoticeDB']),
     formatTime,
-    removeNotification() { // 删除指定消息通知
+    removeNotification () { // 删除指定消息通知
       this.removeIMChatData(this.delItem)
       this.loadNoticeDB()
     },
 
-    noticeMenu(item, evt) {  // 鼠标右键显示下拉菜单
-      evt.preventDefault();
+    noticeMenu (item, evt) {  // 鼠标右键显示下拉菜单
+      evt.preventDefault()
       this.delItem = item
 
       // 获取鼠标点击位置
-      const x = evt.clientX;
-      const y = evt.clientY;
+      const x = evt.clientX
+      const y = evt.clientY
 
       // 设置右键菜单的位置和可见状态
-      this.contextMenuPosition = {x, y};
+      this.contextMenuPosition = { x, y }
       this.showMenu = true
       // 点击其他地方时隐藏右键菜单
-      document.addEventListener('click', this.handleOutsideClick);
+      document.addEventListener('click', this.handleOutsideClick)
     },
 
-    handleOutsideClick() {
+    handleOutsideClick () {
       // 隐藏右键菜单
-      this.showMenu = false;
+      this.showMenu = false
       // 移除监听器
-      document.removeEventListener('click', this.handleOutsideClick);
+      document.removeEventListener('click', this.handleOutsideClick)
     },
 
-    handleMenuItemClick(item) {
+    handleMenuItemClick (item) {
       if (item.name === 'remove') {  // 右键下拉菜单删除
         this.removeIMChatData(this.delItem)
         this.loadNoticeDB()
@@ -103,11 +103,11 @@ export default {
       }
     },
 
-    goNotice() {  // 查看消息通知跳转机制
+    goNotice () {  // 查看消息通知跳转机制
       // this.$router.push({name:'gameIndex'}) 模拟消息打开应用通知机制
     },
 
-    isStringEmpty(item) {  // 判断用户来源
+    isStringEmpty (item) {  // 判断用户来源
       // if(item.from !== null && item.from.avatarUrl !== ''){
       //   return true
       // }else{
@@ -115,8 +115,8 @@ export default {
       // }
     },
 
-    noticeDetail() {
-      this.$router.push({name: 'chatMain'})
+    noticeDetail () {
+      this.$router.push({ name: 'chatMain' })
       this.$emit('closeMessage')
     }
   }

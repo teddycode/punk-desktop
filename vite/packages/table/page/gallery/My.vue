@@ -38,7 +38,8 @@
       <viewer :images="myPapers" :options="options">
         <a-row id="bingImages" :gutter="[20, 20]" style="margin-right: 1em">
           <a-col v-for="img in myPapers" :span="6" class="image-wrapper" style="">
-            <img :alt="img.resolution" :data-source="img.path" :src="fileImageExtension(img) === true ? img.path : img.src" class="image-item pointer"
+            <img :alt="img.resolution" :data-source="img.path"
+                 :src="fileImageExtension(img) === true ? img.path : img.src" class="image-item pointer"
                  style="position: relative" @error="deleteAll(img)"
                  @contextmenu.stop="showMenu(img)">
             <div v-if="fileImageExtension(img) === true" class="play-icon pointer" style="" @click="previewVideo(img)">
@@ -107,26 +108,26 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from 'pinia'
-import {appStore} from '../../store'
+import { mapActions, mapWritableState } from 'pinia'
+import { appStore } from '../../store'
 import Import from './Import.vue'
-import {message, Modal} from 'ant-design-vue'
-import GradeSmallTip from "../../components/GradeSmallTip.vue";
-import {paperStore} from '../../store/paper'
+import { message, Modal } from 'ant-design-vue'
+import GradeSmallTip from '../../components/GradeSmallTip.vue'
+import { paperStore } from '../../store/paper'
 import Player from 'xgplayer/dist/simple_player'
-import {defineComponent} from 'vue'
+import { defineComponent } from 'vue'
 
 const fs = window.$models.fs
 const path = require('path')
 
 export default defineComponent({
   name: 'My',
-  components: {Import, GradeSmallTip},
+  components: { Import, GradeSmallTip },
   computed: {
     ...mapWritableState(paperStore, ['settings', 'activePapers', 'myPapers']),
     ...mapWritableState(appStore, ['backgroundImage', 'styles']),
   },
-  data() {
+  data () {
     return {
       visibleMenu: false,
       visibleImport: false,
@@ -147,7 +148,7 @@ export default defineComponent({
       },
     }
   },
-  mounted() {
+  mounted () {
     if (this.settings.savePath) {
       this.getLoadLively()
       this.loadStaticPaper()
@@ -165,11 +166,11 @@ export default defineComponent({
   methods: {
     ...mapActions(paperStore, ['addToActive', 'addToMyPaper', 'addToStaticPaper']),
     ...mapActions(appStore, ['setBackgroundImage']),
-    go() {
-      this.$router.push({name: 'pickingPaper'})
+    go () {
+      this.$router.push({ name: 'pickingPaper' })
     },
     // 获取本地视频目录数据
-    getLoadLively() {
+    getLoadLively () {
       fs.pathExists(path.join(this.settings.savePath, 'lively')).then((exists) => {
         if (exists) {
           const videos = fs.readdirSync(path.join(this.settings.savePath, 'lively'))
@@ -189,7 +190,7 @@ export default defineComponent({
       })
     },
     // 获取本地图片数据
-    loadStaticPaper() {
+    loadStaticPaper () {
       const staticDir = path.join(path.join(this.settings.savePath), 'static')
       // 判断文件目录是否存在
       fs.pathExists(staticDir).then((exists) => {
@@ -215,7 +216,7 @@ export default defineComponent({
       })
     },
 
-    setDesktopPaper() {
+    setDesktopPaper () {
       Modal.confirm({
         content: '确定将此壁纸设置为系统桌面壁纸？注意，此处设置不是工作台的壁纸。',
         okText: '设置桌面壁纸',
@@ -227,11 +228,11 @@ export default defineComponent({
       })
     },
 
-    showMenu(item) {
+    showMenu (item) {
       this.currentPaper = item
       this.visibleMenu = true
     },
-    setAppPaper() {
+    setAppPaper () {
       // // 1 清除样式
       // const value = cache.get("style")
       // document.documentElement.classList.remove(value);
@@ -261,7 +262,7 @@ export default defineComponent({
 
       this.visibleMenu = false
     },
-    playAll() {
+    playAll () {
       const imageArr = []
       this.myPapers.map(el => {
         if (this.fileImageExtension(el)) {
@@ -289,7 +290,7 @@ export default defineComponent({
       })
     },
 
-    playActive() {
+    playActive () {
       const playArr = []
       this.activePapers.map(el => {
         if (this.fileImageExtension(el)) {
@@ -316,7 +317,7 @@ export default defineComponent({
     },
 
     // 获取文件时间
-    async getFileCreatedTime(filePath) {
+    async getFileCreatedTime (filePath) {
       try {
         const stats = await fs.stat(filePath)
         return stats.birthtime
@@ -326,7 +327,7 @@ export default defineComponent({
     },
 
     // 时间转换
-    changeTime(msec) {
+    changeTime (msec) {
       let datetime = new Date(msec)
       let year = datetime.getFullYear()
       let month = datetime.getMonth()
@@ -337,14 +338,14 @@ export default defineComponent({
       return year + '/' + ((month + 1) >= 10 ? (month + 1) : '0' + (month + 1)) + '/' + ((date + 1) < 10 ? '0' + date : date) + ' ' + ((hour + 1) < 10 ? '0' + hour : hour) + ':' + ((minute + 1) < 10 ? '0' + minute : minute) + ':' + ((second + 1) < 10 ? '0' + second : second)
     },
 
-    isInActive(image) {
+    isInActive (image) {
       return this.activePapers.findIndex(img => {
         return image.src === img.src
       }) > -1
     },
 
     // 删除壁纸
-    del() {
+    del () {
       const imageExtensions = ['jpg', 'jpeg', 'gif', 'bmp', 'png']
       if (this.fileImageExtension(this.currentPaper)) {
         this.activePapers.filter(img => {
@@ -377,11 +378,11 @@ export default defineComponent({
     },
 
     // 删除有问题的图片
-    deleteAll(img) {
+    deleteAll (img) {
       this.myPapers.indexOf(img) !== -1 ? this.myPapers.splice(this.myPapers.indexOf(img), 1) : ''
     },
 
-    closePreview() {
+    closePreview () {
       this.previewVideoVisible = false
       if (window.$xgplayer) {
         window.$xgplayer.destroy()
@@ -389,7 +390,7 @@ export default defineComponent({
       }
     },
     // 判断文件是否为图片
-    fileImageExtension(filePath) {
+    fileImageExtension (filePath) {
       const fileExtensions = filePath.src.split('.').pop()
       const extensions = ['mp4', 'mpeg', 'avi', 'rmvb']
       if (extensions.indexOf(fileExtensions) !== -1) {
@@ -399,7 +400,7 @@ export default defineComponent({
       }
     },
     // 视频播放
-    previewVideo(img) {
+    previewVideo (img) {
       $('#actions').show()
       this.timer = setTimeout(() => {
         $('#actions').fadeOut()
@@ -422,7 +423,7 @@ export default defineComponent({
         autoplay: true
       })
     },
-    closePreview() {
+    closePreview () {
       this.previewVideoVisible = false
       if (window.$xgplayer) {
         window.$xgplayer.destroy()
@@ -431,11 +432,11 @@ export default defineComponent({
     },
 
     // 下载壁纸
-    download() {
+    download () {
       if (this.settings.savePath === '') {
         Modal.confirm({
           centered: true,
-          style: {'z-index': 999999},
+          style: { 'z-index': 999999 },
           content: '您尚未设置壁纸保存目录，请设置目录，设置目录后下载将自动开始。',
           onOk: async () => {
             await this.queryStart()
@@ -448,7 +449,7 @@ export default defineComponent({
     },
 
     // 开始下载
-    doStartDownload(item) {
+    doStartDownload (item) {
       message.info('开始下载壁纸')
       const name = this.currentPaper.path.split('&')[1].slice(3)
       // item.percent = 0
@@ -472,7 +473,7 @@ export default defineComponent({
     },
 
     // 选择目录
-    async queryStart() {
+    async queryStart () {
       let savePath = await tsbApi.dialog.showOpenDialog({
         title: '选择目录', message: '请选择下载壁纸的目录', properties: [
           'openDirectory', 'createDirectory',
@@ -484,7 +485,6 @@ export default defineComponent({
       } else {
       }
     },
-
 
   },
 })

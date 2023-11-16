@@ -31,7 +31,8 @@
             <!-- <div v-for="item in powerList" class="rounded-lg h-1/6  mt-2 flex flex-row items-center p-2 relative"
               style="width: calc(50% - 8px);"
               :style="item.detail[[leveList[clickGrade]]] ? 'background: rgba(42, 42, 42, 1)' : 'background: rgba(42, 42, 42, 1);opacity: 0.6;'"> -->
-            <div v-for="item in powerList" :style="item.detail[[leveList[clickGrade]]] ? 'background: var(--secondary-bg)' : 'background: var(--secondary-bg);opacity: 0.6;'"
+            <div v-for="item in powerList"
+                 :style="item.detail[[leveList[clickGrade]]] ? 'background: var(--secondary-bg)' : 'background: var(--secondary-bg);opacity: 0.6;'"
                  class="rounded-lg h-1/6  mt-2 flex flex-row items-center p-2 relative"
                  style="width: calc(50% - 8px);">
               <Icon :icon="item.icon" class="mr-4 ml-2 text-white"
@@ -68,14 +69,14 @@
 
 <script>
 import GradePanel from '../../components/comp/GradePanel.vue'
-import {leveList, powerList} from '../../js/data/abilityData'
-import {mapState} from "pinia";
-import {appStore} from "../../store";
+import { leveList, powerList } from '../../js/data/abilityData'
+import { mapState } from 'pinia'
+import { appStore } from '../../store'
 
 export default {
-  name: "Grade",
-  components: {GradePanel},
-  data() {
+  name: 'Grade',
+  components: { GradePanel },
+  data () {
     return {
       leveList,
       powerList,
@@ -93,26 +94,26 @@ export default {
   },
   computed: {
     ...mapState(appStore, ['userInfo']),
-    abilityList() {
+    abilityList () {
       return this.powerList[this.leveList[this.clickGrade]]
     },
-    abilityGrade() {
+    abilityGrade () {
       return leveList.findIndex((n) => n > lv) !== -1 ? leveList.findIndex((n) => n > lv) - 1 : leveList.length - 1
     }
   },
-  mounted() {
+  mounted () {
 
     this.grade = this.userInfo.onlineGradeExtra
     this.clickStep(this.abilityGrade)
   },
   methods: {
-    openGradeTip() {
+    openGradeTip () {
       this.tipFlag = true
     },
-    closeTip() {
+    closeTip () {
       this.tipFlag = false
     },
-    clickStep(e) {
+    clickStep (e) {
       for (let i = 0; i < this.$refs.step.$el.children.length; i++) {
         this.$refs.step.$el.children[i].children[0].children[2].children[0].style.background = ''
       }

@@ -31,12 +31,12 @@
 </template>
 
 <script>
-import {leveList, powerList} from '../js/data/abilityData'
-import {powerState} from '../js/watch/grade'
+import { leveList, powerList } from '../js/data/abilityData'
+import { powerState } from '../js/watch/grade'
 
 export default {
-  name: "GradeSmallTip",
-  data() {
+  name: 'GradeSmallTip',
+  data () {
     return {
       leveList,
       powerList,
@@ -60,7 +60,7 @@ export default {
       default: ''
     }
   },
-  mounted() {
+  mounted () {
     this.lv = lv
     const {
       tipTitle,
@@ -77,16 +77,16 @@ export default {
   },
   methods: {
     powerState,
-    clickTip() {
+    clickTip () {
       this.clickTipShow = true
     },
-    closeTip() {
+    closeTip () {
       this.clickTipShow = false
     },
-    goGrade() {
+    goGrade () {
       this.closeTip()
       this.$emit('closeDrawer')
-      this.$router.push({name: 'grade'})
+      this.$router.push({ name: 'grade' })
     }
   }
 }

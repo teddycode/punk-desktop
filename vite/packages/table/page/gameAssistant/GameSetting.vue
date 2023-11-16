@@ -137,7 +137,8 @@
       <div class="mt-3 mb-0 pl-2">
         <ExclamationCircleFilled/>
         普通登录支持邮箱验证和手机app授权。<br>
-        网络不好建议设置代理！ steam302用户请看-><a href="https://www.yuque.com/tswork/mqon1y/kvinb8xbzw2eaa2e" style="color:var(--secondary-text);"
+        网络不好建议设置代理！ steam302用户请看-><a href="https://www.yuque.com/tswork/mqon1y/kvinb8xbzw2eaa2e"
+                                                   style="color:var(--secondary-text);"
                                                    target="_blank">技术说明</a>
       </div>
       <div class=" mt-3">
@@ -195,16 +196,16 @@
 </template>
 
 <script>
-import {mapActions, mapState, mapWritableState} from 'pinia'
-import {message, Modal as antModal} from 'ant-design-vue'
+import { mapActions, mapState, mapWritableState } from 'pinia'
+import { message, Modal as antModal } from 'ant-design-vue'
 import Modal from '../../components/Modal.vue'
 import HorizontalPanel from '../../components/HorizontalPanel.vue'
-import {steamUserStore} from '../../store/steamUser'
-import {ExclamationCircleFilled} from '@ant-design/icons-vue'
+import { steamUserStore } from '../../store/steamUser'
+import { ExclamationCircleFilled } from '@ant-design/icons-vue'
 
-import {completeTask} from "../../apps/task/page/branch/task"
+import { completeTask } from '../../apps/task/page/branch/task'
 
-const {steamSession, path, https, steamUser} = $models
+const { steamSession, path, https, steamUser } = $models
 let LoginSession
 let EAuthTokenPlatformType
 if (steamSession) {
@@ -212,19 +213,18 @@ if (steamSession) {
   EAuthTokenPlatformType = steamSession.EAuthTokenPlatformType
 }
 
-
 export default {
   name: 'gameSetting',
-  components: {ExclamationCircleFilled, Modal, HorizontalPanel},
-  data() {
+  components: { ExclamationCircleFilled, Modal, HorizontalPanel },
+  data () {
     return {
       retry: {},
       loadingUserInfoVisible: false,
       logUserName: '',
       session: {},//会话
       mailBoxShow: false,
-      loginTypeList: [{title: '普通登录', name: 'mailBox'}, {title: '手机令牌离线登录', name: 'phone'}],
-      loginType: {title: '邮箱验证', name: 'mailBox'},
+      loginTypeList: [{ title: '普通登录', name: 'mailBox' }, { title: '手机令牌离线登录', name: 'phone' }],
+      loginType: { title: '邮箱验证', name: 'mailBox' },
       loginLoading: false,
       userName: '',
       password: '',
@@ -285,15 +285,15 @@ export default {
       ],
     }
   },
-  mounted() {
+  mounted () {
 
   },
   watch: {
     'settings.proxy': {
-      handler(newVal) {
+      handler (newVal) {
         console.log('修改了设置')
         const user = window.client
-        const {type, address, port, userName, password} = newVal
+        const { type, address, port, userName, password } = newVal
         //user.setOption('httpProxy',null)
         //user.setOption('socksProxy',null)
         //user.setOption('webCompatibilityMode',false)
@@ -308,10 +308,10 @@ export default {
             //   user.setOption('httpProxy',`http://${address}:${port}`)
             // }
             // user.httpProxy=`http://${address}:${port}`
-            break;
+            break
           case 'socks5':
             // user.setOption('socksProxy',`socks5://${userName}:${password}@${address}:${port}`)
-            break;
+            break
           case 'web':
             // user.setOption('webCompatibilityMode',true)
         }
@@ -328,7 +328,7 @@ export default {
   },
   methods: {
     ...mapActions(steamUserStore, ['setSteamLoginData', 'setUserData']),
-    clearRecent() {
+    clearRecent () {
       antModal.confirm({
         centered: true,
         content: '确认清空游玩记录？此操作并不会删除对应的游戏桌面。但不可恢复。',
@@ -337,7 +337,7 @@ export default {
         }
       })
     },
-    removeAllDesk() {
+    removeAllDesk () {
       antModal.confirm({
         centered: true,
         content: '确认删除全部的桌面？此操作非常危险，一旦操作就无法撤销！',
@@ -347,10 +347,10 @@ export default {
         okText: '确认删除'
       })
     },
-    cancelLoadUserInfo() {
+    cancelLoadUserInfo () {
       this.loadingUserInfoVisible = false
     },
-    async loginSuccessCallback(session) {
+    async loginSuccessCallback (session) {
       this.mailBoxShow = false
       message.info({
         content: `登录成功用户名 ${session.accountName}`,
@@ -383,8 +383,8 @@ export default {
         })
       }
     },
-    getProxyOptions() {
-      const {type, address, port, userName, password} = this.settings.proxy
+    getProxyOptions () {
+      const { type, address, port, userName, password } = this.settings.proxy
       switch (type) {
         case 'none':
           return {}
@@ -400,11 +400,11 @@ export default {
             httpProxy: `http://${userName}:${password}@${address}:${port}`
           }
         case 'socks5':
-          return {'socksProxy': `socks5://${userName}:${password}@${address}:${port}`}
+          return { 'socksProxy': `socks5://${userName}:${password}@${address}:${port}` }
       }
 
     },
-    showBind() {
+    showBind () {
       const options = this.getProxyOptions()
       console.log(options, '参数')
       let session = new LoginSession(EAuthTokenPlatformType.SteamClient, options)
@@ -414,15 +414,15 @@ export default {
       window.steamSession = session
       this.clickBind()
     },
-    cancelLogin() {
-      this.modalVisibility = false;
+    cancelLogin () {
+      this.modalVisibility = false
       this.mailBoxShow = false
       this.loginLoading = false
     },
-    showProxySettings() {
+    showProxySettings () {
       this.proxyVisibility = true
     },
-    clickBind() {
+    clickBind () {
       if (this.steamLoginData.refreshToken === '') {
         this.modalVisibility = true
       } else {
@@ -434,13 +434,13 @@ export default {
         this.setUserData({})
       }
     },
-    getRegion(e) {
+    getRegion (e) {
       console.log(e)
     },
-    mailBox() {
+    mailBox () {
       window.steamSession.submitSteamGuardCode(this.mailBoxAuthCode)
     },
-    errorParse(str) {
+    errorParse (str) {
       str = str.toLowerCase()
       if (str.indexOf('invalidpassword') > -1) {
         return '用户名或密码错误'
@@ -450,7 +450,7 @@ export default {
         return str
       }
     },
-    async bindSteam() {
+    async bindSteam () {
       if (this.loginLoading === true) return
       this.loginLoading = true
       switch (this.loginType.name) {
@@ -523,7 +523,6 @@ export default {
             //   })
             //   return
             // }
-
 
           }).finally(() => {
             this.loginLoading = false

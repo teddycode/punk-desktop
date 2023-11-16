@@ -20,15 +20,15 @@
 </template>
 
 <script>
-import {Modal} from 'ant-design-vue'
+import { Modal } from 'ant-design-vue'
 
-const {appModel} = window.$models
+const { appModel } = window.$models
 export default {
   name: 'QingApps',
   computed: {
     // ...mapWritableState(apps,['myApps','qingApps'])
   },
-  data() {
+  data () {
     return {
       apps: [],
       outerSettings: {
@@ -40,15 +40,15 @@ export default {
       },
     }
   },
-  async mounted() {
+  async mounted () {
     this.apps = await appModel.getAllApps()
   },
   methods: {
     // 运行app
-    executeApp(app) {
-      ipc.send('executeApp', {app: JSON.parse(JSON.stringify(app))}) // 传给appManager.js执行
+    executeApp (app) {
+      ipc.send('executeApp', { app: JSON.parse(JSON.stringify(app)) }) // 传给appManager.js执行
     },
-    uninstall(app) {
+    uninstall (app) {
       let that = this
       let appId = app.nanoid
       Modal.confirm({
@@ -59,7 +59,7 @@ export default {
         okText: '确认',
         okType: 'danger',
         cancelText: '取消',
-        onOk() {
+        onOk () {
           appModel.uninstall(app.nanoid).then(
               (success) => {
                 for (let i = 0; i < that.apps.length; i++) {
@@ -69,19 +69,19 @@ export default {
                 }
                 ipc.send('message', {
                   type: 'success',
-                  config: {content: '卸载应用成功。'},
+                  config: { content: '卸载应用成功。' },
                 })
-                ipc.send('deleteApp', {nanoid: appId})
+                ipc.send('deleteApp', { nanoid: appId })
               },
               (err) => {
                 ipc.send('message', {
                   type: 'success',
-                  config: {content: '卸载失败。'},
+                  config: { content: '卸载失败。' },
                 })
               }
           )
         },
-        onCancel() {
+        onCancel () {
         },
       })
     }

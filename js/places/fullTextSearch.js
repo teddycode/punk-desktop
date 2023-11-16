@@ -136,8 +136,8 @@ function tokenize (string) {
   return string.trim().toLowerCase()
     .replace(ignoredCharactersRegex, '')
     .replace(nonLetterRegex, ' ')
-  // remove diacritics
-  // https://stackoverflow.com/a/37511463
+    // remove diacritics
+    // https://stackoverflow.com/a/37511463
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
     .split(whitespaceRegex).filter(function (token) {
       return !stopWords[token] && token.length <= 100

@@ -25,7 +25,8 @@
                    class="flex flex-wrap mr-2 image-wrapper" style="">
               <!-- {{ commentList.image }} -->
               <img :data-source="replyCom.image_artwork_master[index]" :src="img"
-                   class="mb-2 mr-2 rounded-md image-item pointer cover-sm" style="position: relative object-fit: fill;">
+                   class="mb-2 mr-2 rounded-md image-item pointer cover-sm"
+                   style="position: relative object-fit: fill;">
             </a-col>
           </a-row>
         </viewer>

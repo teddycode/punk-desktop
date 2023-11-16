@@ -26,21 +26,21 @@ Vue.component('appstore-comp', {
             icon: 'folder'
           },
 
-        //   children: [{
-        //     title: '办公导航',
-        //     key: '123',
-        //     slots: {
-        //       icon: 'list-icon'
-        //     }
-        //   },
-        //     {
-        //       title: '程序员导航',
-        //       key: '1223',
-        //       slots: {
-        //         icon: 'list-icon'
-        //       }
-        //     }
-        // ]
+          //   children: [{
+          //     title: '办公导航',
+          //     key: '123',
+          //     slots: {
+          //       icon: 'list-icon'
+          //     }
+          //   },
+          //     {
+          //       title: '程序员导航',
+          //       key: '1223',
+          //       slots: {
+          //         icon: 'list-icon'
+          //       }
+          //     }
+          // ]
         },
         {
           title: '应用导航',
@@ -50,24 +50,22 @@ Vue.component('appstore-comp', {
           }
         }
 
-  ]
+      ]
+    }
+  }, mounted () {
+    window.$trees.push({
+      name: 'appstore',
+      comp: this
+    })
   }
-}, mounted()
-{
-  window.$trees.push({
-    name: 'appstore',
-    comp: this
-  })
-}
-,
-methods: {
-  onSelect(selectedKeys, info)
-  {
-    window.tab = selectedKeys[0]
-    this.$router.push({ path: '/appstore', query: { listId: selectedKeys[0] } })
-    resetOtherTree('appstore', selectedKeys)
-    this.$emit('get-tab', window.tab)
-  }
+  ,
+  methods: {
+    onSelect (selectedKeys, info) {
+      window.tab = selectedKeys[0]
+      this.$router.push({ path: '/appstore', query: { listId: selectedKeys[0] } })
+      resetOtherTree('appstore', selectedKeys)
+      this.$emit('get-tab', window.tab)
+    }
 
-}
+  }
 })

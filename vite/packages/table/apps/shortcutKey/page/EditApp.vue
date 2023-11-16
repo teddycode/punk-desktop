@@ -89,7 +89,8 @@ export default {
       </div>
     </div>
     <span>软件名称</span>
-    <a-input v-model:value="formApp.alias" aria-placeholder="font-size: 14px;" class="input" placeholder="请输入应用名称"
+    <a-input v-model:value="formApp.alias" aria-placeholder="font-size: 14px;" class="input"
+             placeholder="请输入应用名称"
              spellcheck="false" style="width:480px;height: 48px;"/>
     <span>方案简介</span>
     <a-textarea v-model:value="formApp.summary" :rows="4" aria-placeholder="font-size: 14px;" class="input xt-text"

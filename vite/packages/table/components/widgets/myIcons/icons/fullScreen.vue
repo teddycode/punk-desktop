@@ -33,14 +33,13 @@
 </template>
 
 <script>
-import icon from "../components/icon.vue"
-import DragAndFollow from '../components/DragAndFollow.vue';
-import DroppableArea from "../components/DroppableArea.vue"
-import BottomEdit from "../components/bottomEdit.vue";
+import icon from '../components/icon.vue'
+import DragAndFollow from '../components/DragAndFollow.vue'
+import DroppableArea from '../components/DroppableArea.vue'
+import BottomEdit from '../components/bottomEdit.vue'
 
-
-import {mapWritableState} from 'pinia'
-import {myIcons} from '../../../../store/myIcons.ts'
+import { mapWritableState } from 'pinia'
+import { myIcons } from '../../../../store/myIcons.ts'
 
 export default {
   props: {
@@ -53,7 +52,7 @@ export default {
       type: String
     },
   },
-  data() {
+  data () {
     return {
       title: this.groupTitle,
       index: 0,
@@ -63,17 +62,17 @@ export default {
       menuList: [
 
         {
-          icon: "shezhi1",
-          title: "设置",
+          icon: 'shezhi1',
+          title: '设置',
           fn: () => {
-            this.editIcons();
+            this.editIcons()
           },
         },
         {
-          icon: "guanbi2",
-          title: "删除",
+          icon: 'guanbi2',
+          title: '删除',
           fn: () => {
-            this.deleteIcons();
+            this.deleteIcons()
           },
         },
       ]
@@ -88,26 +87,26 @@ export default {
   },
   computed: {
     ...mapWritableState(myIcons, ['isDrag', 'isPaste', 'iconList', 'isClose', 'iconState']),
-    show() {
-      return {display: this.isShow == true ? 'black' : 'none'}
+    show () {
+      return { display: this.isShow == true ? 'black' : 'none' }
     }
   },
-  mounted() {
+  mounted () {
     this.isDrag = false
   },
   methods: {
     // 全屏拖拽开始
-    handleDragStart(event) {
+    handleDragStart (event) {
       // 初始化
       this.isDrag = true
       this.isPaste = false
       this.iconState = true
       this.iconList = []
-      this.index = event.target.dataset.index; // 获取拖拽的图标下标
-      this.iconList.push({...this.iconLists[this.index], iconIndex: this.customIndex})
+      this.index = event.target.dataset.index // 获取拖拽的图标下标
+      this.iconList.push({ ...this.iconLists[this.index], iconIndex: this.customIndex })
     },
     // 全屏拖拽结束
-    handleDragEnd() {
+    handleDragEnd () {
       if (this.isClose) { // 是否离开过全屏
         // 粘贴到多图标组件
         if (this.isPaste && this.iconState) this.deleteIcons()
@@ -122,39 +121,39 @@ export default {
       this.isDrag = false
     },
     // 全屏离开
-    handleLeave() {
+    handleLeave () {
       if (this.isDrag) { // 是否为拖拽状态
         this.isShow = false
         this.isClose = true
       }
     },
     // 右键点击
-    rightClick(index) {
+    rightClick (index) {
       this.index = index
       this.visible = true
     },
     // 多图标全屏模式关闭
-    closeFullScreen() {
-      this.$emit("closeFullScreen")
+    closeFullScreen () {
+      this.$emit('closeFullScreen')
     },
     // 解除多图标分组
-    disbandGroup() {
-      this.$emit("closeFullScreen")
-      this.$emit("disbandGroup")
+    disbandGroup () {
+      this.$emit('closeFullScreen')
+      this.$emit('disbandGroup')
     },
     // 更新多图标组件标题
-    updateGroupTitle() {
-      this.$emit("updateGroupTitle", this.title)
+    updateGroupTitle () {
+      this.$emit('updateGroupTitle', this.title)
     },
     // 编辑多图标组件中的单个图标
-    editIcons() {
+    editIcons () {
       this.visible = false
       this.$emit('editIcons', this.index)
     },
     // 删除多图标组件中的单个图标
-    deleteIcons() {
+    deleteIcons () {
       this.visible = false
-      this.$emit("deleteIcons", this.index)
+      this.$emit('deleteIcons', this.index)
     }
   }
 }

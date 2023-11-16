@@ -34,15 +34,15 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from 'pinia'
-import {appStore} from '../../store'
-import {CodeTwoTone} from '@ant-design/icons-vue'
-import {basicSetup, EditorView} from 'codemirror'
-import {json} from '@codemirror/lang-json'
+import { mapActions, mapWritableState } from 'pinia'
+import { appStore } from '../../store'
+import { CodeTwoTone } from '@ant-design/icons-vue'
+import { basicSetup, EditorView } from 'codemirror'
+import { json } from '@codemirror/lang-json'
 import _ from 'lodash-es'
-import {message, Modal} from 'ant-design-vue'
+import { message, Modal } from 'ant-design-vue'
 
-const {clipboard} = require('electron')
+const { clipboard } = require('electron')
 
 const path = require('path')
 export default {
@@ -50,13 +50,13 @@ export default {
   components: {
     CodeTwoTone
   },
-  data() {
+  data () {
     return {
       editor: {},
       json: ''
     }
   },
-  mounted() {
+  mounted () {
     this.json = this.getJson()
     this.editor = new EditorView({
       doc: this.json,
@@ -70,7 +70,7 @@ export default {
     ...mapWritableState(appStore, ['app', 'debugMod', 'devApp'])
   },
   methods: {
-    overwrite() {
+    overwrite () {
       Modal.confirm({
         content: '是否覆盖到' + path.join(this.devApp.local_dir, 'manifest.json') + '？',
         onOk: () => {
@@ -86,11 +86,11 @@ export default {
         }
       })
     },
-    copyJson() {
+    copyJson () {
       clipboard.writeText(this.getJson())
       message.success('复制成功。')
     },
-    getJson() {
+    getJson () {
       let devApp = _.cloneDeep(this.devApp)
       delete devApp.nanoid
       delete devApp.assign_apps
@@ -104,11 +104,11 @@ export default {
       delete devApp.app_nanoid
       return JSON.stringify(devApp, null, '\t')
     },
-    refresh() {
+    refresh () {
       this.json = this.getJson()
     },
-    openDir() {
-      const {shell} = require('electron')
+    openDir () {
+      const { shell } = require('electron')
       shell.openPath(this.devApp.local_dir)
     },
     ...mapActions(appStore, ['toggleDebug'])

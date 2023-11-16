@@ -9,8 +9,8 @@
   </div>
 </template>
 <script>
-import {Icon} from '@iconify/vue';
-import sleepingFace from '@iconify-icons/fluent-emoji/sleeping-face';
+import { Icon } from '@iconify/vue'
+import sleepingFace from '@iconify-icons/fluent-emoji/sleeping-face'
 
 export default {
   name: 'Unusual',
@@ -19,7 +19,7 @@ export default {
   },
   computed: {},
   props: ['title', 'buttonTitle', 'num', 'back'],
-  data() {
+  data () {
     return {
       icons: {
         sleepingFace,
@@ -27,7 +27,7 @@ export default {
 
     }
   },
-  mounted() {
+  mounted () {
 
   },
   watch: {},

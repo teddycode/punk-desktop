@@ -83,19 +83,19 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from 'pinia'
-import {clipboardStore} from '../../store'
+import { mapActions, mapWritableState } from 'pinia'
+import { clipboardStore } from '../../store'
 import HorizontalPanel from '../../../../components/HorizontalPanel.vue'
 import HorizontalDrawer from '../../../../components/HorizontalDrawer.vue'
-import {codeLanguage, themeType} from '../../../../js/data/clipTheme'
-import {message, Modal} from 'ant-design-vue'
+import { codeLanguage, themeType } from '../../../../js/data/clipTheme'
+import { message, Modal } from 'ant-design-vue'
 
 export default {
   components: {
     HorizontalPanel,
     HorizontalDrawer
   },
-  data() {
+  data () {
     return {
       // 控制抽屉打开
       setShow: false,
@@ -107,13 +107,13 @@ export default {
       instruct: 'CTRL + ALT + V',
       // 历史记录时间
       historyCapacity: [
-        {title: '1天', name: 'day'},
-        {title: '1周', name: 'week'},
-        {title: '1月', name: 'month'},
-        {title: '不限制', name: 'unlimited'}
+        { title: '1天', name: 'day' },
+        { title: '1周', name: 'week' },
+        { title: '1月', name: 'month' },
+        { title: '不限制', name: 'unlimited' }
       ],
       pageSizes: [
-        {title: '10', name: '10'},
+        { title: '10', name: '10' },
         {
           title: '15', name: '15'
         },
@@ -125,7 +125,7 @@ export default {
         }
       ],
       // 默认历史记录时间
-      defaultCapacity: {title: '1天', name: 'day'},
+      defaultCapacity: { title: '1天', name: 'day' },
       pageSizeTab: {}
     }
   },
@@ -133,14 +133,14 @@ export default {
     ...mapWritableState(clipboardStore, [
       'settings'
     ]),
-    selectLanguage() {
+    selectLanguage () {
       const index = this.codeLanguage.find(el => {
         return el.abbr === this.settings.clipMode
       })
       return index
     }
   },
-  mounted() {
+  mounted () {
     this.pageSizeTab = this.pageSizes.find(s => {
       return String(s.name) === String(this.settings.pageSize)
     })
@@ -155,11 +155,11 @@ export default {
         ]
     ),
     // 通过该方法可以打开弹窗
-    clipOpenShow() {
+    clipOpenShow () {
       this.setShow = true
     },
     //清理数据
-    async cleanData() {
+    async cleanData () {
       Modal.confirm({
         content: '确认清空全部记录？此操作不会删除收藏内的内容。',
         centered: true,
@@ -172,39 +172,39 @@ export default {
 
     },
     // 打开代码高亮
-    openCodeHighlight() {
+    openCodeHighlight () {
       this.clipSetVisible = true
     },
     // 关闭全部
-    onClose() {
+    onClose () {
       this.clipSetVisible = false
     },
     // 修改缩进单位配置
-    updateIndentUnit(e) {
+    updateIndentUnit (e) {
       this.updateClipSize(e.target.value)
     },
     // 选择主题
-    openThemeDrawer() {
+    openThemeDrawer () {
       this.$refs.themeRef.openDrawer()
     },
     // 选择代码语言
-    openLanguageDrawer() {
+    openLanguageDrawer () {
       this.$refs.languageRef.openDrawer()
     },
     // 修改主题
-    getTheme(item) {
+    getTheme (item) {
       // console.log('修改主题',item);
       this.updateTheme(item.name)
     },
     // 修改语言包
-    getLanguage(item) {
+    getLanguage (item) {
       // console.log('修改语言',item);
       this.changeClipMode(item.abbr)
     }
   },
   watch: {
     'settings.enable': {
-      handler(newVal, oldVal) {
+      handler (newVal, oldVal) {
         // console.log('剪切板开关',newVal)
         if (newVal) {
           //是切换到了启用
@@ -220,23 +220,23 @@ export default {
     },
     // 是否默认代码高亮
     'settings.clipSetShow': {
-      handler(newVal, oldVal) {
+      handler (newVal, oldVal) {
         this.isSetCodeHighlight(newVal)
       }
     },
     // 是否显示行号
     'settings.showLineNumber': {
-      handler(newVal, oldVal) {
+      handler (newVal, oldVal) {
         this.isClipLineNumber(newVal)
       }
     },
     'pageSizeTab': {
-      handler(newVal) {
+      handler (newVal) {
         this.settings.pageSize = Number(newVal.name)
       }
     },
     'defaultCapacity': {
-      handler(newVal) {
+      handler (newVal) {
         const values = {
           'day': 86400,
           'week': 604800,

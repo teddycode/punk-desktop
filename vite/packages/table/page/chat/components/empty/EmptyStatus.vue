@@ -5,7 +5,7 @@
 <script>
 export default {
   props: ['text'],
-  data() {
+  data () {
     return {
       simpleImage: '/img/state/null.png'
     }

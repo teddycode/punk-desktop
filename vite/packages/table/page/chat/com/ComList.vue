@@ -42,7 +42,8 @@
           </video>
           <!-- 正文内容 -->
           <div class="flex flex-col justify-between" style="flex-shrink: 1;">
-            <div v-if="cardData.title" id="title" :class="{ 'omit-title': cardData.image.length === 1 || cardData.data?.video }"
+            <div v-if="cardData.title" id="title"
+                 :class="{ 'omit-title': cardData.image.length === 1 || cardData.data?.video }"
                  :innerHTML="title" style="color: var(--primary-text);">
             </div>
             <div id="context" :class="{ 'omit': cardData.image.length === 1 || cardData.data?.video }"

@@ -29,7 +29,8 @@
                   v-for="(i, index) in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]"
                   :class="{ 'active': timeHour === index }"
                   class="flex items-center justify-center xt-text-2 pointer setting-hour"
-                  style="width: 48px;height: 40px;line-height: 40px;text-align: center;flex-shrink: 0;" @click="timeHour = index">
+                  style="width: 48px;height: 40px;line-height: 40px;text-align: center;flex-shrink: 0;"
+                  @click="timeHour = index">
                 {{ index }}
               </div>
             </div>
@@ -58,11 +59,13 @@
             <!-- {{ defaultType }} -->
           </div>
           <div class="flex justify-between ">
-            <xt-button class="mt-2 font-16 xt-text" style="width: 48%; height: 40px; background-color: var(--primary-bg); "
+            <xt-button class="mt-2 font-16 xt-text"
+                       style="width: 48%; height: 40px; background-color: var(--primary-bg); "
                        type="primary"
                        @click="settingClock">取消
             </xt-button>
-            <xt-button class="mt-2 font-16 xt-text" style="width: 48%; height: 40px; background-color: var(--active-bg);"
+            <xt-button class="mt-2 font-16 xt-text"
+                       style="width: 48%; height: 40px; background-color: var(--active-bg);"
                        type="primary"
                        @click="addSettingClock">确认添加
             </xt-button>
@@ -206,7 +209,8 @@
           </div>
         </div>
       </vue-custom-scrollbar>
-      <a-modal v-model:visible="custom" :footer="null" :maskClosable="false" centered style="font-size: 8px;color: var(--primary-text); "
+      <a-modal v-model:visible="custom" :footer="null" :maskClosable="false" centered
+               style="font-size: 8px;color: var(--primary-text); "
                title="" @ok="() => { }">
         <div style="display: flex;flex-direction: column;align-items: center;">
           <div style="">自定义倒计时</div>
@@ -224,8 +228,10 @@
 
   <!-- `linear-gradient(to-right,${currentColor.value} ${100-progress.value}% ,${targetColor.value} ${progress.value}%)` -->
   <div style="position: relative">
-    <xt-button v-if="useCountDownStore.countDowntime.hours !== undefined" :style="{ background: `linear-gradient(to-right, var(--secondary-bg) ${100 - useCountDownStore.progress}%, var(--warning) ${useCountDownStore.progress}%)  ` }"
-               class="flex items-center justify-center mr-3 rounded-md clock-timer progress-bar " style="width: 150px; height: 32px;"
+    <xt-button v-if="useCountDownStore.countDowntime.hours !== undefined"
+               :style="{ background: `linear-gradient(to-right, var(--secondary-bg) ${100 - useCountDownStore.progress}%, var(--warning) ${useCountDownStore.progress}%)  ` }"
+               class="flex items-center justify-center mr-3 rounded-md clock-timer progress-bar "
+               style="width: 150px; height: 32px;"
                @click="closeDetail">
       <div class="flex items-center">
         <clockIcon class="mr-1 text-base" icon="fluent:clock-alarm-16-filled"></clockIcon>
@@ -239,7 +245,8 @@
       </div>
 
     </xt-button>
-    <xt-button v-else class="flex items-center justify-center mr-3 rounded-md clock-timer top-bar " style="width: 82px; height: 32px;background: rgba(80,139,254,0.20);"
+    <xt-button v-else class="flex items-center justify-center mr-3 rounded-md clock-timer top-bar "
+               style="width: 82px; height: 32px;background: rgba(80,139,254,0.20);"
                @click="closeDetail">
       <div class="flex items-center">
         <clockIcon class="mr-1 text-base" icon="fluent:clock-alarm-16-filled"></clockIcon>

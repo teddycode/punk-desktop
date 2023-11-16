@@ -21,51 +21,49 @@ const tpl = `
 `
 const EnterPwd = {
   template: tpl,
-    data () {
-      return {
-        user:{
-          user_info:{
-
-          }
-        },
-        pwd:'',
-        shake:0
-      }
-    },
-    async mounted () {
-      let user=await userModel.get({uid:this.$route.params.uid})
-      if(user){
-        this.user=user
-      }else{
-        console.error('user can\'t find')
-      }
-      setTimeout(()=>{
-        document.getElementById('pwdInput').focus()
-      },200)
-    },
-    methods: {
-      async doEnter () {
-        let right = await userModel.compareEnterPwd(this.pwd, this.user.uid)
-        if (right) {
-          this.$router.replace({ name: 'space', params: { uid: this.user.uid } })
-        } else {
-          let timer
-          let i = 0
-          timer = setInterval(() => {
-            this.shake = ((i % 3) - 1) * 60;
-            i++
-            if (i === 5) {
-              clearInterval(timer);
-            }
-          }, 50);
-
-        }
+  data () {
+    return {
+      user: {
+        user_info: {}
       },
+      pwd: '',
+      shake: 0
+    }
+  },
+  async mounted () {
+    let user = await userModel.get({ uid: this.$route.params.uid })
+    if (user) {
+      this.user = user
+    } else {
+      console.error('user can\'t find')
+    }
+    setTimeout(() => {
+      document.getElementById('pwdInput').focus()
+    }, 200)
+  },
+  methods: {
+    async doEnter () {
+      let right = await userModel.compareEnterPwd(this.pwd, this.user.uid)
+      if (right) {
+        this.$router.replace({ name: 'space', params: { uid: this.user.uid } })
+      } else {
+        let timer
+        let i = 0
+        timer = setInterval(() => {
+          this.shake = ((i % 3) - 1) * 60
+          i++
+          if (i === 5) {
+            clearInterval(timer)
+          }
+        }, 50)
 
-      goLogin(){
-        ipc.send('login')
       }
+    },
+
+    goLogin () {
+      ipc.send('login')
     }
   }
+}
 
 module.exports = EnterPwd

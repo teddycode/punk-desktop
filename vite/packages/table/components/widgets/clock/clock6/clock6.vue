@@ -21,57 +21,57 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
-      time: "",
-      pmam: "",
-      fullDate: "",
+      time: '',
+      pmam: '',
+      fullDate: '',
       timerID: 0,
       day: 0,
       dayRef: null
     }
   },
-  mounted() {
-    this.timerID = setInterval(this.startClock, 1000);
-    this.startClock();
+  mounted () {
+    this.timerID = setInterval(this.startClock, 1000)
+    this.startClock()
     // this.dayRef = this.$refs['dayRef'].children
   },
   methods: {
-    updateTime(t) {
+    updateTime (t) {
       if (t < 10) {
-        return "0" + t;
+        return '0' + t
       } else {
-        return t;
+        return t
       }
     },
-    startClock() {
-      const date = new Date();
-      const hour = date.getHours();
-      const min = date.getMinutes();
-      const sec = date.getSeconds();
-      this.day = date.getDay();
+    startClock () {
+      const date = new Date()
+      const hour = date.getHours()
+      const min = date.getMinutes()
+      const sec = date.getSeconds()
+      this.day = date.getDay()
 
-      const currDate = date.getDate();
-      const year = date.getFullYear();
-      const month = date.getMonth();
+      const currDate = date.getDate()
+      const year = date.getFullYear()
+      const month = date.getMonth()
       const monthNames = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-      ];
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+      ]
 
-      this.time = `${this.updateTime(hour)}:${this.updateTime(min)}:${this.updateTime(sec)}`;
-      this.pmam = hour >= 12 ? "PM" : "AM";
-      this.fullDate = `${monthNames[month]} ${currDate} ${year}`;
+      this.time = `${this.updateTime(hour)}:${this.updateTime(min)}:${this.updateTime(sec)}`
+      this.pmam = hour >= 12 ? 'PM' : 'AM'
+      this.fullDate = `${monthNames[month]} ${currDate} ${year}`
     }
   }
 }

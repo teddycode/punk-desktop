@@ -46,25 +46,25 @@
 </template>
 
 <script setup>
-import {computed} from "vue";
+import { computed } from 'vue'
 
 const props = defineProps({
   data: {},
-});
+})
 // 展示状态
 const trigger = computed(() => {
   if (props.data.float) {
-    return "mouseenter";
+    return 'mouseenter'
   } else {
-    return "";
+    return ''
   }
-});
+})
 
-const emits = defineEmits(["itemClick"]);
+const emits = defineEmits(['itemClick'])
 
 const onItemClick = (item) => {
-  emits("itemClick", item);
-};
+  emits('itemClick', item)
+}
 </script>
 
 <style lang="scss" scoped>

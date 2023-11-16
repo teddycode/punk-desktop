@@ -15,38 +15,37 @@
 </template>
 
 <script>
-import {defineComponent} from 'vue'
-import {appStore} from '../../../../../store'
+import { defineComponent } from 'vue'
+import { appStore } from '../../../../../store'
 
 export default defineComponent({
   props: ['memberInfo', 'server'],
 
-  setup(props, ctx) {
+  setup (props, ctx) {
     const server = props.server.TUICore
-    const types = server.TIM.TYPES;
-
+    const types = server.TIM.TYPES
 
     const store = appStore()
 
     const handleRoleName = (item) => {  // 区分群组角色
-      const {t} = server.config.i18n.useI18n();
-      let name = '';
+      const { t } = server.config.i18n.useI18n()
+      let name = ''
       switch (item?.role) {
         case types.GRP_MBR_ROLE_ADMIN:
-          name = t('TUIChat.manage.管理员');
-          break;
+          name = t('TUIChat.manage.管理员')
+          break
         case types.GRP_MBR_ROLE_OWNER:
-          name = t('TUIChat.manage.群主');
-          break;
+          name = t('TUIChat.manage.群主')
+          break
       }
       if (name) {
-        name = `(${name})`;
+        name = `(${name})`
       }
 
       if (parseInt(item.userID) === parseInt(store.$state.userInfo.uid)) {
         name += `(${t('TUIChat.manage.我')})`
       }
-      return name;
+      return name
     }
 
     return {

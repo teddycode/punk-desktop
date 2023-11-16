@@ -79,13 +79,13 @@
 
 <script>
 //  import { defineComponent, onMounted, reactive, toRefs,ref,nextTick,computed,watchEffect } from 'vue'
-import {mapActions, mapWritableState} from 'pinia'
-import {CloseOutlined, LeftOutlined, PlusOutlined} from '@ant-design/icons-vue'
-import Sortable from 'sortablejs';
-import {Icon as ClassIcon} from '@iconify/vue'
-import {communityStore} from '../../store/communityStore'
-import {channelClass} from '../../../../js/chat/createChannelClass'
-import {message, Modal as ClassModal} from 'ant-design-vue'
+import { mapActions, mapWritableState } from 'pinia'
+import { CloseOutlined, LeftOutlined, PlusOutlined } from '@ant-design/icons-vue'
+import Sortable from 'sortablejs'
+import { Icon as ClassIcon } from '@iconify/vue'
+import { communityStore } from '../../store/communityStore'
+import { channelClass } from '../../../../js/chat/createChannelClass'
+import { message, Modal as ClassModal } from 'ant-design-vue'
 
 export default {
   props: ['no', 'data', 'type'],
@@ -94,7 +94,7 @@ export default {
     ClassIcon,
   },
 
-  async mounted() {
+  async mounted () {
     // await this.getChannelList(this.no)
     this.getChannelList(this.no)
 
@@ -107,7 +107,7 @@ export default {
 
   },
 
-  data() {
+  data () {
     return {
       settingsScroller: {
         useBothWheelAxes: true,
@@ -138,9 +138,8 @@ export default {
       'updateChannel'
     ]),
 
-
     // 拖拽排序
-    onSortEnd(evt) {
+    onSortEnd (evt) {
       // console.log('排查问题',evt)
 
       let newIndex = evt.newIndex, oldIndex = evt.oldIndex
@@ -161,16 +160,14 @@ export default {
       this.updateCategoryClass(cloneTemp)
     },
 
-
-    closeChannel() {  // 关闭
+    closeChannel () {  // 关闭
       this.$emit('close')
     },
-    backButton() {  // 返回
+    backButton () {  // 返回
       this.$emit('classBack')
     },
 
-
-    listClick(item, index) {  // 选中当前频道目录分类
+    listClick (item, index) {  // 选中当前频道目录分类
       if (this.statusIndex === index) {
         this.statusIndex = -1
       } else {
@@ -179,8 +176,7 @@ export default {
       }
     },
 
-
-    deleted(item) {  // 删除
+    deleted (item) {  // 删除
       // console.log(item.id);
       if (item.id) {
         ClassModal.confirm({
@@ -206,9 +202,8 @@ export default {
 
     },
 
-
-    addClassItem() {  // 新增
-      this.categoryClass.unshift({name: '分类名称'})
+    addClassItem () {  // 新增
+      this.categoryClass.unshift({ name: '分类名称' })
       this.edit(0)
       // this.$nextTick(()=>{
       //  const classRef = document.querySelector('#classInputRef')
@@ -219,7 +214,7 @@ export default {
       // console.log(this.categoryClass);
     },
 
-    async saveEdit(item) {  // 保存编辑
+    async saveEdit (item) {  // 保存编辑
       // console.log('获取编辑后的数据',item);
       if (item.id) {
 
@@ -251,11 +246,11 @@ export default {
       }
     },
 
-    exitEdit() {  // 退出编辑
+    exitEdit () {  // 退出编辑
       this.isEditing = false
     },
 
-    edit(index) {  // 编辑中
+    edit (index) {  // 编辑中
       this.isEditing = true
       this.editIndex = index
       this.$nextTick(() => {
@@ -267,7 +262,7 @@ export default {
       })
     },
 
-    async createClass(item) {
+    async createClass (item) {
       const option = {
         name: item.name,
         communityNo: this.no,
@@ -286,8 +281,7 @@ export default {
 
     },
 
-
-    async finshCategoryCreate() {  // 完成频道目录创建
+    async finshCategoryCreate () {  // 完成频道目录创建
       const option = {
         type: this.type,
         id: this.classItem.id,
@@ -324,7 +318,7 @@ export default {
 
       } else {
         // console.log('this.data不是数组');
-        console.log('查看this.data', this.data);
+        console.log('查看this.data', this.data)
 
         const channelsOption = {
           ...option,

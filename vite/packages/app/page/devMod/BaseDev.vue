@@ -148,20 +148,20 @@
 </template>
 
 <script>
-import {message, Modal} from 'ant-design-vue';
-import {appStore} from '../../store'
-import {mapWritableState} from 'pinia'
-import {Sketch} from '@lk77/vue3-color'
+import { message, Modal } from 'ant-design-vue'
+import { appStore } from '../../store'
+import { mapWritableState } from 'pinia'
+import { Sketch } from '@lk77/vue3-color'
 import DebugTip from '../../components/DebugTip.vue'
-import {getLogo} from '../../util'
+import { getLogo } from '../../util'
 
 const formItemLayout = {
-  labelCol: {span: 6},
-  wrdevApperCol: {span: 16},
+  labelCol: { span: 6 },
+  wrdevApperCol: { span: 16 },
 }
 const formTailLayout = {
-  labelCol: {span: 4},
-  wrdevApperCol: {span: 8, offset: 4},
+  labelCol: { span: 4 },
+  wrdevApperCol: { span: 8, offset: 4 },
 }
 
 const path = require('path')
@@ -176,21 +176,21 @@ export default {
   },
   methods: {
     getLogo,
-    getExtra(type) {
+    getExtra (type) {
       let tip = `&nbsp;调试&nbsp;`
       switch (type) {
         case 'debug_url':
           return tip + `调试入口，仅调试模式下生效，可根据开关启用调试入口`
       }
     },
-    async selectLogo() {
+    async selectLogo () {
       if (!this.devApp.local_dir) {
         message.error('请先选择项目目录，方可选择应用图标')
         return
       }
       let file = ipc.sendSync('selectFile')
 
-      function copyFile(dir) {
+      function copyFile (dir) {
         let dest = path.join(dir, 'logo.png')
         fs.copyFileSync(file[0], dest)
         return 'local|' + dest + '?t=' + Date.now()
@@ -210,14 +210,14 @@ export default {
         }
       }
     },
-    async selectDir() {
+    async selectDir () {
       let dir = ipc.sendSync('selectDir')
       if (dir) {
         this.devApp.local_dir = dir[0]
       }
     }
   },
-  mounted() {
+  mounted () {
     this.formState.name = this.devApp
     let optimizeValues = ['keepRunning', 'theme', 'desktop', 'showInSideBar', 'alwaysTop', 'autoRun', 'noFrame']
     let optimize = []
@@ -237,7 +237,7 @@ export default {
     // })
 
   },
-  data() {
+  data () {
     return {
       formItemLayout,
       formTailLayout,

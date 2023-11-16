@@ -27,10 +27,10 @@
 </template>
 
 <script>
-import Widget from "../../card/Widget.vue";
-import {Icon as MyIcon} from '@iconify/vue';
-import {message} from 'ant-design-vue'
-import {getGameInfo} from "../../../store/gameInfomation"
+import Widget from '../../card/Widget.vue'
+import { Icon as MyIcon } from '@iconify/vue'
+import { message } from 'ant-design-vue'
+import { getGameInfo } from '../../../store/gameInfomation'
 import browser from '../../../js/common/browser'
 
 export default {
@@ -59,40 +59,40 @@ export default {
       type: Boolean,
     },
   },
-  data() {
+  data () {
     return {
       options: {
-        className: "card double",
-        title: "电竞资讯",
+        className: 'card double',
+        title: '电竞资讯',
         // icon: "bianji",
-        icon: "",
+        icon: '',
         // icon: "games-16-filled",
       },
       gameData: [],
-    };
+    }
   },
-  async mounted() {
+  async mounted () {
     await this.onGetInfo()
   },
   methods: {
-    async onGetInfo() {
-      let dataList = await getGameInfo("/app/juhe/get");
-      this.gameData = dataList;
+    async onGetInfo () {
+      let dataList = await getGameInfo('/app/juhe/get')
+      this.gameData = dataList
     },
-    jump(url) {
+    jump (url) {
       // console.log("https:"+url);
-      browser.openInUserSelect("https:" + url)
+      browser.openInUserSelect('https:' + url)
     },
-    refreshNow() {
+    refreshNow () {
       this.$refs.refreshButton.classList.add('animate-spin')
       setTimeout(() => {
         this.$refs.refreshButton.classList.remove('animate-spin')
-        message.success({content: '刷新资讯成功', key: 'refreshZixun'})
+        message.success({ content: '刷新资讯成功', key: 'refreshZixun' })
       }, 500)
       this.onGetInfo()
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

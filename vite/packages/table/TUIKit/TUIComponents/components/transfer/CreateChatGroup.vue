@@ -20,7 +20,8 @@
           <!--头像 -->
           <!-- <a-avatar shape="square" :size="64" :src="avatarUrl"></a-avatar> -->
           <div class="overflow-hidden">
-            <a-avatar :src="avatarUrl" :style="{'filter': bgColor?`drop-shadow(#${bgColor} 80px 0)`:'',transform:bgColor?'translateX(-80px)':''}"
+            <a-avatar :src="avatarUrl"
+                      :style="{'filter': bgColor?`drop-shadow(#${bgColor} 80px 0)`:'',transform:bgColor?'translateX(-80px)':''}"
                       style="height:64px;width: 64px;border-radius: 0;"></a-avatar>
           </div>
           <CreateIcon color="var(--secondary-text)" height="20" icon="akar-icons:cloud-upload"
@@ -36,7 +37,8 @@
       <a-input ref="inputRef" v-model:value="groupName" placeholder="群名称" spellcheck="false"
                style="margin-top: 16px; text-align: center; width: 320px;color: var(--primary-text); border-radius: 12px; height: 40px;"/>
 
-      <a-input ref="inputRef" v-model:value="groupID" :spellcheck="false" :style="validateChinese !== true ? {marginBottom:'16px'}: {marginBottom:'8px'}"
+      <a-input ref="inputRef" v-model:value="groupID" :spellcheck="false"
+               :style="validateChinese !== true ? {marginBottom:'16px'}: {marginBottom:'8px'}"
                placeholder="群ID"
                style="margin-top: 16px; text-align: center; width: 320px;color: var(--primary-text); border-radius: 12px; height: 40px;"/>
 
@@ -48,7 +50,8 @@
       <a-select v-model:value="defaultType.type"
                 :bordered="false"
                 :dropdownStyle="{boxShadow:'none !important',borderRadius:'12px',color:'var(--secondary-text)'}"
-                :showArrow="true" style="width: 320px; border-radius: 12px; color: var(--secondary-text);" @change="getGroupType($event)"
+                :showArrow="true" style="width: 320px; border-radius: 12px; color: var(--secondary-text);"
+                @change="getGroupType($event)"
       >
         <a-select-option v-for="(item,index) in groupType" :key="index" :value="item.type">{{ item.text }}
         </a-select-option>
@@ -73,11 +76,11 @@
 </template>
 
 <script>
-import {mapActions} from 'pinia'
-import {Icon as CreateIcon} from '@iconify/vue'
+import { mapActions } from 'pinia'
+import { Icon as CreateIcon } from '@iconify/vue'
 import _ from 'lodash-es'
-import {message} from 'ant-design-vue'
-import {chatStore} from '../../../../store/chat'
+import { message } from 'ant-design-vue'
+import { chatStore } from '../../../../store/chat'
 
 import SelectIcon from '../../../../../selectIcon/page/index.vue'
 
@@ -88,7 +91,7 @@ export default {
     SelectIcon, CreateIcon
   },
 
-  data() {
+  data () {
     return {
 
       iconVisible: false,
@@ -126,21 +129,21 @@ export default {
       groupName: '',
       groupID: '',
 
-      defaultType: {type: window.$TUIKit.TIM.TYPES.GRP_PUBLIC}, // 获取默认的群组类型
+      defaultType: { type: window.$TUIKit.TIM.TYPES.GRP_PUBLIC }, // 获取默认的群组类型
       avatarUrl: 'https://web.sdk.qcloud.com/im/assets/images/Public.svg'
     }
   },
 
   computed: {
-    validateChinese() {
+    validateChinese () {
       if (this.groupID !== '') {
-        const chineseReg = /^[\u4e00-\u9fa5]+$/;
+        const chineseReg = /^[\u4e00-\u9fa5]+$/
         return chineseReg.test(this.groupID)
       } else {
         return false
       }
     },
-    groupTypeData() {
+    groupTypeData () {
       if (this.defaultType.type) {
         const index = this.groupType.find((item) => {
           return item.type === this.defaultType.type
@@ -151,7 +154,7 @@ export default {
 
   },
 
-  mounted() {
+  mounted () {
     this.$nextTick(() => {
       this.$refs.inputRef.focus()
     })
@@ -159,18 +162,18 @@ export default {
 
   methods: {
     ...mapActions(chatStore, ['updateConversation']),
-    backButton() {
+    backButton () {
       this.$emit('back')
     },
-    closeCreate() {
+    closeCreate () {
       this.$emit('close')
     },
-    onShowSelect() {
+    onShowSelect () {
       this.iconVisible = !this.iconVisible
       this.innerHeight = window.innerHeight
     },
 
-    getGroupType(evt) {
+    getGroupType (evt) {
       const index = _.find(this.groupType, function (o) {
         return o.type === evt
       })
@@ -179,7 +182,7 @@ export default {
     },
 
     // 获取头像
-    getAvatar(avatar) {
+    getAvatar (avatar) {
       if (avatar.indexOf('color=') >= 0) {
         let color = avatar.substr(avatar.indexOf('color=') + 7, 6)
         this.bgColor = color
@@ -190,19 +193,19 @@ export default {
     },
 
     // 更换头像
-    async updateGroupAvatar() {
+    async updateGroupAvatar () {
       document.querySelector('#groupFileID').click()
     },
-    async getFileInfo(evt) {
+    async getFileInfo (evt) {
       const files = evt.target.files[0]
       const res = await fileUpload(files)
       this.avatarUrl = res
     },
 
     // 创建社群
-    async submit() {
+    async submit () {
       if (this.validateChinese) {
-        return
+
       } else {
         const option = {
           type: this.defaultType.type,
@@ -216,11 +219,11 @@ export default {
           message.success(`${res.data.group.name}创建成功`)
           const name = `GROUP${this.groupID}`
           this.updateConversation(name)
-          this.$router.push({name: 'chatMain'})
+          this.$router.push({ name: 'chatMain' })
           window.$TUIKit.TUIServer.TUIConversation.getConversationProfile(name).then((imResponse) => {
             // 通知 TUIConversation 添加当前会话
             // Notify TUIConversation to toggle the current conversation
-            window.$TUIKit.TUIServer.TUIConversation.handleCurrentConversation(imResponse.data.conversation);
+            window.$TUIKit.TUIServer.TUIConversation.handleCurrentConversation(imResponse.data.conversation)
           })
           this.$emit('close')
         }

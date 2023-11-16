@@ -13,8 +13,9 @@
         </div>
       </template>
     </vue-custom-scrollbar>
-    <div class="flex items-center select-active voice-item-hover justify-center rounded-lg py-3 my-2 pointer s-item w-full xt-bg-2 xt-text"
-         @click="backInput">
+    <div
+        class="flex items-center select-active voice-item-hover justify-center rounded-lg py-3 my-2 pointer s-item w-full xt-bg-2 xt-text"
+        @click="backInput">
       <Icon icon="xiangzuo" style="font-size: 1.429em;"></Icon>
       <span class="text-center" style="font-size: 16px;  font-weight: 400;">返回</span>
     </div>
@@ -22,11 +23,11 @@
 </template>
 
 <script>
-import {listInputs, setAsDefault} from '../../../js/ext/audio/audio'
+import { listInputs, setAsDefault } from '../../../js/ext/audio/audio'
 
 export default {
   name: 'VoiceInputDetail',
-  data() {
+  data () {
     return {
       inputList: [],
       settingsScroller: {
@@ -40,18 +41,18 @@ export default {
       defaultItem: {},
     }
   },
-  async mounted() {
+  async mounted () {
     this.inputList = await listInputs()
   },
   methods: {
-    selectAudio(item, list) {
+    selectAudio (item, list) {
       list.forEach(li => {
         li.isDefaultForMultimedia = false
       })
       item.isDefaultForMultimedia = true
       setAsDefault(item)
     },
-    backInput() {
+    backInput () {
       this.$emit('updateInput', this.defaultItem)
     }
   }

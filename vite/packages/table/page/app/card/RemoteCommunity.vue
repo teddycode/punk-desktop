@@ -54,13 +54,13 @@
 <script>
 import Market from '../../../components/card/remote/Market.vue'
 import HorizontalPanel from '../../../components/HorizontalPanel.vue'
-import {mapActions, mapWritableState} from "pinia";
+import { mapActions, mapWritableState } from 'pinia'
 import RemoteShare from '../../../components/card/remote/RemoteShare.vue'
-import {cardStore} from '../../../store/card';
-import {shareList} from '../../../components/card/remote/testData'
-import cache from '../../../components/card/hooks/cache';
-import Modal from '../../../components/Modal.vue';
-import {message} from "ant-design-vue";
+import { cardStore } from '../../../store/card'
+import { shareList } from '../../../components/card/remote/testData'
+import cache from '../../../components/card/hooks/cache'
+import Modal from '../../../components/Modal.vue'
+import { message } from 'ant-design-vue'
 
 export default {
   components: {
@@ -69,13 +69,13 @@ export default {
     RemoteShare,
     Modal
   },
-  data() {
+  data () {
     return {
       navType: [
-        {title: '社区分享', name: 'share'},
-        {title: '我的', name: 'my'}
+        { title: '社区分享', name: 'share' },
+        { title: '我的', name: 'my' }
       ],
-      selectNav: {title: '社区分享', name: 'share'},
+      selectNav: { title: '社区分享', name: 'share' },
       desk: {},
       openShare: false,
       //当前卡片
@@ -89,33 +89,33 @@ export default {
     }
   },
   methods: {
-    ...mapActions(cardStore, ["addCard"]),
-    close() {
+    ...mapActions(cardStore, ['addCard']),
+    close () {
       this.$router.go(-1)
     },
-    shareNow() {
+    shareNow () {
       this.openShare = true
     },
-    closeShare(val, direct) {
+    closeShare (val, direct) {
       this.openShare = val
-      this.selectNav = {title: '我的', name: 'my'}
+      this.selectNav = { title: '我的', name: 'my' }
       this.direct = direct
     },
-    closeMy() {
+    closeMy () {
       this.$forceUpdate()
     },
-    setNavFixed() {
-      let nav = document.getElementById('nav');
-      let list = document.getElementById('navList');
+    setNavFixed () {
+      let nav = document.getElementById('nav')
+      let list = document.getElementById('navList')
       nav.classList.add('suspension-r-nav')
       list.classList.add('list-r-nav')
     },
     // 获取要添加的市场小卡片
-    getCard(card) {
+    getCard (card) {
       this.promptVisible = true
       this.selectCard = card
     },
-    addNewCard(card) {
+    addNewCard (card) {
       let size = card.sizes[0].split('x')
       this.addCard(
           {
@@ -128,24 +128,24 @@ export default {
             }
           },
           this.desk
-      );
+      )
       // this.addCard(
       //   { name: card.option[0].name, id: Date.now(), customData: {url:card.url} },
       //   this.desk
       // );
       this.close()
-      message.success("添加成功！");
+      message.success('添加成功！')
     },
-    subCard(card) {
+    subCard (card) {
       this.card.customData.url = card.url
       this.close()
-      message.success("修改成功！");
+      message.success('修改成功！')
     }
   },
   computed: {
     ...mapWritableState(cardStore, ['desks']),
   },
-  mounted() {
+  mounted () {
     let params = this.$route.params
     let deskId = params.id
     this.cardId = params.cardId
@@ -160,7 +160,7 @@ export default {
     this.setNavFixed()
   },
   watch: {
-    selectNav(val) {
+    selectNav (val) {
       this.$nextTick(() => {
         if (val.name === 'share') {
           this.setNavFixed()

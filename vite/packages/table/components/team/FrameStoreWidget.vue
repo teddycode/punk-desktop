@@ -10,7 +10,8 @@
             <div style="width: 100px;height: 100px;">
 
               <RayMedal v-if="item.frame.rarity>=4" :size="120" :src="item.cover"
-                        medalStyle="transform:scale(250%) !important" style="transform: translateX(-10%) translateY(-5%) ">
+                        medalStyle="transform:scale(250%) !important"
+                        style="transform: translateX(-10%) translateY(-5%) ">
 
               </RayMedal>
               <img v-else :src="item.cover" alt="" class="w-full h-full object-fill">
@@ -44,7 +45,8 @@
                 </a-avatar-group>
               </div>
             </div>
-            <div class=" xt-bg px-3 py-1 rounded-full pointer" style="position: absolute;right: 10px;top: 10px" title="试穿"
+            <div class=" xt-bg px-3 py-1 rounded-full pointer" style="position: absolute;right: 10px;top: 10px"
+                 title="试穿"
                  @click="tryFrame(item.cover)">
               <icon icon="yifu" style="font-size: 18px"></icon>
               试穿
@@ -59,11 +61,13 @@
               赞助 ￥ {{ getFramePrice(item).price }}
               <template v-if="+getFramePrice(item).originPrice"><span
                   class="line-through ml-2">￥{{ getFramePrice(item).originPrice }}</span>
-                <a-badge :count="getDiscount(getFramePrice(item))" :number-style="{ backgroundColor: '#52c41a',borderColor:'transparent' }"
+                <a-badge :count="getDiscount(getFramePrice(item))"
+                         :number-style="{ backgroundColor: '#52c41a',borderColor:'transparent' }"
                          class="ml-2"></a-badge>
               </template>
             </a-button>
-            <a-button v-else class="mr-3 rounded-xl avatar-font flex items-center justify-center  m-3" style="width: 100%"
+            <a-button v-else class="mr-3 rounded-xl avatar-font flex items-center justify-center  m-3"
+                      style="width: 100%"
                       type="default">
               已有 <span class=" ml-2">￥ {{ getFramePrice(item).price }}</span>
               <template v-if="getFramePrice(item).originPrice"><span
@@ -71,13 +75,15 @@
               </template>
 
             </a-button>
-            <a-button v-if="getFrameScore(item)" class="mr-3  rounded-xl avatar-font flex items-center justify-center" hidden=""
+            <a-button v-if="getFrameScore(item)" class="mr-3  rounded-xl avatar-font flex items-center justify-center"
+                      hidden=""
                       style="color: var(--active-text);height: 44px;" type="primary" @click="scorePay(item)"
 
             >
               {{ getFrameScore(item) }}积分
             </a-button>
-            <a-button :style="getFrameScore(item)&&false ? {width:'104px'}:{width:'50%'}" class="rounded-xl" hidden="" style="height: 44px;color: var(--active-text);"
+            <a-button :style="getFrameScore(item)&&false ? {width:'104px'}:{width:'50%'}" class="rounded-xl" hidden=""
+                      style="height: 44px;color: var(--active-text);"
                       type="primary"
                       @click="teamGift(item)"
             >
@@ -96,7 +102,8 @@
   </div>
 
   <!-- 收款码付费弹窗组件 -->
-  <a-modal v-model:visible="payVisible" :bodyStyle="{borderRadius:'12px',padding:'12px',}" :closable="false" :footer="null" :header="null" :width="480"
+  <a-modal v-model:visible="payVisible" :bodyStyle="{borderRadius:'12px',padding:'12px',}" :closable="false"
+           :footer="null" :header="null" :width="480"
            centered @cancel="closeCheckTimer"
   >
     <div v-if="isPay === false" class="w-full flex items-center mb-6">
@@ -116,7 +123,8 @@
   </a-modal>
 
   <!-- 积分付费弹窗组件 -->
-  <a-modal v-model:visible="pointVisible" :bodyStyle="{borderRadius:'12px',padding:'12px',}" :closable="false" :footer="null" :header="null"
+  <a-modal v-model:visible="pointVisible" :bodyStyle="{borderRadius:'12px',padding:'12px',}" :closable="false"
+           :footer="null" :header="null"
            :width="480" centered
   >
     <div class="flex mb-6">
@@ -146,19 +154,19 @@
 </template>
 
 <script>
-import {mapActions, mapState, mapWritableState} from 'pinia'
+import { mapActions, mapState, mapWritableState } from 'pinia'
 import HorizontalPanel from '../HorizontalPanel.vue'
 import HorzontanlPanelIcon from '../HorzontanlPanelIcon.vue'
 import PaymentMoney from '../payModal/PaymentMoney.vue'
 import PointPayment from '../payModal/PointPayment.vue'
 import GiftModal from '../payModal/GiftModal.vue'
-import {appStore} from '../../store'
-import {frameStore} from '../../store/avatarFrame'
-import {teamStore} from '../../store/team'
+import { appStore } from '../../store'
+import { frameStore } from '../../store/avatarFrame'
+import { teamStore } from '../../store/team'
 import _ from 'lodash-es'
-import {message} from 'ant-design-vue'
+import { message } from 'ant-design-vue'
 import MyFrames from './MyFrames.vue'
-import {avatarBgColor, avatarGainMethodText, avatarTagColor, textTag, titleTagColor} from '../../js/common/avatar'
+import { avatarBgColor, avatarGainMethodText, avatarTagColor, textTag, titleTagColor } from '../../js/common/avatar'
 import RayMedal from '../small/RayMedal.vue'
 import FrameAvatar from '../avatar/FrameAvatar.vue'
 import Modal from '../Modal.vue'
@@ -176,13 +184,13 @@ export default {
     Modal
   },
   props: [],
-  data() {
+  data () {
     return {
       avatarList: [    // 头像框是否购买的状态
-        {title: '头像框商店', name: 'shop_store'},
-        {title: '拥有', name: 'have_bought'}
+        { title: '头像框商店', name: 'shop_store' },
+        { title: '拥有', name: 'have_bought' }
       ],
-      listItem: {title: '商店', name: 'shop_store'}, // 默认显示头像框未购买界面
+      listItem: { title: '商店', name: 'shop_store' }, // 默认显示头像框未购买界面
       settingsScroller: {
         useBothWheelAxes: true,
         swipeEasing: true,
@@ -211,7 +219,7 @@ export default {
     ...mapState(appStore, ['userInfo']),
     ...mapState(teamStore, ['membersDevote']),
     ...mapWritableState(frameStore, ['frameData']),
-    frameList() {
+    frameList () {
       const data = this.frameData.list
       // const list = _.filter(data, function (o) { return o.frame.gainMethod !== 'rank' })
       // console.log(list)
@@ -220,24 +228,24 @@ export default {
   },
   watch: {
     'listItem': {
-      handler() {
+      handler () {
         this.listItem = this.listItem
       },
       immediate: true,
     },
   },
-  mounted() {
+  mounted () {
     this.getFrameGoods()
   },
   methods: {
     ...mapActions(frameStore, ['getFrameGoods', 'ensureOrder']),
     ...mapActions(appStore, ['showUserCard']),
-    tryFrame(frameImage) {
+    tryFrame (frameImage) {
       this.tryFrameVisible = true
       this.tringFrame = frameImage
     },
     avatarTagColor, textTag, titleTagColor, avatarBgColor, avatarGainMethodText,
-    getFramePrice(item) {  // 根据价格类型获取数据
+    getFramePrice (item) {  // 根据价格类型获取数据
       const money = _.find(item.prices, function (o) {
         return o.type === 'money'
       })
@@ -247,10 +255,10 @@ export default {
         return {}
       }
     },
-    getDiscount(price) {
+    getDiscount (price) {
       return '-' + ((1 - price.price / price.originPrice) * 100).toFixed(1) + '%'
     },
-    getFrameScore(item) {  // 根据积分类型获取数据
+    getFrameScore (item) {  // 根据积分类型获取数据
       const score = _.find(item.prices, function (o) {
         return o.type === 'score'
       })
@@ -259,36 +267,36 @@ export default {
       }
     },
 
-    scorePay(item) {   // 点击积分兑换回调事件
+    scorePay (item) {   // 点击积分兑换回调事件
       this.pointVisible = true
       this.needPayAvatar.url = item.cover
       this.needPayAvatar.name = item.summary
     },
 
-    teamGift(item) {  // 赠送回调事件
+    teamGift (item) {  // 赠送回调事件
       this.$refs.giftRef.openGiftModal()
       this.needPayAvatar.price = this.getFramePrice(item)
     },
     // 赠送使用价格支付方式回调事件
-    pricePay() {
+    pricePay () {
       this.giftShow = true
     },
 
     // 头像框人物搜索回调事件
-    avatarSearch(e) {
+    avatarSearch (e) {
       console.log('测试', e)
     },
     // 选中队友后回调事件
-    giftTeamMember(item) {
+    giftTeamMember (item) {
       this.teamIndex = item.uid
       this.payShow = true
     },
-    closeCheckTimer() {
+    closeCheckTimer () {
       this.$refs.paymentPanel.closeTimer()
       console.log('关闭支付状态监测')
     },
     // 点击价格购买逻辑
-    buyNow(item) {
+    buyNow (item) {
       this.needPayAvatar.name = item.summary
       this.needPayAvatar.url = item.cover
       this.needPayAvatar.price = this.getFramePrice(item)

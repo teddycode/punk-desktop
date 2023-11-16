@@ -77,16 +77,17 @@
 
   </div>
 
-  <ChannelClassification v-if="nextShow === true" :data="selectGroup" :no="no" :type="type" @classBack="nextShow = false"
+  <ChannelClassification v-if="nextShow === true" :data="selectGroup" :no="no" :type="type"
+                         @classBack="nextShow = false"
                          @close="closeChannel">
   </ChannelClassification>
 
 </template>
 
 <script>
-import {Icon as ChatIcon} from '@iconify/vue'
+import { Icon as ChatIcon } from '@iconify/vue'
 import _ from 'lodash-es'
-import {message} from 'ant-design-vue'
+import { message } from 'ant-design-vue'
 
 import ChannelClassification from './ChannelClassification.vue'
 
@@ -96,7 +97,7 @@ export default {
     ChatIcon, ChannelClassification
   },
 
-  data() {
+  data () {
     return {
       selectGroup: [],
       nextShow: false,
@@ -120,7 +121,7 @@ export default {
 
   computed: {},
 
-  mounted() {
+  mounted () {
     this.$nextTick(() => {
       this.$refs.searchRef.focus()
     }),
@@ -129,15 +130,15 @@ export default {
 
   methods: {
     // 关闭和返回
-    closeChannel() {
+    closeChannel () {
       this.$emit('close')
     },
-    backChannel() {
+    backChannel () {
       this.$emit('back')
     },
 
     // 获取初始数据
-    getList() {
+    getList () {
       const list = this.server.TUIServer.TUIGroup.store.groupList
       // console.log('获取群聊数据',list);
       const arr = _.filter(list, function (o) {
@@ -147,7 +148,7 @@ export default {
     },
 
     // 点击左侧选中
-    leftListClick(item) {
+    leftListClick (item) {
       const index = _.findIndex(this.selectGroup, function (o) {
         return o.groupID === item.groupID
       })
@@ -159,18 +160,18 @@ export default {
     },
 
     // 选择下一步
-    selectSubmit(evt) {
+    selectSubmit (evt) {
       if (this.selectGroup.length !== 0) {
         this.nextShow = true
         //  community.getChannel(data.option)
       } else {
         message.warn('没有选择指定的群')
-        evt.preventDefault();
+        evt.preventDefault()
       }
     },
 
     // 清除选中的数据
-    removeGroup(item) {
+    removeGroup (item) {
       const index = _.findIndex(this.selectGroup, function (o) {
         return o.groupID === item.groupID
       })
@@ -178,21 +179,21 @@ export default {
     },
 
     // 判断是否选中状态
-    isSelected(index) {
+    isSelected (index) {
       return this.selectGroup.includes(this.filterList[index])
     },
 
     // 群聊搜索
-    async groupSearch(evt) {
+    async groupSearch (evt) {
       /**
        * 此处需要做两种判断
        * 第一种:过滤社群中是否关联过得去群聊,需要通过后台接口进行检测
        * 第二种:过滤自自己是成员的群聊
        * **/
       if (this.searchKeyWord !== '') {
-        this.filterList = [];
+        this.filterList = []
 
-        const chineseRegex = /[\u4e00-\u9fa5]/;
+        const chineseRegex = /[\u4e00-\u9fa5]/
 
         // 判断搜索是否为中文
         if (chineseRegex.test(this.searchKeyWord)) {
@@ -212,14 +213,12 @@ export default {
           this.filterList = [res?.data?.group]
         }
 
-
       } else {
         this.title = '我创建的群聊'
         this.getList()
         evt.preventDefault()
       }
     },
-
 
   }
 

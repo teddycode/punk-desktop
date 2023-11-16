@@ -4,42 +4,42 @@
 </template>
 
 <script>
-import ColorPicker from "colorpicker-v3";
-import "colorpicker-v3/style.css";
+import ColorPicker from 'colorpicker-v3'
+import 'colorpicker-v3/style.css'
 
 export default {
   components: {
     ColorPicker,
   },
-  data() {
+  data () {
     return {
       colorData: this.data,
-    };
+    }
   },
   props: {
     data: {
       type: String,
-      default: "",
+      default: '',
     },
     data: {
       type: String,
-      default: "",
+      default: '',
     },
   },
   watch: {
-    colorData(newV) {
-      this.$emit("update:data", newV);
+    colorData (newV) {
+      this.$emit('update:data', newV)
     },
-    data(newV) {
-      this.colorData = newV;
+    data (newV) {
+      this.colorData = newV
     },
   },
   methods: {
-    colorClick() {
-      this.$emit("click");
+    colorClick () {
+      this.$emit('click')
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

@@ -45,15 +45,15 @@
 </template>
 
 <script>
-import {mapWritableState} from 'pinia'
-import {paperStore} from '../../store/paper'
-import {Modal} from 'ant-design-vue'
+import { mapWritableState } from 'pinia'
+import { paperStore } from '../../store/paper'
+import { Modal } from 'ant-design-vue'
 
 const fs = window.$models.fs
 const path = require('path')
 export default {
   name: 'Import',
-  data() {
+  data () {
     return {}
   },
   props: {
@@ -67,26 +67,26 @@ export default {
   computed: {
     ...mapWritableState(paperStore, ['settings', 'myPapers'])
   },
-  mounted() {
+  mounted () {
   },
   methods: {
-    clearFix() {
+    clearFix () {
       this.myPapers = []
       this.activePapers = []
     },
     //选择本地按钮的导入方式
-    async importFile() {
+    async importFile () {
       if (this.settings.savePath) {
         let openPath = await tsbApi.dialog.showOpenDialog({
           title: '选择导入的代码',
-          filters: [{name: '图片', extensions: ['png', 'jpg', 'jpeg', 'bmp', 'gif']}, {
+          filters: [{ name: '图片', extensions: ['png', 'jpg', 'jpeg', 'bmp', 'gif'] }, {
             name: '视频',
             extensions: ['mp4', 'mpeg', 'avi', 'rmvb']
-          }, {name: '全部', extensions: ['*']}],
+          }, { name: '全部', extensions: ['*'] }],
           properties: ['multiSelections']
         })
         if (!openPath) {
-          return
+
         } else {
           const imgReg = /.(jpg|jpeg|gif|bmp|png)$/  // 匹配图片正则
           const videoReg = /.(mp4|mpeg|avi|rmvb)$/ // 匹配视频正则
@@ -95,11 +95,11 @@ export default {
           for (let i = 0; i < openPath.length; i++) {
             if (imgReg.test(openPath[i])) {
               // 将选中的文件复制到指定的文件夹中
-              fs.copySync(openPath[i], `${staticDir}\\${openPath[i].split("\\")[openPath[i].split("\\").length - 1]}`)
+              fs.copySync(openPath[i], `${staticDir}\\${openPath[i].split('\\')[openPath[i].split('\\').length - 1]}`)
               this.loadStaticPaper()
             } else if (videoReg.test(openPath[i])) {
               // 将动态的文件复制到指定存放的动态文件目录中
-              fs.copySync(openPath[i], `${livelyDir}\\${openPath[i].split("\\")[openPath[i].split("\\").length - 1]}`)
+              fs.copySync(openPath[i], `${livelyDir}\\${openPath[i].split('\\')[openPath[i].split('\\').length - 1]}`)
               // this.getLoadLively()
             }
           }
@@ -109,12 +109,12 @@ export default {
       }
     },
     // 选择网络资源的导入方式
-    importNetworkFile() {
+    importNetworkFile () {
     },
     // 选择文件拖拽的导入方式
-    dragOver() {
+    dragOver () {
     },
-    drop(e) {
+    drop (e) {
       if (this.settings.savePath) {
         const imgReg = /.(jpg|jpeg|gif|bmp|png)$/  // 匹配图片正则
         const videoReg = /.(mp4|mpeg|avi|rmvb)$/ // 匹配视频正则
@@ -129,11 +129,11 @@ export default {
         }
         fileArr.forEach(el => {
           if (imgReg.test(el)) {
-            fs.copySync(el, `${staticDir}\\${el.split("\\")[el.split("\\").length - 1]}`)
+            fs.copySync(el, `${staticDir}\\${el.split('\\')[el.split('\\').length - 1]}`)
             this.loadStaticPaper()
           } else if (videoReg.test(el)) {
             // 将动态壁纸复制到指定动态壁纸文件夹中
-            fs.copySync(el, `${livelyDir}\\${el.split("\\")[el.split("\\").length - 1]}`)
+            fs.copySync(el, `${livelyDir}\\${el.split('\\')[el.split('\\').length - 1]}`)
             // this.getLoadLively()
           }
         })
@@ -142,7 +142,7 @@ export default {
       }
     },
     // 设置指定目录的创建
-    setDirPrompt() {
+    setDirPrompt () {
       Modal.confirm({
         content: '未设置壁纸保存目录,需要设置壁纸保存文件夹',
         okText: '确定',
@@ -158,7 +158,7 @@ export default {
           fs.ensureDirSync(staticDir)
           fs.ensureDirSync(livelyDir)
         }
-      });
+      })
     },
 
   }

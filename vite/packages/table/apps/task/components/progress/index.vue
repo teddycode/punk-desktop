@@ -14,51 +14,51 @@
 </template>
 
 <script setup>
-import {computed, reactive, ref, toRefs} from "vue";
+import { computed, reactive, ref, toRefs } from 'vue'
 
-import {storeToRefs} from "pinia";
-import {taskStore} from "../../store";
+import { storeToRefs } from 'pinia'
+import { taskStore } from '../../store'
 
-const store = taskStore();
-const {successBranchTask} = storeToRefs(store);
+const store = taskStore()
+const { successBranchTask } = storeToRefs(store)
 const props = defineProps({
   text: {
-    default: "进度",
+    default: '进度',
   },
   task: {
     default: {},
   },
-});
-const {task} = toRefs(props);
+})
+const { task } = toRefs(props)
 
 // 获取当前分支总长度
-let branchLength = ref(task.value.tasks.length);
+let branchLength = ref(task.value.tasks.length)
 
 // 获取当前分支的所有的ID
 const allTaskId = computed(() => {
-  let allTaskId = reactive([]);
-  task.value.tasks.forEach((item) => allTaskId.push(item.id));
-  return allTaskId;
-});
+  let allTaskId = reactive([])
+  task.value.tasks.forEach((item) => allTaskId.push(item.id))
+  return allTaskId
+})
 
 // 获取当前分支已完成的任务数
 const successTask = computed(() => {
-  let num = 0;
+  let num = 0
   allTaskId.value.forEach((item) => {
-    if (successBranchTask.value.includes(item)) num++;
-  });
-  return num;
-});
+    if (successBranchTask.value.includes(item)) num++
+  })
+  return num
+})
 
 // 获取当前分支完成进度
-const progress = ref(0);
+const progress = ref(0)
 const branchProgress = computed(() => {
-  let res = (successTask.value / branchLength.value) * 100;
-  progress.value = Math.round(res);
+  let res = (successTask.value / branchLength.value) * 100
+  progress.value = Math.round(res)
   return {
-    width: progress.value + "%",
-  };
-});
+    width: progress.value + '%',
+  }
+})
 </script>
 
 <style lang="scss" scoped></style>

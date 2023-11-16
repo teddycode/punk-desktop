@@ -34,27 +34,27 @@ export default {
     },
   },
   methods: {
-    getImg(url) {
+    getImg (url) {
       return '/img/addCard/' + url + '.png'
     },
-    addCard(item, index) {
+    addCard (item, index) {
       this.onBack()
-      this.$emit("addCardAchieve", this.cardDetails, index)
+      this.$emit('addCardAchieve', this.cardDetails, index)
     },
-    onBack() {
-      this.$emit("closeCardDetails", false)
+    onBack () {
+      this.$emit('closeCardDetails', false)
     },
-    setImg(src) {
-      var img = new Image();
+    setImg (src) {
+      var img = new Image()
       img.src = src
       let size = {
         width: img.width,
         height: img.height
       }
       if (size.width > size.height) {
-        return {width: '360px'}
+        return { width: '360px' }
       } else {
-        return {height: '320px'}
+        return { height: '320px' }
       }
     }
 

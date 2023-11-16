@@ -80,7 +80,7 @@
             <h3 v-if="editing" class="pointer text-more">
               <span v-if="editing"><span style="margin-left: 0.8em">
                 <left-square-outlined v-if="index !== 0" class="mr-3" @click.stop="moveGrid(-1, index)"/> <right-square-outlined
-                v-if="index !== this.grids.length - 1" @click.stop="moveGrid(1, index)"/></span>
+                  v-if="index !== this.grids.length - 1" @click.stop="moveGrid(1, index)"/></span>
                 <span class="pl-5"></span> {{ grid.title }}</span>
             </h3>
             <h3 v-else class="pointer text-more xt-text" style="padding-left: 0.8em;margin-bottom: 0em"
@@ -90,9 +90,9 @@
           </template>
 
           <div>
-            <div style="min-height: 3em" @contextmenu.stop="showMenu(index)" :id="'board-'+board.id" class="grid"
-                 v-for="(board,index) in decks">
-              <DeckItem :id="item.id" :item="item" v-for="item in board.children"></DeckItem>
+            <div v-for="(board,index) in decks" :id="'board-'+board.id" class="grid" style="min-height: 3em"
+                 @contextmenu.stop="showMenu(index)">
+              <DeckItem v-for="item in board.children" :id="item.id" :item="item"></DeckItem>
             </div>
             <div v-if="grid.children.length === 0 && editing === false"
                  :style="{ width: getVuuriWidth(grid.cols) }"

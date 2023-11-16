@@ -9,9 +9,11 @@ const publicSuffixes = require('../../ext/publicSuffixes/public_suffix_list.json
 function removeWWW (domain) {
   return (domain.startsWith('www.') ? domain.slice(4) : domain)
 }
+
 function removeTrailingSlash (url) {
   return (url.endsWith('/') ? url.slice(0, -1) : url)
 }
+
 const specialMaps = {
   'ts://settings': 'tsbapp://./settings.html'
 }
@@ -32,7 +34,7 @@ function parseSpecialUrl (url) {
   if (source !== '') {
     return {
       status: true,
-      url: url.replace(specialMaps[source],source)
+      url: url.replace(specialMaps[source], source)
     }
   } else {
     return {
@@ -48,13 +50,13 @@ function parseSpecialUrl (url) {
  * @returns {{status: boolean}|{url, status: boolean}}
  */
 function getSourceUrl (url) {
-  let foundKey=Object.keys(specialMaps).find(key=>{
+  let foundKey = Object.keys(specialMaps).find(key => {
     return url.startsWith(key)
   })
   if (foundKey) {
     return {
       status: true,
-      url: url.replace(foundKey,specialMaps[foundKey])
+      url: url.replace(foundKey, specialMaps[foundKey])
     }
   } else {
     return {
@@ -172,6 +174,7 @@ var urlParser = {
     function isRenderUrl (url) {
       return url.startsWith('http://localhost:1600') || url.startsWith('tsbapp://') || parseSpecialUrl(url).status || getSourceUrl(url).status
     }
+
     return url.startsWith(urlParser.getFileURL(__dirname)) || isRenderUrl(url)
   },
   getSourceURL: function (url) {
@@ -242,7 +245,7 @@ var urlParser = {
 
     // is domain an ipv4/6 or known hostname?
     if ((urlParser.validIP4Regex.test(cleanDomain) || (cleanDomain.startsWith('[') && cleanDomain.endsWith(']'))) ||
-        hosts.includes(cleanDomain)) {
+      hosts.includes(cleanDomain)) {
       return true
     }
     // it has a public suffix?

@@ -1,6 +1,7 @@
 <template>
   <Widget ref="clockSlot" :customIndex="customIndex" :desk="desk"
-          :menuList="menuList" :options="{ ...this.options,background:this.isColor}" :showRightIcon="!this.$props.isTop" @delete='clearTime'>
+          :menuList="menuList" :options="{ ...this.options,background:this.isColor}" :showRightIcon="!this.$props.isTop"
+          @delete='clearTime'>
     <div class="title" @click="test">番茄时间</div>
     <div class="time">{{ displayNum(minutes) }}:{{ displayNum(seconds) }}</div>
     <div class="title">今日番茄时间 {{ countToday(this.tomatoNum) }}</div>
@@ -62,16 +63,16 @@
 </template>
 
 <script>
-import Widget from "../../../components/card/Widget.vue";
-import {Icon} from '@iconify/vue';
-import {mapActions, mapWritableState} from "pinia";
-import {tomatoStore} from '../store'
-import FullScreen from "../components/fullScreen.vue";
-import {cardStore} from '../../../store/card'
+import Widget from '../../../components/card/Widget.vue'
+import { Icon } from '@iconify/vue'
+import { mapActions, mapWritableState } from 'pinia'
+import { tomatoStore } from '../store'
+import FullScreen from '../components/fullScreen.vue'
+import { cardStore } from '../../../store/card'
 import XtButton from '../../../ui/libs/Button/index.vue'
 
 export default {
-  name: "TimerClock",
+  name: 'TimerClock',
   components: {
     XtButton,
     Widget,
@@ -95,7 +96,7 @@ export default {
       type: Boolean,
     }
   },
-  data() {
+  data () {
     return {
       // 设置
       settingVisible: false,
@@ -104,7 +105,7 @@ export default {
         title: 'TimerClock',
         type: 'timer',
         noTitle: true,
-        background: "#E7763E",
+        background: '#E7763E',
         beforeDelete: true,
       },
       menuList: [
@@ -112,16 +113,16 @@ export default {
           icon: 'shezhi1',
           title: '设置',
           fn: () => {
-            this.settingVisible = true;
+            this.settingVisible = true
             this.$refs.clockSlot.visible = false
           }
         },
       ],
     }
   },
-  mounted() {
-    this.getTomatoNum();
-    this.init(this.customData, this.customIndex, this.desk);
+  mounted () {
+    this.getTomatoNum()
+    this.init(this.customData, this.customIndex, this.desk)
   },
   computed: {
     ...mapWritableState(tomatoStore, ['hours', 'minutes', 'seconds', 'running', 'isPause', 'isColor', 'isFullScreen', 'isFull', 'isState', 'tomatoNum']),
@@ -130,29 +131,29 @@ export default {
     ...mapActions(tomatoStore, ['onPlay', 'onStop', 'onPause', 'onFullScreen', 'getTomatoNum', 'onChange', 'init']),
     ...mapActions(cardStore, ['updateCustomData']),
     // 删除 清除定时器
-    clearTime() {
-      this.onStop();
+    clearTime () {
+      this.onStop()
     },
     // 计算今日番茄时间
-    countToday(num) {
-      let totalTime = num * 25;
+    countToday (num) {
+      let totalTime = num * 25
       let hour = totalTime / 60
       let min = totalTime % 60
       return Math.trunc(hour) + 'h' + min + 'm'
     },
     // 时间格式
-    displayNum(num) {
+    displayNum (num) {
       if (num < 10) {
         return '0' + num
       } else {
         return num
       }
     },
-    test() {
+    test () {
       console.log(this.$props)
     }
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

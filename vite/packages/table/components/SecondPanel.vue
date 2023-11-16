@@ -22,9 +22,9 @@
 </template>
 
 <script>
-import GradeSmallTip from "./GradeSmallTip.vue";
-import {taskStore} from "../apps/task/store";
-import {mapWritableState} from 'pinia'
+import GradeSmallTip from './GradeSmallTip.vue'
+import { taskStore } from '../apps/task/store'
+import { mapWritableState } from 'pinia'
 import routerTab from '../js/common/routerTab'
 
 export default {
@@ -42,8 +42,8 @@ export default {
   emits: [
     'changeTab'
   ],
-  components: {GradeSmallTip},
-  data() {
+  components: { GradeSmallTip },
+  data () {
     return {
       panel: {},
       activeIndex: '',
@@ -56,21 +56,21 @@ export default {
       },
     }
   },
-  mounted() {
+  mounted () {
     this.panel = document.getElementById('secondPanel')
     this.activeIndex = this.menus[0].index
     //this.panel.style.marginTop = -this.panel.offsetHeight / 2-20 + 'px'
   },
   computed: {
     ...mapWritableState(taskStore, ['taskID', 'step']),
-    M01035() {
+    M01035 () {
       if (this.taskID == 'M0103' && this.step == 5) {
         this.change(1, {
-          "index": "p",
-          "title": "拾光壁纸",
-          "icon": "wallpaper",
-          "route": {
-            "name": "pickingPaper"
+          'index': 'p',
+          'title': '拾光壁纸',
+          'icon': 'wallpaper',
+          'route': {
+            'name': 'pickingPaper'
           }
         })
         return true
@@ -79,7 +79,7 @@ export default {
   },
   methods: {
     isActive: routerTab.isActive,
-    current(menu) {
+    current (menu) {
       if (menu.tab) {
         return this.isActive(menu.tab, 2)
       } else {
@@ -90,9 +90,8 @@ export default {
         }
       }
 
-
     },
-    change(e, menu) {
+    change (e, menu) {
       this.activeIndex = menu.index
       this.$emit('changeTab', {
         index: menu.index,

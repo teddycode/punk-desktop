@@ -30,32 +30,32 @@
 </template>
 
 <script setup>
-import {ref} from "vue";
-import {storeToRefs} from "pinia";
-import {taskStore} from "../../store.ts";
-import {tasks} from "./Primary.ts";
-import TaskList from "./TaskList.vue";
+import { ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { taskStore } from '../../store.ts'
+import { tasks } from './Primary.ts'
+import TaskList from './TaskList.vue'
 
-const currentTask = ref(null);
-const sotre = taskStore();
-const {list} = storeToRefs(sotre);
+const currentTask = ref(null)
+const sotre = taskStore()
+const { list } = storeToRefs(sotre)
 const completedTask = (tasks) => {
-  let length = tasks.length;
-  let count = 0;
+  let length = tasks.length
+  let count = 0
   tasks.forEach((item) => {
     if (list.value.includes(item.id)) {
-      count++;
+      count++
     }
-  });
+  })
 
-  return `${count} / ${length}`;
-};
+  return `${count} / ${length}`
+}
 const back = () => {
-  currentTask.value = null;
-};
+  currentTask.value = null
+}
 const taskClick = (item) => {
-  currentTask.value = item;
-};
+  currentTask.value = item
+}
 </script>
 
 <style lang="scss" scoped></style>

@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import {AppstoreOutlined} from '@ant-design/icons-vue'
+import { AppstoreOutlined } from '@ant-design/icons-vue'
 
 export default {
   name: 'App',

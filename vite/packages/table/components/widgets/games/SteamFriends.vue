@@ -20,8 +20,8 @@
 <script>
 
 import Widget from '../../card/Widget.vue'
-import {steamUserStore} from '../../../store/steamUser'
-import {mapState} from 'pinia'
+import { steamUserStore } from '../../../store/steamUser'
+import { mapState } from 'pinia'
 import VueCustomScrollbar from '../../../../../src/components/vue-scrollbar.vue'
 
 export default {
@@ -44,7 +44,7 @@ export default {
       type: Object
     }
   },
-  data() {
+  data () {
     return {
       scrollbarSettings: {
         useBothWheelAxes: true,

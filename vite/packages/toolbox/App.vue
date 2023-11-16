@@ -5,23 +5,23 @@
 </template>
 
 <script>
-import zhCN from "ant-design-vue/es/locale/zh_CN";
-import dayjs from "dayjs";
-import "dayjs/locale/zh-cn";
-import toolsMain from "./views/main/index.vue";
+import zhCN from 'ant-design-vue/es/locale/zh_CN'
+import dayjs from 'dayjs'
+import 'dayjs/locale/zh-cn'
+import toolsMain from './views/main/index.vue'
 
-dayjs.locale("zh-cn");
+dayjs.locale('zh-cn')
 
 export default {
-  data() {
+  data () {
     return {
       locale: zhCN,
-    };
+    }
   },
   components: {
     toolsMain,
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

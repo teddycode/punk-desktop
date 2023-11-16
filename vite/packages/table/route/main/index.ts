@@ -39,150 +39,150 @@ import ChatChild from "./chat"
 import Power from "@page/Power.vue";
 
 export default [
-  {
-    path: "/main",
-    name: "main",
-    component: Main,
-    children: [
-      {
-        path: '/power',
-        name: 'power',
-        component: Power
+    {
+        path: "/main",
+        name: "main",
+        component: Main,
+        children: [
+            {
+                path: '/power',
+                name: 'power',
+                component: Power
 
-      },
-      {
-        path: "/inspector",
-        name: "inspector",
-        component: Inspector,
-      },
-      {
-        path: "",
-        name: "home",
-        component: Home,
-        meta: {
-          tab1: 'home'
-        }
-      },
-      {
-        path: "/app",
-        name: "app",
-        component: AppFrame,
-        children: [],
-      },
-      {
-        path: "/watch",
-        name: "watch",
-        component: Watch,
-      },
-      {
-        path: "/dashboard",
-        name: "dashboard",
-        component: Dashboard,
-      },
-      {
-        path: "/social",
-        name: "social",
-        component: Social,
-        children: SocialChild,
-      },
-      {
-        path: "/apps",
-        name: "apps",
-        component: Apps,
-      },
-      {
-        path: '/browser',
-        component: BrowserMain,
-        children: BrowserChild
-      },
-      {
-        path: '/chat',
-        component: ChatIndex,
-        name: 'chatIndex',
-        rememberChildrenPosition: true,
-        redirect: {
-          name: 'chat'
-        },
-        children: ChatChild
-      },
+            },
+            {
+                path: "/inspector",
+                name: "inspector",
+                component: Inspector,
+            },
+            {
+                path: "",
+                name: "home",
+                component: Home,
+                meta: {
+                    tab1: 'home'
+                }
+            },
+            {
+                path: "/app",
+                name: "app",
+                component: AppFrame,
+                children: [],
+            },
+            {
+                path: "/watch",
+                name: "watch",
+                component: Watch,
+            },
+            {
+                path: "/dashboard",
+                name: "dashboard",
+                component: Dashboard,
+            },
+            {
+                path: "/social",
+                name: "social",
+                component: Social,
+                children: SocialChild,
+            },
+            {
+                path: "/apps",
+                name: "apps",
+                component: Apps,
+            },
+            {
+                path: '/browser',
+                component: BrowserMain,
+                children: BrowserChild
+            },
+            {
+                path: '/chat',
+                component: ChatIndex,
+                name: 'chatIndex',
+                rememberChildrenPosition: true,
+                redirect: {
+                    name: 'chat'
+                },
+                children: ChatChild
+            },
 
-      {
-        path: "/music",
-        name: "music",
-        component: Music,
-      },
-      {
-        path: "/weather",
-        name: "weather",
-        component: Weather,
-      },
-      {
-        path: "/gameAssistant",
-        name: "gameAssistant",
-        component: GameAssistant,
-        children: GameAssistChild
-      },
+            {
+                path: "/music",
+                name: "music",
+                component: Music,
+            },
+            {
+                path: "/weather",
+                name: "weather",
+                component: Weather,
+            },
+            {
+                path: "/gameAssistant",
+                name: "gameAssistant",
+                component: GameAssistant,
+                children: GameAssistChild
+            },
 
-      {
-        path: "/work",
-        name: 'work',
-        component: WorkIndex,
-        meta: {
-          rememberChildrenPosition: true
-        },
-        redirect: '/desk',
-        children: WorkChild
-      },
+            {
+                path: "/work",
+                name: 'work',
+                component: WorkIndex,
+                meta: {
+                    rememberChildrenPosition: true
+                },
+                redirect: '/desk',
+                children: WorkChild
+            },
 
-      {
-        path: "/status",
-        name: "status",
-        component: Status,
-      },
-      {
-        path: "/sensor",
-        name: "sensor",
-        component: Sensor,
-      },
-      {
-        path: "/setting",
-        name: "setting",
-        component: Setting,
-      },
-      {
-        path: "/basicSetting",
-        name: "basicSetting",
-        component: BasicSetting,
-        children: BasicSettingsChild,
-      },
-      {
-        path: "/setting",
-        name: "addCardSetting",
-        component: SetupCard,
-      },
-      {
-        path: "/CPUIndex",
-        name: "CPUIndex",
-        component: CPUIndex,
-      },
-      {
-        path: "/gallery",
-        name: "gallery",
-        component: Gallery,
-        children: GalleryChild,
-      },
-      {
-        path: "/market",
-        name: "marketIndex",
-        component: MarketIndex,
-        children: MarketChild,
-      },
-      {
-        path: "/remoteCommunity",
-        name: "remoteCommunity",
-        component: RemoteCommunity,
-      },
+            {
+                path: "/status",
+                name: "status",
+                component: Status,
+            },
+            {
+                path: "/sensor",
+                name: "sensor",
+                component: Sensor,
+            },
+            {
+                path: "/setting",
+                name: "setting",
+                component: Setting,
+            },
+            {
+                path: "/basicSetting",
+                name: "basicSetting",
+                component: BasicSetting,
+                children: BasicSettingsChild,
+            },
+            {
+                path: "/setting",
+                name: "addCardSetting",
+                component: SetupCard,
+            },
+            {
+                path: "/CPUIndex",
+                name: "CPUIndex",
+                component: CPUIndex,
+            },
+            {
+                path: "/gallery",
+                name: "gallery",
+                component: Gallery,
+                children: GalleryChild,
+            },
+            {
+                path: "/market",
+                name: "marketIndex",
+                component: MarketIndex,
+                children: MarketChild,
+            },
+            {
+                path: "/remoteCommunity",
+                name: "remoteCommunity",
+                component: RemoteCommunity,
+            },
 
-    ],
-  },
+        ],
+    },
 ];

@@ -32,11 +32,11 @@ const appsRestore = {
   },
   // 从数据库读取
   restoreFromDB: async function (listId) {
-    try{
-      if(typeof listId==="undefined"){
-        listId=0
+    try {
+      if (typeof listId === 'undefined') {
+        listId = 0
       }
-      return await db.myApps.where({listId:listId}).desc('order').toArray()
+      return await db.myApps.where({ listId: listId }).desc('order').toArray()
     } catch (e) {
       console.log(e)
       return []

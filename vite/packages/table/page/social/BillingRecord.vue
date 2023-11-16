@@ -28,19 +28,19 @@ export default {
     CheckRecord,
   },
 
-  data() {
+  data () {
     return {
       recordType: [
-        {title: '账单记录', name: 'check'},
-        {title: '礼物记录', name: 'gift'}
+        { title: '账单记录', name: 'check' },
+        { title: '礼物记录', name: 'gift' }
       ],
-      defaultRecord: {title: '账单记录', name: 'check'},
+      defaultRecord: { title: '账单记录', name: 'check' },
     }
   },
 
   watch: {
     defaultRecord: {
-      handler() {
+      handler () {
         this.defaultRecord = this.defaultRecord
       }
     }

@@ -76,7 +76,8 @@
             </div>
             <div class="flex flex-col">
               <HorizontalPanel v-model:selectType="defaultMode" :navList="modeData" class="mb-5"></HorizontalPanel>
-              <div v-for="item in teamData" class="guide-page-bg mb-4 p-4 button-active flex items-center justify-between pointer rounded-lg"
+              <div v-for="item in teamData"
+                   class="guide-page-bg mb-4 p-4 button-active flex items-center justify-between pointer rounded-lg"
                    @click="openTeamPersonal(item)"
               >
                 <div class="flex items-center">
@@ -135,12 +136,12 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from 'pinia';
-import {appStore} from '../../../store'
-import {navStore} from '../../../store/nav';
-import {cardStore} from '../../../store/card';
-import {defaultAvatar} from '../../../js/common/teamAvatar'
-import {taskStore} from '../../../apps/task/store'
+import { mapActions, mapWritableState } from 'pinia'
+import { appStore } from '../../../store'
+import { navStore } from '../../../store/nav'
+import { cardStore } from '../../../store/card'
+import { defaultAvatar } from '../../../js/common/teamAvatar'
+import { taskStore } from '../../../apps/task/store'
 // import GradeNotice from './GradeNotice.vue'
 import {
   deskTemplate,
@@ -154,8 +155,8 @@ import {
   workPanel,
   workTheme
 } from '../../../js/data/guideData'
-import cache from '../../../components/card/hooks/cache';
-import {setThemeSwitch} from '../../../components/card/hooks/themeSwitch/index';
+import cache from '../../../components/card/hooks/cache'
+import { setThemeSwitch } from '../../../components/card/hooks/themeSwitch/index'
 import HorizontalPanel from '../../../components/HorizontalPanel.vue'
 import _ from 'lodash-es'
 
@@ -164,13 +165,13 @@ export default {
     // GradeNotice,
     HorizontalPanel
   },
-  data() {
+  data () {
     return {
       step: 0,
       isShow: false,
       guideData, teamData, deskTemplate,
       modeData, workTheme, modeImg,
-      defaultMode: {title: '完整模式', name: 'intMode'},
+      defaultMode: { title: '完整模式', name: 'intMode' },
       showModal: false,
       defaultTeamData: {},
       selectItem: [],
@@ -182,11 +183,11 @@ export default {
     ...mapWritableState(appStore, ['styles', 'simple', 'stylesIndex', 'userInfo']),
     ...mapWritableState(cardStore, ['currentDeskId', 'currentDeskIndex']),
     //是否禁用下一步
-    isNext() {
+    isNext () {
       return this.statusIndex === 2 || this.selectItem.length > 0
     }
   },
-  mounted() {
+  mounted () {
     this.selectItem = ['wf'] // gr
   },
   methods: {
@@ -196,15 +197,15 @@ export default {
     ...mapActions(taskStore, ['startfirstTask']),
 
     // 点击返回按钮的回调事件
-    backSplash() {
-      this.$router.replace({name: 'splash'})
+    backSplash () {
+      this.$router.replace({ name: 'splash' })
     },
     // 上一步按钮
-    prevButton() {
+    prevButton () {
       this.step--
     },
     // 选择合适的主题模式回调事件
-    selectThemeMode(index) {
+    selectThemeMode (index) {
       cache.set('index', index)
       if (index === 0) {
         this.updateMode(false)
@@ -213,17 +214,17 @@ export default {
       }
     },
     // 打开个人和小队引导信息提示回调事件
-    openTeamPersonal(item) {
+    openTeamPersonal (item) {
       this.defaultTeamData = item
       this.showModal = true
     },
     // 选择合适的工作台模式
-    selectWorkMode(item, index) {
+    selectWorkMode (item, index) {
       const find = this.selectItem.indexOf(item.id)
       if (find > -1) {
         this.selectItem.splice(find, 1)
       } else {
-        this.selectItem.push(item.id); // 添加选中
+        this.selectItem.push(item.id) // 添加选中
       }
       this.statusIndex = index
       if (index === 2) {
@@ -231,14 +232,14 @@ export default {
       }
     },
     // 选中状态
-    isActive(item) {
+    isActive (item) {
       if (item.id === 'dy') {  // 第三个元素选中
         return this.statusIndex === 2
       }
       return this.selectItem.includes(item.id)
     },
     // 下一步按钮
-    nextButton() {
+    nextButton () {
       this.step++
       if (this.step > 2) this.isShow = true
       if (this.step > 2) {  // 最后一步生成桌面
@@ -247,18 +248,18 @@ export default {
             this.addSwitchDesk(this.guideData[i])
           }
         } else if (this.selectItem[0] && this.selectItem[0] !== undefined) { // 单选不极简情况下
-          this.addSwitchDesk({id: this.selectItem[0]})
+          this.addSwitchDesk({ id: this.selectItem[0] })
         } else if (this.statusIndex === 2) { // 单选极简情况下
           this.addSwitchDesk(this.guideData[this.statusIndex])
         }
 
         // 当所有步骤执行完以后
         this.setAgreeTest()
-        this.$router.push({name: 'home'})
+        this.$router.push({ name: 'home' })
         this.startfirstTask()
         let postTimer = setTimeout(() => {
           const avatar = this.userInfo.avatar
-          const regex = new RegExp(avatar.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+          const regex = new RegExp(avatar.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
           const isUrlExists = _.some(defaultAvatar, function (o) {
             return regex.test(o.default_url)
           })
@@ -268,7 +269,6 @@ export default {
             this.setSecondaryVisible(false)
           }
         }, 60000)
-
 
         // console.log('多选:>>>',);
         // console.log('单选::>>> 不极简',this.selectItem[0]);
@@ -284,11 +284,11 @@ export default {
         //   }
         // }
       } else {
-        return
+
       }
     },
 
-    addSwitchDesk(obj) {   // 添加桌面和导航
+    addSwitchDesk (obj) {   // 添加桌面和导航
       switch (obj.id) {
         case 'gr': // 游戏娱乐
           this.addDesk(this.deskTemplate.gameName, this.deskTemplate.game)
@@ -296,21 +296,21 @@ export default {
             this.updateLeftNavData(gamePanel.left)
             this.updateBottomNavData(gamePanel.bottom)
           }
-          break;
+          break
         case 'wf': // 效率辅助
           this.addDesk(this.deskTemplate.workName, this.deskTemplate.work)
           if (this.selectItem.length === 1) {
             this.updateLeftNavData(workPanel.left)
             this.updateBottomNavData(workPanel.bottom)
           }
-          break;
+          break
         case 'dy': // 极简diy
           this.addDesk(this.deskTemplate.emptyName, this.deskTemplate.empty)
           if (this.statusIndex === 2) {
             this.updateLeftNavData(diyPanel.left)
             this.updateBottomNavData(diyPanel.bottom)
           }
-          break;
+          break
       }
 
       this.switchToDesk(0)
@@ -322,14 +322,14 @@ export default {
     },
 
     // 图片转换
-    guideImg(url) {
-      return '/img/state/' + url + '.png';
+    guideImg (url) {
+      return '/img/state/' + url + '.png'
     }
   },
   watch: {
     // 根据浅色模式监听
     'styles': {
-      handler(newVal, oldVal) {
+      handler (newVal, oldVal) {
         let model = newVal || this.stylesIndex === 1
         setThemeSwitch(model)
       },
@@ -337,7 +337,7 @@ export default {
     },
     // 切换极简和完整模式监听
     'defaultMode': {
-      handler(newVal) {
+      handler (newVal) {
         this.defaultMode = newVal
         this.updateSimple(newVal.name !== 'intMode')
       },

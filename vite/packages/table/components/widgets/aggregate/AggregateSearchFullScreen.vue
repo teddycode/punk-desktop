@@ -127,13 +127,13 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios'
 import browser from '../../../js/common/browser'
 import _ from 'lodash-es'
-import {mapWritableState} from "pinia";
-import {clipboardStore} from '../../../apps/clipboard/store'
+import { mapWritableState } from 'pinia'
+import { clipboardStore } from '../../../apps/clipboard/store'
 
-const {clipboard} = require('electron')
+const { clipboard } = require('electron')
 
 export default {
   props: {
@@ -149,7 +149,7 @@ export default {
       type: String
     }
   },
-  data() {
+  data () {
     return {
       settingsScroller: {  // 滚动条配置
         useBothWheelAxes: true,
@@ -168,40 +168,39 @@ export default {
       clipboardIndex: -1, // 剪切板内容列表下标
       isDropdownVisible: false, // 是否显示下拉列表
       linkType: [  // 设置中打开方式类型
-        {name: '工作台内打开', value: 'work'},
-        {name: '磐古跨链客户端', value: 'thisky'},
-        {name: '系统默认浏览器', value: 'system'}
+        { name: '工作台内打开', value: 'work' },
+        { name: '磐古跨链客户端', value: 'thisky' },
+        { name: '系统默认浏览器', value: 'system' }
       ],
       openMode: {},
       openIndex: ''
     }
   },
 
-
   computed: {
     ...mapWritableState(clipboardStore, ['items']),
-    showSearchResults() {  // 显示搜索建议列表
+    showSearchResults () {  // 显示搜索建议列表
       if (this.searchSuggestionList !== undefined && this.searchKeyWords === '') {
         return false
       } else {
         return true
       }
     },
-    getOpenMode() {
+    getOpenMode () {
       const type = this.urlType
       const index = _.findIndex(this.linkType, function (o) {
         return type === o.value
       })
       return index
     },
-    getClipBoardData() {  // 获取剪切板数据
+    getClipBoardData () {  // 获取剪切板数据
       const clipBoardText = clipboard.readText()
       const clipBoardList = clipBoardText.split('\r\n')
       return [...clipBoardList]
     }
   },
 
-  mounted() {
+  mounted () {
     this.$nextTick(() => {
       this.$refs.searchRef.focus()
       // 监听键盘触发事件
@@ -213,7 +212,7 @@ export default {
   },
   methods: {
     // 键盘操作
-    keyBoardTrigger(evt) {
+    keyBoardTrigger (evt) {
       if (evt.ctrlKey && evt.key === 'Tab') {  // ctrl+tab组合键
         evt.preventDefault()
         this.isDropdownVisible = true
@@ -231,7 +230,7 @@ export default {
       } else if (evt.key === 'ArrowUp') { // 向上键
         evt.preventDefault()
         if (this.showSearchResults) {
-          this.suggestIndex = Math.max(this.suggestIndex - 1, -1);
+          this.suggestIndex = Math.max(this.suggestIndex - 1, -1)
           this.suggestScrollTop()
           this.updateInputValue()
         } else {
@@ -256,32 +255,32 @@ export default {
     },
 
     // 键盘抬起
-    removeKeyBoardTrigger(evt) {
+    removeKeyBoardTrigger (evt) {
       if (evt.code === 'ControlLeft') {
         this.isDropdownVisible = false
       }
     },
 
-    dataSearch() {  // 监听输入框关键字输入
+    dataSearch () {  // 监听输入框关键字输入
       if (this.searchKeyWords === '') {
-        this.searchSuggestionList = [];
-        return;
+        this.searchSuggestionList = []
+        return
       }
       this.fetchSuggestions(true)
     },
 
     // 获取搜索建议列表 数据请求
-    async fetchSuggestions(val) {
+    async fetchSuggestions (val) {
       if (val) { // 防止重复请求
         const words = encodeURIComponent(this.searchKeyWords)
         const url = `${this.list[this.selectIndex].recommendUrl}${words}`
         const result = await axios.get(url)
         this.getDataFields(result)
       }
-      return
+
     },
 
-    selectAggSearch(item, index) {  // 点击列表项选中
+    selectAggSearch (item, index) {  // 点击列表项选中
       this.selectIndex = index
       this.selectIcon.icon = item.icon
       this.$refs.searchRef.focus()
@@ -289,7 +288,7 @@ export default {
     },
 
     // 根据不同搜索引擎api返回的字段获取数据
-    getDataFields(res) {
+    getDataFields (res) {
       if (this.list[this.selectIndex].id === 3 && res.data[1]) { // 必应搜索建议
         this.searchSuggestionList = res.data[1]
       } else if (this.list[this.selectIndex].id === 1 && res.data.g) {  // 百度搜索建议
@@ -309,23 +308,23 @@ export default {
       }
     },
 
-    matchingKey(val) { // 匹配搜索关键字是否存在
-      const isMatched = val.includes(this.searchKeyWords);
+    matchingKey (val) { // 匹配搜索关键字是否存在
+      const isMatched = val.includes(this.searchKeyWords)
       if (isMatched && this.searchSuggestionList.length !== 1) {
-        const regex = new RegExp(this.searchKeyWords, 'gi');
-        return val.replace(regex, `<span style="color:var(--active-bg);">${this.searchKeyWords}</span>`);
+        const regex = new RegExp(this.searchKeyWords, 'gi')
+        return val.replace(regex, `<span style="color:var(--active-bg);">${this.searchKeyWords}</span>`)
       } else {
         return val
       }
     },
 
-    updateInputValue() { // 搜索建议列表项选中赋值给搜索关键词
+    updateInputValue () { // 搜索建议列表项选中赋值给搜索关键词
       const id = this.list[this.selectIndex].id
       if (id === 1 && this.searchKeyWords !== '' && this.suggestIndex !== -1) {
         this.searchKeyWords = this.searchSuggestionList[this.suggestIndex].q
         this.fetchSuggestions(false)
       } else if (id === 2 && this.searchKeyWords !== '' && this.suggestIndex !== -1) {
-        return
+
       } else if (id === 3 && this.searchKeyWords !== '' && this.suggestIndex !== -1) {
         this.searchKeyWords = this.searchSuggestionList[this.suggestIndex]
         this.fetchSuggestions(false)
@@ -341,86 +340,86 @@ export default {
       }
     },
 
-    openSearchSuggest(words) {  // 回车或者点击其他后根据不同打开方式类型进行打开
+    openSearchSuggest (words) {  // 回车或者点击其他后根据不同打开方式类型进行打开
       const url = `${this.list[this.selectIndex].searchUrl}${words}`
       switch (this.openMode.value) {
         case 'work':
           browser.openInTable(url)  // 在工作台中打开
-          break;
+          break
         case 'thisky':
           browser.openInInner(url) // 在磐古跨链客户端打开
-          break;
+          break
         case 'system':
           browser.openInSystem(url) // 在系统默认的浏览器打开
-          break;
+          break
         default:
-          break;
+          break
       }
     },
 
-    enterSearch() {  // 回车进行搜索
+    enterSearch () {  // 回车进行搜索
       const enterWords = encodeURIComponent(this.searchKeyWords)
       this.openSearchSuggest(enterWords)
     },
 
-    getSuggestItem(item, index) { // 选择推荐关键字
+    getSuggestItem (item, index) { // 选择推荐关键字
       this.suggestIndex = index
       switch (this.list[this.selectIndex].id) {
         case 1: // 百度搜索
           const baiduWords = encodeURIComponent(item.q)
           this.openSearchSuggest(baiduWords)
-          break;
+          break
         case 2:
           // 谷歌接口暂时不能使用,还没有找到api
           // 谷歌搜索引擎api暂时没有找到关键字搜索推荐
-          break;
+          break
         case 3: // 必应搜索
           const bingWords = encodeURIComponent(item)
           this.openSearchSuggest(bingWords)
-          break;
+          break
         case 4: // 知乎搜索
           const zhihuWords = encodeURIComponent(item.query)
           this.openSearchSuggest(zhihuWords)
-          break;
+          break
         case 5:
           // github搜索引擎api暂时没有找到关键字搜索推荐
           const githubWords = encodeURIComponent(item.name)
           this.openSearchSuggest(githubWords)
-          break;
+          break
         case 6: // B站搜索
           const biliWords = encodeURIComponent(item.value)
           this.openSearchSuggest(biliWords)
-          break;
+          break
         case 7:  // 微博搜索
           const weiboWords = encodeURIComponent(item.suggestion)
           this.openSearchSuggest(weiboWords)
-          break;
+          break
         case 8:  // 优酷搜索
           const youkuWords = encodeURIComponent(item.name)
           this.openSearchSuggest(youkuWords)
-          break;
+          break
         case 9:  // 豆瓣搜索
           const doubanWords = encodeURIComponent(item)
           this.openSearchSuggest(doubanWords)
-          break;
+          break
         default:
-          break;
+          break
       }
     },
 
-    changeOpenType(item, index) {  // 手动切换
+    changeOpenType (item, index) {  // 手动切换
       this.openMode = item
       this.openIndex = index
       this.isDropdownVisible = false
     },
 
-    selectClipboardItem(item, index) {
+    selectClipboardItem (item, index) {
       this.clipboardIndex = index
       this.searchKeyWords = item
       this.fetchSuggestions(true)
     },
 
-    leftTabScrollToTop() {  // tab触发时高度滚动
+    leftTabScrollToTop () {  // tab触发时高度滚动
       const container = document.querySelector('.left-tab-container')
       if (this.selectIndex === 0) { // 判断下标为0
         container.scrollTop = 0
@@ -429,14 +428,14 @@ export default {
       }
     },
 
-    suggestScrollTop() {  // 向上键盘触发
+    suggestScrollTop () {  // 向上键盘触发
       const container = document.querySelector('.suggest-container')
       if (this.suggestIndex === 0 && this.clipboardIndex === -1 || this.suggestIndex === 2) {
         container.scrollTop = 0
       }
     },
 
-    suggestScrollBottom() {  //  向下键盘触发
+    suggestScrollBottom () {  //  向下键盘触发
       const container = document.querySelector('.suggest-container')
       if (this.suggestIndex === 0 && this.clipboardIndex === -1) {
         container.scrollTop = 0

@@ -68,124 +68,124 @@
 </template>
 
 <script>
-import {mapWritableState} from "pinia";
-import {appStore} from "../store";
-import SecondPanel from "../components/SecondPanel.vue";
-import {SystemApps} from "../consts";
+import { mapWritableState } from 'pinia'
+import { appStore } from '../store'
+import SecondPanel from '../components/SecondPanel.vue'
+import { SystemApps } from '../consts'
 
-let fs = require("fs");
+let fs = require('fs')
 export default {
-  name: "Apps",
-  components: {SecondPanel},
+  name: 'Apps',
+  components: { SecondPanel },
   computed: {
-    ...mapWritableState(appStore, ["status"]),
+    ...mapWritableState(appStore, ['status']),
   },
-  mounted() {
+  mounted () {
     //确认自启动，如果未启动，则静默启动
-    let running = ipc.sendSync("ensureTableApp", {
+    let running = ipc.sendSync('ensureTableApp', {
       app: SystemApps.wyyMusic,
-    });
+    })
     if (!running) {
       //不再提示 message.info('正在为您在后台启动网易云音乐网页版…')
     }
     //window.updateMusicStatusHandler = this.updateStatus
   },
-  data() {
+  data () {
     return {
       scrollTop: 0,
-      prompt: "",
-      tab: "player",
-      currentIndex: "my",
+      prompt: '',
+      tab: 'player',
+      currentIndex: 'my',
       showPrompt: false,
       menus: [
         {
-          title: "本地应用",
-          index: "my",
-          icon: "",
+          title: '本地应用',
+          index: 'my',
+          icon: '',
         },
         {
-          title: "web3应用",
-          index: "qing",
+          title: 'web3应用',
+          index: 'qing',
         },
         {
-          title: "应用市场",
-          icon: "",
-          index: "store",
+          title: '应用市场',
+          icon: '',
+          index: 'store',
         },
       ],
-    };
+    }
   },
   watch: {
-    "status.music": function (newValue, oldValue) {
-      let status = newValue;
+    'status.music': function (newValue, oldValue) {
+      let status = newValue
       if (status.prompt) {
-        this.prompt = status.prompt;
-        this.scrollTop = status.scrollTop;
-        if (document.getElementById("prompt")) {
-          document.getElementById("prompt").scrollTop = this.scrollTop;
+        this.prompt = status.prompt
+        this.scrollTop = status.scrollTop
+        if (document.getElementById('prompt')) {
+          document.getElementById('prompt').scrollTop = this.scrollTop
         }
       }
       //document.getElementById('prompt').scrollTop=this.scrollTop
-      this.getPercent();
+      this.getPercent()
     },
   },
   methods: {
-    togglePrompt() {
+    togglePrompt () {
       if (!this.showPrompt) {
-        this.doAction("prompt");
+        this.doAction('prompt')
       }
-      this.showPrompt = !this.showPrompt;
+      this.showPrompt = !this.showPrompt
     },
-    enterMusic() {
+    enterMusic () {
       this.$router.push({
-        name: "app",
+        name: 'app',
         params: SystemApps.wyyMusic,
-      });
+      })
     },
-    doAction(action) {
-      require("electron").ipcRenderer.send("wyyAction", {action});
+    doAction (action) {
+      require('electron').ipcRenderer.send('wyyAction', { action })
     },
 
-    getPercent() {
-      let currentText = this.status.music.progress.split(":");
-      let current;
+    getPercent () {
+      let currentText = this.status.music.progress.split(':')
+      let current
       if (currentText.length === 2) {
         current = new Date(
-            "2023/1/1 00:" + currentText[0] + ":" + currentText[1]
-        );
+            '2023/1/1 00:' + currentText[0] + ':' + currentText[1]
+        )
       }
-      let totalText = this.status.music.total.split(":");
-      let total;
+      let totalText = this.status.music.total.split(':')
+      let total
       if (totalText.length === 2) {
-        total = new Date("2023/1/1 00:" + totalText[0] + ":" + totalText[1]);
+        total = new Date('2023/1/1 00:' + totalText[0] + ':' + totalText[1])
       }
 
       let totalSeconds =
           total.getHours() * 60 * 60 +
           total.getMinutes() * 60 +
-          total.getSeconds();
+          total.getSeconds()
       let currentSeconds =
           current.getHours() * 60 * 60 +
           current.getMinutes() * 60 +
-          current.getSeconds();
+          current.getSeconds()
       this.status.music.percent = (
           (currentSeconds / totalSeconds) *
           100
-      ).toFixed(0);
+      ).toFixed(0)
     },
 
-    changeTab(data) {
-      this.currentIndex = data.index;
+    changeTab (data) {
+      this.currentIndex = data.index
     },
   },
-  beforeUnmount() {
+  beforeUnmount () {
     if (!this.status.music.playing) {
-      ipc.send("closeTableApp", {
+      ipc.send('closeTableApp', {
         app: JSON.parse(JSON.stringify(SystemApps.wyyMusic)),
-      });
+      })
     }
   },
-};
+}
 </script>
 <style>
 .ant-slider-track {

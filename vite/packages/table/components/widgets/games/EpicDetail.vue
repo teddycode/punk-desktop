@@ -18,18 +18,20 @@
         }}天</span>
     </div>
     <div class="flex justify-between mt-2">
-        <span class="w-12 h-12 cursor-pointer epic-back flex items-center rounded-lg justify-center" style="color: var(--primary-text);background: var(--primary-bg);"
+        <span class="w-12 h-12 cursor-pointer epic-back flex items-center rounded-lg justify-center"
+              style="color: var(--primary-text);background: var(--primary-bg);"
               @click="epicBack">
            <Icon class="text-xl" icon="xiangzuo"></Icon>
         </span>
-      <span class="w-2/3 epic-back text-center mr-3 pointer rounded-lg s-item" style="padding:13px 30px;color: var(--primary-text);background: var(--primary-bg);"
+      <span class="w-2/3 epic-back text-center mr-3 pointer rounded-lg s-item"
+            style="padding:13px 30px;color: var(--primary-text);background: var(--primary-bg);"
             @click="onClickOffice">领取</span>
     </div>
   </div>
 </template>
 
 <script>
-import {remainderDay} from "../../../js/axios/api"
+import { remainderDay } from '../../../js/axios/api'
 import browser from '../../../js/common/browser'
 
 export default {
@@ -46,17 +48,17 @@ export default {
       }
     }
   },
-  data() {
+  data () {
     return {
       backShow: false
     }
   },
   methods: {
     remainderDay,
-    epicBack() {
+    epicBack () {
       this.$emit('update:backShow', this.backShow)
     },
-    onClickOffice() {
+    onClickOffice () {
       browser.openInUserSelect(`https://store.epicgames.com/zh-CN`)
     }
   }

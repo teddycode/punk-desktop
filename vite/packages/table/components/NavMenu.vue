@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     // 修改导航索引
-    updateNavIndex(item, index) {
+    updateNavIndex (item, index) {
       this.$emit('changeNav', item)
     }
   }

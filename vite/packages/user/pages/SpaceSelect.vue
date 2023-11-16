@@ -170,7 +170,7 @@
 <script>
 
 import VersionList from '../components/VersionList.vue'
-import {message, Modal} from 'ant-design-vue'
+import { message, Modal } from 'ant-design-vue'
 import SpaceList from '../components/SpaceList.vue'
 import TaskList from '../components/TaskList.vue'
 
@@ -187,7 +187,7 @@ import {
 } from '@ant-design/icons-vue'
 import vueCustomScrollbar from '../../../src/components/vue-scrollbar.vue'
 
-const {userModel, spaceModel, spaceVersionModel} = window.$models
+const { userModel, spaceModel, spaceVersionModel } = window.$models
 
 export default {
   name: 'SpaceSelect',
@@ -206,7 +206,7 @@ export default {
     HistoryOutlined,
     CloseOutlined
   },
-  data() {
+  data () {
     return {
       versions: [],
       activeVersion: {},//当前版本
@@ -224,7 +224,7 @@ export default {
         user_info: {}
       },
       spaces: [],
-      activeSpace: {nanoid: ''},
+      activeSpace: { nanoid: '' },
       spaceData: {
         state: {
           tasks: []
@@ -257,21 +257,21 @@ export default {
       tipCopyRead: '0',
     }
   },
-  async beforeRouteUpdate(to, from) {
+  async beforeRouteUpdate (to, from) {
     this.init(to.params.uid)
   },
-  async mounted() {
+  async mounted () {
     let uid = Number(this.$route.params.uid)
     this.init(uid)
   },
   computed: {},
   methods: {
-    setTaskList(version) {
+    setTaskList (version) {
       console.log('选中', version)
       this.activeVersion = version
       this.spaceData = JSON.parse(version.data)
     },
-    restoreVersion(version) {
+    restoreVersion (version) {
       if (this.currentSpace.spaceId === this.activeSpace.nanoid) {
         Modal.confirm({
           content: '当前空间正在使用中，此操作将自动重启浏览器，请确认当前所有的网页内容均已保存。',
@@ -299,7 +299,7 @@ export default {
       }
 
     },
-    async doRestoreVersion(version) {
+    async doRestoreVersion (version) {
       if (this.activeSpace.type === 'local') {
         let rs = await spaceVersionModel.restore(this.activeSpace.nanoid, version.nanoid, 'local')
         if (rs.status === 1) {
@@ -315,7 +315,7 @@ export default {
         console.log('是云空间', this.activeSpace, 'cloud')
       }
     },
-    async toggleHistory() {
+    async toggleHistory () {
       this.showHistory = !this.showHistory
       if (this.showHistory) {
         let rs = await spaceVersionModel.list(this.activeSpace.nanoid)
@@ -324,7 +324,7 @@ export default {
         }
       }
     },
-    async init(uid) {
+    async init (uid) {
       this.tipCopyRead = localStorage.getItem('tipCopyRead')
       let user = {}
       if (!Number(uid)) {
@@ -339,7 +339,7 @@ export default {
         this.user = user
       } else {
         //网络用户
-        user = await userModel.get({uid: uid})
+        user = await userModel.get({ uid: uid })
         if (user) {
           this.user = user
         } else {
@@ -360,13 +360,13 @@ export default {
       this.resetActive()
       this.loading = false
     },
-    setTipCopyRead() {
+    setTipCopyRead () {
       localStorage.setItem('tipCopyRead', '1')
     },
-    setEnterPwd() {
+    setEnterPwd () {
       this.visibleSetEnterPwd = true
     },
-    doSetEnterPwd() {
+    doSetEnterPwd () {
       if (this.newEnterPwd !== '') {
         Modal.confirm({
           title: '修改密码确认',
@@ -413,7 +413,7 @@ export default {
     /**
      * 导入本机空间
      */
-    async importFromLocal() {
+    async importFromLocal () {
       //todo loadLocalSpaces()
       let spaces = await spaceModel.getLocalSpaces()
       this.localOptions = []
@@ -440,7 +440,7 @@ export default {
      * 导入空间
      * @returns {Promise<void>}
      */
-    async doImportSpaces() {
+    async doImportSpaces () {
       let currentIndex = undefined
       try {
         let selectedSpaces = this.selectedImportSpaces.map(space => {
@@ -482,11 +482,11 @@ export default {
         message.error('导入空间失败。未知异常。')
       }
     },
-    async loadSpaces() {
+    async loadSpaces () {
       let spaces = []
       //下面开始获取用户空间
       try {
-        let result = await spaceModel.setUser(this.user).getUserSpaces({showBackup: this.showBackup})
+        let result = await spaceModel.setUser(this.user).getUserSpaces({ showBackup: this.showBackup })
 
         if (result.status === 1) {
           spaces = result.data
@@ -518,14 +518,14 @@ export default {
       // }
     }
     ,
-    goLogin() {
+    goLogin () {
       ipc.send('login')
       //https://s.apps.vip/login?response_type=code&client_id=10001&state=1
     }
     ,
-    async doCreateSpace() {
+    async doCreateSpace () {
       try {
-        let result = await spaceModel.setUser(this.user).addSpace({name: this.newSpaceName})
+        let result = await spaceModel.setUser(this.user).addSpace({ name: this.newSpaceName })
         if (result.status === 1) {
           this.newSpaceName = ''
           message.success('创建空间成功。')
@@ -553,18 +553,18 @@ export default {
       }
     }
     ,
-    showCreateSpace() {
+    showCreateSpace () {
       this.visibleCreate = true
       setTimeout(() => {
         this.$refs.spaceNameInput.input.focus()
       }, 200)
     },
-    resetActive() {
+    resetActive () {
       this.showHistory = false
       this.activeVersion = {}
-      this.activeSpace = {nanoid: ''}
+      this.activeSpace = { nanoid: '' }
     },
-    async setActive(space) {
+    async setActive (space) {
       this.showHistory = false
       this.activeSpace = space
       this.activeVersion = {}
@@ -587,7 +587,7 @@ export default {
       }
 
     },
-    deleteAccount(uid) {
+    deleteAccount (uid) {
       Modal.confirm({
         title: '解绑此帐号',
         content: '解绑帐号并不会影响帐号数据，仅仅是将本地帐号退出。但是退出后无法再使用此帐号下的所有空间。',
@@ -595,7 +595,7 @@ export default {
         okText: '确认',
         cancelText: '取消',
         onOk: () => {
-          userModel.delete({uid: uid}).then(() => {
+          userModel.delete({ uid: uid }).then(() => {
             message.success('解绑帐号成功。')
             this.$router.replace('/')
           }).catch(() => {

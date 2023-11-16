@@ -46,8 +46,8 @@
 </template>
 
 <script>
-import {mapActions} from 'pinia'
-import {appStore} from '../../store'
+import { mapActions } from 'pinia'
+import { appStore } from '../../store'
 
 export default {
   name: 'RankList',
@@ -78,14 +78,14 @@ export default {
       default: () => ''
     }
   },
-  data() {
+  data () {
     return {
       selectVal: ''
     }
   },
   methods: {
     ...mapActions(appStore, ['showUserCard']),
-    showCard(uid, userInfo) {
+    showCard (uid, userInfo) {
       if (uid) {
         this.showUserCard(uid, userInfo)
       }

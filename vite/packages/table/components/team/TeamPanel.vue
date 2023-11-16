@@ -73,7 +73,8 @@
     </div>
     <div v-if="userDetail" class="xt-bg"
          style="width:300px;height: 500px;position: relative">
-      <div class="p-2 rounded-md inline-block m-2 pointer bg-mask" style="position:absolute;right:0;width: 2.8em;text-align: center;z-index: 99"
+      <div class="p-2 rounded-md inline-block m-2 pointer bg-mask"
+           style="position:absolute;right:0;width: 2.8em;text-align: center;z-index: 99"
            @click="closeDetail">
         <Icon icon="guanbi" style="font-size: 1.2em"></Icon>
       </div>
@@ -97,9 +98,10 @@
           </a-col>
 
           <a-col :span="12">
-            <div v-if="Number(teamLeader.userInfo.uid)===Number(userInfo.uid) && Number(this.showUserInfo.uid)!==Number(userInfo.uid)"
-                 class="rounded-lg bg-mask px-6 py-3 pointer "
-                 @click="kick(this.showUserInfo.uid)">
+            <div
+                v-if="Number(teamLeader.userInfo.uid)===Number(userInfo.uid) && Number(this.showUserInfo.uid)!==Number(userInfo.uid)"
+                class="rounded-lg bg-mask px-6 py-3 pointer "
+                @click="kick(this.showUserInfo.uid)">
               <icon icon="shanchu" style="font-size: 1.3em;vertical-align: text-bottom"></icon>
               移出小队
             </div>
@@ -128,7 +130,8 @@
              @click="showUserDetail(teamLeader.userInfo,teamLeader)">
 
           <UserAvatar :avatar="teamLeader.userInfo.avatar"
-                      :frame="teamLeader.userInfo.equippedItems?.frameDetail" :frameUrl="teamLeader.userInfo.equippedItems?.frameDetail?.image"
+                      :frame="teamLeader.userInfo.equippedItems?.frameDetail"
+                      :frameUrl="teamLeader.userInfo.equippedItems?.frameDetail?.image"
                       :online="teamLeader.online"
                       :showDetail="showDetail" :tag="teamLeader.userInfo.uid===userInfo.uid?'我':'队长'"></UserAvatar>
 
@@ -141,7 +144,8 @@
              class="text-center  mb-3 pointer  pt-2" @click="showUserDetail(user.userInfo,user)">
 
           <UserAvatar :avatar="user.userInfo.avatar"
-                      :frame="user.userInfo.equippedItems?.frameDetail" :frameUrl="user.userInfo.equippedItems?.frameDetail?.image"
+                      :frame="user.userInfo.equippedItems?.frameDetail"
+                      :frameUrl="user.userInfo.equippedItems?.frameDetail?.image"
                       :online="user.online"
                       :showDetail="showDetail" :tag="user.userInfo.uid===userInfo.uid?'我':''"></UserAvatar>
           <div v-if="showDetail" :title=" user.userInfo.nickname" class="pt-1 truncate" style="font-size: 0.9em">{{
@@ -162,11 +166,11 @@
 </template>
 
 <script>
-import {PlusOutlined} from '@ant-design/icons-vue'
-import {teamStore} from '../../store/team'
-import {mapActions, mapState, mapWritableState} from 'pinia'
-import {appStore} from '../../store'
-import {Modal} from 'ant-design-vue'
+import { PlusOutlined } from '@ant-design/icons-vue'
+import { teamStore } from '../../store/team'
+import { mapActions, mapState, mapWritableState } from 'pinia'
+import { appStore } from '../../store'
+import { Modal } from 'ant-design-vue'
 import UserDetail from './UserDetail.vue'
 import UserAvatar from '../small/UserAvatar.vue'
 import LevelIcon from '../small/LevelIcon.vue'
@@ -198,12 +202,12 @@ export default {
     FrameStoreWidget
   },
   computed: {
-    teamLeader() {
+    teamLeader () {
       return teamLeader
     },
     ...mapWritableState(teamStore, ['team', 'teamVisible', 'teamLeader', 'teamMembers']),
     ...mapState(appStore, ['userInfo']),
-    effect() {
+    effect () {
       let online = this.teamLeader.online ? 1 : 0
       this.teamMembers.forEach(member => {
         if (member.online) {
@@ -219,7 +223,7 @@ export default {
       return (online - 1) * 5 + 100
     }
   },
-  data() {
+  data () {
     return {
       online: 0,
       currentTab: 'barrage',
@@ -245,7 +249,7 @@ export default {
       relationship: 'unload'
     }
   },
-  mounted() {
+  mounted () {
     if (this.team.status) {
       this.updateTeamShip(this.team.no, {
         userCache: 0
@@ -256,21 +260,21 @@ export default {
       }, 30000)
     }
   },
-  unmounted() {
+  unmounted () {
     clearInterval(this.timer)
   },
 
   methods: {
     ...mapActions(teamStore, ['updateTeamShip', 'quitByNo', 'updateMy', 'closeTeam', 'updateTeam']),
-    updateRelationship(e) {
+    updateRelationship (e) {
       this.relationship = e.relationship
       console.log(e, '更新关系')
     },
-    showBarragePanel() {
+    showBarragePanel () {
       this.userDetail = false
       this.showDetail = true
     },
-    showUserDetail(userInfo, memberInfo) {
+    showUserDetail (userInfo, memberInfo) {
       this.showUserMemberInfo = memberInfo
       if (this.showUserMemberInfo.uid === this.teamLeader.uid) {
         this.showUserMemberInfo.joinedTime = this.team.createTime
@@ -283,14 +287,14 @@ export default {
       this.showDetail = false
       this.userDetail = true
     },
-    closeDetail() {
+    closeDetail () {
       this.userDetail = false
       this.teamDetail = false
       this.showDetail = false
       this.showUserInfo = {}
       this.earningsShow = false
     },
-    showTeamDetail() {
+    showTeamDetail () {
       this.showBarrage = false
       this.userDetail = false
       this.updateTeam(this.team.no).then()
@@ -298,7 +302,7 @@ export default {
       this.showDetail = true
 
     },
-    cleanTeam() {
+    cleanTeam () {
       this.teamVisible = false
       this.team = {
         status: false
@@ -308,7 +312,7 @@ export default {
      *
      * @param uid
      */
-    kick(uid) {
+    kick (uid) {
       Modal.confirm({
         content: '将队员移出队伍后，此人将无法再为小队做出贡献，但是历史贡献记录将被保留，其再次加入队伍后可继承。',
         centered: true,
@@ -320,20 +324,20 @@ export default {
               this.closeDetail()
               this.updateTeamShip(this.team.no).then()
               this.updateMy().then()
-              Modal.info({content: '将队员请离队伍成功', centered: true})
+              Modal.info({ content: '将队员请离队伍成功', centered: true })
             } else {
               this.updateMy().then()
-              Modal.error({content: '请离失败', centered: true})
+              Modal.error({ content: '请离失败', centered: true })
             }
 
           } else {
             this.updateMy().then()
-            Modal.error({content: '请离意外失败', centered: true})
+            Modal.error({ content: '请离意外失败', centered: true })
           }
         }
       })
     },
-    exit() {
+    exit () {
       Modal.info({
         content: '此功能暂未完成',
         centered: true
@@ -344,7 +348,7 @@ export default {
       // this.teamVisible = false
     },
     // 点击领取收益弹出事件
-    receiveTeamEarnings() {
+    receiveTeamEarnings () {
       this.currentTab = 'devote'
     },
 

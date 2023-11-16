@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import {defineComponent, reactive, toRefs} from 'vue'
+import { defineComponent, reactive, toRefs } from 'vue'
 import AddFriend from '../../../components/transfer/addFriend.vue'
 import GroupDetail from '../components/group-detail.vue'
 import Modal from '../../../../../components/Modal.vue'
@@ -49,7 +49,7 @@ export default defineComponent({
     Modal
   },
 
-  setup() {
+  setup () {
 
     const data = reactive({
       settingsScroller: {  // 滚动条配置
@@ -67,9 +67,9 @@ export default defineComponent({
 
     const clickGroupList = async (item) => {  // 点击群聊列表
       data.groupShow = true
-      const res = await window.$chat.getGroupProfile({groupID: item.groupID})
+      const res = await window.$chat.getGroupProfile({ groupID: item.groupID })
       data.groupItem = res.data.group
-      const result = await window.$chat.getGroupMemberList({groupID: item.groupID, count: 15, offset: 0})
+      const result = await window.$chat.getGroupMemberList({ groupID: item.groupID, count: 15, offset: 0 })
       data.memeber = result.data.memberList
     }
 

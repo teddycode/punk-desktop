@@ -3,7 +3,8 @@
     <svg v-if="item.type==='icon'" :style="getStyle" aria-hidden="true" class="icon group-icon" style="margin-top: 7px">
       <use v-bind:xlink:href="'#icon-'+item.icon.name"></use>
     </svg>
-    <div v-if="item.type==='font'" :style="{'font-size':item.font.size+'px',color:item.font.color,'background':item.font.bgColor}"
+    <div v-if="item.type==='font'"
+         :style="{'font-size':item.font.size+'px',color:item.font.color,'background':item.font.bgColor}"
          class="text-icon">
       {{ item.font.text }}
     </div>
@@ -11,17 +12,17 @@
 </template>
 
 <script>
-import {mapState} from 'pinia'
-import {deckStore} from '../../apps/deck/store'
-import {message} from 'ant-design-vue'
-import {ActionHandler} from '../../js/action/actionHandler'
+import { mapState } from 'pinia'
+import { deckStore } from '../../apps/deck/store'
+import { message } from 'ant-design-vue'
+import { ActionHandler } from '../../js/action/actionHandler'
 
 export default {
   name: 'DeckItem',
   props: ['item'],
   computed: {
     ...mapState(deckStore, ['settings', 'editing']),
-    getStyle() {
+    getStyle () {
       let width = 80
       switch (this.settings.iconSize) {
         case 'small':
@@ -36,11 +37,11 @@ export default {
         default:
           width = 80
       }
-      return {'font-size': width - 10 + 'px'}
+      return { 'font-size': width - 10 + 'px' }
     }
   },
   methods: {
-    async doActions(item) {
+    async doActions (item) {
       if (this.editing) {
         //如果正在编辑，则不触发任何状态
         return
@@ -69,7 +70,7 @@ export default {
               key: 'action'
             })
           } else {
-            message.success({content: `共为您成功执行${done.length}个动作`, key: 'action'})
+            message.success({ content: `共为您成功执行${done.length}个动作`, key: 'action' })
           }
 
         } else {
@@ -86,7 +87,7 @@ export default {
           }
         }
         if (failure.length > 0) {
-          console.warn({content: '打印失败日志：', key: 'action'})
+          console.warn({ content: '打印失败日志：', key: 'action' })
           failure.forEach(f => {
             console.warn(f.message)
           })

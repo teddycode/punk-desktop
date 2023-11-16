@@ -40,27 +40,27 @@
 </template>
 
 <script>
-import ModalList from "../../../comp/ModalList.vue";
-import {paperStore} from "../../../../store/paper";
-import {message} from "ant-design-vue";
+import ModalList from '../../../comp/ModalList.vue'
+import { paperStore } from '../../../../store/paper'
+import { message } from 'ant-design-vue'
 
-import {validateFile} from "../../../card/hooks/imageProcessing";
-import {mapWritableState} from "pinia";
+import { validateFile } from '../../../card/hooks/imageProcessing'
+import { mapWritableState } from 'pinia'
 
 export default {
   computed: {
-    ...mapWritableState(paperStore, ["myPapers"]),
+    ...mapWritableState(paperStore, ['myPapers']),
   },
   components: {
     ModalList,
   },
-  data() {
+  data () {
     return {
-      myData: {title: "", link: undefined, img: {}},
+      myData: { title: '', link: undefined, img: {} },
       myImgShow: false,
       blurs: 0,
       zoom: 0,
-    };
+    }
   },
   props: {
     blur: {
@@ -72,52 +72,52 @@ export default {
       default: 0,
     },
   },
-  mounted() {
-    this.blurs = this.blur;
-    this.zoom = this.bgZoom;
+  mounted () {
+    this.blurs = this.blur
+    this.zoom = this.bgZoom
   },
   watch: {
-    blurs(newVal, oldVal) {
-      this.$emit("updateBlur", newVal);
+    blurs (newVal, oldVal) {
+      this.$emit('updateBlur', newVal)
     },
-    zoom(newVal, oldVal) {
-      this.$emit("updateBgZoom", newVal);
+    zoom (newVal, oldVal) {
+      this.$emit('updateBgZoom', newVal)
     },
   },
   methods: {
-    openMy() {
-      this.myImgShow = true;
+    openMy () {
+      this.myImgShow = true
     },
-    sendImg(img) {
-      this.myData.img = img;
-      this.$emit("img", img.path);
+    sendImg (img) {
+      this.myData.img = img
+      this.$emit('img', img.path)
     },
-    async importFile() {
-      let fileRef = this.$refs.fileRef;
+    async importFile () {
+      let fileRef = this.$refs.fileRef
       // 点击上传图片按钮
-      fileRef.click();
+      fileRef.click()
       // 上传图片回调
-      let that = this;
+      let that = this
       fileRef.onchange = async function () {
-        if (this.files.length === 0) return; // 没有选择文件
-        const file = this.files[0]; // 获取文件
-        let validate = validateFile(file, 10);
-        if (validate !== true) return message.error(validate);
-        that.$emit("img", file.path);
-      };
+        if (this.files.length === 0) return // 没有选择文件
+        const file = this.files[0] // 获取文件
+        let validate = validateFile(file, 10)
+        if (validate !== true) return message.error(validate)
+        that.$emit('img', file.path)
+      }
     },
-    async showOpenFileDialog() {
+    async showOpenFileDialog () {
       let savePath = await tsbApi.dialog.showOpenDialog({
-        title: "选择",
-        message: "请选择文件",
-        properties: ["openFile "],
-      });
+        title: '选择',
+        message: '请选择文件',
+        properties: ['openFile '],
+      })
       if (savePath) {
       } else {
       }
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

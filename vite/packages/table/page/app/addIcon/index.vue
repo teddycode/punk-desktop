@@ -69,69 +69,69 @@
 </template>
 
 <script>
-import Links from "./modules/Links.vue";
-import MyApps from "./modules/MyApps.vue";
-import Desktop from "./modules/Desktop.vue";
-import QingApps from "./modules/QingApps.vue";
-import {cardStore} from "../../../store/card.ts";
-import {myIcons} from "../../../store/myIcons.ts";
-import {scrollable} from "./hooks/scrollable";
-import {mapActions, mapWritableState} from "pinia";
-import {taskStore} from "../../../apps/task/store";
-import {renderIcon} from '../../../js/common/common'
+import Links from './modules/Links.vue'
+import MyApps from './modules/MyApps.vue'
+import Desktop from './modules/Desktop.vue'
+import QingApps from './modules/QingApps.vue'
+import { cardStore } from '../../../store/card.ts'
+import { myIcons } from '../../../store/myIcons.ts'
+import { scrollable } from './hooks/scrollable'
+import { mapActions, mapWritableState } from 'pinia'
+import { taskStore } from '../../../apps/task/store'
+import { renderIcon } from '../../../js/common/common'
 
 export default {
-  emits: ["update:navName"],
+  emits: ['update:navName'],
   props: {
     desk: {},
     navList: {
       type: Array,
       default: () => {
         return [
-          {name: "网址导航", component: "Links"},
-          {name: "本地应用", component: "MyApps"},
-          {name: "桌面图标", component: "Desktop"},
-          {name: "web3应用", component: "QingApps"},
-        ];
+          { name: '网址导航', component: 'Links' },
+          { name: '本地应用', component: 'MyApps' },
+          { name: '桌面图标', component: 'Desktop' },
+          { name: 'web3应用', component: 'QingApps' },
+        ]
       },
     },
     navName: {
       type: String,
-      default: "Links",
+      default: 'Links',
     },
   },
-  provide() {
+  provide () {
     return {
       width: () => {
-        return this.width;
+        return this.width
       },
       height: () => {
-        return this.height;
+        return this.height
       },
-    };
+    }
   },
-  data() {
+  data () {
     return {
       name: this.navName,
       screenWidth: 0,
       screenHeight: 0,
       selectApps: {},
-      type: "internal",
+      type: 'internal',
       linkList: [
         {
-          value: "internal",
-          name: "工作台内打开",
+          value: 'internal',
+          name: '工作台内打开',
         },
         {
-          value: "thinksky",
-          name: "磐古跨链客户端",
+          value: 'thinksky',
+          name: '磐古跨链客户端',
         },
         {
-          value: "default",
-          name: "系统默认",
+          value: 'default',
+          name: '系统默认',
         },
       ],
-    };
+    }
   },
   directives: {
     scrollable,
@@ -145,123 +145,123 @@ export default {
   watch: {
     navName: {
       deep: true,
-      handler(newValue, old) {
-        this.selectApps = {};
-        this.$emit("update:navName", newValue);
+      handler (newValue, old) {
+        this.selectApps = {}
+        this.$emit('update:navName', newValue)
       },
     },
   },
   computed: {
-    ...mapWritableState(myIcons, ["iconOption", "iconList"]),
-    ...mapWritableState(taskStore, ["taskID", "step"]),
-    m02013() {
-      if (this.taskID == "M0201" && this.step == 3) {
-        this.name = "Desktop";
-        return this.taskID == "M0201" && this.step == 3;
+    ...mapWritableState(myIcons, ['iconOption', 'iconList']),
+    ...mapWritableState(taskStore, ['taskID', 'step']),
+    m02013 () {
+      if (this.taskID == 'M0201' && this.step == 3) {
+        this.name = 'Desktop'
+        return this.taskID == 'M0201' && this.step == 3
       }
     },
-    m02015() {
-      return this.taskID == "M0201" && this.step == 5;
+    m02015 () {
+      return this.taskID == 'M0201' && this.step == 5
     },
-    height() {
-      let h = this.screenHeight;
-      if (h > 901) return 415;
-      else if (h > 600) return 272;
-      else return 136;
+    height () {
+      let h = this.screenHeight
+      if (h > 901) return 415
+      else if (h > 600) return 272
+      else return 136
     },
-    leftTabHeight() {
-      let h = this.height;
+    leftTabHeight () {
+      let h = this.height
       return {
         height: `${h + 60}px`,
-      };
-    },
-    selectedWidth() {
-      let w = this.width;
-      if (this.name == "Links") w += 128;
-      return {
-        width: w + 8 + "px",
-      };
-    },
-    width() {
-      let w = this.screenWidth;
-      if (w > 1024) return 566;
-      else if (w > 768) return 424;
-      else return 282;
-    },
-    selectAppsLenght() {
-      let i = 0;
-      for (let key in this.selectApps) {
-        this.selectApps[key].forEach(() => i++);
       }
-      return i;
+    },
+    selectedWidth () {
+      let w = this.width
+      if (this.name == 'Links') w += 128
+      return {
+        width: w + 8 + 'px',
+      }
+    },
+    width () {
+      let w = this.screenWidth
+      if (w > 1024) return 566
+      else if (w > 768) return 424
+      else return 282
+    },
+    selectAppsLenght () {
+      let i = 0
+      for (let key in this.selectApps) {
+        this.selectApps[key].forEach(() => i++)
+      }
+      return i
     },
   },
-  mounted() {
+  mounted () {
     this.screenHeight =
-        window.innerHeight || document.documentElement.clientHeight;
+        window.innerHeight || document.documentElement.clientHeight
     this.screenWidth =
-        window.innerWidtht || document.documentElement.clientWidth;
-    window.addEventListener("resize", this.handleResize);
+        window.innerWidtht || document.documentElement.clientWidth
+    window.addEventListener('resize', this.handleResize)
   },
-  beforeDestroy() {
-    window.removeEventListener("resize", this.handleResize);
+  beforeDestroy () {
+    window.removeEventListener('resize', this.handleResize)
   },
   methods: {
-    ...mapActions(cardStore, ["addCard"]),
+    ...mapActions(cardStore, ['addCard']),
     renderIcon,
-    updateData(data) {
-      this.selectApps = data;
+    updateData (data) {
+      this.selectApps = data
     },
-    handleResize() {
+    handleResize () {
       this.screenHeight =
-          window.innerHeight || document.documentElement.clientHeight;
+          window.innerHeight || document.documentElement.clientHeight
       this.screenWidth =
-          window.innerWidtht || document.documentElement.clientWidth;
+          window.innerWidtht || document.documentElement.clientWidth
     },
-    close() {
-      this.$emit("close");
+    close () {
+      this.$emit('close')
     },
     // 提交icon 并格式化数据
-    async commitIcons() {
+    async commitIcons () {
       if (!this.desk) {
-        this.$emit("getSelectApps", this.selectApps);
-        this.close();
-        return;
+        this.$emit('getSelectApps', this.selectApps)
+        this.close()
+        return
       }
       for (let key in this.selectApps) {
         this.selectApps[key].forEach(async (item) => {
-          let iconOption = {...this.iconOption};
-          iconOption.titleValue = item.name;
-          iconOption.link = item.link || "fast";
-          iconOption.src = item.icon;
+          let iconOption = { ...this.iconOption }
+          iconOption.titleValue = item.name
+          iconOption.link = item.link || 'fast'
+          iconOption.src = item.icon
           if (item.open) {
-            iconOption.open = item.open;
+            iconOption.open = item.open
           } else {
-            iconOption.linkValue = item.path;
+            iconOption.linkValue = item.path
           }
-          this.addIcon(iconOption);
-        });
+          this.addIcon(iconOption)
+        })
       }
-      this.close();
+      this.close()
     },
-    close() {
-      this.$emit("close");
+    close () {
+      this.$emit('close')
     },
     // 添加单图标组件
-    addIcon(icon) {
+    addIcon (icon) {
       let random =
-          Math.floor(Math.random() * 50) * Math.floor(Math.random() * 100);
+          Math.floor(Math.random() * 50) * Math.floor(Math.random() * 100)
       this.addCard(
           {
-            name: "myIcons",
+            name: 'myIcons',
             id: Date.now() - random,
-            customData: {iconList: [{...icon}]},
+            customData: { iconList: [{ ...icon }] },
           },
           this.desk
-      );
+      )
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

@@ -1,7 +1,7 @@
 <template>
   <div
-    class="drag"
-    style="display:flex;height: 100vh;text-align: center;align-content: center;align-items: center;background:#33 3;justify-content: center">
+      class="drag"
+      style="display:flex;height: 100vh;text-align: center;align-content: center;align-items: center;background:#33 3;justify-content: center">
     <div v-if="launching" style="margin: auto;">
       <div class="mb-5 animate-bounce ">
         <a-avatar :size="60"
@@ -62,30 +62,30 @@
 </template>
 
 <script>
-import {message, Modal} from 'ant-design-vue'
-import {appStore} from '../store'
-import {mapActions, mapWritableState} from 'pinia'
-import {codeStore} from '../store/code'
-import {cardStore} from '../store/card'
-import {deckStore} from '../apps/deck/store'
-import {paperStore} from '../store/paper'
-import {weatherStore} from '../store/weather'
-import {screenStore} from '../store/screen'
-import {isMain} from '../js/common/screenUtils'
-import {inspectorStore} from '../store/inspector'
-import {teamStore} from '../store/team'
-import {steamUserStore} from '../store/steamUser'
-import {captureStore} from '../store/capture'
-import {navStore} from '../store/nav'
-import {clipboardStore} from '../apps/clipboard/store'
-import {browserStore} from '../store/browser'
+import { message, Modal } from 'ant-design-vue'
+import { appStore } from '../store'
+import { mapActions, mapWritableState } from 'pinia'
+import { codeStore } from '../store/code'
+import { cardStore } from '../store/card'
+import { deckStore } from '../apps/deck/store'
+import { paperStore } from '../store/paper'
+import { weatherStore } from '../store/weather'
+import { screenStore } from '../store/screen'
+import { isMain } from '../js/common/screenUtils'
+import { inspectorStore } from '../store/inspector'
+import { teamStore } from '../store/team'
+import { steamUserStore } from '../store/steamUser'
+import { captureStore } from '../store/capture'
+import { navStore } from '../store/nav'
+import { clipboardStore } from '../apps/clipboard/store'
+import { browserStore } from '../store/browser'
 import RayMedal from '../components/small/RayMedal.vue'
-import {chatStore} from '../store/chat'
+import { chatStore } from '../store/chat'
 
 export default {
   name: 'Code',
-  components: {RayMedal},
-  data() {
+  components: { RayMedal },
+  data () {
     return {
       showTip: false,
       loading: false,
@@ -99,7 +99,7 @@ export default {
       version: tsbApi.runtime.appVersion
     }
   },
-  async mounted() {
+  async mounted () {
     //启动检测项的store，必须已经载入的项目，如果这边不写，就不确保必须载入完成
     //注意，此处的第二个参数，必须和此store同名，尤其注意有些命名里带了store的
     this.initStore(appStore, 'appStore')
@@ -137,7 +137,7 @@ export default {
             return check
         })) {
           //未全部搞定
-          return
+
         } else {
           //已经全部搞定
           clearInterval(this.storeReadyTimer)
@@ -161,7 +161,7 @@ export default {
     ...mapActions(appStore, ['getUserInfo', 'setUser']),
     ...mapActions(steamUserStore, ['bindClientEvents']),
     ...mapActions(captureStore, ['bindCaptureIPC']),
-    timeout() {
+    timeout () {
       this.timeoutHandler = setTimeout(() => {
         Modal.error({
           content: '服务器连接超时。可能服务器正在维护，请稍后再试。',
@@ -174,11 +174,11 @@ export default {
         })
       }, 5000)
     },
-    goDirect() {
-      this.$router.replace({name: 'wizard'})
+    goDirect () {
+      this.$router.replace({ name: 'wizard' })
       localStorage.setItem('wizarded', 1)
     },
-    enter() {
+    enter () {
       clearTimeout(this.timeoutHandler)//清理掉超时提示
       chatStore().login()
       if (localStorage.getItem('wizarded')) {
@@ -187,17 +187,17 @@ export default {
         if (currentRoute) {
           if (['lock', 'power'].includes(currentRoute.name)) {
             //阻止lock、power页面的自动跳转
-            this.$router.replace({name: 'home'})
+            this.$router.replace({ name: 'home' })
           } else {
             this.$router.replace(currentRoute)
           }
         } else {
-          this.$router.replace({name: 'home'})
+          this.$router.replace({ name: 'home' })
         }
       }
 
     },
-    bindUserInfoResponse() {
+    bindUserInfoResponse () {
       ipc.removeAllListeners('userInfo')
       ipc.on('userInfo', async (event, args) => {
         console.error('splash接收到登录参数:', args)
@@ -234,7 +234,7 @@ export default {
         }
       })
     },
-    initStore(store, name) {
+    initStore (store, name) {
       if (!window.loadedStore) {
         window.loadedStore = {}
       }
@@ -244,7 +244,7 @@ export default {
       store()
     },
 
-    async afterLaunch() {
+    async afterLaunch () {
       this.bindCaptureIPC()
       this.bindClientEvents()
 
@@ -272,12 +272,12 @@ export default {
       this.launching = false
       if (!this.userInfo) {
         //如果个人信息不存在，则直接返回
-        return
+
       } else {
         this.enter()
       }
     },
-    gradeTableGenerate(num) {
+    gradeTableGenerate (num) {
       let lvSys = {}
       for (let i = 0; i < num + 1; i++) {
         let arrLef = 0
@@ -294,7 +294,7 @@ export default {
       delete lvSys['lv0']
       return lvSys
     },
-    login() {
+    login () {
       tsbApi.user.login((data) => {
         this.getUserInfo()
       })

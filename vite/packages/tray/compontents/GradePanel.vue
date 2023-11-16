@@ -46,7 +46,8 @@
             </div>
             <div class="text-grey" style="line-height: 2">升级剩余时长: {{ remainHour }}小时{{ remainMinute }}分</div>
             <div class="tip text-grey">距离上一名 ： {{ distance }} <span :disabled="this.times===0" class="text-button"
-                                                                         style="margin-left:20px;margin-top: 10px" type="primary"
+                                                                         style="margin-left:20px;margin-top: 10px"
+                                                                         type="primary"
                                                                          @click="use">查看（{{
                 times
               }}次）</span></div>
@@ -76,20 +77,20 @@
 </template>
 
 <script>
-import {defineComponent} from 'vue'
-import {mapState} from 'vuex'
-import {message, Modal} from 'ant-design-vue'
+import { defineComponent } from 'vue'
+import { mapState } from 'vuex'
+import { message, Modal } from 'ant-design-vue'
 
 export default defineComponent({
   name: 'grade-panel',
   props: {},
   computed: {
     ...mapState(['user', 'onlineGrade']),
-    getPath() {
+    getPath () {
       return 'file://' + window.globalArgs['app-path'] + '/icons/badge/'
     }
   },
-  data() {
+  data () {
     return {
 
       grade: {},
@@ -147,16 +148,14 @@ export default defineComponent({
       }
     }
   },
-  mounted() {
+  mounted () {
     console.log('初始化')
     console.log(this.user)
 
     this.grade = this.user.onlineGradeExtra
 
-
     let lv = this.grade.lv
     let section = this.gradeTableGenerate(64)[lv + 1]
-
 
     let remain = section[0] * 60 - this.grade.cumulativeMinute
     this.remainHour = Math.floor(remain / 60)
@@ -165,7 +164,7 @@ export default defineComponent({
   },
 
   methods: {
-    getBadge() {
+    getBadge () {
       if (!this.grade.rank) {
         return this.badge.t9999
       }
@@ -186,23 +185,23 @@ export default defineComponent({
       }
     },
 
-    getTimes() {
+    getTimes () {
       let str = this.getDateStr()
       let times = localStorage.getItem(str)
       times = Number(times === null ? 2 : times)
       this.times = times
       return times
     },
-    getDateStr() {
+    getDateStr () {
       let date = new Date(Date.now())
       let str = date.getFullYear() + '_' + (date.getMonth() + 1) + '_' + date.getDate() + '_' + this.user.uid
       return str
     },
-    setTimes(times) {
+    setTimes (times) {
       let str = this.getDateStr()
       localStorage.setItem(str, Number(times))
     },
-    use() {
+    use () {
       let times = this.getTimes()
       if (times <= 0) {
         message.error('剩余道具不足，无法使用。')
@@ -227,7 +226,7 @@ export default defineComponent({
       }
     },
 
-    gradeTableGenerate(num) {
+    gradeTableGenerate (num) {
       let lvSys = {}
       for (let i = 0; i < num + 1; i++) {
         let arrLef = 0

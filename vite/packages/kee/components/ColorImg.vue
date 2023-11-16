@@ -11,7 +11,7 @@ export default {
   name: 'ColorImg',
   props: ['color', 'src', 'width', 'height'],
   computed: {
-    getStyle() {
+    getStyle () {
       let imgColor = 'black'
       if (this.color === '' || !this.color) {
         imgColor = 'black'

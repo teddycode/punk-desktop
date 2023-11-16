@@ -47,17 +47,17 @@
 </template>
 
 <script>
-import {appStore} from '../../store'
-import {mapWritableState} from 'pinia'
+import { appStore } from '../../store'
+import { mapWritableState } from 'pinia'
 import DebugTip from '../../components/DebugTip.vue'
 
 const formItemLayout = {
-  labelCol: {span: 6},
-  wrdevApperCol: {span: 16},
+  labelCol: { span: 6 },
+  wrdevApperCol: { span: 16 },
 }
 const formTailLayout = {
-  labelCol: {span: 4},
-  wrdevApperCol: {span: 8, offset: 4},
+  labelCol: { span: 4 },
+  wrdevApperCol: { span: 8, offset: 4 },
 }
 
 const path = require('path')
@@ -71,10 +71,10 @@ export default {
     DebugTip
   },
   methods: {},
-  mounted() {
+  mounted () {
     this.formState.name = this.devApp
   },
-  data() {
+  data () {
     return {
       formItemLayout,
       formTailLayout,

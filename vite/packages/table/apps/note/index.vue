@@ -54,16 +54,15 @@
 </template>
 
 <script>
-import NodeContent from "./components/nodeContent.vue";
-import LeftTab from "./components/leftTab.vue";
-import LeftSearch from "./components/leftSearch.vue";
-import {mapActions, mapWritableState} from "pinia";
-import {noteStore} from './store'
+import NodeContent from './components/nodeContent.vue'
+import LeftTab from './components/leftTab.vue'
+import LeftSearch from './components/leftSearch.vue'
+import { mapActions, mapWritableState } from 'pinia'
+import { noteStore } from './store'
 import Modal from '../../components/Modal.vue'
-import {Icon} from '@iconify/vue';
-import dismiss16Filled from '@iconify-icons/fluent/dismiss-16-filled';
-import {cardStore} from '../../store/card'
-
+import { Icon } from '@iconify/vue'
+import dismiss16Filled from '@iconify-icons/fluent/dismiss-16-filled'
+import { cardStore } from '../../store/card'
 
 export default {
   name: 'Tomato',
@@ -74,7 +73,7 @@ export default {
     Modal,
     Icon,
   },
-  data() {
+  data () {
     return {
       icons: {
         dismiss16Filled,
@@ -84,7 +83,7 @@ export default {
 
     }
   },
-  mounted() {
+  mounted () {
     this.getNotes()
   },
   computed: {
@@ -95,20 +94,20 @@ export default {
   methods: {
     ...mapActions(noteStore, ['getNotes', 'switchDesk']),
     // 选择便签
-    changeSelIndex(n) {
+    changeSelIndex (n) {
       this.selIndex = n
     },
     // 选择桌面
-    selDesk() {
+    selDesk () {
       this.desks.forEach((item, index) => {
         if (item.id == this.noteList[this.selNote].desk.id) {
           this.selIndex = index
         }
-      });
+      })
       this.promptVisible = true
     },
     // 切换便签在不同的桌面
-    changeDesk() {
+    changeDesk () {
       this.promptVisible = false
       this.switchDesk(this.selNote, this.selIndex)
     },

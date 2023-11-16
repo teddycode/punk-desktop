@@ -140,27 +140,27 @@ module.exports = Vue.component('apps-page', {
     this.load()
   },
   methods: {
-    installApp(app,background=false){
-      let standAloneAppModel=require('../../util/model/standAloneAppModel.js')
-      let option={
+    installApp (app, background = false) {
+      let standAloneAppModel = require('../../util/model/standAloneAppModel.js')
+      let option = {
         name: app.name,
         logo: app.icon,
-        summary:   app.summary,
-        type:'web',
+        summary: app.summary,
+        type: 'web',
         themeColor: '#ccc',
         settings: {
-          bounds:{
-            width:1200,
-            height:800
+          bounds: {
+            width: 1200,
+            height: 800
           }
         },
         showInSideBar: false
       }
-      standAloneAppModel.install(app.url,option).then(success=>{
-        this.$message.success('安装了应用：' + app.name+'，可在我的应用中查看。')
-        ipc.send('installApp',{id:success,background:background})
-      },err=>{
-        this.$message.error('安装了应用：' + app.name+'，可在我的应用中查看。')
+      standAloneAppModel.install(app.url, option).then(success => {
+        this.$message.success('安装了应用：' + app.name + '，可在我的应用中查看。')
+        ipc.send('installApp', { id: success, background: background })
+      }, err => {
+        this.$message.error('安装了应用：' + app.name + '，可在我的应用中查看。')
       })
     },
     showModal () {

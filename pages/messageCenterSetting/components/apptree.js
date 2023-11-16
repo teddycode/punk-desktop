@@ -11,13 +11,9 @@ const apptreeComponent = {
   template: apptreeTemplate,
   name: 'apptree',
   props: {},
-  data() {
-    return {
-
-    }
+  data () {
+    return {}
   },
-  methods: {
-
-  }
+  methods: {}
 
 }

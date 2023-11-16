@@ -31,8 +31,8 @@
 </template>
 
 <script>
-import {computed, reactive, ref, toRefs} from 'vue'
-import {useRoute, useRouter} from 'vue-router'
+import { computed, reactive, ref, toRefs } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import Drag from '../../TUIKit/TUIComponents/components/drag'
 import TUIContact from '../../TUIKit/TUIComponents/container/TUIContact/index.vue'
 import SecondPanel from '../../components/SecondPanel.vue'
@@ -46,18 +46,18 @@ import CreateGroup from '../../TUIKit/TUIComponents/container/TUISearch/componen
 import Transfer from '../../TUIKit/TUIComponents/components/transfer/index.vue'
 import CreateCommunity from './components/CreateCommunitys.vue'
 import config from './config'
-import {appStore} from '../../store'
-import {storeToRefs} from 'pinia'
-import {chatList} from '../../js/data/chatList'
+import { appStore } from '../../store'
+import { storeToRefs } from 'pinia'
+import { chatList } from '../../js/data/chatList'
 import ChatDropDown from './components/float/ChatsDropDown.vue'
 import ChatFold from './components/float/ChatFolds.vue'
 import JoinCommunity from './components/JoinCommunity.vue'
-import {AppstoreOutlined, LinkOutlined, MessageOutlined} from '@ant-design/icons-vue'
-import {communityStore} from './store/communityStore'
-import {localCache} from '../../js/axios/serverCache'
+import { AppstoreOutlined, LinkOutlined, MessageOutlined } from '@ant-design/icons-vue'
+import { communityStore } from './store/communityStore'
+import { localCache } from '../../js/axios/serverCache'
 import MyCommunity from './page/communityDetail.vue'
-import {Icon as chatIcon} from '@iconify/vue'
-import {chatStore} from '../../store/chat'
+import { Icon as chatIcon } from '@iconify/vue'
+import { chatStore } from '../../store/chat'
 import CategoryFloat from './components/float/CategorysFloat.vue'
 import DefaultFloat from './components/float/DefaultsFloat.vue'
 
@@ -77,14 +77,14 @@ export default {
     CreateCommunity, JoinCommunity, MyCommunity, CategoryFloat, DefaultFloat,
   },
 
-  setup() {
+  setup () {
     const myCom = communityStore()
     const router = useRouter()
     const route = useRoute()
     const TUIServer = window.$TUIKit
     const Server = window.$chat
     const chat = chatStore()
-    const {settings} = storeToRefs(chat)
+    const { settings } = storeToRefs(chat)
     const data = reactive({
       index: 'chat',
       // type:'chat',
@@ -117,7 +117,6 @@ export default {
 
       router.push(item.route)
 
-
     }
 
     const selectDorpTab = (item) => {
@@ -141,8 +140,8 @@ export default {
 
     const appS = appStore()
 
-    const {userInfo} = appS
-    const {communityList} = myCom
+    const { userInfo } = appS
+    const { communityList } = myCom
 
     const menuCommunityList = []
     // 遍历将社群进行UI层数据替换
@@ -152,14 +151,14 @@ export default {
           name: communityList[i].communityInfo.name,
           img: communityList[i].communityInfo.icon,
           type: `community${communityList[i].cno}`,
-          float: "",
+          float: '',
           tab: 'community_' + communityList[i].communityInfo.no,
           noBg: true,
           callBack: (item) => {
             selectTab(item)
             data.communityNo = communityList[i].communityInfo.no
           },
-          route: {name: 'myCommunity', params: {no: communityList[i].communityInfo.no}},
+          route: { name: 'myCommunity', params: { no: communityList[i].communityInfo.no } },
         }
         menuCommunityList.push(item)
       } else {
@@ -177,7 +176,6 @@ export default {
       return data.index === localCache.get('communityId')
     })
 
-
     const chatLeftList = ref([
       {
         // icon: 'message',
@@ -185,7 +183,7 @@ export default {
         tab: 'session',
         route: {
           name: 'chatMain',
-          params: {no: '', info: JSON.stringify('')}
+          params: { no: '', info: JSON.stringify('') }
         },
         callBack: selectTab,
       },
@@ -196,7 +194,7 @@ export default {
         callBack: selectTab,
         route: {
           name: 'contact',
-          params: {no: '', info: JSON.stringify('')}
+          params: { no: '', info: JSON.stringify('') }
         }
       },
       ...(config.adminUids.includes(userInfo.uid) ? [
@@ -208,7 +206,7 @@ export default {
           callBack: selectTab,
           route: {
             name: 'chatAdmin',
-            params: {no: '', info: JSON.stringify('')}
+            params: { no: '', info: JSON.stringify('') }
           }
         }
       ] : []),
@@ -221,7 +219,7 @@ export default {
         callBack: selectTab,
         route: {
           name: 'chatFind',
-          params: {no: '', info: JSON.stringify('')}
+          params: { no: '', info: JSON.stringify('') }
         }
       },
       // 写社群相关静态内容时临时打开的路由
@@ -229,7 +227,7 @@ export default {
         icon: '',
         img: '/icons/logo128.png',
         type: 'community',
-        float: "",
+        float: '',
         // chat.settings.enableHide ? "communityFloat" :
         noBg: true,
         callBack: (item) => {
@@ -238,7 +236,7 @@ export default {
         },
         tab: 'community',
         route: {
-          name: 'defaultCommunity', params: {no: 1}
+          name: 'defaultCommunity', params: { no: 1 }
         }
       },
 
@@ -301,14 +299,14 @@ export default {
       // return
       if (settings.value.enableHide) {
         const mapList = chatLeftList.value.map((item) => {
-          return {...item, float: item.float === '' ? "communityFloat" : ''}
+          return { ...item, float: item.float === '' ? 'communityFloat' : '' }
         })
         // console.log('测试::>>',mapList)
         return mapList
       } else {
         return chatLeftList.value
       }
-    });
+    })
 
     // onMounted(() => {
     //   router.push({ name: 'chatMain' })

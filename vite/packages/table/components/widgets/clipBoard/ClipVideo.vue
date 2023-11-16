@@ -18,12 +18,12 @@ export default {
     }
   },
 
-  mounted() {
+  mounted () {
     this.loadXgPlayer()
   },
   methods: {
     // 初始化西瓜视频播放器
-    loadXgPlayer() {
+    loadXgPlayer () {
       const url = this.videoUrl
       this.$nextTick(() => {
         // console.log(this.playerProps,'播放参数')

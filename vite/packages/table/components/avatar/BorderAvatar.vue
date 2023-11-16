@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import {rarityBorderColor} from '../../js/common/avatar'
+import { rarityBorderColor } from '../../js/common/avatar'
 
 export default {
   props: {

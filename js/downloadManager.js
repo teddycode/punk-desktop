@@ -144,7 +144,15 @@ const downloadManager = {
     })
 
     downloadManager.container.appendChild(container)
-    downloadManager.downloadBarElements[downloadItem.path] = { container, title, infoBox, detailedInfoBox, progress, dropdown, openFolder }
+    downloadManager.downloadBarElements[downloadItem.path] = {
+      container,
+      title,
+      infoBox,
+      detailedInfoBox,
+      progress,
+      dropdown,
+      openFolder
+    }
   },
   updateItem: function (downloadItem) {
     const elements = downloadManager.downloadBarElements[downloadItem.path]

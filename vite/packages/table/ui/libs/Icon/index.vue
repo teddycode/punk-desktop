@@ -12,45 +12,45 @@
 </template>
 
 <script>
-import {copyMixins} from "../../common/copyMixins";
+import { copyMixins } from '../../common/copyMixins'
 
 export default {
-  name: "XtIcon",
+  name: 'XtIcon',
   mixins: [copyMixins],
   computed: {
     // 自定义宽高
-    customStyle() {
+    customStyle () {
       return {
-        width: this.w + "px",
-        height: this.w + "px",
-        "border-radius": this.radius + "px  !important",
+        width: this.w + 'px',
+        height: this.w + 'px',
+        'border-radius': this.radius + 'px  !important',
         // height: this.h + "px",
-      };
+      }
     },
 
-    fontSizeStyle() {
+    fontSizeStyle () {
       return {
-        "font-size": this.size + "px ",
-      };
+        'font-size': this.size + 'px ',
+      }
     },
-    typeClass() {
-      if (this.type === "default") {
-        return "xt-btn";
-      } else if (this.type === "theme") {
-        return "xt-active-btn";
+    typeClass () {
+      if (this.type === 'default') {
+        return 'xt-btn'
+      } else if (this.type === 'theme') {
+        return 'xt-active-btn'
       } else {
-        return "flex justify-center items-center";
+        return 'flex justify-center items-center'
       }
     },
   },
   props: {
     type: {
       type: String,
-      default: "default",
+      default: 'default',
     },
     radius: {
       type: String,
-      default: "12",
+      default: '12',
     },
     icon: {
       type: String,
@@ -69,7 +69,7 @@ export default {
       default: 48,
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

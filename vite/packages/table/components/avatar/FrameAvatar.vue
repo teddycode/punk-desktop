@@ -117,33 +117,33 @@
 
 <script>
 // import FrameStoreWidget from '../team/FrameStoreWidget.vue'
-import Modal from "../Modal.vue";
-import {avatarGainMethodText, avatarTagColor, textTag, titleTagColor,} from "../../js/common/avatar";
-import RayMedal from "../small/RayMedal.vue";
+import Modal from '../Modal.vue'
+import { avatarGainMethodText, avatarTagColor, textTag, titleTagColor, } from '../../js/common/avatar'
+import RayMedal from '../small/RayMedal.vue'
 
 export default {
-  components: {RayMedal, Modal},
+  components: { RayMedal, Modal },
   props: {
     framePlacement: {
       type: String,
       enum: [
-        "auto",
-        "auto-start",
-        "auto-end",
-        "top",
-        "bottom",
-        "right",
-        "left",
-        "top-start",
-        "top-end",
-        "bottom-start",
-        "bottom-end",
-        "right-start",
-        "right-end",
-        "left-start",
-        "left-end",
+        'auto',
+        'auto-start',
+        'auto-end',
+        'top',
+        'bottom',
+        'right',
+        'left',
+        'top-start',
+        'top-end',
+        'bottom-start',
+        'bottom-end',
+        'right-start',
+        'right-end',
+        'left-start',
+        'left-end',
       ],
-      default: "left",
+      default: 'left',
     },
     frame: {
       type: Object,
@@ -163,11 +163,11 @@ export default {
       type: String,
     },
   },
-  data() {
+  data () {
     return {
       frameStoreVisible: false,
       docBody: document.body,
-    };
+    }
   },
 
   methods: {
@@ -175,11 +175,11 @@ export default {
     textTag,
     titleTagColor,
     avatarTagColor,
-    toggleStore() {
-      window.toggleFrameStore();
+    toggleStore () {
+      window.toggleFrameStore()
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

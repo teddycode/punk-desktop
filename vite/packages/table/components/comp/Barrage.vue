@@ -1,14 +1,14 @@
 <template></template>
 
 <script>
-import {message} from 'ant-design-vue'
-import {appStore} from '../../store'
-import {mapActions, mapState} from 'pinia'
-import {teamStore} from '../../store/team'
+import { message } from 'ant-design-vue'
+import { appStore } from '../../store'
+import { mapActions, mapState } from 'pinia'
+import { teamStore } from '../../store/team'
 
 export default {
   name: 'Barrage',
-  data() {
+  data () {
     return {
       sendBarragesCount: {},//用于屏蔽弹幕的数组，最终会存入localStorage ,nanoid:times
       filteredBarrages: [],//已经被屏蔽的
@@ -20,7 +20,7 @@ export default {
     ...mapState(appStore, ['settings', 'userInfo']),
     ...mapState(teamStore, ['my', 'myTeamNo', 'myTeam']),
   },
-  async mounted() {
+  async mounted () {
     window.loadBarrage = this.loadAll
     if (this.userInfo) {
       if (!this.my.created) {
@@ -50,14 +50,13 @@ export default {
       limit: settings.barrage.limit,
       height: settings.barrage.height,
       hooks: {
-        send(manager, data) {
+        send (manager, data) {
         },
 
-        barrageCreate(barrage, node) {
+        barrageCreate (barrage, node) {
           if (!barrage.isSpecial) {
             // 设置弹幕内容和样式
             node.classList.add('barrage-style')
-
 
             if (barrage.data.self) {
               node.style.background = 'black'
@@ -70,7 +69,7 @@ export default {
 
           }
         },
-        barrageAppend(barrage, node) {
+        barrageAppend (barrage, node) {
           //node.textContent = barrage.data.content
           node.textContent = barrage.data.self ? '我：' + barrage.data.content : barrage.data.content
           if (barrage.data.type === 'team') {
@@ -93,7 +92,6 @@ export default {
             frameEl.src = data.userInfo?.equippedItems?.frameDetail?.image
             frameAvatar.appendChild(frameEl)
           }
-
 
           node.appendChild(frameAvatar)
           node.classList.add('barrage-style')
@@ -141,20 +139,20 @@ export default {
     manager.start()
     manager.show()
   },
-  unmounted() {
+  unmounted () {
     clearInterval(this.timer)
   },
   methods: {
     ...mapActions(teamStore, ['updateMy']),
-    async test() {
+    async test () {
       this.getList()
       this.getTeamBarrage()
     },
-    async loadAll(url) {
+    async loadAll (url) {
       this.changeUrl(url).then()
       this.getTeamBarrage().then()
     },
-    async changeUrl(url) {
+    async changeUrl (url) {
       this.pageUrl = url
       if (this.settings.enableBarrage) {
         //如果启用弹幕，才刷新
@@ -162,7 +160,7 @@ export default {
       }
     },
 
-    async getTeamBarrage() {
+    async getTeamBarrage () {
       if (this.myTeamNo) {
         tsbApi.barrage.getList(this.CONST.CHANNEL.TEAM, this.myTeamNo).then(rs => {
           if (rs.status) {
@@ -184,7 +182,7 @@ export default {
     /**
      * 通过计数的方式进行弹幕的屏蔽
      */
-    filterBarrages(list) {
+    filterBarrages (list) {
       let sendList = list.filter(barrage => {
         if (this.filteredBarrages.indexOf(barrage.nanoid) > -1)//已经被屏蔽了
         {
@@ -208,12 +206,12 @@ export default {
       return sendList
 
     },
-    async sendChat(messages) {
+    async sendChat (messages) {
 
       let barrages = []
       messages.forEach(mes => {
         if (mes.body === '') {
-          return
+
         } else {
           if (!mes.avatar) {
             mes.avatar = 'https://up.apps.vip/logo/group.png?t=2'
@@ -228,7 +226,7 @@ export default {
       })
       $manager.send(barrages)
     },
-    async getList() {
+    async getList () {
       this.CONST = tsbApi.barrage.CONST
       try {
         let rs = await tsbApi.barrage.getList(this.CONST.CHANNEL.PUBLIC, this.pageUrl)
@@ -242,11 +240,11 @@ export default {
           }
 
         } else {
-          message.error({content: '获取弹幕接口返回错误，可能是服务器正在维护，请稍后再试。', key: 'barrage'})
+          message.error({ content: '获取弹幕接口返回错误，可能是服务器正在维护，请稍后再试。', key: 'barrage' })
         }
       } catch (e) {
         console.error(e)
-        message.error({content: '获取弹幕意外错误。', key: 'barrage'})
+        message.error({ content: '获取弹幕意外错误。', key: 'barrage' })
       }
     },
   }

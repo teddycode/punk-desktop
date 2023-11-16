@@ -91,16 +91,16 @@ import HorizontalDrawer from '../../../components/HorizontalDrawer.vue'
 import TabSwitching from '../../../components/TabSwitching.vue'
 import ClipList from './ClipList.vue'
 import ClipSetDrawer from '../components/clipPreview/ClipSetDrawer.vue'
-import {message} from 'ant-design-vue'
-import {mapActions, mapWritableState} from 'pinia'
-import {clipboardStore} from '../store'
+import { message } from 'ant-design-vue'
+import { mapActions, mapWritableState } from 'pinia'
+import { clipboardStore } from '../store'
 import _ from 'lodash-es'
-import {CloseCircleFilled} from '@ant-design/icons-vue'
-import {isWin} from '../../../js/common/screenUtils'
+import { CloseCircleFilled } from '@ant-design/icons-vue'
+import { isWin } from '../../../js/common/screenUtils'
 // 引入模拟数据 后期对接数据需要删除 以免影响测试
 import ClipItem from '../components/ClipItem.vue'
 import XtButton from '../../../ui/libs/Button/index.vue'
-import {Icon as Iconify} from '@iconify/vue';
+import { Icon as Iconify } from '@iconify/vue'
 
 export default {
   name: 'Clipboard',
@@ -117,7 +117,7 @@ export default {
     Iconify
   },
 
-  data() {
+  data () {
     return {
       dbKey: '',//数据库的key
       page: 1,
@@ -125,22 +125,21 @@ export default {
       count: 20,
       // 历史和收藏切换数组
       clipType: [
-        {title: '剪切板历史', icon: 'time-circle', name: 'history'},
-        {title: '收藏', icon: 'star', name: 'collect'}
+        { title: '剪切板历史', icon: 'time-circle', name: 'history' },
+        { title: '收藏', icon: 'star', name: 'collect' }
       ],
-
 
       // 导航栏筛选分类
       filterList: [
-        {title: '全部', icon: 'appstore', typename: 'all', name: '全部'},
-        {title: '文本', icon: 'text-align-left', typename: 'text', name: '文本'},
-        {title: '图片', icon: 'image', typename: 'image', name: '图片'},
-        {title: '文件', icon: 'file', typename: 'file', name: '文件'},
-        {title: '视频', icon: 'video', typename: 'video', name: '视频'},
-        {title: '音频', icon: 'erji1', typename: 'audio', name: '音频'}
+        { title: '全部', icon: 'appstore', typename: 'all', name: '全部' },
+        { title: '文本', icon: 'text-align-left', typename: 'text', name: '文本' },
+        { title: '图片', icon: 'image', typename: 'image', name: '图片' },
+        { title: '文件', icon: 'file', typename: 'file', name: '文件' },
+        { title: '视频', icon: 'video', typename: 'video', name: '视频' },
+        { title: '音频', icon: 'erji1', typename: 'audio', name: '音频' }
       ],
       // 导航栏筛选分类默认值
-      currentFilter: {title: '全部', icon: 'appstore', name: '全部', typename: 'all'},
+      currentFilter: { title: '全部', icon: 'appstore', name: '全部', typename: 'all' },
 
       // 空状态
       simpleImage: '/public/img/test/not-data.png',
@@ -167,7 +166,7 @@ export default {
   computed: {
     ...mapWritableState(clipboardStore, ['loading', 'clipboardObserver', 'items', 'loadFromDb', 'totalRows', 'hasNextPage', 'filterType', 'tab', 'searchWords', 'settings']),
     // 根据剪切板列表不同状态进行数据显示
-    clipContents() {
+    clipContents () {
       let list = []
       if (this.items.length === 0) {
         return []
@@ -177,18 +176,18 @@ export default {
 
     }
   },
-  async mounted() {
+  async mounted () {
     this.setLoadEvent()
     this.dbKey = 'clipboard:item:'
     this.pageLoad()
   },
-  async unmounted() {
+  async unmounted () {
     this.items.splice(5, this.items.length - 5) //退出的时候清理items，提升载入时间
   },
   methods: {
     ...mapActions(clipboardStore, ['nextPage', 'doSearch']),
     isWin,
-    setLoadEvent() {
+    setLoadEvent () {
       this.loadEvent = _.debounce(async () => {
             console.error('触底事件')
             if (this.hasNextPage) {
@@ -199,51 +198,51 @@ export default {
                   content: '已经到底了',
                   key: 'loadInfo'
                 })
-                return
+
               }
             } else {
               console.log('由于没有下一页返工')
-              return
+
             }
           }, 300,
           {
             leading: true
           })
     },
-    async doLoadNextPage() {
+    async doLoadNextPage () {
       if (this.loadEvent) {
         this.loadEvent()
       }
     },
 
-    pageLoad() {
+    pageLoad () {
       this.doLoadNextPage()
     },
     // 打开导航栏切换
-    openClipType() {
+    openClipType () {
       this.$refs.clipRef.openDrawer()
     },
     // 切换导航栏
-    getClipItem(v) {
+    getClipItem (v) {
       this.currentFilter = v
     },
     // 打开搜索入口
-    clipSearch() {
+    clipSearch () {
       this.drawerVisible = true
     },
     // 打开设置入口
-    openSet() {
+    openSet () {
       this.$refs.clipDrawer.clipOpenShow()
     },
     // 搜索按钮事件
-    clickSearch() {
+    clickSearch () {
       this.doSearch()
     }
   },
 
   watch: {
     'tab': {
-      handler(newTab) {
+      handler (newTab) {
         this.hasNextPage = true
         this.items = []
         if (newTab.name === 'history') {
@@ -258,7 +257,7 @@ export default {
     },
     // 监听导航栏筛选切换
     'currentFilter': {
-      handler() {
+      handler () {
         this.hasNextPage = true
         this.filterType = this.currentFilter.typename
         this.items = []

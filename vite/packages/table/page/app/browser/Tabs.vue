@@ -66,7 +66,8 @@ export default {
   <div class="ml-20 mt-2">
     <template v-for="tab in runningTabs">
 
-      <div v-if="tab.url" class="s-bg p-2 rounded-md m-1 pointer" style="display: inline-block;vertical-align: top;width: 220px;"
+      <div v-if="tab.url" class="s-bg p-2 rounded-md m-1 pointer"
+           style="display: inline-block;vertical-align: top;width: 220px;"
            @click="switchToTab(tab)">
         <div>
           <a-image :height="140" :src="'file://'+tab.capture" :width="200" class="mb-1 rounded-md"

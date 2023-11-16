@@ -13,7 +13,7 @@ Vue.component('clock3', {
   name: 'clock3',
   data () {
     return {
-      elementId: "0",
+      elementId: '0',
       canvas: {
         width: 350,
         height: 350
@@ -22,7 +22,7 @@ Vue.component('clock3', {
       timer: null
     }
   },
-  created(){
+  created () {
     this.elementId = Date.now().toString()
   },
   mounted () {
@@ -34,7 +34,7 @@ Vue.component('clock3', {
   },
   methods: {
     drawCoolClock () {
-      let canvas = document.getElementById('canvas_'+this.elementId)
+      let canvas = document.getElementById('canvas_' + this.elementId)
       let ctx = canvas.getContext('2d')
       let [x0, y0] = [this.canvas.width / 2, this.canvas.height / 2] //获取圆心x,y
       this.L = this.canvas.width / 2 - 10 //设置圆半径

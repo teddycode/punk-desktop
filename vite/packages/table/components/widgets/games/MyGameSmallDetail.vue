@@ -32,13 +32,15 @@
         <Icon icon="trophy" style="font-size: 1.429em;"></Icon>
         <span style="font-size: 16px; font-weight: 400;">游戏攻略</span>
       </div>
-      <div v-if="isStartGame === false" class="rounded-lg flex items-center game-start-button pointer-active s-item  pointer justify-center"
+      <div v-if="isStartGame === false"
+           class="rounded-lg flex items-center game-start-button pointer-active s-item  pointer justify-center"
            style="background: rgba(82, 196, 26, 1);padding: 13px 80px;"
            @click="startGame">
         <Icon icon="bofang" style="font-size: 1.429em;"></Icon>
         <span style="font-size: 16px; font-weight: 400;">开始游戏</span>
       </div>
-      <div v-else class="rounded-lg flex items-center pointer-active s-item  pointer justify-center" style=" padding: 13px 80px;"
+      <div v-else class="rounded-lg flex items-center pointer-active s-item  pointer justify-center"
+           style=" padding: 13px 80px;"
            @click="closeGame">
         <Icon icon="tuichu" style="font-size: 1.429em;"></Icon>
         <span style="font-size: 16px; font-weight: 400;">关闭游戏</span>
@@ -84,7 +86,8 @@
           <Icon icon="trophy" style="font-size: 1.429em;"></Icon>
           <span style="font-size: 16px; font-weight: 400;">游戏攻略</span>
         </div>
-        <div v-if="isStartGame === false" class="flex items-center  rounded-lg pointer  justify-center px-3 py-3" style="background: rgba(82, 196, 26, 1);"
+        <div v-if="isStartGame === false" class="flex items-center  rounded-lg pointer  justify-center px-3 py-3"
+             style="background: rgba(82, 196, 26, 1);"
              @click="startGame">
           <Icon icon="game" style="font-size: 1.429em;"></Icon>
           <span style="font-size: 16px; font-weight: 400;">打开游戏</span>
@@ -99,7 +102,7 @@
 </template>
 
 <script>
-import {LeftCircleOutlined, RightCircleOutlined} from '@ant-design/icons-vue';
+import { LeftCircleOutlined, RightCircleOutlined } from '@ant-design/icons-vue'
 
 export default {
   name: 'MyGameSmallDetail',
@@ -119,7 +122,7 @@ export default {
       }
     }
   },
-  data() {
+  data () {
     return {
       detailList: [
         {
@@ -137,17 +140,17 @@ export default {
   },
   methods: {
     // 关闭游戏
-    closeGame() {
+    closeGame () {
       this.$emit('quitGame')
     },
-    imgChang(i) {
-      this.carouselIndex = i;
+    imgChang (i) {
+      this.carouselIndex = i
     },
     // 打开游戏攻略
-    openGameGuide() {
-      this.$router.push({name: 'gameIntroduction'})
+    openGameGuide () {
+      this.$router.push({ name: 'gameIntroduction' })
     },
-    startGame() {
+    startGame () {
       this.isStartGame = !this.isStartGame
     }
   }

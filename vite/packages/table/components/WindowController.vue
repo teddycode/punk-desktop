@@ -17,9 +17,9 @@
 </template>
 
 <script>
-import {getSign, isMain} from '../js/common/screenUtils'
+import { getSign, isMain } from '../js/common/screenUtils'
 
-import {BorderOutlined, MinusOutlined} from '@ant-design/icons-vue'
+import { BorderOutlined, MinusOutlined } from '@ant-design/icons-vue'
 
 export default {
   name: 'WindowController',
@@ -27,25 +27,25 @@ export default {
     MinusOutlined,
     BorderOutlined
   },
-  data() {
+  data () {
     return {
       alwaysTop: false,
     }
   },
-  async mounted() {
+  async mounted () {
     this.alwaysTop = await tsbApi.window.isAlwaysOnTop()
   },
   methods: {
     // 关闭按钮
-    close() {
+    close () {
       if (isMain()) {
         ipc.send('exitTable')
       } else {
-        ipc.send('closeScreen', {fullDomain: getSign()})
+        ipc.send('closeScreen', { fullDomain: getSign() })
       }
     },
     // 窗口放大
-    async maximize() {
+    async maximize () {
       if (await tsbApi.window.isMaximized()) {
         tsbApi.window.unMaximize()
       } else {
@@ -53,11 +53,11 @@ export default {
       }
     },
     // 关闭窗口放大
-    minimize() {
+    minimize () {
       tsbApi.window.minimize()
     },
     // 固定
-    fixed() {
+    fixed () {
       this.alwaysTop = !this.alwaysTop
       tsbApi.window.setAlwaysOnTop(this.alwaysTop)
     },

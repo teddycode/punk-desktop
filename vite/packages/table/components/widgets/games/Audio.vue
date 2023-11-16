@@ -22,8 +22,9 @@
           </div>
         </div>
         <div class="flex-1">
-          <div class="flex btn-active voice-hover items-center rounded-full pointer justify-center px-3 py-3 s-item xt-bg-2"
-               @click.stop="closeVolume">
+          <div
+              class="flex btn-active voice-hover items-center rounded-full pointer justify-center px-3 py-3 s-item xt-bg-2"
+              @click.stop="closeVolume">
             <Icon v-if="muteShow === true" icon="yinliang" style="font-size: 2.286em;"></Icon>
             <Icon v-else icon="jingyin" style="font-size: 2.286em;"></Icon>
           </div>
@@ -52,9 +53,10 @@
           <div class="mr-4 flex items-center justify-center" style="width: 180px;">
             <a-progress :percent="audioTest" :showInfo="false"/>
           </div>
-          <div class="flex btn-active voice-hover items-center rounded-full pointer justify-center px-3 py-3 s-item xt-bg-2"
-               style=""
-               @click.stop="closeMicrophone">
+          <div
+              class="flex btn-active voice-hover items-center rounded-full pointer justify-center px-3 py-3 s-item xt-bg-2"
+              style=""
+              @click.stop="closeMicrophone">
             <Icon v-if="microphoneShow === true" icon="mic-on" style="font-size: 2.286em;"></Icon>
             <Icon v-else icon="mic-off" style="font-size: 2.286em;"></Icon>
           </div>
@@ -81,9 +83,9 @@
 </template>
 <script>
 import Widget from '../../card/Widget.vue'
-import HorizontalPanel from '../../HorizontalPanel.vue';
-import {inspectorStore} from '../../../store/inspector'
-import {mapActions, mapWritableState} from 'pinia'
+import HorizontalPanel from '../../HorizontalPanel.vue'
+import { inspectorStore } from '../../../store/inspector'
+import { mapActions, mapWritableState } from 'pinia'
 import Template from '../../../../user/pages/Template.vue'
 import {
   getDefaultMic,
@@ -94,7 +96,7 @@ import {
   setDefaultVolume,
   setMicVolume
 } from '../../../js/ext/audio/audio.ts'
-import {appStore} from '../../../store'
+import { appStore } from '../../../store'
 
 export default {
   name: 'Audio',
@@ -123,14 +125,14 @@ export default {
   },
   watch: {
     'audioType': {
-      handler(newValue, oldValue) {
+      handler (newValue, oldValue) {
         if (newValue.name === 'input') {
           this.startListenAudioTest()
         }
       }
     }
   },
-  async mounted() {
+  async mounted () {
     this.outputList = await listOutputs()
     this.inputList = await listInputs()
     this.defaultOutput = await getDefaultVolume()
@@ -138,7 +140,7 @@ export default {
     this.muteShow = !this.defaultOutput.muted
     this.microphoneShow = !this.defaultMic.muted
   },
-  data() {
+  data () {
     return {
       options: {
         className: 'card',
@@ -149,8 +151,8 @@ export default {
       devices: [],
       defaultOutput: {},
       defaultMic: {},
-      audioTitle: [{title: '输出', name: 'output'}, {title: '输入', name: 'input'}],
-      audioType: {title: '输出', name: 'output'},
+      audioTitle: [{ title: '输出', name: 'output' }, { title: '输入', name: 'input' }],
+      audioType: { title: '输出', name: 'output' },
       audioValue: 50,
       settingsScroller: {
         useBothWheelAxes: true,
@@ -170,12 +172,12 @@ export default {
   methods: {
     ...mapActions(inspectorStore, ['startListenAudioTest', 'stopListenerAudioTest']),
     // 选中输入设备
-    selectInputDevice(item, index) {
+    selectInputDevice (item, index) {
       item.isDefaultForMultimedia = true
 
     },
     // 选中输出设备
-    selectDefaultDevice(item, list) {
+    selectDefaultDevice (item, list) {
       list.forEach(li => {
         li.isDefaultForMultimedia = false
       })
@@ -183,16 +185,16 @@ export default {
       setAsDefault(item)
     },
     // 关闭麦克风逻辑
-    closeMicrophone() {
+    closeMicrophone () {
       this.microphoneShow = !this.microphoneShow
-      setMicVolume({muted: !this.microphoneShow})
+      setMicVolume({ muted: !this.microphoneShow })
     },
-    goStatus() {
+    goStatus () {
       this.$router.push({
         name: 'status'
       })
     },
-    async gua() {
+    async gua () {
       if (!this.settings.duck) {
         return
       }
@@ -200,7 +202,7 @@ export default {
       audioSpeaker.play()
     },
     // 关闭音量逻辑
-    closeVolume() {
+    closeVolume () {
       this.muteShow = !this.muteShow
       setDefaultVolume({
         volume: this.defaultOutput.volume,
@@ -212,7 +214,7 @@ export default {
         }, 800)
       }
     },
-    changeVolume() {
+    changeVolume () {
 
       setDefaultVolume({
         volume: this.defaultOutput.volume
@@ -220,7 +222,7 @@ export default {
       this.gua()
     }
   },
-  unmounted() {
+  unmounted () {
     this.stopListenerAudioTest()
   }
 }

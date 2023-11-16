@@ -13,24 +13,36 @@ const tpls = `
 `
 
 Vue.component('CloudNavsComp', {
-  props:{
-    Clouds:[],
+  props: {
+    Clouds: [],
 
   },
   data () {
-    return {
-    }
+    return {}
   },
   template: tpls,
-  mounted(){},
+  mounted () {},
   methods: {
-    clickCard(item) {
-      if(item.groupId) {
-        this.$router.push({ name: 'group', query: { groupId: item.groupId, listId: item.id, t: Date.now(), type: item.type, name: item.name, summary: item.summary } })
+    clickCard (item) {
+      if (item.groupId) {
+        this.$router.push({
+          name: 'group',
+          query: {
+            groupId: item.groupId,
+            listId: item.id,
+            t: Date.now(),
+            type: item.type,
+            name: item.name,
+            summary: item.summary
+          }
+        })
         const spliceStr = `L2-${item.groupId}-${item.id}`
         resetOtherTree('group', [spliceStr])
       } else {
-        this.$router.push({ name: 'cloud', query: { listId: item.id, t: Date.now(), type: item.type, name: item.name, summary: item.summary } })
+        this.$router.push({
+          name: 'cloud',
+          query: { listId: item.id, t: Date.now(), type: item.type, name: item.name, summary: item.summary }
+        })
         resetOtherTree('cloud', [item.id])
       }
     }

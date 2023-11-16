@@ -28,7 +28,7 @@ export default {
     versions: [],
     activeVersion: {}
   },
-  data() {
+  data () {
     return {
       activeVersion: {}
     }
@@ -36,11 +36,11 @@ export default {
   emits: ['setActive']
   , methods: {
     friendlyDate: window.tsbApi.util.friendlyDate,
-    setActive(version) {
+    setActive (version) {
       this.activeVersion = version
       this.$emit('setActive', version)
     },
-    restoreVersion(version) {
+    restoreVersion (version) {
       this.$emit('restoreVersion', version)
     }
   }

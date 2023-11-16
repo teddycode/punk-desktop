@@ -20,17 +20,17 @@
 </template>
 
 <script>
-import {mapWritableState} from 'pinia'
-import {appStore} from '../../../../store'
+import { mapWritableState } from 'pinia'
+import { appStore } from '../../../../store'
 
 export default {
   props: ['selectList'],
 
-  data() {
+  data () {
     return {
       breadcrumb: [
-        {name: '联系人', path: '/', type: 'contact', color: 'var(--active-bg)'},
-        {name: '我的好友', path: '/myFriend', type: 'friend'}
+        { name: '联系人', path: '/', type: 'contact', color: 'var(--active-bg)' },
+        { name: '我的好友', path: '/myFriend', type: 'friend' }
       ],
       separator: '/',
       friendList: [],
@@ -50,7 +50,7 @@ export default {
     ...mapWritableState(appStore, ['settings'])
   },
 
-  async mounted() {
+  async mounted () {
     const server = window.$TUIKit
     const res = await server.tim.getFriendList()
     const list = res?.data.map((item) => {
@@ -61,26 +61,25 @@ export default {
   },
 
   methods: {
-    isSelect(index) {
+    isSelect (index) {
       return this.selectList.includes(this.friendList[index])
     },
 
-    backCrumb(item) {
+    backCrumb (item) {
       if (item.type === 'contact') {
         this.$emit('back')
       }
     },
 
-    currentFriend(item) {
+    currentFriend (item) {
       this.$emit('currentClick', item)
     },
-
 
   },
 
   watch: {
     'settings.isAllSelected': {
-      handler(newVal) {
+      handler (newVal) {
         if (newVal) {
           this.$emit('updateList', this.friendList)
         }

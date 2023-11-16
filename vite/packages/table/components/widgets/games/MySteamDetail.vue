@@ -25,13 +25,15 @@
           <div class="flex items-center detail-active mr-3 s-item pointer px-3 rounded-lg" @click="backGameList">
             <Icon icon="xiangzuo" style="font-size: 1.8em;"></Icon>
           </div>
-          <div v-if="runningGame.appid!==steamDetail.appid" class="flex game-start-button items-center mr-3  detail-active s-item  rounded-lg pointer  justify-center"
+          <div v-if="runningGame.appid!==steamDetail.appid"
+               class="flex game-start-button items-center mr-3  detail-active s-item  rounded-lg pointer  justify-center"
                style="background: rgba(82,196,26,1);padding: 13px 40px;"
                @click="startGame">
             <Icon icon="bofang" style="font-size: 1.2em;"></Icon>
             <span class="ml-2">开始游戏</span>
           </div>
-          <div v-else class="flex items-center mr-3 game-start-button running  detail-active s-item  rounded-lg pointer  justify-center"
+          <div v-else
+               class="flex items-center mr-3 game-start-button running  detail-active s-item  rounded-lg pointer  justify-center"
                style="padding: 13px 40px;"
                @click="closeGame">
             <Icon icon="guanbi" style="font-size: 1.2em;"></Icon>
@@ -91,9 +93,13 @@
         <span class="truncate mb-2.5 " style="max-width: 180px;">{{ steamDetail.name }}</span>
       </div>
       <span
-          class="flex items-center mb-2.5 justify-center last-time">最近游玩 : {{ getDateMyTime(steamDetail.time) }} </span>
+          class="flex items-center mb-2.5 justify-center last-time">最近游玩 : {{
+          getDateMyTime(steamDetail.time)
+        }} </span>
       <span
-          class="flex items-center mb-2.5 justify-center last-time">过去两周 : {{ twoWeekTime(steamDetail.time) }} 小时</span>
+          class="flex items-center mb-2.5 justify-center last-time">过去两周 : {{
+          twoWeekTime(steamDetail.time)
+        }} 小时</span>
       <span
           class="flex items-center mb-2.5 justify-center last-time">总数 : {{ totalTime(steamDetail.time) }} 小时</span>
       <div class="flex items-center">
@@ -101,18 +107,22 @@
              @click="backGameList">
           <Icon icon="xiangzuo" style="font-size: 1.5em;"></Icon>
         </div>
-        <div class="flex mb-2  w-full s-item detail-active  rounded-lg pointer items-center justify-center" style="padding:12px 35px;"
+        <div class="flex mb-2  w-full s-item detail-active  rounded-lg pointer items-center justify-center"
+             style="padding:12px 35px;"
              @click="guidelineJump(steamDetail.appid)">
           <Icon icon="trophy" style="font-size: 1.2em;"></Icon>
           <span class="ml-2">游戏攻略</span>
         </div>
       </div>
-      <div v-if="runningGame.appid!==steamDetail.appid" class="flex game-start-button w-full items-center  detail-active s-item py-3 rounded-lg pointer justify-center" style="background: rgba(82,196,26,1);"
+      <div v-if="runningGame.appid!==steamDetail.appid"
+           class="flex game-start-button w-full items-center  detail-active s-item py-3 rounded-lg pointer justify-center"
+           style="background: rgba(82,196,26,1);"
            @click="startGame">
         <Icon icon="bofang" style="font-size: 1.2em;"></Icon>
         <span class="ml-2">开始游戏</span>
       </div>
-      <div v-else class="flex w-full game-start-button running items-center  detail-active s-item py-3 rounded-lg pointer justify-center"
+      <div v-else
+           class="flex w-full game-start-button running items-center  detail-active s-item py-3 rounded-lg pointer justify-center"
            @click="closeGame">
         <Icon icon="guanbi" style="font-size: 1.2em;"></Icon>
         <span class="ml-2">关闭游戏</span>
@@ -122,10 +132,10 @@
 </template>
 
 <script>
-import {getDateTime} from '../../../util'
-import {mapActions, mapWritableState} from 'pinia';
-import {steamUserStore} from "../../../store/steamUser";
-import {inspectorStore} from '../../../store/inspector'
+import { getDateTime } from '../../../util'
+import { mapActions, mapWritableState } from 'pinia'
+import { steamUserStore } from '../../../store/steamUser'
+import { inspectorStore } from '../../../store/inspector'
 
 export default {
   name: 'MySteamDetail',
@@ -141,13 +151,13 @@ export default {
       }
     }
   },
-  data() {
+  data () {
     return {
       CPUGPUData: {
-        useCPU: {value: 0},
-        useGPU: {value: 0},
-        useMemory: {value: 0},
-        FPS: {value: 0},
+        useCPU: { value: 0 },
+        useGPU: { value: 0 },
+        useMemory: { value: 0 },
+        FPS: { value: 0 },
         down: 0,
         up: 0
       },
@@ -161,8 +171,8 @@ export default {
 
   watch: {
     'displayData': {
-      handler() {
-        let {useGPU, useMemory, useCPU, FPS, down, up} = this.displayData || {}
+      handler () {
+        let { useGPU, useMemory, useCPU, FPS, down, up } = this.displayData || {}
         this.CPUGPUData = {
           useGPU: useGPU,
           useCPU: useCPU,
@@ -176,12 +186,12 @@ export default {
     }
   },
 
-  mounted() {
+  mounted () {
   },
 
   methods: {
     ...mapActions(steamUserStore, ['playGame', 'stopGame']),
-    getDateMyTime(time) {
+    getDateMyTime (time) {
       if (time) {
         const timer = getDateTime(new Date(parseInt(time.rtime_last_played) * 1000))
         return time.rtime_last_played !== 0 ? timer.month + '月' + timer.day + '日' : '0'
@@ -190,24 +200,24 @@ export default {
       }
 
     },
-    twoWeekTime(time) {
+    twoWeekTime (time) {
       return time ? (time.playtime_2weeks / 60).toFixed(1) : 0
     },
-    totalTime(time) {
+    totalTime (time) {
       return time ? (time.playtime_forever / 60).toFixed(1) : 0
     },
     // 游戏攻略跳转
-    guidelineJump(id) {
-      this.$router.push({name: 'gameIntroduction', params: {id}})
+    guidelineJump (id) {
+      this.$router.push({ name: 'gameIntroduction', params: { id } })
     },
     // 关闭游戏
-    closeGame() {
+    closeGame () {
       this.stopGame(this.steamDetail)
     },
-    startGame() {
+    startGame () {
       this.playGame(this.steamDetail)
     },
-    backGameList() {
+    backGameList () {
       this.$emit('closeDetail')
     }
   }

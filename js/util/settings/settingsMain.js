@@ -12,8 +12,8 @@ var settings = {
       await settingModel.set(undefined, 'system', key, settings.list[key])
     }
   },
-  setDb: async function (key,value) {
-    await settingModel.set(undefined, 'system', key,value)
+  setDb: async function (key, value) {
+    await settingModel.set(undefined, 'system', key, value)
   },
   runChangeCallbacks (key) {
     settings.onChangeCallbacks.forEach(function (listener) {
@@ -47,7 +47,7 @@ var settings = {
   },
   set (key, value) {
     settings.list[key] = value
-    settings.setDb(key,value).then(() => {
+    settings.setDb(key, value).then(() => {
       settings.runChangeCallbacks(key)
 
       if (mainWindow) {

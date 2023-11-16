@@ -18,7 +18,7 @@
 <script>
 export default {
   name: 'Prompt',
-  data() {
+  data () {
     return {
       inputValue: ''
     }
@@ -31,11 +31,11 @@ export default {
     'visible'
   ],
   methods: {
-    handleOk() {
-      this.$emit('changeValue', {value: this.inputValue})
+    handleOk () {
+      this.$emit('changeValue', { value: this.inputValue })
 
     },
-    handleCancel() {
+    handleCancel () {
       this.$emit('cancel')
     }
   }

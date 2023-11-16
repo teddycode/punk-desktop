@@ -19,16 +19,19 @@
       </div>
     </Vue3SeamlessScroll>
     <div class="set-button flex no-drag">
-      <div class="set-button-item my-bg  rounded-lg pointer mr-3" style="background: var(--secondary-bg);color:var(--secondary-text);"
+      <div class="set-button-item my-bg  rounded-lg pointer mr-3"
+           style="background: var(--secondary-bg);color:var(--secondary-text);"
            @click="stopScroll">
         <Icon v-if="isScrolling  === false" icon="bofang"></Icon>
         <Icon v-else icon="pause"></Icon>
       </div>
-      <div class="set-button-item my-bg rounded-lg pointer mr-3" style="background: var(--secondary-bg);color:var(--secondary-text);"
+      <div class="set-button-item my-bg rounded-lg pointer mr-3"
+           style="background: var(--secondary-bg);color:var(--secondary-text);"
            @click="openSheZhi">
         <Icon icon="shezhi"></Icon>
       </div>
-      <div class="set-button-item  rounded-lg pointer" style="background: var(--secondary-bg);color:var(--secondary-text);"
+      <div class="set-button-item  rounded-lg pointer"
+           style="background: var(--secondary-bg);color:var(--secondary-text);"
            @click="closeFullScreen">
         <Icon icon="quxiaoquanping_huaban" style=""></Icon>
       </div>
@@ -57,11 +60,11 @@
 </template>
 
 <script>
-import {mapWritableState} from 'pinia'
-import {steamUserStore} from "../../store/steamUser";
-import HorizontalPanel from "../../components/HorizontalPanel.vue";
-import {Vue3SeamlessScroll} from "vue3-seamless-scroll";
-import {appStore} from '../../store'
+import { mapWritableState } from 'pinia'
+import { steamUserStore } from '../../store/steamUser'
+import HorizontalPanel from '../../components/HorizontalPanel.vue'
+import { Vue3SeamlessScroll } from 'vue3-seamless-scroll'
+import { appStore } from '../../store'
 
 export default {
   name: 'MyFullScreenGame',
@@ -69,7 +72,7 @@ export default {
     HorizontalPanel,
     Vue3SeamlessScroll
   },
-  data() {
+  data () {
     return {
       settingsScroller: {
         useBothWheelAxes: true,
@@ -80,15 +83,15 @@ export default {
       },
       showTime: true,
       screenVisible: false,
-      sortList: [{title: '最近游玩', name: 'timer'}, {title: 'A-Z', name: 'letter'}],
-      sortType: {title: '最近游玩', name: 'timer'},
+      sortList: [{ title: '最近游玩', name: 'timer' }, { title: 'A-Z', name: 'letter' }],
+      sortType: { title: '最近游玩', name: 'timer' },
       isScrolling: false,
       screenList: [],
       // scaleValue:15,  // 暂时没有合适方法,后期补充
     }
   },
 
-  mounted() {
+  mounted () {
     this.screenList = this.gameList
     this.isScrolling = true
   },
@@ -98,44 +101,44 @@ export default {
     ...mapWritableState(appStore, ['settings'])
   },
   methods: {
-    closeFullScreen() {
+    closeFullScreen () {
       this.$emit('close')
       this.isScrolling = false
     },
-    twoWeekTime(time) {
+    twoWeekTime (time) {
       return time ? (time.playtime_2weeks / 60).toFixed(1) : 0
     },
-    totalTime(time) {
+    totalTime (time) {
       return time ? (time.playtime_forever / 60).toFixed(1) : 0
     },
-    openSheZhi() {
+    openSheZhi () {
       this.screenVisible = true
     },
-    stopScroll() {
+    stopScroll () {
       this.isScrolling = !this.isScrolling
     },
-    tabSort(item) {
+    tabSort (item) {
       this.sortType = item
       this.screenVisible = false
     }
   },
   watch: {
     'sortType': {
-      handler() {
+      handler () {
         if (this.sortType.name === 'letter') {
-          this.screenList.sort((a, b) => a.name.localeCompare(b.name));
+          this.screenList.sort((a, b) => a.name.localeCompare(b.name))
         } else {
           this.screenList.sort((a, b) => {
             if (a.time === undefined && a.time === undefined) {
-              return 0;
+              return 0
             } else if (a.time === undefined) {
-              return 1;
+              return 1
             } else if (b.time === undefined) {
-              return -1;
+              return -1
             } else if (a.time !== b.time) {
-              return b.time.rtime_last_played - a.time.rtime_last_played;
+              return b.time.rtime_last_played - a.time.rtime_last_played
             }
-          });
+          })
         }
       },
       immediate: true

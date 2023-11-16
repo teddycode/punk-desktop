@@ -1,7 +1,8 @@
 <template>
   <div class="flex flex-row items-center justify-center w-full h-full">
     <div v-if="!setUp"
-         class="w-1/2  max-w-md rounded-lg flex flex-col items-center pt-6 px-4 mr-10" style="background: rgba(33, 33, 33, 1);height: 250px">
+         class="w-1/2  max-w-md rounded-lg flex flex-col items-center pt-6 px-4 mr-10"
+         style="background: rgba(33, 33, 33, 1);height: 250px">
       <div class="text-white">
         <Icon class="mr-2" icon="sound" style="font-size: 1.2em"></Icon>
         新用户须知
@@ -17,7 +18,8 @@
       </div>
     </div>
     <div v-else
-         class="  h-5/12 rounded-lg flex flex-col items-center pt-6 px-4 pb-4" style="font-size:16px;background: rgba(33, 33, 33, 1);width:350px">
+         class="  h-5/12 rounded-lg flex flex-col items-center pt-6 px-4 pb-4"
+         style="font-size:16px;background: rgba(33, 33, 33, 1);width:350px">
       <div class="text-white">
         <Icon class="mr-2" icon="rise" style="font-size: 1.2em"></Icon>
         升级啦
@@ -36,14 +38,14 @@
 </template>
 
 <script>
-import {message} from 'ant-design-vue';
-import {mapActions} from "pinia";
-import {appStore} from "../../../store";
+import { message } from 'ant-design-vue'
+import { mapActions } from 'pinia'
+import { appStore } from '../../../store'
 import browser from '../../../js/common/browser'
 
 export default {
-  name: "GradeNotice",
-  data() {
+  name: 'GradeNotice',
+  data () {
     return {
       known: false,
       knownTip: false,
@@ -53,22 +55,22 @@ export default {
   },
   methods: {
     ...mapActions(appStore, ['setAgreeTest']),
-    clickAgree() {
+    clickAgree () {
       this.known = !this.known
     },
-    openAgree() {
+    openAgree () {
       browser.openInSystem('https://www.yuque.com/tswork/mqon1y/xd8yo2745bcxrk3c')
     },
-    next() {
+    next () {
       if (this.known === false) {
-        message.info('请阅读新手引导后确认');
+        message.info('请阅读新手引导后确认')
       } else {
         this.setUp = true
       }
     },
-    goGrade() {
+    goGrade () {
       this.setAgreeTest(true)
-      this.$router.push({name: 'grade'})
+      this.$router.push({ name: 'grade' })
     }
   }
 }

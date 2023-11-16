@@ -10,7 +10,8 @@
 
       <span>来自社区用户的分享（{{ dataList.length }}）<strong style="color:red">！此功能正在开发中！</strong></span>
       <a-select v-model:value="sortVal" :bordered="false"
-                :dropdownStyle="{ 'z-index': 99999, backgroundColor: 'var(--secondary-bg)' }" class="select rounded-lg  s-item flex items-center text-center"
+                :dropdownStyle="{ 'z-index': 99999, backgroundColor: 'var(--secondary-bg)' }"
+                class="select rounded-lg  s-item flex items-center text-center"
                 size="large" style=" z-index: 9; position: relative;"
                 @change="handleChange">
         <a-select-option v-for=" item  in  sortType " :value="item.value" class="no-drag">{{
@@ -128,20 +129,20 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from "pinia";
-import {cardStore} from "../../../store/card";
-import {message} from "ant-design-vue";
-import NewPreviewCardDetails from "@page/app/card/NewPreviewCardDetails.vue";
-import {dataList, delList, shareList} from './testData';
+import { mapActions, mapWritableState } from 'pinia'
+import { cardStore } from '../../../store/card'
+import { message } from 'ant-design-vue'
+import NewPreviewCardDetails from '@page/app/card/NewPreviewCardDetails.vue'
+import { dataList, delList, shareList } from './testData'
 import Modal from '../../Modal.vue'
-import {taskStore} from "../../../apps/task/store";
+import { taskStore } from '../../../apps/task/store'
 
 export default {
   computed: {
-    ...mapWritableState(taskStore, ["taskID", "step"]),
-    m03033() {
+    ...mapWritableState(taskStore, ['taskID', 'step']),
+    m03033 () {
       return this.step == 3 &&
-          this.taskID == "M0303"
+          this.taskID == 'M0303'
     }
   },
   components: {
@@ -167,7 +168,7 @@ export default {
       default: () => '',
     }
   },
-  data() {
+  data () {
     return {
       carouselIndex: 0,
       isCardDetails: false,
@@ -178,9 +179,9 @@ export default {
       shareList,
       sortVal: '最多使用',
       sortType: [
-        {value: '最多使用', name: '最多使用'},
-        {value: '下载次数', name: '下载次数'},
-        {value: '分享时间', name: '分享时间'},
+        { value: '最多使用', name: '最多使用' },
+        { value: '下载次数', name: '下载次数' },
+        { value: '分享时间', name: '分享时间' },
       ],
       paging: 1,
       list: [],
@@ -189,20 +190,20 @@ export default {
     }
   },
   methods: {
-    ...mapActions(cardStore, ["addCard"]),
-    getImg(url) {
-      return "/img/addCard/" + url + ".png";
+    ...mapActions(cardStore, ['addCard']),
+    getImg (url) {
+      return '/img/addCard/' + url + '.png'
     },
-    addNewCard(item) {
+    addNewCard (item) {
       if (item.option[1] != undefined) {
-        this.fullScreen(item);
+        this.fullScreen(item)
       } else {
-        this.add(item);
+        this.add(item)
       }
     },
-    fullScreen(item) {
-      this.cardDetails = item;
-      this.isCardDetails = true;
+    fullScreen (item) {
+      this.cardDetails = item
+      this.isCardDetails = true
     },
     //获取url
     // getUrl(str) {
@@ -213,8 +214,8 @@ export default {
     //     }
     //     return null;
     // },
-    add(item, index = 0) {
-      index = index ?? this.carouselIndex;
+    add (item, index = 0) {
+      index = index ?? this.carouselIndex
       // let url = this.getUrl(item.detail)
       let size = item.sizes[0].split('x')
       this.addCard(
@@ -228,41 +229,41 @@ export default {
             }
           },
           this.desk
-      );
-      this.$emit("closeMarket", false);
-      message.success("添加成功！");
+      )
+      this.$emit('closeMarket', false)
+      message.success('添加成功！')
     },
-    closeCardDetails() {
-      this.isCardDetails = false;
+    closeCardDetails () {
+      this.isCardDetails = false
     },
-    formatTimestamp(timestamp) {
-      const date = new Date(timestamp);
-      const year = date.getFullYear().toString();
-      const month = (date.getMonth() + 1).toString().padStart(2, "0");
-      const day = date.getDate().toString().padStart(2, "0");
-      return `${year}-${month}-${day}`;
+    formatTimestamp (timestamp) {
+      const date = new Date(timestamp)
+      const year = date.getFullYear().toString()
+      const month = (date.getMonth() + 1).toString().padStart(2, '0')
+      const day = date.getDate().toString().padStart(2, '0')
+      return `${year}-${month}-${day}`
     },
-    shareNow() {
+    shareNow () {
       this.$emit('shareNow')
     },
-    openDelFrame(id) {
+    openDelFrame (id) {
       this.cardId = id
       this.promptVisible = true
     },
-    delCard(id) {
+    delCard (id) {
       delList(id)
       this.list = shareList
       this.$forceUpdate()
       this.$emit('closeMy')
     },
-    showPrompt(item) {
+    showPrompt (item) {
       this.$emit('getCard', item)
     },
-    setImg(src, index) {
+    setImg (src, index) {
       let imgDom = document.getElementById('img' + index)
-      var img = new Image();
+      var img = new Image()
       img.src = src
-      let res;
+      let res
       setTimeout(() => {
         res = {
           width: img.width,
@@ -288,7 +289,7 @@ export default {
       // }()
     },
   },
-  mounted() {
+  mounted () {
     if (this.listType === 'my') {
       this.list = JSON.parse(JSON.stringify(shareList))
     } else {

@@ -10,6 +10,10 @@ class TaskList {
     this.pendingCallbackTimeout = null
   }
 
+  static getRandomId () {
+    return Math.round(Math.random() * 100000000000000000)
+  }
+
   on (name, fn) {
     this.events.push({ name, fn })
   }
@@ -73,7 +77,7 @@ class TaskList {
   }
 
   getAll () {
-	  return this.tasks
+    return this.tasks
   }
 
   getSelected () {
@@ -163,10 +167,6 @@ class TaskList {
         return this.tasks[i]
       }
     }
-  }
-
-  static getRandomId () {
-    return Math.round(Math.random() * 100000000000000000)
   }
 }
 

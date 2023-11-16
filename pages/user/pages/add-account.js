@@ -24,18 +24,17 @@ const tpl = `
 // const userModel = require('../../util/model/userModel')
 const AddAccount = {
   template: tpl,
-    data () {
-      return {
-      }
-    },
-    async mounted () {
-    },
-    methods: {
-      goLogin(){
-        ipc.send('login')
+  data () {
+    return {}
+  },
+  async mounted () {
+  },
+  methods: {
+    goLogin () {
+      ipc.send('login')
       //https://s.apps.vip/login?response_type=code&client_id=10001&state=1
-      }
     }
   }
+}
 
 module.exports = AddAccount

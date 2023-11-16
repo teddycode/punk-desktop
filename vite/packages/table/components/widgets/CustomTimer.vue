@@ -38,16 +38,16 @@
 </template>
 
 <script>
-import {mapActions} from 'pinia'
-import {cardStore} from '../../store/card'
+import { mapActions } from 'pinia'
+import { cardStore } from '../../store/card'
 import Widget from '../card/Widget.vue'
-import {Calendar} from 'v-calendar';
-import 'v-calendar/style.css';
+import { Calendar } from 'v-calendar'
+import 'v-calendar/style.css'
 
 export default {
   name: 'CustomTimer',
   props: ['desk'],
-  data() {
+  data () {
     return {
       status: 'pause',
       value: null,
@@ -65,30 +65,29 @@ export default {
       selectedColor: 'red',
       isDark: true
 
-
     }
   },
   components: {
     Widget,
     Calendar,
   },
-  mounted() {
+  mounted () {
 
   },
   methods: {
-    onPanelChange(value, mode) {
+    onPanelChange (value, mode) {
     },
     ...mapActions(cardStore, ['removeCard']),
-    async moveToday() {
-      await this.$refs.calendar.move(new Date());
+    async moveToday () {
+      await this.$refs.calendar.move(new Date())
     },
-    showDrawer() {
+    showDrawer () {
       this.visible = true
     },
-    onClose() {
+    onClose () {
       this.visible = false
     },
-    removeCalendar() {
+    removeCalendar () {
       this.removeCard(this.customIndex)
       this.visible = false
     }

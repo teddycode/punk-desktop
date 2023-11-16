@@ -6,9 +6,9 @@
 
 <script>
 export default {
-  name: "Icon",
-  props: ["icon", "style"],
-};
+  name: 'Icon',
+  props: ['icon', 'style'],
+}
 </script>
 
 <style scoped>

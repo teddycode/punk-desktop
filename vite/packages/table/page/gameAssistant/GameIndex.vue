@@ -124,25 +124,25 @@
 </template>
 
 <script>
-import {steamUserStore} from '../../store/steamUser'
+import { steamUserStore } from '../../store/steamUser'
 import Desk from '../../components/desk/Desk.vue'
-import {mapWritableState} from 'pinia'
-import {getClientIcon, getCover} from '../../js/common/game'
-import {nanoid} from 'nanoid'
+import { mapWritableState } from 'pinia'
+import { getClientIcon, getCover } from '../../js/common/game'
+import { nanoid } from 'nanoid'
 import GameListDrawer from '../../components/game/GameListDrawer.vue'
-import {appStore} from '../../store'
-import {useToast} from 'vue-toastification'
+import { appStore } from '../../store'
+import { useToast } from 'vue-toastification'
 import DeskGroup from '../../components/desk/DeskGroup.vue'
 import Template from '../../../user/pages/Template.vue'
 import Emoji from '../../components/comp/Emoji.vue'
 
 const toast = useToast()
 export default {
-  components: {Emoji, Template, DeskGroup, GameListDrawer, Desk},
+  components: { Emoji, Template, DeskGroup, GameListDrawer, Desk },
   computed: {
     ...mapWritableState(steamUserStore, ['deskSettings', 'desks', 'runningGame', 'recentGameList', 'deskList', 'currentDeskId', 'desksOld']),
     ...mapWritableState(appStore, ['fullScreen']),
-    selectDeskGame() {
+    selectDeskGame () {
       let found = this.recentGameList.find(g => {
         return g.appid === this.selectDeskId
       })
@@ -155,7 +155,7 @@ export default {
         }
       }
     },
-    displayGameList() {
+    displayGameList () {
       return this.recentGameList.filter(game => {
         let found = this.deskList.find(desk => {
           return desk.id === game.appid
@@ -170,7 +170,7 @@ export default {
       })
     }
   },
-  data() {
+  data () {
     return {
       recentVisible: false,
       selectDeskId: '0',
@@ -184,7 +184,7 @@ export default {
       }
     }
   },
-  mounted() {
+  mounted () {
     this.migrateOldData()
     this.deskList.forEach(desk => {
       //修正一下锁定机制，锁定的桌面无法被删除
@@ -236,10 +236,10 @@ export default {
   methods: {
     getClientIcon,
     getCover,
-    setSelectDeskId(id) {
+    setSelectDeskId (id) {
       this.selectDeskId = id
     },
-    migrateOldData() {
+    migrateOldData () {
       if (typeof this.desks === 'object') {
         console.log(this.desks, '需要转移')
         if (Object.keys(this.desks).length === 0) {
@@ -293,7 +293,7 @@ export default {
         this.desks = []
       }
     },
-    changeDesk(p) {
+    changeDesk (p) {
       let changeDesk = this.deskList.find(desk => {
         return desk.id === p.id
       })
@@ -303,7 +303,7 @@ export default {
         this.currentDesk = changeDesk
       }
     },
-    addCard() {
+    addCard () {
       let foundDesk = this.deskList.find(desk => {
         return desk.id === this.currentDeskId
       })
@@ -325,7 +325,7 @@ export default {
 
       this.$refs.deskGroupRef.addCard()
     },
-    createMainDesk() {
+    createMainDesk () {
       this.desks[this.selectDeskGame.appid] = {
         name: this.selectDeskGame.name,
         nanoid: nanoid(4),
@@ -333,10 +333,10 @@ export default {
         settings: this.desks['0'].settings
       }
     },
-    showMore() {
+    showMore () {
       this.recentVisible = true
     },
-    getGame(id) {
+    getGame (id) {
       return this.recentGameList.find(g => {
         return g.appid === id
       })

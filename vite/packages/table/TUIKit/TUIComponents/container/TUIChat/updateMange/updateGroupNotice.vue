@@ -1,13 +1,15 @@
 <template>
   <div class="flex flex-col">
     <div class="textarea-container">
-      <a-textarea v-model:value="noticeValue" :disabled="noticeInfo.role !== 'Owner' && noticeInfo.role !== 'Admin'" :maxlength="maxLength"
+      <a-textarea v-model:value="noticeValue" :disabled="noticeInfo.role !== 'Owner' && noticeInfo.role !== 'Admin'"
+                  :maxlength="maxLength"
                   :rows="8" :spellcheck="false"
                   placeholder="暂无群公告" style="color: var(--primary-text);border-radius: 12px;"
                   @input="handleInput"></a-textarea>
       <span class="char-count">{{ currentLength }} / {{ maxLength }}</span>
     </div>
-    <a-button v-if="noticeInfo.role !== 'Member' " style="width: 100%; height: 48px; margin-top: 24px;border-radius: 12px !important;" type="primary"
+    <a-button v-if="noticeInfo.role !== 'Member' "
+              style="width: 100%; height: 48px; margin-top: 24px;border-radius: 12px !important;" type="primary"
               @click="saveGroupNotice">保存
     </a-button>
   </div>

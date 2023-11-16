@@ -138,9 +138,9 @@
 </template>
 
 <script>
-import {computed, defineComponent, onMounted, reactive, ref, toRefs} from 'vue';
-import {SearchOutlined} from '@ant-design/icons-vue'
-import {appStore} from '../../../../store'
+import { computed, defineComponent, onMounted, reactive, ref, toRefs } from 'vue'
+import { SearchOutlined } from '@ant-design/icons-vue'
+import { appStore } from '../../../../store'
 import _ from 'lodash-es'
 
 export default defineComponent({
@@ -187,9 +187,9 @@ export default defineComponent({
   //   },
   // },
 
-  components: {SearchOutlined},
+  components: { SearchOutlined },
 
-  setup(props, ctx) {
+  setup (props, ctx) {
     const friendValue = ref('')
     const data = reactive({
       addFriendLists: [],
@@ -209,11 +209,11 @@ export default defineComponent({
     const handleInput = async () => {   // 好友搜索
 
       if (parseInt(friendValue.value) === isSelfUid) {
-        return
+
       } else {
         const val = friendValue.value
-        console.log(val);
-        const imResponse = await window.$chat.getUserProfile({userIDList: [`${val}`]})
+        console.log(val)
+        const imResponse = await window.$chat.getUserProfile({ userIDList: [`${val}`] })
         data.addFriendLists = imResponse.data
       }
 
@@ -232,7 +232,6 @@ export default defineComponent({
       ctx.emit('close')
     }
 
-
     const isFriend = computed(() => {
       const index = _.find(data.friendLists, function (o) {
         return o.userID === friendValue.value
@@ -250,7 +249,6 @@ export default defineComponent({
     }
 
     onMounted(loadFriend)
-
 
     return {
       friendValue, ...toRefs(data), isFriend,

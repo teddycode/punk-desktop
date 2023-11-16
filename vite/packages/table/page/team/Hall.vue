@@ -5,7 +5,8 @@
       <HorizontalPanel v-model:selectType="teamType" :navList="teamNavList"></HorizontalPanel>
     </a-col>
     <a-col :span="3">
-      <div class="s-bg pointer h-12 w-24 rounded-lg flex justify-center items-center px-3" style="background: var(--primary-bg);;color: var(--primary-text);"
+      <div class="s-bg pointer h-12 w-24 rounded-lg flex justify-center items-center px-3"
+           style="background: var(--primary-bg);;color: var(--primary-text);"
            @click="random">
         <icon class="mr-1" icon="shuaxin" style="font-size: 1.2em"></icon>
         换一换
@@ -31,7 +32,8 @@
         队长：
         <div class="mt-2 ml-2">
           <a-avatar :size="40"
-                    :src="selectTeam.leaderInfo.data.userInfo.avatar" class="mr-3 pointer" @click.stop="showUserCard(selectTeam.leaderInfo.data.uid,selectTeam.leaderInfo.data.userInfo)"></a-avatar>
+                    :src="selectTeam.leaderInfo.data.userInfo.avatar" class="mr-3 pointer"
+                    @click.stop="showUserCard(selectTeam.leaderInfo.data.uid,selectTeam.leaderInfo.data.userInfo)"></a-avatar>
           {{ selectTeam.leaderInfo.data.userInfo.nickname }}
         </div>
       </div>
@@ -49,7 +51,8 @@
     </div>
 
     <div class="mt-10">
-      <a-button :disabled="hasTeam" block size="large" style="color:var(--primary-text);background: var(--primary-bg);" type="primary"
+      <a-button :disabled="hasTeam" block size="large" style="color:var(--primary-text);background: var(--primary-bg);"
+                type="primary"
                 @click="joinTeam(selectTeam)">加入小队
       </a-button>
     </div>
@@ -63,16 +66,16 @@
 import HorizontalPanel from '../../components/HorizontalPanel.vue'
 import TeamList from '../../components/team/TeamList.vue'
 
-import {mapActions, mapState, mapWritableState} from 'pinia'
-import {teamStore} from '../../store/team'
-import {Modal} from 'ant-design-vue'
-import {appStore} from '../../store'
-import {completeTask} from "../../apps/task/page/branch/task.ts"
+import { mapActions, mapState, mapWritableState } from 'pinia'
+import { teamStore } from '../../store/team'
+import { Modal } from 'ant-design-vue'
+import { appStore } from '../../store'
+import { completeTask } from '../../apps/task/page/branch/task.ts'
 
 export default {
   name: 'Hall',
-  components: {TeamList, HorizontalPanel},
-  data() {
+  components: { TeamList, HorizontalPanel },
+  data () {
     return {
       randomNums: [],
       settingsScroller: {
@@ -87,14 +90,14 @@ export default {
       selectTeam: {},
       actionVisible: false,
       list: [],
-      teamNavList: [{title: '活跃小队', name: 'active'}, {title: '最新创建', name: 'latest'}],
-      teamType: {title: '活跃小队', name: 'active'},
+      teamNavList: [{ title: '活跃小队', name: 'active' }, { title: '最新创建', name: 'latest' }],
+      teamType: { title: '活跃小队', name: 'active' },
     }
   },
   computed: {
     ...mapState(teamStore, ['hasTeam']),
     ...mapWritableState(teamStore, 'teamVisible'),
-    showTeam() {
+    showTeam () {
 
       let data = []
       this.randomNums.forEach(num => {
@@ -106,7 +109,7 @@ export default {
   methods: {
     ...mapActions(teamStore, ['getTeamList', 'updateMy', 'joinByNo']),
     ...mapActions(appStore, ['showUserCard']),
-    random() {
+    random () {
       let randomNums = []
       while (1) {
         let randomNum = (Math.random() * this.list.length).toFixed(0)
@@ -122,11 +125,11 @@ export default {
       }
       this.randomNums = randomNums
     },
-    showAction(data) {
+    showAction (data) {
       this.selectTeam = data.team
       this.actionVisible = true
     },
-    async joinTeam(team) {
+    async joinTeam (team) {
       let rs = await this.joinByNo(team.no)
       if (rs.code === 1000) {
         let result = rs.data
@@ -134,16 +137,16 @@ export default {
           this.team = result.data
           await this.updateMy(0)
           this.teamVisible = true
-          Modal.success({content: '加入小队成功。', centered: true})
+          Modal.success({ content: '加入小队成功。', centered: true })
           // 支线任务点
           completeTask('Z0401')
         } else {
-          Modal.error({content: result.info, centered: true})
+          Modal.error({ content: result.info, centered: true })
         }
       }
     }
   },
-  async mounted() {
+  async mounted () {
 
     let result = await this.getTeamList({
       take: this.take,

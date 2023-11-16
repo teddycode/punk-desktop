@@ -11,10 +11,10 @@ var tabEditor = require('navbar/tabEditor.js')
 var readerView = require('readerView.js')
 var taskOverlay = require('taskOverlay/taskOverlay.js')
 const bookmark = require('./extras/bookmark/bookmarkSys')
-let settings=require('../js/util/settings/settings')
+let settings = require('../js/util/settings/settings')
 const oneTab = require('./extras/newTabs/oneTab.js')
 
-window.waitOpenTabs=[]
+window.waitOpenTabs = []
 
 module.exports = {
   initialize: function () {
@@ -61,7 +61,7 @@ module.exports = {
     })
 
     ipc.on('showBookmarks', function () {
-      ipc.send('handleTsbProtocol',{url:'tsb://app/redirect/?package=com.thisky.fav&url=/'})
+      ipc.send('handleTsbProtocol', { url: 'tsb://app/redirect/?package=com.thisky.fav&url=/' })
       //tabEditor.show(tabs.getSelected(), '!bookmarks ')
     })
 
@@ -69,7 +69,7 @@ module.exports = {
       tabEditor.show(tabs.getSelected(), '!history ')
     })
 
-    ipc.on('duplicateTab', function (e,arg) {
+    ipc.on('duplicateTab', function (e, arg) {
       if (modalMode.enabled()) {
         return
       }
@@ -78,14 +78,14 @@ module.exports = {
         focusMode.warn()
         return
       }
-      if(arg.id){
+      if (arg.id) {
         browserUI.duplicateTab(tabs.get(arg.id))
-      }else
-         browserUI.duplicateTab(tabs.get(tabs.getSelected()))
+      } else
+        browserUI.duplicateTab(tabs.get(tabs.getSelected()))
     })
 
     ipc.on('addTab', function (e, data) {
-      console.log('接收到addtab',e,data)
+      console.log('接收到addtab', e, data)
       //todo 此处的判断还不是很稳妥，虽然大部分的情况下是可以打开了，但还是有失败率
       /* new tabs can't be created in modal mode */
       if (modalMode.enabled()) {
@@ -97,29 +97,28 @@ module.exports = {
         focusMode.warn()
         return
       }
-      if(!tabs){
+      if (!tabs) {
         window.waitOpenTabs.push(data.url)
         //如果还没有初始化好tabs，则将此tab放置到要初始化的tabs队列
-      }else{
-        let currentTab=tabs.get(tabs.getSelected())
-        if(data.partition){
+      } else {
+        let currentTab = tabs.get(tabs.getSelected())
+        if (data.partition) {
           var newTab = tabs.add({
             url: data.url || '',
-            partition:data.partition,
-            newName:data.newName,
+            partition: data.partition,
+            newName: data.newName,
           })
-        }else{
+        } else {
           var newTab = tabs.add({
             url: data.url || '',
-            partition:currentTab.partition,
-            newName:currentTab.newName,
+            partition: currentTab.partition,
+            newName: currentTab.newName,
           })
         }
 
-
         browserUI.addTab(newTab, {
           enterEditMode: !data.url, // only enter edit mode if the new tab is empty
-          password:data.password
+          password: data.password
         })
       }
 
@@ -127,7 +126,7 @@ module.exports = {
 
     //定位到task组的某tabid，往后插入创建tab
     ipc.on('toTaskAddTab', (event, arg) => {
-      if(arg.tab.id) {
+      if (arg.tab.id) {
         //右键移动的操作
         let newTask = tasks.get(arg.taskId)
 
@@ -154,7 +153,6 @@ module.exports = {
       }
     })
 
-
     // var myVar = setInterval(function(){
     //   var valueStr
     //   settings.listen('filteringBlockedCount', function (value) {
@@ -171,9 +169,7 @@ module.exports = {
     //   }
     // },1000)
 
-
-
-    ipc.on('blockSetting',(event,args)=>{
+    ipc.on('blockSetting', (event, args) => {
       let value = {}
       value.blockingLevel = args
       settings.set('filtering', value)
@@ -188,16 +184,15 @@ module.exports = {
       }
     })
 
-    ipc.on('themeSelect',(event,args)=>{
+    ipc.on('themeSelect', (event, args) => {
       settings.set('siteTheme', args)
     })
 
-    ipc.on('selectEngine',(event,args)=>{
+    ipc.on('selectEngine', (event, args) => {
       settings.get('searchEngine')
 
-      settings.set('searchEngine',{ name: args })
+      settings.set('searchEngine', { name: args })
     })
-
 
     ipc.on('saveCurrentPage', async function () {
       var currentTab = tabs.get(tabs.getSelected())
@@ -230,11 +225,11 @@ module.exports = {
       }
     })
 
-    ipc.on('saveViewCapture',()=>{
+    ipc.on('saveViewCapture', () => {
       ipc.send('saveViewCapture', { id: tabs.getSelected() })
     })
 
-    ipc.on('saveViewFullCapture',()=>{
+    ipc.on('saveViewFullCapture', () => {
       ipc.send('saveViewFullCapture', { id: tabs.getSelected() })
     })
 
@@ -256,7 +251,7 @@ module.exports = {
         webviews.callAsync(tabs.getSelected(), 'downloadURL', [tabs.get(tabs.getSelected()).url])
       } else {
         var savePath = await ipc.invoke('showSaveDialog', {
-          defaultPath: currentTab.title.replace(/[/\\]/g, '_')+'.pdf'
+          defaultPath: currentTab.title.replace(/[/\\]/g, '_') + '.pdf'
         })
 
         // savePath will be undefined if the save dialog is canceled
@@ -265,7 +260,7 @@ module.exports = {
             savePath = savePath + '.pdf'
           }
           // webviews.callAsync(tabs.getSelected(), 'printToPDF', [savePath])
-          ipc.send('printToPDF',{'id':tabs.getSelected(),savePath})
+          ipc.send('printToPDF', { 'id': tabs.getSelected(), savePath })
         }
       }
     })

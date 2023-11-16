@@ -11,8 +11,8 @@
 
 <script setup>
 import routerTab from '../../../js/common/routerTab'
-import {onBeforeRouteUpdate, useRoute} from 'vue-router'
-import {computed, onMounted, ref} from 'vue'
+import { onBeforeRouteUpdate, useRoute } from 'vue-router'
+import { computed, onMounted, ref } from 'vue'
 
 const isActive = routerTab.isActive
 const props = defineProps({

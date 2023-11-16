@@ -4,6 +4,7 @@ class Kdbx {
   name
   dbName
   filePath
+
   constructor () {
     this.name = 'file'
   }
@@ -63,4 +64,4 @@ class Kdbx {
   }
 }
 
-module.exports=Kdbx
+module.exports = Kdbx

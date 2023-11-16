@@ -7,7 +7,7 @@ const iconSelectorTpl = `
 </ul>
 </div>
   `
-const iconSelector=Vue.component('icon-selector', {
+const iconSelector = Vue.component('icon-selector', {
   template: iconSelectorTpl,
   name: 'icon-selector',
   model: {
@@ -21,33 +21,31 @@ const iconSelector=Vue.component('icon-selector', {
       value: 'bulb',
       icons: [
         'bulb', 'alert', 'api', 'appstore', 'audio', 'bank', 'bell',
-        'bug',   'calendar', 'camera', 'car',
-        'carry-out','cloud','code','compass','control',
-        'crown','customer-service','dashboard','eye',
-        'folder','gift','heart','home',
-        'like','mail','message','mobile','notification','picture','play-square'
-        ,'profile','pushpin','read','rocket','schedule','shop',
-        'shopping','skin','smile','star','tablet','tag','tool','thunderbolt','trophy'
-        ,'video-camera','wallet','apartment','audit','bars','coffee' ,'desktop','dollar',
-       'global'
+        'bug', 'calendar', 'camera', 'car',
+        'carry-out', 'cloud', 'code', 'compass', 'control',
+        'crown', 'customer-service', 'dashboard', 'eye',
+        'folder', 'gift', 'heart', 'home',
+        'like', 'mail', 'message', 'mobile', 'notification', 'picture', 'play-square'
+        , 'profile', 'pushpin', 'read', 'rocket', 'schedule', 'shop',
+        'shopping', 'skin', 'smile', 'star', 'tablet', 'tag', 'tool', 'thunderbolt', 'trophy'
+        , 'video-camera', 'wallet', 'apartment', 'audit', 'bars', 'coffee', 'desktop', 'dollar',
+        'global'
 
       ]
     }
   },
-  computed: {
-
-  },
+  computed: {},
   mounted () {
 
   },
   methods: {
 
-    selectIcon(icon){
-      this.value=icon
+    selectIcon (icon) {
+      this.value = icon
       this.change()
     },
-    isSelectedIcon(icon){
-      return icon===this.value
+    isSelectedIcon (icon) {
+      return icon === this.value
     },
     change () {
       this.$emit('change', this.value)
@@ -58,4 +56,4 @@ const iconSelector=Vue.component('icon-selector', {
   }
 })
 
-module.exports=iconSelector
+module.exports = iconSelector

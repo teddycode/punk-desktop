@@ -42,7 +42,7 @@ export default {
     }
   },
 
-  data() {
+  data () {
     return {
       audioStatus: 'play',
       audioStart: '0:00',
@@ -53,7 +53,7 @@ export default {
   },
 
   computed: {
-    audioIcon() {
+    audioIcon () {
       if (this.audioHuds) {
         return this.audioVolume < 0.01 ? 'jingyin' : 'yinliang'
       } else {
@@ -62,12 +62,12 @@ export default {
     }
   },
 
-  mounted() {
+  mounted () {
     this.fetch()
   },
 
   methods: {
-    fetch() {
+    fetch () {
       let that = this
       var myVid = this.$refs.audioRef
       myVid.loop = false
@@ -88,7 +88,7 @@ export default {
       }
     },
     // 播放暂停控制
-    playAudio() {
+    playAudio () {
       let recordAudio = this.$refs.audioRef // 获取audio元素
       if (recordAudio.paused) {
         recordAudio.play()
@@ -99,7 +99,7 @@ export default {
       }
     },
     // 更新进度条与当前播放时间
-    updateProgress(e) {
+    updateProgress (e) {
       var value = e.target.currentTime / e.target.duration
       if (document.getElementById('progressBar')) {
         document.getElementById('progressBar').style.width = value * 100 + '%'
@@ -116,7 +116,7 @@ export default {
      * 音频播放时间换算
      * @param {number} value - 音频当前播放时间，单位秒
      */
-    transTime(time) {
+    transTime (time) {
       var duration = parseInt(time)
       var minute = parseInt(duration / 60)
       var sec = (duration % 60) + ''
@@ -133,7 +133,7 @@ export default {
     },
 
     // 调节音频音量
-    handleShowMuteIcon(e) {
+    handleShowMuteIcon (e) {
       let hdiv = document.getElementById('volumeBarBg').clientHeight
       let audio = this.$refs.audioRef
       // 只有音乐开始播放后才可以调节，已经播放过但暂停了的也可以
@@ -145,7 +145,7 @@ export default {
     },
 
     //音频进度调节
-    setAudio(e) {
+    setAudio (e) {
       if (this.audioStatus === 'pause' || this.audioHuds === false) {
         let wdiv = document.getElementById('progressBarBg').clientWidth
         let audio = this.$refs.audioRef

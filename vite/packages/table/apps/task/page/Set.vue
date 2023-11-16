@@ -15,9 +15,9 @@
 </template>
 
 <script setup>
-import {taskStore} from "../store";
+import { taskStore } from '../store'
 
-const task = taskStore();
+const task = taskStore()
 </script>
 
 <style lang="scss" scoped></style>

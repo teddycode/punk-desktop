@@ -65,7 +65,7 @@ const wallpaperSelector = Vue.component('wallpaper-selector', {
   props: {
     'value': String,
     'deskId': '',
-    'defaultWallPaper':'',
+    'defaultWallPaper': '',
   },
   components: {},
   data () {
@@ -78,13 +78,12 @@ const wallpaperSelector = Vue.component('wallpaper-selector', {
 
     }
   },
-  watch: {
-  },
+  watch: {},
   computed: {
-    wallPaper(){
-      if(!!!this.value){
+    wallPaper () {
+      if (!!!this.value) {
         return this.defaultWallPaper
-      }else{
+      } else {
         return this.value
       }
     }
@@ -111,33 +110,32 @@ const wallpaperSelector = Vue.component('wallpaper-selector', {
       this.visibleMainMenu = false
     },
     setWallPaper (wp) {
-      if(!!!this.deskId){
+      if (!!!this.deskId) {
         //设置默认背景
         //todo 处理有deskid的情况，只设置desk的桌面壁纸
         try {
           //保存壁纸设置
           wallPaper.setUrlWallPaper(wp).then(() => {
-              if(!!!appVue.currentDeskInfo.wallPaper){
+              if (!!!appVue.currentDeskInfo.wallPaper) {
                 wallPaper.setElementBg(document.body, wp)
               }
               this.refreshWallPaperHistory()
-              this.$message.success({ content: '壁纸设置成功。' ,key:'setWallPaper'})
+              this.$message.success({ content: '壁纸设置成功。', key: 'setWallPaper' })
             }
           )
-          appVue.defaultDeskWallPaper=wp
+          appVue.defaultDeskWallPaper = wp
         } catch (err) {
-          this.$message.error({ content: '保存壁纸失败。',key:'setWallPaper' })
+          this.$message.error({ content: '保存壁纸失败。', key: 'setWallPaper' })
         }
-      }else{
-        let deskInfo=deskModel.getDeskInfo(this.deskId)
-        deskInfo.wallPaper=wp
-        appVue.currentDeskInfo=deskModel.updateDeskInfo(this.deskId,deskInfo)
+      } else {
+        let deskInfo = deskModel.getDeskInfo(this.deskId)
+        deskInfo.wallPaper = wp
+        appVue.currentDeskInfo = deskModel.updateDeskInfo(this.deskId, deskInfo)
         wallPaper.pushHistory(wp)
         this.refreshWallPaperHistory()
         appVue.setBg(wp)
-        this.$message.success({ content: '当前桌面壁纸设置成功。' ,key:'setWallPaper'})
+        this.$message.success({ content: '当前桌面壁纸设置成功。', key: 'setWallPaper' })
       }
-
 
     },
     refreshWallPaperHistory () {

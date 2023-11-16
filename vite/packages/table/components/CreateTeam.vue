@@ -1,6 +1,7 @@
 <template>
   <div class="flex flex-row items-center justify-center w-full h-full">
-    <div class="w-1/2  h-82 max-w-lg rounded-lg flex flex-col  pt-6  mr-10 p-10 px-15" style="background: rgba(33, 33, 33, 1);"
+    <div class="w-1/2  h-82 max-w-lg rounded-lg flex flex-col  pt-6  mr-10 p-10 px-15"
+         style="background: rgba(33, 33, 33, 1);"
          @click.stop="()=>{}">
       <div>
         <div class="text-center mb-5">
@@ -14,7 +15,8 @@
         </div>
         <a-row :gutter="10">
           <a-col :span="4">
-            <div class="rounded-lg h-10 w-4/5 flex justify-center items-center mt-4 pointer text-white" style="background: rgb(58,58,58);"
+            <div class="rounded-lg h-10 w-4/5 flex justify-center items-center mt-4 pointer text-white"
+                 style="background: rgb(58,58,58);"
                  @click="roll">
               <Icon id="touzi" ref="touzi" class=" " icon="touzi" style="font-size: 1.8em"></Icon>
             </div>
@@ -37,15 +39,15 @@
 </template>
 
 <script>
-import {message, Modal} from 'ant-design-vue'
-import {teamStore} from '../store/team'
-import {mapActions, mapWritableState} from 'pinia'
+import { message, Modal } from 'ant-design-vue'
+import { teamStore } from '../store/team'
+import { mapActions, mapWritableState } from 'pinia'
 
 const names = '发际线跟我作对,汤臣一品业组,我们做的都队,卷死其他组,精神小伙成双队,清华在校生组,素质教育漏网之鱼队,裸考过线组,下岗工人再就业队,光宗耀组,铁道游击队,没有这组,好好好你说的都队,花开富贵组,蒙的全队,所以爱会消失对不队,治安大队,校外施工队,斗地组,六神五组,重案六组,基因重组'
 
 export default {
   name: 'CreateTeam',
-  data() {
+  data () {
     return {
       avatar: '',
       name: '',
@@ -58,7 +60,7 @@ export default {
     }
   },
   emits: ['created'],
-  mounted() {
+  mounted () {
     this.roll(false)
   },
   computed: {
@@ -66,7 +68,7 @@ export default {
   },
   methods: {
     ...mapActions(teamStore, ['create', 'updateMy']),
-    async doCreate() {
+    async doCreate () {
       if (this.avatar.trim() === '') {
         message.error('必须选择一个头像')
         return
@@ -113,7 +115,7 @@ export default {
         message.error('网络繁忙，创建失败')
       })
     },
-    rollAvatar() {
+    rollAvatar () {
       let i = Math.ceil((Math.random() * 10))
       if (this.i === i) {
         this.rollAvatar()
@@ -122,7 +124,7 @@ export default {
       this.i = i
       this.avatar = `https://a.apps.vip/teamAvatar/avatar (${i}).svg`
     },
-    rollName() {
+    rollName () {
       let groups = names.split(',')
       let j = Math.ceil((Math.random() * groups.length)) - 1
       if (this.j === j) {
@@ -132,7 +134,7 @@ export default {
       this.j = j
       this.name = groups[j]
     },
-    rollNo() {
+    rollNo () {
       let k = Math.ceil((Math.random() * 8999)) + 1000
       if (this.k === k) {
         this.rollName()
@@ -141,7 +143,7 @@ export default {
       this.k = k
       this.no = k
     },
-    roll(animate = true) {
+    roll (animate = true) {
       if (animate) {
         if (this.timer) {
           clearTimeout(this.timer)
@@ -158,7 +160,6 @@ export default {
         this.rollName()
         this.rollNo()
       }
-
 
     }
   }

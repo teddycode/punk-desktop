@@ -75,21 +75,19 @@
 </template>
 
 <script>
-import {defineComponent, reactive, toRefs} from 'vue'
-import useClipboard from 'vue-clipboard3';
-import {message, Modal as antdModal} from 'ant-design-vue'
-import {router} from '../../../../../router'
-import Modal from '../../../../../components/Modal.vue';
+import { defineComponent, reactive, toRefs } from 'vue'
+import useClipboard from 'vue-clipboard3'
+import { message, Modal as antdModal } from 'ant-design-vue'
+import { router } from '../../../../../router'
+import Modal from '../../../../../components/Modal.vue'
 import UserSelect from '../../../components/userselect/index.vue'
 
 export default defineComponent({
   props: ['group', 'memeber'],
 
+  components: { Modal, UserSelect },
 
-  components: {Modal, UserSelect},
-
-
-  setup(props, ctx) {
+  setup (props, ctx) {
 
     const types = window.$TUIKit.TIM.TYPES
 
@@ -108,20 +106,20 @@ export default defineComponent({
     })
 
     const handleGroupIDCopy = async () => {  // 复制群组id
-      const {toClipboard} = useClipboard();
-      const res = await toClipboard(props.group.groupID);
-      if (res.text !== "") {
-        message.success('群聊ID成功复制');
+      const { toClipboard } = useClipboard()
+      const res = await toClipboard(props.group.groupID)
+      if (res.text !== '') {
+        message.success('群聊ID成功复制')
       }
     }
 
     const enter = async (ID, type) => {  // 进入群聊
-      router.push({name: 'chatMain'})
-      const name = `${type}${ID}`;
+      router.push({ name: 'chatMain' })
+      const name = `${type}${ID}`
       window.$TUIKit.TUIServer.TUIConversation.getConversationProfile(name).then((imResponse) => {
         // 通知 TUIConversation 添加当前会话
         // Notify TUIConversation to toggle the current conversation
-        window.$TUIKit.TUIServer.TUIConversation.handleCurrentConversation(imResponse.data.conversation);
+        window.$TUIKit.TUIServer.TUIConversation.handleCurrentConversation(imResponse.data.conversation)
       })
 
       ctx.emit('closeDrawer')
@@ -132,7 +130,7 @@ export default defineComponent({
         content: '是否确认操作',
         okText: '确认',
         cancelText: '取消',
-        onOk() {
+        onOk () {
           dismissGroup(group)
           ctx.emit('closeDrawer')
         }
@@ -162,7 +160,7 @@ export default defineComponent({
         content: '是否确认操作',
         okText: '确认',
         cancelText: '取消',
-        onOk() {
+        onOk () {
           quitGroup(group)
           ctx.emit('closeDrawer')
         }
@@ -170,7 +168,7 @@ export default defineComponent({
     }
 
     const quitGroup = async (group) => {
-      await window.$chat.quitGroup(group);
+      await window.$chat.quitGroup(group)
       const result = await window.$chat.deleteConversation(`GROUP${group}`)
       if (res.code === 0 && result.code === 0) {
         message.success(`${props.group.name}已退出`)

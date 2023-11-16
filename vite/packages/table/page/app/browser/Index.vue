@@ -197,18 +197,18 @@
 </template>
 
 <script>
-import {appStore} from '../../../store'
-import {mapActions, mapWritableState} from 'pinia'
-import {MinusOutlined, PlusOutlined} from '@ant-design/icons-vue'
+import { appStore } from '../../../store'
+import { mapActions, mapWritableState } from 'pinia'
+import { MinusOutlined, PlusOutlined } from '@ant-design/icons-vue'
 import _ from 'lodash-es'
-import {browserStore} from '../../../store/browser'
+import { browserStore } from '../../../store/browser'
 import Template from '../../../../user/pages/Template.vue'
 import runningApps from '../../../components/bottomPanel/RunningApps.vue'
 import BackBtn from '../../../components/comp/BackBtn.vue'
 
 export default {
   name: 'BrowserIndex',
-  data() {
+  data () {
     return {
       showScale: false,
       scale: 100,
@@ -227,13 +227,13 @@ export default {
     MinusOutlined,
   },
   computed: {
-    runningApps() {
+    runningApps () {
       return runningApps
     },
     ...mapWritableState(appStore, ['fullScreen', 'settings', 'saving']),
     ...mapWritableState(browserStore, ['currentTab', 'runningTabs'])
   },
-  mounted() {
+  mounted () {
     this.setEvent('addedTab', this.addedTab)
     ipc.send('getRunningTableTabs')
     let params = this.$route.params
@@ -254,7 +254,7 @@ export default {
       }
       if (params.url) {
         //如果存在需要打开的url
-        await this.invokeAddTab({url: params.url})
+        await this.invokeAddTab({ url: params.url })
         setTimeout(() => {
           ipc.send('getRunningTableTabs')
         }, 3000)
@@ -274,29 +274,29 @@ export default {
     })
 
   },
-  beforeUnmount() {
+  beforeUnmount () {
     this.handleLeave()
   },
   methods: {
     ...mapActions(browserStore, ['updateTabCapture', 'setEvent']),
-    switchToTab(id) {
+    switchToTab (id) {
       let found = this.runningTabs.find(tab => {
         return tab.id === id
       })
       if (found) {
         this.currentTab = found
         this.urlInput = this.currentTab.url
-        ipc.send('showTableTab', {id: id, position: this.getContentBounds()})
+        ipc.send('showTableTab', { id: id, position: this.getContentBounds() })
       }
 
     },
-    async addTab() {
-      await this.invokeAddTab({url: this.urlInput})
+    async addTab () {
+      await this.invokeAddTab({ url: this.urlInput })
     },
-    async addNewTab() {
-      await this.invokeAddTab({url: 'about:blank'})
+    async addNewTab () {
+      await this.invokeAddTab({ url: 'about:blank' })
     },
-    fixZoom(num) {
+    fixZoom (num) {
       return Number(((num * this.settings.zoomFactor) / 100).toFixed(0))
     },
     /**
@@ -304,7 +304,7 @@ export default {
      * @param tab
      * @returns {Promise<void>}
      */
-    getContentBounds() {
+    getContentBounds () {
       let frame = document.getElementById('frame')
       let position = {
         x: this.fixZoom(frame.getBoundingClientRect().x),
@@ -314,7 +314,7 @@ export default {
       }
       return position
     },
-    async invokeAddTab(tab) {
+    async invokeAddTab (tab) {
 
       let args = {
         position: this.getContentBounds(),
@@ -322,8 +322,8 @@ export default {
       }
       await ipc.send('addTableTab', JSON.parse(JSON.stringify(args)))
     },
-    addedTab(args) {
-      const {tab} = args
+    addedTab (args) {
+      const { tab } = args
       this.currentTab = tab
       this.urlInput = this.currentTab.url
       this.runningTabs.push(JSON.parse(JSON.stringify(this.currentTab)))
@@ -331,14 +331,14 @@ export default {
     /**
      * 切换缩放
      */
-    switchScale() {
+    switchScale () {
       this.showScale = !this.showScale
     },
     /**
      * 设置网页的缩放
      * @param value
      */
-    setScale(value) {
+    setScale (value) {
       ipc.send('setTableTabScale', {
         tab: JSON.parse(JSON.stringify(this.currentTab)),
         scale: value,
@@ -347,12 +347,12 @@ export default {
     /**
      * 显示当前的全部tabs
      */
-    showTabs() {
+    showTabs () {
       this.$router.push({
         name: 'browserTabs'
       })
     },
-    toggleFullScreen() {
+    toggleFullScreen () {
       this.fullScreen = !this.fullScreen
       this.$nextTick(() => {
         this.syncBounds()
@@ -361,7 +361,7 @@ export default {
     /**
      * 同步边框位置
      */
-    syncBounds() {
+    syncBounds () {
       if (!this.currentTab) {
         return
       }
@@ -382,28 +382,28 @@ export default {
      * 隐藏Tab
      * @param tab
      */
-    hideTab(tab) {
+    hideTab (tab) {
       ipc.send('hideTableTab', {
         tab: tab
       })
     },
-    handleLeave() {
+    handleLeave () {
       if (this.currentTab) {
         this.hideTab(JSON.parse(JSON.stringify(this.currentTab)))
       }
       this.fullScreen = false
     },
-    goBack() {
+    goBack () {
       ipc.send('goBackTableTab', {
         tab: JSON.parse(JSON.stringify(this.currentTab)),
       })
     },
-    goForward() {
+    goForward () {
       ipc.send('goForwardTableTab', {
         tab: JSON.parse(JSON.stringify(this.currentTab)),
       })
     },
-    refresh() {
+    refresh () {
       ipc.send('refreshTableTab', {
         tab: JSON.parse(JSON.stringify(this.currentTab)),
       })

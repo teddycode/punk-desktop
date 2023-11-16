@@ -78,7 +78,8 @@
                   <a-col v-for="(img, index) in cardData.image_170_170"
                          :span="11" class="flex flex-wrap mr-2 image-wrapper" style="">
                     <img :data-source="cardData.image[index].image" :src="img.image"
-                         class="mb-2 mr-2 rounded-md image-item pointer cover-lm" style="position: relative object-fit: fill;"
+                         class="mb-2 mr-2 rounded-md image-item pointer cover-lm"
+                         style="position: relative object-fit: fill;"
                          @contextmenu.stop="showMenu(img)">
                   </a-col>
                 </a-row>
@@ -117,7 +118,8 @@
         </div>
         <Comment :reply="cardData.reply_count" :tid="tid" :uid="cardData.user.uid"/>
       </div>
-      <a-spin v-else size="large" style="margin-top: 45%; display: flex; flex-direction: column; justify-content: center; align-items: center"
+      <a-spin v-else size="large"
+              style="margin-top: 45%; display: flex; flex-direction: column; justify-content: center; align-items: center"
               tip="Loading..."></a-spin>
 
     </div>

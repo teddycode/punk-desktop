@@ -17,11 +17,11 @@
 </template>
 
 <script>
-import {Icon as navIcon} from '@iconify/vue'
-import {renderIcon} from '../../js/common/common'
+import { Icon as navIcon } from '@iconify/vue'
+import { renderIcon } from '../../js/common/common'
 
 export default {
-  name: "listItem",
+  name: 'listItem',
   props: {
     item: {
       type: Object,

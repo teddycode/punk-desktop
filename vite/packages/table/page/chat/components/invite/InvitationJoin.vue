@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import {computed, onMounted, ref} from 'vue'
-import {Icon as DirectlyIcon} from '@iconify/vue'
+import { computed, onMounted, ref } from 'vue'
+import { Icon as DirectlyIcon } from '@iconify/vue'
 import ContactSelector from '../contact/ContactSelector.vue'
 
 export default {
@@ -30,7 +30,7 @@ export default {
 
   props: ['no'],
 
-  setup(props, ctx) {
+  setup (props, ctx) {
     const server = window.$TUIKit
 
     const recentlyChatList = computed(() => {

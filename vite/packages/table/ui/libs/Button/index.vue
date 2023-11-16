@@ -34,20 +34,20 @@
 </template>
 
 <script>
-import {copyMixins} from "../../common/copyMixins";
+import { copyMixins } from '../../common/copyMixins'
 
 export default {
-  name: "XtButton",
+  name: 'XtButton',
   mixins: [copyMixins],
   props: {
     // 有prefix  postfix
     iconPosition: {
-      default: "prefix",
+      default: 'prefix',
     },
     // 有 default theme error warn link success
     type: {
       type: String,
-      default: "default",
+      default: 'default',
     },
     icon: {
       type: String,
@@ -55,7 +55,7 @@ export default {
     text: {},
     // 有 mini default big
     size: {
-      default: "default",
+      default: 'default',
     },
     w: {
       type: Number,
@@ -68,53 +68,53 @@ export default {
   },
   computed: {
     // 自定义宽高
-    customStyle() {
+    customStyle () {
       return {
-        width: this.w + "px",
-        height: this.h + "px",
-      };
+        width: this.w + 'px',
+        height: this.h + 'px',
+      }
     },
-    textSize() {
+    textSize () {
       let sizeList = {
         default: {
-          fontSize: "16px",
+          fontSize: '16px',
         },
         mini: {
-          fontSize: "14px",
+          fontSize: '14px',
         },
         big: {
-          fontSize: "18px",
+          fontSize: '18px',
         },
-      };
-      return sizeList[this.size];
+      }
+      return sizeList[this.size]
     },
-    iconSize() {
+    iconSize () {
       let sizeList = {
         default: {
-          fontSize: "18px",
+          fontSize: '18px',
         },
         mini: {
-          fontSize: "16px",
+          fontSize: '16px',
         },
         big: {
-          fontSize: "20px",
+          fontSize: '20px',
         },
-      };
-      return sizeList[this.size];
+      }
+      return sizeList[this.size]
     },
-    typeClass() {
+    typeClass () {
       let typeLIst = {
-        default: "xt-btn",
-        theme: "xt-theme-btn",
-        error: "xt-error-btn",
-        warn: "xt-warn-btn",
-        link: "xt-link-btn",
-        success: "xt-success-btn",
-      };
-      return typeLIst[this.type];
+        default: 'xt-btn',
+        theme: 'xt-theme-btn',
+        error: 'xt-error-btn',
+        warn: 'xt-warn-btn',
+        link: 'xt-link-btn',
+        success: 'xt-success-btn',
+      }
+      return typeLIst[this.type]
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

@@ -20,11 +20,13 @@
         </div>
         <div class="flex items-center justify-end h-[56px] ">
           <div class="flex items-center">
-            <xt-button class=" xt-text xt-bg-2" style="border-radius:10px ; color: var(--secondary-text) !important;width: 68px; height: 32px;"
+            <xt-button class=" xt-text xt-bg-2"
+                       style="border-radius:10px ; color: var(--secondary-text) !important;width: 68px; height: 32px;"
                        type="text"
                        @click="handleOk">取消
             </xt-button>
-            <xt-button class="ml-2" style="border-radius:10px ; color: var(--secondary-text) !important; width: 68px; height: 32px;background-color: var(--active-bg);"
+            <xt-button class="ml-2"
+                       style="border-radius:10px ; color: var(--secondary-text) !important; width: 68px; height: 32px;background-color: var(--active-bg);"
                        type="primary"
                        @click="publishPost">提交
             </xt-button>

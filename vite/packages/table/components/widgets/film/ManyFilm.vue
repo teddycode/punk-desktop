@@ -38,12 +38,15 @@
           <div v-for="item in filmArrange" :key="item.id" class="w-full rounded-t-lg  cursor-pointer mr-5 one-film"
                @click="btnDetail(item.id)">
             <!-- <img :src="item.img" alt="" class="rounded-lg img-film"> -->
-            <a-image :preview="false" :src="item.img" alt="" class="rounded-lg" height="171px" style="object-fit: cover;"
+            <a-image :preview="false" :src="item.img" alt="" class="rounded-lg" height="171px"
+                     style="object-fit: cover;"
                      width="116px"/>
             <div class="right-top text-center bg-black bg-opacity-70" style="background: var(--primary-bg) !important;">
                 <span v-if="item.sc" style="font-family: PingFangSC-Semibold;font-weight: 600;">
                   猫眼：<span
-                    style="font-weight: 700;font-family: Oswald-Bold;color: var(--primary-text);background: background: var(--primary-bg);">{{ item.score }}</span>
+                    style="font-weight: 700;font-family: Oswald-Bold;color: var(--primary-text);background: background: var(--primary-bg);">{{
+                    item.score
+                  }}</span>
                 </span>
               <span v-else style="font-weight: 700;font-family: Oswald-Bold;color: var(--primary-text);">{{
                   item.comingDate
@@ -60,15 +63,15 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from 'pinia'
-import Widget from "../../card/Widget.vue";
-import {filmStore} from '../../../store/douBan';
-import DataStatu from "../DataStatu.vue"
+import { mapActions, mapWritableState } from 'pinia'
+import Widget from '../../card/Widget.vue'
+import { filmStore } from '../../../store/douBan'
+import DataStatu from '../DataStatu.vue'
 import FilmDetail from './FilmDetail.vue'
-import _ from 'lodash-es';
+import _ from 'lodash-es'
 
 export default {
-  name: "ManyFilm",
+  name: 'ManyFilm',
   components: {
     Widget,
     FilmDetail,
@@ -89,16 +92,21 @@ export default {
       type: Object
     }
   },
-  data() {
+  data () {
     return {
-      sizeList: [{title: '1x2', height: 2, width: 1, name: '1x2'}, {title: '2x2', height: 2, width: 2, name: '2x2'},],
+      sizeList: [{ title: '1x2', height: 2, width: 1, name: '1x2' }, {
+        title: '2x2',
+        height: 2,
+        width: 2,
+        name: '2x2'
+      },],
       options: {
         className: 'card',
         title: '正在热映',
         icon: 'video',
         type: 'singleFilm'
       },
-      mySize: {title: "1x2", height: 2, width: 1, name: '1x2'},
+      mySize: { title: '1x2', height: 2, width: 1, name: '1x2' },
       filmList: [],
       filmPart: [],
       filmArrange: [],
@@ -106,14 +114,14 @@ export default {
       detailId: -1,
       isLoading: false,
       pageToggle: true,
-    };
+    }
   },
   computed: {
     ...mapWritableState(filmStore, ['data']),
   },
   watch: {
     'customData.width': {
-      handler() {
+      handler () {
         this.getDoubanList()
       },
       deep: true,
@@ -122,26 +130,26 @@ export default {
   },
   methods: {
     ...mapActions(filmStore, ['getData']),
-    getDoubanList() {
+    getDoubanList () {
       if (this.customData.width ? this.customData.width === 1 : 'true') {
         this.filmArrange = this.filmPart.slice(0, 4)
       } else if (this.customData.width === 2) {
         this.filmArrange = this.filmPart
       }
     },
-    refreshPage() {
+    refreshPage () {
       this.filmPart = _.sampleSize(this.filmList, 8)
       this.getDoubanList()
     },
-    btnDetail(id) {
+    btnDetail (id) {
       this.detailId = id
       this.detailToggle = true
     },
-    detailBack(val) {
+    detailBack (val) {
       this.detailToggle = val
     }
   },
-  async mounted() {
+  async mounted () {
     this.isLoading = true
     await this.getData()
     if (!this.data) {
@@ -158,7 +166,7 @@ export default {
       this.isLoading = false
     })
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

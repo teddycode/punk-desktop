@@ -14,7 +14,8 @@
         </div>
         <div class="flex" style="position: relative;">
           <div :style="{backgroundImage:backgroundImage}"
-               class="flex justify-center items-center mr-3 pointer shadow" style="width:40px;height:40px;border-radius: 10px;"
+               class="flex justify-center items-center mr-3 pointer shadow"
+               style="width:40px;height:40px;border-radius: 10px;"
                @click="isColor=!isColor"></div>
           <!-- 颜色选择 -->
           <div v-show="isColor"
@@ -76,11 +77,11 @@
 </template>
 
 <script>
-import {Icon} from '@iconify/vue';
-import moreHorizontal16Filled from '@iconify-icons/fluent/more-horizontal-16-filled';
-import {mapActions, mapWritableState} from "pinia";
-import {noteStore} from '../store'
-import {cardStore} from '../../../store/card';
+import { Icon } from '@iconify/vue'
+import moreHorizontal16Filled from '@iconify-icons/fluent/more-horizontal-16-filled'
+import { mapActions, mapWritableState } from 'pinia'
+import { noteStore } from '../store'
+import { cardStore } from '../../../store/card'
 
 export default {
   components: {
@@ -89,18 +90,18 @@ export default {
   props: ['selDesk'],
   computed: {
     ...mapWritableState(noteStore, ['noteList', 'selNote', 'noteBgColor', 'selNoteTitle', 'selNoteText']),
-    deskName() {
+    deskName () {
       if (this.noteList.length) {
-        return this.selNote >= 0 ? this.noteList[this.selNote].deskName : ""
+        return this.selNote >= 0 ? this.noteList[this.selNote].deskName : ''
       }
     },
-    backgroundImage() {
+    backgroundImage () {
       if (this.noteList.length) {
         return this.selNote >= 0 ? this.noteList[this.selNote].customData.background : ''
       }
     }
   },
-  data() {
+  data () {
     return {
       icons: {
         moreHorizontal16Filled,
@@ -113,31 +114,31 @@ export default {
         //     newIcon: "fluent:window-multiple-16-filled",
         // },
         {
-          label: "添加到桌面",
+          label: '添加到桌面',
           callBack: () => {
             // console.log('添加');
             // console.log(this);
             this.selDesk()
           },
-          newIcon: "fluent:open-20-filled",
+          newIcon: 'fluent:open-20-filled',
         },
         {
-          label: "删除便签",
+          label: '删除便签',
           // callBack: this.callBack,
-          newIcon: "akar-icons:trash-can",
+          newIcon: 'akar-icons:trash-can',
           color: '#FF4D4F',
 
         },
       ]
 
-    };
+    }
   },
-  mounted() {
+  mounted () {
   },
   methods: {
     ...mapActions(cardStore, ['updateCustomData']),
     // 修改当前便签颜色
-    changeBgColor(i) {
+    changeBgColor (i) {
       this.noteList[this.selNote].customData.background = this.noteBgColor[i]
       this.updateCustomData(this.noteList[this.selNote].id, {
         background: this.noteBgColor[i]
@@ -146,13 +147,13 @@ export default {
     },
   },
   watch: {
-    selNoteTitle(newval, oldval) {
+    selNoteTitle (newval, oldval) {
       this.noteList[this.selNote].customData.title = newval
       this.updateCustomData(this.noteList[this.selNote].id, {
         title: newval
       }, this.noteList[this.selNote].desk)
     },
-    selNoteText(newval, oldval) {
+    selNoteText (newval, oldval) {
       // console.log(newval);
       this.noteList[this.selNote].customData.text = newval
       this.updateCustomData(this.noteList[this.selNote].id, {
@@ -160,7 +161,7 @@ export default {
       }, this.noteList[this.selNote].desk)
     },
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .shadow {

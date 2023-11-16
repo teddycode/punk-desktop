@@ -2,7 +2,8 @@
   <Widget :desk="desk" :menu-list="menuList" :options="options">
     <div class="content pointer" style="color:var(--primary-text)" @click="go">
       <div>
-        <a-progress :percent="GPUData.useGPU.value" :strokeWidth="10" :width="105" stroke-color="#FF9C00" style="margin-top: 28px"
+        <a-progress :percent="GPUData.useGPU.value" :strokeWidth="10" :width="105" stroke-color="#FF9C00"
+                    style="margin-top: 28px"
                     type="circle">
           <template #format="percent">
             <div style="color:var(--primary-text);font-size: 24px;font-weight: 700;">{{ GPUData.useGPU.value }}%</div>
@@ -37,16 +38,16 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from 'pinia'
-import {initCanvas} from "../../../util";
-import Widget from "../../card/Widget.vue";
-import {inspectorStore} from '../../../store/inspector'
-import {message} from 'ant-design-vue'
+import { mapActions, mapWritableState } from 'pinia'
+import { initCanvas } from '../../../util'
+import Widget from '../../card/Widget.vue'
+import { inspectorStore } from '../../../store/inspector'
+import { message } from 'ant-design-vue'
 
 export default {
-  name: "SmallGPUCard",
+  name: 'SmallGPUCard',
   props: ['desk'],
-  data() {
+  data () {
     return {
       options: {
         className: 'card small',
@@ -55,9 +56,9 @@ export default {
         type: 'smallGPUCard'
       },
       GPUData: {
-        useGPU: {value: 0},
-        warmGPU: {value: 0},
-        videoStorage: {value: 0}
+        useGPU: { value: 0 },
+        warmGPU: { value: 0 },
+        videoStorage: { value: 0 }
       },
       GPUList: [999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999],
       menuList: [
@@ -77,27 +78,27 @@ export default {
   },
   computed: {
     ...mapWritableState(inspectorStore, ['displayData', 'aidaData']),
-    GPUStorage() {
+    GPUStorage () {
       return this.GPUData.videoStorage.value > 0 ? (this.GPUData.videoStorage.value / 1000).toFixed(2) : this.GPUData.videoStorage.value
     }
-  }, mounted() {
+  }, mounted () {
     this.startInspect()
   },
-  unmounted() {
+  unmounted () {
     this.stopInspect()
   },
   watch: {
-    "displayData": {
-      handler(newVal, oldVal) {
-        let {useGPU, warmGPU, videoStorage} = this.displayData || {}
+    'displayData': {
+      handler (newVal, oldVal) {
+        let { useGPU, warmGPU, videoStorage } = this.displayData || {}
         this.GPUData = {
           useGPU: useGPU,
           warmGPU: warmGPU,
           videoStorage: videoStorage
         }
         this.GPUData.useGPU.value && this.GPUList.push(this.GPUData.useGPU.value)
-        this.GPUList.shift();
-        this.initCanvas('myGPUCanvas', this.GPUList, 6, 12, "#515151", "#3B8FFA")
+        this.GPUList.shift()
+        this.initCanvas('myGPUCanvas', this.GPUList, 6, 12, '#515151', '#3B8FFA')
       },
       deep: true,
     },
@@ -105,8 +106,8 @@ export default {
   methods: {
     ...mapActions(inspectorStore, ['startInspect', 'stopInspect']),
     initCanvas,
-    go() {
-      this.$router.push({name: 'inspector'})
+    go () {
+      this.$router.push({ name: 'inspector' })
     }
   }
 }

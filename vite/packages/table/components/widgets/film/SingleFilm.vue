@@ -11,7 +11,8 @@
              style="width: 240px;height: 354px;margin: 13px auto 0;position: relative;"
              @click="btnDetail(singleFilm.id)"
         >
-          <a-image :preview="false" :src="singleFilm.img" alt="" class="rounded-lg" height="354px" style="object-fit: cover;"
+          <a-image :preview="false" :src="singleFilm.img" alt="" class="rounded-lg" height="354px"
+                   style="object-fit: cover;"
                    width="240px"/>
           <div class="right-top text-center bg-black bg-opacity-70"
                style="font-weight: 600;font-family: PingFangSC-Semibold;background:var(--primary-bg) !important;">
@@ -33,15 +34,15 @@
 </template>
 
 <script>
-import Widget from "../../card/Widget.vue";
+import Widget from '../../card/Widget.vue'
 import FilmDetail from './FilmDetail.vue'
-import DataStatu from "../DataStatu.vue"
-import {mapActions, mapWritableState} from 'pinia'
-import {filmStore} from '../../../store/douBan';
-import _ from 'lodash-es';
+import DataStatu from '../DataStatu.vue'
+import { mapActions, mapWritableState } from 'pinia'
+import { filmStore } from '../../../store/douBan'
+import _ from 'lodash-es'
 
 export default {
-  name: "ManyFilm",
+  name: 'ManyFilm',
   components: {
     Widget,
     FilmDetail,
@@ -62,7 +63,7 @@ export default {
       },
     }
   },
-  data() {
+  data () {
     return {
       options: {
         className: 'card',
@@ -76,26 +77,26 @@ export default {
       detailId: -1,
       isLoading: false,
       pageToggle: true,
-    };
+    }
   },
   computed: {
     ...mapWritableState(filmStore, ['data']),
   },
   methods: {
     ...mapActions(filmStore, ['getData', 'getFilmDetail']),
-    btnDetail(id) {
+    btnDetail (id) {
       this.detailId = id
       this.detailToggle = true
     },
-    refreshPage() {
+    refreshPage () {
       this.singleFilm = _.sampleSize(this.filmList, 1)[0]
     },
-    detailBack(val) {
+    detailBack (val) {
       this.detailToggle = val
     },
 
   },
-  async mounted() {
+  async mounted () {
     this.isLoading = true
     await this.getData()
     if (!this.data) {
@@ -111,7 +112,7 @@ export default {
       this.isLoading = false
     })
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

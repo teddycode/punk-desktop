@@ -58,7 +58,8 @@
         <div class="content-header">
           <label>
             <p class="name">{{ handleConversation?.name(conversation) }}
-              <a-badge :count="conversation.conversationID==='GROUP'+liveRoom?'全员':''" :number-style="{border:'none !important'}"
+              <a-badge :count="conversation.conversationID==='GROUP'+liveRoom?'全员':''"
+                       :number-style="{border:'none !important'}"
                        style="margin-top: -1px;zoom:0.9"></a-badge>
             </p>
           </label>

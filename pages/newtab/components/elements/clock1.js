@@ -1,4 +1,4 @@
-const clock1Tpl=
+const clock1Tpl =
   `
 
   <div class="FlipClock">
@@ -14,9 +14,9 @@ const clock1Tpl=
   </div>
   `
 Vue.component('clock1', {
-  template:clock1Tpl,
-  name:'clock1',
-  data() {
+  template: clock1Tpl,
+  name: 'clock1',
+  data () {
     return {
       timer: null,
       flipObjs: []
@@ -24,7 +24,7 @@ Vue.component('clock1', {
   },
   methods: {
     // 初始化数字
-    init() {
+    init () {
       let now = new Date()
       let nowTimeStr = this.formatDate(new Date(now.getTime()), 'hhiiss')
       for (let i = 0; i < this.flipObjs.length; i++) {
@@ -32,7 +32,7 @@ Vue.component('clock1', {
       }
     },
     // 开始计时
-    run() {
+    run () {
       this.timer = setInterval(() => {
         // 获取当前时间
         let now = new Date()
@@ -50,7 +50,7 @@ Vue.component('clock1', {
       }, 1000)
     },
     // 正则格式化日期
-    formatDate(date, dateFormat) {
+    formatDate (date, dateFormat) {
       /* 单独格式化年份，根据y的字符数量输出年份
      * 例如：yyyy => 2019
             yy => 19
@@ -88,11 +88,11 @@ Vue.component('clock1', {
       return dateFormat
     },
     // 日期时间补零
-    padLeftZero(str) {
+    padLeftZero (str) {
       return ('00' + str).substr(str.length)
     }
   },
-  mounted() {
+  mounted () {
     this.flipObjs = [
       this.$refs.flipperHour1,
       this.$refs.flipperHour2,

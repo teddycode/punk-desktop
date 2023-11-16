@@ -1,12 +1,12 @@
 <script>
-import {message} from "ant-design-vue";
-import TencentCloudChat from "tim-js-sdk";
-import {mapState} from "pinia";
-import {appStore} from "../../store";
+import { message } from 'ant-design-vue'
+import TencentCloudChat from 'tim-js-sdk'
+import { mapState } from 'pinia'
+import { appStore } from '../../store'
 import * as sns from '../../js/common/sns'
 
 export default {
-  name: "AddFriendButton",
+  name: 'AddFriendButton',
   props: [
     'uid',
     'bgColor',
@@ -17,17 +17,17 @@ export default {
       'myUserInfo': 'userInfo'
     }),
   },
-  async mounted() {
+  async mounted () {
     await this.checkFriendship()
     this.$emit('loaded')
   },
-  data() {
+  data () {
     return {
       relationship: 'unload'
     }
   },
   methods: {
-    addFriend() {
+    addFriend () {
       let promise = window.$chat.addFriend({
         to: String(this.uid),
         source: 'AddSource_Type_UserCard',
@@ -36,22 +36,22 @@ export default {
         type: TencentCloudChat.TYPES.SNS_ADD_TYPE_BOTH
       })
       promise.then((imResponse) => {
-        const {code} = imResponse.data
+        const { code } = imResponse.data
         if (code === 30539) {
           message.info('申请加为好友成功，等待对方通过。')
         } else if (code === 0) {
           message.success('添加好友成功。')
           this.relationship = 'yes'
-          this.$emit('relationshipChanged', {relationship: this.relationship})
+          this.$emit('relationshipChanged', { relationship: this.relationship })
         }
       }).catch((imError) => {
         message.error('添加好友失败。')
         console.error(imError)
       })
     },
-    async checkFriendship() {
+    async checkFriendship () {
       this.relationship = await sns.checkFriendship(this.uid)
-      this.$emit('relationshipChanged', {relationship: this.relationship})
+      this.$emit('relationshipChanged', { relationship: this.relationship })
     },
   }
 }

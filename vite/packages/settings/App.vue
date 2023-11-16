@@ -482,7 +482,8 @@ export default defineComponent({
                     <textarea id="content-blocking-exceptions" rows="1" spellcheck="false"
                               style="width: 100%; max-width: 500px"></textarea>
                   </div>
-                  <a id="customize-filters-link" data-string="settingsCustomizeFiltersLink" href="https://www.yuque.com/tswork/ngd5zk/vch5wr"
+                  <a id="customize-filters-link" data-string="settingsCustomizeFiltersLink"
+                     href="https://www.yuque.com/tswork/ngd5zk/vch5wr"
                      target="_blank"></a>
                 </div>
               </div>
@@ -605,7 +606,8 @@ export default defineComponent({
                 </div>
                 <a-radio-group
                     v-if="askCloseExit === false && this.platform === 'win32'"
-                    v-model:value="closeExit" style="margin-top: 10px;margin-bottom: 10px;background: #f1f1f1;padding: 10px;border-radius: 3px"
+                    v-model:value="closeExit"
+                    style="margin-top: 10px;margin-bottom: 10px;background: #f1f1f1;padding: 10px;border-radius: 3px"
                     @change="changeCloseExit">
                   <a-radio :value="0">完全退出</a-radio>
                   <a-radio :value="1">节能后台运行（推荐）</a-radio>

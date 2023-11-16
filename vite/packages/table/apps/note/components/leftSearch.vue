@@ -71,18 +71,18 @@
 </template>
 
 <script>
-import {Icon} from '@iconify/vue';
-import add16Filled from '@iconify-icons/fluent/add-16-filled';
-import search20Filled from '@iconify-icons/fluent/search-20-filled';
-import {mapActions, mapWritableState} from "pinia";
-import {noteStore} from '../store'
+import { Icon } from '@iconify/vue'
+import add16Filled from '@iconify-icons/fluent/add-16-filled'
+import search20Filled from '@iconify-icons/fluent/search-20-filled'
+import { mapActions, mapWritableState } from 'pinia'
+import { noteStore } from '../store'
 
 export default {
   components: {
     Icon
   },
   props: ['selDesk'],
-  data() {
+  data () {
     return {
       icons: {
         add16Filled,
@@ -95,50 +95,50 @@ export default {
         //     newIcon: "fluent:window-multiple-16-filled",
         // },
         {
-          label: "添加到桌面",
+          label: '添加到桌面',
           callBack: () => {
             // 修改当前选中桌面
             this.selDesk()
 
             // console.log('触发了callBack');
           },
-          newIcon: "fluent:open-20-filled",
+          newIcon: 'fluent:open-20-filled',
         },
         {
-          label: "删除便签",
+          label: '删除便签',
           // callBack: this.callBack,
-          newIcon: "akar-icons:trash-can",
+          newIcon: 'akar-icons:trash-can',
           color: '#FF4D4F',
           callBack: () => {
             this.moveNote()
           }
         },
       ]
-    };
+    }
   },
   computed: {
     ...mapWritableState(noteStore, ['noteList', 'selNote', 'selNoteTitle', 'selNoteText', 'isSelTab']),
   },
-  mounted() {
+  mounted () {
   },
   watch: {},
   methods: {
     ...mapActions(noteStore, ['moveNote', 'deTest']),
-    changeNote(n) {
+    changeNote (n) {
       this.selNote = n
       this.selNoteTitle = this.noteList[n].customData.title
       this.selNoteText = this.noteList[n].customData.text
 
     },
-    formatTimestamp(timestamp) {
-      var date = new Date(timestamp);
-      var year = date.getFullYear();
-      var month = ("0" + (date.getMonth() + 1)).slice(-2);
-      var day = ("0" + date.getDate()).slice(-2);
-      return year + "-" + month + "-" + day;
+    formatTimestamp (timestamp) {
+      var date = new Date(timestamp)
+      var year = date.getFullYear()
+      var month = ('0' + (date.getMonth() + 1)).slice(-2)
+      var day = ('0' + date.getDate()).slice(-2)
+      return year + '-' + month + '-' + day
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

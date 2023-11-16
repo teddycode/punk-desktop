@@ -76,12 +76,12 @@
 </template>
 
 <script>
-import {message} from 'ant-design-vue'
+import { message } from 'ant-design-vue'
 import XtButton from '../../../ui/libs/Button/index.vue'
 
 export default {
   name: 'KeyBoard',
-  components: {XtButton},
+  components: { XtButton },
   props: {
     //需要修改的内容
     selectKey: {
@@ -94,7 +94,7 @@ export default {
       defalut: () => []
     }
   },
-  data() {
+  data () {
     return {
       modifierKeyOne: [
         {
@@ -120,7 +120,6 @@ export default {
           checked: false,
           isGray: false,
         },
-
 
         {
           key: 'Win',
@@ -519,7 +518,7 @@ export default {
       keyContent: {}
     }
   },
-  mounted() {
+  mounted () {
     this.keyContent = this.deepClone(this.selectKey, this.keyContent)
     this.keyContent.keyArr.forEach(item => {
       this.isKeyChecked(item.field, item.index, true)
@@ -527,7 +526,7 @@ export default {
   },
   methods: {
     //深拷贝
-    deepClone(obj, newObj) {
+    deepClone (obj, newObj) {
       var newObj = newObj || {}
       for (let key in obj) {
         if (typeof obj[key] == 'object') {
@@ -540,12 +539,12 @@ export default {
       return newObj
     },
     // 取消
-    onBack() {
+    onBack () {
       this.keyContent = []
       this.$emit('closeKeyBoard')
     },
     // 确定
-    confirm() {
+    confirm () {
       // if(!this.keyContent.keyArr.length) return message.info('不能为空')
       if (!this.keyContent.keyArr.length) {
         this.keyContent.keyStr = '?'
@@ -573,7 +572,7 @@ export default {
 
     },
     // 按键
-    onKeyDown(item, index, field) {
+    onKeyDown (item, index, field) {
       let flag = false // 阻止触发改变数据操作
       let isChecked = true
 
@@ -619,7 +618,7 @@ export default {
       }
     },
     // 设置是否选中
-    isKeyChecked(field, index, isChecked) {
+    isKeyChecked (field, index, isChecked) {
       switch (field) {
         case 'modifierKeyOne':
           this.modifierKeyOne[index].checked = isChecked

@@ -23,7 +23,8 @@
       </a-tooltip>
     </div>
     <div class="flex max-search" hidden="">
-      <div class="inline-block input-box no-drag pointer" hidden="" style=" background: var( --primary-bg); color: var(--secondary-text);width: 320px"
+      <div class="inline-block input-box no-drag pointer" hidden=""
+           style=" background: var( --primary-bg); color: var(--secondary-text);width: 320px"
            @click="openGlobalSearch">
         <Icon icon="sousuo"></Icon>
       </div>
@@ -75,7 +76,9 @@
   </div>
 
 
-  <a-drawer v-model:visible="messageDrawer" :bodyStyle="{ padding: '12px 12px 12px 0 ', overflow: 'hidden !important', }" :closable="false" :width="500" placement="right"
+  <a-drawer v-model:visible="messageDrawer"
+            :bodyStyle="{ padding: '12px 12px 12px 0 ', overflow: 'hidden !important', }" :closable="false" :width="500"
+            placement="right"
             style="z-index:1000;"
             @closeMessage="messageDrawer = false">
     <MessagePopup @closeMessage="messageDrawer = false"></MessagePopup>
@@ -118,22 +121,22 @@
 </template>
 
 <script>
-import {countDownStore} from '../store/countDown'
-import {getDateTime} from '../../../src/util/dateTime'
-import {appStore} from '../store'
-import {cardStore} from '../store/card'
-import {topClockSettingStore} from '../store/topClockSetting'
-import {mapActions, mapState, mapWritableState} from 'pinia'
-import {paperStore} from '../store/paper'
-import {weatherStore} from '../store/weather'
-import {isMain} from '../js/common/screenUtils'
-import {timerStore} from '../store/timer'
+import { countDownStore } from '../store/countDown'
+import { getDateTime } from '../../../src/util/dateTime'
+import { appStore } from '../store'
+import { cardStore } from '../store/card'
+import { topClockSettingStore } from '../store/topClockSetting'
+import { mapActions, mapState, mapWritableState } from 'pinia'
+import { paperStore } from '../store/paper'
+import { weatherStore } from '../store/weather'
+import { isMain } from '../js/common/screenUtils'
+import { timerStore } from '../store/timer'
 import WindowController from './WindowController.vue'
 import MessagePopup from '../page/notice/noticeIndex.vue'
-import {steamUserStore} from '../store/steamUser'
-import {getClientIcon, getCover, getIcon} from '../js/common/game'
-import {clipboardStore} from '../apps/clipboard/store'
-import {noticeStore} from '../store/notice'
+import { steamUserStore } from '../store/steamUser'
+import { getClientIcon, getCover, getIcon } from '../js/common/game'
+import { clipboardStore } from '../apps/clipboard/store'
+import { noticeStore } from '../store/notice'
 import TopTomato from '../../table/apps/tomato/widget/TopTomato.vue'
 import TopClockTimer from './widgets/TopClockTimer.vue'
 
@@ -145,7 +148,7 @@ export default {
     TopTomato,
     TopClockTimer,
   },
-  data() {
+  data () {
     return {
       loading: true,
       dateTime: {},
@@ -159,7 +162,7 @@ export default {
   },
   computed: {
     ...mapWritableState(countDownStore, ['countDowndate', 'countDowntime']),
-    ...mapWritableState(cardStore, ["countdownDay", "appDate", "clockEvent", "filterClockEvent", "clockTag", 'chooseType']),
+    ...mapWritableState(cardStore, ['countdownDay', 'appDate', 'clockEvent', 'filterClockEvent', 'clockTag', 'chooseType']),
     ...mapWritableState(appStore, ['status', 'showWindowController']),
     ...mapWritableState(appStore, {
       appSettings: 'settings'
@@ -172,13 +175,13 @@ export default {
     ...mapState(noticeStore, ['noticeSettings']),
     ...mapWritableState(topClockSettingStore, ['checkTopClock']),
     isMain,
-    lockTimeoutDisplay() {
+    lockTimeoutDisplay () {
       // if(this.lockTimeout>=60){
       //   return ((this.lockTimeout/60).toFixed(0)-1)+'分'+this.lockTimeout % 60+'秒'
       // }else{
       //   return this.lockTimeout+'秒'
       // }
-      function secTotime(s) {
+      function secTotime (s) {
         var t = ''
         if (s > -1) {
           var hour = Math.floor(s / 3600)
@@ -205,7 +208,7 @@ export default {
 
       return secTotime(this.lockTimeout)
     },
-    city() {
+    city () {
       if (this.cities[0]) {
         return this.cities[0]
       } else {
@@ -213,16 +216,16 @@ export default {
       }
 
     },
-    hasWeather() {
+    hasWeather () {
       return this.cities.length > 0
     },
 
-    hasChat() {
+    hasChat () {
       return this.$route.path !== '/chat'
     },
 
   },
-  async mounted() {
+  async mounted () {
     window.onblur = () => {
       this.setLockTimer()
     }
@@ -235,7 +238,7 @@ export default {
     }
     this.filterClock(this.clockTag)
   },
-  created() {
+  created () {
     this.getTime()
   },
   methods: {
@@ -245,7 +248,7 @@ export default {
     ...mapActions(cardStore, ['setAppDate', 'filterClock']),
     ...mapActions(noticeStore, ['loadNoticeDB']),
     ...mapActions(appStore, ['hideNoticeEntry']),
-    clearLockTimer() {
+    clearLockTimer () {
       if (this.lockTimer) {
         clearInterval(this.lockTimer)
         this.lockTimer = null
@@ -253,15 +256,15 @@ export default {
         this.showLockTip = false
       }
     },
-    toggleAppStats() {
+    toggleAppStats () {
       this.appStats = !this.appStats
     },
-    enterClipboard() {
+    enterClipboard () {
       this.$router.push({
         name: 'clipboard'
       })
     },
-    setLockTimer() {
+    setLockTimer () {
       if (this.settings.enable) {
         //只有启用了锁屏才会触发这个效果
         if (this.lockTimer) {
@@ -279,19 +282,19 @@ export default {
         }
       }
     },
-    openGlobalSearch() {
+    openGlobalSearch () {
       ipc.send('openGlobalSearch')
     },
-    getTime() {
+    getTime () {
       this.dateTime = getDateTime()
       this.setAppDate(this.dateTime)
     },
-    enterMusic() {
+    enterMusic () {
       this.$router.push({
         name: 'music',
       })
     },
-    enterGameDesk(appid) {
+    enterGameDesk (appid) {
       this.$router.push({
         name: 'gameIndex',
         params: {
@@ -299,14 +302,14 @@ export default {
         }
       })
     },
-    messageAlert() {
+    messageAlert () {
       this.messageDrawer = true
       this.$nextTick(async () => {
         await this.loadNoticeDB()
       })
       this.hideNoticeEntry()
     },
-    topClockTimerVisibleSetting() {
+    topClockTimerVisibleSetting () {
       this.filterClock(this.clockTag, this.chooseType)
       if (this.checkTopClock === true) {
         if (this.filterClockEvent.length > 0) {
@@ -325,12 +328,10 @@ export default {
       }
       // console.log(this.clockTag);
 
-
     },
 
-
   },
-  beforeUpdate() {
+  beforeUpdate () {
     this.topClockTimerVisibleSetting()
   },
 }

@@ -41,12 +41,12 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from 'pinia'
-import {Icon as ForumIcon} from '@iconify/vue'
-import {forumStore} from '../../store/forumStore'
-import {communityStore} from '../../store/communityStore'
-import {channelClass} from '../../../../js/chat/createChannelClass'
-import {message} from 'ant-design-vue'
+import { mapActions, mapWritableState } from 'pinia'
+import { Icon as ForumIcon } from '@iconify/vue'
+import { forumStore } from '../../store/forumStore'
+import { communityStore } from '../../store/communityStore'
+import { channelClass } from '../../../../js/chat/createChannelClass'
+import { message } from 'ant-design-vue'
 
 export default {
 
@@ -56,7 +56,7 @@ export default {
     ForumIcon
   },
 
-  data() {
+  data () {
     return {
       settingsScroller: {
         useBothWheelAxes: true,
@@ -74,7 +74,7 @@ export default {
     ...mapWritableState(forumStore, ['forumList']),
   },
 
-  async mounted() {
+  async mounted () {
     await this.getForumData()
   },
 
@@ -82,14 +82,14 @@ export default {
     ...mapActions(forumStore, ['getForumData']),
     ...mapActions(communityStore, ['getChannelList', 'getCategoryData']),
 
-    closeChannel() {
+    closeChannel () {
       this.$emit('close')
     },
-    backChannel() {
+    backChannel () {
       this.$emit('back')
     },
 
-    selectForum(index, item) {
+    selectForum (index, item) {
       if (this.selectIndex === index) {
         this.selectIndex = -1
         this.selectForumItem = ''
@@ -99,13 +99,13 @@ export default {
       }
     },
 
-    async createForumChannel(evt) {
+    async createForumChannel (evt) {
       if (this.selectIndex !== -1 && this.selectForumItem !== '') {
         const option = {
           type: 'forum',
           id: this.id,
           no: this.no,
-          content: {name: this.selectForumItem.name, props: this.selectForumItem}
+          content: { name: this.selectForumItem.name, props: this.selectForumItem }
         }
         //  console.log('查看参数',option)
         const res = await channelClass.secondaryChannel(option)

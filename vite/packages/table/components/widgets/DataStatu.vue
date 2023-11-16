@@ -10,16 +10,16 @@
 
 <script>
 export default {
-  name: "DataStatu",
+  name: 'DataStatu',
   components: {},
   props: {
     imgDisplay: {
       type: String,
-      default: "/img/test/not-data.png",
+      default: '/img/test/not-data.png',
     },
     textPrompt: {
       type: String,
-      default: "数据获取失败",
+      default: '数据获取失败',
     },
     btnDisplay: {
       type: Boolean,
@@ -34,15 +34,15 @@ export default {
       default: true
     }
   },
-  data() {
-    return {};
+  data () {
+    return {}
   },
   methods: {
-    jumpPage() {
+    jumpPage () {
       this.$emit('notData', false)
     }
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

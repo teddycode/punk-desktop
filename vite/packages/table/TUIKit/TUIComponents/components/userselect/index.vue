@@ -48,13 +48,13 @@
 </template>
 
 <script>
-import {computed, defineComponent, reactive, toRefs} from 'vue'
+import { computed, defineComponent, reactive, toRefs } from 'vue'
 import _ from 'lodash-es'
 
 export default defineComponent({
   props: ['list', 'type', 'groupID'],
 
-  setup(props, ctx) {
+  setup (props, ctx) {
 
     const TIM = window.$TUIKit.TIM
     const tim = window.$TUIKit.tim
@@ -87,7 +87,7 @@ export default defineComponent({
       if (index === -1 && data.adminList.length < 1) {
         data.adminList.push(item)
       } else {
-        return;
+
       }
     }
 
@@ -108,7 +108,7 @@ export default defineComponent({
           }
           await tim.setGroupMemberRole(adminOption)
           ctx.emit('close')
-          break;
+          break
         case 'delAdmin':  // 删除管理员
           const option = {
             groupID: props.groupID,
@@ -117,7 +117,7 @@ export default defineComponent({
           }
           await tim.setGroupMemberRole(option)
           ctx.emit('close')
-          break;
+          break
         case 'change':  // 转让群聊
           const options = {
             groupID: props.groupID,
@@ -125,25 +125,25 @@ export default defineComponent({
           }
           await tim.changeGroupOwner(options)
           ctx.emit('close')
-          break;
+          break
         case 'addMuteUser':  // 新增禁言用户
           const muteOption = {
             groupID: props.groupID,
             muteTime: 60 * 60 * 24 * 30,
             userID: data.adminList[0].userID
           }
-          await tim.setGroupMemberMuteTime(muteOption);
+          await tim.setGroupMemberMuteTime(muteOption)
           ctx.emit('close')
-          break;
+          break
         case 'removeMuteUser':  // 取消禁言用户
           const mOption = {
             groupID: props.groupID,
             muteTime: 0,
             userID: data.adminList[0].userID
           }
-          await tim.setGroupMemberMuteTime(mOption);
+          await tim.setGroupMemberMuteTime(mOption)
           ctx.emit('close')
-          break;
+          break
         case 'removeMember':
           const removeMemberOption = {
             groupID: props.groupID,
@@ -151,7 +151,7 @@ export default defineComponent({
           }
           await tim.deleteGroupMember(removeMemberOption)
           ctx.emit('closeUser')
-          break;
+          break
         case 'addMember':
           const addMemberOption = {
             groupID: props.groupID,
@@ -159,9 +159,9 @@ export default defineComponent({
           }
           await tim.addGroupMember(addMemberOption)
           ctx.emit('closeUser')
-          break;
+          break
         default:
-          break;
+          break
       }
     }
 

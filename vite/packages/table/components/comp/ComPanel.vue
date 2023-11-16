@@ -50,9 +50,9 @@
 </template>
 
 <script>
-import {appStore} from '../../store'
-import {mapState} from 'pinia'
-import {EditOutlined, EyeOutlined, SendOutlined, UserAddOutlined} from '@ant-design/icons-vue '
+import { appStore } from '../../store'
+import { mapState } from 'pinia'
+import { EditOutlined, EyeOutlined, SendOutlined, UserAddOutlined } from '@ant-design/icons-vue '
 import browser from '../../js/common/browser'
 
 export default {
@@ -60,17 +60,17 @@ export default {
   components: {
     SendOutlined, UserAddOutlined, EyeOutlined, EditOutlined
   },
-  data() {
+  data () {
     return {}
   },
   computed: {
     ...mapState(appStore, ['userInfo'])
   },
-  mounted() {
+  mounted () {
 
   },
   methods: {
-    go(url) {
+    go (url) {
       browser.openInInner(url)
     }
   }

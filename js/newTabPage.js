@@ -9,6 +9,7 @@ const newTabPage = {
   imagePath: path.join(window.globalArgs['user-data-path'], 'newTabBackground'),
   reloadBackground: function () {
     newTabPage.background.src = newTabPage.imagePath + '?t=' + Date.now()
+
     function onLoad () {
       newTabPage.background.hidden = false
       newTabPage.hasBackground = true
@@ -17,6 +18,7 @@ const newTabPage = {
 
       newTabPage.deleteBackground.hidden = false
     }
+
     function onError () {
       newTabPage.background.hidden = true
       newTabPage.hasBackground = false
@@ -25,6 +27,7 @@ const newTabPage = {
 
       newTabPage.deleteBackground.hidden = true
     }
+
     newTabPage.background.addEventListener('load', onLoad)
     newTabPage.background.addEventListener('error', onError)
   },

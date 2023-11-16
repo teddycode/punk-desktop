@@ -51,17 +51,17 @@
 </template>
 
 <script>
-import {defineComponent, reactive, toRefs} from 'vue'
-import {CloseOutlined} from '@ant-design/icons-vue'
-import {message} from 'ant-design-vue'
-import {useRouter} from 'vue-router'
+import { defineComponent, reactive, toRefs } from 'vue'
+import { CloseOutlined } from '@ant-design/icons-vue'
+import { message } from 'ant-design-vue'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   props: ['data'],
   components: {
     CloseOutlined,
   },
-  setup(props, ctx) {
+  setup (props, ctx) {
     const router = useRouter()
 
     const data = reactive({
@@ -76,12 +76,12 @@ export default defineComponent({
 
       if (res.data.status === 'JoinedSuccess') {
         message.success('加群成功')
-        router.push({name: 'chatMain'})
+        router.push({ name: 'chatMain' })
         const name = `GROUP${props.data.groupID}`
         window.TUIKitTUICore.TUIServer.TUIConversation.getConversationProfile(name).then((imResponse) => {
           // 通知 TUIConversation 添加当前会话
           // Notify TUIConversation to toggle the current conversation
-          window.TUIKitTUICore.TUIServer.TUIConversation.handleCurrentConversation(imResponse.data.conversation);
+          window.TUIKitTUICore.TUIServer.TUIConversation.handleCurrentConversation(imResponse.data.conversation)
         })
       } else if (res.data.status === 'WaitAdminApproval') {
         message.info('入群申请已经发出,需要等待群管理员审核通过')

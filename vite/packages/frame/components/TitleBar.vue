@@ -37,9 +37,10 @@
       <img id="appLogo"
            :src="app.logo"
            onerror="this.src='../../icons/default.svg'"
-           style="margin-top:-3px;border-radius: 100px ;background-color: white;width: 20px;height: 20px;vertical-align: middle;border:2px solid white"><span id="appName"
-                              :title="'网址：' + encodeURI(this.app.url) + '（双击复制）'" style="color: white;margin-left: 10px;font-size: 14px"
-                              @dblclick="copyAddress">{{ app.name }}</span>
+           style="margin-top:-3px;border-radius: 100px ;background-color: white;width: 20px;height: 20px;vertical-align: middle;border:2px solid white"><span
+        id="appName"
+        :title="'网址：' + encodeURI(this.app.url) + '（双击复制）'" style="color: white;margin-left: 10px;font-size: 14px"
+        @dblclick="copyAddress">{{ app.name }}</span>
 
 
     </div>
@@ -95,7 +96,7 @@
 </template>
 
 <script>
-import {EllipsisOutlined, HomeOutlined, LeftOutlined, RedoOutlined, RightOutlined} from '@ant-design/icons-vue'
+import { EllipsisOutlined, HomeOutlined, LeftOutlined, RedoOutlined, RightOutlined } from '@ant-design/icons-vue'
 
 export default {
   name: 'TitleBar',
@@ -106,18 +107,17 @@ export default {
     HomeOutlined,
     EllipsisOutlined
   },
-  data() {
+  data () {
     return {
       platform: 'darwin',
       currentUrl: '',
       app: {},
 
-
       windowIsMaximized: false,
       windowIsFullscreen: false
     }
   },
-  mounted() {
+  mounted () {
     this.platform = process.platform
     if (this.platform === 'darwin') {
       document.body.classList.add('mac')
@@ -162,7 +162,6 @@ export default {
       //   document.getElementById('goHome').hidden = true
       //   document.getElementById('refresh').style.marginLeft = '30px'
 
-
     })
     ipc.on('maximize', (e) => {
       this.windowIsMaximized = true
@@ -179,56 +178,56 @@ export default {
 
   },
   methods: {
-    showMenu() {
+    showMenu () {
       console.log(window.nanoid)
-      ipc.send('createAppMenu', {nanoid: window.nanoid})
+      ipc.send('createAppMenu', { nanoid: window.nanoid })
     },
-    goBack() {
+    goBack () {
       ipc.send('saAppGoBack', {
         nanoid: window.nanoid
       })
     },
 
-    goForward() {
+    goForward () {
       ipc.send('saAppGoForward', {
         nanoid: window.nanoid
       })
     },
 
-    refresh() {
+    refresh () {
       ipc.send('saAppRefresh', {
         nanoid: window.nanoid
       })
     },
 
-    home() {
+    home () {
       ipc.send('saAppHome', {
         nanoid: window.nanoid
       })
     },
 
-    resetSize() {
+    resetSize () {
       ipc.send('saAppResetSize', {
         nanoid: window.nanoid
       })
     },
-    minimize() {
-      ipc.invoke('minimizeAppWindow', {nanoid: window.nanoid})
+    minimize () {
+      ipc.invoke('minimizeAppWindow', { nanoid: window.nanoid })
     },
-    maximize() {
-      ipc.invoke('maximizeAppWindow', {nanoid: window.nanoid})
+    maximize () {
+      ipc.invoke('maximizeAppWindow', { nanoid: window.nanoid })
     },
-    restore() {
+    restore () {
       if (this.windowIsFullscreen) {
-        ipc.invoke('setFullScreenAppWindow', {flag: false, nanoid: window.nanoid})
+        ipc.invoke('setFullScreenAppWindow', { flag: false, nanoid: window.nanoid })
       } else {
-        ipc.invoke('unmaximizeAppWindow', {nanoid: window.nanoid})
+        ipc.invoke('unmaximizeAppWindow', { nanoid: window.nanoid })
       }
     },
-    close() {
-      ipc.invoke('closeAppWindow', {nanoid: window.nanoid})
+    close () {
+      ipc.invoke('closeAppWindow', { nanoid: window.nanoid })
     },
-    copyAddress() {
+    copyAddress () {
       clipboard.writeText(this.currentUrl)
     }
   }

@@ -16,12 +16,12 @@
 </template>
 
 <script>
-import {defineComponent} from 'vue'
-import NoticeDropDown from './noticeDropDown.vue';
+import { defineComponent } from 'vue'
+import NoticeDropDown from './noticeDropDown.vue'
 
 export default defineComponent({
   props: ['list'],
-  components: {NoticeDropDown},
+  components: { NoticeDropDown },
 
 })
 </script>

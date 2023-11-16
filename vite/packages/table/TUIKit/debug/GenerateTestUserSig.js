@@ -1,5 +1,5 @@
 // es
-import LibGenerateTestUserSig from './lib-generate-test-usersig-es.min.js';
+import LibGenerateTestUserSig from './lib-generate-test-usersig-es.min.js'
 // umd
 // import * as LibGenerateTestUserSig from './lib-generate-test-usersig-umd.min.js';
 
@@ -12,7 +12,7 @@ import LibGenerateTestUserSig from './lib-generate-test-usersig-es.min.js';
  * 时间单位：秒
  * 默认时间：7 x 24 x 60 x 60 = 604800 = 7 天
  */
-const EXPIRETIME = 604800;
+const EXPIRETIME = 604800
 
 /**
  * Module: GenerateTestUserSig
@@ -49,14 +49,14 @@ const EXPIRETIME = 604800;
  * Reference：https://cloud.tencent.com/document/product/647/17275#Server
  */
 
-function genTestUserSig(options) {
-    const {SDKAppID, secretKey, userID} = options;
-    const generator = new LibGenerateTestUserSig(SDKAppID, secretKey, EXPIRETIME);
-    const userSig = generator.genTestUserSig(userID);
-    return {
-        SDKAppID,
-        userSig,
-    };
+function genTestUserSig (options) {
+  const { SDKAppID, secretKey, userID } = options
+  const generator = new LibGenerateTestUserSig(SDKAppID, secretKey, EXPIRETIME)
+  const userSig = generator.genTestUserSig(userID)
+  return {
+    SDKAppID,
+    userSig,
+  }
 }
 
-export {genTestUserSig, EXPIRETIME};
+export { genTestUserSig, EXPIRETIME }

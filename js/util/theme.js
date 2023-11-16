@@ -1,11 +1,11 @@
 if (typeof require !== 'undefined') {
-  if(typeof require('electron').app==='undefined'){
+  if (typeof require('electron').app === 'undefined') {
     var tempSettings = require('./settings/settings.js')
-  }else{
-    var tempSettings=global.settings
-      //var settings=global.settings
+  } else {
+    var tempSettings = global.settings
+    //var settings=global.settings
   }
-}else{
+} else {
   var tempSettings = window.settings
 }
 
@@ -46,13 +46,13 @@ function disableDarkMode () {
  * 获取是否应该是夜间模式
  * @returns {boolean}
  */
-function getShouldDarkMod(){
+function getShouldDarkMod () {
   // 1 or true: dark mode is always enabled
-  const value=tempSettings.get('darkMode')
+  const value = tempSettings.get('darkMode')
   if (value === 1 || value === true) {
     return true
   }
-  if (value === 2 ) {
+  if (value === 2) {
     if (systemShouldEnableDarkMode()) {
       return true
     } else {
@@ -70,7 +70,6 @@ function getShouldDarkMod(){
     // -1: never enable
     return false
   }
-
 
 }
 
@@ -136,6 +135,7 @@ function initialize () {
       disableDarkMode()
     }
   }
+
   tempSettings.listen('darkMode', themeSettingsChanged)
   tempSettings.listen('systemShouldUseDarkColors', function () {
     // the settings API differs between the UI process and tabs
@@ -148,7 +148,7 @@ function initialize () {
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = { initialize ,systemShouldEnableDarkMode,getShouldDarkMod}
+  module.exports = { initialize, systemShouldEnableDarkMode, getShouldDarkMod }
 } else {
   initialize()
 }

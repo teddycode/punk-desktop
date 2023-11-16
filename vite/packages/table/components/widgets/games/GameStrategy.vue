@@ -18,13 +18,15 @@
 
       <!-- 视频 -->
       <template v-if="strategy.name === 'video'">
-        <xt-new-icon v-if="biliVideoList.length !== 0" :style="isTop ? { color:'var(--disable-text) !important',cursor:'not-allowed !important' } : { color:'var(--primary-text) !important' }"
+        <xt-new-icon v-if="biliVideoList.length !== 0"
+                     :style="isTop ? { color:'var(--disable-text) !important',cursor:'not-allowed !important' } : { color:'var(--primary-text) !important' }"
                      bgClass="xt-bg  category-button mr-3" icon="fluent:chevron-left-16-filled" type="theme"
                      w="44"
                      @click="prevButton"
         >
         </xt-new-icon>
-        <xt-new-icon v-if="biliVideoList.length !== 0" :style="isBottom ? { color:'var(--disable-text) !important',cursor:'not-allowed !important' } : { color:'var(--primary-text) !important' }"
+        <xt-new-icon v-if="biliVideoList.length !== 0"
+                     :style="isBottom ? { color:'var(--disable-text) !important',cursor:'not-allowed !important' } : { color:'var(--primary-text) !important' }"
                      bgClass="xt-bg  category-button " icon="fluent:chevron-right-16-filled" type="theme"
                      w="44"
                      @click="nextButton"
@@ -34,13 +36,15 @@
 
       <!-- 图文列表 -->
       <template v-else>
-        <xt-new-icon v-if="graphicList.length !== 0" :style="isTop ? { color:'var(--disable-text) !important',cursor:'not-allowed !important' } : { color:'var(--primary-text) !important' }"
+        <xt-new-icon v-if="graphicList.length !== 0"
+                     :style="isTop ? { color:'var(--disable-text) !important',cursor:'not-allowed !important' } : { color:'var(--primary-text) !important' }"
                      bgClass="xt-bg  category-button mr-3" icon="fluent:chevron-left-16-filled" type="theme"
                      w="44"
                      @click="prevButton"
         >
         </xt-new-icon>
-        <xt-new-icon v-if="graphicList.length !== 0" :style="isBottom ? { color:'var(--disable-text) !important',cursor:'not-allowed !important' } : { color:'var(--primary-text) !important' }"
+        <xt-new-icon v-if="graphicList.length !== 0"
+                     :style="isBottom ? { color:'var(--disable-text) !important',cursor:'not-allowed !important' } : { color:'var(--primary-text) !important' }"
                      bgClass="xt-bg  category-button " icon="fluent:chevron-right-16-filled" type="theme"
                      w="44"
                      @click="nextButton"
@@ -87,16 +91,16 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from 'pinia'
-import {Icon as StrategyIcon} from '@iconify/vue'
-import {gameStrategyStore} from '../../../store/gameStrategyStore'
-import {steamUserStore} from '../../../store/steamUser';
+import { mapActions, mapWritableState } from 'pinia'
+import { Icon as StrategyIcon } from '@iconify/vue'
+import { gameStrategyStore } from '../../../store/gameStrategyStore'
+import { steamUserStore } from '../../../store/steamUser'
 
-import Widget from '../../card/Widget.vue';
-import HorizontalPanel from '../../HorizontalPanel.vue';
-import HorizontalDrawer from '../../HorizontalDrawer.vue';
-import BiliVideoDetail from './strategy/BiliVideoDetail.vue';
-import GraphicDetail from './strategy/GraphicDetail.vue';
+import Widget from '../../card/Widget.vue'
+import HorizontalPanel from '../../HorizontalPanel.vue'
+import HorizontalDrawer from '../../HorizontalDrawer.vue'
+import BiliVideoDetail from './strategy/BiliVideoDetail.vue'
+import GraphicDetail from './strategy/GraphicDetail.vue'
 
 export default {
   props: ['customIndex', 'customData', 'desk'],
@@ -106,7 +110,7 @@ export default {
     BiliVideoDetail, GraphicDetail
   },
 
-  data() {
+  data () {
     return {
       options: {
         className: 'card double',
@@ -117,11 +121,11 @@ export default {
       },
 
       strategyType: [
-        {title: '视频攻略', name: 'video'},
-        {title: '图文攻略', name: 'image-text'}
+        { title: '视频攻略', name: 'video' },
+        { title: '图文攻略', name: 'image-text' }
       ],
 
-      strategy: {title: '视频攻略', name: 'video'},
+      strategy: { title: '视频攻略', name: 'video' },
 
       searchShow: false,
       searchWord: this.customData.chineseName, // 搜索关键词
@@ -141,7 +145,7 @@ export default {
     ...mapWritableState(gameStrategyStore, ['biliVideoList', 'graphicList']),
 
     // 计算总页数
-    totalPages() {
+    totalPages () {
       if (this.strategy.name === 'video') {
         return Math.ceil(this.biliVideoList.length / 6) // 数据总量除以6，向上取整
       } else {
@@ -149,20 +153,20 @@ export default {
       }
     },
     // 计算当前页要显示的数据
-    videoList() {
-      const start = (this.videoCurrentPage - 1) * 6;  // 每页6个数据，计算起始索引
-      const end = start + 6;  // 计算结束索引
-      return this.biliVideoList.slice(start, end);  // 返回当前页要显示的数据
+    videoList () {
+      const start = (this.videoCurrentPage - 1) * 6  // 每页6个数据，计算起始索引
+      const end = start + 6  // 计算结束索引
+      return this.biliVideoList.slice(start, end)  // 返回当前页要显示的数据
     },
-    graphicsList() {
-      const start = (this.graphicCurrentPage - 1) * 5;  // 每页6个数据，计算起始索引
-      const end = start + 5;  // 计算结束索引
-      return this.graphicList.slice(start, end);  // 返回当前页要显示的数据
+    graphicsList () {
+      const start = (this.graphicCurrentPage - 1) * 5  // 每页6个数据，计算起始索引
+      const end = start + 5  // 计算结束索引
+      return this.graphicList.slice(start, end)  // 返回当前页要显示的数据
     }
 
   },
 
-  mounted() {
+  mounted () {
     if (Object.keys(this.customData).length === 0) {
       this.customData.name = this.recentGameList[0]?.chineseName
       this.customData.id = this.recentGameList[0]?.appid
@@ -176,16 +180,16 @@ export default {
   methods: {
     ...mapActions(gameStrategyStore, ['getBiliData', 'getGraphicData']),
     // 打开右侧弹窗进行选择
-    openGuideDrawer() {
+    openGuideDrawer () {
       this.$refs.strategyDrawer.openDrawer()
     },
-    openSearch() {
+    openSearch () {
       this.searchShow = true
       this.searchWord = this.customData.chineseName
     },
 
     // 更新数据
-    getArea(v) {
+    getArea (v) {
       // console.log('排查数据',v);
 
       if (this.strategy.name === 'video') {
@@ -200,7 +204,7 @@ export default {
     },
 
     // 搜索
-    searchEnter() {
+    searchEnter () {
       if (this.searchWord !== '') {
         this.customData.name = this.searchWord
         this.customData.chineseName = this.searchWord
@@ -212,7 +216,7 @@ export default {
       }
     },
 
-    refreshStrategy() {
+    refreshStrategy () {
       if (this.strategy.name === 'video') {
         this.getBiliData(this.customData.chineseName)
       } else {
@@ -220,59 +224,57 @@ export default {
       }
     },
 
-
     // 分页
-    nextButton(e) {
+    nextButton (e) {
       if (this.isBottom) {
 
-        e.preventDefault();
+        e.preventDefault()
 
       } else {
 
         if (this.strategy.name === 'video') {
           if (this.videoCurrentPage < this.totalPages) {
-            this.videoCurrentPage++;
-            this.isTop = false;  // 切换页面时重置到达顶部的状态
+            this.videoCurrentPage++
+            this.isTop = false  // 切换页面时重置到达顶部的状态
             if (this.videoCurrentPage === this.totalPages) {
-              this.isBottom = true;  // 到达底部
+              this.isBottom = true  // 到达底部
             }
           }
         } else {
           if (this.graphicCurrentPage < this.totalPages) {
-            this.graphicCurrentPage++;
-            this.isTop = false;  // 切换页面时重置到达顶部的状态
+            this.graphicCurrentPage++
+            this.isTop = false  // 切换页面时重置到达顶部的状态
             if (this.graphicCurrentPage === this.totalPages) {
-              this.isBottom = true;  // 到达底部
+              this.isBottom = true  // 到达底部
             }
           }
         }
 
       }
 
-
     },
 
-    prevButton(e) {
+    prevButton (e) {
       if (this.isTop) {
 
-        e.preventDefault();
+        e.preventDefault()
 
       } else {
 
         if (this.strategy.name === 'video') {
           if (this.videoCurrentPage > 1) {
-            this.videoCurrentPage--;
-            this.isBottom = false;  // 切换页面时重置到达底部的状态
+            this.videoCurrentPage--
+            this.isBottom = false  // 切换页面时重置到达底部的状态
             if (this.videoCurrentPage === 1) {
-              this.isTop = true;  // 到达顶部
+              this.isTop = true  // 到达顶部
             }
           }
         } else {
           if (this.graphicCurrentPage > 1) {
-            this.graphicCurrentPage--;
-            this.isBottom = false;  // 切换页面时重置到达底部的状态
+            this.graphicCurrentPage--
+            this.isBottom = false  // 切换页面时重置到达底部的状态
             if (this.graphicCurrentPage === 1) {
-              this.isTop = true;  // 到达顶部
+              this.isTop = true  // 到达顶部
             }
           }
         }
@@ -284,13 +286,12 @@ export default {
 
   watch: {
     'strategy': {
-      handler() {
+      handler () {
         this.refreshStrategy()
       },
       immediate: true
     }
   }
-
 
 }
 </script>

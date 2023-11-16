@@ -1,11 +1,11 @@
 const settings = window.settings
 const statsh = require('util/statsh/statsh.js')
 const axios = require('../src/util/axios')
-const { db } = require('./util/database');
+const { db } = require('./util/database')
 
 const userStatsModel = require('../pages/util/model/userStatsModel')
 const standAloneAppModel = require('../src/model/appModel.js')
-const userModel = require("../src/model/userModel");
+const userModel = require('../src/model/userModel')
 const statistics = {
   envGetters: [],
   registerGetter: function (key, fn) {
@@ -117,7 +117,7 @@ const statistics = {
     })
 
     //职业统计上报 上报完过一次设置为null，除非career再次被赋值才会上报
-    if(settings.get('career')) {
+    if (settings.get('career')) {
       axios.post('/app/open/usageStats/addCareer', {
         career: settings.get('career'),
         uid: result.value.uid != 0 ? result.value.uid : 0,   //用户uid
@@ -128,19 +128,17 @@ const statistics = {
     }
   },
 
-
-
   initialize: async function () {
     await userStatsModel.initialize()
     // await settings.initialize()
 
     //初次安装的用户需要往dexie的system表中插入此数据，否则第一次上传会报错
-    if(await db.system.count() === 0) {
+    if (await db.system.count() === 0) {
       await db.system.put({
-        name: "currentUser",
+        name: 'currentUser',
         value: {
-          avatar: "../../icons/browser.ico",
-          nickname: "立即登录",
+          avatar: '../../icons/browser.ico',
+          nickname: '立即登录',
           uid: 0
         }
       })
@@ -156,7 +154,6 @@ const statistics = {
     setTimeout(statistics.upload, 10 * 1000) //启动10秒后上报
     setInterval(statistics.upload, 3 * 60 * 1000) //每隔3分钟上报一次
 
-
     statistics.usageDataCache = settings.get('usageData') || ({
       created: Date.now()
     })
@@ -170,7 +167,7 @@ const statistics = {
     }, 60 * 1000)
 
     //初始化的时候检验一下证书过期的白名单是否已经创建
-    if(settings.get('whiteCertInvalid') == undefined) {
+    if (settings.get('whiteCertInvalid') == undefined) {
       settings.set('whiteCertInvalid', [])
     }
 
@@ -201,13 +198,13 @@ const statistics = {
 
     /* 注释掉此段关于用户关闭信息收集按钮后的重制设备ID的问题 */
     settings.listen('collectUsageStats', function (value) {
-      console.log(settings.get('clientID'),'在统计中获得的settings clientId')
+      console.log(settings.get('clientID'), '在统计中获得的settings clientId')
       if (value === false) {
         // disabling stats collection should reset client ID
         // settings.set('clientID', undefined)
-        return
+
       } else if (!settings.get('clientID')) {
-        console.log(settings,'执行到了找不到clientId的逻辑，后面部分已被屏蔽')
+        console.log(settings, '执行到了找不到clientId的逻辑，后面部分已被屏蔽')
         //暂时屏蔽掉初始化ClientID的操作
         // let newClientId=require('nanoid').nanoid(8)
         // console.log('强制初始化clientId',newClientId)

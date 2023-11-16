@@ -77,15 +77,15 @@
 </template>
 
 <script>
-import {appStore} from '../../store'
-import {mapWritableState} from 'pinia'
-import GradeSmallTip from "../GradeSmallTip.vue";
+import { appStore } from '../../store'
+import { mapWritableState } from 'pinia'
+import GradeSmallTip from '../GradeSmallTip.vue'
 import browser from '../../js/common/browser'
 
-const {groupApi} = window.$apis
+const { groupApi } = window.$apis
 export default {
   name: 'GroupPanel',
-  data() {
+  data () {
     return {
       activeKey: 'public',
       innerSettings: {
@@ -97,37 +97,37 @@ export default {
       },
     }
   },
-  components: {GradeSmallTip},
-  mounted() {
-    this.getMyCircle({page: 1, row: 20})
-    this.getJoinedCircle({page: 1, row: 20})
+  components: { GradeSmallTip },
+  mounted () {
+    this.getMyCircle({ page: 1, row: 20 })
+    this.getJoinedCircle({ page: 1, row: 20 })
   },
   computed: {
     ...mapWritableState(appStore, ['myData', 'userInfo']),
-    publicGroup() {
+    publicGroup () {
       return this.myData.myCircle.filter(group => {
         return group.is_private === 0
       })
     },
-    privateGroup() {
+    privateGroup () {
       return this.myData.myCircle.filter(group => {
         return group.is_private === 1
       })
     },
-    auditGroup() {
+    auditGroup () {
       return this.myData.myCircle.filter(group => {
         return group.is_audit === 0 && group.creator === this.userInfo.uid
       })
     }
   },
   methods: {
-    look() {
+    look () {
       browser.openInInner('https://s.apps.vip/groups')
     },
-    go(url) {
+    go (url) {
       browser.openInInner(url)
     },
-    createGroup() {
+    createGroup () {
       ipc.send('osxCreateCircle')
     },
     /**
@@ -135,7 +135,7 @@ export default {
      * @param options
      * @returns {Promise<void>}
      */
-    async getMyCircle(options) {
+    async getMyCircle (options) {
       const result = await groupApi.getMyCircle(options)
       if (result.code === 1000) {
         this.myData.myCircle = result.data
@@ -146,7 +146,7 @@ export default {
      * @param options
      * @returns {Promise<void>}
      */
-    async getJoinedCircle(options) {
+    async getJoinedCircle (options) {
       try {
         const result = await groupApi.getJoinedCircle(options)
         if (result.code === 1000) {

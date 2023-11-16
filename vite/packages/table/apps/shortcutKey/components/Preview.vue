@@ -58,17 +58,17 @@
 </template>
 
 <script>
-import ShortcutKeyList from '../shortcutKey/ShortcutKeyList.vue';
-import {message} from 'ant-design-vue';
-import {mapActions} from "pinia";
-import {keyStore} from '../store'
+import ShortcutKeyList from '../shortcutKey/ShortcutKeyList.vue'
+import { message } from 'ant-design-vue'
+import { mapActions } from 'pinia'
+import { keyStore } from '../store'
 
 export default {
-  name: "Preview",
+  name: 'Preview',
   components: {
     ShortcutKeyList
   },
-  data() {
+  data () {
     return {
       // 快捷方案
       // keyScheme: {},
@@ -94,17 +94,17 @@ export default {
   watch: {},
   methods: {
     ...mapActions(keyStore, ['setShortcutKeyList', 'import']),
-    addPlan(keyScheme) {
+    addPlan (keyScheme) {
       this.setShortcutKeyList(keyScheme)
-      message.success('添加成功');
+      message.success('添加成功')
       this.openDrawer = false
       this.$emit('closePreview', false)
     },
-    close() {
+    close () {
       this.$emit('closePreview', false)
       this.fullScreen = false
     },
-    async importScheme() {
+    async importScheme () {
       if (await this.import([this.keyScheme])) {
         message.success('下载方案成功。')
         this.close()

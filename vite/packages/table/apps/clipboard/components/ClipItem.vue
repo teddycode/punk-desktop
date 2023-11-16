@@ -338,14 +338,14 @@
 import HorzontanlPanelIcon from '../../../components/HorzontanlPanelIcon.vue'
 import ClipSetDrawer from './clipPreview/ClipSetDrawer.vue'
 import ClipCodemirror from './clipPreview/ClipCodemirror.vue'
-import {mapActions, mapWritableState} from 'pinia'
-import {clipboardStore} from '../store'
+import { mapActions, mapWritableState } from 'pinia'
+import { clipboardStore } from '../store'
 import textCodeMirror from './clipPreview/textCodeMirror.vue'
 import ClipVideo from './parser/ClipVideo.vue'
 import ClipAudio from './parser/ClipAudio.vue'
-import {codeLanguage} from '../../../js/data/clipTheme'
+import { codeLanguage } from '../../../js/data/clipTheme'
 import ClipItemWidget from './ClipItemWidget.vue'
-import {getDateTime} from '../../../util'
+import { getDateTime } from '../../../util'
 import TextItem from './items/TextItem.vue'
 import ImageItem from './items/ImageItem.vue'
 import FileItem from './items/FileItem.vue'
@@ -374,7 +374,7 @@ export default {
       }
     }
   },
-  data() {
+  data () {
     return {
       type: {},
       img: {},
@@ -389,31 +389,31 @@ export default {
 
       // 文本底部切换
       textType: [
-        {title: '纯文本', icon: 'ziyuan', name: 'text', id: 0},
+        { title: '纯文本', icon: 'ziyuan', name: 'text', id: 0 },
         {
           title: '代码块', icon: 'daima', name: 'code', id: 1
         }
       ],
-      defaultTextType: {title: '纯文本', icon: 'ziyuan', name: 'text'},
+      defaultTextType: { title: '纯文本', icon: 'ziyuan', name: 'text' },
 
       // 文本键盘快捷键操作按钮
       textKey: [
-        {title: '复制', intr: 'Ctrl + C', id: 'cc'},
-        {title: '打开链接', intr: 'Ctrl + O', id: 'co'},
-        {title: '预览', intr: 'Space', id: 's'},
-        {title: '添加到收藏', intr: 'Ctrl + S', id: 'cs'},
-        {title: '删除', intr: 'Delete', id: 'd'}
+        { title: '复制', intr: 'Ctrl + C', id: 'cc' },
+        { title: '打开链接', intr: 'Ctrl + O', id: 'co' },
+        { title: '预览', intr: 'Space', id: 's' },
+        { title: '添加到收藏', intr: 'Ctrl + S', id: 'cs' },
+        { title: '删除', intr: 'Delete', id: 'd' }
       ],
 
       // 图片快捷键操作按钮
       imageKey: [
-        {title: '复制', intr: 'Ctrl + C', id: 'cc'},
-        {title: '打开', intr: 'Ctrl + O', id: 'co'},
-        {title: '预览', intr: 'Space', id: 's'},
-        {title: '复制路径', intr: 'Ctrl + Alt + C', id: 'cac'},
-        {title: '在资源管理器中打开', intr: 'Ctrl + Enter', id: 'ce'},
-        {title: '添加到收藏', intr: 'Ctrl + S', id: 'cs'},
-        {title: '删除', intr: 'Delete', id: 'd'}
+        { title: '复制', intr: 'Ctrl + C', id: 'cc' },
+        { title: '打开', intr: 'Ctrl + O', id: 'co' },
+        { title: '预览', intr: 'Space', id: 's' },
+        { title: '复制路径', intr: 'Ctrl + Alt + C', id: 'cac' },
+        { title: '在资源管理器中打开', intr: 'Ctrl + Enter', id: 'ce' },
+        { title: '添加到收藏', intr: 'Ctrl + S', id: 'cs' },
+        { title: '删除', intr: 'Delete', id: 'd' }
       ],
 
       settingsScroller: {
@@ -432,7 +432,7 @@ export default {
 
   computed: {
     ...mapWritableState(clipboardStore, ['previewShow', 'clipSetShow', 'settings', 'tab']),
-    showArray() {
+    showArray () {
       if (!this.clipItem.showType) {
         if (this.clipSetShow) {
           const newTextArr = this.textType.slice()  // 将文本底部tab数组复制一份
@@ -444,7 +444,7 @@ export default {
       }
       return this.clipItem.showType
     },
-    timeText() {
+    timeText () {
       const time = getDateTime(new Date(this.clipItem.createTime))
       return `${time.hours}:${time.minutes}:${time.seconds}` + '&nbsp;&nbsp;&nbsp;' + `${time.month}月${time.day}日`
     }
@@ -452,25 +452,25 @@ export default {
 
   watch: {
     'clipItem': {
-      handler() {
+      handler () {
         this.refresh()
       }
     },
     'defaultTextType': {
-      handler() {
+      handler () {
         this.defaultTextType = this.defaultTextType
       },
       immediate: true,
     },
   },
 
-  mounted() {
+  mounted () {
     window.addEventListener('keydown', this.clipKeyDown)
   },
 
   methods: {
     ...mapActions(clipboardStore, ['changeClipMode', 'isOpenPreview']),
-    refresh() {
+    refresh () {
 
       // this.type = this.getType(this.clipItem.type)
       // this.capacity = this.clipItem.content.length + '个字符'
@@ -478,7 +478,7 @@ export default {
       //   this.img = toRaw(this.clipItem.content).toDataURL()
       // }
     },
-    getType(type) {
+    getType (type) {
       switch (type) {
         case 'text':
           return {
@@ -509,18 +509,17 @@ export default {
 
     },
     // 鼠标右键触发
-    textButton() {
+    textButton () {
       this.controlsShow = true
     },
     // 返回按钮
-    backClip() {
+    backClip () {
       this.controlsShow = false
       this.codeLanguageShow = false
     },
 
-
     // 键盘快捷键触发
-    clipKeyDown(e) {
+    clipKeyDown (e) {
       // 打开预览快捷键功能
       if (e.keyCode === 32) {
         if (this.controlsShow) {
@@ -533,7 +532,7 @@ export default {
     },
 
     // 快捷键按钮触发
-    keyOperation(item) {
+    keyOperation (item) {
       switch (item.id) {
         case 'cc':
           message.success('复制成功')
@@ -568,24 +567,24 @@ export default {
           break
       }
     },
-    previewItem(item) {
+    previewItem (item) {
       console.log('猫盘', item)
       this.$emit('previewItem', item)
     },
     // 打开代码块语言包切换界面
-    openCode() {
+    openCode () {
       this.codeLanguageShow = true
     },
 
     // 代码块语言包切换的回调事件
-    clickCodeLanguage(item) {
+    clickCodeLanguage (item) {
       this.changeClipMode(item.abbr) // 将代码块语言包进行替换的方法
       this.defaultTextType.title = item.title
       this.codeLanguageShow = false
     },
 
     // 打开设置
-    openClipSet() {
+    openClipSet () {
       this.$refs.setDrawer.clipOpenShow()
     },
   },

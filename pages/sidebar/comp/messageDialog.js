@@ -158,9 +158,9 @@ const messageTempl = /* html */`
       </div>
     </div>
   </div>
-`;
+`
 
-Vue.component("message-center", {
+Vue.component('message-center', {
   template: messageTempl,
   props: {
     visible: {
@@ -170,9 +170,9 @@ Vue.component("message-center", {
       type: String,
     },
   },
-  data() {
+  data () {
     return {
-      fixed: localStorage.getItem("isMessageFixed") == "true" ? true : false,
+      fixed: localStorage.getItem('isMessageFixed') == 'true' ? true : false,
       silent: false,
       messageListStatus: {
         groupChat: {
@@ -185,36 +185,36 @@ Vue.component("message-center", {
           fold: false
         }
       }
-    };
+    }
   },
   computed: {
-    groupMessage() {
+    groupMessage () {
       return this.$store.getters.getAllMessages.filter(
-        (v) => v.type === "groupChat"
-      );
+        (v) => v.type === 'groupChat'
+      )
     },
-    communityMessage() {
+    communityMessage () {
       return this.$store.getters.getAllMessages.filter(
-        (v) => v.type === "community"
-      );
+        (v) => v.type === 'community'
+      )
     },
-    webOsMessage() {
+    webOsMessage () {
       return this.$store.getters.getAllMessages.filter(
-        (v) => v.type === "webOs"
-      );
+        (v) => v.type === 'webOs'
+      )
     },
     isSilent: {
-      get() {
+      get () {
         return this.silent
       },
-      set(val) {
+      set (val) {
         this.silent = val
       }
     }
   },
   methods: {
-    handleMessageListStatus(type) {
-      if(type === 'groupChat') {
+    handleMessageListStatus (type) {
+      if (type === 'groupChat') {
         this.messageListStatus.groupChat.fold = !this.messageListStatus.groupChat.fold
       } else if (type === 'community') {
         this.messageListStatus.community.fold = !this.messageListStatus.community.fold
@@ -222,62 +222,62 @@ Vue.component("message-center", {
         this.messageListStatus.webOs.fold = !this.messageListStatus.webOs.fold
       }
     },
-    errorPic(event, item) {
-      let img = event.srcElement;   //当前元素
-      img.src = item.index_name.startsWith('1_') ? 'https://apps.vip/img/anonymity.png' : '../../icons/svg/chat.svg';
-      img.onerror = null; //防止闪图
+    errorPic (event, item) {
+      let img = event.srcElement   //当前元素
+      img.src = item.index_name.startsWith('1_') ? 'https://apps.vip/img/anonymity.png' : '../../icons/svg/chat.svg'
+      img.onerror = null //防止闪图
     },
-    showGroup() {
-      ipc.invoke('saAppOpenSysApp', {saAppId: 1})
+    showGroup () {
+      ipc.invoke('saAppOpenSysApp', { saAppId: 1 })
     },
-    mountedIsSilent() {
-      let messageSetting = JSON.parse(localStorage.getItem("messageSetting"))
+    mountedIsSilent () {
+      let messageSetting = JSON.parse(localStorage.getItem('messageSetting'))
       let index = messageSetting.findIndex(v => v.appId === 1)
       let childRes = messageSetting[index].childs.some(v => v.notice === true)
-      if(messageSetting[index].notice || childRes) {
-        this.silent =  false
+      if (messageSetting[index].notice || childRes) {
+        this.silent = false
       } else {
         this.silent = true
       }
     },
-    clearMessages() {
-      this.$store.dispatch("deleteAllMessages");
+    clearMessages () {
+      this.$store.dispatch('deleteAllMessages')
     },
-    delMenuClick(id) {
-      this.$store.dispatch("deleteMessageById", id);
+    delMenuClick (id) {
+      this.$store.dispatch('deleteMessageById', id)
     },
-    openMenuClick(item) {
-      if(item.type === 'groupChat') {
+    openMenuClick (item) {
+      if (item.type === 'groupChat') {
         ipc.send('mesageOpenOperate', {
           saAppId: 1,
           type: 'groupChat',
           indexName: item.index_name
         })
-      } else if(item.type === 'webOs') {
-        ipc.send('addTab',{url: item.title});
-      } else if(item.type === 'community') {
+      } else if (item.type === 'webOs') {
+        ipc.send('addTab', { url: item.title })
+      } else if (item.type === 'community') {
         //todo
       }
     },
-    noReceived(item) {
-      if(item.type === 'groupChat') {
+    noReceived (item) {
+      if (item.type === 'groupChat') {
         let messageSetting = JSON.parse(localStorage.getItem('messageSetting'))
         let index = messageSetting.findIndex(v => v.appId === 1)
         messageSetting[index].notice = false
         messageSetting[index].childs.forEach(v => {
           v.notice = false
-        });
-        ipc.send("notificationSettingStatus", messageSetting)
-        localStorage.setItem("messageSetting", JSON.stringify(messageSetting))
+        })
+        ipc.send('notificationSettingStatus', messageSetting)
+        localStorage.setItem('messageSetting', JSON.stringify(messageSetting))
         this.silent = true
-      } else if(item.type === 'groupChat') {
+      } else if (item.type === 'groupChat') {
         //todo
-      } else if(item.type === 'webOs') {
+      } else if (item.type === 'webOs') {
         //console.log(settings, ' label！！！')
         let webMessage = settings.get('noticeWebOrigin')
         //console.log(webMessage, ' label！！！')
         let mapWebMessage = webMessage.map(v => {
-          if(v.link == item.title) {
+          if (v.link == item.title) {
             return {
               link: v.link,
               notice: false
@@ -291,187 +291,187 @@ Vue.component("message-center", {
 
       }
     },
-    removeAllMessage(type) {
-      this.$store.dispatch("deleteMessageByType", type);
+    removeAllMessage (type) {
+      this.$store.dispatch('deleteMessageByType', type)
     },
-    removeMessage(id) {
-      this.$store.dispatch("deleteMessageById", id);
+    removeMessage (id) {
+      this.$store.dispatch('deleteMessageById', id)
     },
-    clkmask() {
-      this.$emit("closeMessage");
-      localStorage.setItem("isMessageFixed", false);
+    clkmask () {
+      this.$emit('closeMessage')
+      localStorage.setItem('isMessageFixed', false)
     },
-    openMsmSetting() {
-      ipc.send("openMsmSetting");
+    openMsmSetting () {
+      ipc.send('openMsmSetting')
     },
-    fixedMessage() {
-      if (this.mod !== "auto" && !this.fixed) {
-        let $style = document.getElementsByClassName("message-dialog")[0].style;
-        $style.height = "100vh";
-        $style.borderRadius = "0px";
+    fixedMessage () {
+      if (this.mod !== 'auto' && !this.fixed) {
+        let $style = document.getElementsByClassName('message-dialog')[0].style
+        $style.height = '100vh'
+        $style.borderRadius = '0px'
         $style.bottom = '0px'
-        this.fixed = true;
+        this.fixed = true
         this.mod === 'open' ? $style.left = '145px' : $style.left = '45px'
-        localStorage.setItem("isMessageFixed", true);
-      } else if (this.mod !== "auto" && this.fixed) {
-        let $style = document.getElementsByClassName("message-dialog")[0].style;
-        $style.height = "600px";
-        $style.borderRadius = "10px";
+        localStorage.setItem('isMessageFixed', true)
+      } else if (this.mod !== 'auto' && this.fixed) {
+        let $style = document.getElementsByClassName('message-dialog')[0].style
+        $style.height = '600px'
+        $style.borderRadius = '10px'
         $style.bottom = '10px'
         this.mod === 'open' ? $style.left = '155px' : $style.left = '55px'
-        this.fixed = false;
-        localStorage.setItem("isMessageFixed", false);
+        this.fixed = false
+        localStorage.setItem('isMessageFixed', false)
       } else {
-        ipc.send("message", {
-          type: "error",
+        ipc.send('message', {
+          type: 'error',
           config: {
-            content: "auto模式下无法固定消息中心位置,请切换侧边栏其余两种模式",
+            content: 'auto模式下无法固定消息中心位置,请切换侧边栏其余两种模式',
           },
-        });
+        })
       }
     },
   },
   watch: {
     mod: {
-      handler(val) {
-        if (val === "auto" || val === "open") {
-          if(this.fixed) {
-            document.getElementsByClassName("message-dialog")[0].style.left = "145px"
-            document.getElementsByClassName("message-dialog")[0].style.bottom = "0px"
+      handler (val) {
+        if (val === 'auto' || val === 'open') {
+          if (this.fixed) {
+            document.getElementsByClassName('message-dialog')[0].style.left = '145px'
+            document.getElementsByClassName('message-dialog')[0].style.bottom = '0px'
           } else {
-            document.getElementsByClassName("message-dialog")[0].style.left = "155px"
-            document.getElementsByClassName("message-dialog")[0].style.bottom = "10px"
+            document.getElementsByClassName('message-dialog')[0].style.left = '155px'
+            document.getElementsByClassName('message-dialog')[0].style.bottom = '10px'
           }
         } else {
-          if(this.fixed) {
-            document.getElementsByClassName("message-dialog")[0].style.left = "45px"
-            document.getElementsByClassName("message-dialog")[0].style.bottom = "0px"
+          if (this.fixed) {
+            document.getElementsByClassName('message-dialog')[0].style.left = '45px'
+            document.getElementsByClassName('message-dialog')[0].style.bottom = '0px'
           } else {
-            document.getElementsByClassName("message-dialog")[0].style.left = "55px"
-            document.getElementsByClassName("message-dialog")[0].style.bottom = "10px"
+            document.getElementsByClassName('message-dialog')[0].style.left = '55px'
+            document.getElementsByClassName('message-dialog')[0].style.bottom = '10px'
           }
         }
       },
       deep: true,
     },
     fixed: {
-      handler(val) {
+      handler (val) {
         if (val === true) {
-          document.getElementsByClassName("message-mask")[0].style.display =
-            "none";
-          ipc.send("channelFixed");
+          document.getElementsByClassName('message-mask')[0].style.display =
+            'none'
+          ipc.send('channelFixed')
         } else {
-          document.getElementsByClassName("message-mask")[0].style.display =
-            "block";
-          ipc.send("channelFreeFixed");
+          document.getElementsByClassName('message-mask')[0].style.display =
+            'block'
+          ipc.send('channelFreeFixed')
         }
       },
       deep: true,
     },
   },
-  mounted() {
+  mounted () {
     this.$tag = 'message-center'
 
-    if (this.mod === "auto" || this.mod === "open") {
+    if (this.mod === 'auto' || this.mod === 'open') {
       if (this.fixed) {
-        this.$emit("updateVisible", true);
-        let $style = document.getElementsByClassName("message-dialog")[0].style;
-        $style.height = "100vh";
-        $style.borderRadius = "0px";
+        this.$emit('updateVisible', true)
+        let $style = document.getElementsByClassName('message-dialog')[0].style
+        $style.height = '100vh'
+        $style.borderRadius = '0px'
         $style.left = '145px'
         $style.bottom = '0px'
-        document.getElementsByClassName("message-mask")[0].style.display = "none";
+        document.getElementsByClassName('message-mask')[0].style.display = 'none'
       } else {
-        this.$emit("updateVisible", false);
-        let $style = document.getElementsByClassName("message-dialog")[0].style;
-        $style.height = "600px";
-        $style.borderRadius = "10px";
+        this.$emit('updateVisible', false)
+        let $style = document.getElementsByClassName('message-dialog')[0].style
+        $style.height = '600px'
+        $style.borderRadius = '10px'
         $style.left = '155px'
         $style.bottom = '10px'
-        document.getElementsByClassName("message-mask")[0].style.display =
-          "block";
+        document.getElementsByClassName('message-mask')[0].style.display =
+          'block'
       }
     } else {
       if (this.fixed) {
-        this.$emit("updateVisible", true);
-        let $style = document.getElementsByClassName("message-dialog")[0].style;
-        $style.height = "100vh";
-        $style.borderRadius = "0px";
+        this.$emit('updateVisible', true)
+        let $style = document.getElementsByClassName('message-dialog')[0].style
+        $style.height = '100vh'
+        $style.borderRadius = '0px'
         $style.left = '45px'
         $style.bottom = '0px'
-        document.getElementsByClassName("message-mask")[0].style.display = "none";
+        document.getElementsByClassName('message-mask')[0].style.display = 'none'
       } else {
-        this.$emit("updateVisible", false);
-        let $style = document.getElementsByClassName("message-dialog")[0].style;
-        $style.height = "600px";
-        $style.borderRadius = "10px";
+        this.$emit('updateVisible', false)
+        let $style = document.getElementsByClassName('message-dialog')[0].style
+        $style.height = '600px'
+        $style.borderRadius = '10px'
         $style.left = '55px'
         $style.bottom = '10px'
-        document.getElementsByClassName("message-mask")[0].style.display =
-          "block";
+        document.getElementsByClassName('message-mask')[0].style.display =
+          'block'
       }
     }
 
-    if (localStorage.getItem("messageSetting")) {
-      ipc.send("notificationSettingStatus", JSON.parse(localStorage.getItem('messageSetting')))
+    if (localStorage.getItem('messageSetting')) {
+      ipc.send('notificationSettingStatus', JSON.parse(localStorage.getItem('messageSetting')))
     } else {
       const list = [
         {
-          title: "浏览器",
+          title: '浏览器',
           appId: 0,
-          url: "../sidebar/assets/network.svg",
+          url: '../sidebar/assets/network.svg',
           notice: true,
           childsShow: true,
           childs: [
             {
-              title: "网页消息",
+              title: '网页消息',
               notice: true,
             },
           ],
         },
         {
-          title: "团队",
+          title: '团队',
           appId: 1,
-          url: "../../icons/svg/chat.svg",
+          url: '../../icons/svg/chat.svg',
           notice: true,
           childsShow: true,
           childs: [
             {
-              title: "聊天",
+              title: '聊天',
               notice: true,
             },
             {
-              title: "好友申请",
+              title: '好友申请',
               notice: true,
             },
           ],
         },
         {
-          title: "社区",
+          title: '社区',
           appId: 2,
-          url: "../sidebar/assets/osx.svg",
+          url: '../sidebar/assets/osx.svg',
           notice: true,
           childsShow: true,
           childs: [
             {
-              title: "互动消息",
+              title: '互动消息',
               notice: true,
             },
             {
-              title: "关注消息",
+              title: '关注消息',
               notice: true,
             },
             {
-              title: "应用消息",
+              title: '应用消息',
               notice: true,
             },
           ],
         },
-      ];
-      localStorage.setItem("messageSetting", JSON.stringify(list));
-      ipc.send("notificationSettingStatus", list)
+      ]
+      localStorage.setItem('messageSetting', JSON.stringify(list))
+      ipc.send('notificationSettingStatus', list)
     }
 
     this.mountedIsSilent()
   },
-});
+})

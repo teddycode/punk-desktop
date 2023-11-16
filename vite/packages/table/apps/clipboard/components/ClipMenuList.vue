@@ -119,7 +119,8 @@ export default {
 
 <template>
   <div class="menu-wrapper">
-    <div v-for="item in menuList" class="flex pointer justify-between s-item button-active  btn-list px-4 rounded-lg py-3 mb-2"
+    <div v-for="item in menuList"
+         class="flex pointer justify-between s-item button-active  btn-list px-4 rounded-lg py-3 mb-2"
          @click="this.clickItem();item.fn(clipItem)">
       <span>{{ item.title }}</span>
       <!--      <span>{{ item.shortKeys }}</span>-->

@@ -2,8 +2,10 @@
   <Modal :maskNoClose="true" animationName="t-b-close" class="">
     <div class="w-[500px] pl-4 pr-4 content">
       <div class="flex justify-between w-full h-[64px] items-center ">
-        <a-dropdown overlayStyle="background-color: var(--primary-bg); padding-left:3px ;padding-right:3px; width: 100px;" placement="bottom"
-                    trigger="click">
+        <a-dropdown
+            overlayStyle="background-color: var(--primary-bg); padding-left:3px ;padding-right:3px; width: 100px;"
+            placement="bottom"
+            trigger="click">
           <div class="flex items-center justify-center w-full">
             <div class="ml-20 font-16 xt-text">{{ defaultType.title }}</div>
             <newIcon class="ml-1 xt-text" icon="fluent:caret-down-12-filled" style="font-size: 20px;"/>
@@ -49,11 +51,13 @@
           </template>
         </a-select>
         <div class="flex items-center">
-          <xt-button class=" xt-text xt-bg-2" style="border-radius:10px ; color: var(--secondary-text) !important;width: 64px; height: 40px;"
+          <xt-button class=" xt-text xt-bg-2"
+                     style="border-radius:10px ; color: var(--secondary-text) !important;width: 64px; height: 40px;"
                      type="text"
                      @click="handleOk">取消
           </xt-button>
-          <xt-button class="ml-2" style="border-radius:10px ; color: var(--secondary-text) !important; width: 64px; height: 40px;background-color: var(--active-bg);"
+          <xt-button class="ml-2"
+                     style="border-radius:10px ; color: var(--secondary-text) !important; width: 64px; height: 40px;background-color: var(--active-bg);"
                      type="primary"
                      @click="publishPost">发布
           </xt-button>

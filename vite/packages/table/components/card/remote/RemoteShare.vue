@@ -70,7 +70,8 @@
               <span>连接地址</span>
               <span class="truncate ml-3 text-right" style="flex:1;">{{ card.customData?.url }}</span>
             </div>
-            <a-input v-model:value="name" :maxlength="20" aria-placeholder="font-size: 16px;" class="input" placeholder="名称" show-count
+            <a-input v-model:value="name" :maxlength="20" aria-placeholder="font-size: 16px;" class="input"
+                     placeholder="名称" show-count
                      spellcheck="false" style="width:266px;height: 48px;"/>
             <a-textarea v-model:value="detail" :bordered="false" :maxlength="200" aria-placeholder="font-size: 16px;"
                         class="input xt-text my-4" placeholder="简介（可选）" show-count spellcheck="false"
@@ -94,13 +95,13 @@
 </template>
 
 <script>
-import {defineAsyncComponent} from 'vue'
-import api from '../../../../../src/model/api';
-import {message} from 'ant-design-vue';
-import cache from '../hooks/cache';
-import {setList} from './testData'
-import {nanoid} from 'nanoid'
-import {completeTask} from "../../../apps/task/page/branch/task.ts"
+import { defineAsyncComponent } from 'vue'
+import api from '../../../../../src/model/api'
+import { message } from 'ant-design-vue'
+import cache from '../hooks/cache'
+import { setList } from './testData'
+import { nanoid } from 'nanoid'
+import { completeTask } from '../../../apps/task/page/branch/task.ts'
 
 const Remote = defineAsyncComponent(() => import('../../widgets/custom/Remote.vue'))
 
@@ -110,7 +111,7 @@ export default {
     Remote,
   },
   props: ['openShare', 'desk', 'cardId', 'direct'],
-  data() {
+  data () {
     return {
       remotes: [],
       activeIndex: 0,
@@ -124,18 +125,18 @@ export default {
     }
   },
   methods: {
-    close() {
+    close () {
       this.$emit('closeShare', false)
     },
-    getImg(url) {
-      return "/img/addCard/" + url + ".png";
+    getImg (url) {
+      return '/img/addCard/' + url + '.png'
     },
-    toggleActive(index) {
+    toggleActive (index) {
       this.activeIndex = index
     },
-    uplaodImageChange(info) {  // info 上传文件的所有信息
-      const formData = new FormData();
-      formData.append("file", info.file)
+    uplaodImageChange (info) {  // info 上传文件的所有信息
+      const formData = new FormData()
+      formData.append('file', info.file)
       api.postCosUpload(formData, (err, res) => {
         if (!err) {
           message.error('数据上传失败')
@@ -149,30 +150,30 @@ export default {
         }
       })
     },
-    beforeUpload(file) {  // 上传之前的准备工作
-      const regex = /^image\/(jpeg|png|jpg)$/;  // 通过正则表达式匹配是否指定的png jpg jpeg的类型文件
+    beforeUpload (file) {  // 上传之前的准备工作
+      const regex = /^image\/(jpeg|png|jpg)$/  // 通过正则表达式匹配是否指定的png jpg jpeg的类型文件
       const isFileType = !regex.test(file.type)
       if (isFileType) {
-        message.error('只能上传JPG和PNG格式图片');
+        message.error('只能上传JPG和PNG格式图片')
       }
-      const isLt2M = file.size / 1024 / 1024 < 2;
+      const isLt2M = file.size / 1024 / 1024 < 2
       if (!isLt2M) {
-        message.error('上传图片不能大于2MB');
+        message.error('上传图片不能大于2MB')
       }
-      return isFileType && isLt2M;
+      return isFileType && isLt2M
     },
-    delImg() {
+    delImg () {
       this.img = ''
     },
-    shareNow() {
+    shareNow () {
       if (!this.img.trim()) return message.info('图片不能为空')
       if (!this.name.trim()) return message.info('名称不能为空')
       const time = new Date().valueOf()
       let cardContent = {
         nanoid: nanoid(4),
-        "name": "remote",
-        "cname": this.name,
-        "detail": this.detail,
+        'name': 'remote',
+        'cname': this.name,
+        'detail': this.detail,
         url: this.card.customData.url,
         sizes: [this.cardSize],
         option: [
@@ -184,9 +185,9 @@ export default {
           },
         ],
         time,
-        "download": 0,
-        "avatar": '/icons/logo128.png',
-        "nickname": 'Victor Ruiz',
+        'download': 0,
+        'avatar': '/icons/logo128.png',
+        'nickname': 'Victor Ruiz',
       }
       completeTask('Z0302')
       setList(cardContent)
@@ -199,13 +200,13 @@ export default {
       // this.close()
       this.$emit('closeShare', false, false)
     },
-    scrub() {
+    scrub () {
       this.direct ? this.$router.go(-1) : this.close()
     }
   },
-  mounted() {
+  mounted () {
     let deskCard = cache.get('cardSize')
-    const {width, height} = this.$refs.sizeBox.getBoundingClientRect();
+    const { width, height } = this.$refs.sizeBox.getBoundingClientRect()
     // console.log(deskCard)
     // console.log(width,height)
     let zoom = JSON.parse(JSON.stringify(this.desk.settings.cardZoom))
@@ -229,7 +230,6 @@ export default {
     // })
     // this.remotes = remoteArr
     // console.log(this.remotes)
-
 
     // html2canvas(document.querySelector("#capture"),{useCORS: true}).then(canvas => {
     //   document.body.appendChild(canvas);

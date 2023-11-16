@@ -10,12 +10,14 @@
   <template v-if="wallStatus === 0">
     <div class="wallheaven-tab">
       <a-radio-group v-model:value="dataObj.purity" style="margin-right: 16px;" @change="getPurity($event)">
-        <a-radio-button style="border:none !important;background:rgba(255, 255, 255, 0.1) !important;border-top-left-radius: 8px;border-bottom-left-radius: 8px;"
-                        value="100">
+        <a-radio-button
+            style="border:none !important;background:rgba(255, 255, 255, 0.1) !important;border-top-left-radius: 8px;border-bottom-left-radius: 8px;"
+            value="100">
           SFW
         </a-radio-button>
-        <a-radio-button style="border:none !important;background:rgba(255, 255, 255, 0.1) !important;border-top-right-radius: 8px;border-bottom-right-radius: 8px;"
-                        value="010">
+        <a-radio-button
+            style="border:none !important;background:rgba(255, 255, 255, 0.1) !important;border-top-right-radius: 8px;border-bottom-right-radius: 8px;"
+            value="010">
           Sketchy
         </a-radio-button>
       </a-radio-group>
@@ -46,12 +48,14 @@
   <template v-if="wallStatus === 1">
     <div class="wallheaven-tab">
       <a-radio-group v-model:value="dataObj.purity" style="margin-right: 16px;" @change="getPurity($event)">
-        <a-radio-button style="border:none !important;background:rgba(255, 255, 255, 0.1) !important;border-top-left-radius: 8px;border-bottom-left-radius: 8px;"
-                        value="100">
+        <a-radio-button
+            style="border:none !important;background:rgba(255, 255, 255, 0.1) !important;border-top-left-radius: 8px;border-bottom-left-radius: 8px;"
+            value="100">
           SFW
         </a-radio-button>
-        <a-radio-button style="border:none !important;background:rgba(255, 255, 255, 0.1) !important;border-top-right-radius: 8px;border-bottom-right-radius: 8px;"
-                        value="010">
+        <a-radio-button
+            style="border:none !important;background:rgba(255, 255, 255, 0.1) !important;border-top-right-radius: 8px;border-bottom-right-radius: 8px;"
+            value="010">
           Sketchy
         </a-radio-button>
       </a-radio-group>
@@ -82,12 +86,14 @@
   <template v-if="wallStatus === 2">
     <div class="wallheaven-tab">
       <a-radio-group v-model:value="dataObj.purity" style="margin-right: 16px;" @change="getPurity($event)">
-        <a-radio-button style="border:none !important;background:rgba(255, 255, 255, 0.1) !important;border-top-left-radius: 8px;border-bottom-left-radius: 8px;"
-                        value="100">
+        <a-radio-button
+            style="border:none !important;background:rgba(255, 255, 255, 0.1) !important;border-top-left-radius: 8px;border-bottom-left-radius: 8px;"
+            value="100">
           SFW
         </a-radio-button>
-        <a-radio-button style="border:none !important;background:rgba(255, 255, 255, 0.1) !important;border-top-right-radius: 8px;border-bottom-right-radius: 8px;"
-                        value="010">
+        <a-radio-button
+            style="border:none !important;background:rgba(255, 255, 255, 0.1) !important;border-top-right-radius: 8px;border-bottom-right-radius: 8px;"
+            value="010">
           Sketchy
         </a-radio-button>
       </a-radio-group>
@@ -193,19 +199,19 @@
 </template>
 
 <script>
-import {defineComponent} from 'vue'
-import {SearchOutlined} from "@ant-design/icons-vue";
-import axios from "axios";
+import { defineComponent } from 'vue'
+import { SearchOutlined } from '@ant-design/icons-vue'
+import axios from 'axios'
 import justifiedGallery from 'justifiedGallery'
-import {paperStore} from "../../store/paper";
-import {mapActions, mapState} from "pinia";
+import { paperStore } from '../../store/paper'
+import { mapActions, mapState } from 'pinia'
 
 export default defineComponent({
   name: 'Wallheaven',
   components: {
     SearchOutlined
   },
-  data() {
+  data () {
     return {
       wallTitle: [
         {
@@ -260,9 +266,9 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapState(paperStore, ["myPapers"]),
+    ...mapState(paperStore, ['myPapers']),
   },
-  mounted() {
+  mounted () {
     justifiedGallery()
     $('#wall-container-paper').scroll(() => {
       if ($('#wall-container-paper').scrollTop() + $('#wall-container-paper').height() + 20 >= $('#wallImages').prop('scrollHeight') && this.isLoading === false) {
@@ -273,9 +279,9 @@ export default defineComponent({
     this.getWallHeavenData(this.page++)
   },
   methods: {
-    ...mapActions(paperStore, ["removeToMyPaper"]),
+    ...mapActions(paperStore, ['removeToMyPaper']),
     // wallheaven壁纸分类标题
-    wallTitleClick(item) {
+    wallTitleClick (item) {
       this.wallStatus = item.id
       this.dataObj.categories = item.categories
       this.dataObj.sorting = item.sorting
@@ -288,25 +294,25 @@ export default defineComponent({
       }
     },
     // 初始化数据
-    getWallHeavenData(page) {
+    getWallHeavenData (page) {
       const url = `https://wallhaven.cc/api/v1/search?&categories=${this.dataObj.categories}&purity=${this.dataObj.purity}&sorting=${this.dataObj.sorting}&page=${page}`
       if (!this.isLoading) {
         this.isLoading = true
         axios.get(url).then(async res => {
           let wallImageData = res.data.data
-          let animations = ["ani-gray", "bowen", "ani-rotate"];
+          let animations = ['ani-gray', 'bowen', 'ani-rotate']
           if (wallImageData) {
             wallImageData.forEach(img => {
-              let randomIndex = Math.floor(Math.random() * animations.length);
+              let randomIndex = Math.floor(Math.random() * animations.length)
               const image = {
                 title: false,
                 src: img.thumbs.large,
                 path: img.path,
                 resolution: img.resolution,
                 animations: animations[randomIndex],
-              };
+              }
               if (this.wallStatus === 0) {
-                this.hotHeavenList.push(image);
+                this.hotHeavenList.push(image)
               } else if (this.wallStatus === 1) {
                 this.acgHeavenList.push(image)
               } else if (this.wallStatus === 2) {
@@ -314,27 +320,27 @@ export default defineComponent({
               }
             })
             this.$nextTick(() => {
-              this.isLoading = false;
-            });
+              this.isLoading = false
+            })
           }
         })
       }
     },
     // 添加收藏
-    addToMy(img) {
-      this.removeToMyPaper(img);
+    addToMy (img) {
+      this.removeToMyPaper(img)
     },
-    isInMyPapers(image) {
+    isInMyPapers (image) {
       return (
           this.myPapers.findIndex((img) => {
-            return image.src === img.src;
+            return image.src === img.src
           }) > -1
-      );
+      )
     },
-    getSearchData() {
+    getSearchData () {
       let searchUrl = `https://wallhaven.cc/api/v1/search?&categories=${this.dataObj.categories}&purity=${this.dataObj.purity}${this.searchObj.wallSizeValue === '' ? '' : `&atleast=${this.searchObj.wallSizeValue}`}${this.wallStatus === 0 ? `&sorting=${this.hotSorting}` : this.wallStatus === 1 ? `&sorting=${this.acgSorting}` : this.wallStatus === 2 ? `&sorting=${this.peopleSorting}` : ''}${this.searchObj.searchName !== '' ? `&q=${this.searchObj.searchName}` : ''}&page=${this.page}`
       if (this.wallStatus === 0) {
-        this.hotHeavenList = [];
+        this.hotHeavenList = []
       } else if (this.wallStatus === 1) {
         this.acgHeavenList = []
       } else if (this.wallStatus === 2) {
@@ -344,19 +350,19 @@ export default defineComponent({
         this.isLoading = true
         axios.get(searchUrl).then(async res => {
           let searchImageData = res.data.data
-          let animations = ["ani-gray", "bowen", "ani-rotate"];
+          let animations = ['ani-gray', 'bowen', 'ani-rotate']
           if (searchImageData) {
             searchImageData.forEach(img => {
-              let randomIndex = Math.floor(Math.random() * animations.length);
+              let randomIndex = Math.floor(Math.random() * animations.length)
               const image = {
                 title: false,
                 src: img.thumbs.large,
                 path: img.path,
                 resolution: img.resolution,
                 animations: animations[randomIndex],
-              };
+              }
               if (this.wallStatus === 0) {
-                this.hotHeavenList.push(image);
+                this.hotHeavenList.push(image)
               } else if (this.wallStatus === 1) {
                 this.acgHeavenList.push(image)
               } else if (this.wallStatus === 2) {
@@ -364,21 +370,21 @@ export default defineComponent({
               }
             })
             this.$nextTick(() => {
-              this.isLoading = false;
-            });
+              this.isLoading = false
+            })
           }
         })
       }
     },
-    wallSelectChange(e) {
+    wallSelectChange (e) {
       this.searchObj.sorting = e
     },
-    getWallSelectValue(e) {
+    getWallSelectValue (e) {
       if (e !== '') {
         this.searchObj.wallSizeValue = e
       }
     },
-    getPurity(e) {
+    getPurity (e) {
       this.dataObj.purity = e.target.value
     }
 

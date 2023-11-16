@@ -70,10 +70,10 @@
 </template>
 
 <script>
-const {userModel, spaceModel} = window.$models
-import {createVNode} from 'vue'
-import {DesktopOutlined} from '@ant-design/icons-vue'
-import {message, Modal} from 'ant-design-vue'
+const { userModel, spaceModel } = window.$models
+import { createVNode } from 'vue'
+import { DesktopOutlined } from '@ant-design/icons-vue'
+import { message, Modal } from 'ant-design-vue'
 
 export default {
   name: 'SpaceList',
@@ -81,12 +81,12 @@ export default {
     spaces: Array,
     user: Object,
     currentSpace: Object,
-    activeSpace: {nanoid: ''},
+    activeSpace: { nanoid: '' },
   },
   components: {
     DesktopOutlined
   },
-  data() {
+  data () {
     return {
       //修改<a-modal
 
@@ -98,26 +98,26 @@ export default {
   },
   emits: ['setActive', 'reloadSpaces'],
   methods: {
-    friendlyDate(date) {
+    friendlyDate (date) {
       return tsbApi.util.friendlyDate(date)
     },
-    offLine(time) {
+    offLine (time) {
       return this.lastReloadTime - time > 30 * 1000
     },
-    reloadSpaces() {
+    reloadSpaces () {
       this.lastReloadTime = Date.now()
       this.$emit('reloadSpaces')
     },
-    setActive(space) {
+    setActive (space) {
       this.$emit('setActive', space)
     },
-    getSpaceIcon(space) {
+    getSpaceIcon (space) {
       let icon = '/icons/box.svg'
       //todo 支持自定义图标
       return icon
     },
 
-    showRenameSpace(space) {
+    showRenameSpace (space) {
       this.visibleRename = true
       this.spaceRename = space.name
       this.renamingSpace = space
@@ -138,7 +138,7 @@ export default {
       //   </a-modal>
     }
     ,
-    async doRenameSpace() {
+    async doRenameSpace () {
       try {
         if (this.spaceRename === this.renamingSpace.name) {
           message.error('重命名的名称和原名称一致，请修改新名称。')
@@ -173,7 +173,7 @@ export default {
      * 复制一个空间，右键菜单
      * @param space
      */
-    async copySpace(space) {
+    async copySpace (space) {
       let result = await spaceModel.setUser(this.user).copy(space)
       if (result.status === 1) {
         message.success('复制空间成功')
@@ -183,7 +183,7 @@ export default {
       }
     }
     ,
-    deleteSpace(space) {
+    deleteSpace (space) {
       if (space.isUsing || space.isOtherUsing) {
         message.info('不可删除正在使用中的空间。')
         return
@@ -211,7 +211,7 @@ export default {
         }
       })
     },
-    async doChangeSpaceCloud(space) {
+    async doChangeSpaceCloud (space) {
       try {
         let result = await spaceModel.setUser(this.user).changeCurrent(space)
         if (result.status === 1) {
@@ -226,7 +226,7 @@ export default {
 
     }
     ,
-    async switchSpace(space) {
+    async switchSpace (space) {
       if (this.user.uid === 0) {
         Modal.confirm({
           title: '切换到本地空间',

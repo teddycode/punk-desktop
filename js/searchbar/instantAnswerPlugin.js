@@ -84,7 +84,7 @@ function showSearchbarInstantAnswers (text, input, event) {
     if (instantAnswers[res.AnswerType]) {
       data = instantAnswers[res.AnswerType](text, res.Answer)
 
-    // use the default format
+      // use the default format
     } else if (res.Abstract || (res.Answer && typeof res.Answer === 'string')) {
       data = {
         title: (typeof res.Answer === 'string' && removeTags(res.Answer)) || removeTags(res.Heading),
@@ -101,7 +101,7 @@ function showSearchbarInstantAnswers (text, input, event) {
         }
       }
 
-    // show a disambiguation
+      // show a disambiguation
     } else if (res.RelatedTopics) {
       res.RelatedTopics.slice(0, 3).forEach(function (item) {
         // the DDG api returns the entity name inside an <a> tag

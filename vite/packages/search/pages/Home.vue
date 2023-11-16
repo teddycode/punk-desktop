@@ -44,10 +44,10 @@
 </template>
 
 <script>
-import {BulbOutlined, CloseOutlined, SearchOutlined, SmileOutlined} from '@ant-design/icons-vue'
-import {Modal} from 'ant-design-vue'
-import {appStore} from '../store'
-import {mapWritableState} from 'pinia'
+import { BulbOutlined, CloseOutlined, SearchOutlined, SmileOutlined } from '@ant-design/icons-vue'
+import { Modal } from 'ant-design-vue'
+import { appStore } from '../store'
+import { mapWritableState } from 'pinia'
 import gpt from '../assets/img/gpt.svg'
 import SearchInput from '../components/SearchInput.vue'
 
@@ -57,7 +57,7 @@ export default {
     SearchInput,
     SearchOutlined, SmileOutlined, CloseOutlined, BulbOutlined
   },
-  data() {
+  data () {
     return {
       gpt,
       tip: ''
@@ -66,22 +66,22 @@ export default {
   computed: {
     ...mapWritableState(appStore, ['apps'])
   },
-  mounted() {
+  mounted () {
 
     this.tip = localStorage.getItem('closeTip')
   },
   methods: {
-    learn() {
+    learn () {
       this.$router.push('/learn')
     },
-    executeApp(app) {
-      ipc.send('executeApp', {app: JSON.parse(JSON.stringify(app))})
+    executeApp (app) {
+      ipc.send('executeApp', { app: JSON.parse(JSON.stringify(app)) })
 
     },
     /**
      * 关闭提示
      */
-    closeTip() {
+    closeTip () {
       Modal.confirm({
         centered: true,
         content: '是否关闭ChartGPT提示？在关闭提示后，您仍可点击搜索输入栏左侧放大镜🔍图标学习如何使用GPT。',

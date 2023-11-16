@@ -34,12 +34,12 @@ const props = defineProps({
     default: false,
   },
   color: {
-    default: "var(--primary-text)",
+    default: 'var(--primary-text)',
   },
   name: {
-    default: "name",
+    default: 'name',
   },
-});
+})
 </script>
 
 <style lang="scss" scoped>

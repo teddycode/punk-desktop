@@ -36,7 +36,7 @@ var settings = {
     ipc.send('settingChanged', key, value)
     settings.runChangeCallbacks(key)
   },
-  reload(){
+  reload () {
     var fileData
     try {
       fileData = fs.readFileSync(settings.filePath, 'utf-8')

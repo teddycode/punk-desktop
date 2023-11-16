@@ -40,17 +40,17 @@
 </template>
 
 <script setup>
-import {useRouter} from "vue-router";
-import {taskStore} from "../../store.ts";
-import {ref} from "vue";
+import { useRouter } from 'vue-router'
+import { taskStore } from '../../store.ts'
+import { ref } from 'vue'
 
-const flag = ref(true);
-const store = taskStore();
-const router = useRouter();
+const flag = ref(true)
+const store = taskStore()
+const router = useRouter()
 const go = () => {
-  router.push({name: "promotion"});
-  store.isTaskDrawer = false;
-};
+  router.push({ name: 'promotion' })
+  store.isTaskDrawer = false
+}
 </script>
 
 <style lang="scss" scoped></style>

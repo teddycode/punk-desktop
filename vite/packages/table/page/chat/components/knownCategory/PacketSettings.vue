@@ -22,25 +22,25 @@
 </template>
 
 <script>
-import {mapActions} from 'pinia'
-import {Icon as CategoryIcon} from '@iconify/vue'
-import {communityStore} from '../../store/communityStore'
-import {message} from 'ant-design-vue'
+import { mapActions } from 'pinia'
+import { Icon as CategoryIcon } from '@iconify/vue'
+import { communityStore } from '../../store/communityStore'
+import { message } from 'ant-design-vue'
 
 export default {
-  props: ["no", "item"],
+  props: ['no', 'item'],
 
   components: {
     CategoryIcon
   },
 
-  data() {
+  data () {
     return {
       categoryName: this.item.name,
     }
   },
 
-  mounted() {
+  mounted () {
     this.$nextTick(() => {
       const inputDom = document.querySelector('.search')
       inputDom.focus()
@@ -51,14 +51,14 @@ export default {
   methods: {
     ...mapActions(communityStore, ['updateChannel', 'getCategoryData']),
     // 关闭弹窗
-    closeNewGroup() {
+    closeNewGroup () {
       this.$emit('close')
     },
 
     // 创建完成
-    async submitCategory() {
+    async submitCategory () {
       if (this.categoryName !== '' && this.no !== '1') {
-        const categoryRes = await this.updateChannel({...this.item, name: this.categoryName})
+        const categoryRes = await this.updateChannel({ ...this.item, name: this.categoryName })
         if (categoryRes.status === 1) {
           message.success(`${categoryRes.info}`)
           await this.getCategoryData(this.no)

@@ -21,48 +21,48 @@
 
 <script>
 export default {
-  name: "XtTextarea",
+  name: 'XtTextarea',
   props: {
     data: {},
     placeholder: {
-      default: "",
+      default: '',
     },
     border: {
-      default: "xt-border",
+      default: 'xt-border',
     },
   },
-  data() {
+  data () {
     return {
       searchValue: this.data,
-    };
+    }
   },
   watch: {
-    searchValue(newV) {
-      this.$emit("update:data", newV);
+    searchValue (newV) {
+      this.$emit('update:data', newV)
     },
-    data(newV) {
-      this.searchValue = newV;
+    data (newV) {
+      this.searchValue = newV
     },
   },
   methods: {
     // 按下回车
-    handleEnter(e) {
-      this.$emit("enter", e);
+    handleEnter (e) {
+      this.$emit('enter', e)
     },
     // 内容改变
-    handleChange(e) {
-      this.$emit("change", e);
+    handleChange (e) {
+      this.$emit('change', e)
     },
     // 获取焦点
-    handleFocus(e) {
-      this.$emit("focus", e);
+    handleFocus (e) {
+      this.$emit('focus', e)
     },
     // 失去焦点
-    handleBlur(e) {
-      this.$emit("blur", e);
+    handleBlur (e) {
+      this.$emit('blur', e)
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

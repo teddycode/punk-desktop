@@ -74,11 +74,11 @@
 </template>
 
 <script>
-import {Modal} from 'ant-design-vue'
+import { Modal } from 'ant-design-vue'
 
 export default {
   name: 'Tomato',
-  data() {
+  data () {
     return {
       tomato: 0,
       target: 5,
@@ -96,15 +96,15 @@ export default {
       running: false,
     }
   },
-  mounted() {
+  mounted () {
     this.start()
   },
   computed: {
-    rate() {
+    rate () {
       let rate = this.getRate()
       return rate
     },
-    status() {
+    status () {
       if (this.running) {
         if (!this.timer) {
           return '暂停'
@@ -116,7 +116,7 @@ export default {
       }
     }
   },
-  beforeRouteLeave(to, from, next) {
+  beforeRouteLeave (to, from, next) {
     let isPaused = false
     if (this.running) {
       if (!this.timer) {
@@ -144,17 +144,17 @@ export default {
     }
   },
   methods: {
-    goBack() {
+    goBack () {
       this.$router.go(-1)
     },
-    displayNum(num) {
+    displayNum (num) {
       if (num < 10) {
         return '0' + num
       } else {
         return num
       }
     },
-    reset(hours = 0, minutes = 0, seconds = 0) {
+    reset (hours = 0, minutes = 0, seconds = 0) {
       this.totalTime = {
         hours,
         minutes,
@@ -164,32 +164,32 @@ export default {
       this.minutes = this.totalTime.minutes
       this.seconds = this.totalTime.seconds
     },
-    start() {
+    start () {
       this.reset(0, 25, 0)
       this.timer = setInterval(this.interval, this.tick)
       this.running = true
     },
-    stop() {
+    stop () {
       this.running = false
       this.clearInterval()
       this.reset(0, 0, 0)
 
     },
-    clearInterval() {
+    clearInterval () {
       clearInterval(this.timer)
       this.timer = null
     },
-    getRate() {
+    getRate () {
       return Number(((1 - (this.seconds + this.minutes * 60 + this.hours * 60 * 60) / (this.totalTime.seconds + this.totalTime.minutes * 60 + this.totalTime.hours * 60 * 60)) * 100).toFixed())
     },
-    pause() {
+    pause () {
       if (this.timer === null) {
         this.timer = setInterval(this.interval, this.tick)
       } else {
         this.clearInterval()
       }
     },
-    finish() {
+    finish () {
       this.running = false
       this.clearInterval()
       this.reset()
@@ -204,7 +204,7 @@ export default {
         cancelText: null
       })
     },
-    interval() {
+    interval () {
       if (!this.running) return
       if (this.seconds <= 0) {
         if (this.minutes === 0) {

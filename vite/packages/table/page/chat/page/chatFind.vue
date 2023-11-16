@@ -5,7 +5,8 @@
       <a-input v-if="communityDefault.name === 'community'" ref="findSearchRef"
                v-model:value="searchKeyWord" class="h-10 ml-3"
                placeholder="搜索"
-               spellcheck="false" style="width: 244px;border-radius: 10px;background: var(--secondary-bg);" @input="findSearch" @pressEnter="findSearch"
+               spellcheck="false" style="width: 244px;border-radius: 10px;background: var(--secondary-bg);"
+               @input="findSearch" @pressEnter="findSearch"
       >
         <template #suffix>
           <SearchIcon class="pointer category-button" icon="fluent:search-20-filled" style="font-size: 1.43rem;"
@@ -21,10 +22,10 @@
 </template>
 
 <script>
-import {mapActions} from 'pinia'
+import { mapActions } from 'pinia'
 import HorizontalPanel from '../../../components/HorizontalPanel.vue'
-import {Icon as SearchIcon} from '@iconify/vue'
-import {communityStore} from '../store/communityStore'
+import { Icon as SearchIcon } from '@iconify/vue'
+import { communityStore } from '../store/communityStore'
 
 import GroupsUserFind from './find/groupsUserFind.vue'
 import CommunityFind from './find/communityFind.vue'
@@ -37,20 +38,20 @@ export default {
     GroupsUserFind
   },
 
-  data() {
+  data () {
     return {
       communityList: [
-        {title: '社群', name: 'community',},
-        {title: '群聊和用户', name: 'user',}
+        { title: '社群', name: 'community', },
+        { title: '群聊和用户', name: 'user', }
       ],
-      communityDefault: {title: '社群', name: 'community'},
+      communityDefault: { title: '社群', name: 'community' },
       isListEmpty: window.$TUIKit.store.store.TUIConversation.conversationList,
       searchList: [],
       searchKeyWord: ''
     }
   },
 
-  mounted() {
+  mounted () {
     this.$nextTick(() => {
       if (this.communityDefault.name === 'community') {
         this.$refs.findSearchRef.focus()
@@ -61,7 +62,7 @@ export default {
   methods: {
     ...mapActions(communityStore, ['searchCommendCommunity']),
     // 社群发现页搜索
-    async findSearch() {
+    async findSearch () {
       if (this.searchKeyWord !== '') {
         const searchResult = await this.searchCommendCommunity(this.searchKeyWord)
         // console.log('获取搜索结果',searchResult);
@@ -72,10 +73,9 @@ export default {
     }
   },
 
-
   watch: {
     'communityDefault': {
-      handler(newVal) {
+      handler (newVal) {
         this.communityDefault = newVal
       },
       immediate: true,
@@ -83,7 +83,7 @@ export default {
     },
 
     'isListEmpty': {
-      handler(newVal) {
+      handler (newVal) {
         if (newVal?.length === 0) {
           this.communityDefault = this.communityList[1]
         } else {

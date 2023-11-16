@@ -21,10 +21,10 @@ export default {
   name: 'Arrow',
   props: ['type', 'value'],
   computed: {
-    stand() {
+    stand () {
       return dataHelper.aboveStandard(this.type, this.value, standard)
     },
-    getStand() {
+    getStand () {
       return (standard[this.type]).toFixed(1)
     }
   }

@@ -43,7 +43,7 @@ export default {
     },
 
   },
-  data() {
+  data () {
     return {
       visibleSettings: false,
       visibleSource: false,
@@ -71,11 +71,10 @@ export default {
     }
   },
   methods: {
-    choosenSource() {
+    choosenSource () {
       this.visibleSource = false
     },
   }
-
 
 }
 </script>

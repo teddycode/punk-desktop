@@ -1,17 +1,17 @@
-import ShortcutKeyRoute from "../../apps/shortcutKey/route";
+import ShortcutKeyRoute from "@table/apps/shortcutKey/route";
 //应用
 import TomatoStart from '@page/app/tomato/TomatoStart.vue'
 import Tomato from '@page/app/tomato/Tomato.vue'
 /*待办*/
 import Todo from '@page/app/todo/App.vue'
-import DeckAdd from "../../apps/deck/DeckAdd.vue";
-import DeckIndex from "../../apps/deck/DeckIndex.vue";
-import Clipboard from "../../apps/clipboard/page/Clipboard.vue"
+import DeckAdd from "@table/apps/deck/DeckAdd.vue";
+import DeckIndex from "@table/apps/deck/DeckIndex.vue";
+import Clipboard from "@table/apps/clipboard/page/Clipboard.vue"
 import WorkDesk from '@page/work/Desk.vue'
 /*便签*/
-import Note from '../../apps/note/index.vue'
+import Note from '@table/apps/note/index.vue'
 import AIAssistant from "@page/AIAssistant/index.vue"
-import DeckHome from "../../apps/deck/DeckHome.vue";
+import DeckHome from "@table/apps/deck/DeckHome.vue";
 
 export default [
     {

@@ -11,7 +11,9 @@
               </span>
       <span v-if="item.type==='number'">
                 <a-input-number id="inputNumber" v-model:value="item.value" :max="item.max"
-                                :min="0" size="small" style="width: 50px;text-align: center" @change="item.onChange"/> {{ item.unit }}
+                                :min="0" size="small" style="width: 50px;text-align: center" @change="item.onChange"/> {{
+          item.unit
+        }}
               </span>
       <span v-if="item.type==='button'">
                <a-button :size="item.buttonSize" :type="item.buttonType" @click="item.click">{{ item.title }}</a-button>
@@ -28,7 +30,7 @@
 export default {
   name: 'SettingGroup',
   props: ['itemGroups'],
-  mounted() {
+  mounted () {
 
   }
 }

@@ -43,100 +43,100 @@
 </template>
 
 <script>
-import FastNav from "../components/FastNav.vue";
-import {linkList} from "../hooks/config";
-import {getHostAddress} from "../hooks/getHostAddress";
-import editMixins from "../hooks/mixins";
+import FastNav from '../components/FastNav.vue'
+import { linkList } from '../hooks/config'
+import { getHostAddress } from '../hooks/getHostAddress'
+import editMixins from '../hooks/mixins'
 
-import {useBase64AsImage} from "../../../../card/hooks/base64";
+import { useBase64AsImage } from '../../../../card/hooks/base64'
 
 export default {
   mixins: [editMixins],
   components: {
     FastNav,
   },
-  data() {
+  data () {
     return {
       linkList,
-    };
+    }
   },
   computed: {
-    title() {
+    title () {
       return (
           this.edit.open.name ||
           this.edit.linkValue.name ||
           this.edit.linkValue ||
-          ""
-      );
+          ''
+      )
     },
   },
 
   methods: {
-    clear() {
-      this.edit.linkValue = "";
-      this.edit.link = "";
-      this.edit.open = {value: "", type: "internal"};
+    clear () {
+      this.edit.linkValue = ''
+      this.edit.link = ''
+      this.edit.open = { value: '', type: 'internal' }
     },
-    leaveInput() {
+    leaveInput () {
       if (this.edit.src.length === 0) {
-        const domain = getHostAddress(this.edit.open.value);
-        this.edit.src = domain + "/favicon.ico";
+        const domain = getHostAddress(this.edit.open.value)
+        this.edit.src = domain + '/favicon.ico'
       }
     },
-    linkClick() {
-      this.edit.link = "link";
+    linkClick () {
+      this.edit.link = 'link'
     },
-    fastClick() {
+    fastClick () {
       this.$nextTick(() => {
-        this.$refs.fastNavRef.showFastNav();
-      });
+        this.$refs.fastNavRef.showFastNav()
+      })
     },
     // 获取app信息
 
-    async returnApp(item) {
-      console.log('item :>> ', item);
-      console.log('item.path :>> ', item.path);
+    async returnApp (item) {
+      console.log('item :>> ', item)
+      console.log('item.path :>> ', item.path)
       let img = await tsbApi.system.extractFileIcon(item.path)
-      console.log('img :>> ', img);
-      this.edit.open.name = item.name;
+      console.log('img :>> ', img)
+      this.edit.open.name = item.name
       // 当图片状态为空时
       if (!this.edit.src) {
-        if (item.icon && item.type !== "tableApp") {
-          this.edit.src = item.icon;
+        if (item.icon && item.type !== 'tableApp') {
+          this.edit.src = item.icon
         } else {
-          this.edit.src = await useBase64AsImage(item.icon);
+          this.edit.src = await useBase64AsImage(item.icon)
         }
       }
       // 当标题状态为空时
-      if (this.edit.titleValue == "") {
-        if (item.name) this.edit.titleValue = item.name;
+      if (this.edit.titleValue == '') {
+        if (item.name) this.edit.titleValue = item.name
       }
-      if (item.type === "lightApp") {
+      if (item.type === 'lightApp') {
         // 轻应用数据
         this.edit.open = {
-          type: "lightApp",
+          type: 'lightApp',
           value: item.package,
           name: item.name,
-        };
-        item = this.edit.open;
-      } else if (item.type === "coolApp") {
+        }
+        item = this.edit.open
+      } else if (item.type === 'coolApp') {
         // 酷应用数据
         this.edit.open = {
-          type: "coolApp",
+          type: 'coolApp',
           value: item.data,
           name: item.name,
-        };
-        item = this.edit.open;
-      } else if (item.type === "tableApp") {
+        }
+        item = this.edit.open
+      } else if (item.type === 'tableApp') {
         // 本地应用数据
 
         this.edit.open = {
-          type: "tableApp",
+          type: 'tableApp',
           value: item.path,
           name: item.name,
           src: item.src
-        };
-        item = this.edit.open;
+        }
+        item = this.edit.open
 
       }
       //  else if (item.type === "systemApp") {
@@ -149,33 +149,33 @@ export default {
       //   item = this.edit.open;
       // }
 
-      this.edit.linkValue = item;
-      this.edit.link = "fast";
+      this.edit.linkValue = item
+      this.edit.link = 'fast'
     },
-    navClick() {
-      let fileRef = this.$refs.fileRef;
+    navClick () {
+      let fileRef = this.$refs.fileRef
 
-      fileRef.click();
-      let that = this;
+      fileRef.click()
+      let that = this
       // 用户选择执行
       fileRef.onchange = async function () {
         if (this.files.length === 0) {
-          this.clear();
-          return;
+          this.clear()
+          return
         }
-        const file = this.files[0];
+        const file = this.files[0]
         that.edit.open = {
-          type: "tableApp",
+          type: 'tableApp',
           name: file.name,
           value: file.path,
-        };
-        that.edit.link = "nav";
+        }
+        that.edit.link = 'nav'
         that.edit.src = await tsbApi.system.extractFileIcon(file.path)
-        this.value = "";
-      };
+        this.value = ''
+      }
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

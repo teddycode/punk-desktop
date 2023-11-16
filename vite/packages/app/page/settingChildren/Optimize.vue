@@ -39,27 +39,26 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from 'pinia'
-import {appStore} from '../../store'
+import { mapActions, mapWritableState } from 'pinia'
+import { appStore } from '../../store'
 import DebugTip from '../../components/DebugTip.vue'
 
-const {appModel} = window.$models
+const { appModel } = window.$models
 export default {
   name: 'Optimize',
-  components: {DebugTip},
-  data() {
+  components: { DebugTip },
+  data () {
     return {}
   },
   computed: {
     ...mapWritableState(appStore, ['app', 'debugMod', 'userSetting'])
   },
-  mounted() {
+  mounted () {
   },
   methods: {
-    async restore() {
+    async restore () {
 
       let defaultSetting = await appModel.getDefaultUserSetting(this.app.nanoid)
-
 
       this.userSetting.optimize = defaultSetting.optimize
     },

@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import {Icon as ChannelIcon} from '@iconify/vue'
+import { Icon as ChannelIcon } from '@iconify/vue'
 import ChannelLink from './knownCategory/ChannelLink.vue'
 import ForumChannel from './knownCategory/ForumChannel.vue'
 import ChannelGroup from './knownCategory/ChannelGroup.vue'
@@ -58,34 +58,32 @@ export default {
 
   props: ['no', 'id'],
 
-  data() {
+  data () {
     return {
       nextShow: false,
       channelList: [
         // { icon:'fluent-emoji-flat:desktop-computer',name:'桌面',type:'desk'},
-        {icon: 'fluent-emoji-flat:placard', name: '社区', type: 'community'},
-        {icon: 'fluent-emoji-flat:thought-balloon', name: '群聊', type: 'group'},
-        {icon: 'fluent-emoji-flat:globe-with-meridians', name: '网页链接', type: 'link'}
+        { icon: 'fluent-emoji-flat:placard', name: '社区', type: 'community' },
+        { icon: 'fluent-emoji-flat:thought-balloon', name: '群聊', type: 'group' },
+        { icon: 'fluent-emoji-flat:globe-with-meridians', name: '网页链接', type: 'link' }
       ],
       selectIndex: 'community',
     }
   },
 
-
   methods: {
-    closeChannel() {
+    closeChannel () {
       this.$emit('close')
     },
 
-    selectChannel(item) {
+    selectChannel (item) {
       this.selectIndex = item.type
     },
 
-    selectSubmit() {
+    selectSubmit () {
       this.nextShow = true
     }
   },
-
 
 }
 </script>

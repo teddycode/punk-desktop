@@ -22,7 +22,8 @@
                spellcheck="false" style="height: 48px;"/>
       <span class="drawer-title" style="margin-top:24px;">选项</span>
       <span class="drawer-tip">每行填写一个选项</span>
-      <a-textarea v-model:value="eatText" :bordered="false" aria-placeholder="font-size: 16px;" class="input xt-text my-4"
+      <a-textarea v-model:value="eatText" :bordered="false" aria-placeholder="font-size: 16px;"
+                  class="input xt-text my-4"
                   placeholder="请输入" spellcheck="false" style="height: 423px;"
                   @change="getEatVal"/>
     </div>

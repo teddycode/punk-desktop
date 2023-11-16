@@ -21,9 +21,10 @@
                     </div>
                   </a-col>
                   <a-col v-if="user.devote" :span="7">
-                    <div class=" rounded-lg pointer receive-active flex justify-center items-center bg-black bg-opacity-30 pl-3 pr-3 pt-2 pb-2"
-                         style="font-size: 16px; color: rgba(255,255,255,0.85);font-weight: 500;"
-                         @click="doExchangeDevote(user.uid)">
+                    <div
+                        class=" rounded-lg pointer receive-active flex justify-center items-center bg-black bg-opacity-30 pl-3 pr-3 pt-2 pb-2"
+                        style="font-size: 16px; color: rgba(255,255,255,0.85);font-weight: 500;"
+                        @click="doExchangeDevote(user.uid)">
                       领取
                     </div>
                   </a-col>
@@ -88,23 +89,23 @@
 </template>
 
 <script>
-import {mapActions, mapState} from "pinia";
-import {appStore} from "../../store";
-import HorizontalPanel from "../HorizontalPanel.vue";
-import UserAvatar from "../small/UserAvatar.vue";
-import {teamStore} from "../../store/team";
-import {message} from "ant-design-vue";
+import { mapActions, mapState } from 'pinia'
+import { appStore } from '../../store'
+import HorizontalPanel from '../HorizontalPanel.vue'
+import UserAvatar from '../small/UserAvatar.vue'
+import { teamStore } from '../../store/team'
+import { message } from 'ant-design-vue'
 import XtButton from '../../ui/libs/Button/index.vue'
-import {completeTask} from "../../apps/task/page/branch/task"
+import { completeTask } from '../../apps/task/page/branch/task'
 
 export default {
-  name: "TeamDevote",
-  components: {XtButton, UserAvatar, HorizontalPanel},
+  name: 'TeamDevote',
+  components: { XtButton, UserAvatar, HorizontalPanel },
   props: ['teamLeader', 'teamMembers', 'team'],
   computed: {
     ...mapState(appStore, ['userInfo']),
     ...mapState(teamStore, ['membersDevote']),
-    memberDevoteDisplay() {
+    memberDevoteDisplay () {
       let display = JSON.parse(JSON.stringify(this.teamMembers))
       display.unshift(JSON.parse(JSON.stringify(this.teamLeader)))
 
@@ -112,12 +113,11 @@ export default {
         user.devote = this.membersDevote[user.uid] || 0
       })
 
-
       return display.filter(member => {
         return Number(member.uid) !== Number(this.userInfo.uid)
       })
     },
-    total() {
+    total () {
       let total = 0
       this.memberDevoteDisplay.forEach(devote => {
         total += devote.devote
@@ -125,10 +125,10 @@ export default {
       return total
     }
   },
-  data() {
+  data () {
     return {
-      incomeTitle: [{title: '我的收益', name: 'MIC'}, {title: '小队贡献', name: 'CB'}],
-      defaultIncome: {title: '我的收益', name: 'MIC'},
+      incomeTitle: [{ title: '我的收益', name: 'MIC' }, { title: '小队贡献', name: 'CB' }],
+      defaultIncome: { title: '我的收益', name: 'MIC' },
       teamIncome: [],  // 小队收益
       teamCB: [],  // 小队贡献
       outerSettings: {
@@ -142,17 +142,17 @@ export default {
       avatar_url: '/img/excellent _avatar.svg',
     }
   },
-  async mounted() {
+  async mounted () {
     await this.getMemberDevote()
   },
   methods: {
     ...mapActions(teamStore, ['getMemberDevote', 'exchangeDevote']),
     // 我的额外收益领取
-    myExtra() {
+    myExtra () {
 
     },
     // 小队收益
-    async doExchangeDevote(uid = 0) {
+    async doExchangeDevote (uid = 0) {
       let rs = await this.exchangeDevote(uid)
       if (rs.status) {
         message.success('兑换成功')
@@ -164,7 +164,7 @@ export default {
       }
     },
     // 小队贡献
-    captainContribute() {
+    captainContribute () {
     }
 
   }

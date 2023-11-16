@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       w: '100%',
       h: '360px',
@@ -25,11 +25,11 @@ export default {
       default: '1',
     },
   },
-  mounted() {
+  mounted () {
     this.drag()
   },
   methods: {
-    dragCallBack(e) {
+    dragCallBack (e) {
       if (e == 'card1') {
         this.w = `${540}px`
         this.h = `${140}px`
@@ -50,7 +50,7 @@ export default {
         this.h = height * 205 + (height - 1) * 10 - 60 + 'px'
       }
     },
-    drag() {
+    drag () {
       let that = this
       let a = this.$refs.textRef
       let dragRef = this.$refs.dragRef
@@ -82,7 +82,7 @@ export default {
           document.onmouseup = null
           that.dragCallBack(name)
         }
-      }, {capture: true})
+      }, { capture: true })
     },
   }
 }

@@ -38,21 +38,21 @@
 
 <script>
 export default {
-  name: "XtState",
+  name: 'XtState',
   props: {
     // 显示的状态
     state: {
       type: String,
-      default: "init",
+      default: 'init',
     },
     // 显示的窗口大小 两种方式 1、外部定义宽高 2、传递window对象
     window: {
       type: Object,
       default: () => {
         return {
-          w: "100%",
-          h: "100%",
-        };
+          w: '100%',
+          h: '100%',
+        }
       },
     },
     // 显示的图片大小
@@ -65,10 +65,10 @@ export default {
       type: Object,
       default: () => {
         return {
-          init: "请先绑定", // 初始化
-          null: "暂无数据", // 空数据
-          false: "加载失败", // 失败
-        };
+          init: '请先绑定', // 初始化
+          null: '暂无数据', // 空数据
+          false: '加载失败', // 失败
+        }
       },
     },
     // 显示的文本内容
@@ -76,31 +76,31 @@ export default {
       type: Object,
       default: () => {
         return {
-          init: "绑定", // 初始化
-          false: "刷新", // 失败
-        };
+          init: '绑定', // 初始化
+          false: '刷新', // 失败
+        }
       },
     },
     // 背景 原先默认值 xt-bg 现在下方到class直接添加
     bg: {
       type: String,
-      default: "",
+      default: '',
     },
     web: {
       default: false,
     },
   },
-  mounted() {
+  mounted () {
   },
   methods: {
-    onClick() {
-      this.$emit("onClick");
+    onClick () {
+      this.$emit('onClick')
     },
-    webClick() {
-      window.open("https://www.apps.vip/download/");
+    webClick () {
+      window.open('https://www.apps.vip/download/')
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

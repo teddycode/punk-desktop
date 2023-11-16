@@ -32,7 +32,7 @@
 <script>
 export default {
   name: 'OnlineMedal',
-  data() {
+  data () {
     return {
       badge: {
         t9999: {
@@ -84,12 +84,12 @@ export default {
   },
   props: ['rank'],
   computed: {
-    getPath() {
+    getPath () {
       return 'file://' + window.globalArgs['app-dir_name'] + '/../../icons/badge/'
     }
   },
   methods: {
-    getBadge() {
+    getBadge () {
       if (!this.rank) {
         return this.badge.t9999
       }

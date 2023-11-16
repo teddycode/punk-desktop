@@ -2,51 +2,51 @@
   <div id="ec" class="echarts"></div>
 </template>
 <script>
-import * as echarts from "echarts";
-import {getDateTime} from "../../../../src/util/dateTime.js";
+import * as echarts from 'echarts'
+import { getDateTime } from '../../../../src/util/dateTime.js'
 
 export default {
-  name: "WeatherChart",
+  name: 'WeatherChart',
   props: {
     daily: {
       type: Array,
       default: () => [],
     },
   },
-  data() {
+  data () {
     return {
       tempMin: [],
       tempMax: [],
       fxDate: [],
-    };
+    }
   },
-  mounted() {
-    this.fxDate = this.daily.map((item) => this.getMonthAndDay(item.fxDate));
-    this.tempMin = this.daily.map((item) => item.tempMin);
-    this.tempMax = this.daily.map((item) => item.tempMax);
-    this.wertherEcharts();
+  mounted () {
+    this.fxDate = this.daily.map((item) => this.getMonthAndDay(item.fxDate))
+    this.tempMin = this.daily.map((item) => item.tempMin)
+    this.tempMax = this.daily.map((item) => item.tempMax)
+    this.wertherEcharts()
   },
 
   methods: {
-    getMonthAndDay(time) {
-      let format = getDateTime(new Date(time));
-      return format.month + "月" + format.day + "日";
+    getMonthAndDay (time) {
+      let format = getDateTime(new Date(time))
+      return format.month + '月' + format.day + '日'
     },
-    wertherEcharts() {
-      var myChart = echarts.init(document.getElementById("ec"), 'dark');
+    wertherEcharts () {
+      var myChart = echarts.init(document.getElementById('ec'), 'dark')
 
       myChart.setOption({
 
         backgroundColor: '',
         tooltip: {
-          trigger: "axis",
+          trigger: 'axis',
         },
 
         xAxis: {
           axisTick: {
             show: false
           },
-          type: "category",
+          type: 'category',
           boundaryGap: false,
           // data: [],
           data: this.fxDate,
@@ -58,7 +58,7 @@ export default {
         },
         yAxis: {
           splitLine: false,
-          type: "value",
+          type: 'value',
           boundaryGap: ['20%', '20%'],
           show: false,
 
@@ -71,31 +71,31 @@ export default {
 
         series: [
           {
-            name: "最高温",
-            type: "line",
+            name: '最高温',
+            type: 'line',
             smooth: true,
             areaStyle: {},
             data: this.tempMax,
-            label: {show: true, fontSize: 15, color: "#FFFFFF", formatter: '{c}℃'},
-            itemStyle: {color: "#ffb95e"},
+            label: { show: true, fontSize: 15, color: '#FFFFFF', formatter: '{c}℃' },
+            itemStyle: { color: '#ffb95e' },
             // markLine: {
             //   data: [{ type: "average", name: "Avg" }],
             // },
           },
           {
-            name: "最低温",
-            type: "line",
+            name: '最低温',
+            type: 'line',
             smooth: true,
             areaStyle: {},
             data: this.tempMin,
             label: {
               show: true,
-              position: "bottom",
+              position: 'bottom',
               fontSize: 15,
-              color: "#FFFFFF",
+              color: '#FFFFFF',
               formatter: '{c}℃'
             },
-            itemStyle: {color: "#009dff"},
+            itemStyle: { color: '#009dff' },
             // markLine: {
             //   data: [
             //     { type: "average", name: "Avg" },
@@ -119,10 +119,10 @@ export default {
             // },
           },
         ],
-      });
+      })
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

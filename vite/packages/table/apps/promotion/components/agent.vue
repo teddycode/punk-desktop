@@ -26,90 +26,90 @@ export default {
   name: 'Promotion',
   components: {},
   computed: {},
-  data() {
+  data () {
     return {
-      userName: "",
-      userAcc: "",
+      userName: '',
+      userAcc: '',
       incomeList: {
-        title: "下级代理收益",
+        title: '下级代理收益',
         data: [
           {
-            belowAgent: "nihoa",
-            belowAgentUser: "123456",
-            agentLevel: "1级",
-            totalIncome: "0.0",
-            monthIncome: "0.0",
-            dayIncome: "0.0",
+            belowAgent: 'nihoa',
+            belowAgentUser: '123456',
+            agentLevel: '1级',
+            totalIncome: '0.0',
+            monthIncome: '0.0',
+            dayIncome: '0.0',
           },
           {
-            belowAgent: "nihoa",
-            belowAgentUser: "1234567",
-            agentLevel: "1级",
-            totalIncome: "0.0",
-            monthIncome: "0.0",
-            dayIncome: "0.0",
+            belowAgent: 'nihoa',
+            belowAgentUser: '1234567',
+            agentLevel: '1级',
+            totalIncome: '0.0',
+            monthIncome: '0.0',
+            dayIncome: '0.0',
           },
           {
-            belowAgent: "nihoa",
-            belowAgentUser: "1234568",
-            agentLevel: "1级",
-            totalIncome: "0.0",
-            monthIncome: "0.0",
-            dayIncome: "0.0",
+            belowAgent: 'nihoa',
+            belowAgentUser: '1234568',
+            agentLevel: '1级',
+            totalIncome: '0.0',
+            monthIncome: '0.0',
+            dayIncome: '0.0',
           },
           {
-            belowAgent: "nihoa",
-            belowAgentUser: "1234596",
-            agentLevel: "1级",
-            totalIncome: "0.0",
-            monthIncome: "0.0",
-            dayIncome: "0.0",
+            belowAgent: 'nihoa',
+            belowAgentUser: '1234596',
+            agentLevel: '1级',
+            totalIncome: '0.0',
+            monthIncome: '0.0',
+            dayIncome: '0.0',
           },
         ]
       },
       incomeCol: [
         {
-          title: "下级代理",
-          dataIndex: "belowAgent",
-          key: "belowAgent"
+          title: '下级代理',
+          dataIndex: 'belowAgent',
+          key: 'belowAgent'
         },
         {
-          title: "下级代理账号",
-          dataIndex: "belowAgentUser",
-          key: "belowAgentUser"
+          title: '下级代理账号',
+          dataIndex: 'belowAgentUser',
+          key: 'belowAgentUser'
         },
         {
-          title: "代理层级",
-          dataIndex: "agentLevel",
-          key: "agentLevel"
+          title: '代理层级',
+          dataIndex: 'agentLevel',
+          key: 'agentLevel'
         },
         {
-          title: "总收益",
-          dataIndex: "totalIncome",
-          key: "totalIncome"
+          title: '总收益',
+          dataIndex: 'totalIncome',
+          key: 'totalIncome'
         },
         {
-          title: "本月收益",
-          dataIndex: "monthIncome",
-          key: "monthIncome"
+          title: '本月收益',
+          dataIndex: 'monthIncome',
+          key: 'monthIncome'
         },
         {
-          title: "当日收益",
-          dataIndex: "dayIncome",
-          key: "dayIncome"
+          title: '当日收益',
+          dataIndex: 'dayIncome',
+          key: 'dayIncome'
         },
       ]
 
     }
   },
-  mounted() {
+  mounted () {
 
   },
   watch: {},
   methods: {
-    onTest() {
-      console.log(this.userAcc);
-      console.log(this.userName);
+    onTest () {
+      console.log(this.userAcc)
+      console.log(this.userName)
     }
 
   },

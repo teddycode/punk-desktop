@@ -74,11 +74,11 @@
 </template>
 
 <script>
-import Icon from "../components/icon.vue";
-import Set from "./Set.vue";
-import XtZoom from "../../../../ui/components/Zoom/index.vue";
-import {sizeValues} from "../components/iconConfig";
-import {message} from "ant-design-vue";
+import Icon from '../components/icon.vue'
+import Set from './Set.vue'
+import XtZoom from '../../../../ui/components/Zoom/index.vue'
+import { sizeValues } from '../components/iconConfig'
+import { message } from 'ant-design-vue'
 
 export default {
   props: {
@@ -96,31 +96,31 @@ export default {
       type: Object,
     },
   },
-  data() {
+  data () {
     return {
       index: 0,
       visible: false,
       w: this.width,
       h: this.height,
       count: 0,
-      icons: "icons1",
+      icons: 'icons1',
       titleVisible: false,
       title: this.groupTitle,
-    };
+    }
   },
   watch: {
     w: {
-      async handler(newV) {
-        await this.setIconState();
-        this.getAppCount();
-        this.$emit("update:width", newV);
+      async handler (newV) {
+        await this.setIconState()
+        this.getAppCount()
+        this.$emit('update:width', newV)
       },
       immediate: true,
     },
-    async h(newV) {
-      await this.setIconState();
-      this.getAppCount();
-      this.$emit("update:height", newV);
+    async h (newV) {
+      await this.setIconState()
+      this.getAppCount()
+      this.$emit('update:height', newV)
     },
   },
   components: {
@@ -128,81 +128,81 @@ export default {
     Icon,
     XtZoom,
   },
-  beforeMount() {
-    this.getAppCount();
+  beforeMount () {
+    this.getAppCount()
   },
   methods: {
-    titleBlur() {
-      message.success("成功修改分组名");
-      this.$emit("updateGroupTitle", this.title);
+    titleBlur () {
+      message.success('成功修改分组名')
+      this.$emit('updateGroupTitle', this.title)
     },
-    setIconState() {
+    setIconState () {
       if (parseFloat(this.h) > 280) {
-        this.icons = "icons2";
+        this.icons = 'icons2'
       } else {
-        this.icons = "icons1";
+        this.icons = 'icons1'
       }
     },
-    getAppCount() {
-      const w = parseFloat(this.w);
-      const h = parseFloat(this.h);
-      const title = 22 * w;
-      let icons = w * h - title;
-      let icon = sizeValues[this.icons].w * sizeValues[this.icons].h;
+    getAppCount () {
+      const w = parseFloat(this.w)
+      const h = parseFloat(this.h)
+      const title = 22 * w
+      let icons = w * h - title
+      let icon = sizeValues[this.icons].w * sizeValues[this.icons].h
 
-      let res = parseInt(icons / icon - 1);
-      this.count = res;
+      let res = parseInt(icons / icon - 1)
+      this.count = res
     },
-    iconsRightClick() {
-      this.$emit("iconsRightClick");
+    iconsRightClick () {
+      this.$emit('iconsRightClick')
     },
-    rightClick(index) {
-      this.index = index;
-      this.visible = true;
+    rightClick (index) {
+      this.index = index
+      this.visible = true
     },
-    fullScreenClick(event) {
-      this.$emit("fullScreenClick", event);
+    fullScreenClick (event) {
+      this.$emit('fullScreenClick', event)
     },
     // 删除多图标组件中的单个图标
-    deleteIcons(index) {
-      this.$emit("deleteIcons", index);
+    deleteIcons (index) {
+      this.$emit('deleteIcons', index)
     },
     // 编辑多图标组件中的单个图标
-    editIcons(index) {
-      this.$emit("editIcons", index);
+    editIcons (index) {
+      this.$emit('editIcons', index)
     },
   },
   computed: {
-    titleSize() {
-      let w = parseFloat(this.w) - 80;
+    titleSize () {
+      let w = parseFloat(this.w) - 80
       return {
-        width: w + "px",
-      };
+        width: w + 'px',
+      }
     },
-    size() {
+    size () {
       return {
         width: `${this.w} !important`,
         height: `${this.h} !important`,
-      };
-    },
-    blankLabel() {
-      let row = parseFloat(this.w) / sizeValues[this.icons].w;
-      row = parseInt(row);
-      let count = this.iconList.length;
-      if (count > this.count) {
-        count++;
       }
-      const item = count % row;
-      return item === 0 ? 0 : row - item;
     },
-    iconsState() {
+    blankLabel () {
+      let row = parseFloat(this.w) / sizeValues[this.icons].w
+      row = parseInt(row)
+      let count = this.iconList.length
+      if (count > this.count) {
+        count++
+      }
+      const item = count % row
+      return item === 0 ? 0 : row - item
+    },
+    iconsState () {
       return {
         width: `${sizeValues[this.icons].w}px !important`,
         height: `${sizeValues[this.icons].h}px !important`,
-      };
+      }
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

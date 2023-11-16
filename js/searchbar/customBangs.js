@@ -95,7 +95,7 @@ function initialize () {
     snippet: l('switchToTask'),
     isAction: false,
     fn: function (text) {
-    /* disabled in focus mode */
+      /* disabled in focus mode */
       if (focusMode.enabled()) {
         focusMode.warn()
         return
@@ -122,7 +122,7 @@ function initialize () {
     snippet: l('createTask'),
     isAction: true,
     fn: function (text) {
-    /* disabled in focus mode */
+      /* disabled in focus mode */
       if (focusMode.enabled()) {
         focusMode.warn()
         return
@@ -144,7 +144,7 @@ function initialize () {
     snippet: l('moveToTask'),
     isAction: false,
     fn: function (text) {
-    /* disabled in focus mode */
+      /* disabled in focus mode */
       if (focusMode.enabled()) {
         focusMode.warn()
         return
@@ -165,7 +165,7 @@ function initialize () {
       if (newTask) {
         newTask.tabs.add(currentTab, { atEnd: true })
       } else {
-      // create a new task with the given name
+        // create a new task with the given name
         newTask = tasks.get(tasks.add(undefined, tasks.getIndex(tasks.getSelected().id) + 1))
         newTask.name = text
 

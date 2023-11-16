@@ -51,21 +51,21 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from "pinia";
-import Widget from "../../card/Widget.vue";
-import {inspectorStore} from '../../../store/inspector'
-import {message} from 'ant-design-vue'
+import { mapActions, mapWritableState } from 'pinia'
+import Widget from '../../card/Widget.vue'
+import { inspectorStore } from '../../../store/inspector'
+import { message } from 'ant-design-vue'
 
-const {rpc} = window.$models
+const { rpc } = window.$models
 
 export default {
-  name: "CPUFourCard",
+  name: 'CPUFourCard',
   props: {
     desk: {
       type: Object
     }
   },
-  data() {
+  data () {
     return {
       options: {
         className: 'card',
@@ -74,10 +74,10 @@ export default {
         type: 'CPUFourCard'
       },
       CPUGPUData: {
-        useCPU: {value: 0},
-        useGPU: {value: 0},
-        useMemory: {value: 0},
-        FPS: {value: 0},
+        useCPU: { value: 0 },
+        useGPU: { value: 0 },
+        useMemory: { value: 0 },
+        FPS: { value: 0 },
         down: 0,
         up: 0
       },
@@ -116,31 +116,31 @@ export default {
   // },
   components: {
     Widget
-  }, mounted() {
+  }, mounted () {
     this.startInspect()
   },
-  unmounted() {
+  unmounted () {
     this.stopInspect()
   },
   computed: {
-    ...mapWritableState(inspectorStore, ["displayData", 'aidaData']),
-    lastDown() {
+    ...mapWritableState(inspectorStore, ['displayData', 'aidaData']),
+    lastDown () {
       return this.CPUGPUData.down < 1000 ? this.CPUGPUData.down + 'KB/S' : this.CPUGPUData.down < 1024000 ? (this.CPUGPUData.down / 1024).toFixed(2) + 'MB/S' : (this.CPUGPUData.down / 1024 / 1024).toFixed(2) + 'GB/S'
     },
-    lastUp() {
+    lastUp () {
       return this.CPUGPUData.up < 1000 ? this.CPUGPUData.up + 'KB/S' : this.CPUGPUData.up < 1024000 ? (this.CPUGPUData.up / 1024).toFixed(2) + 'MB/S' : (this.CPUGPUData.up / 1024 / 1024).toFixed(2) + 'GB/S'
     }
   },
   methods: {
     ...mapActions(inspectorStore, ['startInspect', 'stopInspect']),
-    go() {
-      this.$router.push({name: 'inspector'})
+    go () {
+      this.$router.push({ name: 'inspector' })
     }
   },
   watch: {
-    "displayData": {
-      handler(newVal, oldVal) {
-        let {useGPU, useMemory, useCPU, FPS, down, up} = this.displayData || {}
+    'displayData': {
+      handler (newVal, oldVal) {
+        let { useGPU, useMemory, useCPU, FPS, down, up } = this.displayData || {}
         this.CPUGPUData = {
           useGPU: useGPU,
           useCPU: useCPU,

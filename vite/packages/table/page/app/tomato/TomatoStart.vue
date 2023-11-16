@@ -24,7 +24,7 @@ export default {
     BackBtn
   },
   methods: {
-    start() {
+    start () {
       this.$router.push({
         name: 'tomato'
       })

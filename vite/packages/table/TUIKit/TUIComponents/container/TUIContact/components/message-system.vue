@@ -27,41 +27,41 @@
 </template>
 
 <script>
-import {defineComponent, reactive, toRefs, watchEffect} from 'vue';
-import {translateGroupSystemNotice} from '../../utils';
+import { defineComponent, reactive, toRefs, watchEffect } from 'vue'
+import { translateGroupSystemNotice } from '../../utils'
 
 export default defineComponent({
   props: ['data', 'types', 'isH5', 'isEmpty'],
 
-  setup(props, ctx) {
+  setup (props, ctx) {
     const data = reactive({
       messageList: [],
       types: {},
       isHandle: false,
       simpleImage: '/img/state/null.png', // 空状态
-    });
+    })
 
     watchEffect(() => {
-      (data.messageList) = props.data;
-      data.types = props.types;
-    });
+      (data.messageList) = props.data
+      data.types = props.types
+    })
 
     const handleApplication = (handleAction, message) => {
       const options = {
         handleAction,
         message,
-      };
-      ctx.emit('application', options);
-      message.isHandle = true;
-    };
+      }
+      ctx.emit('application', options)
+      message.isHandle = true
+    }
 
     return {
       ...toRefs(data),
       translateGroupSystemNotice,
       handleApplication,
-    };
+    }
   },
-});
+})
 </script>
 <style lang="scss" scoped src="./style/index.scss"></style>
 <style lang="scss" scope>

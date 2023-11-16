@@ -23,56 +23,56 @@
 </template>
 
 <script>
-import syncSelected from "../hooks/syncSelected";
+import syncSelected from '../hooks/syncSelected'
 
-import {appsStore} from "../../../../store/apps";
-import {mapWritableState} from "pinia";
+import { appsStore } from '../../../../store/apps'
+import { mapWritableState } from 'pinia'
 
 export default {
   mixins: [syncSelected],
-  inject: ["width", "height"],
+  inject: ['width', 'height'],
   components: {},
-  data() {
+  data () {
     return {
       appList: [],
-    };
+    }
   },
   computed: {
-    ...mapWritableState(appsStore, ["myApps"]),
-    heightStyle() {
+    ...mapWritableState(appsStore, ['myApps']),
+    heightStyle () {
       return {
-        height: this.height() + "px",
-      };
+        height: this.height() + 'px',
+      }
     },
-    widthStyle() {
+    widthStyle () {
       return {
-        width: this.width() + "px",
-      };
+        width: this.width() + 'px',
+      }
     },
   },
-  mounted() {
-    let data = [];
+  mounted () {
+    let data = []
     this.$nextTick(() => {
       this.myApps.forEach((item) => {
         data.push({
           ...item,
           open: {
-            type: "tableApp",
+            type: 'tableApp',
             value: item.path,
             name: item.name,
           },
-        });
-      });
-      this.appList = data;
-    });
+        })
+      })
+      this.appList = data
+    })
   },
   methods: {
     // 跳转链接
-    goAddMyApps() {
-      this.$router.push({name: "apps"});
+    goAddMyApps () {
+      this.$router.push({ name: 'apps' })
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

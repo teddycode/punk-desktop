@@ -25,26 +25,26 @@ export default {
       default: false,
     },
     placement: {
-      default: "bottom",
+      default: 'bottom',
     },
   },
-  data() {
+  data () {
     return {
       visible: this.modelValue,
-    };
+    }
   },
   methods: {
-    close() {
-      this.visible = false;
-      this.$emit("update:modelValue", false);
+    close () {
+      this.visible = false
+      this.$emit('update:modelValue', false)
     },
   },
   watch: {
-    modelValue(newV) {
-      this.visible = newV;
+    modelValue (newV) {
+      this.visible = newV
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

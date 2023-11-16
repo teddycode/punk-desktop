@@ -1,5 +1,4 @@
 
-
 .space-name {
   cursor: pointer;
   font-size: 12px;
@@ -15,53 +14,62 @@
   font-weight: bold;
 }
 
-@keyframes rotate{
-  0%{
+@keyframes rotate {
+  0% {
     transform: rotate(0);
   }
-  100%{
-    transform:rotate(365deg);
+  100% {
+    transform: rotate(365deg);
   }
 }
 
-.online{
+.online {
   outline: none;
   cursor: pointer;
 }
-.saving{
+
+.saving {
   transition: 0.2s;
-  animation: rotate 2s linear infinite;  /*开始动画后无限循环，用来控制rotate*/
+  animation: rotate 2s linear infinite; /*开始动画后无限循环，用来控制rotate*/
 }
-.offline{
+
+.offline {
   outline: none;
   cursor: pointer;
   filter: grayscale(1);
 }
-.space-selector{
+
+.space-selector {
   list-style: none;
   margin: 0;
   padding: 0;
-  li{
+
+  li {
     user-select: none;
     cursor: pointer;
-    &:hover{
+
+    &:hover {
       background-color: #f1f1f1;
     }
+
     line-height: 28px;
-    padding:2px 5px ;
+    padding: 2px 5px;
     border-radius: 4px;
     margin: 2px;
   }
-  .active{
+
+  .active {
     background-color: #f1f1f1;
   }
-  .divider{
+
+  .divider {
     border-bottom: 1px solid rgba(241, 241, 241, 0.24);
     border-radius: 0;
     height: 0;
     width: 95%;
     padding: 0;
-    &:hover{
+
+    &:hover {
       background-color: #fff;
     }
   }

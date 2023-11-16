@@ -24,31 +24,31 @@
 </template>
 
 <script>
-import {ref} from 'vue';
-import {CaretRightOutlined} from '@ant-design/icons-vue';
-import ChatDropDown from './ChatsDropDown.vue';
-import {categoryMenu} from '../../../../js/data/chatList'
+import { ref } from 'vue'
+import { CaretRightOutlined } from '@ant-design/icons-vue'
+import ChatDropDown from './ChatsDropDown.vue'
+import { categoryMenu } from '../../../../js/data/chatList'
 
 export default {
   props: ['title', 'content', 'show', 'no'],
   components: {
     CaretRightOutlined, ChatDropDown
   },
-  setup() {
-    const collapsed = ref(false);
+  setup () {
+    const collapsed = ref(false)
     const dorpShow = ref(false)
     const dorpList = ref(categoryMenu)
 
     const toggleCollapse = () => {
-      collapsed.value = !collapsed.value;
-    };
+      collapsed.value = !collapsed.value
+    }
 
     return {
       collapsed, dorpShow, dorpList,
       toggleCollapse
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

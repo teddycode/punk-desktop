@@ -1,6 +1,6 @@
 require('../../dist/localization.build.js')
 require('../util/util.js').tools.getWindowArgs(window)
-let userMode=require('../../src/model/userModel')
+let userMode = require('../../src/model/userModel')
 const electron = require('electron')
 const ipc = electron.ipcRenderer
 
@@ -13,7 +13,7 @@ window.mainWindowId = 0 //主窗体id
 window.l = l
 window.db = db
 const { themeSetting } = require('../util/theme')
-const theme=require('./theme.js')
+const theme = require('./theme.js')
 //将语言包的接口暴露给里面的页面
 window.l = l
 window.ipc = ipc
@@ -110,10 +110,10 @@ ipc.on('receiveGlobal', function (e, data) {
 ipc.on('addItem', function (e, data) {
   window.$store.state.items.push(data.item)
 })
-ipc.on('themeChange',(e,a)=>{
-  if(a.status==='enable'){
+ipc.on('themeChange', (e, a) => {
+  if (a.status === 'enable') {
     theme.enableDarkMode()
-  }else{
+  } else {
     theme.disableDarkMode()
   }
 
@@ -127,34 +127,32 @@ ipc.on('refreshMyGroups', async () => {
 })
 
 //读入当前登录的帐号
-window.getCurrentUser= async function  getCurrentUser () {
-   let userRs =await userModel.getCurrent()
-  let user={}
+window.getCurrentUser = async function getCurrentUser () {
+  let userRs = await userModel.getCurrent()
+  let user = {}
   if (userRs.status) {
-    user=userRs.data
+    user = userRs.data
     //兼容老版本优化
-    user.fans=user.user_info.fans || 0
-    user.postCount=user.user_info.postCount || 0
-    user.follow=user.user_info.follow || 0
-    user.grade= user.user_info.grade || {
+    user.fans = user.user_info.fans || 0
+    user.postCount = user.user_info.postCount || 0
+    user.follow = user.user_info.follow || 0
+    user.grade = user.user_info.grade || {
       grade: 1
     }
     window.$store.state.user = user
-    if(user.token){
+    if (user.token) {
       //存在用户则进行用户数据的查询
-      try{
+      try {
         await window.$store.dispatch('getUserInfo', {
           token: user.token
         })
-      }
-      catch (e){
+      } catch (e) {
         console.log(e)
       }
     }
   } else {
 
   }
-
 
 }
 
@@ -165,7 +163,7 @@ async function insertDefaultUser (code) {
     avatar: '../../icons/browser.ico'
   }
   if (code) {
-   // await db.accounts.where('code').equals(code).delete()
+    // await db.accounts.where('code').equals(code).delete()
   }
   await db.system.where('name').equals('currentUser').modify({ value: defaultUser })
   window.$store.state.user = null
@@ -177,31 +175,31 @@ window.insertDefaultUser = insertDefaultUser
 
 ipc.on('userLogin', async function (e, data) {
   //此处是用户触发自动登录后的回调地址
-  let userResponse =await userMode.getCurrent()
-  console.log('userResponse=',userResponse)
-  if(userResponse.status===1){
-    let data=userResponse.data
-    let user={
-      uid:data.uid,
-      nickname:data.user_info.nickname,
-      avatar:data.user_info.avatar,
-      token:data.token,
-      fans:data.user_info.fans||0,
-      postCount:data.user_info.postCount || 0,
-      follow:data.user_info.follow||0,
-      grade:data.user_info.grade || {
-        grade:0
+  let userResponse = await userMode.getCurrent()
+  console.log('userResponse=', userResponse)
+  if (userResponse.status === 1) {
+    let data = userResponse.data
+    let user = {
+      uid: data.uid,
+      nickname: data.user_info.nickname,
+      avatar: data.user_info.avatar,
+      token: data.token,
+      fans: data.user_info.fans || 0,
+      postCount: data.user_info.postCount || 0,
+      follow: data.user_info.follow || 0,
+      grade: data.user_info.grade || {
+        grade: 0
       },
-      refreshToken:data.refresh_token,
-      expireTime:data.expire_time,
+      refreshToken: data.refresh_token,
+      expireTime: data.expire_time,
       refreshExpireTime: data.refresh_expire_time,
-      code:data.code
+      code: data.code
     }
-    window.$store.commit('set_user',user)
+    window.$store.commit('set_user', user)
     window.$store.dispatch('getUserInfo')
     //await window.$store.dispatch('getGroups')  //老的团队获取接口
-    window.$store.dispatch('getJoinedCircle', {page: 1, row: 500})
-    window.$store.dispatch('getMyCircle', {page: 1, row: 500})
+    window.$store.dispatch('getJoinedCircle', { page: 1, row: 500 })
+    window.$store.dispatch('getMyCircle', { page: 1, row: 500 })
   }
 
 })

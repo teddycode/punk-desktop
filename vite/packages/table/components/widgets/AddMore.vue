@@ -18,13 +18,13 @@
 
 <script>
 export default {
-  name: "AddMore",
+  name: 'AddMore',
   methods: {
-    addCard() {
-      this.$router.push({name: "addCard"});
+    addCard () {
+      this.$router.push({ name: 'addCard' })
     },
   },
-};
+}
 </script>
 
 <style scoped>

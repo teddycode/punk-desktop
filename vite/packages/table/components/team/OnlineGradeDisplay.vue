@@ -29,18 +29,18 @@ import LevelIcon from '../small/LevelIcon.vue'
 
 export default {
   name: 'GradeDisplay',
-  components: {LevelIcon},
+  components: { LevelIcon },
   props: ['grade', 'extra'],
-  data() {
+  data () {
     return {}
   },
   computed: {
-    percent() {
+    percent () {
 
     },
 
   },
-  mounted() {
+  mounted () {
 
   },
   methods: {}

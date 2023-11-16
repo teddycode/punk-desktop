@@ -1,7 +1,8 @@
 <template>
   <Widget ref="gameSlot" :confirmCCData="confirmCCData" :customData="customData"
           :customIndex="customIndex" :desk="desk" :menuList="gameBare" :options="options">
-    <div class="bg-mask rounded-lg px-3 py-1 pointer xt-bg-2" style="position: absolute;left: 45px;top:10px;color:var(--primary-text)"
+    <div class="bg-mask rounded-lg px-3 py-1 pointer xt-bg-2"
+         style="position: absolute;left: 45px;top:10px;color:var(--primary-text)"
          @click="showRegionSelect">{{ region.name }}
     </div>
     <a-spin v-if="isLoading === true"
@@ -22,7 +23,8 @@
         <div class="discount-item flex flex-col" style="margin-top: 1em;">
           <div class="flex flex-col ">
             <div v-for="item in list" class="w-full flex cursor-pointer rounded-md"
-                 style="position:relative;height:65px; margin-bottom: 12px;overflow: hidden" @click="enterDetail(item,customData.id)">
+                 style="position:relative;height:65px; margin-bottom: 12px;overflow: hidden"
+                 @click="enterDetail(item,customData.id)">
               <img :src="item.header_image" alt="" class=" rounded-md"
                    style="width:140px;height:65px; object-fit: cover;">
               <div class="flex  discount-content flex-col" style="margin-left: 10px; width: 104px;">
@@ -51,7 +53,8 @@
           </div>
 
           <div class="flex items-center justify-between">
-            <div class="s-item change  flex rounded-lg cursor-pointer xt-bg-2" style="padding:13px 41px;color:var(--primary-text)"
+            <div class="s-item change  flex rounded-lg cursor-pointer xt-bg-2"
+                 style="padding:13px 41px;color:var(--primary-text)"
                  @click="discountChange">
               <Icon v-if="reloadShow === true" class="animate-spin" icon="reload" style="font-size: 1.429em;"></Icon>
               <Icon v-else icon="reload" style="font-size: 1.429em;"></Icon>
@@ -124,10 +127,10 @@
 <script>
 import Widget from '../../card/Widget.vue'
 import HorizontalDrawer from '../../HorizontalDrawer.vue'
-import {currencyFormat, regionRange, sendRequest} from '../../../js/axios/api'
-import {mapActions, mapWritableState} from 'pinia'
-import {steamStore} from '../../../store/steam'
-import {cardStore} from '../../../store/card'
+import { currencyFormat, regionRange, sendRequest } from '../../../js/axios/api'
+import { mapActions, mapWritableState } from 'pinia'
+import { steamStore } from '../../../store/steam'
+import { cardStore } from '../../../store/card'
 import Template from '../../../../user/pages/Template.vue'
 import browser from '../../../js/common/browser'
 
@@ -155,7 +158,7 @@ export default {
     Widget,
     HorizontalDrawer
   },
-  data() {
+  data () {
     return {
       fail: false,//失败
       options: {
@@ -177,7 +180,7 @@ export default {
       epicShow: false,
       gameBare: [{
         icon: 'shezhi1', title: '设置', fn: () => {
-          this.$refs.regionDrawer.detailDisplay = true;
+          this.$refs.regionDrawer.detailDisplay = true
           this.$refs.gameSlot.visible = false
         }
       }]
@@ -186,7 +189,7 @@ export default {
   computed: {
     ...mapWritableState(steamStore, ['data', 'dataDetail']),
     ...mapWritableState(cardStore, ['customComponents']),
-    region() {
+    region () {
       if (this.customData && this.customData.id) {
         let found = this.regionRange.find(re => {
           return re.id === this.customData.id
@@ -198,7 +201,7 @@ export default {
       return this.regionRange[0]
 
     },
-    list() {
+    list () {
       if (this.key) {
 
       }
@@ -220,12 +223,11 @@ export default {
     //   immediate: true
     // }
   },
-  async mounted() {
+  async mounted () {
     this.isLoading = true
     if (this.customData && this.customData.id) {
       this.defaultRegion = this.customData.id
     }
-
 
     this.getRegion().then(() => {
 
@@ -235,10 +237,10 @@ export default {
     ...mapActions(steamStore, ['setGameDetail', 'updateGameData', 'setGameData', 'getData', 'getRandomList']),
     ...mapActions(cardStore, ['updateCustomData']),
     currencyFormat,
-    showRegionSelect() {
+    showRegionSelect () {
       this.$refs.regionDrawer.openDrawer()
     },
-    retry() {
+    retry () {
       this.getRegion().then(() => {
       }).catch(() => this.fail = true).finally(() => {
         this.isLoading = false
@@ -246,7 +248,7 @@ export default {
     },
 
     // 点击切换
-    discountChange() {
+    discountChange () {
       this.reloadShow = true
       setTimeout(() => {
         this.key = Date.now()
@@ -254,7 +256,7 @@ export default {
       }, 300)
     },
     // 点击进入详情
-    enterDetail(item, cc) {
+    enterDetail (item, cc) {
       this.gameShow = true
       if (!this.isLoading) {
         this.isLoading = true
@@ -269,7 +271,7 @@ export default {
                 const detailData = resData.data
                 this.detailList = detailData
               } else {
-                return
+
               }
             }).finally(() => {
               this.$nextTick(() => {
@@ -280,14 +282,14 @@ export default {
         }
       }
     },
-    discountBack() {
+    discountBack () {
       this.gameShow = false
       window.localStorage.removeItem('detail')
     },
-    openSteam(id) {
+    openSteam (id) {
       browser.openInUserSelect(`https://store.steampowered.com/app/${id}`)
     },
-    async getRegion() {
+    async getRegion () {
 
       this.fail = false
       this.isLoading = true
@@ -297,7 +299,6 @@ export default {
         }
       }, 6000)
 
-
       this.gameVisible = false
       this.customData.id = this.defaultRegion
       // 获取国家地区名称参数
@@ -306,15 +307,15 @@ export default {
         this.isLoading = false
       })
     },
-    getArea(v) {
+    getArea (v) {
       this.defaultRegion = v.id
       this.getRegion()
     },
-    enterDiscountDetail() {
-      this.$router.push({name: 'recommend', params: {id: this.customData.id}})
+    enterDiscountDetail () {
+      this.$router.push({ name: 'recommend', params: { id: this.customData.id } })
     },
-    enterGameDetail(v) {
-      this.$router.push({name: 'GameDiscountDetail', params: {id: v}})
+    enterGameDetail (v) {
+      this.$router.push({ name: 'GameDiscountDetail', params: { id: v } })
     }
   }
 }

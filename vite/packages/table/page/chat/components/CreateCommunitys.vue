@@ -26,7 +26,8 @@
           <!--头像 -->
           <!-- <a-avatar shape="square" :size="64" :src="avatarUrl"></a-avatar> -->
           <div class="overflow-hidden">
-            <a-avatar :src="avatarUrl" :style="{'filter': bgColor?`drop-shadow(#${bgColor} 80px 0)`:'',transform:bgColor?'translateX(-80px)':''}"
+            <a-avatar :src="avatarUrl"
+                      :style="{'filter': bgColor?`drop-shadow(#${bgColor} 80px 0)`:'',transform:bgColor?'translateX(-80px)':''}"
                       style="height:64px;width: 64px;border-radius: 0;"></a-avatar>
           </div>
           <communityIcon color="var(--secondary-text)" height="20" icon="akar-icons:cloud-upload"
@@ -35,7 +36,8 @@
         </div>
 
         <SelectIcon v-show="iconVisible" :customTitle="customTitle" :isCustom="isCustom"
-                    :windowHeight="this.innerHeight" @getAvatar="getAvatar" @isIconShow="iconVisible = false"></SelectIcon>
+                    :windowHeight="this.innerHeight" @getAvatar="getAvatar"
+                    @isIconShow="iconVisible = false"></SelectIcon>
 
         <div class="flex items-center justify-center font-16" style="color:var(--secondary-text);margin-top: 12px;">
           推荐图片尺寸：256*256，不能超过4MB
@@ -63,11 +65,11 @@
 </template>
 
 <script>
-import {mapActions} from 'pinia'
-import {fileUpload} from '../../../components/card/hooks/imageProcessing'
-import {message} from 'ant-design-vue'
-import {communityStore} from '../store/communityStore'
-import {Icon as communityIcon} from '@iconify/vue'
+import { mapActions } from 'pinia'
+import { fileUpload } from '../../../components/card/hooks/imageProcessing'
+import { message } from 'ant-design-vue'
+import { communityStore } from '../store/communityStore'
+import { Icon as communityIcon } from '@iconify/vue'
 import SelectIcon from '../../../../selectIcon/page/index.vue'
 
 export default {
@@ -78,7 +80,7 @@ export default {
     SelectIcon,
   },
 
-  data() {
+  data () {
     return {
       //
       iconVisible: false,
@@ -96,7 +98,7 @@ export default {
 
   computed: {},
 
-  mounted() {
+  mounted () {
     this.$nextTick(() => {
       const inputDom = document.querySelector('.search')
       inputDom.focus()
@@ -106,25 +108,25 @@ export default {
   methods: {
     ...mapActions(communityStore, ['createCommunity', 'getMyCommunity']),
 
-    onShowSelect() {
+    onShowSelect () {
       this.iconVisible = !this.iconVisible
       // console.log(window);
       // console.log(window.innerHeight);
       this.innerHeight = window.innerHeight
     },
 
-    closeCreateCom() {
+    closeCreateCom () {
       this.$emit('close')
     },
-    backCreate() {
+    backCreate () {
       this.$emit('back')
     },
 
     // 更换头像
-    async updateGroupAvatar() {
+    async updateGroupAvatar () {
       document.querySelector('#groupFileID').click()
     },
-    async getFileInfo(evt) {
+    async getFileInfo (evt) {
       const files = evt.target.files[0]
       const res = await fileUpload(files)
       // console.log('获取头像::>>',res)
@@ -132,7 +134,7 @@ export default {
     },
 
     // 获取头像
-    getAvatar(avatar) {
+    getAvatar (avatar) {
       if (avatar.indexOf('color=') >= 0) {
         let color = avatar.substr(avatar.indexOf('color=') + 7, 6)
         this.bgColor = color
@@ -142,12 +144,11 @@ export default {
       this.avatarUrl = avatar
     },
 
-
     // 创建社群
-    async finshCreateCommunity(evt) {
-      const chineseCharReg = /[\u4e00-\u9fa5]/g; // 匹配2-16个汉字
+    async finshCreateCommunity (evt) {
+      const chineseCharReg = /[\u4e00-\u9fa5]/g // 匹配2-16个汉字
       // // const nonChineseCharReg = /[^\u4e00-\u9fa5]/g; // 匹配4-32个字符
-      const chineseCharCount = (this.communityName.match(chineseCharReg) || []).length;
+      const chineseCharCount = (this.communityName.match(chineseCharReg) || []).length
       // // const nonCharCount = (this.communityName.match(nonChineseCharReg) || []).length;
 
       // console.log('排查问题',chineseCharCount);
@@ -171,17 +172,16 @@ export default {
           await this.getMyCommunity()
           this.$emit('close')
         } else {
-          evt.preventDefault();
+          evt.preventDefault()
           message.error(`${res.info}`)
         }
 
       } else {
-        evt.preventDefault();
+        evt.preventDefault()
         message.error('社群名称长度的范围需要在2-16个字符之间')
       }
 
     }
-
 
   }
 }

@@ -1,6 +1,7 @@
-const theme={
-  init(){
-    settings=window.settings
+const theme = {
+  init () {
+    settings = window.settings
+
     function systemShouldEnableDarkMode () {
       return settings.list.systemShouldUseDarkColors
     }
@@ -17,8 +18,8 @@ const theme={
         window.dispatchEvent(new CustomEvent('themechange'))
       })
       window.postMessage({
-        message:'themeChange',
-        status:'enable'
+        message: 'themeChange',
+        status: 'enable'
       })
     }
 
@@ -29,8 +30,8 @@ const theme={
         window.dispatchEvent(new CustomEvent('themechange'))
       })
       window.postMessage({
-        message:'themeChange',
-        status:'disable'
+        message: 'themeChange',
+        status: 'disable'
       })
 
     }
@@ -58,7 +59,7 @@ const theme={
 
         // 2, undefined, or false: automatic dark mode following system
         //移除undefined和false
-        if (value === 2 ) {
+        if (value === 2) {
           if (systemShouldEnableDarkMode()) {
             enableDarkMode()
           } else {
@@ -97,14 +98,16 @@ const theme={
           disableDarkMode()
         }
       }
+
       settings.listen('darkMode', themeSettingsChanged)
       settings.listen('systemShouldUseDarkColors', function () {
         // the settings API differs between the UI process and tabs
 
-          settings.get('darkMode', themeSettingsChanged)
+        settings.get('darkMode', themeSettingsChanged)
 
       })
     }
+
     initialize()
   }
 }

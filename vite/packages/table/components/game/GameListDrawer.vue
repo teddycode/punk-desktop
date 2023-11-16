@@ -51,7 +51,8 @@ export default {
 
   <a-drawer v-model:visible="drawerVisible" :height="270" placement="bottom" @close="visibleChanged">
     <vue-custom-scrollbar :settings="outerSettings" style="width: 100%;height: 100%;white-space: nowrap;">
-      <div v-for="game in items" :class="{'active-game':game.appid===activeId}" class="mr-6 text-center pointer mb-1 game"
+      <div v-for="game in items" :class="{'active-game':game.appid===activeId}"
+           class="mr-6 text-center pointer mb-1 game"
            style="display: inline-block"
            @click="select(game)">
         <a-image :preview="false" :src="getCover(game.appid)" class="mb-2"

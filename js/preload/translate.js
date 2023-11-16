@@ -63,7 +63,11 @@ async function translate (destLang) {
     } catch (e) { }
   }
 
-  var nodesSet = nodes.filter(n => n.textContent.replace(/[\s0-9]+/g, '').length > 2).map(n => ({ node: n, translated: false, originalLength: n.textContent.length }))
+  var nodesSet = nodes.filter(n => n.textContent.replace(/[\s0-9]+/g, '').length > 2).map(n => ({
+    node: n,
+    translated: false,
+    originalLength: n.textContent.length
+  }))
 
   function handleChunk () {
     // rescore the nodes

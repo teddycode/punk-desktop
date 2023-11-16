@@ -83,19 +83,19 @@
 </template>
 
 <script>
-import {inspectorStore} from '../../store/inspector'
-import {mapWritableState} from 'pinia'
+import { inspectorStore } from '../../store/inspector'
+import { mapWritableState } from 'pinia'
 import BackBtn from '../../components/comp/BackBtn.vue'
 
 export default {
   name: 'Inspector',
-  components: {BackBtn},
+  components: { BackBtn },
   computed: {
     ...mapWritableState(inspectorStore, ['dataSource', 'frequent'])
   },
   methods: {
-    go() {
-      this.$router.push({name: 'apps'})
+    go () {
+      this.$router.push({ name: 'apps' })
     }
   }
 }

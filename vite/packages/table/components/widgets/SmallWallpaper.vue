@@ -56,7 +56,8 @@
     <div class="text-base">壁纸源</div>
     <a-select v-model:value="pickFilterValue"
               :bordered="false" :options="wallpaperOptions" class="w-full h-10 rounded-lg mt-4 text-xs" size="large"
-              style="background: rgba(42, 42, 42, 1);border: 1px solid rgba(255, 255, 255, 0.1);" @change="pickFilterChange($event)">
+              style="background: rgba(42, 42, 42, 1);border: 1px solid rgba(255, 255, 255, 0.1);"
+              @change="pickFilterChange($event)">
     </a-select>
   </a-drawer>
 </template>
@@ -64,10 +65,10 @@
 <script>
 import Widget from '../card/Widget.vue'
 import axios from 'axios'
-import {mapActions, mapWritableState} from 'pinia'
-import {paperStore} from '../../store/paper'
-import {appStore} from '../../store'
-import {cardStore} from '../../store/card'
+import { mapActions, mapWritableState } from 'pinia'
+import { paperStore } from '../../store/paper'
+import { appStore } from '../../store'
+import { cardStore } from '../../store/card'
 import XtButton from '../../ui/libs/Button/index.vue'
 
 export default {
@@ -90,7 +91,7 @@ export default {
       type: Object
     }
   },
-  data() {
+  data () {
     return {
       options: {
         className: 'card small',
@@ -107,12 +108,12 @@ export default {
       },],
       pickFilterValue: '我的收藏',
       wallpaperOptions: [
-        {value: '我的收藏', name: 'my', path: ''},
-        {value: '必应壁纸', name: 'bing', path: 'https://cn.bing.com/HPImageArchive.aspx?format=js&idx=1&n=8'},
-        {value: '拾光壁纸', path: 'https://api.nguaduot.cn/timeline/v2?client=thisky', name: 'PickingPaper'},
-        {value: '贪食鬼', path: 'https://api.nguaduot.cn/glutton/v2?client=thisky', name: 'PickingPaper'},
-        {value: '贪吃蛇', path: 'https://api.nguaduot.cn/snake/v2?client=thisky', name: 'PickingPaper'},
-        {value: 'wallhaven', path: 'https://api.nguaduot.cn/wallhaven/v2?client=thisky', name: 'PickingPaper'},
+        { value: '我的收藏', name: 'my', path: '' },
+        { value: '必应壁纸', name: 'bing', path: 'https://cn.bing.com/HPImageArchive.aspx?format=js&idx=1&n=8' },
+        { value: '拾光壁纸', path: 'https://api.nguaduot.cn/timeline/v2?client=thisky', name: 'PickingPaper' },
+        { value: '贪食鬼', path: 'https://api.nguaduot.cn/glutton/v2?client=thisky', name: 'PickingPaper' },
+        { value: '贪吃蛇', path: 'https://api.nguaduot.cn/snake/v2?client=thisky', name: 'PickingPaper' },
+        { value: 'wallhaven', path: 'https://api.nguaduot.cn/wallhaven/v2?client=thisky', name: 'PickingPaper' },
         // {value:'动态壁纸',name:'lively',path:'https://api.nguaduot.cn/timeline/v2'}
       ],
       settingVisible: false,
@@ -122,7 +123,7 @@ export default {
         path: '',
         name: 'my'
       },
-      imgList: [{src: ''}],
+      imgList: [{ src: '' }],
       currentImg: {
         srcProtocol: null,
         path: ''
@@ -135,14 +136,14 @@ export default {
     ...mapActions(paperStore, ['removeToMyPaper']),
     ...mapActions(appStore, ['setBackgroundImage']),
     ...mapActions(cardStore, ['updateCustomData']),
-    goGallery() {
-      this.$router.push({name: 'my'})
+    goGallery () {
+      this.$router.push({ name: 'my' })
     },
-    imgError() {
+    imgError () {
       this.imgSpin = false
       this.currentImg.src = '/img/defaultImg.jpg'
     },
-    pickFilterChange(e) {
+    pickFilterChange (e) {
       this.addressType = this.wallpaperOptions.find(i => i.value === e)
       this.updateCustomData(this.customIndex, this.addressType, this.desk)
       if (!this.addressType) {
@@ -210,11 +211,11 @@ export default {
         this.initImg()
       }
     },
-    initImg() {
+    initImg () {
       this.imgIndex = 0
       this.setImg()
     },
-    setImg() {
+    setImg () {
       this.currentImg = this.imgList[this.imgIndex] || {
         srcProtocol: null,
         path: ''
@@ -227,13 +228,13 @@ export default {
       })
 
     },
-    lastImg() {
+    lastImg () {
       this.imgIndex -= 1
       if (this.imgIndex < 0) {
         this.imgIndex = this.imgList.length - 1
       }
     },
-    async nextImg() {
+    async nextImg () {
       // if(this.imgIndex>=this.imgList.length-1){
       //   if(this.addressType.name ==='picking') {
       //
@@ -278,7 +279,7 @@ export default {
         this.imgIndex = 0
       }
     },
-    randomImg() {
+    randomImg () {
       if (this.randomFlag === true) return
       this.randomFlag = true
       setTimeout(() => {
@@ -288,7 +289,7 @@ export default {
       }, 500)
 
     },
-    collect() {
+    collect () {
       if (this.addressType.name === 'PickingPaper') {
         this.removeToMyPaper(this.imgList[this.imgIndex])
       } else if (this.addressType.name === 'bing') {
@@ -300,7 +301,7 @@ export default {
       }
 
     },
-    settingImg() {
+    settingImg () {
       if (this.addressType.name === 'my') {
         if (this.imgList[this.imgIndex].srcProtocol) {
           this.setBackgroundImage({
@@ -322,7 +323,7 @@ export default {
   },
   computed: {
     ...mapWritableState(paperStore, ['myPapers']),
-    isInMyPapers() {
+    isInMyPapers () {
       return (
           this.myPapers.findIndex((img) => {
             return this.imgList[this.imgIndex].src === img.src
@@ -330,7 +331,7 @@ export default {
       )
     },
   },
-  mounted() {
+  mounted () {
     this.$nextTick(() => {
       if (!this.customData) {
         this.pickFilterChange('我的收藏')
@@ -344,7 +345,7 @@ export default {
   },
   watch: {
     imgIndex: {
-      handler() {
+      handler () {
         this.setImg()
       },
     }

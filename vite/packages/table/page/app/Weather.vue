@@ -85,17 +85,17 @@
 </template>
 
 <script>
-import {message} from 'ant-design-vue'
-import {mapActions, mapWritableState} from 'pinia'
-import {getDateTime} from '../../../../src/util/dateTime.js'
+import { message } from 'ant-design-vue'
+import { mapActions, mapWritableState } from 'pinia'
+import { getDateTime } from '../../../../src/util/dateTime.js'
 import WeatherChart from './WeatherChart.vue'
-import {weatherStore} from '../../store/weather'
+import { weatherStore } from '../../store/weather'
 import BackBtn from '../../components/comp/BackBtn.vue'
 
 export default {
   name: 'Weather',
-  components: {BackBtn, WeatherChart},
-  data() {
+  components: { BackBtn, WeatherChart },
+  data () {
     return {
       outerSettings: {
         useBothWheelAxes: true,
@@ -119,10 +119,10 @@ export default {
 
     }
   },
-  mounted() {
+  mounted () {
     this.fixData()
 
-    $("#display").on("touchend", (e) => {
+    $('#display').on('touchend', (e) => {
       e.stopPropagation()
     })
     if (this.$route.params['add']) {
@@ -135,27 +135,26 @@ export default {
       this.currentCity = this.cities[0].id
     }
 
-
   },
   computed: {
     ...mapWritableState(weatherStore, ['cities', 'lastUpdateTime']),
   },
   methods: {
     ...mapActions(weatherStore, ['getNow', 'get24h', 'get7d', 'search', 'addCity', 'removeCity', 'reloadCityWeatherAll', 'get', 'fixData']),
-    getMonthAndDay(time) {
+    getMonthAndDay (time) {
       let format = this.getDateTime(new Date(time))
       return format.month + '/' + format.day
     },
-    getdHours(time) {
+    getdHours (time) {
       let format = this.getDateTime(new Date(time))
       return format.hours
     },
-    getObsTime(time) {
+    getObsTime (time) {
       let format = this.getDateTime(new Date(time))
-      return format.month + '-' + format.day + ' ' + format.hours + ":" + format.minutes
+      return format.month + '-' + format.day + ' ' + format.hours + ':' + format.minutes
     },
     getDateTime,
-    onEdit(cityId, action) {
+    onEdit (cityId, action) {
       if (action === 'add') {
         this.visibleAdd = true
       } else {
@@ -163,7 +162,7 @@ export default {
       }
     },
 
-    async add(city) {
+    async add (city) {
       try {
         city = await this.reloadCityWeatherAll(city)
       } catch (e) {
@@ -176,7 +175,7 @@ export default {
       this.visibleAdd = false
     },
 
-    async onSearch() {
+    async onSearch () {
       let rs = await this.search(this.words)
       if (rs) {
         this.searchList = rs

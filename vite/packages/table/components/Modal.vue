@@ -9,8 +9,8 @@
 
 <script>
 export default {
-  name: "Modal",
-  data() {
+  name: 'Modal',
+  data () {
     return {
       className: '',
       flag: false
@@ -18,7 +18,7 @@ export default {
   },
   props: ['visible', 'blurFlag', 'animationName', 'maskNoClose'],
   methods: {
-    closeModal() {
+    closeModal () {
       if (this.maskNoClose) return
       if (this.animationName) {
         if (this.flag) return
@@ -33,13 +33,13 @@ export default {
         this.$emit('update:visible', false)
       }
     },
-    Keyboard(e) {  // 键盘关闭事件
+    Keyboard (e) {  // 键盘关闭事件
       if (e.key === 'Escape') {
         this.closeModal()
       }
     }
   },
-  mounted() {
+  mounted () {
     this.className = this.animationName
     window.addEventListener('keydown', this.Keyboard)
   },

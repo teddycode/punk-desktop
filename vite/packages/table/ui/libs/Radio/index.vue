@@ -20,43 +20,43 @@
 </template>
 
 <script>
-const sizeList = ["large", "default", "small"];
+const sizeList = ['large', 'default', 'small']
 export default {
-  name: "XtRadio",
+  name: 'XtRadio',
   watch: {
-    select(newV) {
+    select (newV) {
       // 执行回调
-      this.$emit("onChange", newV);
+      this.$emit('onChange', newV)
       // 更新双向绑定
-      this.$emit("update:data", newV);
+      this.$emit('update:data', newV)
     },
   },
   computed: {
-    fontSizeStyle() {
+    fontSizeStyle () {
       return {
         fontSize: `${this.fontSize}px`,
-      };
+      }
     },
   },
-  data() {
+  data () {
     return {
       select: this.data,
-    };
+    }
   },
   props: {
     text: {
       type: String,
-      default: "",
+      default: '',
     },
     // 自定义绑定数组显示的内容
     name: {
       type: String,
-      default: "name",
+      default: 'name',
     },
     // 自定义绑定的值
     value: {
       type: String,
-      default: "value",
+      default: 'value',
     },
     space: {
       type: Number,
@@ -64,46 +64,46 @@ export default {
     },
     data: {
       type: String,
-      default: "card small",
+      default: 'card small',
     },
     size: {
       type: String,
-      default: "large",
-      validator(val) {
-        const state = sizeList.includes(val);
+      default: 'large',
+      validator (val) {
+        const state = sizeList.includes(val)
         if (!state) {
-          console.error(`你的 size 必须是 ${sizeList.join(" ")}`);
+          console.error(`你的 size 必须是 ${sizeList.join(' ')}`)
         }
-        return val;
+        return val
       },
     },
     list: {
       type: Array,
       default: () => {
         return [
-          {name: "2 x 2", value: "card small"},
-          {name: "2 x 4", value: "card"},
-          {name: "4 x 2", value: "card1"},
-          {name: "4 x 4", value: "card double"},
-        ];
+          { name: '2 x 2', value: 'card small' },
+          { name: '2 x 4', value: 'card' },
+          { name: '4 x 2', value: 'card1' },
+          { name: '4 x 4', value: 'card double' },
+        ]
       },
       validator: (val) => {
         if (!Array.isArray(val)) {
-          console.error(`list 必须是一个数组`);
-          return false;
+          console.error(`list 必须是一个数组`)
+          return false
         }
 
         const res = val.every(
-            (item) => typeof item === "object" && item !== null
-        );
+            (item) => typeof item === 'object' && item !== null
+        )
         if (!res) {
-          console.error(`list 包含的元素必须是对象`);
+          console.error(`list 包含的元素必须是对象`)
         }
-        return res;
+        return res
       },
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

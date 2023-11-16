@@ -14,8 +14,8 @@ Vue.component('clock2', {
     return {
       time: '',
       date: '',
-      timerID:0,
-      week :['星期天', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
+      timerID: 0,
+      week: ['星期天', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
     }
   },
   mounted () {

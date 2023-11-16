@@ -156,8 +156,8 @@ const localCacheManager = {
       url: url,
       method: 'get',
       responseType: 'arraybuffer',
-      headers:{
-        referer:''
+      headers: {
+        referer: ''
       }
     })
     try {

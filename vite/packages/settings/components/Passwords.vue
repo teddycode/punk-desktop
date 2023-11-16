@@ -260,12 +260,12 @@ export default {
           <template #overlay>
             <a-menu>
               <a-menu-item>
-                <a href="javascript:;" @click="filterDomain(record.domain)">
+                <a href="javascript:" @click="filterDomain(record.domain)">
                   <search-outlined></search-outlined>
                   只看此网站的账号</a>
               </a-menu-item>
               <a-menu-item>
-                <a :href="'http://'+record.domain" href="javascript:;" target="_blank">
+                <a :href="'http://'+record.domain" href="javascript:" target="_blank">
                   <export-outlined/>
                   打开此网站</a>
               </a-menu-item>
@@ -336,7 +336,7 @@ export default {
           <template #overlay>
             <a-menu>
               <a-menu-item>
-                <a href="javascript:;" @click="delAccount(record)">
+                <a href="javascript:" @click="delAccount(record)">
                   <delete-outlined/>
                   删除</a>
               </a-menu-item>

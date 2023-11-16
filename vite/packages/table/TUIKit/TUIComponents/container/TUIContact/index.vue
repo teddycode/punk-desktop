@@ -54,14 +54,14 @@
 </template>
 
 <script>
-import {computed, defineComponent, onMounted, reactive, toRefs, watch} from 'vue'
-import {appStore} from '../../../../store';
-import {isArrayEqual} from '../utils';
-import {chatStore} from '../../../../store/chat'
+import { computed, defineComponent, onMounted, reactive, toRefs, watch } from 'vue'
+import { appStore } from '../../../../store'
+import { isArrayEqual } from '../utils'
+import { chatStore } from '../../../../store/chat'
 
 import Group from './addressbook/group.vue'
-import Friend from './addressbook/friend.vue';
-import MessageSystem from './components/message-system.vue';
+import Friend from './addressbook/friend.vue'
+import MessageSystem from './components/message-system.vue'
 
 const TUIContact = defineComponent({
   components: {
@@ -70,8 +70,8 @@ const TUIContact = defineComponent({
 
   props: ['displayOnlineStatus'],
 
-  setup(props, ctx) {
-    const TUIServer = TUIContact.TUIServer;
+  setup (props, ctx) {
+    const TUIServer = TUIContact.TUIServer
     const store = appStore()
     const chat = chatStore()
 
@@ -95,9 +95,9 @@ const TUIContact = defineComponent({
       onlineStatus: false,
       userStatusList: new Map(),
       sideList: [
-        {title: '通知', icon: 'notification', color: 'var(--active-bg)', index: 'system'},
-        {title: '群聊', icon: 'message', color: 'var(--success)', index: 'group'},
-        {title: '好友', icon: 'smile', color: 'var(--warning)', index: 'friend'},
+        { title: '通知', icon: 'notification', color: 'var(--active-bg)', index: 'system' },
+        { title: '群聊', icon: 'message', color: 'var(--success)', index: 'group' },
+        { title: '好友', icon: 'smile', color: 'var(--warning)', index: 'friend' },
       ],
       sideIndex: 'system', // 接收通讯录侧边列表项下标
       isUndefined: TUIServer.store.systemConversation === undefined,
@@ -108,10 +108,10 @@ const TUIContact = defineComponent({
     const select = async (item) => {
       data.sideIndex = item.index
       if (item.name === 'system') {
-        await TUIServer.getSystemMessageList();
-        await TUIServer.setMessageRead();
+        await TUIServer.getSystemMessageList()
+        await TUIServer.setMessageRead()
       } else if (item.name === 'group') {
-        (data.currentGroup) = data.groupList[0];
+        (data.currentGroup) = data.groupList[0]
       } else if (item.name === 'friend') {
         const index = data.friendList.filter((item) => {
           return parseInt(item.userID) !== parseInt(store.$state?.userInfo?.uid)
@@ -120,29 +120,27 @@ const TUIContact = defineComponent({
       }
     }
 
-
     watch(() => data.userIDList, (newVal, oldVal) => {
-      if (isArrayEqual(newVal, oldVal)) return;
-      TUIServer.handleUserStatus(data.displayOnlineStatus, data.userIDList);
+      if (isArrayEqual(newVal, oldVal)) return
+      TUIServer.handleUserStatus(data.displayOnlineStatus, data.userIDList)
     })
 
-
     watch(() => props.displayOnlineStatus, async (newVal, oldVal) => {
-      if (newVal === oldVal) return;
-      data.displayOnlineStatus = newVal;
-      TUIServer.handleUserStatus(data.displayOnlineStatus, data.userIDList);
-    }, {immediate: true,})
+      if (newVal === oldVal) return
+      data.displayOnlineStatus = newVal
+      TUIServer.handleUserStatus(data.displayOnlineStatus, data.userIDList)
+    }, { immediate: true, })
 
     const isNeedPermission = computed(() => {
-      const isHaveSeif = (data.currentGroup).selfInfo.userID;
-      const isPermission = (data.currentGroup).joinOption === TUIServer.TUICore.TIM.TYPES.JOIN_OPTIONS_NEED_PERMISSION;
-      return !isHaveSeif && isPermission;
+      const isHaveSeif = (data.currentGroup).selfInfo.userID
+      const isPermission = (data.currentGroup).joinOption === TUIServer.TUICore.TIM.TYPES.JOIN_OPTIONS_NEED_PERMISSION
+      return !isHaveSeif && isPermission
     })
 
     const friendLists = computed(() => {
       const list = data.friendList.filter((item) => {
         return parseInt(item.userID) !== parseInt(store.$state?.userInfo?.uid)
-      });
+      })
       return list
     })
 
@@ -152,15 +150,14 @@ const TUIContact = defineComponent({
     })
 
     const handleGroupApplication = (params) => {
-      TUIServer.handleGroupApplication(params);
+      TUIServer.handleGroupApplication(params)
     }
-
 
     onMounted(async () => {
       // 解决通讯录初始化
       if (data.sideIndex === 'system') {
-        await TUIServer.getSystemMessageList();
-        await TUIServer.setMessageRead();
+        await TUIServer.getSystemMessageList()
+        await TUIServer.setMessageRead()
       }
     })
 

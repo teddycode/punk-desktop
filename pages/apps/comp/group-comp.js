@@ -77,26 +77,26 @@ Vue.component('group-comp', {
   },
   computed: {},
   methods: {
-    createGroup() {
-      ipc.send('createGroup', {from: 'groupComp'})
+    createGroup () {
+      ipc.send('createGroup', { from: 'groupComp' })
     },
-    async refreshNavs() {
+    async refreshNavs () {
       await this.$store.dispatch('getMyGroups')
-      if(this.groupLists[0].children.length > 0 ) {
+      if (this.groupLists[0].children.length > 0) {
         this.groupLists[0].children = []
-        this.groupLists[0].children= groupModel.convertTreeNode(this.$store.getters.getMyGroups, 'app_group_list', 'custom', 'list-icon')
+        this.groupLists[0].children = groupModel.convertTreeNode(this.$store.getters.getMyGroups, 'app_group_list', 'custom', 'list-icon')
       } else {
         this.groupLists[0].children = groupModel.convertTreeNode(this.$store.getters.getMyGroups, 'app_group_list', 'custom', 'list-icon')
       }
     },
     async onSelect (selectedKeys, info) {
       console.log(selectedKeys, 'selectedKeys__~')
-      if(selectedKeys[0] === 'group') {
-        this.$router.push({ name: 'groupList', query: {t: Date.now()}})
+      if (selectedKeys[0] === 'group') {
+        this.$router.push({ name: 'groupList', query: { t: Date.now() } })
         resetOtherTree('group', selectedKeys)
       } else if (selectedKeys[0].startsWith('L1')) {
         const id = Number(selectedKeys[0].split('-')[1])
-        this.$router.push({ name: 'groupNavs', query: {id: id, t: Date.now()}})
+        this.$router.push({ name: 'groupNavs', query: { id: id, t: Date.now() } })
         resetOtherTree('group', selectedKeys)
       } else if (selectedKeys[0].startsWith('L2')) {
         //点二级菜单的时候先需要去获取一级
@@ -113,7 +113,10 @@ Vue.component('group-comp', {
             summary = item.summary
           }
         })
-        this.$router.push({ name: 'group', query: { groupId: group_id, listId: jump, t: Date.now(), type: type, name: name, summary: summary } })
+        this.$router.push({
+          name: 'group',
+          query: { groupId: group_id, listId: jump, t: Date.now(), type: type, name: name, summary: summary }
+        })
         resetOtherTree('group', selectedKeys)
       }
     },
@@ -143,13 +146,13 @@ Vue.component('group-comp', {
         content: `删除后无法撤销，请谨慎操作!`,
         okText: '确认删除，不后悔',
         cancelText: '保留',
-        async onOk() {
+        async onOk () {
           const data = {
             ids: [Number(treeKey.split('-')[2])],
             group_id: Number(treeKey.split('-')[1])
           }
           const result = await that.$store.dispatch('deleteAppGroupNav', data)
-          if(result.code === 1000) {
+          if (result.code === 1000) {
             that.createListVisible = false
             await that.refreshNavs()
             appVue.$message.success({ content: '列表删除成功' })
@@ -157,7 +160,7 @@ Vue.component('group-comp', {
             appVue.$message.error({ content: '列表删除失败!' })
           }
         },
-        onCancel() {
+        onCancel () {
           console.log('Cancel')
         },
       })
@@ -169,20 +172,20 @@ Vue.component('group-comp', {
      */
     handleMenuRenameList (treeKey) {
       const result = groupModel.findTreeNode(this.groupLists[0].children, treeKey)
-      this.createList(async ()=> {
+      this.createList(async () => {
         const name = getNameInputValue()
         if (!!!name) {
           appVue.$message.error({ content: '请输入列表名称。' })
           return
         }
-        const data =  {
+        const data = {
           id: Number(treeKey.split('-')[2]),
           name: name,
           summary: '描述',
           group_id: Number(treeKey.split('-')[1])
         }
         const result = await this.$store.dispatch('updateAppGroupNav', data)
-        if(result.code === 1000) {
+        if (result.code === 1000) {
           this.createListVisible = false
           await this.refreshNavs()
           appVue.$message.success({ content: '重命名列表成功' })
@@ -207,7 +210,7 @@ Vue.component('group-comp', {
             return
           }
           const result = await this.$store.dispatch('addAppGroupNav', list)
-          if(result.code === 1000) {
+          if (result.code === 1000) {
             this.createListVisible = false
             await this.refreshNavs()
             appVue.$message.success({ content: '添加列表成功。' })
@@ -226,15 +229,15 @@ Vue.component('group-comp', {
      * @param treeKey
      */
     checkMenuDisable (visible, treeKey) {
-      if(treeKey.startsWith('group')) {
-          this.disableCreate = true
-          this.disableRename = true
-          this.disableDelete = true
+      if (treeKey.startsWith('group')) {
+        this.disableCreate = true
+        this.disableRename = true
+        this.disableDelete = true
       } else if (treeKey.startsWith('L2')) {
-          this.disableCreate = true
-          this.disableRename = false
-          this.disableDelete = false
-      } else if(treeKey.startsWith('L1')) {
+        this.disableCreate = true
+        this.disableRename = false
+        this.disableDelete = false
+      } else if (treeKey.startsWith('L1')) {
         this.disableCreate = false
         this.disableRename = true
         this.disableDelete = true
@@ -242,22 +245,22 @@ Vue.component('group-comp', {
     },
 
     // 拖拽元素放置到了目的地元素上面
-    allowDrop(e, key) {
+    allowDrop (e, key) {
       console.log(key, '拖拽key～～～')
     },
-    dragEnter(e) {
+    dragEnter (e) {
       console.log('enter')
       console.log(e)
       e.target.classList.add('canDrag')
     },
-    dragLeave(e) {
+    dragLeave (e) {
       console.log('leave')
       console.log(e)
       e.target.classList.remove('canDrag')
     },
 
     // 拖拽元素结束了操作
-    async drop(e, key) {
+    async drop (e, key) {
       e.target.classList.remove('canDrag')
       if (key === 'group' || key.startsWith('L1') || Number(key.split('-')[2]) === window.$listId) {
         e.preventDefault()
@@ -267,12 +270,12 @@ Vue.component('group-comp', {
         window.$selectedApps.forEach(e => {
           ids.push(Number(e))
         })
-        const data  = {
+        const data = {
           ids,
           list_id: Number(key.split('-')[2]),
         }
         const result = await this.$store.dispatch('updateGroupNavApps', data)
-        if(result.code === 1000){
+        if (result.code === 1000) {
           window.$selectedApps = []
           window.$removeApps()
           appVue.$message.success({ content: '移动应用成功。' })

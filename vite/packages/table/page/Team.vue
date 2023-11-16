@@ -19,8 +19,8 @@ import SecondPanel from '../components/SecondPanel.vue'
 
 export default {
   name: 'Team',
-  components: {SecondPanel},
-  data() {
+  components: { SecondPanel },
+  data () {
     return {
 
       menus: [
@@ -35,7 +35,7 @@ export default {
         },
       ],
     }
-  }, methods: {}, async mounted() {
+  }, methods: {}, async mounted () {
 
   }
 }

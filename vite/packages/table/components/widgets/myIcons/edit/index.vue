@@ -35,12 +35,12 @@
 </template>
 
 <script>
-import MyIcon from "../components/icon.vue";
-import Edit from "./edit.vue";
+import MyIcon from '../components/icon.vue'
+import Edit from './edit.vue'
 
-import mixins from "./hooks/mixins";
+import mixins from './hooks/mixins'
 
-const {fs} = window.$models;
+const { fs } = window.$models
 
 export default {
   mixins: [mixins],
@@ -52,20 +52,20 @@ export default {
     MyIcon,
   },
   methods: {
-    close() {
-      this.$emit("close");
+    close () {
+      this.$emit('close')
     },
 
-    async save() {
+    async save () {
       // this.edit.linkValue = {
       //   type: "systemApp",
       //   event: "ai",
       // };
       // this.edit.open = {};
-      this.$emit("save");
+      this.$emit('save')
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

@@ -28,22 +28,22 @@
 </template>
 
 <script>
-import Topic from "./topic.vue";
-import {mapActions, mapWritableState} from "pinia";
-import {aiStore} from "../../../../store/ai";
+import Topic from './topic.vue'
+import { mapActions, mapWritableState } from 'pinia'
+import { aiStore } from '../../../../store/ai'
 
 export default {
   computed: {
-    ...mapWritableState(aiStore, ["todayList", "topList", "previousList"]),
+    ...mapWritableState(aiStore, ['todayList', 'topList', 'previousList']),
   },
-  components: {Topic},
+  components: { Topic },
   methods: {
-    ...mapActions(aiStore, ["addTopic"]),
-    add() {
-      this.addTopic();
+    ...mapActions(aiStore, ['addTopic']),
+    add () {
+      this.addTopic()
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

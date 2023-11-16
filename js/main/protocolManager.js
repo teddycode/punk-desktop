@@ -26,10 +26,10 @@ protocolManager = {
         const action = urlObj.pathname.split('/')[1]
         if (action === 'redirect') {
           protocolManager.sidePanel.send('appRedirect', {
-            package: searchParams.get('package'),
-            url: searchParams.get('url'),
-            background: searchParams.get('background') !== null ? searchParams.get('background') : true
-          }
+              package: searchParams.get('package'),
+              url: searchParams.get('url'),
+              background: searchParams.get('background') !== null ? searchParams.get('background') : true
+            }
           )
           // console.log('是重定向协议')
           // console.log('url=',searchParams.get('url'))

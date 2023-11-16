@@ -83,7 +83,8 @@
               </div>
               <div>
                 <a-select v-model:value="defaultDataType" :bordered="false"
-                          dropdownSyle="" style="width:100%;  height: 40px; border-radius: 10px;background-color: var(--primary-bg);"
+                          dropdownSyle=""
+                          style="width:100%;  height: 40px; border-radius: 10px;background-color: var(--primary-bg);"
                           @select="changeDataType(defaultDataType)">
                   <a-select-option v-for="(item, index) in selectDataType" :value="index"
                                    class="xt-bg xt-text-2 selsect-options">
@@ -126,22 +127,22 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from "pinia";
-import {cardStore} from '../../store/card'
-import {topClockSettingStore} from '../../store/topClockSetting'
-import {timeStamp, transDate} from "../../util";
-import {message} from "ant-design-vue";
-import dayjs from "dayjs";
+import { mapActions, mapWritableState } from 'pinia'
+import { cardStore } from '../../store/card'
+import { topClockSettingStore } from '../../store/topClockSetting'
+import { timeStamp, transDate } from '../../util'
+import { message } from 'ant-design-vue'
+import dayjs from 'dayjs'
 import BackBtn from '../../components/comp/BackBtn.vue'
-import {getDateTime} from '../../../../src/util/dateTime'
-import {Icon as clockIcon} from '@iconify/vue'
+import { getDateTime } from '../../../../src/util/dateTime'
+import { Icon as clockIcon } from '@iconify/vue'
 import RadioTab from '../../components/RadioTab.vue'
 
 export default {
-  name: "SetupClock",
-  components: {BackBtn, clockIcon, RadioTab},
+  name: 'SetupClock',
+  components: { BackBtn, clockIcon, RadioTab },
 
-  data() {
+  data () {
     return {
       outerSettings: {
         useBothWheelAxes: true,
@@ -150,11 +151,11 @@ export default {
         suppressScrollX: true,
         wheelPropagation: true,
       },
-      title: "",
-      countdownDayType: "大",
-      clockType: "不重复",
+      title: '',
+      countdownDayType: '大',
+      clockType: '不重复',
 
-      eventValue: "未命名",
+      eventValue: '未命名',
       dateValue: null,
       clockDate: null,
       flag: true,
@@ -166,83 +167,83 @@ export default {
       dateTime: {},//当前时间
       timer: null,//当前时间更新计时器
       dataType: [
-        {title: '不重复', name: '不重复'},
-        {title: '每天', name: '每天'}
+        { title: '不重复', name: '不重复' },
+        { title: '每天', name: '每天' }
       ],
-      defaultType: {title: '不重复', name: '不重复'},
+      defaultType: { title: '不重复', name: '不重复' },
       selectDataType: [
-        {title: '始终显示', tag: 'always', type: '0'},
-        {title: '显示30分钟内的闹钟', tag: 'within30min', type: '1'},
-        {title: '显示1小时内的闹钟', tag: 'within1hour', type: '2'},
+        { title: '始终显示', tag: 'always', type: '0' },
+        { title: '显示30分钟内的闹钟', tag: 'within30min', type: '1' },
+        { title: '显示1小时内的闹钟', tag: 'within1hour', type: '2' },
       ],
       defaultDataType: '显示30分钟内的闹钟',
       checked: true,
-    };
+    }
   },
 
-  mounted() {
-    if (this.$route.params["name"]) {
+  mounted () {
+    if (this.$route.params['name']) {
       // console.log(this.$route.params);
-      this.title = this.$route.params["cname"];
-      this.cardType = this.$route.params["name"];
-      this.customIndex = this.$route.params["customIndex"];
+      this.title = this.$route.params['cname']
+      this.cardType = this.$route.params['name']
+      this.customIndex = this.$route.params['customIndex']
     }
     this.updateTime()
     this.timer = setInterval(() => {
       this.updateTime()
     }, 1000)
   },
-  unmounted() {
+  unmounted () {
     clearInterval(this.timer)
   },
   computed: {
-    ...mapWritableState(cardStore, ["countdownDay", "appDate", "clockEvent", 'chooseType']),
+    ...mapWritableState(cardStore, ['countdownDay', 'appDate', 'clockEvent', 'chooseType']),
     ...mapWritableState(topClockSettingStore, ['checkTopClock'])
   },
   methods: {
     dayjs,
     transDate,
     ...mapActions(cardStore, [
-      "addCountdownDay",
-      "addClock",
-      "addCard",
-      "removeCountdownDay",
-      "removeClock",
+      'addCountdownDay',
+      'addClock',
+      'addCard',
+      'removeCountdownDay',
+      'removeClock',
       'filterClock',
     ]),
     ...mapActions(topClockSettingStore, ['changeTopClockStatus']),
-    updateTime() {
+    updateTime () {
       this.dateTime = getDateTime()
     },
-    addCard() {
-      if (this.eventValue === "" || this.dateValue === null) {
-        if (this.flag !== true) return;
-        this.flag = false;
+    addCard () {
+      if (this.eventValue === '' || this.dateValue === null) {
+        if (this.flag !== true) return
+        this.flag = false
         setTimeout(() => {
-          message.info("不可为空！");
-          this.flag = true;
-        }, 500);
-        return;
+          message.info('不可为空！')
+          this.flag = true
+        }, 500)
+        return
       }
       this.addCountdownDay({
         eventValue: this.eventValue,
         dateValue: timeStamp(this.dateValue.valueOf()),
         customIndex: this.customIndex
-      });
+      })
       // this.$router.push({
       //   name: "home",
       // });
-      message.success("添加成功！");
+      message.success('添加成功！')
     },
-    addSettingClock() {
-      if (this.eventValue === "") {
-        if (this.flag !== true) return;
-        this.flag = false;
-        message.info("闹钟名称不可为空！");
+    addSettingClock () {
+      if (this.eventValue === '') {
+        if (this.flag !== true) return
+        this.flag = false
+        message.info('闹钟名称不可为空！')
         setTimeout(() => {
-          this.flag = true;
-        }, 500);
-        return;
+          this.flag = true
+        }, 500)
+        return
       }
 
       let date = new Date(Date.now())
@@ -256,29 +257,28 @@ export default {
       }
       let dateSpan = timeStamp(timeSpan)
 
-
       this.addClock({
         clockType: this.defaultType.name,
         eventValue: this.eventValue,
         dateValue: timeSpan,
         clockTimeStamp: timeSpan
-      });
+      })
       // this.$router.push({
       //   name: "home",
       // });
-      message.success("添加成功！");
+      message.success('添加成功！')
     },
-    onContextMenuClick(e, index) {
-      this.removeCountdownDay(index);
+    onContextMenuClick (e, index) {
+      this.removeCountdownDay(index)
     },
-    onClockMenuClick(e, index) {
-      this.removeClock(index, 1);
+    onClockMenuClick (e, index) {
+      this.removeClock(index, 1)
     },
-    changeSwitchStatus(value) {
-      console.log(this.checked);
+    changeSwitchStatus (value) {
+      console.log(this.checked)
       this.changeTopClockStatus(value)
     },
-    changeDataType(value) {
+    changeDataType (value) {
       // console.log(this.selectDataType[value.title]);
       // console.log(value);
       let tag = this.selectDataType[value].tag
@@ -287,7 +287,7 @@ export default {
       this.filterClock(tag, temp)
     }
   },
-  mounted() {
+  mounted () {
     // console.log(this.chooseType, 'this.chooseType--isUndefined');
     // console.log(this.checkTopClock,'this.checkTopClock');
     this.checked = this.checkTopClock
@@ -310,12 +310,12 @@ export default {
   */
   watch: {
     checkTopClock: {
-      handler(value) {
+      handler (value) {
         this.checked = value
       }
     },
     chooseType: {
-      handler(value) {
+      handler (value) {
         if (value == undefined) {
           this.defaultDataType = '显示30分钟内的闹钟'
         } else {
@@ -333,7 +333,7 @@ export default {
       deep: true
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

@@ -47,13 +47,13 @@
 </template>
 
 <script>
-import {defineComponent,} from 'vue'
-import {mapActions, mapWritableState} from 'pinia'
-import {formatTime} from '../../util'
-import {noticeStore} from '../../store/notice'
-import {appStore} from '../../store'
-import {topClockSettingStore} from '../../store/topClockSetting'
-import {Icon as clockIcon} from '@iconify/vue'
+import { defineComponent, } from 'vue'
+import { mapActions, mapWritableState } from 'pinia'
+import { formatTime } from '../../util'
+import { noticeStore } from '../../store/notice'
+import { appStore } from '../../store'
+import { topClockSettingStore } from '../../store/topClockSetting'
+import { Icon as clockIcon } from '@iconify/vue'
 
 export default defineComponent({
   props: ['content', 'noticeType', 'isPlay', 'title', 'changeIcon'],
@@ -70,7 +70,7 @@ export default defineComponent({
   },
   watch: {
     'noticeType': {
-      handler(newVal) {
+      handler (newVal) {
         // if(this.noticeType === 'notice' && this.isPlay){
         this.setNoticePlay()
         if (this.settings.noticePlay) {
@@ -89,7 +89,7 @@ export default defineComponent({
     }
   },
 
-  setup(props, ctx) {
+  setup (props, ctx) {
 
     const talkLater = () => {  // 点击稍后再说按钮
       ctx.emit('closeToast')

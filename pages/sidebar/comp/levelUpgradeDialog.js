@@ -9,7 +9,7 @@ const levelUpgradeTempl = /* html */`
   </div>
 `
 
-Vue.component("level-upgrade", {
+Vue.component('level-upgrade', {
   template: levelUpgradeTempl,
   props: {
     visible: {
@@ -17,7 +17,7 @@ Vue.component("level-upgrade", {
     }
   },
   methods: {
-    closeLevelUpgrade() {
+    closeLevelUpgrade () {
       this.$emit('closeLevelUpgrade')
     }
   }

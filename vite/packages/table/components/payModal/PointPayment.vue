@@ -20,7 +20,8 @@
       <div class="px-4 avatar-font" style="color:var(--secondary-text);">可用积分</div>
       <div class="px-4 avatar-font" style="color: var(--primary-text);">2000积分</div>
     </div>
-    <a-button v-if="isEnough" style="border-radius: 12px; margin-right: 0;height: 48px; width: 400px;color: var(--active-text);"
+    <a-button v-if="isEnough"
+              style="border-radius: 12px; margin-right: 0;height: 48px; width: 400px;color: var(--active-text);"
               type="primary"
               @click="integralEnough">
       立即兑换
@@ -44,19 +45,18 @@ export default {
       }
     }
   },
-  data() {
+  data () {
     return {
       isEnough: true, // 判断积分是否足够
     }
   },
   methods: {
     // 积分足够的情况下的回调事件
-    integralEnough() {
+    integralEnough () {
     },
     // 积分不足的情况下回调事件
-    notEnoughPoint() {
+    notEnoughPoint () {
     },
-
 
   }
 

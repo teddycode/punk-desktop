@@ -17,7 +17,7 @@ const modules = [
   'js/preload/webApi.js'
 ]
 
-function buildPreload() {
+function buildPreload () {
   /* concatenate modules */
   let output = ''
   modules.forEach(function (script) {

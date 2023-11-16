@@ -6,20 +6,19 @@
 <script>
 import CodeMirror from 'codemirror'
 
-
 export default {
   props: {
     editorContent: {
       type: String,
     }
   },
-  mounted() {
+  mounted () {
     this.myClipRefs = CodeMirror(this.$refs.myClip, {
       value: this.editorContent,
       smartIndent: true,
       tabSize: 6,
       indentWithTabs: true,
-      direction: "ltr",
+      direction: 'ltr',
       lineWrapping: true,
       viewportMargin: Infinity,
       mode: null

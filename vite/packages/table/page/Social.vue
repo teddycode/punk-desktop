@@ -21,8 +21,8 @@ import browser from '../js/common/browser'
 
 export default {
   name: 'Social',
-  components: {SecondPanel, GroupPanel, GradePanel, ComPanel, ComActionPanel},
-  data() {
+  components: { SecondPanel, GroupPanel, GradePanel, ComPanel, ComActionPanel },
+  data () {
     return {
       tabs: [
         {
@@ -95,7 +95,6 @@ export default {
         //  }
       ],
 
-
       scrollbarSettings: {
         useBothWheelAxes: true,
         swipeEasing: true,
@@ -106,14 +105,14 @@ export default {
 
     }
   },
-  async mounted() {
+  async mounted () {
 
   },
   methods: {
-    goUrl(url) {
+    goUrl (url) {
       browser.openInInner(url)
     },
-    changeTab(data) {
+    changeTab (data) {
       this.$router.push(data.menu.route)
     },
   }

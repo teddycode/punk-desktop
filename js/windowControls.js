@@ -1,4 +1,4 @@
-const settings = require('util/settings/settings.js');
+const settings = require('util/settings/settings.js')
 
 function initialize () {
   if (settings.get('useSeparateTitlebar') === true) {
@@ -9,16 +9,16 @@ function initialize () {
   var windowIsFullscreen = false
 
   var captionMinimize =
-  document.querySelector('.windows-caption-buttons .caption-minimise, body.linux .titlebar-linux .caption-minimise')
+    document.querySelector('.windows-caption-buttons .caption-minimise, body.linux .titlebar-linux .caption-minimise')
 
   var captionMaximize =
-  document.querySelector('.windows-caption-buttons .caption-maximize, body.linux .titlebar-linux .caption-maximize')
+    document.querySelector('.windows-caption-buttons .caption-maximize, body.linux .titlebar-linux .caption-maximize')
 
   var captionRestore =
-  document.querySelector('.windows-caption-buttons .caption-restore, body.linux .titlebar-linux .caption-restore')
+    document.querySelector('.windows-caption-buttons .caption-restore, body.linux .titlebar-linux .caption-restore')
 
   var captionClose =
-  document.querySelector('.windows-caption-buttons .caption-close, body.linux .titlebar-linux .caption-close')
+    document.querySelector('.windows-caption-buttons .caption-close, body.linux .titlebar-linux .caption-close')
 
   var linuxClose = document.querySelector('#linux-control-buttons #close-button')
   var linuxMinimize = document.querySelector('#linux-control-buttons #minimize-button')

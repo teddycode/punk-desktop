@@ -23,8 +23,8 @@
 <script>
 import ClipItem from '../components/ClipItem.vue'
 import ClipTextPreview from '../components/clipPreview/Previewer.vue'
-import {mapWritableState} from 'pinia'
-import {clipboardStore} from '../store'
+import { mapWritableState } from 'pinia'
+import { clipboardStore } from '../store'
 
 export default {
   components: {
@@ -37,7 +37,7 @@ export default {
       default: () => []
     }
   },
-  data() {
+  data () {
     return {
       simpleImage: '/public/img/test/not-data.png',
       previewData: null
@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     // 获取item
-    getItem(args) {
+    getItem (args) {
       // this.previewData = v
       const item = args.item
       this.previewData = item

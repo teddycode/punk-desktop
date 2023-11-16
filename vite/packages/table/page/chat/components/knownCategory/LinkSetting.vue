@@ -48,10 +48,10 @@
 </template>
 
 <script>
-import {mapActions} from 'pinia'
-import {Icon as LinkIcon} from '@iconify/vue'
-import {communityStore} from '../../store/communityStore'
-import {message} from 'ant-design-vue'
+import { mapActions } from 'pinia'
+import { Icon as LinkIcon } from '@iconify/vue'
+import { communityStore } from '../../store/communityStore'
+import { message } from 'ant-design-vue'
 
 import RadioTab from '../../../../components/RadioTab.vue'
 
@@ -63,26 +63,25 @@ export default {
     LinkIcon, RadioTab,
   },
 
-  data() {
+  data () {
     return {
       requestProtocol: 'https',
       linkType: [
-        {title: '内部浏览器', name: 'inter', openMethod: 'userSelect'},
-        {title: '系统浏览器', name: 'system', openMethod: 'systemSelect'}
+        { title: '内部浏览器', name: 'inter', openMethod: 'userSelect' },
+        { title: '系统浏览器', name: 'system', openMethod: 'systemSelect' }
       ],
       openType: [
-        {title: '当前页面直接打开', name: 'current', openMethod: 'currentPage'},
-        {title: '外部跳转打开', name: 'outer', openMethod: 'outerOpen'},
+        { title: '当前页面直接打开', name: 'current', openMethod: 'currentPage' },
+        { title: '外部跳转打开', name: 'outer', openMethod: 'outerOpen' },
       ],
-      defaultType: {title: '内部浏览器', name: 'inter', openMethod: 'userSelect'},
-      defaultOpen: {title: '当前页面直接打开', name: 'current', openMethod: 'currentPage'},
-      link: this.item !== '' ? JSON.parse(this.item?.props).url.indexOf("https://") !== -1 ? JSON.parse(this.item?.props).url.slice(8) : JSON.parse(this.item?.props).url.indexOf("http://") !== -1 ? JSON.parse(this.item?.props).url.slice(7) : '' : '',
+      defaultType: { title: '内部浏览器', name: 'inter', openMethod: 'userSelect' },
+      defaultOpen: { title: '当前页面直接打开', name: 'current', openMethod: 'currentPage' },
+      link: this.item !== '' ? JSON.parse(this.item?.props).url.indexOf('https://') !== -1 ? JSON.parse(this.item?.props).url.slice(8) : JSON.parse(this.item?.props).url.indexOf('http://') !== -1 ? JSON.parse(this.item?.props).url.slice(7) : '' : '',
       linkName: this.item !== '' ? this.item?.name : '',
     }
   },
 
-
-  mounted() {
+  mounted () {
     this.$nextTick(() => {
       const nameRef = this.$refs.linkNameRef
       const linkRef = this.$refs.linkRef
@@ -96,14 +95,14 @@ export default {
   methods: {
     ...mapActions(communityStore, ['updateChannel', 'getCategoryData', 'getChannelList']),
 
-    backChannel() {
+    backChannel () {
       this.$emit('back')
     },
-    closeChannel() {
+    closeChannel () {
       this.$emit('close')
     },
 
-    async submitSelect(evt) {
+    async submitSelect (evt) {
       const option = {
         ...this.item,
         name: this.linkName,
@@ -132,27 +131,26 @@ export default {
     }
   },
 
-
   watch: {
-    defaultType(newVal) {
+    defaultType (newVal) {
       this.defaultType = newVal
     },
-    defaultOpen(newVal) {
+    defaultOpen (newVal) {
       console.log('监听数据变化', newVal)
       this.defaultOpen = newVal
     },
     'item': {
-      handler(newVal) {
+      handler (newVal) {
         if (newVal && newVal !== '' && newVal !== undefined) {
           const data = JSON.parse(newVal.props)
           if (data.openMethod === 'currentPage') {
-            this.defaultType = {title: '当前页面直接打开', name: 'current', openMethod: 'currentPage'}
+            this.defaultType = { title: '当前页面直接打开', name: 'current', openMethod: 'currentPage' }
           } else {
-            this.defaultOpen = {title: '外部跳转打开', name: 'outer', openMethod: 'outerOpen'}
+            this.defaultOpen = { title: '外部跳转打开', name: 'outer', openMethod: 'outerOpen' }
             if (data.openMethod === 'userSelect') {
-              this.defaultType = {title: '内部浏览器', name: 'inter', openMethod: 'userSelect'}
+              this.defaultType = { title: '内部浏览器', name: 'inter', openMethod: 'userSelect' }
             } else {
-              this.defaultType = {title: '系统浏览器', name: 'system', openMethod: 'systemSelect'}
+              this.defaultType = { title: '系统浏览器', name: 'system', openMethod: 'systemSelect' }
             }
           }
         }

@@ -131,14 +131,14 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from 'pinia'
-import {communityStore} from '../../store/communityStore'
-import {hotCommunityData} from '../../../../js/data/chatList'
+import { mapActions, mapWritableState } from 'pinia'
+import { communityStore } from '../../store/communityStore'
+import { hotCommunityData } from '../../../../js/data/chatList'
 
 export default {
   props: ['dataList'],
 
-  data() {
+  data () {
     return {
       settingsScroller: {
         useBothWheelAxes: true,
@@ -152,25 +152,25 @@ export default {
     }
   },
 
-  mounted() {
+  mounted () {
     this.getMyCommunity()
     this.getRecommendCommunityList()
   },
 
   computed: {
     ...mapWritableState(communityStore, ['communityList', 'recommendCommunityList']),
-    findList() {
+    findList () {
       const list = Object.values(this.recommendCommunityList.reduce((acc, curr) => {
         if (!acc[curr.id]) {
-          acc[curr.id] = curr;
+          acc[curr.id] = curr
         }
-        return acc;
-      }, {}));
+        return acc
+      }, {}))
       return list
     },
 
     // 热门社群模拟数据
-    hotList() {
+    hotList () {
       return hotCommunityData
     },
 
@@ -182,7 +182,7 @@ export default {
 
   watch: {
     'dataList': {
-      handler(newVal) {
+      handler (newVal) {
         // console.log('监听props数据是否为空',newVal);
         if (newVal?.length !== 0) {
           this.searchShow = true

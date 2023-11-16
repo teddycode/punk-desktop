@@ -71,7 +71,7 @@ const tpl = `
 const spaceModel = require('../../../src/model/spaceModel')
 const backupSpaceModel = require('../../../src/model/backupSpaceModel')
 const configModel = require('../../../src/model/configModel')
-const ipc=require('electron').ipcRenderer
+const ipc = require('electron').ipcRenderer
 const disconnect = {
   template: tpl,
   data () {
@@ -83,13 +83,13 @@ const disconnect = {
       title: '',
       fatal: true,//非致命意外
       description: '',
-      spaceId:0,
-      dontShowDisconnect:false //不再询问
+      spaceId: 0,
+      dontShowDisconnect: false //不再询问
     }
   },
   async mounted () {
     try {
-      this.spaceId=window.globalArgs['spaceId']
+      this.spaceId = window.globalArgs['spaceId']
       let space = await spaceModel.getSpace(window.globalArgs['spaceId'])
       this.space = space
       this.user = space.userInfo
@@ -101,8 +101,8 @@ const disconnect = {
 
   },
   methods: {
-    closeAndSaveCnf(){
-      configModel.set('dontShowDisconnect',this.dontShowDisconnect)
+    closeAndSaveCnf () {
+      configModel.set('dontShowDisconnect', this.dontShowDisconnect)
       ipc.send('closeUserWindow')
     },
     /**
@@ -116,10 +116,10 @@ const disconnect = {
      * 切换到云空间，保存
      */
     async reconnect () {
-      try{
-        let result=await spaceModel.setUser(this.user).clientOnline(this.spaceId)
-        if(result.status===1){
-          if(result.data==='-1'){
+      try {
+        let result = await spaceModel.setUser(this.user).clientOnline(this.spaceId)
+        if (result.status === 1) {
+          if (result.data === '-1') {
             antd.Modal.confirm({
               title: '云空间已被删除',
               content: '云空间已被删除，无法再连接，为了不丢失您的离线空间，点击确定进入恢复备份操作。',
@@ -130,7 +130,7 @@ const disconnect = {
                 //todo 切换到致命错误
               }
             })
-          }else if(result.data==='-2'){
+          } else if (result.data === '-2') {
             antd.Modal.confirm({
               title: '云空间已被其他设备占用',
               content: '云空间已被其他设备占用，为了不丢失您的离线空间，点击确定进入恢复备份操作。',
@@ -141,26 +141,26 @@ const disconnect = {
                 //todo 切换到致命错误
               }
             })
-          }else{
+          } else {
             //连接成功
             ipc.send('reconnect')
             antd.Modal.success({
               title: '重连成功，点击确定关闭窗口',
               content: Vue.h('div', {}, [Vue.h('p', '重连成功')]),
-              onOk:async ()=>{
+              onOk: async () => {
                 this.closeAndSaveCnf()
               }
-            });
+            })
           }
         }
-      }catch (e) {
-        try{
-          if(e.response.status===401){
+      } catch (e) {
+        try {
+          if (e.response.status === 401) {
             window.antd.message.error('账号信息失效，请先离线使用，然后重新登录此账号，即可恢复空间连接。')
-          }else{
+          } else {
             window.antd.message.error('重连失败，请稍后再试。')
           }
-        }catch (e) {
+        } catch (e) {
           window.antd.message.error('重连失败，请稍后再试。')
         }
       }
@@ -188,7 +188,7 @@ const disconnect = {
       //todo 切换到这个空间
       //todo 关闭当前窗体
     },
-    continueUse(){
+    continueUse () {
       antd.Modal.confirm({
         title: '离线使用空间？',
         content: '此模式下依然可使用空间。系统会在后台尝试重连，一旦成功连接会自动转入线上空间并将离线改动同步上去。可放心使用。',

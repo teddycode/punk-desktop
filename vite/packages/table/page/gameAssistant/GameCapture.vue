@@ -29,7 +29,8 @@
                 <div v-else class="flex justify-between flex-wrap">
                   <div v-for="(item,index) in recordGameData"
                        :class="{'s-active':defaultIndex === index}"
-                       class="flex pointer flex-col capture-bg rounded-lg mb-4  record-game-item" @click="clickRecordGame(item,index)"
+                       class="flex pointer flex-col capture-bg rounded-lg mb-4  record-game-item"
+                       @click="clickRecordGame(item,index)"
                   >
                     <img :src="item.url" class="w-full rounded-t-lg h-full object-cover">
                     <div class="px-4 py-3">
@@ -48,7 +49,8 @@
                 <div v-else class="flex justify-between flex-wrap">
                   <div v-for="(item,index) in  deskSource"
                        :class="{'s-active':defaultIndex === index}"
-                       class="flex flex-col capture-bg rounded-lg mb-4 pointer record-game-item" @click="chooseSource(item,index)"
+                       class="flex flex-col capture-bg rounded-lg mb-4 pointer record-game-item"
+                       @click="chooseSource(item,index)"
                   >
                     <img :src="'file://'+item.src" class="w-full rounded-t-lg h-full object-cover">
                     <div class="px-4 py-3">
@@ -67,7 +69,8 @@
                 <div v-else class="flex justify-between flex-wrap">
                   <div v-for="(item,index) in  windowSource"
                        :class="{'s-active':defaultIndex === index}"
-                       class="flex flex-col justify-between capture-bg rounded-lg mb-4 pointer record-game-item" @click="chooseSource(item,index)"
+                       class="flex flex-col justify-between capture-bg rounded-lg mb-4 pointer record-game-item"
+                       @click="chooseSource(item,index)"
                   >
                     <img :src="'file://'+item.src" class="w-full rounded-t-lg h-full object-cover">
                     <div class="px-4 py-3 truncate">
@@ -111,7 +114,8 @@
                 <div class="cp-text capture-title">截图</div>
               </div>
 
-              <div v-if="!recording" :class="{disable:!this.settings.videoSavePath}" class="cp-w cp-red-active cp-red-1 pointer flex-col rounded-lg mr-3 hover-btn"
+              <div v-if="!recording" :class="{disable:!this.settings.videoSavePath}"
+                   class="cp-w cp-red-active cp-red-1 pointer flex-col rounded-lg mr-3 hover-btn"
                    @click="startRecording">
                 <div class="w-20 h-20 flex cp-red-2  items-center rounded-full justify-center mb-3">
                   <div class="rounded-full cp-red-full flex items-center justify-center cp-lw">
@@ -304,7 +308,8 @@
               <div class="mb-3 fps-t mb-2 ">需先设置截屏保存位置：</div>
               <div class="text-center mb-3 py-3 s-item rounded-lg" @click="setImageSavePath">设置截屏保存位置</div>
             </div>
-            <vue-custom-scrollbar v-else :settings="settingsScroller" class="rounded-md" style="height:100%;" @touchstart.stop
+            <vue-custom-scrollbar v-else :settings="settingsScroller" class="rounded-md" style="height:100%;"
+                                  @touchstart.stop
                                   @touchmove.stop @touchend.stop>
               <div class="flex flex-row flex-wrap content-game">
                 <div v-for="item in pagedImages" class="game-list-item my-game-content my-image"
@@ -315,7 +320,8 @@
                   <a-tooltip :title="item.filename">
                     <div
                         class="px-1 truncate"
-                        style="position: absolute;width: 100%;bottom: 0;color: white;background: rgba(0,0,0,0.3);font-size: 12px">{{ item.filename }}
+                        style="position: absolute;width: 100%;bottom: 0;color: white;background: rgba(0,0,0,0.3);font-size: 12px">
+                      {{ item.filename }}
                     </div>
                   </a-tooltip>
 
@@ -328,7 +334,8 @@
               <div class="mb-3 fps-t">需先设置录屏保存位置：</div>
               <div class="text-center mb-3 py-3 s-item rounded-lg" @click="setVideoSavePath">设置录屏保存位置</div>
             </div>
-            <vue-custom-scrollbar v-else :settings="settingsScroller" class="rounded-md" style="height:100%;" @touchstart.stop
+            <vue-custom-scrollbar v-else :settings="settingsScroller" class="rounded-md" style="height:100%;"
+                                  @touchstart.stop
                                   @touchmove.stop @touchend.stop>
               <div class="flex flex-row flex-wrap content-game ">
                 <div v-for="item in pagedVideos"
@@ -440,23 +447,23 @@
 
 <script>
 import _ from 'lodash-es'
-import {mapActions, mapState, mapWritableState} from 'pinia'
-import {AreaChartOutlined} from '@ant-design/icons-vue'
+import { mapActions, mapState, mapWritableState } from 'pinia'
+import { AreaChartOutlined } from '@ant-design/icons-vue'
 import HorizontalCapture from '../../components/HorizontalCaptrue.vue'
-import {inspectorStore} from '../../store/inspector'
+import { inspectorStore } from '../../store/inspector'
 import * as echarts from 'echarts'
-import {FPSOption} from '../../components/widgets/supervisory/echartOptions'
-import {captureStore} from '../../store/capture'
+import { FPSOption } from '../../components/widgets/supervisory/echartOptions'
+import { captureStore } from '../../store/capture'
 import BackBtn from '../../components/comp/BackBtn.vue'
-import {steamUserStore} from '../../store/steamUser'
+import { steamUserStore } from '../../store/steamUser'
 import VideoItem from '../../components/game/VideoItem.vue'
-import {useToast} from 'vue-toastification'
+import { useToast } from 'vue-toastification'
 import SaveImage from '../../components/game/SaveImage.vue'
-import {message, Modal} from 'ant-design-vue'
-import {formatSeconds, timeStamp} from '../../util'
+import { message, Modal } from 'ant-design-vue'
+import { formatSeconds, timeStamp } from '../../util'
 import VueCustomScrollbar from '../../../../src/components/vue-scrollbar.vue'
 import filenamify from 'filenamify'
-import {getDefaultMic, getDefaultVolume, setDefaultVolume, setMicVolume} from '../../js/ext/audio/audio'
+import { getDefaultMic, getDefaultVolume, setDefaultVolume, setMicVolume } from '../../js/ext/audio/audio'
 
 const toast = useToast()
 export default {
@@ -469,7 +476,7 @@ export default {
     HorizontalCapture
   },
 
-  data() {
+  data () {
     return {
       loading: false,
       //1.选源 2.实操
@@ -487,11 +494,11 @@ export default {
       systemMicrophone: {}, // 麦克风
       captureType: [
         // {title:'录游戏',name:'recordGame'},
-        {title: '捕获窗口', name: 'logger'},
-        {title: '捕获全屏', name: 'recordFullScreen'},
+        { title: '捕获窗口', name: 'logger' },
+        { title: '捕获全屏', name: 'recordFullScreen' },
 
       ],
-      defaultRecordingType: {title: '录窗口', name: 'logger'},
+      defaultRecordingType: { title: '录窗口', name: 'logger' },
       settingsScroller: {
         useBothWheelAxes: true,
         swipeEasing: true,
@@ -508,21 +515,21 @@ export default {
       defaultIndex: 0,
       simpleImage: '/public/img/test/not-data.png',
       lastCapture: [
-        {title: '截屏', name: 'screenCap'},
-        {title: '录制', name: 'record'}
+        { title: '截屏', name: 'screenCap' },
+        { title: '录制', name: 'record' }
       ],
-      defaultLastCap: {title: '截屏', name: 'screenCap'},
+      defaultLastCap: { title: '截屏', name: 'screenCap' },
       monitorTitle: 'FPS',
       monitorSetData: [
-        {title: 'FPS', name: '实时、平均、1%LOW帧数监测', id: 'f'},
-        {title: '性能', name: 'CPU占用、GPU占用、实时FPS监测', id: 'p'},
-        {title: '性能', name: '实时FPS监测', id: 's'}
+        { title: 'FPS', name: '实时、平均、1%LOW帧数监测', id: 'f' },
+        { title: '性能', name: 'CPU占用、GPU占用、实时FPS监测', id: 'p' },
+        { title: '性能', name: '实时FPS监测', id: 's' }
       ],
       CPUGPUData: {
-        useCPU: {value: 0},
-        useGPU: {value: 0},
-        useMemory: {value: 0},
-        FPS: {value: 0},
+        useCPU: { value: 0 },
+        useGPU: { value: 0 },
+        useMemory: { value: 0 },
+        FPS: { value: 0 },
         down: 0,
         up: 0
       },
@@ -555,39 +562,39 @@ export default {
     ...mapWritableState(inspectorStore, ['displayData']),
     ...mapWritableState(captureStore, ['sources', 'settings', 'images', 'videos', 'currentSource']),
     ...mapState(steamUserStore, ['runningGame']),
-    deskSource() {
+    deskSource () {
       return this.sources.filter(s => {
         return s.type === 'screen'
       })
     },
-    windowSource() {
+    windowSource () {
       return this.sources.filter(s => {
         return s.type === 'window'
       })
     },
-    pagedImages() {
+    pagedImages () {
       let sorted = this.images.sort((img1, img2) => {
         return img2.stat.ctimeMs - img1.stat.ctimeMs
       })
       return sorted
     },
-    pagedVideos() {
+    pagedVideos () {
       let sorted = this.videos.sort((img1, img2) => {
         return img2.stat.ctimeMs - img1.stat.ctimeMs
       })
       return sorted
     },
-    recordedTimeStr() {
+    recordedTimeStr () {
 
       return formatSeconds(this.recordedSeconds)
     },
-    averageFps() {
+    averageFps () {
       if (this.fpsList.length === 0) {
         return 0
       }
       return _.mean(this.fpsList).toFixed(1)
     },
-    low1() {
+    low1 () {
 
       let sorted = this.fpsList.sort((a, b) => {
         return a - b
@@ -600,12 +607,12 @@ export default {
       return _.mean(_.take(sorted, getNum)).toFixed(1)
     }
   },
-  unmounted() {
+  unmounted () {
     if (this.recording) {
       this.stopRecording()
     }
   },
-  async mounted() {
+  async mounted () {
 
     getDefaultVolume().then((defaultVolume) => {
       this.systemSound = {
@@ -641,8 +648,8 @@ export default {
 
   watch: {
     'displayData': {
-      handler(newVal, oldVal) {
-        let {useGPU, useMemory, useCPU, FPS, down, up} = this.displayData || {}
+      handler (newVal, oldVal) {
+        let { useGPU, useMemory, useCPU, FPS, down, up } = this.displayData || {}
         this.CPUGPUData = {
           useGPU: useGPU,
           useCPU: useCPU,
@@ -674,14 +681,14 @@ export default {
     /**
      * 重载列表
      */
-    reload() {
+    reload () {
       if (this.lastCapture === 'record') {
         this.loadVideos()
       } else {
         this.loadImages()
       }
     },
-    refreshSource(cb) {
+    refreshSource (cb) {
       this.sources = []
       this.loading = true
       this.getSource()
@@ -695,7 +702,7 @@ export default {
         }
       }, 500)
     },
-    async setImageSavePath() {
+    async setImageSavePath () {
       let savePath = await tsbApi.dialog.showOpenDialog({
         title: '选择目录', message: '请选择截屏保存位置', properties: [
           'openDirectory', 'createDirectory',
@@ -707,7 +714,7 @@ export default {
       } else {
       }
     },
-    async setVideoSavePath() {
+    async setVideoSavePath () {
       let savePath = await tsbApi.dialog.showOpenDialog({
         title: '选择目录', message: '请选择视频保存位置', properties: [
           'openDirectory', 'createDirectory',
@@ -720,20 +727,20 @@ export default {
       }
     },
 
-    async loadImages() {
+    async loadImages () {
       this.images = this.genFileList(this.settings.imageSavePath, ['.jpg', '.png', '.bmp', '.jpeg'])
     },
-    async loadVideos() {
+    async loadVideos () {
       this.videos = this.genFileList(this.settings.videoSavePath, ['.mp4', '.avi', '.mpg', 'rmvb', 'webm'])
     },
     // 从目录开始
-    genFileList(path, extMap) {
+    genFileList (path, extMap) {
       let filesList = []
       this.readFile(path, filesList, extMap)
       return filesList
     },
     // 遍历读取文件
-    readFile(path, filesList, extMap) {
+    readFile (path, filesList, extMap) {
       let files = fs.readdirSync(path) // 需要用到同步读取
       files.forEach((file) => {
         let states = fs.statSync(path + '/' + file)
@@ -753,29 +760,29 @@ export default {
         }
       })
     },
-    clickMute() {
+    clickMute () {
       this.systemSound.muted = !this.systemSound.muted
       setDefaultVolume({
         muted: this.systemSound.muted
       })
     },
-    clickMicMute() {
+    clickMicMute () {
       this.systemMicrophone.muted = !this.systemMicrophone.muted
       setMicVolume({
         muted: this.systemMicrophone.muted
       })
     },
-    changeVolume() {
+    changeVolume () {
       setDefaultVolume({
         volume: this.systemSound.volume
       })
     },
-    changeMicVolume() {
+    changeMicVolume () {
       setMicVolume({
         volume: this.systemMicrophone.volume
       })
     },
-    getAllFiles(path, extMap, object, arr) {
+    getAllFiles (path, extMap, object, arr) {
       fs.readdir(path, (err, files) => {
         if (err) throw err
         files.forEach(file => {
@@ -801,19 +808,19 @@ export default {
      * 获取到最近捕获的文件路径
      * @returns {string}
      */
-    getRecentPath() {
+    getRecentPath () {
       return this.recentType === 'video' ? this.getRecentVideoPath() : this.getRecentImagePath()
     },
-    getRecentImagePath() {
+    getRecentImagePath () {
       return require('path').join(this.settings.imageSavePath, this.recentFileName)
     },
-    getRecentVideoPath() {
+    getRecentVideoPath () {
       return require('path').join(this.settings.videoSavePath, this.recentFileName)
     },
-    async saveRecent() {
-      let filters = {name: '图片', extensions: ['png']}
+    async saveRecent () {
+      let filters = { name: '图片', extensions: ['png'] }
       if (this.recentType === 'video') {
-        filters = {name: '视频', extensions: ['webm']}
+        filters = { name: '视频', extensions: ['webm'] }
       }
       let savePath = await tsbApi.dialog.showSaveDialog({
         title: '选择保存位置',
@@ -832,13 +839,13 @@ export default {
         }
       }
     },
-    openRecent() {
+    openRecent () {
       require('electron').shell.openPath(this.getRecentPath())
     },
-    openPos() {
+    openPos () {
       require('electron').shell.showItemInFolder(this.getRecentPath())
     },
-    delRecent() {
+    delRecent () {
       Modal.confirm({
         content: '删除此内容？',
         centered: true,
@@ -853,7 +860,7 @@ export default {
     /**
      * 查找源
      */
-    findWindow() {
+    findWindow () {
       if (!this.runningGame.chineseName) {
         return false
       }
@@ -864,14 +871,14 @@ export default {
       })
       return source
     },
-    chooseSource(source) {
+    chooseSource (source) {
       this.step = 2
       this.currentSource = source
     },
-    filterName(name) {
+    filterName (name) {
       return filenamify(name)
     },
-    callback(image) {
+    callback (image) {
       this.recentScreenShot = image
       let time = timeStamp(Date.now())
       const filename = this.filterName(this.currentSource.name) + '_' + time.year + '年' + time.month + '月' + time.day + '日' + time.hours + '时' + time.minutes + '分' + time.seconds + '秒' + '.png'
@@ -892,7 +899,7 @@ export default {
       })
 
     },
-    showToast(src) {
+    showToast (src) {
       toast(
           {
             component: SaveImage,
@@ -909,7 +916,7 @@ export default {
       )
     },
     // 截图
-    screenshot() {
+    screenshot () {
       //ipc.send('captureImage',{source:this.currentSource})
       const handleStream = (stream) => {
         //document.body.style.cursor = oldCursor
@@ -991,7 +998,7 @@ export default {
       }
     },
     // 开始录制事件
-    async startRecording() {
+    async startRecording () {
       const videoSource = await navigator.mediaDevices.getUserMedia({
         audio: false, // 强行表示不录制音频，音频额外获取
         video: {
@@ -1061,7 +1068,7 @@ export default {
       recorder.onstop = () => {
         // 录屏停止并获取录屏文件
         // 触发时机一定在ondataavailable之后
-        const videoFile = new Blob(fileBits, {type: 'video/webm;codecs=vp9'})
+        const videoFile = new Blob(fileBits, { type: 'video/webm;codecs=vp9' })
         var reader = new FileReader()
         reader.onload = () => {
           var buffer = new Buffer(reader.result)
@@ -1107,7 +1114,7 @@ export default {
      * 设置一个录制定时器
      * @param start 是否是启动，否则自动清理定时器
      */
-    setRecordingTimer(start = true) {
+    setRecordingTimer (start = true) {
       if (!start) {
         //如果是取消
         if (this.recordingTimer) {
@@ -1120,14 +1127,14 @@ export default {
         this.recordedSeconds++
       }, 1000)
     },
-    stopRecording() {
+    stopRecording () {
       this.setRecordingTimer(false)
       this.recorder.stop()
       this.recording = false
       this.recordKey = Date.now()
     },
     // 开始监控事件
-    startMonitoring() {
+    startMonitoring () {
       this.settings.enableInspector = !this.settings.enableInspector
       if (this.settings.enableInspector) {
         this.startInspect()
@@ -1137,28 +1144,28 @@ export default {
       if (this.settings.enableInspector && this.selectIndex === 'f') {
         this.fpsEcharts()
       } else {
-        return
+
       }
     },
 
     // 打开录制设置入口
-    openRecordSet() {
+    openRecordSet () {
       this.recordSetShow = true
     },
-    clickRecordGame(item, index) {
+    clickRecordGame (item, index) {
       this.defaultIndex = index
     },
-    openMonitorSet() {
+    openMonitorSet () {
       this.setShow = true
     },
-    selectMonitorItem(v) {
+    selectMonitorItem (v) {
       this.settings.inspectorIndex = v.id
       this.monitorTitle = v.title
       this.setShow = false
       this.fpsEcharts()
     },
     // FPS图形表
-    fpsEcharts() {
+    fpsEcharts () {
       this.$nextTick(() => {
         this.fpsInstance = echarts.init(this.$refs.fpsChart)
         this.fpsInstance.setOption({
@@ -1232,7 +1239,7 @@ export default {
         })
       })
     },
-    pageResize() {
+    pageResize () {
       if (window.innerHeight <= 700) {
         this.isHeight = false
       } else {

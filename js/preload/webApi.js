@@ -25,16 +25,16 @@ const browser = {
   short: 'tsb'
 }
 
-try{
+try {
   contextBridge.exposeInMainWorld('__TSB_RUNTIME', browser)
   contextBridge.exposeInMainWorld('__TSB_API', {
     tipOpenInApp,
     installAppConfirm,
     openGroupChat
   })
-}catch (e) {
-  window.__TSB_RUNTIME=browser
-  window.__TSB_API={
+} catch (e) {
+  window.__TSB_RUNTIME = browser
+  window.__TSB_API = {
     tipOpenInApp,
     installAppConfirm,
     openGroupChat

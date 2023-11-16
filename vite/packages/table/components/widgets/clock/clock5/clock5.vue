@@ -22,13 +22,13 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       hours: 0,
       minutes: 0,
       seconds: 0,
       timerID: 0,
-      textContent: "12-Hour Format"
+      textContent: '12-Hour Format'
     }
   },
   props: {
@@ -37,39 +37,39 @@ export default {
       default: true,
     },
   },
-  mounted() {
-    this.timerID = setInterval(this.setTime, 1000);
-    this.setTime();
+  mounted () {
+    this.timerID = setInterval(this.setTime, 1000)
+    this.setTime()
   },
   methods: {
-    setTime() {
-      const now = new Date();
-      let hours = now.getHours();
-      this.minutes = now.getMinutes().toString().padStart(2, "0");
-      this.seconds = now.getSeconds().toString().padStart(2, "0");
-      const is12HourFormat = this.textContent === "12-Hour Format";
+    setTime () {
+      const now = new Date()
+      let hours = now.getHours()
+      this.minutes = now.getMinutes().toString().padStart(2, '0')
+      this.seconds = now.getSeconds().toString().padStart(2, '0')
+      const is12HourFormat = this.textContent === '12-Hour Format'
       if (is12HourFormat) {
-        hours = hours % 12;
-        if (hours === 0) hours = 12;
+        hours = hours % 12
+        if (hours === 0) hours = 12
       }
 
-      this.hours = hours.toString().padStart(2, "0");
+      this.hours = hours.toString().padStart(2, '0')
     },
-    toggleFormat() {
-      const is12HourFormat = this.textContent === "12-Hour Format";
+    toggleFormat () {
+      const is12HourFormat = this.textContent === '12-Hour Format'
 
       if (is12HourFormat) {
-        this.textContent = "24-Hour Format";
+        this.textContent = '24-Hour Format'
       } else {
-        this.textContent = "12-Hour Format";
+        this.textContent = '12-Hour Format'
       }
 
       // Update the time format immediately after toggling
-      this.setTime();
+      this.setTime()
     }
   },
-  destroyed() {
-    clearInterval(this.timerID);// 销毁定时器
+  destroyed () {
+    clearInterval(this.timerID)// 销毁定时器
   },
 }
 </script>

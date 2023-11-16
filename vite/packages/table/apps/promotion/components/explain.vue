@@ -14,12 +14,12 @@ export default {
     Article,
   },
   computed: {},
-  data() {
+  data () {
     return {
       artNames: [
-        "promotion_summary",
-        "promotion_affilicate",
-        "promotion_reward"
+        'promotion_summary',
+        'promotion_affilicate',
+        'promotion_reward'
       ],
       // 这里存放样式名 需要去文章组件定义样式
       titleStyle: 'box-title',
@@ -34,7 +34,7 @@ export default {
       },
     }
   },
-  mounted() {
+  mounted () {
 
   },
   watch: {},

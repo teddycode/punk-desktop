@@ -20,17 +20,16 @@ const videoTpl = `
 Vue.component('eleVideo', {
   template: videoTpl,
   name: 'eleVideo',
-  props: ['source','controls'],
+  props: ['source', 'controls'],
   components: {},
   data () {
-    return {
-    }
+    return {}
   },
   computed: {},
   mounted () {
   },
   methods: {
-    removeElement(){
+    removeElement () {
       this.$emit('remove-element')
     },
     enterSubmit () {

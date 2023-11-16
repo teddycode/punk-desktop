@@ -97,11 +97,11 @@
 
 <script>
 import Widget from '../../card/Widget.vue'
-import HorizontalPanel from '../../HorizontalPanel.vue';
-import MySteamDetail from './MySteamDetail.vue';
-import MyGameSmallDetail from './MyGameSmallDetail.vue';
-import {mapWritableState} from 'pinia';
-import {steamUserStore} from '../../../store/steamUser';
+import HorizontalPanel from '../../HorizontalPanel.vue'
+import MySteamDetail from './MySteamDetail.vue'
+import MyGameSmallDetail from './MyGameSmallDetail.vue'
+import { mapWritableState } from 'pinia'
+import { steamUserStore } from '../../../store/steamUser'
 // import { message } from "ant-design-vue";
 
 export default {
@@ -112,7 +112,7 @@ export default {
     MySteamDetail,
     MyGameSmallDetail,
   },
-  mounted() {
+  mounted () {
     if (!this.customData) {
       this.customData = {}
     }
@@ -134,20 +134,20 @@ export default {
   },
   computed: {
     ...mapWritableState(steamUserStore, ['gameList']),
-    showSize() {
+    showSize () {
       if (this.customData && this.customData.width && this.customData.height) {
-        return {width: this.customData.width, height: this.customData.height}
+        return { width: this.customData.width, height: this.customData.height }
       }
       return this.sizeList[0]
     },
-    defaultGame() {
+    defaultGame () {
       if (this.customData && this.customData.name) {
         return this.customData
       }
       return this.showGameType[0]
     },
   },
-  data() {
+  data () {
     return {
       options: {
         className: 'card ',
@@ -163,23 +163,28 @@ export default {
       detailShow: false,
       CPUShow: false,
       otherDetailShow: false,
-      sizeList: [{title: '1x2', width: 1, height: 2, name: '1x2'}, {title: '2x2', width: 2, height: 2, name: '2x2'}],
+      sizeList: [{ title: '1x2', width: 1, height: 2, name: '1x2' }, {
+        title: '2x2',
+        width: 2,
+        height: 2,
+        name: '2x2'
+      }],
       gameMiddleBare: [{
         icon: 'shezhi1', title: '设置', fn: () => {
-          this.middleShow = true;
+          this.middleShow = true
           this.$refs.gameSmallSlot.visible = false
         }
       }],
       showGameType: [{
         title: 'Steam游戏，按最近游玩时间顺序展示',
         name: 'steam'
-      }, {title: '其他游戏，按最近游玩时间顺序展示(正在开发中)', name: 'other'}],
+      }, { title: '其他游戏，按最近游玩时间顺序展示(正在开发中)', name: 'other' }],
       // steamCardSize:[{title:'1x2',className:'',name:'1x2'}, {title:'2x2',className:'double',name:'2x2'}],
       // defaultSize:{title:'2x2',width:2,height:2,name:'2x2'},
       steamDetail: {},
 
       otherGameList: [
-        {title: '小缇娜的奇幻之地', src: '/img/test/1.png'},
+        { title: '小缇娜的奇幻之地', src: '/img/test/1.png' },
       ],
       otherData: {},
 
@@ -187,7 +192,7 @@ export default {
   },
   watch: {
     'defaultSize': {
-      handler() {
+      handler () {
         // // console.log(this.defaultSize);
         // this.increaseCustomComponents(this.$parent.copiedItems[0].id,{
         //   width:this.defaultSize.width,
@@ -201,24 +206,24 @@ export default {
   },
   methods: {
     // ...mapActions(cardStore,['increaseCustomComponents']),
-    getGameType(item, index) {
+    getGameType (item, index) {
       this.customData.name = item.name
       this.steamIndex = index
     },
-    enterMyGameDetail(item) {
+    enterMyGameDetail (item) {
       this.steamDetail = item
       this.myDetailShow = true
       this.detailShow = true
     },
-    closeGame() {
+    closeGame () {
       this.detailShow = false
       this.myDetailShow = false
     },
-    enterOtherGameDetail(item) {
+    enterOtherGameDetail (item) {
       this.otherDetailShow = true
       this.otherData = item
     },
-    closeOtherGame() {
+    closeOtherGame () {
       this.otherDetailShow = false
     }
   }

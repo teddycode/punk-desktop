@@ -1,17 +1,17 @@
 <template>
   <div style="width: 100%; display: flex; height: 100%; flex-direction: column">
     <div
-      :style="{ background: app.theme || '#424242' }"
-      class="drag"
-      style="height: 4em; width: 100%"
+        :style="{ background: app.theme || '#424242' }"
+        class="drag"
+        style="height: 4em; width: 100%"
     >
       <a-row>
         <a-col :span="6">
           <div class="app-btn no-drag" @click="goBack">
             <div class="btn-wrapper">
               <Icon
-                icon="xiangzuo"
-                style="font-size: 1.5em; vertical-align: middle"
+                  icon="xiangzuo"
+                  style="font-size: 1.5em; vertical-align: middle"
 
               ></Icon>
             </div>
@@ -19,8 +19,8 @@
           <div class="app-btn no-drag" @click="refresh">
             <div class="btn-wrapper">
               <Icon
-                icon="shuaxin"
-                style="font-size: 1.5em; vertical-align: middle"
+                  icon="shuaxin"
+                  style="font-size: 1.5em; vertical-align: middle"
               ></Icon>
             </div>
           </div>
@@ -31,19 +31,19 @@
               <a-col :span="6"> 网页缩放</a-col>
               <a-col :span="10">
                 <a-slider
-                  v-model:value="scale"
-                  :marks="marks"
-                  :max="300"
-                  :min="50"
-                  :step="10"
-                  style="width: 100px"
-                  @change="setScale"
+                    v-model:value="scale"
+                    :marks="marks"
+                    :max="300"
+                    :min="50"
+                    :step="10"
+                    style="width: 100px"
+                    @change="setScale"
                 ></a-slider>
               </a-col>
               <a-col :span="8">
                 <a-button-group>
                   <a-button
-                    @click="
+                      @click="
                       () => {
                         if (this.scale + 10 <= 300) {
                           this.scale = this.scale + 10;
@@ -56,7 +56,7 @@
                     />
                   </a-button>
                   <a-button
-                    @click="
+                      @click="
                       () => {
                         if (this.scale - 10 >= 20) {
                           this.scale = this.scale - 10;
@@ -78,34 +78,34 @@
         <a-col :span="8" style="text-align: right">
           <div class="app-btn no-drag" @click="switchScale">
             <Icon
-              icon="wenzidaxiao2"
-              style="font-size: 1.5em; vertical-align: middle"
+                icon="wenzidaxiao2"
+                style="font-size: 1.5em; vertical-align: middle"
             ></Icon>
             <div class="scale">{{ scale }}%</div>
           </div>
           <div class="app-btn no-drag">
             <div
-              v-if="fullScreen"
-              class="btn-wrapper"
-              @click="toggleFullScreen"
+                v-if="fullScreen"
+                class="btn-wrapper"
+                @click="toggleFullScreen"
             >
               <Icon
-                icon="quxiaoquanping_huaban"
-                style="font-size: 1.5em; vertical-align: middle"
+                  icon="quxiaoquanping_huaban"
+                  style="font-size: 1.5em; vertical-align: middle"
               ></Icon>
             </div>
             <div v-else class="btn-wrapper" @click="toggleFullScreen">
               <Icon
-                icon="quanping_huaban"
-                style="font-size: 1.4em; vertical-align: middle"
+                  icon="quanping_huaban"
+                  style="font-size: 1.4em; vertical-align: middle"
               ></Icon>
             </div>
           </div>
           <div class="app-btn no-drag">
             <div class="btn-wrapper">
               <Icon
-                icon="touping"
-                style="font-size: 1.5em; vertical-align: middle"
+                  icon="touping"
+                  style="font-size: 1.5em; vertical-align: middle"
               ></Icon>
             </div>
           </div>
@@ -113,16 +113,16 @@
       </a-row>
     </div>
     <div
-      v-if="fullScreen"
-      id="frame"
-      :style="{ background: app.theme || '#424242' }"
-      style="width: 100%; flex: 1"
+        v-if="fullScreen"
+        id="frame"
+        :style="{ background: app.theme || '#424242' }"
+        style="width: 100%; flex: 1"
     ></div>
     <div
-      v-else
-      id="frame"
-      :style="{ background: app.theme || '#424242' }"
-      style="width: 100%; flex: 1"
+        v-else
+        id="frame"
+        :style="{ background: app.theme || '#424242' }"
+        style="width: 100%; flex: 1"
     >
       &nbsp;
     </div>

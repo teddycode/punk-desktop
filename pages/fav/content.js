@@ -11,10 +11,9 @@
 // ==/UserScript==
 window.jQuery.noConflict(true)
 
-
 window.jQuery(function () {
   let inserted = false
-  let dragImage=window.jQuery('<div id=\'drag-images\' style=\'position: fixed; top: -100000px;\'></div>')
+  let dragImage = window.jQuery('<div id=\'drag-images\' style=\'position: fixed; top: -100000px;\'></div>')
   'use strict'
   let tpl = window.jQuery(`
 <!--<div  id="_fav-modal" style="z-index: 99999999 !important; position: fixed !important; top: 0; left: 0; right: 0; bottom: 0;background: rgba(0,0,0,0.32)">-->
@@ -44,11 +43,11 @@ window.jQuery(function () {
     </div>
   </div>
 `)
-  window.jQuery(()=>{
+  window.jQuery(() => {
     /**
      * 创建放置区域
      */
-    function createDropArea(){
+    function createDropArea () {
       if (!inserted) {
         tpl.hide()
         window.jQuery('body').append(tpl)
@@ -57,39 +56,39 @@ window.jQuery(function () {
         console.log('插入了可拖放区域')
       }
       /*设置各个背景处理事件*/
-      window.jQuery('#_fav_drag_box').on('mouseenter',function(){
+      window.jQuery('#_fav_drag_box').on('mouseenter', function () {
         console.log('mousenter')
-        this.style['background']='#eaeaea'
+        this.style['background'] = '#eaeaea'
       })
-      window.jQuery('#_fav_drag_box').on('mouseleave',function(){
+      window.jQuery('#_fav_drag_box').on('mouseleave', function () {
         console.log('mouseleave')
-        this.style['background']='#f1f2f4'
+        this.style['background'] = '#f1f2f4'
       })
-      window.jQuery('._folder-folder').on('mouseenter',function(){
-        this.style['background']='#eaeaea'
+      window.jQuery('._folder-folder').on('mouseenter', function () {
+        this.style['background'] = '#eaeaea'
       })
-      window.jQuery('._folder-folder').on('mouseleave',function(){
-        this.style['background']='white'
+      window.jQuery('._folder-folder').on('mouseleave', function () {
+        this.style['background'] = 'white'
       })
       /*设置各个背景处理事件end*/
-      window.jQuery('#_fav_drag_box').on('dragover',function(event){
+      window.jQuery('#_fav_drag_box').on('dragover', function (event) {
         event.preventDefault()
       })
-      window.jQuery('#_fav_drag_box').on('drop',function(event){
+      window.jQuery('#_fav_drag_box').on('drop', function (event) {
         event.preventDefault()
         var data = event.dataTransfer || event.originalEvent.dataTransfer
-        console.log('打算获取图片',data.getData('Text'))
+        console.log('打算获取图片', data.getData('Text'))
         console.log('放到了收集箱')
         //直传给preload，让它处理
-        let parsedData=JSON.parse(data.getData('Text'))
+        let parsedData = JSON.parse(data.getData('Text'))
         window.postMessage({
-          event:'getContentForFav',
-          content:{
-            type:'img',
-            src:parsedData.src,
-            width:parsedData.width,
-            height:parsedData.height,
-            alt:parsedData.alt
+          event: 'getContentForFav',
+          content: {
+            type: 'img',
+            src: parsedData.src,
+            width: parsedData.width,
+            height: parsedData.height,
+            alt: parsedData.alt
           }
         })
       })
@@ -97,25 +96,25 @@ window.jQuery(function () {
       // window.postMessage({
       //   // event:''
       // })
-      window.jQuery('img').attr('draggable',true)
-
+      window.jQuery('img').attr('draggable', true)
 
     }
+
     createDropArea()
 
-    window.jQuery('img').bind('dragstart',(e)=>{
-      setTimeout(()=>{
+    window.jQuery('img').bind('dragstart', (e) => {
+      setTimeout(() => {
         window.jQuery('#_fav-modal').show()
-      },200)
+      }, 200)
       var data = event.dataTransfer || event.originalEvent.dataTransfer
-      data.setData("Text",JSON.stringify({
-        src:e.target.src,
-        width:e.target.naturalWidth,
-        height:e.target.naturalHeight,
-        alt:e.target.alt
-      }));
+      data.setData('Text', JSON.stringify({
+        src: e.target.src,
+        width: e.target.naturalWidth,
+        height: e.target.naturalHeight,
+        alt: e.target.alt
+      }))
       console.log(e.target.src)
-      let dragElement=e.target
+      let dragElement = e.target
       if (dragElement.naturalWidth > 140) {
         var u = 140 / dragElement.width * dragElement.height, canvas = document.createElement('canvas')
         canvas.width = 140, canvas.height = u, canvas.getContext('2d').drawImage(dragElement, 0, 0, 140, u),
@@ -127,14 +126,13 @@ window.jQuery(function () {
 
       //window.jQuery('_fav-modal').show()
     })
-    window.jQuery('img').bind('dragend',(e)=>{
+    window.jQuery('img').bind('dragend', (e) => {
         window.jQuery('#_fav-modal').hide()
         console.log('拖拽结束')
         // jQuery('#_fav-modal').hide()
       }
     )
   })
-
 
   //
   // //解除复制限制来自https://greasyfork.org/zh-CN/scripts/12591

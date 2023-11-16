@@ -17,9 +17,9 @@
 </template>
 
 <script>
-import {mapActions} from 'pinia'
-import {noticeStore} from '../../store/notice'
-import {Modal} from 'ant-design-vue'
+import { mapActions } from 'pinia'
+import { noticeStore } from '../../store/notice'
+import { Modal } from 'ant-design-vue'
 
 export default {
   props: {
@@ -27,9 +27,9 @@ export default {
       type: Number
     }
   },
-  data() {
+  data () {
     return {
-      dropList: [{title: '打开应用', name: 'open'}],
+      dropList: [{ title: '打开应用', name: 'open' }],
       // ,{title:'全部清理',name:'clear'}
       dropDownIndex: 0,
 
@@ -37,12 +37,12 @@ export default {
   },
   methods: {
     ...mapActions(noticeStore, ['deleteAllNotice']),
-    selectMenuItem(item, index) {
+    selectMenuItem (item, index) {
       this.dropDownIndex = index
       if (item.name === 'clear') {
         Modal.confirm({
-          content: "确定要清理所有消息",
-          okText: "删除",
+          content: '确定要清理所有消息',
+          okText: '删除',
           centered: true,
           onOk: () => {
             this.deleteAllNotice()

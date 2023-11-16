@@ -255,9 +255,9 @@ const defaultKeybindings = {
       var time = Date.now()
       // pressing mod+r twice in a row reloads the whole browser
       if (time - lastReload < 500 && 'development-mode' in window.globalArgs) {
-        ipc.send('message',{type:'success',config:{content:'在开发环境下，连续刷新2次，自动重载浏览器'}})
+        ipc.send('message', { type: 'success', config: { content: '在开发环境下，连续刷新2次，自动重载浏览器' } })
         //ipc.send('destroyAllViews')
-       // ipc.invoke('reloadWindow')
+        // ipc.invoke('reloadWindow')
         ipc.invoke('reloadBrowser')
       } else if (tabs.get(tabs.getSelected()).url.startsWith(webviews.internalPages.error)) {
         // reload the original page rather than show the error page again

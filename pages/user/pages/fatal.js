@@ -155,11 +155,11 @@ const fatal = {
      * 切换到云空间，不保存
      */
     async changeToCloudSpace () {
-      try{
-        let latestSpace=await this.getLatestSpace()
-        if(latestSpace)
-         this.changeToSpace(latestSpace)
-      }catch (e) {
+      try {
+        let latestSpace = await this.getLatestSpace()
+        if (latestSpace)
+          this.changeToSpace(latestSpace)
+      } catch (e) {
         console.warn(e)
         window.antd.message.error('切换到最新的空间失败。请稍后再试。')
       }
@@ -168,30 +168,30 @@ const fatal = {
      * 切换到云端空间
      * @param space
      */
-     changeToSpace(space){
-        spaceModel.setUser(this.user).changeCurrent(space).then().catch((e)=>{
-          console.warn(e)
-          window.antd.message.error('切换空间失败。')
-        })
+    changeToSpace (space) {
+      spaceModel.setUser(this.user).changeCurrent(space).then().catch((e) => {
+        console.warn(e)
+        window.antd.message.error('切换空间失败。')
+      })
     },
     /**
      * 获取到最新的云端空间
      * @returns {Promise<boolean|*>}
      */
-    async getLatestSpace(){
-      try{
-        let latestResult=await spaceModel.setUser(this.user).getSpace(this.space.id)
-        if(latestResult.status){
-          if(latestResult.data.id===-1){
+    async getLatestSpace () {
+      try {
+        let latestResult = await spaceModel.setUser(this.user).getSpace(this.space.id)
+        if (latestResult.status) {
+          if (latestResult.data.id === -1) {
             window.antd.message.error('云空间已被删除，无法载入。')
             return false
           }
           return latestResult.data
-        }else{
+        } else {
           console.warn(latestResult)
           window.antd.message.error('获取最新的空间失败，请稍后重试。')
         }
-      }catch (e) {
+      } catch (e) {
         console.warn(e)
         window.antd.message.error('获取最新的空间失败，请稍后重试。')
         return false
@@ -201,12 +201,12 @@ const fatal = {
      * 切换到云空间，保存
      */
     async saveAndChange () {
-      let latestSpace=await this.getLatestSpace() //先获取最新的空间，如果获取失败，则不进行任何的操作了
-      if(latestSpace){
-        if(await this.doSave()){ //处理保存的事件
+      let latestSpace = await this.getLatestSpace() //先获取最新的空间，如果获取失败，则不进行任何的操作了
+      if (latestSpace) {
+        if (await this.doSave()) { //处理保存的事件
           this.changeToSpace(latestSpace)
         }
-      }else{
+      } else {
         antd.message.error('未获取到最新的空间，无法切换。')
       }
     },
@@ -214,15 +214,15 @@ const fatal = {
      * 不保存切换空间
      * @returns {Promise<void>}
      */
-    async changeWithoutSave(){
-      let latestSpace=await this.getLatestSpace() //先获取最新的空间，如果获取失败，则不进行任何的操作了
-      if(latestSpace){
+    async changeWithoutSave () {
+      let latestSpace = await this.getLatestSpace() //先获取最新的空间，如果获取失败，则不进行任何的操作了
+      if (latestSpace) {
         this.changeToSpace(latestSpace)
-      }else{
+      } else {
         antd.message.error('未获取到最新的空间，无法切换。')
       }
     },
-    async doSave(){
+    async doSave () {
       if (this.backupName.trim() === '') {
         antd.message.error('空间名必填')
         return
@@ -254,9 +254,9 @@ const fatal = {
       this.$router.replace('/')
     },
     async switchToBackup () {
-      let resultChange={}
+      let resultChange = {}
       let copySpace = await this.doSave()
-      if(copySpace){
+      if (copySpace) {
         try {
           if (this.savePosition === 'local') {
             resultChange = await spaceModel.setAdapter('local').changeCurrent(copySpace)

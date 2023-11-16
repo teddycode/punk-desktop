@@ -30,12 +30,12 @@
 
 <script>
 import OnlineTag from './OnlineTag.vue'
-import FrameAvatar from '../avatar/FrameAvatar.vue';
-import BorderAvatar from '../avatar/BorderAvatar.vue';
+import FrameAvatar from '../avatar/FrameAvatar.vue'
+import BorderAvatar from '../avatar/BorderAvatar.vue'
 
 export default {
   name: 'UserAvatar',
-  components: {OnlineTag, FrameAvatar, BorderAvatar},
+  components: { OnlineTag, FrameAvatar, BorderAvatar },
   props: ['avatar', 'tag', 'online', 'tagColor', 'showDetail', 'frameUrl', 'frame'],
   computed: {
     // rarityBorder(){ // 通过计算属性将稀有度边框UI进行渲染
@@ -47,7 +47,7 @@ export default {
     //   }
     // },
   },
-  data() {
+  data () {
     return {}
   }
 }

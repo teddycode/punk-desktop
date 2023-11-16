@@ -96,8 +96,7 @@
 
 // import Modal from "./modal.vue"
 
-import {CloseOutlined, LeftOutlined} from '@ant-design/icons-vue';
-
+import { CloseOutlined, LeftOutlined } from '@ant-design/icons-vue'
 
 export default {
   name: 'Promotion',
@@ -107,161 +106,160 @@ export default {
     CloseOutlined,
   },
   computed: {},
-  data() {
+  data () {
     return {
       visible: false,
       // 对话框表格 数据绑定
-      passKey: "",
-      passContent: "",
+      passKey: '',
+      passContent: '',
       // 我的邀请口令 表格渲染数据
       keyWord: {
         // dataSource:{
-        title: "我的邀请口令",
+        title: '我的邀请口令',
         data: [
           {
-            index: "1000345",
-            keyWord: "磐古跨链客户端",
-            type: "长期",
-            state: "生效中",
+            index: '1000345',
+            keyWord: '磐古跨链客户端',
+            type: '长期',
+            state: '生效中',
           },
           {
-            index: "1000346",
-            keyWord: "副屏小帮手",
-            type: "短期（2个月）",
-            state: "已失效",
+            index: '1000346',
+            keyWord: '副屏小帮手',
+            type: '短期（2个月）',
+            state: '已失效',
           },
           {
-            index: "1000348",
-            keyWord: "副屏小帮手",
-            type: "短期（2个月）",
-            state: "已失效",
+            index: '1000348',
+            keyWord: '副屏小帮手',
+            type: '短期（2个月）',
+            state: '已失效',
           },
           {
-            index: "1000348",
-            keyWord: "副屏小帮手",
-            type: "短期（2个月）",
-            state: "已失效",
+            index: '1000348',
+            keyWord: '副屏小帮手',
+            type: '短期（2个月）',
+            state: '已失效',
           },
           {
-            index: "1000348",
-            keyWord: "副屏小帮手",
-            type: "短期（2个月）",
-            state: "已失效",
+            index: '1000348',
+            keyWord: '副屏小帮手',
+            type: '短期（2个月）',
+            state: '已失效',
           },
         ]
       },
       keyWordCol: [
         // columns:[
         {
-          title: "序号",
-          dataIndex: "index",
-          key: "index"
+          title: '序号',
+          dataIndex: 'index',
+          key: 'index'
         },
         {
-          title: "口令",
-          dataIndex: "keyWord",
-          key: "keyWord"
+          title: '口令',
+          dataIndex: 'keyWord',
+          key: 'keyWord'
         },
         {
-          title: "序号",
-          dataIndex: "type",
-          key: "type"
+          title: '序号',
+          dataIndex: 'type',
+          key: 'type'
         },
         {
-          title: "序号",
-          dataIndex: "state",
-          key: "state"
+          title: '序号',
+          dataIndex: 'state',
+          key: 'state'
         },
       ],
       detailList: {
-        title: "邀请收益明细",
+        title: '邀请收益明细',
         data: [
           {
-            user: "nihao1",
-            account: "123456",
-            useTime: "2023-09-20 16:37",
-            active: "是",
-            activeTime: "2023-09-20 16:37",
+            user: 'nihao1',
+            account: '123456',
+            useTime: '2023-09-20 16:37',
+            active: '是',
+            activeTime: '2023-09-20 16:37',
           },
           {
-            user: "nihao2",
-            account: "123456",
-            useTime: "2023-09-20 16:37",
-            active: "是",
-            activeTime: "2023-09-20 16:37",
+            user: 'nihao2',
+            account: '123456',
+            useTime: '2023-09-20 16:37',
+            active: '是',
+            activeTime: '2023-09-20 16:37',
           },
           {
-            user: "nihao3",
-            account: "123456",
-            useTime: "2023-09-20 16:37",
-            active: "是",
-            activeTime: "2023-09-20 16:37",
+            user: 'nihao3',
+            account: '123456',
+            useTime: '2023-09-20 16:37',
+            active: '是',
+            activeTime: '2023-09-20 16:37',
           },
           {
-            user: "nihao3",
-            account: "123456",
-            useTime: "2023-09-20 16:37",
-            active: "是",
-            activeTime: "2023-09-20 16:37",
+            user: 'nihao3',
+            account: '123456',
+            useTime: '2023-09-20 16:37',
+            active: '是',
+            activeTime: '2023-09-20 16:37',
           },
           {
-            user: "nihao3",
-            account: "123456",
-            useTime: "2023-09-20 16:37",
-            active: "是",
-            activeTime: "2023-09-20 16:37",
+            user: 'nihao3',
+            account: '123456',
+            useTime: '2023-09-20 16:37',
+            active: '是',
+            activeTime: '2023-09-20 16:37',
           },
         ]
 
       },
       detailCol: [
         {
-          title: "用户",
-          dataIndex: "user",
-          key: "user"
+          title: '用户',
+          dataIndex: 'user',
+          key: 'user'
         },
         {
-          title: "账号",
-          dataIndex: "account",
-          key: "account"
+          title: '账号',
+          dataIndex: 'account',
+          key: 'account'
         },
         {
-          title: "口令兑换时间",
-          dataIndex: "useTime",
-          key: "useTime"
+          title: '口令兑换时间',
+          dataIndex: 'useTime',
+          key: 'useTime'
         },
         {
-          title: "是否激活",
-          dataIndex: "active",
-          key: "active"
+          title: '是否激活',
+          dataIndex: 'active',
+          key: 'active'
         },
         {
-          title: "激活时间",
-          dataIndex: "activeTime",
-          key: "activeTime"
+          title: '激活时间',
+          dataIndex: 'activeTime',
+          key: 'activeTime'
         },
       ],
       // 对话框渲染数据
       modalState: 3,
 
-
     }
   },
-  mounted() {
+  mounted () {
 
   },
   watch: {},
   methods: {
-    handleOk() {
+    handleOk () {
       // console.log("触发了");
-      this.visible = false;
+      this.visible = false
     },
-    showModal() {
-      this.visible = true;
-      this.modalState = 1;
+    showModal () {
+      this.visible = true
+      this.modalState = 1
     },
     // 控制 对话框 状态
-    onAgree() {
+    onAgree () {
       this.modalState = 3
     }
   },

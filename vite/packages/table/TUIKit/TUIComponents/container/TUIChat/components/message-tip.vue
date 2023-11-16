@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import {defineComponent, reactive, toRefs, watchEffect} from 'vue';
+import { defineComponent, reactive, toRefs, watchEffect } from 'vue'
 
 export default defineComponent({
   props: {
@@ -15,14 +15,14 @@ export default defineComponent({
       default: () => ({}),
     },
   },
-  setup(props, ctx) {
+  setup (props, ctx) {
     const data = reactive({
       message: {},
-    });
+    })
 
     watchEffect(() => {
-      data.message = props.data;
-    });
+      data.message = props.data
+    })
 
     const hasCreateGroup = (text) => {
       return text.includes('创建')
@@ -30,9 +30,9 @@ export default defineComponent({
 
     return {
       ...toRefs(data), hasCreateGroup
-    };
+    }
   },
-});
+})
 </script>
 <style lang="scss" scoped>
 @import url('../../../styles/common.scss');

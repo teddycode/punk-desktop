@@ -46,9 +46,9 @@
 <script>
 
 export default {
-  name: "ShareModal",
+  name: 'ShareModal',
   components: {},
-  data() {
+  data () {
     return {
       release: false,
     }
@@ -69,13 +69,13 @@ export default {
   },
 
   methods: {
-    close() {
+    close () {
       this.$emit('closeShare', false)
       if (this.back) {
         this.$router.go(-1)
       }
     },
-    openDrawer() {
+    openDrawer () {
       this.$emit('closeShare', false)
       this.release = true
     },

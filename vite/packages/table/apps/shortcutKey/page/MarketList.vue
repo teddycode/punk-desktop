@@ -51,19 +51,19 @@
 </template>
 
 <script>
-import {appStore} from '../../../store';
-import ShortcutKeyList from '../shortcutKey/ShortcutKeyList.vue';
-import {mapActions} from "pinia";
-import {keyStore} from '../store'
-import Preview from '../components/Preview.vue';
+import { appStore } from '../../../store'
+import ShortcutKeyList from '../shortcutKey/ShortcutKeyList.vue'
+import { mapActions } from 'pinia'
+import { keyStore } from '../store'
+import Preview from '../components/Preview.vue'
 
 export default {
-  name: "MarketList",
+  name: 'MarketList',
   components: {
     ShortcutKeyList,
     Preview
   },
-  data() {
+  data () {
     return {
       navLists: [],
       // 快捷方案
@@ -88,14 +88,14 @@ export default {
   watch: {
     navList: {
       immediate: true,
-      handler() {
+      handler () {
         this.navLists = JSON.parse(JSON.stringify(this.navList))
       }
     },
     selected: {
       immediate: true,
       deep: true,
-      handler(newV, oldV) {
+      handler (newV, oldV) {
         if (newV == '下载次数') this.navLists = this.mySort(this.navLists, 'download')
         else if (newV == '更新时间') this.navLists = this.mySort(this.navLists, 'time')
         else this.navLists = this.navList
@@ -105,10 +105,10 @@ export default {
   methods: {
     ...mapActions(appStore, ['showUserCard']),
     ...mapActions(keyStore, ['setShortcutKeyList']),
-    showCard(id) {
+    showCard (id) {
       this.showUserCard(id)
     },
-    mySort(data, property, asc) {
+    mySort (data, property, asc) {
       let datas = [...data]
       return datas.sort(function (a, b) {
         a = a[property]
@@ -117,11 +117,11 @@ export default {
         else return b - a
       })
     },
-    previewKay(item) {
+    previewKay (item) {
       this.keyScheme = item
       this.showModal = true
     },
-    closePreview() {
+    closePreview () {
       this.showModal = false
     }
   }

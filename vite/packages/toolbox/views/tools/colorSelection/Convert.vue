@@ -97,39 +97,39 @@
 </template>
 
 <script>
-import ColorPicker from "colorpicker-v3";
-import "colorpicker-v3/style.css";
-import {defineAsyncComponent} from "vue";
-import tinycolor from "tinycolor2";
-import {colorSelection} from "../../../store/colorSelection";
-import {mapWritableState} from "pinia";
+import ColorPicker from 'colorpicker-v3'
+import 'colorpicker-v3/style.css'
+import { defineAsyncComponent } from 'vue'
+import tinycolor from 'tinycolor2'
+import { colorSelection } from '../../../store/colorSelection'
+import { mapWritableState } from 'pinia'
 
 export default {
   components: {
     ColorPicker,
-    Convert: defineAsyncComponent(() => import("./convert.vue")),
+    Convert: defineAsyncComponent(() => import('./convert.vue')),
   },
-  data() {
+  data () {
     return {
       selectIndex: 0,
-      RGB: "",
-      HSL: "",
-      HEX: "",
-      HSV: "",
-      menus: [{label: "删除", callBack: this.delColor}],
-    };
+      RGB: '',
+      HSL: '',
+      HEX: '',
+      HSV: '',
+      menus: [{ label: '删除', callBack: this.delColor }],
+    }
   },
   computed: {
-    ...mapWritableState(colorSelection, ["colorList"]),
+    ...mapWritableState(colorSelection, ['colorList']),
   },
   watch: {
     colorList: {
-      handler(newV) {
-        var color = tinycolor(this.colorList[this.selectIndex]);
-        this.RGB = color.toRgbString(); // "rgb(255, 0, 0)"
-        this.HEX = color.toHexString(); // "#ff0000"
-        this.HSL = color.toHslString(); // "hsl(0, 100%, 50%)"
-        this.HSV = color.toHsvString(); // "hsv(0, 100%, 100%)"
+      handler (newV) {
+        var color = tinycolor(this.colorList[this.selectIndex])
+        this.RGB = color.toRgbString() // "rgb(255, 0, 0)"
+        this.HEX = color.toHexString() // "#ff0000"
+        this.HSL = color.toHslString() // "hsl(0, 100%, 50%)"
+        this.HSV = color.toHsvString() // "hsv(0, 100%, 100%)"
         // this.getCMYK( newV[this.selectIndex]);
       },
       deep: true,
@@ -137,50 +137,50 @@ export default {
     },
   },
   methods: {
-    delColor(index) {
-      this.selectIndex--;
-      this.colorList.splice(index, 1);
+    delColor (index) {
+      this.selectIndex--
+      this.colorList.splice(index, 1)
     },
-    selectColor(index) {
-      this.selectIndex = index;
+    selectColor (index) {
+      this.selectIndex = index
     },
-    getColor() {
+    getColor () {
       if (!window.EyeDropper) {
-        resultElement.textContent = "你的浏览器不支持 EyeDropper API";
-        return;
+        resultElement.textContent = '你的浏览器不支持 EyeDropper API'
+        return
       }
 
-      const eyeDropper = new EyeDropper();
+      const eyeDropper = new EyeDropper()
 
       eyeDropper
           .open()
           .then((result) => {
-            this.colorList[this.selectIndex] = result.sRGBHex;
+            this.colorList[this.selectIndex] = result.sRGBHex
           })
           .catch((e) => {
-            console.log("e :>> ", e);
-          });
+            console.log('e :>> ', e)
+          })
     },
 
-    addColor() {
-      if (this.colorList.length > 6) return;
-      this.colorList.push("#ffffff");
-      this.selectIndex = this.colorList.length - 1;
+    addColor () {
+      if (this.colorList.length > 6) return
+      this.colorList.push('#ffffff')
+      this.selectIndex = this.colorList.length - 1
     },
-    getCMYK(hexColor) {
+    getCMYK (hexColor) {
       // 去掉 # 号
-      hexColor = hexColor.replace("#", "");
+      hexColor = hexColor.replace('#', '')
 
       // 将 HEX 转换为 RGB
-      const r = parseInt(hexColor.substring(0, 2), 16) / 255;
-      const g = parseInt(hexColor.substring(2, 4), 16) / 255;
-      const b = parseInt(hexColor.substring(4, 6), 16) / 255;
+      const r = parseInt(hexColor.substring(0, 2), 16) / 255
+      const g = parseInt(hexColor.substring(2, 4), 16) / 255
+      const b = parseInt(hexColor.substring(4, 6), 16) / 255
 
       // 将 RGB 转换为 CMYK
-      const k = 1 - Math.max(r, g, b);
-      const c = (1 - r - k) / (1 - k);
-      const m = (1 - g - k) / (1 - k);
-      const y = (1 - b - k) / (1 - k);
+      const k = 1 - Math.max(r, g, b)
+      const c = (1 - r - k) / (1 - k)
+      const m = (1 - g - k) / (1 - k)
+      const y = (1 - b - k) / (1 - k)
 
       // 将 CMYK 值乘以 100 并四舍五入
       const cmyk = {
@@ -188,13 +188,13 @@ export default {
         m: Math.round(m * 100),
         y: Math.round(y * 100),
         k: Math.round(k * 100),
-      };
+      }
 
-      this.CMYK = `${cmyk.c}, ${cmyk.m}, ${cmyk.y}, ${cmyk.k}`;
-      return this.CMYK;
+      this.CMYK = `${cmyk.c}, ${cmyk.m}, ${cmyk.y}, ${cmyk.k}`
+      return this.CMYK
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

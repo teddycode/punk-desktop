@@ -43,13 +43,13 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from 'pinia'
-import {appStore} from '../../store'
+import { mapActions, mapWritableState } from 'pinia'
+import { appStore } from '../../store'
 import DebugTip from '../../components/DebugTip.vue'
 
 export default {
   name: 'Optimize',
-  components: {DebugTip},
+  components: { DebugTip },
   computed: {
     ...mapWritableState(appStore, ['app', 'debugMod'])
   },

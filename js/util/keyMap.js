@@ -31,10 +31,11 @@ var defaultKeyMap = {
   fillPassword: 'mod+\\',
   toggleTabAudio: 'shift+mod+m',
   showHistory: 'shift+mod+h',
-  table:'alt+z',//呼出工作台
-  superTools:'alt+x',//超级工具箱
-  globalSearch:'alt+f'//全局搜索
+  table: 'alt+z',//呼出工作台
+  superTools: 'alt+x',//超级工具箱
+  globalSearch: 'alt+f'//全局搜索
 }
+
 /* Utility function to override default mapping with user settings */
 function userKeyMap (settings) {
   var keyMapCopy = Object.assign({}, defaultKeyMap)

@@ -138,16 +138,16 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from "pinia";
-import {cardStore} from "../../store/card";
-import {transDate} from "../../../../src/util/dateTime";
-import Widget from "../card/Widget.vue";
-import {message} from "ant-design-vue";
-import {timeStamp} from "../../util";
-import {timerStore} from '../../store/timer'
+import { mapActions, mapWritableState } from 'pinia'
+import { cardStore } from '../../store/card'
+import { transDate } from '../../../../src/util/dateTime'
+import Widget from '../card/Widget.vue'
+import { message } from 'ant-design-vue'
+import { timeStamp } from '../../util'
+import { timerStore } from '../../store/timer'
 
 export default {
-  name: "CountdownDay",
+  name: 'CountdownDay',
   props: {
     customIndex: {
       type: Number,
@@ -166,7 +166,7 @@ export default {
     Widget
   },
 
-  data() {
+  data () {
     return {
       outerSettings: {
         useBothWheelAxes: true,
@@ -175,8 +175,13 @@ export default {
         suppressScrollX: true,
         wheelPropagation: true,
       },
-      eventValue: "",
-      sizeList: [{title: '1x1', height: 1, width: 1, name: '1x1'}, {title: '1x2', height: 2, width: 1, name: '1x2'},],
+      eventValue: '',
+      sizeList: [{ title: '1x1', height: 1, width: 1, name: '1x1' }, {
+        title: '1x2',
+        height: 2,
+        width: 1,
+        name: '1x2'
+      },],
       dateValue: null,
       options: {
         className: 'card small',
@@ -186,64 +191,64 @@ export default {
       },
       menuList: [{
         icon: 'shezhi1', title: '设置', fn: () => {
-          this.settingVisible = true;
+          this.settingVisible = true
           this.$refs.cardSlot.visible = false
         }
       },],
       settingVisible: false,
-      status: "pause",
+      status: 'pause',
       value: null,
       visible: false,
       goAddFlag: false,
       countdownDays: []
-    };
+    }
   },
   computed: {
-    ...mapWritableState(cardStore, ["countdownDay"]),
+    ...mapWritableState(cardStore, ['countdownDay']),
     ...mapWritableState(timerStore, ['appDate'])
   },
-  mounted() {
+  mounted () {
     this.sortCountdown()
     this.setCountdownDay()
   },
   methods: {
-    ...mapActions(cardStore, ["removeCountdownDay", 'addCountdownDay', 'sortCountdown']),
-    onPanelChange(value, mode) {
+    ...mapActions(cardStore, ['removeCountdownDay', 'addCountdownDay', 'sortCountdown']),
+    onPanelChange (value, mode) {
     },
     transDate,
-    differenceDay(item) {
+    differenceDay (item) {
       return transDate(
-          this.appDate.year + "-" + this.appDate.month + "-" + this.appDate.day,
+          this.appDate.year + '-' + this.appDate.month + '-' + this.appDate.day,
           item.dateValue.year +
-          "-" +
+          '-' +
           item.dateValue.month +
-          "-" +
+          '-' +
           item.dateValue.day
       )
     },
-    closeDrawer() {
+    closeDrawer () {
       this.goAddFlag = false
-      this.settingVisible = false;
+      this.settingVisible = false
     },
-    onSetup() {
+    onSetup () {
       this.$router.push({
-        name: "addCardSetting",
+        name: 'addCardSetting',
         params: {
           name: 'countdownDay',
           cname: '纪念日',
         },
-      });
+      })
     },
 
-    onContextMenuClick(e, index) {
-      this.removeCountdownDay(index);
+    onContextMenuClick (e, index) {
+      this.removeCountdownDay(index)
     },
-    goAddEvent() {
+    goAddEvent () {
       this.goAddFlag = true
     },
-    addEvent() {
-      if (this.eventValue === "" || this.dateValue === null) {
-        message.info("不可为空！");
+    addEvent () {
+      if (this.eventValue === '' || this.dateValue === null) {
+        message.info('不可为空！')
         return
       }
       this.goAddFlag = false
@@ -251,18 +256,18 @@ export default {
         eventValue: this.eventValue,
         dateValue: timeStamp(this.dateValue.valueOf()),
         customIndex: this.customIndex
-      });
-      this.eventValue = ""
+      })
+      this.eventValue = ''
       this.dateValue = null
-      message.info("添加成功！");
+      message.info('添加成功！')
     },
-    setCountdownDay() {
+    setCountdownDay () {
       let countdownDay = JSON.parse(JSON.stringify(this.countdownDay))
       if (this.customData.notRetain) {
         for (let i = 0; i < countdownDay.length; i++) {
           if (countdownDay[i].customIndex) {
             countdownDay.splice(i, 1)
-            i--;
+            i--
           }
         }
         this.countdownDays = countdownDay
@@ -274,12 +279,12 @@ export default {
   watch: {
     countdownDay: {
       deep: true,
-      handler(val) {
+      handler (val) {
         this.setCountdownDay()
       }
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

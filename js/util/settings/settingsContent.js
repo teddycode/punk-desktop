@@ -19,7 +19,7 @@ var settings = {
     if (settings.loaded) {
       cb(settings.list[key])
 
-    // if the settings haven't loaded, wait until they have
+      // if the settings haven't loaded, wait until they have
     } else {
       settings.onLoadCallbacks.push({
         key: key,
@@ -70,19 +70,17 @@ window.addEventListener('message', function (e) {
     settings.loaded = true
     settings.runChangeCallbacks()
 
-
   }
 
   //接收到返回是否是默认浏览器的消息，根据情况直接设置内容
-  if(e.data.message && e.data.message === 'returnIsDefaultBrowser'){
-	var defaultBrowserButton = document.getElementById('button-default-browser')
-	if(e.data.result==false){
-		defaultBrowserButton.innerText=l('notDefaultBrowser')
-	}else{
-		defaultBrowserButton.innerText=l('isDefaultBrowser')
-	}
+  if (e.data.message && e.data.message === 'returnIsDefaultBrowser') {
+    var defaultBrowserButton = document.getElementById('button-default-browser')
+    if (e.data.result == false) {
+      defaultBrowserButton.innerText = l('notDefaultBrowser')
+    } else {
+      defaultBrowserButton.innerText = l('isDefaultBrowser')
+    }
   }
-
 
 })
 

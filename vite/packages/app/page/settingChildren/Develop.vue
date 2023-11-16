@@ -33,15 +33,15 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from 'pinia'
-import {appStore} from '../../store'
-import {CodeTwoTone} from '@ant-design/icons-vue'
-import {message, Modal} from 'ant-design-vue'
+import { mapActions, mapWritableState } from 'pinia'
+import { appStore } from '../../store'
+import { CodeTwoTone } from '@ant-design/icons-vue'
+import { message, Modal } from 'ant-design-vue'
 
-const {devAppModel} = window.$models
+const { devAppModel } = window.$models
 export default {
   name: 'develop',
-  data() {
+  data () {
     return {
       existsDevApp: false,
       allowSystemDebug: false,
@@ -50,7 +50,7 @@ export default {
   components: {
     CodeTwoTone
   },
-  async mounted() {
+  async mounted () {
     let devApp = await devAppModel.checkExistsByAppId(this.app.nanoid)
     if (devApp) {
       this.existsDevApp = devApp
@@ -60,12 +60,12 @@ export default {
     ...mapWritableState(appStore, ['app', 'debugMod', 'devApp'])
   },
   methods: {
-    enableAllowSystemDebug() {
+    enableAllowSystemDebug () {
       console.log('allowSystemDebug')
       this.allowSystemDebug = true
     },
     ...mapActions(appStore, ['toggleDebug', 'setDevApp']),
-    async switchToDevMod() {
+    async switchToDevMod () {
       if (!this.debugMod) {
         let devApp = await devAppModel.checkExistsByAppId(this.app.nanoid)
         if (!devApp) {
@@ -76,7 +76,7 @@ export default {
               devApp = await devAppModel.createFromApp(this.app)
               if (devApp) {
                 this.setDevApp(devApp)
-                this.$router.push({path: '/dev/'})
+                this.$router.push({ path: '/dev/' })
               } else {
                 return message.error('创建项目失败。')
               }
@@ -84,7 +84,7 @@ export default {
           })
         } else {
           this.setDevApp(devApp)//devApp是不和任何对象挂钩的，只有在保存的时候才会把对应的设置覆盖进去
-          this.$router.push({path: '/dev/'})
+          this.$router.push({ path: '/dev/' })
         }
       } else {
         this.debugMod = false

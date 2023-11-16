@@ -43,9 +43,9 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from 'pinia'
-import {forumStore} from '../../store/forumStore'
-import {Icon as ClassIcon} from '@iconify/vue'
+import { mapActions, mapWritableState } from 'pinia'
+import { forumStore } from '../../store/forumStore'
+import { Icon as ClassIcon } from '@iconify/vue'
 
 import ChannelClassification from './ChannelClassification.vue'
 
@@ -57,7 +57,7 @@ export default {
 
   props: ['no'],
 
-  data() {
+  data () {
     return {
       settingsScroller: {
         useBothWheelAxes: true,
@@ -76,22 +76,21 @@ export default {
     ...mapWritableState(forumStore, ['forumList'])
   },
 
-  async mounted() {
+  async mounted () {
     await this.getForumData()
   },
 
-
   methods: {
     ...mapActions(forumStore, ['getForumData']),
-    closeChannel() {
+    closeChannel () {
       this.$emit('close')
     },
-    backChannel() {
+    backChannel () {
       this.$emit('back')
     },
 
     // 选择指定的版块
-    selectForum(index, item) {
+    selectForum (index, item) {
       if (this.selectIndex === index) {
         this.selectIndex = -1
         this.selectForumItem = ''
@@ -102,17 +101,15 @@ export default {
     },
 
     // 选择下一步
-    selectNext(evt) {
+    selectNext (evt) {
       if (this.selectForumItem !== '') {
         this.classShow = true
       } else {
-        evt.preventDefault();
+        evt.preventDefault()
       }
     }
 
-
   },
-
 
 }
 </script>

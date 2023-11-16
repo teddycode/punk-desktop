@@ -2,20 +2,24 @@
 @import "sa-app";
 @import "space";
 @import "dark-mod";
+
 body {
   background-color: #00000000;
   overflow: hidden;
 }
+
 .bottomBar {
-  .ant-badge-dot{
+  .ant-badge-dot {
     right: 5px;
     top: 5px;
   }
+
   .ant-btn {
     background: none !important;
     border: none !important;
   }
 }
+
 .sidebar {
   position: fixed;
   bottom: 0;
@@ -50,7 +54,7 @@ body {
 
 }
 
-.sidebar .side-container .side-items .app-task .task-icon{
+.sidebar .side-container .side-items .app-task .task-icon {
   margin-top: 10px;
 }
 
@@ -136,11 +140,13 @@ body {
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
   .edit-tip {
     vertical-align: text-top;
     margin-top: -3px;
     display: inline-block;
   }
+
   &:hover {
     color: grey;
 
@@ -157,16 +163,19 @@ body {
   &:hover {
     background: rgba(224, 224, 224, 0.35);
     border-radius: 4px;
-    .tip{
+
+    .tip {
       display: inline-block;
     }
   }
-  .tip{
+
+  .tip {
     display: none;
   }
 }
-.close-task-btn{
-  &:hover{
+
+.close-task-btn {
+  &:hover {
     color: red;
   }
 }
@@ -220,9 +229,10 @@ body {
 
 }
 
-.app-task{
+.app-task {
   width: 45px; /*修复左侧栏收起状态下的错位问题*/
 }
+
 .wrapper {
   width: 42px;
   height: 42px;
@@ -262,73 +272,88 @@ body {
   border-radius: 0;
 
 }
-.init-expanded{
+
+.init-expanded {
   width: 145px;
   transition: none;
+
   .wrapper {
     width: 142px;
     transition: none;
   }
+
   .side-container .side-items {
     width: 145px;
     transition: none;
 
   }
+
   .bottom-container {
     width: 145px;
     transition: none;
   }
+
   .side-items .app-items {
     width: 162px;
     transition: none;
   }
+
   .app-box {
     width: 145px;
     transition: none;
   }
+
   .app-task {
     width: 145px;
     transition: none;
   }
+
   .ant-collapse > .ant-collapse-item > .ant-collapse-header .ant-collapse-arrow {
     left: 68px;
     transition: none;
   }
 }
+
 .expanded {
   width: 145px;
   transition: width 0.1s;
+
   .wrapper {
     width: 142px;
     transition: width 0.1s;
   }
+
   .side-container .side-items {
     width: 145px;
     transition: width 0.1s;
 
   }
+
   .bottom-container {
     width: 145px;
     transition: width 0.1s;
   }
+
   .side-items .app-items {
     width: 162px;
     transition: width 0.1s;
   }
+
   .app-box {
     width: 145px;
     transition: width 0.1s;
   }
+
   .app-task {
     width: 145px;
     transition: width 0.1s;
   }
+
   .ant-collapse > .ant-collapse-item > .ant-collapse-header .ant-collapse-arrow {
     left: 68px;
     transition: width 0.1s;
   }
 }
-
 
 
 .divider {
@@ -339,7 +364,6 @@ body {
 .ant-collapse-borderless {
   background-color: transparent;
 }
-
 
 
 .user-panel {
@@ -364,12 +388,14 @@ body {
     margin-top: 20px;
     margin-bottom: 20px;
     border: 1px solid rgb(226, 221, 221);
-    &:hover{
-      cursor:pointer;
+
+    &:hover {
+      cursor: pointer;
       border: 1px solid #1890ff;
-      transition: all .3s cubic-bezier(.645,.045,.355,1);
+      transition: all .3s cubic-bezier(.645, .045, .355, 1);
       background-color: rgba(3, 167, 248, 0.1);
     }
+
     .action {
       text-align: center;
       padding: 10px;
@@ -384,6 +410,7 @@ body {
     .actions-bottom {
       height: calc(100% - 24px);
       width: 100%;
+
       .action-bottom-action {
         width: 40px;
         height: 100%;

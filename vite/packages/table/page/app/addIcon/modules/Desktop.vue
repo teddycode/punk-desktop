@@ -11,48 +11,48 @@
 </template>
 
 <script>
-import syncSelected from "../hooks/syncSelected";
-import {taskStore} from "../../../../apps/task/store";
-import {mapWritableState} from "pinia";
+import syncSelected from '../hooks/syncSelected'
+import { taskStore } from '../../../../apps/task/store'
+import { mapWritableState } from 'pinia'
 
 export default {
   mixins: [syncSelected],
 
-  data() {
+  data () {
     return {
       allApps: [],
-    };
+    }
   },
   computed: {
-    ...mapWritableState(taskStore, ["taskID", "step"]),
-    m02014() {
-      return this.taskID == "M0201" && this.step == 4;
+    ...mapWritableState(taskStore, ['taskID', 'step']),
+    m02014 () {
+      return this.taskID == 'M0201' && this.step == 4
     },
   },
   watch: {},
-  mounted() {
-    this.loadDeskIconApps();
+  mounted () {
+    this.loadDeskIconApps()
   },
   methods: {
-    async loadDeskIconApps() {
-      const desktopApps = await ipc.sendSync("getDeskApps");
-      let data = [];
+    async loadDeskIconApps () {
+      const desktopApps = await ipc.sendSync('getDeskApps')
+      let data = []
       //todo 要增加一个提示界面
       for (const item of desktopApps) {
         data.push({
           ...item,
           icon: await tsbApi.system.extractFileIcon(item.path),
           open: {
-            type: "tableApp",
+            type: 'tableApp',
             value: item.path,
             name: item.name,
           },
-        });
+        })
       }
-      this.allApps = data;
+      this.allApps = data
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

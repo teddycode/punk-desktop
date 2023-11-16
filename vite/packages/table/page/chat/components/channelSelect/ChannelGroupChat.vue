@@ -13,7 +13,8 @@
     </div>
 
     <div class="px-6 flex-col mt-4">
-      <div v-for="item in list" :class="{'select-bg':listIndex === item.type}" class="flex flex-col p-4 mb-4 rounded-lg pointer"
+      <div v-for="item in list" :class="{'select-bg':listIndex === item.type}"
+           class="flex flex-col p-4 mb-4 rounded-lg pointer"
            style="background: var(--secondary-bg);" @click="selectChannel(item)">
         <span class="font-16-400 mb-2.5" style="color:var(--primary-text);">{{ item.title }}</span>
         <span class="font-14-400" style="color:var(--secondary-text);">{{ item.summary }}</span>
@@ -41,8 +42,8 @@
 </template>
 
 <script>
-import {defineComponent, reactive, toRefs} from 'vue'
-import {Icon as ChatIcon} from '@iconify/vue'
+import { defineComponent, reactive, toRefs } from 'vue'
+import { Icon as ChatIcon } from '@iconify/vue'
 
 import CreateCommunity from '../CreateNewGroups.vue'
 import SelectKnownGroup from './ChannelKnownGroup.vue'
@@ -55,12 +56,12 @@ export default defineComponent({
     ChatIcon, CreateCommunity, SelectKnownGroup
   },
 
-  setup(props, ctx) {
+  setup (props, ctx) {
 
     const data = reactive({
       list: [
-        {title: '创建新群聊', summary: '选择你的联系人，创建一个新的群聊关联到社群中。', type: 'create'},
-        {title: '添加已有群聊', summary: '选择你已经创建的群聊，将他们批量关联到社群中。', type: 'already'}
+        { title: '创建新群聊', summary: '选择你的联系人，创建一个新的群聊关联到社群中。', type: 'create' },
+        { title: '添加已有群聊', summary: '选择你已经创建的群聊，将他们批量关联到社群中。', type: 'already' }
       ],
       listIndex: 'create',
       chatShow: false,
@@ -84,7 +85,6 @@ export default defineComponent({
     const selectSubmit = () => {
       data.chatShow = true
     }
-
 
     return {
       ...toRefs(data),

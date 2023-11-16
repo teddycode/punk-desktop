@@ -11,6 +11,7 @@ function open (menuTemplate, x, y) {
   nextMenuId++
   menuCallbacks[nextMenuId] = {}
   var nextItemId = 0
+
   function prepareToSend (menuPart) {
     if (menuPart instanceof Array) {
       return menuPart.map(item => prepareToSend(item))

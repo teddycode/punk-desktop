@@ -62,7 +62,7 @@
 
 <script>
 export default {
-  name: "XtFullScreen",
+  name: 'XtFullScreen',
   props: {
     boxClass: {},
     visible: {
@@ -72,7 +72,7 @@ export default {
       default: true,
     },
     title: {
-      default: "",
+      default: '',
     },
     showFull: {
       default: true,
@@ -84,77 +84,77 @@ export default {
     // 用于标记布局是默认还是弹窗
     type: {
       type: String,
-      default: "default",
+      default: 'default',
       validator: (val) => {
-        if (val !== "default" && val !== "popup") {
-          console.error("type  必须是 default 或 popup");
-          return false;
+        if (val !== 'default' && val !== 'popup') {
+          console.error('type  必须是 default 或 popup')
+          return false
         }
-        return true;
+        return true
       },
     },
     full: {
       default: false,
     },
   },
-  data() {
+  data () {
     return {
       isFull: this.full,
       currentType: this.type,
-    };
+    }
   },
   watch: {
-    isFull(newV) {
-      this.$emit("update:full", newV);
+    isFull (newV) {
+      this.$emit('update:full', newV)
     },
-    full(newV) {
-      this.isFull = newV;
+    full (newV) {
+      this.isFull = newV
     },
   },
   computed: {
-    typeStyle() {
+    typeStyle () {
       let typeList = {
-        default: " rounded-xl xt-bg ",
+        default: ' rounded-xl xt-bg ',
         popup:
-            "fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 rounded-xl xt-modal  xt-shadow ",
-        full: "fixed left-0 right-0 top-0 bottom-0 xt-modal ",
-      };
-      let type = typeList[this.currentType] ?? typeList["default"];
-      let p = this.setSpacing("p");
-      return type + p;
+            'fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 rounded-xl xt-modal  xt-shadow ',
+        full: 'fixed left-0 right-0 top-0 bottom-0 xt-modal ',
+      }
+      let type = typeList[this.currentType] ?? typeList['default']
+      let p = this.setSpacing('p')
+      return type + p
     },
   },
-  mounted() {
-    window.addEventListener("keydown", this.handleEscKeyPressed, {
+  mounted () {
+    window.addEventListener('keydown', this.handleEscKeyPressed, {
       capture: true,
-    });
+    })
   },
-  beforeDestroy() {
-    window.removeEventListener("keydown", this.handleEscKeyPressed, {
+  beforeDestroy () {
+    window.removeEventListener('keydown', this.handleEscKeyPressed, {
       capture: true,
-    });
+    })
   },
   methods: {
-    handleEscKeyPressed(event) {
+    handleEscKeyPressed (event) {
       if (event.keyCode === 27) {
-        this.close();
+        this.close()
       }
     },
-    close() {
-      this.$emit("update:modelValue", false);
-      this.$emit("close");
+    close () {
+      this.$emit('update:modelValue', false)
+      this.$emit('close')
     },
-    setSpacing(name) {
-      return name + "-" + this.spacing;
+    setSpacing (name) {
+      return name + '-' + this.spacing
     },
-    fullScreenClick() {
-      this.isFull = !this.isFull;
-      this.currentType = this.isFull ? "full" : this.type;
+    fullScreenClick () {
+      this.isFull = !this.isFull
+      this.currentType = this.isFull ? 'full' : this.type
       // 可以通过v-model:full="你的变量" 监控全屏切换状态
-      this.$emit("update:full", this.isFull);
+      this.$emit('update:full', this.isFull)
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

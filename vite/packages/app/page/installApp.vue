@@ -60,12 +60,12 @@
 </template>
 
 <script>
-const {appModel} = window.$models
+const { appModel } = window.$models
 import _ from 'lodash-es'
 
 export default {
   name: 'installApp',
-  data() {
+  data () {
     return {
       app: {
         auth: {
@@ -93,7 +93,7 @@ export default {
     }
 
   },
-  mounted() {
+  mounted () {
     ipc.on('returnInstallAppJson', (event, args) => {
       this.app = args.appJson
       this.from = args.from
@@ -103,13 +103,13 @@ export default {
     ipc.send('getInstallAppJson')
   },
   methods: {
-    checkHas(object) {
+    checkHas (object) {
       return Object.keys(object).some(key => {
         console.log(object[key])
         return object[key]
       })
     },
-    async install() {
+    async install () {
       let installedAppId = ''
       delete this.app.nanoid
       try {
@@ -120,18 +120,18 @@ export default {
         }
         if (installedAppId) {
           await appModel.setUserSetting(this.app, this.userSetting)
-          ipc.send('installAppReturn', {result: true, nanoid: installedAppId})
+          ipc.send('installAppReturn', { result: true, nanoid: installedAppId })
         } else {
-          ipc.send('installAppReturn', {result: false})
+          ipc.send('installAppReturn', { result: false })
         }
       } catch (e) {
         console.warn(e)
-        ipc.send('installAppReturn', {result: false})
+        ipc.send('installAppReturn', { result: false })
       }
       ipc.send('closeSelf')
     },
-    close() {
-      ipc.send('installAppReturn', {result: false})
+    close () {
+      ipc.send('installAppReturn', { result: false })
       ipc.send('closeSelf')
     }
   }
