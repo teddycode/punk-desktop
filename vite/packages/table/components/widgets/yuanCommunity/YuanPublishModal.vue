@@ -73,7 +73,7 @@ import {Icon as newIcon} from '@iconify/vue';
 import {fileUpload} from '../../../components/card/hooks/imageProcessing'
 import fluentEmojis from '../../../js/chat/fulentEmojis'
 import {yuanCommunityStore} from '../../../store/yuanCommunity'
-import {useCommunityStore} from '../../../page/chat/commun'
+import {useCommunityStore} from '@page/chat/commun'
 import PostItem from './Detail/PostItem.vue';
 import VideoItem from './Detail/VideoItem.vue';
 import DynamicItem from './Detail/DynamicItem.vue';

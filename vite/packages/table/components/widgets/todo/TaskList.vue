@@ -48,10 +48,10 @@
 </template>
 
 <script lang="ts">
-import {ITaskInfo} from "../../../page/app/todo/interfaces";
+import {ITaskInfo} from "@page/app/todo/interfaces";
 import dayjs from "dayjs";
 import {mapActions, mapState} from "pinia";
-import {taskStore} from "../../../page/app/todo/stores/task";
+import {taskStore} from "@page/app/todo/stores/task";
 import {PlusSquareOutlined, ToTopOutlined} from "@ant-design/icons-vue";
 import VueCustomScrollbar from "../../../../../src/components/vue-scrollbar.vue";
 import Emoji from "../../comp/Emoji.vue";

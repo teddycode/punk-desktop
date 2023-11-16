@@ -74,11 +74,11 @@
 import Widget from '../../card/Widget.vue'
 import {mapWritableState} from 'pinia'
 import Tasklist from './TaskList.vue'
-import {databaseStore, listStore, taskStore} from "../../../page/app/todo/store";
+import {databaseStore, listStore, taskStore} from "@page/app/todo/store";
 import {LeftOutlined, PlusOutlined, RightOutlined} from "@ant-design/icons-vue";
 import XtButton from "../../../ui/libs/Button/index.vue";
 import Modal from "../../Modal.vue";
-import TaskInput from "../../../page/app/todo/components/TaskInput.vue";
+import TaskInput from "@page/app/todo/components/TaskInput.vue";
 import {Tippy} from "vue-tippy";
 import {message} from 'ant-design-vue'
 

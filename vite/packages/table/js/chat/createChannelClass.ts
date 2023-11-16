@@ -1,4 +1,4 @@
-import {communityStore} from '../../page/chat/store/communityStore'
+import {communityStore} from '@page/chat/store/communityStore'
 
 export const channelClass = {
 

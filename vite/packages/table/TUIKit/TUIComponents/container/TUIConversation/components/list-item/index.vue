@@ -112,7 +112,7 @@
 import {onClickOutside, useElementBounding} from '@vueuse/core';
 import {defineComponent, nextTick, reactive, ref, toRefs, watch, watchEffect} from 'vue';
 import {Conversation} from '../../interface';
-import config from '../../../../../../page/chat/config'
+import config from '@page/chat/config'
 
 const ListItem: any = defineComponent({
   props: [

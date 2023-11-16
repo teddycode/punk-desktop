@@ -154,8 +154,8 @@
 <script lang='ts' setup>
 import {computed, onMounted, reactive, ref} from 'vue'
 import {UserOutlined} from '@ant-design/icons-vue'
-import Comment from '../../../page/chat/com/Comment.vue';
-import {useCommunityStore} from '../../../page/chat/commun'
+import Comment from '@page/chat/com/Comment.vue';
+import {useCommunityStore} from '@page/chat/commun'
 import {appStore} from '../../../../table/store'
 import {Icon} from '@iconify/vue';
 import browser from '../../../js/common/browser';
