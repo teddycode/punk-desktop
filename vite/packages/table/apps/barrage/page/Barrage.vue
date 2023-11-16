@@ -1,7 +1,7 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import BarragePanel from "../../../components/comp/BarragePanel.vue";
-import BarrageSetting from "../../../page/settings/BarrageSetting.vue";
+import BarrageSetting from "@page/settings/BarrageSetting.vue";
 
 export default defineComponent({
   name: "Barrage",

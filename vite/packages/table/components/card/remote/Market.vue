@@ -131,7 +131,7 @@
 import {mapActions, mapWritableState} from "pinia";
 import {cardStore} from "../../../store/card";
 import {message} from "ant-design-vue";
-import NewPreviewCardDetails from "../../../page/app/card/NewPreviewCardDetails.vue";
+import NewPreviewCardDetails from "@page/app/card/NewPreviewCardDetails.vue";
 import {dataList, delList, shareList} from './testData';
 import Modal from '../../Modal.vue'
 import {taskStore} from "../../../apps/task/store";

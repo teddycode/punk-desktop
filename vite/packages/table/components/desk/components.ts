@@ -53,7 +53,7 @@ import GameStrategy from "../widgets/games/GameStrategy.vue";
 
 import VueCustomScrollbar from "../../../../src/components/vue-scrollbar.vue";
 import HorizontalPanel from "../HorizontalPanel.vue";
-import AddIcon from "../../page/app/addIcon/index.vue";
+import AddIcon from "@page/app/addIcon/index.vue";
 import News from "../widgets/news/NewsCard.vue";
 import Template from "../../../user/pages/Template.vue";
 import SmallRank from "../widgets/SmallRank.vue";
@@ -67,7 +67,7 @@ import RightMenu from "./RightMenu.vue";
 import FreeDesk from "./free/index";
 
 const NewAddCard = defineAsyncComponent(
-    () => import("../../page/app/card/NewAddCard.vue")
+    () => import("@page/app/card/NewAddCard.vue")
 );
 
 export default {

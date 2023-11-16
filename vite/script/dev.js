@@ -1,6 +1,7 @@
 let vite=require("vite")
 let vue=require("@vitejs/plugin-vue")
 const path = require('path')
+
 let dev={
   server:null,
   serverPort:1600,
@@ -12,13 +13,17 @@ let dev={
         port:this.serverPort
       },
       plugins:[vue()],
-      resolve: {
+      resolve: {  // 与vite.config.ts相同
         alias: {
           "@package": path.resolve("./packages"),
           "@table": path.resolve("./packages/table"),
           "@page": path.resolve("./packages/table/page"),
           "@store": path.resolve("./packages/table/store"),
           "@route": path.resolve("./packages/table/route"),
+          "@apps": path.resolve("./packages/table/apps"),
+          "@components": path.resolve("./packages/table/components"),
+          "@assets": path.resolve("./packages/table/assets"),
+          "@js": path.resolve("./packages/table/js"),
         },
       },
     }

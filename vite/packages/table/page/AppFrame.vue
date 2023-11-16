@@ -1,17 +1,17 @@
 <template>
   <div style="width: 100%; display: flex; height: 100%; flex-direction: column">
     <div
-        :style="{ background: app.theme || '#424242' }"
-        class="drag"
-        style="height: 4em; width: 100%"
+      :style="{ background: app.theme || '#424242' }"
+      class="drag"
+      style="height: 4em; width: 100%"
     >
       <a-row>
         <a-col :span="6">
           <div class="app-btn no-drag" @click="goBack">
             <div class="btn-wrapper">
               <Icon
-                  icon="xiangzuo"
-                  style="font-size: 1.5em; vertical-align: middle"
+                icon="xiangzuo"
+                style="font-size: 1.5em; vertical-align: middle"
 
               ></Icon>
             </div>
@@ -19,8 +19,8 @@
           <div class="app-btn no-drag" @click="refresh">
             <div class="btn-wrapper">
               <Icon
-                  icon="shuaxin"
-                  style="font-size: 1.5em; vertical-align: middle"
+                icon="shuaxin"
+                style="font-size: 1.5em; vertical-align: middle"
               ></Icon>
             </div>
           </div>
@@ -31,19 +31,19 @@
               <a-col :span="6"> 网页缩放</a-col>
               <a-col :span="10">
                 <a-slider
-                    v-model:value="scale"
-                    :marks="marks"
-                    :max="300"
-                    :min="50"
-                    :step="10"
-                    style="width: 100px"
-                    @change="setScale"
+                  v-model:value="scale"
+                  :marks="marks"
+                  :max="300"
+                  :min="50"
+                  :step="10"
+                  style="width: 100px"
+                  @change="setScale"
                 ></a-slider>
               </a-col>
               <a-col :span="8">
                 <a-button-group>
                   <a-button
-                      @click="
+                    @click="
                       () => {
                         if (this.scale + 10 <= 300) {
                           this.scale = this.scale + 10;
@@ -56,7 +56,7 @@
                     />
                   </a-button>
                   <a-button
-                      @click="
+                    @click="
                       () => {
                         if (this.scale - 10 >= 20) {
                           this.scale = this.scale - 10;
@@ -78,34 +78,34 @@
         <a-col :span="8" style="text-align: right">
           <div class="app-btn no-drag" @click="switchScale">
             <Icon
-                icon="wenzidaxiao2"
-                style="font-size: 1.5em; vertical-align: middle"
+              icon="wenzidaxiao2"
+              style="font-size: 1.5em; vertical-align: middle"
             ></Icon>
             <div class="scale">{{ scale }}%</div>
           </div>
           <div class="app-btn no-drag">
             <div
-                v-if="fullScreen"
-                class="btn-wrapper"
-                @click="toggleFullScreen"
+              v-if="fullScreen"
+              class="btn-wrapper"
+              @click="toggleFullScreen"
             >
               <Icon
-                  icon="quxiaoquanping_huaban"
-                  style="font-size: 1.5em; vertical-align: middle"
+                icon="quxiaoquanping_huaban"
+                style="font-size: 1.5em; vertical-align: middle"
               ></Icon>
             </div>
             <div v-else class="btn-wrapper" @click="toggleFullScreen">
               <Icon
-                  icon="quanping_huaban"
-                  style="font-size: 1.4em; vertical-align: middle"
+                icon="quanping_huaban"
+                style="font-size: 1.4em; vertical-align: middle"
               ></Icon>
             </div>
           </div>
           <div class="app-btn no-drag">
             <div class="btn-wrapper">
               <Icon
-                  icon="touping"
-                  style="font-size: 1.5em; vertical-align: middle"
+                icon="touping"
+                style="font-size: 1.5em; vertical-align: middle"
               ></Icon>
             </div>
           </div>
@@ -113,16 +113,16 @@
       </a-row>
     </div>
     <div
-        v-if="fullScreen"
-        id="frame"
-        :style="{ background: app.theme || '#424242' }"
-        style="width: 100%; flex: 1"
+      v-if="fullScreen"
+      id="frame"
+      :style="{ background: app.theme || '#424242' }"
+      style="width: 100%; flex: 1"
     ></div>
     <div
-        v-else
-        id="frame"
-        :style="{ background: app.theme || '#424242' }"
-        style="width: 100%; flex: 1"
+      v-else
+      id="frame"
+      :style="{ background: app.theme || '#424242' }"
+      style="width: 100%; flex: 1"
     >
       &nbsp;
     </div>
@@ -130,145 +130,145 @@
 </template>
 
 <script>
-import {appStore} from "../store";
-import {mapWritableState} from "pinia";
-import {MinusOutlined, PlusOutlined} from "@ant-design/icons-vue";
-import _ from "lodash-es";
+import { appStore } from '../store'
+import { mapWritableState } from 'pinia'
+import { MinusOutlined, PlusOutlined } from '@ant-design/icons-vue'
+import _ from 'lodash-es'
 
 export default {
-  name: "AppFrame",
-  data() {
+  name: 'AppFrame',
+  data () {
     return {
       app: {},
       showScale: false,
       scale: 100,
       marks: {
-        100: "100",
-        200: "200",
+        100: '100',
+        200: '200',
       },
-    };
+    }
   },
   components: {
     PlusOutlined,
     MinusOutlined,
   },
   computed: {
-    ...mapWritableState(appStore, ["fullScreen", "settings", "saving"]),
+    ...mapWritableState(appStore, ['fullScreen', 'settings', 'saving']),
   },
-  mounted() {
-    let app = this.$route.params;
-    if (typeof app.fullScreen === "undefined") {
-      app.fullScreen = true; //默认全屏
+  mounted () {
+    let app = this.$route.params
+    if (typeof app.fullScreen === 'undefined') {
+      app.fullScreen = true //默认全屏
     } else {
-      app.fullScreen = !(app.fullScreen === "false");
+      app.fullScreen = !(app.fullScreen === 'false')
     }
     if (app.fullScreen) {
-      this.fullScreen = app.fullScreen;
+      this.fullScreen = app.fullScreen
     }
-    if (app.type === "system") {
+    if (app.type === 'system') {
       //系统应用则跳转
       this.$router.replace({
         ...JSON.parse(app.route),
-      });
+      })
     } else {
       //非系统应用，则打开内嵌网页
       this.$nextTick(() => {
-        let frame = document.getElementById("frame");
+        let frame = document.getElementById('frame')
         let position = {
           x: this.fixZoom(frame.getBoundingClientRect().x),
           y: this.fixZoom(frame.getBoundingClientRect().y),
           width: this.fixZoom(frame.offsetWidth),
           height: this.fixZoom(frame.offsetHeight),
-        };
+        }
         let args = {
           position,
           app,
-        };
-        this.app = app;
-        ipc.send("executeTableApp", args);
+        }
+        this.app = app
+        ipc.send('executeTableApp', args)
         setTimeout(() => {
-          ipc.send("getRunningApps");
-          ipc.send("getRunningTableApps");
-        }, 3000);
-        frame.addEventListener("resize", () => {
+          ipc.send('getRunningApps')
+          ipc.send('getRunningTableApps')
+        }, 3000)
+        frame.addEventListener('resize', () => {
           _.debounce(() => {
-            this.syncBounds();
-          }, 1000);
-        });
+            this.syncBounds()
+          }, 1000)
+        })
         setTimeout(() => {
-          this.syncBounds();
-        }, 600);
-      });
+          this.syncBounds()
+        }, 600)
+      })
     }
   },
-  beforeUnmount() {
-    this.handleLeave();
+  beforeUnmount () {
+    this.handleLeave()
   },
   methods: {
-    fixZoom(num) {
-      return Number(((num * this.settings.zoomFactor) / 100).toFixed(0));
+    fixZoom (num) {
+      return Number(((num * this.settings.zoomFactor) / 100).toFixed(0))
     },
-    switchScale() {
-      this.showScale = !this.showScale;
+    switchScale () {
+      this.showScale = !this.showScale
     },
-    setScale(value) {
-      ipc.send("setTableAppScale", {
+    setScale (value) {
+      ipc.send('setTableAppScale', {
         app: JSON.parse(JSON.stringify(this.app)),
         scale: value,
-      });
+      })
     },
-    toggleFullScreen() {
-      this.fullScreen = !this.fullScreen;
+    toggleFullScreen () {
+      this.fullScreen = !this.fullScreen
       this.$nextTick(() => {
-        this.syncBounds();
-      });
+        this.syncBounds()
+      })
     },
-    syncBounds() {
-      let frame = document.getElementById("frame");
+    syncBounds () {
+      let frame = document.getElementById('frame')
       let position = {
         x: this.fixZoom(frame.getBoundingClientRect().x),
         y: this.fixZoom(frame.getBoundingClientRect().y),
         width: this.fixZoom(frame.offsetWidth),
         height: this.fixZoom(frame.offsetHeight),
-      };
+      }
       let args = {
         bounds: position,
         app: this.app,
-      };
-      ipc.send("syncTableAppBounds", JSON.parse(JSON.stringify(args)));
-    },
-    handleLeave() {
-      if (this.saving && this.app.name !== "wyyMusic") {
-        ipc.send("closeTableApp", {
-          app: JSON.parse(JSON.stringify(this.app)),
-        });
-        this.fullScreen = false;
-        return;
       }
-      if (this.app.type !== "system") {
+      ipc.send('syncTableAppBounds', JSON.parse(JSON.stringify(args)))
+    },
+    handleLeave () {
+      if (this.saving && this.app.name !== 'wyyMusic') {
+        ipc.send('closeTableApp', {
+          app: JSON.parse(JSON.stringify(this.app)),
+        })
+        this.fullScreen = false
+        return
+      }
+      if (this.app.type !== 'system') {
         //非系统应用，隐藏应用
         if (this.app.background) {
-          ipc.send("hideTableApp", {
+          ipc.send('hideTableApp', {
             app: JSON.parse(JSON.stringify(this.app)),
-          });
+          })
         } else {
-          ipc.send("closeTableApp", {
+          ipc.send('closeTableApp', {
             app: JSON.parse(JSON.stringify(this.app)),
-          });
+          })
         }
-        this.fullScreen = false;
+        this.fullScreen = false
       }
     },
-    goBack() {
-      this.$router.go(-1);
+    goBack () {
+      this.$router.go(-1)
     },
-    refresh() {
-      ipc.send("refreshTableApp", {
+    refresh () {
+      ipc.send('refreshTableApp', {
         app: JSON.parse(JSON.stringify(this.app)),
-      });
+      })
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

@@ -1,12 +1,12 @@
-import Lock from '../page/Lock.vue'
-import Wizard from '../page/Wizard.vue'
-import main from './main'
+import Lock from '@page/Lock.vue'
+import Wizard from '@page/Wizard.vue'
+import main from './main/index'
 
 //设置
-import Splash from '../page/Splash.vue'
+import Splash from '@page/Splash.vue'
 //import index from './index'
 // 快捷键
-import CreativeMarket from "../apps/shortcutKey/page/CreativeMarket.vue"
+import CreativeMarket from "@table/apps/shortcutKey/page/CreativeMarket.vue"
 
 const routes = [
     ...main,
@@ -22,14 +22,11 @@ const routes = [
         name: 'splash',
         component: Splash
     },
-
-
     {
         path: '/wizard',
         name: 'wizard',
         component: Wizard
     },
-
     {
         path: '/creativeMarket',
         name: 'creativeMarket',

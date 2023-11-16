@@ -2,7 +2,8 @@
   <div class="cpu-index">
     <div class="content-small">
 
-      <a-progress :percent="CPUData.SCPUUTI.value" :width="160" class="left-content" stroke-color="#FF9C00" strokeWidth="11"
+      <a-progress :percent="CPUData.SCPUUTI.value" :width="160" class="left-content" stroke-color="#FF9C00"
+                  strokeWidth="11"
                   type="circle">
         <template #format="percent">
           <div style="color:#E0E0E0;font-size: 36px;font-weight: 700;">{{ CPUData.SCPUUTI.value }}%</div>
@@ -29,7 +30,8 @@
 
     <div class="content-small">
 
-      <a-progress :percent="GPUData.SGPU1UTI.value" :width="160" class="left-content" stroke-color="#FF9C00" strokeWidth="11"
+      <a-progress :percent="GPUData.SGPU1UTI.value" :width="160" class="left-content" stroke-color="#FF9C00"
+                  strokeWidth="11"
                   type="circle">
         <template #format="percent">
           <div style="color:#E0E0E0;font-size: 36px;font-weight: 700;">{{ GPUData.SGPU1UTI.value }}%</div>
@@ -66,34 +68,34 @@
 </template>
 
 <script>
-import {mapActions, mapWritableState} from "pinia";
-import {cardStore} from "../../store/card";
-import {filterObjKeys, initCanvas} from "../../util";
+import { mapActions, mapWritableState } from 'pinia'
+import { cardStore } from '../../store/card'
+import { filterObjKeys, initCanvas } from '../../util'
 
 export default {
-  name: "CPUIndex",
-  data() {
+  name: 'CPUIndex',
+  data () {
     return {
       timer: null,
       CPUData: {
-        SCPUUTI: {value: 0},
-        TCPUPKG: {value: 0},
-        SMEMUTI: {value: 0},
+        SCPUUTI: { value: 0 },
+        TCPUPKG: { value: 0 },
+        SMEMUTI: { value: 0 },
       },
       CPUList: [999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999],
       GPUData: {
-        SGPU1UTI: {value: 0},
-        TGPU1DIO: {value: 0},
-        SMEMUTI: {value: 0},
-        SGPU1USEDDEMEM: {value: 0}
+        SGPU1UTI: { value: 0 },
+        TGPU1DIO: { value: 0 },
+        SMEMUTI: { value: 0 },
+        SGPU1USEDDEMEM: { value: 0 }
       },
       GPUList: [999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999],
     }
   },
   computed: {
-    ...mapWritableState(cardStore, ["aidaData"]),
+    ...mapWritableState(cardStore, ['aidaData']),
   },
-  created() {
+  created () {
     this.timer = setInterval(() => {
       readAida64().then(res => {
         Object.keys(res).map(i => {
@@ -106,40 +108,40 @@ export default {
       }).catch(err => {
         clearInterval(this.timer)
         this.setAidaData({
-          SGPU1UTI: {value: 0},
-          TGPU1DIO: {value: 0},
-          SMEMUTI: {value: 0},
-          SCPUUTI: {value: 0},
-          TCPUPKG: {value: 0},
-          SRTSSFPS: {value: 0},
-          SDSK1ACT: {value: 0},
+          SGPU1UTI: { value: 0 },
+          TGPU1DIO: { value: 0 },
+          SMEMUTI: { value: 0 },
+          SCPUUTI: { value: 0 },
+          TCPUPKG: { value: 0 },
+          SRTSSFPS: { value: 0 },
+          SDSK1ACT: { value: 0 },
         })
       })
     }, 1000)
   },
-  unmounted() {
+  unmounted () {
     if (this.timer) {
       clearInterval(this.timer)
     }
   },
   watch: {
-    "aidaData": {
-      handler(newVal, oldVal) {
+    'aidaData': {
+      handler (newVal, oldVal) {
         filterObjKeys(this.CPUData, this.aidaData)
         filterObjKeys(this.GPUData, this.aidaData)
 
         if (this.GPUData.TGPU1DIO.value === 0) {
           for (let i = 0; i < Object.keys(this.aidaData).length; i++) {
-            if (Object.keys(this.aidaData)[i] === "TCPUGTC")
+            if (Object.keys(this.aidaData)[i] === 'TCPUGTC')
               this.GPUData.TGPU1DIO.value = this.aidaData.TCPUGTC.value
           }
         }
         this.CPUData.SCPUUTI.value && this.CPUList.push(this.CPUData.SCPUUTI.value)
-        this.CPUList.shift();
+        this.CPUList.shift()
         this.GPUData.SGPU1UTI.value && this.GPUList.push(this.GPUData.SGPU1UTI.value)
-        this.GPUList.shift();
-        this.initCanvas('myCPUCanvas', this.CPUList, 8, 8, "#515151", "#3B8FFA")
-        this.initCanvas('myGPUCanvas', this.GPUList, 8, 8, "#515151", "#3B8FFA")
+        this.GPUList.shift()
+        this.initCanvas('myCPUCanvas', this.CPUList, 8, 8, '#515151', '#3B8FFA')
+        this.initCanvas('myGPUCanvas', this.GPUList, 8, 8, '#515151', '#3B8FFA')
       },
       deep: true,
     },

@@ -462,10 +462,10 @@ import {nanoid} from "nanoid";
 import Template from "../../../user/pages/Template.vue";
 
 import {deskTemplates} from "../../js/data/deskTemplates";
-import DeskMarket from "../../page/app/card/DeskMarket.vue";
+import DeskMarket from "@page/app/card/DeskMarket.vue";
 import {deskStore} from "../../store/desk";
 import ShareDesk from "./ShareDesk.vue";
-import NewAddCard from "../../page/app/card/NewAddCard.vue";
+import NewAddCard from "@page/app/card/NewAddCard.vue";
 import DeskPreview from "./DeskPreview.vue";
 import {marketStore} from "../../store/market";
 import Icon from "../Icon.vue";
