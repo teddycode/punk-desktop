@@ -9,14 +9,11 @@
         >
           <div
               v-for="item in navList"
-              :style="{
-              'border-right':
-                item.component == name ? '1px solid var(--active-bg)' : '',
-            }"
+              :style="{'border-right': item.component === name ? '1px solid var(--active-bg)' : '',}"
           >
             <div
                 :key="item.name"
-                :class="{ 'xt-bg-2': item.component == name }"
+                :class="{ 'xt-bg-2': item.component === name }"
                 class="flex justify-center items-center rounded-xl cursor-pointer h-12 w-120 mr-2"
                 @click="name = item.component"
             >
@@ -53,7 +50,7 @@
     </div>
     <footer class="flex items-center justify-center mt-2">
       <XtTab
-          v-if="name == 'Links'"
+          v-if="name === 'Links'"
           v-model:data="type"
           :list="linkList"
           boxClass="my-2 p-1 xt-bg-2"
@@ -73,12 +70,13 @@ import Links from './modules/Links.vue'
 import MyApps from './modules/MyApps.vue'
 import Desktop from './modules/Desktop.vue'
 import QingApps from './modules/QingApps.vue'
-import { cardStore } from '../../../store/card.ts'
-import { myIcons } from '../../../store/myIcons.ts'
+import PageApps from './modules/PageApps.vue'
+import { cardStore } from '@store/card'
+import { myIcons } from '@store/myIcons'
 import { scrollable } from './hooks/scrollable'
 import { mapActions, mapWritableState } from 'pinia'
-import { taskStore } from '../../../apps/task/store'
-import { renderIcon } from '../../../js/common/common'
+import { taskStore } from '@apps/task/store'
+import { renderIcon } from '@js/common/common'
 
 export default {
   emits: ['update:navName'],
@@ -91,7 +89,8 @@ export default {
           { name: '网址导航', component: 'Links' },
           { name: '本地应用', component: 'MyApps' },
           { name: '桌面图标', component: 'Desktop' },
-          { name: 'web3应用', component: 'QingApps' },
+          { name: '轻应用', component: 'QingApps' },
+          { name: 'web3应用', component: 'PageApps' },
         ]
       },
     },
@@ -100,7 +99,7 @@ export default {
       default: 'Links',
     },
   },
-  provide () {
+  provide() {
     return {
       width: () => {
         return this.width
@@ -110,7 +109,7 @@ export default {
       },
     }
   },
-  data () {
+  data() {
     return {
       name: this.navName,
       screenWidth: 0,
@@ -141,11 +140,12 @@ export default {
     MyApps,
     Desktop,
     QingApps,
+    PageApps,
   },
   watch: {
     navName: {
       deep: true,
-      handler (newValue, old) {
+      handler(newValue, old) {
         this.selectApps = {}
         this.$emit('update:navName', newValue)
       },
@@ -154,41 +154,41 @@ export default {
   computed: {
     ...mapWritableState(myIcons, ['iconOption', 'iconList']),
     ...mapWritableState(taskStore, ['taskID', 'step']),
-    m02013 () {
-      if (this.taskID == 'M0201' && this.step == 3) {
+    m02013() {
+      if (this.taskID === 'M0201' && this.step === 3) {
         this.name = 'Desktop'
-        return this.taskID == 'M0201' && this.step == 3
+        return this.taskID === 'M0201' && this.step === 3
       }
     },
-    m02015 () {
-      return this.taskID == 'M0201' && this.step == 5
+    m02015() {
+      return this.taskID === 'M0201' && this.step === 5
     },
-    height () {
+    height() {
       let h = this.screenHeight
       if (h > 901) return 415
       else if (h > 600) return 272
       else return 136
     },
-    leftTabHeight () {
+    leftTabHeight() {
       let h = this.height
       return {
         height: `${h + 60}px`,
       }
     },
-    selectedWidth () {
+    selectedWidth() {
       let w = this.width
-      if (this.name == 'Links') w += 128
+      if (this.name === 'Links') w += 128
       return {
         width: w + 8 + 'px',
       }
     },
-    width () {
+    width() {
       let w = this.screenWidth
       if (w > 1024) return 566
       else if (w > 768) return 424
       else return 282
     },
-    selectAppsLenght () {
+    selectAppsLenght() {
       let i = 0
       for (let key in this.selectApps) {
         this.selectApps[key].forEach(() => i++)
@@ -196,40 +196,40 @@ export default {
       return i
     },
   },
-  mounted () {
+  mounted() {
     this.screenHeight =
         window.innerHeight || document.documentElement.clientHeight
     this.screenWidth =
         window.innerWidtht || document.documentElement.clientWidth
     window.addEventListener('resize', this.handleResize)
   },
-  beforeDestroy () {
+  beforeDestroy() {
     window.removeEventListener('resize', this.handleResize)
   },
   methods: {
     ...mapActions(cardStore, ['addCard']),
     renderIcon,
-    updateData (data) {
+    updateData(data) {
       this.selectApps = data
     },
-    handleResize () {
+    handleResize() {
       this.screenHeight =
           window.innerHeight || document.documentElement.clientHeight
       this.screenWidth =
           window.innerWidtht || document.documentElement.clientWidth
     },
-    close () {
+    close() {
       this.$emit('close')
     },
     // 提交icon 并格式化数据
-    async commitIcons () {
+    async commitIcons() {
       if (!this.desk) {
         this.$emit('getSelectApps', this.selectApps)
         this.close()
         return
       }
       for (let key in this.selectApps) {
-        this.selectApps[key].forEach(async (item) => {
+        for (const item of this.selectApps[key]) {
           let iconOption = { ...this.iconOption }
           iconOption.titleValue = item.name
           iconOption.link = item.link || 'fast'
@@ -240,25 +240,22 @@ export default {
             iconOption.linkValue = item.path
           }
           this.addIcon(iconOption)
-        })
+        }
       }
       this.close()
     },
-    close () {
+    close() {
       this.$emit('close')
     },
     // 添加单图标组件
-    addIcon (icon) {
-      let random =
-          Math.floor(Math.random() * 50) * Math.floor(Math.random() * 100)
-      this.addCard(
-          {
-            name: 'myIcons',
-            id: Date.now() - random,
-            customData: { iconList: [{ ...icon }] },
-          },
-          this.desk
-      )
+    addIcon(icon) {
+      console.log('添加了图标：', icon)
+      let random = Math.floor(Math.random() * 50) * Math.floor(Math.random() * 100)
+      this.addCard({
+        name: 'myIcons',
+        id: Date.now() - random,
+        customData: { iconList: [{ ...icon }] },
+      }, this.desk)
     },
   },
 }

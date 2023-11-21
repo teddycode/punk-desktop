@@ -22,7 +22,7 @@
 <script>
 import CreateTopic from '../chat/left/createTopic.vue'
 import { mapWritableState } from 'pinia'
-import { aiStore } from '../../../store/ai'
+import { aiStore } from '@store/ai'
 import Edit from './edit.vue'
 import { SettingFilled } from '@ant-design/icons-vue'
 

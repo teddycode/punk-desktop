@@ -310,8 +310,7 @@
     <AllDeskList
         :activeId="currentDeskId"
         :items="deskList"
-        @valueChanged="
-        (event) => {
+        @valueChanged="(event) => {
           setCurrentDeskId(event.id);
           this.allDeskListVisible = false;
         }
@@ -814,7 +813,6 @@ export default {
           "state": false
         }
       }
-
 
       this.$refs.currentDeskRef.hideMenu();
       this.menuVisible = false;

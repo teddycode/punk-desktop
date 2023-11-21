@@ -12,7 +12,7 @@
 
 <script>
 import syncSelected from '../hooks/syncSelected'
-import { taskStore } from '../../../../apps/task/store'
+import { taskStore } from '@apps/task/store'
 import { mapWritableState } from 'pinia'
 
 export default {
@@ -26,7 +26,7 @@ export default {
   computed: {
     ...mapWritableState(taskStore, ['taskID', 'step']),
     m02014 () {
-      return this.taskID == 'M0201' && this.step == 4
+      return this.taskID === 'M0201' && this.step === 4
     },
   },
   watch: {},

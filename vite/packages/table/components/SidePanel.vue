@@ -56,13 +56,13 @@
 <script>
 import { mapWritableState } from 'pinia'
 import EditNavigation from './bottomPanel/EditNavigation.vue'
-import { navStore } from '../store/nav'
-import { cardStore } from '../store/card'
+import { navStore } from '@store/nav'
+import { cardStore } from '@store/card'
 import Sortable from 'sortablejs'
 import { message } from 'ant-design-vue'
 import routerTab from '../js/common/routerTab'
 import { Icon as navIcon } from '@iconify/vue'
-import { renderIcon } from '../js/common/common'
+import { renderIcon } from '@js/common/common'
 
 export default {
   name: 'SidePanel',
@@ -151,7 +151,6 @@ export default {
         this.sortable.destroy()
         this.sortable = null
         message.info('已中止侧栏调整')
-
       }
     },
     enableDrag () {
@@ -242,6 +241,8 @@ export default {
               this.full = true
               tsbApi.window.setFullScreen(true)
             }
+          } else if (item.event === 'goback') {
+            item.fn(this)
           } else if (item.event === '/status') {
             if (this.$route.path === '/status') {
               this.$router.go(-1)

@@ -10,13 +10,13 @@
       <div class="flex">
         <!-- 头部搜索和下拉列表 -->
         <Search
-            v-model:keywords="keywords"
-            :defaultSelect="sort"
-            :isFiltrate="true"
-            :showSort="currentTab.name==='market'"
-            :sortType="sortType"
-            @changeInput="changeInput"
-            @changeSelect="changeSelect"
+          v-model:keywords="keywords"
+          :defaultSelect="sort"
+          :isFiltrate="true"
+          :showSort="currentTab.name==='market'"
+          :sortType="sortType"
+          @changeInput="changeInput"
+          @changeSelect="changeSelect"
         />
         <!-- 分享 -->
         <div v-if="currentTab.name==='market' && false"

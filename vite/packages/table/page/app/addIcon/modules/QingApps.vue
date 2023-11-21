@@ -19,17 +19,19 @@ export default {
     let res = await getQingApps()
     let appList = []
     res.forEach((item) => {
-      appList.push({
-        link: 'fast',
-        icon: item.logo,
-        name: item.name,
-        path: { package: item.package, type: 'lightApp', name: item.name },
-        open: {
-          type: 'lightApp',
-          value: item.package,
+      if (item?.type === 'web') {
+        appList.push({
+          link: 'fast',
+          icon: item.logo,
           name: item.name,
-        },
-      })
+          path: { package: item.package, type: 'lightApp', name: item.name },
+          open: {
+            type: 'lightApp',
+            value: item.package,
+            name: item.name,
+          },
+        })
+      }
     })
     this.appList = appList
   },

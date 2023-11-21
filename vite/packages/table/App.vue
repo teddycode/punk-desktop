@@ -76,22 +76,22 @@
 <script lang="ts">
 import zhCN from "ant-design-vue/es/locale/zh_CN";
 import {mapActions, mapWritableState} from "pinia";
-import {cardStore} from "./store/card"
-import {appStore} from "./store";
+import {cardStore} from "@store/card"
+import {appStore} from "@store";
 import Barrage from "./components/comp/Barrage.vue";
-import {codeStore} from "./store/code";
-import {appsStore} from "./store/apps";
-import {steamUserStore} from "./store/steamUser";
-import {screenStore} from './store/screen'
+import {codeStore} from "@store/code";
+import {appsStore} from "@store/apps";
+import {steamUserStore} from "@store/steamUser";
+import {screenStore} from '@store/screen'
 
 import browser from './js/common/browser';
 import UserCard from "./components/small/UserCard.vue";
 import Modal from './components/Modal.vue'
-import {timerStore} from "./store/timer";
-import {toggleFullScreen} from "./js/common/common";
+import {timerStore} from "@store/timer";
+import {toggleFullScreen} from "@js/common/common";
 // improt "/vite/src/util/"
-import {initStyle} from "./components/card/hooks/styleSwitch/";
-import {initTheme} from "./components/card/hooks/themeSwitch/";
+import {initStyle} from "@components/card/hooks/styleSwitch";
+import {initTheme} from "@components/card/hooks/themeSwitch";
 import FrameStoreWidget from "./components/team/FrameStoreWidget.vue";
 
 import {DndProvider} from 'vue3-dnd'

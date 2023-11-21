@@ -1,5 +1,5 @@
 <template>
-
+  <!--桌面卡片-->
   <div v-if="currentDesk.cards" style="height:100%;width: calc(100% - 20px); ">
     <div v-if="currentDesk.cards.length === 0" :class="notTrigger ? 'trigger' : '' " class="m-auto"
          style="width: 100%;height: 100%;">
@@ -26,7 +26,7 @@
         </a-result>
       </div>
     </div>
-
+    <!--桌面右键 -->
     <RightMenu :menus='dropdownMenu' class="w-full h-full" @contextmenu="showMenu">
       <!-- <xt-button @click='addFreeDeskState(currentDesk.id)'>自由布局</xt-button>
       <xt-button @click='delFreeDeskState(currentDesk.id)'>默认布局</xt-button> -->
@@ -36,13 +36,12 @@
                      :desk="currentDesk" :editing="editing"/>
         </template>
       </FreeDesk>
-      <vue-custom-scrollbar v-show="!getFreeDeskState(currentDesk.id)" id="scrollerBar" key="scrollbar" :settings="{...scrollbarSettings,
+      <vue-custom-scrollbar v-show="!getFreeDeskState(currentDesk.id)" id="scrollerBar" key="scrollbar"
+                            :settings="{...scrollbarSettings,
                             suppressScrollY:settings.vDirection?false: true ,
-        suppressScrollX:settings.vDirection?true: false,
-                          }"
+                            suppressScrollX:settings.vDirection?true: false, }"
                             class="no-drag"
                             style="position: relative; width: 100%; height: 100%;padding-left: 10px;padding-right: 10px;display: flex;flex-direction: row">
-
 
         <div id="cardContent" ref="deskContainer"
              :class="notTrigger ? 'trigger' : '' " :style="{
@@ -60,9 +59,8 @@
           <vuuri v-if=" currentDesk.cards && !hide" :key="key" ref="grid" v-model="currentDesk.cards"
                  :drag-enabled="editing" :get-item-margin="() => {
             return usingSettings.cardMargin * this.adjustZoom  + 'px';
-          }
-
-          " :options="muuriOptions" :style="{
+          }"
+                 :options="muuriOptions" :style="{
           width:settings.vDirection?'100%':'auto',
           height:settings.vDirection?'auto':'100%',
     }" class="grid home-widgets" group-id="grid.id">
@@ -72,7 +70,6 @@
                   :class="{editing:editing}"
                   :editing="editing"
                   :style="{ zoom: (usingSettings.cardZoom * this.adjustZoom / 100).toFixed(2), }">
-
 
                 <component :is="item.name" :customData="item.customData" :customIndex="item.id"
                            :desk="currentDesk" :editing="editing"></component>
@@ -86,7 +83,7 @@
     </RightMenu>
 
   </div>
-
+  <!---->
   <transition name="fade">
     <div v-if="addCardVisible" class="home-blur" style="
         position: fixed;
@@ -100,7 +97,7 @@
                   @onBack="() => { this.addCardVisible = false }"></NewAddCard>
     </div>
   </transition>
-
+  <!--添加小组件-->
   <a-drawer :contentWrapperStyle="{ backgroundColor: '#1F1F1F' }" :height="350" :visible="menuVisible" :width="120"
             class="drawer"
             placement="bottom" style="z-index: 99999999999;" @close="onClose">
@@ -252,8 +249,6 @@
       <slot name="settingsAllAfter">
       </slot>
     </template>
-
-
   </a-drawer>
 
   <transition name="fade">
@@ -276,7 +271,7 @@
 import Muuri from 'muuri'
 import { message, Modal } from 'ant-design-vue'
 import { mapActions, mapWritableState } from 'pinia'
-import { appStore } from '../../store'
+import { appStore } from '@store'
 
 import { useWidgetStore } from '../card/store.ts'
 import { useFreeDeskStore } from './free/store'
@@ -286,95 +281,91 @@ export default {
   name: 'Desk',
   emits: ['changeEditing'],
   mixins: [componentsMinis],
-  props:
-      {
-        deskGroupMenu: {
-          default: () => {
-            return []
-          }
-        },
-        globalSettings: {
-          type: Object,
-          default: {}
-        },
-        editing: {
-          type: Boolean,
-          required: true,
-          default: false,
-        },
-        currentDesk: {
-          type: Object,
-          required: true,
-          default: () => {
-            return { cards: [] }
-          }
-
-        },
-        muuriOptions: {
-          type: Object,
-          required: false,
-          default: () => {
-            return {
-              // dragStartPredicate: {
-              //   distance: 10,
-              //   delay: 1000,
-              // },
-              dragAutoScroll: {},
-              layout: {
-                // fillGaps: true,
-                // horizontal: false,
-                alignRight: false,
-                alignBottom: false,
-                // rounding: true
-              },
-              targets: [
-                {
-                  element: '#scrollerBar>div',
-                },
-              ],
-              handle: null,
-              threshold: 50,
-              safeZone: 0.2,
-              speed: Muuri.AutoScroller.smoothSpeed(1000, 2000, 2500),
-              sortDuringScroll: true,
-              smoothStop: false,
-              onStart: null,
-              onStop: null,
-              dragSortPredicate: {
-                threshold: 30,
-              },
-              dragSortHeuristics: {
-                sortInterval: 10,
-                minDragDistance: 5,
-                minBounceBackAngle: Math.PI / 2,
-              },
-
-            }
-          }
-        },
-        settings: {
-          type: Object,
-          required: false,
-          default: {
-            cardZoom: 100,
-            marginTop: 0,
-            cardMargin: 5,//卡片间隙
-            vDirection: false,
-          }
-        },
-        notTrigger: {
-          type: Boolean,
-          default: () => false
-        },
-
+  props: {
+    deskGroupMenu: {
+      default: () => {
+        return []
       }
-  ,
+    },
+    globalSettings: {
+      type: Object,
+      default: {}
+    },
+    editing: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    currentDesk: {
+      type: Object,
+      required: true,
+      default: () => {
+        return { cards: [] }
+      }
 
+    },
+    muuriOptions: {
+      type: Object,
+      required: false,
+      default: () => {
+        return {
+          // dragStartPredicate: {
+          //   distance: 10,
+          //   delay: 1000,
+          // },
+          dragAutoScroll: {},
+          layout: {
+            // fillGaps: true,
+            // horizontal: false,
+            alignRight: false,
+            alignBottom: false,
+            // rounding: true
+          },
+          targets: [
+            {
+              element: '#scrollerBar>div',
+            },
+          ],
+          handle: null,
+          threshold: 50,
+          safeZone: 0.2,
+          speed: Muuri.AutoScroller.smoothSpeed(1000, 2000, 2500),
+          sortDuringScroll: true,
+          smoothStop: false,
+          onStart: null,
+          onStop: null,
+          dragSortPredicate: {
+            threshold: 30,
+          },
+          dragSortHeuristics: {
+            sortInterval: 10,
+            minDragDistance: 5,
+            minBounceBackAngle: Math.PI / 2,
+          },
+
+        }
+      }
+    },
+    settings: {
+      type: Object,
+      required: false,
+      default: {
+        cardZoom: 100,
+        marginTop: 0,
+        cardMargin: 5,//卡片间隙
+        vDirection: false,
+      }
+    },
+    notTrigger: {
+      type: Boolean,
+      default: () => false
+    },
+  },
   watch: {
-    freeDeskState (newV) {
+    freeDeskState(newV) {
       this.renewFreeDeskState(this.currentDesk.id)
     },
-    currentDesk (newVal) {
+    currentDesk(newVal) {
       newVal.layoutSize = this.getLayoutSize()
       // if (!newVal.settings) {
       //   newVal.settings=
@@ -389,7 +380,7 @@ export default {
     },
 
     'currentDesk.settings': {
-      handler (newVal) {
+      handler(newVal) {
         console.log('更改了方向')
         console.log()
         if (!newVal) {
@@ -409,7 +400,7 @@ export default {
       immediate: true,
     },
     'currentDesk.settings.vDirection': {
-      handler (newVal) {
+      handler(newVal) {
         console.log('更新了方向，重载')
         this.key = Date.now()
         console.log(this.muuriOptions.layout, 'murri参数')
@@ -420,7 +411,7 @@ export default {
   computed: {
     ...mapWritableState(appStore, ['fullScreen']),
     ...mapWritableState(useWidgetStore, ['rightModel']),
-    deskGroupMenus () {
+    deskGroupMenus() {
       if (this.deskGroupMenu && this.deskGroupMenu.length > 1) {
         let arr = [...this.deskGroupMenu[1].children]
         let exists = arr.some(item => item.id === 4)
@@ -440,7 +431,7 @@ export default {
       return []
     },
 
-    deskMenus () {
+    deskMenus() {
       return [
         {
           id: 1,
@@ -482,12 +473,12 @@ export default {
         },
       ]
     },
-    dropdownMenu () {
+    dropdownMenu() {
       let arr = [...this.deskGroupMenus, ...this.deskMenus]
       arr.sort((a, b) => a.id - b.id)
       return arr
     },
-    usingSettings () {
+    usingSettings() {
       if (this.settings.enableZoom) {
         return this.settings
       } else {
@@ -495,7 +486,7 @@ export default {
       }
     }
   },
-  data () {
+  data() {
     return {
       freeDeskState: false,
       stashBound: { width: 0, height: 0, zoom: 0 },
@@ -522,33 +513,30 @@ export default {
       resizeHandler: null
     }
   },
-  mounted () {
+  mounted() {
     this.resizeHandler = () => {
       this.currentDesk.layoutSize = this.getLayoutSize()
     }
     this.getLayoutSize()
-
     window.addEventListener('resize', this.resizeHandler)
   },
-  unmounted () {
+  unmounted() {
     window.removeEventListener('resize', this.resizeHandler)
   },
   methods: {
     ...mapActions(useFreeDeskStore, ['addFreeDeskState', 'getFreeDeskState', 'delFreeDeskState', 'renewFreeDeskState']),
-    learn () {
+    learn() {
       browser.openInTable('https://www.bilibili.com/video/BV1Th4y1o7SZ/?vd_source=2b7e342ffb60104849f5db6262bb1e0b')
     },
-    update () {
+    update() {
       if (this.$refs.grid) {
         this.$refs.grid.update()
       }
-
     },
-    hideMenu () {
+    hideMenu() {
       this.menuVisible = false
     },
-    toggleEditing () {
-
+    toggleEditing() {
       if (this.editing) {
         message.info('已关闭拖拽调整')
       } else {
@@ -560,23 +548,23 @@ export default {
       this.key = Date.now()
       console.log(this.muuriOptions, 'ediingt输出')
     },
-    showSetting () {
+    showSetting() {
       this.settingVisible = true
       this.menuVisible = false
     },
-    hideDesk () {
+    hideDesk() {
       this.hide = !this.hide
       this.menuVisible = false
     },
-    iconHide () {
+    iconHide() {
       this.iconVisible = false
     },
 
-    showDesk () {
+    showDesk() {
       this.hide = !this.hide
       this.menuVisible = false
     },
-    clear () {
+    clear() {
       this.menuVisible = false
       let desk = this.currentDesk
       if (desk) {
@@ -591,39 +579,38 @@ export default {
         })
       }
     },
-    newAddCard () {
+    newAddCard() {
       this.addCardVisible = true
       // addCardVisible
       this.menuVisible = false
     },
-    hideAddCard () {
+    hideAddCard() {
       this.addCardVisible = false
     },
-    onClose () {
+    onClose() {
       this.menuVisible = false
     },
-    showMenu () {
+    showMenu() {
       if (!this.notTrigger && this.rightModel !== 'follow') this.menuVisible = true
     },
     // 添加图标
-    newAddIcon () {
+    newAddIcon() {
       this.iconVisible = true
       this.menuVisible = false
     },
     /**
      * 暂存布局，与restore结对使用。
      */
-    stashLayout () {
-      let bound = {
+    stashLayout() {
+      this.stashBound = {
         width: this.$refs.deskContainer.clientWidth,
         height: this.$refs.deskContainer.clientHeight
       }
-      this.stashBound = bound
     },
     /**
      * 恢复布局
      */
-    restoreLayout (rate = 0) {
+    restoreLayout(rate = 0) {
       if (rate) {
         this.adjustZoom = 1
         this.update()
@@ -641,7 +628,7 @@ export default {
      * 获取当前布局的宽高
      * @returns {{width: number, height: number}}
      */
-    getLayoutSize () {
+    getLayoutSize() {
       this.currentDesk.layoutSize = {
         width: this.$refs.deskContainer.clientWidth,
         height: this.$refs.deskContainer.clientHeight
@@ -667,12 +654,10 @@ export default {
             })
           }, 1000)
         })
-
       }
-
       return this.currentDesk.layoutSize
     },
-    setFullScreen (flag, cb) {
+    setFullScreen(flag, cb) {
       this.stashLayout()
       this.fullScreen = flag
       this.$nextTick(() => {
@@ -682,10 +667,9 @@ export default {
           this.restoreLayout()
         }
         if (cb) cb()
-
       })
     },
-    getAdjustZoom () {
+    getAdjustZoom() {
       return this.adjustZoom
     }
   }

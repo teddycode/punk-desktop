@@ -15,8 +15,7 @@ export const myIcons = defineStore("myIcons", {
             size: "mini", // 组件大小
             link: "", // 选择类型
             linkValue: "", // 旧版打开
-            open: {
-                // 新版打开
+            open: {    // 新版打开
                 value: "", // 具体参数
                 type: "internal", // 打开类型
             },

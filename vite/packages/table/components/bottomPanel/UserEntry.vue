@@ -11,9 +11,9 @@ import { defineComponent } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import Emoji from '../comp/Emoji.vue'
 import MyProp from '../team/MyProp.vue'
-import { appStore } from '../../store'
-import { teamStore } from '../../store/team'
-import { taskStore } from '../../apps/task/store'
+import { appStore } from '@store'
+import { teamStore } from '@store/team'
+import { taskStore } from '@apps/task/store'
 import BorderAvatar from '../avatar/BorderAvatar.vue'
 import { mapWritableState } from 'pinia'
 
@@ -34,13 +34,16 @@ export default defineComponent({
         {
           img: '/img/bottomPanel/team.png',
           title: '我的组织',
-          type: 'team',
+          route: {
+            name: 'dao',
+          },
+          type: 'route',
         },
         {
           img: '/img/bottomPanel/wallet.png',
           title: '我的钱包',
           route: {
-            name: 'rank',
+            name: 'wallets',
           },
           type: 'route',
         },

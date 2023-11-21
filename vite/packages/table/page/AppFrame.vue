@@ -130,7 +130,7 @@
 </template>
 
 <script>
-import { appStore } from '../store'
+import { appStore } from '@store'
 import { mapWritableState } from 'pinia'
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons-vue'
 import _ from 'lodash-es'

@@ -21,7 +21,7 @@ import MainView from './core/MainView.vue'
 import ChatLeft from './chat/left/index.vue'
 import LeftTab from './leftTab/index.vue'
 import { mapWritableState } from 'pinia'
-import { aiStore } from '../../store/ai'
+import { aiStore } from '@store/ai'
 
 export default {
   computed: {

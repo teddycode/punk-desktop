@@ -80,7 +80,6 @@ loadChat()
 // Your SDKAppID
 // init TUIKit
 
-
 const notice = new Notifications()
 window.$notice = notice
 
@@ -121,13 +120,24 @@ const $app = app.use(pinia).use(Antd).use(ColorPicker).use(router).use(VueViewer
             trigger: "mouseenter click"
         }, // => Global default options * see all props
     }
-).use(Toast, options).use(TUIKit).use(WujieVue).use(VueShepherdPlugin).mount('#app')
+).use(Toast, options)
+  .use(TUIKit).use(WujieVue)
+  .use(VueShepherdPlugin)
+  .mount('#app')
+
 registerXTUI(app)
 
 app.component('Icon', Icon)
 app.component('PanelButton', PanelButton)
 app.component('BackBtn', BackBtn)
 app.component('vueCustomScrollbar', vueCustomScrollbar)
+
+// 导入elementplus库
+import ElementPlus from 'element-plus'
+app.use(ElementPlus)
+// 导入fontawesomeIcon
+import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
+app.component('font-awesome-icon', FontAwesomeIcon)
 
 window.USER_DATA_PATH = window.globalArgs['user-data-dir']//挂载一个用户数据目录的常量，方便后续开发
 

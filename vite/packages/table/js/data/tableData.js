@@ -12,21 +12,6 @@ export default {
     { name: 'lightApp', cname: 'web3应用' },
   ],
   coolAppList: [
-    // {
-    //   icon: 'http://a.apps.vip/icons/flappy.jpg',
-    //   type: 'coolApp',
-    //   name: 'Mlappy Bird',
-    //   summary: '和小伙伴们一起飞。',
-    //   needInstall: false,
-    //   data: {
-    //     theme: '#030c13',
-    //     name: 'mlappyBird',
-    //     url: 'http://bird.apps.vip/?',
-    //     background: false,
-    //     type: 'game',
-    //     scale: 160
-    //   }
-    // },
     {
       icon: 'https://s1.hdslb.com/bfs/static/jinkela/popular/assets/icon_popular.png',
       name: '网页数据监控小助手',
@@ -177,7 +162,8 @@ export default {
       fn () {
         vm.$router.push({ path: '/lock' })
       }
-    }, {
+    },
+    {
       type: 'systemApp',
       icon: 'fluent:slide-settings-24-regular',
       name: '设备设置',
@@ -203,6 +189,15 @@ export default {
           vm.$emit('setFull', true)
           tsbApi.window.setFullScreen(true)
         }
+      }
+    },
+    {
+      type: 'systemApp',
+      icon: 'fluent-mdl2:navigate-back',
+      name: '返回',
+      event: 'goback',
+      fn: (parent) => {
+        parent.$router.go(-1)
       }
     },
     {
@@ -254,16 +249,6 @@ export default {
       fn: () => {
         vm.$router.push({ name: 'todo' })
       }
-      // data:
-      //   {
-      //     fullScreen: false,
-      //     theme: 'transparent',
-      //     name: 'todo',
-      //     url: 'https://a.apps.vip/todo',
-      //     background: true,
-      //     node: true,
-      //     security: true
-      //   }
     },
     {
       type: 'systemApp',

@@ -5,7 +5,7 @@
 <script lang="ts">
 import DeskGroup from "../../components/desk/DeskGroup.vue";
 import {mapWritableState} from "pinia";
-import {workStore} from "../../store/work";
+import {workStore} from "@store/work";
 
 export default ({
   name: "Desk",

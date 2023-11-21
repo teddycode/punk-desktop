@@ -13,7 +13,6 @@
       {{ titleValue }}
     </div>
   </div>
-
   <XtGuided v-if="visible" @close="visible = false"></XtGuided>
 </template>
 
@@ -21,7 +20,7 @@
 import { message } from 'ant-design-vue'
 import editProps from '../hooks/editProps'
 import { sizeValues } from './iconConfig'
-import { renderIcon } from '../../../../js/common/common'
+import { renderIcon } from '@js/common/common'
 
 export default {
   mixins: [editProps],
@@ -30,14 +29,14 @@ export default {
     state: { type: Boolean, default: false },
     index: { type: Number },
   },
-  data () {
+  data() {
     return {
       visible: false,
     }
   },
   computed: {
     // 动态切换圆角状态
-    radiusState () {
+    radiusState() {
       if (this.state) return
       if (this.isRadius)
         return {
@@ -46,17 +45,17 @@ export default {
       else return { borderRadius: '0px' }
     },
     // 动态切换背景状态
-    backgroundState () {
+    backgroundState() {
       if (this.state) return
       if (this.isBackground) return { background: this.backgroundColor }
       else return { background: 'none' }
     },
-    iconSize () {
+    iconSize() {
       return this.getSizeValues(this.size).iconSize
     },
-    textSize () {
+    textSize() {
       let textSize = this.getSizeValues(this.size).textSize
-      if (this.size == 'icons1' || this.size == 'icons2') {
+      if (this.size === 'icons1' || this.size === 'icons2') {
         textSize['font-size'] = '12px'
         textSize['margin-top'] = '4px'
       } else {
@@ -64,25 +63,25 @@ export default {
       }
       return textSize
     },
-    imgSize () {
+    imgSize() {
       return this.getSizeValues(this.size).imgSize
     },
-    bgSize () {
+    bgSize() {
       return this.getSizeValues(this.size).bgSize
     },
-    imgStateStyle () {
+    imgStateStyle() {
       return {
         'object-fit': this.imgState,
       }
     },
   },
   watch: {
-    imgShape (newV) {
+    imgShape(newV) {
     },
   },
   methods: {
     renderIcon,
-    getSizeValues (size) {
+    getSizeValues(size) {
       if (this.isReSize) {
         size = 'mini'
       }
@@ -96,7 +95,7 @@ export default {
         imgH = this.isTitle ? imgH : imgH + 20
       }
       let bgH =
-          this.size == 'icons1' || this.size == 'icons2'
+          this.size === 'icons1' || this.size === 'icons2'
               ? imgH
               : this.isTitle
                   ? h - 20
@@ -120,7 +119,42 @@ export default {
         },
       }
     },
-    newOpenApp () {
+    closeModal() {
+      window.open('https://www.apps.vip/download/')
+      this.visible = false
+    },
+    // 单图标点击执行app
+    iconClick(event) {
+      try {
+        console.log('点击信息: ', JSON.stringify(this?.open))
+        if (event.ctrlKey && event.button === 0) {
+          this.$emit('custom-event')
+          return
+        }
+        // 先检测是不是web端
+        // if (!this.$isXT) {
+        //   let arr = ["default", "internal", "thinksky"];
+        //   if (this.link == "link" && arr.includes(this.open.type)) {
+        //     window.open(this.open.value);
+        //   } else {
+        //     this.visible = true;
+        //   }
+        //   return;
+        // }
+        if (this.open !== undefined && this.open.value !== '') {
+          // 链接
+          this.newOpenApp()
+        } else if (this.link !== '') {
+          // 其他应用
+          this.openApp(this.linkValue)
+        } else message.error('你还未设置链接/快捷方式')
+      } catch (e) {
+        console.log(e)
+        message.error('应用打开失败！')
+      }
+    },
+    // 新版app打开方式
+    newOpenApp() {
       switch (this.open.type) {
           // 默认浏览器
         case 'default':
@@ -146,9 +180,13 @@ export default {
           break
           // 本地应用
         case 'tableApp':
-          require('electron').shell.openPath(
-              require('path').normalize(this.open.value)
-          )
+          require('electron').shell.openPath(require('path').normalize(this.open.value))
+          break
+          // 桌面内嵌页面，由route跳转并携带参数
+        case 'pageApp':
+          let route = { name: this.open?.route, params: { data: this.open?.params } }
+          console.log('跳转路由：', route)
+          this.$router.push(route)
           break
           // 系统应用
           // case "systemApp":
@@ -163,47 +201,15 @@ export default {
         default:
           this.openApp()
       }
-
-    },
-    closeModal () {
-      window.open('https://www.apps.vip/download/')
-      this.visible = false
-    },
-    // 单图标点击
-    iconClick (event) {
-      if (event.ctrlKey && event.button === 0) {
-        this.$emit('custom-event')
-        return
-      }
-      // 先检测是不是web端
-      // if (!this.$isXT) {
-      //   let arr = ["default", "internal", "thinksky"];
-      //   if (this.link == "link" && arr.includes(this.open.type)) {
-      //     window.open(this.open.value);
-      //   } else {
-      //     this.visible = true;
-      //   }
-      //   return;
-      // }
-
-      if (this.open !== undefined && this.open.value !== '') {
-        // 链接
-        console.log('lianjie :>> ')
-        this.newOpenApp()
-      } else if (this.link !== '') {
-        // 其他应用
-        this.openApp(this.linkValue)
-      } else message.error('你还未设置链接/快捷方式')
     },
     // 复制来到 旧版打开app
-    openApp () {
+    openApp() {
       if (typeof this.linkValue === 'object' && this.linkValue.type) {
         switch (this.linkValue.type) {
           case 'systemApp':
             if (this.linkValue.event === 'fullscreen') {
-              // 这里不知道啥意思
-              if (this.full) this.full = false
-              else this.full = true
+              // 这里不知道啥意思linkValue
+              this.full = !this.full;
               tsbApi.window.setFullScreen(!this.full)
             } else if (this.linkValue.event === '/status') {
               if (this.$route.path === '/status') this.$router.go(-1)

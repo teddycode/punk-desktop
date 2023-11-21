@@ -20,3 +20,7 @@ export const getSelect = (data) => {
 export const getQingApps = () => {
   return appModel.getAllApps()
 }
+
+export const getPageApps = () => {
+  return appModel.getAllApps()
+}

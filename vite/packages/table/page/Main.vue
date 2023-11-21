@@ -1,6 +1,6 @@
 <template>
   <div
-      style="display: flex;flex-direction: column;height: 100vh;flex-wrap: nowrap;align-content: stretch;align-items: stretch;">
+    style="display: flex;flex-direction: column;height: 100vh;flex-wrap: nowrap;align-content: stretch;align-items: stretch;">
     <div style="height: auto;flex: 0">
       <!--顶部状态栏      -->
       <TopPanel v-if="!fullScreen"></TopPanel>
@@ -23,12 +23,9 @@
                    @getDelIcon="getDelIcon"
         ></SidePanel>
       </div>
-      <div
-          :style="{margin:fullScreen?0:'-8px',padding:fullScreen?0:'8px'}"
-
-          style="flex-shrink: 1;flex-grow: 1;align-items: center;align-content: center;flex-direction: column;position: relative;overflow: hidden;"
-      >
-        <!--主题区域，自动滚动条        -->
+      <div :style="{margin:fullScreen?0:'-8px',padding:fullScreen?0:'8px'}"
+           style="flex-shrink: 1;flex-grow: 1;align-items: center;align-content: center;flex-direction: column;position: relative;overflow: hidden;">
+        <!-- 子内容区域        -->
         <keep-alive>
           <router-view></router-view>
         </keep-alive>
@@ -67,11 +64,11 @@ import SidePanel from '../components/SidePanel.vue'
 import TopPanel from '../components/TopPanel.vue'
 import BottomPanel from '../components/BottomPanel.vue'
 import { mapActions, mapWritableState } from 'pinia'
-import { appStore } from '../store'
+import { appStore } from '@store'
 import TeamPanel from '../components/team/TeamPanel.vue'
-import { teamStore } from '../store/team'
-import { isMain } from '../js/common/screenUtils'
-import { navStore } from '../store/nav'
+import { teamStore } from '@store/team'
+import { isMain } from '@js/common/screenUtils'
+import { navStore } from '@store/nav'
 import fullScreen from '../components/widgets/myIcons/icons/fullScreen.vue'
 
 export default {
@@ -88,7 +85,7 @@ export default {
     },
     ...mapWritableState(appStore, ['routeUpdateTime', 'fullScreen', 'settings', 'init']),
     ...mapWritableState(teamStore, ['teamVisible']),
-    ...mapWritableState(navStore, ['sideNavigationList', 'rightNavigationList', 'navigationToggle', 'footNavigationList']),
+    ...mapWritableState(navStore, ['sideNavigationList', 'leftNavigationList','rightNavigationList', 'navigationToggle', 'footNavigationList']),
     isMain
   },
   data () {

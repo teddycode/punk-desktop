@@ -934,7 +934,8 @@ export default {
     },
     setCustom () {
       this.custom = false
-    }, setCustoms () {
+    },
+    setCustoms () {
       this.visibleAdd = false
     },
     shareDesk () {

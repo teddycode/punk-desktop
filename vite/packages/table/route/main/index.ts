@@ -38,6 +38,8 @@ import ChatChild from "./chat"
 
 import Power from "@page/Power.vue";
 
+import dapps from '@route/dapp/index'
+
 export default [
     {
         path: "/main",
@@ -122,7 +124,6 @@ export default [
                 component: GameAssistant,
                 children: GameAssistChild
             },
-
             {
                 path: "/work",
                 name: 'work',
@@ -182,7 +183,7 @@ export default [
                 name: "remoteCommunity",
                 component: RemoteCommunity,
             },
-
+            ...dapps
         ],
     },
 ];

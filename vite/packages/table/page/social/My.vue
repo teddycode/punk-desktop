@@ -36,16 +36,16 @@
 </template>
 
 <script>
-import GradePanel from '../../components/comp/GradePanel.vue'
-import ComPanel from '../../components/comp/ComPanel.vue'
-import ComActionPanel from '../../components/comp/ComActionPanel.vue'
-import GroupPanel from '../../components/comp/GroupPanel.vue'
-import UserCard from '../../components/small/UserCard.vue'
-import UpdateMyInfo from '../../components/comp/UpdateMyInfo.vue'
+import GradePanel from '@components/comp/GradePanel.vue'
+import ComPanel from '@components/comp/ComPanel.vue'
+import ComActionPanel from '@components/comp/ComActionPanel.vue'
+import GroupPanel from '@components/comp/GroupPanel.vue'
+import UserCard from '@components/small/UserCard.vue'
+import UpdateMyInfo from '@components/comp/UpdateMyInfo.vue'
 import { mapActions, mapState } from 'pinia'
-import { appStore } from '../../store'
+import { appStore } from '@store'
 import FrameStoreWidget from '../../components/team/FrameStoreWidget.vue'
-import { defaultAvatar } from '../../js/common/teamAvatar'
+import { defaultAvatar } from '@js/common/teamAvatar'
 import _ from 'lodash-es'
 
 export default {

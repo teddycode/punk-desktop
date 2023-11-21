@@ -19,10 +19,10 @@
 <script>
 import TeamTip from '../TeamTip.vue'
 import { mapActions, mapWritableState } from 'pinia'
-import { teamStore } from '../../store/team'
+import { teamStore } from '@store/team'
 import MyProp from '../team/MyProp.vue'
 import Emoji from '../comp/Emoji.vue'
-import { taskStore } from '../../apps/task/store'
+import { taskStore } from '@apps/task/store'
 
 export default {
   name: 'Team',
@@ -39,7 +39,7 @@ export default {
           img: '/img/bottomPanel/my.png',
           title: '个人信息',
           route: {
-            name: 'socialMy'
+            name: ''
           },
           type: 'route'
         },

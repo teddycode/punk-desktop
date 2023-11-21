@@ -1,5 +1,5 @@
 import axios from './baseURL'
-import { sUrl } from '../../packages/table/consts'
+import { sUrl } from '@table/consts'
 
 const url = {
   homeRecommend: '/app/good/getGoodRecommend',//首页推挤接口
