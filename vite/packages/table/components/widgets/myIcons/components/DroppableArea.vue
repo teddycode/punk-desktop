@@ -24,7 +24,7 @@ export default {
 
     // 处理鼠标经过事件
     handleHover (event) {
-      console.log('2 :>> ', 2)
+      console.log('Mouse hover')
       this.$emit('hover', event)
     },
   },

@@ -431,7 +431,7 @@ export default {
   background: rgba(255, 255, 255, 0.2) !important;
 }
 
-::v-deep .ant-slider-track {
+:deep(.ant-slider-track)  {
   // background: linear-gradient(90deg, rgba(98, 193, 255, 1) 0%, rgba(51, 141, 255, 1) 100%) !important;
 }
 
@@ -448,7 +448,7 @@ export default {
   border-radius: 8px;
 }
 
-::v-deep .ps__thumb-y {
+:deep(.ps__thumb-y) {
   display: none !important;
 }
 

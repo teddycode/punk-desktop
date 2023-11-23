@@ -72,7 +72,7 @@ import { navStore } from '@store/nav'
 import fullScreen from '../components/widgets/myIcons/icons/fullScreen.vue'
 
 export default {
-  name: 'Main',
+  name: 'MainLayout',
   components: { TeamPanel, BottomPanel, TopPanel, SidePanel },
   mounted () {
     this.$router.afterEach((to, from) => {

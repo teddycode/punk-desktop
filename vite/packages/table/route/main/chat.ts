@@ -19,148 +19,148 @@ import Team from "@page/Team.vue";
 import Hall from "@page/team/Hall.vue";
 
 export default [
-    BarrageRoute,
-    {
-        path: '/chatDesk',
-        name: 'chatDesk',
-        component: ChatDesk
-    },
+  BarrageRoute,
+  {
+    path: '/chatDesk',
+    name: 'chatDesk',
+    component: ChatDesk
+  },
 
-    {
-        path: '/chatHome',
-        name: 'chat',
-        component: Chat,
+  {
+    path: '/chatHome',
+    name: 'chat',
+    component: Chat,
+    meta: {
+      rememberChildrenPosition: true
+    },
+    redirect: {
+      name: 'chatMain',
+    },
+    children: [
+      {
+        path: '/contact',
+        name: 'contact',
+        component: Contact,
         meta: {
-            rememberChildrenPosition: true
-        },
-        redirect: {
-            name: 'chatMain',
-        },
-        children: [
-            {
-                path: '/contact',
-                name: 'contact',
-                component: Contact,
-                meta: {
-                    type: 'contact',
-                    tab1: 'community',
-                    tab2: 'chat',
-                    tab3: 'contact'
-                }
-            },
-            {
-                path: '/chatMain',
-                name: 'chatMain',
-                component: ChatMain,
-                meta: {
-                    type: 'chat',
-                    tab1: 'community',
-                    tab2: 'chat',
-                    tab3: 'session'
-                }
-            },
-            {
-                path: '/chatAdmin',
-                name: 'chatAdmin',
-                component: ChatAdmin,
-                meta: {
-                    type: 'chatAdmin',
-                    tab1: 'community',
-                    tab2: 'chat',
-                    tab3: 'admin'
-                }
-            },
-            {
-                path: '/chatFind',
-                name: 'chatFind',
-                component: ChatFind,
-                meta: {
-                    type: 'find',
-                    tab1: 'community',
-                    tab2: 'chat',
-                    tab3: 'find'
-                }
-            },
-            {
-                path: '/community',
-                name: 'defaultCommunity',
-                component: CommunityIndex,
-                props: true,
-                meta: {
-                    tab1: 'community',
-                    tab2: 'chat',
-                    tab3: 'community'
-                }
-            },
-            {
-                path: '/myCommunity/:no',
-                name: 'myCommunity',
-                component: MyCommunity,
-                props: true,
-                meta: {
-                    tab1: 'community',
-                    tab2: 'chat',
-                    tab3: 'community_{no}',
-                }
-            }
-        ]
-    },
+          type: 'contact',
+          tab1: 'community',
+          tab2: 'chat',
+          tab3: 'contact'
+        }
+      },
+      {
+        path: '/chatMain',
+        name: 'chatMain',
+        component: ChatMain,
+        meta: {
+          type: 'chat',
+          tab1: 'community',
+          tab2: 'chat',
+          tab3: 'session'
+        }
+      },
+      {
+        path: '/chatAdmin',
+        name: 'chatAdmin',
+        component: ChatAdmin,
+        meta: {
+          type: 'chatAdmin',
+          tab1: 'community',
+          tab2: 'chat',
+          tab3: 'admin'
+        }
+      },
+      {
+        path: '/chatFind',
+        name: 'chatFind',
+        component: ChatFind,
+        meta: {
+          type: 'find',
+          tab1: 'community',
+          tab2: 'chat',
+          tab3: 'find'
+        }
+      },
+      {
+        path: '/community',
+        name: 'defaultCommunity',
+        component: CommunityIndex,
+        props: true,
+        meta: {
+          tab1: 'community',
+          tab2: 'chat',
+          tab3: 'community'
+        }
+      },
+      {
+        path: '/myCommunity/:no',
+        name: 'myCommunity',
+        component: MyCommunity,
+        props: true,
+        meta: {
+          tab1: 'community',
+          tab2: 'chat',
+          tab3: 'community_{no}',
+        }
+      }
+    ]
+  },
 
-    {
-        path: "/team",
-        name: "team",
-        component: Team,
-        children: [
-            {
-                path: "",
-                name: "hall",
-                meta: {
-                    tab1: 'community',
-                    tab2: 'team',
-                },
-                component: Hall,
-            },
-        ],
-    },
-    {
-        path: '/channel',
-        name: 'channel',
-        component: Channel,
-        // meta:{
-        //   tab1:'channel'
-        // },
-        redirect: {
-            name: 'channelsIndex'
+  {
+    path: "/team",
+    name: "team",
+    component: Team,
+    children: [
+      {
+        path: "",
+        name: "hall",
+        meta: {
+          tab1: 'community',
+          tab2: 'team',
         },
-        children: [
-            {
-                path: '',
-                name: 'channelsIndex',
-                meta: {
-                    tab1: 'community',
-                    tab2: 'channel'
-                },
-                component: ChannelIndex
-            },
-            {
-                path: "",
-                name: 'circle',
-                meta: {
-                    tab1: 'community',
-                    tab2: 'channel'
-                },
-                component: Circle
-            },
-            {
-                path: "",
-                name: 'circleDetail',
-                meta: {
-                    tab1: 'community',
-                    tab2: 'channel'
-                },
-                component: CircleDetail
-            }
-        ]
-    }
+        component: Hall,
+      },
+    ],
+  },
+  {
+    path: '/channel',
+    name: 'channel',
+    component: Channel,
+    // meta:{
+    //   tab1:'channel'
+    // },
+    redirect: {
+      name: 'channelsIndex'
+    },
+    children: [
+      {
+        path: '',
+        name: 'channelsIndex',
+        meta: {
+          tab1: 'community',
+          tab2: 'channel'
+        },
+        component: ChannelIndex
+      },
+      {
+        path: "",
+        name: 'circle',
+        meta: {
+          tab1: 'community',
+          tab2: 'channel'
+        },
+        component: Circle
+      },
+      {
+        path: "",
+        name: 'circleDetail',
+        meta: {
+          tab1: 'community',
+          tab2: 'channel'
+        },
+        component: CircleDetail
+      }
+    ]
+  }
 
 ]

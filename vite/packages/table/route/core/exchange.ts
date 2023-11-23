@@ -5,42 +5,73 @@ import exchangePage from "@page/core/Exchange/index.vue";
 import tokenPage from "@page/core/Exchange/components/TokenPage/index.vue";
 import tradePage from "@page/core/Exchange/components/Trade/index.vue";
 import orderPage from "@page/core/Exchange/components/OrderPage/index.vue";
-
-export default [
-  {
-    path: "index",
-    name: "ExchangePage",
-    component: exchangePage,
+import {CodeOutlined} from "@ant-design/icons-vue";
+//  三级路由-交易组
+export default {
+  path: 'exchange',
+  redirect: {name: "ExchangePage"},
+  component: exchangePage,
+  meta: {
+    icon: CodeOutlined
   },
-  {
-    path: "myExchange",
-    name: "MyExchange",
-    component: myExchange,
-  },
-  {
-    path: "myToken",
-    name: "MyToken",
-    component: tokenPage,
-  },
-  {
-    path: "myTrade",
-    name: "MyTrade",
-    component: tradePage,
-  },
-  {
-    path: "limitOrder",
-    name: "LimitOrder",
-    component: limitOrder,
-  },
-  {
-    path: "myOrder",
-    name: "MyOrder",
-    component: orderPage,
-  },
-  {
-    path: "depositToken",
-    name: "DepositToken",
-    component: depositToken,
-  },
-];
+  children: [
+    {
+      path: "home",
+      name: "ExchangePage",
+      component: exchangePage,
+      meta: {
+        icon: CodeOutlined
+      },
+    },
+    {
+      path: "myExchange",
+      name: "MyExchange",
+      component: myExchange,
+      meta: {
+        icon: CodeOutlined
+      },
+    },
+    {
+      path: "myToken",
+      name: "MyToken",
+      component: tokenPage,
+      meta: {
+        icon: CodeOutlined
+      },
+    },
+    {
+      path: "myTrade",
+      name: "MyTrade",
+      component: tradePage,
+      meta: {
+        icon: CodeOutlined
+      },
+    },
+    {
+      path: "limitOrder",
+      name: "LimitOrder",
+      component: limitOrder,
+      meta: {
+        icon: CodeOutlined
+      },
+    },
+    {
+      path: "myOrder",
+      name: "MyOrder",
+      component: orderPage,
+      meta: {
+        icon: CodeOutlined
+      },
+    },
+    {
+      path: "depositToken",
+      name: "DepositToken",
+      component: depositToken,
+      meta: {
+        icon: CodeOutlined
+      },
+    },
+  ],
+}
+;
 

@@ -6,6 +6,7 @@
   </div>
 </template>
 
+<!--TODO 删除该文件 -->
 <script>
 export default {
   name: 'Background',

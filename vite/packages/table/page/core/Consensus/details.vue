@@ -20,7 +20,7 @@
 
 <script>
 import {computed} from "vue";
-import vSidebar from "@page/core/components/Sidebar.vue";
+import vSidebar from "@page/core/Consensus/componnents/Sidebar.vue";
 import vTags from "@page/core/components/Tags.vue";
 import Background from "@page/core/components/Background.vue";
 import {useBaseStore} from "@store/baseboard";

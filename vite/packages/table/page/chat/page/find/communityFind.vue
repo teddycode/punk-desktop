@@ -133,7 +133,7 @@
 <script>
 import { mapActions, mapWritableState } from 'pinia'
 import { communityStore } from '../../store/communityStore'
-import { hotCommunityData } from '../../../../js/data/chatList'
+import { hotCommunityData } from '@js/data/chatList'
 
 export default {
   props: ['dataList'],

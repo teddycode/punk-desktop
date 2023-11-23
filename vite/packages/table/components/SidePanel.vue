@@ -242,7 +242,7 @@ export default {
               tsbApi.window.setFullScreen(true)
             }
           } else if (item.event === 'goback') {
-            item.fn(this)
+            this.$router.go(-1)
           } else if (item.event === '/status') {
             if (this.$route.path === '/status') {
               this.$router.go(-1)

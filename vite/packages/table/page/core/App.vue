@@ -8,7 +8,7 @@
 
 <script>
 
-// 系统主要功能区的
+// 功能区入口
 export default {
   name: 'coreMain',
   data () {

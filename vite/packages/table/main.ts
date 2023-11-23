@@ -56,8 +56,7 @@ import dayjs from 'dayjs';
 import "../../public/css/styleSwitch/codemirror.scss"
 import "../../public/css/toast.scss"
 import "../../public/css/category.scss"
-
-import {router} from './router'
+import {processRouter, router} from './router'
 
 //腾讯IM部分
 import {loadChat, TUIKit} from './chat'
@@ -65,8 +64,17 @@ import {loadChat, TUIKit} from './chat'
 // initSocket()
 import {Notifications} from './js/common/sessionNotice'
 
-
 import WujieVue from 'wujie-vue3'
+// 导入elementplus库
+import ElementPlus from 'element-plus'
+// 导入fontawesomeIcon
+import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
+//国际化
+import i18n from "./lang/index"
+
+// 1. 状态管理与状态持久化存储
+const pinia = createPinia()
+pinia.use(piniaPersist)
 
 window.$currentEnv = currentEnv;
 window.$isWeb = isWeb;
@@ -75,14 +83,12 @@ window.$isMac = isMac;
 
 loadChat()
 
-
 // const { bus, setupApp, preloadApp, destroyApp } = WujieVue;
 // Your SDKAppID
 // init TUIKit
 
 const notice = new Notifications()
 window.$notice = notice
-
 
 dayjs.locale('zh-cn');
 
@@ -99,30 +105,26 @@ app.config.globalProperties.$isWeb = isWeb;
 app.config.globalProperties.$isClient = isClient;
 app.config.globalProperties.$isMac = isMac;
 
-// 状态管理器
-const pinia = createPinia()
-// 状态持久化存储
-pinia.use(piniaPersist)
-
 // @ts-ignore
 window.$ = $
 const options: PluginOptions = {}
 const $app = app.use(pinia).use(Antd).use(ColorPicker).use(router).use(VueViewer).use(setupCalendar, {}).use(
-    VueTippy,
-    // optional
-    {
-        directive: 'tippy', // => v-tippy
-        component: 'tippy', // => <tippy/>
-        componentSingleton: 'tippy-singleton', // => <tippy-singleton/>,
-        defaultProps: {
-            placement: 'auto-end',
-            allowHTML: true,
-            trigger: "mouseenter click"
-        }, // => Global default options * see all props
-    }
+  VueTippy,
+  // optional
+  {
+    directive: 'tippy', // => v-tippy
+    component: 'tippy', // => <tippy/>
+    componentSingleton: 'tippy-singleton', // => <tippy-singleton/>,
+    defaultProps: {
+      placement: 'auto-end',
+      allowHTML: true,
+      trigger: "mouseenter click"
+    }, // => Global default options * see all props
+  }
 ).use(Toast, options)
   .use(TUIKit).use(WujieVue)
   .use(VueShepherdPlugin)
+  .use(i18n) // 加载国际化插件
   .mount('#app')
 
 registerXTUI(app)
@@ -131,18 +133,17 @@ app.component('Icon', Icon)
 app.component('PanelButton', PanelButton)
 app.component('BackBtn', BackBtn)
 app.component('vueCustomScrollbar', vueCustomScrollbar)
-
-// 导入elementplus库
-import ElementPlus from 'element-plus'
 app.use(ElementPlus)
-// 导入fontawesomeIcon
-import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
+
 app.component('font-awesome-icon', FontAwesomeIcon)
 
 window.USER_DATA_PATH = window.globalArgs['user-data-dir']//挂载一个用户数据目录的常量，方便后续开发
 
 window.$app = $app
 
+//处理路由记录
+processRouter();
+
 export {
-    router
+  router
 };
