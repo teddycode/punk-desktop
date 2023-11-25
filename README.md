@@ -139,6 +139,7 @@ sass_binary_site=https://npm.taobao.org/mirrors/node-sass/
 PYTHON_MIRROR=http://npm.taobao.org/mirrors/python
 profiler_binary_host_mirror=http://npm.taobao.org/mirrors/node-inspector/
 registry=https://registry.npm.taobao.org
+canvas_binary_host_mirror=https://registry.npmmirror.com/-/binary/canvas
 ```
 
 4.在根目录运行yarn命令

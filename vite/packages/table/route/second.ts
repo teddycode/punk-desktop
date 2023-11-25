@@ -36,7 +36,8 @@ import ChatIndex from '@page/chat/index.vue'
 import ChatChild from "./main/chat"
 
 import Power from "@page/Power.vue";
-import coreBasicLayout from "@page/core/Layouts/BaseLayout.vue";
+// import coreBasicLayout from "@page/core/Layouts/BaseLayout.vue";
+import BasicLayout2 from "@page/core/Layouts/BaseLayout2.vue";
 import computing from "./core/computing";
 import consensus from "./core/consensus";
 import crypto from "./core/crypto";
@@ -52,7 +53,7 @@ export default [
   {   // 系统核心功能路由
     path: "/core",
     name: "core",
-    component: coreBasicLayout,
+    component: BasicLayout2,
     meta: {
       title: "核心功能",
     },
@@ -71,12 +72,12 @@ export default [
   {   // 其他Dapp功能路由
     path: "/dapps",
     name: "dapps",
-    component: coreBasicLayout,
+    component: BasicLayout2,
   },
   {   // 钱包区路由
     path: "/wallet",
     name: "wallet",
-    component: coreBasicLayout,
+    component: BasicLayout2,
   },
   {
     path: '/power',

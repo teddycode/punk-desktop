@@ -72,6 +72,7 @@ import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 //国际化
 import i18n from "./lang/index"
 
+
 // 1. 状态管理与状态持久化存储
 const pinia = createPinia()
 pinia.use(piniaPersist)

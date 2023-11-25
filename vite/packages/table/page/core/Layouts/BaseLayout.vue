@@ -1,38 +1,44 @@
 <template>
-  <div class="common-layout ">
-    <a-layout>
-      <a-layout-header style="background: #fff; padding: 0">
-        <layoutHeader :style="fixedTop?'position: fixed;zIndex:10;width:100%;':''">
-        </layoutHeader>
-      </a-layout-header>
-      <a-layout>
-        <a-layout-sider v-if="isMenu">
-          <layoutAside :style="fixedTop?'position: fixed;width: 200px;':''"></layoutAside>
-        </a-layout-sider>
-        <a-layout-content>
-          <pathBar v-if="isPathbar" :style="fixedTop?{position:'fixed',zIndex: 10}:null"></pathBar>
-          <breadcrumb v-if="isBreadcrumb"
-                      :style="fixedTop?{ position: 'fixed', zIndex: 10, width: '100%',  marginTop:isPathbar?'40px':'0'}:null"></breadcrumb>
-          <div class="content background " :style="maxHeidht">
-            <router-view></router-view>
-          </div>
-        </a-layout-content>
-      </a-layout>
-      <svg-icon name="icon-name"></svg-icon>
-    </a-layout>
-    <baseInfo></baseInfo>
-  </div>
+  <a-config-provider :component-size="modulesSize" :prefixCls="themes?'custom-dark':'ant'" :locale="locale">
+    <a-spin :spinning="loading" :delay="500" tip="飞速加载中...">
+      <div class="common-layout ">
+        <a-layout>
+          <a-layout-header style="background: #fff; padding: 0">
+            <layoutHeader :style="fixedTop?'position: fixed;zIndex:10;width:100%;':''">
+            </layoutHeader>
+          </a-layout-header>
+          <a-layout>
+            <a-layout-sider v-if="isMenu">
+              <layoutAside :style="fixedTop?'position: fixed;width: 200px;':''"></layoutAside>
+            </a-layout-sider>
+            <a-layout-content>
+              <!--              <pathBar v-if="isPathbar" :style="fixedTop?{position:'fixed',zIndex: 10}:null"></pathBar>-->
+              <breadcrumb v-if="isBreadcrumb"
+                          :style="fixedTop?{ position: 'fixed', zIndex: 10, width: '100%',  marginTop:isPathbar?'40px':'0'}:null"></breadcrumb>
+              <div class="content background " :style="maxHeidht">
+                <router-view></router-view>
+              </div>
+            </a-layout-content>
+          </a-layout>
+        </a-layout>
+        <baseInfo></baseInfo>
+      </div>
+    </a-spin>
+  </a-config-provider>
 </template>
 
 <script setup lang="ts">
 import layoutHeader from './components/layout-header.vue'
 import layoutAside from './components/layout-Aside.vue'
 import breadcrumb from './components/breadcrumb.vue'
-import pathBar from './components/pathBar.vue'
 import baseInfo from "./components/baseInfo.vue"
 import {computed, nextTick, provide, ref, watch} from "vue"
 import {useLayoutStore} from "@store/baseSettings.ts"; // 导入你的 Pinia store
 import {useRouter} from 'vue-router';
+import {ConfigProvider,} from 'ant-design-vue';
+import enUS from 'ant-design-vue/es/locale/en_US';
+import zhCN from 'ant-design-vue/es/locale/zh_CN';
+import dayjs from "dayjs";
 
 const router = useRouter()
 const store = useLayoutStore() // 使用 Pinia store
@@ -61,23 +67,36 @@ const maxHeidht = computed(() => {
   return `margin:${fixedTop.value ? height : 10}px 10px 10px 10px;`
 })
 
+// element-plus 国际化
+const locale = computed(() => {
+    let a = store.locales == "zh-cn" ? zhCN : enUS
+    dayjs.locale(a)
+    return a;
+  }
+)
+const modulesSize = computed(() => store.modulesSize)
+const themes = computed(() => store.themes)
+const themesColor = computed(() => store.themesColor)
+ConfigProvider.config({
+  theme: themesColor.value,
+});
 //  页面切换效果 左---右
 const tagView = computed(() => store.tagView)
 const transitionNames = ref("slide-right")
 watch(
-    () => router.currentRoute.value,
-    (to, from) => {
-      if (tagView.value.some(x => x.path === from.path)) {
-        if (tagView.value.findIndex(x => x.path === to.path) < tagView.value.findIndex(x => x
-            .path === from.path)) {
-          transitionNames.value = 'slide-left';
-        } else {
-          transitionNames.value = 'slide-right';
-        }
+  () => router.currentRoute.value,
+  (to, from) => {
+    if (tagView.value.some(x => x.path === from.path)) {
+      if (tagView.value.findIndex(x => x.path === to.path) < tagView.value.findIndex(x => x
+        .path === from.path)) {
+        transitionNames.value = 'slide-left';
       } else {
         transitionNames.value = 'slide-right';
       }
+    } else {
+      transitionNames.value = 'slide-right';
     }
+  }
 );
 </script>
 <style scoped>

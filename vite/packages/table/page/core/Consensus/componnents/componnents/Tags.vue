@@ -1,11 +1,11 @@
 <template>
   <div class="tags" v-if="showTags">
     <ul>
-      <li class="tags-li" v-for="(item,index) in tagsList" :class="{'active': isActive(item.path)}" :key="index">
+      <li class="tags-li" v-for="(item, index) in tagsList" :class="{'active': isActive(item.path)}" :key="index">
         <router-link :to="item.path" class="tags-li-title">{{ item.title }}</router-link>
         <span class="tags-li-icon" @click="closeTags(index)">
-                    <i class="el-icon-close"></i>
-                </span>
+          <i class="el-icon-close"></i>
+        </span>
       </li>
     </ul>
     <div class="tags-close-box">
@@ -31,31 +31,26 @@ import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router'
 import { useBaseStore } from '@store/baseboard'
 
 export default {
-  setup() {
+  setup () {
     const route = useRoute()
     const router = useRouter()
     const isActive = (path) => {
       return path === route.fullPath
     }
-
     const store = useBaseStore()
     const tagsList = computed(() => store.tagsList)
     const showTags = computed(() => tagsList.value.length > 0)
-
     // 关闭单个标签
     const closeTags = (index) => {
       const delItem = tagsList.value[index]
       store.delLastTag({ index })
-      const item = tagsList.value[index]
-          ? tagsList.value[index]
-          : tagsList.value[index - 1]
+      const item = tagsList.value[index] ? tagsList.value[index] : tagsList.value[index - 1]
       if (item) {
         delItem.path === route.fullPath && router.push(item.path)
       } else {
         router.push('/')
       }
     }
-
     // 设置标签
     const setTags = (route) => {
       const isExist = tagsList.value.some((item) => {
@@ -76,7 +71,6 @@ export default {
     onBeforeRouteUpdate((to) => {
       setTags(to)
     })
-
     // 关闭全部标签
     const closeAll = () => {
       store.commit('clearTags')
@@ -92,13 +86,11 @@ export default {
     const handleTags = (command) => {
       command === 'other' ? closeOther() : closeAll()
     }
-
     // 关闭当前页面的标签页
     // store.commit("closeCurrentTag", {
     //     $router: router,
     //     $route: route
     // });
-
     return {
       isActive,
       tagsList,
@@ -110,8 +102,7 @@ export default {
 }
 </script>
 
-
-<style scoped>
+<style>
 .tags {
   position: relative;
   height: 30px;

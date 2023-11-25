@@ -1,29 +1,22 @@
-import DetailsPage from "@page/core/Consensus/details.vue";
-import HomePage from "@page/core/Consensus/index.vue";
-import SelfPage from '@page/core/Consensus/self.vue'
+import DetailsPage from "@page/core/Consensus/detail.vue";
+import BasePage from "@page/core/Consensus/index.vue";
+import myConsensus from '@page/core/Consensus/self.vue'
 import {CodeOutlined} from "@ant-design/icons-vue";
 
 export default {
-  path: "consensus",
-  redirect: {name: "ConsensusHomePage"},
-  component: HomePage,
+  path: "consensusHome",
+  redirect: {name: "ConsensusPage"},
+  component: BasePage,
   meta: {
     icon: CodeOutlined
   },
   children: [
     {
-      path: "index",
-      name: "ConsensusHomePage",
-      component: HomePage,
-      meta: {
-        icon: CodeOutlined
-      }
-    },
-    {
-      path: "details",
-      name: "ConsensusDetails",
+      path: "/consensus",
+      name: "ConsensusPage",
       component: DetailsPage,
       meta: {
+        title: "共识",
         icon: CodeOutlined
       }
     },
@@ -34,7 +27,7 @@ export default {
         title: "我的共识",
         icon: CodeOutlined
       },
-      component: SelfPage,
+      component: myConsensus,
     },
   ]
 }

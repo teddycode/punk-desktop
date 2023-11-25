@@ -1,7 +1,15 @@
 <template>
   <div class="sidebar">
-    <el-menu class="sidebar-el-menu" :default-active="onRoutes" :collapse="collapse" background-color="#324157"
-             text-color="#bfcbd9" active-text-color="#20a0ff" unique-opened router>
+    <el-menu
+      class="sidebar-el-menu"
+      :default-active="onRoutes"
+      :collapse="collapse"
+      background-color="#324157"
+      text-color="#bfcbd9"
+      active-text-color="#20a0ff"
+      unique-opened
+      router
+    >
       <template v-for="item in items">
         <template v-if="item.subs">
           <el-submenu :index="item.index" :key="item.index">
@@ -16,8 +24,7 @@
                   {{ threeItem.title }}
                 </el-menu-item>
               </el-submenu>
-              <el-menu-item v-else :index="subItem.index" :key="subItem.index">{{ subItem.title }}
-              </el-menu-item>
+              <el-menu-item v-else :index="subItem.index" :key="subItem.index">{{ subItem.title }}</el-menu-item>
             </template>
           </el-submenu>
         </template>
@@ -33,41 +40,36 @@
 </template>
 
 <script>
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
-import { useBaseStore } from '@store/baseboard'
-
+import { computed } from "vue";
+import { useRoute } from "vue-router";
+import { useBaseStore } from "@store/baseboard";
 export default {
   setup() {
     const items = [
       {
-        icon: 'el-icon-apple',
-        index: '/consensus',
-        title: '共识',
+        icon: "el-icon-apple",
+        index: "/consensus",
+        title: "共识",
       },
       {
-        icon: 'el-icon-apple',
-        index: '/myConsensus',
-        title: '我的共识',
+        icon: "el-icon-apple",
+        index: "/self",
+        title: "我的共识",
       },
-    ]
-
-    const route = useRoute()
-
+    ];
+    const route = useRoute();
     const onRoutes = computed(() => {
-      return route.path
-    })
-
-    const store = useBaseStore()
-    const collapse = computed(() => store.collapse)
-
+      return route.path;
+    });
+    const store = useBaseStore();
+    const collapse = computed(() => store.collapse);
     return {
       items,
       onRoutes,
       collapse,
-    }
+    };
   },
-}
+};
 </script>
 
 <style scoped>
@@ -79,15 +81,12 @@ export default {
   bottom: 20px;
   overflow-y: scroll;
 }
-
 .sidebar::-webkit-scrollbar {
   width: 0;
 }
-
 .sidebar-el-menu:not(.el-menu--collapse) {
   width: 240px;
 }
-
 .sidebar > ul {
   height: 100%;
 }
