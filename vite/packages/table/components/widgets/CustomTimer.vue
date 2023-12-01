@@ -1,29 +1,37 @@
 <template>
   <Widget :desk="desk" :options="options">
-    <div class="absolute  left-4 top-4 h-6 w-16 pointer" @click="moveToday"></div>
-    <div class="my-calendar"
-         style="border-bottom: solid 1px  rgba(255, 255, 255, 0.1);color:var(--primary-text) !important">
-      <Calendar ref="calendar" :attributes="attributes" :color="selectedColor" :is-dark="isDark"
-                borderless style="color:var(--primary-text) !important" transparent>
+    <div class="absolute left-4 top-4 h-6 w-16 pointer" @click="moveToday"></div>
+    <div
+      class="my-calendar"
+      style="border-bottom: solid 1px rgba(255, 255, 255, 0.1); color: var(--primary-text) !important"
+    >
+      <Calendar
+        ref="calendar"
+        :attributes="attributes"
+        :color="selectedColor"
+        :is-dark="isDark"
+        borderless
+        style="color: var(--primary-text) !important"
+        transparent
+      >
       </Calendar>
     </div>
 
-
-    <a-row class="festival mt-4 s-item xt-bg-2 xt-text" style="border-radius: 12px;height: 60px;">
+    <a-row class="festival mt-4 s-item xt-bg-2 xt-text" style="border-radius: 12px; height: 60px">
       <a-col :span="11" class="flex flex-row items-center pl-2 py-2">
         <a-row>
           <a-col :span="4" class="flex pt-4">
-            <div class="round-dot "></div>
+            <div class="round-dot"></div>
           </a-col>
           <a-col>
             <div class="flex flex-col">
               <span>元旦</span>
-              <span style="font-size: 12px;">放假3天</span>
+              <span style="font-size: 12px">放假3天</span>
             </div>
           </a-col>
         </a-row>
       </a-col>
-      <a-col :span="13" class="flex  flex-row items-center justify-end pr-2 pt-4">12月30日~1月1日</a-col>
+      <a-col :span="13" class="flex flex-row items-center justify-end pr-2 pt-4">12月30日~1月1日</a-col>
     </a-row>
     <!--      <a-row class="festival mt-2 " style="border-radius: 12px;background: rgba(42, 42, 42, 1);height: 44px">-->
     <!--        <a-col :span="11" class="flex flex-row items-center pl-2">-->
@@ -32,22 +40,20 @@
     <!--        </a-col>-->
     <!--        <a-col :span="13"  class="text-right flex  items-center justify-end pr-2">6月22日~6月24日</a-col>-->
     <!--      </a-row>-->
-
   </Widget>
-
 </template>
 
 <script>
-import { mapActions } from 'pinia'
-import { cardStore } from '../../store/card'
-import Widget from '../card/Widget.vue'
-import { Calendar } from 'v-calendar'
-import 'v-calendar/style.css'
+import { mapActions } from 'pinia';
+import { cardStore } from '../../store/card';
+import Widget from '../card/Widget.vue';
+import { Calendar } from 'v-calendar';
+import 'v-calendar/style.css';
 
 export default {
   name: 'CustomTimer',
   props: ['desk'],
-  data () {
+  data() {
     return {
       status: 'pause',
       value: null,
@@ -56,50 +62,49 @@ export default {
         className: 'card',
         title: '日历',
         icon: 'carryout',
-        type: 'customTimer'
+        type: 'customTimer',
       },
-      attributes: [{
-        highlight: true,
-        dates: new Date()
-      },],
+      attributes: [
+        {
+          highlight: true,
+          dates: new Date(),
+        },
+      ],
       selectedColor: 'red',
-      isDark: true
-
-    }
+      isDark: true,
+    };
   },
   components: {
     Widget,
     Calendar,
   },
-  mounted () {
-
-  },
+  mounted() {},
   methods: {
-    onPanelChange (value, mode) {
-    },
+    onPanelChange(value, mode) {},
     ...mapActions(cardStore, ['removeCard']),
-    async moveToday () {
-      await this.$refs.calendar.move(new Date())
+    async moveToday() {
+      await this.$refs.calendar.move(new Date());
     },
-    showDrawer () {
-      this.visible = true
+    showDrawer() {
+      this.visible = true;
     },
-    onClose () {
-      this.visible = false
+    onClose() {
+      this.visible = false;
     },
-    removeCalendar () {
-      this.removeCard(this.customIndex)
-      this.visible = false
-    }
+    removeCalendar() {
+      this.removeCard(this.customIndex);
+      this.visible = false;
+    },
   },
-}
+};
 </script>
 <style>
 .vc-arrow {
   color: var(--primary-text) !important;
 }
 
-.vc-weekday, .vc-header > .vc-title {
+.vc-weekday,
+.vc-header > .vc-title {
   color: var(--primary-text) !important;
 }
 
@@ -127,9 +132,7 @@ export default {
   background: #363739;
 }
 
-:deep(
-    .ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner
-  ) {
+:deep(.ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner) {
   background: red;
   border-radius: 100%;
 }
@@ -144,10 +147,7 @@ export default {
   position: relative;
 }
 
-:deep(
-    .ant-picker-cell-in-view.ant-picker-cell-today
-      .ant-picker-cell-inner::before
-  ) {
+:deep(.ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before) {
   position: absolute;
   top: 0;
   right: 0;
@@ -156,10 +156,13 @@ export default {
   z-index: 1;
   border: 1px solid red;
   border-radius: 100%;
-  content: "";
+  content: '';
 }
 
-:deep(.ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-calendar-date-value,ant-picker-cell-inner ant-picker-calendar-date ant-picker-calendar-date-today) {
+:deep(
+    .ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-calendar-date-value,
+    ant-picker-cell-inner ant-picker-calendar-date ant-picker-calendar-date-today
+  ) {
   color: white;
   z-index: 2;
 }

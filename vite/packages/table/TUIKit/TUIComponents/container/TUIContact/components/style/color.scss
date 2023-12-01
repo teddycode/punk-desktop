@@ -5,30 +5,25 @@
     letter-spacing: 0;
   }
 }
-
 .icon {
   &-warn {
     background: coral;
-    color: #FFFFFF;
+    color: #ffffff;
     font-style: normal;
   }
 }
-
 .btn {
   font-weight: 400;
-  color: #FFFFFF;
+  color: #ffffff;
   letter-spacing: 0;
-
   &-cancel {
     border: 1px solid #dddddd;
     color: #666666;
   }
-
   &-default {
-    background: #006EFF;
-    border: 1px solid #006EFF;
+    background: #006eff;
+    border: 1px solid #006eff;
   }
-
   &:disabled {
     opacity: 0.3;
   }

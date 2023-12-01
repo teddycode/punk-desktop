@@ -1,12 +1,10 @@
 <template>
   <teleport to="body">
-
-    <div :style="show" class='pop-container' @click="closeFullScreen()">
-    </div>
+    <div :style="show" class="pop-container" @click="closeFullScreen()"></div>
     <droppable-area @leave="handleLeave">
-      <div :style="show" class="box  xt-modal" @click.stop="">
+      <div :style="show" class="box xt-modal" @click.stop="">
         <div class="title xt-text">
-          <input v-model="title" class="input-box" style="" type="title" @blur="updateGroupTitle()"/>
+          <input v-model="title" class="input-box" style="" type="title" @blur="updateGroupTitle()" />
           <div class="box-btn xt-bg-2" @click="disbandGroup">
             <Icon class="icon" icon="zhankai"></Icon>
           </div>
@@ -15,9 +13,12 @@
           <div v-for="(item, index) in iconLists" ref="iconRef" @contextmenu.prevent.stop="rightClick(index)">
             <drag-and-follow @drag-start="handleDragStart" @drag-end="handleDragEnd">
               <icon
-                  :data-index="index"
-                  :index="index" :isReSize="true" style="margin: 5px 10px;" v-bind="item"
-                  @onIconClick="closeFullScreen"
+                :data-index="index"
+                :index="index"
+                :isReSize="true"
+                style="margin: 5px 10px"
+                v-bind="item"
+                @onIconClick="closeFullScreen"
               >
               </icon>
             </drag-and-follow>
@@ -26,33 +27,32 @@
       </div>
     </droppable-area>
 
-    <a-drawer v-model:visible="visible" :height="200" :width="500" placement="bottom" style="z-index: 99999999;">
+    <a-drawer v-model:visible="visible" :height="200" :width="500" placement="bottom" style="z-index: 99999999">
       <BottomEdit :menuList="menuList"></BottomEdit>
     </a-drawer>
   </teleport>
 </template>
 
 <script>
-import icon from '../components/icon.vue'
-import DragAndFollow from '../components/DragAndFollow.vue'
-import DroppableArea from '../components/DroppableArea.vue'
-import BottomEdit from '../components/bottomEdit.vue'
+import icon from '../components/icon.vue';
+import DragAndFollow from '../components/DragAndFollow.vue';
+import DroppableArea from '../components/DroppableArea.vue';
+import BottomEdit from '../components/bottomEdit.vue';
 
-import { mapWritableState } from 'pinia'
-import { myIcons } from '../../../../store/myIcons.ts'
+import { mapWritableState } from 'pinia';
+import { myIcons } from '../../../../store/myIcons.ts';
 
 export default {
   props: {
     iconLists: {
       type: Object,
-      default: () => {
-      },
+      default: () => {},
     },
     groupTitle: {
-      type: String
+      type: String,
     },
   },
-  data () {
+  data() {
     return {
       title: this.groupTitle,
       index: 0,
@@ -60,103 +60,104 @@ export default {
       visible: false,
       isShow: true,
       menuList: [
-
         {
           icon: 'shezhi1',
           title: '设置',
           fn: () => {
-            this.editIcons()
+            this.editIcons();
           },
         },
         {
           icon: 'guanbi2',
           title: '删除',
           fn: () => {
-            this.deleteIcons()
+            this.deleteIcons();
           },
         },
-      ]
-    }
+      ],
+    };
   },
   inject: ['customIndex'],
   components: {
     icon,
     DragAndFollow,
     DroppableArea,
-    BottomEdit
+    BottomEdit,
   },
   computed: {
     ...mapWritableState(myIcons, ['isDrag', 'isPaste', 'iconList', 'isClose', 'iconState']),
-    show () {
-      return { display: this.isShow == true ? 'black' : 'none' }
-    }
+    show() {
+      return { display: this.isShow == true ? 'black' : 'none' };
+    },
   },
-  mounted () {
-    this.isDrag = false
+  mounted() {
+    this.isDrag = false;
   },
   methods: {
     // 全屏拖拽开始
-    handleDragStart (event) {
+    handleDragStart(event) {
       // 初始化
-      this.isDrag = true
-      this.isPaste = false
-      this.iconState = true
-      this.iconList = []
-      this.index = event.target.dataset.index // 获取拖拽的图标下标
-      this.iconList.push({ ...this.iconLists[this.index], iconIndex: this.customIndex })
+      this.isDrag = true;
+      this.isPaste = false;
+      this.iconState = true;
+      this.iconList = [];
+      this.index = event.target.dataset.index; // 获取拖拽的图标下标
+      this.iconList.push({ ...this.iconLists[this.index], iconIndex: this.customIndex });
     },
     // 全屏拖拽结束
-    handleDragEnd () {
-      if (this.isClose) { // 是否离开过全屏
+    handleDragEnd() {
+      if (this.isClose) {
+        // 是否离开过全屏
         // 粘贴到多图标组件
-        if (this.isPaste && this.iconState) this.deleteIcons()
+        if (this.isPaste && this.iconState) this.deleteIcons();
         // 恢复单图标组件
         else if (this.iconState) {
-          this.$emit('dragAddIcon', this.iconList[0])
-          this.deleteIcons()
+          this.$emit('dragAddIcon', this.iconList[0]);
+          this.deleteIcons();
         }
-        this.closeFullScreen() // 关闭全屏
-        this.isClose = false // 关闭全屏离开状态
+        this.closeFullScreen(); // 关闭全屏
+        this.isClose = false; // 关闭全屏离开状态
       }
-      this.isDrag = false
+      this.isDrag = false;
     },
     // 全屏离开
-    handleLeave () {
-      if (this.isDrag) { // 是否为拖拽状态
-        this.isShow = false
-        this.isClose = true
+    handleLeave() {
+      if (this.isDrag) {
+        // 是否为拖拽状态
+        this.isShow = false;
+        this.isClose = true;
       }
     },
     // 右键点击
-    rightClick (index) {
-      this.index = index
-      this.visible = true
+    rightClick(index) {
+      this.index = index;
+      this.visible = true;
     },
     // 多图标全屏模式关闭
-    closeFullScreen () {
-      this.$emit('closeFullScreen')
+    closeFullScreen() {
+      this.$emit('closeFullScreen');
     },
     // 解除多图标分组
-    disbandGroup () {
-      this.$emit('closeFullScreen')
-      this.$emit('disbandGroup')
+    disbandGroup() {
+      this.$emit('closeFullScreen');
+      this.$emit('disbandGroup');
     },
     // 更新多图标组件标题
-    updateGroupTitle () {
-      this.$emit('updateGroupTitle', this.title)
+    updateGroupTitle() {
+      this.$emit('updateGroupTitle', this.title);
     },
     // 编辑多图标组件中的单个图标
-    editIcons () {
-      this.visible = false
-      this.$emit('editIcons', this.index)
+    editIcons() {
+      this.visible = false;
+      this.$emit('editIcons', this.index);
     },
     // 删除多图标组件中的单个图标
-    deleteIcons () {
-      this.visible = false
-      this.$emit('deleteIcons', this.index)
-    }
-  }
-}
+    deleteIcons() {
+      this.visible = false;
+      this.$emit('deleteIcons', this.index);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -216,9 +217,7 @@ export default {
         outline: none;
         background: var(--main-mask-bg) !important;
         border-radius: 12px;
-
       }
-
     }
 
     .box-btn {
@@ -249,7 +248,6 @@ export default {
     &::-webkit-scrollbar {
       display: none;
     }
-
   }
 }
 </style>

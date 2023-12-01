@@ -1,7 +1,7 @@
 <template>
   <div class="box">
     <div class="box-block">
-      <img :src="imgDisplay" alt="">
+      <img :src="imgDisplay" alt="" />
       <span>{{ textPrompt }}</span>
       <div v-if="btnToggle" class="block-btn" @click="jumpPage">{{ btnText }}</div>
     </div>
@@ -23,26 +23,26 @@ export default {
     },
     btnDisplay: {
       type: Boolean,
-      default: true
+      default: true,
     },
     btnText: {
       type: String,
-      default: '返回'
+      default: '返回',
     },
     btnToggle: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
-  data () {
-    return {}
+  data() {
+    return {};
   },
   methods: {
-    jumpPage () {
-      this.$emit('notData', false)
-    }
+    jumpPage() {
+      this.$emit('notData', false);
+    },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -80,5 +80,3 @@ export default {
   }
 }
 </style>
-
-

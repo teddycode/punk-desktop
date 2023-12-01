@@ -33,47 +33,45 @@ const cloudNavsTpl = `
     </a-result>
   </template>
 </div>
-`
+`;
 
-const CloudNavsComp = require('../comp/cloudNavsComp.js')
-const { api } = require('../../../server-config')
-const { ipcRenderer: ipc } = require('electron')
+const CloudNavsComp = require('../comp/cloudNavsComp.js');
+const { api } = require('../../../server-config');
+const { ipcRenderer: ipc } = require('electron');
 
 module.exports = Vue.component('cloud-navs-page', {
   name: 'cloud-navs-page',
   template: cloudNavsTpl,
   component: { CloudNavsComp },
-  beforeRouteEnter (to, from, next) {
-    next(async vm => {
-      vm.myClouds = []
-      await vm.load(vm)
-    })
+  beforeRouteEnter(to, from, next) {
+    next(async (vm) => {
+      vm.myClouds = [];
+      await vm.load(vm);
+    });
   },
-  async beforeRouteUpdate (to, from, next) {
-    await this.load(this)
+  async beforeRouteUpdate(to, from, next) {
+    await this.load(this);
   },
-  data () {
+  data() {
     return {
       uid: Number,
-      myClouds: []
-    }
+      myClouds: [],
+    };
   },
   computed: {},
-  async mounted () {
-    await this.$store.dispatch('getCurrentUser')
-    this.uid = this.$store.getters.getCurrentUser.value.uid
+  async mounted() {
+    await this.$store.dispatch('getCurrentUser');
+    this.uid = this.$store.getters.getCurrentUser.value.uid;
   },
-  beforeCreate () {
-
-  },
+  beforeCreate() {},
   methods: {
-    async load (vm) {
-      await this.$store.dispatch('getAppUserNavs')
-      vm.myClouds = vm.$store.getters.getAppUserNavs
+    async load(vm) {
+      await this.$store.dispatch('getAppUserNavs');
+      vm.myClouds = vm.$store.getters.getAppUserNavs;
     },
-    Login () {
+    Login() {
       //location.href = api.getUrl(api.API_URL.user.login)
-      ipc.send('addTab', { url: api.getUrl(api.API_URL.user.login) })
-    }
-  }
-})
+      ipc.send('addTab', { url: api.getUrl(api.API_URL.user.login) });
+    },
+  },
+});

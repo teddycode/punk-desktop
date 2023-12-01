@@ -1,16 +1,16 @@
 <script lang="ts" setup>
-import {ref, toRefs, watch} from "vue";
-import {useDrop} from "vue3-dnd";
+import { ref, toRefs, watch } from 'vue';
+import { useDrop } from 'vue3-dnd';
 
-import {ItemTypes} from "./ItemTypes";
-import {DragItem} from "./interfaces";
-import {snapToGrid as doSnapToGrid} from "./snapToGrid";
+import { ItemTypes } from './ItemTypes';
+import { DragItem } from './interfaces';
+import { snapToGrid as doSnapToGrid } from './snapToGrid';
 
-import {storeToRefs} from "pinia";
-import {useFreeDeskStore} from "./store";
-import {cardStore} from "../../../store/card";
-import CustomDragLayer from "./CustomDragLayer.vue";
-import DraggableBox from "./DraggableBox.vue";
+import { storeToRefs } from 'pinia';
+import { useFreeDeskStore } from './store';
+import { cardStore } from '../../../store/card';
+import CustomDragLayer from './CustomDragLayer.vue';
+import DraggableBox from './DraggableBox.vue';
 
 const props = defineProps({
   desk: {},
@@ -32,11 +32,11 @@ const handleSnapToGridWhileDraggingChange = () => {
 const freeDeskStore: any = useFreeDeskStore();
 const card: any = cardStore();
 
-const {getCurrentDesk, freeDesk} = storeToRefs(freeDeskStore);
+const { getCurrentDesk, freeDesk } = storeToRefs(freeDeskStore);
 
-const {currentDesk} = toRefs(props);
+const { currentDesk } = toRefs(props);
 // 获取组件
-const {currentDeskId} = storeToRefs(card);
+const { currentDeskId } = storeToRefs(card);
 
 function renaw(cards) {
   let obj = {};
@@ -48,7 +48,7 @@ function renaw(cards) {
     }
     // 不存在要追加进去
     else {
-      const {id, name, data, customData} = item;
+      const { id, name, data, customData } = item;
 
       obj[item.id] = {
         top: 0,
@@ -60,7 +60,7 @@ function renaw(cards) {
       };
     }
   });
-  console.log("obj :>> ", obj);
+  console.log('obj :>> ', obj);
   freeDesk.value[currentDeskId.value] = obj;
 }
 
@@ -79,7 +79,7 @@ watch(currentDesk?.value.cards, (newV) => {
 // 1 缓存下来 如何缓存 怎么实现
 
 const moveBox = (id: string, left: number, top: number) => {
-  Object.assign(getCurrentDesk.value[id], {left, top}); // 现在我们可以安全地合并对象
+  Object.assign(getCurrentDesk.value[id], { left, top }); // 现在我们可以安全地合并对象
 };
 
 const [, drop] = useDrop(() => ({
@@ -109,14 +109,14 @@ const [, drop] = useDrop(() => ({
       :currentDesk="currentDesk"
     /> -->
     <DraggableBox
-        v-for="data in getCurrentDesk"
-        :id="data.id"
-        :key="data.id"
-        :currentDesk="currentDesk"
-        :data="data"
-        :left="data.left"
-        :snap-to-grid="snapToGridAfterDrop"
-        :top="data.top"
+      v-for="data in getCurrentDesk"
+      :id="data.id"
+      :key="data.id"
+      :currentDesk="currentDesk"
+      :data="data"
+      :left="data.left"
+      :snap-to-grid="snapToGridAfterDrop"
+      :top="data.top"
     >
       <template #item="{ data }">
         <slot :data="{ data }" name="item">{{ data }}</slot>
@@ -126,24 +126,24 @@ const [, drop] = useDrop(() => ({
       </template> -->
     </DraggableBox>
   </div>
-  <CustomDragLayer :snap-to-grid="snapToGridWhileDragging"/>
+  <CustomDragLayer :snap-to-grid="snapToGridWhileDragging" />
   <p>
     <label for="snapToGridWhileDragging">
       <input
-          id="snapToGridWhileDragging"
-          :checked="snapToGridWhileDragging"
-          type="checkbox"
-          @change="handleSnapToGridWhileDraggingChange"
+        id="snapToGridWhileDragging"
+        :checked="snapToGridWhileDragging"
+        type="checkbox"
+        @change="handleSnapToGridWhileDraggingChange"
       />
       <small>Snap to grid while dragging</small>
     </label>
-    <br/>
+    <br />
     <label for="snapToGridAfterDrop">
       <input
-          id="snapToGridAfterDrop"
-          :checked="snapToGridAfterDrop"
-          type="checkbox"
-          @change="handleSnapToGridAfterDropChange"
+        id="snapToGridAfterDrop"
+        :checked="snapToGridAfterDrop"
+        type="checkbox"
+        @change="handleSnapToGridAfterDropChange"
       />
       <small>Snap to grid after drop</small>
     </label>

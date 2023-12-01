@@ -345,7 +345,7 @@ body:not(.touch) .task-container:not(.collapsed):not(:hover) .task-collapse-butt
 }
 
 .task-info-container span + span:before {
-  content: " - ";
+  content: ' - ';
 }
 
 .task-container:not(.collapsed) .task-info-container .task-last-tab-title {

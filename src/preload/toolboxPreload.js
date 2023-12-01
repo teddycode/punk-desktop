@@ -1,9 +1,9 @@
-window.tsbApi = require('../browserApi/baseApi')
-window.tableApi = require('../tableApi/baseApi')
-const util = require('../util/util.js')
+window.tsbApi = require('../browserApi/baseApi');
+window.tableApi = require('../tableApi/baseApi');
+const util = require('../util/util.js');
 
-const tools = util.tools
+const tools = util.tools;
 
 window.$models = {
-  tools: tools
-}
+  tools: tools,
+};

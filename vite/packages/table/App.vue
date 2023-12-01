@@ -1,10 +1,15 @@
 <template>
   <!-- Your Drag-and-Drop Application -->
 
-  <div v-for="item of settings.down.count" v-if="settings.down.enable" :key="item" :class="settings.down.type + 'flake'"
-       style="z-index:9999"></div>
+  <div
+    style="z-index: 9999"
+    v-if="settings.down.enable"
+    v-for="item of settings.down.count"
+    :key="item"
+    :class="settings.down.type + 'flake'"
+  ></div>
   <a-config-provider :locale="locale">
-    <div :class="{ dark: settings ? settings.darkMod : '', 'horse_run': this.settings.houserun }" class="a-container ">
+    <div class="a-container" :class="{ dark: settings ? settings.darkMod : '', horse_run: this.settings.houserun }">
       <DndProvider :backend="HTML5Backend">
         <router-view></router-view>
       </DndProvider>
@@ -38,131 +43,152 @@
     </template>
   </a-modal> -->
   <audio ref="clock" src="/sound/clock.mp3"></audio>
-  <div v-if="backgroundImage.runpath && !settings.transparent" class="fixed inset-0 video-container ">
-    <video ref="backgroundVideo" autoplay="" class="fullscreen-video" loop="" muted="" playsinline="">
-      <source id="bgVid" :src="videoPath" type="video/mp4">
+  <div class="fixed inset-0 video-container" v-if="backgroundImage.runpath && !settings.transparent">
+    <video class="fullscreen-video" playsinline="" autoplay="" muted="" loop="" ref="backgroundVideo">
+      <source :src="videoPath" type="video/mp4" id="bgVid" />
     </video>
-
   </div>
-  <div v-else-if="backgroundImage.path && !settings.transparent" class="fixed inset-0 video-container ">
-    <img :src="backgroundImage.path" style="object-fit: cover;width: 100%;height: 100%">
+  <div v-else-if="backgroundImage.path && !settings.transparent" class="fixed inset-0 video-container">
+    <img id="wallpaper" style="object-fit: cover; width: 100%; height: 100%" :src="backgroundImage.path" />
   </div>
   <div class="fixed inset-0 background-img-blur-light" style="z-index: -1"></div>
 
-  <div v-if="taggingScreen" class="px-10 rounded-lg"
-       style="pointer-events:none;background: rgba(51,51,51,0.9);font-size: 8em;position: fixed;right: 10px;bottom: 10px;z-index: 999;">
+  <div
+    v-if="taggingScreen"
+    class="px-10 rounded-lg"
+    style="
+      pointer-events: none;
+      background: rgba(51, 51, 51, 0.9);
+      font-size: 8em;
+      position: fixed;
+      right: 10px;
+      bottom: 10px;
+      z-index: 999;
+    "
+  >
     {{ screenDetail.title || '主屏' }}
   </div>
 
-  <Modal v-if="userCardVisible" v-model:visible="userCardVisible" :blurFlag="true" animationName="b-t"
-         style="z-index:999">
+  <Modal
+    style="z-index: 999"
+    v-model:visible="userCardVisible"
+    v-if="userCardVisible"
+    animationName="b-t"
+    :blurFlag="true"
+  >
     <slot>
       <UserCard :key="userCardUid" :uid="userCardUid" :userInfo="userCardUserInfo"></UserCard>
     </slot>
   </Modal>
-  <Modal v-if="frameStoreVisible" v-model:visible="frameStoreVisible" :blurFlag="true"
-         animationName="b-t">
+  <Modal v-model:visible="frameStoreVisible" v-if="frameStoreVisible" animationName="b-t" :blurFlag="true">
     <slot>
-      <div class="mr-3 card half"
-           style="padding:0;width: 370px;background: var(--primary-bg);max-height: 550px;height: 550px;z-index: 9999999;position: relative;overflow: hidden">
+      <div
+        class="mr-3 card half"
+        style="
+          padding: 0;
+          width: 370px;
+          background: var(--primary-bg);
+          max-height: 550px;
+          height: 550px;
+          z-index: 9999999;
+          position: relative;
+          overflow: hidden;
+        "
+      >
         <FrameStoreWidget></FrameStoreWidget>
       </div>
     </slot>
   </Modal>
-
-
 </template>
 
 <script lang="ts">
-import zhCN from "ant-design-vue/es/locale/zh_CN";
-import {mapActions, mapWritableState} from "pinia";
-import {cardStore} from "@store/card"
-import {appStore} from "@store";
-import Barrage from "./components/comp/Barrage.vue";
-import {codeStore} from "@store/code";
-import {appsStore} from "@store/apps";
-import {steamUserStore} from "@store/steamUser";
-import {screenStore} from '@store/screen'
+import zhCN from 'ant-design-vue/es/locale/zh_CN';
+import { mapActions, mapState, mapWritableState } from 'pinia';
+import { cardStore } from './store/card';
+import { appStore } from './store';
+import Barrage from './components/comp/Barrage.vue';
+import { codeStore } from './store/code';
+import { appsStore } from './store/apps';
+import { steamUserStore } from './store/steamUser';
+import { screenStore } from './store/screen';
 
 import browser from './js/common/browser';
-import UserCard from "./components/small/UserCard.vue";
-import Modal from './components/Modal.vue'
-import {timerStore} from "@store/timer";
-import {toggleFullScreen} from "@js/common/common";
+import UserCard from './components/small/UserCard.vue';
+import Modal from './components/Modal.vue';
+import { timerStore } from './store/timer';
+import { Modal as antModal } from 'ant-design-vue';
+import { toggleFullScreen } from './js/common/common';
 // improt "/vite/src/util/"
-import {initStyle} from "@components/card/hooks/styleSwitch";
-import {initTheme} from "@components/card/hooks/themeSwitch";
-import FrameStoreWidget from "./components/team/FrameStoreWidget.vue";
+import { initStyle } from './components/card/hooks/styleSwitch/';
+import { initTheme } from './components/card/hooks/themeSwitch/';
+import FrameStoreWidget from './components/team/FrameStoreWidget.vue';
 
-import {DndProvider} from 'vue3-dnd'
-import {HTML5Backend} from 'react-dnd-html5-backend'
-
-window.browser = browser
-const {appModel} = window.$models
+import { DndProvider } from 'vue3-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+window.browser = browser;
+const { appModel } = window.$models;
 let startX,
-    startY,
-    moveEndX,
-    moveEndY,
-    X,
-    Y = 0;
+  startY,
+  moveEndX,
+  moveEndY,
+  X,
+  Y = 0;
 const distX = 80; //滑动感知最小距离
 const distY = 80; //滑动感知最小距离
 export default {
-  components: {FrameStoreWidget, Modal, UserCard, Barrage, DndProvider},
+  components: { FrameStoreWidget, Modal, UserCard, Barrage, DndProvider },
   data() {
     return {
       HTML5Backend,
-      touchDownRoutes: ["home", "lock"], //支持下滑的页面的白名单
-      touchUpRoutes: ["home", "lock"], //支持下滑的页面的白名单
+      touchDownRoutes: ['home', 'lock'], //支持下滑的页面的白名单
+      touchUpRoutes: ['home', 'lock'], //支持下滑的页面的白名单
       locale: zhCN,
       visible: false,
       dialogVisible: false,
       videoPath: '',
-      frameStoreVisible: false
+      frameStoreVisible: false,
     };
   },
 
   async mounted() {
-    initTheme()
-    initStyle()
+    initTheme();
+    initStyle();
     window.toggleFrameStore = () => {
-      this.frameStoreVisible = !this.frameStoreVisible
-      this.userCardVisible = false
-    }
+      this.frameStoreVisible = !this.frameStoreVisible;
+      this.userCardVisible = false;
+    };
 
-    window.addEventListener("keydown", this.KeyDown, true)// 监听按键事件
+    window.addEventListener('keydown', this.KeyDown, true); // 监听按键事件
 
     window.restore = () => {
-      this.settings.zoomFactor = 100
-      tsbApi.window.setZoomFactor(+this.settings.zoomFactor / 100).then()
-    }
-
+      this.settings.zoomFactor = 100;
+      tsbApi.window.setZoomFactor(+this.settings.zoomFactor / 100).then();
+    };
 
     ipc.on('updateRunningApps', async (event, args) => {
-      this.runningApps = args.runningApps
-      this.runningAppsInfo = {}
+      this.runningApps = args.runningApps;
+      this.runningAppsInfo = {};
       for (const app of args.runningApps) {
-        this.runningAppsInfo[app] = await appModel.get({nanoid: app})
-        this.runningAppsInfo[app].windowId = args.windows[args.runningApps.indexOf(app)]
-        ipc.send('getAppRunningInfo', {nanoid: app})
+        this.runningAppsInfo[app] = await appModel.get({ nanoid: app });
+        this.runningAppsInfo[app].windowId = args.windows[args.runningApps.indexOf(app)];
+        ipc.send('getAppRunningInfo', { nanoid: app });
       }
-    })
+    });
 
     ipc.on('updateRunningTableApps', async (event, args) => {
-      this.runningTableApps = args.apps
-      console.log(args.apps)
-    })
+      this.runningTableApps = args.apps;
+      console.log(args.apps);
+    });
 
     ipc.on('updateRunningInfo', (event, args) => {
-      let app = this.runningAppsInfo[args.nanoid]
-      app.capture = args.info.capture + '?t=' + Date.now()
-      app.memoryUsage = args.info.memoryUsage
-    })
+      let app = this.runningAppsInfo[args.nanoid];
+      app.capture = args.info.capture + '?t=' + Date.now();
+      app.memoryUsage = args.info.memoryUsage;
+    });
 
-
-    document.body.classList.add('lg')
-    this.reset()//重置部分状态
-    this.sortClock()
+    document.body.classList.add('lg');
+    this.reset(); //重置部分状态
+    this.sortClock();
     window.updateMusicStatusHandler = this.updateMusic;
 
     this.bindTouchEvents();
@@ -170,9 +196,19 @@ export default {
   },
 
   computed: {
-    ...mapWritableState(cardStore, ["customComponents", "clockEvent", "clockFlag"]),
-    ...mapWritableState(timerStore, ["appDate"]),
-    ...mapWritableState(appStore, ['userCardVisible', 'fullScreen', 'userCardUid', 'userCardUserInfo', 'settings', 'routeUpdateTime', 'userInfo', 'init', 'backgroundImage']),
+    ...mapWritableState(cardStore, ['customComponents', 'clockEvent', 'clockFlag']),
+    ...mapWritableState(timerStore, ['appDate']),
+    ...mapWritableState(appStore, [
+      'userCardVisible',
+      'fullScreen',
+      'userCardUid',
+      'userCardUserInfo',
+      'settings',
+      'routeUpdateTime',
+      'userInfo',
+      'init',
+      'backgroundImage',
+    ]),
     ...mapWritableState(codeStore, ['myCode']),
     ...mapWritableState(appsStore, ['runningApps', 'runningAppsInfo', 'runningTableApps']),
     ...mapWritableState(screenStore, ['taggingScreen', 'screenDetail']),
@@ -182,41 +218,46 @@ export default {
     ...mapActions(appStore, ['setMusic', 'reset']),
     ...mapActions(cardStore, ['sortClock']),
     ...mapActions(codeStore, ['verify']),
-    ...mapActions(steamUserStore, ['setUserData', 'setSteamLoginData', 'setGameList', 'addGameDetail', 'onRefreshToken']),
+    ...mapActions(steamUserStore, [
+      'setUserData',
+      'setSteamLoginData',
+      'setGameList',
+      'addGameDetail',
+      'onRefreshToken',
+    ]),
     KeyDown(event) {
       if (event.keyCode === 122) {
-        toggleFullScreen()
-        event.preventDefault()
-        event.stopPropagation()
+        toggleFullScreen();
+        event.preventDefault();
+        event.stopPropagation();
       }
       if (this.fullScreen) {
         if (event.keyCode === 27) {
-          this.fullScreen = false
-          event.preventDefault()
-          event.stopPropagation()
+          this.fullScreen = false;
+          event.preventDefault();
+          event.stopPropagation();
         }
       }
     },
     bindTouchEvents() {
-      $(".a-container").on("touchstart", (e) => {
-        startX = e.originalEvent.changedTouches[0].pageX,
-            startY = e.originalEvent.changedTouches[0].pageY;
+      $('.a-container').on('touchstart', (e) => {
+        (startX = e.originalEvent.changedTouches[0].pageX), (startY = e.originalEvent.changedTouches[0].pageY);
       });
-      $(".a-container").on("touchend", (e) => {
-        moveEndX = e.originalEvent.changedTouches[0].pageX,
-            moveEndY = e.originalEvent.changedTouches[0].pageY,
-            X = moveEndX - startX,
-            Y = moveEndY - startY;
+      $('.a-container').on('touchend', (e) => {
+        (moveEndX = e.originalEvent.changedTouches[0].pageX),
+          (moveEndY = e.originalEvent.changedTouches[0].pageY),
+          (X = moveEndX - startX),
+          (Y = moveEndY - startY);
 
         if (X > distX) {
-          console.log("向右滑", distX);
+          console.log('向右滑', distX);
           //e.preventDefault();
         } else if (X < -distX) {
-          console.log("向左滑", distX);
+          console.log('向左滑', distX);
           //e.preventDefault();
         } else if (Y > distY && startY <= 50) {
           if (this.touchDownRoutes.indexOf(this.$route.name) > -1) {
-            ipc.send('openGlobalSearch')
+            ipc.send('openGlobalSearch');
             e.preventDefault();
           }
         } else if (Y < -distY) {
@@ -227,119 +268,112 @@ export default {
           // }
           //e.preventDefault();
         } else {
-          console.log("just touch");
+          console.log('just touch');
         }
       });
     },
     updateMusic(music) {
       this.setMusic(music);
     },
-    ...mapActions(cardStore, ["removeClock", "sortClock"]),
+    ...mapActions(cardStore, ['removeClock', 'sortClock']),
     handleOk() {
       this.visible = false;
       this.removeClock(0);
       this.$refs.clock.pause();
     },
-
   },
   watch: {
     'settings.transparent': {
       handler() {
         if (this.settings.transparent) {
-          $('body').css('background', 'transparent')
+          $('body').css('background', 'transparent');
         } else {
-          $('body').css('background', 'rgb(25, 25, 25)')
+          $('body').css('background', 'rgb(25, 25, 25)');
         }
-      }
+      },
       // document.body.attributes['background']=''
     },
-    "appDate.minutes": {
+    'appDate.minutes': {
       handler(newVal, oldVal) {
-        this.sortClock()
+        this.sortClock();
         try {
           if (
-              this.appDate.minutes === this.clockEvent[0].dateValue.minutes &&
-              this.appDate.hours === this.clockEvent[0].dateValue.hours && this.clockEvent[0].flag === undefined
+            this.appDate.minutes === this.clockEvent[0].dateValue.minutes &&
+            this.appDate.hours === this.clockEvent[0].dateValue.hours &&
+            this.clockEvent[0].flag === undefined
           ) {
             this.visible = true;
             setTimeout(() => {
               this.$refs.clock.play();
-            }, 1000)
+            }, 1000);
           }
-        } catch (err) {
-
-        }
+        } catch (err) {}
       },
       immediate: true,
     },
-    "clockFlag": {
+    clockFlag: {
       handler(newVal, oldVal) {
         try {
           if (
-              this.appDate.minutes === this.clockEvent[0].dateValue.minutes &&
-              this.appDate.hours === this.clockEvent[0].dateValue.hours && this.clockEvent[0].flag === undefined
+            this.appDate.minutes === this.clockEvent[0].dateValue.minutes &&
+            this.appDate.hours === this.clockEvent[0].dateValue.hours &&
+            this.clockEvent[0].flag === undefined
           ) {
             this.visible = true;
             setTimeout(() => {
               this.$refs.clock.play();
-            }, 1000)
+            }, 1000);
           } else {
             this.visible = false;
-            this.$refs.clock.pause()
+            this.$refs.clock.pause();
           }
-        } catch (err) {
-
-        }
+        } catch (err) {}
       },
       immediate: true,
     },
-    "userInfo.onlineGradeExtra": {
+    'userInfo.onlineGradeExtra': {
       handler(newVal, oldVal) {
-        window.lv = 1
+        window.lv = 1;
         if (this.userInfo.onlineGradeExtra) {
-          window.lv = this.userInfo.onlineGradeExtra.lv
+          window.lv = this.userInfo.onlineGradeExtra.lv;
         }
-
       },
       immediate: true,
     },
-    "backgroundImage": {
+    backgroundImage: {
       handler() {
         if (this.backgroundImage.runpath) {
-          document.body.style.setProperty('--suspensiondBackGround', "rgb(26,26,26,.65)");
+          document.body.style.setProperty('--suspensiondBackGround', 'rgb(26,26,26,.65)');
           document.body.style.setProperty('--suspensiondBackGroundBlur', 50 + 'px');
-          document.body.style.setProperty('--gradient', "rgb(26,26,26,.65)");
-          document.body.style.setProperty('--suspensiondBackGroundBoxShadow', "0px 0px 10px 0px rgba(0,0,0,0.5)");
+          document.body.style.setProperty('--gradient', 'rgb(26,26,26,.65)');
+          document.body.style.setProperty('--suspensiondBackGroundBoxShadow', '0px 0px 10px 0px rgba(0,0,0,0.5)');
 
-          document.body.style.backgroundImage = ""
-          this.videoPath = this.backgroundImage.runpath
+          document.body.style.backgroundImage = '';
+          this.videoPath = this.backgroundImage.runpath;
           this.$nextTick(() => {
-            this.$refs.backgroundVideo.load()
-            this.$refs.backgroundVideo.play()
-
-          })
-        } else if (this.backgroundImage.path !== "") {
-          document.body.style.setProperty('--suspensiondBackGround', "rgb(26,26,26,.65)");
+            this.$refs.backgroundVideo.load();
+            this.$refs.backgroundVideo.play();
+          });
+        } else if (this.backgroundImage.path !== '') {
+          document.body.style.setProperty('--suspensiondBackGround', 'rgb(26,26,26,.65)');
           document.body.style.setProperty('--suspensiondBackGroundBlur', 50 + 'px');
-          document.body.style.setProperty('--gradient', "rgb(26,26,26,.65)");
-          document.body.style.setProperty('--suspensiondBackGroundBoxShadow', "0px 0px 10px 0px rgba(0,0,0,0.5)");
-
+          document.body.style.setProperty('--gradient', 'rgb(26,26,26,.65)');
+          document.body.style.setProperty('--suspensiondBackGroundBoxShadow', '0px 0px 10px 0px rgba(0,0,0,0.5)');
         } else {
-          document.body.style.setProperty('--suspensiondBackGround', "rgb(33, 33, 33)");
+          document.body.style.setProperty('--suspensiondBackGround', 'rgb(33, 33, 33)');
           document.body.style.setProperty('--suspensiondBackGroundBlur', 0 + 'px');
-          document.body.style.setProperty('--gradient', "linear-gradient(-33deg,#333333, #212121)");
-          document.body.style.setProperty('--suspensiondBackGroundBoxShadow', "0px");
+          document.body.style.setProperty('--gradient', 'linear-gradient(-33deg,#333333, #212121)');
+          document.body.style.setProperty('--suspensiondBackGroundBoxShadow', '0px');
 
-          document.body.style.background = '#191919'
+          document.body.style.background = '#191919';
         }
-
       },
       immediate: true,
-      deep: true
+      deep: true,
     },
-    "steamLoginData.refreshToken": {
+    'steamLoginData.refreshToken': {
       handler() {
-        this.onRefreshToken()
+        this.onRefreshToken();
       },
       immediate: true,
     },
@@ -348,10 +382,9 @@ export default {
 </script>
 
 <style>
-@import "./assets/common.css";
+@import './assets/common.css';
 
 .a-container {
   width: 100%;
 }
 </style>
-

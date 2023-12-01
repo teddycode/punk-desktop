@@ -23,23 +23,22 @@ const tpls = `
     </a-col>
   </a-row>
 </div>
-`
+`;
 
 Vue.component('GroupListComp', {
   props: {
-    myGroups: []
+    myGroups: [],
   },
-  data () {
-    return {}
+  data() {
+    return {};
   },
   template: tpls,
-  mounted () {
-  },
+  mounted() {},
   methods: {
-    clickCard (group) {
-      this.$router.push({ name: 'groupNavs', query: { id: group.id, t: Date.now() } })
-      const spliceStr = `L1-${group.id}`
-      resetOtherTree('group', [spliceStr])
-    }
-  }
-})
+    clickCard(group) {
+      this.$router.push({ name: 'groupNavs', query: { id: group.id, t: Date.now() } });
+      const spliceStr = `L1-${group.id}`;
+      resetOtherTree('group', [spliceStr]);
+    },
+  },
+});

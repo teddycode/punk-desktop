@@ -1,7 +1,7 @@
 <template>
   <!-- 文本列表 -->
   <template v-if="clipItem.type === 'text'">
-    <TextItem :clip-item="clipItem" @previewItem="previewItem"></TextItem>
+    <TextItem @previewItem="previewItem" :clip-item="clipItem"></TextItem>
     <!--    &lt;!&ndash; 列表主界面 &ndash;&gt;-->
     <!--    <div style="width: 338px;height:420px;flex-shrink: 0; " v-if="controlsShow === false && codeLanguageShow === false"-->
     <!--         class="flex flex-col rounded-lg justify-between " @contextmenu="textButton">-->
@@ -41,7 +41,6 @@
     <!--      </div>-->
     <!--    </div>-->
 
-
     <!--    &lt;!&ndash; 操作界面 &ndash;&gt;-->
     <!--    <div v-else-if="controlsShow === true" style="width: 338px;height:420px;">-->
     <!--      <div class="flex s-item flex-col rounded-lg px-4 py-3 h-full default-content">-->
@@ -66,7 +65,6 @@
     <!--        </div>-->
     <!--      </div>-->
     <!--    </div>-->
-
 
     <!--    &lt;!&ndash; 代码语言切换界面 &ndash;&gt;-->
     <!--    <div v-else style="width: 338px;height:100%;" class="flex flex-col">-->
@@ -96,11 +94,9 @@
   </template>
   <!-- 文本列表 -->
 
-
   <!-- 图片列表 -->
   <template v-if="clipItem.type === 'image'">
-
-    <ImageItem :clip-item="clipItem" @previewItem="previewItem"></ImageItem>
+    <ImageItem @previewItem="previewItem" :clip-item="clipItem"></ImageItem>
 
     <!-- 列表主界面 -->
     <!--    <div style="width: 338px;height:420px;" v-if="controlsShow === false" class="flex flex-col"-->
@@ -155,14 +151,12 @@
 
     <!--      </div>-->
     <!--    </div>-->
-
   </template>
   <!-- 图片列表 -->
 
-
   <!-- 文件列表 -->
   <template v-if="clipItem.type === 'file'">
-    <FileItem :clip-item="clipItem" @previewItem="previewItem"></FileItem>
+    <FileItem @previewItem="previewItem" :clip-item="clipItem"></FileItem>
 
     <!--    &lt;!&ndash; 列表主界面 &ndash;&gt;-->
     <!--    <div style="width: 338px;height:420px;" v-if="controlsShow === false" class="flex flex-col"-->
@@ -219,10 +213,9 @@
   </template>
   <!-- 文件列表 -->
 
-
   <!-- 视频列表 -->
   <template v-if="clipItem.type === 'video'">
-    <VideoItem :clip-item="clipItem" @previewItem="previewItem"></VideoItem>
+    <VideoItem @previewItem="previewItem" :clip-item="clipItem"></VideoItem>
 
     <!--    &lt;!&ndash; 列表主界面 &ndash;&gt;-->
     <!--    <div style="width: 338px;height:420px;" class="flex flex-col " v-if="controlsShow === false">-->
@@ -275,10 +268,9 @@
   </template>
   <!-- 视频列表-->
 
-
   <!-- 音频列表 -->
   <template v-if="clipItem.type === 'audio'">
-    <AudioItem :clip-item="clipItem" @previewItem="previewItem"></AudioItem>
+    <AudioItem @previewItem="previewItem" :clip-item="clipItem"></AudioItem>
     <!-- 列表主界面 -->
     <!--    <div style="width: 338px;height:420px;" class="flex flex-col" v-if="controlsShow === false">-->
     <!--      &lt;!&ndash; 标题内容 &ndash;&gt;-->
@@ -329,29 +321,28 @@
   </template>
   <!-- 音频列表 -->
 
-
   <!-- 设置弹窗 -->
   <ClipSetDrawer ref="setDrawer"></ClipSetDrawer>
 </template>
 
 <script>
-import HorzontanlPanelIcon from '../../../components/HorzontanlPanelIcon.vue'
-import ClipSetDrawer from './clipPreview/ClipSetDrawer.vue'
-import ClipCodemirror from './clipPreview/ClipCodemirror.vue'
-import { mapActions, mapWritableState } from 'pinia'
-import { clipboardStore } from '../store'
-import textCodeMirror from './clipPreview/textCodeMirror.vue'
-import ClipVideo from './parser/ClipVideo.vue'
-import ClipAudio from './parser/ClipAudio.vue'
-import { codeLanguage } from '../../../js/data/clipTheme'
-import ClipItemWidget from './ClipItemWidget.vue'
-import { getDateTime } from '../../../util'
-import TextItem from './items/TextItem.vue'
-import ImageItem from './items/ImageItem.vue'
-import FileItem from './items/FileItem.vue'
-import VideoItem from './items/VideoItem.vue'
-import AudioItem from './items/AudioItem.vue'
-
+import HorzontanlPanelIcon from '../../../components/HorzontanlPanelIcon.vue';
+import ClipSetDrawer from './clipPreview/ClipSetDrawer.vue';
+import { toRaw } from 'vue';
+import ClipCodemirror from './clipPreview/ClipCodemirror.vue';
+import { mapActions, mapWritableState } from 'pinia';
+import { clipboardStore } from '../store';
+import textCodeMirror from './clipPreview/textCodeMirror.vue';
+import ClipVideo from './parser/ClipVideo.vue';
+import ClipAudio from './parser/ClipAudio.vue';
+import { codeLanguage } from '../../../js/data/clipTheme';
+import ClipItemWidget from './ClipItemWidget.vue';
+import { getDateTime } from '../../../util';
+import TextItem from './items/TextItem.vue';
+import ImageItem from './items/ImageItem.vue';
+import FileItem from './items/FileItem.vue';
+import VideoItem from './items/VideoItem.vue';
+import AudioItem from './items/AudioItem.vue';
 export default {
   components: {
     AudioItem,
@@ -365,16 +356,15 @@ export default {
     textCodeMirror,
     ClipSetDrawer,
     ClipVideo,
-    ClipAudio
+    ClipAudio,
   },
   props: {
     clipItem: {
       type: Object,
-      default: () => {
-      }
-    }
+      default: () => {},
+    },
   },
-  data () {
+  data() {
     return {
       type: {},
       img: {},
@@ -391,8 +381,11 @@ export default {
       textType: [
         { title: '纯文本', icon: 'ziyuan', name: 'text', id: 0 },
         {
-          title: '代码块', icon: 'daima', name: 'code', id: 1
-        }
+          title: '代码块',
+          icon: 'daima',
+          name: 'code',
+          id: 1,
+        },
       ],
       defaultTextType: { title: '纯文本', icon: 'ziyuan', name: 'text' },
 
@@ -402,7 +395,7 @@ export default {
         { title: '打开链接', intr: 'Ctrl + O', id: 'co' },
         { title: '预览', intr: 'Space', id: 's' },
         { title: '添加到收藏', intr: 'Ctrl + S', id: 'cs' },
-        { title: '删除', intr: 'Delete', id: 'd' }
+        { title: '删除', intr: 'Delete', id: 'd' },
       ],
 
       // 图片快捷键操作按钮
@@ -413,7 +406,7 @@ export default {
         { title: '复制路径', intr: 'Ctrl + Alt + C', id: 'cac' },
         { title: '在资源管理器中打开', intr: 'Ctrl + Enter', id: 'ce' },
         { title: '添加到收藏', intr: 'Ctrl + S', id: 'cs' },
-        { title: '删除', intr: 'Delete', id: 'd' }
+        { title: '删除', intr: 'Delete', id: 'd' },
       ],
 
       settingsScroller: {
@@ -421,174 +414,171 @@ export default {
         swipeEasing: true,
         suppressScrollY: false,
         suppressScrollX: true,
-        wheelPropagation: true
+        wheelPropagation: true,
       },
 
       // 代码块语言包切换
       codeLanguage,
-
-    }
+    };
   },
 
   computed: {
     ...mapWritableState(clipboardStore, ['previewShow', 'clipSetShow', 'settings', 'tab']),
-    showArray () {
+    showArray() {
       if (!this.clipItem.showType) {
         if (this.clipSetShow) {
-          const newTextArr = this.textType.slice()  // 将文本底部tab数组复制一份
-          this.clipItem.showType = newTextArr.reverse()  // 将复制的文本底部tab数组进行反转
+          const newTextArr = this.textType.slice(); // 将文本底部tab数组复制一份
+          this.clipItem.showType = newTextArr.reverse(); // 将复制的文本底部tab数组进行反转
         } else {
-          this.clipItem.showType = this.textType  // 返回文本底部tab没有改变的数组
+          this.clipItem.showType = this.textType; // 返回文本底部tab没有改变的数组
         }
-        this.defaultTextType = this.clipItem.showType[0]
+        this.defaultTextType = this.clipItem.showType[0];
       }
-      return this.clipItem.showType
+      return this.clipItem.showType;
     },
-    timeText () {
-      const time = getDateTime(new Date(this.clipItem.createTime))
-      return `${time.hours}:${time.minutes}:${time.seconds}` + '&nbsp;&nbsp;&nbsp;' + `${time.month}月${time.day}日`
-    }
+    timeText() {
+      const time = getDateTime(new Date(this.clipItem.createTime));
+      return `${time.hours}:${time.minutes}:${time.seconds}` + '&nbsp;&nbsp;&nbsp;' + `${time.month}月${time.day}日`;
+    },
   },
 
   watch: {
-    'clipItem': {
-      handler () {
-        this.refresh()
-      }
+    clipItem: {
+      handler() {
+        this.refresh();
+      },
     },
-    'defaultTextType': {
-      handler () {
-        this.defaultTextType = this.defaultTextType
+    defaultTextType: {
+      handler() {
+        this.defaultTextType = this.defaultTextType;
       },
       immediate: true,
     },
   },
 
-  mounted () {
-    window.addEventListener('keydown', this.clipKeyDown)
+  mounted() {
+    window.addEventListener('keydown', this.clipKeyDown);
   },
 
   methods: {
     ...mapActions(clipboardStore, ['changeClipMode', 'isOpenPreview']),
-    refresh () {
-
+    refresh() {
       // this.type = this.getType(this.clipItem.type)
       // this.capacity = this.clipItem.content.length + '个字符'
       // if (this.clipItem.type === 'image') {
       //   this.img = toRaw(this.clipItem.content).toDataURL()
       // }
     },
-    getType (type) {
+    getType(type) {
       switch (type) {
         case 'text':
           return {
             icon: 'text-align-left',
-            title: '文本'
-          }
+            title: '文本',
+          };
         case 'image':
           return {
             icon: 'image',
-            title: '图片'
-          }
+            title: '图片',
+          };
         case 'file':
           return {
             icon: 'file',
-            title: '文件'
-          }
+            title: '文件',
+          };
         case 'video':
           return {
             icon: 'video',
-            title: '视频'
-          }
+            title: '视频',
+          };
         case 'audio':
           return {
             title: '音频',
-            icon: 'erji1'
-          }
+            icon: 'erji1',
+          };
       }
-
     },
     // 鼠标右键触发
-    textButton () {
-      this.controlsShow = true
+    textButton() {
+      this.controlsShow = true;
     },
     // 返回按钮
-    backClip () {
-      this.controlsShow = false
-      this.codeLanguageShow = false
+    backClip() {
+      this.controlsShow = false;
+      this.codeLanguageShow = false;
     },
 
     // 键盘快捷键触发
-    clipKeyDown (e) {
+    clipKeyDown(e) {
       // 打开预览快捷键功能
       if (e.keyCode === 32) {
         if (this.controlsShow) {
-          console.log('按下key', e.keyCode)
-          this.$emit('previewItem', this.clipItem)  // 模板搭建测试,后期需要根据剪切板的id来触发预览
-          this.isOpenPreview(true)
-          this.controlsShow = false
+          console.log('按下key', e.keyCode);
+          this.$emit('previewItem', this.clipItem); // 模板搭建测试,后期需要根据剪切板的id来触发预览
+          this.isOpenPreview(true);
+          this.controlsShow = false;
         }
       }
     },
 
     // 快捷键按钮触发
-    keyOperation (item) {
+    keyOperation(item) {
       switch (item.id) {
         case 'cc':
-          message.success('复制成功')
-          console.log('复制', this.clipItem)
-          break
+          message.success('复制成功');
+          console.log('复制', this.clipItem);
+          break;
         case 'co':
-          console.log('打开链接')
-          message.success('打开链接')
-          break
+          console.log('打开链接');
+          message.success('打开链接');
+          break;
         case 's':
-          message.success('预览')
-          this.$emit('previewItem', this.clipItem)
+          message.success('预览');
+          this.$emit('previewItem', this.clipItem);
 
           // console.log(this.clip);
-          this.isOpenPreview(true)
-          break
+          this.isOpenPreview(true);
+          break;
         case 'cs':
-          message.success('添加收藏')
-          console.log('添加收藏')
-          break
+          message.success('添加收藏');
+          console.log('添加收藏');
+          break;
         case 'd':
-          message.success('删除')
-          console.log('删除')
-          break
+          message.success('删除');
+          console.log('删除');
+          break;
         case 'ce':
-          message.success('资源管理器打开')
-          console.log('资源管理打开')
-          break
+          message.success('资源管理器打开');
+          console.log('资源管理打开');
+          break;
         case 'cac':
-          message.success('复制路径')
-          console.log('复制路径')
-          break
+          message.success('复制路径');
+          console.log('复制路径');
+          break;
       }
     },
-    previewItem (item) {
-      console.log('猫盘', item)
-      this.$emit('previewItem', item)
+    previewItem(item) {
+      console.log('猫盘', item);
+      this.$emit('previewItem', item);
     },
     // 打开代码块语言包切换界面
-    openCode () {
-      this.codeLanguageShow = true
+    openCode() {
+      this.codeLanguageShow = true;
     },
 
     // 代码块语言包切换的回调事件
-    clickCodeLanguage (item) {
-      this.changeClipMode(item.abbr) // 将代码块语言包进行替换的方法
-      this.defaultTextType.title = item.title
-      this.codeLanguageShow = false
+    clickCodeLanguage(item) {
+      this.changeClipMode(item.abbr); // 将代码块语言包进行替换的方法
+      this.defaultTextType.title = item.title;
+      this.codeLanguageShow = false;
     },
 
     // 打开设置
-    openClipSet () {
-      this.$refs.setDrawer.clipOpenShow()
+    openClipSet() {
+      this.$refs.setDrawer.clipOpenShow();
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -596,7 +586,6 @@ export default {
 .h-item {
   background: var(--primary-bg);
 }
-
 
 // 隐藏滚动条
 :deep(.ps__thumb-y) {

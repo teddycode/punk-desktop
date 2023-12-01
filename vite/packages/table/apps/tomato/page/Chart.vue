@@ -1,28 +1,30 @@
 <template>
-  <Widget :customIndex="customIndex" :desk="desk" :options="options">
+  <Widget :options="options" :customIndex="customIndex" :desk="desk">
     <div class="title">本周番茄时间</div>
     <div class="time">{{ this.weekTime }}</div>
 
     <div class="echarts">
-      <a-tooltip v-for="(item,index) in this.tomatoList" :key="index" placement="top">
-        <div :class="index == activeIndex ? 'active-col':''"
-             :style="{'height': (item? item/this.maxTomato*100 : 0) + 10 + 'px'}"
-             class="echarts-col"
-             @click="onChangeActive(index)"
+      <a-tooltip v-for="(item, index) in this.tomatoList" :key="index" placement="top">
+        <div
+          class="echarts-col"
+          :style="{ height: (item ? (item / this.maxTomato) * 100 : 0) + 10 + 'px' }"
+          :class="index == activeIndex ? 'active-col' : ''"
+          @click="onChangeActive(index)"
         >
           <!-- <span v-if="index == activeIndex">{{ item }}</span> -->
         </div>
-        <template #title style="font-family:Oswald-SemiBold">{{ '星期' + week[index] + ' : ' + countToday(item) }}
-        </template>
+        <template #title style="font-family: Oswald-SemiBold">{{
+          '星期' + week[index] + ' : ' + countToday(item)
+        }}</template>
       </a-tooltip>
     </div>
   </Widget>
 </template>
 
 <script>
-import Widget from '../../../components/card/Widget.vue'
-import { mapActions, mapWritableState } from 'pinia'
-import { tomatoStore } from '../store'
+import Widget from '../../../components/card/Widget.vue';
+import { mapActions, mapState, mapWritableState } from 'pinia';
+import { tomatoStore } from '../store';
 // import * as echarts from "echarts";
 export default {
   name: 'TimerChart',
@@ -33,21 +35,20 @@ export default {
   props: {
     customIndex: {
       type: Number,
-      default: 0
+      default: 0,
     },
     customData: {
       type: Object,
-      default: () => {
-      }
+      default: () => {},
     },
     desk: {
       type: Object,
-    }
+    },
   },
   computed: {
     ...mapWritableState(tomatoStore, ['tomatoList', 'weekTime', 'maxTomato']),
   },
-  data () {
+  data() {
     return {
       options: {
         className: 'card small',
@@ -58,39 +59,36 @@ export default {
         background: '#24B284',
       },
       activeIndex: 0,
-      week: ['日', '一', '二', '三', '四', '五', '六']
-    }
+      week: ['日', '一', '二', '三', '四', '五', '六'],
+    };
   },
-  mounted () {
-    this.getTomatoNum()
-    this.activeIndex = new Date().getDay()
+  mounted() {
+    this.getTomatoNum();
+    this.activeIndex = new Date().getDay();
   },
   methods: {
     ...mapActions(tomatoStore, ['getTomatoNum']),
-    onChangeActive (n) {
-      this.activeIndex = n
+    onChangeActive(n) {
+      this.activeIndex = n;
     },
     // 计算今日番茄时间
-    countToday (num) {
-      let totalTime = num * 25
-      let hour = totalTime / 60
-      let min = totalTime % 60
-      return Math.trunc(hour) + 'h' + min + 'm'
+    countToday(num) {
+      let totalTime = num * 25;
+      let hour = totalTime / 60;
+      let min = totalTime % 60;
+      return Math.trunc(hour) + 'h' + min + 'm';
     },
   },
-}
+};
 </script>
 
-<style lang="scss" scoped>
-
+<style scoped lang="scss">
 .title {
-
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.60);
+  color: rgba(255, 255, 255, 0.6);
   font-weight: 400;
   text-align: center;
 }
-
 .time {
   letter-spacing: 1px;
   font-family: Oswald-SemiBold;
@@ -110,23 +108,20 @@ export default {
 }
 
 .echarts .echarts-col {
-  background: rgba(255, 255, 255, 0.40);
+  background: rgba(255, 255, 255, 0.4);
   border-radius: 10px;
   width: 29px;
   height: 120px;
   cursor: pointer;
   text-align: center;
 }
-
 .echarts .echarts-col span {
   position: relative;
   top: -22px;
 }
-
 .echarts .echarts-col:hover {
   background: rgba(255, 255, 255, 0.85);
 }
-
 .active-col {
   background: rgba(255, 255, 255, 0.85) !important;
 }

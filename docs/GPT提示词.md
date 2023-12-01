@@ -1,122 +1,130 @@
-### vue页面处理
-以下是vue文件的代码内容，请按照以下要求修改：
-（1）升级至vue3版本；
-（2）尽可能将页面内的UI组件替换成ant design vue 最新版本组件库；
+### vue 页面处理
+
+以下是 vue 文件的代码内容，请按照以下要求修改：
+（1）升级至 vue3 版本；
+（2）尽可能将页面内的 UI 组件替换成 ant design vue 最新版本组件库；
 （3）尝试简化冗余代码，修复潜在问题。
 （4）将文字颜色改成深色。
 具体代码如下：
 
-### pinia升级
-```js
-import { defineStore } from 'pinia'
-import { useStore } from 'vuex'
-import router from "@/router";
+### pinia 升级
 
-var getlocalStorage=(name,falgTrue,falgFalse,stringIs)=>{
-    if(name  == "themes"){
+```js
+import { defineStore } from 'pinia';
+import { useStore } from 'vuex';
+import router from '@/router';
+
+var getlocalStorage = (name, falgTrue, falgFalse, stringIs) => {
+  if (name == 'themes') {
+  }
+  let result = null;
+  let data = window.localStorage.getItem(name);
+  if (data == '' || data == null) {
+    if (falgTrue) result = falgTrue;
+  } else {
+    if (data == 'false') return false;
+    if (falgTrue === true) {
+      if (data == 'true') return true;
+      return false;
+    } else {
+      result = data;
     }
-    let result=null
-    let data=window.localStorage.getItem(name)
-    if(data=="" || data==null){
-        if(falgTrue)result=falgTrue
-    }else{
-        if(data =='false')return false
-        if(falgTrue === true ){
-            if(data=="true")  return true 
-            return  false
-        }else{
-            result=data   
-        }
-    }
-    if(stringIs &&  data)return JSON.parse(result)
-   return result
-}
+  }
+  if (stringIs && data) return JSON.parse(result);
+  return result;
+};
 
 export const useMainStore = defineStore({
-    id: 'main',
-    state: () => ({
-        appId: process.env.VUE_APP_ID,   
-        appName: process.env.VUE_APP_NAME,  
-        locales:getlocalStorage("locales","zh-cn","en"),  
-        isMenu: getlocalStorage("isMenu",true,false), 
-        themes: getlocalStorage("themes",false,true), 
-        themesColor:getlocalStorage("themesColor",{
-            primaryColor: '#1890ff',
-            errorColor: '#ff4d4f',
-            warningColor: '#faad14',
-            successColor: '#52c41a',
-            infoColor: '#909399',
-          },false,true), 
-        isBreadcrumb: getlocalStorage("isBreadcrumb",true,false), 
-        isPathbar: true,
-        direction:getlocalStorage("direction",true), 
-        modulesSize:getlocalStorage("modulesSize",'large'), 
-        allloading:false, 
-        fixedTop:getlocalStorage("fixedTop",true,false), 
-        systemIndex:getlocalStorage("systemIndex",0), 
-        tagView: [], 
-        activeTagView: "", 
-        authority: [], 
-    }),
-    getters: {
-        // 你可以在这里添加你需要的getter
-    },
-    actions: {
-        initRouter(to){
-            if(to && to.meta){
-                if(to.meta.menu){
-                    window.localStorage.setItem("isMenu", to.meta.menu=='y')
-                    this.isMenu = to.meta.menu=='y'
-                }
-                if(to && to.meta && to.meta.title){
-                    this.addTagView({
-                        path: to.path,
-                        name: to.name,
-                        ...to.meta
-                    })
-                }
-            }
-        },
-        addTagView(tag) {
-            this.activeTagView = tag.path
-            if (tag.path == "/") return
-            if (!this.tagView.some((x) => x.path == tag.path)) {
-                this.tagView.push(tag)
-            }
-        },
-        editTagView(tag) {
-            if (this.tagView.some((x) => x.path == tag.path)) {
-                this.activeTagView = tag.path
-                this.tagView = this.tagView.filter((x) => x.path != tag.path)
-            }
-            this.activeTagView = tag.path
-            this.tagView.push(tag)
-        },
-        deleteTagView(index) {
-            if (this.tagView.length <= 1) return;
-            this.tagView.splice(index, 1)
-            if (index>=1 && index<=this.tagView.length){
-                if(index == 0)index = 1
-                this.activeTagView = this.tagView[index - 1].path
-                router.push(this.activeTagView)
-            }
-        },
-        clearTagView(index) {
-            this.tagView=[]
-            this.activeTagView=""
-            this.systemIndex=index
-        },
-        setAllStatus(all){
-            // 这里你可以添加你需要的action
+  id: 'main',
+  state: () => ({
+    appId: process.env.VUE_APP_ID,
+    appName: process.env.VUE_APP_NAME,
+    locales: getlocalStorage('locales', 'zh-cn', 'en'),
+    isMenu: getlocalStorage('isMenu', true, false),
+    themes: getlocalStorage('themes', false, true),
+    themesColor: getlocalStorage(
+      'themesColor',
+      {
+        primaryColor: '#1890ff',
+        errorColor: '#ff4d4f',
+        warningColor: '#faad14',
+        successColor: '#52c41a',
+        infoColor: '#909399',
+      },
+      false,
+      true,
+    ),
+    isBreadcrumb: getlocalStorage('isBreadcrumb', true, false),
+    isPathbar: true,
+    direction: getlocalStorage('direction', true),
+    modulesSize: getlocalStorage('modulesSize', 'large'),
+    allloading: false,
+    fixedTop: getlocalStorage('fixedTop', true, false),
+    systemIndex: getlocalStorage('systemIndex', 0),
+    tagView: [],
+    activeTagView: '',
+    authority: [],
+  }),
+  getters: {
+    // 你可以在这里添加你需要的getter
+  },
+  actions: {
+    initRouter(to) {
+      if (to && to.meta) {
+        if (to.meta.menu) {
+          window.localStorage.setItem('isMenu', to.meta.menu == 'y');
+          this.isMenu = to.meta.menu == 'y';
         }
-    }
-})
+        if (to && to.meta && to.meta.title) {
+          this.addTagView({
+            path: to.path,
+            name: to.name,
+            ...to.meta,
+          });
+        }
+      }
+    },
+    addTagView(tag) {
+      this.activeTagView = tag.path;
+      if (tag.path == '/') return;
+      if (!this.tagView.some((x) => x.path == tag.path)) {
+        this.tagView.push(tag);
+      }
+    },
+    editTagView(tag) {
+      if (this.tagView.some((x) => x.path == tag.path)) {
+        this.activeTagView = tag.path;
+        this.tagView = this.tagView.filter((x) => x.path != tag.path);
+      }
+      this.activeTagView = tag.path;
+      this.tagView.push(tag);
+    },
+    deleteTagView(index) {
+      if (this.tagView.length <= 1) return;
+      this.tagView.splice(index, 1);
+      if (index >= 1 && index <= this.tagView.length) {
+        if (index == 0) index = 1;
+        this.activeTagView = this.tagView[index - 1].path;
+        router.push(this.activeTagView);
+      }
+    },
+    clearTagView(index) {
+      this.tagView = [];
+      this.activeTagView = '';
+      this.systemIndex = index;
+    },
+    setAllStatus(all) {
+      // 这里你可以添加你需要的action
+    },
+  },
+});
 
 // 使用store
-const store = useMainStore()
+const store = useMainStore();
 ```
 
 ### 状态合并
+
 ```ts
 以下是三个vue store文件的名称及其内容：
 （1）index.js : import { createStore } from 'vuex'
@@ -151,10 +159,10 @@ import router from "@/router";
     }else{
         if(data =='false')return false
         if(falgTrue === true ){
-            if(data=="true")  return true 
+            if(data=="true")  return true
             return  false
         }else{
-            result=data   
+            result=data
         }
     }
     if(stringIs &&  data)return JSON.parse(result)
@@ -162,15 +170,15 @@ import router from "@/router";
 }
 const state = {
     //  appid
-    appId: process.env.VUE_APP_ID,   
+    appId: process.env.VUE_APP_ID,
     //  菜单类型
-    appName: process.env.VUE_APP_NAME,  
+    appName: process.env.VUE_APP_NAME,
     //  国际化语言
-    locales:getlocalStorage("locales","zh-cn","en"),  
+    locales:getlocalStorage("locales","zh-cn","en"),
      //  菜单类型
-    isMenu: getlocalStorage("isMenu",true,false), 
+    isMenu: getlocalStorage("isMenu",true,false),
      //  项目主题
-    themes: getlocalStorage("themes",false,true), 
+    themes: getlocalStorage("themes",false,true),
     // 自定义项目主题
     themesColor:getlocalStorage("themesColor",{
         primaryColor: '#1890ff',
@@ -178,24 +186,24 @@ const state = {
         warningColor: '#faad14',
         successColor: '#52c41a',
         infoColor: '#909399',
-      },false,true), 
+      },false,true),
     // 面包屑
-    isBreadcrumb: getlocalStorage("isBreadcrumb",true,false), 
+    isBreadcrumb: getlocalStorage("isBreadcrumb",true,false),
     // 历史菜单
     isPathbar: true,
     // 系统设置方向
-    direction:getlocalStorage("direction",true), 
+    direction:getlocalStorage("direction",true),
     // 全局组件大小
-    modulesSize:getlocalStorage("modulesSize",'large'), 
+    modulesSize:getlocalStorage("modulesSize",'large'),
 
     allloading:false, // 全局loading
 
     fixedTop:getlocalStorage("fixedTop",true,false), // 全局loading
-   
+
     tagView: [], // 历史路由列表
     activeTagView: "", // 当前路由
     authority: [], // 功能按钮权限
-    
+
 }
 const mutations = {
     SET_IS_MENU: (state, all) => state.isMenu = all,
@@ -239,7 +247,7 @@ const mutations = {
         state.systemIndex=index
     },
     SET_ALL_STATUS:(state,all)=>{
-  
+
     }
 }
 
@@ -254,7 +262,7 @@ const actions = {
                 window.localStorage.setItem("isMenu", to.meta.menu=='y')
                 commit('SET_IS_MENU', to.meta.menu=='y');
             }
-            
+
             // 添加历史菜单
             if(to && to.meta && to.meta.title){
                 commit("ADD_TAG_VIEW",{
@@ -273,7 +281,7 @@ export default {
     state,
     mutations,
     actions
-}   
+}
 
 
 (3)userinfo.js:
@@ -295,7 +303,7 @@ const state = {
 const mutations = {
     SET_ALLROUTER: (state, all) => state.allRouter = all,
     SET_MENU: (state, all) => state.allMenu = all,
-   
+
 }
 
 
@@ -313,7 +321,7 @@ const actions = {
         } catch (error){
             console.log(error)
             throw new Error(error)
-         
+
         }
 
     },
@@ -325,7 +333,7 @@ const actions = {
  */
 export async function ResetRouter(index) {
   // 获取角色的菜单选项
-  let menu = await getRoleRouter()  // 
+  let menu = await getRoleRouter()  //
   // 平铺序列号路由
   let routerinstall = await routerArrFun()
   //  路由初始化 根据权限匹配对应的路由
@@ -400,7 +408,7 @@ const addDynamicRoute = async(useroute, parent,parentname) => {
     if (parent) {
       // 子路由path 必须加上父级path
       useroute[i].path = '/' + parent + useroute[i].path
-      //  parentname 必须是父级的name 
+      //  parentname 必须是父级的name
       await router.addRoute(parentname, useroute[i]);
     } else {
       await router.addRoute(useroute[i]);

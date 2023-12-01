@@ -1,27 +1,25 @@
 <template>
   <div class="medal-wrapper">
     <tippy placement="left" trigger="mouseenter click">
-      <div class="badge-box" style="border:none;background: none;zoom: 0.5;margin: 0">
-        <div style="width: 100px;height: 100px;position: relative">
-          <img :src="iconLarge" style="width: 75px;margin-top: 10px">
+      <div class="badge-box" style="border: none; background: none; zoom: 0.5; margin: 0">
+        <div style="width: 100px; height: 100px; position: relative">
+          <img :src="iconLarge" style="width: 75px; margin-top: 10px" />
         </div>
       </div>
       <template #content>
-        <div class="badge-box big " style="width: 250px">
+        <div class="badge-box big" style="width: 250px">
           <a-row>
             <a-col :span="10">
-              <img :src="iconLarge" style="width: 60px;margin-top: 10px">
+              <img :src="iconLarge" style="width: 60px; margin-top: 10px" />
             </a-col>
             <a-col :span="14" style="line-height: 2">
-              <div style="font-size: 13px;font-weight: bold;">{{ title }}</div>
-              <div class="" style="font-size: 12px;line-height: 1.5;color: #ccc">{{ summary }}</div>
-
+              <div style="font-size: 13px; font-weight: bold">{{ title }}</div>
+              <div class="" style="font-size: 12px; line-height: 1.5; color: #ccc">{{ summary }}</div>
             </a-col>
             <a-col :span="24">
               <div class="text-grey mt-3" style="font-size: 0.8em">获得原因：{{ getReason }}</div>
             </a-col>
           </a-row>
-
         </div>
       </template>
     </tippy>
@@ -32,25 +30,25 @@
 export default {
   name: 'Medal',
   props: ['medal'],
-  data () {
+  data() {
     return {
       title: '',
       summary: '',
       getReason: '',
       iconSmall: '',
-      iconLarge: ''
-    }
+      iconLarge: '',
+    };
   },
   components: [],
-  mounted () {
-    let medal = this.medal
-    this.title = medal.medal.alias
-    this.summary = medal.medal.summary
-    this.getReason = medal.reason
-    this.iconSmall = medal.medal.icon_sm
-    this.iconLarge = medal.medal.icon_lg
-  }
-}
+  mounted() {
+    let medal = this.medal;
+    this.title = medal.medal.alias;
+    this.summary = medal.medal.summary;
+    this.getReason = medal.reason;
+    this.iconSmall = medal.medal.icon_sm;
+    this.iconLarge = medal.medal.icon_lg;
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -60,7 +58,6 @@ export default {
   &:hover {
     .big {
       opacity: 1;
-
     }
   }
 
@@ -91,5 +88,4 @@ export default {
   font-size: 12px;
   white-space: nowrap;
 }
-
 </style>

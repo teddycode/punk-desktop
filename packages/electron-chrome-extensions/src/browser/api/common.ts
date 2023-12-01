@@ -1,9 +1,9 @@
-import { promises as fs } from 'fs'
-import * as path from 'path'
-import { nativeImage } from 'electron'
+import { promises as fs } from 'fs';
+import * as path from 'path';
+import { nativeImage } from 'electron';
 
 export interface TabContents extends Electron.WebContents {
-  favicon?: string
+  favicon?: string;
 }
 
 export type ContextMenuType =
@@ -19,7 +19,7 @@ export type ContextMenuType =
   | 'launcher'
   | 'browser_action'
   | 'page_action'
-  | 'action'
+  | 'action';
 
 /**
  * Get the extension's properly typed Manifest.
@@ -27,36 +27,35 @@ export type ContextMenuType =
  * I can't seem to get TS's merged type declarations working so I'm using this
  * instead for now.
  */
-export const getExtensionManifest = (extension: Electron.Extension): chrome.runtime.Manifest =>
-  extension.manifest
+export const getExtensionManifest = (extension: Electron.Extension): chrome.runtime.Manifest => extension.manifest;
 
 export const getExtensionUrl = (extension: Electron.Extension, uri: string) => {
   try {
-    return new URL(uri, extension.url).href
+    return new URL(uri, extension.url).href;
   } catch {}
-}
+};
 
 export const resolveExtensionPath = (extension: Electron.Extension, uri: string) => {
-  const resPath = path.join(extension.path, uri)
+  const resPath = path.join(extension.path, uri);
 
   // prevent any parent traversals
-  if (!resPath.startsWith(extension.path)) return
+  if (!resPath.startsWith(extension.path)) return;
 
-  return resPath
-}
+  return resPath;
+};
 
 export const validateExtensionResource = async (extension: Electron.Extension, uri: string) => {
-  const resPath = resolveExtensionPath(extension, uri)
-  if (!resPath) return
+  const resPath = resolveExtensionPath(extension, uri);
+  if (!resPath) return;
 
   try {
-    await fs.stat(resPath)
+    await fs.stat(resPath);
   } catch {
-    return // doesn't exist
+    return; // doesn't exist
   }
 
-  return resPath
-}
+  return resPath;
+};
 
 export enum ResizeType {
   Exact,
@@ -64,55 +63,47 @@ export enum ResizeType {
   Down,
 }
 
-export const matchSize = (
-  imageSet: { [key: number]: string },
-  size: number,
-  match: ResizeType
-): string | undefined => {
+export const matchSize = (imageSet: { [key: number]: string }, size: number, match: ResizeType): string | undefined => {
   // TODO: match based on size
-  const first = parseInt(Object.keys(imageSet).pop()!, 10)
-  return imageSet[first]
-}
+  const first = parseInt(Object.keys(imageSet).pop()!, 10);
+  return imageSet[first];
+};
 
 /** Gets the relative path to the extension's default icon. */
-export const getIconPath = (
-  extension: Electron.Extension,
-  iconSize: number = 32,
-  resizeType = ResizeType.Up
-) => {
-  const { browser_action, icons } = getExtensionManifest(extension)
-  const { default_icon } = browser_action || {}
+export const getIconPath = (extension: Electron.Extension, iconSize: number = 32, resizeType = ResizeType.Up) => {
+  const { browser_action, icons } = getExtensionManifest(extension);
+  const { default_icon } = browser_action || {};
 
   if (typeof default_icon === 'string') {
-    const iconPath = default_icon
-    return iconPath
+    const iconPath = default_icon;
+    return iconPath;
   } else if (typeof default_icon === 'object') {
-    const iconPath = matchSize(default_icon, iconSize, resizeType)
-    return iconPath
+    const iconPath = matchSize(default_icon, iconSize, resizeType);
+    return iconPath;
   } else if (typeof icons === 'object') {
-    const iconPath = matchSize(icons, iconSize, resizeType)
-    return iconPath
+    const iconPath = matchSize(icons, iconSize, resizeType);
+    return iconPath;
   }
-}
+};
 
 export const getIconImage = (extension: Electron.Extension) => {
-  const iconPath = getIconPath(extension)
-  const iconAbsolutePath = iconPath && resolveExtensionPath(extension, iconPath)
-  return iconAbsolutePath ? nativeImage.createFromPath(iconAbsolutePath) : undefined
-}
+  const iconPath = getIconPath(extension);
+  const iconAbsolutePath = iconPath && resolveExtensionPath(extension, iconPath);
+  return iconAbsolutePath ? nativeImage.createFromPath(iconAbsolutePath) : undefined;
+};
 
-const escapePattern = (pattern: string) => pattern.replace(/[\\^$+?.()|[\]{}]/g, '\\$&')
+const escapePattern = (pattern: string) => pattern.replace(/[\\^$+?.()|[\]{}]/g, '\\$&');
 
 /**
  * @see https://developer.chrome.com/extensions/match_patterns
  */
 export const matchesPattern = (pattern: string, url: string) => {
-  if (pattern === '<all_urls>') return true
-  const regexp = new RegExp(`^${pattern.split('*').map(escapePattern).join('.*')}$`)
-  return url.match(regexp)
-}
+  if (pattern === '<all_urls>') return true;
+  const regexp = new RegExp(`^${pattern.split('*').map(escapePattern).join('.*')}$`);
+  return url.match(regexp);
+};
 
 export const matchesTitlePattern = (pattern: string, title: string) => {
-  const regexp = new RegExp(`^${pattern.split('*').map(escapePattern).join('.*')}$`)
-  return title.match(regexp)
-}
+  const regexp = new RegExp(`^${pattern.split('*').map(escapePattern).join('.*')}$`);
+  return title.match(regexp);
+};

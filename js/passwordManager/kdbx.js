@@ -1,67 +1,66 @@
-const { ipcRenderer } = require('electron')
+const { ipcRenderer } = require('electron');
 
 class Kdbx {
-  name
-  dbName
-  filePath
-
-  constructor () {
-    this.name = 'file'
+  name;
+  dbName;
+  filePath;
+  constructor() {
+    this.name = 'file';
   }
 
-  getDownloadLink () {
-    return null
+  getDownloadLink() {
+    return null;
   }
 
-  getLocalPath () {
-    return null
+  getLocalPath() {
+    return null;
   }
 
-  getSetupMode () {
-    return null
+  getSetupMode() {
+    return null;
   }
 
-  async checkIfConfigured () {
-    return true
+  async checkIfConfigured() {
+    return true;
   }
 
-  isUnlocked () {
-    return true
+  isUnlocked() {
+    return true;
   }
 
-  async getSuggestions (domain) {
+  async getSuggestions(domain) {
     return ipcRenderer.invoke('kdbxCredentialStoreGetCredentials').then(function (results) {
       return results
         .filter(function (result) {
-          return result.domain === domain
+          return result.domain === domain;
         })
         .map(function (result) {
           return {
             ...result,
-            manager: 'file'
-          }
-        })
-    })
+            manager: 'file',
+          };
+        });
+    });
   }
 
-  saveCredential (domain, username, password, name = '') {
-    ipcRenderer.invoke('kdbxCredentialStoreSetPassword', { domain, username, password, name })
+  saveCredential(domain, username, password, name = '') {
+    ipcRenderer.invoke('kdbxCredentialStoreSetPassword', { domain, username, password, name });
   }
 
-  deleteCredential (domain, username) {
-    ipcRenderer.invoke('kdbxCredentialStoreDeletePassword', { domain, username })
+  deleteCredential(domain, username) {
+    ipcRenderer.invoke('kdbxCredentialStoreDeletePassword', { domain, username });
   }
 
-  getAllCredentials () {
+  getAllCredentials() {
     return ipcRenderer.invoke('kdbxCredentialStoreGetCredentials').then(function (results) {
       return results.map(function (result) {
         return {
           ...result,
-          manager: 'file'
-        }
-      })
-    })
+          manager: 'file',
+        };
+      });
+    });
   }
 }
 
-module.exports = Kdbx
+module.exports = Kdbx;

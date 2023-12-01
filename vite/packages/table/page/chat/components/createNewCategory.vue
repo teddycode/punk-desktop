@@ -1,20 +1,30 @@
 <template>
-  <div class="flex flex-col my-3" style="width:500px;">
-    <div class="flex w-full mb-5 h-10 items-center justify-center" style="position: relative;">
-      <span class="font-16-400" style="color:var(--primary-text);">添加分组</span>
-      <div class="close-channel w-10 h-10 flex items-center rounded-lg pointer active-button justify-center"
-           style="background: var(--secondary-bg);" @click="closeNewGroup">
-        <CategoryIcon icon="fluent:dismiss-16-filled" style="font-size: 1.25em;color: var(--secondary-text);"/>
+  <div class="flex flex-col my-3" style="width: 500px">
+    <div class="flex w-full mb-5 h-10 items-center justify-center" style="position: relative">
+      <span class="font-16-400" style="color: var(--primary-text)">添加分组</span>
+      <div
+        class="close-channel w-10 h-10 flex items-center rounded-lg pointer active-button justify-center"
+        style="background: var(--secondary-bg)"
+        @click="closeNewGroup"
+      >
+        <CategoryIcon icon="fluent:dismiss-16-filled" style="font-size: 1.25em; color: var(--secondary-text)" />
       </div>
     </div>
 
     <div class="flex flex-col px-6">
-      <a-input v-model:value="categoryName" class="h-10 search" placeholder="分组名称"
-               style="border-radius: 8px;text-align: center;" @pressEnter="submitCategory"></a-input>
+      <a-input
+        v-model:value="categoryName"
+        class="h-10 search"
+        placeholder="分组名称"
+        style="border-radius: 8px; text-align: center"
+        @pressEnter="submitCategory"
+      ></a-input>
       <div class="mt-4 flex items-center justify-end pt-4">
-        <XtButton style="width: 64px;height:40px;margin-right: 12px;" @click="closeNewGroup">取消</XtButton>
-        <XtButton style="width: 64px;height:40px; background: var(--active-bg);color:var(--active-text);"
-                  @click="submitCategory">确定
+        <XtButton style="width: 64px; height: 40px; margin-right: 12px" @click="closeNewGroup">取消</XtButton>
+        <XtButton
+          style="width: 64px; height: 40px; background: var(--active-bg); color: var(--active-text)"
+          @click="submitCategory"
+          >确定
         </XtButton>
       </div>
     </div>
@@ -22,64 +32,64 @@
 </template>
 
 <script>
-import { mapActions } from 'pinia'
-import { Icon as CategoryIcon } from '@iconify/vue'
-import { communityStore } from '../store/communityStore'
-import { message } from 'ant-design-vue'
+import { mapActions } from 'pinia';
+import { Icon as CategoryIcon } from '@iconify/vue';
+import { communityStore } from '../store/communityStore';
+import { message } from 'ant-design-vue';
 
 export default {
   props: ['no'],
 
   components: {
-    CategoryIcon
+    CategoryIcon,
   },
 
-  data () {
+  data() {
     return {
       categoryName: '',
-    }
+    };
   },
 
-  mounted () {
+  mounted() {
     this.$nextTick(() => {
-      const inputDom = document.querySelector('.search')
-      inputDom.focus()
-    })
+      const inputDom = document.querySelector('.search');
+      inputDom.focus();
+    });
   },
 
   methods: {
     ...mapActions(communityStore, ['createChannel', 'getCategoryData']),
     // 关闭弹窗
-    closeNewGroup () {
-      this.$emit('close')
+    closeNewGroup() {
+      this.$emit('close');
     },
 
     // 创建完成
-    async submitCategory () {
+    async submitCategory() {
       if (this.categoryName !== '' && this.no !== '1') {
         const option = {
-          name: this.categoryName, communityNo: this.no,
-          type: 'category', role: 'category',
-        }
+          name: this.categoryName,
+          communityNo: this.no,
+          type: 'category',
+          role: 'category',
+        };
         //  console.log('排查参数问题',option);
 
-        const categoryRes = await this.createChannel(option)
+        const categoryRes = await this.createChannel(option);
         //  console.log('查看状态',categoryRes);
 
         if (categoryRes.status === 1) {
-          message.success(`${categoryRes.info}`)
-          await this.getCategoryData(this.no)
-          this.closeNewGroup()
+          message.success(`${categoryRes.info}`);
+          await this.getCategoryData(this.no);
+          this.closeNewGroup();
         } else {
-          message.error(`${categoryRes.info}`)
-          this.closeNewGroup()
+          message.error(`${categoryRes.info}`);
+          this.closeNewGroup();
         }
-
       }
-    }
-
+    },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

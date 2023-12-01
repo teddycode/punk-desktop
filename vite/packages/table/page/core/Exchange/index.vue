@@ -9,21 +9,36 @@
         <div class="middle-bottom">
           <div class="exg-transaction-view">
             <div class="header-transaction">
-              <router-link :class="{active: this.$route.name === 'MyExchange'}" class="btn-transaction"
-                           to="/exchange/myExchange">市价
+              <router-link
+                :class="{ active: this.$route.name === 'MyExchange' }"
+                class="btn-transaction"
+                to="/exchange/myExchange"
+                >市价
               </router-link>
-              <router-link :class="{active: this.$route.name === 'LimitOrder'}" class="btn-transaction"
-                           to="/exchange/limitOrder">限价
+              <router-link
+                :class="{ active: this.$route.name === 'LimitOrder' }"
+                class="btn-transaction"
+                to="/exchange/limitOrder"
+                >限价
               </router-link>
-              <router-link :class="{active: this.$route.name === 'DepositToken'}" class="btn-transaction"
-                           to="/exchange/depositToken">充提
+              <router-link
+                :class="{ active: this.$route.name === 'DepositToken' }"
+                class="btn-transaction"
+                to="/exchange/depositToken"
+                >充提
               </router-link>
               <!-- <router-link to="/Exhcange/myToken" class="btn-transaction" :class="{active: $route.path === '/myTransaction/myToken'}">代币</router-link> -->
-              <router-link :class="{active: this.$route.name === 'MyTrade'}" class="btn-transaction"
-                           to="/exchange/myTrade">流动性
+              <router-link
+                :class="{ active: this.$route.name === 'MyTrade' }"
+                class="btn-transaction"
+                to="/exchange/myTrade"
+                >流动性
               </router-link>
-              <router-link :class="{active: this.$route.name === 'MyOrder'}" class="btn-transaction"
-                           to="/exchange/myOrder">我的订单
+              <router-link
+                :class="{ active: this.$route.name === 'MyOrder' }"
+                class="btn-transaction"
+                to="/exchange/myOrder"
+                >我的订单
               </router-link>
             </div>
             <div class="exg-content-transaction">
@@ -44,10 +59,10 @@
   </Background>
 </template>
 <script lang="ts">
-import {ref, onMounted, onBeforeUnmount} from 'vue';
-import Background from "@page/core/components/Background.vue";
-import OrderPage from "@page/core/Exchange/components/OrderPage/index.vue";
-import TokenPage from "@page/core/Exchange/components/TokenPage/index.vue";
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+import Background from '@page/core/components/Background.vue';
+import OrderPage from '@page/core/Exchange/components/OrderPage/index.vue';
+import TokenPage from '@page/core/Exchange/components/TokenPage/index.vue';
 import Kline from 'kline';
 
 export default {
@@ -64,11 +79,11 @@ export default {
     const height = ref(null);
     const setupKline = () => {
       kline.value = new Kline({
-        element: "#kline_container",
-        symbol: "BTC",
-        symbolName: "比特币",
-        type: "poll",
-        url: "http://127.0.0.1:8081/mock.json"
+        element: '#kline_container',
+        symbol: 'BTC',
+        symbolName: '比特币',
+        type: 'poll',
+        url: 'http://127.0.0.1:8081/mock.json',
       });
       kline.value.draw();
       container.value = this.$refs.klineContainer;
@@ -82,8 +97,8 @@ export default {
 
     const handleWindowResize = () => {
       const middleTop = this.$refs.klineContainer.parentElement;
-      if (middleTop && kline.value && typeof kline.value.resize === "function") {
-        console.log("resize");
+      if (middleTop && kline.value && typeof kline.value.resize === 'function') {
+        console.log('resize');
         const width = middleTop.clientWidth;
         const height = middleTop.clientHeight;
         kline.value.resize(width, height);
@@ -106,12 +121,11 @@ export default {
       width,
       height,
       setupKline,
-      handleWindowResize
+      handleWindowResize,
     };
-  }
+  },
 };
 </script>
-
 
 <style scoped>
 .exg-container {
@@ -182,7 +196,7 @@ export default {
   display: flex;
   justify-content: flex-start;
   margin-bottom: 0px;
-  background-color: #2D3748;
+  background-color: #2d3748;
 }
 
 .btn-transaction {
@@ -197,8 +211,8 @@ export default {
 }
 
 .btn-transaction.active {
-  background-color: #4FD1C5; /* Use a brighter color for the active button */
-  color: #F7FAFC; /* Use a darker color for the text to make it stand out */
+  background-color: #4fd1c5; /* Use a brighter color for the active button */
+  color: #f7fafc; /* Use a darker color for the text to make it stand out */
 }
 
 .exg-content-transaction {

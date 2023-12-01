@@ -1,12 +1,6 @@
 <template>
-  <div
-      :class="[titleClass, typeClass]"
-      class="flex justify-between items-center relative"
-  >
-    <div
-        v-if="title"
-        class="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 text-lg"
-    >
+  <div class="flex justify-between items-center relative" :class="[titleClass, typeClass]">
+    <div class="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 text-lg" v-if="title">
       {{ title }}
     </div>
     <div>
@@ -21,13 +15,13 @@
 <script>
 export default {
   computed: {
-    typeClass () {
+    typeClass() {
       let typeList = {
         default: 'xt-text text-base ',
         header: 'xt-text text-lg ',
         text: 'xt-text-2 text-sm',
-      }
-      return typeList[this.type] + ` ${this.m + '-' + this.spacing}`
+      };
+      return typeList[this.type] + ` ${this.m + '-' + this.spacing}`;
     },
   },
   props: {
@@ -46,7 +40,7 @@ export default {
       default: 'default',
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped></style>

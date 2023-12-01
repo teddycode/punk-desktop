@@ -1,16 +1,16 @@
 <template>
-  <vueCustomScrollbar :settings="scrollbarSettings" style="height: 100%,">
-    <div class="page-container rounded-xl box-body" style="height: 100%;">
+  <vueCustomScrollbar :settings="scrollbarSettings" style="height: 100%">
+    <div class="page-container rounded-xl box-body" style="height: 100%">
       <div class="flex-box">
         <div class="box-title">{{ this.inviteList.title }}</div>
-        <div v-for="item in inviteList.data" :key="item.key" class="box-list">
+        <div class="box-list" v-for="item in inviteList.data" :key="item.key">
           <div class="list-title">
             {{ item.title }}&nbsp;
-            <a-tooltip v-if="item.tooltip !== ''" placement="top">
+            <a-tooltip placement="top" v-if="item.tooltip !== ''">
               <template #title>
                 <span>{{ item.tooltip }}</span>
               </template>
-              <QuestionCircleOutlined/>
+              <QuestionCircleOutlined />
             </a-tooltip>
           </div>
           <div class="list-num">{{ item.num }}</div>
@@ -18,39 +18,32 @@
       </div>
       <div class="flex-box">
         <div class="box-title">{{ this.incomeList.title }}</div>
-        <div v-for="item in incomeList.data" :key="item.key" class="box-list">
-          <a-statistic :precision="1" :title="item.title" :value="item.num"/>
+        <div class="box-list" v-for="item in incomeList.data" :key="item.key">
+          <a-statistic :title="item.title" :value="item.num" :precision="1" />
         </div>
       </div>
     </div>
-
-
   </vueCustomScrollbar>
-
-
 </template>
 
-
 <script>
-
-import { QuestionCircleOutlined, } from '@ant-design/icons-vue'
+import { QuestionCircleOutlined } from '@ant-design/icons-vue';
 
 export default {
   name: 'Promotion',
   components: {
-    QuestionCircleOutlined
+    QuestionCircleOutlined,
   },
   computed: {},
-  data () {
+  data() {
     return {
-
       // 滚动条配置
       settingsScroller: {
         useBothWheelAxes: true,
         swipeEasing: true,
         suppressScrollY: false,
         suppressScrollX: true,
-        wheelPropagation: true
+        wheelPropagation: true,
       },
       inviteList: {
         title: '邀请数据',
@@ -73,7 +66,7 @@ export default {
             tooltip: '完成主线任务第一章为激活用户',
             key: 3,
           },
-        ]
+        ],
       },
       incomeList: {
         title: '收益数据',
@@ -108,17 +101,14 @@ export default {
             num: 2310.0,
             key: 6,
           },
-        ]
-      }
-
-    }
+        ],
+      },
+    };
   },
-  mounted () {
-
-  },
+  mounted() {},
   watch: {},
   methods: {},
-}
+};
 </script>
 
 <style scoped>
@@ -133,7 +123,7 @@ export default {
   width: 30%;
   min-width: 240px;
   height: 112px;
-  background: rgba(0, 0, 0, 0.30);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 4px;
   padding: 16px 20px;
 }
@@ -152,11 +142,10 @@ export default {
   border-color: var(--active-bg);
 }
 
-
 .list-title {
   /* margin-top: 16px; */
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.60);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .list-num {

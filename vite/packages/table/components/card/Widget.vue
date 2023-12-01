@@ -1,42 +1,33 @@
 <template>
   <RightMenu
-      v-model:oldMenuVisible="menuVisible"
-      v-model:sizeType="sizeType"
-      :menus="menus"
-      :sizes="sizeList"
-      @removeCard="doRemoveCard"
+    v-model:oldMenuVisible="menuVisible"
+    v-model:sizeType="sizeType"
+    :menus="menus"
+    :sizes="sizeList"
+    @removeCard="doRemoveCard"
   >
     <div
-        v-if="!options?.hide"
-        :class="classes"
-        :style="{
+      v-if="!options?.hide"
+      :class="classes"
+      :style="{
         display: options.hide == true ? 'none' : '',
         width: customSize.width,
         height: customSize.height,
         background: options.background || 'var( --primary-bg)',
       }"
-        style="color: var(--primary-text)"
+      style="color: var(--primary-text)"
     >
       <!--标题栏start-->
       <slot name="cardTitle">
-        <div
-            :class="options.noTitle === true ? 'no-title' : 'content-title'"
-            class="flex items-center justify-between"
-        >
+        <div :class="options.noTitle === true ? 'no-title' : 'content-title'" class="flex items-center justify-between">
           <div v-if="options.noTitle !== true" class="left-title">
             <slot name="left-title"></slot>
             <Icon :icon="options.icon" class="title-icon"></Icon>
             <div class="w-2/3 flex">
               <div v-if="options.isEdit">
                 <a-input
-                    :value="options.title"
-                    style="
-                    border: none;
-                    box-shadow: none !important;
-                    position: relative;
-                    left: -32px;
-                    top: -3px;
-                  "
+                  :value="options.title"
+                  style="border: none; box-shadow: none !important; position: relative; left: -32px; top: -3px"
                 ></a-input>
               </div>
               <div v-else="options.isEdit">
@@ -51,11 +42,7 @@
             </div>
           </div>
           <div v-if="showRightIcon" class="z-10 right-title">
-            <MenuOutlined
-                class="pointer"
-                @click="showDrawer($event)"
-                @contextmenu.stop="showDrawer"
-            />
+            <MenuOutlined class="pointer" @click="showDrawer($event)" @contextmenu.stop="showDrawer" />
             <slot name="right-menu"></slot>
           </div>
         </div>
@@ -83,17 +70,17 @@
 </template>
 
 <script lang="ts">
-import {PropType} from "vue";
-import {mapActions, mapWritableState} from "pinia";
-import {MenuOutlined} from "@ant-design/icons-vue";
-import {Icon as MyIcon} from "@iconify/vue";
-import _ from "lodash-es";
+import { PropType } from 'vue';
+import { mapActions, mapWritableState } from 'pinia';
+import { MenuOutlined } from '@ant-design/icons-vue';
+import { Icon as MyIcon } from '@iconify/vue';
+import _ from 'lodash-es';
 
-import {cardStore} from "../../store/card";
+import { cardStore } from '../../store/card';
 
-import Template from "../../../user/pages/Template.vue";
-import RightMenu from "./RightMenu.vue";
-import {IMenuItem, IOption} from "./types";
+import Template from '../../../user/pages/Template.vue';
+import RightMenu from './RightMenu.vue';
+import { IMenuItem, IOption } from './types';
 
 export default {
   components: {
@@ -102,7 +89,7 @@ export default {
     MyIcon,
     RightMenu,
   },
-  name: "Widget",
+  name: 'Widget',
   props: {
     //卡片尺寸，这个属性优先级高于下方的sizeList
     size: {
@@ -140,8 +127,7 @@ export default {
     //组件自定义数据，每个卡片独立，并存入桌面数据当中
     customData: {
       type: Object,
-      default: () => {
-      },
+      default: () => {},
     },
     desk: {
       type: Object,
@@ -168,19 +154,19 @@ export default {
       //右上角抽屉菜单可见与否的控制
       menuVisible: false,
       //当前设置的组件尺寸数据，对应着props里的sizeList
-      sizeType: {title: "", height: undefined, width: undefined, name: ""},
+      sizeType: { title: '', height: undefined, width: undefined, name: '' },
     };
   },
   computed: {
-    ...mapWritableState(cardStore, ["customComponents"]),
+    ...mapWritableState(cardStore, ['customComponents']),
     menus() {
       return [
         ...this.menuList,
         {
-          icon: "guanbi2",
+          icon: 'guanbi2',
           fn: this.doRemoveCard,
-          title: "删除",
-          color: "#FF4D4F",
+          title: '删除',
+          color: '#FF4D4F',
         },
       ];
     },
@@ -188,25 +174,19 @@ export default {
       return Object.keys(this.customData).length !== 0;
     },
     isCode() {
-      return this.customData.hasOwnProperty("Code");
+      return this.customData.hasOwnProperty('Code');
     },
     customSize() {
       return {
-        width:
-            this.size.width ||
-            this.sizeType.width * 280 + (this.sizeType.width - 1) * 10 + "px" ||
-            undefined,
-        height:
-            this.size.height ||
-            this.sizeType.height * 205 + (this.sizeType.height - 1) * 10 + "px" ||
-            undefined,
+        width: this.size.width || this.sizeType.width * 280 + (this.sizeType.width - 1) * 10 + 'px' || undefined,
+        height: this.size.height || this.sizeType.height * 205 + (this.sizeType.height - 1) * 10 + 'px' || undefined,
       };
     },
     classes() {
       //默认的对象
       let defaultClass = {
         gradient: true,
-        "gradient--14": true,
+        'gradient--14': true,
       };
       //如果存在hideFrame的设置
       if (this.customData && this.customData.hideFrame) {
@@ -216,30 +196,27 @@ export default {
       if (Object.keys(defaultClass).length > 0) {
         //取出className，并分割出一个类的数组
         if (this.options.className) {
-          this.options.className.split(" ").map((c) => {
+          this.options.className.split(' ').map((c) => {
             classNameObject[c] = true;
           });
         }
       }
       let after = _.cloneDeep(Object.assign(classNameObject, defaultClass));
       if (Object.keys(after).length === 0) {
-        after["no-frame"] = true;
+        after['no-frame'] = true;
       }
       return after;
     },
   },
   mounted() {
-    let customData =
-        this.$parent.customData ||
-        this.$parent.$attrs.customData ||
-        this.$parent.$parent.customData;
+    let customData = this.$parent.customData || this.$parent.$attrs.customData || this.$parent.$parent.customData;
     if (customData) {
       if (customData.width && customData.height) {
         this.sizeType = {
-          title: customData.width + "x" + customData.height,
+          title: customData.width + 'x' + customData.height,
           height: customData.height,
           width: customData.width,
-          name: customData.width + "x" + customData.height,
+          name: customData.width + 'x' + customData.height,
         };
         // this.$parent.$attrs.onCustomEvent()
         // console.log(this.$parent.$attrs.onCustomEvent)
@@ -252,36 +229,31 @@ export default {
     sizeType: {
       handler() {
         this.updateCustomData(
-            this.$parent.customIndex ||
-            this.$parent.$parent.customIndex ||
-            this.$parent.$attrs.customIndex,
-            {
-              width: this.sizeType.width,
-              height: this.sizeType.height,
-            },
-            this.desk
+          this.$parent.customIndex || this.$parent.$parent.customIndex || this.$parent.$attrs.customIndex,
+          {
+            width: this.sizeType.width,
+            height: this.sizeType.height,
+          },
+          this.desk,
         );
       },
     },
     size: {
-      handler(newVal) {
-      },
+      handler(newVal) {},
     },
   },
 
   methods: {
-    ...mapActions(cardStore, ["removeCard", "updateCustomData"]),
+    ...mapActions(cardStore, ['removeCard', 'updateCustomData']),
     showDrawer(e) {
       this.menuVisible = true;
     },
     // 右键删除
     doRemoveCard() {
-      this.options.beforeDelete && this.$emit("delete");
+      this.options.beforeDelete && this.$emit('delete');
       this.removeCard(
-          this.$parent.customIndex ||
-          this.$parent.$parent.customIndex ||
-          this.$parent.$attrs.customIndex,
-          this.desk
+        this.$parent.customIndex || this.$parent.$parent.customIndex || this.$parent.$attrs.customIndex,
+        this.desk,
       );
       this.menuVisible = false;
     },

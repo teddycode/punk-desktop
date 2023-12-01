@@ -1,68 +1,68 @@
 <template>
   <div style="overflow: hidden">
-    <div :class="{active:alwaysTop}" class="flex pointer   btn-top-active  items-center no-drag" @click="fixed">
-      <Icon icon="Pushpin" style="font-size: 1.2em;zoom:1.1"></Icon>
+    <div :class="{ active: alwaysTop }" class="flex pointer btn-top-active items-center no-drag" @click="fixed">
+      <Icon icon="Pushpin" style="font-size: 1.2em; zoom: 1.1"></Icon>
     </div>
-    <div class="flex  items-center btn-top-active pointer no-drag" @click="minimize">
-      <MinusOutlined style="font-size: 1.2em;"></MinusOutlined>
+    <div class="flex items-center btn-top-active pointer no-drag" @click="minimize">
+      <MinusOutlined style="font-size: 1.2em"></MinusOutlined>
     </div>
 
-    <div class="flex pointer   btn-top-active  items-center no-drag" @click="maximize">
-      <BorderOutlined style="font-size: 1.2em;zoom:0.9"></BorderOutlined>
+    <div class="flex pointer btn-top-active items-center no-drag" @click="maximize">
+      <BorderOutlined style="font-size: 1.2em; zoom: 0.9"></BorderOutlined>
     </div>
-    <div class="flex btn-top-active  pointer items-center no-drag" @click="close">
-      <Icon icon="guanbi" style="font-size: 1.2em;"></Icon>
+    <div class="flex btn-top-active pointer items-center no-drag" @click="close">
+      <Icon icon="guanbi" style="font-size: 1.2em"></Icon>
     </div>
   </div>
 </template>
 
 <script>
-import { getSign, isMain } from '../js/common/screenUtils'
+import { getSign, isMain } from '../js/common/screenUtils';
 
-import { BorderOutlined, MinusOutlined } from '@ant-design/icons-vue'
+import { BorderOutlined, MinusOutlined } from '@ant-design/icons-vue';
 
 export default {
   name: 'WindowController',
   components: {
     MinusOutlined,
-    BorderOutlined
+    BorderOutlined,
   },
-  data () {
+  data() {
     return {
       alwaysTop: false,
-    }
+    };
   },
-  async mounted () {
-    this.alwaysTop = await tsbApi.window.isAlwaysOnTop()
+  async mounted() {
+    this.alwaysTop = await tsbApi.window.isAlwaysOnTop();
   },
   methods: {
     // 关闭按钮
-    close () {
+    close() {
       if (isMain()) {
-        ipc.send('exitTable')
+        ipc.send('exitTable');
       } else {
-        ipc.send('closeScreen', { fullDomain: getSign() })
+        ipc.send('closeScreen', { fullDomain: getSign() });
       }
     },
     // 窗口放大
-    async maximize () {
+    async maximize() {
       if (await tsbApi.window.isMaximized()) {
-        tsbApi.window.unMaximize()
+        tsbApi.window.unMaximize();
       } else {
-        tsbApi.window.maximize()
+        tsbApi.window.maximize();
       }
     },
     // 关闭窗口放大
-    minimize () {
-      tsbApi.window.minimize()
+    minimize() {
+      tsbApi.window.minimize();
     },
     // 固定
-    fixed () {
-      this.alwaysTop = !this.alwaysTop
-      tsbApi.window.setAlwaysOnTop(this.alwaysTop)
+    fixed() {
+      this.alwaysTop = !this.alwaysTop;
+      tsbApi.window.setAlwaysOnTop(this.alwaysTop);
     },
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -71,7 +71,6 @@ export default {
   & svg {
     color: var(--primary-text) !important;
   }
-
 }
 
 .anticon {

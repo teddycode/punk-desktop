@@ -1,4 +1,4 @@
-@import "images.less";
+@import 'images.less';
 
 #spotlight {
   & {
@@ -45,32 +45,32 @@
     .spl-spinner,
     .spl-prev,
     .spl-next,
-    .spl-page ~ *{
+    .spl-page ~ * {
       filter: invert(1);
     }
-    .spl-progress{
+    .spl-progress {
       background-color: rgba(0, 0, 0, 0.35);
     }
     .spl-header,
-    .spl-footer{
+    .spl-footer {
       background-color: rgba(255, 255, 255, 0.65);
     }
-    .spl-button{
+    .spl-button {
       background: #212529;
       color: #fff;
     }
   }
-  .cover{
+  .cover {
     object-fit: cover;
     height: 100%;
     width: 100%;
   }
-  .contain{
+  .contain {
     object-fit: contain;
     height: 100%;
     width: 100%;
   }
-  .autofit{
+  .autofit {
     object-fit: none;
     width: auto;
     height: auto;
@@ -79,13 +79,13 @@
     transition: none;
   }
 }
-.spl-track{
+.spl-track {
   position: absolute;
   width: 100%;
   height: 100%;
   contain: strict;
 }
-.spl-spinner{
+.spl-spinner {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -94,12 +94,12 @@
   background-size: 42px;
   opacity: 0;
 }
-.spl-spinner.spin{
+.spl-spinner.spin {
   background-image: url(@preloader);
   transition: opacity 0.2s linear 0.25s;
   opacity: 1;
 }
-.spl-spinner.error{
+.spl-spinner.error {
   background-image: url(@error);
   background-size: 128px;
   transition: none;
@@ -125,17 +125,16 @@
   padding: 0;
   border: 0;
   transform: translate(-50%, -50%) scale(1);
-  transition: transform 0.65s cubic-bezier(0.3, 1, 0.3, 1),
-              opacity 0.65s ease;
+  transition: transform 0.65s cubic-bezier(0.3, 1, 0.3, 1), opacity 0.65s ease;
   contain: layout style;
   will-change: transform, opacity;
   visibility: hidden;
 }
-.spl-pane{
+.spl-pane {
   position: absolute;
-  top:0;
-  width:100%;
-  height:100%;
+  top: 0;
+  width: 100%;
+  height: 100%;
   transition: transform 0.65s cubic-bezier(0.3, 1, 0.3, 1);
   contain: layout size;
   will-change: transform, contents;
@@ -153,7 +152,7 @@
   will-change: transform;
 }
 #spotlight.menu .spl-header,
-.spl-header:hover{
+.spl-header:hover {
   transform: translateY(0);
 }
 .spl-header div {
@@ -164,7 +163,7 @@
   height: 50px;
   opacity: 0.5;
 }
-.spl-progress{
+.spl-progress {
   position: absolute;
   top: 0;
   width: 100%;
@@ -173,7 +172,7 @@
   transform: translateX(-100%);
   transition: transform linear;
 }
-.spl-footer{
+.spl-footer {
   position: absolute;
   left: 0;
   right: 0;
@@ -191,17 +190,17 @@
   will-change: transform;
 }
 #spotlight.menu .spl-footer,
-.spl-footer:hover{
+.spl-footer:hover {
   transform: translateY(0);
 }
-.spl-title{
+.spl-title {
   font-size: 22px;
   margin-bottom: 20px;
 }
-.spl-description{
+.spl-description {
   margin-bottom: 20px;
 }
-.spl-button{
+.spl-button {
   display: inline-block;
   //text-decoration: none;
   background: #fff;
@@ -211,56 +210,56 @@
   margin-bottom: 20px;
   cursor: pointer;
 }
-.spl-page{
+.spl-page {
   float: left;
   width: auto;
   line-height: 50px;
 }
-.spl-page ~ *{
+.spl-page ~ * {
   background-position: center;
   background-repeat: no-repeat;
   background-size: 21px;
   float: right;
 }
-.spl-fullscreen{
+.spl-fullscreen {
   background-image: url(@maximize);
 }
-.spl-fullscreen.on{
+.spl-fullscreen.on {
   background-image: url(@minimize);
 }
-.spl-autofit{
+.spl-autofit {
   background-image: url(@autofit);
 }
-.spl-zoom-out{
+.spl-zoom-out {
   background-image: url(@zoomout);
   background-size: 22px;
 }
-.spl-zoom-in{
+.spl-zoom-in {
   background-image: url(@zoomin);
   background-size: 22px;
 }
-.spl-download{
+.spl-download {
   background-image: url(@download);
   background-size: 20px;
 }
-.spl-theme{
+.spl-theme {
   background-image: url(@theme);
 }
-.spl-play{
+.spl-play {
   background-image: url(@play);
 }
-.spl-play.on{
+.spl-play.on {
   background-image: url(@pause);
   animation: pulsate 1s ease infinite;
 }
-.spl-close{
+.spl-close {
   background-image: url(@close);
 }
-.spl-info{
+.spl-info {
   background-image: url(@info);
 }
 .spl-prev,
-.spl-next{
+.spl-next {
   position: absolute;
   top: 50%;
   left: 20px;
@@ -284,21 +283,21 @@
   right: 20px;
   transform: translateX(100px) scaleX(-1);
 }
-#spotlight.menu .spl-prev{
+#spotlight.menu .spl-prev {
   transform: translateX(0);
 }
-#spotlight.menu .spl-next{
+#spotlight.menu .spl-next {
   transform: translateX(0) scaleX(-1);
 }
 
 @media (hover: hover) {
-  .spl-page ~ div{
+  .spl-page ~ div {
     cursor: pointer;
     transition: opacity 0.2s ease;
   }
   .spl-page ~ div:hover,
   .spl-prev:hover,
-  .spl-next:hover{
+  .spl-next:hover {
     opacity: 1;
   }
 }
@@ -307,10 +306,10 @@
   .spl-header div {
     width: 44px;
   }
-  .spl-footer .spl-title{
+  .spl-footer .spl-title {
     font-size: 20px;
   }
-  .spl-footer{
+  .spl-footer {
     font-size: 14px;
   }
   .spl-prev,
@@ -320,12 +319,12 @@
     margin-top: -17.5px;
     background-size: 15px 15px;
   }
-  .spl-spinner{
+  .spl-spinner {
     background-size: 30px 30px;
   }
 }
 
-.hide-scrollbars{
+.hide-scrollbars {
   //&::-webkit-scrollbar {
   //  width: 0;
   //}
@@ -335,13 +334,13 @@
 }
 
 @keyframes pulsate {
-  0%{
+  0% {
     opacity: 1;
   }
-  50%{
+  50% {
     opacity: 0.2;
   }
-  100%{
+  100% {
     opacity: 1;
   }
 }

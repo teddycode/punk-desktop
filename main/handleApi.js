@@ -1,25 +1,25 @@
-const { WindowManager } = require(__dirname + '/src/main/windowManager.js')
+const { WindowManager } = require(__dirname + '/src/main/windowManager.js');
 
 app.whenReady().then(() => {
-  global.windowManager = new WindowManager({})
-  windowManager.init()
-  let resizingSplitBar = false
-  let timer = null
+  global.windowManager = new WindowManager({});
+  windowManager.init();
+  let resizingSplitBar = false;
+  let timer = null;
   ipc.on('startResizeSplitBar', () => {
-    resizingSplitBar = true
+    resizingSplitBar = true;
     timer = setInterval(() => {
       if (resizingSplitBar) {
-        windowManager.resetAttachPosition()
+        windowManager.resetAttachPosition();
       } else {
-        clearInterval(timer)
-        timer = null
+        clearInterval(timer);
+        timer = null;
       }
-    }, 10)
-  })
+    }, 10);
+  });
 
   ipc.on('stopResizeSplitBar', () => {
-    resizingSplitBar = false
-  })
+    resizingSplitBar = false;
+  });
 
   /**
    * tab吸附到右侧
@@ -29,11 +29,11 @@ app.whenReady().then(() => {
     //   sendMessage({type:'error',config:{content:'至少激活2个标签才可使用侧边分屏功能。'}})
     //   return
     // }
-    sendIPCToMainWindow('changeTabAttach', { tab: args.tab })
-    windowManager.setTabAttach({ tab: args.tab })
-  })
+    sendIPCToMainWindow('changeTabAttach', { tab: args.tab });
+    windowManager.setTabAttach({ tab: args.tab });
+  });
 
   ipc.on('detachTab', (event, args) => {
-    windowManager.detachTab()
-  })
-})
+    windowManager.detachTab();
+  });
+});

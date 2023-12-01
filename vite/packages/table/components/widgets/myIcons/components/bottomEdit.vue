@@ -1,21 +1,13 @@
 <template>
   <div class="flex flex-row">
     <template v-for="item in menuList">
-      <xt-task
-          v-if="m02022 && item.title == '移动'"
-          :modelValue="m02022"
-          @cb="item.fn()"
-      >
+      <xt-task v-if="m02022 && item.title == '移动'" :modelValue="m02022" @cb="item.fn()">
         <div class="option h-24 w-24 ml-4" @click="item.fn()">
           <Icon :icon="item.icon" class="icon"></Icon>
           {{ item.title }}
         </div>
       </xt-task>
-      <xt-task
-          v-else-if="m02024 && item.title == '合并'"
-          :modelValue="m02024"
-          @cb="item.fn()"
-      >
+      <xt-task v-else-if="m02024 && item.title == '合并'" :modelValue="m02024" @cb="item.fn()">
         <div class="option h-24 w-24 ml-4" @click="item.fn()">
           <Icon :icon="item.icon" class="icon"></Icon>
           {{ item.title }}
@@ -30,8 +22,8 @@
 </template>
 
 <script>
-import { taskStore } from '../../../../apps/task/store'
-import { mapWritableState } from 'pinia'
+import { taskStore } from '../../../../apps/task/store';
+import { mapWritableState } from 'pinia';
 
 export default {
   props: {
@@ -45,14 +37,14 @@ export default {
   computed: {
     ...mapWritableState(taskStore, ['taskID', 'step']),
 
-    m02022 () {
-      return this.copy === true && this.step == 2 && this.taskID == 'M0202'
+    m02022() {
+      return this.copy === true && this.step == 2 && this.taskID == 'M0202';
     },
-    m02024 () {
-      return this.merge === true && this.step == 4 && this.taskID == 'M0202'
+    m02024() {
+      return this.merge === true && this.step == 4 && this.taskID == 'M0202';
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped></style>

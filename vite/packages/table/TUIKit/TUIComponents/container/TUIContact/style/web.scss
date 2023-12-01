@@ -107,7 +107,7 @@
 
         label {
           font-size: 0.88rem;
-          line-height: 1.25rem;;
+          line-height: 1.25rem;
           padding-bottom: 0.63rem;
         }
 
@@ -232,11 +232,11 @@
         border-radius: 50%;
 
         &-online {
-          background: #29CC85;
+          background: #29cc85;
         }
 
         &-offline {
-          background: #A4A4A4;
+          background: #a4a4a4;
         }
       }
     }
@@ -298,7 +298,7 @@
 
   &::before {
     position: absolute;
-    content: "";
+    content: '';
     width: 50%;
     height: 1px;
     top: 0;

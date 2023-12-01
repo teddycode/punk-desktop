@@ -1,16 +1,27 @@
 <template>
-
-  <Widget ref="cardSlot" :customData="customData" :customIndex="customIndex" :desk="desk"
-          :menuList="menuList" :options="options" :sizeList="sizeList" @click="onHistoryMessage">
+  <Widget
+    ref="cardSlot"
+    :customData="customData"
+    :customIndex="customIndex"
+    :desk="desk"
+    :menuList="menuList"
+    :options="options"
+    :sizeList="sizeList"
+    @click="onHistoryMessage"
+  >
     <div class="top-icon">
-      <Icon icon="majesticons:monitor-line"/>
+      <Icon icon="majesticons:monitor-line" />
     </div>
-    <div class="dash-board overflow-hidden" style="height: 370px;">
-      <Unusual v-if='!this.access_token || !this.baseUrl' :back="back" buttonTitle="立即配置"
-               title="请完成小组件配置"></Unusual>
-      <div v-for="(item,index) in targetKeys" v-else :key="index" class="dash-cell">
+    <div class="dash-board overflow-hidden" style="height: 370px">
+      <Unusual
+        v-if="!this.access_token || !this.baseUrl"
+        :back="back"
+        buttonTitle="立即配置"
+        title="请完成小组件配置"
+      ></Unusual>
+      <div v-for="(item, index) in targetKeys" v-else :key="index" class="dash-cell">
         <div class="cell-title">{{ this.mockData[item - 1].title }}</div>
-        <div class="cell-num" style="font-family: 'Oswald-Medium';">
+        <div class="cell-num" style="font-family: 'Oswald-Medium'">
           {{ this.mockData[item - 1].num == undefined ? '-' : this.mockData[item - 1].num }}
         </div>
       </div>
@@ -19,12 +30,17 @@
     <!-- 设置面板 -->
     <a-drawer v-model:visible="settingVisible" :width="500" placement="right" title="设置">
       <template #extra>
-        <div v-show="this.setVisible" class="xt-active-btn" style="width:64px;height:40px;"
-             @click="changeAccToken(accToken,accUrl)">提交
+        <div
+          v-show="this.setVisible"
+          class="xt-active-btn"
+          style="width: 64px; height: 40px"
+          @click="changeAccToken(accToken, accUrl)"
+        >
+          提交
         </div>
       </template>
-      <vue-custom-scrollbar :settings="settings" style="height: 100%;">
-        <div v-show="this.setVisible ">
+      <vue-custom-scrollbar :settings="settings" style="height: 100%">
+        <div v-show="this.setVisible">
           <div class="text-content">
             <div>关联短说社区系统</div>
             <div>
@@ -33,11 +49,19 @@
             <div>在磐古跨链客户端中打开短说管理后台，可以自动检测获取密钥。</div>
           </div>
           <p class="ml-1 mt-1">密钥</p>
-          <a-input v-model:value="this.accToken" class="search pl-1 input-txt" placeholder="请输入"
-                   style="border-radius: 10px;"></a-input>
+          <a-input
+            v-model:value="this.accToken"
+            class="search pl-1 input-txt"
+            placeholder="请输入"
+            style="border-radius: 10px"
+          ></a-input>
           <p class="ml-1">管理后台地址</p>
-          <a-input v-model:value="this.accUrl" class="search pl-1 input-txt" placeholder="请输入"
-                   style="border-radius: 10px;"></a-input>
+          <a-input
+            v-model:value="this.accUrl"
+            class="search pl-1 input-txt"
+            placeholder="请输入"
+            style="border-radius: 10px"
+          ></a-input>
         </div>
         <div v-show="!this.setVisible && this.access_token && this.baseUrl">
           <div class="text-title" @click="this.setVisible = !this.setVisible">
@@ -46,51 +70,49 @@
           </div>
           <div class="text-content">
             <div>设置小组件数据</div>
-            <div>4*4尺寸的小组件可以选择9个数据，2*4的小组件可以选择六个数据，
+            <div>
+              4*4尺寸的小组件可以选择9个数据，2*4的小组件可以选择六个数据，
               每个小组件的数据都是独立的，你可以为小组件去不同的名字，自由组合不同的数据维度的小组件看板
             </div>
           </div>
           <p>小组件名称</p>
           <p>
             <a-input
-                v-model:value="this.options.title"
-                class="search pl-1"
-                maxlength="20"
-                style="border-radius: 10px;"
-                @change="changeName"></a-input>
+              v-model:value="this.options.title"
+              class="search pl-1"
+              maxlength="20"
+              style="border-radius: 10px"
+              @change="changeName"
+            ></a-input>
           </p>
           <!--  穿梭框 -->
           <p>选择统计数值</p>
           <div class="transfer">
             <a-transfer
-                v-model:target-keys="targetKeys"
-                :data-source="this.mockData"
-                :show-select-all="false"
-                @change="handleChange">
+              v-model:target-keys="targetKeys"
+              :data-source="this.mockData"
+              :show-select-all="false"
+              @change="handleChange"
+            >
               <template #render="item">
                 <span class="custom-item">{{ item.title }}</span>
               </template>
             </a-transfer>
           </div>
         </div>
-
-
       </vue-custom-scrollbar>
     </a-drawer>
-
   </Widget>
-
-
 </template>
 
 <script>
-import Widget from '../../../card/Widget.vue'
-import { Icon } from '@iconify/vue'
-import { defineComponent } from 'vue'
-import { cardStore } from '../../../../store/card'
-import { mapActions, mapWritableState } from 'pinia'
-import { shortTalkStore } from '../store'
-import Unusual from '../../Unusual.vue'
+import Widget from '../../../card/Widget.vue';
+import { Icon } from '@iconify/vue';
+import { defineComponent } from 'vue';
+import { cardStore } from '../../../../store/card';
+import { mapActions, mapWritableState } from 'pinia';
+import { shortTalkStore } from '../store';
+import Unusual from '../../Unusual.vue';
 
 export default {
   components: {
@@ -107,8 +129,7 @@ export default {
     },
     customData: {
       type: Object,
-      default: () => {
-      },
+      default: () => {},
     },
     menuList: {
       type: Array,
@@ -123,7 +144,7 @@ export default {
   computed: {
     ...mapWritableState(shortTalkStore, ['mockData', 'access_token', 'baseUrl', 'setVisible']),
   },
-  data () {
+  data() {
     return {
       settings: {
         swipeEasing: true,
@@ -136,13 +157,13 @@ export default {
           title: '2x4',
           height: 2,
           width: 1,
-          name: '2x4'
+          name: '2x4',
         },
         {
           title: '4x4',
           height: 2,
           width: 2,
-          name: '4x4'
+          name: '4x4',
         },
       ],
       settingVisible: false,
@@ -154,10 +175,10 @@ export default {
           icon: 'shezhi1',
           title: '设置',
           fn: () => {
-            this.settingVisible = true
-            this.$refs.cardSlot.visible = false
-            this.setVisible = false
-          }
+            this.settingVisible = true;
+            this.$refs.cardSlot.visible = false;
+            this.setVisible = false;
+          },
         },
       ],
       options: {
@@ -171,77 +192,88 @@ export default {
       // 密钥和地址
       accToken: '',
       accUrl: '',
-
-    }
+    };
   },
-  mounted () {
+  mounted() {
     // 初始化
-    this.accToken = this.access_token
-    this.accUrl = this.baseUrl
-    this.init()
-
+    this.accToken = this.access_token;
+    this.accUrl = this.baseUrl;
+    this.init();
   },
   methods: {
     ...mapActions(cardStore, ['updateCustomData']),
     ...mapActions(shortTalkStore, ['getBoardData', 'changeAccToken']),
-    init () {
+    init() {
       // 初始化设置数组
       if (!this.customData.targetKeys) {
-        this.updateCustomData(this.customIndex, {
-          'targetKeys': [1, 2, 3, 4, 5, 6, 7, 8, 9],
-        }, this.desk)
+        this.updateCustomData(
+          this.customIndex,
+          {
+            targetKeys: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+          },
+          this.desk,
+        );
       } else {
-        this.targetKeys = this.customData.targetKeys
+        this.targetKeys = this.customData.targetKeys;
       }
       // 初始化名称
       if (!this.customData.optionTitle) {
-        this.updateCustomData(this.customIndex, {
-          'optionTitle': '社区数据',
-        }, this.desk)
+        this.updateCustomData(
+          this.customIndex,
+          {
+            optionTitle: '社区数据',
+          },
+          this.desk,
+        );
       } else {
-        this.options.title = this.customData.optionTitle
+        this.options.title = this.customData.optionTitle;
       }
       // 初始化获取详细数据
-      this.getBoardData()
-
+      this.getBoardData();
     },
     // 修改设置的数组
-    handleChange (keys, direction, moveKeys) {
-      this.updateCustomData(this.customIndex, {
-        'mockData': this.mockData,
-        'targetKeys': keys,
-      }, this.desk)
-
+    handleChange(keys, direction, moveKeys) {
+      this.updateCustomData(
+        this.customIndex,
+        {
+          mockData: this.mockData,
+          targetKeys: keys,
+        },
+        this.desk,
+      );
     },
     // 修改小组件名称
-    changeName () {
-      this.updateCustomData(this.customIndex, {
-        'optionTitle': this.options.title,
-      }, this.desk)
+    changeName() {
+      this.updateCustomData(
+        this.customIndex,
+        {
+          optionTitle: this.options.title,
+        },
+        this.desk,
+      );
     },
 
-    back () {
-      this.settingVisible = true
-      this.setVisible = true
-    }
-
+    back() {
+      this.settingVisible = true;
+      this.setVisible = true;
+    },
   },
   watch: {
     // 监听token 跟 url
-    'access_token': {
-      handler (newVal, oldVal) {
-        this.accToken = this.access_token
-        this.init()
-      }
+    access_token: {
+      handler(newVal, oldVal) {
+        this.accToken = this.access_token;
+        this.init();
+      },
     },
-    'baseUrl': {
-      handler (newVal, oldVal) {
-        this.accUrl = this.baseUrl
-        this.init()
-      }
-    }
-  }
-}
+    baseUrl: {
+      handler(newVal, oldVal) {
+        this.accUrl = this.baseUrl;
+        this.init();
+      },
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -269,15 +301,14 @@ export default {
   width: 32%;
   min-width: 120px;
   height: 112px;
-  background: rgba(0, 0, 0, 0.30);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 10px;
   margin-top: 12px;
 }
 
 .dash-cell .cell-title {
-
   font-size: 16px;
-  color: rgba(255, 255, 255, 0.60);
+  color: rgba(255, 255, 255, 0.6);
   font-weight: 400;
   margin-top: 23px;
 }
@@ -310,7 +341,6 @@ export default {
   max-height: 564px;
   width: 194px !important;
   height: 656px !important;
-
 }
 
 :deep(.ant-btn-icon-only.ant-btn-sm) {
@@ -320,16 +350,15 @@ export default {
   margin-top: 8px;
 }
 
-
 .text-content {
   width: 100%;
   min-height: 124px;
-  background: #2A2A2A;
+  background: #2a2a2a;
   border-radius: 12px;
   padding: 10px 16px;
 
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.60);
+  color: rgba(255, 255, 255, 0.6);
   font-weight: 400;
   margin-bottom: 10px;
 }
@@ -344,7 +373,6 @@ export default {
   margin-bottom: 10px;
 }
 
-
 .top-btn {
   width: 64px;
   height: 40px;
@@ -358,7 +386,7 @@ export default {
   height: 48px;
   line-height: 48px;
   color: rgba(255, 255, 255, 0.85);
-  background: #2A2A2A;
+  background: #2a2a2a;
   border-radius: 12px;
   margin-bottom: 16px;
   cursor: pointer;
@@ -366,7 +394,7 @@ export default {
 
 .text-title span {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.60);
+  color: rgba(255, 255, 255, 0.6);
   float: right;
 }
 
@@ -378,18 +406,16 @@ export default {
 .input-txt {
   height: 40px;
   margin-bottom: 12px;
-  background-color: #2A2A2A 100%;
+  background-color: #2a2a2a 100%;
 }
 
 :deep(.ant-pagination) {
   text-align: center !important;
 }
 
-
 .ant-transfer-list-content::-webkit-scrollbar-track {
   background-color: #f1f1f1 !important;
 }
-
 
 // 滚动条
 :deep(.ant-transfer-list-content) {

@@ -32,7 +32,7 @@ Have you ever wanted a drag and drop library that just works? That doesn't just 
 - **Figures out sort order** on its own
 - A shadow where the item would be dropped offers **visual feedback**
 - Touch events!
-- Seamlessly handles clicks *without any configuration*
+- Seamlessly handles clicks _without any configuration_
 
 # Install
 
@@ -98,15 +98,15 @@ dragula(containers, {
   invalid: function (el, handle) {
     return false; // don't prevent any drags from initiating by default
   },
-  direction: 'vertical',             // Y axis is considered when determining where an element would be dropped
-  copy: false,                       // elements are moved by default, not copied
-  copySortSource: false,             // elements in copy-source containers can be reordered
-  revertOnSpill: false,              // spilling will put the element back where it was dragged from, if this is true
-  removeOnSpill: false,              // spilling will `.remove` the element, if this is true
-  mirrorContainer: document.body,    // set the element that gets mirror elements appended
-  ignoreInputTextSelection: true,     // allows users to select input text, see details below
-  slideFactorX: 0,               // allows users to select the amount of movement on the X axis before it is considered a drag instead of a click
-  slideFactorY: 0,               // allows users to select the amount of movement on the Y axis before it is considered a drag instead of a click
+  direction: 'vertical', // Y axis is considered when determining where an element would be dropped
+  copy: false, // elements are moved by default, not copied
+  copySortSource: false, // elements in copy-source containers can be reordered
+  revertOnSpill: false, // spilling will put the element back where it was dragged from, if this is true
+  removeOnSpill: false, // spilling will `.remove` the element, if this is true
+  mirrorContainer: document.body, // set the element that gets mirror elements appended
+  ignoreInputTextSelection: true, // allows users to select input text, see details below
+  slideFactorX: 0, // allows users to select the amount of movement on the X axis before it is considered a drag instead of a click
+  slideFactorY: 0, // allows users to select the amount of movement on the Y axis before it is considered a drag instead of a click
 });
 ```
 
@@ -114,7 +114,7 @@ You can omit the `containers` argument and add containers dynamically later on.
 
 ```js
 var drake = dragula({
-  copy: true
+  copy: true,
 });
 drake.containers.push(container);
 ```
@@ -147,7 +147,7 @@ The example below dynamically treats all DOM elements with a CSS class of `dragu
 var drake = dragula({
   isContainer: function (el) {
     return el.classList.contains('dragula-container');
-  }
+  },
 });
 ```
 
@@ -165,12 +165,12 @@ Also note that **the position where a drag starts is always going to be a valid 
 
 If `copy` is set to `true` _(or a method that returns `true`)_, items will be copied rather than moved. This implies the following differences:
 
-Event     | Move                                     | Copy
-----------|------------------------------------------|---------------------------------------------
-`drag`    | Element will be concealed from `source`  | Nothing happens
-`drop`    | Element will be moved into `target`      | Element will be cloned into `target`
-`remove`  | Element will be removed from DOM         | Nothing happens
-`cancel`  | Element will stay in `source`            | Nothing happens
+| Event    | Move                                    | Copy                                 |
+| -------- | --------------------------------------- | ------------------------------------ |
+| `drag`   | Element will be concealed from `source` | Nothing happens                      |
+| `drop`   | Element will be moved into `target`     | Element will be cloned into `target` |
+| `remove` | Element will be removed from DOM        | Nothing happens                      |
+| `cancel` | Element will stay in `source`           | Nothing happens                      |
 
 If a method is passed, it'll be called whenever an element starts being dragged in order to decide whether it should follow `copy` behavior or not. Consider the following example.
 
@@ -179,6 +179,7 @@ copy: function (el, source) {
   return el.className === 'you-may-copy-us';
 }
 ```
+
 #### `options.copySortSource`
 
 If `copy` is set to `true` _(or a method that returns `true`)_ and `copySortSource` is `true` as well, users will be able to sort elements in `copy`-source containers.
@@ -205,7 +206,7 @@ When an element is dropped onto a container, it'll be placed near the point wher
 You can provide an `invalid` method with a `(el, handle)` signature. This method should return `true` for elements that shouldn't trigger a drag. The `handle` argument is the element that was clicked, while `el` is the item that would be dragged. Here's the default implementation, which doesn't prevent any drags.
 
 ```js
-function invalidTarget (el, handle) {
+function invalidTarget(el, handle) {
   return false;
 }
 ```
@@ -267,17 +268,17 @@ If an element managed by `drake` is currently being dragged, this method will gr
 
 The `drake` is an event emitter. The following events can be tracked using `drake.on(type, listener)`:
 
-Event Name | Listener Arguments               | Event Description
------------|----------------------------------|-------------------------------------------------------------------------------------
-`drag`     | `el, source`                     | `el` was lifted from `source`
-`dragend`  | `el`                             | Dragging event for `el` ended with either `cancel`, `remove`, or `drop`
-`drop`     | `el, target, source, sibling`    | `el` was dropped into `target` before a `sibling` element, and originally came from `source`
-`cancel`   | `el, container, source`          | `el` was being dragged but it got nowhere and went back into `container`, its last stable parent; `el` originally came from `source`
-`remove`   | `el, container, source`          | `el` was being dragged but it got nowhere and it was removed from the DOM. Its last stable parent was `container`, and originally came from `source`
-`shadow`   | `el, container, source`          | `el`, _the visual aid shadow_, was moved into `container`. May trigger many times as the position of `el` changes, even within the same `container`; `el` originally came from `source`
-`over`     | `el, container, source`          | `el` is over `container`, and originally came from `source`
-`out`      | `el, container, source`          | `el` was dragged out of `container` or dropped, and originally came from `source`
-`cloned`   | `clone, original, type`          | DOM element `original` was cloned as `clone`, of `type` _(`'mirror'` or `'copy'`)_. Fired for mirror images and when `copy: true`
+| Event Name | Listener Arguments            | Event Description                                                                                                                                                                       |
+| ---------- | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `drag`     | `el, source`                  | `el` was lifted from `source`                                                                                                                                                           |
+| `dragend`  | `el`                          | Dragging event for `el` ended with either `cancel`, `remove`, or `drop`                                                                                                                 |
+| `drop`     | `el, target, source, sibling` | `el` was dropped into `target` before a `sibling` element, and originally came from `source`                                                                                            |
+| `cancel`   | `el, container, source`       | `el` was being dragged but it got nowhere and went back into `container`, its last stable parent; `el` originally came from `source`                                                    |
+| `remove`   | `el, container, source`       | `el` was being dragged but it got nowhere and it was removed from the DOM. Its last stable parent was `container`, and originally came from `source`                                    |
+| `shadow`   | `el, container, source`       | `el`, _the visual aid shadow_, was moved into `container`. May trigger many times as the position of `el` changes, even within the same `container`; `el` originally came from `source` |
+| `over`     | `el, container, source`       | `el` is over `container`, and originally came from `source`                                                                                                                             |
+| `out`      | `el, container, source`       | `el` was dragged out of `container` or dropped, and originally came from `source`                                                                                                       |
+| `cloned`   | `clone, original, type`       | DOM element `original` was cloned as `clone`, of `type` _(`'mirror'` or `'copy'`)_. Fired for mirror images and when `copy: true`                                                       |
 
 #### `drake.canMove(item)`
 

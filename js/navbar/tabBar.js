@@ -1,40 +1,40 @@
-const EventEmitter = require('events')
+const EventEmitter = require('events');
 
-const webviews = require('webviews.js')
-const focusMode = require('focusMode.js')
-const readerView = require('readerView.js')
-const tabAudio = require('tabAudio.js')
-const dragula = require('dragula')
-const settings = require('util/settings/settings.js')
-const urlParser = require('util/urlParser.js')
-const keybindings = require('keybindings.js')
+const webviews = require('webviews.js');
+const focusMode = require('focusMode.js');
+const readerView = require('readerView.js');
+const tabAudio = require('tabAudio.js');
+const dragula = require('dragula');
+const settings = require('util/settings/settings.js');
+const urlParser = require('util/urlParser.js');
+const keybindings = require('keybindings.js');
 
-const tabEditor = require('navbar/tabEditor.js')
-const progressBar = require('navbar/progressBar.js')
-const permissionRequests = require('navbar/permissionRequests.js')
+const tabEditor = require('navbar/tabEditor.js');
+const progressBar = require('navbar/progressBar.js');
+const permissionRequests = require('navbar/permissionRequests.js');
 
 // 添加tab上的右键菜单，支持右键选择关闭行为组
-const remoteMenu = require('remoteMenuRenderer.js')
+const remoteMenu = require('remoteMenuRenderer.js');
 // const path = require('path')
 
-const ipc = electron.ipcRenderer
+const ipc = electron.ipcRenderer;
 
-const navbarApi = require('../../src/api/navbarApi.js')
-const baseApi = require('../../src/api/baseApi')
-const deskModel = require('../../pages/util/model/deskModel.js')
-const { ipcRenderer, BrowserWindow } = require('electron')
-const browserUI = require('browserUI.js')
+const navbarApi = require('../../src/api/navbarApi.js');
+const baseApi = require('../../src/api/baseApi');
+const deskModel = require('../../pages/util/model/deskModel.js');
+const { ipcRenderer, BrowserWindow } = require('electron');
+const browserUI = require('browserUI.js');
 
 /**
  * 判断是不是小号标签
  * @param tabData
  * @returns {*}
  */
-function isCopy (tabData) {
-  return tabData.partition && tabData.partition.startsWith('persist:webcontent_')
+function isCopy(tabData) {
+  return tabData.partition && tabData.partition.startsWith('persist:webcontent_');
 }
 
-var lastTabDeletion = 0 // TODO get rid of this
+var lastTabDeletion = 0; // TODO get rid of this
 
 const tabBar = {
   navBar: document.getElementById('navbar'),
@@ -45,118 +45,126 @@ const tabBar = {
 
   dragulaInstance: null,
   getTab: function (tabId) {
-    return tabBar.tabElementMap[tabId]
+    return tabBar.tabElementMap[tabId];
   },
   getTabInput: function (tabId) {
-    return tabBar.getTab(tabId).querySelector('.tab-input')
+    return tabBar.getTab(tabId).querySelector('.tab-input');
   },
   setActiveTab: function (tabId) {
-    var activeTab = document.querySelector('.tab-item.active')
+    var activeTab = document.querySelector('.tab-item.active');
 
     if (activeTab) {
-      activeTab.classList.remove('active')
-      activeTab.removeAttribute('aria-selected')
+      activeTab.classList.remove('active');
+      activeTab.removeAttribute('aria-selected');
     }
 
-    var el = tabBar.getTab(tabId)
-    el.classList.add('active')
-    el.setAttribute('aria-selected', 'true')
+    var el = tabBar.getTab(tabId);
+    el.classList.add('active');
+    el.setAttribute('aria-selected', 'true');
 
     requestAnimationFrame(function () {
-      el.scrollIntoView()
-    })
+      el.scrollIntoView();
+    });
   },
   /* 标签栏补充的右键菜单触发动作开始 */
   // 关闭其他的标签
   closeOtherTabs: function (tabId) {
-    if (tabId !== tabs.getSelected()) { require('browserUI.js').switchToTab(tabId) }
-    const needDestroy = []
-    let lockCount = 0
+    if (tabId !== tabs.getSelected()) {
+      require('browserUI.js').switchToTab(tabId);
+    }
+    const needDestroy = [];
+    let lockCount = 0;
     tasks.getSelected().tabs.forEach(function (tab, index) {
       if (tab.id != tabId) {
         if (tabs.get(tab.id).lock) {
-          lockCount++
+          lockCount++;
         } else {
-          needDestroy.push(tab.id)
+          needDestroy.push(tab.id);
         }
       }
-    })
-    tabBar.closeTabsById(needDestroy, lockCount)
+    });
+    tabBar.closeTabsById(needDestroy, lockCount);
     // $store.getters.fillTasksToItems
   },
-  closeTabsById (needDestroyIds, lockCount) {
+  closeTabsById(needDestroyIds, lockCount) {
     needDestroyIds.forEach(function (tid, index) {
-      require('browserUI.js').destroyTab(tid)
-    })
+      require('browserUI.js').destroyTab(tid);
+    });
     if (lockCount > 0) {
       ipc.send('message', {
         type: 'success',
-        config: { content: '成功关闭' + needDestroyIds.length + '个标签。但有' + lockCount + '个锁定标签未关闭，请解锁后关闭。' }
-      })
+        config: {
+          content: '成功关闭' + needDestroyIds.length + '个标签。但有' + lockCount + '个锁定标签未关闭，请解锁后关闭。',
+        },
+      });
     } else {
-      ipc.send('message', { type: 'success', config: { content: '成功关闭' + needDestroyIds.length + '个标签。' } })
+      ipc.send('message', { type: 'success', config: { content: '成功关闭' + needDestroyIds.length + '个标签。' } });
     }
   },
   // 关闭左侧标签
   closeLeftTabs: function (tabId) {
-    const tabs = tasks.getSelected().tabs
-    if (tabId !== tabs.getSelected()) { require('browserUI.js').switchToTab(tabId) }
-    const needDestroy = []
-    let lockCount = 0
-    const currentIndex = tabs.getIndex(tabId)
+    const tabs = tasks.getSelected().tabs;
+    if (tabId !== tabs.getSelected()) {
+      require('browserUI.js').switchToTab(tabId);
+    }
+    const needDestroy = [];
+    let lockCount = 0;
+    const currentIndex = tabs.getIndex(tabId);
     for (let i = 0; i < currentIndex; i++) {
       if (tabs.getAtIndex(i).id != tabId) {
         if (tabs.getAtIndex(i).lock) {
-          lockCount++
+          lockCount++;
         } else {
-          needDestroy.push(tabs.getAtIndex(i).id)
+          needDestroy.push(tabs.getAtIndex(i).id);
         }
       }
     }
-    tabBar.closeTabsById(needDestroy, lockCount)
+    tabBar.closeTabsById(needDestroy, lockCount);
     // $store.getters.fillTasksToItems
   },
   // 关闭右侧标签
   closeRightTabs: function (tabId) {
-    const tabs = tasks.getSelected().tabs
-    if (tabId !== tabs.getSelected()) { require('browserUI.js').switchToTab(tabId) }
-    const needDestroy = []
-    const count = tabs.count()
-    let lockCount = 0
-    const currentIndex = tabs.getIndex(tabId)
+    const tabs = tasks.getSelected().tabs;
+    if (tabId !== tabs.getSelected()) {
+      require('browserUI.js').switchToTab(tabId);
+    }
+    const needDestroy = [];
+    const count = tabs.count();
+    let lockCount = 0;
+    const currentIndex = tabs.getIndex(tabId);
     for (let i = count - 1; i >= currentIndex; i--) {
       if (tabs.getAtIndex(i).id != tabId) {
         if (tabs.getAtIndex(i).lock) {
-          lockCount++
+          lockCount++;
         } else {
-          needDestroy.push(tabs.getAtIndex(i).id)
+          needDestroy.push(tabs.getAtIndex(i).id);
         }
       }
     }
-    tabBar.closeTabsById(needDestroy, lockCount)
+    tabBar.closeTabsById(needDestroy, lockCount);
     // $store.getters.fillTasksToItems
   },
   // 移动到第一个标签
   moveToFirst: function (tabId) {
-    const tabs = tasks.getSelected().tabs
-    tab = tabs.get(tabId)
-    index = tabs.getIndex(tabId)
-    tabs.splice(index, 1)
-    tabs.splice(0, 0, tab)
-    tabBar.updateAll()
-    require('browserUI.js').switchToTab(tabId)
+    const tabs = tasks.getSelected().tabs;
+    tab = tabs.get(tabId);
+    index = tabs.getIndex(tabId);
+    tabs.splice(index, 1);
+    tabs.splice(0, 0, tab);
+    tabBar.updateAll();
+    require('browserUI.js').switchToTab(tabId);
   },
   // 刷新
   refresh: function (id) {
-    webviews.update(id, tasks.getSelected().tabs.get(id).url)
+    webviews.update(id, tasks.getSelected().tabs.get(id).url);
   },
   // 移动到其他标签组
-  insertTabToTask (tabId) {
-    const previousTask = tasks.getSelected()
-    const currentTabIndex = previousTask.tabs.getIndex(tabId)
+  insertTabToTask(tabId) {
+    const previousTask = tasks.getSelected();
+    const currentTabIndex = previousTask.tabs.getIndex(tabId);
     // 拿到oldTab的信息
-    const oldTab = previousTask.tabs.tabs[currentTabIndex]
-    ipc.send('selectTask', oldTab) // 呼出面板,并把oldtab的应用地址对象传过去
+    const oldTab = previousTask.tabs.tabs[currentTabIndex];
+    ipc.send('selectTask', oldTab); // 呼出面板,并把oldtab的应用地址对象传过去
   },
 
   /**
@@ -165,12 +173,12 @@ const tabBar = {
    * @param {Number} listId 父级id
    * @param {Boolean} single 默认true单个移动
    */
-  addToScopeLocal (tabId, listId, single = true) {
+  addToScopeLocal(tabId, listId, single = true) {
     if (single) {
-      const tabs = tasks.getSelected().tabs
-      const tab = tabs.get(tabId)
+      const tabs = tasks.getSelected().tabs;
+      const tab = tabs.get(tabId);
       if (tab.url.startsWith('file:///')) {
-        ipc.send('message', { type: 'error', config: { content: '系统页面无法添加!' } })
+        ipc.send('message', { type: 'error', config: { content: '系统页面无法添加!' } });
       } else {
         const appNow = {
           icon: tab.favicon == null ? '../../icons/default.svg' : tab.favicon.url,
@@ -178,31 +186,31 @@ const tabBar = {
           url: tab.url,
           summary: '',
           listId: listId || 0,
-          star: '5'
-        }
-        const appsRestore = require('../../pages/apps/appsRestore.js')
-        appsRestore.addApp(appNow)
-        ipc.send('message', { type: 'success', config: { content: '添加成功，可在我的导航和新标签页中查看。' } })
+          star: '5',
+        };
+        const appsRestore = require('../../pages/apps/appsRestore.js');
+        appsRestore.addApp(appNow);
+        ipc.send('message', { type: 'success', config: { content: '添加成功，可在我的导航和新标签页中查看。' } });
       }
     } else {
-      const appsRestore = require('../../pages/apps/appsRestore.js')
-      const tabs = tasks.getSelected().tabs
-      const filterTabs = tabs.tabs.filter(e => !e.url.startsWith('file:///'))
-      filterTabs.forEach(item => {
+      const appsRestore = require('../../pages/apps/appsRestore.js');
+      const tabs = tasks.getSelected().tabs;
+      const filterTabs = tabs.tabs.filter((e) => !e.url.startsWith('file:///'));
+      filterTabs.forEach((item) => {
         const appNow = {
           icon: item.favicon == null ? '../../icons/default.svg' : item.favicon.url,
           name: item.title,
           url: item.url,
           summary: '',
           listId: listId || 0,
-          star: '5'
-        }
-        appsRestore.addApp(appNow)
-      })
+          star: '5',
+        };
+        appsRestore.addApp(appNow);
+      });
       ipc.send('message', {
         type: 'success',
-        config: { content: '整组添加成功，已为您排除系统页面，可在我的导航和新标签页中查看。' }
-      })
+        config: { content: '整组添加成功，已为您排除系统页面，可在我的导航和新标签页中查看。' },
+      });
     }
   },
 
@@ -212,12 +220,12 @@ const tabBar = {
    * @param {Number} listId 父级id
    * @param {Boolean} single 默认true单个移动
    */
-  async addToUserNav (tabId, listId, single = true) {
+  async addToUserNav(tabId, listId, single = true) {
     if (single) {
-      const tabs = tasks.getSelected().tabs
-      const tab = tabs.get(tabId)
+      const tabs = tasks.getSelected().tabs;
+      const tab = tabs.get(tabId);
       if (tab.url.startsWith('file:///')) {
-        ipc.send('message', { type: 'error', config: { content: '系统页面无法添加!' } })
+        ipc.send('message', { type: 'error', config: { content: '系统页面无法添加!' } });
       } else {
         const appNow = {
           icon: tab.favicon == null ? '../../icons/default.svg' : tab.favicon.url,
@@ -225,39 +233,39 @@ const tabBar = {
           url: tab.url,
           summary: '',
           list_id: listId,
-          add_time: String(new Date().getTime())
-        }
-        const result = await navbarApi.addUserNavApp(appNow)
+          add_time: String(new Date().getTime()),
+        };
+        const result = await navbarApi.addUserNavApp(appNow);
         if (result.code === 1000) {
-          ipc.send('message', { type: 'success', config: { content: '添加成功，可在云端用户导航中查看。' } })
+          ipc.send('message', { type: 'success', config: { content: '添加成功，可在云端用户导航中查看。' } });
         }
       }
     } else {
-      const tabs = tasks.getSelected().tabs
-      const filterTabs = tabs.tabs.filter(e => !e.url.startsWith('file:///'))
-      filterTabs.forEach(item => {
+      const tabs = tasks.getSelected().tabs;
+      const filterTabs = tabs.tabs.filter((e) => !e.url.startsWith('file:///'));
+      filterTabs.forEach((item) => {
         const appNow = {
           icon: item.favicon == null ? '../../icons/default.svg' : item.favicon.url,
           name: item.title,
           url: item.url,
           summary: '',
           list_id: listId,
-          add_time: String(new Date().getTime())
-        }
+          add_time: String(new Date().getTime()),
+        };
         setTimeout(async () => {
-          await navbarApi.addUserNavApp(appNow)
-        }, 200)
-      })
-      ipc.send('message', { type: 'success', config: { content: '添加成功，可在云端用户导航中查看。' } })
+          await navbarApi.addUserNavApp(appNow);
+        }, 200);
+      });
+      ipc.send('message', { type: 'success', config: { content: '添加成功，可在云端用户导航中查看。' } });
     }
   },
 
-  async addToGroupNav (tabId, listId, single = true) {
+  async addToGroupNav(tabId, listId, single = true) {
     if (single) {
-      const tabs = tasks.getSelected().tabs
-      const tab = tabs.get(tabId)
+      const tabs = tasks.getSelected().tabs;
+      const tab = tabs.get(tabId);
       if (tab.url.startsWith('file:///')) {
-        ipc.send('message', { type: 'error', config: { content: '系统页面无法添加!' } })
+        ipc.send('message', { type: 'error', config: { content: '系统页面无法添加!' } });
       } else {
         const appNow = {
           icon: tab.favicon == null ? '../../icons/default.svg' : tab.favicon.url,
@@ -265,119 +273,119 @@ const tabBar = {
           url: tab.url,
           summary: '',
           list_id: listId,
-          add_time: String(new Date().getTime())
-        }
-        const result = await navbarApi.addGroupNavApp(appNow)
+          add_time: String(new Date().getTime()),
+        };
+        const result = await navbarApi.addGroupNavApp(appNow);
         if (result.code === 1000) {
-          ipc.send('message', { type: 'success', config: { content: '添加成功，可在云端团队导航中查看。' } })
+          ipc.send('message', { type: 'success', config: { content: '添加成功，可在云端团队导航中查看。' } });
         }
       }
     } else {
-      const tabs = tasks.getSelected().tabs
-      const filterTabs = tabs.tabs.filter(e => !e.url.startsWith('file:///'))
-      filterTabs.forEach(item => {
+      const tabs = tasks.getSelected().tabs;
+      const filterTabs = tabs.tabs.filter((e) => !e.url.startsWith('file:///'));
+      filterTabs.forEach((item) => {
         const appNow = {
           icon: item.favicon == null ? '../../icons/default.svg' : item.favicon.url,
           name: item.title,
           url: item.url,
           summary: '',
           list_id: listId,
-          add_time: String(new Date().getTime())
-        }
+          add_time: String(new Date().getTime()),
+        };
         setTimeout(async () => {
-          await navbarApi.addGroupNavApp(appNow)
-        }, 200)
-      })
-      ipc.send('message', { type: 'success', config: { content: '添加成功，可在云端团队导航中查看。' } })
+          await navbarApi.addGroupNavApp(appNow);
+        }, 200);
+      });
+      ipc.send('message', { type: 'success', config: { content: '添加成功，可在云端团队导航中查看。' } });
     }
   },
   /**
    * 重命名
    * @param tabId
    */
-  rename (tabId) {
+  rename(tabId) {
     const { newName } = ipc.sendSync('prompt', {
       text: '输入标签名称',
       values: [
         {
           placeholder: tabs.get(tabId).newName ? tabs.get(tabId).newName : tabs.get(tabId).title,
           id: 'newName',
-          type: 'text'
-        }
+          type: 'text',
+        },
       ],
       ok: '修改',
       cancel: '取消',
       width: 500,
-      height: 240
-    })
-    const tabData = tabs.get(tabId)
+      height: 240,
+    });
+    const tabData = tabs.get(tabId);
     if (isCopy(tabData)) {
-      tabs.tabs.forEach(tab => {
+      tabs.tabs.forEach((tab) => {
         //遍历全部的标签，并修改同分区的标签为同一个名称
         if (tab.partition === tabData.partition) {
-          tabs.update(tab.id, { newName })
+          tabs.update(tab.id, { newName });
         }
-      })
-      tabBar.updateAll()
+      });
+      tabBar.updateAll();
     } else {
       //不是小号标签，只需要改自己就行了
-      tabs.update(tabId, { newName })
-      tabBar.updateAll()
+      tabs.update(tabId, { newName });
+      tabBar.updateAll();
     }
   },
 
   // 复制tab链接
   shareTab: function (tabId) {
-    const tabs = tasks.getSelected().tabs
-    const tab = tabs.get(tabId)
+    const tabs = tasks.getSelected().tabs;
+    const tab = tabs.get(tabId);
     if (tab.url.startsWith('file:///')) {
-      ipc.send('message', { type: 'error', config: { content: '链接复制失败' } })
+      ipc.send('message', { type: 'error', config: { content: '链接复制失败' } });
     } else {
-      Tools.copy(tab.url)
+      Tools.copy(tab.url);
     }
   },
 
   // 复制tasks整组链接生成分享页
   shareTask: function () {
-    const tabs = tasks.getSelected().tabs
-    const filterList = tabs.tabs.filter(e => !e.url.startsWith('file:///')) // 过滤掉file层面的tab
-    const args = []
+    const tabs = tasks.getSelected().tabs;
+    const filterList = tabs.tabs.filter((e) => !e.url.startsWith('file:///')); // 过滤掉file层面的tab
+    const args = [];
     for (let i = 0; i < filterList.length; i++) {
       const obj = {
         url: filterList[i].url,
         favicon: filterList[i].favicon === null ? '/shareTask/default.svg' : filterList[i].favicon.url,
-        title: filterList[i].title
-      }
-      args.push(obj)
+        title: filterList[i].title,
+      };
+      args.push(obj);
     }
-    ipc.send('shareTask', args)
+    ipc.send('shareTask', args);
   },
 
   /* 标签栏补充的右键菜单触发动作结束 */
   createTab: function (data) {
-    var tabEl = document.createElement('div')
-    tabEl.className = 'tab-item'
-    tabEl.setAttribute('data-tab', data.id)
-    tabEl.setAttribute('role', 'tab')
+    var tabEl = document.createElement('div');
+    tabEl.className = 'tab-item';
+    tabEl.setAttribute('data-tab', data.id);
+    tabEl.setAttribute('role', 'tab');
 
-    tabEl.appendChild(readerView.getButton(data.id))
-    tabEl.appendChild(tabAudio.getButton(data.id))
-    tabEl.appendChild(progressBar.create())
+    tabEl.appendChild(readerView.getButton(data.id));
+    tabEl.appendChild(tabAudio.getButton(data.id));
+    tabEl.appendChild(progressBar.create());
 
     tabEl.addEventListener('dblclick', (e) => {
-      ipc.send('dbClickClose', { id: data.id })
-      e.stopPropagation()
-      e.preventDefault()
-    })
+      ipc.send('dbClickClose', { id: data.id });
+      e.stopPropagation();
+      e.preventDefault();
+    });
     // icons
 
-    var iconArea = document.createElement('span')
-    iconArea.className = 'tab-icon-area'
+    var iconArea = document.createElement('span');
+    iconArea.className = 'tab-icon-area';
 
     if (data.private) {
-      var pbIcon = document.createElement('i')
-      pbIcon.className = 'icon-tab-is-private tab-icon tab-info-icon i carbon:view-off'
-      iconArea.appendChild(pbIcon)
+      var pbIcon = document.createElement('i');
+      pbIcon.className = 'icon-tab-is-private tab-icon tab-info-icon i carbon:view-off';
+      iconArea.appendChild(pbIcon);
     }
 
     // var secIcon = document.createElement('i')
@@ -385,63 +393,63 @@ const tabBar = {
     // secIcon.title = l('connectionNotSecure')
     // iconArea.appendChild(secIcon)
 
-    var closeTabButton = document.createElement('button')
-    closeTabButton.className = 'tab-icon tab-close-button i carbon:close'
+    var closeTabButton = document.createElement('button');
+    closeTabButton.className = 'tab-icon tab-close-button i carbon:close';
     if (data.lock) {
-      closeTabButton.style.display = 'none'
+      closeTabButton.style.display = 'none';
     }
 
     closeTabButton.addEventListener('click', function (e) {
-      tabBar.events.emit('tab-closed', data.id)
+      tabBar.events.emit('tab-closed', data.id);
       // prevent the searchbar from being opened
-      e.stopPropagation()
-    })
+      e.stopPropagation();
+    });
 
-    iconArea.appendChild(closeTabButton)
+    iconArea.appendChild(closeTabButton);
 
     // title
 
-    var title = document.createElement('span')
-    title.className = 'title'
+    var title = document.createElement('span');
+    title.className = 'title';
 
-    tabEl.appendChild(title)
-    tabEl.appendChild(iconArea)
+    tabEl.appendChild(title);
+    tabEl.appendChild(iconArea);
     // click to enter edit mode or switch to a tab
     tabEl.addEventListener('click', function (e) {
       if (tabs.getSelected() !== data.id) {
         // else switch to tab if it isn't focused
-        tabBar.events.emit('tab-selected', data.id)
+        tabBar.events.emit('tab-selected', data.id);
       } else {
         // the tab is focused, edit tab instead
         if (!$toolbar.expanded) {
           // 如果非二栏模式才可以触发show
-          tabEditor.show(data.id)
+          tabEditor.show(data.id);
         }
       }
-    })
+    });
 
-    tabEditor.input.removeEventListener('focus', $toolbar.focusInput)
-    tabEditor.input.addEventListener('focus', $toolbar.focusInput)
+    tabEditor.input.removeEventListener('focus', $toolbar.focusInput);
+    tabEditor.input.addEventListener('focus', $toolbar.focusInput);
 
     tabEl.addEventListener('auxclick', function (e) {
       if (e.which === 2) {
         // if mouse middle click -> close tab
-        tabBar.events.emit('tab-closed', data.id)
+        tabBar.events.emit('tab-closed', data.id);
       }
-    })
+    });
 
     tabEl.addEventListener('wheel', function (e) {
       if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) {
         // https://github.com/minbrowser/min/issues/698
-        return
+        return;
       }
-      event.preventDefault()
+      event.preventDefault();
       if (e.deltaY > 65 && e.deltaX < 10 && Date.now() - lastTabDeletion > 900) {
         e.target.scrollLeft += event.deltaY
           ? event.deltaY
-          : (event.detail && event.detail !== 0)
-            ? event.detail
-            : -event.wheelDelta
+          : event.detail && event.detail !== 0
+          ? event.detail
+          : -event.wheelDelta;
         // // swipe up to delete tabs
         // lastTabDeletion = Date.now()
         //
@@ -457,147 +465,146 @@ const tabBar = {
         //   tabBar.events.emit('tab-closed', data.id)
         // }, 150) // wait until the animation has completed
       }
-    })
+    });
 
     tabEl.addEventListener('contextmenu', async (e) => {
-      e.preventDefault()
-      e.stopPropagation()
-      let desks = []
+      e.preventDefault();
+      e.stopPropagation();
+      let desks = [];
       try {
-        desks = JSON.parse(localStorage.getItem('desks'))
-      } catch (e) {
-      }
-      const addToDeskMenus = []
+        desks = JSON.parse(localStorage.getItem('desks'));
+      } catch (e) {}
+      const addToDeskMenus = [];
       if (desks) {
         desks.forEach((desk) => {
           addToDeskMenus.push({
             id: desk.id,
             label: desk.name,
             click: () => {
-              const tab = tabs.get(data.id)
+              const tab = tabs.get(data.id);
               const app = {
                 type: 'app',
                 data: {
                   name: tab.title,
                   icon: tab.favicon == null ? '../../icons/default.svg' : tab.favicon.url,
-                  url: tab.url
-                }
-              }
-              const deskModel = require('../../pages/util/model/deskModel.js')
-              const element = deskModel.createElementPos(app)
-              deskModel.addElementToDesk(element, desk.id)
-              ipc.send('message', { type: 'success', config: { content: '添加到桌面成功' } })
-            }
-          })
-        })
+                  url: tab.url,
+                },
+              };
+              const deskModel = require('../../pages/util/model/deskModel.js');
+              const element = deskModel.createElementPos(app);
+              deskModel.addElementToDesk(element, desk.id);
+              ipc.send('message', { type: 'success', config: { content: '添加到桌面成功' } });
+            },
+          });
+        });
       }
-      const tab = tabs.get(data.id)
-      let templateAdd = []
+      const tab = tabs.get(data.id);
+      let templateAdd = [];
       if (!tab.url.startsWith('file://')) {
-        let item
+        let item;
         if (tab.attached) {
           item = {
             label: '还原到主屏…',
             click: function () {
               try {
-                require('../browserUI.js').detachTab(data.id)
+                require('../browserUI.js').detachTab(data.id);
               } catch (e) {
-                console.warn(e)
+                console.warn(e);
               }
-            }
-          }
+            },
+          };
         } else {
           item = {
             id: 'setAttach',
             label: '在右侧分屏打开…',
             click: function () {
-              tabBar.setAttach(data.id)
-            }
-          }
+              tabBar.setAttach(data.id);
+            },
+          };
         }
-        templateAdd = [[
-          {
-            id: 'addToDesk',
-            label: '添加到桌面',
-            submenu: addToDeskMenus
-          },
-          {
-            id: 'addToApps',
-            label: '添加到我的应用…',
-            click: function () {
-              tabBar.addToApps(data.id)
-            }
-          },
-          item
-        ]
-        ]
+        templateAdd = [
+          [
+            {
+              id: 'addToDesk',
+              label: '添加到桌面',
+              submenu: addToDeskMenus,
+            },
+            {
+              id: 'addToApps',
+              label: '添加到我的应用…',
+              click: function () {
+                tabBar.addToApps(data.id);
+              },
+            },
+            item,
+          ],
+        ];
       }
 
       const template = templateAdd.concat([
-
         [
           {
             id: 'duplicateTab',
             label: '复制标签',
             click: function () {
-              require('browserUI.js').duplicateTab(tabs.get(data.id))
-            }
+              require('browserUI.js').duplicateTab(tabs.get(data.id));
+            },
           },
           {
             id: 'duplicateCopyTab',
             label: '使用此网址创建小号标签',
             click: function () {
-              require('browserUI.js').duplicateCopyTab(tabs.get(data.id))
-            }
+              require('browserUI.js').duplicateCopyTab(tabs.get(data.id));
+            },
           },
           {
             id: 'lockTab',
             label: tabs.get(data.id).lock === true ? '解锁标签' : '锁定标签',
             click: function () {
-              tabBar.lockTab(data.id)
-            }
+              tabBar.lockTab(data.id);
+            },
           },
           {
             id: 'renameTab',
             label: isCopy(tab) ? '重命名小号' : '重命名标签',
             click: function () {
-              tabBar.rename(data.id)
-            }
+              tabBar.rename(data.id);
+            },
           },
 
           {
             label: '移动到最左边',
             toolTip: '作为组代表,当前任务组会更新为此标签的网站图标',
             click: function () {
-              tabBar.moveToFirst(data.id)
-            }
+              tabBar.moveToFirst(data.id);
+            },
           },
           {
             label: '移动到其他标签组',
             click: () => {
-              tabBar.insertTabToTask(data.id)
-            }
-          }
+              tabBar.insertTabToTask(data.id);
+            },
+          },
         ],
         [
           {
             label: '关闭其他标签',
             click: function () {
-              tabBar.closeOtherTabs(data.id)
-            }
+              tabBar.closeOtherTabs(data.id);
+            },
           },
           {
             label: '关闭左侧标签',
             click: function () {
-              tabBar.closeLeftTabs(data.id)
-            }
+              tabBar.closeLeftTabs(data.id);
+            },
           },
           {
             label: '关闭右侧标签',
             click: function () {
-              tabBar.closeRightTabs(data.id)
-            }
-          }
+              tabBar.closeRightTabs(data.id);
+            },
+          },
         ],
         [
           {
@@ -606,77 +613,77 @@ const tabBar = {
               {
                 label: '复制链接',
                 click: function () {
-                  tabBar.shareTab(data.id)
-                }
-              }
-            ]
-          }
-        ]
-      ])
-      remoteMenu.open(template)
+                  tabBar.shareTab(data.id);
+                },
+              },
+            ],
+          },
+        ],
+      ]);
+      remoteMenu.open(template);
       // 绑定代码结束
-    })
+    });
 
-    tabBar.updateTab(data.id, tabEl)
+    tabBar.updateTab(data.id, tabEl);
 
-    return tabEl
+    return tabEl;
   },
 
   updateTab: function (tabId, tabEl = tabBar.getTab(tabId)) {
-    var tabData = tabs.get(tabId)
+    var tabData = tabs.get(tabId);
 
     // update tab title
-    var tabTitle
+    var tabTitle;
 
-    const isNewTab = tabData.url === '' || tabData.url === urlParser.parse('min://newtab')
+    const isNewTab = tabData.url === '' || tabData.url === urlParser.parse('min://newtab');
     if (isNewTab) {
-      tabTitle = l('newTabLabel')
+      tabTitle = l('newTabLabel');
     } else if (tabData.title) {
-      tabTitle = tabData.title
+      tabTitle = tabData.title;
     } else if (tabData.loaded) {
-      tabTitle = tabData.url
+      tabTitle = tabData.url;
     }
 
-    tabTitle = (tabTitle || l('newTabLabel')).substring(0, 500)
+    tabTitle = (tabTitle || l('newTabLabel')).substring(0, 500);
 
-    var titleEl = tabEl.querySelector('.title')
+    var titleEl = tabEl.querySelector('.title');
 
     // 给tab加上favicon的显示，以提升每个页面的辨识度
-    var iconEl = this.createIconEl(tabData, tabData.loaded)
+    var iconEl = this.createIconEl(tabData, tabData.loaded);
     // titleEl.textContent = tabTitle  原先的方法只是添加了文字
-    titleEl.innerHTML = ''
-    titleEl.appendChild(iconEl)
+    titleEl.innerHTML = '';
+    titleEl.appendChild(iconEl);
 
     if (isCopy(tabData)) {
       if (tabData.newName) {
-        tabTitle = '<span class="tab-name">' + tabData.newName + '</span>' + '|' + tabTitle
+        tabTitle = '<span class="tab-name">' + tabData.newName + '</span>' + '|' + tabTitle;
       } else {
-        tabTitle = '<span class="tab-name">' + '小号|' + '</span>' + tabTitle
+        tabTitle = '<span class="tab-name">' + '小号|' + '</span>' + tabTitle;
       }
     } else {
       if (tabData.newName) {
-        tabTitle = '<span class="tab-name">' + tabData.newName + '</span>' + '|' + tabTitle
+        tabTitle = '<span class="tab-name">' + tabData.newName + '</span>' + '|' + tabTitle;
       }
     }
-    titleEl.innerHTML = titleEl.innerHTML + tabTitle
+    titleEl.innerHTML = titleEl.innerHTML + tabTitle;
 
-    tabEl.title = tabTitle.replace(/<span.*?>|<\/span>/ig, '')
+    tabEl.title = tabTitle.replace(/<span.*?>|<\/span>/gi, '');
     if (tabData.private) {
-      tabEl.title += ' (' + l('privateTab') + ')'
+      tabEl.title += ' (' + l('privateTab') + ')';
     }
 
     // update tab audio icon
-    var audioButton = tabEl.querySelector('.tab-audio-button')
-    tabAudio.updateButton(tabId, audioButton)
+    var audioButton = tabEl.querySelector('.tab-audio-button');
+    tabAudio.updateButton(tabId, audioButton);
 
-    tabEl.querySelectorAll('.permission-request-icon').forEach((el) => el.remove())
+    tabEl.querySelectorAll('.permission-request-icon').forEach((el) => el.remove());
 
     permissionRequests
       .getButtons(tabId)
       .reverse()
       .forEach(function (button) {
-        tabEl.insertBefore(button, tabEl.children[0])
-      })
+        tabEl.insertBefore(button, tabEl.children[0]);
+      });
 
     // var secIcon = tabEl.getElementsByClassName('icon-tab-not-secure')[0]
     // if (tabData.secure === false) {
@@ -686,72 +693,76 @@ const tabBar = {
     // }
   },
   updateAll: function () {
-    const addBtnWrapper = document.getElementById('add-btn-wrapper')
-    empty(tabBar.containerInner)
+    const addBtnWrapper = document.getElementById('add-btn-wrapper');
+    empty(tabBar.containerInner);
 
-    tabBar.tabElementMap = {}
+    tabBar.tabElementMap = {};
 
     tabs.get().forEach(function (tab) {
-      var el = tabBar.createTab(tab)
+      var el = tabBar.createTab(tab);
       // if(tab.attached){
       //   el.hidden=true
       // }
-      tabBar.containerInner.appendChild(el)
-      tabBar.tabElementMap[tab.id] = el
-    })
+      tabBar.containerInner.appendChild(el);
+      tabBar.tabElementMap[tab.id] = el;
+    });
 
     if (tabs.getSelected()) {
-      tabBar.setActiveTab(tabs.getSelected())
+      tabBar.setActiveTab(tabs.getSelected());
     }
     try {
-      tabBar.containerInner.appendChild(addBtnWrapper)
+      tabBar.containerInner.appendChild(addBtnWrapper);
     } catch (e) {
-      console.warn(e)
+      console.warn(e);
     }
-
   },
 
   lockTab: function (id) {
-    const tab = tabs.get(id)
-    const tabEl = tabBar.tabElementMap[id]
-    const closeEl = tabEl.querySelector('.tab-close-button')
+    const tab = tabs.get(id);
+    const tabEl = tabBar.tabElementMap[id];
+    const closeEl = tabEl.querySelector('.tab-close-button');
     if (tab.lock === true) {
-      tabs.update(tab.id, { lock: !tab.lock, startPage: null })
-      $toolbar.updateStartPage()
-      closeEl.style.display = ''
-      ipc.send('message', { type: 'success', config: { content: '标签锁定解除' } })
+      tabs.update(tab.id, { lock: !tab.lock, startPage: null });
+      $toolbar.updateStartPage();
+      closeEl.style.display = '';
+      ipc.send('message', { type: 'success', config: { content: '标签锁定解除' } });
     } else {
-      closeEl.style.display = 'none'
-      tabs.update(tab.id, { lock: !tab.lock, startPage: tab.url })
-      $toolbar.updateStartPage()
-      ipc.send('message', { type: 'success', config: { content: '标签锁定成功' } })
+      closeEl.style.display = 'none';
+      tabs.update(tab.id, { lock: !tab.lock, startPage: tab.url });
+      $toolbar.updateStartPage();
+      ipc.send('message', { type: 'success', config: { content: '标签锁定成功' } });
     }
   },
 
   addTab: function (tabId, last = false) {
-    var tab = tabs.get(tabId)
-    var index = tabs.getIndex(tabId)
-    var tabEl = tabBar.createTab(tab)
+    var tab = tabs.get(tabId);
+    var index = tabs.getIndex(tabId);
+    var tabEl = tabBar.createTab(tab);
     if (last) {
-      tabBar.containerInner.insertBefore(tabEl, tabBar.containerInner.childNodes[tabBar.containerInner.childNodes.length - 1])
-    } else { tabBar.containerInner.insertBefore(tabEl, tabBar.containerInner.childNodes[index + 2])}
-    tabBar.tabElementMap[tabId] = tabEl
+      tabBar.containerInner.insertBefore(
+        tabEl,
+        tabBar.containerInner.childNodes[tabBar.containerInner.childNodes.length - 1],
+      );
+    } else {
+      tabBar.containerInner.insertBefore(tabEl, tabBar.containerInner.childNodes[index + 2]);
+    }
+    tabBar.tabElementMap[tabId] = tabEl;
   },
 
   removeTab: function (tabId) {
-    var tabEl = tabBar.getTab(tabId)
+    var tabEl = tabBar.getTab(tabId);
     if (tabEl) {
       // The tab does not have a corresponding .tab-item element.
       // This happens when destroying tabs from other task where this .tab-item is not present
-      tabBar.containerInner.removeChild(tabEl)
-      delete tabBar.tabElementMap[tabId]
+      tabBar.containerInner.removeChild(tabEl);
+      delete tabBar.tabElementMap[tabId];
     }
   },
   handleDividerPreference: function (dividerPreference) {
     if (dividerPreference === true) {
-      tabBar.navBar.classList.add('show-dividers')
+      tabBar.navBar.classList.add('show-dividers');
     } else {
-      tabBar.navBar.classList.remove('show-dividers')
+      tabBar.navBar.classList.remove('show-dividers');
     }
   },
   initializeTabDragging: function () {
@@ -761,37 +772,37 @@ const tabBar = {
       slideFactorX: 25,
       slideFactorY: 25,
       invalid: function (el, handle) {
-        return el.id === 'add-btn-wrapper'
+        return el.id === 'add-btn-wrapper';
       },
       accepts: function (el, target, source, sibling) {
-        return !(sibling === null)
-      }
-    })
+        return !(sibling === null);
+      },
+    });
 
     tabBar.dragulaInstance.on('drop', function (el, target, source, sibling) {
-      var tabId = el.getAttribute('data-tab')
+      var tabId = el.getAttribute('data-tab');
       if (sibling) {
-        var adjacentTabId = sibling.getAttribute('data-tab')
+        var adjacentTabId = sibling.getAttribute('data-tab');
       }
 
-      var oldTab = tabs.splice(tabs.getIndex(tabId), 1)[0]
+      var oldTab = tabs.splice(tabs.getIndex(tabId), 1)[0];
 
-      var newIdx
+      var newIdx;
       if (adjacentTabId) {
-        newIdx = tabs.getIndex(adjacentTabId)
+        newIdx = tabs.getIndex(adjacentTabId);
       } else {
         // tab was inserted at end
-        newIdx = tabs.count()
+        newIdx = tabs.count();
       }
 
-      tabs.splice(newIdx, 0, oldTab)
-    })
+      tabs.splice(newIdx, 0, oldTab);
+    });
   },
   enableTabDragging: function () {
-    tabBar.dragulaInstance.containers = [document.getElementById('tabs-inner')]
+    tabBar.dragulaInstance.containers = [document.getElementById('tabs-inner')];
   },
   disableTabDragging: function () {
-    tabBar.dragulaInstance.containers = []
+    tabBar.dragulaInstance.containers = [];
   },
   // let option={
   //   appJson:{
@@ -846,8 +857,8 @@ const tabBar = {
   //     ipc.send('message', { type: 'error', config: { content: '添加应用失败' } })
   //   })
   // },
-  addToApps (id) {
-    let tab = tabs.get(id)
+  addToApps(id) {
+    let tab = tabs.get(id);
     // let appManager = require('../../src/main/appManager.js')
     let option = {
       appJson: {
@@ -860,36 +871,36 @@ const tabBar = {
         url: tab.url,
         logo: !!!tab.favicon ? '../../icons/default.svg' : tab.favicon.url,
         summary: '自定义应用',
-        showInSideBar: false
+        showInSideBar: false,
       },
-    }
-    ipc.send('installAppConfirm', option)
+    };
+    ipc.send('installAppConfirm', option);
   },
-  setAttach (id) {
-    const tab = tabs.get(id)
-    window.mainTab = tabs.get(tabs.getSelected())
-    ipc.send('setTabAttach', { tab })
+  setAttach(id) {
+    const tab = tabs.get(id);
+    window.mainTab = tabs.get(tabs.getSelected());
+    ipc.send('setTabAttach', { tab });
   },
   // 扩充一个获取icon的方法
   createIconEl: function (tabData, loaded) {
-    var iconEl = document.createElement('img')
-    iconEl.className = 'icon'
-    iconEl.id = 'icon' + tabData.id
+    var iconEl = document.createElement('img');
+    iconEl.className = 'icon';
+    iconEl.id = 'icon' + tabData.id;
     iconEl.addEventListener('error', (e) => {
-      document.getElementById('icon' + tabData.id).src = __dirname + '/icons/default.svg'
-    })
-    var src = ''
+      document.getElementById('icon' + tabData.id).src = __dirname + '/icons/default.svg';
+    });
+    var src = '';
     if (loaded == false) {
-      src = __dirname + '/icons/loading.gif'
+      src = __dirname + '/icons/loading.gif';
     } else {
       if (tabData.favicon == null) {
-        src = __dirname + '/icons/default18.png'
+        src = __dirname + '/icons/default18.png';
       } else {
-        src = tabData.favicon.url
+        src = tabData.favicon.url;
       }
     }
     // iconEl.title="点击查看网站名片"
-    iconEl.src = src
+    iconEl.src = src;
     // iconEl.style.cursor='pointer'
     // iconEl.style="cursor:pointer"
     //  iconEl.addEventListener('click',(e)=>{
@@ -897,244 +908,255 @@ const tabBar = {
     //    e.preventDefault()
     //    e.stopPropagation()
     //  })
-    return iconEl
-  }
-}
+    return iconEl;
+  },
+};
 
 settings.listen('showDividerBetweenTabs', function (dividerPreference) {
-  tabBar.handleDividerPreference(dividerPreference)
-})
+  tabBar.handleDividerPreference(dividerPreference);
+});
 
 /* tab loading and progress bar status */
 webviews.bindEvent('did-start-loading', function (tabId) {
-  progressBar.update(tabBar.getTab(tabId).querySelector('.progress-bar'), 'start')
+  progressBar.update(tabBar.getTab(tabId).querySelector('.progress-bar'), 'start');
   tabs.update(tabId, {
-    loaded: false
-  })
-})
+    loaded: false,
+  });
+});
 
 webviews.bindEvent('did-stop-loading', function (tabId) {
-  progressBar.update(tabBar.getTab(tabId).querySelector('.progress-bar'), 'finish')
+  progressBar.update(tabBar.getTab(tabId).querySelector('.progress-bar'), 'finish');
   tabs.update(tabId, {
-    loaded: true
-  })
-  tabBar.updateTab(tabId)
-})
+    loaded: true,
+  });
+  tabBar.updateTab(tabId);
+});
 
 tasks.on('tab-updated', function (id, key) {
-  var updateKeys = ['title', 'secure', 'url', 'muted', 'hasAudio', 'favicon'] // 增加了一下更新的字段，否则favcion变化是不会生效的
+  var updateKeys = ['title', 'secure', 'url', 'muted', 'hasAudio', 'favicon']; // 增加了一下更新的字段，否则favcion变化是不会生效的
   if (updateKeys.includes(key)) {
-    tabBar.updateTab(id)
+    tabBar.updateTab(id);
   }
-})
+});
 
 permissionRequests.onChange(function (tabId) {
-  tabBar.updateTab(tabId)
-})
+  tabBar.updateTab(tabId);
+});
 
-tabBar.initializeTabDragging()
+tabBar.initializeTabDragging();
 
-if (0) { // window.platformType === 'mac'
-  tabBar.dragulaInstance.containers = []
+if (0) {
+  // window.platformType === 'mac'
+  tabBar.dragulaInstance.containers = [];
   keybindings.defineShortcut({ keys: 'mod' }, function () {
-    tabBar.enableTabDragging()
-    document.body.classList.add('disable-window-drag')
-  })
+    tabBar.enableTabDragging();
+    document.body.classList.add('disable-window-drag');
+  });
 
-  keybindings.defineShortcut({ keys: 'mod' }, function () {
-    tabBar.disableTabDragging()
-    document.body.classList.remove('disable-window-drag')
-  }, { keyUp: true })
+  keybindings.defineShortcut(
+    { keys: 'mod' },
+    function () {
+      tabBar.disableTabDragging();
+      document.body.classList.remove('disable-window-drag');
+    },
+    { keyUp: true },
+  );
 } else {
   tabBar.dragulaInstance.on('drop', function (el, target, source, sibling) {
-    var tabId = el.getAttribute('data-tab')
+    var tabId = el.getAttribute('data-tab');
     if (sibling) {
-      var adjacentTabId = sibling.getAttribute('data-tab')
+      var adjacentTabId = sibling.getAttribute('data-tab');
     }
 
-    var oldTab = tabs.splice(tabs.getIndex(tabId), 1)[0]
+    var oldTab = tabs.splice(tabs.getIndex(tabId), 1)[0];
 
-    var newIdx
+    var newIdx;
     if (adjacentTabId) {
-      newIdx = tabs.getIndex(adjacentTabId)
+      newIdx = tabs.getIndex(adjacentTabId);
     } else {
       // tab was inserted at end
-      newIdx = tabs.count()
+      newIdx = tabs.count();
     }
 
-    tabs.splice(newIdx, 0, oldTab)
-  })
-  tabBar.enableTabDragging()
+    tabs.splice(newIdx, 0, oldTab);
+  });
+  tabBar.enableTabDragging();
 }
 
-tabBar.container.addEventListener('dragover', (e) => e.preventDefault())
+tabBar.container.addEventListener('dragover', (e) => e.preventDefault());
 
 tabBar.container.addEventListener('drop', (e) => {
-  e.preventDefault()
-  var data = e.dataTransfer
+  e.preventDefault();
+  var data = e.dataTransfer;
   require('browserUI.js').addTab(
     tabs.add({
       url: data.files[0] ? 'file://' + data.files[0].path : data.getData('text'),
-      private: tabs.get(tabs.getSelected()).private
+      private: tabs.get(tabs.getSelected()).private,
     }),
     {
       enterEditMode: false,
-      openInBackground: !settings.get('openTabsInForeground')
-    }
-  )
-})
+      openInBackground: !settings.get('openTabsInForeground'),
+    },
+  );
+});
 ipc.on('refresh', () => {
-  webviews.update(tabs.getSelected(), tasks.getSelected().tabs.get(tabs.getSelected()).url)
-})
-const db = require('../util/database').db
+  webviews.update(tabs.getSelected(), tasks.getSelected().tabs.get(tabs.getSelected()).url);
+});
+const db = require('../util/database').db;
 ipc.on('stashTask', (e, args) => {
-  const task = tasks.get(args.id)
-  db.taskStash.add({
-    taskData: JSON.stringify(tasks.getStringify(task.id)),
-    createTime: Date.now()
-  }).then(res => {
-    ipc.send('message', { type: 'success', config: { content: '暂存标签组成功，您可随时导入此暂存标签组到任何空间。' } })
-    require('../browserUI.js').closeTask(args.id)
-  }).catch((e) => {
-    console.warn(res)
-  })
-})
+  const task = tasks.get(args.id);
+  db.taskStash
+    .add({
+      taskData: JSON.stringify(tasks.getStringify(task.id)),
+      createTime: Date.now(),
+    })
+    .then((res) => {
+      ipc.send('message', {
+        type: 'success',
+        config: { content: '暂存标签组成功，您可随时导入此暂存标签组到任何空间。' },
+      });
+      require('../browserUI.js').closeTask(args.id);
+    })
+    .catch((e) => {
+      console.warn(res);
+    });
+});
 
 ipc.on('importTasks', async (e, args) => {
-  const stashTasks = await db.taskStash.where('id').anyOf(args.ids).toArray()
-  let count = 0
-  const remove = args.config.removeAfterImported
-  stashTasks.forEach(st => {
+  const stashTasks = await db.taskStash.where('id').anyOf(args.ids).toArray();
+  let count = 0;
+  const remove = args.config.removeAfterImported;
+  stashTasks.forEach((st) => {
     try {
-      const task = JSON.parse(st.taskData)
-      task.id = Date.now() - Math.round(Math.random() * 1000000)
-      tasks.add(task)
-      count++
+      const task = JSON.parse(st.taskData);
+      task.id = Date.now() - Math.round(Math.random() * 1000000);
+      tasks.add(task);
+      count++;
       if (remove) {
-        db.taskStash.delete(st.id)
+        db.taskStash.delete(st.id);
       }
     } catch (e) {
-      console.warn('导入失败', e)
+      console.warn('导入失败', e);
     }
-  })
+  });
   if (count > 0) {
-    ipc.send('message', { type: 'success', config: { content: '成功导入' + count + '个标签组。' } })
+    ipc.send('message', { type: 'success', config: { content: '成功导入' + count + '个标签组。' } });
   } else {
-    ipc.send('message', { type: 'error', config: { content: '导入标签组失败。' } })
+    ipc.send('message', { type: 'error', config: { content: '导入标签组失败。' } });
   }
-})
+});
 
 ipc.on('removeStash', (e, args) => {
-  db.taskStash.delete(args.id)
-})
+  db.taskStash.delete(args.id);
+});
 
 ipc.on('toggleLockTab', (event, args) => {
-  const tab = tasks.get(args.taskId).tabs.get(args.id)
+  const tab = tasks.get(args.taskId).tabs.get(args.id);
   if (args.taskId === tasks.getSelected().id) {
-    tabBar.lockTab(args.id)
+    tabBar.lockTab(args.id);
   } else {
-    tasks.get(args.taskId).tabs.update(tab.id, { lock: !tab.lock })
+    tasks.get(args.taskId).tabs.update(tab.id, { lock: !tab.lock });
   }
-})
+});
 
 ipc.on('lockTask', (event, args) => {
-  const tabs = tasks.get(args.id)
+  const tabs = tasks.get(args.id);
   tabs.tabs.forEach((item, index) => {
-    tabs.tabs.update(item.id, { lock: true, startPage: item.url })
-  })
-})
+    tabs.tabs.update(item.id, { lock: true, startPage: item.url });
+  });
+});
 
 ipc.on('clearTaskUnlock', (event, args) => {
-  const task = tasks.get(args.id)
-  const deleteIds = []
+  const task = tasks.get(args.id);
+  const deleteIds = [];
   task.tabs.forEach((tab, index) => {
     if (!tab.lock) {
-      deleteIds.push(tab.id)
+      deleteIds.push(tab.id);
     }
-  })
+  });
   deleteIds.forEach((id) => {
     if (args.id === tasks.getSelected().id) {
       // 如果是当前的标签组，则通过ui去关闭标签
-      require('../browserUI.js').closeTab(id)
+      require('../browserUI.js').closeTab(id);
     } else {
       // 如果不是当前选中的标签组，则直接移除
-      task.tabs.destroy(id)
+      task.tabs.destroy(id);
     }
-  })
+  });
   if (task.tabs.count() === 0 && args.id !== tasks.getSelected().id) {
     // 清空了，再加一个新标签进去，防止tabs出问题
-    task.tabs.add()
+    task.tabs.add();
   }
-})
+});
 
 ipc.on('tabNavigateTo', function (e, data) {
-  const { url } = data
-  const newTab = tabs.add({ url })
-  require('browserUI.js').addTab(newTab, { enterEditMode: false })
-})
+  const { url } = data;
+  const newTab = tabs.add({ url });
+  require('browserUI.js').addTab(newTab, { enterEditMode: false });
+});
 
 /**
  * 获取添加到收藏夹的信息，同时会发送一个获取高清截图的请求到主进程。
  * 故信息和截图两边是分开发送的
  */
 ipc.on('getAddPageInfo', (event, args) => {
-  ipc.send('getHDCapture', { id: tabs.getSelected(), favWindowId: args.favWindowId }) // 发送给主进程，要求捕获一个高清截图
-  const tabInfo = tabs.get(tabs.getSelected())
-  tabInfo.url = urlParser.getSourceURL(tabInfo.url)
-  ipc.sendTo(args.favWindowId, 'gotAddPageInfo', tabInfo) // 直接回传消息给收藏夹的渲染进程
-})
+  ipc.send('getHDCapture', { id: tabs.getSelected(), favWindowId: args.favWindowId }); // 发送给主进程，要求捕获一个高清截图
+  const tabInfo = tabs.get(tabs.getSelected());
+  tabInfo.url = urlParser.getSourceURL(tabInfo.url);
+  ipc.sendTo(args.favWindowId, 'gotAddPageInfo', tabInfo); // 直接回传消息给收藏夹的渲染进程
+});
 
 ipc.on('getCurrentTab', (e, a) => {
-  const data = tabs.get(tabs.getSelected())
-  data.sourceUrl = urlParser.getSourceURL(data.url)
-  ipc.send('gotCurrentTab', { data })
-})
+  const data = tabs.get(tabs.getSelected());
+  data.sourceUrl = urlParser.getSourceURL(data.url);
+  ipc.send('gotCurrentTab', { data });
+});
 
 ipc.on('changeTabAttach', (e, args) => {
-  const tab = tabs.get(args.tab.id)
-  window.attachedTab = tab // 记录下吸附的tab
-  tasks.forEach(task => {
-    task.tabs.forEach(item => {
+  const tab = tabs.get(args.tab.id);
+  window.attachedTab = tab; // 记录下吸附的tab
+  tasks.forEach((task) => {
+    task.tabs.forEach((item) => {
       if (item.id !== args.tab.id) {
-        item.attached = false
+        item.attached = false;
       } else {
-        item.attached = true
+        item.attached = true;
       }
-    })
-  })
-  tabBar.updateAll()
-  require('../browserUI.js').focusTab(args.tab.id)
-})
+    });
+  });
+  tabBar.updateAll();
+  require('../browserUI.js').focusTab(args.tab.id);
+});
 
 ipc.on('speedup', (e, a) => {
-  let closed = 0
+  let closed = 0;
   if (a.type === 'all') {
     // 关闭全部，包含锁定
 
-    tasks.forEach(task => {
-      task.tabs.forEach(tab => {
+    tasks.forEach((task) => {
+      task.tabs.forEach((tab) => {
         if (webviews.viewList.includes(tab.id) && tab.id !== tabs.getSelected()) {
-          webviews.destroy(tab.id)
-          closed++
+          webviews.destroy(tab.id);
+          closed++;
         }
-        tab.loaded = false
-      })
-    })
+        tab.loaded = false;
+      });
+    });
   } else {
     // 仅关闭锁定
-    tasks.forEach(task => {
-      task.tabs.forEach(tab => {
+    tasks.forEach((task) => {
+      task.tabs.forEach((tab) => {
         if (!tab.lock) {
           if (webviews.viewList.includes(tab.id) && tab.id !== tabs.getSelected()) {
-            webviews.destroy(tab.id)
-            closed++
+            webviews.destroy(tab.id);
+            closed++;
           }
-          tab.loaded = false
+          tab.loaded = false;
         }
-      })
-    })
+      });
+    });
   }
 
-  ipc.send('message', { type: 'success', config: { content: '已为您杀死' + closed + '个标签' } })
-})
-module.exports = tabBar
+  ipc.send('message', { type: 'success', config: { content: '已为您杀死' + closed + '个标签' } });
+});
+module.exports = tabBar;

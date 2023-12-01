@@ -23,29 +23,27 @@ npm install vue-shepherd --save
 
 ```vue
 <template>
-  <div ref="el">
-    Testing
-  </div>
+  <div ref="el">Testing</div>
 </template>
 
 <script setup>
-  import { ref, onMounted } from 'vue'
-  import { useShepherd } from 'vue-shepherd'
+import { ref, onMounted } from 'vue';
+import { useShepherd } from 'vue-shepherd';
 
-  const el = ref(null);
+const el = ref(null);
 
-  const tour = useShepherd({
-    useModalOverlay: true
+const tour = useShepherd({
+  useModalOverlay: true,
+});
+
+onMounted(() => {
+  tour.addStep({
+    attachTo: { element: el.value, on: 'top' },
+    text: 'Test',
   });
-  
-  onMounted(() =>  {
-    tour.addStep({
-      attachTo: { element: el.value, on: 'top' },
-      text: 'Test'
-    });
 
-    tour.start();
-  });
+  tour.start();
+});
 </script>
 ```
 
@@ -63,46 +61,45 @@ createApp().use(VueShepherdPlugin).mount('#app');
 
 ```vue
 <template>
-  <div ref="el">
-    Testing
-  </div>
+  <div ref="el">Testing</div>
 </template>
 
 <script>
-  import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
 
-  export default defineComponent({
-    data(){
-      return {
-        tour: null
-      }
+export default defineComponent({
+  data() {
+    return {
+      tour: null,
+    };
+  },
+
+  methods: {
+    createTour() {
+      this.tour = this.$shepherd({
+        useModalOverlay: true,
+      });
+
+      this.tour.addStep({
+        attachTo: { element: this.$refs.el, on: 'top' },
+        text: 'Test',
+      });
     },
+  },
 
-    methods: {
-      createTour(){
-        this.tour = this.$shepherd({
-          useModalOverlay: true
-        });
+  created() {
+    this.createTour();
+  },
 
-        this.tour.addStep({
-          attachTo: { element: this.$refs.el, on: 'top' },
-          text: 'Test'
-        });
-      }
-    },
-
-    created(){
-      this.createTour();
-    },
-
-    mounted(){
-      this.tour.start();
-    }
-  });
+  mounted() {
+    this.tour.start();
+  },
+});
 </script>
 ```
 
 ## SSR
+
 For server side rendering project, you should import the `vue-shepherd.ssr.js` file.
 
 ```js

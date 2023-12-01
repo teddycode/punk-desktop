@@ -16,83 +16,83 @@ import ImagePreviewer from './plugin-components/imagePreviewer';
 import MessageInput from './message-input';
 
 let sendComponents: any = {
-    Face,
-    Image,
-    Video,
-    File,
-    Evaluate,
-    Words,
-    Call,
+  Face,
+  Image,
+  Video,
+  File,
+  Evaluate,
+  Words,
+  Call,
 };
 
 export const messageComponents: any = {
-    Forward,
+  Forward,
 };
 
 export const otherComponents: any = {
-    TypingHeader,
-    ReadReceiptDialog,
-    Replies,
-    ImagePreviewer,
-    MessageInput
+  TypingHeader,
+  ReadReceiptDialog,
+  Replies,
+  ImagePreviewer,
+  MessageInput,
 };
 
 export function getComponents(type: string) {
-    let options: any = {};
-    switch (type) {
-        case 'send':
-            options = sendComponents;
-            break;
-        case 'message':
-            options = messageComponents;
-            break;
-        case 'other':
-            options = otherComponents;
-            break;
-        default:
-            break;
-    }
-    return options;
+  let options: any = {};
+  switch (type) {
+    case 'send':
+      options = sendComponents;
+      break;
+    case 'message':
+      options = messageComponents;
+      break;
+    case 'other':
+      options = otherComponents;
+      break;
+    default:
+      break;
+  }
+  return options;
 }
 
 const install = (app: any) => {
-    const components: any = {...sendComponents, ...messageComponents, ...otherComponents};
-    Object.keys(components).forEach((name: any) => {
-        components[name].TUIServer = TUIChat.server;
-    });
-    TUIChatComponent.TUIServer = TUIChat.server;
-    TUIChatComponent.components = {...TUIChatComponent.components, ...components};
-    app.component(TUIChat.name, TUIChatComponent);
+  const components: any = { ...sendComponents, ...messageComponents, ...otherComponents };
+  Object.keys(components).forEach((name: any) => {
+    components[name].TUIServer = TUIChat.server;
+  });
+  TUIChatComponent.TUIServer = TUIChat.server;
+  TUIChatComponent.components = { ...TUIChatComponent.components, ...components };
+  app.component(TUIChat.name, TUIChatComponent);
 };
 
 const plugin = (TUICore: any) => {
-    (TUIChat.server as any) = new TUIChatServer(TUICore);
-    TUICore.component(TUIChat.name, TUIChat);
-    return TUIChat;
+  (TUIChat.server as any) = new TUIChatServer(TUICore);
+  TUICore.component(TUIChat.name, TUIChat);
+  return TUIChat;
 };
 
 const setPluginComponents = (Components: any) => {
-    sendComponents = {...sendComponents, ...Components};
+  sendComponents = { ...sendComponents, ...Components };
 };
 
 const removePluginComponents = (nameList: Array<string>) => {
-    nameList.map((name: string) => {
-        delete sendComponents[name];
-        return name;
-    });
+  nameList.map((name: string) => {
+    delete sendComponents[name];
+    return name;
+  });
 };
 
 const TUIChat = {
-    name: 'TUIChat',
-    component: TUIChatComponent,
-    server: TUIChatServer,
-    sendComponents,
-    messageComponents,
-    otherComponents,
-    install,
-    plugin,
-    setPluginComponents,
-    removePluginComponents,
+  name: 'TUIChat',
+  component: TUIChatComponent,
+  server: TUIChatServer,
+  sendComponents,
+  messageComponents,
+  otherComponents,
+  install,
+  plugin,
+  setPluginComponents,
+  removePluginComponents,
 };
 
 export default TUIChat;

@@ -1,31 +1,39 @@
 <template>
-  <div class="flex flex-row ml-1" style="height: 100%;width: 100%">
+  <div class="flex flex-row ml-1" style="height: 100%; width: 100%">
     <!--    <div class="w-40 mr-6">-->
     <!--      <div v-for="(item,index) in navList" class="pointer h-14  flex justify-center items-center mb-2 rounded-xl s-icon" :class="activeIndex===index?'s-bg':''" @click="clickNav(item,index)">-->
     <!--        <Icon v-if="item.icon" :icon="item.icon"></Icon>-->
     <!--        <span style="margin-left: 0.5em;" class="s-text text-base">{{ item.title }}</span>-->
     <!--      </div>-->
     <!--    </div>-->
-    <SecondPanel v-if="!fullScreen" :gallery="gallery" :goHome="goHome" :menus="menus" :search="true"
-                 style="padding: 1em 0; text-align: left; " @changeTab="changeTab"></SecondPanel>
-    <div class="flex-1  content-view mb-2"
-         style="padding-top: 1em;height: 99%;display: flex;flex-direction: column;width: 0">
+    <SecondPanel
+      v-if="!fullScreen"
+      :search="true"
+      :goHome="goHome"
+      :menus="menus"
+      :gallery="gallery"
+      style="padding: 1em 0; text-align: left"
+      @changeTab="changeTab"
+    ></SecondPanel>
+    <div
+      class="flex-1 content-view mb-2"
+      style="padding-top: 1em; height: 99%; display: flex; flex-direction: column; width: 0"
+    >
       <router-view></router-view>
     </div>
   </div>
 </template>
 
 <script>
-import SecondPanel from '../../components/SecondPanel.vue'
-import { mapWritableState } from 'pinia'
-import { appStore } from '../../store'
-
+import SecondPanel from '../../components/SecondPanel.vue';
+import { mapWritableState } from 'pinia';
+import { appStore } from '../../store';
 export default {
   name: 'gameAssistant',
   components: {
-    SecondPanel
+    SecondPanel,
   },
-  data () {
+  data() {
     return {
       gallery: false,
       menus: [
@@ -33,44 +41,40 @@ export default {
           index: 'm',
           title: '游戏桌面',
           icon: 'desktop',
-          route:
-              {
-                name: 'gameIndex'
-              }
+          route: {
+            name: 'gameIndex',
+          },
         },
         {
           index: 'm',
           title: '我的游戏',
           icon: 'wanggeshitu',
-          route:
-              {
-                name: 'myGame'
-              }
+          route: {
+            name: 'myGame',
+          },
         },
         {
           index: 'm',
           title: '游戏攻略',
           icon: 'trophy',
-          route:
-              {
-                name: 'gameIntroduction'
-              }
+          route: {
+            name: 'gameIntroduction',
+          },
         },
         {
           index: 'm',
           title: '折扣推荐',
           icon: 'star',
-          route:
-              {
-                name: 'recommend'
-              }
+          route: {
+            name: 'recommend',
+          },
         },
         {
           index: 'z',
           title: '捕获',
           icon: 'video',
           route: {
-            name: 'GameCapture'
+            name: 'GameCapture',
           },
         },
         // {
@@ -95,29 +99,28 @@ export default {
           index: 'm',
           title: '设置',
           icon: 'setting',
-          route:
-              {
-                name: 'gameSetting'
-              }
+          route: {
+            name: 'gameSetting',
+          },
         },
       ],
-    }
+    };
   },
   computed: {
-    ...mapWritableState(appStore, ['fullScreen'])
+    ...mapWritableState(appStore, ['fullScreen']),
   },
   methods: {
-    changeTab (args) {
-      this.$router.push(args.menu.route)
-      this.tab = args.index
+    changeTab(args) {
+      this.$router.push(args.menu.route);
+      this.tab = args.index;
     },
-    goHome () {
+    goHome() {
       this.$router.push({
-        name: 'home'
-      })
-    }
-  }
-}
+        name: 'home',
+      });
+    },
+  },
+};
 </script>
 
 <style scoped></style>

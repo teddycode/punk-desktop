@@ -1,17 +1,17 @@
-const standReturn = require('../util/standReturn')
-const spaceApi = require('../api/spaceApi')
-const userModel = require('./userModel')
-const { nanoid } = require('nanoid')
-const backupSpaceModel = require('../model/backupSpaceModel')
-const spaceModel = require('../model/spaceModel')
+const standReturn = require('../util/standReturn');
+const spaceApi = require('../api/spaceApi');
+const userModel = require('./userModel');
+const { nanoid } = require('nanoid');
+const backupSpaceModel = require('../model/backupSpaceModel');
+const spaceModel = require('../model/spaceModel');
 const cloudSpaceModel = {
   userInfo: {},
-  async addSpace (space, user) {
-    let result = await spaceApi.addSpace(space.name, user)
-    return standReturn.autoReturn(result)
+  async addSpace(space, user) {
+    let result = await spaceApi.addSpace(space.name, user);
+    return standReturn.autoReturn(result);
   },
-  setUser (user) {
-    cloudSpaceModel.user = user
+  setUser(user) {
+    cloudSpaceModel.user = user;
   },
   /**
    * 修改当前的空间
@@ -19,59 +19,63 @@ const cloudSpaceModel = {
    * @param user
    * @returns {Promise<{data: *, status: number}|{data: *, status: number, info: *}>}
    */
-  async changeCurrent (space) {
-    let result = await spaceApi.change(space.nanoid, cloudSpaceModel.user.clientId, cloudSpaceModel.user.clientName, cloudSpaceModel.user)
+  async changeCurrent(space) {
+    let result = await spaceApi.change(
+      space.nanoid,
+      cloudSpaceModel.user.clientId,
+      cloudSpaceModel.user.clientName,
+      cloudSpaceModel.user,
+    );
     if (result.code === 1000) {
       //切换当前用户到对应空间的所属用户
-      await userModel.change(cloudSpaceModel.user)
-      space.id = space.nanoid
+      await userModel.change(cloudSpaceModel.user);
+      space.id = space.nanoid;
       //获取最新的要切换过去的空间
-      let cloudSpaceResult = await cloudSpaceModel.getSpace(space.id, cloudSpaceModel.user)
+      let cloudSpaceResult = await cloudSpaceModel.getSpace(space.id, cloudSpaceModel.user);
       if (cloudSpaceResult.status === 1) {
-        let cloudSpace = cloudSpaceResult.data
-        cloudSpace.id = cloudSpace.nanoid
+        let cloudSpace = cloudSpaceResult.data;
+        cloudSpace.id = cloudSpace.nanoid;
         //正常登录需要使用线上版本的空间来更新一下本地的备份空间，此时是最佳的更新备份空间时机
         await backupSpaceModel.save(cloudSpace, {
           name: cloudSpace.name,
           data: cloudSpace.data,
           count_task: cloudSpace.count_task,
-          count_tab: cloudSpace.count_tab
-        })
-        cloudSpace.type = 'cloud'
-        cloudSpace.uid = cloudSpaceModel.user.uid
-        await ipc.sendSync('changeSpace', JSON.parse(JSON.stringify(cloudSpace)))
+          count_tab: cloudSpace.count_tab,
+        });
+        cloudSpace.type = 'cloud';
+        cloudSpace.uid = cloudSpaceModel.user.uid;
+        await ipc.sendSync('changeSpace', JSON.parse(JSON.stringify(cloudSpace)));
       } else {
-        return standReturn.failure('空间异常')
+        return standReturn.failure('空间异常');
       }
 
-      return standReturn.autoReturn(result)
+      return standReturn.autoReturn(result);
     } else {
-      return standReturn.failure('重新连接失败')
+      return standReturn.failure('重新连接失败');
     }
-
   },
-  async getSpace (spaceId) {
-    return await cloudSpaceModel.restore(spaceId, cloudSpaceModel.user)
+  async getSpace(spaceId) {
+    return await cloudSpaceModel.restore(spaceId, cloudSpaceModel.user);
   },
-  async getUserSpaces () {
-    let result = await spaceApi.getMySpaceList(cloudSpaceModel.user)
-    return standReturn.autoReturn(result)
+  async getUserSpaces() {
+    let result = await spaceApi.getMySpaceList(cloudSpaceModel.user);
+    return standReturn.autoReturn(result);
   },
-  async save (spaceId, saveData, userInfo, force = false) {
-    let result = await spaceApi.save(spaceId, userInfo.clientId, saveData, userInfo, force)
-    return standReturn.autoReturn(result)
+  async save(spaceId, saveData, userInfo, force = false) {
+    let result = await spaceApi.save(spaceId, userInfo.clientId, saveData, userInfo, force);
+    return standReturn.autoReturn(result);
   },
-  async copy (space) {
-    let result = await spaceApi.copy(space.nanoid, cloudSpaceModel.user)
-    return standReturn.autoReturn(result)
+  async copy(space) {
+    let result = await spaceApi.copy(space.nanoid, cloudSpaceModel.user);
+    return standReturn.autoReturn(result);
   },
-  async restore (spaceId, userInfo) {
-    let result = await spaceApi.restore(spaceId, cloudSpaceModel.user)
-    return standReturn.autoReturn(result)
+  async restore(spaceId, userInfo) {
+    let result = await spaceApi.restore(spaceId, cloudSpaceModel.user);
+    return standReturn.autoReturn(result);
   },
-  async deleteSpace (space) {
-    let result = await spaceApi.delete(space.nanoid, cloudSpaceModel.user)
-    return standReturn.autoReturn(result)
+  async deleteSpace(space) {
+    let result = await spaceApi.delete(space.nanoid, cloudSpaceModel.user);
+    return standReturn.autoReturn(result);
   },
   /**
    * 导入本机空间到云端
@@ -79,35 +83,41 @@ const cloudSpaceModel = {
    * @param userInfo
    * @returns {Promise<{data: {}, status: number}|{data: *, status: number, info: *}>}
    */
-  async importFromLocal (spaces) {
-    let result = await spaceApi.importFromLocal(spaces, cloudSpaceModel.user)
-    return standReturn.autoReturn(result)
+  async importFromLocal(spaces) {
+    let result = await spaceApi.importFromLocal(spaces, cloudSpaceModel.user);
+    return standReturn.autoReturn(result);
   },
-  async renameSpace (newName, space) {
-    let result = await spaceApi.rename(newName, space.nanoid, cloudSpaceModel.user)
-    return standReturn.autoReturn(result)
+  async renameSpace(newName, space) {
+    let result = await spaceApi.rename(newName, space.nanoid, cloudSpaceModel.user);
+    return standReturn.autoReturn(result);
   },
-  async clientOffline () {
-    let result = await spaceApi.clientOffline(cloudSpaceModel.user.clientId, cloudSpaceModel.user)
-    return standReturn.autoReturn(result)
+  async clientOffline() {
+    let result = await spaceApi.clientOffline(cloudSpaceModel.user.clientId, cloudSpaceModel.user);
+    return standReturn.autoReturn(result);
   },
-  async clientOnline (nanoid, force = false, userInfo) {
-    let result = await spaceApi.clientOnline(nanoid, force, cloudSpaceModel.user.clientId, cloudSpaceModel.user.clientName, cloudSpaceModel.user)
-    return standReturn.autoReturn(result)
+  async clientOnline(nanoid, force = false, userInfo) {
+    let result = await spaceApi.clientOnline(
+      nanoid,
+      force,
+      cloudSpaceModel.user.clientId,
+      cloudSpaceModel.user.clientName,
+      cloudSpaceModel.user,
+    );
+    return standReturn.autoReturn(result);
   },
   /**
    * 获取用户信息，用于快速构建需要提交到云端的用户信息，会自动存入cloudSpaceModel的user对象中
    * @param uid
    * @returns {Promise<*|boolean>}
    */
-  async getUserInfo (uid) {
-    let userInfo = await userModel.get({ uid })
-    let client = await require('./clientModel').get()
-    userInfo.clientId = client.id
-    userInfo.clientName = client.name
-    cloudSpaceModel.user = userInfo
-    return userInfo
-  }
-}
+  async getUserInfo(uid) {
+    let userInfo = await userModel.get({ uid });
+    let client = await require('./clientModel').get();
+    userInfo.clientId = client.id;
+    userInfo.clientName = client.name;
+    cloudSpaceModel.user = userInfo;
+    return userInfo;
+  },
+};
 
-module.exports = cloudSpaceModel
+module.exports = cloudSpaceModel;

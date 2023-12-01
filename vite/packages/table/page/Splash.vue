@@ -1,7 +1,7 @@
 <template>
   <div
-      class="drag"
-      style="display:flex;height: 100vh;text-align: center;align-content: center;align-items: center;background:#33 3;justify-content: center">
+    style="display:flex;height: 100vh;text-align: center;align-content: center;align-items: center;background:#333;justify-content: center"
+    class="drag">
     <div v-if="launching" style="margin: auto;">
       <div class="mb-5 animate-bounce ">
         <a-avatar :size="60"
@@ -63,24 +63,28 @@
 
 <script>
 import { message, Modal } from 'ant-design-vue'
-import { appStore } from '../store'
-import { mapActions, mapWritableState } from 'pinia'
-import { codeStore } from '../store/code'
-import { cardStore } from '../store/card'
-import { deckStore } from '../apps/deck/store'
-import { paperStore } from '../store/paper'
-import { weatherStore } from '../store/weather'
-import { screenStore } from '../store/screen'
-import { isMain } from '../js/common/screenUtils'
-import { inspectorStore } from '../store/inspector'
-import { teamStore } from '../store/team'
-import { steamUserStore } from '../store/steamUser'
-import { captureStore } from '../store/capture'
-import { navStore } from '../store/nav'
-import { clipboardStore } from '../apps/clipboard/store'
-import { browserStore } from '../store/browser'
+import { appStore } from '@store'
+import { mapWritableState, mapActions } from 'pinia'
+import { codeStore } from '@store/code'
+import { cardStore } from '@store/card'
+import { deckStore } from '@apps/deck/store'
+import { paperStore } from '@store/paper'
+import { weatherStore } from '@store/weather'
+import { screenStore } from '@store/screen'
+import { isMain } from '@js/common/screenUtils'
+import { inspectorStore } from '@store/inspector'
+import { teamStore } from '@store/team'
+import { steamUserStore } from '@store/steamUser'
+import { captureStore } from '@store/capture'
+import { navStore } from '@store/nav'
+import { clipboardStore } from '@apps/clipboard/store'
+import { browserStore } from '@store/browser'
 import RayMedal from '../components/small/RayMedal.vue'
-import { chatStore } from '../store/chat'
+import { chatStore } from '@store/chat'
+import navigationData from '../js/data/tableData'
+import taskStore from '../page/app/todo/stores/task'
+import cache from "../components/card/hooks/cache";
+import { offlineStore } from '@js/common/offline'
 
 export default {
   name: 'Code',
@@ -100,6 +104,16 @@ export default {
     }
   },
   async mounted () {
+    // setTimeout(() => {
+    //   if (window.$isOffline && this.init) {
+    //     this.$router.replace({ name: 'home' })
+    //     this.launching = false
+    //     // 暂时还没有排查到卡顿原因
+    //
+    //   }
+    // }, 3000)
+    // this.timeout()
+
     //启动检测项的store，必须已经载入的项目，如果这边不写，就不确保必须载入完成
     //注意，此处的第二个参数，必须和此store同名，尤其注意有些命名里带了store的
     this.initStore(appStore, 'appStore')
@@ -112,6 +126,7 @@ export default {
     this.initStore(teamStore, 'teamStore')
     this.initStore(inspectorStore, 'inspectorStore')
     this.initStore(navStore, 'nav')
+    this.initStore(taskStore, 'task')
     // this.initStore(browserStore,'browserStore')
     browserStore().bindIPC()
     captureStore()//仅触发一下载入
@@ -131,13 +146,15 @@ export default {
         if (!this.launching) {
           return
         }
-        if (Object.keys(window.loadedStore).some(key => {
+        let haventOk=Object.keys(window.loadedStore).filter(key => {
           let check = !window.loadedStore[key]
           if (window.loadedStore[key] === false)
             return check
-        })) {
+        })
+        if (haventOk.length) {
           //未全部搞定
-
+          console.log(haventOk)
+          return
         } else {
           //已经全部搞定
           clearInterval(this.storeReadyTimer)
@@ -148,11 +165,13 @@ export default {
 
     this.getUserInfo()
     this.sortClock()
+
   },
   computed: {
     ...mapWritableState(codeStore, ['myCode', 'serialHash']),
     ...mapWritableState(appStore, ['settings', 'routeUpdateTime', 'userInfo', 'init', 'lvInfo', 'backgroundImage', 'style']),
     ...mapWritableState(navStore, ['sideNavigationList', 'footNavigationList', 'rightNavigationList']),
+    ...mapWritableState(offlineStore, ['isOffline']),
   },
   methods: {
     ...mapActions(cardStore, ['sortClock', 'sortCountdown']),
@@ -272,10 +291,11 @@ export default {
       this.launching = false
       if (!this.userInfo) {
         //如果个人信息不存在，则直接返回
-
+        return
       } else {
         this.enter()
       }
+
     },
     gradeTableGenerate (num) {
       let lvSys = {}
@@ -299,6 +319,12 @@ export default {
         this.getUserInfo()
       })
     },
+    offline(){
+      this.$router.replace({ name: 'wizard' })
+      cache.set('isOffline',true)
+      window.$isOffline = true
+      this.isOffline = true
+    }
   },
 }
 </script>

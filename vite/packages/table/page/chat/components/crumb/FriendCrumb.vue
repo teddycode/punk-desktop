@@ -1,36 +1,42 @@
 <template>
   <div class="my-4 flex justify-between">
     <a-breadcrumb :separator="separator">
-      <a-breadcrumb-item v-for="(item, index) in breadcrumb" :key="index" class="pointer " @click="backCrumb(item)">
-        <span :style="{color:item.color}" class="category-14-400">{{ item.name }}</span>
+      <a-breadcrumb-item v-for="(item, index) in breadcrumb" class="pointer" :key="index" @click="backCrumb(item)">
+        <span
+          :style="item.color ? { color: `${item.color}` } : { color: 'var(--secondary-text)' }"
+          class="category-14-400"
+          >{{ item.name }}</span
+        >
       </a-breadcrumb-item>
     </a-breadcrumb>
-
-    <a-checkbox v-model:checked="settings.isAllSelected" class="custom-checkbox-font">全选</a-checkbox>
+    <a-checkbox class="custom-checkbox-font" v-model:checked="settings.isAllSelected">全选</a-checkbox>
   </div>
 
-  <vue-custom-scrollbar :settings="settingsScroller" class="flex flex-col " style="height:430px;">
-    <div v-for="(item,index) in friendList" :class="{'select-bg':isSelect(index)}"
-         class="flex rounded-lg items-center pointer mb-2 p-3" @click="currentFriend(item)"
+  <vue-custom-scrollbar class="flex flex-col" :settings="settingsScroller" style="height: 430px">
+    <div
+      v-for="(item, index) in friendList"
+      :class="{ 'select-bg': isSelect(index) }"
+      class="flex rounded-lg items-center pointer mb-2 p-3"
+      @click="currentFriend(item)"
     >
-      <a-avatar :size="32" :src="item.avatar" shape="circle"></a-avatar>
-      <span class="category-16-400 ml-4" style="color:var(--primary-text);">{{ item.nick }}</span>
+      <a-avatar :size="32" shape="circle" :src="item.avatar"></a-avatar>
+      <span class="font-16 font-400 ml-4" style="color: var(--primary-text)">{{ item.nick }}</span>
     </div>
   </vue-custom-scrollbar>
 </template>
 
 <script>
-import { mapWritableState } from 'pinia'
-import { appStore } from '../../../../store'
+import { mapActions, mapWritableState } from 'pinia';
+import { appStore } from '../../../../store';
 
 export default {
   props: ['selectList'],
 
-  data () {
+  data() {
     return {
       breadcrumb: [
         { name: '联系人', path: '/', type: 'contact', color: 'var(--active-bg)' },
-        { name: '我的好友', path: '/myFriend', type: 'friend' }
+        { name: '我的好友', path: '/myFriend', type: 'friend' },
       ],
       separator: '/',
       friendList: [],
@@ -41,56 +47,53 @@ export default {
         swipeEasing: true,
         suppressScrollY: false,
         suppressScrollX: true,
-        wheelPropagation: true
-      }
-    }
+        wheelPropagation: true,
+      },
+    };
   },
 
   computed: {
-    ...mapWritableState(appStore, ['settings'])
+    ...mapWritableState(appStore, ['settings']),
   },
 
-  async mounted () {
-    const server = window.$TUIKit
-    const res = await server.tim.getFriendList()
+  async mounted() {
+    const server = window.$TUIKit;
+    const res = await server.tim.getFriendList();
     const list = res?.data.map((item) => {
-      return item.profile
-    })
+      return item.profile;
+    });
     // console.log('获取好友数据',list);
-    this.friendList = list
+    this.friendList = list;
   },
 
   methods: {
-    isSelect (index) {
-      return this.selectList.includes(this.friendList[index])
+    isSelect(index) {
+      return this.selectList.includes(this.friendList[index]);
     },
 
-    backCrumb (item) {
+    backCrumb(item) {
       if (item.type === 'contact') {
-        this.$emit('back')
+        this.$emit('back');
       }
     },
 
-    currentFriend (item) {
-      this.$emit('currentClick', item)
+    currentFriend(item) {
+      this.$emit('currentClick', item);
     },
-
   },
 
   watch: {
     'settings.isAllSelected': {
-      handler (newVal) {
+      handler(newVal) {
         if (newVal) {
-          this.$emit('updateList', this.friendList)
+          this.$emit('updateList', this.friendList);
         }
       },
       immediate: true,
       deep: true,
-
-    }
-  }
-}
-
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

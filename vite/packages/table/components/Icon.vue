@@ -1,17 +1,14 @@
 <template>
   <svg :style="style" aria-hidden="true" class="icon">
-    <use v-bind:xlink:href="'#icons-'+icon"></use>
+    <use v-bind:xlink:href="'#icons-' + icon"></use>
   </svg>
-
 </template>
 
 <script>
 export default {
   name: 'Icon',
-  props: ['icon', 'style']
-}
+  props: ['icon', 'style'],
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

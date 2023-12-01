@@ -16,10 +16,11 @@
               <option value="">选择代币</option>
               <option v-for="token in tokens" :key="token">{{ token }}</option>
             </select>
-            <input v-model.trim="amountFrom" class="token-input" min="0" placeholder="输入代币数量" type="number">
+            <input v-model.trim="amountFrom" class="token-input" min="0" placeholder="输入代币数量" type="number" />
           </div>
         </div>
-        <div style="height: 30px;"></div> <!-- 空余部分 -->
+        <div style="height: 30px"></div>
+        <!-- 空余部分 -->
         <div class="input-section">
           <div class="input-row">
             <label class="title">To:</label>
@@ -29,7 +30,7 @@
             </select>
           </div>
           <div class="input-row">
-            <input v-model.trim="ToAccount" class="address-input" placeholder="输入转入地址" type="text">
+            <input v-model.trim="ToAccount" class="address-input" placeholder="输入转入地址" type="text" />
           </div>
         </div>
         <button class="transfer-btn" @click="transferTokens">跨链转账</button>
@@ -39,10 +40,10 @@
 </template>
 
 <script lang="ts">
-import {onBeforeMount, ref} from 'vue';
-import Web3 from "web3";
-import {useUserStore} from "@store/users";
-import Background from '@page/core/components/Background.vue'
+import { onBeforeMount, ref } from 'vue';
+import Web3 from 'web3';
+import { useUserStore } from '@store/users';
+import Background from '@page/core/components/Background.vue';
 
 export default {
   components: { Background },
@@ -68,7 +69,7 @@ export default {
           fromAccount.value = accounts[0]; // Set the first account as the default account
           console.log(fromAccount.value);
         } catch (error) {
-          console.error("Error accessing accounts: ", error);
+          console.error('Error accessing accounts: ', error);
         }
       } else {
         console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
@@ -99,11 +100,11 @@ export default {
           value: amountInWei,
           gas: 470000,
         });
-        console.log("Transfer succeeded:", result);
+        console.log('Transfer succeeded:', result);
       } catch (error) {
-        console.error("Transfer failed:", error);
+        console.error('Transfer failed:', error);
       }
-    }
+    };
 
     return {
       selectedBlockchainFrom,
@@ -115,10 +116,10 @@ export default {
       tokens,
       web3,
       fromAccount,
-      transferTokens
-    }
-  }
-}
+      transferTokens,
+    };
+  },
+};
 </script>
 
 <style scoped>
@@ -130,7 +131,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #F9FAFB;
+  background-color: #f9fafb;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   width: 500px;
@@ -156,9 +157,9 @@ export default {
 
 .address-input {
   padding: 10px;
-  border: 1px solid #34D399;
+  border: 1px solid #34d399;
   border-radius: 5px;
-  background-color: #F5F7FA;
+  background-color: #f5f7fa;
   font-size: 16px;
   margin-left: 10px;
   width: 100%;
@@ -171,9 +172,9 @@ export default {
 .blockchain-select {
   width: 100%;
   padding: 10px;
-  border: 1px solid #34D399;
+  border: 1px solid #34d399;
   border-radius: 5px;
-  background-color: #F5F7FA;
+  background-color: #f5f7fa;
   font-size: 16px;
   margin-left: 10px;
 }
@@ -181,9 +182,9 @@ export default {
 .token-select {
   width: 50%;
   padding: 10px;
-  border: 1px solid #34D399;
+  border: 1px solid #34d399;
   border-radius: 5px;
-  background-color: #F5F7FA;
+  background-color: #f5f7fa;
   font-size: 16px;
   margin-left: 10px;
 }
@@ -191,9 +192,9 @@ export default {
 .token-input {
   width: 50%;
   padding: 10px;
-  border: 1px solid #34D399;
+  border: 1px solid #34d399;
   border-radius: 5px;
-  background-color: #F5F7FA;
+  background-color: #f5f7fa;
   font-size: 16px;
   margin-left: 10px;
 }
@@ -202,8 +203,8 @@ export default {
   padding: 10px 20px;
   border: none;
   cursor: pointer;
-  background-color: #34D399;
-  color: #F9FAFB;
+  background-color: #34d399;
+  color: #f9fafb;
   border-radius: 5px;
   font-size: 16px;
   font-weight: bold;

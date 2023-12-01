@@ -1,12 +1,12 @@
 <template>
-    <div class="collections-page">
-      <div class="title-section">
-        <h1 style="color:#dddddd">数字藏品</h1>
-      </div>
-      <div class="table-section">
-        <!--        <a-table :columns="columns" :data-source="dataSource"/>-->
-        <table class="table">
-          <thead>
+  <div class="collections-page">
+    <div class="title-section">
+      <h1 style="color: #dddddd">数字藏品</h1>
+    </div>
+    <div class="table-section">
+      <!--        <a-table :columns="columns" :data-source="dataSource"/>-->
+      <table class="table">
+        <thead>
           <tr>
             <th>藏品名称</th>
             <th>最低价</th>
@@ -16,39 +16,32 @@
             <th>件数</th>
             <th>拥有者人数</th>
           </tr>
-          </thead>
-          <tbody>
-          <tr v-for="data in collections" :key="data.name"
-              @click="handleShowDetails(data.name)">
+        </thead>
+        <tbody>
+          <tr v-for="data in collections" :key="data.name" @click="handleShowDetails(data.name)">
             <td>{{ data.name }}</td>
             <td>{{ data.lowestPrice }}</td>
-            <td :class="getPriceChangeClass(data.lowestPriceChange)">{{
-                data.lowestPriceChange
-              }}
-            </td>
+            <td :class="getPriceChangeClass(data.lowestPriceChange)">{{ data.lowestPriceChange }}</td>
             <td>{{ data.highestPrice }}</td>
-            <td :class="getPriceChangeClass(data.highestPriceChange)">{{
-                data.highestPriceChange
-              }}
-            </td>
+            <td :class="getPriceChangeClass(data.highestPriceChange)">{{ data.highestPriceChange }}</td>
             <td>{{ data.quantity }}</td>
             <td>{{ data.owners }}</td>
           </tr>
-          </tbody>
-        </table>
-      </div>
+        </tbody>
+      </table>
     </div>
+  </div>
 </template>
 
 <script lang="ts">
-import {Web3} from "web3";
-import {defineComponent, onMounted, ref} from "vue";
-import Background from "@page/core/components/Background.vue";
-import {collectionList} from "./mock";
-import {useRouter} from "vue-router";
+import { Web3 } from 'web3';
+import { defineComponent, onMounted, ref } from 'vue';
+import Background from '@page/core/components/Background.vue';
+import { collectionList } from './mock';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
-  name: "CollectionsPage",
+  name: 'CollectionsPage',
   components: {
     Background,
   },
@@ -56,8 +49,8 @@ export default defineComponent({
     const router = useRouter();
     const web3 = ref<Web3>(new Web3(null));
     // TODO what is this?
-    const contractAddress = ref("0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB");
-    const tokenURI = ref("");
+    const contractAddress = ref('0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB');
+    const tokenURI = ref('');
     const collections = collectionList;
 
     // const columns = [
@@ -96,25 +89,25 @@ export default defineComponent({
     // let dataSource = computed(()=>collectionList);
 
     onMounted(() => {
-      web3.value = new Web3("https://goerli.infura.io/v3/b8feaebcfe234f0c83af0e97c070e5f5");
-    })
+      web3.value = new Web3('https://goerli.infura.io/v3/b8feaebcfe234f0c83af0e97c070e5f5');
+    });
 
-    if (typeof window.ethereum !== "undefined") {
+    if (typeof window.ethereum !== 'undefined') {
       web3.value = new Web3(window.ethereum);
     }
 
     function getPriceChangeClass(priceChange: string) {
-      if (priceChange.startsWith("-")) {
-        return "negative-change";
-      } else if (priceChange.startsWith("+")) {
-        return "positive-change";
+      if (priceChange.startsWith('-')) {
+        return 'negative-change';
+      } else if (priceChange.startsWith('+')) {
+        return 'positive-change';
       } else {
-        return "";
+        return '';
       }
     }
 
     function handleShowDetails(name: string) {
-      router.push({name: "CollectionDetails", params: {name}});
+      router.push({ name: 'CollectionDetails', params: { name } });
     }
 
     return {
@@ -132,7 +125,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
 .collections-page {
   /*min-height: 100%;*/
   width: 90%;

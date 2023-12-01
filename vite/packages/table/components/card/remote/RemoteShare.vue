@@ -1,46 +1,58 @@
 <template>
-  <div v-if="openShare" class="fixed inset-0 home-blur xt-mask" style="z-index: 99999;">
+  <div v-if="openShare" class="fixed inset-0 home-blur xt-mask" style="z-index: 99999">
     <div
-        class="share-modal xt-modal fixed text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  rounded-lg flex flex-col"
-        style=";width: 600px;height:80%;max-height: 556px;overflow:auto;background: var(--modal-bg);">
-      <div class="flex flex-col" style="width:100%;">
+      class="share-modal xt-modal fixed text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg flex flex-col"
+      style="width: 600px; height: 80%; max-height: 556px; overflow: auto; background: var(--modal-bg)"
+    >
+      <div class="flex flex-col" style="width: 100%">
         <div class="head-nav">
           <div v-show="!direct" @click="close">
-            <Icon icon="xiangzuo" style="color:var(--primary-text);font-size:24px"></Icon>
+            <Icon icon="xiangzuo" style="color: var(--primary-text); font-size: 24px"></Icon>
           </div>
           <span>分享</span>
           <div @click="$router.go(-1)">
-            <Icon icon="guanbi" style="color:var(--primary-text);font-size:24px"></Icon>
+            <Icon icon="guanbi" style="color: var(--primary-text); font-size: 24px"></Icon>
           </div>
         </div>
         <div class="body-box">
           <div>
             <div id="capture" ref="sizeBox" class="left-img">
               <div :style="{ zoom: zoom + '%' }">
-                <Remote :customData="card.customData" :customIndex="cardId" :desk="desk"
-                        :notTrigger="notTrigger"></Remote>
+                <Remote
+                  :customData="card.customData"
+                  :customIndex="cardId"
+                  :desk="desk"
+                  :notTrigger="notTrigger"
+                ></Remote>
               </div>
             </div>
             <div class="upload-box">
               <div>
                 <div class="avatar">
                   <div>
-                    <a-avatar :size="100" :src="img" class="rounded-lg xt-bg-2" shape="square"/>
+                    <a-avatar :size="100" :src="img" class="rounded-lg xt-bg-2" shape="square" />
                   </div>
-                  <span v-if="img" @click="delImg"><Icon icon="close-circle-fill"
-                                                         style="font-size: 28px;color: #7A7A7A;"></Icon></span>
+                  <span v-if="img" @click="delImg"
+                    ><Icon icon="close-circle-fill" style="font-size: 28px; color: #7a7a7a"></Icon
+                  ></span>
                 </div>
-                <a-upload :before-upload="beforeUpload" :show-upload-list="false"
-                          :style="size"
-                          class="pointer"
-                          @change="uplaodImageChange"
+                <a-upload
+                  :before-upload="beforeUpload"
+                  :show-upload-list="false"
+                  :style="size"
+                  class="pointer"
+                  @change="uplaodImageChange"
                 >
-                  <div class="pointer xt-bg-2 xt-text flex items-center rounded-lg justify-center mr-3 mt-4"
-                       style="width:100px; height:48px;" @click="imageSelect">上传图片
+                  <div
+                    class="pointer xt-bg-2 xt-text flex items-center rounded-lg justify-center mr-3 mt-4"
+                    style="width: 100px; height: 48px"
+                    @click="imageSelect"
+                  >
+                    上传图片
                   </div>
                 </a-upload>
               </div>
-              <div class="ml-6 xt-text-2" style="font-size: 16px;color:var(--secondary-text)">
+              <div class="ml-6 xt-text-2" style="font-size: 16px; color: var(--secondary-text)">
                 <div>上传小组件预览图，不要超过2MB（暂时建议手动截取合适的图片）</div>
               </div>
             </div>
@@ -56,7 +68,7 @@
           <div class="right-box">
             <div class="box-item">
               <span>小组件类型</span>
-              <span class="truncate ml-3 text-right" style="flex:1;">外部小组件</span>
+              <span class="truncate ml-3 text-right" style="flex: 1">外部小组件</span>
             </div>
             <div class="box-item">
               <span>小组件尺寸</span>
@@ -68,24 +80,44 @@
             </div>
             <div class="box-item">
               <span>连接地址</span>
-              <span class="truncate ml-3 text-right" style="flex:1;">{{ card.customData?.url }}</span>
+              <span class="truncate ml-3 text-right" style="flex: 1">{{ card.customData?.url }}</span>
             </div>
-            <a-input v-model:value="name" :maxlength="20" aria-placeholder="font-size: 16px;" class="input"
-                     placeholder="名称" show-count
-                     spellcheck="false" style="width:266px;height: 48px;"/>
-            <a-textarea v-model:value="detail" :bordered="false" :maxlength="200" aria-placeholder="font-size: 16px;"
-                        class="input xt-text my-4" placeholder="简介（可选）" show-count spellcheck="false"
-                        style="width:266px;height: 156px;"/>
+            <a-input
+              v-model:value="name"
+              :maxlength="20"
+              aria-placeholder="font-size: 16px;"
+              class="input"
+              placeholder="名称"
+              show-count
+              spellcheck="false"
+              style="width: 266px; height: 48px"
+            />
+            <a-textarea
+              v-model:value="detail"
+              :bordered="false"
+              :maxlength="200"
+              aria-placeholder="font-size: 16px;"
+              class="input xt-text my-4"
+              placeholder="简介（可选）"
+              show-count
+              spellcheck="false"
+              style="width: 266px; height: 156px"
+            />
           </div>
         </div>
-        <div class="flex justify-center mt-3 mb-6" style="width:100%;">
-          <div class=" mr-3 flex justify-center items-center xt-text xt-bg-2 rounded-lg pointer"
-               style="width: 120px;height: 44px;font-size: 16px;" @click="scrub">
+        <div class="flex justify-center mt-3 mb-6" style="width: 100%">
+          <div
+            class="mr-3 flex justify-center items-center xt-text xt-bg-2 rounded-lg pointer"
+            style="width: 120px; height: 44px; font-size: 16px"
+            @click="scrub"
+          >
             取消
           </div>
-          <div class="flex justify-center items-center bg-blue-500 rounded-lg pointer"
-               style="width: 120px;height: 44px;font-size: 16px;"
-               @click="shareNow">
+          <div
+            class="flex justify-center items-center bg-blue-500 rounded-lg pointer"
+            style="width: 120px; height: 44px; font-size: 16px"
+            @click="shareNow"
+          >
             立即分享
           </div>
         </div>
@@ -95,15 +127,15 @@
 </template>
 
 <script>
-import { defineAsyncComponent } from 'vue'
-import api from '../../../../../src/model/api'
-import { message } from 'ant-design-vue'
-import cache from '../hooks/cache'
-import { setList } from './testData'
-import { nanoid } from 'nanoid'
-import { completeTask } from '../../../apps/task/page/branch/task.ts'
+import { defineAsyncComponent } from 'vue';
+import api from '../../../../../src/model/api';
+import { message } from 'ant-design-vue';
+import cache from '../hooks/cache';
+import { setList } from './testData';
+import { nanoid } from 'nanoid';
+import { completeTask } from '../../../apps/task/page/branch/task.ts';
 
-const Remote = defineAsyncComponent(() => import('../../widgets/custom/Remote.vue'))
+const Remote = defineAsyncComponent(() => import('../../widgets/custom/Remote.vue'));
 
 export default {
   name: 'RemoteShare',
@@ -111,7 +143,7 @@ export default {
     Remote,
   },
   props: ['openShare', 'desk', 'cardId', 'direct'],
-  data () {
+  data() {
     return {
       remotes: [],
       activeIndex: 0,
@@ -121,59 +153,61 @@ export default {
       card: {},
       notTrigger: true,
       cardSize: '',
-      zoom: 0
-    }
+      zoom: 0,
+    };
   },
   methods: {
-    close () {
-      this.$emit('closeShare', false)
+    close() {
+      this.$emit('closeShare', false);
     },
-    getImg (url) {
-      return '/img/addCard/' + url + '.png'
+    getImg(url) {
+      return '/img/addCard/' + url + '.png';
     },
-    toggleActive (index) {
-      this.activeIndex = index
+    toggleActive(index) {
+      this.activeIndex = index;
     },
-    uplaodImageChange (info) {  // info 上传文件的所有信息
-      const formData = new FormData()
-      formData.append('file', info.file)
+    uplaodImageChange(info) {
+      // info 上传文件的所有信息
+      const formData = new FormData();
+      formData.append('file', info.file);
       api.postCosUpload(formData, (err, res) => {
         if (!err) {
-          message.error('数据上传失败')
+          message.error('数据上传失败');
         } else {
-          const img = 'http://' + res.data.data
+          const img = 'http://' + res.data.data;
           if (img) {
-            message.success('自定义头像上传成功')
-            this.img = img
+            message.success('自定义头像上传成功');
+            this.img = img;
           }
           // cache.set('avatar_url',img)
         }
-      })
+      });
     },
-    beforeUpload (file) {  // 上传之前的准备工作
-      const regex = /^image\/(jpeg|png|jpg)$/  // 通过正则表达式匹配是否指定的png jpg jpeg的类型文件
-      const isFileType = !regex.test(file.type)
+    beforeUpload(file) {
+      // 上传之前的准备工作
+      const regex = /^image\/(jpeg|png|jpg)$/; // 通过正则表达式匹配是否指定的png jpg jpeg的类型文件
+      const isFileType = !regex.test(file.type);
       if (isFileType) {
-        message.error('只能上传JPG和PNG格式图片')
+        message.error('只能上传JPG和PNG格式图片');
       }
-      const isLt2M = file.size / 1024 / 1024 < 2
+      const isLt2M = file.size / 1024 / 1024 < 2;
       if (!isLt2M) {
-        message.error('上传图片不能大于2MB')
+        message.error('上传图片不能大于2MB');
       }
-      return isFileType && isLt2M
+      return isFileType && isLt2M;
     },
-    delImg () {
-      this.img = ''
+    delImg() {
+      this.img = '';
     },
-    shareNow () {
-      if (!this.img.trim()) return message.info('图片不能为空')
-      if (!this.name.trim()) return message.info('名称不能为空')
-      const time = new Date().valueOf()
+    shareNow() {
+      if (!this.img.trim()) return message.info('图片不能为空');
+      if (!this.name.trim()) return message.info('名称不能为空');
+      const time = new Date().valueOf();
       let cardContent = {
         nanoid: nanoid(4),
-        'name': 'remote',
-        'cname': this.name,
-        'detail': this.detail,
+        name: 'remote',
+        cname: this.name,
+        detail: this.detail,
         url: this.card.customData.url,
         sizes: [this.cardSize],
         option: [
@@ -181,45 +215,45 @@ export default {
             img: this.img,
             name: 'Remote',
             size: [this.cardSize],
-            zoom: '11'
+            zoom: '11',
           },
         ],
         time,
-        'download': 0,
-        'avatar': '/icons/logo128.png',
-        'nickname': 'Victor Ruiz',
-      }
-      completeTask('Z0302')
-      setList(cardContent)
+        download: 0,
+        avatar: '/icons/logo128.png',
+        nickname: 'Victor Ruiz',
+      };
+      completeTask('Z0302');
+      setList(cardContent);
 
-      message.success('添加成功')
+      message.success('添加成功');
       // if(this.direct){
       //   this.$router.go(-1)
       //   return
       // }
       // this.close()
-      this.$emit('closeShare', false, false)
+      this.$emit('closeShare', false, false);
     },
-    scrub () {
-      this.direct ? this.$router.go(-1) : this.close()
-    }
+    scrub() {
+      this.direct ? this.$router.go(-1) : this.close();
+    },
   },
-  mounted () {
-    let deskCard = cache.get('cardSize')
-    const { width, height } = this.$refs.sizeBox.getBoundingClientRect()
+  mounted() {
+    let deskCard = cache.get('cardSize');
+    const { width, height } = this.$refs.sizeBox.getBoundingClientRect();
     // console.log(deskCard)
     // console.log(width,height)
-    let zoom = JSON.parse(JSON.stringify(this.desk.settings.cardZoom))
+    let zoom = JSON.parse(JSON.stringify(this.desk.settings.cardZoom));
     // console.log(this.desk)
     // console.log(zoom)
     if (deskCard.width >= deskCard.height) {
-      this.zoom = (width * zoom / deskCard.width).toFixed()
+      this.zoom = ((width * zoom) / deskCard.width).toFixed();
     } else {
-      this.zoom = (height * zoom / deskCard.height).toFixed()
+      this.zoom = ((height * zoom) / deskCard.height).toFixed();
     }
     // console.log(this.zoom)
-    this.card = this.desk.cards.find(item => item.id === parseInt(this.cardId))
-    this.cardSize = this.card.customData.width * 2 + 'x' + this.card.customData.height * 2
+    this.card = this.desk.cards.find((item) => item.id === parseInt(this.cardId));
+    this.cardSize = this.card.customData.width * 2 + 'x' + this.card.customData.height * 2;
 
     // this.card = cache.get('currentCard')
     // let remoteArr = []
@@ -243,12 +277,12 @@ export default {
     //     var img = new Image();
     //     img.src = canvas.toDataURL(); //生成base64图片
     //     console.log(img)
-    //     // document.getElementById("photo").appendChild(img);　
+    //     // document.getElementById("photo").appendChild(img);
     //     // base64Canvas = canvas.toDataURL();
     //   }
     // })
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

@@ -7,40 +7,42 @@
           <span>返回</span>
         </div>
       </a-col>
-      <a-col style="font-size: 1.2em; line-height: 2.5em">
-        共 {{ count }} 种卡片
-      </a-col>
+      <a-col style="font-size: 1.2em; line-height: 2.5em"> 共 {{ count }} 种卡片 </a-col>
     </a-row>
 
-    <a-input v-model:value="selectContent" class="no-drag" placeholder="搜索" style="
-        height: 100%;
-        width: 400px;
-        border-radius: 12px;
-        background: rgba(42, 42, 42, 0.6);
-      ">
+    <a-input
+      v-model:value="selectContent"
+      class="no-drag"
+      placeholder="搜索"
+      style="height: 100%; width: 400px; border-radius: 12px; background: rgba(42, 42, 42, 0.6)"
+    >
       <template #prefix>
         <Icon icon="sousuo"></Icon>
       </template>
     </a-input>
   </div>
-  <vue-custom-scrollbar id="addScroll" key="scrollbar" :settings="scrollbarSettings"
-                        style="position:relative;  border-radius: 8px;height: 100vh">
-    <CardPreview v-for="item in filterList" :cardType="item" :desk="desk" @addSuccess="onBack"></CardPreview>
+  <vue-custom-scrollbar
+    key="scrollbar"
+    id="addScroll"
+    :settings="scrollbarSettings"
+    style="position: relative; border-radius: 8px; height: 100vh"
+  >
+    <CardPreview :desk="desk" :cardType="item" v-for="item in filterList" @addSuccess="onBack"></CardPreview>
     <div style="height: 650px"></div>
   </vue-custom-scrollbar>
 </template>
 
 <script>
-import { mapActions } from 'pinia'
-import { cardStore } from '../../../store/card'
-import CardPreview from './CardPreview.vue'
+import { mapActions } from 'pinia';
+import { cardStore } from '../../../store/card';
+import CardPreview from './CardPreview.vue';
 
 export default {
   name: 'AddCard',
   components: { CardPreview },
   props: ['desk'],
   emits: ['onBack'],
-  data () {
+  data() {
     return {
       cardList: [
         {
@@ -80,12 +82,7 @@ export default {
           cname: '性能',
           icon: 'xingneng',
           detail: '监控系统状态，查看游戏帧数',
-          images: [
-            'CPULineChart',
-            'CPUFourCard',
-            'SmallCPUCard',
-            'SmallGPUCard',
-          ],
+          images: ['CPULineChart', 'CPUFourCard', 'SmallCPUCard', 'SmallGPUCard'],
         },
         {
           name: 'music',
@@ -128,7 +125,6 @@ export default {
           images: ['GamesDiscount', 'DiscountPercentage', 'GameEpic'],
         },
         {
-
           name: 'gameAssis',
           cname: '游戏助手',
           icon: 'steam',
@@ -140,14 +136,14 @@ export default {
           cname: '捕获',
           icon: 'audio',
           detail: '捕获',
-          images: ['capture', 'CaptureNewCard']
+          images: ['capture', 'CaptureNewCard'],
         },
         {
           name: 'Audio',
           cname: '音频工具',
           icon: 'audio',
           detail: '音频工具',
-          images: ['audio', 'voice']
+          images: ['audio', 'voice'],
         },
         {
           name: 'remote',
@@ -155,7 +151,7 @@ export default {
           icon: 'game',
           detail: '添加一个链接到外部网页的卡片，可以实现各种自定义功能。',
           images: ['Remote'],
-          size: ['1x2']
+          size: ['1x2'],
         },
         {
           name: 'customAssembly',
@@ -163,7 +159,7 @@ export default {
           icon: 'image',
           detail: '自定义小组件封面和快捷方式',
           images: ['customAssembly'],
-          size: ['2x2']
+          size: ['2x2'],
         },
         {
           name: 'signIn',
@@ -171,7 +167,7 @@ export default {
           icon: 'star',
           detail: '完成签到，获得奖励',
           images: ['signIn'],
-          size: ['1x2']
+          size: ['1x2'],
         },
         {
           name: 'Film',
@@ -179,7 +175,7 @@ export default {
           icon: 'video',
           detail: '查看最近正在上映的热门电影',
           images: ['singleFilm', 'manyFilm'],
-          size: ['1x2']
+          size: ['1x2'],
         },
         {
           name: 'clocks',
@@ -187,7 +183,7 @@ export default {
           icon: 'time-circle',
           detail: '选择合适的时钟组件装点你的桌面',
           images: ['clocks'],
-          size: ['1x1']
+          size: ['1x1'],
         },
         {
           name: 'notes',
@@ -195,7 +191,7 @@ export default {
           icon: 'time-circle',
           detail: '可自由修改内容，调整大小的桌面便签',
           images: ['notes'],
-          size: ['1x2']
+          size: ['1x2'],
         },
         {
           name: 'news',
@@ -203,7 +199,7 @@ export default {
           icon: 'time-circle',
           detail: '头条（推荐），国内，娱乐，体育，军事，科技，财经，时尚等新闻信息',
           images: ['news'],
-          size: ['4x4']
+          size: ['4x4'],
         },
         {
           name: 'AIaides',
@@ -211,7 +207,7 @@ export default {
           icon: 'time-circle',
           detail: '你的专属AI助手,内置数个预设模板供你使用。',
           images: ['AIaides'],
-          size: ['2x2']
+          size: ['2x2'],
         },
         {
           name: 'OilPrices',
@@ -219,7 +215,7 @@ export default {
           icon: 'time-circle',
           detail: '时刻关注你所在的城市的92号，96号，98号，0号油价',
           images: ['OilPrices'],
-          size: ['2x4']
+          size: ['2x4'],
         },
         {
           name: 'yuanCommunity',
@@ -227,8 +223,16 @@ export default {
           icon: 'time-circle',
           detail: '元社区里又发了什么好玩的事情？时刻关注热门和最新动态。',
           images: ['yuanCommunity'],
-          size: ['4x4']
-        }
+          size: ['4x4'],
+        },
+        {
+          name: 'Courier',
+          cname: '我的快递',
+          icon: 'time-circle',
+          detail: '在桌面上时刻关注你的快递动态，支持批量添加快递单号，自定义修改快递名称和图标',
+          images: ['courier'],
+          size: ['4x6'],
+        },
       ],
       cardType: {},
       show: false,
@@ -242,55 +246,54 @@ export default {
         timer: null,
       },
       selectContent: '',
-    }
+    };
   },
 
-  mounted () {
-  },
+  mounted() {},
   computed: {
-    filterList () {
+    filterList() {
       return this.cardList.filter((i) => {
         return (
-            i.cname.toLowerCase().includes(this.selectContent.toLowerCase()) ||
-            i.detail.toLowerCase().includes(this.selectContent.toLowerCase())
-        )
-      })
+          i.cname.toLowerCase().includes(this.selectContent.toLowerCase()) ||
+          i.detail.toLowerCase().includes(this.selectContent.toLowerCase())
+        );
+      });
     },
-    count () {
-      let i = 0
+    count() {
+      let i = 0;
       this.cardList.forEach((c) => {
-        i += c.images.length
-      })
-      return i
+        i += c.images.length;
+      });
+      return i;
     },
   },
   methods: {
     ...mapActions(cardStore, ['addCard']),
-    addAssembly (item) {
+    addAssembly(item) {
       switch (item.name) {
         case 'customTimer':
-          this.cardType = this.cardList[0]
-          break
+          this.cardType = this.cardList[0];
+          break;
         case 'countdownDay':
-          this.cardType = this.cardList[1]
-          break
+          this.cardType = this.cardList[1];
+          break;
         case 'clock':
-          this.cardType = this.cardList[2]
-          break
+          this.cardType = this.cardList[2];
+          break;
         case 'supervisory':
-          this.cardType = this.cardList[3]
-          break
+          this.cardType = this.cardList[3];
+          break;
         case 'games':
-          this.cardType = this.cardList[8]
-          break
+          this.cardType = this.cardList[8];
+          break;
       }
-      this.show = true
+      this.show = true;
     },
-    onBack () {
-      this.$emit('onBack', false)
+    onBack() {
+      this.$emit('onBack', false);
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

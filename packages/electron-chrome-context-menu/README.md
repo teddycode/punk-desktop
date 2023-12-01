@@ -14,14 +14,14 @@ This module aims to provide a context menu with close to feature parity to that 
 
 ```ts
 // ES imports
-import buildChromeContextMenu from "electron-chrome-context-menu";
+import buildChromeContextMenu from 'electron-chrome-context-menu';
 // CommonJS
-const buildChromeContextMenu = require("electron-chrome-context-menu").default;
+const buildChromeContextMenu = require('electron-chrome-context-menu').default;
 
-const { app } = require("electron");
+const { app } = require('electron');
 
-app.on("web-contents-created", (event, webContents) => {
-  webContents.on("context-menu", (e, params) => {
+app.on('web-contents-created', (event, webContents) => {
+  webContents.on('context-menu', (e, params) => {
     const menu = buildChromeContextMenu({
       params,
       webContents,

@@ -2,7 +2,7 @@
 const electron = require('electron')
 const fs = require('fs-extra')
 const path = require('path')
-global.settings = require('./js/util/settings/settingsMain.js')
+global.settings=require('./js/util/settings/settingsMain.js')
 const {
   app, // Module to control application life.
   protocol, // Module to control protocol handling
@@ -39,7 +39,7 @@ var clipboardContent = ''
 var spaceManager
 var sessions = []
 
-app.on('session-created', async (ses) => {
+app.on('session-created',async (ses)=>{
   sessions.push(ses)
   ses.protocol.registerBufferProtocol('tsbapp', (request, response) => {
     render.regDefaultProtocol(request, response)
@@ -75,10 +75,10 @@ function ensureDb () {
     console.warn('由于数据库未初始化，尝试复制初始化数据库')
   }
   //判断DB_ROOT是否是文件夹，如果是文件夹，则进行清理
-  let stat = fs.statSync(DB_ROOT)
-  if (stat.isDirectory()) {
+  let stat= fs.statSync(DB_ROOT)
+  if(stat.isDirectory()){
     fs.rmdirSync(DB_ROOT)
-    fs.copyFileSync(TPL_PATH, DB_ROOT)
+    fs.copyFileSync(TPL_PATH,DB_ROOT)
   }
 }
 

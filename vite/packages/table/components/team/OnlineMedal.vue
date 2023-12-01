@@ -1,38 +1,40 @@
 <template>
   <div class="medal-wrapper">
-    <div class="badge-box" style="border:none;background: none;zoom: 0.5;margin: 0">
-      <div style="width: 100px;height: 100px;position: relative">
-        <img :src="this.getPath+getBadge().badge+'.png'" style="width: 75px;margin-top: 10px">
-        <div v-if="badge.rank<100" :style="{'background-color':this.getBadge().color}" class="badge-num"
-             style="right: 33px;bottom: 20px">
+    <div class="badge-box" style="border: none; background: none; zoom: 0.5; margin: 0">
+      <div style="width: 100px; height: 100px; position: relative">
+        <img :src="this.getPath + getBadge().badge + '.png'" style="width: 75px; margin-top: 10px" />
+        <div
+          v-if="badge.rank < 100"
+          :style="{ 'background-color': this.getBadge().color }"
+          class="badge-num"
+          style="right: 33px; bottom: 20px"
+        >
           {{ badge.rank }}
         </div>
       </div>
     </div>
-    <div class="badge-box big " style="position: absolute;width: 250px">
+    <div class="badge-box big" style="position: absolute; width: 250px">
       <a-row>
         <a-col :span="10">
-          <img :src="this.getPath+getBadge().badge+'.png'" style="width: 75px;margin-top: 10px">
-          <div v-if="badge.rank<100" :style="{'background-color':this.getBadge().color}" class="badge-num">
+          <img :src="this.getPath + getBadge().badge + '.png'" style="width: 75px; margin-top: 10px" />
+          <div v-if="badge.rank < 100" :style="{ 'background-color': this.getBadge().color }" class="badge-num">
             {{ badge.rank }}
           </div>
         </a-col>
         <a-col :span="14" style="line-height: 2">
-          <div style="font-size: 16px;font-weight: bold;">{{ getBadge().title }}</div>
+          <div style="font-size: 16px; font-weight: bold">{{ getBadge().title }}</div>
           <div class="text-grey">{{ getBadge().summaryNames }}</div>
           <div class="text-grey" style="font-size: 0.8em">{{ getBadge().summaryDes }}</div>
         </a-col>
       </a-row>
     </div>
   </div>
-
-
 </template>
 
 <script>
 export default {
   name: 'OnlineMedal',
-  data () {
+  data() {
     return {
       badge: {
         t9999: {
@@ -40,7 +42,7 @@ export default {
           title: '默默无闻',
           summaryNames: '全网300名开外',
           summaryDes: '初出茅庐。',
-          color: '#c1c1c1'
+          color: '#c1c1c1',
         },
 
         t300: {
@@ -48,70 +50,69 @@ export default {
           title: '崭露锋芒',
           summaryNames: '全网前300名',
           summaryDes: '崭露锋芒，潜力无限！',
-          color: '#9CA5CB'
+          color: '#9CA5CB',
         },
         t100: {
           badge: 'bronzec-b',
           title: '实力非凡',
           summaryNames: '全网前100名',
           summaryDes: '不容小觑，成长惊人！',
-          color: 'rgb(196 85 35)'
+          color: 'rgb(196 85 35)',
         },
         t50: {
           badge: 'silverc-b',
           title: '出类拔萃',
           summaryNames: '全网前50名',
           summaryDes: '能力过人，摧枯拉朽！',
-          color: 'rgb(159 183 204)'
+          color: 'rgb(159 183 204)',
         },
         t20: {
           badge: 'goldc-b',
           title: '惊为天人',
           summaryNames: '全网前20名',
           summaryDes: '超强实力，惊天动地！',
-          color: 'rgb(201 126 7)'
+          color: 'rgb(201 126 7)',
         },
         t5: {
           badge: 'platinumc-b',
           title: '超神',
           summaryNames: '全网前5名',
           summaryDes: '前无古人，后无来者！',
-          color: 'rgb(64 116 231)'
+          color: 'rgb(64 116 231)',
         },
         rank: 0,
-      }
-    }
+      },
+    };
   },
   props: ['rank'],
   computed: {
-    getPath () {
-      return 'file://' + window.globalArgs['app-dir_name'] + '/../../icons/badge/'
-    }
+    getPath() {
+      return 'file://' + window.globalArgs['app-dir_name'] + '/../../icons/badge/';
+    },
   },
   methods: {
-    getBadge () {
+    getBadge() {
       if (!this.rank) {
-        return this.badge.t9999
+        return this.badge.t9999;
       }
-      let rank = this.rank
-      this.badge.rank = rank
+      let rank = this.rank;
+      this.badge.rank = rank;
       if (rank > 300) {
-        return this.badge.t9999
+        return this.badge.t9999;
       } else if (rank < 5) {
-        return this.badge.t5
+        return this.badge.t5;
       } else if (rank < 20) {
-        return this.badge.t20
+        return this.badge.t20;
       } else if (rank < 50) {
-        return this.badge.t50
+        return this.badge.t50;
       } else if (rank < 100) {
-        return this.badge.t100
+        return this.badge.t100;
       } else if (rank <= 300) {
-        return this.badge.t300
+        return this.badge.t300;
       }
     },
-  }
-
-}
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -121,7 +122,6 @@ export default {
   &:hover {
     .big {
       opacity: 1;
-
     }
   }
 
@@ -155,5 +155,4 @@ export default {
   font-size: 12px;
   white-space: nowrap;
 }
-
 </style>

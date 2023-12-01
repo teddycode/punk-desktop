@@ -1,5 +1,5 @@
 <template>
-  <xt-left-menu :list="menuList" end="3" last="1" model="id">
+  <xt-left-menu :list="menuList" last="1" end="3" model="id">
     <template #test>
       <xt-button @click="showRightPanel = !showRightPanel">Toggle Right Panel</xt-button>
     </template>
@@ -7,11 +7,11 @@
   </xt-left-menu>
 
   <!-- 新建对话  -->
-  <xt-modal v-model="createChatVisible" :isFooter="false" title="新建模板">
+  <xt-old-modal v-model="createChatVisible" title="新建模板" :isFooter="false">
     <CreateTopic @close="createChatVisible = false"></CreateTopic>
-  </xt-modal>
+  </xt-old-modal>
   <!-- 系统设置 -->
-  <xt-drawer v-model="setVisible" placement="right" title="12">
+  <xt-drawer title="12" v-model="setVisible" placement="right">
     <template #title>
       <div>设置</div>
     </template>
@@ -20,12 +20,11 @@
 </template>
 
 <script>
-import CreateTopic from '../chat/left/createTopic.vue'
-import { mapWritableState } from 'pinia'
-import { aiStore } from '@store/ai'
-import Edit from './edit.vue'
-import { SettingFilled } from '@ant-design/icons-vue'
-
+import CreateTopic from '../chat/left/createTopic.vue';
+import { mapWritableState } from 'pinia';
+import { aiStore } from '../../../store/ai';
+import Edit from './edit.vue';
+import { SettingFilled } from '@ant-design/icons-vue';
 export default {
   components: {
     CreateTopic,
@@ -34,14 +33,9 @@ export default {
     SettingFilled,
   },
   computed: {
-    ...mapWritableState(aiStore, [
-      'selectTab',
-      'isFull',
-      'temperature',
-      'count',
-    ]),
+    ...mapWritableState(aiStore, ['selectTab', 'isFull', 'temperature', 'count']),
   },
-  data () {
+  data() {
     return {
       showRightPanel: false,
       select: 'Chat',
@@ -50,7 +44,7 @@ export default {
           icon: 'message',
           // float: 'test',
           callBack: () => {
-            this.selectTab = 'Chat'
+            this.selectTab = 'Chat';
           },
         },
         // {
@@ -67,7 +61,7 @@ export default {
           flag: true,
           icon: 'tianjia2',
           callBack: () => {
-            this.createChatVisible = true
+            this.createChatVisible = true;
           },
         },
 
@@ -75,15 +69,14 @@ export default {
           flag: true,
           icon: 'setting',
           callBack: () => {
-            this.setVisible = true
+            this.setVisible = true;
           },
         },
       ],
       setVisible: false,
       createChatVisible: false,
-    }
+    };
   },
-}
+};
 </script>
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

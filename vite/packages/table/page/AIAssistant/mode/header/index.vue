@@ -4,11 +4,10 @@
 </template>
 
 <script>
-import Modes from './Modes.vue'
-import Use from './Use.vue'
-import { mapWritableState } from 'pinia'
-import { aiStore } from '../../../../store/ai'
-
+import Modes from './Modes.vue';
+import Use from './Use.vue';
+import { mapWritableState } from 'pinia';
+import { aiStore } from '../../../../store/ai';
 export default {
   computed: {
     ...mapWritableState(aiStore, ['isMode']),
@@ -17,7 +16,7 @@ export default {
     Modes,
     Use,
   },
-}
+};
 </script>
 
 <style lang="scss" scoped></style>

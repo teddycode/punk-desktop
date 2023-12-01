@@ -1,36 +1,35 @@
-const { autoUpdater } = require('electron-updater')
-const { app, Notification, ipcMain: ipc, BrowserWindow, net } = require('electron')
-let updaterWindow = null
-global.initedUpdater = false
-global.showUpdateWindow = false
-
+const { autoUpdater } = require('electron-updater');
+const { app, Notification, ipcMain: ipc, BrowserWindow, net } = require('electron');
+let updaterWindow = null;
+global.initedUpdater = false;
+global.showUpdateWindow = false;
 class Updater {
-  showedError = false
+  showedError = false;
   //升级数据
-  updateData
-
-  showError (error, tag = 'check') {
+  updateData;
+  showError(error, tag = 'check') {
     if (!net.online) {
       const content = {
         title: '自动更新',
-        body: '当前为离线状态，自动更新程序暂不检测更新，请联网后重启应用检测。'
-      }
-      const notification = new Notification(content)
-      notification.show()
-      return
+        body: '当前为离线状态，自动更新程序暂不检测更新，请联网后重启应用检测。',
+      };
+      const notification = new Notification(content);
+      notification.show();
+      return;
     }
-    let errInfo = '未知'
+    let errInfo = '未知';
     if (error.code === 2) {
-      errInfo = '软件包名无法验证'
+      errInfo = '软件包名无法验证';
     }
     if (this.showedError === false) {
       const content = {
         title: '自动更新',
-        body: '自动更新程序意外终止,错误原因： ' + errInfo + ' ，请检查系统代理和网络。或者到www.apps.vip手动下载更新。'
-      }
-      const notification = new Notification(content)
-      notification.show()
-      this.showedError = true
+        body:
+          '自动更新程序意外终止,错误原因： ' + errInfo + ' ，请检查系统代理和网络。或者到www.apps.vip手动下载更新。',
+      };
+      const notification = new Notification(content);
+      notification.show();
+      this.showedError = true;
       // require('electron').shell.openExternal('https://www.apps.vip/#download') //更改为打开系统默认浏览器
     }
   }
@@ -39,63 +38,69 @@ class Updater {
    * 检查更新
    * @param showWindow 显示更新窗口
    */
-  checkUpdate (showWindow = false) {
-    global.showUpdateWindow = showWindow
+  checkUpdate(showWindow = false) {
+    global.showUpdateWindow = showWindow;
     //
     if (isDevelopmentMode) {
       // 如果是开发环境，直接不检测，如需调试升级工具，将此处return注释掉即可
-      return
+      return;
     }
-    autoUpdater.logger = require('electron-log')
+    autoUpdater.logger = require('electron-log');
 
-    autoUpdater.checkForUpdates().then((checkResult) => {
-      // 检测到可以升级，则发送升级的信息到updateWindow
-      this.updateData = {
-        version: checkResult.updateInfo.version,
-        releaseDate: checkResult.updateInfo.releaseDate
-      }
-    }).catch((error) => {
-      this.showError(error, 'checkError')
-    })
+    autoUpdater
+      .checkForUpdates()
+      .then((checkResult) => {
+        // 检测到可以升级，则发送升级的信息到updateWindow
+        this.updateData = {
+          version: checkResult.updateInfo.version,
+          releaseDate: checkResult.updateInfo.releaseDate,
+        };
+      })
+      .catch((error) => {
+        this.showError(error, 'checkError');
+      });
 
     if (!global.initedUpdater) {
-      global.initedUpdater = true
+      global.initedUpdater = true;
       autoUpdater.on('error', (error) => {
-        this.showError(error, 'error')
-      })
+        this.showError(error, 'error');
+      });
       autoUpdater.on('update-available', (data) => {
-        this.updateData = data
+        this.updateData = data;
         // console.log(updateInfo)
         setTimeout(() => {
           const content = {
             title: '自动更新',
-            body: '有新版本可用，正在后台为您下载更新包。请稍候…'
-          }
-          const notification = new Notification(content)
-          notification.show()
-        }, 1000)
-      })
-      autoUpdater.on('update-downloaded', (event, releaseEvents, releaseName, releaseDate, updateUrl, quitAndUpdate) => {
-        // ipc.on('updateNow',(e,arg)=>{
-        //   autoUpdater.quitAndInstall()
-        // })
-        // console.log('update下载完成')
-        this.loadUpdate(this.updateData)
-      })
+            body: '有新版本可用，正在后台为您下载更新包。请稍候…',
+          };
+          const notification = new Notification(content);
+          notification.show();
+        }, 1000);
+      });
+      autoUpdater.on(
+        'update-downloaded',
+        (event, releaseEvents, releaseName, releaseDate, updateUrl, quitAndUpdate) => {
+          // ipc.on('updateNow',(e,arg)=>{
+          //   autoUpdater.quitAndInstall()
+          // })
+          // console.log('update下载完成')
+          this.loadUpdate(this.updateData);
+        },
+      );
       autoUpdater.on('update-not-available', (data) => {
         if (global.showUpdateWindow) {
-          this.updateData = data
+          this.updateData = data;
           // console.log(updateInfo)
-          this.loadUpdate(data)
+          this.loadUpdate(data);
         }
-      })
+      });
     }
     // autoUpdater.on('download-progress',(progressObj)=>{
     //   updaterWindow.webContents.send('downloadProgress',progressObj)
     // })
   }
 
-  loadUpdate (updateInfo) {
+  loadUpdate(updateInfo) {
     if (!updaterWindow) {
       updaterWindow = new BrowserWindow({
         parent: mainWindow,
@@ -112,49 +117,48 @@ class Updater {
             '--user-data-path=' + userDataPath,
             '--app-version=' + app.getVersion(),
             '--app-name=' + app.getName(),
-            ...((isDevelopmentMode ? ['--development-mode'] : []))
-          ]
-        }
-      })
-      updaterWindow.on('close', () => updaterWindow = null)
-      updaterWindow.setMenu(null)
+            ...(isDevelopmentMode ? ['--development-mode'] : []),
+          ],
+        },
+      });
+      updaterWindow.on('close', () => (updaterWindow = null));
+      updaterWindow.setMenu(null);
 
-      updaterWindow.webContents.loadURL('file://' + __dirname + '/../../pages/update/index.html')
+      updaterWindow.webContents.loadURL('file://' + __dirname + '/../../pages/update/index.html');
       //updaterWindow.webContents.openDevTools()
       updaterWindow.on('ready-to-show', () => {
-        updaterWindow.webContents.send('getInfo', { updateInfo: updateInfo, currentVersion: app.getVersion() })
-        updaterWindow.show()
+        updaterWindow.webContents.send('getInfo', { updateInfo: updateInfo, currentVersion: app.getVersion() });
+        updaterWindow.show();
+      });
 
-      })
-
-      updaterWindow.focus()
+      updaterWindow.focus();
     } else {
-      updaterWindow.focus()
+      updaterWindow.focus();
     }
   }
 }
 
 app.whenReady().then(() => {
   ipc.on('startInstall', () => {
-    global.destroyAllViews()
+    global.destroyAllViews();
     // save the window size for the next launch of the app
-    saveWindowBounds()
-    autoUpdater.quitAndInstall()
-    app.quit()
-  })
+    saveWindowBounds();
+    autoUpdater.quitAndInstall();
+    app.quit();
+  });
   // ipc.on('quitAndInstall',(event)=>{
   //   console.log('退出并执行升级')
   //   autoUpdater.quitAndInstall()
   // })
   ipc.on('closeUpdate', () => {
     if (updaterWindow) {
-      updaterWindow.close()
+      updaterWindow.close();
     }
-  })
+  });
 
   ipc.on('checkUpdate', () => {
-    let updater = new Updater()
-    updater.checkUpdate(true)
-  })
-})
-module.exports = Updater
+    let updater = new Updater();
+    updater.checkUpdate(true);
+  });
+});
+module.exports = Updater;

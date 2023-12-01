@@ -1,45 +1,39 @@
 <template>
   <div>
-    <div
-        :class="typeClass"
-        :style="[customStyle]"
-        class="xt-active xt-base-btn"
-        @click="copyToClipboard()"
-    >
+    <div :class="typeClass" :style="[customStyle]" class="xt-active xt-base-btn" @click="copyToClipboard()">
       <XtBaseIcon :icon="icon" :style="fontSizeStyle"></XtBaseIcon>
     </div>
   </div>
 </template>
 
 <script>
-import { copyMixins } from '../../common/copyMixins'
-
+import { copyMixins } from '../../common/copyMixins';
 export default {
   name: 'XtIcon',
   mixins: [copyMixins],
   computed: {
     // 自定义宽高
-    customStyle () {
+    customStyle() {
       return {
         width: this.w + 'px',
         height: this.w + 'px',
         'border-radius': this.radius + 'px  !important',
         // height: this.h + "px",
-      }
+      };
     },
 
-    fontSizeStyle () {
+    fontSizeStyle() {
       return {
         'font-size': this.size + 'px ',
-      }
+      };
     },
-    typeClass () {
+    typeClass() {
       if (this.type === 'default') {
-        return 'xt-btn'
+        return 'xt-btn';
       } else if (this.type === 'theme') {
-        return 'xt-active-btn'
+        return 'xt-active-btn';
       } else {
-        return 'flex justify-center items-center'
+        return 'flex justify-center items-center';
       }
     },
   },
@@ -69,7 +63,7 @@ export default {
       default: 48,
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped></style>

@@ -1,5 +1,5 @@
-import rearrangeAnt from "../js/IntervalAlgo.js";
-import { deepCopy } from "../js/util.js";
+import rearrangeAnt from '../js/IntervalAlgo.js';
+import { deepCopy } from '../js/util.js';
 
 let markedArr = [];
 
@@ -11,7 +11,7 @@ export default function () {
   function clearEditAnt() {
     const noDescIdxS = [];
     antRecords.value.map((item, i) => {
-      if (item.desc == "") {
+      if (item.desc == '') {
         noDescIdxS.push(i);
       }
       item.isEdit = false;
@@ -41,14 +41,14 @@ export default function () {
     }
 
     markedData.forEach((item) => {
-      item[2].style.top = item[0] + "px";
+      item[2].style.top = item[0] + 'px';
     });
   }
   function addEditRecord(uid, top) {
     clearEditAnt();
     antRecords.value.push({
       uid,
-      desc: "",
+      desc: '',
       isEdit: true,
     });
     nextTick(() => {
@@ -58,15 +58,13 @@ export default function () {
   }
   function addAntRecords({ uid, desc, offsetTop, isEdit = false }) {
     // debugger
-    const activeAntIndex = antRecords.value.findIndex(
-      (item) => item.uid == uid
-    );
+    const activeAntIndex = antRecords.value.findIndex((item) => item.uid == uid);
 
     if (activeAntIndex > -1) {
       if (isEdit) {
         clearEditAnt();
         markedArr.forEach((item) => {
-          item[2].style.top = item[0] + "px";
+          item[2].style.top = item[0] + 'px';
         });
       }
       const activeAnt = antRecords.value[activeAntIndex];
@@ -87,9 +85,7 @@ export default function () {
   }
 
   function removeAnt(uid) {
-    const activeAntIndex = antRecords.value.findIndex(
-      (item) => item.uid == uid
-    );
+    const activeAntIndex = antRecords.value.findIndex((item) => item.uid == uid);
     if (activeAntIndex > -1) {
       antRecords.value.splice(activeAntIndex, 1);
     }

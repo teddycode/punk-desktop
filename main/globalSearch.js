@@ -1,15 +1,15 @@
-global.globalSearch = null
+global.globalSearch = null;
 
 const globalSearchMod = {
   init: function () {
     if (globalSearch !== null) {
       if (globalSearch.isFocused()) {
-        globalSearch.hide()
+        globalSearch.hide();
       } else {
-        globalSearch.show()
-        globalSearch.focus()
+        globalSearch.show();
+        globalSearch.focus();
       }
-      return
+      return;
     }
     if (isWin) {
       globalSearch = new BrowserWindow({
@@ -33,10 +33,10 @@ const globalSearchMod = {
             '--user-data-path=' + userDataPath,
             '--app-version=' + app.getVersion(),
             '--app-name=' + app.getName(),
-            ...((isDevelopmentMode ? ['--development-mode'] : [])),
-          ]
-        }
-      })
+            ...(isDevelopmentMode ? ['--development-mode'] : []),
+          ],
+        },
+      });
     } else {
       globalSearch = new BrowserWindow({
         alwaysOnTop: true,
@@ -59,45 +59,45 @@ const globalSearchMod = {
             '--user-data-path=' + userDataPath,
             '--app-version=' + app.getVersion(),
             '--app-name=' + app.getName(),
-            ...((isDevelopmentMode ? ['--development-mode'] : [])),
-          ]
-        }
-      })
+            ...(isDevelopmentMode ? ['--development-mode'] : []),
+          ],
+        },
+      });
     }
 
-    globalSearch.webContents.loadURL(render.getUrl('search.html'))
+    globalSearch.webContents.loadURL(render.getUrl('search.html'));
 
-    globalSearch.on('close', () => globalSearch = null)
+    globalSearch.on('close', () => (globalSearch = null));
 
     globalSearch.webContents.on('did-finish-load', () => {
-      globalSearch.webContents.send('viewLoaded')
-    })
+      globalSearch.webContents.send('viewLoaded');
+    });
 
     globalSearch.on('blur', () => {
-      globalSearch.hide()
-    })
+      globalSearch.hide();
+    });
 
     globalSearch.on('will-resize', (event, args) => {
-      event.preventDefault()
-    })
-  }
-}
-const TableManager = require('./src/main/tableManager.js')
-const TableAppManager = require('./src/main/tableAppManager.js')
-const TableTabManager = require('./src/main/tableTabManager')
-const KeyMapManager = require('./src/main/keyMapManager')
-global.tableManager = new TableManager()
+      event.preventDefault();
+    });
+  },
+};
+const TableManager = require('./src/main/tableManager.js');
+const TableAppManager = require('./src/main/tableAppManager.js');
+const TableTabManager = require('./src/main/tableTabManager');
+const KeyMapManager = require('./src/main/keyMapManager');
+global.tableManager = new TableManager();
 app.whenReady().then(async () => {
-  global.tableAppManager = new TableAppManager()
-  tableAppManager.bindIPC()
-  global.tableTabManager = new TableTabManager()
-  tableTabManager.bindIPC()
+  global.tableAppManager = new TableAppManager();
+  tableAppManager.bindIPC();
+  global.tableTabManager = new TableTabManager();
+  tableTabManager.bindIPC();
   //注册快捷键
-  global.keyMapManager = new KeyMapManager()
-  keyMapManager.bindIPC()
+  global.keyMapManager = new KeyMapManager();
+  keyMapManager.bindIPC();
 
   // let registerTableShortcutResult = false
-  let registerGlobalSearchShortcutResult = false
+  let registerGlobalSearchShortcutResult = false;
 
   // /**
   //  * 获得一个键位
@@ -151,30 +151,43 @@ app.whenReady().then(async () => {
   //     registerTableShortcutResult = true
   //   }
   // }
-  keyMapManager.regWithNotification('table', async () => {
-    await callTable()
-  }, async (key) => {
-    await callTable(2)
-  }, '为您直接打开工作台。')
+  keyMapManager.regWithNotification(
+    'table',
+    async () => {
+      await callTable();
+    },
+    async (key) => {
+      await callTable(2);
+    },
+    '为您直接打开工作台。',
+  );
 
-  keyMapManager.regWithNotification('superTools', async () => {
-    await ToolboxManager.ensure()
-    global.toolboxManager.toggle()
-  }, () => {
-  }, '请在工作台快捷键设置处修改工作台快捷键。')
+  keyMapManager.regWithNotification(
+    'superTools',
+    async () => {
+      await ToolboxManager.ensure();
+      global.toolboxManager.toggle();
+    },
+    () => {},
+    '请在工作台快捷键设置处修改工作台快捷键。',
+  );
 
-  keyMapManager.regWithNotification('globalSearch', async () => {
-    globalSearchMod.init()
-    // statsh 快捷键打开全局搜索
-    if (globalSearch && globalSearch.isFocused()) {
-      statsh.do({
-        action: 'increase',
-        key: 'globalSearchBaseShortOpen',
-        value: 1
-      })
-    }
-  }, () => {
-  }, '请在工作台快捷键设置处修改全局搜索快捷键。')
+  keyMapManager.regWithNotification(
+    'globalSearch',
+    async () => {
+      globalSearchMod.init();
+      // statsh 快捷键打开全局搜索
+      if (globalSearch && globalSearch.isFocused()) {
+        statsh.do({
+          action: 'increase',
+          key: 'globalSearchBaseShortOpen',
+          value: 1,
+        });
+      }
+    },
+    () => {},
+    '请在工作台快捷键设置处修改全局搜索快捷键。',
+  );
 
   // // registerTableShortcut().then()//注册工作台的全局快捷键
   // ipc.on('setTableShortcut', async (e, a) => {
@@ -243,15 +256,13 @@ app.whenReady().then(async () => {
   //   e.returnValue = true
   // })
 
-  async function callTable (tag = -1) {
-    tableManager.init().then(() => {
-
-    })
+  async function callTable(tag = -1) {
+    tableManager.init().then(() => {});
   }
 
-  let tableMod = settings.get('tableMod')
+  let tableMod = settings.get('tableMod');
   if (tableMod === undefined || tableMod === 'table') {
-    callTable(1).then()//呼出工作台
+    callTable(1).then(); //呼出工作台
   }
 
   // function registerSearch () {
@@ -280,43 +291,46 @@ app.whenReady().then(async () => {
   //registerSearch()
 
   ipc.on(ipcMessageMain.sidePanel.openGlobalSearch, () => {
-    globalSearchMod.init()
+    globalSearchMod.init();
 
     // statsh 点击打开全局搜索
     if (globalSearch && globalSearch.isFocused()) {
       statsh.do({
         action: 'increase',
         key: 'globalSearchBaseClickOpen',
-        value: 1
-      })
+        value: 1,
+      });
     }
-  })
+  });
 
   ipc.on('transmitTaskList', (event, args) => {
     if (globalSearch) {
-      globalSearch.webContents.send('processTransmitTaskList', args)
+      globalSearch.webContents.send('processTransmitTaskList', args);
     }
-  })
+  });
 
   ipc.on('changeBrowserWindowHeight', (event, args) => {
-    globalSearch.setSize(600, args)
-  })
+    globalSearch.setSize(600, args);
+  });
 
   ipc.on('closeGlobalSearch', () => {
-    globalSearch.hide()
-  })
+    globalSearch.hide();
+  });
 
   ipc.handle('shell', (event, args) => {
     if (args.cmd) {
       require('child_process').exec(__dirname + '/ext/cmd/x64/nircmdc.exe ' + args.cmd, (err, stdout, stderr) => {
         console.log({
-          err, stdout, stderr
-        })
+          err,
+          stdout,
+          stderr,
+        });
         event.returnValue = {
-          err, stdout, stderr
-        }
-      })
+          err,
+          stdout,
+          stderr,
+        };
+      });
     }
-  })
-
-})
+  });
+});

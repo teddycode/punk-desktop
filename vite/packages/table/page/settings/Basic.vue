@@ -1,52 +1,57 @@
 <template>
-  <div class="h-full" style="display: flex">
-
+  <div style="display: flex" class="h-full">
     <SecondPanel :menus="menus" @changeTab="change"></SecondPanel>
     <!-- 快速搜索 基础设置->基础设置 右侧框 -->
-    <div class="s-bg"
-         style="padding: 1em;border-radius: 8px;margin-left: 1em;width: 100%;margin: 1em;color: var(--primary-text);background: var(--primary-bg);
-
-    ">
+    <div
+      style="
+        padding: 1em;
+        border-radius: 8px;
+        margin-left: 1em;
+        width: 100%;
+        margin: 1em;
+        color: var(--primary-text);
+        background: var(--primary-bg);
+      "
+      class="s-bg"
+    >
       <router-view></router-view>
     </div>
-
   </div>
 </template>
 
 <script>
-import SecondPanel from '../../components/SecondPanel.vue'
-import { isMain } from '../../js/common/screenUtils'
-import { taskStore } from '../../apps/task/store'
-import { mapWritableState } from 'pinia'
-
+import SecondPanel from '../../components/SecondPanel.vue';
+import { isMain } from '../../js/common/screenUtils';
+import { taskStore } from '../../apps/task/store';
+import { mapWritableState } from 'pinia';
 const menus = [
   {
     title: '通用',
     name: 'common',
     route: {
-      name: 'common'
-    }
+      name: 'common',
+    },
   },
   {
     title: '浏览器',
     name: 'browser',
     route: {
-      name: 'browserSetting'
-    }
+      name: 'browserSetting',
+    },
   },
   {
     title: '分屏',
     name: 'screen',
     route: {
-      name: 'subscreen'
-    }
+      name: 'subscreen',
+    },
   },
   {
     title: '按键',
     name: 'key',
     route: {
-      name: 'key'
-    }
+      name: 'key',
+    },
   },
   // {
   //   title: '分屏',
@@ -59,39 +64,43 @@ const menus = [
     title: '弹幕',
     name: 'barrage',
     route: {
-      name: 'barrageSetting'
-    }
-  }
-
-]
+      name: 'barrageSetting',
+    },
+  },
+];
 
 const subMenus = [
   {
     title: '通用',
     name: 'common',
     route: {
-      name: 'common'
-    }
+      name: 'common',
+    },
   },
   {
     title: '弹幕',
     name: 'barrage',
     route: {
-      name: 'barrageSetting'
-    }
-  }
-
-]
+      name: 'barrageSetting',
+    },
+  },
+];
 export default {
   name: 'Basic',
   components: { SecondPanel },
-  data () {
+  data() {
     return {
       menus: isMain() ? menus : subMenus,
-      currentMenu: 'common'
-    }
+      currentMenu: 'common',
+    };
   },
-  mounted () {
+  mounted() {
+    // 离线模式下隐藏弹幕入口
+    if (window.$isOffline) {
+      this.menus = this.menus.filter((i) => {
+        return i.name != 'barrage';
+      });
+    }
     // this.$router.replace({
     //       name:'key'
     //     })
@@ -106,49 +115,49 @@ export default {
   },
   watch: {
     taskID: {
-      handler (newV) {
+      handler(newV) {
         if (this.taskID === 'M0401' && this.step == 2) {
           let obj = {
-            'menu': {
-              'route': {
-                'name': 'key'
-              }
+            menu: {
+              route: {
+                name: 'key',
+              },
             },
-          }
-          this.change(obj)
+          };
+          this.change(obj);
         }
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   methods: {
-    change (tab) {
-      this.$router.push(tab.menu.route)
+    change(tab) {
+      this.$router.push(tab.menu.route);
     },
-    setMenu (menu) {
-      this.currentMenu = menu.name
+    setMenu(menu) {
+      this.currentMenu = menu.name;
       if (menu.route) {
-        this.$router.push(menu.route)
+        this.$router.push(menu.route);
       }
     },
-    setKeyStatus (keyCode, status) {
+    setKeyStatus(keyCode, status) {
       switch (keyCode) {
         case 16:
-          this.shift = status
-          break
+          this.shift = status;
+          break;
         case 17:
-          this.ctrl = status
-          break
+          this.ctrl = status;
+          break;
         case 18:
-          this.alt = status
-          break
+          this.alt = status;
+          break;
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .settings-menus {
   background: #3b3b3b;
   width: 8em;

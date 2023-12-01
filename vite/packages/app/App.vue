@@ -1,13 +1,12 @@
 <script lang="ts">
 import zhCN from 'ant-design-vue/es/locale/zh_CN';
-
 export default {
   data() {
     return {
-      locale: zhCN
-    }
-  }
-}
+      locale: zhCN,
+    };
+  },
+};
 </script>
 
 <template>
@@ -18,5 +17,4 @@ export default {
   </a-config-provider>
 </template>
 
-<style>
-</style>
+<style></style>

@@ -35,15 +35,15 @@ export default function algo(newArr, noOverlapArr, spacing = 0) {
       i--;
     }
   }
-  if (insetIndex !== noOverlapArr.length&&end>noOverlapArr[insetIndex][0]) {
+  if (insetIndex !== noOverlapArr.length && end > noOverlapArr[insetIndex][0]) {
     //对于插入位置后面的元素，如果和后面发生重叠，则把重叠区域向后做最小迁移
     let i = insetIndex;
-    let moveStep = end - noOverlapArr[i][0]+spacing;
+    let moveStep = end - noOverlapArr[i][0] + spacing;
     while (i < noOverlapArr.length && moveStep > 0) {
       noOverlapArr[i][0] += moveStep;
       noOverlapArr[i][1] += moveStep;
       const nextStart = noOverlapArr[i + 1] ? noOverlapArr[i + 1][0] : Infinity;
-      moveStep = noOverlapArr[i][1] - nextStart+spacing;
+      moveStep = noOverlapArr[i][1] - nextStart + spacing;
       i++;
     }
   }
@@ -51,5 +51,3 @@ export default function algo(newArr, noOverlapArr, spacing = 0) {
   noOverlapArr.splice(insetIndex, 0, newArr);
   return noOverlapArr;
 }
-
-

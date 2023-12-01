@@ -1,86 +1,106 @@
 <template>
-  <Widget ref="captureNewSlot" :customData="customData" :customIndex="customIndex" :desk="desk"
-          :menuList="menuList" :options="options">
-
-    <CaptureCore @selectSource="visibleSource=true"></CaptureCore>
-
+  <Widget
+    ref="captureNewSlot"
+    :customData="customData"
+    :customIndex="customIndex"
+    :desk="desk"
+    :menuList="menuList"
+    :options="options"
+  >
+    <CaptureCore @selectSource="visibleSource = true"></CaptureCore>
 
     <div class="flex flex-col items-center justify-center">
-      <span :class="{disable:!this.settings.imageSavePath}"
-            class="mb-3 s-item w-full pointer btn-active voice-hover text-center rounded-lg py-3"
-            @click="showImages">我的截屏({{
-          images.length
-        }})</span>
-      <span :class="{disable:!this.settings.videoSavePath}"
-            class="mb-3 s-item w-full pointer btn-active voice-hover text-center rounded-lg py-3"
-            @click="showVideos">我的录制({{
-          videos.length
-        }})</span>
-      <span class="mb-2 s-item w-full pointer btn-active voice-hover text-center rounded-lg py-3"
-            @click="visibleSettings=true">快捷键设置</span>
-      <span class="mb-3 s-item w-full pointer btn-active voice-hover text-center rounded-lg py-3"
-            @click="visibleSettings=true">捕获设置</span>
+      <span
+        :class="{ disable: !this.settings.imageSavePath }"
+        class="mb-3 s-item w-full pointer btn-active voice-hover text-center rounded-lg py-3"
+        @click="showImages"
+        >我的截屏({{ images.length }})</span
+      >
+      <span
+        :class="{ disable: !this.settings.videoSavePath }"
+        class="mb-3 s-item w-full pointer btn-active voice-hover text-center rounded-lg py-3"
+        @click="showVideos"
+        >我的录制({{ videos.length }})</span
+      >
+      <span
+        class="mb-2 s-item w-full pointer btn-active voice-hover text-center rounded-lg py-3"
+        @click="visibleSettings = true"
+        >快捷键设置</span
+      >
+      <span
+        class="mb-3 s-item w-full pointer btn-active voice-hover text-center rounded-lg py-3"
+        @click="visibleSettings = true"
+        >捕获设置</span
+      >
     </div>
   </Widget>
   <teleport to="#app">
     <Modal v-if="visibleSource" v-model:visible="visibleSource" :blurFlag="true">
-      <SourceSelector @choosenSource="choosenSource">
-      </SourceSelector>
+      <SourceSelector @choosenSource="choosenSource"> </SourceSelector>
     </Modal>
   </teleport>
-  <a-drawer v-model:visible="visibleSettings" :bodyStyle="{ overflow: 'hidden' }" title="设置" width="500"
-            @close="reloadMic">
+  <a-drawer
+    v-model:visible="visibleSettings"
+    :bodyStyle="{ overflow: 'hidden' }"
+    title="设置"
+    width="500"
+    @close="reloadMic"
+  >
     <CaptureSettings></CaptureSettings>
   </a-drawer>
 </template>
 
 <script>
-import Widget from '../../card/Widget.vue'
-import CaptureCore from './CaptureCore.vue'
-import SourceSelector from '../../modal/SourceSelector.vue'
-import CaptureSettings from '../../modal/CaptureSettings.vue'
-import Modal from '../../Modal.vue'
-import { captureStore } from '../../../store/capture'
-import { mapActions, mapState } from 'pinia'
+import Widget from '../../card/Widget.vue';
+import CaptureCore from './CaptureCore.vue';
+import SourceSelector from '../../modal/SourceSelector.vue';
+import CaptureSettings from '../../modal/CaptureSettings.vue';
+import Modal from '../../Modal.vue';
+import { captureStore } from '../../../store/capture';
+import { mapActions, mapState } from 'pinia';
 
 export default {
   name: 'CaptureNewCard',
   components: {
-    Modal, CaptureSettings, SourceSelector,
+    Modal,
+    CaptureSettings,
+    SourceSelector,
     CaptureCore,
-    Widget
+    Widget,
   },
   props: {
     customIndex: {
       type: Number,
-      default: 0
+      default: 0,
     },
     customData: {
       type: Object,
-      default: () => {
-      }
+      default: () => {},
     },
     desk: {
-      type: Object
-    }
+      type: Object,
+    },
   },
-  data () {
+  data() {
     return {
       visibleSettings: false,
       visibleSource: false,
-      menuList: [{
-        icon: 'wanggeshitu',
-        title: '更换录制源',
-        fn: () => {
-          this.visibleSource = true
-        }
-      }, {
-        icon: 'shezhi',
-        title: '设置',
-        fn: () => {
-          this.visibleSettings = true
-        }
-      }],
+      menuList: [
+        {
+          icon: 'wanggeshitu',
+          title: '更换录制源',
+          fn: () => {
+            this.visibleSource = true;
+          },
+        },
+        {
+          icon: 'shezhi',
+          title: '设置',
+          fn: () => {
+            this.visibleSettings = true;
+          },
+        },
+      ],
       options: {
         className: 'card',
         title: '捕获',
@@ -93,33 +113,33 @@ export default {
       recordKey: 'CTRL + WIN + V',
       microphoneKey: 'CTRL + WIN + J',
       microphoneShow: false,
-    }
+    };
   },
-  mounted () {
-    this.reloadAll()
+  mounted() {
+    this.reloadAll();
   },
   computed: {
-    ...mapState(captureStore, ['images', 'videos', 'settings'])
+    ...mapState(captureStore, ['images', 'videos', 'settings']),
   },
   methods: {
     ...mapActions(captureStore, ['reloadAll']),
-    closeMicrophone () {
-      this.microphoneShow = !this.microphoneShow
+    closeMicrophone() {
+      this.microphoneShow = !this.microphoneShow;
     },
-    choosenSource () {
-      this.visibleSource = false
+    choosenSource() {
+      this.visibleSource = false;
     },
-    openDir (dir) {
-      require('electron').shell.openPath(dir)
+    openDir(dir) {
+      require('electron').shell.openPath(dir);
     },
-    showImages () {
-      this.openDir(this.settings.imageSavePath)
+    showImages() {
+      this.openDir(this.settings.imageSavePath);
     },
-    showVideos () {
-      this.openDir(this.settings.videoSavePath)
-    }
-  }
-}
+    showVideos() {
+      this.openDir(this.settings.videoSavePath);
+    },
+  },
+};
 </script>
 
 <style scoped>

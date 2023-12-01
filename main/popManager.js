@@ -1,70 +1,76 @@
 /* 使用方法参考语雀文档：
-* https://duanshuo.yuque.com/hfru7g/gta7yy/pzyk4z */
-const popList = [] // 弹窗池
+ * https://duanshuo.yuque.com/hfru7g/gta7yy/pzyk4z */
+const popList = []; // 弹窗池
 /**
  * 必须先手动填入这个常量中，才可通过popManager调用，主要是为了防止不受控
  * @type {string[]}
  */
 const popRegistered = [
-  'favSaveToFolder'// 收藏夹保存到文件夹窗体
-]
+  'favSaveToFolder', // 收藏夹保存到文件夹窗体
+];
 const popManager = {
   /**
    * 准备窗体
    */
-  async preparePop (name = Date.now().toString(), url, options = {}, webPreferences = {}, fileOption) {
+  async preparePop(name = Date.now().toString(), url, options = {}, webPreferences = {}, fileOption) {
     if (popRegistered.indexOf(name) === -1) {
-      return false // 如果不在注册的弹窗清单中，则直接返回假
+      return false; // 如果不在注册的弹窗清单中，则直接返回假
     }
-    let popWindow = popManager.get(name)
+    let popWindow = popManager.get(name);
     if (popWindow) {
-      return popWindow
+      return popWindow;
     }
-    options = Object.assign({
-      width: 800,
-      height: 600,
-      acceptFirstMouse: true,
-      alwaysOnTop: true,
-      show: false,
-      // resizable: false,  //必须设置为resizeable，无法resize的窗体在window上无边框和阴影
-      frame: false,
-      webPreferences: webPreferences
-    }, options)
-    webPreferences = Object.assign({
-      // preload: __dirname+'/pages/saApp/settingPreload.js',
-      nodeIntegration: true,
-      contextIsolation: false,
-      enableRemoteModule: true,
-      sandbox: false,
-      safeDialogs: false,
-      safeDialogsMessage: false,
-      partition: null,
-      webSecurity: false,
-      additionalArguments: [
-        '--user-data-path=' + userDataPath,
-        '--app-version=' + app.getVersion(),
-        '--app-name=' + app.getName()
-      ]
-    }, webPreferences)
+    options = Object.assign(
+      {
+        width: 800,
+        height: 600,
+        acceptFirstMouse: true,
+        alwaysOnTop: true,
+        show: false,
+        // resizable: false,  //必须设置为resizeable，无法resize的窗体在window上无边框和阴影
+        frame: false,
+        webPreferences: webPreferences,
+      },
+      options,
+    );
+    webPreferences = Object.assign(
+      {
+        // preload: __dirname+'/pages/saApp/settingPreload.js',
+        nodeIntegration: true,
+        contextIsolation: false,
+        enableRemoteModule: true,
+        sandbox: false,
+        safeDialogs: false,
+        safeDialogsMessage: false,
+        partition: null,
+        webSecurity: false,
+        additionalArguments: [
+          '--user-data-path=' + userDataPath,
+          '--app-version=' + app.getVersion(),
+          '--app-name=' + app.getName(),
+        ],
+      },
+      webPreferences,
+    );
     const popInstance = await windowManager.create({
       name: name,
       windowOption: options,
-      webPreferences
-    })
+      webPreferences,
+    });
 
-    console.log(popInstance)
-    const pop = popInstance.window
+    console.log(popInstance);
+    const pop = popInstance.window;
     if (url.startsWith('http') || url.startsWith('https')) {
-      pop.loadURL(url)
+      pop.loadURL(url);
     } else {
-      pop.loadFile(url, fileOption)
+      pop.loadFile(url, fileOption);
     }
     pop.on('blur', () => {
-      pop.hide()
-    })
+      pop.hide();
+    });
     pop.on('will-resize', (event) => {
-      event.preventDefault()
-    })
+      event.preventDefault();
+    });
     popWindow = {
       name: name,
       window: pop,
@@ -72,29 +78,29 @@ const popManager = {
        * 设置窗体Bounds，如果窗体不存在，则返回false
        * @param bounds {width,height,x,y}
        */
-      setBounds (bounds) {
-        popWindow.window.setBounds(bounds)
-      }
-    }
+      setBounds(bounds) {
+        popWindow.window.setBounds(bounds);
+      },
+    };
 
-    popList.push(popWindow)
-    return popWindow
+    popList.push(popWindow);
+    return popWindow;
   },
   /**
    * 根据窗体名称创建窗体
    * @param name
    * @returns {boolean|*}
    */
-  get (name) {
-    const find = popList.find(item => {
+  get(name) {
+    const find = popList.find((item) => {
       if (item.name === name) {
-        return item
+        return item;
       }
-    })
+    });
     if (find) {
-      return find
+      return find;
     } else {
-      return false
+      return false;
     }
   },
   /**
@@ -103,13 +109,13 @@ const popManager = {
    * @param bounds  bounds
    * @returns {boolean}
    */
-  setBounds (name, bounds) {
-    const popWindow = popManager.get(name)
+  setBounds(name, bounds) {
+    const popWindow = popManager.get(name);
     if (popWindow) {
-      popWindow.setBounds(bounds)
-      return popWindow
+      popWindow.setBounds(bounds);
+      return popWindow;
     } else {
-      return false
+      return false;
     }
   },
   /**
@@ -120,13 +126,13 @@ const popManager = {
    * @param webPreferences
    * @returns {BrowserWindow}
    */
-  async openPop (name = Date.now().toString(), url, options = {}, webPreferences = {}, fileOptions) {
-    const popWindow = await popManager.preparePop(name, url, options, webPreferences, fileOptions)
+  async openPop(name = Date.now().toString(), url, options = {}, webPreferences = {}, fileOptions) {
+    const popWindow = await popManager.preparePop(name, url, options, webPreferences, fileOptions);
     if (popWindow) {
-      popWindow.window.show()
-      return popWindow
+      popWindow.window.show();
+      return popWindow;
     } else {
-      throw new Error('未注册的pop，不可直接使用，请到popManager中手动注册后使用。')
+      throw new Error('未注册的pop，不可直接使用，请到popManager中手动注册后使用。');
     }
-  }
-}
+  },
+};

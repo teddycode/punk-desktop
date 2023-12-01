@@ -1,25 +1,25 @@
 const store = new Vuex.Store({
   state: {
     allTasks: [],
-    selectedTask: ''
+    selectedTask: '',
   },
   getters: {
-    getAllTasks: state => {
-      return state.allTasks
+    getAllTasks: (state) => {
+      return state.allTasks;
     },
-    getSelectedTask: state => {
-      return state.selectedTask
-    }
+    getSelectedTask: (state) => {
+      return state.selectedTask;
+    },
   },
   mutations: {
     REFRESH_ALLTASKS: (state, tasksList) => {
-      state.allTasks = tasksList
+      state.allTasks = tasksList;
     },
     SET_SELECTEDTASK: (state, selectedTask) => {
-      state.selectedTask = selectedTask
-    }
+      state.selectedTask = selectedTask;
+    },
   },
-  actions: {}
-})
+  actions: {},
+});
 
-module.exports = store
+module.exports = store;

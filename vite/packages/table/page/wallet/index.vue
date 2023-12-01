@@ -6,14 +6,13 @@
   </background>
 </template>
 <script lang="ts">
-
-import Background from "@page/core/components/Background.vue";
+import Background from '@page/core/components/Background.vue';
 
 export default {
   components: {
-    Background
-  }
-}
+    Background,
+  },
+};
 </script>
 
 <style scoped>

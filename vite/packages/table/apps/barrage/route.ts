@@ -1,6 +1,5 @@
-import BarrageIndex from './page/Index.vue'
-import Barrage from './page/Barrage.vue'
-
+import BarrageIndex from './page/Index.vue';
+import Barrage from './page/Barrage.vue';
 export default {
   path: '/barrage',
   name: 'barrageIndex',
@@ -12,8 +11,8 @@ export default {
       component: Barrage,
       meta: {
         tab1: 'community',
-        tab2: 'barrage'
-      }
-    }
-  ]
-}
+        tab2: 'barrage',
+      },
+    },
+  ],
+};

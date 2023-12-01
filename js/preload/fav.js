@@ -9,4 +9,4 @@ window.addEventListener('message', function (e) {
     // }
     // ipc.send('getFavContent', {content: content})
   }
-})
+});

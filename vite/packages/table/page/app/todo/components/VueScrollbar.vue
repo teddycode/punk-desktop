@@ -1,17 +1,17 @@
 <template>
   <section
-      :is="$props.tagname"
-      class="ps-container"
-      @ps-scroll-y="scrollHandle"
-      @ps-scroll-x="scrollHandle"
-      @ps-scroll-up="scrollHandle"
-      @ps-scroll-down="scrollHandle"
-      @ps-scroll-left="scrollHandle"
-      @ps-scroll-right="scrollHandle"
-      @ps-y-reach-start="scrollHandle"
-      @ps-y-reach-end="scrollHandle"
-      @ps-x-reach-start="scrollHandle"
-      @ps-x-reach-end="scrollHandle"
+    class="ps-container"
+    :is="$props.tagname"
+    @ps-scroll-y="scrollHandle"
+    @ps-scroll-x="scrollHandle"
+    @ps-scroll-up="scrollHandle"
+    @ps-scroll-down="scrollHandle"
+    @ps-scroll-left="scrollHandle"
+    @ps-scroll-right="scrollHandle"
+    @ps-y-reach-start="scrollHandle"
+    @ps-y-reach-end="scrollHandle"
+    @ps-x-reach-start="scrollHandle"
+    @ps-x-reach-end="scrollHandle"
   >
     <slot></slot>
   </section>
@@ -23,11 +23,11 @@
 </style>
 <script lang="ts">
 // @ts-nocheck
-import "perfect-scrollbar/css/perfect-scrollbar.css";
-import PerfectScrollbar from "perfect-scrollbar";
+import 'perfect-scrollbar/css/perfect-scrollbar.css';
+import PerfectScrollbar from 'perfect-scrollbar';
 
 export default {
-  name: "VueCustomScrollbar",
+  name: 'VueCustomScrollbar',
   props: {
     settings: {
       default: null,
@@ -38,7 +38,7 @@ export default {
     },
     tagname: {
       type: String,
-      default: "section",
+      default: 'section',
     },
   },
   data() {

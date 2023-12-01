@@ -1,49 +1,38 @@
 <template>
   <div style="width: 100%; display: flex; height: 100%; flex-direction: column">
-    <div
-        :style="{ background: app.theme || '#424242' }"
-        class="drag"
-        style="height: 4em; width: 100%"
-    >
+    <div class="drag" :style="{ background: app.theme || '#424242' }" style="height: 4em; width: 100%">
       <a-row>
         <a-col :span="6">
-          <div class="app-btn no-drag" @click="goBack">
+          <div @click="goBack" class="app-btn no-drag">
             <div class="btn-wrapper">
-              <Icon
-                  icon="xiangzuo"
-                  style="font-size: 1.5em; vertical-align: middle"
-
-              ></Icon>
+              <Icon icon="xiangzuo" style="font-size: 1.5em; vertical-align: middle"></Icon>
             </div>
           </div>
-          <div class="app-btn no-drag" @click="refresh">
+          <div @click="refresh" class="app-btn no-drag">
             <div class="btn-wrapper">
-              <Icon
-                  icon="shuaxin"
-                  style="font-size: 1.5em; vertical-align: middle"
-              ></Icon>
+              <Icon icon="shuaxin" style="font-size: 1.5em; vertical-align: middle"></Icon>
             </div>
           </div>
         </a-col>
         <a-col :span="10" style="text-align: center; line-height: 3">
-          <div v-if="showScale" class="no-drag">
+          <div class="no-drag" v-if="showScale">
             <a-row>
-              <a-col :span="6"> 网页缩放</a-col>
+              <a-col :span="6"> 网页缩放 </a-col>
               <a-col :span="10">
                 <a-slider
-                    v-model:value="scale"
-                    :marks="marks"
-                    :max="300"
-                    :min="50"
-                    :step="10"
-                    style="width: 100px"
-                    @change="setScale"
+                  @change="setScale"
+                  :marks="marks"
+                  :step="10"
+                  v-model:value="scale"
+                  :min="50"
+                  :max="300"
+                  style="width: 100px"
                 ></a-slider>
               </a-col>
               <a-col :span="8">
                 <a-button-group>
                   <a-button
-                      @click="
+                    @click="
                       () => {
                         if (this.scale + 10 <= 300) {
                           this.scale = this.scale + 10;
@@ -51,12 +40,10 @@
                         }
                       }
                     "
-                  >
-                    <plus-outlined
-                    />
-                  </a-button>
+                    ><plus-outlined
+                  /></a-button>
                   <a-button
-                      @click="
+                    @click="
                       () => {
                         if (this.scale - 10 >= 20) {
                           this.scale = this.scale - 10;
@@ -64,11 +51,8 @@
                         }
                       }
                     "
-                  >
-                    <minus-outlined/>
-                  </a-button
-                  >
-                </a-button-group>
+                    ><minus-outlined /> </a-button
+                ></a-button-group>
               </a-col>
             </a-row>
           </div>
@@ -76,68 +60,44 @@
           <!--        <span style="font-size: 1.2em">您可以通过按下esc键隐藏/显示外框。</span>-->
         </a-col>
         <a-col :span="8" style="text-align: right">
-          <div class="app-btn no-drag" @click="switchScale">
-            <Icon
-                icon="wenzidaxiao2"
-                style="font-size: 1.5em; vertical-align: middle"
-            ></Icon>
+          <div @click="switchScale" class="app-btn no-drag">
+            <Icon icon="wenzidaxiao2" style="font-size: 1.5em; vertical-align: middle"></Icon>
             <div class="scale">{{ scale }}%</div>
           </div>
           <div class="app-btn no-drag">
-            <div
-                v-if="fullScreen"
-                class="btn-wrapper"
-                @click="toggleFullScreen"
-            >
-              <Icon
-                  icon="quxiaoquanping_huaban"
-                  style="font-size: 1.5em; vertical-align: middle"
-              ></Icon>
+            <div v-if="fullScreen" @click="toggleFullScreen" class="btn-wrapper">
+              <Icon icon="quxiaoquanping_huaban" style="font-size: 1.5em; vertical-align: middle"></Icon>
             </div>
-            <div v-else class="btn-wrapper" @click="toggleFullScreen">
-              <Icon
-                  icon="quanping_huaban"
-                  style="font-size: 1.4em; vertical-align: middle"
-              ></Icon>
+            <div v-else @click="toggleFullScreen" class="btn-wrapper">
+              <Icon icon="quanping_huaban" style="font-size: 1.4em; vertical-align: middle"></Icon>
             </div>
           </div>
           <div class="app-btn no-drag">
             <div class="btn-wrapper">
-              <Icon
-                  icon="touping"
-                  style="font-size: 1.5em; vertical-align: middle"
-              ></Icon>
+              <Icon icon="touping" style="font-size: 1.5em; vertical-align: middle"></Icon>
             </div>
           </div>
         </a-col>
       </a-row>
     </div>
     <div
-        v-if="fullScreen"
-        id="frame"
-        :style="{ background: app.theme || '#424242' }"
-        style="width: 100%; flex: 1"
+      v-if="fullScreen"
+      id="frame"
+      :style="{ background: app.theme || '#424242' }"
+      style="width: 100%; flex: 1"
     ></div>
-    <div
-        v-else
-        id="frame"
-        :style="{ background: app.theme || '#424242' }"
-        style="width: 100%; flex: 1"
-    >
-      &nbsp;
-    </div>
+    <div v-else id="frame" :style="{ background: app.theme || '#424242' }" style="width: 100%; flex: 1">&nbsp;</div>
   </div>
 </template>
 
 <script>
-import { appStore } from '@store'
-import { mapWritableState } from 'pinia'
-import { MinusOutlined, PlusOutlined } from '@ant-design/icons-vue'
-import _ from 'lodash-es'
-
+import { appStore } from '../store';
+import { mapWritableState } from 'pinia';
+import { PlusOutlined, MinusOutlined } from '@ant-design/icons-vue';
+import _ from 'lodash-es';
 export default {
   name: 'AppFrame',
-  data () {
+  data() {
     return {
       app: {},
       showScale: false,
@@ -146,7 +106,7 @@ export default {
         100: '100',
         200: '200',
       },
-    }
+    };
   },
   components: {
     PlusOutlined,
@@ -155,123 +115,123 @@ export default {
   computed: {
     ...mapWritableState(appStore, ['fullScreen', 'settings', 'saving']),
   },
-  mounted () {
-    let app = this.$route.params
+  mounted() {
+    let app = this.$route.params;
     if (typeof app.fullScreen === 'undefined') {
-      app.fullScreen = true //默认全屏
+      app.fullScreen = true; //默认全屏
     } else {
-      app.fullScreen = !(app.fullScreen === 'false')
+      app.fullScreen = !(app.fullScreen === 'false');
     }
     if (app.fullScreen) {
-      this.fullScreen = app.fullScreen
+      this.fullScreen = app.fullScreen;
     }
     if (app.type === 'system') {
       //系统应用则跳转
       this.$router.replace({
         ...JSON.parse(app.route),
-      })
+      });
     } else {
       //非系统应用，则打开内嵌网页
       this.$nextTick(() => {
-        let frame = document.getElementById('frame')
+        let frame = document.getElementById('frame');
         let position = {
           x: this.fixZoom(frame.getBoundingClientRect().x),
           y: this.fixZoom(frame.getBoundingClientRect().y),
           width: this.fixZoom(frame.offsetWidth),
           height: this.fixZoom(frame.offsetHeight),
-        }
+        };
         let args = {
           position,
           app,
-        }
-        this.app = app
-        ipc.send('executeTableApp', args)
+        };
+        this.app = app;
+        ipc.send('executeTableApp', args);
         setTimeout(() => {
-          ipc.send('getRunningApps')
-          ipc.send('getRunningTableApps')
-        }, 3000)
+          ipc.send('getRunningApps');
+          ipc.send('getRunningTableApps');
+        }, 3000);
         frame.addEventListener('resize', () => {
           _.debounce(() => {
-            this.syncBounds()
-          }, 1000)
-        })
+            this.syncBounds();
+          }, 1000);
+        });
         setTimeout(() => {
-          this.syncBounds()
-        }, 600)
-      })
+          this.syncBounds();
+        }, 600);
+      });
     }
   },
-  beforeUnmount () {
-    this.handleLeave()
+  beforeUnmount() {
+    this.handleLeave();
   },
   methods: {
-    fixZoom (num) {
-      return Number(((num * this.settings.zoomFactor) / 100).toFixed(0))
+    fixZoom(num) {
+      return Number(((num * this.settings.zoomFactor) / 100).toFixed(0));
     },
-    switchScale () {
-      this.showScale = !this.showScale
+    switchScale() {
+      this.showScale = !this.showScale;
     },
-    setScale (value) {
+    setScale(value) {
       ipc.send('setTableAppScale', {
         app: JSON.parse(JSON.stringify(this.app)),
         scale: value,
-      })
+      });
     },
-    toggleFullScreen () {
-      this.fullScreen = !this.fullScreen
+    toggleFullScreen() {
+      this.fullScreen = !this.fullScreen;
       this.$nextTick(() => {
-        this.syncBounds()
-      })
+        this.syncBounds();
+      });
     },
-    syncBounds () {
-      let frame = document.getElementById('frame')
+    syncBounds() {
+      let frame = document.getElementById('frame');
       let position = {
         x: this.fixZoom(frame.getBoundingClientRect().x),
         y: this.fixZoom(frame.getBoundingClientRect().y),
         width: this.fixZoom(frame.offsetWidth),
         height: this.fixZoom(frame.offsetHeight),
-      }
+      };
       let args = {
         bounds: position,
         app: this.app,
-      }
-      ipc.send('syncTableAppBounds', JSON.parse(JSON.stringify(args)))
+      };
+      ipc.send('syncTableAppBounds', JSON.parse(JSON.stringify(args)));
     },
-    handleLeave () {
+    handleLeave() {
       if (this.saving && this.app.name !== 'wyyMusic') {
         ipc.send('closeTableApp', {
           app: JSON.parse(JSON.stringify(this.app)),
-        })
-        this.fullScreen = false
-        return
+        });
+        this.fullScreen = false;
+        return;
       }
       if (this.app.type !== 'system') {
         //非系统应用，隐藏应用
         if (this.app.background) {
           ipc.send('hideTableApp', {
             app: JSON.parse(JSON.stringify(this.app)),
-          })
+          });
         } else {
           ipc.send('closeTableApp', {
             app: JSON.parse(JSON.stringify(this.app)),
-          })
+          });
         }
-        this.fullScreen = false
+        this.fullScreen = false;
       }
     },
-    goBack () {
-      this.$router.go(-1)
+    goBack() {
+      this.$router.go(-1);
     },
-    refresh () {
+    refresh() {
       ipc.send('refreshTableApp', {
         app: JSON.parse(JSON.stringify(this.app)),
-      })
+      });
     },
   },
-}
+};
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .app-btn {
   display: inline-block;
   cursor: pointer;

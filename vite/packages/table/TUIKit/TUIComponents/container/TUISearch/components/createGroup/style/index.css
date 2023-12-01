@@ -1,289 +1,248 @@
-@import url("../../../../../styles/common.scss");
-@import url("../../../../../styles/icon.scss");
-
+@import url('../../../../../styles/common.scss');
+@import url('../../../../../styles/icon.scss');
 .group {
-    background: #FFFFFF;
+  background: #ffffff;
 }
-
 .group-list-item {
-    background: #FFFFFF;
+  background: #ffffff;
 }
-
 .group-list-item label {
-    font-weight: 400;
-    color: #333333;
+  font-weight: 400;
+  color: #333333;
 }
-
 .group-list input {
-    border: 1px solid rgba(131, 137, 153, 0.4);
-    font-weight: 400;
-    color: #333333;
+  border: 1px solid rgba(131, 137, 153, 0.4);
+  font-weight: 400;
+  color: #333333;
 }
-
 .group-list .select {
-    flex: 1;
+  flex: 1;
 }
-
 .group-list .select a {
-    color: #006EFF;
+  color: #006eff;
 }
-
 .group-list .select-item {
-    border: 1px solid rgba(131, 137, 153, 0.4);
+  border: 1px solid rgba(131, 137, 153, 0.4);
 }
-
 .group-list .select-item-header .left {
-    font-weight: 500;
-    color: #333333;
+  font-weight: 500;
+  color: #333333;
 }
-
 .group-list .select-item-detail {
-    color: #4F4F4F;
+  color: #4f4f4f;
 }
-
 .group-list .select .selected {
-    border: 1px solid #006EFF;
+  border: 1px solid #006eff;
 }
-
 .group-list-edit {
-    background: #FFFFFF;
+  background: #ffffff;
 }
-
 .group-profile-footer {
-    background: #FFFFFF;
+  background: #ffffff;
 }
-
 .group-h5 {
-    background: #F7F8FA;
+  background: #f7f8fa;
 }
-
 .group-h5-list-item-introduction {
-    font-weight: 400;
-    color: #888888;
+  font-weight: 400;
+  color: #888888;
 }
-
 .group-h5-list-item-introduction a {
-    color: #006EFF;
+  color: #006eff;
 }
 
 header {
-    background: #FFFFFF;
+  background: #ffffff;
 }
-
 header h1 {
-    font-weight: 500;
-    color: #000000;
-    letter-spacing: 0;
+  font-weight: 500;
+  color: #000000;
+  letter-spacing: 0;
 }
 
 .btn-default {
-    background: #FFFFFF;
-    border: 1px solid #DDDDDD;
-    font-weight: 500;
-    color: #828282;
+  background: #ffffff;
+  border: 1px solid #dddddd;
+  font-weight: 500;
+  color: #828282;
 }
 
 .btn-submit {
-    background: #3370FF;
-    border: 0 solid #2F80ED;
-    font-weight: 400;
-    color: #FFFFFF;
-    letter-spacing: 0;
+  background: #3370ff;
+  border: 0 solid #2f80ed;
+  font-weight: 400;
+  color: #ffffff;
+  letter-spacing: 0;
 }
-
 .btn-submit:disabled {
-    background: #e8e8e9;
-    border: 1px solid #DDDDDD;
-    color: #FFFFFF;
+  background: #e8e8e9;
+  border: 1px solid #dddddd;
+  color: #ffffff;
 }
 
 .group {
-    padding: 30px;
-    box-sizing: border-box;
-    width: 750px;
-    max-height: calc(100vh - 100px);
-    overflow-y: auto;
-    border-radius: 10px;
+  padding: 30px;
+  box-sizing: border-box;
+  width: 750px;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  border-radius: 10px;
 }
-
 .group-list-item {
-    display: flex;
-    padding: 10px 0;
+  display: flex;
+  padding: 10px 0;
 }
-
 .group-list-item label {
-    width: 84px;
-    height: 20px;
-    font-size: 14px;
+  width: 84px;
+  height: 20px;
+  font-size: 14px;
 }
-
 .group-list input {
-    box-sizing: border-box;
-    flex: 1;
-    padding: 6px 10px;
-    border-radius: 2px;
-    font-size: 14px;
-    line-height: 20px;
+  box-sizing: border-box;
+  flex: 1;
+  padding: 6px 10px;
+  border-radius: 2px;
+  font-size: 14px;
+  line-height: 20px;
 }
-
 .group-list .select {
-    flex: 1;
+  flex: 1;
 }
-
 .group-list .select-item {
-    padding: 12px 20px;
-    border-radius: 2px;
-    margin-bottom: 20px;
+  padding: 12px 20px;
+  border-radius: 2px;
+  margin-bottom: 20px;
 }
-
 .group-list .select-item-header {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
-
 .group-list .select-item-header .left {
-    display: flex;
-    align-items: center;
-    font-size: 14px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
 }
-
 .group-list .select-item-header .left .icon {
-    margin-right: 12px;
+  margin-right: 12px;
 }
-
 .group-list .select-item-header .icon-selected {
-    position: relative;
-    left: 12px;
-    top: -4px;
+  position: relative;
+  left: 12px;
+  top: -4px;
 }
-
 .group-list .select-item-detail {
-    padding-top: 6px;
-    font-size: 14px;
+  padding-top: 6px;
+  font-size: 14px;
 }
 
 header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-
 header h1 {
-    padding-bottom: 20px;
-    font-size: 18px;
-    line-height: 30px;
+  padding-bottom: 20px;
+  font-size: 18px;
+  line-height: 30px;
 }
-
 header .icon icon-close {
-    left: 10px;
-    top: -10px;
+  left: 10px;
+  top: -10px;
 }
 
 .group-profile-footer {
-    padding-top: 10px;
-    display: flex;
-    justify-content: flex-end;
+  padding-top: 10px;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .btn-default {
-    width: 82px;
-    height: 32px;
-    border-radius: 4px;
-    font-size: 14px;
+  width: 82px;
+  height: 32px;
+  border-radius: 4px;
+  font-size: 14px;
 }
 
 .btn-submit {
-    width: 82px;
-    height: 32px;
-    border-radius: 4px;
-    margin-left: 10px;
-    font-size: 14px;
+  width: 82px;
+  height: 32px;
+  border-radius: 4px;
+  margin-left: 10px;
+  font-size: 14px;
 }
 
 .group-h5 {
-    width: auto;
-    max-height: none;
-    height: 100%;
-    border-radius: 0;
-    padding: 0;
+  width: auto;
+  max-height: none;
+  height: 100%;
+  border-radius: 0;
+  padding: 0;
 }
-
 .group-h5 .group-box {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
-
 .group-h5 .group-box header {
-    flex-direction: row-reverse;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    padding: 16px 18px;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 16px 18px;
 }
-
 .group-h5 .group-box header h1 {
-    padding-bottom: 0;
+  padding-bottom: 0;
 }
-
 .group-h5 .group-box header .icon {
-    position: absolute;
-    left: 18px;
+  position: absolute;
+  left: 18px;
 }
-
 .group-h5 .group-box .group-list {
-    flex: 1;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column-reverse;
-    justify-content: flex-end;
-    margin-top: 12px;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  margin-top: 12px;
 }
-
 .group-h5 .group-box .group-list-item {
-    padding: 14px 18px;
-    border-bottom: 1px solid #E5E5E5;
+  padding: 14px 18px;
+  border-bottom: 1px solid #e5e5e5;
 }
-
 .group-h5 .group-box .group-list-edit {
-    display: flex;
-    align-items: flex-start;
-    padding: 12px 18px;
+  display: flex;
+  align-items: flex-start;
+  padding: 12px 18px;
 }
-
 .group-h5 .group-box .group-list-edit input {
-    width: 100%;
-    flex: 0;
+  width: 100%;
+  flex: 0;
 }
-
 .group-h5 .group-box .group-profile-footer {
-    box-shadow: inset 0 1px 0 0 #eeeeee;
-    padding: 12px 18px;
+  box-shadow: inset 0 1px 0 0 #eeeeee;
+  padding: 12px 18px;
 }
-
 .group-h5-list-item-content {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
 }
-
 .group-h5-list-item-content .content {
-    width: 0;
-    flex: 1;
-    padding: 0 12px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: end;
+  width: 0;
+  flex: 1;
+  padding: 0 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: end;
 }
-
 .group-h5-list-item-introduction {
-    padding: 12px 18px;
-    font-size: 14px;
-    line-height: 20px;
+  padding: 12px 18px;
+  font-size: 14px;
+  line-height: 20px;
 }
 
 /*# sourceMappingURL=index.css.map */

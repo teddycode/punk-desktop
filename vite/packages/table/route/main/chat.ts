@@ -1,29 +1,29 @@
-import BarrageRoute from "../../apps/barrage/route";
+import BarrageRoute from '../../apps/barrage/route';
 // import ImTeam from '@page/chat/team.vue'
-import ChatMain from '@page/chat/page/chatMain.vue'
-import CommunityIndex from '@page/chat/page/communityIndex.vue'
-import ChatFind from '@page/chat/page/chatFind.vue'
-import MyCommunity from '@page/chat/page/communityDetail.vue'
-import Channel from '@page/channels/Channels.vue'
-import ChannelIndex from '@page/channels/ChannelsIndex.vue'
-import Circle from '@page/channels/Groups.vue'
-import CircleDetail from '@page/channels/GroupsDetail.vue'
+import ChatMain from '@page/chat/page/chatMain.vue';
+import CommunityIndex from '@page/chat/page/communityIndex.vue';
+import ChatFind from '@page/chat/page/chatFind.vue';
+import MyCommunity from '@page/chat/page/communityDetail.vue';
+import Channel from '@page/channels/Channels.vue';
+import ChannelIndex from '@page/channels/ChannelsIndex.vue';
+import Circle from '@page/channels/Groups.vue';
+import CircleDetail from '@page/channels/GroupsDetail.vue';
 /**聊天团队模式结束**/
 //导入应用路由
-import ChatAdmin from '@page/chat/page/admin.vue'
+import ChatAdmin from '@page/chat/page/admin.vue';
 /**聊天团队模式开始**/
-import ChatDesk from '@page/chat/chatDesk.vue'
-import Contact from '@page/chat/contact.vue'
-import Chat from '@page/chat/chat.vue'
-import Team from "@page/Team.vue";
-import Hall from "@page/team/Hall.vue";
+import ChatDesk from '@page/chat/chatDesk.vue';
+import Contact from '@page/chat/contact.vue';
+import Chat from '@page/chat/chat.vue';
+import Team from '@page/Team.vue';
+import Hall from '@page/team/Hall.vue';
 
 export default [
   BarrageRoute,
   {
     path: '/chatDesk',
     name: 'chatDesk',
-    component: ChatDesk
+    component: ChatDesk,
   },
 
   {
@@ -31,7 +31,7 @@ export default [
     name: 'chat',
     component: Chat,
     meta: {
-      rememberChildrenPosition: true
+      rememberChildrenPosition: true,
     },
     redirect: {
       name: 'chatMain',
@@ -45,8 +45,8 @@ export default [
           type: 'contact',
           tab1: 'community',
           tab2: 'chat',
-          tab3: 'contact'
-        }
+          tab3: 'contact',
+        },
       },
       {
         path: '/chatMain',
@@ -56,8 +56,8 @@ export default [
           type: 'chat',
           tab1: 'community',
           tab2: 'chat',
-          tab3: 'session'
-        }
+          tab3: 'session',
+        },
       },
       {
         path: '/chatAdmin',
@@ -67,8 +67,8 @@ export default [
           type: 'chatAdmin',
           tab1: 'community',
           tab2: 'chat',
-          tab3: 'admin'
-        }
+          tab3: 'admin',
+        },
       },
       {
         path: '/chatFind',
@@ -78,8 +78,8 @@ export default [
           type: 'find',
           tab1: 'community',
           tab2: 'chat',
-          tab3: 'find'
-        }
+          tab3: 'find',
+        },
       },
       {
         path: '/community',
@@ -89,8 +89,8 @@ export default [
         meta: {
           tab1: 'community',
           tab2: 'chat',
-          tab3: 'community'
-        }
+          tab3: 'community',
+        },
       },
       {
         path: '/myCommunity/:no',
@@ -101,19 +101,19 @@ export default [
           tab1: 'community',
           tab2: 'chat',
           tab3: 'community_{no}',
-        }
-      }
-    ]
+        },
+      },
+    ],
   },
 
   {
-    path: "/team",
-    name: "team",
+    path: '/team',
+    name: 'team',
     component: Team,
     children: [
       {
-        path: "",
-        name: "hall",
+        path: '',
+        name: 'hall',
         meta: {
           tab1: 'community',
           tab2: 'team',
@@ -130,7 +130,7 @@ export default [
     //   tab1:'channel'
     // },
     redirect: {
-      name: 'channelsIndex'
+      name: 'channelsIndex',
     },
     children: [
       {
@@ -138,29 +138,28 @@ export default [
         name: 'channelsIndex',
         meta: {
           tab1: 'community',
-          tab2: 'channel'
+          tab2: 'channel',
         },
-        component: ChannelIndex
+        component: ChannelIndex,
       },
       {
-        path: "",
+        path: '',
         name: 'circle',
         meta: {
           tab1: 'community',
-          tab2: 'channel'
+          tab2: 'channel',
         },
-        component: Circle
+        component: Circle,
       },
       {
-        path: "",
+        path: '',
         name: 'circleDetail',
         meta: {
           tab1: 'community',
-          tab2: 'channel'
+          tab2: 'channel',
         },
-        component: CircleDetail
-      }
-    ]
-  }
-
-]
+        component: CircleDetail,
+      },
+    ],
+  },
+];

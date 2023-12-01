@@ -1,20 +1,19 @@
-import * as config from "./config";
-import {ethers} from "ethers";
+import * as config from './config';
+import { ethers } from 'ethers';
 import erc20ShadowArtifact from './abi/VaultShadow.json';
 
-import {ethVault, wallet_side} from "./bridge_setup";
+import { ethVault, wallet_side } from './bridge_setup';
 
 export async function deposit(chainId, token, amount, receiver) {
   // todo: chainId unused
 
   if (token === config.token.eth) {
-    const input = ethers.utils.defaultAbiCoder.encode(["address"], [receiver]);
-    const tx = await ethVault.deposit(input, {value: ethers.utils.parseEther(amount)});
-    console.log(tx.hash)
+    const input = ethers.utils.defaultAbiCoder.encode(['address'], [receiver]);
+    const tx = await ethVault.deposit(input, { value: ethers.utils.parseEther(amount) });
+    console.log(tx.hash);
   } else {
-    console.log("")
+    console.log('');
   }
-
 }
 
 export async function burn(chainId, token, amount, receiver) {
@@ -25,4 +24,3 @@ export async function burn(chainId, token, amount, receiver) {
   const tx = await ethShadow.burn(receiver, ethers.utils.parseEther(amount));
   console.log('Burning transaction sent:', tx.hash);
 }
-

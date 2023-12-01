@@ -19,46 +19,42 @@
       <div class="developer-title">成为磐古开发者</div>
       <div class="developer-description">想要在磐古系统中加入你的设计？来治理社区提交你的提案吧。</div>
       <div class="buttons-container">
-        <shape-button class="developer-button-left" color="blue" @click="gotoGovernance">进入治理社区
-        </shape-button>
-        <shape-button class="developer-button-right" color="blue" @click="gotoNewProposal">创建新提案
-        </shape-button>
+        <shape-button class="developer-button-left" color="blue" @click="gotoGovernance">进入治理社区 </shape-button>
+        <shape-button class="developer-button-right" color="blue" @click="gotoNewProposal">创建新提案 </shape-button>
       </div>
     </div>
     <div>
-      <div id="hash"  class="PageTitle">哈希函数</div>
-      <a-table :columns="hashColumns" :dataSource="hashData" rowKey="name"/>
+      <div id="hash" class="PageTitle">哈希函数</div>
+      <a-table :columns="hashColumns" :dataSource="hashData" rowKey="name" />
       <div id="sig" class="PageTitle">数字签名</div>
-      <a-table :columns="sigColumns" :dataSource="sigData" rowKey="name"/>
+      <a-table :columns="sigColumns" :dataSource="sigData" rowKey="name" />
       <div id="ke" class="PageTitle">密钥交换</div>
-      <a-table :columns="keyExchangeColumns" :dataSource="keyExchangeData" rowKey="name"/>
+      <a-table :columns="keyExchangeColumns" :dataSource="keyExchangeData" rowKey="name" />
       <div id="commit" class="PageTitle">秘密承诺</div>
-      <a-table :columns="commitmentColumns" :dataSource="commitmentData" rowKey="name"/>
+      <a-table :columns="commitmentColumns" :dataSource="commitmentData" rowKey="name" />
       <div id="share" class="PageTitle">秘密分享</div>
-      <a-table :columns="secretSharingColumns" :dataSource="secretSharingData" rowKey="name"/>
+      <a-table :columns="secretSharingColumns" :dataSource="secretSharingData" rowKey="name" />
       <div id="vrf" class="PageTitle">可验证随机数</div>
-      <a-table :columns="vrfColumns" :dataSource="vrfData" rowKey="name"/>
+      <a-table :columns="vrfColumns" :dataSource="vrfData" rowKey="name" />
       <div id="vdf" class="PageTitle">可验证延迟函数</div>
-      <a-table :columns="vdfColumns" :dataSource="vdfData" rowKey="name"/>
+      <a-table :columns="vdfColumns" :dataSource="vdfData" rowKey="name" />
       <div id="zkp" class="PageTitle">零知识证明</div>
-      <a-table :columns="zkpColumns" :dataSource="zkpData" rowKey="name"/>
+      <a-table :columns="zkpColumns" :dataSource="zkpData" rowKey="name" />
     </div>
-    <div id="more" class="PageTitle">
-      了解更多
-    </div>
+    <div id="more" class="PageTitle">了解更多</div>
     <a-row gutter="40">
       <a-col :span="12">
         <div class="document-button">
-          <read-outlined/>
+          <read-outlined />
           <span class="doc-text">阅读文档</span>
-          <right-circle-outlined/>
+          <right-circle-outlined />
         </div>
       </a-col>
       <a-col :span="12">
         <div class="document-button">
-          <login-outlined/>
+          <login-outlined />
           <span class="doc-text">进入论坛</span>
-          <right-circle-outlined/>
+          <right-circle-outlined />
         </div>
       </a-col>
     </a-row>
@@ -66,10 +62,10 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
-import { Button, Col, Menu, MenuItem, Row, SubMenu, Table } from 'ant-design-vue'
-import ShapeButton from '@page/core/components/ShapeButton.vue'
-import { LoginOutlined, ReadOutlined, RightCircleOutlined, } from '@ant-design/icons-vue'
+import { defineComponent } from 'vue';
+import { Button, Col, Menu, MenuItem, Row, SubMenu, Table } from 'ant-design-vue';
+import ShapeButton from '@page/core/components/ShapeButton.vue';
+import { LoginOutlined, ReadOutlined, RightCircleOutlined } from '@ant-design/icons-vue';
 
 export default defineComponent({
   name: 'Crypto',
@@ -87,19 +83,19 @@ export default defineComponent({
     'login-outlined': LoginOutlined,
   },
   methods: {
-    goAnchor (selector) {
+    goAnchor(selector) {
       document.querySelector(selector).scrollIntoView({
         behavior: 'smooth',
-      })
+      });
     },
-    gotoGovernance () {
-      this.$router.push({ name: 'GovernancePage' })
+    gotoGovernance() {
+      this.$router.push({ name: 'GovernancePage' });
     },
-    gotoNewProposal () {
-      this.$router.push({ name: 'ProposalHomePage' })
+    gotoNewProposal() {
+      this.$router.push({ name: 'ProposalHomePage' });
     },
   },
-  data () {
+  data() {
     return {
       activeIndex: '1',
       hashColumns: [
@@ -461,9 +457,9 @@ export default defineComponent({
           lastUpdate: '2023-08-03',
         },
       ],
-    }
+    };
   },
-})
+});
 </script>
 
 <style scoped>

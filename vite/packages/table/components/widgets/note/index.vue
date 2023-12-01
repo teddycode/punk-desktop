@@ -1,19 +1,30 @@
 <template>
   <Widget
-      ref="homelSlotRef"
-      :customData="customData"
-      :customIndex="customIndex"
-      :desk="desk"
-      :menuList="menuList"
-      :options="{...this.options,background:this.customData.background,title:this.customData.title}"
-      :size="reSize"
-      class="test"
+    ref="homelSlotRef"
+    :customData="customData"
+    :customIndex="customIndex"
+    :desk="desk"
+    :menuList="menuList"
+    :options="{ ...this.options, background: this.customData.background, title: this.customData.title }"
+    :size="reSize"
+    class="test"
   >
     <!-- 图标 -->
     <template #left-title>
-      <div class="icon"
-           style="width: 35px;height: 24px;display: flex; justify-content: center;align-items: center;position: absolute;left: 1px;top:14px;">
-        <Icon :icon="icons.notepad12Regular" height="20" width="20"/>
+      <div
+        class="icon"
+        style="
+          width: 35px;
+          height: 24px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          position: absolute;
+          left: 1px;
+          top: 14px;
+        "
+      >
+        <Icon :icon="icons.notepad12Regular" height="20" width="20" />
       </div>
     </template>
     <!-- <cardDrag ref="drag" @reSizeInit="reSizeInit"> </cardDrag> -->
@@ -22,13 +33,13 @@
       <template #="{ row }">
         <!-- :style="{ backgroundImage: background, color: fontColor }" -->
         <textarea
-            v-model="text"
-            :style="{ backgroundImage: background}"
-            class="box no-drag"
-            placeholder="输入卡片内容"
-            spellcheck="false"
-            style="color: var(--primary-text);"
-            @blur="updateText"
+          v-model="text"
+          :style="{ backgroundImage: background }"
+          class="box no-drag"
+          placeholder="输入卡片内容"
+          spellcheck="false"
+          style="color: var(--primary-text)"
+          @blur="updateText"
         >
         </textarea>
       </template>
@@ -54,24 +65,24 @@
     <div class="text-base" style="margin: 12px 0">背景色</div>
     <div class="item-box">
       <div
-          v-for="item in 6"
-          :key="item"
-          :style="{ backgroundImage: color[`${'color' + item}`] }"
-          class="item"
-          @click="updateBackground(color[`${'color' + item}`])"
+        v-for="item in 6"
+        :key="item"
+        :style="{ backgroundImage: color[`${'color' + item}`] }"
+        class="item"
+        @click="updateBackground(color[`${'color' + item}`])"
       ></div>
     </div>
   </a-drawer>
 </template>
 
 <script>
-import Widget from '../../card/Widget.vue'
-import cardSizeHook from '../../card/hooks/cardSizeHook'
-import cardDrag from '../../card/hooks/cardDrag.vue'
-import cardDragHook from '../../card/hooks/cardDragHook'
-import { message } from 'ant-design-vue'
-import { Icon } from '@iconify/vue'
-import notepad12Regular from '@iconify-icons/fluent/notepad-12-regular'
+import Widget from '../../card/Widget.vue';
+import cardSizeHook from '../../card/hooks/cardSizeHook';
+import cardDrag from '../../card/hooks/cardDrag.vue';
+import cardDragHook from '../../card/hooks/cardDragHook';
+import { message } from 'ant-design-vue';
+import { Icon } from '@iconify/vue';
+import notepad12Regular from '@iconify-icons/fluent/notepad-12-regular';
 
 export default {
   name: '便签',
@@ -88,8 +99,7 @@ export default {
     },
     customData: {
       type: Object,
-      default: () => {
-      },
+      default: () => {},
     },
     menuList: {
       type: Array,
@@ -104,7 +114,7 @@ export default {
   directives: {
     // reSize,
   },
-  data () {
+  data() {
     return {
       fontColors: ['white', 'black', 'red', 'green', 'blue'],
       fontColor: 'white',
@@ -122,8 +132,8 @@ export default {
           icon: 'shezhi1',
           title: '设置',
           fn: () => {
-            this.$refs.homelSlotRef.visible = false
-            this.settingVisible = true
+            this.$refs.homelSlotRef.visible = false;
+            this.settingVisible = true;
           },
         },
       ],
@@ -155,98 +165,94 @@ export default {
       icons: {
         notepad12Regular,
       },
-    }
+    };
   },
-  created () {
-    let setData = {}
+  created() {
+    let setData = {};
     if (!this.customData.background) {
-      setData.background = this.color.color1
+      setData.background = this.color.color1;
     }
     if (!this.customData.text) {
-      setData.text = ''
+      setData.text = '';
     }
     if (!this.customData.color) {
-      setData.colors = '#ffffff'
+      setData.colors = '#ffffff';
     }
     if (this.customData.fontColor) {
-      this.fontColor = this.customData.fontColor
+      this.fontColor = this.customData.fontColor;
     }
     if (Object.keys(setData)) {
-      this.updateCustomData(this.customIndex, setData, this.desk)
+      this.updateCustomData(this.customIndex, setData, this.desk);
     }
   },
-  mounted () {
-    this.text = this.customData.text
-    this.background = this.customData.background
-    this.colors = this.customData.color
+  mounted() {
+    this.text = this.customData.text;
+    this.background = this.customData.background;
+    this.colors = this.customData.color;
     if (!this.customData.fontColor) {
-      this.fontColor = 'white'
+      this.fontColor = 'white';
     }
   },
 
   methods: {
-    updateText () {
+    updateText() {
       this.updateCustomData(
-          this.customIndex,
-          {
-            text: this.text,
-          },
-          this.desk
-      )
+        this.customIndex,
+        {
+          text: this.text,
+        },
+        this.desk,
+      );
     },
-    updateBackground (backgroundColor) {
+    updateBackground(backgroundColor) {
       message.success({
         content: '设置卡片背景成功',
         key: 'bg',
-      })
+      });
       this.updateCustomData(
+        this.customIndex,
+        {
+          background: backgroundColor,
+        },
+        this.desk,
+      );
+      this.background = backgroundColor;
+      if (backgroundColor == 'linear-gradient(-45deg, #545454 0%, #F9F8F9 0%, #F2F1F2 100%)') {
+        this.updateCustomData(
           this.customIndex,
           {
-            background: backgroundColor,
+            color: '#000000',
           },
-          this.desk
-      )
-      this.background = backgroundColor
-      if (
-          backgroundColor ==
-          'linear-gradient(-45deg, #545454 0%, #F9F8F9 0%, #F2F1F2 100%)'
-      ) {
-        this.updateCustomData(
-            this.customIndex,
-            {
-              color: '#000000',
-            },
-            this.desk
-        )
-        this.colors = '#000000'
+          this.desk,
+        );
+        this.colors = '#000000';
       } else {
         this.updateCustomData(
-            this.customIndex,
-            {
-              color: '#ffffff',
-            },
-            this.desk
-        )
-        this.colors = '#ffffff'
+          this.customIndex,
+          {
+            color: '#ffffff',
+          },
+          this.desk,
+        );
+        this.colors = '#ffffff';
       }
     },
-    updateFontColor (color) {
+    updateFontColor(color) {
       message.success({
         content: '设置字体颜色成功',
         key: 'color',
-      })
+      });
       this.updateCustomData(
-          this.customIndex,
-          {
-            fontColor: color,
-          },
-          this.desk
-      )
-      this.fontColor = color
+        this.customIndex,
+        {
+          fontColor: color,
+        },
+        this.desk,
+      );
+      this.fontColor = color;
     },
-
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

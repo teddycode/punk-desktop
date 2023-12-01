@@ -1,29 +1,41 @@
 <template>
-  <div class="flex" style="width: 380px;">
+  <div class="flex" style="width: 380px">
     <div class="flex flex-col w-full">
-      <div class="flex items-center justify-between" style="margin-bottom: 13px;">
+      <div class="flex items-center justify-between" style="margin-bottom: 13px">
         <div class="flex items-center">
-          <div class="flex items-center justify-center" style="width: 32px;height: 32px;">
-            <img :src="message.icon" alt="" class="w-full rounded-full h-full object-cover">
+          <div class="flex items-center justify-center" style="width: 32px; height: 32px">
+            <img :src="message.icon" alt="" class="w-full rounded-full h-full object-cover" />
           </div>
-          <div class="font-16 ml-3" style="color: var(--primary-text);">{{ message.title }}</div>
+          <div class="font-16 ml-3" style="color: var(--primary-text)">{{ message.title }}</div>
         </div>
-        <div v-if="styles" class="flex items-center active-button pointer justify-center"
-             style="width:21px;height:21px;" @click="talkLater">
-          <img alt="" class="w-full rounded-full h-full object-cover" src="/img/icon/close-circle-fill1.png">
+        <div
+          v-if="styles"
+          class="flex items-center active-button pointer justify-center"
+          style="width: 21px; height: 21px"
+          @click="talkLater"
+        >
+          <img alt="" class="w-full rounded-full h-full object-cover" src="/img/icon/close-circle-fill1.png" />
         </div>
-        <div v-else class="flex items-center pointer active-button justify-center" style="width:21px;height:21px;"
-             @click="talkLater">
-          <img alt="" class="w-full rounded-full h-full object-cover" src="/img/icon/close-circle-fill.png">
+        <div
+          v-else
+          class="flex items-center pointer active-button justify-center"
+          style="width: 21px; height: 21px"
+          @click="talkLater"
+        >
+          <img alt="" class="w-full rounded-full h-full object-cover" src="/img/icon/close-circle-fill.png" />
         </div>
       </div>
 
-      <div class="font-16" style="color: var(--secondary-text);margin-bottom: 24px;">{{ message.body }}</div>
+      <div class="font-16" style="color: var(--secondary-text); margin-bottom: 24px">{{ message.body }}</div>
 
       <div class="flex items-center justify-between">
-        <div class="font-16" style="color:var(--secondary-text);">{{ formatTime(parseInt(message.time) * 1000) }}</div>
-        <div class="px-5 py-2 rounded-lg flex pointer items-center justify-center active-button"
-             style="background: var(--active-bg);color: var(--active-text);" @click="viewNow">立即查看
+        <div class="font-16" style="color: var(--secondary-text)">{{ formatTime(parseInt(message.time) * 1000) }}</div>
+        <div
+          class="px-5 py-2 rounded-lg flex pointer items-center justify-center active-button"
+          style="background: var(--active-bg); color: var(--active-text)"
+          @click="viewNow"
+        >
+          立即查看
         </div>
       </div>
     </div>
@@ -32,65 +44,65 @@
 </template>
 
 <script>
-import { defineComponent, } from 'vue'
-import { mapActions, mapWritableState } from 'pinia'
-import { formatTime } from '../../util'
-import { noticeStore } from '../../store/notice'
-import { appStore } from '../../store'
+import { defineComponent } from 'vue';
+import { mapActions, mapWritableState } from 'pinia';
+import { formatTime } from '../../util';
+import { noticeStore } from '../../store/notice';
+import { appStore } from '../../store';
 
 export default defineComponent({
   props: ['message', 'messageType', 'isPlay'],
 
   computed: {
     ...mapWritableState(noticeStore, ['noticeSettings']),
-    ...mapWritableState(appStore, ['styles', 'settings'])
+    ...mapWritableState(appStore, ['styles', 'settings']),
   },
 
   methods: {
-    ...mapActions(appStore, ['setMessagePlay'])
+    ...mapActions(appStore, ['setMessagePlay']),
   },
 
   watch: {
-    'messageType': {
-      handler (newVal) {
+    messageType: {
+      handler(newVal) {
         if (this.isPlay && newVal === 'message') {
-          this.setMessagePlay()
+          this.setMessagePlay();
           if (this.settings.messagePlay) {
             this.$nextTick(() => {
-              this.$refs.message.play()
-            })
+              this.$refs.message.play();
+            });
           } else {
             this.$nextTick(() => {
-              this.$refs.message.pause()
-            })
+              this.$refs.message.pause();
+            });
           }
         }
       },
       immediate: true,
       deep: true,
-    }
-
+    },
   },
 
-  setup (props, ctx) {
-    const talkLater = () => {  // 点击稍后再说按钮
-      ctx.emit('closeToast')
-      ctx.emit('nowCheck')
-    }
+  setup(props, ctx) {
+    const talkLater = () => {
+      // 点击稍后再说按钮
+      ctx.emit('closeToast');
+      ctx.emit('nowCheck');
+    };
 
-    const viewNow = () => {  // 点击立即查看
-      ctx.emit('closeToast')
-      ctx.emit('examine')
-    }
+    const viewNow = () => {
+      // 点击立即查看
+      ctx.emit('closeToast');
+      ctx.emit('examine');
+    };
 
     return {
       formatTime,
       talkLater,
-      viewNow
-    }
-  }
-})
-
+      viewNow,
+    };
+  },
+});
 </script>
 
 <style lang="scss" scoped>
@@ -105,9 +117,7 @@ export default defineComponent({
   }
 }
 
-
 .font-16 {
-
   font-size: 16px;
   font-weight: 400;
 }

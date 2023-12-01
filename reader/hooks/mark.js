@@ -1,4 +1,4 @@
-import { setLocal } from "../js/localStorage.js";
+import { setLocal } from '../js/localStorage.js';
 let jsMark;
 export default function () {
   function initMark(el, className, cb) {
@@ -7,7 +7,7 @@ export default function () {
       options: {
         isCover: true,
         beautify: true,
-        ignoreClass: ["ignore1", "ignore"],
+        ignoreClass: ['ignore1', 'ignore'],
       },
     });
 
@@ -19,20 +19,20 @@ export default function () {
         className: res.storeRenderOther.className || className.value,
       });
       cb.onSelected &&
-      cb.onSelected({
-        uid,
-        offsetTop,
-        desc: res.storeRenderOther.desc,
-        hasStoreRender: res.hasStoreRender,
-      });
+        cb.onSelected({
+          uid,
+          offsetTop,
+          desc: res.storeRenderOther.desc,
+          hasStoreRender: res.hasStoreRender,
+        });
 
       if (!res.hasStoreRender) {
         setLocal({
           offset: res.offset,
           text: res.text,
           uid,
-          desc: "",
-          className:className.value,
+          desc: '',
+          className: className.value,
         });
       }
     };
@@ -44,7 +44,7 @@ export default function () {
   function deleteMark(uid) {
     jsMark.deleteMark(uid);
     const ignoreEle = document.getElementById(uid);
-    if(ignoreEle){
+    if (ignoreEle) {
       ignoreEle.parentNode.removeChild(ignoreEle);
     }
     jsMark.beautifyHTML();
@@ -56,7 +56,7 @@ export default function () {
   function search(value) {
     jsMark.repaintRange({
       uuid: 2323,
-      className: "annotator-h3",
+      className: 'annotator-h3',
       textNodes: jsMark.findWord(value),
     });
   }

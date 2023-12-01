@@ -1,27 +1,27 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
+import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: "MedalNo",
-  props: ['no']
-})
+  name: 'MedalNo',
+  props: ['no'],
+});
 </script>
 
 <template>
- <span v-if="no === 1">
-              <a-avatar :size="32" src="/img/rankingList/one.png"></a-avatar>
-            </span>
+  <span v-if="no === 1">
+    <a-avatar src="/img/rankingList/one.png" :size="32"></a-avatar>
+  </span>
   <span v-else-if="no === 2">
-              <a-avatar :size="32" src="/img/rankingList/two.png"></a-avatar>
-            </span>
+    <a-avatar src="/img/rankingList/two.png" :size="32"></a-avatar>
+  </span>
   <span v-else-if="no === 3">
-              <a-avatar :size="32" src="/img/rankingList/three.png"></a-avatar>
-            </span>
+    <a-avatar src="/img/rankingList/three.png" :size="32"></a-avatar>
+  </span>
 
-  <div v-else :style="no < 11 ? 'width:32px' : ''" class="ranking-back flex justify-center items-center">{{ no }}</div>
+  <div v-else class="ranking-back flex justify-center items-center" :style="no < 11 ? 'width:32px' : ''">{{ no }}</div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .ranking-back {
   height: 32px;
   padding: 0 10px;

@@ -1,13 +1,13 @@
 <template>
-  <vueCustomScrollbar :settings="settingsScroller" style="height: 100%;width: 100%;">
-    <div v-for="(item,index) in article" :key="index">
+  <vueCustomScrollbar :settings="settingsScroller" style="height: 100%; width: 100%">
+    <div v-for="(item, index) in article" :key="index">
       <h2 :class="titleStyle" v-html="item.title"></h2>
       <div :class="contentStyle" v-html="item.content"></div>
     </div>
   </vueCustomScrollbar>
 </template>
 <script>
-import articleService from '../js/service/articleService'
+import articleService from '../js/service/articleService';
 
 export default {
   name: 'Article',
@@ -27,42 +27,41 @@ export default {
     contentStyle: {
       type: String,
     },
-
   },
   components: {
     // VueCustomScrollbar
   },
   computed: {},
-  data () {
+  data() {
     return {
       settingsScroller: {
         useBothWheelAxes: true,
         swipeEasing: true,
         suppressScrollY: false,
         suppressScrollX: true,
-        wheelPropagation: true
+        wheelPropagation: true,
       },
-      article: []
-    }
+      article: [],
+    };
   },
-  mounted () {
-    this.onMounted()
+  mounted() {
+    this.onMounted();
   },
   watch: {},
   methods: {
-    async onMounted () {
+    async onMounted() {
       if (this.artName) {
-        const rs = await articleService.getOne(this.artName)
-        this.article.push(rs)
+        const rs = await articleService.getOne(this.artName);
+        this.article.push(rs);
       } else if (this.artNames) {
-        let rs = await articleService.getMany(this.artNames)
-        rs.forEach(e => {
-          this.article.push(e)
-        })
+        let rs = await articleService.getMany(this.artNames);
+        rs.forEach((e) => {
+          this.article.push(e);
+        });
       }
-    }
+    },
   },
-}
+};
 </script>
 
 <style scoped>
@@ -81,7 +80,7 @@ export default {
 .box-content {
   margin: 24px 16px;
   padding: 16px 16px 0 16px;
-  background: rgba(0, 0, 0, 0.30);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 12px;
   min-width: 600px;
   display: flex;
@@ -90,5 +89,4 @@ export default {
   word-break: break-all;
   font-size: 16px;
 }
-
 </style>

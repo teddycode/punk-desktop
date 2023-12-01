@@ -7,20 +7,20 @@
  * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved.
 -->
 <script>
-import { defineComponent } from 'vue'
-import { message, Modal } from 'ant-design-vue'
-import Emoji from '../comp/Emoji.vue'
-import MyProp from '../team/MyProp.vue'
-import { appStore } from '@store'
-import { teamStore } from '@store/team'
-import { taskStore } from '@apps/task/store'
-import BorderAvatar from '../avatar/BorderAvatar.vue'
-import { mapWritableState } from 'pinia'
+import { defineComponent } from 'vue';
+import { message, Modal } from 'ant-design-vue';
+import Emoji from '../comp/Emoji.vue';
+import MyProp from '../team/MyProp.vue';
+import { appStore } from '@store';
+import { teamStore } from '@store/team';
+import { taskStore } from '@apps/task/store';
+import BorderAvatar from '../avatar/BorderAvatar.vue';
+import { mapWritableState } from 'pinia';
 
 export default defineComponent({
   name: 'UserEntry',
   components: { Emoji, MyProp, BorderAvatar },
-  data () {
+  data() {
     return {
       teamList: [
         {
@@ -68,55 +68,55 @@ export default defineComponent({
       openTeam: false,
       showMyProp: false,
       teamKey: Date.now(),
-    }
+    };
   },
   computed: {
     ...mapWritableState(teamStore, ['team', 'teamVisible']),
     ...mapWritableState(taskStore, ['isTaskDrawer']),
     ...mapWritableState(appStore, ['userInfo', 'deleteUserInfo']),
   },
-  mounted () {
-  },
+  mounted() {},
   methods: {
-    async jump (type, val) {
+    async jump(type, val) {
       switch (type) {
         case 'route':
-          this.$router.push(val.route)
-          break
+          this.$router.push(val.route);
+          break;
         case 'team':
-          await this.updateMy(0)
+          await this.updateMy(0);
           if (this.team.status === false) {
-            this.teamKey = Date.now()
-            this.showTeamTip = true
+            this.teamKey = Date.now();
+            this.showTeamTip = true;
           } else {
-            this.teamVisible = !this.teamVisible
+            this.teamVisible = !this.teamVisible;
           }
-          break
+          break;
         case 'prop':
-          this.showMyProp = true
-          break
+          this.showMyProp = true;
+          break;
         case 'task':
-          this.isTaskDrawer = true
-          break
+          this.isTaskDrawer = true;
+          break;
         case 'logout':
-          this.logout(this?.userInfo.uid)
-          break
+          this.logout(this?.userInfo.uid);
+          break;
       }
-      this.openTeam = false
+      this.openTeam = false;
     },
-    toggleTeam () {
-      this.openTeam = !this.openTeam
+    toggleTeam() {
+      this.openTeam = !this.openTeam;
     },
-    closeMyProp (val) {
-      this.showMyProp = val
+    closeMyProp(val) {
+      this.showMyProp = val;
     },
-    login () {
+    login() {
       tsbApi.user.login((data) => {
-        console.log('before get user details:', data)
-        ipc.send('getDetailUserInfo')
-      })
+        console.log('用户已登录：', data);
+        this.userInfo = data;
+        ipc.send('getDetailUserInfo');
+      });
     },
-    logout (uid) {
+    logout(uid) {
       Modal.confirm({
         title: '退出此帐号:' + this.userInfo.uid,
         content: '退出帐号并不会影响帐号数据，仅仅是将本地帐号退出。但是退出后无法再使用此帐号下的所有空间。',
@@ -124,20 +124,20 @@ export default defineComponent({
         okText: '确认',
         cancelText: '取消',
         onOk: async () => {
-          console.log('uid:', uid)
-          await this.deleteUserInfo()
-          let res = await ipc.invoke('direct-logout', uid)
+          console.log('uid:', uid);
+          await this.deleteUserInfo();
+          let res = await ipc.invoke('direct-logout', uid);
           if (res) {
-            message.success('帐号退出成功。')
-            this.$router.replace('/')
+            message.success('帐号退出成功。');
+            this.$router.replace('/');
           } else {
-            message.error('账号退出失败，请重试！')
+            message.error('账号退出失败，请重试！');
           }
-        }
-      })
-    }
+        },
+      });
+    },
   },
-})
+});
 </script>
 
 <template>
@@ -150,28 +150,18 @@ export default defineComponent({
   <div v-else>
     <div class="team-module">
       <div
-          style="
-          margin-left: 0;
-          padding: 0.6em !important;
-          color: var(--primary-text);
-          background: var(--primary-bg);
-        "
-          @click="toggleTeam"
+        style="margin-left: 0; padding: 0.6em !important; color: var(--primary-text); background: var(--primary-bg)"
+        @click="toggleTeam"
       >
         <div v-if="userInfo.avatar">
-          <BorderAvatar :avatarSize="50" :avatarUrl="userInfo.avatar"/>
+          <BorderAvatar :avatarSize="50" :avatarUrl="userInfo.avatar" />
         </div>
         <div v-else>
           <emoji icon="unlogin" style="width: 52px; height: 52px"></emoji>
         </div>
       </div>
       <div v-if="openTeam" class="team-box">
-        <div
-            v-for="t in teamList"
-            :key="t.title"
-            class="team-item"
-            @click="jump(t.type, t)"
-        >
+        <div v-for="t in teamList" :key="t.title" class="team-item" @click="jump(t.type, t)">
           <a-avatar :size="40" :src="t.img"></a-avatar>
           <span>{{ t.title }}</span>
         </div>

@@ -1,3 +1,3 @@
-import Example from './Example.vue'
+import Example from './Example.vue';
 
-export default Example
+export default Example;

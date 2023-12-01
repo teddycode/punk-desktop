@@ -1,26 +1,35 @@
 <template>
-  <div id="galleryContainer" style="text-align: center;display: flex;height: 100%">
-    <SecondPanel :gallery="gallery" :goHome="goHome" :menus="menus" :search="true"
-                 style="padding: 1em; text-align: left; " @changeTab="changeTab"></SecondPanel>
-    <div id="parentScroller"
-         style="flex-grow: 1;flex-shrink: 1;margin-left: 1em;display: flex;flex-direction: column;height: 100%">
+  <div id="galleryContainer" style="text-align: center; display: flex; height: 100%">
+    <SecondPanel
+      :search="true"
+      :goHome="goHome"
+      :menus="menus"
+      :gallery="gallery"
+      style="padding: 1em; text-align: left"
+      @changeTab="changeTab"
+    ></SecondPanel>
+    <div
+      id="parentScroller"
+      style="flex-grow: 1; flex-shrink: 1; margin-left: 1em; display: flex; flex-direction: column; height: 100%"
+    >
       <router-view></router-view>
     </div>
   </div>
 </template>
 
-
 <script>
-import VueCustomScrollbar from '../../../src/components/vue-scrollbar.vue'
-import GradeSmallTip from '../components/GradeSmallTip.vue'
-import SecondPanel from '../components/SecondPanel.vue'
+import justifiedGallery from 'justifiedGallery';
+
+import VueCustomScrollbar from '../../../src/components/vue-scrollbar.vue';
+import GradeSmallTip from '../components/GradeSmallTip.vue';
+import SecondPanel from '../components/SecondPanel.vue';
 
 export default {
   name: 'Gallery',
   components: {
     SecondPanel,
     VueCustomScrollbar,
-    GradeSmallTip
+    GradeSmallTip,
   },
   data: () => ({
     tab: '',
@@ -29,20 +38,17 @@ export default {
         index: 'm',
         title: '我的收藏',
         icon: 'xihuan',
-        route:
-            {
-              name: 'my'
-            }
+        route: {
+          name: 'my',
+        },
       },
       {
         title: '必应壁纸',
         index: 'b',
         icon: 'bing',
-        route:
-            {
-              name: 'bing',
-
-            }
+        route: {
+          name: 'bing',
+        },
       },
       // {
       //   title: 'Wallheaven',
@@ -58,28 +64,25 @@ export default {
         title: '拾光壁纸',
         icon: 'wallpaper',
         route: {
-          name: 'pickingPaper'
-        }
+          name: 'pickingPaper',
+        },
       },
       {
         index: 'l',
         title: '动态壁纸',
         icon: 'a-zujiantianchong_huaban1fuben7',
-        route:
-            {
-              name: 'lively'
-            }
+        route: {
+          name: 'lively',
+        },
       },
       {
         index: 's',
         title: '设置',
         icon: 'shezhi',
-        route:
-            {
-              name: 'papersSetting'
-            }
+        route: {
+          name: 'papersSetting',
+        },
       },
-
     ],
     tmp: {
       width: 250,
@@ -89,16 +92,16 @@ export default {
       subHtml: `<h4>Photo by - <a href='https://unsplash.com/@entrycube' >Diego Guzmán </a></h4> <p> Location -
           <a href='https://unsplash.com/s/photos/fushimi-inari-taisha-shrine-senbontorii%2C-68%E7%95%AA%E5%9C%B0-fukakusa-yabunouchicho%2C-fushimi-ward%2C-kyoto%2C-japan'>Fushimi Ward,
           Kyoto, Japan</a></p>`,
-      url: 'https://images.unsplash.com/photo-1581894158358-5ecd2c518883?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=240&q=80'
+      url: 'https://images.unsplash.com/photo-1581894158358-5ecd2c518883?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=240&q=80',
     },
 
-    images: [],//当前相册图片
+    images: [], //当前相册图片
     gallery: true,
   }),
-  async mounted () {
+  async mounted() {
     $('#galleryContainer').on('touchend', (e) => {
-      e.stopPropagation()
-    })
+      e.stopPropagation();
+    });
     // this.$router.push({name:'my'})
     // justifiedGallery()
     // $('#container').justifiedGallery({
@@ -107,50 +110,46 @@ export default {
     //   rowHeight: 180,
     //   margins: 5
     // })
-
   },
   methods: {
-    changeTab (args) {
-      this.$router.push(args.menu.route)
-      this.tab = args.index
+    changeTab(args) {
+      this.$router.push(args.menu.route);
+      this.tab = args.index;
     },
-    goLock () {
-      this.$router.push('/lock')
+    goLock() {
+      this.$router.push('/lock');
     },
 
-    play () {
+    play() {
       window.Spotlight.show(this.bingImages, {
         control: 'autofit,page,fullscreen,close,zoom,prev,next',
         play: true,
         autoslide: true,
         infinite: true,
         progress: false,
-        title: false
-      })
+        title: false,
+      });
     },
-    goHome () {
+    goHome() {
       this.$router.push({
-        name: 'setting'
-      })
-    }
+        name: 'setting',
+      });
+    },
   },
-}
+};
 </script>
 <style lang="scss" scoped>
 @import 'justifiedGallery/dist/css/justifiedGallery.min.css';
-
 .float-left {
   width: 175px;
   height: auto;
   padding: 0 1em;
   border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
-
 .menu {
   &:hover {
     background: #696969;
   }
-
   width: 8em;
   padding-left: 1em;
   font-size: 1.3em;
@@ -195,7 +194,6 @@ export default {
   transform: rotate(360deg);
 }
 
-
 .spl-scene {
   transition: transform 0.2s ease;
 }
@@ -203,9 +201,7 @@ export default {
 /* custom animation "visible state" (css context by custom classname "only-this-gallery" to apply these animation just on a specific gallery) */
 .spl-pane > * {
   clip-path: circle(100% at center);
-  transition: transform 0.35s ease,
-  opacity 0.65s ease,
-  clip-path 0.8s ease, filter 3s ease-out;
+  transition: transform 0.35s ease, opacity 0.65s ease, clip-path 0.8s ease, filter 3s ease-out;
 }
 
 /* custom animation "hidden state" ("custom" is the name of the animation you pass as gallery option) */

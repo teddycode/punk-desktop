@@ -1,20 +1,15 @@
 <template>
   <div
-      class="flex flex-row items-center justify-center w-full mb-3 bottom-panel"
-      style="text-align: center"
-      @click.stop
-      @contextmenu.stop="showMenu"
+    class="flex flex-row items-center justify-center w-full mb-3 bottom-panel"
+    style="text-align: center"
+    @click.stop
+    @contextmenu.stop="showMenu"
   >
     <!-- 用户信息 | 搜索 | 任务栏 | 社交网络 | AIAssistant -->
     <div
-        v-if="!simple || settings.enableChat"
-        class="flex flex-row common-panel user s-bg"
-        style="
-        vertical-align: top;
-        margin-top: 0;
-        background: var(--primary-bg);
-        color: var(--primary-text);
-      "
+      v-if="!simple || settings.enableChat"
+      class="flex flex-row common-panel user s-bg"
+      style="vertical-align: top; margin-top: 0; background: var(--primary-bg); color: var(--primary-text)"
     >
       <SearchButton></SearchButton>
       <template v-if="!simple && isMain">
@@ -24,9 +19,9 @@
 
     <!-- 快速搜索 底部栏区域 -->
     <div
-        v-show="navigationToggle[2]"
-        class="flex flex-row items-center pl-4 s-bg"
-        style="
+      v-show="navigationToggle[2]"
+      class="flex flex-row items-center pl-4 s-bg"
+      style="
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -42,7 +37,7 @@
       "
     >
       <div
-          style="
+        style="
           display: flex;
           flex-direction: row;
           width: 100%;
@@ -52,57 +47,35 @@
           justify-content: center;
         "
       >
-        <div
-            style="height: 56px; width: 100%; overflow: hidden"
-            @contextmenu.stop="showMenu"
-        >
+        <div style="height: 56px; width: 100%; overflow: hidden" @contextmenu.stop="showMenu">
           <div
-              ref="content"
-              class="mr-6 scroll-content"
-              style="overflow-y: hidden; overflow-x: auto; flex: 1; display: flex"
+            ref="content"
+            class="mr-6 scroll-content"
+            style="overflow-y: hidden; overflow-x: auto; flex: 1; display: flex"
           >
             <xt-task id="M0104" no="1" @cb="showMenu">
-              <div
-                  id="bottomContent"
-                  style="white-space: nowrap; display: flex; align-items: center"
-              >
+              <div id="bottomContent" style="white-space: nowrap; display: flex; align-items: center">
                 <div v-if="footNavigationList.length <= 0" style=""></div>
-                <a-tooltip
-                    v-for="item in footNavigationList"
-                    :key="item.name"
-                    :title="item.name"
-                >
+                <a-tooltip v-for="item in footNavigationList" :key="item.name" :title="item.name">
                   <div
-                      class="mr-3 mr-6 pointer"
-                      style="white-space: nowrap; display: inline-block"
-                      @contextmenu.stop="enableDrag"
-                      @click.stop="clickNavigation(item)"
+                    class="mr-3 mr-6 pointer"
+                    style="white-space: nowrap; display: inline-block"
+                    @contextmenu.stop="enableDrag"
+                    @click.stop="clickNavigation(item)"
                   >
                     <div
-                        v-if="item.type === 'systemApp'"
-                        class="flex items-center justify-center rounded-lg s-item xt-bg-2"
-                        style="width: 56px; height: 56px"
+                      v-if="item.type === 'systemApp'"
+                      class="flex items-center justify-center rounded-lg s-item xt-bg-2"
+                      style="width: 56px; height: 56px"
                     >
                       <navIcon
-                          :icon="item.icon"
-                          class="test"
-                          style="
-                          width: 32px;
-                          height: 32px;
-                          fill: var(--primary-text);
-                        "
+                        :icon="item.icon"
+                        class="test"
+                        style="width: 32px; height: 32px; fill: var(--primary-text)"
                       ></navIcon>
                     </div>
-                    <div
-                        v-else
-                        class="flex items-center justify-center"
-                        style="width: 45px; height: 45px"
-                    >
-                      <a-avatar
-                          :size="40"
-                          :src="renderIcon(item.icon)"
-                          shape="square"
-                      ></a-avatar>
+                    <div v-else class="flex items-center justify-center" style="width: 45px; height: 45px">
+                      <a-avatar :size="40" :src="renderIcon(item.icon)" shape="square"></a-avatar>
                     </div>
                   </div>
                 </a-tooltip>
@@ -113,28 +86,18 @@
 
         <a-tooltip :title="showScreen ? '运行中的分屏' : '运行中的应用'">
           <div
-              v-if="isMain"
-              class="flex items-center justify-center h-2/3 pointer"
-              style="
-              flex-shrink: 0;
-              border-left: 1px solid var(--divider);
-              width: 72px;
-              height: 58px;
-            "
-              @click="appChange"
+            v-if="isMain"
+            class="flex items-center justify-center h-2/3 pointer"
+            style="flex-shrink: 0; border-left: 1px solid var(--divider); width: 72px; height: 58px"
+            @click="appChange"
           >
             <template v-if="!showScreen">
               <navIcon
-                  icon="fluent:window-multiple-16-filled"
-                  style="
-                  width: 40px;
-                  height: 40px;
-                  margin-left: 5px;
-                  margin-top: 1px;
-                "
+                icon="fluent:window-multiple-16-filled"
+                style="width: 40px; height: 40px; margin-left: 5px; margin-top: 1px"
               ></navIcon>
               <span
-                  style="
+                style="
                   position: absolute;
                   width: 48px;
                   height: 48px;
@@ -143,21 +106,16 @@
                   font-weight: bold;
                   font-size: 18px;
                 "
-              >{{ runningApps.length + runningTableApps.length }}</span
+                >{{ runningApps.length + runningTableApps.length }}</span
               >
             </template>
             <template v-else>
               <navIcon
-                  icon="majesticons:monitor-line"
-                  style="
-                  width: 40px;
-                  height: 40px;
-                  margin-left: 2px;
-                  margin-top: 1px;
-                "
+                icon="majesticons:monitor-line"
+                style="width: 40px; height: 40px; margin-left: 2px; margin-top: 1px"
               ></navIcon>
               <span
-                  style="
+                style="
                   position: absolute;
                   width: 48px;
                   height: 48px;
@@ -167,7 +125,7 @@
                   font-size: 18px;
                   margin-bottom: 6px;
                 "
-              >{{ runningScreen }}</span
+                >{{ runningScreen }}</span
               >
             </template>
           </div>
@@ -175,14 +133,9 @@
       </div>
     </div>
     <div
-        v-if="!simple || settings.enableChat"
-        class="flex flex-row common-panel user s-bg"
-        style="
-        vertical-align: top;
-        margin-top: 0;
-        background: var(--primary-bg);
-        color: var(--primary-text);
-      "
+      v-if="!simple || settings.enableChat"
+      class="flex flex-row common-panel user s-bg"
+      style="vertical-align: top; margin-top: 0; background: var(--primary-bg); color: var(--primary-text)"
     >
       <div v-show="settings.enableChat" class="pointer">
         <ChatButton></ChatButton>
@@ -193,32 +146,20 @@
   </div>
   <!-- to this -->
   <div
-      v-show="visibleTrans"
-      id="trans"
-      style="
-      position: fixed;
-      left: 0;
-      top: 0;
-      width: 100vw;
-      height: 100vh;
-      background: #2c2c2c;
-    "
+    v-show="visibleTrans"
+    id="trans"
+    style="position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; background: #2c2c2c"
   >
-    <a-button
-        style="position: fixed; left: 10px; top: 10px"
-        @click="visibleTrans = false"
-    >取消
-    </a-button>
-    <iframe id="transFrame" style="width: 100vw; height: 100vh; border: none">
-    </iframe>
+    <a-button style="position: fixed; left: 10px; top: 10px" @click="visibleTrans = false">取消 </a-button>
+    <iframe id="transFrame" style="width: 100vw; height: 100vh; border: none"> </iframe>
   </div>
   <a-drawer
-      :closable="true"
-      :contentWrapperStyle="{ backgroundColor: '#212121', height: '216px' }"
-      :visible="menuVisible"
-      class="drawer"
-      placement="bottom"
-      @close="onClose"
+    :closable="true"
+    :contentWrapperStyle="{ backgroundColor: '#212121', height: '216px' }"
+    :visible="menuVisible"
+    class="drawer"
+    placement="bottom"
+    @close="onClose"
   >
     <a-row>
       <a-col>
@@ -229,16 +170,8 @@
           </xt-task>
         </div>
 
-        <div
-            v-for="item in builtInFeatures"
-            :key="item.name"
-            class="btn"
-            @click="clickNavigation(item)"
-        >
-          <navIcon
-              :icon="item.icon"
-              style="font-size: 3em; vertical-align: bottom"
-          ></navIcon>
+        <div v-for="item in builtInFeatures" :key="item.name" class="btn" @click="clickNavigation(item)">
+          <navIcon :icon="item.icon" style="font-size: 3em; vertical-align: bottom"></navIcon>
           <div>
             <span>{{ item.name }}</span>
           </div>
@@ -254,54 +187,49 @@
   </transition>
   <!--任务管理器 -->
   <div
-      v-if="changeFlag"
-      class="fixed inset-0 home-blur"
-      style="z-index: 999; background: var(--mask-background-color)"
-      @click="closeChangeApp"
+    v-if="changeFlag"
+    class="fixed inset-0 home-blur"
+    style="z-index: 999; background: var(--mask-background-color)"
+    @click="closeChangeApp"
   >
-    <ChangeApp
-        :full="full"
-        :tab="tab"
-        @closeChangeApp="closeChangeApp"
-        @setFull="setFull"
-    ></ChangeApp>
+    <ChangeApp :full="full" :tab="tab" @closeChangeApp="closeChangeApp" @setFull="setFull"></ChangeApp>
   </div>
   <TeamTip :key="teamKey" v-model:visible="showTeamTip"></TeamTip>
 </template>
 
 <script>
-import PanelButton from './PanelButton.vue'
-import { appStore } from '../store'
-import { cardStore } from '../store/card'
-import { navStore } from '../store/nav'
-import { mapActions, mapWritableState } from 'pinia'
-import Template from '../../user/pages/Template.vue'
-import { ThunderboltFilled } from '@ant-design/icons-vue'
-import { message } from 'ant-design-vue'
-import SidePanel from './SidePanel.vue'
-import SecondPanel from './SecondPanel.vue'
-import GradeSmallTip from './GradeSmallTip.vue'
-import { isMain } from '../js/common/screenUtils'
+import PanelButton from './PanelButton.vue';
+import { appStore } from '../store';
+import { cardStore } from '../store/card';
+import { navStore } from '../store/nav';
+import { mapActions, mapWritableState } from 'pinia';
+import Template from '../../user/pages/Template.vue';
+import { ThunderboltFilled } from '@ant-design/icons-vue';
+import { message } from 'ant-design-vue';
+import SidePanel from './SidePanel.vue';
+import SecondPanel from './SecondPanel.vue';
+import GradeSmallTip from './GradeSmallTip.vue';
+import { isMain } from '../js/common/screenUtils';
 
-import EditNavigation from './bottomPanel/EditNavigation.vue'
-import ChangeApp from './bottomPanel/ChangeApp.vue'
-import ScrolX from './ScrolX.vue'
+import EditNavigation from './bottomPanel/EditNavigation.vue';
+import ChangeApp from './bottomPanel/ChangeApp.vue';
+import ScrolX from './ScrolX.vue';
 
-import TeamTip from './TeamTip.vue'
-import { teamStore } from '../store/team'
-import { messageStore } from '../store/message'
-import { appsStore } from '../store/apps'
-import { screenStore } from '../store/screen'
-import { renderIcon, toggleFullScreen } from '../js/common/common'
-import Sortable from 'sortablejs'
-import TaskBox from '../apps/task/page/TaskBox.vue'
-import Emoji from './comp/Emoji.vue'
-import ChatButton from './bottomPanel/ChatButton.vue'
-import AIButton from './bottomPanel/AIButton.vue'
-import UserEntry from './bottomPanel/UserEntry.vue'
-import SearchButton from './bottomPanel/SearchButton.vue'
-import { Icon as navIcon } from '@iconify/vue'
-import navigationData from '../js/data/tableData'
+import TeamTip from './TeamTip.vue';
+import { teamStore } from '../store/team';
+import { messageStore } from '../store/message';
+import { appsStore } from '../store/apps';
+import { screenStore } from '../store/screen';
+import { renderIcon, toggleFullScreen } from '../js/common/common';
+import Sortable from 'sortablejs';
+import TaskBox from '../apps/task/page/TaskBox.vue';
+import Emoji from './comp/Emoji.vue';
+import ChatButton from './bottomPanel/ChatButton.vue';
+import AIButton from './bottomPanel/AIButton.vue';
+import UserEntry from './bottomPanel/UserEntry.vue';
+import SearchButton from './bottomPanel/SearchButton.vue';
+import { Icon as navIcon } from '@iconify/vue';
+import navigationData from '../js/data/tableData';
 
 export default {
   name: 'BottomPanel',
@@ -325,7 +253,7 @@ export default {
     TaskBox,
     navIcon,
   },
-  data () {
+  data() {
     return {
       sortable: null,
 
@@ -358,7 +286,7 @@ export default {
       rightNav: false,
       delNav: false,
       //screenWidth: document.body.clientWidth
-    }
+    };
   },
   props: {
     delZone: {
@@ -366,15 +294,15 @@ export default {
       default: () => false,
     },
   },
-  unmounted () {
-    let that = this
-    window.removeEventListener('resize', that.checkScroll)
-    clearInterval(this.updateMessageTimer)
+  unmounted() {
+    let that = this;
+    window.removeEventListener('resize', that.checkScroll);
+    clearInterval(this.updateMessageTimer);
     if (this.timerRunning) {
-      clearInterval(this.timerRunning)
+      clearInterval(this.timerRunning);
     }
   },
-  mounted () {
+  mounted() {
     // TODO 删掉分屏管理
     // this.timerRunning = setInterval(() => {
     //   this.showScreen = !this.showScreen;
@@ -398,13 +326,13 @@ export default {
     //   })
     //   localStorage.setItem('insertBird','1')
     // }
-    this.getMessageIndex().then()
+    this.getMessageIndex().then();
     //每3分钟刷新一次消息
     this.updateMessageTimer = setInterval(() => {
-      this.getMessageIndex().then()
-    }, 180000)
-    let that = this
-    this.checkScroll()
+      this.getMessageIndex().then();
+    }, 180000);
+    let that = this;
+    this.checkScroll();
     // const that = this
     // window.onresize = function() {
     //   return function(){
@@ -412,20 +340,20 @@ export default {
     //     that.screenWidth = window.screenWidth
     //   }()
     // }
-    window.addEventListener('resize', that.checkScroll)
-    let content = this.$refs.content
+    window.addEventListener('resize', that.checkScroll);
+    let content = this.$refs.content;
     content.addEventListener('wheel', (event) => {
-      event.preventDefault()
+      event.preventDefault();
       // console.log('wheel',event)
-      content.scrollLeft += event.deltaY
-    })
+      content.scrollLeft += event.deltaY;
+    });
     navigationData.systemAppList.forEach((item) => {
       this.footNavigationList.forEach((i) => {
         if (item.name === i.name) {
-          i.icon = item.icon
+          i.icon = item.icon;
         }
-      })
-    })
+      });
+    });
   },
   computed: {
     ...mapWritableState(appStore, ['userInfo', 'settings', 'lvInfo', 'simple']),
@@ -443,23 +371,23 @@ export default {
     ]),
     // ...mapWritableState(cardStore, ['navigationList', 'routeParams']),
 
-    isMain () {
-      return isMain()
+    isMain() {
+      return isMain();
     },
-    runningScreen () {
-      let count = 0
+    runningScreen() {
+      let count = 0;
       this.screens.forEach((s) => {
         if (s.running) {
-          count++
+          count++;
         }
-      })
-      return count
+      });
+      return count;
     },
   },
   watch: {
     footNavigationList: {
-      handler () {
-        this.checkScroll()
+      handler() {
+        this.checkScroll();
         // this.$nextTick(()=>{
         //   console.log(this.$refs.content.offsetHeight-this.$refs.content.clientHeight>0)
         //   if(this.$refs.content.offsetHeight-this.$refs.content.clientHeight>0){
@@ -472,39 +400,35 @@ export default {
       immediate: true,
       deep: true,
     },
-    delZone (val) {
-      this.delNav = val
+    delZone(val) {
+      this.delNav = val;
     },
     navigationToggle: {
       immediate: true,
       deep: true,
-      handler (val) {
-        this.leftNav = val[0]
-        this.rightNav = val[1]
+      handler(val) {
+        this.leftNav = val[0];
+        this.rightNav = val[1];
       },
     },
   },
   methods: {
     ...mapActions(teamStore, ['updateMy']),
     ...mapActions(messageStore, ['getMessageIndex']),
-    ...mapActions(navStore, [
-      'setFootNavigationList',
-      'sortFootNavigationList',
-      'removeFootNavigationList',
-    ]),
-    async toggleTeam () {
-      await this.updateMy(0)
+    ...mapActions(navStore, ['setFootNavigationList', 'sortFootNavigationList', 'removeFootNavigationList']),
+    async toggleTeam() {
+      await this.updateMy(0);
       if (this.team.status === false) {
-        this.teamKey = Date.now()
-        this.showTeamTip = true
+        this.teamKey = Date.now();
+        this.showTeamTip = true;
       } else {
-        this.teamVisible = !this.teamVisible
+        this.teamVisible = !this.teamVisible;
       }
     },
-    closeDrawer () {
-      this.menuVisible = false
+    closeDrawer() {
+      this.menuVisible = false;
     },
-    checkScroll () {
+    checkScroll() {
       // this.$nextTick(() => {
       //   if (this.$refs.content.offsetHeight - this.$refs.content.clientHeight > 0) {
       //     this.$refs.content.style.marginTop = '17px'
@@ -513,83 +437,82 @@ export default {
       //   }
       // })
     },
-    goMy () {
-      this.$router.push({ name: 'socialMy' })
+    goMy() {
+      this.$router.push({ name: 'socialMy' });
     },
     ...mapActions(appStore, ['setUser']),
-    setFull (value) {
-      this.full = value
+    setFull(value) {
+      this.full = value;
     },
-    appChange () {
+    appChange() {
       if (this.showScreen) {
-        this.tab = 'screen'
+        this.tab = 'screen';
         this.routeParams.url &&
-        ipc.send('hideTableApp', {
-          app: JSON.parse(JSON.stringify(this.routeParams)),
-        })
+          ipc.send('hideTableApp', {
+            app: JSON.parse(JSON.stringify(this.routeParams)),
+          });
       } else {
-        this.tab = 'apps'
+        this.tab = 'apps';
         this.routeParams.url &&
+          ipc.send('hideTableApp', {
+            app: JSON.parse(JSON.stringify(this.routeParams)),
+          });
+      }
+      this.changeFlag = true;
+    },
+    closeChangeApp() {
+      this.routeParams.url &&
+        setTimeout(() => {
+          this.$router.push({ name: 'app', params: this.routeParams });
+        }, 400);
+      this.changeFlag = false;
+    },
+    showMenu() {
+      this.routeParams.url &&
         ipc.send('hideTableApp', {
           app: JSON.parse(JSON.stringify(this.routeParams)),
-        })
-      }
-      this.changeFlag = true
+        });
+      this.menuVisible = true;
     },
-    closeChangeApp () {
-      this.routeParams.url &&
-      setTimeout(() => {
-        this.$router.push({ name: 'app', params: this.routeParams })
-      }, 400)
-      this.changeFlag = false
+    hideMenu() {
+      this.menuVisible = false;
     },
-    showMenu () {
-      this.routeParams.url &&
-      ipc.send('hideTableApp', {
-        app: JSON.parse(JSON.stringify(this.routeParams)),
-      })
-      this.menuVisible = true
+    onClose() {
+      this.routeParams.url && this.$router.push({ name: 'app', params: this.routeParams });
+      this.menuVisible = false;
     },
-    hideMenu () {
-      this.menuVisible = false
+    editNavigation() {
+      this.quick = true;
+      this.menuVisible = false;
     },
-    onClose () {
-      this.routeParams.url &&
-      this.$router.push({ name: 'app', params: this.routeParams })
-      this.menuVisible = false
-    },
-    editNavigation () {
-      this.quick = true
-      this.menuVisible = false
-    },
-    setQuick () {
-      this.quick = false
+    setQuick() {
+      this.quick = false;
     },
 
-    openSetting () {
-      this.$router.push({ name: 'setting' })
-      this.hideMenu()
+    openSetting() {
+      this.$router.push({ name: 'setting' });
+      this.hideMenu();
     },
-    openStatus () {
-      this.hideMenu()
+    openStatus() {
+      this.hideMenu();
       if (this.$route.path === '/status') {
-        this.$router.go(-1)
+        this.$router.go(-1);
       } else {
-        this.$router.push({ path: '/status' })
+        this.$router.push({ path: '/status' });
       }
     },
 
-    power () {
-      this.$router.push({ path: '/power' })
+    power() {
+      this.$router.push({ path: '/power' });
     },
-    lock () {
-      this.$router.push({ path: '/lock' })
+    lock() {
+      this.$router.push({ path: '/lock' });
     },
-    transFile () {
+    transFile() {
       //this.visibleTrans=true
       //document.getElementById('transFrame').src='https://szfilehelper.weixin.qq.com/'
       // console.log('发送消息')
-      ipc.send('executeAppByPackage', { package: 'com.thisky.fileHelper' })
+      ipc.send('executeAppByPackage', { package: 'com.thisky.fileHelper' });
       this.$router.push({
         name: 'app',
         params: {
@@ -599,153 +522,146 @@ export default {
           preload: 'fileHelper',
           background: false,
         },
-      })
+      });
     },
-    async setFullScreen () {
+    async setFullScreen() {
       // await tsbApi.window.isFullScreen()
       if (this.full) {
-        this.full = false
-        tsbApi.window.setFullScreen(false)
+        this.full = false;
+        tsbApi.window.setFullScreen(false);
       } else {
-        this.full = true
-        tsbApi.window.setFullScreen(true)
+        this.full = true;
+        tsbApi.window.setFullScreen(true);
       }
     },
 
-    clickNavigation (item) {
-      this.hideMenu()
+    clickNavigation(item) {
+      this.hideMenu();
       switch (item.type) {
         case 'systemApp':
           if (item.event === 'fullscreen') {
-            toggleFullScreen()
-            this.full = !this.full
+            toggleFullScreen();
+            this.full = !this.full;
           } else if (item.event === '/status') {
             if (this.$route.path === '/status') {
-              this.$router.go(-1)
+              this.$router.go(-1);
             } else {
-              this.$router.push({ path: '/status' })
+              this.$router.push({ path: '/status' });
             }
           } else if (item.data) {
             this.$router.push({
               name: 'app',
               params: item.data,
-            })
+            });
           } else {
-            this.$router.push({ name: item.event })
+            this.$router.push({ name: item.event });
           }
-          break
+          break;
         case 'coolApp':
           this.$router.push({
             name: 'app',
             params: item.data,
-          })
-          break
+          });
+          break;
         case 'localApp':
-          require('electron').shell.openPath(item.path)
-          break
+          require('electron').shell.openPath(item.path);
+          break;
         case 'lightApp':
-          ipc.send('executeAppByPackage', { package: item.package })
-          break
+          ipc.send('executeAppByPackage', { package: item.package });
+          break;
         default:
-          require('electron').shell.openPath(item.path)
+          require('electron').shell.openPath(item.path);
       }
     },
-    disableDrag () {
+    disableDrag() {
       if (this.sortable) {
-        document.removeEventListener('click', this.disableDrag)
-        this.sortable.destroy()
-        this.sortable = null
-        message.info('已中止导航栏调整')
+        document.removeEventListener('click', this.disableDrag);
+        this.sortable.destroy();
+        this.sortable = null;
+        message.info('已中止导航栏调整');
       }
     },
-    enableDrag () {
+    enableDrag() {
       if (this.sortable) {
-        return
+        return;
       }
-      document.addEventListener('click', this.disableDrag)
-      let that = this
-      let drop = document.getElementById('bottomContent')
+      document.addEventListener('click', this.disableDrag);
+      let that = this;
+      let drop = document.getElementById('bottomContent');
       this.sortable = Sortable.create(drop, {
         sort: true,
         animation: 150,
         onStart: function (event) {
-          let delIcon = document.getElementById('delIcon2')
-          that.$emit('getDelIcon', true)
-          this.delNav = true
+          let delIcon = document.getElementById('delIcon2');
+          that.$emit('getDelIcon', true);
+          this.delNav = true;
           if (this.delNav) {
             delIcon.ondragover = function (ev) {
-              ev.preventDefault()
-            }
+              ev.preventDefault();
+            };
           }
           delIcon.ondrop = function (ev) {
-            let oneNav = that.footNavigationList[event.oldIndex]
+            let oneNav = that.footNavigationList[event.oldIndex];
             //将要删除的是否是主要功能
             if (!that.mainNavigationList.find((f) => f.name === oneNav.name)) {
-              that.removeFootNavigationList(event.oldIndex)
-              return
+              that.removeFootNavigationList(event.oldIndex);
+              return;
             }
-            let sumList = []
+            let sumList = [];
             // 判断其他导航栏是否是打开状态，是则获取功能列表
             if (that.leftNav && that.rightNav) {
-              sumList = that.sideNavigationList.concat(
-                  that.rightNavigationList
-              )
+              sumList = that.sideNavigationList.concat(that.rightNavigationList);
             } else if (that.leftNav && !that.rightNav) {
-              sumList = that.sideNavigationList
+              sumList = that.sideNavigationList;
             } else if (!that.leftNav && that.rightNav) {
-              sumList = that.rightNavigationList
+              sumList = that.rightNavigationList;
             } else {
-              message.info(`导航栏中至少保留一个「${oneNav.name}」`)
+              message.info(`导航栏中至少保留一个「${oneNav.name}」`);
               // console.log('不可删除')
-              return
+              return;
             }
-            that.delNavigation(
-                sumList,
-                oneNav,
-                event.oldIndex,
-                that.removeFootNavigationList
-            )
-          }
+            that.delNavigation(sumList, oneNav, event.oldIndex, that.removeFootNavigationList);
+          };
         },
         onUpdate: function (event) {
           let newIndex = event.newIndex,
-              oldIndex = event.oldIndex
-          let newItem = drop.children[newIndex]
-          let oldItem = drop.children[oldIndex]
+            oldIndex = event.oldIndex;
+          let newItem = drop.children[newIndex];
+          let oldItem = drop.children[oldIndex];
 
           // 先删除移动的节点
-          drop.removeChild(newItem)
+          drop.removeChild(newItem);
           // 再插入移动的节点到原有节点，还原了移动的操作
           if (newIndex > oldIndex) {
-            drop.insertBefore(newItem, oldItem)
+            drop.insertBefore(newItem, oldItem);
           } else {
-            drop.insertBefore(newItem, oldItem.nextSibling)
+            drop.insertBefore(newItem, oldItem.nextSibling);
           }
-          that.sortFootNavigationList(event)
+          that.sortFootNavigationList(event);
         },
         onEnd: function (event) {
-          that.$emit('getDelIcon', false)
+          that.$emit('getDelIcon', false);
         },
-      })
-      message.success('开始调整底部栏，点击导航外部即可终止调整。')
+      });
+      message.success('开始调整底部栏，点击导航外部即可终止调整。');
     },
     renderIcon,
-    delNavigation (sumList, oneNav, index, delMethod) {
+    delNavigation(sumList, oneNav, index, delMethod) {
       if (!this.mainNavigationList.find((item) => item.name === oneNav.name)) {
         //如果不是必须的
-        delMethod(index)
+        delMethod(index);
       } else {
         if (sumList.find((item) => item.name === oneNav.name)) {
           //正常移除
-          delMethod(index)
+          delMethod(index);
         } else {
           //不可移除
-          message.info(`导航栏中至少保留一个「${oneNav.name}」`)
+          message.info(`导航栏中至少保留一个「${oneNav.name}」`);
         }
       }
     },
   },
-}
+};
 </script>
 <style></style>
 <style lang="scss" scoped>

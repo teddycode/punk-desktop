@@ -1,37 +1,37 @@
 <template>
   <div class="flex relative">
     <div class="w-32">
-      <div :style="heightStyle" class="overflow-y-auto xt-container">
+      <div class="overflow-y-auto xt-container" :style="heightStyle">
         <div
-            v-for="(item, index) in webBtn"
-            :class="{
+          v-for="(item, index) in webBtn"
+          @click="handleChange(index)"
+          class="h-12 justify-center items-center cursor-pointer flex rounded-xl mr-2"
+          style="flex: 0 0 auto; width: 120px"
+          :class="{
             'xt-bg-2': index === selectIndex,
           }"
-            class="h-12 justify-center items-center cursor-pointer flex rounded-xl mr-2"
-            style="flex: 0 0 auto ;width: 120px;"
-            @click="handleChange(index)"
         >
           {{ item.label }}
         </div>
       </div>
     </div>
     <Icon
-        ref="iconRef"
-        :data="appList[selectName]"
-        :isSelect="true"
-        :name="selectName"
-        style="height: calc(100% - 48px)"
-        @updateSelectApps="updateSelectApps"
+      ref="iconRef"
+      @updateSelectApps="updateSelectApps"
+      :isSelect="true"
+      :name="selectName"
+      style="height: calc(100% - 48px)"
+      :data="appList[selectName]"
     >
     </Icon>
   </div>
 </template>
 
 <script>
-import { getSelect } from '../api/api'
-import syncSelected from '../hooks/syncSelected'
-import cache from '../../../../components/card/hooks/cache'
-import { scrollable } from '../hooks/scrollable'
+import { getNavList, getSelect } from '../api/api';
+import syncSelected from '../hooks/syncSelected';
+import cache from '../../../../components/card/hooks/cache';
+import { scrollable } from '../hooks/scrollable';
 
 export default {
   inject: ['height'],
@@ -41,14 +41,14 @@ export default {
   },
   watch: {
     type: {
-      handler (newV) {
+      handler(newV) {
         this.appList[this.selectName].forEach((item) => {
-          item.open.type = this.type
-        })
+          item.open.type = this.type;
+        });
       },
     },
   },
-  data () {
+  data() {
     return {
       webBtn: [
         {
@@ -120,57 +120,48 @@ export default {
       appList: {},
       selectIndex: 0,
       selectName: '',
-    }
+    };
   },
   directives: {
     scrollable,
   },
-  async mounted () {
-    this.getData(this.selectIndex)
+  async mounted() {
+    this.getData(this.selectIndex);
   },
   computed: {
-    heightStyle () {
+    heightStyle() {
       return {
         height: this.height() + 60 + 'px',
-      }
+      };
     },
   },
   methods: {
-    async getData (index) {
-      index = this.webBtn[index].name
-      let appList = cache.get(`link-${index}`)
+    async getData(index) {
+      index = this.webBtn[index].name;
+      let appList = cache.get(`link-${index}`);
       if (!appList) {
-        appList = []
-        let res = await getSelect({
-          applicationType: index,
-        })
-        res.data[0].forEach((item) => {
-          appList.push({
-            link: 'link',
-            icon: item.app.version.logo256 || '',
-            name: item.app.version.name || '',
-            open: {
-              value: item.app.version.url || '',
-              type: this.type,
-            },
-          })
-        })
-        cache.set(`link-${index}`, appList, 2 * 24 * 60 * 60 * 1000)
+        appList = [];
+        let res = getNavList();
+        console.log('查回的导航', res);
+        cache.set(`link-${index}`, res[index], 2 * 24 * 60 * 60 * 1000);
       } else {
         appList.forEach((item) => {
-          item.open.type = this.type
-        })
+          item.open = {
+            type: this.type,
+            value: item.url,
+          };
+        });
       }
 
-      this.appList[index] = appList
-      this.selectName = index
+      this.appList[index] = appList;
+      this.selectName = index;
     },
-    handleChange (index) {
-      this.selectIndex = index
-      this.getData(this.selectIndex)
+    handleChange(index) {
+      this.selectIndex = index;
+      this.getData(this.selectIndex);
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped></style>

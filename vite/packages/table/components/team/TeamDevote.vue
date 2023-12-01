@@ -2,29 +2,30 @@
   <template v-if="team">
     <div class="px-3 py-2 flex flex-col" style="height: 100%">
       <HorizontalPanel v-model:selectType="defaultIncome" :navList="incomeTitle"></HorizontalPanel>
-      <div v-if="defaultIncome.name === 'MIC'" class="mt-3  flex flex-col" style="flex:1;height: 0">
-
-        <div style="height:0;flex:1">
-          <a-empty v-if="memberDevoteDisplay.length===0" description="" style="margin-top: 3em">
-          </a-empty>
-          <vue-custom-scrollbar :settings="outerSettings" style="position:relative;height:100%;  ">
-            <div class="flex" style="width: 100%;flex-direction: column">
-              <div v-for="user in memberDevoteDisplay" class="text-center   mt-3  mb-3">
+      <div v-if="defaultIncome.name === 'MIC'" class="mt-3 flex flex-col" style="flex: 1; height: 0">
+        <div style="height: 0; flex: 1">
+          <a-empty v-if="memberDevoteDisplay.length === 0" description="" style="margin-top: 3em"> </a-empty>
+          <vue-custom-scrollbar :settings="outerSettings" style="position: relative; height: 100%">
+            <div class="flex" style="width: 100%; flex-direction: column">
+              <div v-for="user in memberDevoteDisplay" class="text-center mt-3 mb-3">
                 <a-row style="width: 100%">
                   <a-col :span="8">
-                    <UserAvatar :avatar="user.userInfo.avatar"
-                                :tag="user.userInfo.uid===teamLeader.uid?'队长':'队员'"></UserAvatar>
+                    <UserAvatar
+                      :avatar="user.userInfo.avatar"
+                      :tag="user.userInfo.uid === teamLeader.uid ? '队长' : '队员'"
+                    ></UserAvatar>
                   </a-col>
                   <a-col :span="9" class="text-center">
-                    <div class=" pt-3 " style=" font-size: 14px; color: rgba(255,255,255,0.85);font-weight: 500;">
+                    <div class="pt-3" style="font-size: 14px; color: rgba(255, 255, 255, 0.85); font-weight: 500">
                       {{ user.devote.toFixed(2) }} 分钟
                     </div>
                   </a-col>
                   <a-col v-if="user.devote" :span="7">
                     <div
-                        class=" rounded-lg pointer receive-active flex justify-center items-center bg-black bg-opacity-30 pl-3 pr-3 pt-2 pb-2"
-                        style="font-size: 16px; color: rgba(255,255,255,0.85);font-weight: 500;"
-                        @click="doExchangeDevote(user.uid)">
+                      class="rounded-lg pointer receive-active flex justify-center items-center bg-black bg-opacity-30 pl-3 pr-3 pt-2 pb-2"
+                      style="font-size: 16px; color: rgba(255, 255, 255, 0.85); font-weight: 500"
+                      @click="doExchangeDevote(user.uid)"
+                    >
                       领取
                     </div>
                   </a-col>
@@ -33,12 +34,13 @@
             </div>
           </vue-custom-scrollbar>
         </div>
-        <div class="flex items-center rounded-lg py-1 px-2 xt-bg-2" style="height:50px">
+        <div class="flex items-center rounded-lg py-1 px-2 xt-bg-2" style="height: 50px">
           <a-col :span="3" class="mr-4 pt-2">
             <a-avatar :size="40" :src="team.avatar" class="mt-3 ml-3 mt-2" shape="square" style=""></a-avatar>
           </a-col>
           <a-col :span="12">
-            <span class="xt-text-2">总共待领取</span><br> <strong>{{ total.toFixed(2) }}</strong> 分钟
+            <span class="xt-text-2">总共待领取</span><br />
+            <strong>{{ total.toFixed(2) }}</strong> 分钟
           </a-col>
           <a-col :span="8">
             <!--            <div class="flex justify-between items-center h-12" style="display: block;">-->
@@ -51,7 +53,7 @@
           </a-col>
         </div>
       </div>
-      <div v-else class="mt-4 flex flex-col text-center" style="color: var(--primary-text);">
+      <div v-else class="mt-4 flex flex-col text-center" style="color: var(--primary-text)">
         暂不可用，请等待更新
         <!--      <div class="flex items-center justify-between mt-6">-->
         <!--        <span class="pl-4">队员</span>-->
@@ -83,20 +85,18 @@
         <!--      </div>-->
       </div>
     </div>
-
   </template>
-
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia'
-import { appStore } from '../../store'
-import HorizontalPanel from '../HorizontalPanel.vue'
-import UserAvatar from '../small/UserAvatar.vue'
-import { teamStore } from '../../store/team'
-import { message } from 'ant-design-vue'
-import XtButton from '../../ui/libs/Button/index.vue'
-import { completeTask } from '../../apps/task/page/branch/task'
+import { mapActions, mapState } from 'pinia';
+import { appStore } from '../../store';
+import HorizontalPanel from '../HorizontalPanel.vue';
+import UserAvatar from '../small/UserAvatar.vue';
+import { teamStore } from '../../store/team';
+import { message } from 'ant-design-vue';
+import XtButton from '../../ui/libs/Button/index.vue';
+import { completeTask } from '../../apps/task/page/branch/task';
 
 export default {
   name: 'TeamDevote',
@@ -105,70 +105,69 @@ export default {
   computed: {
     ...mapState(appStore, ['userInfo']),
     ...mapState(teamStore, ['membersDevote']),
-    memberDevoteDisplay () {
-      let display = JSON.parse(JSON.stringify(this.teamMembers))
-      display.unshift(JSON.parse(JSON.stringify(this.teamLeader)))
+    memberDevoteDisplay() {
+      let display = JSON.parse(JSON.stringify(this.teamMembers));
+      display.unshift(JSON.parse(JSON.stringify(this.teamLeader)));
 
-      display.map(user => {
-        user.devote = this.membersDevote[user.uid] || 0
-      })
+      display.map((user) => {
+        user.devote = this.membersDevote[user.uid] || 0;
+      });
 
-      return display.filter(member => {
-        return Number(member.uid) !== Number(this.userInfo.uid)
-      })
+      return display.filter((member) => {
+        return Number(member.uid) !== Number(this.userInfo.uid);
+      });
     },
-    total () {
-      let total = 0
-      this.memberDevoteDisplay.forEach(devote => {
-        total += devote.devote
-      })
-      return total
-    }
+    total() {
+      let total = 0;
+      this.memberDevoteDisplay.forEach((devote) => {
+        total += devote.devote;
+      });
+      return total;
+    },
   },
-  data () {
+  data() {
     return {
-      incomeTitle: [{ title: '我的收益', name: 'MIC' }, { title: '小队贡献', name: 'CB' }],
+      incomeTitle: [
+        { title: '我的收益', name: 'MIC' },
+        { title: '小队贡献', name: 'CB' },
+      ],
       defaultIncome: { title: '我的收益', name: 'MIC' },
-      teamIncome: [],  // 小队收益
-      teamCB: [],  // 小队贡献
+      teamIncome: [], // 小队收益
+      teamCB: [], // 小队贡献
       outerSettings: {
         useBothWheelAxes: true,
         swipeEasing: true,
         suppressScrollY: false,
         suppressScrollX: true,
-        wheelPropagation: true
+        wheelPropagation: true,
       },
       rarity: 4, // 稀有度
       avatar_url: '/img/excellent _avatar.svg',
-    }
+    };
   },
-  async mounted () {
-    await this.getMemberDevote()
+  async mounted() {
+    await this.getMemberDevote();
   },
   methods: {
     ...mapActions(teamStore, ['getMemberDevote', 'exchangeDevote']),
     // 我的额外收益领取
-    myExtra () {
-
-    },
+    myExtra() {},
     // 小队收益
-    async doExchangeDevote (uid = 0) {
-      let rs = await this.exchangeDevote(uid)
+    async doExchangeDevote(uid = 0) {
+      let rs = await this.exchangeDevote(uid);
       if (rs.status) {
-        message.success('兑换成功')
+        message.success('兑换成功');
         // 支线任务点
-        completeTask('Z0402')
-        await this.getMemberDevote()
+        completeTask('Z0402');
+        await this.getMemberDevote();
       } else {
-        message.error('兑换失败，失败原因：' + rs.info)
+        message.error('兑换失败，失败原因：' + rs.info);
       }
     },
     // 小队贡献
-    captainContribute () {
-    }
-
-  }
-}
+    captainContribute() {},
+  },
+};
 </script>
 
 <style scoped>
@@ -192,7 +191,7 @@ export default {
 
 .receive-active:active {
   filter: brightness(0.8);
-  background: rgba(0, 0, 0, 0.40);
+  background: rgba(0, 0, 0, 0.4);
 }
 
 :deep(.ant-avatar-image) {

@@ -1,7 +1,7 @@
 <template>
-  <div class="  px-6 box">
+  <div class="px-6 box">
     <!-- 头部导航 -->
-    <div class="flex items-center justify-between" style="height: 96px;">
+    <div class="flex items-center justify-between" style="height: 96px">
       <HorizontalPanel v-model:select-type="currentTab" :nav-list="tabList"></HorizontalPanel>
       <!--      <div @click="onBack" class="pointer flex items-center rounded-lg justify-center"-->
       <!--        style="background: var(&#45;&#45;mask-bg);width:112px;height:48px;font-size: 16px;color: var(&#45;&#45;primary-text);">-->
@@ -12,28 +12,35 @@
         <Search
           v-model:keywords="keywords"
           :defaultSelect="sort"
-          :isFiltrate="true"
-          :showSort="currentTab.name==='market'"
           :sortType="sortType"
-          @changeInput="changeInput"
+          :showSort="currentTab.name === 'market'"
+          :isFiltrate="true"
           @changeSelect="changeSelect"
+          @changeInput="changeInput"
         />
         <!-- 分享 -->
-        <div v-if="currentTab.name==='market' && false"
-             class="pointer xt-mask flex items-center rounded-lg justify-center ml-3"
-             style="width:134px;height:48px;font-size: 16px;color: var(--primary-text);"
-             @click="share">我来分享
+        <div
+          v-if="currentTab.name === 'market' && false"
+          class="pointer xt-mask flex items-center rounded-lg justify-center ml-3"
+          style="width: 134px; height: 48px; font-size: 16px; color: var(--primary-text)"
+          @click="share"
+        >
+          我来分享
         </div>
       </div>
     </div>
-    <div class="flex" style="height: 90%;">
+    <div class="flex" style="height: 90%">
       <!-- 侧边导航 -->
-      <NavMenu v-if="currentTab.name==='market'" :currenIndex="navIndex" :list="marketList"
-               @changeNav="updateNavIndex"/>
+      <NavMenu
+        v-if="currentTab.name === 'market'"
+        :list="marketList"
+        :currenIndex="navIndex"
+        @changeNav="updateNavIndex"
+      />
       <!-- 列表内容 -->
-      <div class="ml-5 right no-drag" style="width:100%;height:90%;overflow: auto;">
-        <div v-if="currentTab.name==='market'">
-          <MarketList v-if="false" :navList="marketList[navIndex].children" :selected="sort"></MarketList>
+      <div class="ml-5 right no-drag" style="width: 100%; height: 90%; overflow: auto">
+        <div v-if="currentTab.name === 'market'">
+          <MarketList v-if="false" :selected="sort" :navList="marketList[navIndex].children"></MarketList>
           敬请期待
         </div>
 
@@ -46,14 +53,14 @@
 </template>
 
 <script>
-import MarketList from './MarketList.vue'
-import Search from '../../../components/Search.vue'
-import NavMenu from '../../../components/NavMenu.vue'
-import { mapWritableState } from 'pinia'
-import { keyStore } from '../store'
-import HorizontalPanel from '../../../components/HorizontalCaptrue.vue'
-import axios from 'axios'
-import LocalSchemeList from '../components/LocalSchemeList.vue'
+import MarketList from './MarketList.vue';
+import Search from '../../../components/Search.vue';
+import NavMenu from '../../../components/NavMenu.vue';
+import { mapActions, mapWritableState } from 'pinia';
+import { keyStore } from '../store';
+import HorizontalPanel from '../../../components/HorizontalCaptrue.vue';
+import axios from 'axios';
+import LocalSchemeList from '../components/LocalSchemeList.vue';
 
 export default {
   name: 'CreativeMarket',
@@ -62,17 +69,16 @@ export default {
     HorizontalPanel,
     MarketList,
     Search,
-    NavMenu
+    NavMenu,
   },
-  data () {
+  data() {
     return {
-
       tab: '',
       gallery: false,
       select: 0,
       navIndex: 0,
       sort: '综合排序',
-      keywords: '',//搜索内容
+      keywords: '', //搜索内容
       sortType: [
         { value: '综合排序', name: '综合排序' },
         { value: '下载次数', name: '下载次数' },
@@ -81,15 +87,15 @@ export default {
       tabList: [
         {
           name: 'official',
-          title: '官方'
+          title: '官方',
         },
         {
           name: 'market',
-          title: '创意市场'
-        }
+          title: '创意市场',
+        },
       ],
       currentTab: { name: 'official' },
-      officialSchemes: [],//官方方案
+      officialSchemes: [], //官方方案
       // marketList: [
       //   {
       //     cname: '推荐',
@@ -583,45 +589,44 @@ export default {
       //     ]
       //   },
       // ],
-      inputSearchValue: ''
-    }
+      inputSearchValue: '',
+    };
   },
 
   computed: {
     ...mapWritableState(keyStore, ['marketList']),
   },
   methods: {
-    changeTab (args) {
-      this.tab = args.index
+    changeTab(args) {
+      this.tab = args.index;
     },
-    onBack () {
-      this.$router.go(-1)
+    onBack() {
+      this.$router.go(-1);
     },
-    updateNavIndex ({ index }) {
-      this.navIndex = index
+    updateNavIndex({ index }) {
+      this.navIndex = index;
     },
     //跳转到分享页
-    share () {
-      this.$router.push({ name: 'shareKey' })
+    share() {
+      this.$router.push({ name: 'shareKey' });
     },
-    changeSelect (event) {
+    changeSelect(event) {
       // console.log('选择下拉',event)
-      this.sort = event
+      this.sort = event;
     },
-    changeInput (event) {
+    changeInput(event) {
       // console.log('输入框',event)
     },
   },
-  mounted () {
-    axios.get('https://a.apps.vip/download/shortcut.keys?t=' + Date.now()).then(data => {
-      this.officialSchemes = data.data
-      console.log(this.officialSchemes, '官方方案')
-    })
+  mounted() {
+    axios.get('https://a.apps.vip/download/shortcut.keys?t=' + Date.now()).then((data) => {
+      this.officialSchemes = data.data;
+      console.log(this.officialSchemes, '官方方案');
+    });
 
     // this.$router.push({name: 'marketList'})
   },
-
-}
+};
 </script>
 <style lang="scss" scoped>
 .box {
@@ -649,7 +654,6 @@ export default {
 
   .active {
     background: var(--mask-bg);
-
   }
 }
 

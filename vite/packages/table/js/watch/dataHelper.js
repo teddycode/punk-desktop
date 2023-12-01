@@ -6,51 +6,50 @@ const dataHelper = {
    * @param fix
    * @returns {string}
    */
-  getRate (num, total, fix = 1) {
+  getRate(num, total, fix = 1) {
     if (typeof num === 'undefined' || typeof total === 'undefined') {
-      return '-'
+      return '-';
     }
-    num = dataHelper.convertWan(num)
-    total = dataHelper.convertWan(total)
-    return (num / total * 100).toFixed(fix)
+    num = dataHelper.convertWan(num);
+    total = dataHelper.convertWan(total);
+    return ((num / total) * 100).toFixed(fix);
   },
 
-  convertWan (num) {
-    num = String(num)
+  convertWan(num) {
+    num = String(num);
     if (num.indexOf('万') > -1) {
-      num = num.replace('万', '')
-      num = Number(num) * 10000
+      num = num.replace('万', '');
+      num = Number(num) * 10000;
     }
 
-    return Number(num)
+    return Number(num);
   },
 
   /**
    * 是否高于标准水平，返回true是，返回false否
    */
-  aboveStandard (type, value, standard) {
+  aboveStandard(type, value, standard) {
     if (!standard[type]) {
-      return true
+      return true;
     }
-    return value > standard[type]
+    return value > standard[type];
   },
   /**
    * 格式化，千+逗号
    * @param num
    * @returns {*|string}
    */
-  format (num) {
+  format(num) {
     if (String(num).indexOf('万') > -1) {
       //已经是格式化文本
-      return num
+      return num;
     }
     if (Number(num) > 0) {
-      return (Number(num)).toLocaleString()
+      return Number(num).toLocaleString();
     } else {
-      return '-'
+      return '-';
     }
-
   },
-}
+};
 
-export default dataHelper
+export default dataHelper;

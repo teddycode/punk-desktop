@@ -1,7 +1,7 @@
 const objectToString = Object.prototype.toString;
 const toTypeString = (value: any) => objectToString.call(value);
 
-export const {isArray} = Array;
+export const { isArray } = Array;
 export const isMap = (val: any) => toTypeString(val) === '[object Map]';
 export const isSet = (val: any) => toTypeString(val) === '[object Set]';
 export const isDate = (val: any) => val instanceof Date;

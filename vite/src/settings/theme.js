@@ -1,45 +1,43 @@
 const theme = {
-  init () {
-    settings = window.settings
-
-    function systemShouldEnableDarkMode () {
-      return settings.list.systemShouldUseDarkColors
+  init() {
+    settings = window.settings;
+    function systemShouldEnableDarkMode() {
+      return settings.list.systemShouldUseDarkColors;
     }
 
-    function isNightTime () {
-      var hours = new Date().getHours()
-      return (hours > 21 || hours < 6)
+    function isNightTime() {
+      var hours = new Date().getHours();
+      return hours > 21 || hours < 6;
     }
 
-    function enableDarkMode () {
-      document.body.classList.add('dark-mode')
-      window.isDarkMode = true
+    function enableDarkMode() {
+      document.body.classList.add('dark-mode');
+      window.isDarkMode = true;
       requestAnimationFrame(function () {
-        window.dispatchEvent(new CustomEvent('themechange'))
-      })
+        window.dispatchEvent(new CustomEvent('themechange'));
+      });
       window.postMessage({
         message: 'themeChange',
-        status: 'enable'
-      })
+        status: 'enable',
+      });
     }
 
-    function disableDarkMode () {
-      document.body.classList.remove('dark-mode')
-      window.isDarkMode = false
+    function disableDarkMode() {
+      document.body.classList.remove('dark-mode');
+      window.isDarkMode = false;
       requestAnimationFrame(function () {
-        window.dispatchEvent(new CustomEvent('themechange'))
-      })
+        window.dispatchEvent(new CustomEvent('themechange'));
+      });
       window.postMessage({
         message: 'themeChange',
-        status: 'disable'
-      })
-
+        status: 'disable',
+      });
     }
 
-    var themeInterval = null
+    var themeInterval = null;
 
-    function initialize () {
-      function themeSettingsChanged (value) {
+    function initialize() {
+      function themeSettingsChanged(value) {
         /*
         value is the value of the darkMode pref
         0 - automatic dark mode
@@ -49,67 +47,64 @@ const theme = {
         2: follow system (default)
         true / false: legacy pref values, translate to always/system
         */
-        clearInterval(themeInterval)
+        clearInterval(themeInterval);
 
         // 1 or true: dark mode is always enabled
         if (value === 1 || value === true) {
-          enableDarkMode()
-          return
+          enableDarkMode();
+          return;
         }
 
         // 2, undefined, or false: automatic dark mode following system
         //移除undefined和false
         if (value === 2) {
           if (systemShouldEnableDarkMode()) {
-            enableDarkMode()
+            enableDarkMode();
           } else {
-            disableDarkMode()
+            disableDarkMode();
           }
 
           themeInterval = setInterval(function () {
             if (systemShouldEnableDarkMode()) {
               if (!window.isDarkMode) {
-                enableDarkMode()
+                enableDarkMode();
               }
             } else if (window.isDarkMode) {
-              disableDarkMode()
+              disableDarkMode();
             }
-          }, 10000)
+          }, 10000);
         } else if (value === 0) {
           // 0: automatic dark mode at night
           if (isNightTime()) {
-            enableDarkMode()
+            enableDarkMode();
           } else {
-            disableDarkMode()
+            disableDarkMode();
           }
 
           themeInterval = setInterval(function () {
             if (isNightTime()) {
               if (!window.isDarkMode) {
-                enableDarkMode()
+                enableDarkMode();
               }
             } else if (window.isDarkMode) {
-              disableDarkMode()
+              disableDarkMode();
             }
-          }, 10000)
+          }, 10000);
           //undefined和false都默认和永久禁用一致
         } else if (value === undefined || value === -1 || value === false) {
           // -1: never enable
-          disableDarkMode()
+          disableDarkMode();
         }
       }
-
-      settings.listen('darkMode', themeSettingsChanged)
+      settings.listen('darkMode', themeSettingsChanged);
       settings.listen('systemShouldUseDarkColors', function () {
         // the settings API differs between the UI process and tabs
 
-        settings.get('darkMode', themeSettingsChanged)
-
-      })
+        settings.get('darkMode', themeSettingsChanged);
+      });
     }
+    initialize();
+  },
+};
 
-    initialize()
-  }
-}
-
-export default theme
+export default theme;

@@ -30,7 +30,7 @@ const ipcMessageMain = {
     openMsmSetting: 'openMsmSetting',
 
     //打开全局搜索
-    openGlobalSearch: 'openGlobalSearch'
+    openGlobalSearch: 'openGlobalSearch',
   },
   /**
    * 主界面使用ipc
@@ -39,7 +39,7 @@ const ipcMessageMain = {
     /**
      * 打开书签
      */
-    openBookmarks: 'openBookmarks'
+    openBookmarks: 'openBookmarks',
   },
   /**
    * 独立应用IPC消息
@@ -51,8 +51,8 @@ const ipcMessageMain = {
     openSetting: 'saAppOpenSetting',
     createAppMenu: 'createAppMenu',
     deleteApp: 'deleteApp',
-    installApp: 'installApp'
-  }
-}
+    installApp: 'installApp',
+  },
+};
 
-module.exports = ipcMessageMain
+module.exports = ipcMessageMain;

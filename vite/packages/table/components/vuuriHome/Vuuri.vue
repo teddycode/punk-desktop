@@ -1,35 +1,31 @@
 <template>
-  <div
-      ref="muuri"
-      :class="className"
-      :data-grid-key="gridKey"
-      class="muuri-grid">
+  <div ref="muuri" :class="className" :data-grid-key="gridKey" class="muuri-grid">
     <div
-        v-for="item in copiedItems"
-        :key="item[itemKey]"
-        :data-item-key="item[itemKey]"
-        :style="_getItemStyles(item)"
-        class="muuri-item"
+      v-for="item in copiedItems"
+      :key="item[itemKey]"
+      :data-item-key="item[itemKey]"
+      :style="_getItemStyles(item)"
+      class="muuri-item"
     >
       <div class="muuri-item-content">
-        <slot :item="item" name="item"/>
+        <slot :item="item" name="item" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { debounce, differenceWith } from 'lodash-es'
-import Muuri from 'muuri'
-import { v4 as uuidv4 } from 'uuid'
-import { GridEvent } from './GridEvent'
-import GridStore from './GridStore'
-import { ItemDragHandle, ItemKey, ItemSize } from './constants'
+import { debounce, differenceWith } from 'lodash-es';
+import Muuri from 'muuri';
+import { v4 as uuidv4 } from 'uuid';
+import { GridEvent } from './GridEvent';
+import GridStore from './GridStore';
+import { ItemDragHandle, ItemKey, ItemSize } from './constants';
 
 export default {
   name: 'Vuuri',
-  date () {
-    ''
+  date() {
+    '';
   },
   props: {
     /**
@@ -38,7 +34,7 @@ export default {
     className: {
       type: String,
       required: false,
-      default: () => `class${uuidv4().replace(/-/g, '')}`
+      default: () => `class${uuidv4().replace(/-/g, '')}`,
     },
     /**
      * To set up options of the grid
@@ -47,14 +43,14 @@ export default {
     options: {
       type: Object,
       required: false,
-      default: () => ({})
+      default: () => ({}),
     },
     /**
      * Array input for items to display (via v-model)
      */
     modelValue: {
       type: Array,
-      required: false
+      required: false,
     },
     /**
      * Identifier property for each item
@@ -62,7 +58,7 @@ export default {
     itemKey: {
       type: String,
       required: false,
-      default: () => ItemKey.key
+      default: () => ItemKey.key,
     },
     /**
      * Callback to fetch a dynamic width based on item
@@ -70,7 +66,7 @@ export default {
     getItemWidth: {
       type: Function,
       required: false,
-      default: () => ItemSize.width
+      default: () => ItemSize.width,
     },
     /**
      * Callback to fetch a dynamic height based on item
@@ -78,12 +74,12 @@ export default {
     getItemHeight: {
       type: Function,
       required: false,
-      default: () => ItemSize.height
+      default: () => ItemSize.height,
     },
     getItemMargin: {
       type: Function,
       required: false,
-      default: () => ItemSize.margin
+      default: () => ItemSize.margin,
     },
     /**
      * Enable drag and drop feature on the grid
@@ -91,7 +87,7 @@ export default {
     dragEnabled: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     /**
      * Selector for determining the handle to activate dragging
@@ -99,24 +95,24 @@ export default {
     dragHandle: {
       type: String,
       required: false,
-      default: ItemDragHandle.select
+      default: ItemDragHandle.select,
     },
     /**
      * When dragEnabled is on, can control which other grid you can drag into
      */
     groupId: {
       type: [String, Number],
-      required: false
+      required: false,
     },
     /**
      * When dragEnabled is on, can control which other grid you can drag into
      */
     groupIds: {
       type: [Array],
-      required: false
-    }
+      required: false,
+    },
   },
-  data () {
+  data() {
     return {
       /**
        * Deep copy of props items
@@ -129,50 +125,51 @@ export default {
        */
       events: {},
       /*
-      * The generated Muuri Options object
-      */
-      muuriOptions: {}
-    }
+       * The generated Muuri Options object
+       */
+      muuriOptions: {},
+    };
   },
   watch: {
     modelValue: {
       deep: true,
-      handler (newItems, oldValue) {
+      handler(newItems, oldValue) {
         if (!this.internallySet) {
-          this._sync(newItems, this.copiedItems)
+          this._sync(newItems, this.copiedItems);
         }
-      }
+      },
     },
     'settings.iconSize': {
       deep: true,
-      handler () {
+      handler() {
         if (!this.internallySet) {
-          this.update()
+          this.update();
         }
-      }
-    }
+      },
+    },
   },
   computed: {
-    selector () {
-      return `.${this.className}`
-    }
+    selector() {
+      return `.${this.className}`;
+    },
   },
   methods: {
     /**
      * Manually update the items in the muuri grid
      */
-    update () {
+    update() {
       this.$nextTick(() => {
         this.muuri
-            .refreshItems()
-            .layout(true, () => this.$emit('updated')).synchronize()
-      })
+          .refreshItems()
+          .layout(true, () => this.$emit('updated'))
+          .synchronize();
+      });
     },
     /**
      * Prepares the muuri instance
      * @private
      */
-    _setup () {
+    _setup() {
       this.muuri = new Muuri(this.selector, {
         ...this.muuriOptions,
         // dragStartPredicate: function (item, e) {
@@ -185,65 +182,65 @@ export default {
         //     return true;
         //   }
         // },
-      })
+      });
       if (this.groupId) {
-        GridStore.addGrid(this.groupId, this.muuri)
+        GridStore.addGrid(this.groupId, this.muuri);
       }
       if (this.groupIds) {
-        GridStore.addGridToGroups(this.groupIds, this.muuri)
+        GridStore.addGridToGroups(this.groupIds, this.muuri);
       }
       this.observer = new ResizeObserver(() => {
-        this._resizeOnLoad()
-      })
-      this.observer.observe(this.$refs.muuri)
-      this._sync(this.modelValue, [])
+        this._resizeOnLoad();
+      });
+      this.observer.observe(this.$refs.muuri);
+      this._sync(this.modelValue, []);
       this.$nextTick(() => {
-        GridStore.setItemsForGridId(this.gridKey, this.modelValue)
-      })
+        GridStore.setItemsForGridId(this.gridKey, this.modelValue);
+      });
     },
     /**
      * @private
      */
-    _setupNonReactiveProps () {
+    _setupNonReactiveProps() {
       /**
        * @type {Muuri}
        */
-      this.muuri = undefined
+      this.muuri = undefined;
       /**
        * @type {ResizeObserver}
        */
-      this.observer = undefined
+      this.observer = undefined;
       /**
        * @type {string}
        */
-      this.gridKey = uuidv4().replace(/-/g, '')
+      this.gridKey = uuidv4().replace(/-/g, '');
     },
     /**
      * Creates the options object for Muuri
      * @private
      */
-    _setupOptions () {
+    _setupOptions() {
       if (this.dragEnabled) {
-        this.muuriOptions = { ...this._generateDragOptions(), ...this.muuriOptions }
+        this.muuriOptions = { ...this._generateDragOptions(), ...this.muuriOptions };
       }
       if (this.groupId || this.groupIds) {
-        let groupIds = []
+        let groupIds = [];
         if (this.groupId) {
-          groupIds.push(this.groupId)
+          groupIds.push(this.groupId);
         }
         if (this.groupIds) {
-          groupIds = groupIds.concat(this.groupIds)
+          groupIds = groupIds.concat(this.groupIds);
         }
         this.muuriOptions.dragSort = () => {
-          return GridStore.getGrids(groupIds)
-        }
+          return GridStore.getGrids(groupIds);
+        };
       }
-      this.muuriOptions = { ...this.options, ...this.muuriOptions }
+      this.muuriOptions = { ...this.options, ...this.muuriOptions };
     },
     /**
      * @private
      */
-    _generateDragOptions () {
+    _generateDragOptions() {
       return {
         dragEnabled: true,
         dragHandle: this.dragHandle,
@@ -255,8 +252,8 @@ export default {
         },
         dragPlaceholder: {
           enabled: true,
-          createElement (item) {
-            return item.getElement().cloneNode(true)
+          createElement(item) {
+            return item.getElement().cloneNode(true);
           },
         },
         dragAutoScroll: {
@@ -265,65 +262,63 @@ export default {
           syncAfterScroll: false,
         },
         layout: {
-          ...this.options.layout
+          ...this.options.layout,
         },
-
-      }
+      };
     },
     /**
      * Registers Muuri events
      * @private
      */
-    _registerEvents () {
-      Object.values(GridEvent).forEach(event => {
+    _registerEvents() {
+      Object.values(GridEvent).forEach((event) => {
         this.events[event] = (...args) => {
-          this.$emit(event, ...args)
-        }
-        this.muuri.on(event, this.events[event])
+          this.$emit(event, ...args);
+        };
+        this.muuri.on(event, this.events[event]);
         if (event === GridEvent.dragStart) {
-          this.muuri.on(event, this._onDragStart)
+          this.muuri.on(event, this._onDragStart);
         }
         if (event === GridEvent.send) {
-          this.muuri.on(event, this._onItemSend)
+          this.muuri.on(event, this._onItemSend);
         }
         if (event === GridEvent.receive) {
-          this.muuri.on(event, this._onItemReceive)
+          this.muuri.on(event, this._onItemReceive);
         }
         if (event === GridEvent.move) {
-          this.muuri.on(event, this._onItemMove)
+          this.muuri.on(event, this._onItemMove);
         }
         if (event === GridEvent.dragEnd) {
-          this.muuri.on(event, this._onDragEnd)
+          this.muuri.on(event, this._onDragEnd);
         }
         if (event === GridEvent.dragReleaseEnd) {
-          this.muuri.on(event, this._onDragReleaseEnd)
+          this.muuri.on(event, this._onDragReleaseEnd);
         }
-      })
+      });
     },
     /**
      * Unregister Muuri events
      * @private
      */
-    _unregisterEvents () {
-      Object.values(GridEvent).forEach(event => {
-        this.muuri.off(event, this.events[event])
-        delete this.events[event]
-      })
+    _unregisterEvents() {
+      Object.values(GridEvent).forEach((event) => {
+        this.muuri.off(event, this.events[event]);
+        delete this.events[event];
+      });
     },
     /**
      * Listener when dragging begins
      * @type {Muuri.Item} item
      * @private
      */
-    _onDragStart (item) {
-      GridStore.setDraggingGridItem(item)
-      this.currentDragGrid = item.getGrid()
+    _onDragStart(item) {
+      GridStore.setDraggingGridItem(item);
+      this.currentDragGrid = item.getGrid();
     },
-    _onDragReleaseEnd (item) {
+    _onDragReleaseEnd(item) {
       if (this.currentDragGrid) {
-
-        this.muuri.send(item, this.currentDragGrid, -1)
-        this.currentDragGrid = null
+        this.muuri.send(item, this.currentDragGrid, -1);
+        this.currentDragGrid = null;
       }
     },
     /**
@@ -331,67 +326,67 @@ export default {
      * @type {Muuri.Item} item
      * @private
      */
-    _onItemMove ({ item }) {
-      const value = this._reOrderWithItem(item)
-      this._emitValue(value)
+    _onItemMove({ item }) {
+      const value = this._reOrderWithItem(item);
+      this._emitValue(value);
     },
     /**
      * Listener when item leaves its original grid
      * @type {Muuri.Item} item
      * @private
      */
-    _onItemSend ({ item }) {
-      const index = this.modelValue.findIndex(value => value[this.itemKey] == item.getElement().dataset.itemKey)
-      const removedItem = this.modelValue.splice(index, 1)[0]
-      GridStore.setDraggingItem(removedItem)
-      this._emitValue(this.modelValue)
+    _onItemSend({ item }) {
+      const index = this.modelValue.findIndex((value) => value[this.itemKey] == item.getElement().dataset.itemKey);
+      const removedItem = this.modelValue.splice(index, 1)[0];
+      GridStore.setDraggingItem(removedItem);
+      this._emitValue(this.modelValue);
     },
     /**
      * Listener when item enters a new grid
      * @private
      */
-    _onItemReceive () {
-      const vuuriItem = GridStore.getDraggingItem()
-      this.modelValue.push(vuuriItem)
-      const value = this._reOrderWithItem(GridStore.getDraggingGridItem())
-      this._emitValue(value)
+    _onItemReceive() {
+      const vuuriItem = GridStore.getDraggingItem();
+      this.modelValue.push(vuuriItem);
+      const value = this._reOrderWithItem(GridStore.getDraggingGridItem());
+      this._emitValue(value);
     },
     /**
      * Listener when dragging ends
      */
-    _onDragEnd () {
-      GridStore.setDraggingGridItem(null)
-      GridStore.setDraggingItem(null)
+    _onDragEnd() {
+      GridStore.setDraggingGridItem(null);
+      GridStore.setDraggingItem(null);
     },
     /**
      * Makes sure the items order is updated with value
      * @type {Muuri.Item} item
      * @private
      */
-    _reOrderWithItem (item) {
-      const $grid = item.getGrid()
-      let i = 0
+    _reOrderWithItem(item) {
+      const $grid = item.getGrid();
+      let i = 0;
       const itemKeys = $grid.getItems().reduce((accum, item) => {
-        accum[item.getElement().dataset.itemKey] = i
-        i += 1
-        return accum
-      }, {})
+        accum[item.getElement().dataset.itemKey] = i;
+        i += 1;
+        return accum;
+      }, {});
       return this.modelValue.reduce((accum, a) => {
-        accum[itemKeys[a[this.itemKey]]] = a
+        accum[itemKeys[a[this.itemKey]]] = a;
         // accum.push(a);
-        return accum
-      }, [])
+        return accum;
+      }, []);
     },
     /**
      * Styles for each grid item
      * @private
      */
-    _getItemStyles (item) {
+    _getItemStyles(item) {
       return {
         width: this.getItemWidth(item),
         height: this.getItemHeight(item),
-        margin: this.getItemMargin(item)
-      }
+        margin: this.getItemMargin(item),
+      };
     },
     /**
      * Creates a unique identifier for the item based its property values
@@ -400,8 +395,8 @@ export default {
      * @returns {string}
      * @private
      */
-    _generateItemKey (item) {
-      item._$muuri_id = uuidv4()
+    _generateItemKey(item) {
+      item._$muuri_id = uuidv4();
     },
     /**
      * Callback used to resize the muuri grid
@@ -409,8 +404,8 @@ export default {
      */
     _resizeOnLoad: debounce(function () {
       this.$nextTick(() => {
-        this.update()
-      }, 100)
+        this.update();
+      }, 100);
     }),
     /**
      * Returns the difference between the two arrays
@@ -419,10 +414,10 @@ export default {
      * @returns {Array<*>}
      * @private
      */
-    _getDiff (newValue, oldValue) {
+    _getDiff(newValue, oldValue) {
       return differenceWith(newValue, oldValue, (a, b) => {
-        return a[this.itemKey] === b[this.itemKey]
-      })
+        return a[this.itemKey] === b[this.itemKey];
+      });
     },
     /**
      * Apply items updates on muuri
@@ -430,16 +425,15 @@ export default {
      * @param {?Array<*>} oldItems
      * @private
      */
-    _sync (newItems = null, oldItems = null) {
+    _sync(newItems = null, oldItems = null) {
       if (!newItems || !oldItems) {
-        return
+        return;
       }
-      this._remove(newItems, oldItems)
-          .then(() => {
-            this.update()
-            this._add(newItems, oldItems)
-            GridStore.setItemsForGridId(this.gridKey, this.copiedItems)
-          })
+      this._remove(newItems, oldItems).then(() => {
+        this.update();
+        this._add(newItems, oldItems);
+        GridStore.setItemsForGridId(this.gridKey, this.copiedItems);
+      });
     },
     /**
      * Remove deleted items from muuri
@@ -448,38 +442,35 @@ export default {
      * @returns {Promise<void>}
      * @private
      */
-    _remove (newItems, oldItems) {
-      const valuesToRemove = this._getDiff(oldItems, newItems)
+    _remove(newItems, oldItems) {
+      const valuesToRemove = this._getDiff(oldItems, newItems);
       if (!valuesToRemove.length) {
-        return Promise.resolve()
+        return Promise.resolve();
       }
-      const itemsToRemove = []
-      valuesToRemove.forEach(value => {
-        const itemToRemove = this.muuri.getItems().find(item => {
-          return (
-              value[this.itemKey] + '' ===
-              item.getElement().dataset.itemKey
-          )
-        })
+      const itemsToRemove = [];
+      valuesToRemove.forEach((value) => {
+        const itemToRemove = this.muuri.getItems().find((item) => {
+          return value[this.itemKey] + '' === item.getElement().dataset.itemKey;
+        });
         if (itemToRemove) {
-          itemsToRemove.push(itemToRemove)
+          itemsToRemove.push(itemToRemove);
         }
-      })
+      });
       if (!itemsToRemove.length) {
-        return Promise.resolve()
+        return Promise.resolve();
       }
       return new Promise((resolve) => {
         this.muuri.hide(itemsToRemove, {
           onFinish: () => {
-            this.muuri.remove(itemsToRemove)
-            valuesToRemove.forEach(value => {
-              const index = this.copiedItems.findIndex(item => item.id === value.id)
-              this.copiedItems.splice(index, 1)
-            })
-            resolve()
-          }
-        })
-      })
+            this.muuri.remove(itemsToRemove);
+            valuesToRemove.forEach((value) => {
+              const index = this.copiedItems.findIndex((item) => item.id === value.id);
+              this.copiedItems.splice(index, 1);
+            });
+            resolve();
+          },
+        });
+      });
     },
     /**
      * Add new items to muuri
@@ -487,56 +478,55 @@ export default {
      * @param oldItems
      * @private
      */
-    _add (newItems, oldItems) {
-      let valuesToAdd = this._getDiff(newItems, oldItems)
-      valuesToAdd = this._getDiff(valuesToAdd, this.copiedItems) // sync from setup and watch may overlap
+    _add(newItems, oldItems) {
+      let valuesToAdd = this._getDiff(newItems, oldItems);
+      valuesToAdd = this._getDiff(valuesToAdd, this.copiedItems); // sync from setup and watch may overlap
       if (!valuesToAdd.length) {
-        return
+        return;
       }
       if (this.itemKey === ItemKey.key) {
-        valuesToAdd.forEach(item => this._generateItemKey(item))
+        valuesToAdd.forEach((item) => this._generateItemKey(item));
       }
       // renders new elements
-      this.copiedItems = this.copiedItems.concat(valuesToAdd)
+      this.copiedItems = this.copiedItems.concat(valuesToAdd);
       this.$nextTick(() => {
-        valuesToAdd.forEach(value => {
-          const $element = document.querySelector(`${this.selector} [data-item-key="${value[this.itemKey]}"]`)
+        valuesToAdd.forEach((value) => {
+          const $element = document.querySelector(`${this.selector} [data-item-key="${value[this.itemKey]}"]`);
           this.muuri.add($element, {
             layout: false,
-            active: false
-          })
-        })
-        this.muuri.filter(() => true)
-      })
+            active: false,
+          });
+        });
+        this.muuri.filter(() => true);
+      });
     },
-    _emitValue (value) {
-      this.internallySet = true
-      this.$emit('update:modelValue', value)
+    _emitValue(value) {
+      this.internallySet = true;
+      this.$emit('update:modelValue', value);
       this.$nextTick(() => {
-        this.internallySet = false
-        GridStore.setItemsForGridId(this.gridKey, this.value)
-      })
-    }
+        this.internallySet = false;
+        GridStore.setItemsForGridId(this.gridKey, this.value);
+      });
+    },
   },
-  created () {
-    this._setupNonReactiveProps()
-    this._setupOptions()
+  created() {
+    this._setupNonReactiveProps();
+    this._setupOptions();
   },
-  mounted () {
-    this._setup()
-    this._registerEvents()
+  mounted() {
+    this._setup();
+    this._registerEvents();
   },
-  beforeDestroy () {
-    this._unregisterEvents()
-    this.$emit('on-destroy', this)
-  }
-}
+  beforeDestroy() {
+    this._unregisterEvents();
+    this.$emit('on-destroy', this);
+  },
+};
 </script>
 
 <style scoped>
 .muuri-grid {
   position: relative;
-
 }
 
 .muuri-item {
@@ -562,7 +552,7 @@ export default {
   width: 100%;
   height: 100%;
   color: #ffffff;
-//min-width: 80px; //min-height: 80px; border-radius: 0.4em;
+  //min-width: 80px; //min-height: 80px; border-radius: 0.4em;
 }
 
 .muuri-item-placeholder {

@@ -14,4 +14,4 @@ module.exports = {
     'prefer-const': 0,
     'vue/multi-word-component-names': 0,
   },
-}
+};

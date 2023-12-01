@@ -1,4 +1,4 @@
-const levelUpgradeTempl = /* html */`
+const levelUpgradeTempl = /* html */ `
   <div class="lv-upgrade-wrap" v-show="visible">
     <div class="lv-upgrade-mask"></div>
     <div class="lv-upgrade-dialog flex flex-direction align-start justify-around">
@@ -7,18 +7,18 @@ const levelUpgradeTempl = /* html */`
       <a-icon type="close" class="close-btn" @click="closeLevelUpgrade"></a-icon>
     </div>
   </div>
-`
+`;
 
 Vue.component('level-upgrade', {
   template: levelUpgradeTempl,
   props: {
     visible: {
       type: Boolean,
-    }
+    },
   },
   methods: {
-    closeLevelUpgrade () {
-      this.$emit('closeLevelUpgrade')
-    }
-  }
-})
+    closeLevelUpgrade() {
+      this.$emit('closeLevelUpgrade');
+    },
+  },
+});

@@ -25,87 +25,97 @@ const createDeskTpl = `
     </a-modal>
   </div>
 </div>
-  `
+  `;
 Vue.component('createDesk', {
   template: createDeskTpl,
   name: 'createDesk',
   model: {
     prop: ['visible'],
-    event: 'changeVisible'
+    event: 'changeVisible',
   },
   props: {
     visible: {
       type: Boolean,
-      default: false
+      default: false,
     },
-    deskId: Number//如果有桌面id为编辑
+    deskId: Number, //如果有桌面id为编辑
   },
   components: {},
-  data () {
+  data() {
     return {
       icons: [
-        'bulb', 'account-book', 'alert', 'api', 'appstore', 'audio', 'bank', 'bell', 'book', 'bug', 'calculator', 'build', 'calendar', 'camera', 'car'
-      ]
-    }
+        'bulb',
+        'account-book',
+        'alert',
+        'api',
+        'appstore',
+        'audio',
+        'bank',
+        'bell',
+        'book',
+        'bug',
+        'calculator',
+        'build',
+        'calendar',
+        'camera',
+        'car',
+      ],
+    };
   },
   computed: {
     desk: () => {
-      console.log(this.deskId)
+      console.log(this.deskId);
       if (this.deskId === -1) {
         return {
           id: -1,
           name: '新桌面',
           icon: 'bulb',
-        }
+        };
       } else {
         return {
           id: 111,
           name: '222xx',
-          icon: '333'
-        }
+          icon: '333',
+        };
       }
-
-    }
+    },
   },
-  mounted () {
-    console.log('挂载')
-    console.log(this.deskId)
+  mounted() {
+    console.log('挂载');
+    console.log(this.deskId);
   },
   methods: {
-    isSelectedIcon (icon) {
-      console.log(icon)
-      console.log(this.desk.icon)
-      return icon === this.desk.icon
+    isSelectedIcon(icon) {
+      console.log(icon);
+      console.log(this.desk.icon);
+      return icon === this.desk.icon;
     },
-    visibleChange () {
-      console.log('change')
-      this.$emit('changeVisible', !this.visible)
+    visibleChange() {
+      console.log('change');
+      this.$emit('changeVisible', !this.visible);
     },
-    changeName (e) {
-      this.desk.name = e.target.value
+    changeName(e) {
+      this.desk.name = e.target.value;
     },
-    handleOk () {
+    handleOk() {
       if (!!!this.desk.icon) {
-        this.$message.error('必须选择图标')
-        return
+        this.$message.error('必须选择图标');
+        return;
       }
       if (!!!this.desk.name) {
-        this.$message.error('必须输入桌面名称')
-        return
+        this.$message.error('必须输入桌面名称');
+        return;
       }
-      this.visibleChange()
-      this.$emit('add-desk', { icon: this.desk.icon, name: this.desk.name })
+      this.visibleChange();
+      this.$emit('add-desk', { icon: this.desk.icon, name: this.desk.name });
     },
-    selectIcon (icon) {
-      console.log('set')
-      this.desk.icon = icon
+    selectIcon(icon) {
+      console.log('set');
+      this.desk.icon = icon;
     },
-    handleCancel () {
-      this.$emit('changeVisible', false)
-    }
-
-  }
-  ,
-  destroyed () {
-  }
-})
+    handleCancel() {
+      this.$emit('changeVisible', false);
+    },
+  },
+  destroyed() {},
+});

@@ -1,9 +1,9 @@
-const ipcHelper = require('./ipcHelper')
+const ipcHelper = require('./ipcHelper');
 
 const notification = {
-  async send (options) {
-    await ipcHelper.sendSync('notification', 'send', { options })
-  }
-}
+  async send(options) {
+    await ipcHelper.sendSync('notification', 'send', { options });
+  },
+};
 
-module.exports = notification
+module.exports = notification;

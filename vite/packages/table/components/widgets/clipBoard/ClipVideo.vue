@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import Player from 'xgplayer/dist/simple_player'
+import Player from 'xgplayer/dist/simple_player';
 
 export default {
   props: {
@@ -15,16 +15,16 @@ export default {
     },
     playerProps: {
       type: Object,
-    }
+    },
   },
 
-  mounted () {
-    this.loadXgPlayer()
+  mounted() {
+    this.loadXgPlayer();
   },
   methods: {
     // 初始化西瓜视频播放器
-    loadXgPlayer () {
-      const url = this.videoUrl
+    loadXgPlayer() {
+      const url = this.videoUrl;
       this.$nextTick(() => {
         // console.log(this.playerProps,'播放参数')
         // if(window.$xgplayerClipboard){
@@ -40,16 +40,15 @@ export default {
           // fluid: true,
           videoInit: true,
           controlsList: ['nofullscreen'],
-          ...this.playerProps
-        })
-      })
-    }
-  }
-}
+          ...this.playerProps,
+        });
+      });
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-
 .video-body {
   // border: 1px solid #fff;
   // height: 127px;

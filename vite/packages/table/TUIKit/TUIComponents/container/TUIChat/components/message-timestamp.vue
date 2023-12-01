@@ -1,11 +1,10 @@
 <template>
-  <div v-show="timestampShowFlag" class="message-timestamp">
+  <div class="message-timestamp" v-show="timestampShowFlag">
     {{ timestampShowContent }}
   </div>
 </template>
-<script lang="ts" setup>
-import {defineProps, ref, toRefs, watch} from 'vue';
-
+<script setup lang="ts">
+import { defineProps, toRefs, ref, watch } from 'vue';
 const props = defineProps({
   currTime: {
     type: Number,
@@ -16,8 +15,8 @@ const props = defineProps({
     default: 0,
   },
 });
-const {t} = (window as any)?.TUIKitTUICore?.config?.i18n?.useI18n();
-const {currTime, prevTime} = toRefs(props);
+const { t } = (window as any)?.TUIKitTUICore?.config?.i18n?.useI18n();
+const { currTime, prevTime } = toRefs(props);
 const timestampShowFlag = ref(false);
 const timestampShowContent = ref('');
 
@@ -40,17 +39,17 @@ const handleItemTime = (currTime: number, prevTime: number) => {
 };
 
 watch(
-    () => [currTime.value, prevTime.value],
-    (newVal: any, oldVal: any) => {
-      if (newVal?.toString() === oldVal?.toString()) {
-        return;
-      } else {
-        timestampShowContent.value = handleItemTime(currTime.value, prevTime.value);
-      }
-    },
-    {
-      immediate: true,
+  () => [currTime.value, prevTime.value],
+  (newVal: any, oldVal: any) => {
+    if (newVal?.toString() === oldVal?.toString()) {
+      return;
+    } else {
+      timestampShowContent.value = handleItemTime(currTime.value, prevTime.value);
     }
+  },
+  {
+    immediate: true,
+  },
 );
 
 // 计算时间戳函数
@@ -84,12 +83,12 @@ function calculateTimestamp(timestamp: number): string {
   } else if (target.getTime() >= thisYear) {
     // Over a week, within this year, display mouth/day hour:minute
     return `${target.getMonth() + 1}/${target.getDate()} ${formatNum(target.getHours())}:${formatNum(
-        target.getMinutes()
+      target.getMinutes(),
     )}`;
   } else {
     // Not within this year, display year/mouth/day hour:minute
     return `${target.getFullYear()}/${target.getMonth() + 1}/${target.getDate()} ${formatNum(
-        target.getHours()
+      target.getHours(),
     )}:${formatNum(target.getMinutes())}`;
   }
 }
@@ -97,7 +96,6 @@ function calculateTimestamp(timestamp: number): string {
 <style lang="scss" scoped>
 @import url('../../../styles/common.scss');
 @import url('../../../styles/icon.scss');
-
 .message-timestamp {
   margin: 0 auto;
   color: var(--secondary-text);

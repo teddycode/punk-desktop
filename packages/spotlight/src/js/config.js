@@ -1,30 +1,28 @@
 export const controls = [
-
-    "info",
-    "theme",
-    "download",
-    "play",
-    "page",
-    "close",
-    "autofit",
-    "zoom-in",
-    "zoom-out",
-    "prev",
-    "next",
-    "fullscreen"
+  'info',
+  'theme',
+  'download',
+  'play',
+  'page',
+  'close',
+  'autofit',
+  'zoom-in',
+  'zoom-out',
+  'prev',
+  'next',
+  'fullscreen',
 ];
 
 export const controls_default = {
-
-    "info": 1,
-    "page": 1,
-    "close": 1,
-    "autofit": 1,
-    "zoom-in": 1,
-    "zoom-out": 1,
-    "prev": 1,
-    "next": 1,
-    "fullscreen": 1
+  info: 1,
+  page: 1,
+  close: 1,
+  autofit: 1,
+  'zoom-in': 1,
+  'zoom-out': 1,
+  prev: 1,
+  next: 1,
+  fullscreen: 1,
 };
 
 /**
@@ -32,17 +30,16 @@ export const controls_default = {
  */
 
 export const keycodes = {
-
-    BACKSPACE: 8,
-    ESCAPE: 27,
-    SPACEBAR: 32,
-    LEFT: 37,
-    RIGHT: 39,
-    UP: 38,
-    NUMBLOCK_PLUS : 107,
-    PLUS: 187,
-    DOWN: 40,
-    NUMBLOCK_MINUS: 109,
-    MINUS: 189,
-    INFO: 73
+  BACKSPACE: 8,
+  ESCAPE: 27,
+  SPACEBAR: 32,
+  LEFT: 37,
+  RIGHT: 39,
+  UP: 38,
+  NUMBLOCK_PLUS: 107,
+  PLUS: 187,
+  DOWN: 40,
+  NUMBLOCK_MINUS: 109,
+  MINUS: 189,
+  INFO: 73,
 };

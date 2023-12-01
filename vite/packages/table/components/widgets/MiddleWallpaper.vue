@@ -4,22 +4,43 @@
       <div class="absolute top-4 left-4 w-24 h-5 pointer" @click="openRight"></div>
       <div class="absolute inset-0" style="border-radius: 8px; z-index: -1">
         <div v-if="imgList.length <= 0" class="w-full text-center" style="margin-top: 20%">
-          <a-empty :image="simpleImage"/>
+          <a-empty :image="simpleImage" />
           <div class="item-content">
             <xt-button :h="40" :w="100" size="mini" type="theme" @click="goGallery">去挑选壁纸</xt-button>
           </div>
         </div>
         <div v-else class="h-full w-full pointer" @click="goSource">
-          <video v-if="currentImg.srcProtocol" ref="wallpaperVideo" autoplay=""
-                 class="fullscreen-video" loop="" muted="" playsinline="" style="border-radius: 8px; object-fit: cover">
-            <source id="bgVid" :src="currentImg.srcProtocol" type="video/mp4"/>
+          <video
+            v-if="currentImg.srcProtocol"
+            ref="wallpaperVideo"
+            autoplay=""
+            class="fullscreen-video"
+            loop=""
+            muted=""
+            playsinline=""
+            style="border-radius: 8px; object-fit: cover"
+          >
+            <source id="bgVid" :src="currentImg.srcProtocol" type="video/mp4" />
           </video>
 
-          <img v-else-if="currentImg.middleSrc" :src="currentImg.middleSrc" alt="" class="h-full w-full"
-               style="border-radius: 8px; object-fit: cover"
-               @error="imgError" @load="imgLoad"/>
-          <img v-else :src="currentImg.src" alt="" class="h-full w-full" style="border-radius: 8px; object-fit: cover"
-               @error="imgError" @load="imgLoad"/>
+          <img
+            v-else-if="currentImg.middleSrc"
+            :src="currentImg.middleSrc"
+            alt=""
+            class="h-full w-full"
+            style="border-radius: 8px; object-fit: cover"
+            @error="imgError"
+            @load="imgLoad"
+          />
+          <img
+            v-else
+            :src="currentImg.src"
+            alt=""
+            class="h-full w-full"
+            style="border-radius: 8px; object-fit: cover"
+            @error="imgError"
+            @load="imgLoad"
+          />
         </div>
       </div>
       <div v-if="imgList.length > 0" class="flex flex-row absolute bottom-4 justify-center" style="width: 543px">
@@ -32,8 +53,11 @@
         <div class="item-icon flex justify-center items-center pointer mr-4" @click="randomImg">
           <Icon :class="randomFlag ? 'replace-it' : ''" class="icon" icon="reload"></Icon>
         </div>
-        <div v-if="addressType.name !== 'my'" class="item-icon flex justify-center items-center pointer mr-4"
-             @click="collect">
+        <div
+          v-if="addressType.name !== 'my'"
+          class="item-icon flex justify-center items-center pointer mr-4"
+          @click="collect"
+        >
           <Icon v-if="!isInMyPapers" icon="star"></Icon>
           <Icon v-else icon="star-fill" style="fill: yellow"></Icon>
         </div>
@@ -48,27 +72,31 @@
       <div class="text-center">「壁纸」设置</div>
     </template>
     <div class="text-base">壁纸源</div>
-    <a-select v-model:value="pickFilterValue" :bordered="false" :options="wallpaperOptions"
-              class="w-full h-10 rounded-lg mt-4 text-xs" size="large"
-              style="
-        border: 1px solid rgba(255, 255, 255, 0.1);
-      " @change="pickFilterChange($event)">
+    <a-select
+      v-model:value="pickFilterValue"
+      :bordered="false"
+      :options="wallpaperOptions"
+      class="w-full h-10 rounded-lg mt-4 text-xs"
+      size="large"
+      style="border: 1px solid rgba(255, 255, 255, 0.1)"
+      @change="pickFilterChange($event)"
+    >
     </a-select>
   </a-drawer>
 </template>
 
 <script>
-import Widget from '../card/Widget.vue'
-import axios from 'axios'
-import { mapActions, mapWritableState } from 'pinia'
-import { paperStore } from '../../store/paper'
-import { appStore } from '../../store'
-import { cardStore } from '../../store/card'
-import { lively } from '../../js/data/livelyData'
-import XtButton from '../../ui/libs/Button/index.vue'
+import Widget from '../card/Widget.vue';
+import axios from 'axios';
+import { mapActions, mapWritableState } from 'pinia';
+import { paperStore } from '../../store/paper';
+import { appStore } from '../../store';
+import { cardStore } from '../../store/card';
+import { lively } from '../../js/data/livelyData';
+import XtButton from '../../ui/libs/Button/index.vue';
 
-let fs = require('fs')
-let path = require('path')
+let fs = require('fs');
+let path = require('path');
 export default {
   name: 'MiddleWallpaper',
   components: {
@@ -85,11 +113,10 @@ export default {
     },
     customData: {
       type: Object,
-      default: () => {
-      },
-    }
+      default: () => {},
+    },
   },
-  data () {
+  data() {
     return {
       imgSpin: false,
       options: {
@@ -103,8 +130,8 @@ export default {
           icon: 'shezhi1',
           title: '设置',
           fn: () => {
-            this.settingVisible = true
-            this.$refs.cardSlot.visible = false
+            this.settingVisible = true;
+            this.$refs.cardSlot.visible = false;
           },
         },
       ],
@@ -153,127 +180,112 @@ export default {
       imgIndex: 0,
       randomFlag: false,
       list: [],
-    }
+    };
   },
   methods: {
     ...mapActions(paperStore, ['removeToMyPaper']),
     ...mapActions(appStore, ['setBackgroundImage']),
     ...mapActions(cardStore, ['updateCustomData']),
-    goGallery () {
-      this.$router.push({ name: 'my' })
+    goGallery() {
+      this.$router.push({ name: 'my' });
     },
-    imgLoad () {
-      this.imgSpin = false
+    imgLoad() {
+      this.imgSpin = false;
     },
-    openRight () {
-      this.settingVisible = true
+    openRight() {
+      this.settingVisible = true;
     },
-    pickFilterChange (e) {
+    pickFilterChange(e) {
       this.addressType = this.wallpaperOptions.find((i) => i.value === e) || {
         value: '我的收藏',
         path: '',
         name: 'my',
-      }
-      this.updateCustomData(this.customIndex, this.addressType, this.desk)
-      this.options.title = this.addressType.value
-      if (
-          this.addressType.name === 'pickingPaper' ||
-          this.addressType.name === 'bing'
-      ) {
+      };
+      this.updateCustomData(this.customIndex, this.addressType, this.desk);
+      this.options.title = this.addressType.value;
+      if (this.addressType.name === 'pickingPaper' || this.addressType.name === 'bing') {
         axios
-            .get(this.addressType.path)
-            .then((res) => {
-              this.imgList = []
-              if (res.data.data) {
-                let pickImage = res.data.data
-                this.count = res.data.count
-                let animations = ['ani-gray', 'bowen', 'ani-rotate']
-                if (pickImage) {
-                  pickImage.forEach((img) => {
-                    if (img.thumburl !== null) {
-                      let thumburl = ''
-                      let str = ''
-                      let randomIndex = Math.floor(
-                          Math.random() * animations.length
-                      )
-                      if (img.thumburl.indexOf('@') !== -1) {
-                        str = img.thumburl.substring(
-                            img.thumburl.indexOf('@'),
-                            img.thumburl.length
-                        )
-                        thumburl = img.thumburl.replace(str, '@1200w.webp')
-                      }
-                      if (img.thumburl.indexOf('400') !== -1) {
-                        thumburl =
-                            img.thumburl.substring(0, img.thumburl.indexOf('400')) +
-                            '1200' +
-                            img.thumburl.slice(
-                                img.thumburl.indexOf('400') - img.thumburl.length + 3
-                            )
-                      }
-                      if (img.thumburl.indexOf('fw') !== -1) {
-                        str = img.thumburl.substring(
-                            img.thumburl.indexOf('fw'),
-                            img.thumburl.length
-                        )
-                        thumburl = img.thumburl.replace(str, 'fw1200webp')
-                      }
-                      const image = {
-                        title: false,
-                        src: img.thumburl,
-                        path: img.imgurl,
-                        resolution: img.size,
-                        score: img.score,
-                        no: img.no,
-                        middleSrc: thumburl,
-                        animations: animations[randomIndex],
-                      }
-                      this.imgList.push(image)
+          .get(this.addressType.path)
+          .then((res) => {
+            this.imgList = [];
+            if (res.data.data) {
+              let pickImage = res.data.data;
+              this.count = res.data.count;
+              let animations = ['ani-gray', 'bowen', 'ani-rotate'];
+              if (pickImage) {
+                pickImage.forEach((img) => {
+                  if (img.thumburl !== null) {
+                    let thumburl = '';
+                    let str = '';
+                    let randomIndex = Math.floor(Math.random() * animations.length);
+                    if (img.thumburl.indexOf('@') !== -1) {
+                      str = img.thumburl.substring(img.thumburl.indexOf('@'), img.thumburl.length);
+                      thumburl = img.thumburl.replace(str, '@1200w.webp');
                     }
-                  })
-                }
-              } else {
-                let images = res.data.images
-                let animations = ['ani-gray', 'bowen', 'ani-rotate']
-                if (images) {
-                  images.forEach((img) => {
-                    let random = Math.random()
-                    let randomIndex = Math.floor(
-                        Math.random() * animations.length
-                    )
-                    let image = {
-                      title: false, // img.title,
-                      src: 'https://cn.bing.com' + img.url,
-                      path: 'https://cn.bing.com' + img.url,
-                      animation: animations[randomIndex], //['gray','rate'][(Math.random()*2).toFixed()]//''slide','fade','scale',
+                    if (img.thumburl.indexOf('400') !== -1) {
+                      thumburl =
+                        img.thumburl.substring(0, img.thumburl.indexOf('400')) +
+                        '1200' +
+                        img.thumburl.slice(img.thumburl.indexOf('400') - img.thumburl.length + 3);
                     }
-                    this.imgList.push(image)
-                  })
-                }
+                    if (img.thumburl.indexOf('fw') !== -1) {
+                      str = img.thumburl.substring(img.thumburl.indexOf('fw'), img.thumburl.length);
+                      thumburl = img.thumburl.replace(str, 'fw1200webp');
+                    }
+                    const image = {
+                      title: false,
+                      src: img.thumburl,
+                      path: img.imgurl,
+                      resolution: img.size,
+                      score: img.score,
+                      no: img.no,
+                      middleSrc: thumburl,
+                      animations: animations[randomIndex],
+                    };
+                    this.imgList.push(image);
+                  }
+                });
               }
-              this.initImg()
-            })
-            .catch((err) => {
-              this.imgList = []
-              this.imgIndex = 0
-              this.imgSpin = false
-            })
+            } else {
+              let images = res.data.images;
+              let animations = ['ani-gray', 'bowen', 'ani-rotate'];
+              if (images) {
+                images.forEach((img) => {
+                  let random = Math.random();
+                  let randomIndex = Math.floor(Math.random() * animations.length);
+                  let image = {
+                    title: false, // img.title,
+                    src: 'https://cn.bing.com' + img.url,
+                    path: 'https://cn.bing.com' + img.url,
+                    animation: animations[randomIndex], //['gray','rate'][(Math.random()*2).toFixed()]//''slide','fade','scale',
+                  };
+                  this.imgList.push(image);
+                });
+              }
+            }
+            this.initImg();
+          })
+          .catch((err) => {
+            this.imgList = [];
+            this.imgIndex = 0;
+            this.imgSpin = false;
+          });
       } else if (this.addressType.name === 'my') {
-        this.imgList = this.myPapers
-        this.initImg()
+        this.imgList = this.myPapers;
+        this.initImg();
       }
       // else if(this.addressType.name === 'lively'){
       //   this.imgList = this.list
       //   this.initImg()
       // }
     },
-    initImg () {
-      this.imgIndex = 0
-      this.setImg()
+    initImg() {
+      this.imgIndex = 0;
+      this.setImg();
     },
-    imgError () {
-      this.imgSpin = false
-      this.currentImg.src = '/img/defaultImg.jpg'
+    imgError() {
+      this.imgSpin = false;
+      this.currentImg.src = '/img/defaultImg.jpg';
     },
     // getVideo (item) {
     //
@@ -281,35 +293,34 @@ export default {
     //   filename = `https://up.apps.vip/lively/${filename}`
     //   return filename
     // },
-    setImg () {
-      this.imgSpin = true
+    setImg() {
+      this.imgSpin = true;
       if (this.imgList.length > 0) {
-        this.currentImg = this.imgList[this.imgIndex]
+        this.currentImg = this.imgList[this.imgIndex];
         this.$nextTick(() => {
           if (this.currentImg.srcProtocol) {
-            this.$refs.wallpaperVideo.load()
-            this.$refs.wallpaperVideo.play().catch((err) => {
-            })
-            this.imgSpin = false
+            this.$refs.wallpaperVideo.load();
+            this.$refs.wallpaperVideo.play().catch((err) => {});
+            this.imgSpin = false;
           }
-        })
+        });
       } else {
         this.currentImg = {
           srcProtocol: null,
           value: '我的收藏',
           path: '',
           name: 'my',
-        }
-        this.imgSpin = false
+        };
+        this.imgSpin = false;
       }
     },
-    lastImg () {
-      this.imgIndex -= 1
+    lastImg() {
+      this.imgIndex -= 1;
       if (this.imgIndex < 0) {
-        this.imgIndex = this.imgList.length - 1
+        this.imgIndex = this.imgList.length - 1;
       }
     },
-    async nextImg () {
+    async nextImg() {
       // if(this.imgIndex>=this.imgList.length-1){
       //   if(this.addressType.name ==='picking') {
       //
@@ -349,49 +360,49 @@ export default {
       //   }
       //
       // }
-      this.imgIndex += 1
+      this.imgIndex += 1;
       if (this.imgIndex >= this.imgList.length) {
-        this.imgIndex = 0
+        this.imgIndex = 0;
       }
     },
-    randomImg () {
-      if (this.randomFlag === true) return
-      this.randomFlag = true
+    randomImg() {
+      if (this.randomFlag === true) return;
+      this.randomFlag = true;
       setTimeout(() => {
-        this.randomFlag = false
-        let nmb = parseInt(Math.random() * this.imgList.length)
-        this.imgIndex === nmb ? this.randomImg() : (this.imgIndex = nmb)
-      }, 500)
+        this.randomFlag = false;
+        let nmb = parseInt(Math.random() * this.imgList.length);
+        this.imgIndex === nmb ? this.randomImg() : (this.imgIndex = nmb);
+      }, 500);
     },
-    collect () {
+    collect() {
       if (this.addressType.name === 'pickingPaper') {
-        this.removeToMyPaper(this.imgList[this.imgIndex])
+        this.removeToMyPaper(this.imgList[this.imgIndex]);
       } else if (this.addressType.name === 'bing') {
         let image = {
           src: this.imgList[this.imgIndex].src,
           path: this.imgList[this.imgIndex].src,
-        }
-        this.removeToMyPaper(image)
+        };
+        this.removeToMyPaper(image);
       }
     },
-    settingImg () {
+    settingImg() {
       if (this.addressType.name === 'my') {
         if (this.imgList[this.imgIndex].srcProtocol) {
           this.setBackgroundImage({
             path: '',
             runpath: `file://${this.imgList[this.imgIndex].src}`,
-          })
+          });
         } else {
           if (!this.imgList[this.imgIndex].path) {
-            this.imgList[this.imgIndex].path = this.imgList[this.imgIndex].src
+            this.imgList[this.imgIndex].path = this.imgList[this.imgIndex].src;
           }
 
-          this.setBackgroundImage(this.imgList[this.imgIndex])
+          this.setBackgroundImage(this.imgList[this.imgIndex]);
         }
       } else if (this.addressType.name === 'lively') {
-        this.doStartDownload(this.imgList[this.imgIndex])
+        this.doStartDownload(this.imgList[this.imgIndex]);
       } else {
-        this.setBackgroundImage(this.imgList[this.imgIndex])
+        this.setBackgroundImage(this.imgList[this.imgIndex]);
       }
     },
     // doStartDownload (item) {
@@ -417,15 +428,15 @@ export default {
   },
   computed: {
     ...mapWritableState(paperStore, ['myPapers', 'settings']),
-    isInMyPapers () {
+    isInMyPapers() {
       return (
-          this.myPapers.findIndex((img) => {
-            return this.imgList[this.imgIndex].src === img.src
-          }) > -1
-      )
+        this.myPapers.findIndex((img) => {
+          return this.imgList[this.imgIndex].src === img.src;
+        }) > -1
+      );
     },
-    goSource () {
-      this.$router.push({ name: this.addressType.name })
+    goSource() {
+      this.$router.push({ name: this.addressType.name });
     },
     // savePath(){
     //   if(!this.settings.savePath){
@@ -434,7 +445,7 @@ export default {
     //   return this.settings.savePath
     // }
   },
-  mounted () {
+  mounted() {
     // this.list = [...lively]
     // this.savePath = this.settings.savePath
     // lively2.forEach((w) => {
@@ -466,22 +477,22 @@ export default {
     // })
     this.$nextTick(() => {
       if (!this.customData) {
-        this.pickFilterChange('我的收藏')
+        this.pickFilterChange('我的收藏');
       } else {
-        this.pickFilterValue = this.customData.value
-        this.pickFilterChange(this.customData.value)
+        this.pickFilterValue = this.customData.value;
+        this.pickFilterChange(this.customData.value);
       }
-      this.setImg()
-    })
+      this.setImg();
+    });
   },
   watch: {
     imgIndex: {
-      handler () {
-        this.setImg()
+      handler() {
+        this.setImg();
       },
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

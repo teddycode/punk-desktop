@@ -31,22 +31,22 @@
 </template>
 
 <script>
-import { useUserStore } from '@store/users'
-import Background from '@page/core/components/Background.vue'
+import { useUserStore } from '@store/users';
+import Background from '@page/core/components/Background.vue';
 
 export default {
   components: { Background },
   data() {
     return {
       store: useUserStore(),
-    }
+    };
   },
   computed: {
     transferRecords() {
-      return store.transferRecords
+      return store.transferRecords;
     },
   },
-}
+};
 </script>
 
 <style scoped>

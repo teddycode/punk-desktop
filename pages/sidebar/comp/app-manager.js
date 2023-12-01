@@ -1,5 +1,4 @@
-const appManagerTpl =
-  `
+const appManagerTpl = `
    <div class="wrapper" >
    <a-popover
                 placement="right"
@@ -107,7 +106,7 @@ CPU:
     </div>
 
 
-  `
+  `;
 
 Vue.component('app-manager', {
   template: appManagerTpl,
@@ -115,95 +114,90 @@ Vue.component('app-manager', {
   props: {
     apps: {
       type: Array,
-      default: []
+      default: [],
     },
     runningApps: {
       type: Array,
-      default: []
-    }
+      default: [],
+    },
   },
-  data () {
+  data() {
     return {
       setted: false,
-      timer: 0
-    }
+      timer: 0,
+    };
   },
-  mounted () {
-
-  },
+  mounted() {},
 
   methods: {
-
-    startStat (id) {
+    startStat(id) {
       if (!this.setted) {
-        window.tickId = id
+        window.tickId = id;
         this.timer = setInterval(() => {
-          ipc.send('getAppRunningInfo', { nanoid: window.tickId })
-        }, 1000)
-        this.setted = true
+          ipc.send('getAppRunningInfo', { nanoid: window.tickId });
+        }, 1000);
+        this.setted = true;
       }
-
     },
-    stopStat () {
-      clearInterval(this.timer)
-      this.setted = false
+    stopStat() {
+      clearInterval(this.timer);
+      this.setted = false;
     },
-    destroyed () {
+    destroyed() {
       // 销毁定时器
-      clearInterval(this.timer)
+      clearInterval(this.timer);
     },
-    executeApp (app) {
+    executeApp(app) {
       // if(!!!app.processing){
       //   ipc.send('executeApp',{app:app})
       // }
       // 判断单例的问题留给主进程处理
-      ipc.send('executeApp', { app: app })
+      ipc.send('executeApp', { app: app });
     },
-    getApp (nanoid) {
+    getApp(nanoid) {
       let defaultMemoryUsage = {
         cpu: {
-          percentCPUUsage: 0
+          percentCPUUsage: 0,
         },
         memory: {
-          workingSetSize: 0
-        }
-      }
+          workingSetSize: 0,
+        },
+      };
       let currentApp = {
         name: '',
         nanoid: '',
         logo: '',
         capture: '',
-        memoryUsage: defaultMemoryUsage
-      }
+        memoryUsage: defaultMemoryUsage,
+      };
       appVue.$refs.sidePanel.apps.forEach((app) => {
         if (app.nanoid === nanoid) {
           if (!!!app.memoryUsage) {
-            app.memoryUsage = defaultMemoryUsage
+            app.memoryUsage = defaultMemoryUsage;
           }
           if (!!!app.capture) {
-            app.capture = ''
+            app.capture = '';
           }
-          currentApp = app
+          currentApp = app;
         }
-
-      })
-      return currentApp
+      });
+      return currentApp;
     },
-    closeApp (appId) {
-      ipc.send('closeApp', { nanoid: appId })
+    closeApp(appId) {
+      ipc.send('closeApp', { nanoid: appId });
     },
-    openSetting (appId) {
-      ipc.send('saAppOpenSetting', { nanoid: appId })
+    openSetting(appId) {
+      ipc.send('saAppOpenSetting', { nanoid: appId });
     },
-    showAllSaApps () {
-      ipc.send('showAllSaApps')
-    }
+    showAllSaApps() {
+      ipc.send('showAllSaApps');
+    },
   },
   computed: {
-    hasNew () {
+    hasNew() {
       return this.apps.some((app) => {
-        return app.isNew
-      })
-    }
-  }
-})
+        return app.isNew;
+      });
+    },
+  },
+});

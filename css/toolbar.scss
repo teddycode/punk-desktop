@@ -11,8 +11,8 @@
     .feature-btn {
       margin-left: 10px;
       cursor: pointer;
-      background-color: #F3F3F3;
-      color: rgba(0,0,0,.65);
+      background-color: #f3f3f3;
+      color: rgba(0, 0, 0, 0.65);
       padding: 6px;
       height: 70%;
       border: 1px solid #e3e3e3;
@@ -32,12 +32,12 @@
     margin-right: 10px;
     span {
       font-size: 14px;
-      color: rgba(0,0,0,.65);
+      color: rgba(0, 0, 0, 0.65);
     }
     .noob-guide-btn {
       width: 140px;
       font-size: 14px;
-      color: rgba(0,0,0,.65);
+      color: rgba(0, 0, 0, 0.65);
       padding: 4px;
       height: 70%;
       border-radius: 4px;
@@ -82,9 +82,9 @@
   }
 
   .app {
-    filter:grayscale(1);
-    &:hover{
-      filter:none
+    filter: grayscale(1);
+    &:hover {
+      filter: none;
     }
     padding: 2px;
     width: 26px;
@@ -94,22 +94,21 @@
 
   .action:hover {
     background: rgba(238, 238, 238, 0.8);
-
   }
 
   .is-reader {
     img {
-      border: 1px solid #1E90FF;
+      border: 1px solid #1e90ff;
       border-radius: 50%;
     }
-
   }
 
   .action-wrapper {
     width: 40px;
     position: relative;
-    &.open::after, &:hover::after{
-      content: "";
+    &.open::after,
+    &:hover::after {
+      content: '';
       display: inline-block;
       width: 30px;
       height: 30px;
@@ -162,7 +161,6 @@
 
   #tab-editor-input {
     font-size: 14px;
-
   }
 
   #address-bar {
@@ -182,7 +180,7 @@
     height: 16px;
     vertical-align: middle;
     width: 0;
-    margin-top: -3px
+    margin-top: -3px;
   }
 }
 

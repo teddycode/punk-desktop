@@ -1,7 +1,6 @@
 .TUI-contact-H5 {
   height: 100%;
   overflow-y: auto;
-
   .TUI-contact {
     &-left {
       min-width: 0;
@@ -10,29 +9,25 @@
       flex: 1;
       position: static;
     }
-
     &-main {
       position: fixed;
       top: 0;
       left: 0;
       z-index: 2;
       flex-direction: column;
-      background: #EFEFEF;
-
+      background: #efefef;
       &-h5 {
         &-title {
           display: flex;
           align-items: center;
           padding: 12px 16px;
-          background: #FFFFFF;
+          background: #ffffff;
           justify-content: center;
           position: relative;
-
           .icon {
             position: absolute;
             left: 16px;
           }
-
           h1 {
             flex: 1;
             width: 0;
@@ -46,73 +41,60 @@
           }
         }
       }
-
       &-info {
         padding: 12px 0;
-
         &-header {
-          background: #FFFFFF;
+          background: #ffffff;
           padding: 12px 16px;
           flex-direction: row-reverse;
           justify-content: flex-end;
           align-items: center;
-
           .list {
             padding-left: 12px;
           }
         }
-
         &-main {
-          background: #FFFFFF;
+          background: #ffffff;
           padding: 12px 16px;
-
           textarea {
-            background: #EFEFEF;
+            background: #efefef;
           }
         }
-
         &-footer {
           padding-top: 12px;
           flex-direction: column;
-
           p {
             text-align: center;
-            background: #FFFFFF;
+            background: #ffffff;
             padding: 10px 0;
             opacity: 1;
           }
-
           .btn {
             flex: 1;
-            background: #FFFFFF;
-            border-bottom: 1px solid #EEEEEE;
+            background: #ffffff;
+            border-bottom: 1px solid #eeeeee;
             margin: 0;
             padding: 15px 0;
           }
         }
       }
     }
-
     &-system {
       flex: 1;
       position: static;
     }
-
     &-list {
       position: static;
       overflow-y: scroll;
     }
   }
-
   .btn {
     &-cancel {
-      color: #FF584C;
+      color: #ff584c;
     }
-
     &-default {
-      color: #006EFF;
+      color: #006eff;
     }
-
     &:disabled {
       opacity: 0.3;
     }

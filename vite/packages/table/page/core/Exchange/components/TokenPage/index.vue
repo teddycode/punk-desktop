@@ -29,13 +29,13 @@
     <div class="table-section">
       <table class="table">
         <thead>
-        <tr>
-          <th>#</th>
-          <th>代币名称</th>
-          <th>价格</th>
-          <th>变化</th>
-          <th>成交量</th>
-        </tr>
+          <tr>
+            <th>#</th>
+            <th>代币名称</th>
+            <th>价格</th>
+            <th>变化</th>
+            <th>成交量</th>
+          </tr>
         </thead>
         <tr v-for="(tokenData, index) in filteredTokenDataList" :key="tokenData.name">
           <td>{{ index + 1 }}</td>
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import ShapeButton from '@page/core/components/ShapeButton.vue'
+import ShapeButton from '@page/core/components/ShapeButton.vue';
 
 export default {
   name: 'TokenPage',
@@ -72,18 +72,18 @@ export default {
       searchKeyword: '',
       rates: {},
       ratesUpdateTime: null,
-    }
+    };
   },
   //hello!
   created() {
-    this.fetchRates()
+    this.fetchRates();
   },
   computed: {
     filteredTokenDataList() {
-      let filteredList = this.tokenDataList
+      let filteredList = this.tokenDataList;
 
       if (this.selectedToken) {
-        filteredList = filteredList.filter(tokenData => tokenData.name === this.selectedToken)
+        filteredList = filteredList.filter((tokenData) => tokenData.name === this.selectedToken);
       }
 
       if (this.selectedTime) {
@@ -91,76 +91,77 @@ export default {
       }
 
       if (this.searchKeyword) {
-        const keyword = this.searchKeyword.toLowerCase().trim()
-        filteredList = filteredList.filter(tokenData => {
+        const keyword = this.searchKeyword.toLowerCase().trim();
+        filteredList = filteredList.filter((tokenData) => {
           return (
-              tokenData.name.toLowerCase().includes(keyword) ||
-              tokenData.change.toLowerCase().includes(keyword) ||
-              tokenData.param1.toLowerCase().includes(keyword) ||
-              tokenData.param2.toLowerCase().includes(keyword) ||
-              tokenData.param3.toLowerCase().includes(keyword)
-          )
-        })
+            tokenData.name.toLowerCase().includes(keyword) ||
+            tokenData.change.toLowerCase().includes(keyword) ||
+            tokenData.param1.toLowerCase().includes(keyword) ||
+            tokenData.param2.toLowerCase().includes(keyword) ||
+            tokenData.param3.toLowerCase().includes(keyword)
+          );
+        });
       }
 
-      return filteredList
+      return filteredList;
     },
   },
   methods: {
     async fetchRates() {
       try {
-        let response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum,bitcoin,binancecoin,cardano,dogecoin,ripple,usd-coin&vs_currencies=usd')
-        let data = await response.json()
+        let response = await fetch(
+          'https://api.coingecko.com/api/v3/simple/price?ids=ethereum,bitcoin,binancecoin,cardano,dogecoin,ripple,usd-coin&vs_currencies=usd',
+        );
+        let data = await response.json();
         this.rates = {
-          'ETH': data.ethereum.usd,
-          'BTC': data.bitcoin.usd,
-          'BNB': data.binancecoin.usd,
-          'ADA': data.cardano.usd,
-          'DOGE': data.dogecoin.usd,
-          'XRP': data.ripple.usd,
-          'USDC': data['usd-coin'].usd,
-        }
-        this.ratesUpdateTime = new Date()
+          ETH: data.ethereum.usd,
+          BTC: data.bitcoin.usd,
+          BNB: data.binancecoin.usd,
+          ADA: data.cardano.usd,
+          DOGE: data.dogecoin.usd,
+          XRP: data.ripple.usd,
+          USDC: data['usd-coin'].usd,
+        };
+        this.ratesUpdateTime = new Date();
       } catch (error) {
-        console.error('Failed to fetch rates:', error)
+        console.error('Failed to fetch rates:', error);
       }
     },
     getTokenPrice(token) {
       // eslint-disable-next-line no-prototype-builtins
       if (this.rates.hasOwnProperty(token)) {
-        return '$' + this.rates[token].toFixed(2)
+        return '$' + this.rates[token].toFixed(2);
       }
-      return ''
+      return '';
     },
     getTokenChangeClass(change) {
       if (change.startsWith('-')) {
-        return 'negative-change'
+        return 'negative-change';
       } else if (change.startsWith('+')) {
-        return 'positive-change'
+        return 'positive-change';
       } else {
-        return ''
+        return '';
       }
     },
     search_token() {
       // 获取搜索关键字
-      const keyword = this.searchKeyword.toLowerCase().trim()
+      const keyword = this.searchKeyword.toLowerCase().trim();
 
       // 如果关键字为空，则显示所有代币数据
       if (keyword === '') {
-        this.filteredTokenDataList = this.tokenDataList
+        this.filteredTokenDataList = this.tokenDataList;
       } else {
         // 根据关键字筛选匹配的代币数据
-        this.filteredTokenDataList = this.tokenDataList.filter(tokenData =>
-            tokenData.name.toLowerCase().includes(keyword)
-        )
+        this.filteredTokenDataList = this.tokenDataList.filter((tokenData) =>
+          tokenData.name.toLowerCase().includes(keyword),
+        );
       }
     },
   },
-}
+};
 </script>
 
 <style scoped>
-
 .token-page {
   width: 90%;
   margin: 0 auto;
@@ -184,16 +185,15 @@ export default {
   margin-right: 5px;
 }
 
-
 .token-selection,
 .time-selection {
   display: flex;
   align-items: center;
   margin-right: 20px;
-
 }
 
-.token-select, .time-select {
+.token-select,
+.time-select {
   padding: 6px;
   border: 1px solid white; /* 边框颜色为白色 */
   border-radius: 4px;
@@ -203,9 +203,10 @@ export default {
   height: 2.5em;
 }
 
-.token-select-option, .time-select-option {
+.token-select-option,
+.time-select-option {
   color: white;
-  background-color: #2D3748;
+  background-color: #2d3748;
 }
 
 .table-section {

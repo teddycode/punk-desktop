@@ -1,101 +1,137 @@
 <template>
   <Widget ref="cardSlot" :customIndex="customIndex" :desk="desk" :menuList="menuList" :options="options">
     <!-- <div class="flex flex-col items-center"> -->
-    <div v-if="countDowntime.hours" class="mt-4"
-         style="display: flex;flex-direction: column;justify-content: space-between; ">
+    <div
+      v-if="countDowntime.hours"
+      class="mt-4"
+      style="display: flex; flex-direction: column; justify-content: space-between"
+    >
       <div class="right-title" @click.stop="showDrawer" @contextmenu.stop="showDrawer">
-        <Icon class="title-icon" icon="gengduo1" style="cursor:pointer"></Icon>
+        <Icon class="title-icon" icon="gengduo1" style="cursor: pointer"></Icon>
       </div>
-      <div class="font-14" style="text-align: center;color: var(--primary-text);font-size:16px  ;">
-        <clockIcon class="mr-2 title-icon" icon="fluent:clock-12-regular"
-                   style="cursor:pointer ;font-size: 20px;text-align: center; vertical-align: sub;">
+      <div class="font-14" style="text-align: center; color: var(--primary-text); font-size: 16px">
+        <clockIcon
+          class="mr-2 title-icon"
+          icon="fluent:clock-12-regular"
+          style="cursor: pointer; font-size: 20px; text-align: center; vertical-align: sub"
+        >
         </clockIcon>
         计时器
       </div>
-      <div class="mt-4 mb-4"
-           style="color: #FBAE17;font-size: 40px;font-weight:600;text-align: center; font-family: Oswald-SemiBold;">
+      <div
+        class="mt-4 mb-4"
+        style="color: #fbae17; font-size: 40px; font-weight: 600; text-align: center; font-family: Oswald-SemiBold"
+      >
         {{ countDowntime.hours + ':' + countDowntime.minutes + ':' + countDowntime.seconds }}
       </div>
-      <div style="display: flex;align-items: center;justify-content: space-between;padding: 0 6em;">
-        <clockIcon v-show="!countDownBtn" icon="akar-icons:pause"
-                   style="width: 2em; height: 2em;cursor:pointer;color: var(--primary-text);"
-                   @click="closeCountDown"></clockIcon>
-        <clockIcon v-show="countDownBtn"
-                   icon="fluent:play-16-filled"
-                   style="width: 2em; height: 2em;cursor:pointer;color: var(--primary-text);"
-                   @click="startCountDown"></clockIcon>
-        <clockIcon icon="fluent:dismiss-16-filled"
-                   style="width: 2em; height: 2em;cursor:pointer;color: var(--primary-text);"
-                   @click="deleteCountDown"></clockIcon>
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 0 6em">
+        <clockIcon
+          v-show="!countDownBtn"
+          icon="akar-icons:pause"
+          style="width: 2em; height: 2em; cursor: pointer; color: var(--primary-text)"
+          @click="closeCountDown"
+        ></clockIcon>
+        <clockIcon
+          v-show="countDownBtn"
+          icon="fluent:play-16-filled"
+          style="width: 2em; height: 2em; cursor: pointer; color: var(--primary-text)"
+          @click="startCountDown"
+        ></clockIcon>
+        <clockIcon
+          icon="fluent:dismiss-16-filled"
+          style="width: 2em; height: 2em; cursor: pointer; color: var(--primary-text)"
+          @click="deleteCountDown"
+        ></clockIcon>
       </div>
     </div>
     <div v-else-if="clockEvent.length <= 0" class="flex flex-col text-center" style="width: 100%">
       <div class="right-title" @click.stop="showDrawer" @contextmenu.stop="showDrawer">
-        <Icon class="title-icon" icon="gengduo1" style="cursor:pointer"></Icon>
+        <Icon class="title-icon" icon="gengduo1" style="cursor: pointer"></Icon>
       </div>
       <div class="flex flex-col items-center justify-center mt-10">
-        <xt-button class="rounded-lg  w-[120px] h-[45px] xt-active-bg mb-4 border-0 p-0 font-16" type="primary"
-                   @click="onSetup">添加闹钟
+        <xt-button
+          class="rounded-lg w-[120px] h-[45px] xt-active-bg mb-4 border-0 p-0 font-16"
+          type="primary"
+          @click="onSetup"
+          >添加闹钟
         </xt-button>
-        <xt-button class="rounded-lg  w-[120px] h-[45px]  border-0 p-0 warn-bg font-16" type="text"
-                   @click="onSetCountDown">添加定时器
+        <xt-button
+          class="rounded-lg w-[120px] h-[45px] border-0 p-0 warn-bg font-16"
+          type="text"
+          @click="onSetCountDown"
+          >添加定时器
         </xt-button>
       </div>
-
     </div>
     <div v-else class="flex flex-col mt-6 text-center cursor-pointer" @click="onSetup">
-      <div class="right-title" @click.stop="showDrawer" @contextmenu.stop="showDrawer">
-
-      </div>
-      <div class="font-14"
-           style="text-align: center;font-family: PingFangSC-Regular !important;font-size: 16px;font-weight: 400; ">
-        <clockIcon class="mr-2 title-icon" icon="fluent:clock-alarm-16-filled"
-                   style="cursor:pointer ;font-size: 20px;text-align: center; vertical-align: sub;">
+      <div class="right-title" @click.stop="showDrawer" @contextmenu.stop="showDrawer"></div>
+      <div
+        class="font-14"
+        style="text-align: center; font-family: PingFangSC-Regular !important; font-size: 16px; font-weight: 400"
+      >
+        <clockIcon
+          class="mr-2 title-icon"
+          icon="fluent:clock-alarm-16-filled"
+          style="cursor: pointer; font-size: 20px; text-align: center; vertical-align: sub"
+        >
         </clockIcon>
         下一个闹钟
       </div>
       <!-- style="font-size: 3em; margin-top: 0.5em" -->
-      <div class="mt-4 mb-4 font-40" style="font-family:Oswald-SemiBold !important; font-size: 40px; font-weight: 600;">
+      <div class="mt-4 mb-4 font-40" style="font-family: Oswald-SemiBold !important; font-size: 40px; font-weight: 600">
         <!-- <icon icon="naozhong"></icon> -->
         {{ clockEvent[0].dateValue.hours }}:{{ clockEvent[0].dateValue.minutes }}
       </div>
-      <div class="text-more font-14" style="font-family: PingFangSC-Regular !important; font-size: 16px;">
+      <div class="text-more font-14" style="font-family: PingFangSC-Regular !important; font-size: 16px">
         {{ clockEvent[0].eventValue }}
       </div>
     </div>
   </Widget>
   <!-- {{ topClockSettingVisible }} -->
   <!-- <clockDrawer v-if="topClockSettingVisible"></clockDrawer> -->
-  <a-drawer v-model:visible="topClockSettingVisible" :width="600" class="custom-class xt-text" placement="right"
-            style="color: red" title="设置">
+  <a-drawer
+    v-model:visible="topClockSettingVisible"
+    :width="600"
+    class="custom-class xt-text"
+    placement="right"
+    style="color: red"
+    title="设置"
+  >
     <div class="flex">
       <SetupClock></SetupClock>
     </div>
   </a-drawer>
-  <a-modal v-model:visible="custom" :footer="null" :maskClosable="false" centered popupClassName="{popupClass}"
-           style="font-size: 8px;color: var(--primary-text);"
-           title="" @ok="() => { }">
-    <div style="display: flex;flex-direction: column;align-items: center;">
+  <a-modal
+    v-model:visible="custom"
+    :footer="null"
+    :maskClosable="false"
+    centered
+    popupClassName="{popupClass}"
+    style="font-size: 8px; color: var(--primary-text)"
+    title=""
+    @ok="() => {}"
+  >
+    <div style="display: flex; flex-direction: column; align-items: center">
       <div style="">自定义倒计时</div>
       <a-space :popupStyle="{ zIndex: 9999999999999 }" direction="vertical" style="margin: 14px">
-        <a-time-picker v-model:value="value1" :popupStyle="{ zIndex: 9999999999999 }" :showNow="false" size="large"/>
+        <a-time-picker v-model:value="value1" :popupStyle="{ zIndex: 9999999999999 }" :showNow="false" size="large" />
       </a-space>
-      <xt-button style="margin: 14px; background: var(--active-bg);" type="primary"
-                 @click="addCustom">开始倒计时
+      <xt-button style="margin: 14px; background: var(--active-bg)" type="primary" @click="addCustom"
+        >开始倒计时
       </xt-button>
     </div>
   </a-modal>
 </template>
 
 <script>
-import { mapActions, mapWritableState } from 'pinia'
-import { countDownStore } from '../../store/countDown'
-import { cardStore } from '../../store/card'
-import { topClockSettingStore } from '../../store/topClockSetting'
-import dayjs from 'dayjs'
-import Widget from '../card/Widget.vue'
-import { Icon as clockIcon } from '@iconify/vue'
-import SetupClock from './setClock.vue'
+import { mapActions, mapWritableState } from 'pinia';
+import { countDownStore } from '../../store/countDown';
+import { cardStore } from '../../store/card';
+import { topClockSettingStore } from '../../store/topClockSetting';
+import dayjs from 'dayjs';
+import Widget from '../card/Widget.vue';
+import { Icon as clockIcon } from '@iconify/vue';
+import SetupClock from './setClock.vue';
 
 export default {
   name: 'Clock',
@@ -103,14 +139,13 @@ export default {
   props: {
     customIndex: {
       type: Number,
-      default: 0
+      default: 0,
     },
     desk: {
-      type: Object
+      type: Object,
     },
-
   },
-  data () {
+  data() {
     return {
       simpleImage: '/public/img/test/load-ail.png',
       visible: false,
@@ -119,78 +154,76 @@ export default {
       options: {
         className: 'card small',
         title: '闹钟',
-        noTitle: true
+        noTitle: true,
       },
       menuList: [
         {
           newIcon: 'fluent:clock-12-regular',
           title: '3分钟',
           fn: () => {
-            this.onCountDown(3)
-          }
+            this.onCountDown(3);
+          },
         },
         {
           newIcon: 'fluent:clock-12-regular',
           title: '10分钟',
           fn: () => {
-            this.onCountDown(10)
-          }
+            this.onCountDown(10);
+          },
         },
         {
           newIcon: 'fluent:clock-12-regular',
           title: '30分钟',
           fn: () => {
-            this.onCountDown(30)
-          }
+            this.onCountDown(30);
+          },
         },
         {
           newIcon: 'fluent:clock-12-regular',
           title: '自定义',
           fn: () => {
-            this.onCountDown(300)
-          }
+            this.onCountDown(300);
+          },
         },
         {
           icon: 'shezhi1',
           title: '设置',
           fn: () => {
-            this.settingVisible = true
-            this.$refs.cardSlot.visible = false
-            this.changeSettingStatus()
-          }
+            this.settingVisible = true;
+            this.$refs.cardSlot.visible = false;
+            this.changeSettingStatus();
+          },
         },
       ],
       visibleDrawer: false,
       clockValue: '',
       setClockName: '未命名',
       settingVisible: false,
-    }
+    };
   },
   computed: {
     ...mapWritableState(cardStore, ['appDate', 'clockEvent']),
     ...mapWritableState(countDownStore, ['countDowndate', 'countDowntime', 'countDownBtn']),
-    ...mapWritableState(topClockSettingStore, ['topClockSettingVisible'])
+    ...mapWritableState(topClockSettingStore, ['topClockSettingVisible']),
   },
 
   methods: {
     ...mapActions(cardStore, ['removeCard']),
     ...mapActions(countDownStore, ['setCountDown', 'stopCountDown', 'openCountDown', 'dCountDown']),
     ...mapActions(topClockSettingStore, ['changeSettingStatus']),
-    onContextMenuClick (e) {
-
+    onContextMenuClick(e) {},
+    onSetCountDown() {
+      this.$refs.cardSlot.menuVisible = true;
     },
-    onSetCountDown () {
-      this.$refs.cardSlot.menuVisible = true
+    showDrawer() {
+      this.visible = true;
     },
-    showDrawer () {
-      this.visible = true
+    onClose() {
+      this.visible = false;
     },
-    onClose () {
-      this.visible = false
-    },
-    onSetup () {
+    onSetup() {
       // this.topClockSettingVisible = true
-      this.changeSettingStatus()
+      this.changeSettingStatus();
       // this.$router.push({
       //   name: 'addCardSetting',
       //   params: {
@@ -199,55 +232,51 @@ export default {
       //   },
       // })
     },
-    removeClock () {
-      this.removeCard(this.customIndex)
-      this.dCountDown()
-      this.visible = false
+    removeClock() {
+      this.removeCard(this.customIndex);
+      this.dCountDown();
+      this.visible = false;
     },
-    onCountDown (value) {
+    onCountDown(value) {
       switch (value) {
         case 3:
-          this.setCountDown({ hours: 0, minutes: 3, seconds: 0 })
-          break
+          this.setCountDown({ hours: 0, minutes: 3, seconds: 0 });
+          break;
         case 10:
-          this.setCountDown({ hours: 0, minutes: 10, seconds: 0 })
-          break
+          this.setCountDown({ hours: 0, minutes: 10, seconds: 0 });
+          break;
         case 30:
-          this.setCountDown({ hours: 0, minutes: 30, seconds: 0 })
-          break
+          this.setCountDown({ hours: 0, minutes: 30, seconds: 0 });
+          break;
         case 300:
-          this.custom = true
-          break
+          this.custom = true;
+          break;
       }
-      this.$refs.cardSlot.hideMenu()
-      this.countDownBtn = false
-    }, closeCountDown () {
-
-      this.stopCountDown()
-
+      this.$refs.cardSlot.hideMenu();
+      this.countDownBtn = false;
     },
-    startCountDown () {
-
-      this.openCountDown()
-
+    closeCountDown() {
+      this.stopCountDown();
     },
-    deleteCountDown () {
-      this.dCountDown()
+    startCountDown() {
+      this.openCountDown();
     },
-    closeCustom () {
-      this.custom = false
+    deleteCountDown() {
+      this.dCountDown();
     },
-    addCustom () {
+    closeCustom() {
+      this.custom = false;
+    },
+    addCustom() {
       this.setCountDown({
         hours: parseFloat(this.value1.$H),
         minutes: parseFloat(this.value1.$m),
-        seconds: parseFloat(this.value1.$s)
-      })
-      this.custom = false
-    }
+        seconds: parseFloat(this.value1.$s),
+      });
+      this.custom = false;
+    },
   },
-
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -259,7 +288,7 @@ export default {
 .ant-click-animating-node {
   background: #676767;
   box-shadow: #676767;
-  animation: none
+  animation: none;
 }
 
 .drawer {
@@ -273,13 +302,11 @@ font-40 {
 }
 
 font-14 {
-
   font-size: 14px;
   font-weight: 400;
 }
 
 font-16 {
-
   font-size: 16px;
   font-weight: 500;
 }
@@ -296,7 +323,7 @@ font-16 {
   background-color: var(--primary-bg);
 }
 
-:deep( .ant-picker-panel-container ) {
+:deep(.ant-picker-panel-container) {
   background-color: var(--primary-bg) !important;
 }
 </style>

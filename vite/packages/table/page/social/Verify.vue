@@ -1,15 +1,11 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
+import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: "Verify"
-})
+  name: 'Verify',
+});
 </script>
 
-<template>
+<template></template>
 
-</template>
-
-<style lang="scss" scoped>
-
-</style>
+<style scoped lang="scss"></style>

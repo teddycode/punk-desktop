@@ -56,95 +56,90 @@ const wallpaperSelectorTpl = `
 
 
 </div>
-  `
-const wallList = require('../wall.json')
-const { wallUrl } = require('../../util/theme.js')
+  `;
+const wallList = require('../wall.json');
+const { wallUrl } = require('../../util/theme.js');
 const wallpaperSelector = Vue.component('wallpaper-selector', {
   template: wallpaperSelectorTpl,
   name: 'wallpaper-selector',
   props: {
-    'value': String,
-    'deskId': '',
-    'defaultWallPaper': '',
+    value: String,
+    deskId: '',
+    defaultWallPaper: '',
   },
   components: {},
-  data () {
+  data() {
     return {
       wallUrl: wallUrl,
       wallPapersList: wallList,
       setWallPaperVisible: false,
       loadingWallPaperHistory: false,
-      wallPaperHistory: [],//壁纸历史
-
-    }
+      wallPaperHistory: [], //壁纸历史
+    };
   },
   watch: {},
   computed: {
-    wallPaper () {
+    wallPaper() {
       if (!!!this.value) {
-        return this.defaultWallPaper
+        return this.defaultWallPaper;
       } else {
-        return this.value
+        return this.value;
       }
-    }
+    },
   },
-  mounted () {
-    this.wallPaperHistory = wallPaper.getHistory()
+  mounted() {
+    this.wallPaperHistory = wallPaper.getHistory();
   },
   methods: {
-
-    showWallPaperSetting () {
-      this.setWallPaperVisible = true
+    showWallPaperSetting() {
+      this.setWallPaperVisible = true;
     },
-    change () {
+    change() {
       // this.$emit('change', this.wallPaper)
     }
-    , /**
+    /**
      * 设置壁纸
-     */
-    setTheme () {
+     */,
+    setTheme() {
       setTimeout(() => {
-        appVue.loadingWallPaperHistory = false
-      }, 500)
-      this.setThemeVisible = true
-      this.visibleMainMenu = false
+        appVue.loadingWallPaperHistory = false;
+      }, 500);
+      this.setThemeVisible = true;
+      this.visibleMainMenu = false;
     },
-    setWallPaper (wp) {
+    setWallPaper(wp) {
       if (!!!this.deskId) {
         //设置默认背景
         //todo 处理有deskid的情况，只设置desk的桌面壁纸
         try {
           //保存壁纸设置
           wallPaper.setUrlWallPaper(wp).then(() => {
-              if (!!!appVue.currentDeskInfo.wallPaper) {
-                wallPaper.setElementBg(document.body, wp)
-              }
-              this.refreshWallPaperHistory()
-              this.$message.success({ content: '壁纸设置成功。', key: 'setWallPaper' })
+            if (!!!appVue.currentDeskInfo.wallPaper) {
+              wallPaper.setElementBg(document.body, wp);
             }
-          )
-          appVue.defaultDeskWallPaper = wp
+            this.refreshWallPaperHistory();
+            this.$message.success({ content: '壁纸设置成功。', key: 'setWallPaper' });
+          });
+          appVue.defaultDeskWallPaper = wp;
         } catch (err) {
-          this.$message.error({ content: '保存壁纸失败。', key: 'setWallPaper' })
+          this.$message.error({ content: '保存壁纸失败。', key: 'setWallPaper' });
         }
       } else {
-        let deskInfo = deskModel.getDeskInfo(this.deskId)
-        deskInfo.wallPaper = wp
-        appVue.currentDeskInfo = deskModel.updateDeskInfo(this.deskId, deskInfo)
-        wallPaper.pushHistory(wp)
-        this.refreshWallPaperHistory()
-        appVue.setBg(wp)
-        this.$message.success({ content: '当前桌面壁纸设置成功。', key: 'setWallPaper' })
+        let deskInfo = deskModel.getDeskInfo(this.deskId);
+        deskInfo.wallPaper = wp;
+        appVue.currentDeskInfo = deskModel.updateDeskInfo(this.deskId, deskInfo);
+        wallPaper.pushHistory(wp);
+        this.refreshWallPaperHistory();
+        appVue.setBg(wp);
+        this.$message.success({ content: '当前桌面壁纸设置成功。', key: 'setWallPaper' });
       }
-
     },
-    refreshWallPaperHistory () {
-      this.wallPaperHistory = wallPaper.getHistory()
-    }
+    refreshWallPaperHistory() {
+      this.wallPaperHistory = wallPaper.getHistory();
+    },
   },
 
-  destroyed () {
-  }
-})
+  destroyed() {},
+});
 
-module.exports = wallpaperSelector
+module.exports = wallpaperSelector;

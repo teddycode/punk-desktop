@@ -1,22 +1,22 @@
-const path = require('path')
-const fs = require('fs')
-const Database = require('../../js/util/database.js')
-window.db = Database.db
-window.globalArgs = {}
-let loaded = false
+const path = require('path');
+const fs = require('fs');
+const Database = require('../../js/util/database.js');
+window.db = Database.db;
+window.globalArgs = {};
+let loaded = false;
 process.argv.forEach(function (arg) {
   if (arg.startsWith('--')) {
-    var key = arg.split('=')[0].replace('--', '')
-    var value = arg.split('=')[1]
-    globalArgs[key] = value
+    var key = arg.split('=')[0].replace('--', '');
+    var value = arg.split('=')[1];
+    globalArgs[key] = value;
   }
-})
+});
 if (navigator.platform === 'MacIntel') {
-  window.platformType = 'mac'
+  window.platformType = 'mac';
 } else if (navigator.platform === 'Win32') {
-  window.platformType = 'windows'
+  window.platformType = 'windows';
 } else {
-  window.platformType = 'linux'
+  window.platformType = 'linux';
 }
 
 const newtabRestore = {
@@ -101,132 +101,158 @@ const newtabRestore = {
           slinkLogo: './assets/github.svg',
           frontLink: 'https://github.com/search?utf8=%E2%9C%93&q=',
           sDefault: 0,
-        }
-      ]
+        },
+      ];
       db.mySearch
         .bulkAdd(searchList)
         .then((rs) => console.log(rs))
         .catch((err) => console.log(err))
         .catch((err) => {
-          console.log(err)
-        })
-    })
+          console.log(err);
+        });
+    });
   },
 
   //从数据库读出所有的搜索引擎数据
   restoreFromDB: async () => {
     try {
-      return await db.mySearch.orderBy('id').toArray()
+      return await db.mySearch.orderBy('id').toArray();
     } catch (err) {
-      console.log(err)
-      return []
+      console.log(err);
+      return [];
     }
   },
   loadBookmarks: async (count = 7) => {
-    let lastBookmarks = []
+    let lastBookmarks = [];
     try {
-      await db.places.orderBy('lastVisit').reverse().filter(function (place) { return place.isBookmarked }).limit(count).each(item => {
-        lastBookmarks.push({
-          'title': item.title,
-          'link': item.url
+      await db.places
+        .orderBy('lastVisit')
+        .reverse()
+        .filter(function (place) {
+          return place.isBookmarked;
         })
-      })
-      return lastBookmarks
+        .limit(count)
+        .each((item) => {
+          lastBookmarks.push({
+            title: item.title,
+            link: item.url,
+          });
+        });
+      return lastBookmarks;
     } catch (err) {
-      console.log(err)
-      return []
+      console.log(err);
+      return [];
     }
   },
   loadHistory: async (count = 4) => {
-    let todayHistory = [] //当前访问历史
-    let yesterdayHistory = []
-    let dayBeforeYesterdayHistory = []
-    let beforeAllHistory = []
+    let todayHistory = []; //当前访问历史
+    let yesterdayHistory = [];
+    let dayBeforeYesterdayHistory = [];
+    let beforeAllHistory = [];
     try {
-      var today = new Date()
-      today.setHours(0)
-      today.setMinutes(0)
-      today.setSeconds(0)
-      today.setMilliseconds(0)
-      var oneday = 1000 * 60 * 60 * 24
-      var yesterday = new Date(today - oneday)
-      var dayBeforeYesterday = new Date(today - 2 * oneday)
-      await db.places.orderBy('lastVisit').reverse().filter(function (place) {
-        if (place.lastVisit >= today.valueOf()) return true
-      }).limit(count).each(item => {
-        todayHistory.push({
-          'title': item.title,
-          'link': item.url
+      var today = new Date();
+      today.setHours(0);
+      today.setMinutes(0);
+      today.setSeconds(0);
+      today.setMilliseconds(0);
+      var oneday = 1000 * 60 * 60 * 24;
+      var yesterday = new Date(today - oneday);
+      var dayBeforeYesterday = new Date(today - 2 * oneday);
+      await db.places
+        .orderBy('lastVisit')
+        .reverse()
+        .filter(function (place) {
+          if (place.lastVisit >= today.valueOf()) return true;
         })
-
-      })
-      await db.places.orderBy('lastVisit').reverse().filter(function (place) {
-        if (place.lastVisit >= yesterday.valueOf() && place.lastVisit < today.valueOf()) return true
-      }).limit(count).each(item => {
-        yesterdayHistory.push({
-          'title': item.title,
-          'link': item.url
+        .limit(count)
+        .each((item) => {
+          todayHistory.push({
+            title: item.title,
+            link: item.url,
+          });
+        });
+      await db.places
+        .orderBy('lastVisit')
+        .reverse()
+        .filter(function (place) {
+          if (place.lastVisit >= yesterday.valueOf() && place.lastVisit < today.valueOf()) return true;
         })
-      })
-      await db.places.orderBy('lastVisit').reverse().filter(function (place) {
-        if (place.lastVisit >= dayBeforeYesterday.valueOf() && place.lastVisit < yesterday.valueOf()) return true
-      }).limit(count).each(item => {
-        dayBeforeYesterdayHistory.push({
-          'title': item.title,
-          'link': item.url
+        .limit(count)
+        .each((item) => {
+          yesterdayHistory.push({
+            title: item.title,
+            link: item.url,
+          });
+        });
+      await db.places
+        .orderBy('lastVisit')
+        .reverse()
+        .filter(function (place) {
+          if (place.lastVisit >= dayBeforeYesterday.valueOf() && place.lastVisit < yesterday.valueOf()) return true;
         })
-      })
-      await db.places.orderBy('lastVisit').reverse().filter(function (place) {
-        if (place.lastVisit < dayBeforeYesterday.valueOf()) return true
-      }).limit(count).each(item => {
-        beforeAllHistory.push({
-          'title': item.title,
-          'link': item.url
+        .limit(count)
+        .each((item) => {
+          dayBeforeYesterdayHistory.push({
+            title: item.title,
+            link: item.url,
+          });
+        });
+      await db.places
+        .orderBy('lastVisit')
+        .reverse()
+        .filter(function (place) {
+          if (place.lastVisit < dayBeforeYesterday.valueOf()) return true;
         })
-      })
+        .limit(count)
+        .each((item) => {
+          beforeAllHistory.push({
+            title: item.title,
+            link: item.url,
+          });
+        });
 
       //console.log(todayHistory)
-      return [{
-        time_title: '访问历史',
-        info: todayHistory
-      }, {
-        time_title: '昨天',
-        info: yesterdayHistory
-      }, {
-        time_title: '前天',
-        info: dayBeforeYesterdayHistory
-      }, {
-        time_title: '前天以前',
-        info: beforeAllHistory
-      }]
+      return [
+        {
+          time_title: '访问历史',
+          info: todayHistory,
+        },
+        {
+          time_title: '昨天',
+          info: yesterdayHistory,
+        },
+        {
+          time_title: '前天',
+          info: dayBeforeYesterdayHistory,
+        },
+        { time_title: '前天以前', info: beforeAllHistory },
+      ];
     } catch (err) {
-      console.log(err)
-      return []
+      console.log(err);
+      return [];
     }
-
   },
 
   //设置默认写入接口
   saveDefaultDB: async (id) => {
-
     try {
-      const result = await db.mySearch.where('sDefault').equals(1).modify({ sDefault: 0 })
+      const result = await db.mySearch.where('sDefault').equals(1).modify({ sDefault: 0 });
       if (result) {
-        await db.mySearch.update(id, { sDefault: 1 })
+        await db.mySearch.update(id, { sDefault: 1 });
       }
     } catch (err) {
-      console.log('dexie失败:' + err)
+      console.log('dexie失败:' + err);
     }
   },
 
   //初始化mySearch数据库
   initialize: async () => {
-    const result = await newtabRestore.restoreFromDB()
+    const result = await newtabRestore.restoreFromDB();
     //console.log(result, '__ini__')
     if (result.length == 0) {
-      await newtabRestore.saveToDB()
+      await newtabRestore.saveToDB();
     }
-  }
-}
+  },
+};
 
-module.exports = newtabRestore
+module.exports = newtabRestore;

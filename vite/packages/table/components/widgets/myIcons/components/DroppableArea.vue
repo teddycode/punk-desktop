@@ -1,10 +1,5 @@
 <template>
-  <div
-      class="droppable"
-      @mouseleave="handleLeave"
-      @mouseover="handleHover"
-      @mouseup="handleDrop"
-  >
+  <div class="droppable" @mouseleave="handleLeave" @mouseover="handleHover" @mouseup="handleDrop">
     <slot></slot>
   </div>
 </template>
@@ -13,20 +8,20 @@
 export default {
   methods: {
     // 处理放置事件
-    handleDrop (event) {
-      this.$emit('drop', event)
+    handleDrop(event) {
+      this.$emit('drop', event);
     },
 
     // 处理离开事件
-    handleLeave () {
-      this.$emit('leave')
+    handleLeave() {
+      this.$emit('leave');
     },
 
     // 处理鼠标经过事件
-    handleHover (event) {
-      console.log('Mouse hover')
-      this.$emit('hover', event)
+    handleHover(event) {
+      console.log('Mouse hover');
+      this.$emit('hover', event);
     },
   },
-}
+};
 </script>

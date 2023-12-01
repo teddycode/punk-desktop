@@ -1,79 +1,109 @@
 <template>
-  <vueCustomScrollbar :settings="settingsScroller" style="height: 100%;">
+  <vueCustomScrollbar :settings="settingsScroller" style="height: 100%">
     <div class="flex flex-box">
       <div class="box-title">推广记录</div>
-      <div class="flex" style="width: 100%;justify-content: space-between;">
-        <div v-for="(item,index) in cardList" class="list-box">
+      <div class="flex" style="width: 100%; justify-content: space-between">
+        <div class="list-box" v-for="(item, index) in cardList">
           <div class="list-title">{{ item.title }}</div>
           <div class="list-num">{{ item.num }}</div>
         </div>
       </div>
       <!-- 筛选条件 -->
       <div class="search-box">
-        <input v-model="search.userId" class="input ant-input" placeholder="用户昵称、UID" style="width:200px;"
-               type="text">
+        <input
+          type="text"
+          v-model="search.userId"
+          placeholder="用户昵称、UID"
+          style="width: 200px"
+          class="input ant-input"
+        />
         <a-select
-            v-model:selValue="selValue" :bordered="false" :filter-option="filterOption"
-            :options="sortType"
-            class="select input rounded-lg  text-xs flex items-center"
-            placeholder="用户类型"
-            show-search
-            size="large"
-            style="width: 160px"
-            @change="handleChange"
+          class="select input rounded-lg text-xs flex items-center"
+          size="large"
+          :bordered="false"
+          v-model:selValue="selValue"
+          show-search
+          placeholder="用户类型"
+          style="width: 160px"
+          :filter-option="filterOption"
+          @change="handleChange"
+          :options="sortType"
         ></a-select>
-        <input v-model="search.keyCode" class="input ant-input" placeholder="口令" style="width:200px;" type="text">
-        <input v-model="search.promoterId" class="input ant-input" placeholder="推广员昵称、UID" style="width:200px;"
-               type="text">
-        <input v-model="search.higherId" class="input ant-input" placeholder="上级推广员昵称、UID" style="width:200px;"
-               type="text">
-        <a-date-picker v-model:value="search.redemptionTime" class="input ant-input" placeholder="兑换时间"
-                       style="width:160px;"/>
+        <input type="text" v-model="search.keyCode" placeholder="口令" class="input ant-input" style="width: 200px" />
+        <input
+          type="text"
+          v-model="search.promoterId"
+          placeholder="推广员昵称、UID"
+          class="input ant-input"
+          style="width: 200px"
+        />
+        <input
+          type="text"
+          v-model="search.higherId"
+          placeholder="上级推广员昵称、UID"
+          class="input ant-input"
+          style="width: 200px"
+        />
+        <a-date-picker
+          class="input ant-input"
+          v-model:value="search.redemptionTime"
+          placeholder="兑换时间"
+          style="width: 160px"
+        />
         <a-select
-            v-model:selValue="selValue" :bordered="false" :filter-option="filterOption"
-            :options="sortType"
-            class="input select rounded-lg  text-xs flex items-center "
-            placeholder="激活状态"
-            show-search
-            size="large"
-            style="width: 160px"
-            @change="handleChange"
+          class="input select rounded-lg text-xs flex items-center"
+          size="large"
+          :bordered="false"
+          v-model:selValue="selValue"
+          show-search
+          placeholder="激活状态"
+          style="width: 160px"
+          :filter-option="filterOption"
+          @change="handleChange"
+          :options="sortType"
         ></a-select>
-        <a-date-picker v-model:value="search.activationTime" class="input ant-input" placeholder="激活时间"
-                       style="width:160px;"/>
-        <div class=" no-drag xt-active-btn input pointer" style="width:64px;">搜索</div>
-        <div class="input flex no-drag pointer" style="width:40px;justify-content:center;align-items:center;">
-          <Icon :icon="icons.arrowCounterclockwise20Filled"/>
+        <a-date-picker
+          class="input ant-input"
+          v-model:value="search.activationTime"
+          placeholder="激活时间"
+          style="width: 160px"
+        />
+        <div class="no-drag xt-active-btn input pointer" style="width: 64px">搜索</div>
+        <div class="input flex no-drag pointer" style="width: 40px; justify-content: center; align-items: center">
+          <Icon :icon="icons.arrowCounterclockwise20Filled" />
         </div>
-        <div class="flex input"
-             style="align-items:center;font-size:14px;color: rgba(255,255,255,0.60);background:none;">共{{ dataNum }}条数据
+        <div
+          class="flex input"
+          style="align-items: center; font-size: 14px; color: rgba(255, 255, 255, 0.6); background: none"
+        >
+          共{{ dataNum }}条数据
         </div>
       </div>
       <a-table
-          :columns="detailCol"
-          :dataSource="detailList.data"
-          :pagination="{ pageSize: 6 }"
-          :scroll="{ x: 1500 }"
-          class="table-box" tableLayout='fixed'>
-        <a-table-column key="tags" data-index="tags" title="Tags">
-          <template #default="{ text: tags }">
-          </template>
+        :dataSource="detailList.data"
+        :pagination="{ pageSize: 6 }"
+        :scroll="{ x: 1500 }"
+        tableLayout="fixed"
+        :columns="detailCol"
+        class="table-box"
+      >
+        <a-table-column key="tags" title="Tags" data-index="tags">
+          <template #default="{ text: tags }"> </template>
         </a-table-column>
       </a-table>
     </div>
   </vueCustomScrollbar>
 </template>
 <script>
-import { Icon } from '@iconify/vue'
-import arrowCounterclockwise20Filled from '@iconify-icons/fluent/arrow-counterclockwise-20-filled'
-
+import { Icon } from '@iconify/vue';
+import arrowCounterclockwise20Filled from '@iconify-icons/fluent/arrow-counterclockwise-20-filled';
 export default {
   name: 'Promotion',
   components: {
-    Icon
+    Icon,
   },
   computed: {},
-  data () {
+  data() {
     return {
       dataNum: 123,
       icons: {
@@ -97,7 +127,7 @@ export default {
         swipeEasing: true,
         suppressScrollY: true,
         suppressScrollX: false,
-        wheelPropagation: true
+        wheelPropagation: true,
       },
       // 卡片列表
       cardList: [
@@ -213,8 +243,7 @@ export default {
             isActive: '是',
             activationTime: '2023-08-06 13:12',
           },
-        ]
-
+        ],
       },
       detailCol: [
         {
@@ -267,15 +296,13 @@ export default {
           dataIndex: 'activationTime',
           key: 'activationTime',
         },
-      ]
-    }
+      ],
+    };
   },
-  mounted () {
-
-  },
+  mounted() {},
   watch: {},
   methods: {},
-}
+};
 </script>
 
 <style scoped>
@@ -300,19 +327,17 @@ export default {
   width: 19%;
   min-width: 140px;
   height: 112px;
-  background: rgba(0, 0, 0, 0.30);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 4px;
   padding: 16px 20px;
   margin-top: 24px;
   border-left: 4px solid;
   border-color: var(--active-bg);
-
 }
-
 .list-title {
   /* margin-top: 16px; */
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.60);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .list-num {
@@ -331,7 +356,7 @@ export default {
 .input {
   margin-top: 16px;
   margin-right: 12px;
-  background: rgba(0, 0, 0, 0.30);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 10px;
   height: 40px !important;
   font-size: 14px;
@@ -347,12 +372,10 @@ export default {
 .table-box :deep(.ant-table-tbody > tr > td) {
   background: transparent;
 }
-
 .table-box :deep(.ant-table-thead > tr > th) {
   background: transparent;
   border-bottom: transparent;
 }
-
 .table-box :deep(.ant-table) {
   background: transparent;
 }
@@ -363,15 +386,12 @@ export default {
   overflow: hidden;
   overflow-y: auto;
 }
-
 .table-box :deep(.ant-table-content::-webkit-scrollbar) {
   /* width: 2px; */
   height: 5px;
 }
-
 .table-box :deep(.ant-table-content::-webkit-scrollbar-thumb) {
   background: #aaa !important;
   border-radius: 3px;
 }
-
 </style>

@@ -5,35 +5,38 @@ There are three possible ways that keybindings can be handled.
   - If a BrowserView is focused, shortcuts are handled by the before-input-event listener.
   */
 
-const Mousetrap = require('mousetrap')
-const keyMapModule = require('util/keyMap.js')
+const Mousetrap = require('mousetrap');
+const keyMapModule = require('util/keyMap.js');
 
-var webviews = require('webviews.js')
-var modalMode = require('modalMode.js')
-var settings = require('util/settings/settings.js')
+var webviews = require('webviews.js');
+var modalMode = require('modalMode.js');
+var settings = require('util/settings/settings.js');
 
-var keyMap = keyMapModule.userKeyMap(settings.get('keyMap'))
+var keyMap = keyMapModule.userKeyMap(settings.get('keyMap'));
 
-var shortcutsList = []
-var registeredMousetrapBindings = {}
+var shortcutsList = [];
+var registeredMousetrapBindings = {};
 
 /*
 Determines whether a shortcut can actually run
 single-letter shortcuts and shortcuts used for text editing can't run when an input is focused
 */
-function checkShortcutCanRun (combo, cb) {
+function checkShortcutCanRun(combo, cb) {
   if (/^(shift)?\+?\w$/.test(combo) || combo === 'mod+left' || combo === 'mod+right') {
     webviews.callAsync(tabs.getSelected(), 'isFocused', function (err, isFocused) {
       if (err || !tabs.get(tabs.getSelected()).url || !isFocused) {
         // check whether an input is focused in the browser UI
         if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') {
-          cb(false)
+          cb(false);
         } else {
-          cb(true)
+          cb(true);
         }
       } else {
         // check whether an input is focused in the webview
-        webviews.callAsync(tabs.getSelected(), 'executeJavaScript', `
+        webviews.callAsync(
+          tabs.getSelected(),
+          'executeJavaScript',
+          `
           document.activeElement.tagName === "INPUT"
           || document.activeElement.tagName === "TEXTAREA"
           || document.activeElement.tagName === "IFRAME"
@@ -47,119 +50,126 @@ function checkShortcutCanRun (combo, cb) {
             }
             return false;
           })()
-      `, function (err, isInputFocused) {
-          if (err) {
-            console.warn(err)
-            return
-          }
-          cb(isInputFocused === false)
-        })
+      `,
+          function (err, isInputFocused) {
+            if (err) {
+              console.warn(err);
+              return;
+            }
+            cb(isInputFocused === false);
+          },
+        );
       }
-    })
+    });
   } else {
-    cb(true)
+    cb(true);
   }
 }
 
-function defineShortcut (keysOrKeyMapName, fn, options = {}) {
+function defineShortcut(keysOrKeyMapName, fn, options = {}) {
   if (keysOrKeyMapName.keys) {
-    var binding = keysOrKeyMapName.keys
+    var binding = keysOrKeyMapName.keys;
   } else {
-    var binding = keyMap[keysOrKeyMapName]
+    var binding = keyMap[keysOrKeyMapName];
   }
 
   if (typeof binding === 'string') {
-    binding = [binding]
+    binding = [binding];
   }
 
   var shortcutCallback = function (e, combo) {
     // Disable shortcuts for modal mode, unless this is the combo to close the modal
     if (modalMode.enabled() && combo !== 'esc') {
-      return
+      return;
     }
 
     checkShortcutCanRun(combo, function (canRun) {
       if (canRun) {
-        fn(e, combo)
+        fn(e, combo);
       }
-    })
-  }
+    });
+  };
 
   binding.forEach(function (keys) {
     shortcutsList.push({
       combo: keys,
       keys: keys.split('+'),
       fn: shortcutCallback,
-      keyUp: options.keyUp || false
-    })
+      keyUp: options.keyUp || false,
+    });
     if (!registeredMousetrapBindings[keys + (options.keyUp ? '-keyup' : '')]) {
       // mousetrap only allows one listener for each key combination (+keyup variant)
       // so register a single listener, and have it call all the other listeners that we have
-      Mousetrap.bind(keys, function (e, combo) {
-        shortcutsList.forEach(function (shortcut) {
-          if (shortcut.combo === combo && (e.type === 'keyup') === shortcut.keyUp) {
-            shortcut.fn(e, combo)
-          }
-        })
-      }, (options.keyUp ? 'keyup' : null))
-      registeredMousetrapBindings[keys + (options.keyUp ? '-keyup' : '')] = true
+      Mousetrap.bind(
+        keys,
+        function (e, combo) {
+          shortcutsList.forEach(function (shortcut) {
+            if (shortcut.combo === combo && (e.type === 'keyup') === shortcut.keyUp) {
+              shortcut.fn(e, combo);
+            }
+          });
+        },
+        options.keyUp ? 'keyup' : null,
+      );
+      registeredMousetrapBindings[keys + (options.keyUp ? '-keyup' : '')] = true;
     }
-  })
+  });
 }
 
-function initialize () {
+function initialize() {
   webviews.bindEvent('before-input-event', function (tabId, input) {
-    var expectedKeys = 1
+    var expectedKeys = 1;
     // account for additional keys that aren't in the input.key property
     if (input.alt && input.key !== 'Alt') {
-      expectedKeys++
+      expectedKeys++;
     }
     if (input.shift && input.key !== 'Shift') {
-      expectedKeys++
+      expectedKeys++;
     }
     if (input.control && input.key !== 'Control') {
-      expectedKeys++
+      expectedKeys++;
     }
     if (input.meta && input.key !== 'Meta') {
-      expectedKeys++
+      expectedKeys++;
     }
 
     shortcutsList.forEach(function (shortcut) {
       if ((shortcut.keyUp && input.type !== 'keyUp') || (!shortcut.keyUp && input.type !== 'keyDown')) {
-        return
+        return;
       }
-      var matches = true
-      var matchedKeys = 0
+      var matches = true;
+      var matchedKeys = 0;
       shortcut.keys.forEach(function (key) {
-        if (!(
-          key === input.key.toLowerCase() ||
-          key === input.code.replace('Digit', '') ||
-          (key === 'esc' && input.key === 'Escape') ||
-          (key === 'left' && input.key === 'ArrowLeft') ||
-          (key === 'right' && input.key === 'ArrowRight') ||
-          (key === 'up' && input.key === 'ArrowUp') ||
-          (key === 'down' && input.key === 'ArrowDown') ||
-          (key === 'alt' && (input.alt || input.key === 'Alt')) ||
-          (key === 'option' && (input.alt || input.key === 'Alt')) ||
-          (key === 'shift' && (input.shift || input.key === 'Shift')) ||
-          (key === 'ctrl' && (input.control || input.key === 'Control')) ||
-          (key === 'mod' && window.platformType === 'mac' && (input.meta || input.key === 'Meta')) ||
-          (key === 'mod' && window.platformType !== 'mac' && (input.control || input.key === 'Control'))
-        )
+        if (
+          !(
+            key === input.key.toLowerCase() ||
+            key === input.code.replace('Digit', '') ||
+            (key === 'esc' && input.key === 'Escape') ||
+            (key === 'left' && input.key === 'ArrowLeft') ||
+            (key === 'right' && input.key === 'ArrowRight') ||
+            (key === 'up' && input.key === 'ArrowUp') ||
+            (key === 'down' && input.key === 'ArrowDown') ||
+            (key === 'alt' && (input.alt || input.key === 'Alt')) ||
+            (key === 'option' && (input.alt || input.key === 'Alt')) ||
+            (key === 'shift' && (input.shift || input.key === 'Shift')) ||
+            (key === 'ctrl' && (input.control || input.key === 'Control')) ||
+            (key === 'mod' && window.platformType === 'mac' && (input.meta || input.key === 'Meta')) ||
+            (key === 'mod' && window.platformType !== 'mac' && (input.control || input.key === 'Control'))
+          )
         ) {
-          matches = false
+          matches = false;
         } else {
-          matchedKeys++
+          matchedKeys++;
         }
-      })
+      });
 
       if (matches && matchedKeys === expectedKeys) {
-        shortcut.fn(null, shortcut.combo)
+        shortcut.fn(null, shortcut.combo);
       }
-    })
-  })
+    });
+  });
 }
 
-initialize()
+initialize();
 
-module.exports = { defineShortcut }
+module.exports = { defineShortcut };

@@ -1,27 +1,27 @@
 <!-- 带头像框组件 -->
 <template>
   <tippy
-      v-if="frameUrl"
-      :append-to="docBody"
-      :interactive="true"
-      :placement="framePlacement"
-      :trigger="frame.name ? 'mouseenter' : ''"
-      :z-index="9999999"
+    v-if="frameUrl"
+    :append-to="docBody"
+    :interactive="true"
+    :placement="framePlacement"
+    :trigger="frame.name ? 'mouseenter' : ''"
+    :z-index="9999999"
   >
     <div
-        :style="{ width: avatarSize + 'px', height: avatarSize + 'px' }"
-        style="position: relative !important; display: inline-block; zoom: 0.8"
+      :style="{ width: avatarSize + 'px', height: avatarSize + 'px' }"
+      style="position: relative !important; display: inline-block; zoom: 0.8"
     >
       <transition name="fade">
         <a-avatar
-            v-if="frameUrl"
-            :size="avatarSize + 49"
-            :src="frameUrl"
-            :style="{ zoom: zoom }"
-            alt=""
-            class="w-full h-full object-cover frame-position"
-            shape="square"
-            style=""
+          v-if="frameUrl"
+          :size="avatarSize + 49"
+          :src="frameUrl"
+          :style="{ zoom: zoom }"
+          alt=""
+          class="w-full h-full object-cover frame-position"
+          shape="square"
+          style=""
         ></a-avatar>
         <!--        <RayMedal medalStyle="transform:scale(250%) !important"  :size="120"  style="transform: translateX(-20%) " :src="frameUrl">-->
 
@@ -29,12 +29,7 @@
       </transition>
 
       <transition name="fade">
-        <a-avatar
-            :size="avatarSize + 8"
-            :src="avatarUrl"
-            :style="{ zoom: zoom }"
-            class="avatar-position"
-        ></a-avatar>
+        <a-avatar :size="avatarSize + 8" :src="avatarUrl" :style="{ zoom: zoom }" class="avatar-position"></a-avatar>
       </transition>
     </div>
     <template #content>
@@ -44,35 +39,29 @@
             <a-col :span="9">
               <template v-if="frame?.detail.rarity === 4">
                 <RayMedal
-                    :size="120"
-                    :src="frameUrl"
-                    medalStyle="transform:scale(250%) !important"
-                    style="transform: translateX(-20%)"
+                  :size="120"
+                  :src="frameUrl"
+                  medalStyle="transform:scale(250%) !important"
+                  style="transform: translateX(-20%)"
                 >
                 </RayMedal>
               </template>
               <a-avatar
-                  v-else
-                  :size="70"
-                  :src="frameUrl"
-                  alt=""
-                  class="w-full h-full object-cover"
-                  shape="square"
-                  style=""
+                v-else
+                :size="70"
+                :src="frameUrl"
+                alt=""
+                class="w-full h-full object-cover"
+                shape="square"
+                style=""
               ></a-avatar>
             </a-col>
             <a-col :span="15" class="text-left">
               <div class="mt-2">
-                <span
-                    :style="titleTagColor(frame?.detail.rarity)"
-                    class="avatar-font mr-2 font-bold"
-                >
+                <span :style="titleTagColor(frame?.detail.rarity)" class="avatar-font mr-2 font-bold">
                   {{ frame?.alias }}
                 </span>
-                <span
-                    :style="avatarTagColor(frame?.detail.rarity)"
-                    class="w-11 h-6 rank-font rounded my-2.5 px-1"
-                >
+                <span :style="avatarTagColor(frame?.detail.rarity)" class="w-11 h-6 rank-font rounded my-2.5 px-1">
                   {{ textTag(frame?.detail.rarity) }}
                 </span>
               </div>
@@ -83,29 +72,15 @@
           </a-row>
         </div>
 
-        <div class="rounded-lg xt-bg-2 p-2 mb-2">
-          获得方式：{{ avatarGainMethodText(frame?.detail.gainMethod) }}
-        </div>
+        <div class="rounded-lg xt-bg-2 p-2 mb-2">获得方式：{{ avatarGainMethodText(frame?.detail.gainMethod) }}</div>
 
-        <a-button block class="rounded-full" type="primary" @click="toggleStore"
-        >头像框商店
-        </a-button
-        >
+        <a-button block class="rounded-full" type="primary" @click="toggleStore">头像框商店 </a-button>
       </div>
     </template>
   </tippy>
 
-  <div
-      v-else
-      :style="{ width: avatarSize + 'px', height: avatarSize + 'px' }"
-      style="display: inline-block"
-  >
-    <a-avatar
-        :size="avatarSize"
-        :src="avatarUrl"
-        :style="{ zoom: zoom }"
-        class=""
-    ></a-avatar>
+  <div v-else :style="{ width: avatarSize + 'px', height: avatarSize + 'px' }" style="display: inline-block">
+    <a-avatar :size="avatarSize" :src="avatarUrl" :style="{ zoom: zoom }" class=""></a-avatar>
   </div>
 
   <!--  <Modal v-model:visible="frameStoreVisible" v-if="frameStoreVisible">-->
@@ -117,9 +92,9 @@
 
 <script>
 // import FrameStoreWidget from '../team/FrameStoreWidget.vue'
-import Modal from '../Modal.vue'
-import { avatarGainMethodText, avatarTagColor, textTag, titleTagColor, } from '../../js/common/avatar'
-import RayMedal from '../small/RayMedal.vue'
+import Modal from '../Modal.vue';
+import { avatarGainMethodText, avatarTagColor, textTag, titleTagColor } from '../../js/common/avatar';
+import RayMedal from '../small/RayMedal.vue';
 
 export default {
   components: { RayMedal, Modal },
@@ -163,11 +138,11 @@ export default {
       type: String,
     },
   },
-  data () {
+  data() {
     return {
       frameStoreVisible: false,
       docBody: document.body,
-    }
+    };
   },
 
   methods: {
@@ -175,11 +150,11 @@ export default {
     textTag,
     titleTagColor,
     avatarTagColor,
-    toggleStore () {
-      window.toggleFrameStore()
+    toggleStore() {
+      window.toggleFrameStore();
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

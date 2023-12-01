@@ -1,35 +1,35 @@
-import { app, session as electronSession } from 'electron'
-import { EventEmitter } from 'events'
-import path from 'path'
-import { promises as fs } from 'fs'
+import { app, session as electronSession } from 'electron';
+import { EventEmitter } from 'events';
+import path from 'path';
+import { promises as fs } from 'fs';
 
-import { BrowserActionAPI } from './api/browser-action'
-import { TabsAPI } from './api/tabs'
-import { WindowsAPI } from './api/windows'
-import { WebNavigationAPI } from './api/web-navigation'
-import { ExtensionStore } from './store'
-import { ContextMenusAPI } from './api/context-menus'
-import { RuntimeAPI } from './api/runtime'
-import { CookiesAPI } from './api/cookies'
-import { NotificationsAPI } from './api/notifications'
-import { ChromeExtensionImpl } from './impl'
-import { CommandsAPI } from './api/commands'
-import { ExtensionContext } from './context'
-import { ExtensionRouter } from './router'
-import { PermissionsAPI } from "./api/permissions";
+import { BrowserActionAPI } from './api/browser-action';
+import { TabsAPI } from './api/tabs';
+import { WindowsAPI } from './api/windows';
+import { WebNavigationAPI } from './api/web-navigation';
+import { ExtensionStore } from './store';
+import { ContextMenusAPI } from './api/context-menus';
+import { RuntimeAPI } from './api/runtime';
+import { CookiesAPI } from './api/cookies';
+import { NotificationsAPI } from './api/notifications';
+import { ChromeExtensionImpl } from './impl';
+import { CommandsAPI } from './api/commands';
+import { ExtensionContext } from './context';
+import { ExtensionRouter } from './router';
+import { PermissionsAPI } from './api/permissions';
 import { I18nAPI } from './api/i18n';
 
 export interface ChromeExtensionOptions extends ChromeExtensionImpl {
-  session?: Electron.Session
+  session?: Electron.Session;
 
   /**
    * Path to electron-chrome-extensions module files. Might be needed if
    * JavaScript bundlers like Webpack are used in your build process.
    */
-  modulePath?: string
+  modulePath?: string;
 }
 
-const sessionMap = new WeakMap<Electron.Session, ElectronChromeExtensions>()
+const sessionMap = new WeakMap<Electron.Session, ElectronChromeExtensions>();
 
 /**
  * Provides an implementation of various Chrome extension APIs to a session.
@@ -37,105 +37,105 @@ const sessionMap = new WeakMap<Electron.Session, ElectronChromeExtensions>()
 export class ElectronChromeExtensions extends EventEmitter {
   /** Retrieve an instance of this class associated with the given session. */
   static fromSession(session: Electron.Session) {
-    return sessionMap.get(session)
+    return sessionMap.get(session);
   }
 
-  private ctx: ExtensionContext
-  private modulePath: string
+  private ctx: ExtensionContext;
+  private modulePath: string;
 
   private api: {
-    browserAction: BrowserActionAPI
-    contextMenus: ContextMenusAPI
-    commands: CommandsAPI,
-    permissions:PermissionsAPI,
-    i18n:I18nAPI,
-    cookies: CookiesAPI
-    notifications: NotificationsAPI
-    runtime: RuntimeAPI
-    tabs: TabsAPI
-    webNavigation: WebNavigationAPI
-    windows: WindowsAPI
-  }
+    browserAction: BrowserActionAPI;
+    contextMenus: ContextMenusAPI;
+    commands: CommandsAPI;
+    permissions: PermissionsAPI;
+    i18n: I18nAPI;
+    cookies: CookiesAPI;
+    notifications: NotificationsAPI;
+    runtime: RuntimeAPI;
+    tabs: TabsAPI;
+    webNavigation: WebNavigationAPI;
+    windows: WindowsAPI;
+  };
 
   constructor(opts?: ChromeExtensionOptions) {
-    super()
+    super();
 
-    const { session = electronSession.defaultSession, modulePath, ...impl } = opts || {}
+    const { session = electronSession.defaultSession, modulePath, ...impl } = opts || {};
 
     if (sessionMap.has(session)) {
-      throw new Error(`Extensions instance already exists for the given session`)
+      throw new Error(`Extensions instance already exists for the given session`);
     }
 
-    sessionMap.set(session, this)
+    sessionMap.set(session, this);
 
-    const router = new ExtensionRouter(session)
-    const store = new ExtensionStore(impl)
+    const router = new ExtensionRouter(session);
+    const store = new ExtensionStore(impl);
 
     this.ctx = {
       emit: this.emit.bind(this),
       router,
       session,
       store,
-    }
+    };
 
-    this.modulePath = modulePath || path.join(__dirname, '..')
+    this.modulePath = modulePath || path.join(__dirname, '..');
 
     this.api = {
       browserAction: new BrowserActionAPI(this.ctx),
       contextMenus: new ContextMenusAPI(this.ctx),
       commands: new CommandsAPI(this.ctx),
-      permissions:new PermissionsAPI(this.ctx),
-      i18n:new I18nAPI(this.ctx),
+      permissions: new PermissionsAPI(this.ctx),
+      i18n: new I18nAPI(this.ctx),
       cookies: new CookiesAPI(this.ctx),
       notifications: new NotificationsAPI(this.ctx),
       runtime: new RuntimeAPI(this.ctx),
       tabs: new TabsAPI(this.ctx),
       webNavigation: new WebNavigationAPI(this.ctx),
       windows: new WindowsAPI(this.ctx),
-    }
+    };
 
-    this.prependPreload()
+    this.prependPreload();
   }
-  public setupProtocol(session:Electron.Session){
-    this.api.browserAction.setupProtocol(session)
+  public setupProtocol(session: Electron.Session) {
+    this.api.browserAction.setupProtocol(session);
   }
 
   private async prependPreload() {
-    const { session } = this.ctx
-    let preloads = session.getPreloads()
+    const { session } = this.ctx;
+    let preloads = session.getPreloads();
 
-    const preloadPath = path.join(this.modulePath, 'dist/preload.js')
+    const preloadPath = path.join(this.modulePath, 'dist/preload.js');
 
-    const preloadIndex = preloads.indexOf(preloadPath)
+    const preloadIndex = preloads.indexOf(preloadPath);
     if (preloadIndex > -1) {
-      preloads.splice(preloadIndex, 1)
+      preloads.splice(preloadIndex, 1);
     }
 
-    preloads = [preloadPath, ...preloads]
-    session.setPreloads(preloads)
+    preloads = [preloadPath, ...preloads];
+    session.setPreloads(preloads);
 
-    let preloadExists = false
+    let preloadExists = false;
     try {
-      const stat = await fs.stat(preloadPath)
-      preloadExists = stat.isFile()
+      const stat = await fs.stat(preloadPath);
+      preloadExists = stat.isFile();
     } catch {}
 
     if (!preloadExists) {
       console.error(
-        `Unable to access electron-chrome-extensions preload file (${preloadPath}). Consider configuring the 'modulePath' constructor option.`
-      )
+        `Unable to access electron-chrome-extensions preload file (${preloadPath}). Consider configuring the 'modulePath' constructor option.`,
+      );
     }
   }
 
   /** Add webContents to be tracked as a tab. */
   addTab(tab: Electron.WebContents, window: Electron.BrowserWindow) {
-    this.ctx.store.addTab(tab, window)
+    this.ctx.store.addTab(tab, window);
   }
 
   /** Notify extension system that the active tab has changed. */
   selectTab(tab: Electron.WebContents) {
     if (this.ctx.store.tabs.has(tab)) {
-      this.api.tabs.onActivated(tab.id)
+      this.api.tabs.onActivated(tab.id);
     }
   }
 
@@ -150,7 +150,7 @@ export class ElectronChromeExtensions extends EventEmitter {
    * extension IPCs to the main process.
    */
   addExtensionHost(host: Electron.WebContents) {
-    console.warn('ElectronChromeExtensions.addExtensionHost() is deprecated')
+    console.warn('ElectronChromeExtensions.addExtensionHost() is deprecated');
   }
 
   /**
@@ -158,7 +158,7 @@ export class ElectronChromeExtensions extends EventEmitter {
    * @see https://developer.chrome.com/extensions/contextMenus
    */
   getContextMenuItems(webContents: Electron.WebContents, params: Electron.ContextMenuParams) {
-    return this.api.contextMenus.buildMenuItemsForParams(webContents, params)
+    return this.api.contextMenus.buildMenuItemsForParams(webContents, params);
   }
 
   /**
@@ -167,8 +167,8 @@ export class ElectronChromeExtensions extends EventEmitter {
    * @deprecated Not needed in Electron >=12.
    */
   addExtension(extension: Electron.Extension) {
-    console.warn('ElectronChromeExtensions.addExtension() is deprecated')
-    this.api.browserAction.processExtension(extension)
+    console.warn('ElectronChromeExtensions.addExtension() is deprecated');
+    this.api.browserAction.processExtension(extension);
   }
 
   /**
@@ -177,12 +177,12 @@ export class ElectronChromeExtensions extends EventEmitter {
    * @deprecated Not needed in Electron >=12.
    */
   removeExtension(extension: Electron.Extension) {
-    console.warn('ElectronChromeExtensions.removeExtension() is deprecated')
-    this.api.browserAction.removeActions(extension.id)
+    console.warn('ElectronChromeExtensions.removeExtension() is deprecated');
+    this.api.browserAction.removeActions(extension.id);
   }
 }
 
 /**
  * @deprecated Use `ElectronChromeExtensions` instead.
  */
-export const Extensions = ElectronChromeExtensions
+export const Extensions = ElectronChromeExtensions;

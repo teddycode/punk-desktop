@@ -1,71 +1,78 @@
 // 步骤一选择工作台模式数据
 export const guideData = [
   {
-    title: '游戏娱乐', url: 'joystick_3d', id: 'gr',
-    explain: '在左侧栏添加游戏助手，支持steam平台游戏，录屏截屏，查看攻略；支持系统CPU、GPU、内存、游戏帧数检测。'
+    title: '游戏娱乐',
+    url: 'joystick_3d',
+    id: 'gr',
+    explain: '在左侧栏添加游戏助手，支持steam平台游戏，录屏截屏，查看攻略；支持系统CPU、GPU、内存、游戏帧数检测。',
   },
   {
-    title: '效率办公', url: 'keyboard_3d', id: 'wf',
-    explain: '在左侧栏添加办公应用，支持快捷键、剪切板、AI、待办。'
+    title: '效率办公',
+    url: 'keyboard_3d',
+    id: 'wf',
+    explain: '在左侧栏添加办公应用，支持快捷键、剪切板、AI、待办。',
   },
   {
-    title: '极简DIY', url: 'magic_wand_3d', id: 'dy',
-    explain: '无内置推荐数据，仅保留基础核心功能模块，从0开始DIY你的专属工作台。建议老用户选择。'
-  }
-]
+    title: '极简DIY',
+    url: 'magic_wand_3d',
+    id: 'dy',
+    explain: '无内置推荐数据，仅保留基础核心功能模块，从0开始DIY你的专属工作台。建议老用户选择。',
+  },
+];
 
 // 步骤二选择工作台主题模式数据
 export const workTheme = [
   { title: '浅色模式', url: 'sun_3d', id: 1 },
   { title: '暗色模式', url: 'new_moon_3d', id: 0 },
-]
+];
 
 // 步骤三工作台极简模式和完整模式数据
 export const modeData = [
-  { title: '完整模式', name: 'intMode', },
+  { title: '完整模式', name: 'intMode' },
   { title: '极简模式', name: 'simpMode' },
-
-]
+];
 
 // 模式图
 export const modeImg = {
   initUrl: 'https://a.apps.vip/icons/mod/common.png',
-  simpleUrl: 'https://a.apps.vip/icons/mod/tiny.png'
-}
+  simpleUrl: 'https://a.apps.vip/icons/mod/tiny.png',
+};
 
 export const teamData = [
   {
-    img: 'init', title: '我的组织',
-    content: '展示你在web3世界中的参与的DAO组织，您可以参加组织，实现去中心化协作。'
+    img: 'init',
+    title: '我的组织',
+    content: '展示你在web3世界中的参与的DAO组织，您可以参加组织，实现去中心化协作。',
   },
   {
-    img: 'placard_3d', title: '我的信息',
-    content: '内置我的钱包、交易记录、即时通讯、联系人，社区消息等。'
-  }
-]
+    img: 'placard_3d',
+    title: '我的信息',
+    content: '内置我的钱包、交易记录、即时通讯、联系人，社区消息等。',
+  },
+];
 
 // 游戏娱乐左侧和底部栏数据
 export const gamePanel = {
   left: [
-    { 'type': 'systemApp', 'icon': 'shouye1', 'name': '主页', 'event': 'home' },
-    { 'type': 'systemApp', 'icon': 'yingyongzhongxin', 'name': '应用管理', 'event': 'apps' },
-    { 'type': 'systemApp', 'icon': 'youxishoubing', 'name': '游戏', 'event': 'gameIndex' },
-    { 'type': 'systemApp', 'icon': 'yinle1', 'name': '音乐', 'event': 'music' },
-    { 'type': 'systemApp', 'icon': 'banner', 'name': '壁纸', 'event': 'my', }
+    { type: 'systemApp', icon: 'shouye1', name: '主页', event: 'home' },
+    { type: 'systemApp', icon: 'yingyongzhongxin', name: '应用管理', event: 'apps' },
+    { type: 'systemApp', icon: 'youxishoubing', name: '游戏', event: 'gameIndex' },
+    { type: 'systemApp', icon: 'yinle1', name: '音乐', event: 'music' },
+    { type: 'systemApp', icon: 'banner', name: '壁纸', event: 'my' },
   ],
   bottom: [
-    { 'type': 'systemApp', 'icon': 'lock', 'name': '锁定屏幕', 'event': 'lock' },
-    { 'type': 'systemApp', 'icon': 'laptop', 'name': '设备设置', 'event': 'status' },
-    { 'type': 'systemApp', 'icon': 'fullscreen', 'name': '全屏显示', 'event': 'fullscreen' },
-    { 'type': 'systemApp', 'icon': 'setting', 'name': '基础设置', 'event': 'setting' },
-    { 'type': 'systemApp', 'icon': 'tuichu', 'name': '电源', 'event': 'power' }
-  ]
-}
+    { type: 'systemApp', icon: 'lock', name: '锁定屏幕', event: 'lock' },
+    { type: 'systemApp', icon: 'laptop', name: '设备设置', event: 'status' },
+    { type: 'systemApp', icon: 'fullscreen', name: '全屏显示', event: 'fullscreen' },
+    { type: 'systemApp', icon: 'setting', name: '基础设置', event: 'setting' },
+    { type: 'systemApp', icon: 'tuichu', name: '电源', event: 'power' },
+  ],
+};
 // 效率辅助左侧和底部栏数据
 export const workPanel = {
   left: [
-    { 'type': 'systemApp', 'icon': 'shouye1', 'name': '主页', 'event': 'home' },
-    { 'type': 'systemApp', 'icon': 'yingyongzhongxin', 'name': '应用管理', 'event': 'apps' },
+    { type: 'systemApp', icon: 'shouye1', name: '主页', event: 'home' },
+    { type: 'systemApp', icon: 'yingyongzhongxin', name: '应用管理', event: 'apps' },
     {
       type: 'systemApp',
       icon: 'rizhi',
@@ -76,11 +83,17 @@ export const workPanel = {
   ],
   bottom: [
     {
-      type: 'systemApp', icon: 'shangchuan', name: '文件传输', event: 'fileHelper',
+      type: 'systemApp',
+      icon: 'shangchuan',
+      name: '文件传输',
+      event: 'fileHelper',
       data: {
-        theme: '#2c2c2c', name: 'fileHelper', url: 'https://szfilehelper.weixin.qq.com/',
-        preload: 'fileHelper', background: false,
-      }
+        theme: '#2c2c2c',
+        name: 'fileHelper',
+        url: 'https://szfilehelper.weixin.qq.com/',
+        preload: 'fileHelper',
+        background: false,
+      },
     },
     {
       icon: 'https://res.wx.qq.com/a/wx_fed/assets/res/OTE0YTAw.png',
@@ -95,38 +108,38 @@ export const workPanel = {
         preload: 'weixin',
         background: true,
         node: false,
-        security: true
-      }
+        security: true,
+      },
     },
-    { 'type': 'systemApp', 'icon': 'lock', 'name': '锁定屏幕', 'event': 'lock' },
-    { 'type': 'systemApp', 'icon': 'laptop', 'name': '设备设置', 'event': 'status' },
-    { 'type': 'systemApp', 'icon': 'fullscreen', 'name': '全屏显示', 'event': 'fullscreen' },
-    { 'type': 'systemApp', 'icon': 'setting', 'name': '基础设置', 'event': 'setting' },
-    { 'type': 'systemApp', 'icon': 'tuichu', 'name': '电源', 'event': 'power' }
-  ]
-}
+    { type: 'systemApp', icon: 'lock', name: '锁定屏幕', event: 'lock' },
+    { type: 'systemApp', icon: 'laptop', name: '设备设置', event: 'status' },
+    { type: 'systemApp', icon: 'fullscreen', name: '全屏显示', event: 'fullscreen' },
+    { type: 'systemApp', icon: 'setting', name: '基础设置', event: 'setting' },
+    { type: 'systemApp', icon: 'tuichu', name: '电源', event: 'power' },
+  ],
+};
 // 极简diy左侧和底部栏数据
 export const diyPanel = {
   left: [
-    { 'type': 'systemApp', 'icon': 'shouye1', 'name': '主页', 'event': 'home' },
-    { 'type': 'systemApp', 'icon': 'yingyongzhongxin', 'name': '应用管理', 'event': 'apps' },
-    { 'type': 'systemApp', 'icon': 'yinle1', 'name': '音乐', 'event': 'music' },
-    { 'type': 'systemApp', 'icon': 'kuaijie1', 'name': '快捷指令', 'event': 'deck' },
+    { type: 'systemApp', icon: 'shouye1', name: '主页', event: 'home' },
+    { type: 'systemApp', icon: 'yingyongzhongxin', name: '应用管理', event: 'apps' },
+    { type: 'systemApp', icon: 'yinle1', name: '音乐', event: 'music' },
+    { type: 'systemApp', icon: 'kuaijie1', name: '快捷指令', event: 'deck' },
   ],
   bottom: [
-    { 'type': 'systemApp', 'icon': 'lock', 'name': '锁定屏幕', 'event': 'lock' },
-    { 'type': 'systemApp', 'icon': 'setting', 'name': '基础设置', 'event': 'setting' },
-    { 'type': 'systemApp', 'icon': 'fullscreen', 'name': '全屏显示', 'event': 'fullscreen' },
-    { 'type': 'systemApp', 'icon': 'laptop', 'name': '设备设置', 'event': 'status' },
-    { 'type': 'systemApp', 'icon': 'tuichu', 'name': '电源', 'event': 'power' }
-  ]
-}
+    { type: 'systemApp', icon: 'lock', name: '锁定屏幕', event: 'lock' },
+    { type: 'systemApp', icon: 'setting', name: '基础设置', event: 'setting' },
+    { type: 'systemApp', icon: 'fullscreen', name: '全屏显示', event: 'fullscreen' },
+    { type: 'systemApp', icon: 'laptop', name: '设备设置', event: 'status' },
+    { type: 'systemApp', icon: 'tuichu', name: '电源', event: 'power' },
+  ],
+};
 
 // 游戏娱乐和效率辅助合并左侧和底部栏数据
 export const mergePanel = {
   left: [
-    { 'type': 'systemApp', 'icon': 'shouye1', 'name': '主页', 'event': 'home' },
-    { 'type': 'systemApp', 'icon': 'yingyongzhongxin', 'name': '应用管理', 'event': 'apps' },
+    { type: 'systemApp', icon: 'shouye1', name: '主页', event: 'home' },
+    { type: 'systemApp', icon: 'yingyongzhongxin', name: '应用管理', event: 'apps' },
     {
       type: 'systemApp',
       icon: 'rizhi',
@@ -134,17 +147,23 @@ export const mergePanel = {
       tab: 'work',
       event: 'work',
     },
-    { 'type': 'systemApp', 'icon': 'youxishoubing', 'name': '游戏', 'event': 'gameIndex' },
-    { 'type': 'systemApp', 'icon': 'yinle1', 'name': '音乐', 'event': 'music' },
-    { 'type': 'systemApp', 'icon': 'banner', 'name': '壁纸', 'event': 'my', },
+    { type: 'systemApp', icon: 'youxishoubing', name: '游戏', event: 'gameIndex' },
+    { type: 'systemApp', icon: 'yinle1', name: '音乐', event: 'music' },
+    { type: 'systemApp', icon: 'banner', name: '壁纸', event: 'my' },
   ],
   bottom: [
     {
-      type: 'systemApp', icon: 'shangchuan', name: '文件传输', event: 'fileHelper',
+      type: 'systemApp',
+      icon: 'shangchuan',
+      name: '文件传输',
+      event: 'fileHelper',
       data: {
-        theme: '#2c2c2c', name: 'fileHelper', url: 'https://szfilehelper.weixin.qq.com/',
-        preload: 'fileHelper', background: false,
-      }
+        theme: '#2c2c2c',
+        name: 'fileHelper',
+        url: 'https://szfilehelper.weixin.qq.com/',
+        preload: 'fileHelper',
+        background: false,
+      },
     },
     {
       icon: 'https://res.wx.qq.com/a/wx_fed/assets/res/OTE0YTAw.png',
@@ -159,16 +178,16 @@ export const mergePanel = {
         preload: 'weixin',
         background: true,
         node: false,
-        security: true
-      }
+        security: true,
+      },
     },
-    { 'type': 'systemApp', 'icon': 'lock', 'name': '锁定屏幕', 'event': 'lock' },
-    { 'type': 'systemApp', 'icon': 'laptop', 'name': '设备设置', 'event': 'status' },
-    { 'type': 'systemApp', 'icon': 'fullscreen', 'name': '全屏显示', 'event': 'fullscreen' },
-    { 'type': 'systemApp', 'icon': 'setting', 'name': '基础设置', 'event': 'setting' },
-    { 'type': 'systemApp', 'icon': 'tuichu', 'name': '电源', 'event': 'power' }
+    { type: 'systemApp', icon: 'lock', name: '锁定屏幕', event: 'lock' },
+    { type: 'systemApp', icon: 'laptop', name: '设备设置', event: 'status' },
+    { type: 'systemApp', icon: 'fullscreen', name: '全屏显示', event: 'fullscreen' },
+    { type: 'systemApp', icon: 'setting', name: '基础设置', event: 'setting' },
+    { type: 'systemApp', icon: 'tuichu', name: '电源', event: 'power' },
   ],
-}
+};
 
 // 工作台桌面
 export const deskTemplate = {
@@ -257,4 +276,4 @@ export const deskTemplate = {
   gameName: '游戏娱乐',
   workName: '效率辅助',
   emptyName: 'DIY桌面',
-}
+};

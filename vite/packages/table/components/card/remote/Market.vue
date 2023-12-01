@@ -7,17 +7,17 @@
       <div class="block-btn" @click="shareNow">立即分享</div>
     </div>
     <div v-else id="nav" class="head-nav">
-
-      <span>来自社区用户的分享（{{ dataList.length }}）<strong style="color:red">！此功能正在开发中！</strong></span>
-      <a-select v-model:value="sortVal" :bordered="false"
-                :dropdownStyle="{ 'z-index': 99999, backgroundColor: 'var(--secondary-bg)' }"
-                class="select rounded-lg  s-item flex items-center text-center"
-                size="large" style=" z-index: 9; position: relative;"
-                @change="handleChange">
-        <a-select-option v-for=" item  in  sortType " :value="item.value" class="no-drag">{{
-            item.name
-          }}
-        </a-select-option>
+      <span>来自社区用户的分享（{{ dataList.length }}）<strong style="color: red">！此功能正在开发中！</strong></span>
+      <a-select
+        v-model:value="sortVal"
+        :bordered="false"
+        :dropdownStyle="{ 'z-index': 99999, backgroundColor: 'var(--secondary-bg)' }"
+        class="select rounded-lg s-item flex items-center text-center"
+        size="large"
+        style="z-index: 9; position: relative"
+        @change="handleChange"
+      >
+        <a-select-option v-for="item in sortType" :value="item.value" class="no-drag">{{ item.name }} </a-select-option>
       </a-select>
     </div>
     <div id="navList">
@@ -53,8 +53,12 @@
             </div>
           </div>
           <div class="left no-drag" @click="fullScreen(item)">
-            <img :id="'img' + index" :src="item.option[0].img" class="imgInit"
-                 @load="setImg(item.option[0].img,index)"/>
+            <img
+              :id="'img' + index"
+              :src="item.option[0].img"
+              class="imgInit"
+              @load="setImg(item.option[0].img, index)"
+            />
             <!-- <img :src="item.option[0].img ? item.option[0].img : getImg(item.option[0].name)" alt="" :style="{ zoom: '6%' }"/> -->
             <span class="size-bg">{{ item.option[0].size }}</span>
           </div>
@@ -66,26 +70,18 @@
               {{ item.detail }}
             </div>
             <div class="flex justify-between">
-              <div class="flex items-center truncate pr-2" style="flex:1;">
+              <div class="flex items-center truncate pr-2" style="flex: 1">
                 <span>
                   <a-avatar :size="24" :src="item.avatar" shape="square"></a-avatar>
                 </span>
-                <span class="ml-3 truncate xt-text" style="flex:1;font-size: 16px;">{{ item.nickname }}</span>
+                <span class="ml-3 truncate xt-text" style="flex: 1; font-size: 16px">{{ item.nickname }}</span>
               </div>
               <div class="data">
-                <Icon
-                    class="icons"
-                    icon="xiazai"
-                    style="color: #508bfe; margin: 0; width: 20px"
-                ></Icon>
+                <Icon class="icons" icon="xiazai" style="color: #508bfe; margin: 0; width: 20px"></Icon>
                 <div class="data-box">
                   {{ item.download }}
                 </div>
-                <Icon
-                    class="icons"
-                    icon="shijian"
-                    style="color: #52c41a; margin: 0; width: 20px"
-                ></Icon>
+                <Icon class="icons" icon="shijian" style="color: #52c41a; margin: 0; width: 20px"></Icon>
                 <div class="data-box">{{ formatTimestamp(item.time) }}</div>
               </div>
             </div>
@@ -95,24 +91,27 @@
       <!-- 切换数据 -->
       <div v-if="list.length > 3" class="switch-data">
         <div :class="paging === 1 ? 'pag-active' : ''" class="mr-3">
-          <Icon icon="xiangzuo" style="font-size: 1.5em;"></Icon>
+          <Icon icon="xiangzuo" style="font-size: 1.5em"></Icon>
         </div>
         <div>
-          <Icon icon="xiangyou" style="font-size: 1.5em;"></Icon>
+          <Icon icon="xiangyou" style="font-size: 1.5em"></Icon>
         </div>
       </div>
     </div>
   </div>
   <!-- 删除 -->
-  <Modal v-if="promptVisible" v-model:visible="promptVisible" blurFlag="true" style="z-index:99999;">
-    <div class="p-5 xt-modal flex flex-col justify-center items-center"
-         style="width:480px;height:207px;border-radius:16px">
+  <Modal v-if="promptVisible" v-model:visible="promptVisible" blurFlag="true" style="z-index: 99999">
+    <div
+      class="p-5 xt-modal flex flex-col justify-center items-center"
+      style="width: 480px; height: 207px; border-radius: 16px"
+    >
       <div>
-        <Icon icon="tishi-xianxing" style="font-size: 21px;color: orange"></Icon>
-        <span class="ml-3" style="font-size: 18px;color: var(--primary-text);font-weight: 500;">是否确定删除</span>
+        <Icon icon="tishi-xianxing" style="font-size: 21px; color: orange"></Icon>
+        <span class="ml-3" style="font-size: 18px; color: var(--primary-text); font-weight: 500">是否确定删除</span>
       </div>
-      <span class="mt-6 mb-8"
-            style="font-size: 16px;color: var(--secondary-text);">删除后会同步下架分享在创意市场的小组件方案</span>
+      <span class="mt-6 mb-8" style="font-size: 16px; color: var(--secondary-text)"
+        >删除后会同步下架分享在创意市场的小组件方案</span
+      >
       <div class="modal-btn">
         <div class="mr-3 rounded-lg xt-bg-2 pointer" @click="promptVisible = false">取消</div>
         <div class="mr-3 rounded-lg xt-bg-2 pointer" @click="delCard(cardId)">确定</div>
@@ -120,42 +119,40 @@
     </div>
   </Modal>
   <NewPreviewCardDetails
-      v-if="isCardDetails"
-      :cardDetails="cardDetails"
-      @addCardAchieve="add"
-      @closeCardDetails="closeCardDetails"
+    v-if="isCardDetails"
+    :cardDetails="cardDetails"
+    @addCardAchieve="add"
+    @closeCardDetails="closeCardDetails"
   >
   </NewPreviewCardDetails>
 </template>
 
 <script>
-import { mapActions, mapWritableState } from 'pinia'
-import { cardStore } from '../../../store/card'
-import { message } from 'ant-design-vue'
-import NewPreviewCardDetails from '@page/app/card/NewPreviewCardDetails.vue'
-import { dataList, delList, shareList } from './testData'
-import Modal from '../../Modal.vue'
-import { taskStore } from '../../../apps/task/store'
+import { mapActions, mapWritableState } from 'pinia';
+import { cardStore } from '../../../store/card';
+import { message } from 'ant-design-vue';
+import NewPreviewCardDetails from '@page/app/card/NewPreviewCardDetails.vue';
+import { dataList, delList, shareList } from './testData';
+import Modal from '../../Modal.vue';
+import { taskStore } from '../../../apps/task/store';
 
 export default {
   computed: {
     ...mapWritableState(taskStore, ['taskID', 'step']),
-    m03033 () {
-      return this.step == 3 &&
-          this.taskID == 'M0303'
-    }
+    m03033() {
+      return this.step == 3 && this.taskID == 'M0303';
+    },
   },
   components: {
     NewPreviewCardDetails,
-    Modal
+    Modal,
   },
   props: {
     //获取当前桌面
     desk: {
       type: Object,
       required: true,
-      default: () => {
-      },
+      default: () => {},
     },
     //列表类型   默认是社区的  my是我分享的
     listType: {
@@ -166,9 +163,9 @@ export default {
     setCard: {
       type: String,
       default: () => '',
-    }
+    },
   },
-  data () {
+  data() {
     return {
       carouselIndex: 0,
       isCardDetails: false,
@@ -186,24 +183,24 @@ export default {
       paging: 1,
       list: [],
       promptVisible: false,
-      cardId: ''
-    }
+      cardId: '',
+    };
   },
   methods: {
     ...mapActions(cardStore, ['addCard']),
-    getImg (url) {
-      return '/img/addCard/' + url + '.png'
+    getImg(url) {
+      return '/img/addCard/' + url + '.png';
     },
-    addNewCard (item) {
+    addNewCard(item) {
       if (item.option[1] != undefined) {
-        this.fullScreen(item)
+        this.fullScreen(item);
       } else {
-        this.add(item)
+        this.add(item);
       }
     },
-    fullScreen (item) {
-      this.cardDetails = item
-      this.isCardDetails = true
+    fullScreen(item) {
+      this.cardDetails = item;
+      this.isCardDetails = true;
     },
     //获取url
     // getUrl(str) {
@@ -214,67 +211,67 @@ export default {
     //     }
     //     return null;
     // },
-    add (item, index = 0) {
-      index = index ?? this.carouselIndex
+    add(item, index = 0) {
+      index = index ?? this.carouselIndex;
       // let url = this.getUrl(item.detail)
-      let size = item.sizes[0].split('x')
+      let size = item.sizes[0].split('x');
       this.addCard(
-          {
-            name: item.option[index].name,
-            id: Date.now(),
-            customData: {
-              url: item.url,
-              width: (parseInt(size[0]) / 2),
-              height: (parseInt(size[1]) / 2)
-            }
+        {
+          name: item.option[index].name,
+          id: Date.now(),
+          customData: {
+            url: item.url,
+            width: parseInt(size[0]) / 2,
+            height: parseInt(size[1]) / 2,
           },
-          this.desk
-      )
-      this.$emit('closeMarket', false)
-      message.success('添加成功！')
+        },
+        this.desk,
+      );
+      this.$emit('closeMarket', false);
+      message.success('添加成功！');
     },
-    closeCardDetails () {
-      this.isCardDetails = false
+    closeCardDetails() {
+      this.isCardDetails = false;
     },
-    formatTimestamp (timestamp) {
-      const date = new Date(timestamp)
-      const year = date.getFullYear().toString()
-      const month = (date.getMonth() + 1).toString().padStart(2, '0')
-      const day = date.getDate().toString().padStart(2, '0')
-      return `${year}-${month}-${day}`
+    formatTimestamp(timestamp) {
+      const date = new Date(timestamp);
+      const year = date.getFullYear().toString();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      return `${year}-${month}-${day}`;
     },
-    shareNow () {
-      this.$emit('shareNow')
+    shareNow() {
+      this.$emit('shareNow');
     },
-    openDelFrame (id) {
-      this.cardId = id
-      this.promptVisible = true
+    openDelFrame(id) {
+      this.cardId = id;
+      this.promptVisible = true;
     },
-    delCard (id) {
-      delList(id)
-      this.list = shareList
-      this.$forceUpdate()
-      this.$emit('closeMy')
+    delCard(id) {
+      delList(id);
+      this.list = shareList;
+      this.$forceUpdate();
+      this.$emit('closeMy');
     },
-    showPrompt (item) {
-      this.$emit('getCard', item)
+    showPrompt(item) {
+      this.$emit('getCard', item);
     },
-    setImg (src, index) {
-      let imgDom = document.getElementById('img' + index)
-      var img = new Image()
-      img.src = src
-      let res
+    setImg(src, index) {
+      let imgDom = document.getElementById('img' + index);
+      var img = new Image();
+      img.src = src;
+      let res;
       setTimeout(() => {
         res = {
           width: img.width,
-          height: img.height
-        }
+          height: img.height,
+        };
         if (res.width > res.height) {
-          imgDom.style.width = '100px'
+          imgDom.style.width = '100px';
         } else {
-          imgDom.style.height = '100px'
+          imgDom.style.height = '100px';
         }
-      })
+      });
       // return img.onload = function () {
       //   res = {
       //     width: img.width,
@@ -289,14 +286,14 @@ export default {
       // }()
     },
   },
-  mounted () {
+  mounted() {
     if (this.listType === 'my') {
-      this.list = JSON.parse(JSON.stringify(shareList))
+      this.list = JSON.parse(JSON.stringify(shareList));
     } else {
-      this.list = JSON.parse(JSON.stringify(dataList))
+      this.list = JSON.parse(JSON.stringify(dataList));
     }
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -426,7 +423,6 @@ export default {
     justify-content: space-between;
 
     .title {
-
       font-size: 16px;
       color: rgba(255, 255, 255, 0.85);
       font-weight: 500;
@@ -435,7 +431,6 @@ export default {
     }
 
     .text {
-
       font-size: 16px;
       font-weight: 400;
       margin: 2px 0;

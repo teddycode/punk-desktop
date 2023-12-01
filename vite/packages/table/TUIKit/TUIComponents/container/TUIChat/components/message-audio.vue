@@ -1,18 +1,18 @@
 <template>
   <div
-      :class="[data.message.flow === 'out' && 'reserve']"
-      :style="`width: ${data?.second * 10 + 40}px`"
-      class="message-audio"
-      @click.stop="play"
+    class="message-audio"
+    :class="[data.message.flow === 'out' && 'reserve']"
+    @click.stop="play"
+    :style="`width: ${data?.second * 10 + 40}px`"
   >
-    <i :class="[data.message.flow === 'out' && 'icon-reserve']" class="icon icon-voice"></i>
+    <i class="icon icon-voice" :class="[data.message.flow === 'out' && 'icon-reserve']"></i>
     <label>{{ data.second }}s</label>
     <audio ref="audio" :src="data.url"></audio>
   </div>
 </template>
 
 <script lang="ts">
-import {defineComponent, reactive, ref, toRefs, watch} from 'vue';
+import { defineComponent, watch, reactive, toRefs, ref } from 'vue';
 
 export default defineComponent({
   props: {
@@ -30,11 +30,11 @@ export default defineComponent({
     const audio = ref(null);
 
     watch(
-        () => props.data,
-        () => {
-          data.data = props.data;
-        },
-        {deep: true, immediate: true}
+      () => props.data,
+      () => {
+        data.data = props.data;
+      },
+      { deep: true, immediate: true },
     );
 
     const play = () => {
@@ -67,7 +67,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import url('../../../styles/common.scss');
 @import url('../../../styles/icon.scss');
-
 .message-audio {
   display: flex;
   align-items: center;
@@ -75,17 +74,14 @@ export default defineComponent({
   cursor: pointer;
   max-width: 100%;
   overflow: hidden;
-
   .icon {
     margin: 0 4px;
   }
-
   audio {
     width: 0;
     height: 0;
   }
 }
-
 .reserve {
   flex-direction: row-reverse;
 }

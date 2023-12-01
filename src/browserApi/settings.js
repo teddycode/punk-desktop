@@ -1,23 +1,21 @@
-const ipcHelper = require('./ipcHelper')
+const ipcHelper = require('./ipcHelper');
 
-function send (channel, args = {}) {
-  ipcHelper.send('settings', channel, args)
+function send(channel, args = {}) {
+  ipcHelper.send('settings', channel, args);
 }
-
-async function sendSync (channel, args = {}) {
-  return await ipcHelper.sendSync('settings', channel, args)
+async function sendSync(channel, args = {}) {
+  return await ipcHelper.sendSync('settings', channel, args);
 }
-
 const settings = {
-  async get (key) {
-    return await sendSync('get', { key })
+  async get(key) {
+    return await sendSync('get', { key });
   },
-  async set (key, value) {
-    return await sendSync('set', { key, value })
+  async set(key, value) {
+    return await sendSync('set', { key, value });
   },
-  setAutoRun (value) {
-    send('setAutoRun', value)
-  }
-}
+  setAutoRun(value) {
+    send('setAutoRun', value);
+  },
+};
 
-module.exports = settings
+module.exports = settings;

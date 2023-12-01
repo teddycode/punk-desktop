@@ -5,26 +5,22 @@
 <script>
 export default {
   name: 'Sensor',
-  data () {
+  data() {
     return {
-      data: ''
+      data: '',
+    };
+  },
+  mounted() {
+    if (process.platform === 'win32') {
+      const readAida64 = window.readAida64;
+      setInterval(() => {
+        readAida64().then((res) => {
+          this.data = JSON.stringify(res, null, '\t');
+        });
+      }, 1000);
     }
   },
-  mounted () {
-
-    if (process.platform === 'win32') {
-      const readAida64 = window.readAida64
-      setInterval(() => {
-        readAida64().then(res => {
-          this.data = JSON.stringify(res, null, '\t')
-        })
-      }, 1000)
-    }
-
-  }
-}
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

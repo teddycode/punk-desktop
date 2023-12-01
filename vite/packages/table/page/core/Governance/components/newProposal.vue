@@ -15,35 +15,35 @@
       </div> -->
       <div class="input-group">
         <label for="title">类型</label>
-        <input v-model="type" class="custom-input" required>
+        <input v-model="type" class="custom-input" required />
       </div>
       <div class="input-group">
         <label for="title">执行器</label>
-        <input v-model="executor" class="custom-input" required>
+        <input v-model="executor" class="custom-input" required />
       </div>
       <div class="input-group">
         <label for="title">目标</label>
-        <input v-model="target" class="custom-input" required>
+        <input v-model="target" class="custom-input" required />
       </div>
       <div class="input-group">
         <label for="title">金额</label>
-        <input v-model="value" class="custom-input" required>
+        <input v-model="value" class="custom-input" required />
       </div>
       <div class="input-group">
         <label for="title">签名</label>
-        <input v-model="signature" class="custom-input" required>
+        <input v-model="signature" class="custom-input" required />
       </div>
       <div class="input-group">
         <label for="title">载荷数据</label>
-        <input v-model="calldata" class="custom-input" required>
+        <input v-model="calldata" class="custom-input" required />
       </div>
       <div class="input-group">
         <label for="title">代理调用</label>
-        <input v-model="withdelgateCall" class="custom-input" required>
+        <input v-model="withdelgateCall" class="custom-input" required />
       </div>
       <div class="input-group">
         <label for="title">ipfs哈希</label>
-        <input v-model="ipfsHash" class="custom-input" required>
+        <input v-model="ipfsHash" class="custom-input" required />
       </div>
       <button type="submit">提交</button>
     </form>
@@ -51,16 +51,16 @@
 </template>
 
 <script>
-import selfInfo from './selfInfo.vue'
-import { governance } from '@page/core/Governance/services/address'
-import { BigNumber } from 'ethers'
+import selfInfo from './selfInfo.vue';
+import { governance } from '@page/core/Governance/services/address';
+import { BigNumber } from 'ethers';
 
 export default {
   name: 'NewProposal',
   components: {
     selfInfo,
   },
-  data () {
+  data() {
     return {
       type: '',
       executor: '',
@@ -70,18 +70,27 @@ export default {
       calldata: '',
       withdelgateCall: '',
       ipfsHash: '',
-    }
+    };
   },
   methods: {
-    async submitProposal () {
+    async submitProposal() {
       // 检查用户是否已经登录
       if (!localStorage.getItem('userLoggedIn')) {
         // 用户未登录，显示提示
-        alert('请先登录钱包，然后才能上传提案')
-        return
+        alert('请先登录钱包，然后才能上传提案');
+        return;
       }
-      const tx = await governance.create(BigNumber.from(this.type), this.executor, this.target, this.value, this.signature, this.calldata, this.withdelgateCall, this.ipfsHash)
-      const receipt = await tx.wait()
+      const tx = await governance.create(
+        BigNumber.from(this.type),
+        this.executor,
+        this.target,
+        this.value,
+        this.signature,
+        this.calldata,
+        this.withdelgateCall,
+        this.ipfsHash,
+      );
+      const receipt = await tx.wait();
       // // 处理提交提案的逻辑
       // const endDate = new Date();
       // endDate.setDate(endDate.getDate() + 5);
@@ -103,9 +112,9 @@ export default {
       //     .catch(error => {
       //         console.log(error);
       //     });
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>

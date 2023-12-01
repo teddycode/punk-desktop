@@ -1,14 +1,14 @@
 <template>
   <div class="box">
     <a-drawer
-        v-if="visible"
-        v-model:visible="visible"
-        :bodyStyle="{padding: '12px'}"
-        :height="200"
-        :placement="placement"
-        :width="500"
-        style="z-index: 99999999"
-        @close="close()"
+      v-if="visible"
+      :width="500"
+      :height="200"
+      :placement="placement"
+      style="z-index: 99999999"
+      v-model:visible="visible"
+      @close="close()"
+      :bodyStyle="{ padding: '12px' }"
     >
       <template #title>
         <slot name="title"></slot>
@@ -28,24 +28,23 @@ export default {
       default: 'bottom',
     },
   },
-  data () {
+  data() {
     return {
       visible: this.modelValue,
-    }
+    };
   },
   methods: {
-    close () {
-      this.visible = false
-      this.$emit('update:modelValue', false)
+    close() {
+      this.visible = false;
+      this.$emit('update:modelValue', false);
     },
   },
   watch: {
-    modelValue (newV) {
-      this.visible = newV
+    modelValue(newV) {
+      this.visible = newV;
     },
   },
-}
+};
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

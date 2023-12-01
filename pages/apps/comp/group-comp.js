@@ -34,20 +34,20 @@ const groupTpl = `
     </div>
   </template>
 </div>
-`
+`;
 
-const groupModel = require('../../util/model/groupModel')
+const groupModel = require('../../util/model/groupModel');
 const getNameInputValue = function () {
-  return document.getElementById('nameInput').value
-}
+  return document.getElementById('nameInput').value;
+};
 Vue.component('group-comp', {
   name: 'group-comp',
   template: groupTpl,
-  data () {
+  data() {
     return {
       //创建列表的弹窗可见
       createListVisible: false,
-      createTitle: '',//创建列表的标题
+      createTitle: '', //创建列表的标题
       //下拉菜单控制属性
       disableCreate: false,
       disableCreateChild: false,
@@ -61,166 +61,179 @@ Vue.component('group-comp', {
           title: '团队列表',
           key: 'group',
           slots: {
-            icon: 'folder-text'
+            icon: 'folder-text',
           },
-          children: []
-        }
-      ]
-    }
+          children: [],
+        },
+      ],
+    };
   },
-  async mounted () {
+  async mounted() {
     window.$trees.push({
       name: 'group',
-      comp: this
-    })
-    await this.refreshNavs()
+      comp: this,
+    });
+    await this.refreshNavs();
   },
   computed: {},
   methods: {
-    createGroup () {
-      ipc.send('createGroup', { from: 'groupComp' })
+    createGroup() {
+      ipc.send('createGroup', { from: 'groupComp' });
     },
-    async refreshNavs () {
-      await this.$store.dispatch('getMyGroups')
+    async refreshNavs() {
+      await this.$store.dispatch('getMyGroups');
       if (this.groupLists[0].children.length > 0) {
-        this.groupLists[0].children = []
-        this.groupLists[0].children = groupModel.convertTreeNode(this.$store.getters.getMyGroups, 'app_group_list', 'custom', 'list-icon')
+        this.groupLists[0].children = [];
+        this.groupLists[0].children = groupModel.convertTreeNode(
+          this.$store.getters.getMyGroups,
+          'app_group_list',
+          'custom',
+          'list-icon',
+        );
       } else {
-        this.groupLists[0].children = groupModel.convertTreeNode(this.$store.getters.getMyGroups, 'app_group_list', 'custom', 'list-icon')
+        this.groupLists[0].children = groupModel.convertTreeNode(
+          this.$store.getters.getMyGroups,
+          'app_group_list',
+          'custom',
+          'list-icon',
+        );
       }
     },
-    async onSelect (selectedKeys, info) {
-      console.log(selectedKeys, 'selectedKeys__~')
+    async onSelect(selectedKeys, info) {
+      console.log(selectedKeys, 'selectedKeys__~');
       if (selectedKeys[0] === 'group') {
-        this.$router.push({ name: 'groupList', query: { t: Date.now() } })
-        resetOtherTree('group', selectedKeys)
+        this.$router.push({ name: 'groupList', query: { t: Date.now() } });
+        resetOtherTree('group', selectedKeys);
       } else if (selectedKeys[0].startsWith('L1')) {
-        const id = Number(selectedKeys[0].split('-')[1])
-        this.$router.push({ name: 'groupNavs', query: { id: id, t: Date.now() } })
-        resetOtherTree('group', selectedKeys)
+        const id = Number(selectedKeys[0].split('-')[1]);
+        this.$router.push({ name: 'groupNavs', query: { id: id, t: Date.now() } });
+        resetOtherTree('group', selectedKeys);
       } else if (selectedKeys[0].startsWith('L2')) {
         //点二级菜单的时候先需要去获取一级
-        await this.$store.dispatch('getAppGroupNavs', Number(selectedKeys[0].split('-')[1]))
-        const jump = Number(selectedKeys[0].split('-')[2])
-        let type = Number
-        let name = '默认列表'
-        let summary = '描述'
-        let group_id = Number(selectedKeys[0].split('-')[1])
+        await this.$store.dispatch('getAppGroupNavs', Number(selectedKeys[0].split('-')[1]));
+        const jump = Number(selectedKeys[0].split('-')[2]);
+        let type = Number;
+        let name = '默认列表';
+        let summary = '描述';
+        let group_id = Number(selectedKeys[0].split('-')[1]);
         this.$store.getters.getAppGroupNavs.forEach((item) => {
           if (item.id === jump) {
-            type = item.type
-            name = item.name
-            summary = item.summary
+            type = item.type;
+            name = item.name;
+            summary = item.summary;
           }
-        })
+        });
         this.$router.push({
           name: 'group',
-          query: { groupId: group_id, listId: jump, t: Date.now(), type: type, name: name, summary: summary }
-        })
-        resetOtherTree('group', selectedKeys)
+          query: { groupId: group_id, listId: jump, t: Date.now(), type: type, name: name, summary: summary },
+        });
+        resetOtherTree('group', selectedKeys);
       }
     },
-    onContextMenuClick (treeKey, menuKey) {
+    onContextMenuClick(treeKey, menuKey) {
       if (menuKey === 'createList') {
         //创建列表菜单
-        this.handleMenuCreateList(treeKey)
+        this.handleMenuCreateList(treeKey);
       } else if (menuKey === 'renameList') {
-        this.handleMenuRenameList(treeKey)
+        this.handleMenuRenameList(treeKey);
       } else if (menuKey === 'deleteList') {
-        this.handleMenuDeleteList(treeKey)
+        this.handleMenuDeleteList(treeKey);
       }
     },
-    createList (callback = () => {}, value = '', title = '') {
-      this.createTitle = title
-      this.createListVisible = true
-      this.handleNameInput = callback
+    createList(callback = () => {}, value = '', title = '') {
+      this.createTitle = title;
+      this.createListVisible = true;
+      this.handleNameInput = callback;
       appVue.$nextTick(() => {
-        document.getElementById('nameInput').value = value
-      })
+        document.getElementById('nameInput').value = value;
+      });
     },
-    handleMenuDeleteList (treeKey) {
-      let that = this
-      const result = groupModel.findTreeNode(this.groupLists[0].children, treeKey)
+    handleMenuDeleteList(treeKey) {
+      let that = this;
+      const result = groupModel.findTreeNode(this.groupLists[0].children, treeKey);
       this.$confirm({
         title: `确认删除列表: ${result.title} ？`,
         content: `删除后无法撤销，请谨慎操作!`,
         okText: '确认删除，不后悔',
         cancelText: '保留',
-        async onOk () {
+        async onOk() {
           const data = {
             ids: [Number(treeKey.split('-')[2])],
-            group_id: Number(treeKey.split('-')[1])
-          }
-          const result = await that.$store.dispatch('deleteAppGroupNav', data)
+            group_id: Number(treeKey.split('-')[1]),
+          };
+          const result = await that.$store.dispatch('deleteAppGroupNav', data);
           if (result.code === 1000) {
-            that.createListVisible = false
-            await that.refreshNavs()
-            appVue.$message.success({ content: '列表删除成功' })
+            that.createListVisible = false;
+            await that.refreshNavs();
+            appVue.$message.success({ content: '列表删除成功' });
           } else {
-            appVue.$message.error({ content: '列表删除失败!' })
+            appVue.$message.error({ content: '列表删除失败!' });
           }
         },
-        onCancel () {
-          console.log('Cancel')
+        onCancel() {
+          console.log('Cancel');
         },
-      })
-
+      });
     },
     /**
      * 处理菜单的重命名列表事件
      * @param treeKey
      */
-    handleMenuRenameList (treeKey) {
-      const result = groupModel.findTreeNode(this.groupLists[0].children, treeKey)
-      this.createList(async () => {
-        const name = getNameInputValue()
-        if (!!!name) {
-          appVue.$message.error({ content: '请输入列表名称。' })
-          return
-        }
-        const data = {
-          id: Number(treeKey.split('-')[2]),
-          name: name,
-          summary: '描述',
-          group_id: Number(treeKey.split('-')[1])
-        }
-        const result = await this.$store.dispatch('updateAppGroupNav', data)
-        if (result.code === 1000) {
-          this.createListVisible = false
-          await this.refreshNavs()
-          appVue.$message.success({ content: '重命名列表成功' })
-        } else {
-          appVue.$message.error({ content: '重命名列表失败!' })
-        }
-      }, result.title, '重命名')
+    handleMenuRenameList(treeKey) {
+      const result = groupModel.findTreeNode(this.groupLists[0].children, treeKey);
+      this.createList(
+        async () => {
+          const name = getNameInputValue();
+          if (!!!name) {
+            appVue.$message.error({ content: '请输入列表名称。' });
+            return;
+          }
+          const data = {
+            id: Number(treeKey.split('-')[2]),
+            name: name,
+            summary: '描述',
+            group_id: Number(treeKey.split('-')[1]),
+          };
+          const result = await this.$store.dispatch('updateAppGroupNav', data);
+          if (result.code === 1000) {
+            this.createListVisible = false;
+            await this.refreshNavs();
+            appVue.$message.success({ content: '重命名列表成功' });
+          } else {
+            appVue.$message.error({ content: '重命名列表失败!' });
+          }
+        },
+        result.title,
+        '重命名',
+      );
     },
     /**
      * 处理菜单的创建列表事件
      */
-    handleMenuCreateList (treeKey) {
+    handleMenuCreateList(treeKey) {
       this.createList(
         async () => {
           let list = {
             name: getNameInputValue(),
             summary: '描述',
-            group_id: Number(treeKey.split('-')[1])
-          }
+            group_id: Number(treeKey.split('-')[1]),
+          };
           if (!!!list.name) {
-            appVue.$message.error({ content: '请输入列表名称。' })
-            return
+            appVue.$message.error({ content: '请输入列表名称。' });
+            return;
           }
-          const result = await this.$store.dispatch('addAppGroupNav', list)
+          const result = await this.$store.dispatch('addAppGroupNav', list);
           if (result.code === 1000) {
-            this.createListVisible = false
-            await this.refreshNavs()
-            appVue.$message.success({ content: '添加列表成功。' })
+            this.createListVisible = false;
+            await this.refreshNavs();
+            appVue.$message.success({ content: '添加列表成功。' });
           } else {
-            appVue.$message.error({ content: '添加列表失败。' })
+            appVue.$message.error({ content: '添加列表失败。' });
           }
         },
         '请输入云端团队导航名',
-        '云端'
-      )
+        '云端',
+      );
     },
 
     /**
@@ -228,62 +241,62 @@ Vue.component('group-comp', {
      * @param visible
      * @param treeKey
      */
-    checkMenuDisable (visible, treeKey) {
+    checkMenuDisable(visible, treeKey) {
       if (treeKey.startsWith('group')) {
-        this.disableCreate = true
-        this.disableRename = true
-        this.disableDelete = true
+        this.disableCreate = true;
+        this.disableRename = true;
+        this.disableDelete = true;
       } else if (treeKey.startsWith('L2')) {
-        this.disableCreate = true
-        this.disableRename = false
-        this.disableDelete = false
+        this.disableCreate = true;
+        this.disableRename = false;
+        this.disableDelete = false;
       } else if (treeKey.startsWith('L1')) {
-        this.disableCreate = false
-        this.disableRename = true
-        this.disableDelete = true
+        this.disableCreate = false;
+        this.disableRename = true;
+        this.disableDelete = true;
       }
     },
 
     // 拖拽元素放置到了目的地元素上面
-    allowDrop (e, key) {
-      console.log(key, '拖拽key～～～')
+    allowDrop(e, key) {
+      console.log(key, '拖拽key～～～');
     },
-    dragEnter (e) {
-      console.log('enter')
-      console.log(e)
-      e.target.classList.add('canDrag')
+    dragEnter(e) {
+      console.log('enter');
+      console.log(e);
+      e.target.classList.add('canDrag');
     },
-    dragLeave (e) {
-      console.log('leave')
-      console.log(e)
-      e.target.classList.remove('canDrag')
+    dragLeave(e) {
+      console.log('leave');
+      console.log(e);
+      e.target.classList.remove('canDrag');
     },
 
     // 拖拽元素结束了操作
-    async drop (e, key) {
-      e.target.classList.remove('canDrag')
+    async drop(e, key) {
+      e.target.classList.remove('canDrag');
       if (key === 'group' || key.startsWith('L1') || Number(key.split('-')[2]) === window.$listId) {
-        e.preventDefault()
-        appVue.$message.error({ content: '注意移动目标!' })
+        e.preventDefault();
+        appVue.$message.error({ content: '注意移动目标!' });
       } else {
-        let ids = []
-        window.$selectedApps.forEach(e => {
-          ids.push(Number(e))
-        })
+        let ids = [];
+        window.$selectedApps.forEach((e) => {
+          ids.push(Number(e));
+        });
         const data = {
           ids,
           list_id: Number(key.split('-')[2]),
-        }
-        const result = await this.$store.dispatch('updateGroupNavApps', data)
+        };
+        const result = await this.$store.dispatch('updateGroupNavApps', data);
         if (result.code === 1000) {
-          window.$selectedApps = []
-          window.$removeApps()
-          appVue.$message.success({ content: '移动应用成功。' })
+          window.$selectedApps = [];
+          window.$removeApps();
+          appVue.$message.success({ content: '移动应用成功。' });
         } else {
-          console.log(result)
-          appVue.$message.success({ content: '移动应用失败!' })
+          console.log(result);
+          appVue.$message.success({ content: '移动应用失败!' });
         }
       }
     },
-  }
-})
+  },
+});

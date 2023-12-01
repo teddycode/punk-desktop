@@ -70,27 +70,18 @@ onMounted(() => {
     <div class="container">
       <h1 class="pageTitle">vue-shepherd</h1>
 
-      <h4 class="first-element">
-        Guide your users through a tour of your app.
-      </h4>
+      <h4 class="first-element">Guide your users through a tour of your app.</h4>
 
       <h5>Installation</h5>
 
-      <div class="install-element" ref="installElement">
-        Install instructions go here
-      </div>
+      <div class="install-element" ref="installElement">Install instructions go here</div>
 
       <h5>Usage</h5>
 
-      <div class="usage-element" ref="usageElement">
-        Usage instructions go here
-      </div>
+      <div class="usage-element" ref="usageElement">Usage instructions go here</div>
 
       <div class="medium-8 columns medium-centered text-center">
-        <a
-          href="https://github.com/shipshapecode/shepherd"
-          class="shepherd-logo-link"
-        >
+        <a href="https://github.com/shipshapecode/shepherd" class="shepherd-logo-link">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             version="1.0"

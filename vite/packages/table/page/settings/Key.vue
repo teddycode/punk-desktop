@@ -7,14 +7,11 @@
 </template>
 
 <script>
-import KeySetting from '../../components/comp/KeySetting.vue'
-
+import KeySetting from '../../components/comp/KeySetting.vue';
 export default {
   name: 'Key',
   components: { KeySetting },
-
-}
+};
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style scoped lang="scss"></style>

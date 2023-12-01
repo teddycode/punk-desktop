@@ -15,81 +15,83 @@ const systemType = {
    * High Sierra 10.13.6
    * @returns {string}
    */
-  systemVersion () {
-    return process.getSystemVersion()
+  systemVersion() {
+    return process.getSystemVersion();
   },
   /**
    * win32 是windows darwin是mac
    *  "aix" | "android" | "darwin" | "freebsd" | "haiku" | "linux" | "openbsd" | "sunos" | "win32" |
    * @returns {NodeJS.Platform}
    */
-  platform () {
-    return process.platform
+  platform() {
+    return process.platform;
   },
   /**
    * 系统平台中文名称
    */
-  platformAlias () {
+  platformAlias() {
     switch (systemType.platform()) {
       case 'darwin':
-        return 'MacOS'
+        return 'MacOS';
       case 'win32':
-        return 'Windows'
+        return 'Windows';
     }
   },
   /**
    * 获得版本号的中文名称
    * @returns {string}
    */
-  versionAlias () {
-    const sysVersion = process.getSystemVersion()
+  versionAlias() {
+    const sysVersion = process.getSystemVersion();
     if (systemType.platform() === 'win32') {
       if (sysVersion.startsWith('10.0.1')) {
-        return 'win10'
+        return 'win10';
       } else if (sysVersion.startsWith('10.0.2')) {
-        return 'win11'
-      } else if (sysVersion.startsWith('6.1')) { return 'win7' } else return '早于win7'
+        return 'win11';
+      } else if (sysVersion.startsWith('6.1')) {
+        return 'win7';
+      } else return '早于win7';
     } else if (systemType.platform() === 'darwin') {
       if (sysVersion.startsWith('13.')) {
-        return 'Ventura'
+        return 'Ventura';
       }
       if (sysVersion.startsWith('12.')) {
-        return 'Monterey'
+        return 'Monterey';
       } else if (sysVersion.startsWith('11.6.2')) {
-        return 'Big Sur'
+        return 'Big Sur';
       } else if (sysVersion.startsWith('10.15.7')) {
-        return 'Catalina'
+        return 'Catalina';
       } else if (sysVersion.startsWith('10.14.6')) {
-        return 'Mojave'
+        return 'Mojave';
       } else if (sysVersion.startsWith('10.13.6')) {
-        return 'High Sierra'
+        return 'High Sierra';
       } else if (sysVersion.startsWith('10.12.6')) {
-        return 'Sierra'
+        return 'Sierra';
       } else if (sysVersion.startsWith('10.11.6')) {
-        return 'El Capitan'
+        return 'El Capitan';
       } else if (sysVersion.startsWith('10.10.5')) {
-        return 'Yosemite'
+        return 'Yosemite';
       } else {
-        return '早于Yosemite'
+        return '早于Yosemite';
       }
     }
   },
-  winVersionCase (versionStart) {
-    const sysVersion = process.getSystemVersion()
+  winVersionCase(versionStart) {
+    const sysVersion = process.getSystemVersion();
     if (sysVersion.startsWith(versionStart) && systemType.platform() === 'win32') {
-      return true
+      return true;
     } else {
-      return false
+      return false;
     }
   },
-  isWin7 () {
-    return systemType.winVersionCase('6.1')
+  isWin7() {
+    return systemType.winVersionCase('6.1');
   },
-  isWin10 () {
-    return systemType.winVersionCase('10.0.1')
+  isWin10() {
+    return systemType.winVersionCase('10.0.1');
   },
-  isWin11 () {
-    return systemType.winVersionCase('10.0.2')
-  }
-}
-module.exports = systemType
+  isWin11() {
+    return systemType.winVersionCase('10.0.2');
+  },
+};
+module.exports = systemType;

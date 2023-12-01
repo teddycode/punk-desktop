@@ -1,21 +1,19 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
+import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: "Emoji",
+  name: 'Emoji',
   props: ['icon'],
   methods: {
     getUrl() {
-      return '/emoji/' + this.icon + '.png'
-    }
-  }
-})
+      return '/emoji/' + this.icon + '.png';
+    },
+  },
+});
 </script>
 
 <template>
   <a-avatar :src="getUrl()" shape="square"></a-avatar>
 </template>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

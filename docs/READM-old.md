@@ -1,6 +1,5 @@
-此文件为磐古跨链客户端最早base的一个国外开源的浏览器项目，我们在此基础上进行了二次完善，得到了磐古跨链客户端部分。
+此文件为磐古跨链客户端最早 base 的一个国外开源的浏览器项目，我们在此基础上进行了二次完善，得到了磐古跨链客户端部分。
 仅供大家参考，大家如果有兴趣可以自行去看一下这个原始项目。
-
 
 # Min
 
@@ -22,8 +21,8 @@ Download Min from the [releases page](https://github.com/minbrowser/min/releases
 Min is made possible by these sponsors:
 
 | [<img src="https://avatars3.githubusercontent.com/u/17785839?s=400&v=4" width="40">](https://github.com/ritterob) | [<img src="https://avatars.githubusercontent.com/u/6592155?s=460&v=4" width="40">](https://github.com/blackgwe) | [<img src="https://avatars.githubusercontent.com/u/33535850?v=4" width="40">](https://github.com/jonathanhuston) | [<img src="https://avatars.githubusercontent.com/u/74563788?v=4" width="40">](https://github.com/JackGFuller) | [<img src="https://avatars.githubusercontent.com/u/34013162?v=4" width="40">](https://github.com/flightmansam) |     |
-| ----------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |  --- |
-| [@ritterob](https://github.com/ritterob)                                                                          | [@blackgwe](https://github.com/blackgwe)                                                                        | [@jonathanhuston](https://github.com/jonathanhuston)                                                                        | [@JackGFuller](https://github.com/JackGFuller)                                                                              | [@flightmansam](https://github.com/flightmansam)                                                                              ||
+| ----------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | --- |
+| [@ritterob](https://github.com/ritterob)                                                                          | [@blackgwe](https://github.com/blackgwe)                                                                        | [@jonathanhuston](https://github.com/jonathanhuston)                                                             | [@JackGFuller](https://github.com/JackGFuller)                                                                | [@flightmansam](https://github.com/flightmansam)                                                               |     |
 
 [Become a sponsor](https://github.com/sponsors/PalmerAL)
 

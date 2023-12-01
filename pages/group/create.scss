@@ -2,16 +2,13 @@
   height: 180px;
   line-height: 1.5;
 }
-
 .candidate {
   margin-right: 10px;
   cursor: pointer;
 }
-
 .active {
   border: 1px dashed #ccc;
 }
-
 .tip {
   color: #999;
   padding-left: 25px;
@@ -28,7 +25,6 @@
 
 .form-item-col4 {
   margin-bottom: 0;
-
   .ant-form-item-control {
     display: flex;
     justify-content: center;

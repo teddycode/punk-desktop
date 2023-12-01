@@ -4,4 +4,4 @@ module.exports = {
   HTTP_SERVER: 'xxx.com',
   SENTRY_SERVICE: '',
   ELECTRON_DISABLE_SECURITY_WARNINGS: true,
-}
+};

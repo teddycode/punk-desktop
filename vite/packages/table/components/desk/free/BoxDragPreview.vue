@@ -1,7 +1,7 @@
 <!--  -->
 <script lang="ts" setup>
-import Box from "./Box.vue";
-import {onMounted, onUnmounted, ref} from "vue";
+import Box from './Box.vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 
 const props = defineProps({
   title: {},
@@ -21,7 +21,7 @@ const tickTock = ref(false);
 <template>
   <div class="box-drag-preview">
     2222222222
-    <Box :title="title" :yellow="tickTock" preview/>
+    <Box :title="title" :yellow="tickTock" preview />
   </div>
 </template>
 

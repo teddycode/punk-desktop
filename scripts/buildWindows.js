@@ -1,48 +1,51 @@
-const fs = require('fs')
-const archiver = require('archiver')
+const fs = require('fs');
+const archiver = require('archiver');
 
-const packageFile = require('./../package.json')
-const version = packageFile.version
+const packageFile = require('./../package.json');
+const version = packageFile.version;
 
-const createPackage = require('./createPackage.js')
+const createPackage = require('./createPackage.js');
 
-async function afterPackageBuilt (appPaths) {
+async function afterPackageBuilt(appPaths) {
   /* create zip files */
 
   await appPaths.forEach(async function (packagePath) {
-    var output = fs.createWriteStream(packagePath.replace('Min-', 'TsWork-v' + version + '-') + '.zip')
+    var output = fs.createWriteStream(packagePath.replace('Min-', 'TsWork-v' + version + '-') + '.zip');
     var archive = archiver('zip', {
-      zlib: { level: 9 }
-    })
-    archive.directory(packagePath, 'Min-v' + version)
-    archive.pipe(output)
-    await archive.finalize()
-  })
+      zlib: { level: 9 },
+    });
+    archive.directory(packagePath, 'Min-v' + version);
+    archive.pipe(output);
+    await archive.finalize();
+  });
 
   /* create installer */
-  if (appPaths.filter(p => p.includes('x64')).length > 0) {
-    const installer = require('electron-installer-windows')
+  if (appPaths.filter((p) => p.includes('x64')).length > 0) {
+    const installer = require('electron-installer-windows');
 
     const options = {
-      src: appPaths.filter(p => p.includes('x64'))[0],
+      src: appPaths.filter((p) => p.includes('x64'))[0],
       dest: 'dist/app/min-installer-x64',
       icon: 'icons/browser.ico',
       animation: 'icons/windows-installer.gif',
       licenseUrl: 'https://github.com/minbrowser/min/blob/master/LICENSE.txt',
-      noMsi: true
-    }
+      noMsi: true,
+    };
 
-    console.log(options)
-    console.log('正在打包 (可能需要较长时间)')
+    console.log(options);
+    console.log('正在打包 (可能需要较长时间)');
 
     await installer(options)
       .then(function () {
-        fs.renameSync('./dist/app/min-installer-x64/min-' + version + '-setup.exe', './dist/app/min-' + version + '-setup.exe')
+        fs.renameSync(
+          './dist/app/min-installer-x64/min-' + version + '-setup.exe',
+          './dist/app/min-' + version + '-setup.exe',
+        );
       })
-      .catch(err => {
-        console.error(err, err.stack)
-        process.exit(1)
-      })
+      .catch((err) => {
+        console.error(err, err.stack);
+        process.exit(1);
+      });
   }
 }
 
@@ -50,6 +53,6 @@ async function afterPackageBuilt (appPaths) {
 createPackage('win32', { arch: 'x64' })
   .then(afterPackageBuilt)
   .then(function () {
-    return createPackage('win32', { arch: 'ia32' })
+    return createPackage('win32', { arch: 'ia32' });
   })
-  .then(afterPackageBuilt)
+  .then(afterPackageBuilt);

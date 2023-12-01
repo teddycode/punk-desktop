@@ -1,5 +1,5 @@
-const axios = require('../util/axios.js')
-const userModel = require('../model/userModel')
+const axios = require('../util/axios.js');
+const userModel = require('../model/userModel');
 const baseApi = {
   token: '',
   currentUser: {},
@@ -9,25 +9,25 @@ const baseApi = {
   refreshExpireTime: 0,
   beforeInit: async () => {
     if (typeof window === 'undefined') {
-      baseApi.inMain = true
+      baseApi.inMain = true;
     }
   },
   init: async (user = false) => {
-    await baseApi.beforeInit()
+    await baseApi.beforeInit();
     if (user === false) {
-      let userResponse = await userModel.getCurrent()
+      let userResponse = await userModel.getCurrent();
       if (userResponse.status === 1) {
-        user = userResponse.data
+        user = userResponse.data;
       } else {
-        return
+        return;
       }
     }
-    baseApi.currentUser = user
-    baseApi.token = user.token
-    baseApi.uid = user.uid
-    baseApi.refreshToken = user.refresh_token
-    baseApi.expireTime = user.expire_time
-    baseApi.refreshExpireTime = user.refresh_expire_time
+    baseApi.currentUser = user;
+    baseApi.token = user.token;
+    baseApi.uid = user.uid;
+    baseApi.refreshToken = user.refresh_token;
+    baseApi.expireTime = user.expire_time;
+    baseApi.refreshExpireTime = user.refresh_expire_time;
   },
 
   /**
@@ -39,15 +39,13 @@ const baseApi = {
    * @returns Promise
    */
   axios: async (url, params, method = 'post', min = false) => {
-    let data = {}
-    if (method === 'get') data = { params }
-    if (method === 'post' || method === 'put' || method === 'delete')
-      data = { data: params }
+    let data = {};
+    if (method === 'get') data = { params };
+    if (method === 'post' || method === 'put' || method === 'delete') data = { data: params };
     //todo cache请求缓存后期做一下，防止在1000毫秒内重复请求设置
     if (!min) {
-
       let conf = {
-        timeout: 10000,//设置默认3秒钟超时 因为我加入的圈子的接口耗时过长，所以这边从5秒又放宽到了10秒
+        timeout: 10000, //设置默认3秒钟超时 因为我加入的圈子的接口耗时过长，所以这边从5秒又放宽到了10秒
         method: method,
         url: url,
         headers: { Authorization: baseApi.token },
@@ -57,17 +55,17 @@ const baseApi = {
           refreshToken: baseApi.refreshToken,
           expire_deadtime: baseApi.expireTime,
           refreshExpire_deadtime: baseApi.refreshExpireTime,
-          inMain: baseApi.inMain
-        }
-      }
-      return axios(conf)
+          inMain: baseApi.inMain,
+        },
+      };
+      return axios(conf);
     } else {
       return axios({
         method: method,
         url: url,
         ...data,
-      })
+      });
     }
   },
-}
-module.exports = baseApi
+};
+module.exports = baseApi;

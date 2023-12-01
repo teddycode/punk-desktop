@@ -91,15 +91,15 @@ const tpl = `
 </a-row>
 </div>
 
-  `
+  `;
 Vue.component('gradePanel', {
   template: tpl,
   name: 'grade-panel',
   props: {
     grade: {},
-    user: {}
+    user: {},
   },
-  data () {
+  data() {
     return {
       remainHour: '',
       remainMinute: '',
@@ -112,7 +112,7 @@ Vue.component('gradePanel', {
           title: '默默无闻',
           summaryNames: '全网300名开外',
           summaryDes: '初出茅庐。',
-          color: '#c1c1c1'
+          color: '#c1c1c1',
         },
 
         t300: {
@@ -120,89 +120,89 @@ Vue.component('gradePanel', {
           title: '崭露锋芒',
           summaryNames: '全网前300名',
           summaryDes: '崭露锋芒，潜力无限！',
-          color: '#9CA5CB'
+          color: '#9CA5CB',
         },
         t100: {
           badge: 'bronzec-b',
           title: '实力非凡',
           summaryNames: '全网前100名',
           summaryDes: '不容小觑，成长惊人！',
-          color: 'rgb(196 85 35)'
+          color: 'rgb(196 85 35)',
         },
         t50: {
           badge: 'silverc-b',
           title: '出类拔萃',
           summaryNames: '全网前50名',
           summaryDes: '能力过人，摧枯拉朽！',
-          color: 'rgb(159 183 204)'
+          color: 'rgb(159 183 204)',
         },
         t20: {
           badge: 'goldc-b',
           title: '惊为天人',
           summaryNames: '全网前20名',
           summaryDes: '超强实力，惊天动地！',
-          color: 'rgb(201 126 7)'
+          color: 'rgb(201 126 7)',
         },
         t5: {
           badge: 'platinumc-b',
           title: '超神',
           summaryNames: '全网前5名',
           summaryDes: '前无古人，后无来者！',
-          color: 'rgb(64 116 231)'
+          color: 'rgb(64 116 231)',
         },
         rank: 0,
-      }
-    }
+      },
+    };
   },
-  mounted () {
-    let lv = this.grade.lv
-    let section = this.gradeTableGenerate(64)[lv + 1]
-    let remain = section[0] * 60 - this.grade.cumulativeMinute
-    this.remainHour = Math.floor(remain / 60)
-    this.remainMinute = remain - (Math.floor(remain / 60) * 60)
-    this.times = this.getTimes()
+  mounted() {
+    let lv = this.grade.lv;
+    let section = this.gradeTableGenerate(64)[lv + 1];
+    let remain = section[0] * 60 - this.grade.cumulativeMinute;
+    this.remainHour = Math.floor(remain / 60);
+    this.remainMinute = remain - Math.floor(remain / 60) * 60;
+    this.times = this.getTimes();
   },
 
   methods: {
-    getBadge () {
-      let rank = this.grade.rank
-      this.badge.rank = rank
+    getBadge() {
+      let rank = this.grade.rank;
+      this.badge.rank = rank;
       if (rank > 300) {
-        return this.badge.t9999
+        return this.badge.t9999;
       } else if (rank < 5) {
-        return this.badge.t5
+        return this.badge.t5;
       } else if (rank < 20) {
-        return this.badge.t20
+        return this.badge.t20;
       } else if (rank < 50) {
-        return this.badge.t50
+        return this.badge.t50;
       } else if (rank < 100) {
-        return this.badge.t100
+        return this.badge.t100;
       } else if (rank <= 300) {
-        return this.badge.t300
+        return this.badge.t300;
       }
     },
 
-    getTimes () {
-      let str = this.getDateStr()
-      let times = localStorage.getItem(str)
-      times = Number(times === null ? 2 : times)
-      this.times = times
-      return times
+    getTimes() {
+      let str = this.getDateStr();
+      let times = localStorage.getItem(str);
+      times = Number(times === null ? 2 : times);
+      this.times = times;
+      return times;
     },
-    getDateStr () {
-      let date = new Date(Date.now())
-      let str = date.getFullYear() + '_' + (date.getMonth() + 1) + '_' + date.getDate() + '_' + this.user.uid
-      return str
+    getDateStr() {
+      let date = new Date(Date.now());
+      let str = date.getFullYear() + '_' + (date.getMonth() + 1) + '_' + date.getDate() + '_' + this.user.uid;
+      return str;
     },
-    setTimes (times) {
-      let str = this.getDateStr()
-      localStorage.setItem(str, Number(times))
+    setTimes(times) {
+      let str = this.getDateStr();
+      localStorage.setItem(str, Number(times));
     },
-    use () {
-      let times = this.getTimes()
+    use() {
+      let times = this.getTimes();
       if (times <= 0) {
-        antd.message.error('剩余道具不足，无法使用。')
-        return false
+        antd.message.error('剩余道具不足，无法使用。');
+        return false;
       } else {
         let confirm = antd.Modal.confirm({
           content: '是否使用道具？',
@@ -210,35 +210,34 @@ Vue.component('gradePanel', {
           centered: true,
           cancelText: '取消',
           onOk: () => {
-            times--
-            this.times = times
-            this.setTimes(times)
-            this.distance = (this.grade.distance / 60).toFixed(0) + '小时' + this.grade.distance % 60 + '分'
-            antd.message.success('已为您查看前一名距离。')
-            confirm.destroy()
-            return true
-          }
-        })
-
+            times--;
+            this.times = times;
+            this.setTimes(times);
+            this.distance = (this.grade.distance / 60).toFixed(0) + '小时' + (this.grade.distance % 60) + '分';
+            antd.message.success('已为您查看前一名距离。');
+            confirm.destroy();
+            return true;
+          },
+        });
       }
     },
 
-    gradeTableGenerate (num) {
-      let lvSys = {}
+    gradeTableGenerate(num) {
+      let lvSys = {};
       for (let i = 0; i < num + 1; i++) {
-        let arrLef = 0
-        let arrRg = 0
+        let arrLef = 0;
+        let arrRg = 0;
         for (let j = 0; j < i; j++) {
-          arrLef += 10 * (j + 2)
+          arrLef += 10 * (j + 2);
         }
         for (let k = 0; k < i + 1; k++) {
-          arrRg += 10 * (k + 2)
+          arrRg += 10 * (k + 2);
         }
-        arrRg -= 1
-        lvSys[`${i}`] = [arrLef, arrRg]
+        arrRg -= 1;
+        lvSys[`${i}`] = [arrLef, arrRg];
       }
-      delete lvSys['lv0']
-      return lvSys
+      delete lvSys['lv0'];
+      return lvSys;
     },
-  }
-})
+  },
+});

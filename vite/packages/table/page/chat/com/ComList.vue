@@ -1,17 +1,17 @@
 <template>
   <!-- {{ props.cardData }} -->
   <div class="w-full card">
-    <div class=" card-content">
+    <div class="card-content">
       <!-- {{ Imageheight.width }} -->
       <div class="w-full card-top">
         <div class="top-left">
           <a-avatar :size="32" :src="cardData.user.avatar" class="pointer" @click.stop="showCard(uid, userInfo)">
             <template #icon>
-              <UserOutlined/>
+              <UserOutlined />
             </template>
           </a-avatar>
           <div class="user-msg">
-            <div class="text-sm username" style="color: var(--primary-text);">
+            <div class="text-sm username" style="color: var(--primary-text)">
               {{ cardData.user.nickname }}
             </div>
             <div class="text-xs self-msg xt-text-2">
@@ -21,108 +21,113 @@
             </div>
           </div>
         </div>
-
       </div>
 
       <div class="w-full">
-        <div class="flex ">
+        <div class="flex">
           <!-- 单个图片 -->
           <template v-if="cardData.image.length === 1 && !cardData.data?.video">
             <!-- <div > -->
-            <img :class="{ 'hide-images-video': detailVisible }" :src="cardData.image_170_170[0].image"
-                 class="object-cover mr-2 overflow-hidden rounded-md cover-im" style="flex-shrink: 0;text-align: "
-            >
+            <img
+              :src="cardData.image_170_170[0].image"
+              class="object-cover mr-2 overflow-hidden rounded-md cover-im"
+              :class="{ 'hide-images-video': detailVisible }"
+              style="flex-shrink: 0; text-align: "
+            />
             <!-- </div> -->
-
           </template>
-          <video v-if="cardData.data?.video" :class="{ 'hide-images-video': detailVisible }"
-                 class="object-cover mr-2 rounded-md cover-im">
-            <source :src="cardData.data?.video" type="video/mp4"/>
-            <source :src="cardData.data?.video" type="video/webm"/>
+          <video
+            class="object-cover mr-2 rounded-md cover-im"
+            v-if="cardData.data?.video"
+            :class="{ 'hide-images-video': detailVisible }"
+          >
+            <source :src="cardData.data?.video" type="video/mp4" />
+            <source :src="cardData.data?.video" type="video/webm" />
           </video>
           <!-- 正文内容 -->
-          <div class="flex flex-col justify-between" style="flex-shrink: 1;">
-            <div v-if="cardData.title" id="title"
-                 :class="{ 'omit-title': cardData.image.length === 1 || cardData.data?.video }"
-                 :innerHTML="title" style="color: var(--primary-text);">
-            </div>
-            <div id="context" :class="{ 'omit': cardData.image.length === 1 || cardData.data?.video }"
-                 :innerHTML="content" style="color:  var(--secondary-text); text-align: left;">
-            </div>
+          <div class="flex flex-col justify-between" style="flex-shrink: 1">
+            <div
+              id="title"
+              style="color: var(--primary-text)"
+              v-if="cardData.title"
+              :class="{ 'omit-title': cardData.image.length === 1 || cardData.data?.video }"
+              :innerHTML="title"
+            ></div>
+            <div
+              id="context"
+              style="color: var(--secondary-text); text-align: left"
+              :class="{ omit: cardData.image.length === 1 || cardData.data?.video }"
+              :innerHTML="content"
+            ></div>
           </div>
         </div>
         <template v-if="cardData.image.length > 1">
-          <div class="flex w-full p-0 mt-3 -mb-1 whitespace-pre-wrap cover-wrapper ">
+          <div class="flex w-full p-0 mt-3 -mb-1 whitespace-pre-wrap cover-wrapper">
             <!-- <div> -->
-            <img v-for="(item, index) in cardData.image_170_170" :key="index" :src="item.image" alt=""
-                 class="object-cover mr-2 overflow-hidden rounded-md cover-sm">
+            <img
+              :src="item.image"
+              alt=""
+              :key="index"
+              v-for="(item, index) in cardData.image_170_170"
+              class="object-cover mr-2 overflow-hidden rounded-md cover-sm"
+            />
             <!-- </div> -->
-
           </div>
         </template>
-
-
       </div>
 
-      <div class="text-xs card-bottom" style="color:  var(--secondary-text);">
-        <span class="view" style="cursor: pointer;">{{ cardData.view_count }} 浏览</span>
-        <span class="like" style="cursor: pointer;">{{ cardData.support_count }} 点赞</span>
-        <span class="comments" style="cursor: pointer;">{{ cardData.reply_count }} 评论</span>
+      <div class="text-xs card-bottom" style="color: var(--secondary-text)">
+        <span class="view" style="cursor: pointer">{{ cardData.view_count }} 浏览</span>
+        <span class="like" style="cursor: pointer">{{ cardData.support_count }} 点赞</span>
+        <span class="comments" style="cursor: pointer">{{ cardData.reply_count }} 评论</span>
       </div>
-
     </div>
-
   </div>
 </template>
 
-<script lang='ts' setup>
-import {computed} from 'vue'
-import {UserOutlined} from '@ant-design/icons-vue'
-import {appStore} from '../../../../table/store'
-import emojiReplace from '../../../js/chat/emoji'
-
-const useUserStore = appStore()
-
+<script setup lang="ts">
+import { computed, reactive } from 'vue';
+import { UserOutlined } from '@ant-design/icons-vue';
+import { appStore } from '../../../../table/store';
+import emojiReplace from '../../../js/chat/emoji';
+const useUserStore = appStore();
 
 const props = defineProps({
   detailVisible: Boolean,
   cardData: {
     type: Object,
-    default: () => []
-  }
-})
+    default: () => [],
+  },
+});
 const postData = computed(() => {
-  return props.cardData
-})
-let uid = postData.value.user.uid
+  return props.cardData;
+});
+let uid = postData.value.user.uid;
 let userInfo = {
   uid: postData.value.user.uid,
   nickname: postData.value.user.nickname,
-  avatar: postData.value.user.avatar_128
-}
+  avatar: postData.value.user.avatar_128,
+};
 const showCard = (uid, userInfo) => {
-  useUserStore.showUserCard(uid, userInfo)
-
-
-}
+  useUserStore.showUserCard(uid, userInfo);
+};
 const createTime = computed(() => {
-  let [date, time] = props.cardData.create_time.split(' ')
-  return [date, time]
-})
+  let [date, time] = props.cardData.create_time.split(' ');
+  return [date, time];
+});
 // 用于在动态和评论中使用的表情
 // str.replace(/\[([^(\]|\[)]*)\]/g,(item,index) => {})
 // https://sad.apps.vip/public/static/emoji/emojistatic/
 const content = computed(() => {
-  let result = emojiReplace(props.cardData.summary)
+  let result = emojiReplace(props.cardData.summary);
   return result;
 });
 const title = computed(() => {
-  let result = emojiReplace(props.cardData.title)
+  let result = emojiReplace(props.cardData.title);
   return result;
 });
-
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .card {
   .cover-wrapper {
     flex-wrap: wrap;
@@ -134,7 +139,6 @@ const title = computed(() => {
     height: 100px;
     aspect-ratio: 1 / 1;
   }
-
 
   .cover-im {
     // margin-bottom: 10px;
@@ -254,7 +258,6 @@ const title = computed(() => {
         content: '·';
         margin-left: 5px;
         margin-right: 5px;
-
       }
 
       .like::after {
@@ -263,9 +266,6 @@ const title = computed(() => {
         margin-right: 5px;
       }
     }
-
-
   }
-
 }
 </style>

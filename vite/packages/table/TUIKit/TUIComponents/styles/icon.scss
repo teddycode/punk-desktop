@@ -60,7 +60,6 @@
   background-size: contain;
 }
 
-
 .icon-call-video {
   margin: 5px;
   width: 20px;
@@ -68,7 +67,6 @@
   background: url('../assets/icon/video-call.png') no-repeat;
   background-size: contain;
 }
-
 
 .icon-down-arrow {
   margin: 0;
@@ -94,8 +92,8 @@
 .icon-unselected {
   width: 16px;
   height: 16px;
-  background: #FFFFFF;
-  border: 1px solid #DDDDDD;
+  background: #ffffff;
+  border: 1px solid #dddddd;
   border-radius: 8px;
 }
 
@@ -315,7 +313,6 @@
   background-size: contain;
 }
 
-
 .icon-msg-play {
   width: 20px;
   height: 20px;
@@ -384,10 +381,10 @@
   width: 12px;
   height: 12px;
   border-radius: 100%;
-  background: #FF584C;
+  background: #ff584c;
   font-style: normal;
   font-size: 12px;
-  color: #FFFFFF;
+  color: #ffffff;
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -417,10 +414,10 @@
 
 .icon-close::before,
 .icon-close::after {
-  content: "";
+  content: '';
   position: absolute;
   /*方便进行定位*/
-  background-color: #8F959E;
+  background-color: #8f959e;
   height: 16px;
   width: 2px;
   top: 50%;
@@ -446,7 +443,7 @@
 
 .plus::before,
 .plus::after {
-  content: "";
+  content: '';
   position: absolute;
   background-color: #232832;
   border-radius: 0.5px;

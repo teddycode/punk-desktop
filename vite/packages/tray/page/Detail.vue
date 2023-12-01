@@ -1,56 +1,55 @@
 <template>
   <div class="detail-title">
-    <arrow-left-outlined @click="goBack"/>
+    <arrow-left-outlined @click="goBack" />
     &nbsp;{{ detail.title }}
   </div>
-  <vueCustomScrollbar :settings="settings" style="height: calc(100vh - 35px);padding: 15px">
+  <vueCustomScrollbar :settings="settings" style="height: calc(100vh - 35px); padding: 15px">
     <GradePanel></GradePanel>
   </vueCustomScrollbar>
 </template>
 
 <script>
-import GradePanel from '../compontents/GradePanel.vue'
-import { ArrowLeftOutlined } from '@ant-design/icons-vue'
+import GradePanel from '../compontents/GradePanel.vue';
+import { ArrowLeftOutlined } from '@ant-design/icons-vue';
 
-import vueCustomScrollbar from '../../../src/components/vue-scrollbar.vue'
-
+import vueCustomScrollbar from '../../../src/components/vue-scrollbar.vue';
 const components = {
   GradePanel,
   //下面是icons
   ArrowLeftOutlined,
-  vueCustomScrollbar
-}
+  vueCustomScrollbar,
+};
 const detailMap = {
-  'grade': {
+  grade: {
     title: '等级详情',
-    component: GradePanel
+    component: GradePanel,
   },
-}
+};
 export default {
   name: 'Detail',
   components,
-  data () {
+  data() {
     return {
       detail: {},
       settings: {
         swipeEasing: true,
         suppressScrollY: false,
         suppressScrollX: true,
-        wheelPropagation: true
+        wheelPropagation: true,
       },
-    }
+    };
   },
-  mounted () {
-    this.detail = detailMap[this.$route.params.path]
-    ipc.send('resizeTray', { width: 400, height: 430 })
-    console.log(this.detail)
+  mounted() {
+    this.detail = detailMap[this.$route.params.path];
+    ipc.send('resizeTray', { width: 400, height: 430 });
+    console.log(this.detail);
   },
   methods: {
-    goBack () {
-      this.$router.go(-1)
-    }
-  }
-}
+    goBack() {
+      this.$router.go(-1);
+    },
+  },
+};
 </script>
 
 <style scoped>

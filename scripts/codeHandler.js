@@ -1,10 +1,10 @@
-const path = require('path')
-const fs = require('fs')
-const javaScriptObfuscator = require('javascript-obfuscator')
+const path = require('path');
+const fs = require('fs');
+const javaScriptObfuscator = require('javascript-obfuscator');
 
-function codeHandle (outFile) {
-  console.log(outFile)
-  let content = fs.readFileSync(outFile, 'utf-8')
+function codeHandle(outFile) {
+  console.log(outFile);
+  let content = fs.readFileSync(outFile, 'utf-8');
   let result = javaScriptObfuscator.obfuscate(content, {
     compact: false,
     controlFlowFlattening: true,
@@ -13,11 +13,11 @@ function codeHandle (outFile) {
     simplify: true,
     stringArrayShuffle: true,
     splitStrings: true,
-    stringArrayThreshold: 1
-  })
-  let outputContent = result.getObfuscatedCode()
-  fs.writeFileSync(outFile, outputContent)
+    stringArrayThreshold: 1,
+  });
+  let outputContent = result.getObfuscatedCode();
+  fs.writeFileSync(outFile, outputContent);
 }
 
 //codeHandle(path.resolve(__dirname, '../main.build.js'))
-codeHandle(path.resolve(__dirname, '../dist/bundle.js'))
+codeHandle(path.resolve(__dirname, '../dist/bundle.js'));

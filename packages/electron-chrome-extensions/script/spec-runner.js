@@ -10,7 +10,7 @@ const fail = '✗'.red;
 
 const args = require('minimist')(process.argv, {
   string: ['target'],
-  unknown: arg => unknownFlags.push(arg)
+  unknown: (arg) => unknownFlags.push(arg),
 });
 
 const unknownArgs = [];
@@ -22,11 +22,11 @@ for (const flag of unknownFlags) {
   }
 }
 
-async function main () {
+async function main() {
   await runElectronTests();
 }
 
-async function runElectronTests () {
+async function runElectronTests() {
   const errors = [];
 
   const testResultsDir = process.env.ELECTRON_TEST_RESULTS_DIR;
@@ -51,14 +51,14 @@ async function runElectronTests () {
   }
 }
 
-async function runMainProcessElectronTests () {
+async function runMainProcessElectronTests() {
   let exe = require('electron');
   const runnerArgs = ['spec', ...unknownArgs.slice(2)];
 
   const { status, signal } = childProcess.spawnSync(exe, runnerArgs, {
     cwd: path.resolve(__dirname, '..'),
     env: process.env,
-    stdio: 'inherit'
+    stdio: 'inherit',
   });
   if (status !== 0) {
     if (status) {

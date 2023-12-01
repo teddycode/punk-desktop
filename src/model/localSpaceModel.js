@@ -1,42 +1,41 @@
-const standReturn = require('../util/standReturn')
-const { nanoid } = require('nanoid')
-const { SqlDb } = require('../util/sqldb')
-const spaceModel = require('./spaceModel')
-let sqlDb = new SqlDb()
+const standReturn = require('../util/standReturn');
+const { nanoid } = require('nanoid');
+const { SqlDb } = require('../util/sqldb');
+const spaceModel = require('./spaceModel');
+let sqlDb = new SqlDb();
 const localSpaceModel = {
   /**
    * 获取空间，
    * @param id  nanoid，已更新sqldb
    * @returns {Promise<*|null>}
    */
-  async getSpace (id) {
+  async getSpace(id) {
     try {
-      let space = await sqlDb.knex('local_space').where({ nanoid: id }).first()
+      let space = await sqlDb.knex('local_space').where({ nanoid: id }).first();
       if (space) {
-        return space
+        return space;
       } else {
-        return null
+        return null;
       }
     } catch (e) {
-      console.warn(e)
-      return null
+      console.warn(e);
+      return null;
     }
-
   },
   /**
    * 获得最后同步的空间，已更新sqldb
    * @returns {null|*}
    */
-  async getLastSyncSpace () {
-    let space = await sqlDb.knex('local_space').orderBy('sync_time', 'desc').first()
+  async getLastSyncSpace() {
+    let space = await sqlDb.knex('local_space').orderBy('sync_time', 'desc').first();
     if (space) {
       // if(!!!spaces[0].id){
       //   //ldb.db.get('spaces').remove({create_time:spaces[0]['create_time']}).write()
       //   return localSpaceModel.getLastSyncSpace()
       // }
-      return space
+      return space;
     } else {
-      return null
+      return null;
     }
   },
 
@@ -45,25 +44,24 @@ const localSpaceModel = {
    * @param space
    * @returns {Promise<{data: {}, status: number}|{data: *, status: number, info: string}>}
    */
-  async copy (space) {
+  async copy(space) {
     try {
-      let sourceSpace = await sqlDb.knex('local_space').where({ nanoid: space.nanoid }).first()
+      let sourceSpace = await sqlDb.knex('local_space').where({ nanoid: space.nanoid }).first();
       if (!!!sourceSpace) {
-        return standReturn.failure('空间不存在')
+        return standReturn.failure('空间不存在');
       }
-      let targetSpace = JSON.parse(JSON.stringify(sourceSpace))
-      targetSpace.nanoid = nanoid()
-      targetSpace.name = targetSpace.name + '_副本'
-      targetSpace.update_time = Date.now()
-      targetSpace.sync_time = Date.now()
-      let result = await sqlDb.knex('local_space').insert(targetSpace)
+      let targetSpace = JSON.parse(JSON.stringify(sourceSpace));
+      targetSpace.nanoid = nanoid();
+      targetSpace.name = targetSpace.name + '_副本';
+      targetSpace.update_time = Date.now();
+      targetSpace.sync_time = Date.now();
+      let result = await sqlDb.knex('local_space').insert(targetSpace);
       if (result.length > 0) {
-        return standReturn.success(targetSpace)
+        return standReturn.success(targetSpace);
       }
     } catch (e) {
-      return standReturn.failure()
+      return standReturn.failure();
     }
-
   },
   /**
    * 添加空间，已更新为sqldb
@@ -71,8 +69,7 @@ const localSpaceModel = {
    * @param user
    * @returns {Promise<{data: {}, status: number}|{data: *, status: number, info: string}>}
    */
-  async addSpace (space, user) {
-
+  async addSpace(space, user) {
     /*
      id:spaceId,
         data:saveData.data,
@@ -86,30 +83,29 @@ const localSpaceModel = {
       let spaceAdd = {
         name: space.name,
         data: {
-          'version': 2,
-          'state': {
-            'tasks': [],
-            'selectedTask': ''
+          version: 2,
+          state: {
+            tasks: [],
+            selectedTask: '',
           },
-          'saveTime': Date.now(),
+          saveTime: Date.now(),
         },
         count_task: 1,
         count_tab: 1,
         create_time: Date.now(),
         update_time: Date.now(),
         sync_time: Date.now(),
-        nanoid: nanoid()
-      }
-      let result = await sqlDb.knex('local_space').insert(spaceAdd)
+        nanoid: nanoid(),
+      };
+      let result = await sqlDb.knex('local_space').insert(spaceAdd);
       if (result.length > 0) {
-        return standReturn.success(spaceAdd)
+        return standReturn.success(spaceAdd);
       } else {
-        return standReturn.failure({}, '插入失败。')
+        return standReturn.failure({}, '插入失败。');
       }
     } catch (e) {
-      return standReturn.failure({}, '意外错误')
+      return standReturn.failure({}, '意外错误');
     }
-
   },
 
   /**
@@ -118,25 +114,25 @@ const localSpaceModel = {
    * @param option
    * @returns {Promise<{data: {}, status: number}|{data: *, status: number, info: *}>}
    */
-  async getUserSpaces (user, option) {
+  async getUserSpaces(user, option) {
     try {
-      let result = []
+      let result = [];
       if (option.showBackup) {
-        let backupSpaces = await sqlDb.knex('backup_space').orderBy('sync_time', 'desc')
-        backupSpaces.forEach(sp => {
-          sp.type = 'cloud'
-        })
-        result = result.concat(backupSpaces)
+        let backupSpaces = await sqlDb.knex('backup_space').orderBy('sync_time', 'desc');
+        backupSpaces.forEach((sp) => {
+          sp.type = 'cloud';
+        });
+        result = result.concat(backupSpaces);
       }
-      let localSpaces = await sqlDb.knex('local_space').orderBy('sync_time', 'desc')
-      localSpaces.forEach(sp => {
-        sp.type = 'local'
-      })
-      result = result.concat(localSpaces)
-      return standReturn.success(result)
+      let localSpaces = await sqlDb.knex('local_space').orderBy('sync_time', 'desc');
+      localSpaces.forEach((sp) => {
+        sp.type = 'local';
+      });
+      result = result.concat(localSpaces);
+      return standReturn.success(result);
     } catch (e) {
-      console.warn(e)
-      return standReturn.failure([], '无法读取本地空间。')
+      console.warn(e);
+      return standReturn.failure([], '无法读取本地空间。');
     }
   },
 
@@ -145,18 +141,18 @@ const localSpaceModel = {
    * @param space
    * @returns {Promise<{data: {}, status: number}>}
    */
-  async changeCurrent (space) {
-    space.type = 'local'
-    await ipc.sendSync('changeSpace', JSON.parse(JSON.stringify(space)))
-    return standReturn.success(space)
+  async changeCurrent(space) {
+    space.type = 'local';
+    await ipc.sendSync('changeSpace', JSON.parse(JSON.stringify(space)));
+    return standReturn.success(space);
   },
 
   /**
    * 获取全部空间，已更新为sqldb
    * @returns {Promise<*>}
    */
-  async getAll () {
-    return await sqlDb.knex('local_space').orderBy('sync_time', 'desc').select()
+  async getAll() {
+    return await sqlDb.knex('local_space').orderBy('sync_time', 'desc').select();
   },
 
   /**
@@ -164,17 +160,16 @@ const localSpaceModel = {
    * @param space
    * @returns {Promise<{data: {}, status: number}|{data: *, status: number, info: string}>}
    */
-  async deleteSpace (space) {
+  async deleteSpace(space) {
     try {
-      let result = await sqlDb.knex('local_space').where({ nanoid: space.nanoid }).delete()
+      let result = await sqlDb.knex('local_space').where({ nanoid: space.nanoid }).delete();
       if (result) {
-        return standReturn.success()
+        return standReturn.success();
       } else {
-        return standReturn.failure({}, '不存在空间')
+        return standReturn.failure({}, '不存在空间');
       }
-
     } catch (e) {
-      return standReturn.failure()
+      return standReturn.failure();
     }
   },
 
@@ -184,16 +179,16 @@ const localSpaceModel = {
    * @param space
    * @returns {Promise<{data: {}, status: number}|{data: *, status: number, info: string}>}
    */
-  async renameSpace (newName, space) {
+  async renameSpace(newName, space) {
     try {
       await sqlDb.knex('local_space').where({ nanoid: space.nanoid }).update({
-        name: newName, update_time: Date.now()
-      })
-      return standReturn.success()
+        name: newName,
+        update_time: Date.now(),
+      });
+      return standReturn.success();
     } catch (e) {
-      return standReturn.failure()
+      return standReturn.failure();
     }
-
   },
 
   /**
@@ -201,18 +196,18 @@ const localSpaceModel = {
    * @param space
    * @returns {Promise<void>}
    */
-  async update (space) {
-    let foundSpace = await sqlDb.knex('local_space').where({ nanoid: space.nanoid }).first()
+  async update(space) {
+    let foundSpace = await sqlDb.knex('local_space').where({ nanoid: space.nanoid }).first();
     if (foundSpace) {
-      let saveData = {}
-      saveData.update_time = Date.now()
-      saveData.sync_time = Date.now()
-      saveData.name = space.name
-      saveData.user = space.user
-      sqlDb.knex('local_space').where({ nanoid: space.nanoid }).update(saveData)
-      standReturn.success('更新空间信息成功')
+      let saveData = {};
+      saveData.update_time = Date.now();
+      saveData.sync_time = Date.now();
+      saveData.name = space.name;
+      saveData.user = space.user;
+      sqlDb.knex('local_space').where({ nanoid: space.nanoid }).update(saveData);
+      standReturn.success('更新空间信息成功');
     } else {
-      standReturn.failure('不存在空间。')
+      standReturn.failure('不存在空间。');
     }
   },
 
@@ -222,19 +217,19 @@ const localSpaceModel = {
    * @param saveData
    * @returns {Promise<{data: *, status: number, info: string}>}
    */
-  async save (space, saveData) {
-    let foundSpace = await sqlDb.knex('local_space').where({ nanoid: space.nanoid }).first()
-    delete saveData.type
+  async save(space, saveData) {
+    let foundSpace = await sqlDb.knex('local_space').where({ nanoid: space.nanoid }).first();
+    delete saveData.type;
     if (foundSpace) {
-      saveData.update_time = Date.now()
-      saveData.sync_time = Date.now()
-      saveData.data = JSON.stringify(saveData.data)
-      await sqlDb.knex('local_space').where({ nanoid: space.nanoid }).update(saveData)
+      saveData.update_time = Date.now();
+      saveData.sync_time = Date.now();
+      saveData.data = JSON.stringify(saveData.data);
+      await sqlDb.knex('local_space').where({ nanoid: space.nanoid }).update(saveData);
     } else {
       if (!space.nanoid) {
-        throw Error('本地空间ID不存在')
+        throw Error('本地空间ID不存在');
       }
-      return standReturn.failure('空间不存在')
+      return standReturn.failure('空间不存在');
       // let newSpace={
       //   nanoid:space.nanoid,
       //   data:saveData.data,
@@ -250,14 +245,16 @@ const localSpaceModel = {
       // ldb.db.get('spaces').push(newSpace).write()
     }
   },
-  async insertDefaultSpace (data = {
-    'version': 2,
-    'state': {
-      'tasks': [],
-      'selectedTask': ''
+  async insertDefaultSpace(
+    data = {
+      version: 2,
+      state: {
+        tasks: [],
+        selectedTask: '',
+      },
+      saveTime: Date.now(),
     },
-    'saveTime': Date.now(),
-  }) {
+  ) {
     let spaceAdd = {
       name: '默认空间',
       data: data,
@@ -266,23 +263,23 @@ const localSpaceModel = {
       create_time: Date.now(),
       update_time: Date.now(),
       sync_time: Date.now(),
-      nanoid: nanoid()
-    }
-    await sqlDb.knex('local_space').insert(spaceAdd)
-    console.warn('插入了默认空间', spaceAdd)
+      nanoid: nanoid(),
+    };
+    await sqlDb.knex('local_space').insert(spaceAdd);
+    console.warn('插入了默认空间', spaceAdd);
     let currentSpace = {
       spaceId: spaceAdd.nanoid,
       spaceType: 'local',
       name: spaceAdd.name,
       userInfo: {
-        uid: 0
+        uid: 0,
       },
-      space: spaceAdd
-    }
-    spaceAdd.type = 'local'
-    await spaceModel.setCurrentSpace(spaceAdd)
-    return currentSpace
-  }
-}
+      space: spaceAdd,
+    };
+    spaceAdd.type = 'local';
+    await spaceModel.setCurrentSpace(spaceAdd);
+    return currentSpace;
+  },
+};
 
-module.exports = localSpaceModel
+module.exports = localSpaceModel;

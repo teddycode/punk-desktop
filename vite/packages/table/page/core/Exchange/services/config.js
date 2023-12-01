@@ -2,11 +2,11 @@
 
 export const tokens = {
   eth: '0x0000000000000000000000000000000000000000',
-  ethShadow: '0xB7e399C05E86200Ec894d3E513748f9C6fe14A11'
-}
+  ethShadow: '0xB7e399C05E86200Ec894d3E513748f9C6fe14A11',
+};
 
 export const development = {
-  abiPath: "./abi/",
+  abiPath: './abi/',
   contracts: {
     frameworkOnMainChain: '0x48F4804809C781D9Ad108d0BF293CfbBF4fc4fc7',
     ethVaultOnMainChain: '0x64a305bd6b4788A3a834833D5cc2d28c407fa3F3',
@@ -18,13 +18,13 @@ export const development = {
   },
   token: tokens,
   tokenMappingFromShadow: {
-    [tokens.ethShadow]: tokens.eth
+    [tokens.ethShadow]: tokens.eth,
   },
   shadowMappingFromToken: {
-    [tokens.eth]: tokens.ethShadow
+    [tokens.eth]: tokens.ethShadow,
   },
   providers: {
     main: 'http://10.130.157.227:3400',
     side: 'http://10.130.157.227:3400',
-  }
-}
+  },
+};

@@ -1,6 +1,6 @@
-const userModel = require('../../../src/model/userModel')
-const spaceModel = require('../../../src/model/spaceModel')
-const { createVNode } = require('../../../ext/vue/vue3')
+const userModel = require('../../../src/model/userModel');
+const spaceModel = require('../../../src/model/spaceModel');
+const { createVNode } = require('../../../ext/vue/vue3');
 const tpl = `
 <div>
   <div style="text-align: center" >
@@ -206,17 +206,17 @@ const tpl = `
   ></a-select></p>
   </a-modal>
 </div>
-`
-const ipc = require('electron').ipcRenderer
+`;
+const ipc = require('electron').ipcRenderer;
 const SpaceSelect = {
   template: tpl,
-  data () {
+  data() {
     return {
       user: {
         uid: 0,
         spaces: [],
         clientId: '',
-        user_info: {}
+        user_info: {},
       },
       spaces: [],
       currentSpace: {},
@@ -244,17 +244,17 @@ const SpaceSelect = {
 
       clientId: '',
 
-      showBackup: false,//默认不显示备份空间
+      showBackup: false, //默认不显示备份空间
       loading: true,
 
       tipCopyRead: '0',
-    }
+    };
   },
-  async mounted () {
-    this.tipCopyRead = localStorage.getItem('tipCopyRead')
+  async mounted() {
+    this.tipCopyRead = localStorage.getItem('tipCopyRead');
 
-    let user = {}
-    let uid = Number(this.$route.params.uid)
+    let user = {};
+    let uid = Number(this.$route.params.uid);
     if (!uid) {
       user = {
         user_info: {
@@ -262,39 +262,36 @@ const SpaceSelect = {
           avatar: '../../icons/logo128.png',
         },
         spaces: [],
-        uid: 0
-      }
-      this.user = user
+        uid: 0,
+      };
+      this.user = user;
     } else {
       //网络用户
-      user = await userModel.get({ uid: this.$route.params.uid })
+      user = await userModel.get({ uid: this.$route.params.uid });
       if (user) {
-        this.user = user
+        this.user = user;
       } else {
-        console.warn(user)
-        window.antd.message.error('获取用户信息失败，登录信息过期或用户帐号异常。请尝试解绑用户后重新登陆帐号。')
-        this.$router.go(-1)
-        return //如果异常，退回上一页，防止后续出错
+        console.warn(user);
+        window.antd.message.error('获取用户信息失败，登录信息过期或用户帐号异常。请尝试解绑用户后重新登陆帐号。');
+        this.$router.go(-1);
+        return; //如果异常，退回上一页，防止后续出错
       }
-
     }
-    this.user.clientId = userModel.getClientId()
+    this.user.clientId = userModel.getClientId();
     try {
-      this.currentSpace = await spaceModel.getCurrent()
-    } catch (e) {
-
-    }
-    await this.loadSpaces()
-    this.loading = false
+      this.currentSpace = await spaceModel.getCurrent();
+    } catch (e) {}
+    await this.loadSpaces();
+    this.loading = false;
   },
   methods: {
-    setTipCopyRead () {
-      localStorage.setItem('tipCopyRead', '1')
+    setTipCopyRead() {
+      localStorage.setItem('tipCopyRead', '1');
     },
-    setEnterPwd () {
-      this.visibleSetEnterPwd = true
+    setEnterPwd() {
+      this.visibleSetEnterPwd = true;
     },
-    doSetEnterPwd () {
+    doSetEnterPwd() {
       if (this.newEnterPwd !== '') {
         antd.Modal.confirm({
           title: '修改密码确认',
@@ -304,17 +301,16 @@ const SpaceSelect = {
           cancelText: '取消',
           onOk: async () => {
             try {
-              userModel.setEnterPwd(this.newEnterPwd, this.user.uid)
-              this.user.enterPwd = this.newEnterPwd
-              this.visibleSetEnterPwd = false
-              window.antd.message.success('访问密码设置成功。')
-
+              userModel.setEnterPwd(this.newEnterPwd, this.user.uid);
+              this.user.enterPwd = this.newEnterPwd;
+              this.visibleSetEnterPwd = false;
+              window.antd.message.success('访问密码设置成功。');
             } catch (e) {
-              console.warn(e)
-              window.antd.message.error('设置访问密码失败。未知异常。')
+              console.warn(e);
+              window.antd.message.error('设置访问密码失败。未知异常。');
             }
-          }
-        })
+          },
+        });
       } else if (this.newEnterPwd === '' && this.user.enterPwd !== '') {
         //原来有密码，清空了密码
         antd.Modal.confirm({
@@ -325,143 +321,142 @@ const SpaceSelect = {
           cancelText: '取消',
           onOk: async () => {
             try {
-              userModel.setEnterPwd(this.newEnterPwd, this.user.uid)
-              this.user.enterPwd = this.newEnterPwd
-              this.visibleSetEnterPwd = false
-              window.antd.message.success('删除访问密码成功。')
-
+              userModel.setEnterPwd(this.newEnterPwd, this.user.uid);
+              this.user.enterPwd = this.newEnterPwd;
+              this.visibleSetEnterPwd = false;
+              window.antd.message.success('删除访问密码成功。');
             } catch (e) {
-              console.warn(e)
-              window.antd.message.error('删除访问密码失败。未知异常。')
+              console.warn(e);
+              window.antd.message.error('删除访问密码失败。未知异常。');
             }
-          }
-        })
+          },
+        });
       }
     },
     /**
      * 导入本机空间
      */
-    async importFromLocal () {
+    async importFromLocal() {
       //todo loadLocalSpaces()
-      let spaces = await spaceModel.getLocalSpaces()
-      this.localOptions = []
+      let spaces = await spaceModel.getLocalSpaces();
+      this.localOptions = [];
       spaces.forEach((space) => {
-        space.data = JSON.parse(space.data)
+        space.data = JSON.parse(space.data);
         if (space.data) {
           if (space.nanoid === this.currentSpace.spaceId) {
             this.localOptions.push({
               label: space.name + '（ ' + space.data.state.tasks.length + ' 标签组）← 当前',
-              value: space.nanoid
-            })
+              value: space.nanoid,
+            });
           } else
             this.localOptions.push({
               label: space.name + '（ ' + space.data.state.tasks.length + ' 标签组）',
-              value: space.nanoid
-            })
-          this.localSpaces.push(space)
+              value: space.nanoid,
+            });
+          this.localSpaces.push(space);
         }
-      })
+      });
 
-      this.visibleImport = true
+      this.visibleImport = true;
     },
     /**
      * 导入空间
      * @returns {Promise<void>}
      */
-    async doImportSpaces () {
-      let currentIndex = undefined
+    async doImportSpaces() {
+      let currentIndex = undefined;
       try {
-        let selectedSpaces = this.selectedImportSpaces.map(space => {
+        let selectedSpaces = this.selectedImportSpaces.map((space) => {
           let item = this.localSpaces.find((item) => {
-            return item.nanoid === space
-          })
+            return item.nanoid === space;
+          });
           return {
             data: item.data,
-            name: item.name + '_导入'
-          }
-        })
+            name: item.name + '_导入',
+          };
+        });
         if (selectedSpaces.length === 0) {
-          window.antd.message.error('请选择需要导入的空间。')
-          return
+          window.antd.message.error('请选择需要导入的空间。');
+          return;
         }
-        currentIndex = this.selectedImportSpaces.find((op => {
-          if (op === this.currentSpace.spaceId)
-            return true
-        }))
+        currentIndex = this.selectedImportSpaces.find((op) => {
+          if (op === this.currentSpace.spaceId) return true;
+        });
 
-        let result = await spaceModel.setUser(this.user).importFromLocal(selectedSpaces)
+        let result = await spaceModel.setUser(this.user).importFromLocal(selectedSpaces);
         if (result.status === 1) {
-          this.visibleImport = false
-          this.selectedImportSpaces = []
-          await this.loadSpaces()
+          this.visibleImport = false;
+          this.selectedImportSpaces = [];
+          await this.loadSpaces();
           if (currentIndex) {
             window.antd.Modal.info({
               title: '空间导入成功',
-              content: '导入空间成功。导入的空间中包括当前使用中的空间，后续对当前空间的改动不会再影响到到导入后的云端空间。'
-            })
+              content:
+                '导入空间成功。导入的空间中包括当前使用中的空间，后续对当前空间的改动不会再影响到到导入后的云端空间。',
+            });
           } else {
-            window.antd.message.success('导入空间成功。')
+            window.antd.message.success('导入空间成功。');
           }
         } else {
-          window.antd.message.error('导入空间失败。' + result.data)
+          window.antd.message.error('导入空间失败。' + result.data);
         }
       } catch (e) {
-        console.warn(e)
-        window.antd.message.error('导入空间失败。未知异常。')
+        console.warn(e);
+        window.antd.message.error('导入空间失败。未知异常。');
       }
     },
-    dateTime (time) {
-      let date = new Date(time)
+    dateTime(time) {
+      let date = new Date(time);
       //return date.getFullYear()+'年'+date.getMonth()+'月'+date.getDate()+'日 '+date.getHours()+':'+date.getMinutes()
-      return date.toLocaleString()
+      return date.toLocaleString();
     },
-    async loadSpaces () {
-      let spaces = []
+    async loadSpaces() {
+      let spaces = [];
       //下面开始获取用户空间
       try {
-        let result = await spaceModel.setUser(this.user).getUserSpaces({ showBackup: this.showBackup })
+        let result = await spaceModel.setUser(this.user).getUserSpaces({ showBackup: this.showBackup });
 
         if (result.status === 1) {
-          spaces = result.data
+          spaces = result.data;
           if (this.user.uid) {
             spaces = spaces.map((sp) => {
-              sp.id = sp.nanoid
-              return sp
-            })
+              sp.id = sp.nanoid;
+              return sp;
+            });
           }
         } else {
-          window.antd.message.error('获取用户空间失败。失败原因：' + result.info)
-          this.$router.go(-1)
-          return
+          window.antd.message.error('获取用户空间失败。失败原因：' + result.info);
+          this.$router.go(-1);
+          return;
         }
       } catch (e) {
         if (e.toString().indexOf('ECONNREFUSED') > -1) {
-          console.warn(e)
-          window.antd.message.error('无法连接到服务器，服务器异常，请稍后再试。')
+          console.warn(e);
+          window.antd.message.error('无法连接到服务器，服务器异常，请稍后再试。');
         } else {
-          window.antd.message.error('获取用户空间失败，可尝试在帐号上右键，选择【解绑账户】，解绑后再重新登录。')
+          window.antd.message.error('获取用户空间失败，可尝试在帐号上右键，选择【解绑账户】，解绑后再重新登录。');
         }
 
-        this.$router.go(-1)
-        return
+        this.$router.go(-1);
+        return;
       }
-      this.spaces = spaces
+      this.spaces = spaces;
     },
-    goLogin () {
-      ipc.send('login')
+    goLogin() {
+      ipc.send('login');
       //https://s.apps.vip/login?response_type=code&client_id=10001&state=1
     },
-    async doCreateSpace () {
+    async doCreateSpace() {
       try {
-        let result = await spaceModel.setUser(this.user).addSpace({ name: this.newSpaceName })
+        let result = await spaceModel.setUser(this.user).addSpace({ name: this.newSpaceName });
         if (result.status === 1) {
-          this.newSpaceName = ''
-          window.antd.message.success('创建空间成功。')
-          this.spaces.push(result.data)
-          this.visibleCreate = false
+          this.newSpaceName = '';
+          window.antd.message.success('创建空间成功。');
+          this.spaces.push(result.data);
+          this.visibleCreate = false;
         } else {
-          window.antd.message.error('空间名称长度在1-10个汉字，请重新输入。')//获取真实的错误信息
-          this.$refs.spaceNameInput.input.select()
+          window.antd.message.error('空间名称长度在1-10个汉字，请重新输入。'); //获取真实的错误信息
+          this.$refs.spaceNameInput.input.select();
         }
 
         //let result=await userApi.addSpace(this.newSpaceName,this.user)
@@ -475,25 +470,24 @@ const SpaceSelect = {
         //   this.$refs.spaceNameInput.input.select()
         // }
       } catch (e) {
-        window.antd.message.error('创建空间失败，失败原因：')
-        console.warn(e)
-
+        window.antd.message.error('创建空间失败，失败原因：');
+        console.warn(e);
       }
     },
-    showCreateSpace () {
-      this.visibleCreate = true
+    showCreateSpace() {
+      this.visibleCreate = true;
       setTimeout(() => {
-        this.$refs.spaceNameInput.input.focus()
-      }, 200)
+        this.$refs.spaceNameInput.input.focus();
+      }, 200);
     },
 
-    showRenameSpace (space) {
-      this.visibleRename = true
-      this.spaceRename = space.name
-      this.renamingSpace = space
+    showRenameSpace(space) {
+      this.visibleRename = true;
+      this.spaceRename = space.name;
+      this.renamingSpace = space;
       setTimeout(() => {
-        this.$refs.spaceRenameInput.input.select()
-      }, 200)
+        this.$refs.spaceRenameInput.input.select();
+      }, 200);
       //     centered
       //     v-model:visible="visibleRenameCreate"
       //     title="空间重命名"
@@ -507,33 +501,32 @@ const SpaceSelect = {
       //     <p></p>
       //   </a-modal>
     },
-    async doRenameSpace () {
+    async doRenameSpace() {
       try {
         if (this.spaceRename === this.renamingSpace.name) {
-          window.antd.message.error('重命名的名称和原名称一致，请修改新名称。')
-          return
+          window.antd.message.error('重命名的名称和原名称一致，请修改新名称。');
+          return;
         }
         if (this.spaceRename.trim() === '') {
-          window.antd.message.error('名称不能为空。')
-          return
+          window.antd.message.error('名称不能为空。');
+          return;
         }
         if (this.spaceRename.trim().length > 10) {
-          window.antd.message.error('名称不能超过10个汉字。')
-          return
+          window.antd.message.error('名称不能超过10个汉字。');
+          return;
         }
-        let result = await spaceModel.setUser(this.user).renameSpace(this.spaceRename.trim(), this.renamingSpace)
+        let result = await spaceModel.setUser(this.user).renameSpace(this.spaceRename.trim(), this.renamingSpace);
         if (result.status === 1) {
-          window.antd.message.success('重命名空间成功。')
-          this.loadSpaces()
-          this.visibleRename = false
+          window.antd.message.success('重命名空间成功。');
+          this.loadSpaces();
+          this.visibleRename = false;
         } else {
-          window.antd.message.error('空间名称长度在1-10个汉字，请重新输入。')//获取真实的错误信息
-          this.$refs.spaceRenameInput.input.select()
+          window.antd.message.error('空间名称长度在1-10个汉字，请重新输入。'); //获取真实的错误信息
+          this.$refs.spaceRenameInput.input.select();
         }
       } catch (e) {
-        window.antd.message.error('重命名空间失败，未知错误。')
-        console.warn(e)
-
+        window.antd.message.error('重命名空间失败，未知错误。');
+        console.warn(e);
       }
     },
 
@@ -541,69 +534,70 @@ const SpaceSelect = {
      * 复制一个空间，右键菜单
      * @param space
      */
-    async copySpace (space) {
-      let result = await spaceModel.setUser(this.user).copy(space)
+    async copySpace(space) {
+      let result = await spaceModel.setUser(this.user).copy(space);
       if (result.status === 1) {
-        window.antd.message.success('复制空间成功')
-        this.loadSpaces()
+        window.antd.message.success('复制空间成功');
+        this.loadSpaces();
       } else {
-        window.antd.message.error('复制空间失败。')
+        window.antd.message.error('复制空间失败。');
       }
     },
-    deleteSpace (space) {
+    deleteSpace(space) {
       if (space.isUsing || space.isOtherUsing) {
-        window.antd.message.info('不可删除正在使用中的空间。')
-        return
+        window.antd.message.info('不可删除正在使用中的空间。');
+        return;
       }
 
       antd.Modal.confirm({
         title: '删除空间确认',
-        content: '是否确认删除 【' + space.name + '】 ？空间一旦被删除将无法恢复，所有标签组的设置将丢失。请务必确认后果。',
+        content:
+          '是否确认删除 【' + space.name + '】 ？空间一旦被删除将无法恢复，所有标签组的设置将丢失。请务必确认后果。',
         centered: true,
         okText: '我已知晓后果，仍要删除',
         cancelText: '取消',
         onOk: async () => {
           try {
-            let result = await spaceModel.setUser(this.user).deleteSpace(space)
+            let result = await spaceModel.setUser(this.user).deleteSpace(space);
             if (result.status) {
-              window.antd.message.success('删除空间成功。')
-              await this.loadSpaces()
+              window.antd.message.success('删除空间成功。');
+              await this.loadSpaces();
             } else {
-              window.antd.message.error('删除空间失败。')
+              window.antd.message.error('删除空间失败。');
             }
           } catch (e) {
-            console.warn(e)
-            window.antd.message.error('删除空间失败。未知异常。')
+            console.warn(e);
+            window.antd.message.error('删除空间失败。未知异常。');
           }
-        }
-      })
+        },
+      });
     },
-    async doChangeSpaceCloud (space) {
+    async doChangeSpaceCloud(space) {
       try {
-        let result = await spaceModel.setUser(this.user).changeCurrent(space)
+        let result = await spaceModel.setUser(this.user).changeCurrent(space);
         if (result.status === 1) {
-          window.antd.message.success('切换使用空间成功。')
+          window.antd.message.success('切换使用空间成功。');
         } else {
-          window.antd.message.error('切换使用空间失败。')
+          window.antd.message.error('切换使用空间失败。');
         }
       } catch (e) {
-        console.warn(e)
-        window.antd.message.error('切换使用空间失败。意外错误。')
+        console.warn(e);
+        window.antd.message.error('切换使用空间失败。意外错误。');
       }
-
     },
-    async switchSpace (space) {
+    async switchSpace(space) {
       if (this.user.uid === 0) {
         antd.Modal.confirm({
           title: '切换到本地空间',
-          content: '是否更改当前空间，更改空间将重载浏览器，可能导致您网页上未保存的内容丢失，请确认已经保存全部内容。切换本地空间并不会更改当前登录帐号。',
+          content:
+            '是否更改当前空间，更改空间将重载浏览器，可能导致您网页上未保存的内容丢失，请确认已经保存全部内容。切换本地空间并不会更改当前登录帐号。',
           centered: true,
           okText: '我已保存，切换空间',
           cancelText: '取消',
           onOk: async () => {
-            spaceModel.setAdapter('local').changeCurrent(space)
-          }
-        })
+            spaceModel.setAdapter('local').changeCurrent(space);
+          },
+        });
       } else {
         if (space.isSelfUsing) {
           if (space.disconnect) {
@@ -614,63 +608,74 @@ const SpaceSelect = {
               okText: '重新连接',
               cancelText: '取消',
               onOk: async () => {
-                this.doChangeSpaceCloud(space)
-              }
-            })
+                this.doChangeSpaceCloud(space);
+              },
+            });
           } else {
-            window.antd.message.info('不可切换到当前使用中的空间。')
+            window.antd.message.info('不可切换到当前使用中的空间。');
           }
-          return
+          return;
         }
         if (space.isOtherUsing) {
           if (space.online) {
             antd.Modal.confirm({
               title: '此空间正忙',
-              content: '此空间正在被其他设备使用，如若切换到此空间，可能造成其他设备未同步的标签组丢失。是否仍然要强行切换？这将导致该设备上的浏览器强制下线。',
+              content:
+                '此空间正在被其他设备使用，如若切换到此空间，可能造成其他设备未同步的标签组丢失。是否仍然要强行切换？这将导致该设备上的浏览器强制下线。',
               centered: true,
               okText: '我已明确，切换空间',
               cancelText: '取消',
               onOk: async () => {
-                this.doChangeSpaceCloud(space)
-              }
-            })
+                this.doChangeSpaceCloud(space);
+              },
+            });
           } else {
             antd.Modal.confirm({
               title: '此空间使用设备异常离线',
-              content: Vue.createVNode('div', {},
-                [
-                  Vue.createVNode('p', {}, '此空间正在被其他设备使用，但是系统检测到此设备可能已经因为网络或者其他原因而离线。'),
-                  Vue.createVNode('p', {}, '所以此设备上可能存在未保存的标签组。如果切换到此空间，可能造成未保存的内容丢失。'),
-                  Vue.createVNode('p', {}, '建议到此设备商重新连接后正常关闭浏览器，以防止数据冲突。'),
-                  Vue.createVNode('p', {}, '如果您确认已无法恢复此设备的连接，则可切换到此设备在离线前最后一次保存的空间。'),
-                  Vue.createVNode('p', {}, '当此设备再次连接网络，会自动将无法保存的空间保存为本地空间做备份。')
-                ]
-              ),
+              content: Vue.createVNode('div', {}, [
+                Vue.createVNode(
+                  'p',
+                  {},
+                  '此空间正在被其他设备使用，但是系统检测到此设备可能已经因为网络或者其他原因而离线。',
+                ),
+                Vue.createVNode(
+                  'p',
+                  {},
+                  '所以此设备上可能存在未保存的标签组。如果切换到此空间，可能造成未保存的内容丢失。',
+                ),
+                Vue.createVNode('p', {}, '建议到此设备商重新连接后正常关闭浏览器，以防止数据冲突。'),
+                Vue.createVNode(
+                  'p',
+                  {},
+                  '如果您确认已无法恢复此设备的连接，则可切换到此设备在离线前最后一次保存的空间。',
+                ),
+                Vue.createVNode('p', {}, '当此设备再次连接网络，会自动将无法保存的空间保存为本地空间做备份。'),
+              ]),
               centered: true,
               okText: '我已明确，切换空间',
               cancelText: '取消',
               onOk: async () => {
-                this.doChangeSpaceCloud(space)
-              }
-            })
+                this.doChangeSpaceCloud(space);
+              },
+            });
           }
-
         } else {
           antd.Modal.confirm({
             title: '切换到云端空间',
-            content: '是否切换到云端空间？切换到云端空间后会同时更换当前帐号到此帐号。请务必确认您网页上的内容已经保存。否则可能丢失未保存内容。',
+            content:
+              '是否切换到云端空间？切换到云端空间后会同时更换当前帐号到此帐号。请务必确认您网页上的内容已经保存。否则可能丢失未保存内容。',
             centered: true,
             okText: '我已保存，切换空间',
             cancelText: '取消',
             onOk: async () => {
-              this.doChangeSpaceCloud(space)
-            }
-          })
+              this.doChangeSpaceCloud(space);
+            },
+          });
         }
       }
     },
 
-    deleteAccount (uid) {
+    deleteAccount(uid) {
       antd.Modal.confirm({
         title: '解绑此帐号',
         content: '解绑帐号并不会影响帐号数据，仅仅是将本地帐号退出。但是退出后无法再使用此帐号下的所有空间。',
@@ -678,16 +683,19 @@ const SpaceSelect = {
         okText: '确认',
         cancelText: '取消',
         onOk: () => {
-          userModel.delete({ uid: uid }).then(() => {
-            window.antd.message.success('解绑帐号成功。')
-            this.$router.replace('/')
-          }).catch(() => {
-            window.antd.message.error('解绑帐号失败。')
-          })
-        }
-      })
+          userModel
+            .delete({ uid: uid })
+            .then(() => {
+              window.antd.message.success('解绑帐号成功。');
+              this.$router.replace('/');
+            })
+            .catch(() => {
+              window.antd.message.error('解绑帐号失败。');
+            });
+        },
+      });
     },
-  }
-}
+  },
+};
 
-module.exports = SpaceSelect
+module.exports = SpaceSelect;

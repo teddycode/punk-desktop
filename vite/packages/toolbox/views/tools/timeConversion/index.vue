@@ -11,22 +11,18 @@
 
     <div class="flex">
       <XtInput
-          v-model="timeStamp"
-          :limit="{ number: true, space: true }"
-          class="xt-bg-2 xt-border rounded-xl overflow-hidden"
-          style="height: 48px"
-          @change="timeStampKeyup()"
-          @input="timeStampKeyup()"
-          @keyup="timeStampKeyup()"
+        class="xt-bg-2 xt-border rounded-xl overflow-hidden"
+        :limit="{ number: true, space: true }"
+        style="height: 48px"
+        v-model="timeStamp"
+        @keyup="timeStampKeyup()"
+        @change="timeStampKeyup()"
+        @input="timeStampKeyup()"
       >
         <template #addonBefore>
           <div
-              class="text-base xt-text flex justify-center items-center"
-              style="
-              width: 80px;
-              height: 46px;
-              background: rgba(255, 255, 255, 0.4);
-            "
+            class="text-base xt-text flex justify-center items-center"
+            style="width: 80px; height: 46px; background: rgba(255, 255, 255, 0.4)"
           >
             时间戳
           </div>
@@ -39,26 +35,22 @@
     </div>
     <div class="flex">
       <XtInput
-          v-model="time"
-          class="xt-bg-2 xt-border rounded-xl overflow-hidden"
-          style="height: 48px"
-          @keyup="timeKeyup()"
+        class="xt-bg-2 xt-border rounded-xl overflow-hidden"
+        style="height: 48px"
+        v-model="time"
+        @keyup="timeKeyup()"
       >
         <template #addonBefore>
           <div
-              class="text-base xt-text flex justify-center items-center h-full"
-              style="
-              width: 80px;
-              height: 100%;
-              background: rgba(255, 255, 255, 0.4);
-            "
+            class="text-base xt-text flex justify-center items-center h-full"
+            style="width: 80px; height: 100%; background: rgba(255, 255, 255, 0.4)"
           >
             时间
           </div>
         </template>
         <template #suffix>
           <div style="width: 125px">
-            <a-date-picker v-model:value="datePicker"/>
+            <a-date-picker v-model:value="datePicker" />
           </div>
         </template>
       </XtInput>
@@ -69,49 +61,49 @@
 </template>
 
 <script>
-import dayjs from '../../../../table/components/card/hooks/day'
+import dayjs from '../../../../table/components/card/hooks/day';
 
-import { timeConversion } from '../../../store/timeConversion'
-import { mapActions, mapWritableState } from 'pinia'
+import { timeConversion } from '../../../store/timeConversion';
+import { mapWritableState, mapActions } from 'pinia';
 
 export default {
-  data () {
+  data() {
     return {
       currentTimeStamp: 0,
       currentTimeStampTimer: '',
       datePicker: '',
-    }
+    };
   },
   computed: {
     ...mapWritableState(timeConversion, ['time', 'timeStamp']),
   },
-  mounted () {
-    this.updateCurrentTimeStamp()
-    this.currentTimeStampTimer = setInterval(this.updateCurrentTimeStamp, 1000)
+  mounted() {
+    this.updateCurrentTimeStamp();
+    this.currentTimeStampTimer = setInterval(this.updateCurrentTimeStamp, 1000);
   },
-  beforeRouteLeave (to, from, next) {
-    clearInterval(this.currentTimeStampTimer)
-    next()
+  beforeRouteLeave(to, from, next) {
+    clearInterval(this.currentTimeStampTimer);
+    next();
   },
   watch: {
-    datePicker (newV) {
-      let date = dayjs(newV).format('YYYY-MM-DD HH:mm:ss')
-      this.time = date
-      this.timeKeyup()
+    datePicker(newV) {
+      let date = dayjs(newV).format('YYYY-MM-DD HH:mm:ss');
+      this.time = date;
+      this.timeKeyup();
     },
   },
   methods: {
     ...mapActions(timeConversion, ['timeKeyup', 'timeStampKeyup']),
-    updateCurrentTimeStamp () {
-      const now = new Date()
-      this.currentTimeStamp = now.getTime()
+    updateCurrentTimeStamp() {
+      const now = new Date();
+      this.currentTimeStamp = now.getTime();
     },
-    getDate () {
-      let time = dayjs().format('YYYY-MM-DD HH:mm:ss')
-      return time
+    getDate() {
+      let time = dayjs().format('YYYY-MM-DD HH:mm:ss');
+      return time;
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -123,7 +115,6 @@ export default {
 :deep(.ant-picker-input) {
   font-size: 22px;
 }
-
 :deep(.ant-picker-focused) {
   box-shadow: none !important;
 }

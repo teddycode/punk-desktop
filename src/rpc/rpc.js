@@ -1,6 +1,6 @@
-const messages = require('./protoc/game-assist_pb')
-const services = require('./protoc/game-assist_grpc_pb')
-const grpc = require('@grpc/grpc-js')
+const messages = require('./protoc/game-assist_pb');
+const services = require('./protoc/game-assist_grpc_pb');
+const grpc = require('@grpc/grpc-js');
 // function main() {
 //   // 创建一个grpc的客户端连接
 //   // 参数就是地址和认证方式
@@ -19,22 +19,21 @@ const grpc = require('@grpc/grpc-js')
 //     console.log(res.getMessage());
 //   });
 // }
-const proto = grpc.loadPackageDefinition()
-var client = new services.InspectorClient('127.0.0.1:50051',
-  grpc.credentials.createInsecure())
+const proto = grpc.loadPackageDefinition();
+var client = new services.InspectorClient('127.0.0.1:50051', grpc.credentials.createInsecure());
 
 const inspector = {
-  async getFPS () {
-    let request = new messages.Empty({})
+  async getFPS() {
+    let request = new messages.Empty({});
     return new Promise((resolve, reject) => {
       client.getFPS(request, (err, response) => {
         if (err) {
-          console.error('客户端返回error', err)
-          reject(err)
+          console.error('客户端返回error', err);
+          reject(err);
         }
-        resolve(response.getFps())
-      })
-    })
+        resolve(response.getFps());
+      });
+    });
     // try{
     //   let response=
     //   console.log(response)
@@ -42,11 +41,11 @@ const inspector = {
     // }catch(e){
     //   console.warn('客户端返回error',e)
     // }
-  }
-}
+  },
+};
 
 const rpc = {
-  inspector
-}
+  inspector,
+};
 
-module.exports = rpc
+module.exports = rpc;

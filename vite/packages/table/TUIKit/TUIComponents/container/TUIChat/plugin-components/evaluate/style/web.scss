@@ -2,11 +2,9 @@
   display: inline-block;
   position: relative;
   cursor: pointer;
-
   .icon-evaluate {
     margin: 12px 10px 0;
   }
-
   &-main {
     position: absolute;
     z-index: 5;
@@ -15,20 +13,17 @@
     padding: 12px;
     display: flex;
     flex-direction: column;
-
     header {
       h1 {
         font-size: 12px;
         text-align: center;
       }
     }
-
     footer {
       font-size: 12px;
       text-align: center;
     }
   }
-
   &-content {
     display: flex;
     flex-direction: column;
@@ -38,7 +33,6 @@
     background-size: cover;
     background-position-x: 128px;
     background-position-y: 77px;
-
     textarea {
       box-sizing: border-box;
       width: 288px;
@@ -48,7 +42,6 @@
       border-radius: 2px;
       resize: none;
     }
-
     .btn {
       border: none;
       border-radius: 5px;
@@ -59,11 +52,9 @@
       cursor: pointer;
     }
   }
-
   &-list {
     flex: 1;
     display: flex;
-
     &-item {
       width: 24px;
       height: 24px;
@@ -72,7 +63,6 @@
       padding: 4px 0;
       font-size: 12px;
       padding-right: 15px;
-
       &:last-child {
         padding-right: 0 !important;
       }

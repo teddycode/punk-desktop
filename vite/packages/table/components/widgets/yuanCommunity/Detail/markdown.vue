@@ -1,68 +1,70 @@
 <template>
   <div class="w-full h-full">
-    <Toolbar :defaultConfig="toolbarConfig"
-             :editor="editorRef" :mode="mode"
-             style="border-bottom: 1px solid var(--divider);background-color: var(--primary-bg) !important;"/>
+    <Toolbar
+      :defaultConfig="toolbarConfig"
+      :editor="editorRef"
+      :mode="mode"
+      style="border-bottom: 1px solid var(--divider); background-color: var(--primary-bg) !important"
+    />
 
-    <Editor v-model="valueHtml"
-            :defaultConfig="editorConfig" :mode="mode"
-            style="height: 100% ; overflow-y: hidden;background-color: var(--primary-bg) !important;"
-            @onCreated="handleCreated"/>
+    <Editor
+      v-model="valueHtml"
+      :defaultConfig="editorConfig"
+      :mode="mode"
+      style="height: 100%; overflow-y: hidden; background-color: var(--primary-bg) !important"
+      @onCreated="handleCreated"
+    />
   </div>
 </template>
 
-<script lang='ts' setup>
-import {onBeforeUnmount, ref, shallowRef} from 'vue'
-import {Editor, Toolbar} from '@wangeditor/editor-for-vue'
-import '@wangeditor/editor/dist/css/style.css' // 引入 css
-import {fileUpload} from '../../../../components/card/hooks/imageProcessing'
-import {message} from 'ant-design-vue'
+<script lang="ts" setup>
+import { onBeforeUnmount, ref, shallowRef } from 'vue';
+import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
+import '@wangeditor/editor/dist/css/style.css'; // 引入 css
+import { fileUpload } from '../../../../components/card/hooks/imageProcessing';
+import { message } from 'ant-design-vue';
 // wangEditor配置
-const editorRef = shallowRef()
+const editorRef = shallowRef();
 // default---wangEditor全部功能  simple---部分功能
-const mode = ref('default')
-const valueHtml = ref('')
-const editorConfig = {placeholder: '正文', MENU_CONF: {}}
+const mode = ref('default');
+const valueHtml = ref('');
+const editorConfig = { placeholder: '正文', MENU_CONF: {} };
 const handleCreated = (editor) => {
   editorRef.value = editor; // 记录 editor 实例，重要！
-  editor.config.bgColor = [
-    'var(--primary-text)',
-    'var(--secondary-bg)',
-  ]
+  editor.config.bgColor = ['var(--primary-text)', 'var(--secondary-bg)'];
   // 查看所有的功能选项
   // console.log(editor.getAllMenuKeys())
 };
 const toolbarConfig = ref({
   toolbarKeys: [
-
-    "bold",
-    "italic",
-    "underline",
-    "divider",
-    "through",
+    'bold',
+    'italic',
+    'underline',
+    'divider',
+    'through',
     {
-      key: "group-text-selcet",
+      key: 'group-text-selcet',
       title: '文本',
-      menuKeys: ["headerSelect", "fontSize", "color", "lineHeight", "bgColor", "fontFamily", "blockquote"],
+      menuKeys: ['headerSelect', 'fontSize', 'color', 'lineHeight', 'bgColor', 'fontFamily', 'blockquote'],
     },
-    "|",
-    "bulletedList",
-    "numberedList",
-    "undo",
-    "redo",
-    "insertTable",
+    '|',
+    'bulletedList',
+    'numberedList',
+    'undo',
+    'redo',
+    'insertTable',
 
     {
       key: 'group-justify',
       title: '对齐',
-      menuKeys: ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyJustify',],
+      menuKeys: ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyJustify'],
     },
-    "|",
-    "uploadImage",
+    '|',
+    'uploadImage',
     {
-      key: "group-more-style",
-      title: "更多",
-      menuKeys: ["code", "emotion", "insertLink", "fullScreen",],
+      key: 'group-more-style',
+      title: '更多',
+      menuKeys: ['code', 'emotion', 'insertLink', 'fullScreen'],
     },
     // {
     //     key:"group-font-style",
@@ -71,10 +73,8 @@ const toolbarConfig = ref({
     // }
     // "fontSize",
     // "lineHeight",
-
-
   ],
-})
+});
 // 组件销毁时，也及时销毁编辑器
 onBeforeUnmount(() => {
   const editor = editorRef.value;
@@ -82,8 +82,7 @@ onBeforeUnmount(() => {
   editor.destroy();
 });
 
-
-editorConfig.MENU_CONF["uploadImage"] = {
+editorConfig.MENU_CONF['uploadImage'] = {
   maxFileSize: 10 * 1024 * 1024,
 
   // 最多可上传几个文件，默认为 10
@@ -100,21 +99,20 @@ editorConfig.MENU_CONF["uploadImage"] = {
   async customUpload(file, insertFn) {
     let url;
     var formData = new FormData();
-    formData.append("file", file);
-    url = await fileUpload(file)
+    formData.append('file', file);
+    url = await fileUpload(file);
     if (!url) {
-      message.error("图片上传失败");
+      message.error('图片上传失败');
     } else {
       insertFn(url);
     }
   },
 };
 editorConfig.MENU_CONF['bgColor'] = {
-  colors: ['#333']
-}
-
+  colors: ['#333'],
+};
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .w-e-bar {
   background-color: var(--secondary-bg) !important;
 }

@@ -1,112 +1,107 @@
 //定义一个TaskList来接收tasks类型的数据
-const groupApi = require('../../src/api/groupApi')
-const userStatsModel = require('../util/model/userStatsModel')
-const userApi = require('../../src/api/userApi')
-const messageModel = require('../../src/model/messageModel')
-const { tools } = require('../util/util')
-const spaceModel = require('../../src/model/spaceModel')
-const statsh = require('../../js/util/statsh/statsh')
-const appModel = require('../../src/model/appModel.js')
+const groupApi = require('../../src/api/groupApi');
+const userStatsModel = require('../util/model/userStatsModel');
+const userApi = require('../../src/api/userApi');
+const messageModel = require('../../src/model/messageModel');
+const { tools } = require('../util/util');
+const spaceModel = require('../../src/model/spaceModel');
+const statsh = require('../../js/util/statsh/statsh');
+const appModel = require('../../src/model/appModel.js');
 
 class TasksList {
-  constructor () {
-    this.tasks = []
-    this.selected = null
-
+  constructor() {
+    this.tasks = [];
+    this.selected = null;
   }
 
-  init (tasks) {
-    this.tasks = tasks.tasks
-    this.selected = tasks.selectedTask
+  init(tasks) {
+    this.tasks = tasks.tasks;
+    this.selected = tasks.selectedTask;
+  }
+  getAll() {
+    return this.tasks;
+  }
+  forEach(fun) {
+    return this.tasks.forEach(fun);
   }
 
-  getAll () {
-    return this.tasks
+  getSelected() {
+    return this.get(this.selected);
   }
 
-  forEach (fun) {
-    return this.tasks.forEach(fun)
+  get(id) {
+    return this.find((task) => task.id === id) || null;
   }
 
-  getSelected () {
-    return this.get(this.selected)
-  }
-
-  get (id) {
-    return this.find(task => task.id === id) || null
-  }
-
-  find (filter) {
+  find(filter) {
     for (var i = 0, len = this.tasks.length; i < len; i++) {
       if (filter(this.tasks[i], i, this.tasks)) {
-        return this.tasks[i]
+        return this.tasks[i];
       }
     }
   }
 
-  getAll () {
-    return this.tasks
+  getAll() {
+    return this.tasks;
+  }
+  getLength() {
+    return this.tasks.length;
   }
 
-  getLength () {
-    return this.tasks.length
+  byIndex(index) {
+    return this.tasks[index];
   }
 
-  byIndex (index) {
-    return this.tasks[index]
+  getIndex(id) {
+    return this.tasks.findIndex((task) => task.id === id);
   }
 
-  getIndex (id) {
-    return this.tasks.findIndex(task => task.id === id)
+  slice(...args) {
+    return this.tasks.slice.apply(this.tasks, args);
   }
 
-  slice (...args) {
-    return this.tasks.slice.apply(this.tasks, args)
-  }
-
-  splice (...args) {
-    return this.tasks.splice.apply(this.tasks, args)
+  splice(...args) {
+    return this.tasks.splice.apply(this.tasks, args);
   }
 }
 
-let count = 0
+let count = 0;
 window.addEventListener('message', async function (e) {
   if (e.data.message && e.data.message === 'receiveGlobal') {
-    let tasksList = new TasksList()
+    let tasksList = new TasksList();
     if ($store.state.pinItems == null) {
-      return
+      return;
     }
-    tasksList.init(e.data.data.tasks)
-    await $store.commit('fillTasksToItems', tasksList)
-    ipc.send('transmitTaskList', $store.getters.getItems)
+    tasksList.init(e.data.data.tasks);
+    await $store.commit('fillTasksToItems', tasksList);
+    ipc.send('transmitTaskList', $store.getters.getItems);
   }
-
-})
+});
 //初始化一个tasks变量
 
 window.onload = function () {
+  Vue.prototype.$window = window;
+  Vue.use(Vuex);
 
-  Vue.prototype.$window = window
-  Vue.use(Vuex)
+  window.ldb = require('../../src/util/ldb');
+  ldb.load(window.globalArgs['user-data-path'] + '/ldb.json');
 
-  window.ldb = require('../../src/util/ldb')
-  ldb.load(window.globalArgs['user-data-path'] + '/ldb.json')
-
-  let showUpdateLog = localStorage.getItem('3.4')
+  let showUpdateLog = localStorage.getItem('3.4');
   if (showUpdateLog !== 'true') {
-    ipc.send('addTab', { url: 'https://www.yuque.com/tswork/browser/by7fgt' })
-    localStorage.setItem('3.4', 'true')
+    ipc.send('addTab', { url: 'https://www.yuque.com/tswork/browser/by7fgt' });
+    localStorage.setItem('3.4', 'true');
   }
-  const DEFAULT_GUEST = {//当前用户
+  const DEFAULT_GUEST = {
+    //当前用户
     uid: 0,
     nickname: '立即登录',
     avatar: '../../icons/browser.ico',
     fans: 0,
     follow: 0,
     grade: {
-      grade: 0
-    }
-  }
+      grade: 0,
+    },
+  };
   const store = new Vuex.Store({
     state: {
       cloudSpaces: [],
@@ -131,111 +126,112 @@ window.onload = function () {
         rank: 0,
         percentage: 0,
       },
-      guideScedule: 0
+      guideScedule: 0,
     },
     getters: {
       getGuideScedule: (state) => state.guideScedule,
-      getTsGrade: state => {
-        return state.onlineGrade
+      getTsGrade: (state) => {
+        return state.onlineGrade;
       },
-      getAllMessages: state => {
-        return state.allMessages
+      getAllMessages: (state) => {
+        return state.allMessages;
       },
-      getMyGroups: state => {
-        return state.myGroups
+      getMyGroups: (state) => {
+        return state.myGroups;
       },
-      getAllCircle: state => {
-        let allCircle = []
-        state.managerGroups.forEach(e => {
-          e.lord = true
-          allCircle.push(e)
-        })
-        state.joinedGroups.forEach(e => {
-          e.lord = false
-          if (!state.managerGroups.some(v => v.id === e.id)) {
-            allCircle.push(e)
+      getAllCircle: (state) => {
+        let allCircle = [];
+        state.managerGroups.forEach((e) => {
+          e.lord = true;
+          allCircle.push(e);
+        });
+        state.joinedGroups.forEach((e) => {
+          e.lord = false;
+          if (!state.managerGroups.some((v) => v.id === e.id)) {
+            allCircle.push(e);
           }
-        })
-        return allCircle
+        });
+        return allCircle;
       },
-      getAll: state => {
-        if (state.pinItems == null) { //还未初始化
-          $store.commit('initItems')
+      getAll: (state) => {
+        if (state.pinItems == null) {
+          //还未初始化
+          $store.commit('initItems');
         }
         return {
-          'pinItems': state.pinItems,
-          'items': state.items
-        }
+          pinItems: state.pinItems,
+          items: state.items,
+        };
       },
-      getStringifyableState (sate) {
+      getStringifyableState(sate) {
         return {
-          sidebar: store.getters.getAll
-        }
-
+          sidebar: store.getters.getAll,
+        };
       },
       //获取当前选中的id
-      getSelected: state => {
-        return state.selected
+      getSelected: (state) => {
+        return state.selected;
       },
       //获取全部的item，包括置顶和非置顶的部分
-      getItems: state => {
-        return state.items
+      getItems: (state) => {
+        return state.items;
       },
-      getPinItems: state => {
-        return state.pinItems
+      getPinItems: (state) => {
+        return state.pinItems;
       },
       //获取单个item的标题，自动处理无分组名的情况，支持语言包
       getItemTitle: (state) => (task) => {
         //如果标签没名字，就给它取个默认名字
-        if (typeof (task) == 'undefined') { //如果已经被删除了，容错处理
-          return ''
+        if (typeof task == 'undefined') {
+          //如果已经被删除了，容错处理
+          return '';
         }
         if (task.name == null || task.name === '') {
-          return l('defaultTaskName').replace('%n', state.tasks.getIndex(task.id) + 1)
+          return l('defaultTaskName').replace('%n', state.tasks.getIndex(task.id) + 1);
         } else {
-          return task.name
+          return task.name;
         }
       },
       //获取任务的icon
       updateItemIcon: (state) => (task, item) => {
         if (task.tabs.length == 0) {
-          return '../../icons/empty.png'
+          return '../../icons/empty.png';
         }
-        let favicon = task.tabs[0].favicon
+        let favicon = task.tabs[0].favicon;
 
-        gotIcon = store.getters.getIcon(favicon)
-        if (gotIcon !== false) //获取到了图标
-        {
-          return gotIcon
+        gotIcon = store.getters.getIcon(favicon);
+        if (gotIcon !== false) {
+          //获取到了图标
+          return gotIcon;
         }
-        if (typeof (item) == 'undefined') {
-          return '../../icons/empty.png'
+        if (typeof item == 'undefined') {
+          return '../../icons/empty.png';
         }
-        return item.icon //如果取不到图标，维持原样，防止icon丢失
+        return item.icon; //如果取不到图标，维持原样，防止icon丢失
       },
       //获取图标的方法
       getIcon: (state) => (favicon) => {
         if (typeof favicon == 'undefined') {
-          return false
+          return false;
         } else if (typeof favicon == 'undefined') {
-          return false
+          return false;
         } else if (favicon == null) {
-          return false
+          return false;
         } else {
-          return favicon.url
+          return favicon.url;
         }
       },
       //从一个任务转化出一个item，用于items列表
       getItemFromTask: (state) => (task, item) => {
-        let parsedTitle = store.getters.getItemTitle(task)
-        let parsedIcon = store.getters.updateItemIcon(task, item)
+        let parsedTitle = store.getters.getItemTitle(task);
+        let parsedIcon = store.getters.updateItemIcon(task, item);
         task.tabs.forEach(function (tab) {
-          let icon = store.getters.getIcon(tab.favicon)
-          tab.icon = icon === false ? '../../icons/tab.png' : icon
+          let icon = store.getters.getIcon(tab.favicon);
+          tab.icon = icon === false ? '../../icons/tab.png' : icon;
           if (!tab.title) {
-            tab.title = l('newTabLabel')
+            tab.title = l('newTabLabel');
           }
-        })
+        });
         let addItem = {
           title: parsedTitle, //名称，用于显示提示
           name: parsedTitle,
@@ -249,89 +245,88 @@ window.onload = function () {
           tabs: task.tabs,
           partition: task.partition,
           userIcon: task.userIcon,
-          count: 0
-        }
-        addItem.count = task.tabs.length
-        return addItem
-      }
-
+          count: 0,
+        };
+        addItem.count = task.tabs.length;
+        return addItem;
+      },
     },
     mutations: {
       //更新新手引导进度值
       UPDATE_GUIDE_SCEDULE: (state, scedule) => {
-        state.guideScedule = scedule
+        state.guideScedule = scedule;
       },
       set_local_spaces: (state, spaces) => {
-        state.localSpaces = spaces
+        state.localSpaces = spaces;
       },
       set_cloud_spaces: (state, spaces) => {
-        state.cloudSpaces = spaces
+        state.cloudSpaces = spaces;
       },
       //设置全部的消息列表
       SET_ALLMESSAGES: (state, messages) => {
-        messages.forEach(v => {
-          v.time = tools.formatTime(v.create_time)
-        })
-        state.allMessages = messages
+        messages.forEach((v) => {
+          v.time = tools.formatTime(v.create_time);
+        });
+        state.allMessages = messages;
       },
       //添加消息
       ADD_MESSAGE: (state, messages) => {
-        messages.time = tools.formatTime(messages.create_time)
-        state.allMessages.unshift(messages)
+        messages.time = tools.formatTime(messages.create_time);
+        state.allMessages.unshift(messages);
       },
       //根据id删除单个消息
       DEL_MESSAGE_BYID: (state, id) => {
-        const index = state.allMessages.findIndex(v => v.nanoid === id)
-        state.allMessages.splice(index, 1)
+        const index = state.allMessages.findIndex((v) => v.nanoid === id);
+        state.allMessages.splice(index, 1);
       },
       //根据type删除消息
       DEL_MESSAGES_BYTYPE: (state, type) => {
-        const result = state.allMessages.filter(v => v.type !== type)
-        state.allMessages = result
+        const result = state.allMessages.filter((v) => v.type !== type);
+        state.allMessages = result;
       },
       //删除所有消息
       DEL_ALLMESSAGES: (state) => {
-        state.allMessages = []
+        state.allMessages = [];
       },
       //设置我的团队列表
       SET_MYGROUPS: (state, myGroups) => {
-        state.myGroups = myGroups
+        state.myGroups = myGroups;
       },
       //同步我加入的圈子
       SET_JOINED_CIRCLE: (state, groups) => {
-        state.joinedGroups = groups
+        state.joinedGroups = groups;
       },
       //同步我管理的圈子
       SET_MANAGER_CIRCLE: (state, groups) => {
-        state.managerGroups = groups
+        state.managerGroups = groups;
       },
       //同步浏览器等级
       SET_TSGRADE: (state, data) => {
-        let userInfo = data.data
+        let userInfo = data.data;
         //还需要特殊处理一下浏览器等级
         //处理前无论如何重置一下防止等级标识被累加
-        state.onlineGrade.crown = []
-        state.onlineGrade.sun = []
-        state.onlineGrade.moon = []
-        state.onlineGrade.star = []
-
-        function handleGrade (name) {
+        state.onlineGrade.crown = [];
+        state.onlineGrade.sun = [];
+        state.onlineGrade.moon = [];
+        state.onlineGrade.star = [];
+        function handleGrade(name) {
           for (let i = 0; i < userInfo.onlineGrade[name]; i++) {
             state.onlineGrade[name].push({
-              icon: `../../icons/grade/${name}.svg`
-            })
+              icon: `../../icons/grade/${name}.svg`,
+            });
           }
         }
 
-        Object.keys(userInfo.onlineGrade).forEach(v => handleGrade(v))
-        state.onlineGrade.lv = userInfo.onlineGradeExtra.lv
-        state.onlineGrade.cumulativeHours = userInfo.onlineGradeExtra.cumulativeHours
-        state.onlineGrade.cumulativeMinute = userInfo.onlineGradeExtra.minutes
-        state.onlineGrade.cumulativeMinutes = userInfo.onlineGradeExtra.minutes - userInfo.onlineGradeExtra.cumulativeHours * 60
-        state.onlineGrade.rank = userInfo.onlineGradeExtra.rank
-        state.onlineGrade.distance = userInfo.onlineGradeExtra.distance
-        state.onlineGrade.percentage = String(userInfo.onlineGradeExtra.percentage).slice(0, 6) * 100
-        window.appVue.lastOpenedLv = userInfo.onlineGradeExtra.lv
+        Object.keys(userInfo.onlineGrade).forEach((v) => handleGrade(v));
+        state.onlineGrade.lv = userInfo.onlineGradeExtra.lv;
+        state.onlineGrade.cumulativeHours = userInfo.onlineGradeExtra.cumulativeHours;
+        state.onlineGrade.cumulativeMinute = userInfo.onlineGradeExtra.minutes;
+        state.onlineGrade.cumulativeMinutes =
+          userInfo.onlineGradeExtra.minutes - userInfo.onlineGradeExtra.cumulativeHours * 60;
+        state.onlineGrade.rank = userInfo.onlineGradeExtra.rank;
+        state.onlineGrade.distance = userInfo.onlineGradeExtra.distance;
+        state.onlineGrade.percentage = String(userInfo.onlineGradeExtra.percentage).slice(0, 6) * 100;
+        window.appVue.lastOpenedLv = userInfo.onlineGradeExtra.lv;
       },
       //清空浏览器等级相关
       SET_RESET_TSGRADE: (state) => {
@@ -341,155 +336,146 @@ window.onload = function () {
           moon: [],
           star: [],
           lv: 0,
-          cumulativeHours: 0
-        }
+          cumulativeHours: 0,
+        };
       },
       set_user: (state, user) => {
-        state.user = user
+        state.user = user;
       },
       logout: (state) => {
-        state.user = DEFAULT_GUEST
+        state.user = DEFAULT_GUEST;
       },
       set_user_info: (state, data) => {
-        let userInfo = data.data
+        let userInfo = data.data;
         if (!!!userInfo || !!!userInfo.grade) {
           userInfo = {
             fans: 0,
             postCount: 0,
             grade: {
-              grade: 0
+              grade: 0,
             },
             follow: 0,
-            signature: ''
-          }
+            signature: '',
+          };
         }
-        state.user.nickname = userInfo.nickname
-        state.user.avatar = userInfo.avatar
-        state.user.fans = userInfo.fans
-        state.user.postCount = userInfo.post_count
-        state.user.grade = userInfo.grade
-        state.user.follow = userInfo.follow
-        state.user.signature = userInfo.signature
+        state.user.nickname = userInfo.nickname;
+        state.user.avatar = userInfo.avatar;
+        state.user.fans = userInfo.fans;
+        state.user.postCount = userInfo.post_count;
+        state.user.grade = userInfo.grade;
+        state.user.follow = userInfo.follow;
+        state.user.signature = userInfo.signature;
       },
       //设置置顶区域的item
-      savePinItems (state, pinItems) {
+      savePinItems(state, pinItems) {
         //将根据pin和items生成Tasks
-        state.pinItems = pinItems
+        state.pinItems = pinItems;
       },
       //设置item
-      saveItems (state, items) {
-        state.items = items
+      saveItems(state, items) {
+        state.items = items;
       },
-      setSelected (state, selected) {
-        state.selected = selected
-        window.appVue.$refs.sidePanel.lastOpenId = selected
+      setSelected(state, selected) {
+        state.selected = selected;
+        window.appVue.$refs.sidePanel.lastOpenId = selected;
       },
 
       //从任务组读入置顶区域，目前还不支持存档，每次进去会重新填充一次
-      initItems: state => {
-        state.pinItems = []
-        state.items = []
+      initItems: (state) => {
+        state.pinItems = [];
+        state.items = [];
       },
       //将任务填充到item列表当中，系统会自动刷新一次列表。
       //算法主要是遍历两个组，然后将task按顺序填充进去，如果有多的，就在队列尾部插入（应对插入新组的情况），如果有少的，则从队尾删除相应数量（应对删除任务的情况）
-      async fillTasksToItems (state, tasksList) {
+      async fillTasksToItems(state, tasksList) {
         //将tasks转化为items
-        let replaceIndex = 0
+        let replaceIndex = 0;
         //遍历置顶的区域，把任务都替换进来
-        const totalCount = tasksList.getLength() //任务的总数
+        const totalCount = tasksList.getLength(); //任务的总数
 
         state.pinItems.forEach(function (pinItem, indexPin) {
           if (pinItem.type == 'task') {
             if (replaceIndex >= totalCount) {
-              state.pinItems.splice(indexPin, 1) //如果已经都填充进去了，则删除掉剩余的任务即可。
+              state.pinItems.splice(indexPin, 1); //如果已经都填充进去了，则删除掉剩余的任务即可。
             } else {
-              state.pinItems[indexPin] = store.getters.getItemFromTask(tasksList
-                .byIndex(
-                  replaceIndex), pinItem)
-              replaceIndex++
+              state.pinItems[indexPin] = store.getters.getItemFromTask(tasksList.byIndex(replaceIndex), pinItem);
+              replaceIndex++;
             }
           }
-
-        })
+        });
 
         //遍历非置顶区域，把任务都替换进来
         state.items.forEach(function (item, index) {
-
           if (item.type == 'task') {
             //如果现存的任务都替换进去了，接下来就不是再替换了，而是删除掉剩余的task，以保持两边同步
             if (replaceIndex >= tasksList.getLength()) {
-              state.items.splice(index, 1)
+              state.items.splice(index, 1);
             } else {
-              state.items[index] = store.getters.getItemFromTask(tasksList.byIndex(
-                replaceIndex), item)
-              replaceIndex++
+              state.items[index] = store.getters.getItemFromTask(tasksList.byIndex(replaceIndex), item);
+              replaceIndex++;
             }
-
           }
-
-        })
+        });
         //如果到最后，还有没替换的，就在队尾插入剩余的任务
-        let last = tasksList.getLength() - replaceIndex
+        let last = tasksList.getLength() - replaceIndex;
         if (last > 0) {
           //如果有剩下的，就往数组最后添加上
           for (let i = 0; i < last; i++) {
-            state.items.push(store.getters.getItemFromTask(tasksList.byIndex(replaceIndex)))
-            replaceIndex++
+            state.items.push(store.getters.getItemFromTask(tasksList.byIndex(replaceIndex)));
+            replaceIndex++;
           }
         }
 
-        let newPinItems = state.pinItems
+        let newPinItems = state.pinItems;
 
         //由于getter无法监控对象和数组的变化，所以这里设空一下，以促使其响应
-        state.pinItems = null
-        state.pinItems = newPinItems
+        state.pinItems = null;
+        state.pinItems = newPinItems;
 
-        let newItems = state.items
-        state.items = null
-        state.items = newItems
+        let newItems = state.items;
+        state.items = null;
+        state.items = newItems;
 
-        state.selected = tasksList.selected
-        window.appVue.$refs.sidePanel.lastOpenId = tasksList.selected
-        let newTasksList = tasksList
-        state.tasks = null
-        state.tasks = newTasksList
+        state.selected = tasksList.selected;
+        window.appVue.$refs.sidePanel.lastOpenId = tasksList.selected;
+        let newTasksList = tasksList;
+        state.tasks = null;
+        state.tasks = newTasksList;
 
         //mark插入对tasks的数据统计
-        await userStatsModel.setValue('tasks', state.tasks.tasks.length)
+        await userStatsModel.setValue('tasks', state.tasks.tasks.length);
         //mark插入对tabs的数据统计
-        let tabsNum = 0
-        state.tasks.tasks.forEach(v => {
-          tabsNum += v.tabs.length
-        })
-        await userStatsModel.setValue('tabs', tabsNum)
-        window.computeBottomSize()
+        let tabsNum = 0;
+        state.tasks.tasks.forEach((v) => {
+          tabsNum += v.tabs.length;
+        });
+        await userStatsModel.setValue('tabs', tabsNum);
+        window.computeBottomSize();
         //statsh
         statsh.do({
           action: 'set',
           key: 'tabs',
-          value: tabsNum
-        })
+          value: tabsNum,
+        });
         statsh.do({
           action: 'set',
           key: 'tasks',
-          value: state.tasks.tasks.length
-        })
-
-      }
-
+          value: state.tasks.tasks.length,
+        });
+      },
     },
     actions: {
-      async getGroups ({ commit }) {
-        const result = await groupApi.getGroups()
+      async getGroups({ commit }) {
+        const result = await groupApi.getGroups();
         if (result.code === 1000) {
-          commit('SET_MYGROUPS', result.data)
+          commit('SET_MYGROUPS', result.data);
         }
       },
-      async getUserInfo ({ commit }) {
-        const result = await userApi.getUserInfo()
+      async getUserInfo({ commit }) {
+        const result = await userApi.getUserInfo();
         if (result.code === 1000) {
-          commit('set_user_info', result.data)
-          commit('SET_TSGRADE', result.data)
+          commit('set_user_info', result.data);
+          commit('SET_TSGRADE', result.data);
         }
       },
       /**
@@ -498,15 +484,15 @@ window.onload = function () {
        * @param options
        * @returns {Promise<void>}
        */
-      async getJoinedCircle ({ commit }, options) {
+      async getJoinedCircle({ commit }, options) {
         try {
-          const result = await groupApi.getJoinedCircle(options)
+          const result = await groupApi.getJoinedCircle(options);
           if (result.code === 1000) {
-            const data = toString.call(result.data) === '[object Array]' ? [] : result.data.list
-            commit('SET_JOINED_CIRCLE', data)
+            const data = toString.call(result.data) === '[object Array]' ? [] : result.data.list;
+            commit('SET_JOINED_CIRCLE', data);
           }
         } catch (e) {
-          console.log(e)
+          console.log(e);
         }
       },
       /**
@@ -515,216 +501,214 @@ window.onload = function () {
        * @param options
        * @returns {Promise<void>}
        */
-      async getMyCircle ({ commit }, options) {
-        const result = await groupApi.getMyCircle(options)
+      async getMyCircle({ commit }, options) {
+        const result = await groupApi.getMyCircle(options);
         if (result.code === 1000) {
-          commit('SET_MANAGER_CIRCLE', result.data)
+          commit('SET_MANAGER_CIRCLE', result.data);
         }
       },
-      async getCircleInfoById ({ commit }) {
-        const result = await groupApi.getCircleInfoById({ id: 95 })
+      async getCircleInfoById({ commit }) {
+        const result = await groupApi.getCircleInfoById({ id: 95 });
         if (result.code === 1000) {
-          return result.data
+          return result.data;
         }
       },
-      async getAllMessage ({ commit }) {
-        const result = await messageModel.allList()
-        commit('SET_ALLMESSAGES', result)
+      async getAllMessage({ commit }) {
+        const result = await messageModel.allList();
+        commit('SET_ALLMESSAGES', result);
       },
-      async deleteMessageById ({ commit }, options) {
-        await messageModel.deleteById(options)
-        commit('DEL_MESSAGE_BYID', options)
+      async deleteMessageById({ commit }, options) {
+        await messageModel.deleteById(options);
+        commit('DEL_MESSAGE_BYID', options);
       },
-      async deleteMessageByType ({ commit }, options) {
-        await messageModel.deleteByType(options)
-        commit('DEL_MESSAGES_BYTYPE', options)
+      async deleteMessageByType({ commit }, options) {
+        await messageModel.deleteByType(options);
+        commit('DEL_MESSAGES_BYTYPE', options);
       },
-      async deleteAllMessages ({ commit }) {
-        await messageModel.clearTable()
-        commit('DEL_ALLMESSAGES')
+      async deleteAllMessages({ commit }) {
+        await messageModel.clearTable();
+        commit('DEL_ALLMESSAGES');
       },
-      async getCloudSpaces ({ commit }, user) {
+      async getCloudSpaces({ commit }, user) {
         try {
           if (!!!user) {
-            user = appVue.$store.state.user
+            user = appVue.$store.state.user;
           }
-          let response = await spaceModel.setUser(user).getUserSpaces()
+          let response = await spaceModel.setUser(user).getUserSpaces();
           if (response.status) {
-            let mySpaces = response.data
+            let mySpaces = response.data;
             if (mySpaces.length > 5) {
-              mySpaces.splice(4, mySpaces.length - 5)
+              mySpaces.splice(4, mySpaces.length - 5);
             }
-            commit('set_cloud_spaces', mySpaces)
+            commit('set_cloud_spaces', mySpaces);
           } else {
-            window.appVue.$message.error('获取云空间失败。')
+            window.appVue.$message.error('获取云空间失败。');
           }
         } catch (e) {
-          console.warn(e)
+          console.warn(e);
         }
-
       },
-      async getLocalSpaces ({ commit }) {
-        let localSpaces = await spaceModel.getLocalSpaces()
-        let spaces = localSpaces.filter(sp => {
-          return sp.type === 'local'
-        })
+      async getLocalSpaces({ commit }) {
+        let localSpaces = await spaceModel.getLocalSpaces();
+        let spaces = localSpaces.filter((sp) => {
+          return sp.type === 'local';
+        });
         if (spaces.length > 5) {
-          spaces.splice(4, spaces.length - 5)
+          spaces.splice(4, spaces.length - 5);
         }
-        commit('set_local_spaces', spaces)
-      }
+        commit('set_local_spaces', spaces);
+      },
+    },
+  });
 
-    }
-  })
-
-  Vue.use(antd)
-  Vue.use(VueTippy)
+  Vue.use(antd);
+  Vue.use(VueTippy);
   var appVue = new Vue({
     el: '#appVue',
     store: store,
     components: {
-      vuedraggable
+      vuedraggable,
     },
     data: {
       mod: 'auto',
       window: window,
-      lastOpenedLv: -1
+      lastOpenedLv: -1,
     },
     watch: {
-      'lastOpenedLv' (newValue, oldValue) {
+      lastOpenedLv(newValue, oldValue) {
         //满足以下表示升级成功了
         if (oldValue !== -1 && newValue !== oldValue) {
-          window.appVue.$refs.sidePanel.levelUpgradeShow = true
+          window.appVue.$refs.sidePanel.levelUpgradeShow = true;
           setTimeout(() => {
-            window.appVue.$refs.sidePanel.levelUpgradeShow = false
-          }, 5000)
+            window.appVue.$refs.sidePanel.levelUpgradeShow = false;
+          }, 5000);
         }
-      }
+      },
     },
     mounted: function () {
       tsbk.default.config({
-        signature: 'ts'
-      })
-      window.$store = store
-      let sideMode = localStorage.getItem('sideMode')
-      sideMode = sideMode || 'close'
+        signature: 'ts',
+      });
+      window.$store = store;
+      let sideMode = localStorage.getItem('sideMode');
+      sideMode = sideMode || 'close';
       if (sideMode === 'close' || sideMode === 'auto') {
-        document.getElementById('clickThroughElement').style.left = '55px'
+        document.getElementById('clickThroughElement').style.left = '55px';
       } else if (sideMode === 'open') {
-        document.getElementById('clickThroughElement').style.left = '155px'
-
+        document.getElementById('clickThroughElement').style.left = '155px';
       }
-      this.mod = sideMode
-      getCurrentUser()
-    }
-  })
-  window.appVue = appVue
+      this.mod = sideMode;
+      getCurrentUser();
+    },
+  });
+  window.appVue = appVue;
 
-  require('./theme.js').initialize()
-}
+  require('./theme.js').initialize();
+};
 
 ipc.on('sideSetOpen', (event, args) => {
-  document.getElementById('clickThroughElement').style.left = '155px'
-  appVue.mod = 'open'
-  appVue.$children[0].mod = 'open'
-  localStorage.setItem('sideMode', 'open')
-})
+  document.getElementById('clickThroughElement').style.left = '155px';
+  appVue.mod = 'open';
+  appVue.$children[0].mod = 'open';
+  localStorage.setItem('sideMode', 'open');
+});
 ipc.on('sideSetClose', (event, args) => {
-  document.getElementById('clickThroughElement').style.left = '55px'
-  appVue.mod = 'close'
-  appVue.$children[0].mod = 'close'
-  localStorage.setItem('sideMode', 'close')
-})
+  document.getElementById('clickThroughElement').style.left = '55px';
+  appVue.mod = 'close';
+  appVue.$children[0].mod = 'close';
+  localStorage.setItem('sideMode', 'close');
+});
 ipc.on('sideSetAuto', (event, args) => {
-  document.getElementById('clickThroughElement').style.left = '55px'
-  appVue.mod = 'auto'
-  appVue.$children[0].mod = 'auto'
-  localStorage.setItem('sideMode', 'auto')
-})
+  document.getElementById('clickThroughElement').style.left = '55px';
+  appVue.mod = 'auto';
+  appVue.$children[0].mod = 'auto';
+  localStorage.setItem('sideMode', 'auto');
+});
 
 ipc.on('storeMessage', async (event, args) => {
-  let message = {}
-  message.type = args.type
-  message.create_time = Date.now()
-  message.title = args.title
-  message.body = args.body
-  message.index_name = args.indexName ?? null
-  message.avatar = args.avatar
-  await messageModel.add(message)
+  let message = {};
+  message.type = args.type;
+  message.create_time = Date.now();
+  message.title = args.title;
+  message.body = args.body;
+  message.index_name = args.indexName ?? null;
+  message.avatar = args.avatar;
+  await messageModel.add(message);
 
-  this.$store.commit('ADD_MESSAGE', message)
-})
+  this.$store.commit('ADD_MESSAGE', message);
+});
 
 ipc.on('webOsNotice', async (event, args) => {
-  const settingStatus = JSON.parse(localStorage.getItem('messageSetting'))
-  let index = settingStatus.findIndex(v => v.title === '浏览器')
-  let childIndex = settingStatus[index].childs.findIndex(v => v.title === '网页消息')
+  const settingStatus = JSON.parse(localStorage.getItem('messageSetting'));
+  let index = settingStatus.findIndex((v) => v.title === '浏览器');
+  let childIndex = settingStatus[index].childs.findIndex((v) => v.title === '网页消息');
   if (settingStatus[index].notice && settingStatus[index].childs[childIndex].notice) {
     //如果允许通知，存入dexie和vuex
-    let message = {}
-    message.type = 'webOs'
-    message.create_time = Date.now()
-    message.title = args.url
-    message.body = `${args.title}【${args.body}】`
-    message.index_name = null,
-      message.avatar = args.icon ? args.icon : args.favicon
-    await messageModel.add(message)
+    let message = {};
+    message.type = 'webOs';
+    message.create_time = Date.now();
+    message.title = args.url;
+    message.body = `${args.title}【${args.body}】`;
+    (message.index_name = null), (message.avatar = args.icon ? args.icon : args.favicon);
+    await messageModel.add(message);
 
-    this.$store.commit('ADD_MESSAGE', message)
+    this.$store.commit('ADD_MESSAGE', message);
   } else {
-
+    return;
   }
-})
+});
 
 ipc.on('isSilent', (event, args) => {
-  let index = this.appVue.$children[0].$children.findIndex(v => v.hasOwnProperty('$tag') && v.$tag === 'message-center')
-  this.appVue.$children[0].$children[index].isSilent = args
-})
+  let index = this.appVue.$children[0].$children.findIndex(
+    (v) => v.hasOwnProperty('$tag') && v.$tag === 'message-center',
+  );
+  this.appVue.$children[0].$children[index].isSilent = args;
+});
 
 ipc.on('refreshCircleList', async (event, args) => {
-  await window.$store.dispatch('getJoinedCircle', { page: 1, row: 500 })
-  await window.$store.dispatch('getMyCircle', { page: 1, row: 500 })
-})
+  await window.$store.dispatch('getJoinedCircle', { page: 1, row: 500 });
+  await window.$store.dispatch('getMyCircle', { page: 1, row: 500 });
+});
 
 ipc.on('handleProtocol', (event, args) => {
-  window.location.href = args
-})
+  window.location.href = args;
+});
 
 ipc.on('execImportHelper', async () => {
-  let saApp = await appModel.getFromPackage('com.thisky.import')
+  let saApp = await appModel.getFromPackage('com.thisky.import');
   if (saApp) {
-    ipc.send('executeApp', { app: saApp })
+    ipc.send('executeApp', { app: saApp });
   } else {
-    appVue.$message.error({ content: '此应用已经被卸载。无法打开。' })
+    appVue.$message.error({ content: '此应用已经被卸载。无法打开。' });
   }
-})
+});
 
 ipc.on('execFav', async () => {
-  let saApp = await appModel.getFromPackage('com.thisky.fav')
+  let saApp = await appModel.getFromPackage('com.thisky.fav');
   if (saApp) {
-    ipc.send('executeApp', { app: saApp })
+    ipc.send('executeApp', { app: saApp });
   } else {
-    appVue.$message.error({ content: '此应用已经被卸载。无法打开。' })
+    appVue.$message.error({ content: '此应用已经被卸载。无法打开。' });
   }
-})
+});
 
-ipc.invoke('getSidebarGuideScedule').then(res => {
+ipc.invoke('getSidebarGuideScedule').then((res) => {
   //这里有可能$store还没挂载上的情况，延迟2000毫秒
   setTimeout(() => {
-    window.$store.commit('UPDATE_GUIDE_SCEDULE', res + 1)
-  }, 2000)
-})
+    window.$store.commit('UPDATE_GUIDE_SCEDULE', res + 1);
+  }, 2000);
+});
 
 ipc.on('updateSidebarGuideScedule', (event, args) => {
-  window.$store.commit('UPDATE_GUIDE_SCEDULE', args)
-})
+  window.$store.commit('UPDATE_GUIDE_SCEDULE', args);
+});
 
 ipc.on('adjustSidePanel', (e, a) => {
   if (a === 'min') {
-    document.getElementById('appVue').hidden = true
-    appVue.$refs.sidePanel.minimal = true
+    document.getElementById('appVue').hidden = true;
+    appVue.$refs.sidePanel.minimal = true;
   } else {
-    document.getElementById('appVue').hidden = false
-    appVue.$refs.sidePanel.minimal = false
+    document.getElementById('appVue').hidden = false;
+    appVue.$refs.sidePanel.minimal = false;
   }
-})
+});

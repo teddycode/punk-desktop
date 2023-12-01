@@ -1,35 +1,29 @@
 .edit {
   &-header {
     h1 {
-
       font-weight: 500;
       color: #333333;
     }
   }
-
   &-list {
     &-item {
       &-content {
         label {
-
           font-weight: 400;
           color: #333333;
         }
-
         input {
-          border: 1px solid rgba(131, 137, 153, 0.40);
+          border: 1px solid rgba(131, 137, 153, 0.4);
 
           font-weight: 400;
           color: #596174;
         }
-
         .gender-list {
           &-item {
             .gender {
-              border: 1px solid rgba(131, 137, 153, 0.40);
-
+              border: 1px solid rgba(131, 137, 153, 0.4);
               &-selected {
-                border: 6px solid #147AFF;
+                border: 6px solid #147aff;
               }
             }
           }
@@ -40,90 +34,75 @@
 }
 
 .btn-default {
-  background: #FFFFFF;
-  border: 1px solid #DDDDDD;
+  background: #ffffff;
+  border: 1px solid #dddddd;
 }
-
 .btn-submit {
-  background: #3370FF;
-  border: 0 solid #2F80ED;
-  color: #FFFFFF;
+  background: #3370ff;
+  border: 0 solid #2f80ed;
+  color: #ffffff;
 }
-
 .selected {
-  border: 1px solid #006EFF !important;
-  color: #006EFF;
+  border: 1px solid #006eff !important;
+  color: #006eff;
 }
 
 .edit-h5 {
-  background: #EFEFEF;
-
+  background: #efefef;
   .edit {
     &-header {
-      background: #FFFFFF;
+      background: #ffffff;
     }
-
     &-list {
       &-item {
-        background: #FFFFFF;
-        border-bottom: 1px solid #EEEEEE;;
+        background: #ffffff;
+        border-bottom: 1px solid #eeeeee;
       }
     }
   }
-
   &-header {
     h1 {
-
       font-weight: 500;
       color: #000000;
       letter-spacing: 0;
     }
-
     .close {
-
       font-weight: 400;
-      color: #3370FF;
+      color: #3370ff;
       letter-spacing: 0;
     }
   }
-
   &-main {
     .list {
       &-item {
         span {
-          border: 1px solid #DDDDDD;
+          border: 1px solid #dddddd;
 
           font-weight: 400;
           letter-spacing: 0;
         }
       }
     }
-
     .input {
-      input, textarea {
-
+      input,
+      textarea {
         font-weight: 400;
         color: #000000;
         letter-spacing: 0;
-        background: #EFEFEF;
+        background: #efefef;
       }
     }
-
     sub {
-
       font-weight: 400;
       color: #888888;
       letter-spacing: 0;
     }
   }
-
   &-footer {
     .btn {
-
       font-weight: 400;
-      color: #FFFFFF;
+      color: #ffffff;
       letter-spacing: 0;
-
       &:disabled {
         opacity: 0.3;
       }
@@ -132,9 +111,8 @@
 }
 
 .mask {
-  background: rgba(0, 0, 0, .5);
-
+  background: rgba(0, 0, 0, 0.5);
   &-main {
-    background: #FFFFFF;
+    background: #ffffff;
   }
 }

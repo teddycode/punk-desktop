@@ -20,21 +20,20 @@ const tpl = `
       <a-button @click="goLogin" type="primary">去登录</a-button>
       </div>
 </div>
-`
+`;
 // const userModel = require('../../util/model/userModel')
 const AddAccount = {
   template: tpl,
-  data () {
-    return {}
+  data() {
+    return {};
   },
-  async mounted () {
-  },
+  async mounted() {},
   methods: {
-    goLogin () {
-      ipc.send('login')
+    goLogin() {
+      ipc.send('login');
       //https://s.apps.vip/login?response_type=code&client_id=10001&state=1
-    }
-  }
-}
+    },
+  },
+};
 
-module.exports = AddAccount
+module.exports = AddAccount;

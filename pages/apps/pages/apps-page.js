@@ -1,5 +1,4 @@
-const appsTpl =
-  ` <div style="width: 100%"><a-layout>
+const appsTpl = ` <div style="width: 100%"><a-layout>
     <a-layout-header style="background: #fff; padding: 0">
       <template>
         <div>
@@ -97,11 +96,11 @@ const appsTpl =
 </a-drawer>
 </template>
 </div>
-`
+`;
 module.exports = Vue.component('apps-page', {
   name: 'apps-page',
   template: appsTpl,
-  data () {
+  data() {
     return {
       visible: false,
       currentApp: {}, //点击时的app
@@ -112,36 +111,35 @@ module.exports = Vue.component('apps-page', {
       visibleCart: false,
       quickDrawerVisible: false,
       btnText: '安装到应用',
-      app: {}
-    }
+      app: {},
+    };
   },
   computed: {
     allApps: {
       get: function () {
         if (typeof window.$appsApiData2 == 'undefined' || window.$appsApiData2 == null) {
-          return window.nativeData2.allApps
+          return window.nativeData2.allApps;
         }
-        return window.$appsApiData2.allApps
-      }
+        return window.$appsApiData2.allApps;
+      },
     },
     appUpdateTime: {
       get: function () {
         if (typeof window.$appsApiData2 == 'undefined' || window.$appsApiData2 == null) {
-          return window.nativeData2.updateTime
+          return window.nativeData2.updateTime;
         } else {
-          return window.$appsApiData2.updateTime
+          return window.$appsApiData2.updateTime;
         }
-
-      }
-    }
+      },
+    },
   },
-  mounted () {
-    this.myApps = []
-    this.load()
+  mounted() {
+    this.myApps = [];
+    this.load();
   },
   methods: {
-    installApp (app, background = false) {
-      let standAloneAppModel = require('../../util/model/standAloneAppModel.js')
+    installApp(app, background = false) {
+      let standAloneAppModel = require('../../util/model/standAloneAppModel.js');
       let option = {
         name: app.name,
         logo: app.icon,
@@ -151,20 +149,23 @@ module.exports = Vue.component('apps-page', {
         settings: {
           bounds: {
             width: 1200,
-            height: 800
-          }
+            height: 800,
+          },
         },
-        showInSideBar: false
-      }
-      standAloneAppModel.install(app.url, option).then(success => {
-        this.$message.success('安装了应用：' + app.name + '，可在我的应用中查看。')
-        ipc.send('installApp', { id: success, background: background })
-      }, err => {
-        this.$message.error('安装了应用：' + app.name + '，可在我的应用中查看。')
-      })
+        showInSideBar: false,
+      };
+      standAloneAppModel.install(app.url, option).then(
+        (success) => {
+          this.$message.success('安装了应用：' + app.name + '，可在我的应用中查看。');
+          ipc.send('installApp', { id: success, background: background });
+        },
+        (err) => {
+          this.$message.error('安装了应用：' + app.name + '，可在我的应用中查看。');
+        },
+      );
     },
-    showModal () {
-      this.visible = true
+    showModal() {
+      this.visible = true;
     },
     load: function () {
       // window.$appsRestore.restoreFromDB().then((data) => {
@@ -175,20 +176,20 @@ module.exports = Vue.component('apps-page', {
       //   this.myApps = []
       // })
     },
-    showDrawer (app) {
-      this.drawerApp = null
-      this.drawerApp = app
-      this.drawerVisible = true
+    showDrawer(app) {
+      this.drawerApp = null;
+      this.drawerApp = app;
+      this.drawerVisible = true;
     },
-    onClose () {
-      this.drawerVisible = false
+    onClose() {
+      this.drawerVisible = false;
     },
     //移入app时的菜单显示
-    show (app) {
-      this.currentApp = app
+    show(app) {
+      this.currentApp = app;
     },
-    hide (obj) {
-      this.currentApp = null
+    hide(obj) {
+      this.currentApp = null;
     },
-  }
-})
+  },
+});

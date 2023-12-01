@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import BottomEdit from '../components/bottomEdit.vue'
+import BottomEdit from '../components/bottomEdit.vue';
 
 export default {
   components: {
@@ -12,7 +12,7 @@ export default {
   props: {
     data: {},
   },
-  data () {
+  data() {
     return {
       iconsSetVisible: this.data,
       menuList: [
@@ -20,22 +20,22 @@ export default {
           icon: 'shezhi1',
           title: '设置',
           fn: () => {
-            this.$emit('editIcons')
-            this.$emit('update:data', false)
+            this.$emit('editIcons');
+            this.$emit('update:data', false);
           },
         },
         {
           icon: 'guanbi2',
           title: '删除',
           fn: () => {
-            this.$emit('deleteIcons')
-            this.$emit('update:data', false)
+            this.$emit('deleteIcons');
+            this.$emit('update:data', false);
           },
         },
       ],
-    }
+    };
   },
-}
+};
 </script>
 
 <style lang="scss" scoped></style>

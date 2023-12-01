@@ -8,13 +8,13 @@ const appstoreTpl = `
           <a-avatar slot="track" shape="square" class="tree-icon" src="../../icons/svg/track.svg"></a-avatar>
         </a-tree>
 </div>
-  `
+  `;
 
 Vue.component('appstore-comp', {
   name: 'appstore-comp',
   template: appstoreTpl,
   props: {},
-  data () {
+  data() {
     return {
       selectedValues: [],
       //下拉菜单控制属性
@@ -23,7 +23,7 @@ Vue.component('appstore-comp', {
           title: '在线导航',
           key: 'appstore',
           slots: {
-            icon: 'folder'
+            icon: 'folder',
           },
 
           //   children: [{
@@ -46,26 +46,24 @@ Vue.component('appstore-comp', {
           title: '应用导航',
           key: 'apps',
           slots: {
-            icon: 'track'
-          }
-        }
-
-      ]
-    }
-  }, mounted () {
+            icon: 'track',
+          },
+        },
+      ],
+    };
+  },
+  mounted() {
     window.$trees.push({
       name: 'appstore',
-      comp: this
-    })
-  }
-  ,
+      comp: this,
+    });
+  },
   methods: {
-    onSelect (selectedKeys, info) {
-      window.tab = selectedKeys[0]
-      this.$router.push({ path: '/appstore', query: { listId: selectedKeys[0] } })
-      resetOtherTree('appstore', selectedKeys)
-      this.$emit('get-tab', window.tab)
-    }
-
-  }
-})
+    onSelect(selectedKeys, info) {
+      window.tab = selectedKeys[0];
+      this.$router.push({ path: '/appstore', query: { listId: selectedKeys[0] } });
+      resetOtherTree('appstore', selectedKeys);
+      this.$emit('get-tab', window.tab);
+    },
+  },
+});

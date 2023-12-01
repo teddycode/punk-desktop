@@ -1,29 +1,22 @@
 <template>
   <!-- 早期组件已经很烂了 得重构 -->
-  <div
-      v-if="web" class="w-full flex items-center justify-center flex-col"
-      style="height: 95%;"
-  >
+  <div class="w-full flex items-center justify-center flex-col" style="height: 95%" v-if="web">
     <div class="mb-2">前往工具台体验完整功能</div>
     <XtButton @click="webClick()">下载</XtButton>
   </div>
   <div
-      v-else
-      v-if="state !== ''"
-      :class="bg"
-      :style="[
+    v-else
+    class="controller-state w-full"
+    :class="bg"
+    :style="[
       {
         width: window.w,
         height: window.h,
       },
     ]"
-      class="controller-state w-full"
+    v-if="state !== ''"
   >
-    <img
-        :src="`/public/img/state/${state}.png`"
-        :style="{ zoom: `${zoom}%` }"
-        alt=""
-    />
+    <img :style="{ zoom: `${zoom}%` }" :src="`/public/img/state/${state}.png`" alt="" />
     <div>{{ text[`${state}`] }}</div>
     <template v-if="state !== 'null' && btn !== ''">
       <!-- 按钮控制有两种：1、插槽 2、回调 -->
@@ -52,7 +45,7 @@ export default {
         return {
           w: '100%',
           h: '100%',
-        }
+        };
       },
     },
     // 显示的图片大小
@@ -68,7 +61,7 @@ export default {
           init: '请先绑定', // 初始化
           null: '暂无数据', // 空数据
           false: '加载失败', // 失败
-        }
+        };
       },
     },
     // 显示的文本内容
@@ -78,7 +71,7 @@ export default {
         return {
           init: '绑定', // 初始化
           false: '刷新', // 失败
-        }
+        };
       },
     },
     // 背景 原先默认值 xt-bg 现在下方到class直接添加
@@ -90,17 +83,16 @@ export default {
       default: false,
     },
   },
-  mounted () {
-  },
+  mounted() {},
   methods: {
-    onClick () {
-      this.$emit('onClick')
+    onClick() {
+      this.$emit('onClick');
     },
-    webClick () {
-      window.open('https://www.apps.vip/download/')
+    webClick() {
+      window.open('https://www.apps.vip/download/');
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -113,11 +105,9 @@ export default {
   text-align: center;
   border-radius: 10px;
 }
-
 img {
   margin-bottom: 22px;
 }
-
 .click {
   margin-top: 10px;
   padding: 13px 26px;

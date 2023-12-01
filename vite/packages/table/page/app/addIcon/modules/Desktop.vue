@@ -1,42 +1,37 @@
 <template>
   <xt-task :modelValue="m02014"></xt-task>
   <div class="h-full w-full">
-    <Icon
-        ref="iconRef"
-        :data="allApps"
-        :isSelect="true"
-        @updateSelectApps="updateSelectApps"
-    ></Icon>
+    <Icon ref="iconRef" :isSelect="true" :data="allApps" @updateSelectApps="updateSelectApps"></Icon>
   </div>
 </template>
 
 <script>
-import syncSelected from '../hooks/syncSelected'
-import { taskStore } from '@apps/task/store'
-import { mapWritableState } from 'pinia'
+import syncSelected from '../hooks/syncSelected';
+import { taskStore } from '@apps/task/store';
+import { mapWritableState } from 'pinia';
 
 export default {
   mixins: [syncSelected],
 
-  data () {
+  data() {
     return {
       allApps: [],
-    }
+    };
   },
   computed: {
     ...mapWritableState(taskStore, ['taskID', 'step']),
-    m02014 () {
-      return this.taskID === 'M0201' && this.step === 4
+    m02014() {
+      return this.taskID === 'M0201' && this.step === 4;
     },
   },
   watch: {},
-  mounted () {
-    this.loadDeskIconApps()
+  mounted() {
+    this.loadDeskIconApps();
   },
   methods: {
-    async loadDeskIconApps () {
-      const desktopApps = await ipc.sendSync('getDeskApps')
-      let data = []
+    async loadDeskIconApps() {
+      const desktopApps = await ipc.sendSync('getDeskApps');
+      let data = [];
       //todo 要增加一个提示界面
       for (const item of desktopApps) {
         data.push({
@@ -47,12 +42,12 @@ export default {
             value: item.path,
             name: item.name,
           },
-        })
+        });
       }
-      this.allApps = data
+      this.allApps = data;
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped></style>

@@ -1,51 +1,54 @@
 <template>
   <div class="message-item">
-    <MessageTip v-if="isMessageTip(message)" :data="handleTipMessageShowContext(message)"/>
+    <MessageTip v-if="isMessageTip(message)" :data="handleTipMessageShowContext(message)" />
     <MessageBubble
-        v-else-if="!message.isRevoked"
-        :data="message"
-        :isH5="env.isH5"
-        :messagesList="messageList"
-        :needEmojiReact="displayEmojiReactions"
-        :needGroupReceipt="displayGroupMessageReadReceipt"
-        :needReplies="true"
-        @jumpID="jumpID"
-        @resendMessage="resendMessage"
-        @showReadReceiptDialog="showReadReceiptDialog"
-        @showRepliesDialog="showRepliesDialog"
+      v-else-if="!message.isRevoked"
+      :data="message"
+      :isH5="env.isH5"
+      :messagesList="messageList"
+      :needGroupReceipt="displayGroupMessageReadReceipt"
+      :needReplies="true"
+      :needEmojiReact="displayEmojiReactions"
+      @jumpID="jumpID"
+      @resendMessage="resendMessage"
+      @showReadReceiptDialog="showReadReceiptDialog"
+      @showRepliesDialog="showRepliesDialog"
     >
-      <MessageText v-if="message.type === types.MSG_TEXT" :data="handleTextMessageShowContext(message)"/>
+      <MessageText v-if="message.type === types.MSG_TEXT" :data="handleTextMessageShowContext(message)" />
       <MessageImage
-          v-if="message.type === types.MSG_IMAGE"
-          :data="handleImageMessageShowContext(message)"
-          :isH5="env.isH5"
-          @previewImage="previewImage"
-          @uploading="uploading"
+        v-if="message.type === types.MSG_IMAGE"
+        :isH5="env.isH5"
+        :data="handleImageMessageShowContext(message)"
+        @uploading="uploading"
+        @previewImage="previewImage"
       />
       <MessageVideo
-          v-if="message.type === types.MSG_VIDEO"
-          :data="handleVideoMessageShowContext(message)"
-          :isH5="env.isH5"
-          @uploading="uploading"
+        v-if="message.type === types.MSG_VIDEO"
+        :isH5="env.isH5"
+        :data="handleVideoMessageShowContext(message)"
+        @uploading="uploading"
       />
-      <MessageAudio v-if="message.type === types.MSG_AUDIO" :data="handleAudioMessageShowContext(message)"/>
-      <MessageFile v-if="message.type === types.MSG_FILE" :data="handleFileMessageShowContext(message)"/>
-      <MessageFace v-if="message.type === types.MSG_FACE" :data="handleFaceMessageShowContext(message)"
-                   :isH5="env.isH5"/>
-      <MessageLocation v-if="message.type === types.MSG_LOCATION" :data="handleLocationMessageShowContext(message)"/>
-      <MessageCustom v-if="message.type === types.MSG_CUSTOM" :data="handleCustomMessageShowContext(message)"/>
-      <MessageMerger v-if="message.type === types.MSG_MERGER" :data="handleMergerMessageShowContext(message)"/>
+      <MessageAudio v-if="message.type === types.MSG_AUDIO" :data="handleAudioMessageShowContext(message)" />
+      <MessageFile v-if="message.type === types.MSG_FILE" :data="handleFileMessageShowContext(message)" />
+      <MessageFace
+        v-if="message.type === types.MSG_FACE"
+        :data="handleFaceMessageShowContext(message)"
+        :isH5="env.isH5"
+      />
+      <MessageLocation v-if="message.type === types.MSG_LOCATION" :data="handleLocationMessageShowContext(message)" />
+      <MessageCustom v-if="message.type === types.MSG_CUSTOM" :data="handleCustomMessageShowContext(message)" />
+      <MessageMerger v-if="message.type === types.MSG_MERGER" :data="handleMergerMessageShowContext(message)" />
       <template #dialog>
-        <MessageTool :message="message" :needEmojiReact="displayEmojiReactions" @handleMessage="handleMessage"/>
-        <MessageEmojiReact v-if="!env?.isH5 && displayEmojiReactions" :message="message" type="dropdown"/>
+        <MessageTool :message="message" :needEmojiReact="displayEmojiReactions" @handleMessage="handleMessage" />
+        <MessageEmojiReact v-if="!env?.isH5 && displayEmojiReactions" :message="message" type="dropdown" />
       </template>
     </MessageBubble>
-    <MessageRevoked v-else :data="message" :isEdit="message.type === types.MSG_TEXT" @edit="handleEdit(message)"/>
+    <MessageRevoked v-else :isEdit="message.type === types.MSG_TEXT" :data="message" @edit="handleEdit(message)" />
   </div>
 </template>
 
-<script lang="ts" setup>
-import {defineEmits, defineProps, toRefs} from 'vue';
+<script setup lang="ts">
+import { toRefs, defineProps, defineEmits } from 'vue';
 import MessageBubble from './message-bubble.vue';
 import MessageText from './message-text.vue';
 import MessageImage from './message-image.vue';
@@ -62,19 +65,19 @@ import MessageEmojiReact from './message-emoji-react.vue';
 import MessageRevoked from './message-revoked.vue';
 
 import {
-  handleAudioMessageShowContext,
-  handleCustomMessageShowContext,
-  handleFaceMessageShowContext,
-  handleFileMessageShowContext,
+  handleTextMessageShowContext,
   handleImageMessageShowContext,
+  handleVideoMessageShowContext,
+  handleAudioMessageShowContext,
+  handleFileMessageShowContext,
+  handleFaceMessageShowContext,
   handleLocationMessageShowContext,
   handleMergerMessageShowContext,
-  handleTextMessageShowContext,
   handleTipMessageShowContext,
-  handleVideoMessageShowContext,
+  handleCustomMessageShowContext,
   isMessageTip,
 } from '../utils/utils';
-import {Message} from 'tim-js-sdk/tim-js-friendship';
+import { Message } from 'tim-js-sdk/tim-js-friendship';
 import constant from '../../constant';
 
 const props = defineProps({
@@ -110,7 +113,7 @@ const props = defineProps({
 });
 
 const emits = defineEmits(['handleEditor', 'showDialog', 'uploading', 'jumpID', 'resendMessage']);
-const {message, types, env, messageList, displayGroupMessageReadReceipt, displayEmojiReactions} = toRefs(props);
+const { message, types, env, messageList, displayGroupMessageReadReceipt, displayEmojiReactions } = toRefs(props);
 
 const handleEdit = (message: any) => {
   emits('handleEditor', message, 'reedit');
@@ -167,12 +170,11 @@ const resendMessage = (message: Message) => {
   if (message) {
     emits('resendMessage', message);
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @import url('../../../styles/common.scss');
 @import url('../../../styles/icon.scss');
-
 .message-item {
   display: flex;
   flex-direction: column;

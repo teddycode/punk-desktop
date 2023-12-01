@@ -22,6 +22,7 @@ Spotlight runs out of the box:
 - No additional handling of dynamic content and event listener
 
 <a name="features" id="features"></a>
+
 ## Features
 
 - Video Support
@@ -60,7 +61,7 @@ Spotlight runs out of the box:
 - Callbacks (onclick, onshow, onclose, onchange)
 - Global API for programmatic usage
 
-__Technical properties:__
+**Technical properties:**
 
 - Outstanding performance
 - Memory optimized, tiny footprint, fully cleans up
@@ -82,9 +83,10 @@ __Technical properties:__
 - Swipe down to close
 
 <a name="started"></a>
+
 ## Getting Started
 
-__Get Latest Stable Build (Recommended):__
+**Get Latest Stable Build (Recommended):**
 
 <table>
     <tr>
@@ -143,15 +145,15 @@ __Get Latest Stable Build (Recommended):__
     </tr>
 </table>
 
-__Get Latest (NPM):__
+**Get Latest (NPM):**
 
 ```cmd
 npm install spotlight.js
 ```
 
-__Get Latest Nightly (Do not use for production!):__
+**Get Latest Nightly (Do not use for production!):**
 
-Just exchange the version number from the URLs above with "master", e.g.: "/spotlight/__0.7.8__/dist/" into "/spotlight/__master__/dist".
+Just exchange the version number from the URLs above with "master", e.g.: "/spotlight/**0.7.8**/dist/" into "/spotlight/**master**/dist".
 
 > If you are using markup on anchor elements to inject the library, then it is recommended to load the lib inside your head section of the document. Because that will better prevent the original behavior of the anchor tag (e.g. when library wasn't fully loaded on page start).
 
@@ -161,10 +163,10 @@ The bundled version includes all assets like js, css, html and icon images as ba
 
 ```html
 <html>
-<head>
+  <head>
     <script src="spotlight.bundle.js"></script>
-</head>
-<body></body>
+  </head>
+  <body></body>
 </html>
 ```
 
@@ -174,11 +176,11 @@ The non-bundled version needs to load js and css separately (css also includes i
 
 ```html
 <html>
-<head>
-    <link rel="stylesheet" href="spotlight.min.css">
+  <head>
+    <link rel="stylesheet" href="spotlight.min.css" />
     <script src="spotlight.min.js"></script>
-</head>
-<body></body>
+  </head>
+  <body></body>
 </html>
 ```
 
@@ -190,11 +192,11 @@ Just add a link tag to the header sections which indicated to preload the script
 
 ```html
 <html>
-<head>
+  <head>
     <title></title>
-    <link rel="preload" href="spotlight.bundle.js" as="script">
-</head>
-<body>
+    <link rel="preload" href="spotlight.bundle.js" as="script" />
+  </head>
+  <body>
     <!--
     
     HTML CONTENT
@@ -204,7 +206,7 @@ Just add a link tag to the header sections which indicated to preload the script
     <script src="spotlight.bundle.js" defer></script>
     <!-- YOUR SCRIPT -->
     <script src="my-script.js" defer></script>
-</body>
+  </body>
 </html>
 ```
 
@@ -218,13 +220,13 @@ The ES6 modules are located in `src/js/`. You need to load the stylesheet file e
 
 ```html
 <head>
-    <link rel="stylesheet" href="dist/css/spotlight.min.css">
+  <link rel="stylesheet" href="dist/css/spotlight.min.css" />
 </head>
 ```
 
 ```html
 <script type="module">
-  import Spotlight from "./src/js/spotlight.js";
+  import Spotlight from './src/js/spotlight.js';
 </script>
 ```
 
@@ -232,7 +234,7 @@ You can also load modules via CDN, e.g.:
 
 ```html
 <script type="module">
-  import Spotlight from "https://unpkg.com/spotlight@0.7.8/src/js/spotlight.js";
+  import Spotlight from 'https://unpkg.com/spotlight@0.7.8/src/js/spotlight.js';
 </script>
 ```
 
@@ -244,17 +246,17 @@ The ES6 modules are not minified. Please use your favored bundler or build tool 
 
 The most simple way is the combination of img tags as preview images (thumbs) wrapped in an anchor element which points to the fully sized image. The advantage of this workaround is it fully falls back to a classical behavior. It is the universal markup language which all web tools already understand. Therefore, it may have some advantages for SEO also.
 
-Just add the class ___spotlight___ to an anchor element accordingly, e.g.:
+Just add the class **_spotlight_** to an anchor element accordingly, e.g.:
 
 ```html
 <a class="spotlight" href="img1.jpg">
-    <img src="thumb1.jpg">
+  <img src="thumb1.jpg" />
 </a>
 <a class="spotlight" href="img2.jpg">
-    <img src="thumb2.jpg">
+  <img src="thumb2.jpg" />
 </a>
 <a class="spotlight" href="img3.jpg">
-    <img src="thumb3.jpg">
+  <img src="thumb3.jpg" />
 </a>
 ```
 
@@ -272,39 +274,40 @@ Alternatively you can use non-anchor elements also:
 </a>
 ```
 
-Pretty much the same like anchors but uses ___data-src___ instead of ___href___.
+Pretty much the same like anchors but uses **_data-src_** instead of **_href_**.
 
 <a name="groups" id="groups"></a>
+
 ### Gallery-Groups
 
 Grouping galleries is useful when you have multiple images on your page which should be separated into groups, instead of adding all images to one single gallery when opened.
 
-Give one of the outer wrapping element the class ___spotlight-group___, e.g.:
+Give one of the outer wrapping element the class **_spotlight-group_**, e.g.:
 
 ```html
 <!-- Group 1 -->
 <div class="spotlight-group">
-    <a class="spotlight" href="dog1.jpg">
-        <img src="dog1-thumb.jpg">
-    </a>
-    <a class="spotlight" href="dog2.jpg">
-        <img src="dog2-thumb.jpg">
-    </a>
-    <a class="spotlight" href="dog3.jpg">
-        <img src="dog3-thumb.jpg">
-    </a>
+  <a class="spotlight" href="dog1.jpg">
+    <img src="dog1-thumb.jpg" />
+  </a>
+  <a class="spotlight" href="dog2.jpg">
+    <img src="dog2-thumb.jpg" />
+  </a>
+  <a class="spotlight" href="dog3.jpg">
+    <img src="dog3-thumb.jpg" />
+  </a>
 </div>
 <!-- Group 2 -->
 <div class="spotlight-group">
-    <a class="spotlight" href="cat1.jpg">
-        <img src="cat1-thumb.jpg">
-    </a>
-    <a class="spotlight" href="cat2.jpg">
-        <img src="cat2-thumb.jpg">
-    </a>
-    <a class="spotlight" href="cat3.jpg">
-        <img src="cat3-thumb.jpg">
-    </a>
+  <a class="spotlight" href="cat1.jpg">
+    <img src="cat1-thumb.jpg" />
+  </a>
+  <a class="spotlight" href="cat2.jpg">
+    <img src="cat2-thumb.jpg" />
+  </a>
+  <a class="spotlight" href="cat3.jpg">
+    <img src="cat3-thumb.jpg" />
+  </a>
 </div>
 ```
 
@@ -319,11 +322,7 @@ Also you can programmatically use Spotlight via the library API. This way does n
 Define a gallery group as follows:
 
 ```js
-var gallery = [
-    { src: "cat1.jpg" },
-    { src: "cat2.jpg" },
-    { src: "cat3.jpg" }
-];
+var gallery = [{ src: 'cat1.jpg' }, { src: 'cat2.jpg' }, { src: 'cat3.jpg' }];
 ```
 
 Show gallery with default options:
@@ -333,6 +332,7 @@ Spotlight.show(gallery /*, options */);
 ```
 
 <a name="options"></a>
+
 ## Options
 
 Pass options declarative via data-attributes in the HTML markup or use the <a href="#api">Spotlight API</a>.
@@ -341,9 +341,9 @@ Pass options declarative via data-attributes in the HTML markup or use the <a hr
 
 > When using API follow thse style `{ option: value }` (change _option_ and _value_ accordingly), e.g.: `{ preload: false }`.
 
-You can either apply the following data-attributes to the ___spotlight-group___ wrapper element or apply them separately to each ___spotlight___ anchor element (that also overrides inherited group definitions).
+You can either apply the following data-attributes to the **_spotlight-group_** wrapper element or apply them separately to each **_spotlight_** anchor element (that also overrides inherited group definitions).
 
-When using API the ___spotlight-group___ is represented by the options payload, also you can assign attributes separately to each gallery entry (that also overrides inherited group definitions).
+When using API the **_spotlight-group_** is represented by the options payload, also you can assign attributes separately to each gallery entry (that also overrides inherited group definitions).
 
 <table>
     <tr></tr>
@@ -750,52 +750,62 @@ Most of these options for a video are inherited by the attributes of a standard 
 
 ```html
 <div class="spotlight-group" data-title="Group title" data-animation="fade" data-control="autofit,close">
-    <a class="spotlight" href="cat1.jpg" data-title="This is a title" data-theme="white">
-        <img src="cat1-thumb.jpg">
-    </a>
-    <a class="spotlight" href="cat2.jpg" data-description="This is a description">
-        <img src="cat2-thumb.jpg">
-    </a>
-    <a class="spotlight" href="cat3.jpg" data-button="Click me" data-button-href="javascript:alert('clicked')">
-        <img src="cat3-thumb.jpg" alt="This is also a title">
-    </a>
-    <a class="spotlight" href="cat4.jpg" data-title="false" data-fit="cover">
-      <img src="cat4-thumb.jpg" alt="This title is hidden">
-    </a>
+  <a class="spotlight" href="cat1.jpg" data-title="This is a title" data-theme="white">
+    <img src="cat1-thumb.jpg" />
+  </a>
+  <a class="spotlight" href="cat2.jpg" data-description="This is a description">
+    <img src="cat2-thumb.jpg" />
+  </a>
+  <a class="spotlight" href="cat3.jpg" data-button="Click me" data-button-href="javascript:alert('clicked')">
+    <img src="cat3-thumb.jpg" alt="This is also a title" />
+  </a>
+  <a class="spotlight" href="cat4.jpg" data-title="false" data-fit="cover">
+    <img src="cat4-thumb.jpg" alt="This title is hidden" />
+  </a>
 </div>
 ```
 
-__Note:__ The 2nd image gets the title "Group title" from the group attributes, on the last image the title is explicitly set to be hidden.
+**Note:** The 2nd image gets the title "Group title" from the group attributes, on the last image the title is explicitly set to be hidden.
 
-> Control elements and animations has to be __whitelisted__ as a comma-separated list when specified. Do not forget to add the "close" control, otherwise you need to provide another way to close the gallery, e.g. via the button in the footer (see the demo page bottom example).
+> Control elements and animations has to be **whitelisted** as a comma-separated list when specified. Do not forget to add the "close" control, otherwise you need to provide another way to close the gallery, e.g. via the button in the footer (see the demo page bottom example).
 
 ### Example: Options & Group Inheritance (API)
 
 Same result as above but as code:
 
 ```js
-Spotlight.show([{
-    src: "cat1.jpg",
-    title: "This is a title",
-    theme: "white"
-},{
-    src: "cat2.jpg",
-    description: "This is a description",
-},{
-    src: "cat3.jpg",
-    button: "Click me",
-    onclick: function(){ alert("clicked"); },
-    title: "This is also a title"
-},{
-    src: "cat4.jpg",
-    title: false,
-    fit: "cover"
-}],{
+Spotlight.show(
+  [
+    {
+      src: 'cat1.jpg',
+      title: 'This is a title',
+      theme: 'white',
+    },
+    {
+      src: 'cat2.jpg',
+      description: 'This is a description',
+    },
+    {
+      src: 'cat3.jpg',
+      button: 'Click me',
+      onclick: function () {
+        alert('clicked');
+      },
+      title: 'This is also a title',
+    },
+    {
+      src: 'cat4.jpg',
+      title: false,
+      fit: 'cover',
+    },
+  ],
+  {
     // Group Definitions:
-    title: "Group title",
-    animation: "fade",
-    control: "autofit,close"
-});
+    title: 'Group title',
+    animation: 'fade',
+    control: 'autofit,close',
+  },
+);
 ```
 
 ## Adaptive Responsive Images
@@ -810,14 +820,18 @@ You can declare a set of the same image in multiple dimensions and quality. Spot
 
 ### Example: Markup
 
-Save your images in several sizes and resolutions and assign the __longest__ dimension of both sides (width, height) like this:
+Save your images in several sizes and resolutions and assign the **longest** dimension of both sides (width, height) like this:
+
 ```html
-<a class="spotlight" href="cat1.jpg" 
-                     data-src-800="cat1_800.jpg" 
-                     data-src-1200="cat1_1200.jpg" 
-                     data-src-2400="cat1_2400.jpg" 
-                     data-src-3800="cat1_3800.jpg">
-    <img src="cat1-thumb.jpg">
+<a
+  class="spotlight"
+  href="cat1.jpg"
+  data-src-800="cat1_800.jpg"
+  data-src-1200="cat1_1200.jpg"
+  data-src-2400="cat1_2400.jpg"
+  data-src-3800="cat1_3800.jpg"
+>
+  <img src="cat1-thumb.jpg" />
 </a>
 ```
 
@@ -830,13 +844,15 @@ This markup completely falls back to standard browser behavior when something go
 Same result as above but as code:
 
 ```js
-Spotlight.show([{
+Spotlight.show([
+  {
     // the default "href" version as fallback isn't required here
-    "src-800": "cat1_800.jpg",
-    "src-1200": "cat1_1200.jpg",
-    "src-2400": "cat1_2400.jpg",
-    "src-3800": "cat1_3800.jpg"
-}]);
+    'src-800': 'cat1_800.jpg',
+    'src-1200': 'cat1_1200.jpg',
+    'src-2400': 'cat1_2400.jpg',
+    'src-3800': 'cat1_3800.jpg',
+  },
+]);
 ```
 
 ## Support Video
@@ -847,9 +863,9 @@ Considering you want to add a standard video element like this as a slide:
 
 ```html
 <video poster="preview.jpg" muted preload controls autoplay playsinline="false">
-    <source src="video.mp4" type="video/mp4">
-    <source src="video.ogv" type="video/ogg">
-    <source src="video.webm" type="video/webm">
+  <source src="video.mp4" type="video/mp4" />
+  <source src="video.ogv" type="video/ogg" />
+  <source src="video.webm" type="video/webm" />
 </video>
 ```
 
@@ -858,17 +874,20 @@ Considering you want to add a standard video element like this as a slide:
 You need a markup like this to represent the video from above:
 
 ```html
-<a class="spotlight" data-media="video"
-                     data-src-webm="video.webm"
-                     data-src-ogg="video.ogv"
-                     data-src-mp4="video.mp4"
-                     data-poster="preview.jpg"
-                     data-autoplay="true"
-                     data-muted="true"
-                     data-preload="true"
-                     data-controls="true"
-                     data-inline="false">
-  <img src="preview.jpg">
+<a
+  class="spotlight"
+  data-media="video"
+  data-src-webm="video.webm"
+  data-src-ogg="video.ogv"
+  data-src-mp4="video.mp4"
+  data-poster="preview.jpg"
+  data-autoplay="true"
+  data-muted="true"
+  data-preload="true"
+  data-controls="true"
+  data-inline="false"
+>
+  <img src="preview.jpg" />
 </a>
 ```
 
@@ -877,19 +896,20 @@ You need a markup like this to represent the video from above:
 Same result as above but as code:
 
 ```js
-Spotlight.show([{
-  
-  "media": "video",
-  "src-webm": "video.webm",
-  "src-ogg": "video.ogv",
-  "src-mp4": "video.mp4",
-  "poster": "preview.jpg",
-  "autoplay": true,
-  "muted": true,
-  "preload": true,
-  "controls": true,
-  "inline": false
-}]);
+Spotlight.show([
+  {
+    media: 'video',
+    'src-webm': 'video.webm',
+    'src-ogg': 'video.ogv',
+    'src-mp4': 'video.mp4',
+    poster: 'preview.jpg',
+    autoplay: true,
+    muted: true,
+    preload: true,
+    controls: true,
+    inline: false,
+  },
+]);
 ```
 
 ## Custom Controls
@@ -898,7 +918,8 @@ Spotlight.show([{
 
 The basic concept is very straight forward. You just need to assign a unique classname along with an event listener. Basically you have to follow these steps.
 
-1. Initialize the Spotlight gallery manually __once__ to make the template available for extensions:
+1. Initialize the Spotlight gallery manually **once** to make the template available for extensions:
+
 ```js
 Spotlight.init();
 ```
@@ -906,19 +927,21 @@ Spotlight.init();
 The gallery automatically initialize when first time open, so you can also add custom control inside the "onshow" callback.
 
 2. Add the custom control and pass a click handler (returns the button element):
+
 ```js
-var button = Spotlight.addControl("my-control", function(event){
-    // handle click event
-    console.log("button clicked");
+var button = Spotlight.addControl('my-control', function (event) {
+  // handle click event
+  console.log('button clicked');
 });
 ```
 
 3. Define a CSS class to style your button:
+
 ```css
 /* your control name will be prefixed by "spl-" automatically */
-.spl-my-control{
-    background-image: url(icon.svg);
-    background-size: 22px;
+.spl-my-control {
+  background-image: url(icon.svg);
+  background-size: 22px;
 }
 ```
 
@@ -927,7 +950,7 @@ var button = Spotlight.addControl("my-control", function(event){
 Removing an added control:
 
 ```js
-Spotlight.removeControl("my-control");
+Spotlight.removeControl('my-control');
 ```
 
 ### Advanced Example (Like Button)
@@ -935,36 +958,42 @@ Spotlight.removeControl("my-control");
 Let's take a useful example of dynamically adding a "like button" in the toolbar. You can see a live demo of this example on the demo page (bottom section).
 
 Providing a gallery as normal and add a custom attribute "like", which stores the current like state of each image.
-```js
-const gallery = [{
 
-    src: "image1.jpg",
-    like: false
-},{
-    src: "image2.jpg",
+```js
+const gallery = [
+  {
+    src: 'image1.jpg',
     like: false,
-},{
-    src: "image3.jpg",
-    like: false
-}];
+  },
+  {
+    src: 'image2.jpg',
+    like: false,
+  },
+  {
+    src: 'image3.jpg',
+    like: false,
+  },
+];
 ```
 
 Define a CSS class to style your button, e.g.:
+
 ```css
 /* custom classes are always prefixed by "spl-" automatically */
-.spl-like{
-    background-image: url(heart-outline.svg);
-    background-size: 22px;
+.spl-like {
+  background-image: url(heart-outline.svg);
+  background-size: 22px;
 }
 /* optionally, additional state to toggle the button: */
-.spl-like.on{
-    background-image: url(heart.svg);
+.spl-like.on {
+  background-image: url(heart.svg);
 }
 ```
 
 > Please keep in mind, when your custom control has the name "like" the corresponding classname always gets prefixed by "spl-" and becomes "spl-like" to prevent classname collision. Do not name your control in prefixed style like "spl-like", because that will prefix this also (and becomes "spl-spl-like").
 
 We need some variables to store some state which is used in the callback handler later:
+
 ```js
 // store the button element to apply dom changes to it
 let like;
@@ -973,82 +1002,79 @@ let slide = 0;
 ```
 
 Implement a click event handler of the like button, e.g.:
+
 ```js
-function handler(event){
-  
-    // get the current like state
-    // at this point we use the stored last index from the variable "slide"
-    const current_like_state = !gallery[slide].like;
-  
-    // toggles the current like state
-    gallery[slide].like = current_like_state;
-  
-    // assign the state as class to visually represent the current like state
-    this.classList.toggle("on");
-  
-    if(current_like_state){
-  
-      // do something if liked ...
-    }
-    else{
-  
-      // do something if unliked ...
-    }
+function handler(event) {
+  // get the current like state
+  // at this point we use the stored last index from the variable "slide"
+  const current_like_state = !gallery[slide].like;
+
+  // toggles the current like state
+  gallery[slide].like = current_like_state;
+
+  // assign the state as class to visually represent the current like state
+  this.classList.toggle('on');
+
+  if (current_like_state) {
+    // do something if liked ...
+  } else {
+    // do something if unliked ...
+  }
 }
 ```
 
 > The keyword `this` corresponds to the current clicked element (the like icon in this example).
 
 Finally, create the gallery and provide some callbacks to insert the custom control dynamically:
+
 ```js
 Spotlight.show(gallery, {
+  // fires when gallery opens
+  onshow: function (index) {
+    // the method "addControl" returns the new created control element
+    like = Spotlight.addControl('like', handler);
+  },
+  // fires when gallery change to another page
+  onchange: function (index, options) {
+    // store the current index for the button listener
+    // the slide index start from 1 (as "page 1")
+    slide = index - 1;
 
-    // fires when gallery opens
-    onshow: function(index){
-
-        // the method "addControl" returns the new created control element
-        like = Spotlight.addControl("like", handler);
-    },
-    // fires when gallery change to another page
-    onchange: function(index, options){
-
-        // store the current index for the button listener
-        // the slide index start from 1 (as "page 1")
-        slide = index - 1;
-
-        // initially apply the stored like state when slide is openened
-        // at this point we use the stored like element
-        like.classList.toggle("on", gallery[slide].like);
-    },
-    // fires when gallery is requested to close
-    onclose: function(index){
-
-        // remove the custom button, so you are able
-        // to open next gallery without this custom control
-        Spotlight.removeControl("like");
-    }
+    // initially apply the stored like state when slide is openened
+    // at this point we use the stored like element
+    like.classList.toggle('on', gallery[slide].like);
+  },
+  // fires when gallery is requested to close
+  onclose: function (index) {
+    // remove the custom button, so you are able
+    // to open next gallery without this custom control
+    Spotlight.removeControl('like');
+  },
 });
 ```
 
 You did not need to remove the custom control everytime. When all your galleries have this custom control, then simply add the control after you call `Spotlight.init()` once.
 
 Initialize the Spotlight gallery once:
+
 ```js
 Spotlight.init();
 ```
 
 Add the custom control once:
+
 ```js
-like = Spotlight.addControl("like", handler);
+like = Spotlight.addControl('like', handler);
 ```
 
 Open the gallery and just provide an "onchange" handler:
+
 ```js
 Spotlight.show(gallery, {
-    onchange: function(index, options){
-        slide = index - 1;
-        like.classList.toggle("on", gallery[slide].like);
-    }
+  onchange: function (index, options) {
+    slide = index - 1;
+    like.classList.toggle('on', gallery[slide].like);
+  },
 });
 ```
 
@@ -1068,18 +1094,17 @@ You can use a hidden backstore optionally which holds the fragments to be insert
 
 ```html
 <div style="display: none">
-    <div id="fragment" style="width: 100%">
-        <h1>Embedded Node Fragment</h1>
-        <p>Any HTML Content...</p>
-    </div>
+  <div id="fragment" style="width: 100%">
+    <h1>Embedded Node Fragment</h1>
+    <p>Any HTML Content...</p>
+  </div>
 </div>
 ```
 
-Provide a __dom query selector__ as "src" which points to a node in your document:
+Provide a **dom query selector** as "src" which points to a node in your document:
+
 ```html
-<a class="spotlight" data-media="node" data-src="#fragment">
-    Click here to open
-</a>
+<a class="spotlight" data-media="node" data-src="#fragment"> Click here to open </a>
 ```
 
 When closing the gallery or change the page to another slide, the fragment will automatically move back to its original position (the hidden backstore in this example).
@@ -1093,14 +1118,16 @@ You can add nodes as slide which are not part of the document via the API (e.g. 
 You can create your own fragments/templates and add the root node directly as "src":
 
 ```js
-Spotlight.show([{
-    media: "node",
-    src: (function(){
-        const iframe = document.createElement("iframe");
-        iframe.src = "https://www.youtube.com/embed/tgbNymZ7vqY";
-        return iframe;
-    }())
-}]);
+Spotlight.show([
+  {
+    media: 'node',
+    src: (function () {
+      const iframe = document.createElement('iframe');
+      iframe.src = 'https://www.youtube.com/embed/tgbNymZ7vqY';
+      return iframe;
+    })(),
+  },
+]);
 ```
 
 #### Example: Templating Engine
@@ -1110,31 +1137,38 @@ Or use your preferred templating engine and add the root node as "src":
 ```js
 Mikado(template).mount(root).render(data);
 
-Spotlight.show([{
-    media: "node",
-    src: root
-}]);
+Spotlight.show([
+  {
+    media: 'node',
+    src: root,
+  },
+]);
 ```
 
 <a name="api" id="api"></a>
+
 ## Spotlight API
 
 Define a gallery group as follows:
 
 ```js
-var gallery = [{
-    title: "Image 1",
-    description: "This is a description.",
-    src: "gallery/london-1758181.jpg"
-},{
-    title: "Image 2",
-    description: "This is a description.",
-    src: "gallery/sea-1975403.jpg"
-},{
-    title: "Image 3",
-    description: "This is a description.",
-    src: "gallery/newport-beach-2089906.jpg"
-}];
+var gallery = [
+  {
+    title: 'Image 1',
+    description: 'This is a description.',
+    src: 'gallery/london-1758181.jpg',
+  },
+  {
+    title: 'Image 2',
+    description: 'This is a description.',
+    src: 'gallery/sea-1975403.jpg',
+  },
+  {
+    title: 'Image 3',
+    description: 'This is a description.',
+    src: 'gallery/newport-beach-2089906.jpg',
+  },
+];
 ```
 
 Show gallery with default options:
@@ -1147,10 +1181,10 @@ Show gallery with custom options:
 
 ```js
 Spotlight.show(gallery, {
-    index: 2,
-    theme: "white",
-    autohide: false,
-    control: ["autofit", "zoom", "close"]
+  index: 2,
+  theme: 'white',
+  autohide: false,
+  control: ['autofit', 'zoom', 'close'],
 });
 ```
 
@@ -1193,10 +1227,11 @@ Spotlight.theme();
 Set theme:
 
 ```js
-Spotlight.theme("white");
+Spotlight.theme('white');
 ```
+
 ```js
-Spotlight.theme("dark");
+Spotlight.theme('dark');
 ```
 
 Toggle fullscreen:
@@ -1210,6 +1245,7 @@ Set fullscreen:
 ```js
 Spotlight.fullscreen(true);
 ```
+
 ```js
 Spotlight.fullscreen(false);
 ```
@@ -1225,6 +1261,7 @@ Set autofit:
 ```js
 Spotlight.autofit(true);
 ```
+
 ```js
 Spotlight.autofit(false);
 ```
@@ -1240,6 +1277,7 @@ Set menu:
 ```js
 Spotlight.menu(true);
 ```
+
 ```js
 Spotlight.menu(false);
 ```
@@ -1253,20 +1291,31 @@ Spotlight.download();
 #### Example ES6:
 
 ```js
-import Spotlight from "./spotlight.js";
+import Spotlight from './spotlight.js';
 
 Spotlight.show(
-    [ /* Gallery */ ], 
-    { /* Options */ }
+  [
+    /* Gallery */
+  ],
+  {
+    /* Options */
+  },
 );
 ```
 
 You can also import any of the Spotlight methods just as you need:
 
 ```js
-import { show, close, goto } from "./spotlight.js";
+import { show, close, goto } from './spotlight.js';
 
-show([/* Gallery */], {/* Options */});
+show(
+  [
+    /* Gallery */
+  ],
+  {
+    /* Options */
+  },
+);
 // ....
 goto(5);
 // ....
@@ -1276,62 +1325,104 @@ close();
 > Modern build tools will apply dead code elimination when just importing methods your application needs.
 
 <a name="styling" id="styling"></a>
+
 ## Custom Styling
 
-To add custom styling just override CSS classes accordingly: 
+To add custom styling just override CSS classes accordingly:
 
 ```css
-#spotlight { /* main font styles, background */ }
-.spl-page { /* current page (toolbar) */ }
-.spl-fullscreen { /* button fullscreen (toolbar) */ }
-.spl-autofit { /* button autofit (toolbar) */ }
-.spl-zoom-out { /* button zoom out (toolbar) */ }
-.spl-zoom-in { /* button zoom in (toolbar) */ }
-.spl-theme { /* button theme (toolbar) */ }
-.spl-play { /* button autoplay (toolbar) */ }
-.spl-download { /* button download (toolbar) */ }
-.spl-close { /* button close (toolbar) */ }
-.spl-prev { /* button page prev */ }
-.spl-next { /* button page next */ }
-.spl-spinner { /* preloading spinner */ }
-.spl-spinner.spin { /* show spinner */ }
-.spl-spinner.error { /* show loading error */ }
-.spl-title { /* image title */ }
-.spl-description { /* image description */ }
-.spl-button { /* button footer */ }
-.spl-header { /* the header wrapping element */ }
-.spl-footer { /* the footer wrapping element */ }
+#spotlight {
+  /* main font styles, background */
+}
+.spl-page {
+  /* current page (toolbar) */
+}
+.spl-fullscreen {
+  /* button fullscreen (toolbar) */
+}
+.spl-autofit {
+  /* button autofit (toolbar) */
+}
+.spl-zoom-out {
+  /* button zoom out (toolbar) */
+}
+.spl-zoom-in {
+  /* button zoom in (toolbar) */
+}
+.spl-theme {
+  /* button theme (toolbar) */
+}
+.spl-play {
+  /* button autoplay (toolbar) */
+}
+.spl-download {
+  /* button download (toolbar) */
+}
+.spl-close {
+  /* button close (toolbar) */
+}
+.spl-prev {
+  /* button page prev */
+}
+.spl-next {
+  /* button page next */
+}
+.spl-spinner {
+  /* preloading spinner */
+}
+.spl-spinner.spin {
+  /* show spinner */
+}
+.spl-spinner.error {
+  /* show loading error */
+}
+.spl-title {
+  /* image title */
+}
+.spl-description {
+  /* image description */
+}
+.spl-button {
+  /* button footer */
+}
+.spl-header {
+  /* the header wrapping element */
+}
+.spl-footer {
+  /* the footer wrapping element */
+}
 ```
 
 <a name="themes" id="themes"></a>
+
 ## Themes
 
-__Customize builtin themes__
+**Customize builtin themes**
 
 Use the same classes as above:
 
 ```css
-#spotlight.white .spl-title{
-    /* image title in white theme */
+#spotlight.white .spl-title {
+  /* image title in white theme */
 }
 ```
 
 ```css
-#spotlight{
-    /* main background in dark theme */
+#spotlight {
+  /* main background in dark theme */
 }
 ```
 
-__Create New Themes__
+**Create New Themes**
 
 Define styles, e.g. for the custom theme name "my-theme":
 
 ```css
-.my-theme .spl-title{
-    /* image title in custom theme */
+.my-theme .spl-title {
+  /* image title in custom theme */
 }
-.my-theme{
-    /* main background in custom theme */
+.my-theme {
+  /* main background in custom theme */
 }
 ```
 
@@ -1339,72 +1430,81 @@ Apply custom theme via markdown:
 
 ```html
 <a class="spotlight" href="cat.jpg" data-theme="my-theme">
-    <img src="cat_thumb.jpg">
+  <img src="cat_thumb.jpg" />
 </a>
 ```
 
 Or apply custom theme via API:
 
 ```js
-Spotlight.show([ /* Gallery */ ],{
-    theme: "my-theme"
-});
+Spotlight.show(
+  [
+    /* Gallery */
+  ],
+  {
+    theme: 'my-theme',
+  },
+);
 ```
 
 You could also set themes per image separately:
 
 ```js
 Spotlight.show([
-    { src: "cat1.jpg" }, // default theme
-    { src: "cat2.jpg", theme: "my-theme" },
-    { src: "cat3.jpg", theme: "white" }
+  { src: 'cat1.jpg' }, // default theme
+  { src: 'cat2.jpg', theme: 'my-theme' },
+  { src: 'cat3.jpg', theme: 'white' },
 ]);
 ```
 
 #### CSS Class
 
 If you like to apply styles independently besides themes you can simply do that by adding a class during initialization:
+
 ```js
-Spotlight.show([
-    { src: "cat1.jpg" }, // default theme
-    { src: "cat2.jpg", theme: "my-theme" },
-    { src: "cat3.jpg", theme: "white" }
-],{
-    class: "custom"
-});
+Spotlight.show(
+  [
+    { src: 'cat1.jpg' }, // default theme
+    { src: 'cat2.jpg', theme: 'my-theme' },
+    { src: 'cat3.jpg', theme: 'white' },
+  ],
+  {
+    class: 'custom',
+  },
+);
 ```
 
 In your stylesheet you can apply you custom styles, .e.g.:
 
 ```css
-#spotlight.custom .spl-title{
-    font-size: 15px;
+#spotlight.custom .spl-title {
+  font-size: 15px;
 }
 ```
 
 <a name="animation" id="animation"></a>
+
 ## Custom Animations
 
-> Important: The style class for a custom animation describes the __<u>hidden state</u>__ of an image.
+> Important: The style class for a custom animation describes the **<u>hidden state</u>** of an image.
 
 You can define your own custom animation by:
 
 <b>1.</b> Define the styles in default state (when image is shown), e.g.:
 
 ```css
-.spl-pane > *{
-    filter: grayscale(0);
-    transition: filter 1s ease-out,
-                opacity 0.5s ease-out;
+.spl-pane > * {
+  filter: grayscale(0);
+  transition: filter 1s ease-out, opacity 0.5s ease-out;
 }
 ```
 
-<b>2.</b> Define styles for the __<u>hidden state</u>__ of the transition by adding a custom classname:
+<b>2.</b> Define styles for the **<u>hidden state</u>** of the transition by adding a custom classname:
 
 ```css
-.spl-pane .my-animation{
-    filter: grayscale(1);
-    opacity: 0;
+.spl-pane .my-animation {
+  filter: grayscale(1);
+  opacity: 0;
 }
 ```
 
@@ -1412,63 +1512,67 @@ Apply custom animation via markdown:
 
 ```html
 <a class="spotlight" href="cat.jpg" data-animation="my-animation">
-    <img src="cat_thumb.jpg">
+  <img src="cat_thumb.jpg" />
 </a>
 ```
 
 Or apply custom animation via API:
 
 ```js
-Spotlight.show([ /* Gallery */ ],{
-    animation: "my-animation"
-});
+Spotlight.show(
+  [
+    /* Gallery */
+  ],
+  {
+    animation: 'my-animation',
+  },
+);
 ```
 
 You could also set animations per image separately:
 
 ```js
 Spotlight.show([
-    { src: "cat1.jpg" }, // default animation
-    { src: "cat2.jpg", animation: "my-animation" },
-    { src: "cat3.jpg", animation: "slide,fade" }
+  { src: 'cat1.jpg' }, // default animation
+  { src: 'cat2.jpg', animation: 'my-animation' },
+  { src: 'cat3.jpg', animation: 'slide,fade' },
 ]);
 ```
 
 #### Use different animations for galleries
 
 The example above will apply the animation to all instances of your gallery. When you want to add specific animation to each gallery you need to add a `class` in your options:
+
 ```js
-Spotlight.show([
-    { src: "cat1.jpg" },
-    { src: "cat2.jpg" },
-    { src: "cat3.jpg" }
-],{
-  animation: "my-animation",
-  class: "custom"
+Spotlight.show([{ src: 'cat1.jpg' }, { src: 'cat2.jpg' }, { src: 'cat3.jpg' }], {
+  animation: 'my-animation',
+  class: 'custom',
 });
 ```
 
-Then, add your classname (context selector) to your CSS for the ___visible___ state of the animation:
+Then, add your classname (context selector) to your CSS for the **_visible_** state of the animation:
 
 ```css
-.custom .spl-pane > *{
-    filter: grayscale(0);
-    transition: filter 1s ease-out,
-                opacity 0.5s ease-out;
+.custom .spl-pane > * {
+  filter: grayscale(0);
+  transition: filter 1s ease-out, opacity 0.5s ease-out;
 }
 ```
 
 Now you can assign different animations to each gallery.
 
 <a name="builds" id="builds"></a>
+
 ## Custom Builds
 
 Go to the root directory of Spotlight and run:
+
 ```cmd
 npm install
 ```
 
 Perform a build:
+
 ```cmd
 npm run build
 ```

@@ -1,17 +1,16 @@
-const path = require('path')
-
-export function getLogo (logo, local_dir, fileProtocol = true) {
+const path = require('path');
+export function getLogo(logo, local_dir, fileProtocol = true) {
   if (logo === 'local') {
-    return (fileProtocol ? 'file://' : '') + path.join(local_dir, 'logo.png')
+    return (fileProtocol ? 'file://' : '') + path.join(local_dir, 'logo.png');
   } else {
-    return logo
+    return logo;
   }
 }
 
-export function getBgColorFromEntry (entry) {
-  let color = 'black'
+export function getBgColorFromEntry(entry) {
+  let color = 'black';
   if (entry) {
-    color = entry.bgColor
+    color = entry.bgColor;
   }
-  return color
+  return color;
 }

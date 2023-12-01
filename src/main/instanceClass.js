@@ -3,26 +3,24 @@
  */
 
 class Instance {
-  type = 'window'
-  name
-  object = null
-  initOption
-  createOptions //首次初始化时的options
-  app //如果是app的话，记录好app信息
+  type = 'window';
+  name;
+  object = null;
+  initOption;
+  createOptions; //首次初始化时的options
+  app; //如果是app的话，记录好app信息
 
-  constructor (initOption) {
-    this.initOption = initOption
-    this.createOptions = initOption.createOptions
-    this.name = initOption.name
-    this.app = initOption.app
+  constructor(initOption) {
+    this.initOption = initOption;
+    this.createOptions = initOption.createOptions;
+    this.name = initOption.name;
+    this.app = initOption.app;
   }
 
-  destroy () {
+  destroy() {}
 
-  }
-
-  close () {
-    windowManager.close(this.name)
+  close() {
+    windowManager.close(this.name);
   }
 }
 
@@ -30,85 +28,85 @@ class Instance {
  * 窗体类
  */
 class WindowInstance extends Instance {
-  window
-  viewHandler
+  window;
+  viewHandler;
 
-  constructor (initOption) {
-    super(initOption)
-    this.window = initOption.window
-    this.viewHandler = initOption.viewHandler
+  constructor(initOption) {
+    super(initOption);
+    this.window = initOption.window;
+    this.viewHandler = initOption.viewHandler;
   }
 
-  create () {
+  create() {
     //todo 将窗体实例创建的方法搬过来
   }
 
-  close () {
-    this.window.webContents.destroy()
-    this.window.close()
-    this.destroy()
+  close() {
+    this.window.webContents.destroy();
+    this.window.close();
+    this.destroy();
   }
 }
 
 class FrameWindowInstance extends Instance {
-  type = 'frameWindow'
-  frame
-  window
-  viewHandler
-
-  constructor (iniOption) {
-    super(iniOption)
-    this.frame = iniOption.frame
-    this.window = this.frame
-    this.view = iniOption.view
-    this.viewHandler = iniOption.viewHandler
+  type = 'frameWindow';
+  frame;
+  window;
+  viewHandler;
+  constructor(iniOption) {
+    super(iniOption);
+    this.frame = iniOption.frame;
+    this.window = this.frame;
+    this.view = iniOption.view;
+    this.viewHandler = iniOption.viewHandler;
   }
 
-  close () {
-    this.frame.removeBrowserView(this.view)
-    this.view.webContents.destroy()
-    this.frame.close()
-    this.destroy()
+  close() {
+    this.frame.removeBrowserView(this.view);
+    this.view.webContents.destroy();
+    this.frame.close();
+    this.destroy();
   }
-
 }
 
 /**
  * view类
  */
 class ViewInstance extends Instance {
-  type = 'view'
-  view
-  parent
+  type = 'view';
+  view;
+  parent;
 
-  constructor (initOption, parent) {
-    super(initOption)
-    this.view = initOption.view
-    this.parent = parent
+  constructor(initOption, parent) {
+    super(initOption);
+    this.view = initOption.view;
+    this.parent = parent;
   }
 
-  create () {
+  create() {
     //todo 将窗体实例创建的方法搬过来
   }
 
-  close () {
+  close() {
     if (mainWindow) {
-      mainWindow.removeBrowserView(this.view)
+      mainWindow.removeBrowserView(this.view);
     }
     if (this.view.webContents && !this.view.webContents.isDestroyed()) {
-      this.view.webContents.destroy()
+      this.view.webContents.destroy();
     }
     if (mainWindow && !mainWindow.isDestroyed()) {
       //防止报错
-      this.parent.restoreAttachMod()
+      this.parent.restoreAttachMod();
     }
-    windowManager.attachedView = null
-    windowManager.attachedInstance = null
-    windowManager.attachStatus = null
-    this.destroy()
+    windowManager.attachedView = null;
+    windowManager.attachedInstance = null;
+    windowManager.attachStatus = null;
+    this.destroy();
   }
 }
 
 module.exports = {
-  WindowInstance, ViewInstance, FrameWindowInstance
-}
+  WindowInstance,
+  ViewInstance,
+  FrameWindowInstance,
+};

@@ -1,26 +1,25 @@
-const kdbxweb = require('kdbxweb')
-const Model = require('../base/model')
-const { readXoredValue, makeXoredValue } = require('../../util/byte-utils')
-require('../../util/kdbxweb/protected-value-ex')
-const logger = require('../../util/logger')
+const kdbxweb = require('kdbxweb');
+const Model = require('../base/model');
+const { readXoredValue, makeXoredValue } = require('../../util/byte-utils');
+require('../../util/kdbxweb/protected-value-ex');
+const logger = require('../../util/logger');
 // const GroupCollection = require('./collections/groupCollection')
 // const GroupModel = require('./groupModel')
 class FileModel extends Model {
-  name
-  db
-  keyFile
-  tags //全部的标签
+  name;
+  db;
+  keyFile;
+  tags; //全部的标签
 
-  constructor (data) {
+  constructor(data) {
     super({
       entryMap: {},
       groupMap: {},
-      ...data
-    })
-    this.tags = []
+      ...data,
+    });
+    this.tags = [];
   }
-
-  forEachEntry (filter, callback) {
+  forEachEntry(filter, callback) {
     // let top = this.db.getDefaultGroup();
     // if (filter.trash) {
     //   top = this.getGroup(
@@ -40,139 +39,127 @@ class FileModel extends Model {
     //   }
     // }
   }
-
-  _addTags () {
+  _addTags() {
     try {
-      const tagsHash = {}
+      const tagsHash = {};
       this.tags.forEach((tag) => {
-        tagsHash[tag.toLowerCase()] = true
-      })
+        tagsHash[tag.toLowerCase()] = true;
+      });
       for (const entry of this.db.getDefaultGroup().allEntries()) {
         for (const tag of entry.tags) {
           if (!tagsHash[tag.toLowerCase()]) {
-            tagsHash[tag.toLowerCase()] = true
-            this.tags.push(tag)
+            tagsHash[tag.toLowerCase()] = true;
+            this.tags.push(tag);
           }
         }
       }
-      this.tags.sort()
-      return this.tags
+      this.tags.sort();
+      return this.tags;
     } catch (e) {
-      console.warn(e)
+      console.warn(e);
     }
   }
 
-  kdfArgsToString (header) {
+  kdfArgsToString(header) {
     if (header.kdfParameters) {
       return header.kdfParameters
         .keys()
         .map((key) => {
-          const val = header.kdfParameters.get(key)
+          const val = header.kdfParameters.get(key);
           if (val instanceof ArrayBuffer) {
-            return undefined
+            return undefined;
           }
-          return key + '=' + val
+          return key + '=' + val;
         })
         .filter((p) => p)
-        .join('&')
+        .join('&');
     } else if (header.keyEncryptionRounds) {
-      return header.keyEncryptionRounds + ' rounds'
+      return header.keyEncryptionRounds + ' rounds';
     } else {
-      return '?'
+      return '?';
     }
   }
-
-  async create (name = 'kdb', path, pwd = '', callback) {
-    this.path = path
-    const password = kdbxweb.ProtectedValue.fromString(pwd)
-    const credentials = new kdbxweb.Credentials(password)
+  async create(name = 'kdb', path, pwd = '', callback) {
+    this.path = path;
+    const password = kdbxweb.ProtectedValue.fromString(pwd);
+    const credentials = new kdbxweb.Credentials(password);
     //kdbxweb.CryptoEngine.setArgon2Impl((...args) => this.argon2(...args));
-    this.db = kdbxweb.Kdbx.create(credentials, name)
-    let group = this.db.createGroup(this.db.getDefaultGroup(), '密码组')
-    let entry = this.db.createEntry(group)
-    this.name = name
-    this.tags = []
-    this.readModel()
-    this.set({ active: true, created: true, name })
+    this.db = kdbxweb.Kdbx.create(credentials, name);
+    let group = this.db.createGroup(this.db.getDefaultGroup(), '密码组');
+    let entry = this.db.createEntry(group);
+    this.name = name;
+    this.tags = [];
+    this.readModel();
+    this.set({ active: true, created: true, name });
     this.db.save().then((data) => {
-      callback(data)
-    })
-
+      callback(data);
+    });
   }
-
-  open (password, fileData, keyFileData, callback) {
-    let passwordValue = kdbxweb.ProtectedValue.fromString(password)
+  open(password, fileData, keyFileData, callback) {
+    let passwordValue = kdbxweb.ProtectedValue.fromString(password);
     try {
-      let credentials
+      let credentials;
       //const challengeResponse = ChalRespCalculator.build(this.chalResp);
 
-      credentials = new kdbxweb.Credentials(passwordValue)
+      credentials = new kdbxweb.Credentials(passwordValue);
 
-      const ts = logger.ts()
+      const ts = logger.ts();
       kdbxweb.Kdbx.load(fileData, credentials)
         .then((db) => {
-          this.db = db
+          this.db = db;
         })
         .then(() => {
           // this.readModel();
-          this.setOpenFile({ passwordLength: password ? password.textLength : 0 })
+          this.setOpenFile({ passwordLength: password ? password.textLength : 0 });
           if (keyFileData) {
-            kdbxweb.ByteUtils.zeroBuffer(keyFileData)
+            kdbxweb.ByteUtils.zeroBuffer(keyFileData);
           }
           logger.info(
             'Opened file ' +
-            this.name +
-            ': ' +
-            logger.ts(ts) +
-            ', ' +
-            this.kdfArgsToString(this.db.header) +
-            ', ' +
-            Math.round(fileData.byteLength / 1024) +
-            ' kB'
-          )
-          this.tags = []
-          let tags = this._addTags()
+              this.name +
+              ': ' +
+              logger.ts(ts) +
+              ', ' +
+              this.kdfArgsToString(this.db.header) +
+              ', ' +
+              Math.round(fileData.byteLength / 1024) +
+              ' kB',
+          );
+          this.tags = [];
+          let tags = this._addTags();
           callback(undefined, {
             name: this.db.meta._name,
             db: this.db,
-            tags
-          })
+            tags,
+          });
         })
         .catch((err) => {
-          if (
-            err.code === kdbxweb.Consts.ErrorCodes.InvalidKey &&
-            password &&
-            !password.byteLength
-          ) {
-            logger.info(
-              'Error opening file with empty password, try to open with null password'
-            )
-            return this.open(null, fileData, keyFileData, callback)
+          if (err.code === kdbxweb.Consts.ErrorCodes.InvalidKey && password && !password.byteLength) {
+            logger.info('Error opening file with empty password, try to open with null password');
+            return this.open(null, fileData, keyFileData, callback);
           }
-          logger.error('Error opening file', err.code, err.message, err)
-          callback(err)
-        })
+          logger.error('Error opening file', err.code, err.message, err);
+          callback(err);
+        });
     } catch (e) {
-      logger.error('Error opening file', e, e.code, e.message, e)
-      callback(e)
+      logger.error('Error opening file', e, e.code, e.message, e);
+      callback(e);
     }
   }
-
-  setOpenFile (props) {
+  setOpenFile(props) {
     this.set({
       ...props,
       active: true,
       oldKeyFileName: this.keyFileName,
       oldPasswordLength: props.passwordLength,
       passwordChanged: false,
-      keyFileChanged: false
-    })
-    this.oldPasswordHash = this.db.credentials.passwordHash
-    this.oldKeyFileHash = this.db.credentials.keyFileHash
-    this.oldKeyChangeDate = this.db.meta.keyChanged
+      keyFileChanged: false,
+    });
+    this.oldPasswordHash = this.db.credentials.passwordHash;
+    this.oldKeyFileHash = this.db.credentials.keyFileHash;
+    this.oldKeyChangeDate = this.db.meta.keyChanged;
   }
-
-  readModel () {
+  readModel() {
     //const groups = new GroupCollection();
     this.set(
       {
@@ -186,10 +173,10 @@ class FileModel extends Model {
         keyEncryptionRounds: this.db.header.keyEncryptionRounds,
         keyChangeForce: this.db.meta.keyChangeForce,
         kdfName: this.readKdfName(),
-        kdfParameters: this.readKdfParams()
+        kdfParameters: this.readKdfParams(),
       },
-      { silent: true }
-    )
+      { silent: true },
+    );
     // this.db.groups.forEach(function (group) {
     //   let groupModel = this.getGroup(this.subId(group.uuid.id));
     //   if (groupModel) {
@@ -202,56 +189,54 @@ class FileModel extends Model {
     // this.buildObjectMap();
     // this.resolveFieldReferences();
   }
-
-  readKdfName () {
+  readKdfName() {
     if (this.db.header.versionMajor === 4 && this.db.header.kdfParameters) {
-      const kdfParameters = this.db.header.kdfParameters
-      let uuid = kdfParameters.get('$UUID')
+      const kdfParameters = this.db.header.kdfParameters;
+      let uuid = kdfParameters.get('$UUID');
       if (uuid) {
-        uuid = kdbxweb.ByteUtils.bytesToBase64(uuid)
+        uuid = kdbxweb.ByteUtils.bytesToBase64(uuid);
         switch (uuid) {
           case kdbxweb.Consts.KdfId.Argon2d:
-            return 'Argon2d'
+            return 'Argon2d';
           case kdbxweb.Consts.KdfId.Argon2id:
-            return 'Argon2id'
+            return 'Argon2id';
           case kdbxweb.Consts.KdfId.Aes:
-            return 'Aes'
+            return 'Aes';
         }
       }
-      return 'Unknown'
+      return 'Unknown';
     } else {
-      return 'Aes'
+      return 'Aes';
     }
   }
 
-  readKdfParams () {
-    const kdfParameters = this.db.header.kdfParameters
+  readKdfParams() {
+    const kdfParameters = this.db.header.kdfParameters;
     if (!kdfParameters) {
-      return undefined
+      return undefined;
     }
-    let uuid = kdfParameters.get('$UUID')
+    let uuid = kdfParameters.get('$UUID');
     if (!uuid) {
-      return undefined
+      return undefined;
     }
-    uuid = kdbxweb.ByteUtils.bytesToBase64(uuid)
+    uuid = kdbxweb.ByteUtils.bytesToBase64(uuid);
     switch (uuid) {
       case kdbxweb.Consts.KdfId.Argon2d:
       case kdbxweb.Consts.KdfId.Argon2id:
         return {
           parallelism: kdfParameters.get('P').valueOf(),
           iterations: kdfParameters.get('I').valueOf(),
-          memory: kdfParameters.get('M').valueOf()
-        }
+          memory: kdfParameters.get('M').valueOf(),
+        };
       case kdbxweb.Consts.KdfId.Aes:
         return {
-          rounds: kdfParameters.get('R').valueOf()
-        }
+          rounds: kdfParameters.get('R').valueOf(),
+        };
       default:
-        return undefined
+        return undefined;
     }
   }
 }
-
 FileModel.defineModelProperties({
   id: '',
   uuid: '',
@@ -299,7 +284,7 @@ FileModel.defineModelProperties({
   supportsColors: true,
   supportsIcons: true,
   supportsExpiration: true,
-  defaultGroupHash: ''
-})
+  defaultGroupHash: '',
+});
 
-module.exports = FileModel
+module.exports = FileModel;

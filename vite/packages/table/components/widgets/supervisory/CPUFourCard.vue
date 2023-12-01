@@ -1,47 +1,51 @@
 <template>
   <Widget :desk="desk" :menu-list="menuList" :options="options">
-    <div class="top-content pointer" style="color:var(--primary-text)" @click="go">
-      <div><span>{{ CPUGPUData.useCPU.value }}%</span>
-        <span>
-      <Icon class="icon" icon="cpu"></Icon>CPU</span>
+    <div class="top-content pointer" style="color: var(--primary-text)" @click="go">
+      <div>
+        <span>{{ CPUGPUData.useCPU.value }}%</span>
+        <span> <Icon class="icon" icon="cpu"></Icon>CPU</span>
       </div>
 
       <div>
         <span>{{ CPUGPUData.useGPU.value }}%</span>
-        <span>
-      <Icon class="icon" icon="xianka"></Icon>GPU</span></div>
+        <span> <Icon class="icon" icon="xianka"></Icon>GPU</span>
+      </div>
 
       <div>
         <span>{{ CPUGPUData.useMemory.value }}%</span>
-        <span>
-      <Icon class="icon" icon="neicun"></Icon>内存</span></div>
+        <span> <Icon class="icon" icon="neicun"></Icon>内存</span>
+      </div>
 
       <div style="position: relative">
         <span>{{ CPUGPUData.FPS.value }}</span>
-        <a-tooltip v-if="CPUGPUData.FPS.value==0" :arrowPointAtCenter="true">
+        <a-tooltip v-if="CPUGPUData.FPS.value == 0" :arrowPointAtCenter="true">
           <template #title>需要游戏运行在前台且打开RTSS方可读取到</template>
-          <Icon v-zoom icon="tishi-xianxing"
-                style="height: 24px;width: 24px;position: absolute;top: 12px;right: 12px;color: orange;margin: 0"></Icon>
+          <Icon
+            v-zoom
+            icon="tishi-xianxing"
+            style="height: 24px; width: 24px; position: absolute; top: 12px; right: 12px; color: orange; margin: 0"
+          ></Icon>
         </a-tooltip>
         <span>
-      <Icon class="icon" icon="game"></Icon>
-        <span>FPS
-      </span>
-       </span>
+          <Icon class="icon" icon="game"></Icon>
+          <span>FPS </span>
+        </span>
       </div>
-      <div class="buttom " style="border-radius: 5px">
+      <div class="buttom" style="border-radius: 5px">
         <div>
           <div>
-            <Icon class="icon" icon="xiazai" style="color: #5CBBFF;"></Icon>
-            <span>下载</span></div>
+            <Icon class="icon" icon="xiazai" style="color: #5cbbff"></Icon>
+            <span>下载</span>
+          </div>
 
           <span>{{ lastDown }}</span>
         </div>
 
         <div>
           <div>
-            <Icon class="icon" icon="shangchuan" style="color: #52C41A;"></Icon>
-            <span>上传</span></div>
+            <Icon class="icon" icon="shangchuan" style="color: #52c41a"></Icon>
+            <span>上传</span>
+          </div>
 
           <span>{{ lastUp }}</span>
         </div>
@@ -51,27 +55,27 @@
 </template>
 
 <script>
-import { mapActions, mapWritableState } from 'pinia'
-import Widget from '../../card/Widget.vue'
-import { inspectorStore } from '../../../store/inspector'
-import { message } from 'ant-design-vue'
+import { mapActions, mapWritableState } from 'pinia';
+import Widget from '../../card/Widget.vue';
+import { inspectorStore } from '../../../store/inspector';
+import { message } from 'ant-design-vue';
 
-const { rpc } = window.$models
+const { rpc } = window.$models;
 
 export default {
   name: 'CPUFourCard',
   props: {
     desk: {
-      type: Object
-    }
+      type: Object,
+    },
   },
-  data () {
+  data() {
     return {
       options: {
         className: 'card',
         title: '性能',
         icon: 'dashboard',
-        type: 'CPUFourCard'
+        type: 'CPUFourCard',
       },
       CPUGPUData: {
         useCPU: { value: 0 },
@@ -79,20 +83,19 @@ export default {
         useMemory: { value: 0 },
         FPS: { value: 0 },
         down: 0,
-        up: 0
+        up: 0,
       },
       menuList: [
         {
           title: '复制数据',
           icon: 'fuzhi',
           fn: () => {
-            require('electron').clipboard.writeText(JSON.stringify(this.aidaData))
-            message.success('复制成功')
-          }
-        }
-      ]
-
-    }
+            require('electron').clipboard.writeText(JSON.stringify(this.aidaData));
+            message.success('复制成功');
+          },
+        },
+      ],
+    };
   },
 
   // directives: {
@@ -115,49 +118,57 @@ export default {
   //}
   // },
   components: {
-    Widget
-  }, mounted () {
-    this.startInspect()
+    Widget,
   },
-  unmounted () {
-    this.stopInspect()
+  mounted() {
+    this.startInspect();
+  },
+  unmounted() {
+    this.stopInspect();
   },
   computed: {
     ...mapWritableState(inspectorStore, ['displayData', 'aidaData']),
-    lastDown () {
-      return this.CPUGPUData.down < 1000 ? this.CPUGPUData.down + 'KB/S' : this.CPUGPUData.down < 1024000 ? (this.CPUGPUData.down / 1024).toFixed(2) + 'MB/S' : (this.CPUGPUData.down / 1024 / 1024).toFixed(2) + 'GB/S'
+    lastDown() {
+      return this.CPUGPUData.down < 1000
+        ? this.CPUGPUData.down + 'KB/S'
+        : this.CPUGPUData.down < 1024000
+        ? (this.CPUGPUData.down / 1024).toFixed(2) + 'MB/S'
+        : (this.CPUGPUData.down / 1024 / 1024).toFixed(2) + 'GB/S';
     },
-    lastUp () {
-      return this.CPUGPUData.up < 1000 ? this.CPUGPUData.up + 'KB/S' : this.CPUGPUData.up < 1024000 ? (this.CPUGPUData.up / 1024).toFixed(2) + 'MB/S' : (this.CPUGPUData.up / 1024 / 1024).toFixed(2) + 'GB/S'
-    }
+    lastUp() {
+      return this.CPUGPUData.up < 1000
+        ? this.CPUGPUData.up + 'KB/S'
+        : this.CPUGPUData.up < 1024000
+        ? (this.CPUGPUData.up / 1024).toFixed(2) + 'MB/S'
+        : (this.CPUGPUData.up / 1024 / 1024).toFixed(2) + 'GB/S';
+    },
   },
   methods: {
     ...mapActions(inspectorStore, ['startInspect', 'stopInspect']),
-    go () {
-      this.$router.push({ name: 'inspector' })
-    }
+    go() {
+      this.$router.push({ name: 'inspector' });
+    },
   },
   watch: {
-    'displayData': {
-      handler (newVal, oldVal) {
-        let { useGPU, useMemory, useCPU, FPS, down, up } = this.displayData || {}
+    displayData: {
+      handler(newVal, oldVal) {
+        let { useGPU, useMemory, useCPU, FPS, down, up } = this.displayData || {};
         this.CPUGPUData = {
           useGPU: useGPU,
           useCPU: useCPU,
           useMemory: useMemory,
           FPS: FPS,
           down: down,
-          up: up
-        }
+          up: up,
+        };
       },
       deep: true,
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
-
 .top-content {
   display: flex;
   flex-wrap: wrap;
@@ -186,21 +197,18 @@ export default {
     > span:first-child {
       font-size: 2.5em;
       font-weight: 700;
-
     }
   }
 
   > div:last-child {
     height: 90px;
     width: 100%;
-
-
   }
 
   .icon {
     width: 20px;
     height: 20px;
-    margin-right: .5em;
+    margin-right: 0.5em;
   }
 }
 
@@ -227,7 +235,6 @@ export default {
     > :nth-child(2) {
       font-weight: 700;
     }
-
   }
 }
 </style>

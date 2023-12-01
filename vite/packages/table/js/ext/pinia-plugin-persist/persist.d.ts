@@ -1,5 +1,4 @@
 import {PiniaPluginContext} from "pinia";
-
 declare global {
     interface PersistStrategy {
         key?: string;

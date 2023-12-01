@@ -1,48 +1,61 @@
 <template>
   <div class="pt-3 drag">
-    <Vue3SeamlessScroll v-model="isScrolling" :copyNum="2" :hover="true" :list="screenList" :wheel="true">
-      <div class="flex flex-row rounded-lg flex-wrap mr-4">
-        <div v-for=" item in screenList " class="pb-4 pl-4 game-list-item rounded-lg flex-shrink-0 my-game-content">
-          <div class="relative  w-auto h-full rounded-lg my-bg   flex flex-col ">
-            <div :style="showTime?'height: calc(100% - 96px)':'height: calc(100% - 50px)'">
-              <img :src="'https://cdn.cloudflare.steamstatic.com/steam/apps/'+item.appid+'/header.jpg'"
-                   alt="" class="w-full h-full rounded-t-lg object-cover">
+    <Vue3SeamlessScroll :list="displayGame" v-model="isScrolling" :copyNum="2" :hover="true" :wheel="true">
+      <div class="flex no-drag flex-row rounded-lg flex-wrap mr-4">
+        <div class="pb-4 pl-4 game-list-item rounded-lg flex-shrink-0 my-game-content" v-for="item in displayGame">
+          <div class="relative w-auto h-full rounded-lg my-bg flex flex-col">
+            <div :style="showTime ? 'height: calc(100% - 96px)' : 'height: calc(100% - 50px)'">
+              <img
+                :src="'https://cdn.cloudflare.steamstatic.com/steam/apps/' + item.appid + '/header.jpg'"
+                class="w-full h-full rounded-t-lg object-cover"
+                alt=""
+              />
             </div>
-            <div :style="showTime?'height: 96px':'height: 50px'" class="p-3 flex flex-col justify-between ">
-              <span class="text-more text-white text-base my-title"
-                    style="font-weight: 400">{{ item.chineseName }}</span>
-              <span :style="showTime?'':'display:none'" class="text-xs">过去两周：{{ twoWeekTime(item.time) }}小时</span>
-              <span :style="showTime?'':'display:none'" class="text-xs">总数：{{ totalTime(item.time) }}小时</span>
+            <div :style="showTime ? 'height: 96px' : 'height: 50px'" class="p-3 flex flex-col justify-between">
+              <span class="text-more text-white text-base my-title" style="font-weight: 400">{{
+                item.chineseName
+              }}</span>
+              <span :style="showTime ? '' : 'display:none'" class="text-xs"
+                >过去两周：{{ twoWeekTime(item.time) }}小时</span
+              >
+              <span :style="showTime ? '' : 'display:none'" class="text-xs">总数：{{ totalTime(item.time) }}小时</span>
             </div>
           </div>
         </div>
       </div>
     </Vue3SeamlessScroll>
     <div class="set-button flex no-drag">
-      <div class="set-button-item my-bg  rounded-lg pointer mr-3"
-           style="background: var(--secondary-bg);color:var(--secondary-text);"
-           @click="stopScroll">
-        <Icon v-if="isScrolling  === false" icon="bofang"></Icon>
-        <Icon v-else icon="pause"></Icon>
+      <div
+        @click="stopScroll"
+        style="background: var(--secondary-bg); color: var(--secondary-text)"
+        class="set-button-item my-bg rounded-lg pointer mr-3"
+      >
+        <Icon icon="bofang" v-if="isScrolling === false"></Icon>
+        <Icon icon="pause" v-else></Icon>
       </div>
-      <div class="set-button-item my-bg rounded-lg pointer mr-3"
-           style="background: var(--secondary-bg);color:var(--secondary-text);"
-           @click="openSheZhi">
+      <div
+        @click="openSheZhi"
+        style="background: var(--secondary-bg); color: var(--secondary-text)"
+        class="set-button-item my-bg rounded-lg pointer mr-3"
+      >
         <Icon icon="shezhi"></Icon>
       </div>
-      <div class="set-button-item  rounded-lg pointer"
-           style="background: var(--secondary-bg);color:var(--secondary-text);"
-           @click="closeFullScreen">
+      <div
+        @click="closeFullScreen"
+        style="background: var(--secondary-bg); color: var(--secondary-text)"
+        class="set-button-item rounded-lg pointer"
+      >
         <Icon icon="quxiaoquanping_huaban" style=""></Icon>
       </div>
     </div>
   </div>
 
-  <a-drawer v-model:visible="screenVisible" :width="500" title="设置">
+  <a-drawer class="no-drag" v-model:visible="screenVisible" title="设置" :width="500">
     <div class="flex justify-between mb-4">
       <span>显示游戏时长</span>
-      <a-switch v-model:checked="showTime"/>
+      <a-switch v-model:checked="showTime" />
     </div>
+
     <!-- 该功能暂时没有合适方法,后期再补充 -->
     <!-- <div class="flex justify-between flex-col mb-4">
       <span>缩放比</span>
@@ -50,9 +63,12 @@
     </div> -->
     <div class="mb-4">排序方式</div>
     <div class="flex flex-col">
-      <div v-for="item in sortList" :class="sortType.name === item.name ? 'xt-active-bg active-text':''"
-           class="w-full h-full rounded-lg my-full-active pointer px-4 py-4 my-bg flex justify-center mb-4"
-           @click="tabSort(item)">
+      <div
+        v-for="item in sortList"
+        @click="tabSort(item)"
+        :class="sortType.name === item.name ? 'xt-active-bg active-text' : ''"
+        class="w-full h-full rounded-lg my-full-active pointer px-4 py-4 my-bg flex justify-center mb-4"
+      >
         {{ item.title }}
       </div>
     </div>
@@ -60,91 +76,98 @@
 </template>
 
 <script>
-import { mapWritableState } from 'pinia'
-import { steamUserStore } from '../../store/steamUser'
-import HorizontalPanel from '../../components/HorizontalPanel.vue'
-import { Vue3SeamlessScroll } from 'vue3-seamless-scroll'
-import { appStore } from '../../store'
+import { mapWritableState } from 'pinia';
+import { steamUserStore } from '../../store/steamUser';
+import HorizontalPanel from '../../components/HorizontalPanel.vue';
+import { Vue3SeamlessScroll } from 'vue3-seamless-scroll';
+import { appStore } from '../../store';
+import { isHide } from './game';
 
 export default {
   name: 'MyFullScreenGame',
   components: {
     HorizontalPanel,
-    Vue3SeamlessScroll
+    Vue3SeamlessScroll,
   },
-  data () {
+  data() {
     return {
       settingsScroller: {
         useBothWheelAxes: true,
         swipeEasing: true,
         suppressScrollY: false,
         suppressScrollX: true,
-        wheelPropagation: true
+        wheelPropagation: true,
       },
       showTime: true,
       screenVisible: false,
-      sortList: [{ title: '最近游玩', name: 'timer' }, { title: 'A-Z', name: 'letter' }],
+      sortList: [
+        { title: '最近游玩', name: 'timer' },
+        { title: 'A-Z', name: 'letter' },
+      ],
       sortType: { title: '最近游玩', name: 'timer' },
       isScrolling: false,
-      screenList: [],
+      //screenList:[],
       // scaleValue:15,  // 暂时没有合适方法,后期补充
-    }
+    };
   },
 
-  mounted () {
-    this.screenList = this.gameList
-    this.isScrolling = true
+  mounted() {
+    //this.screenList = this.gameList
+    this.isScrolling = true;
   },
 
   computed: {
-    ...mapWritableState(steamUserStore, ['gameList', 'myGameList']),
-    ...mapWritableState(appStore, ['settings'])
+    ...mapWritableState(steamUserStore, ['steamGameList', 'localGameList']),
+    ...mapWritableState(steamUserStore, {
+      gameSettings: 'settings',
+    }),
+    ...mapWritableState(appStore, ['settings']),
+    displayGame() {
+      const filtered = this.steamGameList.filter((game) => {
+        return !isHide('steam', game.appid);
+      });
+      if (this.sortType.name === 'letter') {
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
+      } else {
+        filtered.sort((a, b) => {
+          if (a.time === undefined && a.time === undefined) {
+            return 0;
+          } else if (a.time === undefined) {
+            return 1;
+          } else if (b.time === undefined) {
+            return -1;
+          } else if (a.time !== b.time) {
+            return b.time.rtime_last_played - a.time.rtime_last_played;
+          }
+        });
+      }
+
+      return filtered;
+    },
   },
   methods: {
-    closeFullScreen () {
-      this.$emit('close')
-      this.isScrolling = false
+    closeFullScreen() {
+      this.$emit('close');
+      this.isScrolling = false;
     },
-    twoWeekTime (time) {
-      return time ? (time.playtime_2weeks / 60).toFixed(1) : 0
+    twoWeekTime(time) {
+      return time ? (time.playtime_2weeks / 60).toFixed(1) : 0;
     },
-    totalTime (time) {
-      return time ? (time.playtime_forever / 60).toFixed(1) : 0
+    totalTime(time) {
+      return time ? (time.playtime_forever / 60).toFixed(1) : 0;
     },
-    openSheZhi () {
-      this.screenVisible = true
+    openSheZhi() {
+      this.screenVisible = true;
     },
-    stopScroll () {
-      this.isScrolling = !this.isScrolling
+    stopScroll() {
+      this.isScrolling = !this.isScrolling;
     },
-    tabSort (item) {
-      this.sortType = item
-      this.screenVisible = false
-    }
+    tabSort(item) {
+      this.sortType = item;
+      this.screenVisible = false;
+    },
   },
-  watch: {
-    'sortType': {
-      handler () {
-        if (this.sortType.name === 'letter') {
-          this.screenList.sort((a, b) => a.name.localeCompare(b.name))
-        } else {
-          this.screenList.sort((a, b) => {
-            if (a.time === undefined && a.time === undefined) {
-              return 0
-            } else if (a.time === undefined) {
-              return 1
-            } else if (b.time === undefined) {
-              return -1
-            } else if (a.time !== b.time) {
-              return b.time.rtime_last_played - a.time.rtime_last_played
-            }
-          })
-        }
-      },
-      immediate: true
-    },
-  }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -183,14 +206,13 @@ export default {
 }
 
 .fly {
-  animation: fly .5s;
+  animation: fly 0.5s;
   animation-fill-mode: forwards;
   transform-origin: 50% 0 10px;
 }
 
 @keyframes fly {
   0% {
-
   }
   100% {
     transform: rotateX(5deg) translateZ(20px);
@@ -312,7 +334,6 @@ export default {
   font-size: 2em;
   padding: 6px 14px;
 }
-
 
 :deep(.ant-slider-handle) {
   background: rgba(255, 255, 255, 0.85) !important;

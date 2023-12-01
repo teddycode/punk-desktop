@@ -1,18 +1,37 @@
 <template>
   <a-input-group compact style="min-width: 120px">
-    <a-input :placeholder="placeholder" :value="value"
-             placeholder="按下快捷键" size="large"
-             style="width: calc(100% - 200px);min-width: 200px;color: var(--primary-text)"
-             @click="toggleListenKey()">
+    <a-input
+      :placeholder="placeholder"
+      :value="value"
+      placeholder="按下快捷键"
+      size="large"
+      style="width: calc(100% - 200px); min-width: 200px; color: var(--primary-text)"
+      @click="toggleListenKey()"
+    >
     </a-input>
-    <a-button size="large" type="primary" @click="toggleListenKey()">
-      修改
-    </a-button>
+    <a-button size="large" type="primary" @click="toggleListenKey()"> 修改 </a-button>
   </a-input-group>
-  <div v-show="listening" :id="'keyListener_' + this.name"
-       style="transform: translateX(-50%) translateY(-50%); position: absolute;width: 40vw;height:40vh;left: 50%;top: 50%;text-align: center;bottom: 0;background: rgba(21,21,21,0.8);border-radius:20px;line-height: 100px;font-size: 28px;z-index: 999"
-       tabindex='0/1'>
-    请按下 {{ this.title }} 快捷键<br>先按功能键（Ctrl、Shift、Alt再按其他键）<br>
+  <div
+    v-show="listening"
+    :id="'keyListener_' + this.name"
+    style="
+      transform: translateX(-50%) translateY(-50%);
+      position: absolute;
+      width: 40vw;
+      height: 40vh;
+      left: 50%;
+      top: 50%;
+      text-align: center;
+      bottom: 0;
+      background: rgba(21, 21, 21, 0.8);
+      border-radius: 20px;
+      line-height: 100px;
+      font-size: 28px;
+      z-index: 999;
+    "
+    tabindex="0/1"
+  >
+    请按下 {{ this.title }} 快捷键<br />先按功能键（Ctrl、Shift、Alt再按其他键）<br />
     当前键位 {{ this.value }}
   </div>
 </template>
@@ -22,52 +41,52 @@ export default {
   name: 'KeyInput',
   props: ['placeholder', 'name', 'title', 'value'],
   emits: ['changeKeys'],
-  data () {
+  data() {
     return {
       listening: false,
       shortKeys: '',
-      listener: null
-    }
+      listener: null,
+    };
   },
-  mounted () {
-    this.shortKeys = this.value
-    this.listener = document.getElementById('keyListener_' + this.name)
+  mounted() {
+    this.shortKeys = this.value;
+    this.listener = document.getElementById('keyListener_' + this.name);
     // this.listener.onkeydown = (e) => {
     // }
     this.listener.onkeyup = (e) => {
       if (this.listening && (e.ctrlKey || e.altKey || e.shiftKey)) {
-        this.shortKeys = this.getKeys(e)
-        this.listening = false
+        this.shortKeys = this.getKeys(e);
+        this.listening = false;
 
-        this.$emit('changeKeys', { key: this.name, shortcut: this.shortKeys })
-        e.preventDefault()
+        this.$emit('changeKeys', { key: this.name, shortcut: this.shortKeys });
+        e.preventDefault();
       }
-      e.stopPropagation()
-    }
+      e.stopPropagation();
+    };
   },
   methods: {
-    toggleListenKey () {
-      this.listening = true
+    toggleListenKey() {
+      this.listening = true;
       this.$nextTick(() => {
-        this.listener.focus()
-      })
+        this.listener.focus();
+      });
     },
-    getKeys (e) {
-      let key = ''
+    getKeys(e) {
+      let key = '';
       if (e.ctrlKey) {
-        key += 'ctrl+'
+        key += 'ctrl+';
       }
       if (e.altKey) {
-        key += 'alt+'
+        key += 'alt+';
       }
       if (e.shiftKey) {
-        key += 'shift+'
+        key += 'shift+';
       }
-      key += e.code.replaceAll('Key', '')
-      return key
+      key += e.code.replaceAll('Key', '');
+      return key;
     },
-  }
-}
+  },
+};
 </script>
 
 <style scoped></style>

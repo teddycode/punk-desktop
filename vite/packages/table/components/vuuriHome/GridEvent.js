@@ -23,5 +23,5 @@ export const GridEvent = {
   dragEnd: 'dragEnd',
   dragReleaseStart: 'dragReleaseStart',
   dragReleaseEnd: 'dragReleaseEnd',
-  destroy: 'destroy'
-}
+  destroy: 'destroy',
+};

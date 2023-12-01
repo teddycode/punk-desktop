@@ -1,9 +1,9 @@
 <script>
-import {onBeforeUnmount, onMounted, ref, watch,} from "vue";
-import RFB from "@novnc/novnc/core/rfb";
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import RFB from '@novnc/novnc/core/rfb';
 
 export default {
-  name: "VueVnc",
+  name: 'VueVnc',
   props: {
     url: {
       type: String,
@@ -55,7 +55,7 @@ export default {
     },
     background: {
       type: String,
-      default: "",
+      default: '',
     },
     qualityLevel: {
       type: Number,
@@ -110,7 +110,7 @@ export default {
       () => props.url,
       (url) => {
         connect();
-      }
+      },
     );
 
     onMounted(() => {
@@ -159,7 +159,7 @@ export default {
         return;
       }
 
-      logger.info("Connected to remote VNC.");
+      logger.info('Connected to remote VNC.');
       loading.value = false;
     };
 
@@ -173,11 +173,7 @@ export default {
 
       const connected = getConnected();
       if (connected) {
-        logger.info(
-          `Unexpectedly disconnected from remote VNC, retrying in ${
-            props.retryDuration / 1000
-          } seconds.`
-        );
+        logger.info(`Unexpectedly disconnected from remote VNC, retrying in ${props.retryDuration / 1000} seconds.`);
 
         timeouts.value.push(setTimeout(connect, props.retryDuration));
       } else {
@@ -193,9 +189,8 @@ export default {
         return;
       }
 
-      const password =
-        props.rfbOptions?.credentials?.password ?? prompt("请输入密码:");
-      rfb?.sendCredentials({password: password});
+      const password = props.rfbOptions?.credentials?.password ?? prompt('请输入密码:');
+      rfb?.sendCredentials({ password: password });
     };
 
     const _onDesktopName = (e) => {
@@ -243,11 +238,9 @@ export default {
           return;
         }
 
-        screen.value.innerHTML = "";
+        screen.value.innerHTML = '';
 
-        console.log(
-          `创建vnc连接。容器：${screen.value}；wss链接：${props.url}；rfb配置参数：${props.rfbOptions}`
-        );
+        console.log(`创建vnc连接。容器：${screen.value}；wss链接：${props.url}；rfb配置参数：${props.rfbOptions}`);
         const _rfb = new RFB(screen.value, props.url, props.rfbOptions);
 
         _rfb.viewOnly = props.viewOnly;
@@ -294,11 +287,7 @@ export default {
 </script>
 
 <template>
-  <div
-    v-show="!loading"
-    ref="screen"
-    class="vue-vnc_main"
-  ></div>
+  <div v-show="!loading" ref="screen" class="vue-vnc_main"></div>
   <template v-if="loading">
     <slot name="loading">
       <div class="vue-vnc_loading">Loading...</div>
@@ -307,7 +296,6 @@ export default {
 </template>
 
 <style scoped>
-
 .vue-vnc_main {
   width: 65%;
   height: 100%;

@@ -1,8 +1,8 @@
 <template>
   <!-- -->
-  <xt-left-menu :list="test" end="2" last="2">
-    <template #test> 123</template>
-    <template #test1> test1</template>
+  <xt-left-menu :list="test" last="2" end="2">
+    <template #test> 123 </template>
+    <template #test1> test1 </template>
     <div>
       <xt-button @click="a = !a"></xt-button>
       {{ test }}
@@ -13,7 +13,7 @@
 <script>
 export default {
   computed: {
-    test () {
+    test() {
       return [
         {
           icon: 'message',
@@ -52,14 +52,14 @@ export default {
             },
           ],
         },
-      ]
+      ];
     },
   },
-  data () {
+  data() {
     return {
       a: true,
-    }
+    };
   },
-}
+};
 </script>
 <style lang="scss" scoped></style>

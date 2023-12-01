@@ -1,14 +1,19 @@
 <template>
   <div class="drawer" ref="drawer">
-    <img src="/img/rays.png" alt="" class="baseImg" @click="visible=true">
-    <a-drawer :visible="visible" :closable="false"
-              :getContainer="() => $refs.drawer"
-              :placement="direction?'right':'left'" @close="visible=false"
-              :with-header="false" size="340px">
+    <img src="/img/rays.png" alt="" class="baseImg" @click="visible = true" />
+    <a-drawer
+      :visible="visible"
+      :closable="false"
+      :getContainer="() => $refs.drawer"
+      :placement="direction ? 'right' : 'left'"
+      @close="visible = false"
+      :with-header="false"
+      size="340px"
+    >
       <div class="baseUserInfo background">
         <div class="userbox">
           <div class="infoBox">
-            <img src="/img/user.png" alt="" class="userIcon">
+            <img src="/img/user.png" alt="" class="userIcon" />
             <div class="display:flex">
               <div class="username">测试用户</div>
               <div class="userTitle">testUser</div>
@@ -58,8 +63,7 @@
               <div class="form-key">菜单类型</div>
               <div class="form-vakue">
                 <!-- 如果页面固定菜单 直接锁死 -->
-                <a-radio-group v-model:value="isMenu" class="ml-4"
-                               :disabled="router.currentRoute.value.meta.menu">
+                <a-radio-group v-model:value="isMenu" class="ml-4" :disabled="router.currentRoute.value.meta.menu">
                   <a-radio :value="true" size="large">菜单Y</a-radio>
                   <a-radio :value="false" size="large">菜单X</a-radio>
                 </a-radio-group>
@@ -68,13 +72,13 @@
             <div class="form-item">
               <div class="form-key">面包屑</div>
               <div class="form-vakue">
-                <a-switch v-model:checked="isBreadcrumb" checked-children="开" un-checked-children="关"/>
+                <a-switch v-model:checked="isBreadcrumb" checked-children="开" un-checked-children="关" />
               </div>
             </div>
             <div class="form-item">
               <div class="form-key">菜单导航</div>
               <div class="form-vakue">
-                <a-switch v-model:checked="isPathbar" checked-children="开" un-checked-children="关"/>
+                <a-switch v-model:checked="isPathbar" checked-children="开" un-checked-children="关" />
               </div>
             </div>
             <div class="form-item">
@@ -90,17 +94,15 @@
             <div class="form-item">
               <div class="form-key">配置信息位置</div>
               <div class="form-vakue">
-                <a-switch v-model:checked="direction" checked-children="开" un-checked-children="关"/>
+                <a-switch v-model:checked="direction" checked-children="开" un-checked-children="关" />
               </div>
             </div>
             <div class="form-item">
               <div class="form-key">切换系统</div>
-
             </div>
             <div class="form-item">
-              <div class="form-vakue  ">
-                <a-scrollbar>
-                </a-scrollbar>
+              <div class="form-vakue">
+                <a-scrollbar> </a-scrollbar>
               </div>
             </div>
           </a-form>
@@ -110,108 +112,108 @@
   </div>
 </template>
 <script lang="ts">
-import {computed, defineComponent, ref, watch} from 'vue'
-import {useLayoutStore} from '@store/baseSettings' // 假设你已经创建了一个Pinia store并导出了useStore
-import {useI18n} from 'vue-i18n'
-import {useRouter} from 'vue-router'
-import {ConfigProvider} from 'ant-design-vue'
-import colorPicker from '@page/core/components/ColorPicker.vue'
+import { computed, defineComponent, ref, watch } from 'vue';
+import { useLayoutStore } from '@store/baseSettings'; // 假设你已经创建了一个Pinia store并导出了useStore
+import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
+import { ConfigProvider } from 'ant-design-vue';
+import colorPicker from '@page/core/components/ColorPicker.vue';
 
 export default defineComponent({
   components: {
-    colorPicker
+    colorPicker,
   },
   setup() {
-    const store = useLayoutStore()
-    const router = useRouter()
-    const {locale} = useI18n()
+    const store = useLayoutStore();
+    const router = useRouter();
+    const { locale } = useI18n();
 
-    const visible = ref(false)
-    const form = ref(true)
+    const visible = ref(false);
+    const form = ref(true);
 
     const themes = computed({
       get: () => store.themes,
       set: (value: string) => {
-        store.setThemes(value)
+        store.setThemes(value);
         // TODO 检查是否持久化了
-        window.localStorage.setItem('themes', value)
-      }
-    })
+        window.localStorage.setItem('themes', value);
+      },
+    });
 
-    const themesColor = computed(() => store.themesColor)
+    const themesColor = computed(() => store.themesColor);
 
     watch(
-        themesColor,
-        (newval, oldval) => {
-          window.localStorage.setItem('themes', 'false')
-          window.localStorage.removeItem('themesColor')
-          ConfigProvider.config({
-            theme: newval,
-          })
-          window.localStorage.setItem('themesColor', JSON.stringify(newval))
-          store.setThemesColor(newval)
-        },
-        {
-          deep: true,
-        }
-    )
+      themesColor,
+      (newval, oldval) => {
+        window.localStorage.setItem('themes', 'false');
+        window.localStorage.removeItem('themesColor');
+        ConfigProvider.config({
+          theme: newval,
+        });
+        window.localStorage.setItem('themesColor', JSON.stringify(newval));
+        store.setThemesColor(newval);
+      },
+      {
+        deep: true,
+      },
+    );
 
     const locales = computed({
       get: () => store.locales,
       set: (value: string) => {
-        locale.value = value
-        store.setLocales(value)
-        window.localStorage.setItem('locales', value)
-      }
-    })
+        locale.value = value;
+        store.setLocales(value);
+        window.localStorage.setItem('locales', value);
+      },
+    });
 
     const fixedTop = computed({
       get: () => store.fixedTop,
       set: (value: string) => {
-        window.localStorage.setItem('fixedTop', value)
-        store.setFixedTop(value)
-      }
-    })
+        window.localStorage.setItem('fixedTop', value);
+        store.setFixedTop(value);
+      },
+    });
 
     const isMenu = computed({
       get: () => store.isMenu,
       set: (value: string) => {
-        window.localStorage.setItem('isMenu', value)
-        store.setIsMenu(value)
-      }
-    })
+        window.localStorage.setItem('isMenu', value);
+        store.setIsMenu(value);
+      },
+    });
 
     const isBreadcrumb = computed({
       get: () => store.isBreadcrumb,
       set: (value: string) => {
-        window.localStorage.setItem('isBreadcrumb', value)
-        store.setIsBreadcrumb(value)
-      }
-    })
+        window.localStorage.setItem('isBreadcrumb', value);
+        store.setIsBreadcrumb(value);
+      },
+    });
 
     const modulesSize = computed({
       get: () => store.modulesSize,
       set: (value: string) => {
-        window.localStorage.setItem('modulesSize', value)
-        store.setModulesSize(value)
-      }
-    })
+        window.localStorage.setItem('modulesSize', value);
+        store.setModulesSize(value);
+      },
+    });
 
     const isPathbar = computed({
       get: () => store.isPathbar,
       set: (value: string) => {
-        window.localStorage.setItem('isPathbar', value)
-        store.setIsPathBar(value)
-      }
-    })
+        window.localStorage.setItem('isPathbar', value);
+        store.setIsPathBar(value);
+      },
+    });
 
     const direction = computed({
       get: () => store.direction,
       set: (value: string) => {
-        window.localStorage.setItem('direction', value)
-        store.setDirection(value)
-      }
-    })
+        window.localStorage.setItem('direction', value);
+        store.setDirection(value);
+      },
+    });
 
     return {
       router,
@@ -226,12 +228,11 @@ export default defineComponent({
       themes,
       themesColor,
       modulesSize,
-    }
+    };
   },
-})
+});
 </script>
 <style scoped lang="less">
-
 .baseImg {
   position: fixed;
   right: 10px;
@@ -261,7 +262,7 @@ export default defineComponent({
       display: flex;
       align-items: center;
       padding-bottom: 4px;
-      border-bottom: 1px solid #EEE;
+      border-bottom: 1px solid #eee;
 
       .username {
         // color: #FFf;
@@ -323,7 +324,5 @@ export default defineComponent({
       color: aqua;
     }
   }
-
-
 }
 </style>

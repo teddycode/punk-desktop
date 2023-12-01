@@ -16,27 +16,23 @@ const videoTpl = `
                     </a-menu>
                   </a-dropdown>
 </div>
-  `
+  `;
 Vue.component('eleVideo', {
   template: videoTpl,
   name: 'eleVideo',
   props: ['source', 'controls'],
   components: {},
-  data () {
-    return {}
+  data() {
+    return {};
   },
   computed: {},
-  mounted () {
-  },
+  mounted() {},
   methods: {
-    removeElement () {
-      this.$emit('remove-element')
+    removeElement() {
+      this.$emit('remove-element');
     },
-    enterSubmit () {
-    }
-  }
+    enterSubmit() {},
+  },
 
-  ,
-  destroyed () {
-  }
-})
+  destroyed() {},
+});

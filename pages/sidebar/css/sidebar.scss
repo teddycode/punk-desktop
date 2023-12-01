@@ -1,25 +1,21 @@
 //@import "sidebar2";
-@import "sa-app";
-@import "space";
-@import "dark-mod";
-
+@import 'sa-app';
+@import 'space';
+@import 'dark-mod';
 body {
   background-color: #00000000;
   overflow: hidden;
 }
-
 .bottomBar {
   .ant-badge-dot {
     right: 5px;
     top: 5px;
   }
-
   .ant-btn {
     background: none !important;
     border: none !important;
   }
 }
-
 .sidebar {
   position: fixed;
   bottom: 0;
@@ -33,7 +29,6 @@ body {
   transition: width 0.2s;
 }
 
-
 .sidebar .side-items {
   bottom: 0;
   overflow: hidden;
@@ -45,13 +40,12 @@ body {
 
 .sidebar .side-items ul li:hover {
   background-color: #efefef;
-  color: #1E90FF;
+  color: #1e90ff;
 }
 
 .sidebar .side-container .side-items .app-task .icon {
   width: 25px;
   height: 25px;
-
 }
 
 .sidebar .side-container .side-items .app-task .task-icon {
@@ -67,8 +61,6 @@ body {
   align-items: center;
   text-align: center;
   line-height: 45px;
-
-
 }
 
 .item-title {
@@ -111,7 +103,7 @@ body {
   overflow: hidden;
   background-color: #e3e3e3;
   box-sizing: content-box;
-  color: #1E90FF;
+  color: #1e90ff;
 }
 
 .dragClass {
@@ -140,20 +132,14 @@ body {
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-
   .edit-tip {
     vertical-align: text-top;
     margin-top: -3px;
     display: inline-block;
   }
-
   &:hover {
     color: grey;
-
-
   }
-
-
 }
 
 .action {
@@ -163,17 +149,14 @@ body {
   &:hover {
     background: rgba(224, 224, 224, 0.35);
     border-radius: 4px;
-
     .tip {
       display: inline-block;
     }
   }
-
   .tip {
     display: none;
   }
 }
-
 .close-task-btn {
   &:hover {
     color: red;
@@ -210,7 +193,6 @@ body {
     white-space: nowrap;
     padding: 5px;
     border-radius: 4px;
-
   }
 
   .unlock-tab {
@@ -223,16 +205,13 @@ body {
     position: absolute;
     right: 0;
     top: 4px;
-    cursor: pointer
+    cursor: pointer;
   }
-
-
 }
 
 .app-task {
   width: 45px; /*修复左侧栏收起状态下的错位问题*/
 }
-
 .wrapper {
   width: 42px;
   height: 42px;
@@ -256,7 +235,7 @@ body {
 }
 
 .bottomBar li:hover {
-  color: #1E90FF;
+  color: #1e90ff;
 }
 
 .bottom-container {
@@ -267,94 +246,73 @@ body {
   user-select: none;
 }
 
-
 .bottom-container .ant-collapse {
   border-radius: 0;
-
 }
-
 .init-expanded {
   width: 145px;
   transition: none;
-
   .wrapper {
     width: 142px;
     transition: none;
   }
-
   .side-container .side-items {
     width: 145px;
     transition: none;
-
   }
-
   .bottom-container {
     width: 145px;
     transition: none;
   }
-
   .side-items .app-items {
     width: 162px;
     transition: none;
   }
-
   .app-box {
     width: 145px;
     transition: none;
   }
-
   .app-task {
     width: 145px;
     transition: none;
   }
-
   .ant-collapse > .ant-collapse-item > .ant-collapse-header .ant-collapse-arrow {
     left: 68px;
     transition: none;
   }
 }
-
 .expanded {
   width: 145px;
   transition: width 0.1s;
-
   .wrapper {
     width: 142px;
     transition: width 0.1s;
   }
-
   .side-container .side-items {
     width: 145px;
     transition: width 0.1s;
-
   }
-
   .bottom-container {
     width: 145px;
     transition: width 0.1s;
   }
-
   .side-items .app-items {
     width: 162px;
     transition: width 0.1s;
   }
-
   .app-box {
     width: 145px;
     transition: width 0.1s;
   }
-
   .app-task {
     width: 145px;
     transition: width 0.1s;
   }
-
   .ant-collapse > .ant-collapse-item > .ant-collapse-header .ant-collapse-arrow {
     left: 68px;
     transition: width 0.1s;
   }
 }
-
 
 .divider {
   border-top: 1px solid lightgrey;
@@ -364,7 +322,6 @@ body {
 .ant-collapse-borderless {
   background-color: transparent;
 }
-
 
 .user-panel {
   .ant-drawer-body {
@@ -388,29 +345,26 @@ body {
     margin-top: 20px;
     margin-bottom: 20px;
     border: 1px solid rgb(226, 221, 221);
-
     &:hover {
       cursor: pointer;
       border: 1px solid #1890ff;
-      transition: all .3s cubic-bezier(.645, .045, .355, 1);
+      transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
       background-color: rgba(3, 167, 248, 0.1);
     }
-
     .action {
       text-align: center;
       padding: 10px;
-      cursor: pointer
+      cursor: pointer;
     }
 
     .actions-top {
       width: 100%;
-      height: 24px
+      height: 24px;
     }
 
     .actions-bottom {
       height: calc(100% - 24px);
       width: 100%;
-
       .action-bottom-action {
         width: 40px;
         height: 100%;
@@ -420,7 +374,7 @@ body {
 
   .level {
     border-radius: 50%;
-    background: #1E90FF;
+    background: #1e90ff;
     position: absolute;
     bottom: 0;
     right: 10px;
@@ -443,7 +397,6 @@ body {
     -webkit-line-clamp: 2;
 
     -webkit-box-orient: vertical;
-
   }
 
   .user-data {

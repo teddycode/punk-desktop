@@ -1,9 +1,5 @@
 <template>
-  <a-modal
-      :visible="visible"
-      :wrap-style="{ overflow: 'hidden' }"
-      @cancel="handleCancel" @ok="handleOk"
-  >
+  <a-modal :visible="visible" :wrap-style="{ overflow: 'hidden' }" @cancel="handleCancel" @ok="handleOk">
     <p style="font-size: 20px">{{ content }}</p>
     <p>
       <a-input v-model:value="inputValue" :placeholder="placeholder" @keyup.enter="handleOk"></a-input>
@@ -11,37 +7,28 @@
     <template #title>
       <div ref="modalTitleRef" style="width: 100%; cursor: move">{{ title }}</div>
     </template>
-
   </a-modal>
 </template>
 
 <script>
 export default {
   name: 'Prompt',
-  data () {
+  data() {
     return {
-      inputValue: ''
-    }
+      inputValue: '',
+    };
   },
   emits: ['changeValue'],
-  props: [
-    'content',
-    'title',
-    'placeholder',
-    'visible'
-  ],
+  props: ['content', 'title', 'placeholder', 'visible'],
   methods: {
-    handleOk () {
-      this.$emit('changeValue', { value: this.inputValue })
-
+    handleOk() {
+      this.$emit('changeValue', { value: this.inputValue });
     },
-    handleCancel () {
-      this.$emit('cancel')
-    }
-  }
-}
+    handleCancel() {
+      this.$emit('cancel');
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

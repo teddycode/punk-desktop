@@ -1,85 +1,105 @@
 <template>
   <div class="xt-bg pl-6 box h-full">
-    <div :style="showPreview ? 'width:70%' : 'width:100%'" class="pr-4 pt-4"
-         style="height: 100%;display: flex;flex-direction: column">
+    <div
+      class="pr-4 pt-4"
+      :style="showPreview ? 'width:70%' : 'width:100%'"
+      style="height: 100%; display: flex; flex-direction: column"
+    >
       <!-- 头部导航 -->
-      <div class="flex items-center justify-between" style="height: 96px;">
+      <div class="flex items-center justify-between" style="height: 96px">
         <div class="flex">
-          <div class="w-12 h-12 pointer flex items-center rounded-lg justify-center"
-               style="background: var(--mask-bg);font-size: 16px;color: var(--primary-text);"
-               @click="onBack">
-            <Icon icon="xiangzuo" style="font-size: 1.5em;"></Icon>
+          <div
+            @click="onBack"
+            class="w-12 h-12 pointer flex items-center rounded-lg justify-center"
+            style="background: var(--mask-bg); font-size: 16px; color: var(--primary-text)"
+          >
+            <Icon icon="xiangzuo" style="font-size: 1.5em"></Icon>
           </div>
           <div class="box-title no-drag">道具市场</div>
         </div>
         <div class="flex items-center">
           <!-- 头部搜索和下拉列表 -->
           <Search
-              :defaultSelect="sort"
-              :isFiltrate="true"
-              :searchValue="inputSearchValue"
-              :sortType="sortType"
-              @changeInput="changeInput"
-              @changeSelect="changeSelect"
+            :searchValue="inputSearchValue"
+            :defaultSelect="sort"
+            :sortType="sortType"
+            :isFiltrate="true"
+            @changeSelect="changeSelect"
+            @changeInput="changeInput"
           />
-          <div v-if="!showPreview" class="px-6 ml-3 flex items-center xt-mask rounded-lg h-12 pointer"
-               @click="openPreview">
-            <Icon icon="zhankai" style="font-size: 1.5em;"></Icon>
-            <span class="xt-text ml-3" style="font-size: 16px;">装扮预览</span>
+          <div
+            v-if="!showPreview"
+            @click="openPreview"
+            class="px-6 ml-3 flex items-center xt-mask rounded-lg h-12 pointer"
+          >
+            <Icon icon="zhankai" style="font-size: 1.5em"></Icon>
+            <span class="xt-text ml-3" style="font-size: 16px">装扮预览</span>
           </div>
         </div>
       </div>
       <div class="flex mt-4 h-full">
         <!-- 侧边导航 -->
-        <NavMenu :currenIndex="navIndex" :list="marketList" @changeNav="updateNavIndex"/>
+        <NavMenu :list="marketList" :currenIndex="navIndex" @changeNav="updateNavIndex" />
         <!-- 列表内容 -->
         <div class="ml-5 right no-drag h-full">
-          <Props :navList="marketList[navIndex].children" :selected="sort" @getFrameImage="getFrameImage"></Props>
+          <Props :selected="sort" :navList="marketList[navIndex].children" @getFrameImage="getFrameImage"></Props>
         </div>
       </div>
     </div>
-    <div v-if="showPreview" class="preview">
-      <div class="flex items-center justify-between mb-6" style="height: 48px;">
+    <div class="preview" v-if="showPreview">
+      <div class="flex items-center justify-between mb-6" style="height: 48px">
         <div class="flex items-center">
-          <div class="w-12 h-12 pointer flex items-center rounded-lg justify-center"
-               style="background: var(--mask-bg);font-size: 16px;color: var(--primary-text);"
-               @click="showPreview = false">
-            <Icon icon="zhankai" style="font-size: 1.5em;"></Icon>
+          <div
+            @click="showPreview = false"
+            class="w-12 h-12 pointer flex items-center rounded-lg justify-center"
+            style="background: var(--mask-bg); font-size: 16px; color: var(--primary-text)"
+          >
+            <Icon icon="zhankai" style="font-size: 1.5em"></Icon>
           </div>
-          <span class="xt-text ml-3" style="font-size: 16px;">装扮预览</span>
+          <span class="xt-text ml-3" style="font-size: 16px">装扮预览</span>
         </div>
-        <div class="w-12 h-12 pointer flex items-center rounded-lg justify-center"
-             style="background: var(--mask-bg);font-size: 16px;color: var(--primary-text);"
-             @click="clearExtra">
-          <Icon icon="clear" style="font-size: 1.5em;"></Icon>
+        <div
+          @click="clearExtra"
+          class="w-12 h-12 pointer flex items-center rounded-lg justify-center"
+          style="background: var(--mask-bg); font-size: 16px; color: var(--primary-text)"
+        >
+          <Icon icon="clear" style="font-size: 1.5em"></Icon>
         </div>
       </div>
-      <div class="card half mr-3"
-           style="width:376px;height:600px;background: var(--primary-bg);color: var(--primary-text);padding:0;position: relative">
-        <PropPreview :frameImage="frameImage" :uid="userInfo.uid" :userInfo="userInfo"></PropPreview>
+      <div
+        class="card half mr-3"
+        style="
+          width: 376px;
+          height: 600px;
+          background: var(--primary-bg);
+          color: var(--primary-text);
+          padding: 0;
+          position: relative;
+        "
+      >
+        <PropPreview :uid="userInfo.uid" :userInfo="userInfo" :frameImage="frameImage"></PropPreview>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Search from '../../components/Search.vue'
-import NavMenu from '../../components/NavMenu.vue'
-import { mapActions, mapWritableState } from 'pinia'
-import { appStore } from '../../store'
-import { frameStore } from '../../store/avatarFrame'
-import Props from '../../components/market/Props.vue'
-import PropPreview from '../../components/market/PropPreview.vue'
-
+import Search from '../../components/Search.vue';
+import NavMenu from '../../components/NavMenu.vue';
+import { mapActions, mapWritableState } from 'pinia';
+import { appStore } from '../../store';
+import { frameStore } from '../../store/avatarFrame';
+import Props from '../../components/market/Props.vue';
+import PropPreview from '../../components/market/PropPreview.vue';
 export default {
   name: 'CreativeMarket',
   components: {
     Search,
     NavMenu,
     Props,
-    PropPreview
+    PropPreview,
   },
-  data () {
+  data() {
     return {
       tab: '',
       gallery: false,
@@ -100,8 +120,8 @@ export default {
         // {cname: '道具',children: []},
       ],
       showPreview: true,
-      frameImage: ''
-    }
+      frameImage: '',
+    };
   },
   computed: {
     ...mapWritableState(appStore, ['fullScreen', 'userInfo']),
@@ -110,46 +130,46 @@ export default {
   watch: {
     frameData: {
       deep: true,
-      handler (val) {
-        this.marketList[0].children = val.list
-      }
-    }
+      handler(val) {
+        this.marketList[0].children = val.list;
+      },
+    },
   },
-  mounted () {
-    this.fullScreen = true
-    this.getFrameGoods()
+  mounted() {
+    this.fullScreen = true;
+    this.getFrameGoods();
   },
   methods: {
     ...mapActions(frameStore, ['getFrameGoods', 'ensureOrder']),
-    changeTab (args) {
-      this.tab = args.index
+    changeTab(args) {
+      this.tab = args.index;
     },
-    onBack () {
-      this.fullScreen = false
-      this.$router.go(-1)
+    onBack() {
+      this.fullScreen = false;
+      this.$router.go(-1);
     },
-    updateNavIndex ({ index }) {
-      this.navIndex = index
+    updateNavIndex({ index }) {
+      this.navIndex = index;
     },
-    changeSelect (event) {
+    changeSelect(event) {
       // console.log('选择下拉',event)
-      this.sort = event
+      this.sort = event;
     },
-    changeInput (event) {
+    changeInput(event) {
       // console.log('输入框',event)
     },
-    openPreview () {
-      this.showPreview = true
+    openPreview() {
+      this.showPreview = true;
     },
-    getFrameImage (frameImage) {
-      this.frameImage = frameImage
-      this.showPreview = true
+    getFrameImage(frameImage) {
+      this.frameImage = frameImage;
+      this.showPreview = true;
     },
-    clearExtra () {
-      this.frameImage = ''
-    }
+    clearExtra() {
+      this.frameImage = '';
+    },
   },
-}
+};
 </script>
 <style lang="scss" scoped>
 .box {
@@ -163,13 +183,11 @@ export default {
   display: flex;
   justify-content: space-between;
 }
-
 .left {
   height: 95%;
   width: 140px;
   overflow: auto;
   padding-bottom: 40px;
-
   .nav {
     width: 112px;
     height: 56px;
@@ -184,19 +202,15 @@ export default {
 
   .active {
     background: var(--mask-bg);
-
   }
 }
-
 .right {
   width: 100%;
   display: flex;
 }
-
 .left::-webkit-scrollbar {
   display: none;
 }
-
 .box-title {
   display: flex;
   align-items: center;
@@ -205,7 +219,6 @@ export default {
   font-weight: 500;
   color: var(--primary-text);
 }
-
 .preview {
   width: 413px;
   z-index: 9;

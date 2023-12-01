@@ -4,30 +4,21 @@
       1 {{ selectFromCurrency.name }} = {{ fromRate }}
       {{ selectToCurrency.name }}
     </div>
-    <div class="my-3">
-      1 {{ selectToCurrency.name }} = {{ toRate }} {{ selectFromCurrency.name }}
-    </div>
+    <div class="my-3">1 {{ selectToCurrency.name }} = {{ toRate }} {{ selectFromCurrency.name }}</div>
 
     <div class="flex items-center h-12">
-      <XtInput
-          v-model="fromCurrency"
-          class="xt-border rounded-lg"
-          @keyup="fromCurrencyRate()"
-      >
+      <XtInput class="xt-border rounded-lg" v-model="fromCurrency" @keyup="fromCurrencyRate()">
         <template #addonBefore>
           <!-- 下拉区 -->
           <a-dropdown>
             <template #overlay>
-              <div
-                  class="xt-bg-2 xt-border xt-text flex flex-wrap rounded-xl p-2 xt-shadow"
-                  style="width: 520px"
-              >
+              <div class="xt-bg-2 xt-border xt-text flex flex-wrap rounded-xl p-2 xt-shadow" style="width: 520px">
                 <div
-                    v-for="item in currencies"
-                    :class="{ 'xt-theme-text': selectFromCurrency.id == item.id }"
-                    class="p-2 cursor-pointer xt-base-btn text-sm"
-                    style="width: 120px"
-                    @click="selectFromCurrency = item"
+                  v-for="item in currencies"
+                  class="p-2 cursor-pointer xt-base-btn text-sm"
+                  style="width: 120px"
+                  :class="{ 'xt-theme-text': selectFromCurrency.id == item.id }"
+                  @click="selectFromCurrency = item"
                 >
                   {{ item.name }}
                   {{ item.id }}
@@ -36,23 +27,19 @@
             </template>
             <!-- 展示区 -->
             <div
-                class="h-full flex items-center xt-text justify-between px-4"
-                style="
-                width: 170px;
-                background: rgba(255, 255, 255, 0.4);
-                border-radius: 8px 0 0 8px;
-              "
+              class="h-full flex items-center xt-text justify-between px-4"
+              style="width: 170px; background: rgba(255, 255, 255, 0.4); border-radius: 8px 0 0 8px"
             >
               <div class="flex items-center">
                 <img
-                    :src="`https://coinyep.com/img/png/${selectFromCurrency.id}.png`"
-                    alt=""
-                    style="width: 26px; height: 18px"
+                  :src="`https://coinyep.com/img/png/${selectFromCurrency.id}.png`"
+                  alt=""
+                  style="width: 26px; height: 18px"
                 />
                 <div class="mx-2">{{ selectFromCurrency.name }}</div>
                 <div>{{ selectFromCurrency.id }}</div>
               </div>
-              <XtBaseIcon class="m" icon="xiangxia"></XtBaseIcon>
+              <XtBaseIcon icon="xiangxia" class="m"> </XtBaseIcon>
             </div>
           </a-dropdown>
         </template>
@@ -60,27 +47,20 @@
       <XtIcon :copy="fromCurrency" icon="fuzhi" size="28" type=""></XtIcon>
     </div>
     <div class="flex justify-center" style="width: 100%">
-      <XtIcon icon="paixu" size="28" type="" @click="swap()"></XtIcon>
+      <XtIcon icon="paixu" type="" size="28" @click="swap()"></XtIcon>
     </div>
     <div class="flex items-center h-12">
-      <XtInput
-          v-model="toCurrency"
-          class="xt-border rounded-lg"
-          @keyup="toCurrencyRate()"
-      >
+      <XtInput class="xt-border rounded-lg" v-model="toCurrency" @keyup="toCurrencyRate()">
         <template #addonBefore>
           <a-dropdown placement="top">
             <template #overlay>
-              <div
-                  class="xt-bg-2 xt-border xt-text flex flex-wrap rounded-xl p-2 xt-shadow"
-                  style="width: 520px"
-              >
+              <div class="xt-bg-2 xt-border xt-text flex flex-wrap rounded-xl p-2 xt-shadow" style="width: 520px">
                 <div
-                    v-for="item in currencies"
-                    :class="{ 'xt-theme-text': selectToCurrency.id == item.id }"
-                    class="p-2 cursor-pointer xt-base-btn text-sm"
-                    style="width: 120px"
-                    @click="selectToCurrency = item"
+                  v-for="item in currencies"
+                  class="p-2 cursor-pointer xt-base-btn text-sm"
+                  style="width: 120px"
+                  :class="{ 'xt-theme-text': selectToCurrency.id == item.id }"
+                  @click="selectToCurrency = item"
                 >
                   {{ item.name }}
                   {{ item.id }}
@@ -88,23 +68,19 @@
               </div>
             </template>
             <div
-                class="h-full flex items-center xt-text justify-between px-4"
-                style="
-                width: 170px;
-                background: rgba(255, 255, 255, 0.4);
-                border-radius: 8px 0 0 8px;
-              "
+              class="h-full flex items-center xt-text justify-between px-4"
+              style="width: 170px; background: rgba(255, 255, 255, 0.4); border-radius: 8px 0 0 8px"
             >
               <div class="flex items-center">
                 <img
-                    :src="`https://coinyep.com/img/png/${selectToCurrency.id}.png`"
-                    alt=""
-                    style="width: 26px; height: 18px"
+                  :src="`https://coinyep.com/img/png/${selectToCurrency.id}.png`"
+                  alt=""
+                  style="width: 26px; height: 18px"
                 />
                 <div class="mx-2">{{ selectToCurrency.name }}</div>
                 <div>{{ selectToCurrency.id }}</div>
               </div>
-              <XtBaseIcon class="m" icon="xiangxia"></XtBaseIcon>
+              <XtBaseIcon icon="xiangxia" class="m"> </XtBaseIcon>
             </div>
           </a-dropdown>
         </template>
@@ -120,34 +96,34 @@
 </template>
 
 <script>
-import dayjs from 'dayjs'
-import { currencyExchange } from '../../../store/currencyExchange'
-import { mapActions, mapWritableState } from 'pinia'
-import axios from 'axios'
-import { currencies } from './currencies'
+import dayjs from 'dayjs';
+import { currencyExchange } from '../../../store/currencyExchange';
+import { mapWritableState, mapActions } from 'pinia';
+import axios from 'axios';
+import { currencies } from './currencies';
 
 export default {
-  data () {
+  data() {
     return {
       currencies,
       flag: false,
-    }
+    };
   },
-  async mounted () {
-    this.getCurrency(this.selectFromCurrency.id)
-    this.getCurrency(this.selectToCurrency.id)
+  async mounted() {
+    this.getCurrency(this.selectFromCurrency.id);
+    this.getCurrency(this.selectToCurrency.id);
   },
   watch: {
-    async selectFromCurrency (newV) {
-      if (this.flag) return
-      await this.getCurrency(newV.id)
-      this.toCurrencyRate()
+    async selectFromCurrency(newV) {
+      if (this.flag) return;
+      await this.getCurrency(newV.id);
+      this.toCurrencyRate();
     },
-    async selectToCurrency (newV) {
-      if (this.flag) return
-      await this.getCurrency(newV.id)
+    async selectToCurrency(newV) {
+      if (this.flag) return;
+      await this.getCurrency(newV.id);
 
-      this.fromCurrencyRate()
+      this.fromCurrencyRate();
     },
   },
   computed: {
@@ -163,38 +139,32 @@ export default {
   },
   methods: {
     ...mapActions(currencyExchange, ['fromCurrencyRate', 'toCurrencyRate']),
-    getDate () {
-      return dayjs().format('YYYY-MM-DD')
+    getDate() {
+      return dayjs().format('YYYY-MM-DD');
     },
-    swap () {
+    swap() {
       this.flag = true;
-      [this.fromCurrency, this.toCurrency] = [
-        this.toCurrency,
-        this.fromCurrency,
-      ];
-      [this.selectFromCurrency, this.selectToCurrency] = [
-        this.selectToCurrency,
-        this.selectFromCurrency,
-      ]
+      [this.fromCurrency, this.toCurrency] = [this.toCurrency, this.fromCurrency];
+      [this.selectFromCurrency, this.selectToCurrency] = [this.selectToCurrency, this.selectFromCurrency];
       setTimeout(() => {
-        this.flag = false
-      }, 1000)
+        this.flag = false;
+      }, 1000);
     },
-    async getCurrency (id) {
-      let currencyState = this.$cache.get('currencyState')
+    async getCurrency(id) {
+      let currencyState = this.$cache.get('currencyState');
       if (!currencyState) {
-        this.currencyRateList = []
-        this.$cache.set('currencyState', true, 'today')
+        this.currencyRateList = [];
+        this.$cache.set('currencyState', true, 'today');
       }
       if (!this.currencyRateList[id]) {
-        let toUrl = `https://60s.viki.moe/ex-rates?c=` + id
-        let toRes = await axios.get(toUrl)
-        this.toCurrencyRateList = toRes.data.data
-        this.currencyRateList[id] = { ...toRes.data.data }
+        let toUrl = `https://60s.viki.moe/ex-rates?c=` + id;
+        let toRes = await axios.get(toUrl);
+        this.toCurrencyRateList = toRes.data.data;
+        this.currencyRateList[id] = { ...toRes.data.data };
       }
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped></style>

@@ -1,15 +1,14 @@
-import { defineAsyncComponent } from 'vue'
-
+import { defineAsyncComponent, defineComponent } from 'vue';
 export default {
-  install (app) {
+  install(app) {
     // 1、获取当前路径下所有文件中的index.vue
-    const components = import.meta.glob('./*/index.vue')
+    const components = import.meta.glob('./*/index.vue');
     // 2、遍历组件模块
     for (const [fullPath, fn] of Object.entries(components)) {
-      const component = fullPath.replace('./', '').split('/')[0]
-      const componentName = 'Xt' + component
+      const component = fullPath.replace('./', '').split('/')[0];
+      const componentName = 'Xt' + component;
       // 3、进行注册
-      app.component(componentName, defineAsyncComponent(fn))
+      app.component(componentName, defineAsyncComponent(fn));
     }
   },
-}
+};

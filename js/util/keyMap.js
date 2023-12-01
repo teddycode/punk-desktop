@@ -31,25 +31,24 @@ var defaultKeyMap = {
   fillPassword: 'mod+\\',
   toggleTabAudio: 'shift+mod+m',
   showHistory: 'shift+mod+h',
-  table: 'alt+z',//呼出工作台
-  superTools: 'alt+x',//超级工具箱
-  globalSearch: 'alt+f'//全局搜索
-}
-
+  table: 'alt+z', //呼出工作台
+  superTools: 'alt+x', //超级工具箱
+  globalSearch: 'alt+f', //全局搜索
+};
 /* Utility function to override default mapping with user settings */
-function userKeyMap (settings) {
-  var keyMapCopy = Object.assign({}, defaultKeyMap)
+function userKeyMap(settings) {
+  var keyMapCopy = Object.assign({}, defaultKeyMap);
   if (settings) {
     // override the default keymap by the user defined ones
     Object.keys(keyMapCopy).forEach(function (key) {
       if (settings[key]) {
-        keyMapCopy[key] = settings[key]
+        keyMapCopy[key] = settings[key];
       }
-    })
+    });
   }
-  return keyMapCopy
+  return keyMapCopy;
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = { defaultKeyMap, userKeyMap }
+  module.exports = { defaultKeyMap, userKeyMap };
 }

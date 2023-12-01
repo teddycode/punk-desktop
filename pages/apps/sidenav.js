@@ -54,24 +54,24 @@ const tpl = `
     </div>
   </template>
 </div>
-`
+`;
 
 const getNameInputValue = function () {
-  return document.getElementById('nameInput').value
-}
-require('./comp/local-comp.js')
-require('./comp/appstore-comp.js')
-require('./comp/group-comp.js')
-require('./comp/cloud-comp.js')
+  return document.getElementById('nameInput').value;
+};
+require('./comp/local-comp.js');
+require('./comp/appstore-comp.js');
+require('./comp/group-comp.js');
+require('./comp/cloud-comp.js');
 Vue.component('sidenav', {
   name: 'sidenav',
   component: { localComp: 'local-comp', appstoreComp: 'appstore-comp', groupComp: 'group-comp' },
-  data () {
+  data() {
     return {
       current: ['myapp'],
       //创建列表的弹窗可见
       createListVisible: false,
-      createTitle: '',//创建列表的标题
+      createTitle: '', //创建列表的标题
       //下拉菜单控制属性
       disableCreate: false,
       disableCreateChild: false,
@@ -86,78 +86,82 @@ Vue.component('sidenav', {
         title: '云端导航',
         key: 'cloud',
         slots: {
-          icon: 'cloud'
+          icon: 'cloud',
         },
-        children: []
-      }
-    }
+        children: [],
+      },
+    };
   },
   template: tpl,
-  mounted () {
-
-  },
+  mounted() {},
   methods: {
-    getTab () {
-      this.$emit('get-tab', window.tab)
+    getTab() {
+      this.$emit('get-tab', window.tab);
     },
-    titleClick (e) {
-      console.log('titleClick', e)
+    titleClick(e) {
+      console.log('titleClick', e);
     },
 
-    onSelect (selectedKeys, info) {
-      window.tab = selectedKeys[0]
-      this.$emit('get-tab', window.tab)
+    onSelect(selectedKeys, info) {
+      window.tab = selectedKeys[0];
+      this.$emit('get-tab', window.tab);
     },
-    onCheck (checkedKeys, info) {
-      console.log('onCheck', checkedKeys, info)
+    onCheck(checkedKeys, info) {
+      console.log('onCheck', checkedKeys, info);
     },
-    createList (callback = () => {}, value = '', title = '') {
-      this.createTitle = title
-      this.createListVisible = true
-      this.handleNameInput = callback
+    createList(callback = () => {}, value = '', title = '') {
+      this.createTitle = title;
+      this.createListVisible = true;
+      this.handleNameInput = callback;
       appVue.$nextTick(() => {
-        document.getElementById('nameInput').value = value
-      })
+        document.getElementById('nameInput').value = value;
+      });
     },
-    onContextMenuClick (treeKey, menuKey) {
+    onContextMenuClick(treeKey, menuKey) {
       if (menuKey === 'createList') {
         //创建列表菜单
-        this.handleMenuCreateList(treeKey)
+        this.handleMenuCreateList(treeKey);
       } else if (menuKey === 'renameList') {
-        this.handleMenuRenameList(treeKey)
+        this.handleMenuRenameList(treeKey);
       } else if (menuKey === 'deleteList') {
-        this.handleMenuDeleteList(treeKey)
+        this.handleMenuDeleteList(treeKey);
       }
     },
-    handleMenuDeleteList (treeKey) {
-
-    },
+    handleMenuDeleteList(treeKey) {},
     /**
      * 处理菜单的重命名列表事件
      * @param treeKey
      */
-    handleMenuRenameList (treeKey) {
-      let that = this
+    handleMenuRenameList(treeKey) {
+      let that = this;
     },
     /**
      * 处理菜单的创建列表事件
      */
-    handleMenuCreateList (treeKey) {
-      let that = this
+    handleMenuCreateList(treeKey) {
+      let that = this;
       if (this.isType(treeKey, 'cloud')) {
-        this.createList(function () {
-          alert(getNameInputValue())
-        }, '云端列表', '云端')
+        this.createList(
+          function () {
+            alert(getNameInputValue());
+          },
+          '云端列表',
+          '云端',
+        );
       } else if (this.isType(treeKey, 'appstore')) {
         //如果是网络导航，则不处理创建事件，防止恶意提交
       } else if (this.isType(treeKey, 'group')) {
-        this.createList(function () {
-          alert(getNameInputValue())
-        }, '团队列表', '团队')
+        this.createList(
+          function () {
+            alert(getNameInputValue());
+          },
+          '团队列表',
+          '团队',
+        );
       }
     },
-    isType (treeKey, type) {
-      return treeKey === type || treeKey.startsWith(type + '_')
+    isType(treeKey, type) {
+      return treeKey === type || treeKey.startsWith(type + '_');
     },
 
     /**
@@ -165,28 +169,29 @@ Vue.component('sidenav', {
      * @param visible
      * @param treeKey
      */
-    checkMenuDisable (visible, treeKey) {
-      this.disableCreate = false
-      this.disableCreateChild = false
-      this.disableCopy = false
-      this.disableRename = false
-      this.disableDelete = false
-      if (visible === true) {//在创建菜单的时候对菜单的可用性进行调整
+    checkMenuDisable(visible, treeKey) {
+      this.disableCreate = false;
+      this.disableCreateChild = false;
+      this.disableCopy = false;
+      this.disableRename = false;
+      this.disableDelete = false;
+      if (visible === true) {
+        //在创建菜单的时候对菜单的可用性进行调整
         if (this.isType(treeKey, 'appstore')) {
-          this.disableCreate = true
-          this.disableCreateChild = true
-          this.disableCopy = true
-          this.disableRename = true
-          this.disableDelete = true
+          this.disableCreate = true;
+          this.disableCreateChild = true;
+          this.disableCopy = true;
+          this.disableRename = true;
+          this.disableDelete = true;
         } else {
         }
       }
       if (treeKey === 'myapp') {
-        this.disableCreateChild = true
-        this.disableCopy = true
-        this.disableRename = true
-        this.disableDelete = true
+        this.disableCreateChild = true;
+        this.disableCopy = true;
+        this.disableRename = true;
+        this.disableDelete = true;
       }
-    }
-  }
-})
+    },
+  },
+});

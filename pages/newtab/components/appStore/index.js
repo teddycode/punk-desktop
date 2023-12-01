@@ -3,12 +3,12 @@ Vue.component('app-dialog', {
     //dialog显示
     adVisible: {
       type: Boolean,
-      default: false
+      default: false,
     },
     //所有应用数据
     allApps: {
       type: Array,
-    }
+    },
   },
-  template: '#appstore'
-})
+  template: '#appstore',
+});

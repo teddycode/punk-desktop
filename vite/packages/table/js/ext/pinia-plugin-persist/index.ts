@@ -1,5 +1,5 @@
 import {PiniaPluginContext} from 'pinia'
-
+import _ from 'lodash-es'
 const isPromise = (val) => {
     return typeof val === 'object' && typeof val.then === 'function' && typeof val.catch === 'function';
 };

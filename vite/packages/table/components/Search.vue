@@ -1,24 +1,33 @@
 <template>
   <div class="flex items-center">
     <div>
-      <a-input :modelValue="keywordsData" :placeholder="placeholder" :style="inputStyle" allow-clear
-               class="no-drag input" spellcheck="false"
-               @change="changeInput($event)" @keydown.enter="doSearch">
+      <a-input
+        :modelValue="keywordsData"
+        :placeholder="placeholder"
+        :style="inputStyle"
+        allow-clear
+        class="no-drag input"
+        spellcheck="false"
+        @change="changeInput($event)"
+        @keydown.enter="doSearch"
+      >
         <template #prefix>
-          <Icon v-if="isSearchIcon" class="mr-2" icon="sousuo" style="color: var(--disable-text) !important;"></Icon>
+          <Icon v-if="isSearchIcon" class="mr-2" icon="sousuo" style="color: var(--disable-text) !important"></Icon>
         </template>
       </a-input>
     </div>
     <div v-if="isFiltrate && showSort" class="ml-3">
-      <a-select v-model:value="orderData"
-                :bordered="false"
-                :dropdownStyle="{ 'z-index': 999999999999, backgroundColor: 'var(--mask-bg)' }" :style="selectStyle"
-                class="select rounded-lg  s-item flex items-center text-center"
-                size="large"
-                @change="changeSelect($event)">
-        <a-select-option v-for="item in sortType" :key="item" :value="item.value" class="no-drag">{{
-            item.name
-          }}
+      <a-select
+        v-model:value="orderData"
+        :bordered="false"
+        :dropdownStyle="{ 'z-index': 999999999999, backgroundColor: 'var(--mask-bg)' }"
+        :style="selectStyle"
+        class="select rounded-lg s-item flex items-center text-center"
+        size="large"
+        @change="changeSelect($event)"
+      >
+        <a-select-option v-for="item in sortType" :key="item" :value="item.value" class="no-drag"
+          >{{ item.name }}
         </a-select-option>
       </a-select>
     </div>
@@ -70,50 +79,49 @@ export default {
     //下拉的排序类型
     sortType: {
       type: Array,
-      default: []
+      default: [],
     },
-
   },
-  mounted () {
-    this.keywordsData = this.keywords
-    this.orderData = this.order
+  mounted() {
+    this.keywordsData = this.keywords;
+    this.orderData = this.order;
   },
-  data () {
+  data() {
     return {
       keywordsData: '',
       orderData: '',
-      selectValue: ''
-    }
+      selectValue: '',
+    };
   },
   watch: {
-    keywords (newVal) {
-      this.keywordsData = newVal
+    keywords(newVal) {
+      this.keywordsData = newVal;
     },
     defaultSelect: {
       immediate: true,
-      handler (newValue, oldValue) {
+      handler(newValue, oldValue) {
         if (newValue != oldValue) {
-          this.selectValue = this.defaultSelect
+          this.selectValue = this.defaultSelect;
         }
-      }
-    }
+      },
+    },
   },
   methods: {
-    doSearch () {
-      this.$emit('search')
+    doSearch() {
+      this.$emit('search');
     },
 
     //下拉值改变
-    changeSelect (event) {
-      this.$emit('update:order', event)
-      this.$emit('search')
+    changeSelect(event) {
+      this.$emit('update:order', event);
+      this.$emit('search');
     },
     //输入框值改变
-    changeInput (event) {
-      this.$emit('update:keywords', event.target.value)
-    }
-  }
-}
+    changeInput(event) {
+      this.$emit('update:keywords', event.target.value);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

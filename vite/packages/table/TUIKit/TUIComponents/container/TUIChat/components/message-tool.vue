@@ -1,28 +1,32 @@
 <template>
-  <div :class="env?.isH5 ? 'dialog-item-h5' : 'dialog-item-web'" class="dialog-item">
+  <div class="dialog-item" :class="env?.isH5 ? 'dialog-item-h5' : 'dialog-item-web'">
     <MessageEmojiReact
-        v-if="env?.isH5 && needEmojiReact"
-        :message="message"
-        type="dropdown"
-        @handleCollapse="handleCollapse"
+      v-if="env?.isH5 && needEmojiReact"
+      :message="message"
+      type="dropdown"
+      @handleCollapse="handleCollapse"
     />
     <ul
-        v-show="showToolList"
-        :class="env?.isH5 ? 'dialog-item-list-h5' : 'dialog-item-list-web'"
-        class="dialog-item-list"
+      class="dialog-item-list"
+      :class="env?.isH5 ? 'dialog-item-list-h5' : 'dialog-item-list-web'"
+      v-show="showToolList"
     >
       <li
-          v-if="
+        v-if="
           (message.type === types.MSG_FILE || message.type === types.MSG_VIDEO || message.type === types.MSG_IMAGE) &&
           !env.isH5
         "
-          class="pointer" @click="openMessage(message)"
+        @click="openMessage(message)"
+        class="pointer"
       >
         <i class="icon icon-msg-copy"></i>
         <span>{{ $t('TUIChat.打开') }}</span>
       </li>
-      <li v-if="message.type === types.MSG_TEXT" class="pointer"
-          @click="handleMessage(message, constant.handleMessage.copy)">
+      <li
+        v-if="message.type === types.MSG_TEXT"
+        class="pointer"
+        @click="handleMessage(message, constant.handleMessage.copy)"
+      >
         <i class="icon icon-msg-copy"></i>
         <span>{{ $t('TUIChat.复制') }}</span>
       </li>
@@ -30,25 +34,35 @@
         <i class="icon icon-msg-forward"></i>
         <span>{{ $t('TUIChat.转发') }}</span>
       </li>
-      <li v-if="message.status === 'success'" class="pointer"
-          @click="handleMessage(message, constant.handleMessage.reference)">
+      <li
+        v-if="message.status === 'success'"
+        class="pointer"
+        @click="handleMessage(message, constant.handleMessage.reference)"
+      >
         <i class="icon icon-msg-quote"></i>
         <span>{{ $t('TUIChat.引用') }}</span>
       </li>
-      <li v-if="message.status === 'success'" class="pointer"
-          @click="handleMessage(message, constant.handleMessage.reply)">
+      <li
+        v-if="message.status === 'success'"
+        class="pointer"
+        @click="handleMessage(message, constant.handleMessage.reply)"
+      >
         <i class="icon icon-msg-reply"></i>
         <span>{{ $t('TUIChat.回复') }}</span>
       </li>
       <li
-          v-if="message.flow === 'out' && message.status === 'success' && message.type !== types.MSG_CUSTOM"
-          class="pointer" @click="handleMessage(message, constant.handleMessage.revoke)"
+        v-if="message.flow === 'out' && message.status === 'success' && message.type !== types.MSG_CUSTOM"
+        @click="handleMessage(message, constant.handleMessage.revoke)"
+        class="pointer"
       >
         <i class="icon icon-msg-revoke"></i>
         <span>{{ $t('TUIChat.撤回') }}</span>
       </li>
-      <li v-if="message.status === 'success'" class="pointer"
-          @click="handleMessage(message, constant.handleMessage.delete)">
+      <li
+        v-if="message.status === 'success'"
+        class="pointer"
+        @click="handleMessage(message, constant.handleMessage.delete)"
+      >
         <i class="icon icon-msg-del"></i>
         <span>{{ $t('TUIChat.删除') }}</span>
       </li>
@@ -56,15 +70,14 @@
   </div>
 </template>
 <script lang="ts">
-import {defineComponent, reactive, toRefs, watch, watchEffect} from 'vue';
-import {Message} from '../interface';
+import { defineComponent, watch, reactive, toRefs, ref, watchEffect } from 'vue';
+import { Message } from '../interface';
 import TIM from '../../../../TUICore/tim';
-import {handleErrorPrompts} from '../../utils';
+import { handleErrorPrompts } from '../../utils';
 import constant from '../../constant';
 import useClipboard from 'vue-clipboard3';
-import {useStore} from 'vuex';
+import { useStore } from 'vuex';
 import MessageEmojiReact from './message-emoji-react.vue';
-
 export default defineComponent({
   props: {
     message: {
@@ -96,11 +109,11 @@ export default defineComponent({
     });
 
     watch(
-        () => props.message,
-        () => {
-          data.message = props.message;
-        },
-        {deep: true, immediate: true}
+      () => props.message,
+      () => {
+        data.message = props.message;
+      },
+      { deep: true, immediate: true },
     );
 
     const openMessage = (item: any) => {
@@ -132,7 +145,7 @@ export default defineComponent({
         case constant.handleMessage.copy:
           try {
             if (message?.type === data.types.MSG_TEXT && message?.payload?.text) {
-              const {toClipboard} = useClipboard();
+              const { toClipboard } = useClipboard();
               await toClipboard(message?.payload?.text);
             }
           } catch (error) {
@@ -172,7 +185,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import url('../../../styles/common.scss');
 @import url('../../../styles/icon.scss');
-
 .dialog-item {
   background: #ffffff;
   min-width: min-content;
@@ -187,7 +199,6 @@ export default defineComponent({
   align-items: baseline;
   white-space: nowrap;
   border: 1px solid #e0e0e0;
-
   &-web {
     padding: 12px 0;
   }
@@ -199,11 +210,9 @@ export default defineComponent({
     white-space: nowrap;
     justify-content: space-around;
     width: 100%;
-
     &-h5 {
       flex-wrap: nowrap;
       margin: 10px;
-
       li {
         padding: 0 5px;
         display: flex;
@@ -213,7 +222,6 @@ export default defineComponent({
         color: #4f4f4f;
       }
     }
-
     &-web {
       li:first-child {
         margin-top: 0;
@@ -226,7 +234,6 @@ export default defineComponent({
         display: flex;
         flex-direction: row;
         align-items: center;
-
         span {
           padding-left: 4px;
         }

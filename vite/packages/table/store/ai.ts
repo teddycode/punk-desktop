@@ -1,21 +1,21 @@
-import {defineStore} from "pinia";
+import { defineStore } from 'pinia';
 // @ts-ignore
-export const aiStore = defineStore("aiStore", {
+export const aiStore = defineStore('aiStore', {
   state: () => ({
     /**
      * 主菜单配置
      */
-    gpt: "gpt-3.5-turbo", // 选中的模型
+    gpt: 'gpt-3.5-turbo', // 选中的模型
     temperature: 2, // 联想度
     count: 4, // 上下文长度
-    key: "fk200537-ditsnYQ48GLvtjFRVWQ4ZWDYYAImChsl", // 密钥
-    url: "https://openai.api2d.net", // 地址
+    key: 'fk200537-ditsnYQ48GLvtjFRVWQ4ZWDYYAImChsl', // 密钥
+    url: 'https://openai.api2d.net', // 地址
     isFull: false, // 组件全屏状态
-    selectTab: "Chat", // 左侧tab选中情况
+    selectTab: 'Chat', // 左侧tab选中情况
     fullState: {}, // 记录组件展示状态
     searchState: true,
     // 模板组件数据------------------------------
-    mode: "Default",
+    mode: 'Default',
     isMode: true, // 模板使用中
     // chat组件数据-----------------------------
     // 记录当前请求过的数据
@@ -25,12 +25,12 @@ export const aiStore = defineStore("aiStore", {
     // 初始值 提供用于全局状态维护
     defaultData: {
       icon: {
-        name: "message",
+        name: 'message',
         id: 0,
       },
-      id: "",
-      time: "",
-      name: "新的对话",
+      id: '',
+      time: '',
+      name: '新的对话',
       top: false,
     },
     /**
@@ -42,7 +42,7 @@ export const aiStore = defineStore("aiStore", {
     topList: [],
     todayList: [],
     previousList: [],
-    serachTopic: "",
+    serachTopic: '',
   }),
   getters: {
     recentList() {
@@ -53,7 +53,7 @@ export const aiStore = defineStore("aiStore", {
     },
     selectTitle() {
       if (this.selectTopicIndex == -1) {
-        return "未选择对话";
+        return '未选择对话';
       }
       return this.topicList[this.selectTopicIndex].name;
     },
@@ -61,7 +61,7 @@ export const aiStore = defineStore("aiStore", {
   actions: {
     addTopic() {
       // 解构一份初始状态
-      let obj = {...this.defaultData};
+      let obj = { ...this.defaultData };
       obj.id = Date.now();
       obj.time = Date.now();
       this.selectTopicIndex = obj.id;
@@ -88,7 +88,7 @@ export const aiStore = defineStore("aiStore", {
     enabled: true,
     strategies: [
       {
-        paths: ["url", "key", "temperature", "count", "topicList", "chatList"],
+        paths: ['url', 'key', 'temperature', 'count', 'topicList', 'chatList'],
         storage: localStorage,
       },
     ],

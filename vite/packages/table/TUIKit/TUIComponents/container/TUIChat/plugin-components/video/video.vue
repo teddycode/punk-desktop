@@ -1,14 +1,13 @@
 <template>
   <span class="upload-btn icon icon-video">
-      <input v-if="!isMute" accept="video/*" data-type="video" title="视频" type="file" @change="sendUploadMessage"/>
-      <slot/>
+    <input title="视频" v-if="!isMute" type="file" data-type="video" accept="video/*" @change="sendUploadMessage" />
+    <slot />
   </span>
 </template>
 
 <script lang="ts">
-import {defineComponent, reactive, toRefs, watchEffect} from 'vue';
-import {handleErrorPrompts} from '../../../utils';
-
+import { defineComponent, reactive, toRefs, watchEffect } from 'vue';
+import { handleErrorPrompts } from '../../../utils';
 
 const Video = defineComponent({
   props: {
@@ -57,10 +56,8 @@ export default Video;
 <style lang="scss" scoped>
 @import url('../../../../styles/common.scss');
 @import url('../../../../styles/icon.scss');
-
 .upload-btn {
   position: relative;
-
   input {
     position: absolute;
     cursor: pointer;

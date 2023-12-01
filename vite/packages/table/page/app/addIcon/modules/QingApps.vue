@@ -1,23 +1,19 @@
 <template>
-  <Icon
-      :data="appList"
-      :isSelect="true"
-      @updateSelectApps="updateSelectApps"
-  ></Icon>
+  <Icon :isSelect="true" @updateSelectApps="updateSelectApps" :data="appList"></Icon>
 </template>
 
 <script>
-import { getQingApps } from '../api/api'
-import syncSelected from '../hooks/syncSelected'
+import { getQingApps } from '../api/api';
+import syncSelected from '../hooks/syncSelected';
 
 export default {
   mixins: [syncSelected],
   data: {
     appList: [],
   },
-  async mounted () {
-    let res = await getQingApps()
-    let appList = []
+  async mounted() {
+    let res = await getQingApps();
+    let appList = [];
     res.forEach((item) => {
       if (item?.type === 'web') {
         appList.push({
@@ -30,12 +26,12 @@ export default {
             value: item.package,
             name: item.name,
           },
-        })
+        });
       }
-    })
-    this.appList = appList
+    });
+    this.appList = appList;
   },
-}
+};
 </script>
 
 <style lang="scss" scoped></style>

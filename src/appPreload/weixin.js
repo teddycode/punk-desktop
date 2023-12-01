@@ -1,11 +1,11 @@
-let $ = require('cash-dom')
-const { insertCss } = require('./common.js')
+let $ = require('cash-dom');
+const { insertCss } = require('./common.js');
 $(() => {
-  $('.download_entry').remove()
+  $('.download_entry').remove();
   $('.nav_view.ng-scope').css({
     top: '153px',
-    height: 'calc(100vh - 255px)'
-  })
+    height: 'calc(100vh - 255px)',
+  });
   insertCss(`
   html{
       height: calc(100vh);
@@ -27,7 +27,7 @@ $(() => {
   .chat .box_bd{
   bottom:122px !important
   }
-  `)
+  `);
   // document.body.style.zoom='1.2'
   // $('.chat_item').click(()=>{
   //   setTimeout(()=>{
@@ -50,4 +50,4 @@ $(() => {
   // $('[ui-view=contentView]').css({
   //   height:'100vh'
   // })
-})
+});

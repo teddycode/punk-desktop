@@ -1,10 +1,10 @@
-import { ipcRenderer, contextBridge, webFrame } from 'electron'
-import { addExtensionListener, removeExtensionListener } from './event'
+import { ipcRenderer, contextBridge, webFrame } from 'electron';
+import { addExtensionListener, removeExtensionListener } from './event';
 
 export const injectExtensionAPIs = () => {
   interface ExtensionMessageOptions {
-    noop?: boolean
-    serialize?: (...args: any[]) => any[]
+    noop?: boolean;
+    serialize?: (...args: any[]) => any[];
   }
 
   const invokeExtension = async function (
@@ -13,115 +13,111 @@ export const injectExtensionAPIs = () => {
     options: ExtensionMessageOptions = {},
     ...args: any[]
   ) {
-    const callback = typeof args[args.length - 1] === 'function' ? args.pop() : undefined
+    const callback = typeof args[args.length - 1] === 'function' ? args.pop() : undefined;
 
     if (process.env.NODE_ENV === 'development') {
-      console.log(fnName, args)
+      console.log(fnName, args);
     }
 
     if (options.noop) {
-      console.warn(`${fnName} is not yet implemented.`)
-      if (callback) callback()
-      return
+      console.warn(`${fnName} is not yet implemented.`);
+      if (callback) callback();
+      return;
     }
 
     if (options.serialize) {
-      args = options.serialize(...args)
+      args = options.serialize(...args);
     }
 
-    let result
+    let result;
 
     try {
-      result = await ipcRenderer.invoke('crx-msg', extensionId, fnName, ...args)
+      result = await ipcRenderer.invoke('crx-msg', extensionId, fnName, ...args);
     } catch (e) {
       // TODO: Set chrome.runtime.lastError?
-      console.error(e)
-      result = undefined
+      console.error(e);
+      result = undefined;
     }
 
     if (process.env.NODE_ENV === 'development') {
-      console.log(fnName, '(result)', result)
+      console.log(fnName, '(result)', result);
     }
 
     if (callback) {
-      callback(result)
+      callback(result);
     } else {
-      return result
+      return result;
     }
-  }
+  };
 
   const electronContext = {
     invokeExtension,
     addExtensionListener,
     removeExtensionListener,
-  }
+  };
 
   // Function body to run in the main world.
   // IMPORTANT: This must be self-contained, no closure variable will be included!
   function mainWorldScript() {
     // Use context bridge API or closure variable when context isolation is disabled.
-    const electron = ((window as any).electron as typeof electronContext) || electronContext
+    const electron = ((window as any).electron as typeof electronContext) || electronContext;
 
-    const chrome = window.chrome || {}
-    const extensionId = chrome.runtime?.id
+    const chrome = window.chrome || {};
+    const extensionId = chrome.runtime?.id;
 
     // NOTE: This uses a synchronous IPC to get the extension manifest.
     // To avoid this, JS bindings for RendererExtensionRegistry would be
     // required.
-    const manifest: chrome.runtime.Manifest =
-      (extensionId && chrome.runtime.getManifest()) || ({} as any)
+    const manifest: chrome.runtime.Manifest = (extensionId && chrome.runtime.getManifest()) || ({} as any);
     //取回message的内容，替换掉i18n的本地化方法，因为那个方法有问题
-    let localeMessages:any={}
+    let localeMessages: any = {};
     const invokeExtension =
       (fnName: string, opts: ExtensionMessageOptions = {}) =>
       (...args: any[]) =>
-        electron.invokeExtension(extensionId, fnName, opts, ...args)
-    invokeExtension( 'i18n.getAllMessage')((args:[])=>{
-      localeMessages=args
-    })//取回全部的message
+        electron.invokeExtension(extensionId, fnName, opts, ...args);
+    invokeExtension('i18n.getAllMessage')((args: []) => {
+      localeMessages = args;
+    }); //取回全部的message
     function imageData2base64(imageData: ImageData) {
-      const canvas = document.createElement('canvas')
-      const ctx = canvas.getContext('2d')
-      if (!ctx) return null
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return null;
 
-      canvas.width = imageData.width
-      canvas.height = imageData.height
-      ctx.putImageData(imageData, 0, 0)
+      canvas.width = imageData.width;
+      canvas.height = imageData.height;
+      ctx.putImageData(imageData, 0, 0);
 
-      return canvas.toDataURL()
+      return canvas.toDataURL();
     }
 
     class ExtensionEvent<T extends Function> implements chrome.events.Event<T> {
       constructor(private name: string) {}
 
       addListener(callback: T) {
-        electron.addExtensionListener(extensionId, this.name, callback)
+        electron.addExtensionListener(extensionId, this.name, callback);
       }
       removeListener(callback: T) {
-        electron.removeExtensionListener(extensionId, this.name, callback)
+        electron.removeExtensionListener(extensionId, this.name, callback);
       }
 
-      getRules(callback: (rules: chrome.events.Rule[]) => void): void
-      getRules(ruleIdentifiers: string[], callback: (rules: chrome.events.Rule[]) => void): void
+      getRules(callback: (rules: chrome.events.Rule[]) => void): void;
+      getRules(ruleIdentifiers: string[], callback: (rules: chrome.events.Rule[]) => void): void;
       getRules(ruleIdentifiers: any, callback?: any) {
-        throw new Error('Method not implemented.')
+        throw new Error('Method not implemented.');
       }
       hasListener(callback: T): boolean {
-        throw new Error('Method not implemented.')
+        throw new Error('Method not implemented.');
       }
-      removeRules(ruleIdentifiers?: string[] | undefined, callback?: (() => void) | undefined): void
-      removeRules(callback?: (() => void) | undefined): void
+      removeRules(ruleIdentifiers?: string[] | undefined, callback?: (() => void) | undefined): void;
+      removeRules(callback?: (() => void) | undefined): void;
       removeRules(ruleIdentifiers?: any, callback?: any) {
-        throw new Error('Method not implemented.')
+        throw new Error('Method not implemented.');
       }
-      addRules(
-        rules: chrome.events.Rule[],
-        callback?: ((rules: chrome.events.Rule[]) => void) | undefined
-      ): void {
-        throw new Error('Method not implemented.')
+      addRules(rules: chrome.events.Rule[], callback?: ((rules: chrome.events.Rule[]) => void) | undefined): void {
+        throw new Error('Method not implemented.');
       }
       hasListeners(): boolean {
-        throw new Error('Method not implemented.')
+        throw new Error('Method not implemented.');
       }
     }
 
@@ -133,15 +129,15 @@ export const injectExtensionAPIs = () => {
     }
 
     type DeepPartial<T> = {
-      [P in keyof T]?: DeepPartial<T[P]>
-    }
+      [P in keyof T]?: DeepPartial<T[P]>;
+    };
 
     type APIFactoryMap = {
       [apiName in keyof typeof chrome]: {
-        shouldInject?: () => boolean
-        factory: (base: DeepPartial<typeof chrome[apiName]>) => DeepPartial<typeof chrome[apiName]>
-      }
-    }
+        shouldInject?: () => boolean;
+        factory: (base: DeepPartial<(typeof chrome)[apiName]>) => DeepPartial<(typeof chrome)[apiName]>;
+      };
+    };
 
     /**
      * Factories for each additional chrome.* API.
@@ -160,19 +156,16 @@ export const injectExtensionAPIs = () => {
               serialize: (details: any) => {
                 if (details.imageData) {
                   if (details.imageData instanceof ImageData) {
-                    details.imageData = imageData2base64(details.imageData)
+                    details.imageData = imageData2base64(details.imageData);
                   } else {
-                    details.imageData = Object.entries(details.imageData).reduce(
-                      (obj: any, pair: any[]) => {
-                        obj[pair[0]] = imageData2base64(pair[1])
-                        return obj
-                      },
-                      {}
-                    )
+                    details.imageData = Object.entries(details.imageData).reduce((obj: any, pair: any[]) => {
+                      obj[pair[0]] = imageData2base64(pair[1]);
+                      return obj;
+                    }, {});
                   }
                 }
 
-                return [details]
+                return [details];
               },
             }),
 
@@ -189,9 +182,9 @@ export const injectExtensionAPIs = () => {
             disable: invokeExtension('browserAction.disable', { noop: true }),
 
             onClicked: new ExtensionEvent('browserAction.onClicked'),
-          }
+          };
 
-          return api
+          return api;
         },
       },
 
@@ -201,53 +194,50 @@ export const injectExtensionAPIs = () => {
             ...base,
             getAll: invokeExtension('commands.getAll'),
             onCommand: new ExtensionEvent('commands.onCommand'),
-          }
+          };
         },
       },
 
       contextMenus: {
         factory: (base) => {
-          let menuCounter = 0
+          let menuCounter = 0;
           const menuCallbacks: {
-            [key: string]: chrome.contextMenus.CreateProperties['onclick']
-          } = {}
-          const menuCreate = invokeExtension('contextMenus.create')
+            [key: string]: chrome.contextMenus.CreateProperties['onclick'];
+          } = {};
+          const menuCreate = invokeExtension('contextMenus.create');
 
-          let hasInternalListener = false
+          let hasInternalListener = false;
           const addInternalListener = () => {
             api.onClicked.addListener((info, tab) => {
-              const callback = menuCallbacks[info.menuItemId]
-              if (callback && tab) callback(info, tab)
-            })
-            hasInternalListener = true
-          }
+              const callback = menuCallbacks[info.menuItemId];
+              if (callback && tab) callback(info, tab);
+            });
+            hasInternalListener = true;
+          };
 
           const api = {
             ...base,
-            create: function (
-              createProperties: chrome.contextMenus.CreateProperties,
-              callback?: Function
-            ) {
+            create: function (createProperties: chrome.contextMenus.CreateProperties, callback?: Function) {
               if (typeof createProperties.id === 'undefined') {
-                createProperties.id = `${++menuCounter}`
+                createProperties.id = `${++menuCounter}`;
               }
               if (createProperties.onclick) {
-                if (!hasInternalListener) addInternalListener()
-                menuCallbacks[createProperties.id] = createProperties.onclick
-                delete createProperties.onclick
+                if (!hasInternalListener) addInternalListener();
+                menuCallbacks[createProperties.id] = createProperties.onclick;
+                delete createProperties.onclick;
               }
-              menuCreate(createProperties, callback)
-              return createProperties.id
+              menuCreate(createProperties, callback);
+              return createProperties.id;
             },
             update: invokeExtension('contextMenus.update', { noop: true }),
             remove: invokeExtension('contextMenus.remove'),
             removeAll: invokeExtension('contextMenus.removeAll'),
-            onClicked: new ExtensionEvent<
-              (info: chrome.contextMenus.OnClickData, tab: chrome.tabs.Tab) => void
-            >('contextMenus.onClicked'),
-          }
+            onClicked: new ExtensionEvent<(info: chrome.contextMenus.OnClickData, tab: chrome.tabs.Tab) => void>(
+              'contextMenus.onClicked',
+            ),
+          };
 
-          return api
+          return api;
         },
       },
 
@@ -261,7 +251,7 @@ export const injectExtensionAPIs = () => {
             remove: invokeExtension('cookies.remove'),
             getAllCookieStores: invokeExtension('cookies.getAllCookieStores'),
             onChanged: new ExtensionEvent('cookies.onChanged'),
-          }
+          };
         },
       },
 
@@ -270,13 +260,13 @@ export const injectExtensionAPIs = () => {
           return {
             ...base,
             isAllowedIncognitoAccess: () => false,
-            isAllowedFileSchemeAccess:async (callback:Function)=>{
-              return true//todo 此处应该还要兼容一下涉及到的文件协议
+            isAllowedFileSchemeAccess: async (callback: Function) => {
+              return true; //todo 此处应该还要兼容一下涉及到的文件协议
               //callback(true)
             },
             // TODO: Add native implementation
             getViews: () => [],
-          }
+          };
         },
       },
 
@@ -292,7 +282,7 @@ export const injectExtensionAPIs = () => {
             onClicked: new ExtensionEvent('notifications.onClicked'),
             onButtonClicked: new ExtensionEvent('notifications.onButtonClicked'),
             onClosed: new ExtensionEvent('notifications.onClosed'),
-          }
+          };
         },
       },
 
@@ -307,7 +297,7 @@ export const injectExtensionAPIs = () => {
             websites: {
               hyperlinkAuditingEnabled: new ChromeSetting(),
             },
-          }
+          };
         },
       },
 
@@ -320,19 +310,19 @@ export const injectExtensionAPIs = () => {
             //   manifest.current_locale='zh_CN'
             //   return manifest
             // }
-          }
+          };
         },
       },
 
       storage: {
         factory: (base) => {
-          const local = base && base.local
+          const local = base && base.local;
           return {
             ...base,
             // TODO: provide a backend for browsers to opt-in to
             managed: local,
             sync: local,
-          }
+          };
         },
       },
 
@@ -350,19 +340,19 @@ export const injectExtensionAPIs = () => {
                 api.query(
                   { active: true, windowId: chrome.windows.WINDOW_ID_CURRENT },
                   ([activeTab]: chrome.tabs.Tab[]) => {
-                    api.executeScript(activeTab.id, arg1, arg2)
-                  }
-                )
+                    api.executeScript(activeTab.id, arg1, arg2);
+                  },
+                );
               } else {
-                ;(base.executeScript as typeof chrome.tabs.executeScript)(
+                (base.executeScript as typeof chrome.tabs.executeScript)(
                   arg1 as number,
                   arg2 as chrome.tabs.InjectDetails,
-                  arg3 as () => {}
-                )
+                  arg3 as () => {},
+                );
               }
             },
             get: invokeExtension('tabs.get'),
-            getSelected:invokeExtension('tabs.getSelected'),//todo 确认是否正确返回
+            getSelected: invokeExtension('tabs.getSelected'), //todo 确认是否正确返回
             getCurrent: invokeExtension('tabs.getCurrent'),
             getAllInWindow: invokeExtension('tabs.getAllInWindow'),
             insertCSS: invokeExtension('tabs.insertCSS'),
@@ -377,8 +367,8 @@ export const injectExtensionAPIs = () => {
             onUpdated: new ExtensionEvent('tabs.onUpdated'),
             onActivated: new ExtensionEvent('tabs.onActivated'),
             onReplaced: new ExtensionEvent('tabs.onReplaced'),
-          }
-          return api
+          };
+          return api;
         },
       },
 
@@ -391,17 +381,13 @@ export const injectExtensionAPIs = () => {
             onBeforeNavigate: new ExtensionEvent('webNavigation.onBeforeNavigate'),
             onCommitted: new ExtensionEvent('webNavigation.onCommitted'),
             onCompleted: new ExtensionEvent('webNavigation.onCompleted'),
-            onCreatedNavigationTarget: new ExtensionEvent(
-              'webNavigation.onCreatedNavigationTarget'
-            ),
+            onCreatedNavigationTarget: new ExtensionEvent('webNavigation.onCreatedNavigationTarget'),
             onDOMContentLoaded: new ExtensionEvent('webNavigation.onDOMContentLoaded'),
             onErrorOccurred: new ExtensionEvent('webNavigation.onErrorOccurred'),
             onHistoryStateUpdated: new ExtensionEvent('webNavigation.onHistoryStateUpdated'),
-            onReferenceFragmentUpdated: new ExtensionEvent(
-              'webNavigation.onReferenceFragmentUpdated'
-            ),
+            onReferenceFragmentUpdated: new ExtensionEvent('webNavigation.onReferenceFragmentUpdated'),
             onTabReplaced: new ExtensionEvent('webNavigation.onTabReplaced'),
-          }
+          };
         },
       },
 
@@ -410,7 +396,7 @@ export const injectExtensionAPIs = () => {
           return {
             ...base,
             onHeadersReceived: new ExtensionEvent('webRequest.onHeadersReceived'),
-          }
+          };
         },
       },
 
@@ -420,7 +406,7 @@ export const injectExtensionAPIs = () => {
             ...base,
             WINDOW_ID_NONE: -1,
             WINDOW_ID_CURRENT: -2,
-            getCurrent:invokeExtension('windows.getCurrent'),
+            getCurrent: invokeExtension('windows.getCurrent'),
             get: invokeExtension('windows.get'),
             getLastFocused: invokeExtension('windows.getLastFocused'),
             getAll: invokeExtension('windows.getAll'),
@@ -430,43 +416,43 @@ export const injectExtensionAPIs = () => {
             onCreated: new ExtensionEvent('windows.onCreated'),
             onRemoved: new ExtensionEvent('windows.onRemoved'),
             onFocusChanged: new ExtensionEvent('windows.onFocusChanged'),
-          }
+          };
         },
       },
-    }
+    };
 
     // Initialize APIs
     Object.keys(apiDefinitions).forEach((key: any) => {
-      const apiName: keyof typeof chrome = key
-      const baseApi = chrome[apiName] as any
-      const api = apiDefinitions[apiName]!
+      const apiName: keyof typeof chrome = key;
+      const baseApi = chrome[apiName] as any;
+      const api = apiDefinitions[apiName]!;
 
       // Allow APIs to opt-out of being available in this context.
-      if (api.shouldInject && !api.shouldInject()) return
+      if (api.shouldInject && !api.shouldInject()) return;
       Object.defineProperty(chrome, apiName, {
         value: api.factory(baseApi),
         enumerable: true,
         configurable: true,
-      })
-    })
+      });
+    });
 
     // Remove access to internals
-    delete (window as any).electron
+    delete (window as any).electron;
 
-    Object.freeze(chrome)
+    Object.freeze(chrome);
 
-    void 0 // no return
+    void 0; // no return
   }
 
   try {
     // Expose extension IPC to main world
-    contextBridge.exposeInMainWorld('electron', electronContext)
+    contextBridge.exposeInMainWorld('electron', electronContext);
 
     // Mutate global 'chrome' object with additional APIs in the main world.
-    webFrame.executeJavaScript(`(${mainWorldScript}());`)
+    webFrame.executeJavaScript(`(${mainWorldScript}());`);
   } catch {
     // contextBridge threw an error which means we're in the main world so we
     // can just execute our function.
-    mainWorldScript()
+    mainWorldScript();
   }
-}
+};

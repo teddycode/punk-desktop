@@ -54,14 +54,20 @@
     background: var(--active) !important;
   }
 }
-
+.xt-default-btn {
+  background: var(--secondary-bg);
+  color: var(--primary-text);
+  &:hover {
+    background: var(--active);
+  }
+}
 .xt-error-btn {
-  background: rgba(255, 77, 79, 0.2) !important;
-  color: var(--error) !important;
+  background: rgba(255, 77, 79, 0.2);
+  color: var(--error);
 }
 .xt-warn-btn {
-  background: rgba(250, 173, 20, 0.2) !important;
-  color: var(--warning) !important;
+  background: rgba(250, 173, 20, 0.2);
+  color: var(--warning);
 }
 .xt-link-btn {
   background: rgba(80, 139, 254, 0.2);
@@ -106,12 +112,12 @@
 }
 // 点击状态
 .xt-active {
-  --tw-scale-x: 1.05;
-  --tw-scale-y: 1.05;
+  --tw-scale-x: 1.02;
+  --tw-scale-y: 1.02;
+  transition: all 0.2s;
   &:active {
-    transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-      rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-      scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x))
+      skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
   }
 }
 
@@ -164,5 +170,5 @@
   width: 120px !important;
 }
 .num-youshe {
-  font-family: "优设标题黑";
+  font-family: '优设标题黑';
 }

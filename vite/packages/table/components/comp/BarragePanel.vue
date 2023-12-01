@@ -1,120 +1,121 @@
 <template>
-  <div class="px-3 py-2" style="display: flex;flex-direction: column;height: 100%">
+  <div class="px-3 py-2" style="display: flex; flex-direction: column; height: 100%">
     <div>
       <HorizontalPanel v-model:select-type="currentChannel" :height="44" :navList="channelList"></HorizontalPanel>
     </div>
-    <div style="flex: 1;height:0;padding-top: 10px">
+    <div style="flex: 1; height: 0; padding-top: 10px">
       <TeamBarrage :key="key" :barrages="barrages" :loading="loading"></TeamBarrage>
     </div>
     <div class="mt-2">
-      <BarrageSender :currentChannel="currentChannel" @loadAllBarrages="loadAllBarrages"
-                     @loadTeamBarrage="loadTeamBarrage"></BarrageSender>
+      <BarrageSender
+        :currentChannel="currentChannel"
+        @loadAllBarrages="loadAllBarrages"
+        @loadTeamBarrage="loadTeamBarrage"
+      ></BarrageSender>
     </div>
   </div>
 </template>
 
 <script>
-import BarrageSender from './BarrageSender.vue'
-import TeamBarrage from './TeamBarrage.vue'
-import HorizontalPanel from '../HorizontalPanel.vue'
-import { mapActions, mapState } from 'pinia'
-import { teamStore } from '../../store/team'
-import { appStore } from '../../store'
+import BarrageSender from './BarrageSender.vue';
+import TeamBarrage from './TeamBarrage.vue';
+import HorizontalPanel from '../HorizontalPanel.vue';
+import { mapActions, mapState } from 'pinia';
+import { teamStore } from '../../store/team';
+import { appStore } from '../../store';
 
 export default {
   name: 'BarragePanel',
   components: { HorizontalPanel, TeamBarrage, BarrageSender },
   props: ['channels', 'defaultChannel'],
-  data () {
+  data() {
     return {
       loading: false,
       channelList: [
         {
           title: '全网',
-          name: 'all'
-        }, {
+          name: 'all',
+        },
+        {
           title: '小队',
-          name: 'team'
-        }
+          name: 'team',
+        },
       ],
       currentChannel: {
         name: 'all',
-        title: '全网'
+        title: '全网',
       },
       barragesAll: [],
       barragesTeam: [],
-      key: Date.now()
-    }
+      key: Date.now(),
+    };
   },
-  mounted () {
-    this.loading = true
-    this.CONST = tsbApi.barrage.CONST
+  mounted() {
+    this.loading = true;
+    this.CONST = tsbApi.barrage.CONST;
     if (this.defaultChannel === 'team') {
-      this.channelList = this.channelList.reverse()
-      this.currentChannel = { name: 'team', title: '小队' }
+      this.channelList = this.channelList.reverse();
+      this.currentChannel = { name: 'team', title: '小队' };
     }
-    this.loadAllBarrages().then()
+    this.loadAllBarrages().then();
     if (this.userInfo.uid) {
       this.loadTeamBarrage().then(() => {
-        this.loading = false
-      })
+        this.loading = false;
+      });
     }
   },
   watch: {
     currentChannel: {
-      handler () {
-        this.loading = true
-        this.key = Date.now()
-      }
-    }
+      handler() {
+        this.loading = true;
+        this.key = Date.now();
+      },
+    },
   },
   computed: {
     ...mapState(appStore, ['userInfo']),
     ...mapState(teamStore, ['my', 'myTeamNo', 'myTeam']),
-    barrages () {
+    barrages() {
       if (this.currentChannel.name === 'all') {
-        return this.barragesAll
+        return this.barragesAll;
       } else {
-        return this.barragesTeam
+        return this.barragesTeam;
       }
-    }
+    },
   },
   methods: {
     ...mapActions(teamStore, ['updateMy']),
-    async loadAllBarrages () {
-      this.loading = true
-      tsbApi.barrage.getList(this.CONST.CHANNEL.PUBLIC, 'table').then(rs => {
-        this.loading = false
+    async loadAllBarrages() {
+      this.loading = true;
+      tsbApi.barrage.getList(this.CONST.CHANNEL.PUBLIC, 'table').then((rs) => {
+        this.loading = false;
         if (rs.status) {
-          rs.data.forEach(item => {
-            item.create_time_text = tsbApi.util.friendlyDate(item.create_time)
-          })
-          this.barragesAll = rs.data
-
+          rs.data.forEach((item) => {
+            item.create_time_text = tsbApi.util.friendlyDate(item.create_time);
+          });
+          this.barragesAll = rs.data;
         }
-      })
+      });
     },
-    async loadTeamBarrage () {
-      await this.updateMy()
+    async loadTeamBarrage() {
+      await this.updateMy();
       if (this.myTeamNo) {
-        this.loading = true
-        tsbApi.barrage.getList(this.CONST.CHANNEL.TEAM, this.myTeamNo).then(rs => {
-          this.loading = false
+        this.loading = true;
+        tsbApi.barrage.getList(this.CONST.CHANNEL.TEAM, this.myTeamNo).then((rs) => {
+          this.loading = false;
           if (rs.status) {
-            rs.data.forEach(item => {
-              item.create_time_text = tsbApi.util.friendlyDate(item.create_time)
-            })
-            this.barragesTeam = rs.data
+            rs.data.forEach((item) => {
+              item.create_time_text = tsbApi.util.friendlyDate(item.create_time);
+            });
+            this.barragesTeam = rs.data;
           }
-        })
+        });
       } else {
-        this.barragesTeam = []
+        this.barragesTeam = [];
       }
     },
-  }
-}
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,68 +1,75 @@
 <template>
   <div>
-
     <Widget ref="homelSlotRef" :customData="customData" :customIndex="customIndex" :desk="desk" :options="options">
       <div class="icon-topline">
         <pushpin-outlined></pushpin-outlined>
       </div>
       <div class="top-col">
         <div class="col-left">
-                <span :class="['item', { action: actionIndex == 1 }]"
-                      class="flex-1 h-full nav-item flex justify-center items-center relative pointer span-flex"
-                      @click="onChangeTopIndex(1)">
-                    <div class="span-icon">
-                        <clock-circle-outlined/>
-                    </div>
-                    剪贴板历史</span>
-          <span :class="['item', { action: actionIndex == 2 }]"
-                class="flex-1 h-full nav-item flex justify-center items-center relative pointer span-flex"
-                @click="onChangeTopIndex(2)">
-                    <div class="span-icon">
-                        <star-outlined/>
-                    </div>
-                    收藏</span>
+          <span
+            :class="['item', { action: actionIndex == 1 }]"
+            class="flex-1 h-full nav-item flex justify-center items-center relative pointer span-flex"
+            @click="onChangeTopIndex(1)"
+          >
+            <div class="span-icon">
+              <clock-circle-outlined />
+            </div>
+            剪贴板历史</span
+          >
+          <span
+            :class="['item', { action: actionIndex == 2 }]"
+            class="flex-1 h-full nav-item flex justify-center items-center relative pointer span-flex"
+            @click="onChangeTopIndex(2)"
+          >
+            <div class="span-icon">
+              <star-outlined />
+            </div>
+            收藏</span
+          >
         </div>
         <div class="col-right">
           <!-- 菜单 -->
           <div class="icon-right" @click="settingVisible = !settingVisible">
-            <appstore-outlined/>
+            <appstore-outlined />
           </div>
           <div class="icon-right">
-            <search-outlined/>
+            <search-outlined />
           </div>
         </div>
       </div>
       <div class="clip-body">
-        <div v-for="(item,index) in clipboardShowList" :key="index">
+        <div v-for="(item, index) in clipboardShowList" :key="index">
           <!-- 文本框 -->
           <div v-if="item.type == 'txt'" class="col">
             <div class="icon-sign active-index">
-              <AlignLeftOutlined/>
+              <AlignLeftOutlined />
               文本
             </div>
-            <span class="type-text">file:///C:/Users/Administrator/Desktop/(23-09-09)%E5%89%AA%E8%B4%B4%E6%9D%BF%E5%B0%8F%E7%BB%84%E4%BB%B6/index.html#p1</span>
+            <span class="type-text"
+              >file:///C:/Users/Administrator/Desktop/(23-09-09)%E5%89%AA%E8%B4%B4%E6%9D%BF%E5%B0%8F%E7%BB%84%E4%BB%B6/index.html#p1</span
+            >
           </div>
 
           <!-- 图片框 -->
           <div v-if="item.type == 'image'" class="col">
             <div class="icon-sign active-index">
-              <PictureOutlined/>
+              <PictureOutlined />
               图片
             </div>
-            <img :src="item.imageUrl" alt="">
+            <img :src="item.imageUrl" alt="" />
           </div>
 
           <!-- 文件框 -->
           <div v-if="item.type == 'file'" class="col">
             <div class="icon-sign active-index">
-              <FileOutlined/>
+              <FileOutlined />
               文件
             </div>
-            <vue-custom-scrollbar :settings="settingsScroller" class="" style="height: 100%;width: 100%">
+            <vue-custom-scrollbar :settings="settingsScroller" class="" style="height: 100%; width: 100%">
               <div class="row-body">
                 <a-row class="row-col">
                   <a-col :span="3" class="text-left pt-2 mr-2">
-                    <file-outlined style="font-size: 24px"/>
+                    <file-outlined style="font-size: 24px" />
                   </a-col>
                   <a-col>
                     <div class="font-bold font-14 text-left">
@@ -80,47 +87,47 @@
           <!-- 音频框 -->
           <div v-if="item.type == 'audio'" class="col">
             <div class="icon-sign active-index">
-              <CustomerServiceOutlined/>
+              <CustomerServiceOutlined />
               音频
             </div>
-            <ClipAudio :fileUrl="item.audioUrl" class="flex items-center justify-center"
-                       style="width:302px;height:148px;"></ClipAudio>
+            <ClipAudio
+              :fileUrl="item.audioUrl"
+              class="flex items-center justify-center"
+              style="width: 302px; height: 148px"
+            ></ClipAudio>
           </div>
 
           <!-- 视频框 -->
           <div v-if="item.type == 'video'" class="col">
             <div class="icon-sign active-index">
-              <VideoCameraOutlined/>
+              <VideoCameraOutlined />
               视频
             </div>
-            <ClipVideo :videoUrl="item.videoUrl"
-                       style="width: 266px;height: 127px;"></ClipVideo>
+            <ClipVideo :videoUrl="item.videoUrl" style="width: 266px; height: 127px"></ClipVideo>
           </div>
         </div>
-
-
       </div>
-
-
     </Widget>
   </div>
   <!-- 设置面板 -->
   <a-drawer v-model:visible="settingVisible" :width="500" placement="right" title="设置">
-    <vue-custom-scrollbar :settings="settingsScroller" style="height: 100%;">
-
-        <span v-for="(item, index) in todoList" :key="index"
-              :class="selectTodo.id === item.id ? 'active-index':''"
-              class="span-list mb-4 text-center pointer h-12 xt-bg-2 rounded-lg py-3"
-              @click="onChangeTodo(item.id)">
-        <component :is="item.icon" class="mr-1"/>
-        {{ item.title }}</span>
-
+    <vue-custom-scrollbar :settings="settingsScroller" style="height: 100%">
+      <span
+        v-for="(item, index) in todoList"
+        :key="index"
+        :class="selectTodo.id === item.id ? 'active-index' : ''"
+        class="span-list mb-4 text-center pointer h-12 xt-bg-2 rounded-lg py-3"
+        @click="onChangeTodo(item.id)"
+      >
+        <component :is="item.icon" class="mr-1" />
+        {{ item.title }}</span
+      >
     </vue-custom-scrollbar>
   </a-drawer>
 </template>
 
 <script>
-import Widget from '../../card/Widget.vue'
+import Widget from '../../card/Widget.vue';
 import {
   AlignLeftOutlined,
   AppstoreOutlined,
@@ -131,16 +138,16 @@ import {
   PushpinOutlined,
   SearchOutlined,
   StarOutlined,
-  VideoCameraOutlined
-} from '@ant-design/icons-vue'
+  VideoCameraOutlined,
+} from '@ant-design/icons-vue';
 
 // video组件
-import ClipVideo from './ClipVideo.vue'
+import ClipVideo from './ClipVideo.vue';
 // audio组件
-import ClipAudio from './ClipAudio.vue'
+import ClipAudio from './ClipAudio.vue';
 // 文件组件
 // import VueCustomScrollbar from "../../../../../../../src/components/vue-scrollbar.vue";
-import VueCustomScrollbar from '../../../../../src/components/vue-scrollbar.vue'
+import VueCustomScrollbar from '../../../../../src/components/vue-scrollbar.vue';
 // 导入剪贴板测试数据
 
 export default {
@@ -159,7 +166,6 @@ export default {
     ClipVideo,
     ClipAudio,
     VueCustomScrollbar,
-
   },
   props: {
     customIndex: {
@@ -168,8 +174,7 @@ export default {
     },
     customData: {
       type: Object,
-      default: () => {
-      },
+      default: () => {},
     },
     menuList: {
       type: Array,
@@ -181,7 +186,7 @@ export default {
       type: Boolean,
     },
   },
-  data () {
+  data() {
     return {
       settingVisible: false,
       options: {
@@ -234,14 +239,19 @@ export default {
       clipboardShowList: [
         {
           audioUrl: 'https://cdn.pixabay.com/audio/2023/05/02/audio_28440129d6.mp3',
-          type: 'audio', capacity: '419B',
-          icon: 'erji1', title: '音频', content: ''
+          type: 'audio',
+          capacity: '419B',
+          icon: 'erji1',
+          title: '音频',
+          content: '',
         },
         {
-          title: '视频', icon: 'video', capacity: '4.0MB',
+          title: '视频',
+          icon: 'video',
+          capacity: '4.0MB',
           videoUrl: 'https://up.apps.vip/lively/energy-field-74933.mp4',
           content: 'energy-field-74933.mp4',
-          type: 'video'
+          type: 'video',
         },
         {
           title: '文件',
@@ -250,7 +260,7 @@ export default {
           capacity: '1.2MB',
           content: '磐古跨链客户端概念图.pdf',
           picIcon: 'pdf',
-          type: 'file'
+          type: 'file',
         },
         // {
         //     title:'文本',icon:'file',time:'15秒前',capacity:'1.2MB',content:'磐古跨链客户端概念图.pdf',
@@ -263,31 +273,27 @@ export default {
           capacity: '1.2MB',
           content: '磐古跨链客户端概念图.pdf',
           imageUrl: '//n.sinaimg.cn/games/transform/639/w400h239/20220624/ba99-9f5b6cb9c1cd9eaabec96eaf44a5bf14.jpg',
-          type: 'image'
-        }
-
-      ]
-    }
+          type: 'image',
+        },
+      ],
+    };
   },
-  async mounted () {
-
-  },
+  async mounted() {},
   methods: {
     // 切换组件 剪贴板历史 和 收藏
-    onChangeTopIndex (index) {
-      this.actionIndex = index
+    onChangeTopIndex(index) {
+      this.actionIndex = index;
     },
     // 切换设置 剪贴板类型
-    onChangeTodo (index) {
-      this.selectTodo = this.todoList[index - 1]
-      this.settingVisible = false
-    }
-  }
-}
+    onChangeTodo(index) {
+      this.selectTodo = this.todoList[index - 1];
+      this.settingVisible = false;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-
 .icon-topline {
   position: absolute;
   top: 16px;
@@ -314,13 +320,12 @@ export default {
   border-radius: 8px;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.30);
+  background: rgba(0, 0, 0, 0.3);
   display: flex;
   // overflow-x: auto;
   white-space: nowrap;
   overflow: hidden;
 }
-
 
 .col-left > span {
   text-align: center;
@@ -334,7 +339,6 @@ export default {
 }
 
 .col-left span {
-
   font-size: 16px;
   color: rgba(255, 255, 255, 0.85);
   text-align: center;
@@ -350,14 +354,14 @@ export default {
 .span-icon > span {
   position: relative;
   top: 1px;
-  left: -7px
+  left: -7px;
   // float: left;
 }
 
 .action {
   // width: 100%;
   // height: 100%;
-  background: #508BFE;
+  background: #508bfe;
   cursor: pointer;
   border-radius: 8px;
   flex: 1;
@@ -375,7 +379,7 @@ export default {
   margin-left: 12px;
   width: 44px;
   height: 44px;
-  background: rgba(0, 0, 0, 0.30);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 8px;
   text-align: center;
   line-height: 44px;
@@ -388,7 +392,6 @@ export default {
 
 .clip-body > div:nth-of-type(2n) {
   margin-left: 12px;
-
 }
 
 .clip-body .col {
@@ -400,7 +403,7 @@ export default {
   display: flex;
   align-items: center;
   position: relative;
-  background: rgba(0, 0, 0, 0.30);
+  background: rgba(0, 0, 0, 0.3);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -460,9 +463,7 @@ export default {
   width: 230px;
   max-height: 120px;
   // min-height: 50px;
-
 }
-
 
 .row-body {
   display: flex;
@@ -478,6 +479,5 @@ export default {
   padding: 3px 10px;
   background-color: rgba(0, 0, 0, 0.3);
   border-radius: 8px;
-
 }
 </style>

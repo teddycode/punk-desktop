@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import { ethers } from 'ethers'
-import { governToken, tokenPower, userAddr, } from '@page/core/Governance/services/address'
+import { ethers } from 'ethers';
+import { governToken, tokenPower, userAddr } from '@page/core/Governance/services/address';
 
 export default {
   name: 'selfInfo',
@@ -18,15 +18,15 @@ export default {
     return {
       balance: null, // 用于存储从后台获取的数据
       votingPower: null,
-    }
+    };
   },
   async mounted() {
-    let temp = await governToken.balanceOf(userAddr)
-    this.balance = ethers.utils.formatEther(temp)
-    temp = await tokenPower.getCurrentVotingPower(userAddr)
-    this.votingPower = ethers.utils.formatEther(temp)
-  }
-}
+    let temp = await governToken.balanceOf(userAddr);
+    this.balance = ethers.utils.formatEther(temp);
+    temp = await tokenPower.getCurrentVotingPower(userAddr);
+    this.votingPower = ethers.utils.formatEther(temp);
+  },
+};
 </script>
 
 <style scoped>

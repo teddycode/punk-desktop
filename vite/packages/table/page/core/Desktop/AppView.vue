@@ -10,17 +10,14 @@
       </div>
     </div>
     <div class="vnc-view-window">
-      <VueVnc
-          v-if="true"
-          :url="'ws://localhost:5901'"
-      ></VueVnc>
+      <VueVnc v-if="true" :url="'ws://localhost:5901'"></VueVnc>
     </div>
   </background>
 </template>
 
 <script>
-import Background from '@page/core/components/Background.vue'
-import VueVnc from './components/vue-vnc.vue'
+import Background from '@page/core/components/Background.vue';
+import VueVnc from './components/vue-vnc.vue';
 
 export default {
   name: 'AppView',
@@ -29,30 +26,28 @@ export default {
     Background,
   },
   data() {
-    let params = this.$router.params
-    console.log('参数：', params)
+    let params = this.$router.params;
+    console.log('参数：', params);
     return {
       name: params?.name,
       path: params?.path,
       cmd: params?.cmd,
-    }
+    };
   },
   mounted() {
     // 发送指令执行程序
     // window.electronAPI.onRunApplication(this.path,this.cmd);
   },
   methods: {
-    connect() {
-    },
+    connect() {},
 
-    disconnect() {
-    },
+    disconnect() {},
     onFreshView() {
       // 刷新vnc连接
-      console.log('点击了刷新')
+      console.log('点击了刷新');
     },
-  }
-}
+  },
+};
 </script>
 
 <style scoped>

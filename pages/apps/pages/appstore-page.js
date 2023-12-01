@@ -1,5 +1,4 @@
-const appstoreTpl =
-  ` <div style="width: 100%"><a-layout>
+const appstoreTpl = ` <div style="width: 100%"><a-layout>
     <a-layout-header style="background: #fff; padding: 0">
 
       <template>
@@ -191,11 +190,11 @@ const appstoreTpl =
 </a-drawer>
 
 </div>
-`
+`;
 module.exports = Vue.component('appstore-page', {
   name: 'appstore-page',
   template: appstoreTpl,
-  data () {
+  data() {
     return {
       visible: false,
       shopcartApps: [], //购物车内的app
@@ -207,36 +206,35 @@ module.exports = Vue.component('appstore-page', {
       visibleCart: false,
       quickDrawerVisible: false,
       btnText: '添加收藏',
-      app: {}
-    }
+      app: {},
+    };
   },
   computed: {
     allApps: {
       get: function () {
         if (typeof window.$appsApiData == 'undefined' || window.$appsApiData == null) {
-          return window.nativeData.allApps
+          return window.nativeData.allApps;
         }
-        return window.$appsApiData.allApps
-      }
+        return window.$appsApiData.allApps;
+      },
     },
     appUpdateTime: {
       get: function () {
         if (typeof window.$appsApiData == 'undefined' || window.$appsApiData == null) {
-          return window.nativeData.updateTime
+          return window.nativeData.updateTime;
         } else {
-          return window.$appsApiData.updateTime
+          return window.$appsApiData.updateTime;
         }
-
-      }
-    }
+      },
+    },
   },
-  mounted () {
-    this.myApps = []
-    this.load()
+  mounted() {
+    this.myApps = [];
+    this.load();
   },
   methods: {
-    showModal () {
-      this.visible = true
+    showModal() {
+      this.visible = true;
     },
     load: function () {
       // window.$appsRestore.restoreFromDB().then((data) => {
@@ -247,139 +245,140 @@ module.exports = Vue.component('appstore-page', {
       //   this.myApps = []
       // })
     },
-    showDrawer (app) {
-      this.drawerApp = null
-      this.drawerApp = app
-      console.log(this.drawerApp)
-      this.drawerVisible = true
+    showDrawer(app) {
+      this.drawerApp = null;
+      this.drawerApp = app;
+      console.log(this.drawerApp);
+      this.drawerVisible = true;
     },
-    showDrawerCart () {
-      this.visibleCart = true
+    showDrawerCart() {
+      this.visibleCart = true;
     },
-    onClose () {
-      this.drawerVisible = false
+    onClose() {
+      this.drawerVisible = false;
     },
-    onCloseCart () {
-      this.visibleCart = false
+    onCloseCart() {
+      this.visibleCart = false;
     },
     //移入app时的菜单显示
-    show (app) {
-      this.currentApp = app
-      this.btnText = this.isInMyApps(app) == -1 ? '添加收藏' : '移出收藏'
+    show(app) {
+      this.currentApp = app;
+      this.btnText = this.isInMyApps(app) == -1 ? '添加收藏' : '移出收藏';
     },
-    hide (obj) {
-      this.currentApp = null
+    hide(obj) {
+      this.currentApp = null;
     },
     //添加到购物车
-    addAppToCart (app) {
+    addAppToCart(app) {
       if (this.shopcartApps.indexOf(app) == -1)
         //如果不在，就添加
-        this.shopcartApps.push(app)
+        this.shopcartApps.push(app);
       else {
         //如果已经有了，就删除
-        this.shopcartApps.splice(this.shopcartApps.indexOf(app), 1)
+        this.shopcartApps.splice(this.shopcartApps.indexOf(app), 1);
       }
     },
     //判断是否是我的应用
-    isInMyApps () {
-
+    isInMyApps() {
       if (this.currentApp == null) {
-        return -1
+        return -1;
       }
-      let apps = this.myApps
-      let app = this.currentApp
-      let findIndex = -1
+      let apps = this.myApps;
+      let app = this.currentApp;
+      let findIndex = -1;
       apps.forEach(function (item, index) {
-        if (item.name == app.name)
-          findIndex = index
-      })
-      return findIndex
-
+        if (item.name == app.name) findIndex = index;
+      });
+      return findIndex;
     },
     //检查是否在dexie的myapp中
-    checkInMyApps (app) {
-      if (typeof this.myApps == 'undefined')
-        return -1
-      let apps = this.myApps
-      let findIndex = -1
+    checkInMyApps(app) {
+      if (typeof this.myApps == 'undefined') return -1;
+      let apps = this.myApps;
+      let findIndex = -1;
       apps.forEach(function (item, index) {
-        if (item.name == app.name)
-          findIndex = index
-      })
-      return findIndex
+        if (item.name == app.name) findIndex = index;
+      });
+      return findIndex;
     },
     //收藏app
-    addApp (app) {
-      app.listId = 0
-      this.currentApp = app
-      this.addCurrentApp()
+    addApp(app) {
+      app.listId = 0;
+      this.currentApp = app;
+      this.addCurrentApp();
     },
-    addShopcartApps () {
-      let addCount = 0
-      let hasCount = 0
-      let that = this
+    addShopcartApps() {
+      let addCount = 0;
+      let hasCount = 0;
+      let that = this;
       this.shopcartApps.forEach(function (app) {
         if (that.isInMyApps(app) == -1) {
-          app.listId = 0
-          that.myApps.push(app)
-          window.$appsRestore.addApp(app)
-          addCount++
+          app.listId = 0;
+          that.myApps.push(app);
+          window.$appsRestore.addApp(app);
+          addCount++;
         } else {
-          hasCount++
+          hasCount++;
         }
-      })
-      let text = '添加了' + addCount + '个应用。'
+      });
+      let text = '添加了' + addCount + '个应用。';
       if (hasCount > 0) {
-        text = '选中' + that.shopcartApps.length + '个应用。由于购物车中' + hasCount + '个应用已经存在，实际添加了' +
-          addCount + '个应用。'
+        text =
+          '选中' +
+          that.shopcartApps.length +
+          '个应用。由于购物车中' +
+          hasCount +
+          '个应用已经存在，实际添加了' +
+          addCount +
+          '个应用。';
       }
-      this.shopcartApps = []
-      this.visibleCart = false
-      that.$message.success(text)
+      this.shopcartApps = [];
+      this.visibleCart = false;
+      that.$message.success(text);
     },
     //收藏移除app dexie操作
-    addCurrentApp () {
-      let that = this
-      let app = this.currentApp
-      let index = this.isInMyApps(app)
+    addCurrentApp() {
+      let that = this;
+      let app = this.currentApp;
+      let index = this.isInMyApps(app);
       if (index != -1) {
-        this.myApps.splice(index, 1)
-        that.$message.warning('移除了应用：' + app.name + '')
-        window.$appsRestore.deleteApp(app.name)
-        this.btnText = '添加收藏'
+        this.myApps.splice(index, 1);
+        that.$message.warning('移除了应用：' + app.name + '');
+        window.$appsRestore.deleteApp(app.name);
+        this.btnText = '添加收藏';
       } else {
-        let apps = this.myApps
-        apps.unshift(app)
-        this.myApps = apps
-        this.btnText = '移出收藏'
-        app.listId = 0
-        window.$appsRestore.addApp(app)
-        this.$message.success('添加了应用：' + app.name)
+        let apps = this.myApps;
+        apps.unshift(app);
+        this.myApps = apps;
+        this.btnText = '移出收藏';
+        app.listId = 0;
+        window.$appsRestore.addApp(app);
+        this.$message.success('添加了应用：' + app.name);
       }
     },
     //添加应用到任务栏
-    addTask (app) {
+    addTask(app) {
       postMessage({
         message: 'addTask',
         name: app.name,
         url: app.url,
-        icon: app.icon
-      })
-      this.$message.success('成功在左侧栏添加了应用：' + app.name + '。')
+        icon: app.icon,
+      });
+      this.$message.success('成功在左侧栏添加了应用：' + app.name + '。');
     },
     //发送消息给preload，调取selectTask的窗体
-    selectTask () {
+    selectTask() {
       postMessage({
-        'message': 'selectTask',
-        tabs: this.shopcartApps
-      })
+        message: 'selectTask',
+        tabs: this.shopcartApps,
+      });
     },
-    openShopcart () {
+    openShopcart() {
       postMessage({
         message: 'addTaskTabs',
-        tabs: this.shopcartApps
-      })
-      this.$message.success('成功在左侧栏添加了一组应用，本次共添加' + this.shopcartApps.length + '个应用。')
-    }
-  }
-})
+        tabs: this.shopcartApps,
+      });
+      this.$message.success('成功在左侧栏添加了一组应用，本次共添加' + this.shopcartApps.length + '个应用。');
+    },
+  },
+});

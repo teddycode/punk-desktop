@@ -1,13 +1,9 @@
-<template>
-  学习
-</template>
+<template>学习</template>
 
 <script>
 export default {
-  name: 'Learn'
-}
+  name: 'Learn',
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

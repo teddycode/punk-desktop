@@ -9,42 +9,52 @@ var languages = {
 
 */
 
-function getCurrentLanguage () {
+function getCurrentLanguage() {
   // TODO add a setting to change the language to something other than the default
 
-  var language = 'en-US' // default
+  var language = 'en-US'; // default
 
-  if (typeof navigator !== 'undefined') { // renderer process
-    language = navigator.language
-  } else if (typeof app !== 'undefined') { // main process
-    language = app.getLocale()
+  if (typeof navigator !== 'undefined') {
+    // renderer process
+    language = navigator.language;
+  } else if (typeof app !== 'undefined') {
+    // main process
+    language = app.getLocale();
   } else {
     // nothing worked, fall back to default
   }
 
-  return language
+  return language;
 }
 
-var userLanguage = null
+var userLanguage = null;
 
-function l (stringId) {
+function l(stringId) {
   if (!userLanguage) {
-    userLanguage = getCurrentLanguage()
+    userLanguage = getCurrentLanguage();
   }
 
-  var userBaseLanguage = userLanguage.split('-')[0] // examples: es-419 -> es, nl-BE -> nl
+  var userBaseLanguage = userLanguage.split('-')[0]; // examples: es-419 -> es, nl-BE -> nl
 
   // get the translated string for the given ID
 
   // try an exact match for the user language
-  if (languages[userLanguage] && languages[userLanguage].translations[stringId] && languages[userLanguage].translations[stringId].unsafeHTML !== null) {
-    return languages[userLanguage].translations[stringId]
+  if (
+    languages[userLanguage] &&
+    languages[userLanguage].translations[stringId] &&
+    languages[userLanguage].translations[stringId].unsafeHTML !== null
+  ) {
+    return languages[userLanguage].translations[stringId];
     // try a match for the base language, if the language code is for a particular region
-  } else if (languages[userBaseLanguage] && languages[userBaseLanguage].translations[stringId] && languages[userBaseLanguage].translations[stringId].unsafeHTML !== null) {
-    return languages[userBaseLanguage].translations[stringId]
+  } else if (
+    languages[userBaseLanguage] &&
+    languages[userBaseLanguage].translations[stringId] &&
+    languages[userBaseLanguage].translations[stringId].unsafeHTML !== null
+  ) {
+    return languages[userBaseLanguage].translations[stringId];
   } else {
     // fallback to en-US
-    return languages['en-US'].translations[stringId]
+    return languages['en-US'].translations[stringId];
   }
 }
 
@@ -53,47 +63,50 @@ insert a localized string into all elements with a [data-string] attribute
 set the correct attributes for all elements with a [data-label] attribute
 set the value attribute for all elements with a [data-value] attribute
  */
-function init(){
+function init() {
   if (typeof document !== 'undefined') {
     if (languages[getCurrentLanguage()] && languages[getCurrentLanguage()].rtl) {
-      document.body.classList.add('rtl')
+      document.body.classList.add('rtl');
     }
 
     document.querySelectorAll('[data-string]').forEach(function (el) {
-      var str = l(el.getAttribute('data-string'))
+      var str = l(el.getAttribute('data-string'));
       if (typeof str === 'string') {
-        el.textContent = str
+        el.textContent = str;
       } else if (str && str.unsafeHTML && el.hasAttribute('data-allowHTML')) {
-        el.innerHTML = str.unsafeHTML
+        el.innerHTML = str.unsafeHTML;
       }
-    })
+    });
     document.querySelectorAll('[data-label]').forEach(function (el) {
-      var str = l(el.getAttribute('data-label'))
+      var str = l(el.getAttribute('data-label'));
       if (typeof str === 'string') {
-        el.setAttribute('title', str)
-        el.setAttribute('aria-label', str)
+        el.setAttribute('title', str);
+        el.setAttribute('aria-label', str);
       } else {
-        throw new Error('invalid data-label value: ' + str)
+        throw new Error('invalid data-label value: ' + str);
       }
-    })
+    });
     document.querySelectorAll('[data-value]').forEach(function (el) {
-      var str = l(el.getAttribute('data-value'))
+      var str = l(el.getAttribute('data-value'));
       if (typeof str === 'string') {
-        el.setAttribute('value', str)
+        el.setAttribute('value', str);
       } else {
-        throw new Error('invalid data-value value: ' + str)
+        throw new Error('invalid data-value value: ' + str);
       }
-    })
+    });
   }
 }
-init()
+init();
 if (typeof window !== 'undefined') {
-  window.l = l
-  window.userLanguage = userLanguage
-  window.getCurrentLanguage = getCurrentLanguage
+  window.l = l;
+  window.userLanguage = userLanguage;
+  window.getCurrentLanguage = getCurrentLanguage;
 }
-if(typeof(module) !=='undefined'){
-  module.exports={
-    l,userLanguage,getCurrentLanguage,init
-  }
+if (typeof module !== 'undefined') {
+  module.exports = {
+    l,
+    userLanguage,
+    getCurrentLanguage,
+    init,
+  };
 }

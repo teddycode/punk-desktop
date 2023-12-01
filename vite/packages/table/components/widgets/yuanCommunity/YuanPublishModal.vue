@@ -1,110 +1,140 @@
 <template>
   <Modal :maskNoClose="true" animationName="t-b-close" class="">
     <div class="w-[500px] pl-4 pr-4 content">
-      <div class="flex justify-between w-full h-[64px] items-center ">
+      <div class="flex justify-between w-full h-[64px] items-center">
         <a-dropdown
-            overlayStyle="background-color: var(--primary-bg); padding-left:3px ;padding-right:3px; width: 100px;"
-            placement="bottom"
-            trigger="click">
+          overlayStyle="background-color: var(--primary-bg); padding-left:3px ;padding-right:3px; width: 100px;"
+          placement="bottom"
+          trigger="click"
+        >
           <div class="flex items-center justify-center w-full">
             <div class="ml-20 font-16 xt-text">{{ defaultType.title }}</div>
-            <newIcon class="ml-1 xt-text" icon="fluent:caret-down-12-filled" style="font-size: 20px;"/>
+            <newIcon class="ml-1 xt-text" icon="fluent:caret-down-12-filled" style="font-size: 20px" />
           </div>
           <template #overlay>
-            <a-menu class="text-center xt-bg"
-                    style="display: flex;justify-content: center;flex-direction: column;align-items: center;">
-              <a-menu-item v-for="(item, index) in publishType" :key="index"
-                           @click="handleMenuItemClick(index)">
+            <a-menu
+              class="text-center xt-bg"
+              style="display: flex; justify-content: center; flex-direction: column; align-items: center"
+            >
+              <a-menu-item v-for="(item, index) in publishType" :key="index" @click="handleMenuItemClick(index)">
                 <span class="ml-12 text-center xt-text">{{ item.title }}</span>
               </a-menu-item>
             </a-menu>
           </template>
         </a-dropdown>
 
-        <xt-button class="flex items-center justify-center border-0 rounded-md xt-bg-2 pointer"
-                   style="width: 40px;height: 40px; flex-shrink: 0;" @click="handleFullScreen">
-          <newIcon v-if="!fullScreen" class="mt-1 text-xl text-center xt-text pointer"
-                   icon="fluent:full-screen-maximize-16-filled"></newIcon>
-          <newIcon v-else class="mt-1 text-xl text-center xt-text pointer"
-                   icon="fluent:full-screen-minimize-16-filled"></newIcon>
+        <xt-button
+          class="flex items-center justify-center border-0 rounded-md xt-bg-2 pointer"
+          style="width: 40px; height: 40px; flex-shrink: 0"
+          @click="handleFullScreen"
+        >
+          <newIcon
+            v-if="!fullScreen"
+            class="mt-1 text-xl text-center xt-text pointer"
+            icon="fluent:full-screen-maximize-16-filled"
+          ></newIcon>
+          <newIcon
+            v-else
+            class="mt-1 text-xl text-center xt-text pointer"
+            icon="fluent:full-screen-minimize-16-filled"
+          ></newIcon>
         </xt-button>
-        <xt-button class="flex items-center justify-center ml-2 border-0 rounded-md xt-bg-2 pointer"
-                   style="width: 40px;height: 40px;flex-shrink: 0;" @click="handleOk">
-          <newIcon class="mt-1 text-xl text-center xt-text pointer" icon="akar-icons:cross"/>
+        <xt-button
+          class="flex items-center justify-center ml-2 border-0 rounded-md xt-bg-2 pointer"
+          style="width: 40px; height: 40px; flex-shrink: 0"
+          @click="handleOk"
+        >
+          <newIcon class="mt-1 text-xl text-center xt-text pointer" icon="akar-icons:cross" />
         </xt-button>
-
       </div>
       <component :is="currentComponent"></component>
       <!-- <DynamicItem v-if="defaultType.value='dynamic'"/>
       <VideoItem v-if="defaultType.value='video'"/>
       <PostItem v-if="defaultType.value='post'"/> -->
-      <div class="flex items-center justify-between h-[56px] ">
+      <div class="flex items-center justify-between h-[56px]">
         <!-- <a-button type="text" class=" xt-text xt-bg-2 font-14"
             style="border-radius:10px ; color: var(--secondary-text) !important;">磐古跨链客户端/桌面分享 ></a-button> -->
-        <a-select v-model:value="cascaderValue" :bordered="false" :options="options" :placeholder="holderName"
-                  change-on-select
-                  style=" font-size: 16px; border-radius: 10px;width: 120px;background: var(--secondary-bg);height: 40px;"
-                  @change="handleChange">
+        <a-select
+          v-model:value="cascaderValue"
+          :bordered="false"
+          :options="options"
+          :placeholder="holderName"
+          change-on-select
+          style="font-size: 16px; border-radius: 10px; width: 120px; background: var(--secondary-bg); height: 40px"
+          @change="handleChange"
+        >
           <template #suffixIcon>
-            <newIcon class="rotate-180 xt-text-2" icon="fluent:chevron-left-16-filled"
-                     style="font-size: 20px;vertical-align: super;margin-top: -3px;"></newIcon>
+            <newIcon
+              class="rotate-180 xt-text-2"
+              icon="fluent:chevron-left-16-filled"
+              style="font-size: 20px; vertical-align: super; margin-top: -3px"
+            ></newIcon>
           </template>
         </a-select>
         <div class="flex items-center">
-          <xt-button class=" xt-text xt-bg-2"
-                     style="border-radius:10px ; color: var(--secondary-text) !important;width: 64px; height: 40px;"
-                     type="text"
-                     @click="handleOk">取消
+          <xt-button
+            class="xt-text xt-bg-2"
+            style="border-radius: 10px; color: var(--secondary-text) !important; width: 64px; height: 40px"
+            type="text"
+            @click="handleOk"
+            >取消
           </xt-button>
-          <xt-button class="ml-2"
-                     style="border-radius:10px ; color: var(--secondary-text) !important; width: 64px; height: 40px;background-color: var(--active-bg);"
-                     type="primary"
-                     @click="publishPost">发布
+          <xt-button
+            class="ml-2"
+            style="
+              border-radius: 10px;
+              color: var(--secondary-text) !important;
+              width: 64px;
+              height: 40px;
+              background-color: var(--active-bg);
+            "
+            type="primary"
+            @click="publishPost"
+            >发布
           </xt-button>
         </div>
       </div>
     </div>
-
   </Modal>
 </template>
-<script lang='ts' setup>
-import {computed, onMounted, reactive, ref} from 'vue'
-import type {CascaderProps, UploadProps} from 'ant-design-vue';
-import {message} from 'ant-design-vue'
+<script lang="ts" setup>
+import { computed, onMounted, reactive, ref } from 'vue';
+import type { CascaderProps, UploadProps } from 'ant-design-vue';
+import { message } from 'ant-design-vue';
 import browser from '../../../js/common/browser';
-import Modal from '../../../components/Modal.vue'
-import {Icon as newIcon} from '@iconify/vue';
-import {fileUpload} from '../../../components/card/hooks/imageProcessing'
-import fluentEmojis from '../../../js/chat/fulentEmojis'
-import {yuanCommunityStore} from '../../../store/yuanCommunity'
-import {useCommunityStore} from '@page/chat/commun'
+import Modal from '../../../components/Modal.vue';
+import { Icon as newIcon } from '@iconify/vue';
+import { fileUpload } from '../../../components/card/hooks/imageProcessing';
+import fluentEmojis from '../../../js/chat/fulentEmojis';
+import { yuanCommunityStore } from '../../../store/yuanCommunity';
+import { useCommunityStore } from '@page/chat/commun';
 import PostItem from './Detail/PostItem.vue';
 import VideoItem from './Detail/VideoItem.vue';
 import DynamicItem from './Detail/DynamicItem.vue';
 
-const useCommunStore = useCommunityStore()
-const useYuanCommunityStore = yuanCommunityStore()
+const useCommunStore = useCommunityStore();
+const useYuanCommunityStore = yuanCommunityStore();
 // const imageLoadVisible = ref(true)
-const browserUrl = ref('https://s.apps.vip/forum?id=')
-const emoji = ref('https://sad.apps.vip/public/static/emoji/emojistatic/')
+const browserUrl = ref('https://s.apps.vip/forum?id=');
+const emoji = ref('https://sad.apps.vip/public/static/emoji/emojistatic/');
 const goYuan = () => {
-  browser.openInUserSelect(`${browserUrl.value}${props.forumId}`)
-}
-const titleContent = ref('')
+  browser.openInUserSelect(`${browserUrl.value}${props.forumId}`);
+};
+const titleContent = ref('');
 const publishType = ref([
   {
     title: '发动态',
-    value: 'dynamic'
+    value: 'dynamic',
   },
   {
     title: '发帖子',
-    value: 'post'
+    value: 'post',
   },
   {
     title: '发视频',
-    value: 'video'
-  }
-])
+    value: 'video',
+  },
+]);
 const currentComponent = computed(() => {
   switch (defaultType.value.value) {
     case 'dynamic':
@@ -122,53 +152,52 @@ const currentComponent = computed(() => {
       return DynamicItem;
       break;
   }
-})
+});
 const removeCover = () => {
-  coverList.value = []
-}
-let defaultType = ref({'title': '发动态', 'value': 'dynamic'})
+  coverList.value = [];
+};
+let defaultType = ref({ title: '发动态', value: 'dynamic' });
 const handleMenuItemClick = (index) => {
-  defaultType.value = publishType.value[index]
-}
+  defaultType.value = publishType.value[index];
+};
 // 是否全屏
-const fullScreen = ref(false)
+const fullScreen = ref(false);
 const handleFullScreen = () => {
-//   const full = document.querySelector('.content');
+  //   const full = document.querySelector('.content');
   fullScreen.value = !fullScreen.value;
 };
 // const userName = ref('我是皮克斯呀')
-const postValue = ref('')
+const postValue = ref('');
 const props = defineProps({
   replyVisible: Boolean,
   showPublishModal: Boolean,
   forumId: Number,
-  forumIndex: Number
-})
+  forumIndex: Number,
+});
 // 添加表情
 const addEmoji = (item) => {
   const lastSlashIndex = item.lastIndexOf('/');
   const emoiiValue = item.substring(lastSlashIndex + 1);
   // console.log(emoiiValue);
 
-  const key = Object.entries(fluentEmojis).find(([k, v]) => v === (emoiiValue))[0]
-  postValue.value += `${key}`
-
-}
+  const key = Object.entries(fluentEmojis).find(([k, v]) => v === emoiiValue)[0];
+  postValue.value += `${key}`;
+};
 const imageLoadVisible = computed(() => {
-  return fileList.value?.length > 0
-})
-const visible = ref(false)
+  return fileList.value?.length > 0;
+});
+const visible = ref(false);
 
 function getBase64(file: File) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
+    reader.onerror = (error) => reject(error);
   });
 }
 
-const emit = defineEmits(['handleOk'])
+const emit = defineEmits(['handleOk']);
 const previewVisible = ref(false);
 const previewImage = ref('');
 const previewTitle = ref('');
@@ -176,50 +205,48 @@ const previewTitle = ref('');
 // 用于在动态和评论中使用的表情
 // str.replace(/\[([^(\]|\[)]*)\]/g,(item,index) => {})
 // https://sad.apps.vip/public/static/emoji/emojistatic/
-let folderPath = reactive([])
+let folderPath = reactive([]);
 
 onMounted(() => {
   Object.values(fluentEmojis).forEach((item) => {
-    folderPath.push(`${emoji.value}${item}`)
-  })
-  let textareaElement = window.document.querySelector('textarea')
+    folderPath.push(`${emoji.value}${item}`);
+  });
+  let textareaElement = window.document.querySelector('textarea');
   // console.log(textareaElement);
 
-  textareaElement?.focus()
+  textareaElement?.focus();
   // console.log(navigator.plugins);
-  useYuanCommunityStore.getMyForumList()
-
-
-})
+  useYuanCommunityStore.getMyForumList();
+});
 // 选择发帖板块
-const communCate = computed(() => useYuanCommunityStore.myForumList.joined)
-let arr = ref([])
+const communCate = computed(() => useYuanCommunityStore.myForumList.joined);
+let arr = ref([]);
 communCate.value.forEach((item) => {
   arr.value.push({
     value: item.id,
-    label: item.name
-  })
-})
-let cascaderValue = ref([])
+    label: item.name,
+  });
+});
+let cascaderValue = ref([]);
 const options = ref<CascaderProps['options']>([]);
 arr.value.forEach((item) => {
-  options.value.push(item)
-})
-const loadData: CascaderProps['loadData'] = selectedOptions => {
+  options.value.push(item);
+});
+const loadData: CascaderProps['loadData'] = (selectedOptions) => {
   const targetOption = selectedOptions[selectedOptions.length - 1];
   targetOption.loading = true;
   arr.value.forEach((item) => {
-    targetOption.children?.push(item)
-  })
+    targetOption.children?.push(item);
+  });
   options.value = [...options.value];
 };
 const handleChange = (value) => {
-  cascaderValue.value = value
+  cascaderValue.value = value;
   console.log(cascaderValue.value);
-}
+};
 const holderName = computed(() => {
-  return useYuanCommunityStore.myForumList.joined[props.forumIndex].name
-})
+  return useYuanCommunityStore.myForumList.joined[props.forumIndex].name;
+});
 const settingsScroller = reactive({
   useBothWheelAxes: true,
   swipeEasing: true,
@@ -243,44 +270,44 @@ const handlePreview = async (file: UploadProps['fileList'][number]) => {
 };
 const handleOk = () => {
   // console.log(e);
-  visible.value = false
-  emit('handleOk', visible)
+  visible.value = false;
+  emit('handleOk', visible);
 };
 // 发布帖子
-const titleValue = ref('')
+const titleValue = ref('');
 const publishPost = async () => {
   if (postValue.value || fileList.value.length > 0) {
-    const imageUrlList = await Promise.all(fileList.value.map(async (item) => {
-      const url = await fileUpload(item.originFileObj);
-      return url;
-    }));
+    const imageUrlList = await Promise.all(
+      fileList.value.map(async (item) => {
+        const url = await fileUpload(item.originFileObj);
+        return url;
+      }),
+    );
     // let image = JSON.stringify(imageUrlList.value)
-    let forumId = props.forumId
-    let content = postValue.value
+    let forumId = props.forumId;
+    let content = postValue.value;
     let title = computed(() => {
       if (!titleValue.value || titleValue.value.length < 5) {
-        return postValue.value.slice(0, 5)
+        return postValue.value.slice(0, 5);
       }
-      return titleValue.value
-    })
+      return titleValue.value;
+    });
     // console.log(title.value, 'title.value');
-
 
     setTimeout(async () => {
       // console.log(forumId, content, title.value, image, 'titleValue.value');
       const imageList = JSON.stringify(imageUrlList);
-      await useCommunStore.getCommunityPublishPost(forumId, imageList, content, title.value, cascaderValue)
-      message.success('发布成功')
-      titleValue.value = ''
-      postValue.value = ''
-      fileList.value = []
-      handleOk()
+      await useCommunStore.getCommunityPublishPost(forumId, imageList, content, title.value, cascaderValue);
+      message.success('发布成功');
+      titleValue.value = '';
+      postValue.value = '';
+      fileList.value = [];
+      handleOk();
     });
-
   }
-}
+};
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 :deep(.ant-upload-list-text-container) {
   display: none;
 }
@@ -290,14 +317,12 @@ const publishPost = async () => {
 }
 
 .font-16 {
-
   font-size: 16px;
   // text-align: center;
   font-weight: 400;
 }
 
 .font-14 {
-
   font-size: 14px;
   line-height: 20px;
   font-weight: 400;
@@ -338,7 +363,10 @@ const publishPost = async () => {
   font-size: 16px;
 }
 
-:deep(.ant-select-single.ant-select-show-arrow .ant-select-selection-item, .ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder) {
+:deep(
+    .ant-select-single.ant-select-show-arrow .ant-select-selection-item,
+    .ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder
+  ) {
   // &::placeholder {
   font-weight: 400;
   font-size: 16px;
@@ -379,7 +407,6 @@ const publishPost = async () => {
   width: 51%;
   margin-left: 35%;
 }
-
 
 .reply-textarea {
   border-radius: 10px;

@@ -3,7 +3,7 @@
     <h1 class="entrust-title">委托</h1>
     <div class="input">
       <p class="text">输入地址</p>
-      <input v-model="inputAddress" class="custom-input" type="text">
+      <input v-model="inputAddress" class="custom-input" type="text" />
     </div>
 
     <shape-button @click="delegate">委托</shape-button>
@@ -11,26 +11,26 @@
 </template>
 
 <script>
-import ShapeButton from '@page/core/components/ShapeButton.vue' // 请确保路径是正确的
-import {tokenPower} from "@page/core/Governance/services/address";
+import ShapeButton from '@page/core/components/ShapeButton.vue'; // 请确保路径是正确的
+import { tokenPower } from '@page/core/Governance/services/address';
 
 export default {
-  name: "myEntrust",
+  name: 'myEntrust',
   components: {
-    ShapeButton
+    ShapeButton,
   },
   data() {
     return {
-      inputAddress: "",
-    }
+      inputAddress: '',
+    };
   },
   methods: {
     async delegate() {
       await tokenPower.delegate(this.inputAddress);
-      alert("委托成功");
-    }
-  }
-}
+      alert('委托成功');
+    },
+  },
+};
 </script>
 
 <style scoped>

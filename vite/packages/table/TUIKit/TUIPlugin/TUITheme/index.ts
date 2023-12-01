@@ -1,19 +1,19 @@
 const data = {
-    theme: 'dark',
+  theme: 'dark',
 };
 
 function plugin(TUICore: any) {
-    TUICore.setCommonStore(data);
+  TUICore.setCommonStore(data);
 }
 
 function install(app: any) {
-    console.log('app', app);
+  console.log('app', app);
 }
 
 const TUIColor = {
-    name: 'TUITheme',
-    plugin,
-    install,
+  name: 'TUITheme',
+  plugin,
+  install,
 };
 
 export default TUIColor;

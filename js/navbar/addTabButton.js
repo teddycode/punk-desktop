@@ -1,17 +1,17 @@
-var browserUI = require('browserUI.js')
+var browserUI = require('browserUI.js');
 
-var addTabButton = document.getElementById('add-tab-button')
-var shareButton = document.getElementById('share-button')
+var addTabButton = document.getElementById('add-tab-button');
+var shareButton = document.getElementById('share-button');
 
-function initialize () {
+function initialize() {
   addTabButton.addEventListener('click', function (e) {
-    const tabId = tabs.add(undefined, { atEnd: true })
-    browserUI.addTab(tabId, undefined, true)
-  })
+    const tabId = tabs.add(undefined, { atEnd: true });
+    browserUI.addTab(tabId, undefined, true);
+  });
   //
   // shareButton.addEventListener('click',function (){
   //   require('./tabBar.js').shareTask()
   // })
 }
 
-module.exports = { initialize }
+module.exports = { initialize };

@@ -51,13 +51,13 @@ const searchTpl = `
                     </a-menu>
                   </a-dropdown>
 </div>
-  `
+  `;
 Vue.component('search', {
   template: searchTpl,
   name: 'search',
   props: [],
   components: {},
-  data () {
+  data() {
     return {
       mySearch: [],
       searchWord: '',
@@ -65,59 +65,57 @@ Vue.component('search', {
       slinkLogo: './assets/baidu.svg',
       sfrontLink: 'https://www.baidu.com/s?wd=',
       searchId: 0,
-    }
+    };
   },
   computed: {},
-  mounted () {
-    this.loadMysearch()
-    this.searchId = Date.now()
+  mounted() {
+    this.loadMysearch();
+    this.searchId = Date.now();
     setTimeout(() => {
-      document.getElementById(this.searchId.toString()).focus()
-    }, 200)
+      document.getElementById(this.searchId.toString()).focus();
+    }, 200);
   },
   methods: {
-    chooseSearch (id, index) {
-      this.visible = false
-      this.slinkLogo = this.mySearch[index].slinkLogo
-      this.sfrontLink = this.mySearch[index].frontLink
+    chooseSearch(id, index) {
+      this.visible = false;
+      this.slinkLogo = this.mySearch[index].slinkLogo;
+      this.sfrontLink = this.mySearch[index].frontLink;
       window.$newtabRestore
         .saveDefaultDB(id)
         .then(() => {
           // console.log('dexie设置默认搜索引擎成功')
         })
         .catch((err) => {
-          console.log(err)
-        })
+          console.log(err);
+        });
     },
-    loadMysearch () {
+    loadMysearch() {
       window.$newtabRestore
         .restoreFromDB()
         .then((res) => {
-          this.mySearch = res
+          this.mySearch = res;
           //console.log(res, '___searchres___')
           res.forEach((element) => {
             if (element.sDefault == 1) {
-              this.slinkLogo = element.slinkLogo
-              this.sfrontLink = element.frontLink
+              this.slinkLogo = element.slinkLogo;
+              this.sfrontLink = element.frontLink;
             }
-          })
+          });
         })
         .catch((err) => {
-          console.log(err)
-        })
+          console.log(err);
+        });
     },
-    clklogo () {
-      location.href = this.sfrontLink + this.searchWord
+    clklogo() {
+      location.href = this.sfrontLink + this.searchWord;
     },
-    removeElement () {
-      this.$emit('remove-element')
+    removeElement() {
+      this.$emit('remove-element');
     },
-    enterSubmit () {
-      location.href = this.sfrontLink + this.searchWord
-    }
-  }
+    enterSubmit() {
+      location.href = this.sfrontLink + this.searchWord;
+    },
+  },
 
-  ,
-  destroyed () {
-  }
-})
+  destroyed() {},
+});

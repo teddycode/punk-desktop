@@ -8,10 +8,8 @@
 <script>
 export default {
   name: 'OnlinePercent',
-  props: []
-}
+  props: [],
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

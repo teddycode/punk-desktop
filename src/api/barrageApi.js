@@ -1,29 +1,24 @@
-const baseApi = require('../api/baseApi.js')
-const userModel = require('../model/userModel')
+const baseApi = require('../api/baseApi.js');
+const userModel = require('../model/userModel');
 
 const url = {
   add: '/app/addBarrage',
   list: '/app/getBarrageList',
-  delete: '/app/deleteBarrage'
-}
+  delete: '/app/deleteBarrage',
+};
 
 class BarrageApi {
-  baseApi
+  baseApi;
+  constructor(props) {}
 
-  constructor (props) {
-
+  async init() {
+    await baseApi.init();
   }
-
-  async init () {
-    await baseApi.init()
+  async add(data) {
+    return await baseApi.axios(url.add, data, 'post');
   }
-
-  async add (data) {
-    return await baseApi.axios(url.add, data, 'post')
-  }
-
-  async delete (id) {
-    return await baseApi.axios(url.delete, { nanoid: id }, 'post')
+  async delete(id) {
+    return await baseApi.axios(url.delete, { nanoid: id }, 'post');
   }
 
   /**
@@ -32,13 +27,12 @@ class BarrageApi {
    * @param pageUrl
    * @returns {Promise<*>}
    */
-  async list (channel, pageUrl) {
+  async list(channel, pageUrl) {
     return await baseApi.axios(url.list, {
       channel: channel,
-      pageUrl: pageUrl
-    })
+      pageUrl: pageUrl,
+    });
   }
-
 }
 
-module.exports = BarrageApi
+module.exports = BarrageApi;

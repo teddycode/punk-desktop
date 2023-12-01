@@ -1,24 +1,24 @@
 Vue.component('search', {
-  data () {
+  data() {
     return {
       dataSource: [],
-    }
+    };
   },
   template: '#searchTpl',
   methods: {
-    onSelect (value) {
-      console.log('onSelect', value)
+    onSelect(value) {
+      console.log('onSelect', value);
     },
 
-    handleSearch (value) {
-      this.dataSource = value ? this.searchResult(value) : []
+    handleSearch(value) {
+      this.dataSource = value ? this.searchResult(value) : [];
     },
 
-    getRandomInt (max, min = 0) {
-      return Math.floor(Math.random() * (max - min + 1)) + min
+    getRandomInt(max, min = 0) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
     },
 
-    searchResult (query) {
+    searchResult(query) {
       return new Array(this.getRandomInt(5))
         .join('.')
         .split('.')
@@ -26,7 +26,7 @@ Vue.component('search', {
           query,
           category: `${query}${idx}`,
           count: this.getRandomInt(200, 100),
-        }))
+        }));
     },
-  }
-})
+  },
+});

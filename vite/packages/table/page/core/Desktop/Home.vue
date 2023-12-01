@@ -14,10 +14,10 @@
 </template>
 
 <script lang="ts">
-import Background from "@page/core/components/Background.vue";
+import Background from '@page/core/components/Background.vue';
 
 export default {
-  name: "FileEdit",
+  name: 'FileEdit',
   components: {
     Background,
   },
@@ -25,7 +25,7 @@ export default {
     return {
       filePath: null,
       fileContent: null,
-      fileName: null
+      fileName: null,
     };
   },
   mounted() {
@@ -50,9 +50,9 @@ export default {
     },
     extractFileName(fullPath) {
       return fullPath.split(/[\\/]/).pop(); // 使用正则表达式匹配Windows和Unix路径
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>

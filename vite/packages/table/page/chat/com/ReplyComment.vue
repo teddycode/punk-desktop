@@ -1,60 +1,73 @@
 <template>
   <div class="w-full xt-bg box">
-    <div class="pt-4 pb-3 pl-4 pr-3 ">
-      <div class="flex ">
-        <a-avatar :size="24" :src="replyCom.user.avatar" class="mr-2 pointer"
-                  @click.stop="showCard(uid, userInfo)"></a-avatar>
+    <div class="pt-4 pb-3 pl-4 pr-3">
+      <div class="flex">
+        <a-avatar
+          :src="replyCom.user.avatar"
+          :size="24"
+          class="mr-2 pointer"
+          @click.stop="showCard(uid, userInfo)"
+        ></a-avatar>
         <div class="flex items-center ml-2 text-center">
-                    <span class="font-16 xt-text">
-                        {{ replyCom.user.nickname }}
-                    </span>
-          <div v-if="store.communityPostDetail.user.uid === replyCom.user.uid"
-               class="font-12 w-[32px] h-[20px] rounded-lg xt-theme-b xt-theme-text ml-2 mt-1">作者
+          <span class="font-16 xt-text">
+            {{ replyCom.user.nickname }}
+          </span>
+          <div
+            class="font-12 w-[32px] h-[20px] rounded-lg xt-theme-b xt-theme-text ml-2 mt-1"
+            v-if="store.communityPostDetail.user.uid === replyCom.user.uid"
+          >
+            作者
           </div>
         </div>
       </div>
-      <div :innerHTML="content" class="mt-2 font-16 xt-text" style="user-select: text; text-align: left;">
+      <div class="mt-2 font-16 xt-text" style="user-select: text; text-align: left" :innerHTML="content">
         <!-- {{ replyCom.content }} -->
       </div>
-      <div v-if="replyCom.image" class="flex w-full p-0 mt-3 -mb-1 whitespace-pre-wrap cover-wrapper">
+      <div class="flex w-full p-0 mt-3 -mb-1 whitespace-pre-wrap cover-wrapper" v-if="replyCom.image">
         <!-- <img :src="item" alt="" v-for="(item, index) in replyCom.image_pc"
-            class="object-cover mr-2 rounded-md cover-sm" :key="index"> -->
-        <viewer :images="replyCom.image_pc" :options="options" class="items-center p-0 mb-0 ">
+                    class="object-cover mr-2 rounded-md cover-sm" :key="index"> -->
+        <viewer :images="replyCom.image_pc" :options="options" class="items-center p-0 mb-0">
           <a-row :gutter="[20, 20]" style="margin-right: 1em" wrap="'true">
-            <a-col v-for="(img, index) in replyCom.image_pc" :span="7"
-                   class="flex flex-wrap mr-2 image-wrapper" style="">
+            <a-col
+              class="flex flex-wrap mr-2 image-wrapper"
+              v-for="(img, index) in replyCom.image_pc"
+              :span="7"
+              style=""
+            >
               <!-- {{ commentList.image }} -->
-              <img :data-source="replyCom.image_artwork_master[index]" :src="img"
-                   class="mb-2 mr-2 rounded-md image-item pointer cover-sm"
-                   style="position: relative object-fit: fill;">
+              <img
+                class="mb-2 mr-2 rounded-md image-item pointer cover-sm"
+                :src="img"
+                :data-source="replyCom.image_artwork_master[index]"
+                style="position: relative object-fit: fill;"
+              />
             </a-col>
           </a-row>
         </viewer>
       </div>
-      <div class="flex justify-between  mt-3  h-[20px] xt-text-2 font-14">
-        <div class="flex items-center justify-center ">
-          <div :class="{ 'xt-theme-text': isLike }" class="flex items-center" @click="clickLike">
-            <replyIcon class="mr-1 " icon="akar-icons:thumbs-up" style="font-size: 18px; "></replyIcon>
+      <div class="flex justify-between mt-3 h-[20px] xt-text-2 font-14">
+        <div class="flex items-center justify-center">
+          <div class="flex items-center pointer" @click="clickLike" :class="{ 'xt-theme-text': isLike }">
+            <replyIcon icon="akar-icons:thumbs-up" style="font-size: 18px" class="mr-1"></replyIcon>
             <div class="mr-4 text-center">{{ replyCom.support_count }}</div>
           </div>
-          <div class="flex items-center" @click="replyStatus">
-            <replyIcon class="mr-1 " icon="fluent:chat-16-regular" style="font-size: 20px;"></replyIcon>
+          <div class="flex items-center pointer" @click="replyStatus">
+            <replyIcon icon="fluent:chat-16-regular" style="font-size: 20px" class="mr-1"></replyIcon>
             <!-- <div>回复</div> -->
           </div>
-          <div v-if="useUserStore.userInfo.uid === replyCom.user.uid" class="flex justify-center ml-1">
-            <a-dropdown overlayStyle="background-color: var(--primary-bg); padding-left:3px ;padding-right:3px;"
-                        trigger="click">
+          <div class="flex justify-center ml-1" v-if="useUserStore.userInfo.uid === replyCom.user.uid">
+            <a-dropdown
+              trigger="click"
+              overlayStyle="background-color: var(--primary-bg); padding-left:3px ;padding-right:3px;"
+            >
               <template #overlay>
-                <a-menu class="xt-bg" @click="handleMenuClick">
+                <a-menu @click="handleMenuClick" class="xt-bg">
                   <a-menu-item key="1" class="xt-text">删除</a-menu-item>
                 </a-menu>
               </template>
               <button class="border-0 xt-bg w-[30px] h-[20px]">
-                <replyIcon class="text-xl text-center xt-text-2 pointer"
-                           icon="fluent:more-horizontal-16-filled"/>
-
+                <replyIcon class="text-xl text-center xt-text-2 pointer" icon="fluent:more-horizontal-16-filled" />
               </button>
-
             </a-dropdown>
           </div>
         </div>
@@ -64,86 +77,88 @@
           <span>{{ createTime[1] }}</span>
         </div>
       </div>
-      <replyComments v-if="replyVisible" :replyCom="props.replyCom" @addComment="getReplyText"
-                     @changeStatus="getReplyFlag"/>
+      <replyComments
+        v-if="replyVisible"
+        @changeStatus="getReplyFlag"
+        @addComment="getReplyText"
+        :replyCom="props.replyCom"
+      />
     </div>
     <ReplyCommentLite v-for="item in replyCmmentList" :key="item" :replyCom="item" :replyVisible="replyVisible">
     </ReplyCommentLite>
   </div>
 </template>
 
-<script lang='ts' setup>
-import {computed, onMounted, reactive, ref} from 'vue'
+<script setup lang="ts">
+import { ref, reactive, computed, onMounted } from 'vue';
+import { MessageOutlined, LikeOutlined } from '@ant-design/icons-vue';
 import ReplyCommentLite from './ReplyCommentLite.vue';
 import replyComments from './ReplyComments.vue';
-import {appStore} from '../../../../table/store'
-import emojiReplace from '../../../js/chat/emoji'
-import {Icon as replyIcon} from '@iconify/vue'
-import {message} from 'ant-design-vue'
-import {useCommunityStore} from '../commun'
-
-const store = useCommunityStore()
-const useUserStore = appStore()
+import { appStore } from '../../../../table/store';
+import emojiReplace from '../../../js/chat/emoji';
+import { Icon as replyIcon } from '@iconify/vue';
+import { message } from 'ant-design-vue';
+import { useCommunityStore } from '../commun';
+const store = useCommunityStore();
+const useUserStore = appStore();
 const options = reactive({
-  url: 'data-source'
-})
+  url: 'data-source',
+});
 const isLike = computed(() => {
-  return props.replyCom.is_support
-})
-const replyVisible = ref(false)
+  return props.replyCom.is_support;
+});
+const replyVisible = ref(false);
 const replyCmmentList = computed(() => {
-  return props.replyCom.comment
-})
+  return props.replyCom.comment;
+});
 // const userName=ref('我是皮克斯呀')
 const props = defineProps({
   replyCom: {
     type: Object,
-    default: () => []
+    default: () => [],
   },
-  uid: Number
-})
-let uid = props.replyCom.user.uid
+  uid: Number,
+});
+let uid = props.replyCom.user.uid;
 let userInfo = {
   uid: uid,
   nickname: props.replyCom.user.nickname,
-  avatar: props.replyCom.user.avatar_128
-}
+  avatar: props.replyCom.user.avatar_128,
+};
 const showCard = (uid, userInfo) => {
-  useUserStore.showUserCard(uid, userInfo)
-}
+  useUserStore.showUserCard(uid, userInfo);
+};
 const clickLike = async () => {
   // isLike.value = !isLike.value
-  await store.getCommunityLike('reply', props.replyCom.user.uid)
-  message.success(store.communitySupport.info)
-}
+  await store.getCommunityLike('reply', props.replyCom.user.uid);
+  message.success(store.communitySupport.info);
+};
 const replyStatus = () => {
-  replyVisible.value = !replyVisible.value
-}
+  replyVisible.value = !replyVisible.value;
+};
 const getReplyFlag = (val) => {
   // console.log(val);
-  replyVisible.value = val
-
-}
+  replyVisible.value = val;
+};
 const createTime = computed(() => {
-  let [date, time] = props.replyCom.time.split(' ')
-  return [date, time]
-})
+  let [date, time] = props.replyCom.time.split(' ');
+  return [date, time];
+});
 const getReplyText = (val) => {
   // console.log(val);
-  replyCmmentList.value = val.value
-
-}
+  replyCmmentList.value = val.value;
+};
 // 用于在动态和评论中使用的表情
 // str.replace(/\[([^(\]|\[)]*)\]/g,(item,index) => {})
 // https://sad.apps.vip/public/static/emoji/emojistatic/
 const content = computed(() => {
-  return emojiReplace(props.replyCom.content)
+  return emojiReplace(props.replyCom.content);
 });
 onMounted(() => {
-  useUserStore.getUserInfo()
-})
+  useUserStore.getUserInfo();
+});
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .box {
   border-radius: 8px 8px 0px 0px;
 }
@@ -180,4 +195,5 @@ onMounted(() => {
     content: '·';
     margin: 0 4px;
   }
-}</style>
+}
+</style>

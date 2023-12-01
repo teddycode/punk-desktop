@@ -1,23 +1,18 @@
 <script lang="ts">
-import twoColor from '../../../../public/iconLists/twoColor.json'
-import fruit from '../../../../public/iconLists/fruit.json'
-import animal from '../../../../public/iconLists/animal.json'
-import jingling from '../../../../public/iconLists/jingling.json'
-import {CheckOutlined, CloseOutlined} from '@ant-design/icons-vue'
+import twoColor from '../../../../public/iconLists/twoColor.json';
+import fruit from '../../../../public/iconLists/fruit.json';
+import animal from '../../../../public/iconLists/animal.json';
+import jingling from '../../../../public/iconLists/jingling.json';
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons-vue';
 
 export default {
-  components: {CloseOutlined, CheckOutlined},
+  components: { CloseOutlined, CheckOutlined },
   emits: ['onSelect'],
   data() {
     return {
       activeKey: 'twoColor',
 
-      iconLists: [
-        twoColor,
-        fruit,
-        animal,
-        jingling
-      ],
+      iconLists: [twoColor, fruit, animal, jingling],
       args: {
         shape: 'square',
         text: false,
@@ -25,32 +20,30 @@ export default {
       selectedIcon: {},
       defaultIcon: {
         type: 'icon',
-        icon: {}
+        icon: {},
       },
       defaultText: '',
       inputText: '',
       changed: false,
       originalIcon: '',
-    }
+    };
   },
   mounted() {
     //this.getCaller()
   },
   methods: {
-    close() {
-
-    },
+    close() {},
     onChanged() {
       if (this.inputText !== this.defaultText) {
-        this.changed = true
+        this.changed = true;
       }
     },
     clearIcon() {
       this.selectedIcon = {
         type: 'img',
-        url: this.originalIcon
-      }
-      this.changed = true
+        url: this.originalIcon,
+      };
+      this.changed = true;
     },
     // getCaller(){
     //   this.changed=false
@@ -78,17 +71,17 @@ export default {
     //   })
     // },
     parseFontIcon(userIcon) {
-      let iconPath = userIcon.split('.')
+      let iconPath = userIcon.split('.');
       return {
         list: iconPath[1],
         type: 'fontIcon',
-        name: iconPath[2]
-      }
+        name: iconPath[2],
+      };
     },
     done() {
-      let icon = {}
+      let icon = {};
       if (!!this.selectedIcon) {
-        icon = JSON.parse(JSON.stringify(this.selectedIcon))
+        icon = JSON.parse(JSON.stringify(this.selectedIcon));
       }
       // ipc.sendTo(this.callerId, 'selectedIcon',{
       //   icon:icon,
@@ -97,15 +90,15 @@ export default {
       // ipc.send('closeSelf')
     },
     selectIcon(icon, iconList) {
-      this.changed = true
+      this.changed = true;
       let selectedIcon = {
         list: iconList.key,
         name: icon.name,
         type: 'fontIcon',
-        alias: icon.alias
-      }
-      this.selectedIcon = selectedIcon
-      this.$emit('onSelect', selectedIcon)
+        alias: icon.alias,
+      };
+      this.selectedIcon = selectedIcon;
+      this.$emit('onSelect', selectedIcon);
       // if(this.args.text){
       //   return
       // }else{
@@ -113,33 +106,38 @@ export default {
       //   //   icon:selectedIcon
       //   // })
       // }
-
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <template>
-  <div v-if="this.args.text" class="icon-selector" style="margin-bottom: 10px;padding-top: 10px;width: 100%">
-    <a-row style="padding: 4px;">
+  <div v-if="this.args.text" class="icon-selector" style="margin-bottom: 10px; padding-top: 10px; width: 100%">
+    <a-row style="padding: 4px">
       <a-col class="set-icon" flex="60px" style="text-align: center">
-        <a-avatar v-if="this.selectedIcon.type==='img'" :shape="args.shape" :src="selectedIcon.url"></a-avatar>
-        <svg v-else aria-hidden="true" class="icon group-icon" style="width: 30px;height: 30px">
-          <use v-bind:xlink:href="'#icon-'+this.selectedIcon.name"></use>
+        <a-avatar v-if="this.selectedIcon.type === 'img'" :shape="args.shape" :src="selectedIcon.url"></a-avatar>
+        <svg v-else aria-hidden="true" class="icon group-icon" style="width: 30px; height: 30px">
+          <use v-bind:xlink:href="'#icon-' + this.selectedIcon.name"></use>
         </svg>
-        <div :class="{'square':this.args.shape==='square'}" class="clear-mask" style="" @click="clearIcon()">
-          <close-outlined style="color: white;font-size: 18px;padding-top: 8px"></close-outlined>
+        <div :class="{ square: this.args.shape === 'square' }" class="clear-mask" style="" @click="clearIcon()">
+          <close-outlined style="color: white; font-size: 18px; padding-top: 8px"></close-outlined>
         </div>
       </a-col>
-      <a-col flex="1" style="padding-right:50px">
-        <a-input id="textInput" v-model:value="inputText" placeholder="输入名称" size="small" style="width: 200px"
-                 @change="onChanged"></a-input>
+      <a-col flex="1" style="padding-right: 50px">
+        <a-input
+          id="textInput"
+          v-model:value="inputText"
+          placeholder="输入名称"
+          size="small"
+          style="width: 200px"
+          @change="onChanged"
+        ></a-input>
         &nbsp;
       </a-col>
       <a-col flex="40px" style="text-align: center">
         <a-button v-if="changed" shape="circle" size="small" type="primary" @click="done">
           <template #icon>
-            <CheckOutlined/>
+            <CheckOutlined />
           </template>
         </a-button>
         <!--        <a-button @click="close"  shape="circle" size="small">-->
@@ -149,31 +147,30 @@ export default {
         <!--        </a-button>-->
       </a-col>
     </a-row>
-
   </div>
-  <div :class="{'text':this.args.text}" class="card-container">
+  <div :class="{ text: this.args.text }" class="card-container">
     <a-tabs v-model:activeKey="activeKey" type="card">
       <a-tab-pane v-for="iconList in iconLists" :key="iconList.key">
         <template #tab>
-        <span>
-           <a-tooltip placement="bottom">
-         <template #title>
-            <span style="user-select: none">{{ iconList.alias }}</span>
-          </template>
-          <svg aria-hidden="true" class="icon group-icon">
-            <use v-bind:xlink:href="'#icon-'+iconList.icon"></use>
-          </svg>
-           </a-tooltip>
-        </span>
+          <span>
+            <a-tooltip placement="bottom">
+              <template #title>
+                <span style="user-select: none">{{ iconList.alias }}</span>
+              </template>
+              <svg aria-hidden="true" class="icon group-icon">
+                <use v-bind:xlink:href="'#icon-' + iconList.icon"></use>
+              </svg>
+            </a-tooltip>
+          </span>
         </template>
-        <div class="group-items" style="display: flex;flex-wrap: wrap">
+        <div class="group-items" style="display: flex; flex-wrap: wrap">
           <a-tooltip v-for="icon in iconList.list" placement="top">
             <template #title>
               <span style="user-select: none">{{ icon.alias }}</span>
             </template>
-            <div @click="selectIcon(icon,iconList)">
+            <div @click="selectIcon(icon, iconList)">
               <svg aria-hidden="true" class="icon">
-                <use v-bind:xlink:href="'#icon-'+icon.name"></use>
+                <use v-bind:xlink:href="'#icon-' + icon.name"></use>
               </svg>
             </div>
           </a-tooltip>
@@ -193,9 +190,8 @@ export default {
   </div>
 </template>
 <style lang="scss">
-
-
-.ant-tabs > .ant-tabs-nav .ant-tabs-nav-wrap, .ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-wrap {
+.ant-tabs > .ant-tabs-nav .ant-tabs-nav-wrap,
+.ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-wrap {
   margin-left: 20px;
 }
 
@@ -217,7 +213,6 @@ export default {
 
 .card-container > .ant-tabs-card .ant-tabs-content > .ant-tabs-tabpane {
   padding: 16px;
-
 }
 
 .card-container > .ant-tabs-card > .ant-tabs-nav::before {
@@ -234,7 +229,6 @@ export default {
 [data-theme='compact'] .card-container > .ant-tabs-card .ant-tabs-tab-active {
   background: #414141;
   border: none;
-
 }
 
 #components-tabs-demo-card-top .code-box-demo {
@@ -296,7 +290,6 @@ export default {
 }
 
 .scrollbar {
-
 }
 
 .set-icon {
@@ -320,10 +313,9 @@ export default {
   width: 30px;
   height: 30px;
   top: 0;
-  left: calc(50% - 15px)
+  left: calc(50% - 15px);
 }
 
 .icon-selector {
 }
-
 </style>

@@ -7,30 +7,24 @@
   &.active {
     max-height: calc(100vh - 300px);
   }
-
   &::-webkit-scrollbar {
     width: 6px;
     height: 6px;
   }
-
   &::-webkit-scrollbar-track {
     background: #f6f6f6;
     border-radius: 2px;
   }
-
   &::-webkit-scrollbar-thumb {
     background: rgb(233, 232, 232);
     border-radius: 20px;
   }
-
   &::-webkit-scrollbar-thumb:hover {
     background: #747474;
   }
-
   &::-webkit-scrollbar-corner {
     background: #f6f6f6;
   }
-
   .mg-content-btn {
     background: white;
     margin-top: 8px;
@@ -38,23 +32,20 @@
     width: 100%;
     border: 1px solid rgb(226, 221, 221);
     border-radius: 8px;
-
     &:hover {
       border: 1px solid #1890ff;
-      transition: all .3s cubic-bezier(.645, .045, .355, 1);
+      transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
       background-color: rgba(3, 167, 248, 0.1);
       // .cb-top-word {
       //   color: #1890ff;
       // }
     }
-
     .cb-top {
       position: relative;
       padding-left: 10px;
       width: 100%;
       height: 46px;
       border-bottom: 1px solid rgb(226, 221, 221);
-
       img {
         margin-right: 10px;
         width: 32px;
@@ -62,7 +53,6 @@
         object-fit: cover;
         border-radius: 5px;
       }
-
       .cb-top-word {
         width: 120px;
         font-size: 14px;
@@ -73,18 +63,14 @@
         -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
       }
-
       .cb-top-tag {
         margin-left: 40px;
         cursor: pointer;
       }
-
     }
-
     .cb-bottom {
       width: 100%;
       height: 46px;
-
       .cb-bottom-zone {
         color: rgb(121, 118, 118);
         // &:nth-child(2) {
@@ -99,26 +85,21 @@
   }
 }
 
-
 .shepherd-element.group.shepherd-enabled {
   .shepherd-text {
     font-size: 14px;
   }
-
   max-width: 190px;
   inset: 0 0 auto 11px !important;
-
   .shepherd-button {
     padding: 0.2rem 1rem;
     transition: 0s !important;
   }
-
   .shepherd-footer .shepherd-button:last-child {
     margin-right: 1px;
   }
-
   .shepherd-button.shepherd-button-secondary {
-    background: #FFFFFF !important;
+    background: #ffffff !important;
     padding-left: 1px;
     margin-right: 32px !important;
     color: rgba(80, 139, 254, 1) !important;
@@ -129,28 +110,23 @@
   .shepherd-text {
     font-size: 15px;
   }
-
   max-width: 210px;
   inset: 0 0 auto 11px !important;
-
   .shepherd-button {
     padding: 0.2rem 1rem;
     transition: 0s !important;
   }
-
   .shepherd-footer .shepherd-button:last-child {
     margin-right: 1px;
   }
-
   .shepherd-button.shepherd-button-secondary {
-    background: #FFFFFF !important;
+    background: #ffffff !important;
     padding-left: 1px;
     margin-right: 32px !important;
     color: rgba(80, 139, 254, 1) !important;
   }
-
   .button2.shepherd-button {
-    background: #FFFFFF !important;
+    background: #ffffff !important;
     padding-left: 1px;
     margin-right: 32px !important;
     color: rgba(80, 139, 254, 1) !important;
@@ -163,18 +139,14 @@
   .shepherd-text {
     font-size: 14px;
   }
-
   inset: -71px 0 auto 0px !important;
-
   .shepherd-button {
     padding: 3px 6px;
     transition: 0s !important;
   }
-
   .shepherd-arrow {
     transform: translate(151px, 0px) !important;
   }
-
   .shepherd-footer .shepherd-button:last-child {
     margin-right: 1px;
   }
@@ -186,18 +158,14 @@
   .shepherd-text {
     font-size: 14px;
   }
-
   transform: translate(-11px, 42px) !important;
-
   .shepherd-button {
     padding: 3px 6px;
     transition: 0s !important;
   }
-
   .shepherd-arrow {
     transform: translate(215px, 0px) !important;
   }
-
   .shepherd-footer .shepherd-button:last-child {
     margin-right: 1px;
   }
@@ -205,27 +173,22 @@
 
 .shepherd-element.appSecond.shepherd-enabled {
   max-width: 230px;
-
   .shepherd-text {
     font-size: 14px;
   }
-
   inset: 0px 0 auto 12px !important;
-
   .shepherd-button {
     padding: 3px 6px;
     margin-right: 11px;
     transition: 0s !important;
   }
-
   .button1.shepherd-button {
-    background: #FFFFFF !important;
+    background: #ffffff !important;
     color: rgba(80, 139, 254, 1) !important;
     padding-left: 1px;
   }
-
   .button2.shepherd-button {
-    background: #FFFFFF !important;
+    background: #ffffff !important;
     color: rgba(80, 139, 254, 1) !important;
   }
 }
@@ -235,27 +198,22 @@
     padding: 0.2rem 1rem;
     transition: 0s !important;
   }
-
   .shepherd-text {
     font-size: 14px;
   }
-
   .shepherd-arrow {
     display: none !important;
   }
-
   max-width: 190px;
   left: 50% !important;
   top: 10% !important;
   transform: translate(0px, 0px) !important;
-
   .button2.shepherd-button {
-    background: #FFFFFF !important;
+    background: #ffffff !important;
     padding-left: 1px;
     margin-right: 28px !important;
     color: rgba(80, 139, 254, 1) !important;
   }
-
   .button3.shepherd-button {
     margin-right: 1px;
   }
@@ -263,13 +221,10 @@
 
 .shepherd-element.taskAdd.shepherd-enabled {
   max-width: 168px;
-
   .shepherd-text {
     font-size: 14px;
   }
-
   inset: 0px 0 auto 12px !important;
-
   .shepherd-button {
     padding: 3px 13px;
     margin-right: 7px;
@@ -287,14 +242,13 @@
     //border-bottom: 1px dashed #ddd;
     bottom: 10px;
     left: 0;
-    content: "";
+    content: '';
     width: 100%;
     height: 10px;
     z-index: 2;
     background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), #1a1a1a38);
   }
 }
-
 .single-avatar {
   position: absolute;
   right: 2px;
@@ -305,7 +259,7 @@
 
 .live-grade {
   &:hover {
-    opacity: .8;
+    opacity: 0.8;
   }
 }
 
@@ -317,7 +271,6 @@
   margin-top: 20px;
   border-radius: 4px;
 }
-
 .arrow-box:after {
   margin-top: 20px;
   position: absolute;
@@ -335,21 +288,17 @@
   border: 1px solid #c1c1c1;
   padding: 20px;
   text-align: center;
-
   .tip {
     font-size: 18px;
   }
 }
-
 .badge-box {
-
   border: 4px solid #c3c3c3;
   border-radius: 4px;
   background: white;
   padding: 18px;
   padding-top: 10px;
   margin-top: 10px;
-
   .badge-num {
     bottom: 12px;
     background-color: rgb(64, 116, 231);

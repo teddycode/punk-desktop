@@ -34,10 +34,10 @@
           <div class="liquidity-right">
             <h2 class="h2-2">添加数额</h2>
             <div class="token-input">
-              <input id="tokenA" v-model.number="inputAmountA" autocomplete="off" class="custom-input" type="number">
+              <input id="tokenA" v-model.number="inputAmountA" autocomplete="off" class="custom-input" type="number" />
             </div>
             <div class="token-input">
-              <input id="tokenB" v-model.number="inputAmountB" autocomplete="off" class="custom-input" type="number">
+              <input id="tokenB" v-model.number="inputAmountB" autocomplete="off" class="custom-input" type="number" />
             </div>
           </div>
         </div>
@@ -46,11 +46,11 @@
           <h2 class="price-range-title">价格区间</h2>
           <div class="input-group">
             <div class="input-wrapper">
-              <input v-model.number="priceLow" class="custom-input range-input" pattern="\d*" type="text">
+              <input v-model.number="priceLow" class="custom-input range-input" pattern="\d*" type="text" />
               <span class="input-hint">MIN</span>
             </div>
             <div class="input-wrapper">
-              <input v-model.number="priceUpper" class="custom-input range-input" pattern="\d*" type="text">
+              <input v-model.number="priceUpper" class="custom-input range-input" pattern="\d*" type="text" />
               <span class="input-hint">MAX</span>
             </div>
           </div>
@@ -66,8 +66,13 @@
               </select>
               <i class="fas fa-chevron-down select-icon"></i>
             </div>
-            <input v-model="hookAddress" class="custom-input hook-address-longer" placeholder="钩子地址" type="text"
-                   @input="validateHookAddress">
+            <input
+              v-model="hookAddress"
+              class="custom-input hook-address-longer"
+              placeholder="钩子地址"
+              type="text"
+              @input="validateHookAddress"
+            />
           </div>
           <p v-if="addressError" class="error-message">无效的地址格式</p>
         </div>
@@ -78,17 +83,17 @@
 </template>
 
 <script>
-import ShapeButton from '@page/core/components/ShapeButton.vue'
-import { addLiq } from '@page/core/Exchange/services/addLiquidity'
-import { limitOrderPoolKey } from '@page/core/Exchange/services/address'
-import { ethers } from 'ethers'
+import ShapeButton from '@page/core/components/ShapeButton.vue';
+import { addLiq } from '@page/core/Exchange/services/addLiquidity';
+import { limitOrderPoolKey } from '@page/core/Exchange/services/address';
+import { ethers } from 'ethers';
 // import { initializeWallet } from "@page/core/Exchange/function/address";
-import Background from '@page/core/components/Background.vue'
+import Background from '@page/core/components/Background.vue';
 
 export default {
   components: {
     Background,
-    ShapeButton
+    ShapeButton,
   },
   data() {
     return {
@@ -120,62 +125,73 @@ export default {
         tickLower: 0,
         tickUpper: 0,
         liquidityDelta: 0,
-      }
-    }
+      },
+    };
   },
   watch: {
     hookAddress(newVal) {
       if (newVal === '') {
-        this.isAddButtonClicked = false
-        this.addressError = false
+        this.isAddButtonClicked = false;
+        this.addressError = false;
       }
     },
   },
   methods: {
     validateHookAddress() {
       if (this.isAddButtonClicked) {
-        const pattern = /^0x[a-fA-F0-9]{40}$/
-        this.addressError = !this.hookAddress.match(pattern)
+        const pattern = /^0x[a-fA-F0-9]{40}$/;
+        this.addressError = !this.hookAddress.match(pattern);
       }
     },
     async validateAndAdd() {
-      this.isAddButtonClicked = true
-      this.validateHookAddress()
+      this.isAddButtonClicked = true;
+      this.validateHookAddress();
       if (!this.addressError) {
-        console.log('begin addLiq')
-        console.log('priceLow: ', this.priceLow)
-        console.log('priceUpper: ', this.priceUpper)
+        console.log('begin addLiq');
+        console.log('priceLow: ', this.priceLow);
+        console.log('priceUpper: ', this.priceUpper);
         if (this.selectedTokenA === 'token0' && this.selectedTokenB === 'token1') {
-          console.log('inputAmountA:', this.inputAmountA)
-          console.log('inputAmountB:', this.inputAmountB)
+          console.log('inputAmountA:', this.inputAmountA);
+          console.log('inputAmountB:', this.inputAmountB);
           try {
-            await addLiq(this.priceLow, this.priceUpper, ethers.utils.parseUnits(this.inputAmountA.toString(), 18), ethers.utils.parseUnits(this.inputAmountB.toString(), 18), limitOrderPoolKey)
-            alert('添加流动性成功')
+            await addLiq(
+              this.priceLow,
+              this.priceUpper,
+              ethers.utils.parseUnits(this.inputAmountA.toString(), 18),
+              ethers.utils.parseUnits(this.inputAmountB.toString(), 18),
+              limitOrderPoolKey,
+            );
+            alert('添加流动性成功');
           } catch (err) {
-            console.log(err)
-            alert('添加流动性失败')
+            console.log(err);
+            alert('添加流动性失败');
           }
         } else if (this.selectedTokenA === 'token1' && this.selectedTokenB === 'token0') {
-          console.log('inputAmountA:', this.inputAmountB)
-          console.log('inputAmountB:', this.inputAmountA)
+          console.log('inputAmountA:', this.inputAmountB);
+          console.log('inputAmountB:', this.inputAmountA);
           try {
-            await addLiq(this.priceLow, this.priceUpper, ethers.utils.parseUnits(this.inputAmountB.toString(), 18), ethers.utils.parseUnits(this.inputAmountA.toString(), 18), limitOrderPoolKey)
-            alert('添加流动性成功')
+            await addLiq(
+              this.priceLow,
+              this.priceUpper,
+              ethers.utils.parseUnits(this.inputAmountB.toString(), 18),
+              ethers.utils.parseUnits(this.inputAmountA.toString(), 18),
+              limitOrderPoolKey,
+            );
+            alert('添加流动性成功');
           } catch (err) {
-            console.log(err)
-            alert('添加流动性失败')
+            console.log(err);
+            alert('添加流动性失败');
           }
         } else {
-          alert('暂时不支持tokenA,tokenB以外的代币对！')
+          alert('暂时不支持tokenA,tokenB以外的代币对！');
         }
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
-
 .liquidity-wrapper {
   border-radius: 10px;
   padding: 2%;
@@ -205,7 +221,8 @@ export default {
   gap: 5%;
 }
 
-.liquidity-left, .liquidity-right {
+.liquidity-left,
+.liquidity-right {
   flex: 0.5;
   display: flex;
   flex-direction: column;
@@ -235,7 +252,8 @@ export default {
   margin-left: -10%;
 }
 
-.token-pair, .token-input {
+.token-pair,
+.token-input {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -309,7 +327,8 @@ export default {
   width: 100%;
 }
 
-.custom-select:hover, .custom-input:hover {
+.custom-select:hover,
+.custom-input:hover {
   border-color: #007bff;
 }
 
@@ -319,7 +338,7 @@ export default {
 
 .select-option {
   color: white;
-  background-color: #2D3748;
+  background-color: #2d3748;
 }
 
 .token-label {

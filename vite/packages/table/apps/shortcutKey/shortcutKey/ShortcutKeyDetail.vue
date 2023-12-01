@@ -2,89 +2,117 @@
   <!-- 详情快捷方案 -->
   <div class="detail-box">
     <!-- 头部导航 -->
-    <div class="flex justify-between items-center" style="height: 72px;width:98%">
+    <div class="flex justify-between items-center" style="height: 72px; width: 98%">
       <div class="flex items-center">
-        <div class="pointer button-active xt-mask-2 xt-text h-12 w-12 flex items-center rounded-lg justify-center mr-3"
-             @click="onBack">
-          <Icon icon="xiangzuo" style="font-size: 1.5em;"></Icon>
+        <div
+          @click="onBack"
+          class="pointer button-active xt-mask-2 xt-text h-12 w-12 flex items-center rounded-lg justify-center mr-3"
+        >
+          <Icon icon="xiangzuo" style="font-size: 1.5em"></Icon>
         </div>
         <div class="flex">
-          <div v-for="(item,index) in schemeList.slice(0,3)" :key="item.id" :class="navIndex === index ? 'xt-mask-2':''"
-               class="head-list" @click="switchScheme(index,item)">
-          <span>
-            <a-avatar :size="38" :src="item.icon" shape="square"></a-avatar>
-          </span>
-            <span class="ml-2 xt-text" style="font-size: 16px;">{{ item.name }}</span>
+          <div
+            v-for="(item, index) in schemeList.slice(0, 3)"
+            :key="item.id"
+            class="head-list"
+            :class="navIndex === index ? 'xt-mask-2' : ''"
+            @click="switchScheme(index, item)"
+          >
+            <span>
+              <a-avatar shape="square" :src="item.icon" :size="38"></a-avatar>
+            </span>
+            <span class="ml-2 xt-text" style="font-size: 16px">{{ item.name }}</span>
           </div>
         </div>
-        <div class="pointer button-active xt-mask-2 xt-text h-12 w-12 flex items-center rounded-lg justify-center"
-             @click="recentlyUsedVisible = true">
-          <Icon icon="gengduo1" style="font-size: 1.5em;"></Icon>
+        <div
+          @click="recentlyUsedVisible = true"
+          class="pointer button-active xt-mask-2 xt-text h-12 w-12 flex items-center rounded-lg justify-center"
+        >
+          <Icon icon="gengduo1" style="font-size: 1.5em"></Icon>
         </div>
       </div>
       <div class="flex">
         <a-tooltip placement="left">
           <template #title>展开或收起分类栏</template>
           <div
-              class="pointer button-active xt-mask-2 xt-text h-12 w-12 flex items-center rounded-lg justify-center mr-3"
-              @click="toggleSlide">
-            <Icon icon="outdent" style="font-size: 1.5em;"></Icon>
+            @click="toggleSlide"
+            class="pointer button-active xt-mask-2 xt-text h-12 w-12 flex items-center rounded-lg justify-center mr-3"
+          >
+            <Icon icon="outdent" style="font-size: 1.5em"></Icon>
           </div>
         </a-tooltip>
-        <div class="pointer button-active xt-mask-2 xt-text h-12 w-12 flex items-center rounded-lg justify-center"
-             @click="openSet = true">
-          <Icon icon="shezhi" style="font-size: 1.5em;"></Icon>
+        <div
+          class="pointer button-active xt-mask-2 xt-text h-12 w-12 flex items-center rounded-lg justify-center"
+          @click="openSet = true"
+        >
+          <Icon icon="shezhi" style="font-size: 1.5em"></Icon>
         </div>
       </div>
     </div>
     <div class="key-list">
       <!-- 侧边栏 -->
-      <div v-if="currentScheme.showSide" class="side-nav">
+      <div class="side-nav" v-if="currentScheme.showSide">
         <Search v-model:keywords="keywords" inputStyle="width:100%;" placeholder="搜索"></Search>
         <div class="nav-box">
-          <a-tooltip v-for="(item,index) in sideNav" :title="item.groupName">
-            <div :key="item.id" :style="{backgroundColor:getColor(this.sideNav,index)}"
-                 class="nav-item  truncate "
-                 @click="updateNavIndex(item, index)">
+          <a-tooltip v-for="(item, index) in sideNav" :title="item.groupName">
+            <div
+              class="nav-item truncate"
+              :style="{ backgroundColor: getColor(this.sideNav, index) }"
+              :key="item.id"
+              @click="updateNavIndex(item, index)"
+            >
               {{ item.groupName }}
             </div>
           </a-tooltip>
         </div>
       </div>
       <!-- 快捷键列表 -->
-      <vue-custom-scrollbar id="scrollCus" :settings="settingsScroller" :style="showSide ? 'width: 80%;' : 'width:100%'"
-                            style="height:100%;">
-        <div v-if="keyList.length===0" class="text-center pt-10 flex justify-center items-center">
+      <vue-custom-scrollbar
+        id="scrollCus"
+        :settings="settingsScroller"
+        style="height: 100%"
+        :style="showSide ? 'width: 80%;' : 'width:100%'"
+      >
+        <div v-if="keyList.length === 0" class="text-center pt-10 flex justify-center items-center">
           此方案暂时没有任何快捷键
-          <xt-button :h="40" :w="80" class="ml-6" size="mini" type="theme" @click="btnEdit">编辑方案</xt-button>
-
-
+          <xt-button class="ml-6" @click="btnEdit" type="theme" size="mini" :w="80" :h="40">编辑方案</xt-button>
         </div>
-        <div :style="keyBoxStyle" class="key-box">
-
-          <div v-for="(item,index) in filteredKeyList" :key="item.id">
+        <div class="key-box" :style="keyBoxStyle">
+          <div v-for="(item, index) in filteredKeyList" :key="item.id">
             <!-- 分组名称 -->
-            <div v-if="item.groupName" :id="'groupId_' + item.id"
-                 :style="item.id === currentGroup.id ? activeGroup : ''"
-                 class="key-item border-right "
-                 style="margin-top: 15px">
-              <span class="truncate font-bold">  <div :style="{backgroundColor:getColor(this.filteredKeyList,index)}"
-                                                      class="color-dot"></div> {{
-                  item.groupName
-                }}</span>
+            <div
+              :id="'groupId_' + item.id"
+              class="key-item border-right"
+              style="margin-top: 15px"
+              v-if="item.groupName"
+              :style="item.id === currentGroup.id ? activeGroup : ''"
+            >
+              <span class="truncate font-bold">
+                <div class="color-dot" :style="{ backgroundColor: getColor(this.filteredKeyList, index) }"></div>
+                {{ item.groupName }}</span
+              >
             </div>
             <!-- 快捷键 -->
-            <div v-else
-                 :class="{active:keyIndex === item.id,'rounded-top':isGroupFirst(this.filteredKeyList,index) ,'rounded-bottom':isGroupLast(this.filteredKeyList,index)}"
-                 :style="{backgroundColor:getColor(this.filteredKeyList,index)}"
-                 class="border-right key-item"
-                 @click="setKeyItem(item.id)">
+            <div
+              v-else
+              class="border-right key-item"
+              :class="{
+                active: keyIndex === item.id,
+                'rounded-top': isGroupFirst(this.filteredKeyList, index),
+                'rounded-bottom': isGroupLast(this.filteredKeyList, index),
+              }"
+              :style="{ backgroundColor: getColor(this.filteredKeyList, index) }"
+              @click="setKeyItem(item.id)"
+            >
               <div class="flex w-full">
                 <div v-for="i in item.keys" :key="i" class="flex">
-                  <span class="xt-mask h-8 flex items-center rounded-lg justify-center mr-3"
-                        style="min-width:32px;padding:0 8px;">{{ i }}</span>
+                  <span
+                    style="min-width: 32px; padding: 0 8px"
+                    class="xt-mask h-8 flex items-center rounded-lg justify-center mr-3"
+                    >{{ i }}</span
+                  >
                 </div>
-                <div class="key-title ">{{ item.title }}</div>
+                <div class="key-title">{{ item.title }}</div>
               </div>
 
               <div>
@@ -97,21 +125,26 @@
         </div>
       </vue-custom-scrollbar>
     </div>
-    <div class=" p-2  " style="border-top: 1px solid  var(--divider);margin-left: -12px">
+    <div class="p-2" style="border-top: 1px solid var(--divider); margin-left: -12px">
       <a-tooltip title="自动根据当前聚焦窗口切换快捷键方案，仅对具备至少1个快捷键方案的应用有效。">
-        <strong>自动切换方案：</strong></a-tooltip>
+        <strong>自动切换方案：</strong></a-tooltip
+      >
       <a-switch v-model:checked="settings.enableAutoEnter"></a-switch>
-      <span v-if="!isWin()" class="ml-2">非Windows平台暂不支持自动切换快捷键方案！</span>
+      <span class="ml-2" v-if="!isWin()">非Windows平台暂不支持自动切换快捷键方案！</span>
     </div>
   </div>
 
   <!-- 最近使用 -->
-  <a-drawer v-model:visible="recentlyUsedVisible" placement="right" title="最近使用" width="500">
+  <a-drawer v-model:visible="recentlyUsedVisible" title="最近使用" width="500" placement="right">
     <div class="main-part">
-      <div v-for="(item,index) in schemeList" class="flex items-center mb-4 pointer" @click="switchScheme(index,item)">
-            <span class="mx-4 h-14 w-14 flex justify-center items-center">
-                <a-avatar :size="48" :src="item.icon" shape="square"></a-avatar>
-            </span>
+      <div
+        v-for="(item, index) in schemeList"
+        class="flex items-center mb-4 pointer"
+        @click="switchScheme(index, item)"
+      >
+        <span class="mx-4 h-14 w-14 flex justify-center items-center">
+          <a-avatar shape="square" :src="item.icon" :size="48"></a-avatar>
+        </span>
         <span>{{ item.name }}</span>
         <div class="flex flex-col justify-center items-center">
           <span>{{ item.number }}</span>
@@ -121,44 +154,47 @@
     </div>
   </a-drawer>
   <!-- 设置 -->
-  <a-drawer v-model:visible="openSet" placement="right" title="设置" width="500">
-    <span v-if="appContent.isCommunity" class="set-title">该快捷键方案来自创意市场</span>
-    <span v-else-if="appContent.isMyCreate && appContent.isShare"
-          class="set-title">该快捷键方案由我创建，并已分享至创意市场</span>
-    <span v-else-if="appContent.isMyCreate && !appContent.isShare"
-          class="set-title">该快捷键方案未分享至创意市场，仅本地可用</span>
+  <a-drawer v-model:visible="openSet" title="设置" width="500" placement="right">
+    <span class="set-title" v-if="appContent.isCommunity">该快捷键方案来自创意市场</span>
+    <span class="set-title" v-else-if="appContent.isMyCreate && appContent.isShare"
+      >该快捷键方案由我创建，并已分享至创意市场</span
+    >
+    <span class="set-title" v-else-if="appContent.isMyCreate && !appContent.isShare"
+      >该快捷键方案未分享至创意市场，仅本地可用</span
+    >
     <div class="pointer recommend">
       <div class="flex justify-between">
         <div class="flex">
           <span class="h-14 w-14 flex justify-center items-center">
-            <a-avatar :size="48" :src="appContent.icon" shape="square"></a-avatar>
+            <a-avatar shape="square" :src="appContent.icon" :size="48"></a-avatar>
           </span>
           <span class="flex flex-col ml-4 flex-1">
-            <span class="xt-text truncate" style="font-size: 16px;font-weight: 500;">{{ appContent.name }}</span>
+            <span class="xt-text truncate" style="font-size: 16px; font-weight: 500">{{ appContent.name }}</span>
             <span class="mt-1 xt-text-2 summary">{{ appContent.commonUse }}</span>
           </span>
         </div>
-        <div class="flex flex-col justify-center items-center    xt-mask rounded-lg p-5"
-             style="min-width: 100px;height:78px">
-          <span class="xt-text"
-                style="font-size: 24px;font-weight: 600;">{{ appContent.number }}</span>
+        <div
+          class="flex flex-col justify-center items-center xt-mask rounded-lg p-5"
+          style="min-width: 100px; height: 78px"
+        >
+          <span class="xt-text" style="font-size: 24px; font-weight: 600">{{ appContent.number }}</span>
           <span>{{ appContent.key }}</span>
         </div>
       </div>
-      <div v-if="false" class="flex justify-between items-center mt-4 xt-text-2" style="font-size: 14px;">
+      <div v-if="false" class="flex justify-between items-center mt-4 xt-text-2" style="font-size: 14px">
         <span class="flex items-center">
           <div @click="showCard(appContent.id)">
-            <a-avatar :size="32" :src="appContent.avatar" shape="square"></a-avatar>
+            <a-avatar shape="square" :src="appContent.avatar" :size="32"></a-avatar>
           </div>
           <span class="ml-3">{{ appContent.nickName }}</span>
         </span>
         <span v-if="appContent.isCommunity || appContent.isShare">
           <span>
-            <Icon class="mr-2" icon="dianzan"></Icon>
+            <Icon icon="dianzan" class="mr-2"></Icon>
             <span>{{ appContent.sumLikes }}</span>
           </span>
           <span class="ml-3">
-            <Icon class="mr-2" icon="xiazai"></Icon>
+            <Icon icon="xiazai" class="mr-2"></Icon>
             <span>{{ appContent.download }}</span>
           </span>
         </span>
@@ -172,33 +208,31 @@
     <!--      <Icon icon="upload" class="mr-2"></Icon>-->
     <!--      <span>立即上传</span>-->
     <!--    </div>-->
-    <div v-if="!appContent.isMyCreate" class="set-item">
-      <Icon class="mr-2" icon="dianzan"></Icon>
+    <div class="set-item" v-if="!appContent.isMyCreate">
+      <Icon icon="dianzan" class="mr-2"></Icon>
       <span>点赞</span>
     </div>
     <div class="set-item" @click="btnEdit">
-      <Icon class="mr-2" icon="bianji"></Icon>
+      <Icon icon="bianji" class="mr-2"></Icon>
       <span>编辑方案</span>
     </div>
     <div class="set-item" @click="btnDel">
-      <Icon class="mr-2" icon="delete"></Icon>
+      <Icon icon="delete" class="mr-2"></Icon>
       <span>删除</span>
     </div>
   </a-drawer>
-
-
 </template>
 
 <script>
-import NotShortcutKey from '../page/NotShortcutKey.vue'
+import NotShortcutKey from '../page/NotShortcutKey.vue';
 // import ShortcutKeyList from '../../components/shortcutKey/ShortcutKeyList.vue'
-import Search from '../../../components/Search.vue'
-import { mapActions, mapWritableState } from 'pinia'
-import { keyStore } from '../store'
-import { message, Modal } from 'ant-design-vue'
-import { isGroupFirst, isGroupLast } from '../lib/lib'
-import XtButton from '../../../ui/libs/Button/index.vue'
-import { isWin } from '../../../js/common/screenUtils'
+import Search from '../../../components/Search.vue';
+import { mapActions, mapWritableState } from 'pinia';
+import { keyStore } from '../store';
+import { message, Modal } from 'ant-design-vue';
+import { isGroupLast, isGroupFirst } from '../lib/lib';
+import XtButton from '../../../ui/libs/Button/index.vue';
+import { isWin } from '../../../js/common/screenUtils';
 
 export default {
   name: 'ShortcutKeyDetail',
@@ -206,14 +240,14 @@ export default {
     XtButton,
     NotShortcutKey,
     // ShortcutKeyList,
-    Search
+    Search,
   },
-  data () {
+  data() {
     return {
       navIndex: 0,
       keyIndex: 1,
       recentlyUsedVisible: false,
-      keywords: '',//搜索关键词
+      keywords: '', //搜索关键词
       openSet: false,
       //最近使用的方案
       schemeList: [],
@@ -234,152 +268,156 @@ export default {
         swipeEasing: true,
         suppressScrollY: true,
         suppressScrollX: false,
-        wheelPropagation: true
+        wheelPropagation: true,
       },
-    }
+    };
   },
   computed: {
     ...mapWritableState(keyStore, ['recentlyUsedList', 'currentApp', 'settings', 'currentScheme', 'settings']),
-    filteredKeyList () {
+    filteredKeyList() {
       if (this.keywords) {
-        var regExp = new RegExp(this.keywords, 'i')
-        return this.keyList.filter(key => {
+        var regExp = new RegExp(this.keywords, 'i');
+        return this.keyList.filter((key) => {
           if (key.title) {
-            return key.title.match(regExp)
+            return key.title.match(regExp);
           }
-          return false
-        })
+          return false;
+        });
       } else {
-        return this.keyList
+        return this.keyList;
       }
-    }
+    },
   },
-  mounted () {
-    this.getData()
+  mounted() {
+    this.getData();
   },
   watch: {
     currentApp: {
-      async handler () {
+      async handler() {
         if (this.settings.enableAutoEnter) {
-          this.shortcutSchemeList = await this.loadShortcutSchemes(this.currentApp.exeName)
+          this.shortcutSchemeList = await this.loadShortcutSchemes(this.currentApp.exeName);
           if (this.shortcutSchemeList.length > 0) {
-            await this.setRecentlyUsedList(this.shortcutSchemeList[0])
-            this.navIndex = 0
-            this.getData()
+            await this.setRecentlyUsedList(this.shortcutSchemeList[0]);
+            this.navIndex = 0;
+            this.getData();
           }
-
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   methods: {
-    ...mapActions(keyStore, ['removeShortcutKeyList', 'setMarketList', 'loadShortcutSchemes', 'setRecentlyUsedList', 'saveScheme']),
-    isWin, isGroupLast, isGroupFirst,
-    getColor (array, index, field = 'groupName') {
+    ...mapActions(keyStore, [
+      'removeShortcutKeyList',
+      'setMarketList',
+      'loadShortcutSchemes',
+      'setRecentlyUsedList',
+      'saveScheme',
+    ]),
+    isWin,
+    isGroupLast,
+    isGroupFirst,
+    getColor(array, index, field = 'groupName') {
       for (let i = index; i >= 0; i--) {
         if (array[i][field]) {
           //是组
-          return array[i].color
+          return array[i].color;
         }
       }
-      return index
+      return index;
     },
     /**
      * 切换侧边导航是否显示
      */
-    toggleSlide () {
-      this.currentScheme.showSide = !this.currentScheme.showSide
-      this.saveScheme(this.currentScheme)
+    toggleSlide() {
+      this.currentScheme.showSide = !this.currentScheme.showSide;
+      this.saveScheme(this.currentScheme);
     },
-    getData () {
-      this.schemeList = this.recentlyUsedList
+    getData() {
+      this.schemeList = this.recentlyUsedList;
       if (this.schemeList.length === 0) {
-        this.$router.replace({ name: 'home' })
-        return
+        this.$router.replace({ name: 'home' });
+        return;
       }
-      this.currentScheme = this.schemeList[0]
+      this.currentScheme = this.schemeList[0];
       if (!!!this.currentScheme) {
-        this.$router.replace({ name: 'home' })
-        return
+        this.$router.replace({ name: 'home' });
+        return;
       }
 
-      this.keyList = this.currentScheme.keyList
-      this.appContent = this.schemeList[0]
-      if (!this.keyList.length) this.isData = false
-      this.sideNav = this.keyList.filter(i => i.groupName)
+      this.keyList = this.currentScheme.keyList;
+      this.appContent = this.schemeList[0];
+      if (!this.keyList.length) this.isData = false;
+      this.sideNav = this.keyList.filter((i) => i.groupName);
       if (this.currentScheme.showSide === undefined) {
         //如果从未设置是否显示侧边栏，则根据侧边栏的数量，自动给一个值
         if (this.sideNav.length < 4) {
-          this.currentScheme.showSide = false
+          this.currentScheme.showSide = false;
         } else {
-          this.currentScheme.showSide = true
+          this.currentScheme.showSide = true;
         }
-        this.saveScheme(this.currentScheme)
+        this.saveScheme(this.currentScheme);
       }
-
     },
     /**
      * 切换方案
      * @param index
      * @param item
-     */ async switchScheme (index, item) {
-      await this.setRecentlyUsedList(item)
-      this.currentScheme = item
-      this.navIndex = index
-      this.keyList = item.keyList
-      this.appContent = item
-      this.currentIndex = 0
-      this.sideNav = this.keyList.filter(i => i.groupName)
-      this.recentlyUsedVisible = false
-      this.getData()
-      this.navIndex = 0
-
+     */ async switchScheme(index, item) {
+      await this.setRecentlyUsedList(item);
+      this.currentScheme = item;
+      this.navIndex = index;
+      this.keyList = item.keyList;
+      this.appContent = item;
+      this.currentIndex = 0;
+      this.sideNav = this.keyList.filter((i) => i.groupName);
+      this.recentlyUsedVisible = false;
+      this.getData();
+      this.navIndex = 0;
     },
-    setKeyItem (id) {
-      this.keyIndex = id
+    setKeyItem(id) {
+      this.keyIndex = id;
     },
-    onBack () {
-      this.$router.go(-1)
+    onBack() {
+      this.$router.go(-1);
     },
-    btnEdit () {
-      this.openSet = false
-      this.$router.push({ name: 'shareKey', params: { id: this.appContent.id } })
+    btnEdit() {
+      this.openSet = false;
+      this.$router.push({ name: 'shareKey', params: { id: this.appContent.id } });
     },
-    async btnDel () {
+    async btnDel() {
       Modal.confirm({
         centered: true,
         content: '是否删除此方案？此操作不可恢复。',
         onOk: async () => {
-          await this.removeShortcutKeyList(this.appContent)
-          message.success('删除成功')
-          this.onBack()
-        }
-      })
-
+          await this.removeShortcutKeyList(this.appContent);
+          message.success('删除成功');
+          this.onBack();
+        },
+      });
     },
-    updateNavIndex (item, index) {
-      let groupId = document.getElementById('groupId_' + item.id)
-      this.currentIndex = index
-      this.currentGroup = item
+    updateNavIndex(item, index) {
+      let groupId = document.getElementById('groupId_' + item.id);
+      this.currentIndex = index;
+      this.currentGroup = item;
       this.activeGroup = {
-        background: 'var(--active-bg)'
-      }
+        background: 'var(--active-bg)',
+      };
       setTimeout(() => {
-        this.activeGroup = {}
-      }, 500)
-      let marginLeft = getComputedStyle(groupId, null).marginLeft
-      document.getElementById('scrollCus').scrollLeft = groupId.offsetLeft - parseInt(marginLeft.split('p')[0])
+        this.activeGroup = {};
+      }, 500);
+      let marginLeft = getComputedStyle(groupId, null).marginLeft;
+      document.getElementById('scrollCus').scrollLeft = groupId.offsetLeft - parseInt(marginLeft.split('p')[0]);
     },
-    share () {
-      if (!this.appContent.keyList.length) return message.info('无快捷键列表，请前往编辑')
-      this.appContent.isShare = true
-      this.setMarketList(this.appContent)
-      message.success('上传成功')
-      this.openSet = false
-    }
+    share() {
+      if (!this.appContent.keyList.length) return message.info('无快捷键列表，请前往编辑');
+      this.appContent.isShare = true;
+      this.setMarketList(this.appContent);
+      message.success('上传成功');
+      this.openSet = false;
+    },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -539,7 +577,6 @@ export default {
   flex-wrap: wrap;
   height: 100%;
   width: 100%;
-
 }
 
 .key-box::-webkit-scrollbar {
@@ -572,7 +609,6 @@ export default {
     padding-top: 4px;
     text-align: right;
   }
-
 }
 
 .border-right {
@@ -593,7 +629,6 @@ export default {
 .s-bg {
   box-shadow: none !important;
 }
-
 
 .text-note {
   margin-top: 5px;
@@ -620,7 +655,7 @@ export default {
 
 .active {
   background: var(--mask-bg);
-  border-radius: 10px
+  border-radius: 10px;
 }
 
 .rounded-top {

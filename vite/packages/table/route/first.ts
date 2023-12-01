@@ -1,20 +1,20 @@
-import Lock from '@page/Lock.vue'
-import Wizard from '@page/Wizard.vue'
+import Lock from '@page/Lock.vue';
+import Wizard from '@page/Wizard.vue';
 //设置
-import Splash from '@page/Splash.vue'
+import Splash from '@page/Splash.vue';
 //import index from './index'
 // 快捷键
-import CreativeMarket from "@apps/shortcutKey/page/CreativeMarket.vue"
+import CreativeMarket from '@apps/shortcutKey/page/CreativeMarket.vue';
 
-import MainLayout from "@page/MainLayout.vue";
-import SecondRoutes from "./second.ts";
-import {RouteRecordRaw} from "vue-router";
+import MainLayout from '@page/MainLayout.vue';
+import SecondRoutes from './second.ts';
+import { RouteRecordRaw } from 'vue-router';
 
 // 一級路由
 export const routes: RouteRecordRaw[] = [
   {
-    path: "/main",
-    name: "main",
+    path: '/main',
+    name: 'main',
     component: MainLayout,
     children: SecondRoutes,
   },
@@ -24,14 +24,14 @@ export const routes: RouteRecordRaw[] = [
     component: Lock,
   },
   {
-    path: '/splash',
+    path: '',
     name: 'splash',
-    component: Splash
+    component: Splash,
   },
   {
     path: '/wizard',
     name: 'wizard',
-    component: Wizard
+    component: Wizard,
   },
   {
     path: '/creativeMarket',
@@ -44,6 +44,5 @@ export const routes: RouteRecordRaw[] = [
     //     component: MarketList
     //   },
     // ]
-  }
-]
-
+  },
+];

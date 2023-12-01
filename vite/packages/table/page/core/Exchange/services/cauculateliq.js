@@ -40,7 +40,7 @@ function liquidity0(amount, pa, pb) {
     [pa, pb] = [pb, pa];
   }
   // eslint-disable-next-line no-undef
-  return BigInt(amount) * pa * pb / q96 / (pb - pa);
+  return (BigInt(amount) * pa * pb) / q96 / (pb - pa);
 }
 
 function liquidity1(amount, pa, pb) {
@@ -48,7 +48,7 @@ function liquidity1(amount, pa, pb) {
     [pa, pb] = [pb, pa];
   }
   // eslint-disable-next-line no-undef
-  return BigInt(amount) * q96 / (pb - pa);
+  return (BigInt(amount) * q96) / (pb - pa);
 }
 
 export function caculateLiqDetla(pricelow, pricecur, priceupp, amount0, amount1) {

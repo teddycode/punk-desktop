@@ -1,8 +1,8 @@
 <template>
   <div class="message-merger">
-    <div :data-value="data.message" class="merger-box">
+    <div class="merger-box" :data-value="data.message">
       <p class="merger-title">{{ data.title }}</p>
-      <p v-for="(item, index) in data.abstractList" :key="index" class="merger-text">
+      <p class="merger-text" v-for="(item, index) in data.abstractList" :key="index">
         {{ item }}
       </p>
     </div>
@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, reactive, toRefs, watchEffect} from 'vue';
+import { defineComponent, watchEffect, reactive, toRefs } from 'vue';
 
 export default defineComponent({
   props: {
@@ -37,11 +37,9 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import url('../../../styles/common.scss');
 @import url('../../../styles/icon.scss');
-
 .message-merger {
   display: flex;
   flex-direction: column;
-
   .merger-label {
     border-top: 1px solid #dddddd;
     margin-top: 10px;

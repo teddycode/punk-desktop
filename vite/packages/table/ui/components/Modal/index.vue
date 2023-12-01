@@ -1,11 +1,11 @@
 <template>
   <!-- 弹窗层 -->
   <div
-      v-if="modelValue"
-      :style="{
+    v-if="modelValue"
+    :style="{
       'z-index': boxIndex,
     }"
-      class="xt-text xt-modal xt-shadow fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 rounded-xl p-3"
+    class="xt-text xt-modal xt-shadow fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 rounded-xl p-3"
   >
     <!-- 头部 -->
     <header v-if="isHeader">
@@ -17,13 +17,9 @@
           </slot>
         </template>
         <template #right>
-          <div class="flex items-center ">
+          <div class="flex items-center">
             <slot name="headerRight"></slot>
-            <xt-new-icon
-                bgClass="xt-bg-2"
-                icon="fluent:dismiss-16-filled"
-                @click="colseClick()"
-            />
+            <xt-new-icon bgClass="xt-bg-2" icon="fluent:dismiss-16-filled" @click="colseClick()" />
           </div>
         </template>
       </xt-text>
@@ -42,17 +38,17 @@
   </div>
   <!-- 遮罩层 -->
   <div
-      v-if="modelValue"
-      :style="{
+    v-if="modelValue"
+    :style="{
       'z-index': maskIndex,
     }"
-      class="xt-mask h-full w-full fixed top-0 left-0 ring-0 bottom-0"
-      @click.stop.self="colseClick()"
+    class="xt-mask h-full w-full fixed top-0 left-0 ring-0 bottom-0"
+    @click.stop.self="colseClick()"
   ></div>
 </template>
 
 <script setup>
-import { onBeforeUnmount, onMounted } from 'vue'
+import { onBeforeUnmount, onMounted } from 'vue';
 
 const props = defineProps({
   // 遮罩层级
@@ -83,37 +79,37 @@ const props = defineProps({
   isHeader: {
     default: true,
   },
-})
-const emits = defineEmits(['close', 'ok', 'modelValue'])
+});
+const emits = defineEmits(['close', 'ok', 'modelValue']);
 
 // 关闭
 const colseClick = () => {
-  emits('update:modelValue', false)
-  emits('close')
-}
+  emits('update:modelValue', false);
+  emits('close');
+};
 
 // 完成
 const okClick = () => {
-  emits('update:modelValue', false)
-  emits('ok')
-}
+  emits('update:modelValue', false);
+  emits('ok');
+};
 
 // esc关闭
 const handleEscKeyPressed = (event) => {
   if (props.esc && event.keyCode === 27) {
-    colseClick()
+    colseClick();
   }
-}
+};
 onMounted(() => {
   window.addEventListener('keydown', handleEscKeyPressed, {
     capture: true,
-  })
-})
+  });
+});
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', handleEscKeyPressed, {
     capture: true,
-  })
-})
+  });
+});
 </script>
 
 <style lang="scss" scoped></style>

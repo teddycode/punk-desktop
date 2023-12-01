@@ -4,18 +4,18 @@
 </template>
 
 <script>
-import editMixins from '../hooks/mixins'
-import { shapeList } from '../hooks/config'
+import editMixins from '../hooks/mixins';
+import { shapeList } from '../hooks/config';
 
 export default {
   mixins: [editMixins],
-  data () {
+  data() {
     return {
       shape: 'square',
       shapeList,
-    }
+    };
   },
-}
+};
 </script>
 
 <style lang="scss" scoped></style>

@@ -1,13 +1,22 @@
 <template>
-  <div :data-index="index" :style="[iconSize]"
-       class="cursor-pointer rounded-xl xt-hover black xt-base-btn flex-col justify-around"
-       @click.stop="iconClick($event)">
-    <div :data-index="index"
-         :style="[bgSize, backgroundState]"
-         class="xt-text overflow-hidden no-drag flex items-center justify-center rounded-xl w-full">
-      <img v-if="src && src.length > 0" :data-index="index" :src="renderIcon(src)"
-           :style="[imgSize, radiusState, imgStateStyle]"
-           alt=""/>
+  <div
+    :data-index="index"
+    :style="[iconSize]"
+    class="cursor-pointer rounded-xl xt-hover black xt-base-btn flex-col justify-around"
+    @click.stop="iconClick($event)"
+  >
+    <div
+      :data-index="index"
+      :style="[bgSize, backgroundState]"
+      class="xt-text overflow-hidden no-drag flex items-center justify-center rounded-xl w-full"
+    >
+      <img
+        v-if="src && src.length > 0"
+        :data-index="index"
+        :src="renderIcon(src)"
+        :style="[imgSize, radiusState, imgStateStyle]"
+        alt=""
+      />
     </div>
     <div v-if="isTitle" :data-index="index" :style="[textSize]" class="text-center xt-text h-5 truncate mx-auto">
       {{ titleValue }}
@@ -17,10 +26,10 @@
 </template>
 
 <script>
-import { message } from 'ant-design-vue'
-import editProps from '../hooks/editProps'
-import { sizeValues } from './iconConfig'
-import { renderIcon } from '@js/common/common'
+import { message } from 'ant-design-vue';
+import editProps from '../hooks/editProps';
+import { sizeValues } from './iconConfig';
+import { renderIcon } from '@js/common/common';
 
 export default {
   mixins: [editProps],
@@ -32,74 +41,68 @@ export default {
   data() {
     return {
       visible: false,
-    }
+    };
   },
   computed: {
     // 动态切换圆角状态
     radiusState() {
-      if (this.state) return
+      if (this.state) return;
       if (this.isRadius)
         return {
           borderRadius: this.radius + '%',
-        }
-      else return { borderRadius: '0px' }
+        };
+      else return { borderRadius: '0px' };
     },
     // 动态切换背景状态
     backgroundState() {
-      if (this.state) return
-      if (this.isBackground) return { background: this.backgroundColor }
-      else return { background: 'none' }
+      if (this.state) return;
+      if (this.isBackground) return { background: this.backgroundColor };
+      else return { background: 'none' };
     },
     iconSize() {
-      return this.getSizeValues(this.size).iconSize
+      return this.getSizeValues(this.size).iconSize;
     },
     textSize() {
-      let textSize = this.getSizeValues(this.size).textSize
+      let textSize = this.getSizeValues(this.size).textSize;
       if (this.size === 'icons1' || this.size === 'icons2') {
-        textSize['font-size'] = '12px'
-        textSize['margin-top'] = '4px'
+        textSize['font-size'] = '12px';
+        textSize['margin-top'] = '4px';
       } else {
-        textSize['font-size'] = '14px'
+        textSize['font-size'] = '14px';
       }
-      return textSize
+      return textSize;
     },
     imgSize() {
-      return this.getSizeValues(this.size).imgSize
+      return this.getSizeValues(this.size).imgSize;
     },
     bgSize() {
-      return this.getSizeValues(this.size).bgSize
+      return this.getSizeValues(this.size).bgSize;
     },
     imgStateStyle() {
       return {
         'object-fit': this.imgState,
-      }
+      };
     },
   },
   watch: {
-    imgShape(newV) {
-    },
+    imgShape(newV) {},
   },
   methods: {
     renderIcon,
     getSizeValues(size) {
       if (this.isReSize) {
-        size = 'mini'
+        size = 'mini';
       }
 
-      let { w, h } = sizeValues[size]
+      let { w, h } = sizeValues[size];
 
-      let imgW = sizeValues[size][this.imgShape].w
-      let imgH = sizeValues[size][this.imgShape].h
+      let imgW = sizeValues[size][this.imgShape].w;
+      let imgH = sizeValues[size][this.imgShape].h;
 
       if (this.imgShape !== 'square') {
-        imgH = this.isTitle ? imgH : imgH + 20
+        imgH = this.isTitle ? imgH : imgH + 20;
       }
-      let bgH =
-          this.size === 'icons1' || this.size === 'icons2'
-              ? imgH
-              : this.isTitle
-                  ? h - 20
-                  : h
+      let bgH = this.size === 'icons1' || this.size === 'icons2' ? imgH : this.isTitle ? h - 20 : h;
       return {
         bgSize: {
           width: `${w}px`,
@@ -117,19 +120,19 @@ export default {
           width: `${imgW}px`,
           height: `${imgH}px`,
         },
-      }
+      };
     },
     closeModal() {
-      window.open('https://www.apps.vip/download/')
-      this.visible = false
+      window.open('https://www.apps.vip/download/');
+      this.visible = false;
     },
     // 单图标点击执行app
     iconClick(event) {
       try {
-        console.log('点击信息: ', JSON.stringify(this?.open))
+        console.log('点击信息: ', JSON.stringify(this?.open));
         if (event.ctrlKey && event.button === 0) {
-          this.$emit('custom-event')
-          return
+          this.$emit('custom-event');
+          return;
         }
         // 先检测是不是web端
         // if (!this.$isXT) {
@@ -143,63 +146,63 @@ export default {
         // }
         if (this.open !== undefined && this.open.value !== '') {
           // 链接
-          this.newOpenApp()
+          this.newOpenApp();
         } else if (this.link !== '') {
           // 其他应用
-          this.openApp(this.linkValue)
-        } else message.error('你还未设置链接/快捷方式')
+          this.openApp(this.linkValue);
+        } else message.error('你还未设置链接/快捷方式');
       } catch (e) {
-        console.log(e)
-        message.error('应用打开失败！')
+        console.log(e);
+        message.error('应用打开失败！');
       }
     },
     // 新版app打开方式
     newOpenApp() {
       switch (this.open.type) {
-          // 默认浏览器
+        // 默认浏览器
         case 'default':
-          browser.openInSystem(this.open.value)
-          break
-          // 嵌入浏览器
+          browser.openInSystem(this.open.value);
+          break;
+        // 嵌入浏览器
         case 'internal':
-          browser.openInTable(this.open.value)
-          break
-          // 磐古跨链客户端
+          browser.openInTable(this.open.value);
+          break;
+        // 磐古跨链客户端
         case 'thinksky':
-          browser.openInInner(this.open.value)
-          break
-          // 轻应用
+          browser.openInInner(this.open.value);
+          break;
+        // 轻应用
         case 'lightApp':
           ipc.send('executeAppByPackage', {
             package: this.open.value,
-          })
-          break
-          // 酷应用
+          });
+          break;
+        // 酷应用
         case 'coolApp':
-          this.$router.push({ name: 'app', params: this.open.value })
-          break
-          // 本地应用
+          this.$router.push({ name: 'app', params: this.open.value });
+          break;
+        // 本地应用
         case 'tableApp':
-          require('electron').shell.openPath(require('path').normalize(this.open.value))
-          break
-          // 桌面内嵌页面，由route跳转并携带参数
+          require('electron').shell.openPath(require('path').normalize(this.open.value));
+          break;
+        // 桌面内嵌页面，由route跳转并携带参数
         case 'pageApp':
-          let route = { name: this.open?.route, params: { data: this.open?.params } }
-          console.log('跳转路由：', route)
-          this.$router.push(route)
-          break
-          // 系统应用
-          // case "systemApp":
-          //   if (this.open.value.event === "fullscreen") {
-          //     tsbApi.window.setFullScreen(this.full);
-          //   } else if (this.open.value.event === "/status") {
-          //     this.$router.push({ path: "/status" });
-          //   } else if (this.linkValue.data) {
-          //     this.$router.push({ name: "app", params: this.linkValue.data });
-          //   } else this.$router.push({ name: this.linkValue.event });
-          //   break;
+          let route = { name: this.open?.route, params: { data: this.open?.params } };
+          console.log('跳转路由：', route);
+          this.$router.push(route);
+          break;
+        // 系统应用
+        // case "systemApp":
+        //   if (this.open.value.event === "fullscreen") {
+        //     tsbApi.window.setFullScreen(this.full);
+        //   } else if (this.open.value.event === "/status") {
+        //     this.$router.push({ path: "/status" });
+        //   } else if (this.linkValue.data) {
+        //     this.$router.push({ name: "app", params: this.linkValue.data });
+        //   } else this.$router.push({ name: this.linkValue.event });
+        //   break;
         default:
-          this.openApp()
+          this.openApp();
       }
     },
     // 复制来到 旧版打开app
@@ -210,38 +213,36 @@ export default {
             if (this.linkValue.event === 'fullscreen') {
               // 这里不知道啥意思linkValue
               this.full = !this.full;
-              tsbApi.window.setFullScreen(!this.full)
+              tsbApi.window.setFullScreen(!this.full);
             } else if (this.linkValue.event === '/status') {
-              if (this.$route.path === '/status') this.$router.go(-1)
-              else this.$router.push({ path: '/status' })
+              if (this.$route.path === '/status') this.$router.go(-1);
+              else this.$router.push({ path: '/status' });
             } else if (this.linkValue.data) {
-              this.$router.push({ name: 'app', params: this.linkValue.data })
-            } else this.$router.push({ name: this.linkValue.event })
-            break
+              this.$router.push({ name: 'app', params: this.linkValue.data });
+            } else this.$router.push({ name: this.linkValue.event });
+            break;
           case 'coolApp':
-            this.$router.push({ name: 'app', params: this.linkValue.data })
-            break
+            this.$router.push({ name: 'app', params: this.linkValue.data });
+            break;
           case 'localApp':
-            require('electron').shell.openPath(this.linkValue.path)
-            break
+            require('electron').shell.openPath(this.linkValue.path);
+            break;
           case 'lightApp':
             ipc.send('executeAppByPackage', {
               package: this.linkValue.package,
-            })
-            break
+            });
+            break;
           default:
-            require('electron').shell.openPath(this.linkValue.path)
+            require('electron').shell.openPath(this.linkValue.path);
         }
       } else if (this.linkValue) {
         this.linkValue.path
-            ? require('electron').shell.openPath(this.linkValue.path)
-            : require('electron').shell.openPath(
-                require('path').normalize(this.linkValue)
-            )
+          ? require('electron').shell.openPath(this.linkValue.path)
+          : require('electron').shell.openPath(require('path').normalize(this.linkValue));
       }
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped></style>

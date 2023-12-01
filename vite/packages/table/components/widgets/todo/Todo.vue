@@ -1,86 +1,85 @@
 <template>
   <Widget
-      ref="todoSlot"
-      :customData="customData"
-      :desk="desk"
-      :menuList="toggleTodoList"
-      :options="options"
-      :sizeList="sizeList"
+    ref="todoSlot"
+    :customData="customData"
+    :desk="desk"
+    :menuList="toggleTodoList"
+    :options="options"
+    :sizeList="sizeList"
   >
     <template #right-menu>
-      <div class="pointer float-right" style=" z-index: 0;  margin-left: 10px" @click="todoPage">
-        <RightOutlined/>
+      <div class="pointer float-right" style="z-index: 0; margin-left: 10px" @click="todoPage">
+        <RightOutlined />
       </div>
     </template>
 
-    <div style="height:100%;">
-      <div class="pointer" style="position: absolute;left: 12px;top:12px;" @click="todoPage">
-        <Icon icon="check-square" style="color:var(--secondary-text);font-size:24px"></Icon>
+    <div style="height: 100%">
+      <div class="pointer" style="position: absolute; left: 12px; top: 12px" @click="todoPage">
+        <Icon icon="check-square" style="color: var(--secondary-text); font-size: 24px"></Icon>
       </div>
 
       <div class="head-title">
-        <div @click.stop="showDrawer">{{ selectTodo.title }}
-        </div>
-
+        <div @click.stop="showDrawer">{{ selectTodo.title }}</div>
       </div>
 
-      <div class="mt-2 " style="cursor: auto;height:calc( 100% - 30px);position: relative" @click.stop>
-        <Tasklist :data="notFinish" class="content-box "></Tasklist>
+      <div class="mt-2" style="cursor: auto; height: calc(100% - 30px); position: relative" @click.stop>
+        <Tasklist :data="notFinish" class="content-box"></Tasklist>
 
-        <div style="position:absolute;display: flex;right:0;align-content: end;bottom:0;z-index: 99">
-          <div v-if="addVisible" style="display: flex;margin-bottom:-15px;width: 250px;">
-            <xt-button :h="47" :w="42" class="mr-2" style="margin-top:9px" type="default" @click="toggleInput">
-              <left-outlined/>
+        <div style="position: absolute; display: flex; right: 0; align-content: end; bottom: 0; z-index: 99">
+          <div v-if="addVisible" style="display: flex; margin-bottom: -15px; width: 250px">
+            <xt-button :h="47" :w="42" class="mr-2" style="margin-top: 9px" type="default" @click="toggleInput">
+              <left-outlined />
             </xt-button>
-            <div style="flex:1;">
+            <div style="flex: 1">
               <TaskInput ref="input" :addToList="selectTodo" @added="added"></TaskInput>
             </div>
           </div>
           <div>
-
             <xt-button v-if="!addVisible" :h="40" :w="40" type="theme" @click="toggleInput">
-              <plus-outlined/>
+              <plus-outlined />
             </xt-button>
           </div>
-
         </div>
-
-
       </div>
-
     </div>
   </Widget>
   <a-drawer v-model:visible="openSettings" placement="right" title="设置" width="500">
-    <div class="flex flex-col" style="color:var(--primary-text)">
-      <span class="drawer-title" style="margin-top:0;">类型</span>
-      <span v-for="(item,index) in todoType" :key="index"
-            :class="selectTodo.nanoid === item.nanoid ? 'active-index':''"
-            class="mb-4  text-center pointer change h-12 xt-bg-2 rounded-lg show-game-time py-3"
-            @click.stop="getTodoType(item)">
-         {{ item.title }}
+    <div class="flex flex-col" style="color: var(--primary-text)">
+      <span class="drawer-title" style="margin-top: 0">类型</span>
+      <span
+        v-for="(item, index) in todoType"
+        :key="index"
+        :class="selectTodo.nanoid === item.nanoid ? 'active-index' : ''"
+        class="mb-4 text-center pointer change h-12 xt-bg-2 rounded-lg show-game-time py-3"
+        @click.stop="getTodoType(item)"
+      >
+        {{ item.title }}
       </span>
       <span class="drawer-title">清单</span>
-      <span v-for="(item,index) in listType" :key="index"
-            :class="selectTodo.nanoid === item.nanoid ? 'active-index':''"
-            class="mb-4  text-center pointer change h-12 xt-bg-2 rounded-lg show-game-time py-3"
-            @click.stop="getTodoType(item,index)">
-         {{ item.title }}
+      <span
+        v-for="(item, index) in listType"
+        :key="index"
+        :class="selectTodo.nanoid === item.nanoid ? 'active-index' : ''"
+        class="mb-4 text-center pointer change h-12 xt-bg-2 rounded-lg show-game-time py-3"
+        @click.stop="getTodoType(item, index)"
+      >
+        {{ item.title }}
       </span>
     </div>
   </a-drawer>
 </template>
 
 <script lang="ts">
-import Widget from '../../card/Widget.vue'
-import {mapWritableState} from 'pinia'
-import Tasklist from './TaskList.vue'
-import {databaseStore, listStore, taskStore} from "@page/app/todo/store";
-import {LeftOutlined, PlusOutlined, RightOutlined} from "@ant-design/icons-vue";
-import XtButton from "../../../ui/libs/Button/index.vue";
-import Modal from "../../Modal.vue";
-import TaskInput from "@page/app/todo/components/TaskInput.vue";
-import {Tippy} from "vue-tippy";
-import {message} from 'ant-design-vue'
+import Widget from '../../card/Widget.vue';
+import { mapWritableState } from 'pinia';
+import Tasklist from './TaskList.vue';
+import { databaseStore, listStore, taskStore } from '@page/app/todo/store';
+import { LeftOutlined, PlusOutlined, RightOutlined } from '@ant-design/icons-vue';
+import XtButton from '../../../ui/libs/Button/index.vue';
+import Modal from '../../Modal.vue';
+import TaskInput from '@page/app/todo/components/TaskInput.vue';
+import { Tippy } from 'vue-tippy';
+import { message } from 'ant-design-vue';
 
 export default {
   name: 'Todo',
@@ -88,22 +87,24 @@ export default {
     Tippy,
     TaskInput,
     Modal,
-    XtButton, PlusOutlined, LeftOutlined, RightOutlined,
+    XtButton,
+    PlusOutlined,
+    LeftOutlined,
+    RightOutlined,
     Widget,
     Tasklist,
   },
   props: {
     customIndex: {
       type: Number,
-      default: 0
+      default: 0,
     },
     customData: {
       type: Object,
-      default: () => {
-      }
+      default: () => {},
     },
     desk: {
-      type: Object
+      type: Object,
     },
   },
   data() {
@@ -111,33 +112,40 @@ export default {
       addVisible: false,
 
       // options: {className: 'card small',title: '',icon: 'check-square',type: 'todo'},
-      options: {className: 'card small', title: '', type: 'todo'},
-      sizeList: [{title: '2x2', height: 1, width: 1, name: '1x1'}, {title: '2x4', height: 2, width: 1, name: '1x2'}],
+      options: { className: 'card small', title: '', type: 'todo' },
+      sizeList: [
+        { title: '2x2', height: 1, width: 1, name: '1x1' },
+        { title: '2x4', height: 2, width: 1, name: '1x2' },
+      ],
       openSettings: false,
-      toggleTodoList: [{
-        icon: 'shezhi1', title: '设置', fn: () => {
-          this.openSettings = true;
-          this.$refs.todoSlot.visible = false
-        }
-      }],
+      toggleTodoList: [
+        {
+          icon: 'shezhi1',
+          title: '设置',
+          fn: () => {
+            this.openSettings = true;
+            this.$refs.todoSlot.visible = false;
+          },
+        },
+      ],
       todoType: [
-        {title: '个人', nanoid: 'T00111'},
-        {title: '今天', nanoid: 'T00222'},
-        {title: '七天', nanoid: 'T00333'}
+        { title: '个人', nanoid: 'T00111' },
+        { title: '今天', nanoid: 'T00222' },
+        { title: '七天', nanoid: 'T00333' },
       ],
       // 清单
       listType: [],
       todoIndex: 0,
-      selectTodo: {title: '个人', nanoid: 'T00111'},
-      taskList: []
-    }
+      selectTodo: { title: '个人', nanoid: 'T00111' },
+      taskList: [],
+    };
   },
   computed: {
-    ...mapWritableState(taskStore, ["taskFilter", "displayList", 'tasks']),
-    ...mapWritableState(listStore, ["activeList", "lists"]),
+    ...mapWritableState(taskStore, ['taskFilter', 'displayList', 'tasks']),
+    ...mapWritableState(listStore, ['activeList', 'lists']),
     notFinish() {
-      return this.taskList.filter(item => !item.completed)
-    }
+      return this.taskList.filter((item) => !item.completed);
+    },
   },
   async mounted() {
     //初始化数据
@@ -149,56 +157,55 @@ export default {
     //   this.todoIndex = this.customData.id
     // }
     if (this.customData?.currentTodo) {
-      this.selectTodo = this.customData.currentTodo
+      this.selectTodo = this.customData.currentTodo;
     }
     this.listType = this.lists?.map((item, index) => {
-      return Object.assign({}, {'title': item.title, 'nanoid': item.nanoid})
-    })
-    if (!this.listType.length) this.selectTodo = {title: '个人', nanoid: 'T00111'}
-    this.getTodoType(this.selectTodo)
-
+      return Object.assign({}, { title: item.title, nanoid: item.nanoid });
+    });
+    if (!this.listType.length) this.selectTodo = { title: '个人', nanoid: 'T00111' };
+    this.getTodoType(this.selectTodo);
   },
   methods: {
     added() {
-      this.getTodoType(this.selectTodo)
-      message.success('添加任务成功。')
+      this.getTodoType(this.selectTodo);
+      message.success('添加任务成功。');
     },
     showDrawer() {
-      this.openSettings = true
-      this.$refs.todoSlot.visible = false
+      this.openSettings = true;
+      this.$refs.todoSlot.visible = false;
     },
     toggleInput() {
-      this.addVisible = !this.addVisible
+      this.addVisible = !this.addVisible;
       setTimeout(() => {
-        this.$refs.input.focus()
-      }, 200)
+        this.$refs.input.focus();
+      }, 200);
     },
     getTodoType(item, index) {
-      this.customData.currentTodo = item
-      this.selectTodo = item
+      this.customData.currentTodo = item;
+      this.selectTodo = item;
       // this.customData.id = index
       // this.todoIndex = this.customData.id
-      this.openSettings = false
+      this.openSettings = false;
       switch (item.nanoid) {
         case 'T00111':
-          this.taskList = this.tasks
+          this.taskList = this.tasks;
           break;
         case 'T00222':
-          this.taskList = []
+          this.taskList = [];
           break;
         case 'T00333':
-          this.taskList = []
+          this.taskList = [];
           break;
         default:
-          this.taskList = this.tasks.filter(t => t.listNanoid[0] === item.nanoid)
+          this.taskList = this.tasks.filter((t) => t.listNanoid[0] === item.nanoid);
           break;
       }
     },
     todoPage() {
-      this.$router.push({name: 'todo'})
-    }
-  }
-}
+      this.$router.push({ name: 'todo' });
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -213,7 +220,6 @@ export default {
 }
 
 .drawer-title {
-
   font-size: 16px;
   color: var(--primary-text);
   letter-spacing: 0;
@@ -232,6 +238,5 @@ export default {
   top: 12px;
   color: var(--primary-text);
   display: flex;
-
 }
 </style>

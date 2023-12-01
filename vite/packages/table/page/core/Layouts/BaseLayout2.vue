@@ -7,13 +7,11 @@
 <script>
 export default {
   name: 'BaseLayout2',
-  data () {
-    return {}
+  data() {
+    return {};
   },
-  methods: {}
-}
+  methods: {},
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

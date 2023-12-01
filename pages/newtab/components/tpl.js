@@ -1,26 +1,21 @@
 const tplTpl = `
 <div>
 </div>
-  `
+  `;
 Vue.component('tpl', {
   template: tplTpl,
   name: 'tpl',
   props: [],
   components: {},
-  data () {
+  data() {
     return {
       mySearch: [],
-    }
+    };
   },
   computed: {},
-  mounted () {
-
-  },
+  mounted() {},
   methods: {
-    chooseSearch (id, index) {
-    }
-  }
-  ,
-  destroyed () {
-  }
-})
+    chooseSearch(id, index) {},
+  },
+  destroyed() {},
+});

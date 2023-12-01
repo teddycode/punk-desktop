@@ -37,16 +37,16 @@ const cloudTpl = `
     </div>
   </template>
 </div>
-  `
-const { appListModel, treeUtil } = require('../../util/model/appListModel.js')
+  `;
+const { appListModel, treeUtil } = require('../../util/model/appListModel.js');
 const getNameInputValue = function () {
-  return document.getElementById('nameInput').value
-}
+  return document.getElementById('nameInput').value;
+};
 Vue.component('cloud-comp', {
   name: 'cloud-comp',
   template: cloudTpl,
   props: {},
-  data () {
+  data() {
     return {
       //创建列表的弹窗可见
       createListVisible: false,
@@ -69,156 +69,159 @@ Vue.component('cloud-comp', {
           children: [],
         },
       ],
-    }
+    };
   },
-  async mounted () {
+  async mounted() {
     window.$trees.push({
       name: 'cloud',
       comp: this,
-    })
-    await this.refreshNavs()
-    console.log(this.myAppsLists)
+    });
+    await this.refreshNavs();
+    console.log(this.myAppsLists);
   },
   methods: {
-    async refreshNavs () {
-      await this.$store.dispatch('getAppUserNavs')
+    async refreshNavs() {
+      await this.$store.dispatch('getAppUserNavs');
       if (this.myAppsLists[0].children.length > 0) {
-        this.myAppsLists[0].children = []   //重置
+        this.myAppsLists[0].children = []; //重置
         this.$store.getters.getAppUserNavs.forEach((element) => {
-          this.myAppsLists[0].children.push(appListModel.convertTreeNode(element))
-        })
+          this.myAppsLists[0].children.push(appListModel.convertTreeNode(element));
+        });
       } else {
         this.$store.getters.getAppUserNavs.forEach((element) => {
-          this.myAppsLists[0].children.push(appListModel.convertTreeNode(element))
-        })
+          this.myAppsLists[0].children.push(appListModel.convertTreeNode(element));
+        });
       }
     },
-    onSelect (selectedKeys, info) {
-      console.log(selectedKeys, '__selectedKeys__')
-      console.log(info, 'info')
+    onSelect(selectedKeys, info) {
+      console.log(selectedKeys, '__selectedKeys__');
+      console.log(info, 'info');
       if (selectedKeys.length > 0) {
         if (selectedKeys[0] === 'cloud') {
-          this.$router.push({ name: 'cloudNavs', query: { t: Date.now() } })
-          resetOtherTree('cloud', selectedKeys)
+          this.$router.push({ name: 'cloudNavs', query: { t: Date.now() } });
+          resetOtherTree('cloud', selectedKeys);
         } else {
-          let jump = Number(selectedKeys[0])
-          let type = Number
-          let name = '默认列表'
-          let summary = '描述'
+          let jump = Number(selectedKeys[0]);
+          let type = Number;
+          let name = '默认列表';
+          let summary = '描述';
           this.$store.getters.getAppUserNavs.forEach((item) => {
             if (item.id === selectedKeys[0]) {
-              type = item.type
-              name = item.name
-              summary = item.summary
+              type = item.type;
+              name = item.name;
+              summary = item.summary;
             }
-          })
+          });
           this.$router.push({
             name: 'cloud',
-            query: { listId: jump, t: Date.now(), type: type, name: name, summary: summary }
-          })
-          resetOtherTree('cloud', selectedKeys)
+            query: { listId: jump, t: Date.now(), type: type, name: name, summary: summary },
+          });
+          resetOtherTree('cloud', selectedKeys);
         }
       } else {
         //todo 如果再次点击树节点，导致selectedKeys是空数组了，路由跳转到默认列表
         //todo 默认列表设置是无法被删除的节点，且在用户创建的时候已经建立
       }
-
     },
-    onContextMenuClick (treeKey, menuKey) {
+    onContextMenuClick(treeKey, menuKey) {
       if (menuKey === 'createList') {
         //创建列表菜单
-        this.handleMenuCreateList(treeKey)
+        this.handleMenuCreateList(treeKey);
       } else if (menuKey === 'renameList') {
-        this.handleMenuRenameList(treeKey)
+        this.handleMenuRenameList(treeKey);
       } else if (menuKey === 'deleteList') {
-        this.handleMenuDeleteList(treeKey)
+        this.handleMenuDeleteList(treeKey);
       }
     },
-    createList (callback = () => {}, value = '', title = '') {
-      this.createTitle = title
-      this.createListVisible = true
-      this.handleNameInput = callback
+    createList(callback = () => {}, value = '', title = '') {
+      this.createTitle = title;
+      this.createListVisible = true;
+      this.handleNameInput = callback;
       appVue.$nextTick(() => {
-        document.getElementById('nameInput').value = value
-      })
+        document.getElementById('nameInput').value = value;
+      });
     },
-    handleMenuDeleteList (treeKey) {
-      let that = this
-      const { list } = treeUtil.findTreeNode(treeKey, this.myAppsLists[0].children)
+    handleMenuDeleteList(treeKey) {
+      let that = this;
+      const { list } = treeUtil.findTreeNode(treeKey, this.myAppsLists[0].children);
       this.$confirm({
         title: `确认删除列表： ${list.title} ？`,
         content: `删除后无法撤销，请谨慎操作！`,
         okText: '确认删除，不后悔',
         cancelText: '保留',
-        async onOk () {
-          const result = await that.$store.dispatch('deleteAppUserNav', { ids: [treeKey] })
+        async onOk() {
+          const result = await that.$store.dispatch('deleteAppUserNav', { ids: [treeKey] });
           if (result.code === 1000) {
-            that.createListVisible = false
-            await that.refreshNavs()
-            appVue.$message.success({ content: '列表删除成功' })
+            that.createListVisible = false;
+            await that.refreshNavs();
+            appVue.$message.success({ content: '列表删除成功' });
           } else {
-            appVue.$message.error({ content: '列表删除失败!' })
+            appVue.$message.error({ content: '列表删除失败!' });
           }
         },
-        onCancel () {
-          console.log('Cancel')
+        onCancel() {
+          console.log('Cancel');
         },
-      })
+      });
     },
     /**
      * 处理菜单的重命名列表事件
      * @param treeKey
      */
-    handleMenuRenameList (treeKey) {
-      console.log(treeKey)
-      const { list } = treeUtil.findTreeNode(treeKey, this.myAppsLists[0].children)
-      this.createList(async () => {
-        const name = getNameInputValue()
-        if (!!!name) {
-          appVue.$message.error({ content: '请输入列表名称。' })
-          return
-        }
-        const data = {
-          id: treeKey,
-          name: name,
-          summary: '云端导航列表的描述'
-        }
-        const result = await this.$store.dispatch('updateAppUserNav', data)
-        if (result.code === 1000) {
-          this.createListVisible = false
-          await this.refreshNavs()
-          appVue.$message.success({ content: '重命名列表成功' })
-        } else {
-          appVue.$message.error({ content: '重命名列表失败!' })
-        }
-      }, list.title, '重命名')
+    handleMenuRenameList(treeKey) {
+      console.log(treeKey);
+      const { list } = treeUtil.findTreeNode(treeKey, this.myAppsLists[0].children);
+      this.createList(
+        async () => {
+          const name = getNameInputValue();
+          if (!!!name) {
+            appVue.$message.error({ content: '请输入列表名称。' });
+            return;
+          }
+          const data = {
+            id: treeKey,
+            name: name,
+            summary: '云端导航列表的描述',
+          };
+          const result = await this.$store.dispatch('updateAppUserNav', data);
+          if (result.code === 1000) {
+            this.createListVisible = false;
+            await this.refreshNavs();
+            appVue.$message.success({ content: '重命名列表成功' });
+          } else {
+            appVue.$message.error({ content: '重命名列表失败!' });
+          }
+        },
+        list.title,
+        '重命名',
+      );
     },
     /**
      * 处理菜单的创建列表事件
      */
-    handleMenuCreateList (treeKey) {
+    handleMenuCreateList(treeKey) {
       this.createList(
         async () => {
           let list = {
             name: getNameInputValue(),
-            summary: '云端导航列表的描述'
-          }
+            summary: '云端导航列表的描述',
+          };
           if (!!!list.name) {
-            appVue.$message.error({ content: '请输入列表名称。' })
-            return
+            appVue.$message.error({ content: '请输入列表名称。' });
+            return;
           }
-          const result = await this.$store.dispatch('addAppUserNav', list)
+          const result = await this.$store.dispatch('addAppUserNav', list);
           if (result.code === 1000) {
-            this.createListVisible = false
-            await this.refreshNavs()
-            appVue.$message.success({ content: '添加列表成功。' })
+            this.createListVisible = false;
+            await this.refreshNavs();
+            appVue.$message.success({ content: '添加列表成功。' });
           } else {
-            appVue.$message.error({ content: '添加列表失败。' })
+            appVue.$message.error({ content: '添加列表失败。' });
           }
         },
         '请输入云端用户导航名',
-        '云端'
-      )
+        '云端',
+      );
     },
 
     /**
@@ -226,56 +229,56 @@ Vue.component('cloud-comp', {
      * @param visible
      * @param treeKey
      */
-    checkMenuDisable (visible, treeKey) {
+    checkMenuDisable(visible, treeKey) {
       if (treeKey === 'cloud') {
-        this.disableCreate = false
-        this.disableRename = true
-        this.disableDelete = true
+        this.disableCreate = false;
+        this.disableRename = true;
+        this.disableDelete = true;
       } else {
-        this.disableCreate = true
-        this.disableRename = false
-        this.disableDelete = false
+        this.disableCreate = true;
+        this.disableRename = false;
+        this.disableDelete = false;
       }
     },
     // 拖拽元素放置到了目的地元素上面
-    allowDrop (e, key) {
-      console.log(key, '拖拽key～～～')
+    allowDrop(e, key) {
+      console.log(key, '拖拽key～～～');
     },
-    dragEnter (e) {
-      console.log('enter')
-      console.log(e)
-      e.target.classList.add('canDrag')
+    dragEnter(e) {
+      console.log('enter');
+      console.log(e);
+      e.target.classList.add('canDrag');
     },
-    dragLeave (e) {
-      console.log('leave')
-      console.log(e)
-      e.target.classList.remove('canDrag')
+    dragLeave(e) {
+      console.log('leave');
+      console.log(e);
+      e.target.classList.remove('canDrag');
     },
 
     // 拖拽元素结束了操作
-    async drop (e, key) {
-      e.target.classList.remove('canDrag')
+    async drop(e, key) {
+      e.target.classList.remove('canDrag');
       if (key === 'cloud' || key === window.$listId) {
-        e.preventDefault()
-        appVue.$message.error({ content: '注意移动目标!' })
+        e.preventDefault();
+        appVue.$message.error({ content: '注意移动目标!' });
       } else {
-        let ids = []
-        window.$selectedApps.forEach(e => {
-          ids.push(Number(e))
-        })
+        let ids = [];
+        window.$selectedApps.forEach((e) => {
+          ids.push(Number(e));
+        });
         const data = {
           ids,
           list_id: Number(key),
-        }
-        const result = await this.$store.dispatch('updateUserNavApps', data)
+        };
+        const result = await this.$store.dispatch('updateUserNavApps', data);
         if (result.code === 1000) {
-          window.$selectedApps = []
-          window.$removeApps()
-          appVue.$message.success({ content: '移动应用成功。' })
+          window.$selectedApps = [];
+          window.$removeApps();
+          appVue.$message.success({ content: '移动应用成功。' });
         } else {
-          appVue.$message.success({ content: '移动应用失败！' })
+          appVue.$message.success({ content: '移动应用失败！' });
         }
       }
     },
   },
-})
+});

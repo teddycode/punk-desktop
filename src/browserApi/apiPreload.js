@@ -1,15 +1,13 @@
-const {
-  ipcRenderer
-} = require('electron')
-const ipc = ipcRenderer
-const { contextBridge } = require('electron')
-const api = require('./baseApi.js')
-window.tsbApi = api
+const { ipcRenderer } = require('electron');
+const ipc = ipcRenderer;
+const { contextBridge } = require('electron');
+const api = require('./baseApi.js');
+window.tsbApi = api;
 //载入api
 try {
-  contextBridge.exposeInMainWorld('tsbApi', api)
+  contextBridge.exposeInMainWorld('tsbApi', api);
 } catch (e) {
-  console.warn(e)
+  console.warn(e);
 }
 
 //载入api

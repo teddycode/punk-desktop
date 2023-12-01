@@ -1,6 +1,6 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router';
 
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent } from 'vue';
 
 let routes = [
   {
@@ -8,24 +8,22 @@ let routes = [
     name: 'main',
     component: () => import('../views/main/tools.vue'),
   },
-]
+];
 
-const components = import.meta.glob(
-  '/packages/toolbox/views/tools/*/index.vue'
-)
+const components = import.meta.glob('/packages/toolbox/views/tools/*/index.vue');
 Object.entries(components).forEach((item) => {
-  const name = item[0].match(/\/tools\/(\w+)\/index\.vue/)?.[1]
+  const name = item[0].match(/\/tools\/(\w+)\/index\.vue/)?.[1];
   const route = {
     path: '/' + name,
     name: name,
     component: defineAsyncComponent(item[1]),
-  }
-  routes.push(route)
-})
+  };
+  routes.push(route);
+});
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
-})
+});
 
-export default router
+export default router;

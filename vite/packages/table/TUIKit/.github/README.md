@@ -1,14 +1,11 @@
 ## 关于腾讯云即时通信 IM
 
-腾讯云即时通信（Instant Messaging，IM）基于 QQ 底层 IM 能力开发，仅需植入 SDK
-即可轻松集成聊天、会话、群组、资料管理能力，帮助您实现文字、图片、短语音、短视频等富媒体消息收发，全面满足通信需要。
+腾讯云即时通信（Instant Messaging，IM）基于 QQ 底层 IM 能力开发，仅需植入 SDK 即可轻松集成聊天、会话、群组、资料管理能力，帮助您实现文字、图片、短语音、短视频等富媒体消息收发，全面满足通信需要。
 
 ## 关于 chat-uikit-vue
 
-chat-uikit-vue 是基于腾讯云 Web IM SDK 的一款 VUE UI 组件库，它提供了一些通用的 UI 组件，包含会话、聊天、音视频通话、关系链、资料、群组等功能。基于
-UI 组件您可以像搭积木一样快速搭建起自己的业务逻辑。
-chat-uikit-vue 中的组件在实现 UI 功能的同时，会调用 IM SDK 相应的接口实现 IM 相关逻辑和数据的处理，因而开发者在使用
-chat-uikit-vue 时只需关注自身业务或个性化扩展即可。
+chat-uikit-vue 是基于腾讯云 Web IM SDK 的一款 VUE UI 组件库，它提供了一些通用的 UI 组件，包含会话、聊天、音视频通话、关系链、资料、群组等功能。基于 UI 组件您可以像搭积木一样快速搭建起自己的业务逻辑。
+chat-uikit-vue 中的组件在实现 UI 功能的同时，会调用 IM SDK 相应的接口实现 IM 相关逻辑和数据的处理，因而开发者在使用 chat-uikit-vue 时只需关注自身业务或个性化扩展即可。
 chat-uikit-vue Web 端 和 H5 端界面效果如下图所示：
 
 <img width="1015" alt="page02" src="https://user-images.githubusercontent.com/57951148/192585298-c79960ed-a6a9-4927-89b9-31c1b3f68740.png">
@@ -38,14 +35,13 @@ chat-uikit-vue Web 端 和 H5 端界面效果如下图所示：
 - node（12.13.0 <= node 版本 <= 17.0.0, 推荐使用 Node.js 官方 LTS 版本 16.17.0）
 - npm（版本请与 node 版本匹配）
 
-### TUIKit 源码集成 - github方式集成
+### TUIKit 源码集成 - github 方式集成
 
 #### 步骤 1：创建项目
 
 TUIKit 支持使用 webpack 或 vite 创建项目工程，配置 Vue3 + TypeScript + sass。
 
-以下是使用 vue-cli 搭建项目工程示例，vite 及 create-vue
-搭建示例请参考官网教程 [集成 TUIKit 基础功能](https://cloud.tencent.com/document/product/269/68493)。
+以下是使用 vue-cli 搭建项目工程示例，vite 及 create-vue 搭建示例请参考官网教程 [集成 TUIKit 基础功能](https://cloud.tencent.com/document/product/269/68493)。
 
 使用 vue-cli 方式创建项目， 配置 Vue3 + TypeScript + sass。
 如果您尚未安装 vue-cli ，可以在 terminal 或 cmd 中采用如下方式进行安装：
@@ -70,8 +66,7 @@ cd chat-example
 
 #### 步骤 2：下载 TUIKit 组件
 
-通过 `git clone` 方式下载 TUIKit 组件及其相关依赖， 为了方便您的后续使用，建议您通过以下命令将整个 `chat-uikit-vue`
-复制到您项目的 src目录下，并重命名为TUIKit：
+通过 `git clone` 方式下载 TUIKit 组件及其相关依赖， 为了方便您的后续使用，建议您通过以下命令将整个 `chat-uikit-vue` 复制到您项目的 src 目录下，并重命名为 TUIKit：
 
 ```shell
 # 项目根目录命令行执行
@@ -116,19 +111,15 @@ TUIKit.use(TUICallKit);
 
 // login TUIKit
 
-
 createApp(App).use(TUIKit).mount('#app');
 ```
 
 #### 步骤 4： 获取 SDKAppID 、密钥与 userID
 
-设置 main.ts 文件示例代码中的相关参数 SDKAppID、secretKey 以及 userID ，其中 SDKAppID
-和密钥等信息，可通过 [即时通信 IM 控制台](https://console.cloud.tencent.com/im)
-获取，单击目标应用卡片，进入应用的基础配置页面。例如：  
+设置 main.ts 文件示例代码中的相关参数 SDKAppID、secretKey 以及 userID ，其中 SDKAppID 和密钥等信息，可通过 [即时通信 IM 控制台](https://console.cloud.tencent.com/im) 获取，单击目标应用卡片，进入应用的基础配置页面。例如：  
 ![image](https://user-images.githubusercontent.com/57951148/192587785-6577cc5e-acf9-423c-86d0-52c67234ab1f.png)
 
-userID 信息，可通过 [即时通信 IM 控制台](https://console.cloud.tencent.com/im) 进行创建和获取，单击目标应用卡片，进入应用的账号管理页面，即可创建账号并获取
-userID。例如：  
+userID 信息，可通过 [即时通信 IM 控制台](https://console.cloud.tencent.com/im) 进行创建和获取，单击目标应用卡片，进入应用的账号管理页面，即可创建账号并获取 userID。例如：  
 ![create user](https://user-images.githubusercontent.com/57951148/192585588-c5300d12-6bb5-45a4-831b-f7d733573840.png)
 
 #### 步骤 5：调用 TUIKit 组件
@@ -278,8 +269,7 @@ npm run serve
 #### 步骤 8: 拨打您的第一通电话
 
 自 @tencentcloud/chat-uikit-vue v1.4.0 版本起自动接入音视频通话功能，无需手动集成。
-如果您是 v1.4.0 以下版本，可以通过接入 call-uikit-vue
-体验通话功能。详情请参考 [音视频通话 ( Web & H5 )](https://cloud.tencent.com/document/product/269/79861)
+如果您是 v1.4.0 以下版本，可以通过接入 call-uikit-vue 体验通话功能。详情请参考 [音视频通话 ( Web & H5 )](https://cloud.tencent.com/document/product/269/79861)
 <img width="1015" alt="page05" src="https://user-images.githubusercontent.com/57951148/196082955-e046f0b1-bba2-491d-91b3-f30f2c6f4aae.png">
 
 ### 常见问题
@@ -297,11 +287,9 @@ npm run serve
    </tr>
 </table>
 
-TUIKit 是基于腾讯云 Web IM SDK 的一款 VUE UI 组件库，它提供了一些通用的 UI 组件，包含会话、聊天、音视频通话、关系链、资料、群组等功能。通过以上“TUIKit
-源码集成”教程，您可以快速接入并体验 TUIKit 中的基础功能，并可以直接将 TUIKit 集成到您的现有项目中进行使用。
+TUIKit 是基于腾讯云 Web IM SDK 的一款 VUE UI 组件库，它提供了一些通用的 UI 组件，包含会话、聊天、音视频通话、关系链、资料、群组等功能。通过以上“TUIKit 源码集成”教程，您可以快速接入并体验 TUIKit 中的基础功能，并可以直接将 TUIKit 集成到您的现有项目中进行使用。
 
-Demo 是基于 TUIKit 搭建的一套完整的 即时通信含 UI 解决方案，他是一个基于 VUE3 + TS + TUIKit 的完整项目，其 views/Home.vue
-文件中展示了丰富的 TUIKit 组合使用方案供您参考使用。
+Demo 是基于 TUIKit 搭建的一套完整的 即时通信含 UI 解决方案，他是一个基于 VUE3 + TS + TUIKit 的完整项目，其 views/Home.vue 文件中展示了丰富的 TUIKit 组合使用方案供您参考使用。
 
 #### 2. 什么是 UserSig？
 
@@ -309,14 +297,11 @@ UserSig 是用户登录即时通信 IM 的密码，其本质是对 UserID 等信
 
 #### 3. 如何生成 UserSig？
 
-UserSig 签发方式是将 UserSig 的计算代码集成到您的服务端，并提供面向项目的接口，在需要 UserSig 时由您的项目向业务服务器发起请求获取动态
-UserSig。更多详情请参见 [服务端生成 UserSig](https://cloud.tencent.com/document/product/269/32688#GeneratingdynamicUserSig)。
+UserSig 签发方式是将 UserSig 的计算代码集成到您的服务端，并提供面向项目的接口，在需要 UserSig 时由您的项目向业务服务器发起请求获取动态 UserSig。更多详情请参见 [服务端生成 UserSig](https://cloud.tencent.com/document/product/269/32688#GeneratingdynamicUserSig)。
 
 > !
 >
-> 本文示例代码采用的获取 UserSig 的方案是在客户端代码中配置 SECRETKEY，该方法中 SECRETKEY
-> 很容易被反编译逆向破解，一旦您的密钥泄露，攻击者就可以盗用您的腾讯云流量，因此**该方法仅适合本地跑通功能调试**。 正确的
-> UserSig 签发方式请参见上文。
+> 本文示例代码采用的获取 UserSig 的方案是在客户端代码中配置 SECRETKEY，该方法中 SECRETKEY 很容易被反编译逆向破解，一旦您的密钥泄露，攻击者就可以盗用您的腾讯云流量，因此**该方法仅适合本地跑通功能调试**。 正确的 UserSig 签发方式请参见上文。
 
 #### 4. Component name "XXXX" should always be multi-word
 
@@ -336,7 +321,7 @@ module.exports = {
 ### 相关文档
 
 - [快速跑通 Demo](https://github.com/TencentCloud/chat-uikit-vue/tree/main/Demo)
-- [@tencentcloud/chat-uikit-vue npm仓库](https://www.npmjs.com/package/@tencentcloud/chat-uikit-vue)
-- [SDK API手册](https://web.sdk.qcloud.com/im/doc/zh-cn/SDK.html)
+- [@tencentcloud/chat-uikit-vue npm 仓库](https://www.npmjs.com/package/@tencentcloud/chat-uikit-vue)
+- [SDK API 手册](https://web.sdk.qcloud.com/im/doc/zh-cn/SDK.html)
 - [SDK 更新日志](https://cloud.tencent.com/document/product/269/38492)
-- [音视频通话](https://cloud.tencent.com/document/product/269/79861) 
+- [音视频通话](https://cloud.tencent.com/document/product/269/79861)

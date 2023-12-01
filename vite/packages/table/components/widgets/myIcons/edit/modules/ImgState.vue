@@ -4,18 +4,18 @@
 </template>
 
 <script>
-import { imgStateList } from '../hooks/config'
+import { imgStateList } from '../hooks/config';
 
-import editMixins from '../hooks/mixins'
+import editMixins from '../hooks/mixins';
 
 export default {
   mixins: [editMixins],
-  data () {
+  data() {
     return {
       imgStateList,
-    }
+    };
   },
-}
+};
 </script>
 
 <style lang="scss" scoped></style>

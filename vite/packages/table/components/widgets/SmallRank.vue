@@ -1,14 +1,17 @@
 <template>
   <Widget
-      ref="rankingSmallSlot"
-      :customData="customData"
-      :desk="desk"
-      :menuList="toggleRankingList"
-      :options="options"
-      :sizeList="sizeList">
-    <div class="bg-mask rounded-lg px-3 py-1 pointer"
-         style="position: absolute;left: 45px;top:10px;background: var(--primary-bg);color:var(--primary-text)"
-         @click="showDrawer">
+    ref="rankingSmallSlot"
+    :customData="customData"
+    :desk="desk"
+    :menuList="toggleRankingList"
+    :options="options"
+    :sizeList="sizeList"
+  >
+    <div
+      class="bg-mask rounded-lg px-3 py-1 pointer"
+      style="position: absolute; left: 45px; top: 10px; background: var(--primary-bg); color: var(--primary-text)"
+      @click="showDrawer"
+    >
       {{ rankingType[rankIndex].title }}
     </div>
     <!-- 总在线时长榜 -->
@@ -42,53 +45,58 @@
     </div>
   </Widget>
   <a-drawer v-model:visible="middleShow" placement="right" title="设置" width="500">
-    <div class="flex flex-col" style="color:var(--primary-text)">
-      <span v-for="(item,index) in rankingType" :key="index"
-            :class="rankIndex === index ? 'active-index':''"
-            class="mb-4  text-center pointer change h-12 xt-bg-2 rounded-lg show-game-time py-3"
-            @click="getRankingType(item,index)">
-         {{ item.title }}
+    <div class="flex flex-col" style="color: var(--primary-text)">
+      <span
+        v-for="(item, index) in rankingType"
+        :key="index"
+        :class="rankIndex === index ? 'active-index' : ''"
+        class="mb-4 text-center pointer change h-12 xt-bg-2 rounded-lg show-game-time py-3"
+        @click="getRankingType(item, index)"
+      >
+        {{ item.title }}
       </span>
     </div>
   </a-drawer>
 </template>
 
 <script>
-import Widget from '../card/Widget.vue'
-import { mapActions } from 'pinia'
-import { appStore } from '../../store'
-import { inviteList, onLineList, signInList, teamList } from '../../js/rank'
-import RankList from '../rank/RankList.vue'
+import Widget from '../card/Widget.vue';
+import { mapActions } from 'pinia';
+import { appStore } from '../../store';
+import { inviteList, onLineList, signInList, teamList } from '../../js/rank';
+import RankList from '../rank/RankList.vue';
 
 export default {
   name: 'SmallRank',
   components: {
     Widget,
-    RankList
+    RankList,
   },
   props: {
     customIndex: {
       type: Number,
-      default: 0
+      default: 0,
     },
     customData: {
       type: Object,
-      default: () => {
-      }
+      default: () => {},
     },
     desk: {
-      type: Object
-    }
+      type: Object,
+    },
   },
-  data () {
+  data() {
     return {
       options: { className: 'card small', title: '', icon: 'linechart', type: 'smallRank' },
-      sizeList: [{ title: '1x1', height: 1, width: 1, name: '1x1' }, {
-        title: '1x2',
-        height: 2,
-        width: 1,
-        name: '1x2'
-      },],
+      sizeList: [
+        { title: '1x1', height: 1, width: 1, name: '1x1' },
+        {
+          title: '1x2',
+          height: 2,
+          width: 1,
+          name: '1x2',
+        },
+      ],
       //在线时长榜
       onLineList,
       // 小队榜
@@ -98,12 +106,16 @@ export default {
       // 签到榜
       signInList,
       middleShow: false,
-      toggleRankingList: [{
-        icon: 'shezhi1', title: '设置', fn: () => {
-          this.middleShow = true
-          this.$refs.rankingSmallSlot.visible = false
-        }
-      }],
+      toggleRankingList: [
+        {
+          icon: 'shezhi1',
+          title: '设置',
+          fn: () => {
+            this.middleShow = true;
+            this.$refs.rankingSmallSlot.visible = false;
+          },
+        },
+      ],
       rankingType: [
         { title: '总在线时长榜', name: 'total' },
         { title: '净在线时长榜', name: 'net' },
@@ -113,34 +125,33 @@ export default {
         { title: '累计签到榜', name: 'accrue' },
         { title: '连续签到榜', name: 'series' },
       ],
-      rankIndex: 0
-    }
+      rankIndex: 0,
+    };
   },
-  mounted () {
+  mounted() {
     if (this.customData?.id) {
-      this.rankIndex = this.customData.id
+      this.rankIndex = this.customData.id;
     }
   },
   methods: {
     ...mapActions(appStore, ['showUserCard']),
-    showCard (uid) {
-      this.showUserCard(uid)
+    showCard(uid) {
+      this.showUserCard(uid);
     },
-    getRankingType (item, index) {
-      this.customData.id = index
-      this.rankIndex = this.customData.id
-      this.middleShow = false
+    getRankingType(item, index) {
+      this.customData.id = index;
+      this.rankIndex = this.customData.id;
+      this.middleShow = false;
     },
-    showDrawer () {
-      this.middleShow = true
-      this.$refs.rankingSmallSlot.visible = false
-    }
-  }
-}
+    showDrawer() {
+      this.middleShow = true;
+      this.$refs.rankingSmallSlot.visible = false;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-
 .ranking {
   width: 24px;
   height: 24px;
@@ -159,15 +170,15 @@ export default {
 }
 
 .set-type:nth-of-type(1) > span {
-  background: #FE2C46;
+  background: #fe2c46;
 }
 
 .set-type:nth-of-type(2) > span {
-  background: #FF6600;
+  background: #ff6600;
 }
 
 .set-type:nth-of-type(3) > span {
-  background: #FAAA10;
+  background: #faaa10;
 }
 
 .active-index {

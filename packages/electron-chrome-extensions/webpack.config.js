@@ -1,5 +1,5 @@
-const path = require('path')
-const webpackBase = require('../../build/webpack/webpack.config.base')
+const path = require('path');
+const webpackBase = require('../../build/webpack/webpack.config.base');
 
 const main = {
   ...webpackBase,
@@ -11,7 +11,7 @@ const main = {
   },
 
   node: {
-    __dirname: false
+    __dirname: false,
   },
 
   output: {
@@ -19,7 +19,7 @@ const main = {
     // https://github.com/webpack/webpack/issues/1114
     libraryTarget: 'commonjs2',
   },
-}
+};
 
 const preload = {
   ...webpackBase,
@@ -27,13 +27,13 @@ const preload = {
   target: 'electron-preload',
 
   entry: {
-    preload: './src/preload.ts'
+    preload: './src/preload.ts',
   },
 
   output: {
     path: path.join(__dirname, 'dist'),
   },
-}
+};
 
 const libs = {
   ...webpackBase,
@@ -48,6 +48,6 @@ const libs = {
     path: path.join(__dirname, 'dist'),
     libraryTarget: 'commonjs2',
   },
-}
+};
 
-module.exports = [main, preload, libs]
+module.exports = [main, preload, libs];

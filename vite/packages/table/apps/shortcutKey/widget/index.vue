@@ -1,19 +1,24 @@
 <template>
   <div>
-    <Widget ref="cardSlot" :customData="customData" :customIndex="customIndex" :desk="desk" :menuList="menuList"
-            :options="options">
+    <Widget
+      :customData="customData"
+      :customIndex="customIndex"
+      :menuList="menuList"
+      :options="options"
+      ref="cardSlot"
+      :desk="desk"
+    >
       <div class="icon">
-        <Icon icon="solar:keyboard-bold"/>
+        <Icon icon="fluent:flash-16-regular" />
       </div>
       <!-- 快捷键列表 更多快捷键 -->
       <div v-show="defaultType.name === 'recent'" class="top-list">
-
-        <div style="height: 306px;">
-          <div v-if="displayList.length===0" class="pt-10 text-center">
+        <div style="height: 306px">
+          <div v-if="displayList.length === 0" class="pt-10 text-center">
             您还未使用过任何快捷键方案，请点击更多快捷键查看方案。
           </div>
-          <div v-for="(item,index) in displayList" :key="index" class="card-app pointer" @click="enterDetail(item)">
-            <img :src="item.icon" alt="">
+          <div class="card-app pointer" @click="enterDetail(item)" v-for="(item, index) in displayList" :key="index">
+            <img :src="item.icon" alt="" />
             <div class="title-text">{{ item.name }}</div>
             <div class="right-box">
               <div class="num">{{ item.number }}</div>
@@ -22,8 +27,8 @@
           </div>
         </div>
 
-        <div class="button-bom ">
-          <div class="p-firse pointer" style="width: 100%;" @click="$router.push({name:'schemeList'})">
+        <div class="button-bom">
+          <div @click="$router.push({ name: 'schemeList' })" class="p-firse pointer" style="width: 100%">
             <!-- <icon></icon> -->
             更多快捷键
           </div>
@@ -34,96 +39,100 @@
         </div>
       </div>
       <!-- 快捷键详情面板 -->
-      <div v-show="defaultType.name === 'showDetail'" class="top-list">
-        <div v-if="!selectedScheme" class="text-center">
+      <div class="top-list" v-show="defaultType.name === 'showDetail'">
+        <div class="text-center" v-if="!selectedScheme">
           <div v-if="!selValue">
-            <div class="mt-10 mb-2">
-              请选择方案。
-            </div>
+            <div class="mt-10 mb-2">请选择方案。</div>
 
-            <xt-button class="m-auto" type="theme" @click="settingVisible=true">选择</xt-button>
+            <xt-button @click="settingVisible = true" class="m-auto" type="theme">选择</xt-button>
           </div>
-          <div v-else class="text-center">
-            <div class="mt-10 mb-2">
-              方案已被删除。
-            </div>
+          <div class="text-center" v-else>
+            <div class="mt-10 mb-2">方案已被删除。</div>
 
-            <xt-button class="m-auto" type="theme" @click="settingVisible=true">重新选择</xt-button>
+            <xt-button @click="settingVisible = true" class="m-auto" type="theme">重新选择</xt-button>
           </div>
         </div>
         <template v-else>
-          <div :class="topBar" class="p-firse">
-            <div class="name-img pointer " @click="enterDetail(selectedScheme)">
-              <a-avatar :src="selectedScheme.icon" alt="" shape="square"></a-avatar>
+          <div class="p-firse" :class="topBar">
+            <div @click="enterDetail(selectedScheme)" class="name-img pointer">
+              <a-avatar shape="square" :src="selectedScheme.icon" alt=""></a-avatar>
               <span>{{ selectedScheme.name }} </span>
             </div>
             <div class="page-change">
               <!-- 换页 -->
-              <left-outlined :class="{disable:page<=1}" @click="onChangePage('before')"/>
-              <right-outlined :class="{disable:!hasNext}" @click="onChangePage('next')"/>
+              <left-outlined :class="{ disable: page <= 1 }" @click="onChangePage('before')" />
+              <right-outlined :class="{ disable: !hasNext }" @click="onChangePage('next')" />
             </div>
           </div>
           <div class="key-body">
             <!-- 循环类型 -->
-            <div v-for="(item,index) in keyList"
-                 :key="item.id"
-                 :style="{backgroundColor:!item.groupName?getColor(currentKeyList,index+(page-1)*12) :'' }"
-                 class=" key-wrapper">
+            <div
+              class="key-wrapper"
+              :style="{ backgroundColor: !item.groupName ? getColor(currentKeyList, index + (page - 1) * 12) : '' }"
+              v-for="(item, index) in keyList"
+              :key="item.id"
+            >
               <!-- 标题 -->
-              <div v-if="item.groupName" class="key-item">
-                <div class="key-name truncate">
-                  <div :style="{backgroundColor:getColor(currentKeyList,index+(page-1)*12)}" class="color-dot"></div>
+              <div class="key-item" v-if="item.groupName">
+                <div class="truncate key-name">
+                  <div
+                    class="color-dot"
+                    :style="{ backgroundColor: getColor(currentKeyList, index + (page - 1) * 12) }"
+                  ></div>
                   <strong class="ml-2">{{ item.groupName }}</strong>
                 </div>
               </div>
               <!-- 快捷键 -->
-              <div v-if="item.keyStr !== ''" class="key-item">
+              <div class="key-item" v-if="item.keyStr !== ''">
                 <div class="key-item">
-                  <span v-for="(keySpan,index) in item.keys" :key="index">{{ keySpan }}</span>
+                  <span v-for="(keySpan, index) in item.keys" :key="index">{{ keySpan }}</span>
                 </div>
               </div>
               <div class="key-title">{{ item.title }}</div>
             </div>
           </div>
         </template>
-
       </div>
     </Widget>
   </div>
   <!-- 设置面板 -->
-  <a-drawer v-model:visible="settingVisible" :width="500" placement="right" title="设置">
-    <vue-custom-scrollbar :settings="settingsScroller" style="height: 100%;">
+  <a-drawer :width="500" title="设置" v-model:visible="settingVisible" placement="right">
+    <vue-custom-scrollbar :settings="settingsScroller" style="height: 100%">
       <p>需要在小组件内显示的数据</p>
-      <RadioTab v-model:selectType="defaultType" :navList="dataType" @change="onChangeList(22)"
-                @click="onChangeList(1)"></RadioTab>
+      <RadioTab
+        :navList="dataType"
+        v-model:selectType="defaultType"
+        @click="onChangeList(1)"
+        @change="onChangeList(22)"
+      ></RadioTab>
       <div v-if="defaultType.name === 'showDetail'">
-        <p style="margin-top: 14px;">选择快捷键方案</p>
+        <p style="margin-top: 14px">选择快捷键方案</p>
         <a-select
-            v-model:value="selValue" :bordered="false" :filter-option="filterOption"
-            :options="selectOptions"
-            class="select rounded-lg  text-xs flex items-center"
-            placeholder="请选择"
-            show-search
-            size="large"
-            style="width: 100%"
-            @change="handleChange"
+          class="flex items-center text-xs rounded-lg select"
+          size="large"
+          :bordered="false"
+          v-model:value="selValue"
+          show-search
+          placeholder="请选择"
+          style="width: 100%"
+          :filter-option="filterOption"
+          @change="handleChange"
+          :options="selectOptions"
         ></a-select>
       </div>
     </vue-custom-scrollbar>
-
   </a-drawer>
-
 </template>
 
 <script>
-import Widget from '../../../components/card/Widget.vue'
-import { Icon } from '@iconify/vue'
-import RadioTab from '../../../components/RadioTab.vue'
-import { defineComponent } from 'vue'
-import { LeftOutlined, RightOutlined } from '@ant-design/icons-vue'
-import { keyStore } from '../store'
-import { mapActions, mapState } from 'pinia'
-import { getColor } from '../lib/lib'
+import Widget from '../../../components/card/Widget.vue';
+import { Icon } from '@iconify/vue';
+import RadioTab from '../../../components/RadioTab.vue';
+import { defineComponent } from 'vue';
+import { LeftOutlined, RightOutlined } from '@ant-design/icons-vue';
+import { keyStore } from '../store';
+import { mapState, mapActions } from 'pinia';
+import { getColor } from '../lib/lib';
 // import BottomEdit from "..";
 export default {
   components: {
@@ -132,7 +141,7 @@ export default {
     RadioTab,
     LeftOutlined,
     RightOutlined,
-    defineComponent
+    defineComponent,
   },
 
   props: {
@@ -142,8 +151,7 @@ export default {
     },
     customData: {
       type: Object,
-      default: () => {
-      },
+      default: () => {},
     },
     menuList: {
       type: Array,
@@ -155,7 +163,7 @@ export default {
       type: Boolean,
     },
   },
-  data () {
+  data() {
     return {
       selectedScheme: null,
       page: 1,
@@ -166,7 +174,7 @@ export default {
       // 需要在小组件显示的数据
       dataType: [
         { title: '最近使用列表', name: 'recent' },
-        { title: '指定快捷键详情', name: 'showDetail' }
+        { title: '指定快捷键详情', name: 'showDetail' },
       ],
       defaultType: { title: '最近使用列表', name: 'recent' },
       options: {
@@ -184,9 +192,9 @@ export default {
           icon: 'shezhi1',
           title: '设置',
           fn: () => {
-            this.settingVisible = true
-            this.$refs.cardSlot.visible = false
-          }
+            this.settingVisible = true;
+            this.$refs.cardSlot.visible = false;
+          },
         },
       ],
       // 快捷键测试数据
@@ -474,129 +482,125 @@ export default {
       //     isEdit: false
       //   },
       // ],
-    }
+    };
   },
   watch: {
     defaultType: {
-      handler () {
-        this.saveData()
-      }
+      handler() {
+        this.saveData();
+      },
     },
     selValue: {
-      handler () {
-        this.saveData()
-      }
-    }
+      handler() {
+        this.saveData();
+      },
+    },
   },
   computed: {
     ...mapState(keyStore, ['recentlyUsedList']),
-    displayList () {
+    displayList() {
       if (this.recentlyUsedList) {
-        return this.recentlyUsedList.slice(0, 6)
+        return this.recentlyUsedList.slice(0, 6);
       } else {
-        return []
+        return [];
       }
     },
-    selectOptions () {
-      return this.recentlyUsedList.map(item => {
+    selectOptions() {
+      return this.recentlyUsedList.map((item) => {
         return {
           value: item.id,
-          label: item.name
-        }
-      })
+          label: item.name,
+        };
+      });
     },
-    keyList () {
-      let found = this.recentlyUsedList.find(item => {
-        console.log(item, this.selValue)
-        return item.id === this.selValue
-      })
-      console.log(found)
+    keyList() {
+      let found = this.recentlyUsedList.find((item) => {
+        console.log(item, this.selValue);
+        return item.id === this.selValue;
+      });
+      console.log(found);
       if (found) {
-        this.currentKeyList = found.keyList
-        return found.keyList.slice((this.page - 1) * 12, this.page * 12)
+        this.currentKeyList = found.keyList;
+        return found.keyList.slice((this.page - 1) * 12, this.page * 12);
       } else {
-        return []
+        return [];
       }
     },
-    hasNext () {
-      return this.currentKeyList.slice(this.page * 12, (this.page + 1) * 12).length > 0
+    hasNext() {
+      return this.currentKeyList.slice(this.page * 12, (this.page + 1) * 12).length > 0;
     },
-    selectedScheme () {
-      let found = this.recentlyUsedList.find(item => {
-        return item.id === this.selValue
-      })
+    selectedScheme() {
+      let found = this.recentlyUsedList.find((item) => {
+        return item.id === this.selValue;
+      });
       if (found) {
-        return found
+        return found;
       } else {
-        return null
+        return null;
       }
-    }
+    },
   },
-  async mounted () {
-    this.loadData()
+  async mounted() {
+    this.loadData();
   },
   methods: {
     getColor,
     ...mapActions(keyStore, ['setRecentlyUsedList']),
-    saveData () {
-      this.customData.defaultType = this.defaultType
-      this.customData.selctedSchemeId = this.selValue
+    saveData() {
+      this.customData.defaultType = this.defaultType;
+      this.customData.selctedSchemeId = this.selValue;
     },
-    loadData () {
+    loadData() {
       if (this.customData.defaultType) {
-        this.defaultType = this.customData.defaultType
+        this.defaultType = this.customData.defaultType;
       }
       if (this.customData.selctedSchemeId) {
-        this.selValue = this.customData.selctedSchemeId
+        this.selValue = this.customData.selctedSchemeId;
       }
-
     },
-    enterDetail (item) {
-      this.setRecentlyUsedList(item)
+    enterDetail(item) {
+      this.setRecentlyUsedList(item);
       this.$router.push({
-        name: 'schemeDetail'
-      })
+        name: 'schemeDetail',
+      });
     },
     // 换页
-    onChangePage (type) {
+    onChangePage(type) {
       // type
       if (type === 'next') {
         if (this.hasNext) {
-          this.page++
+          this.page++;
         }
-
       } else {
         if (this.page > 1) {
-          this.page--
+          this.page--;
         }
       }
     },
 
-    handleChange (value) {
-      console.log(`selected ${value}`)
+    handleChange(value) {
+      console.log(`selected ${value}`);
     },
-    filterOption (input, option) {
-      return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+    filterOption(input, option) {
+      return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
     },
-
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-
 .icon {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   // border: 1px solid #fff;
   position: absolute;
-  top: 15px;
-  left: 15px;
+  top: 18px;
+  left: 16px;
 }
 
 .icon svg {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
 }
 
 .card-app {
@@ -605,7 +609,7 @@ export default {
   width: 265px;
   height: 88px;
   margin-top: 14px;
-  background: rgba(0, 0, 0, 0.30);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 12px;
 }
 
@@ -660,7 +664,6 @@ export default {
 }
 
 .button-bom {
-
   font-size: 16px;
   color: rgba(255, 255, 255, 0.85);
   text-align: center;
@@ -672,7 +675,7 @@ export default {
   width: 266px;
   height: 44px;
   float: left;
-  background: rgba(0, 0, 0, 0.30);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 12px;
   margin-top: 16px;
 }
@@ -696,17 +699,15 @@ export default {
   color: var(--primary-text);
 }
 
-
 .button-bom .p-second {
   width: 266px;
   height: 44px;
   float: left;
-  background: rgba(0, 0, 0, 0.30);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 12px;
   margin-left: 12px;
   margin-top: 16px;
 }
-
 
 .page-change {
   width: 100%;
@@ -730,7 +731,6 @@ export default {
 
 i:hover {
   color: rgba(255, 255, 255, 1);
-
 }
 
 .key-body {
@@ -745,9 +745,7 @@ i:hover {
   height: 330px;
   color: var(--primary-text);
   overflow: hidden;
-
 }
-
 
 .key-name {
   font-size: 16px;
@@ -773,9 +771,7 @@ i:hover {
   text-overflow: ellipsis;
 }
 
-
-.key-flex
-.disable {
+.key-flex .disable {
   opacity: 0.5;
 }
 
@@ -792,7 +788,7 @@ i:hover {
   span {
     width: 32px;
     height: 32px;
-    background: rgba(0, 0, 0, 0.30);
+    background: rgba(0, 0, 0, 0.3);
     border-radius: 8px;
     padding: 5px 8px;
     font-size: 16px;

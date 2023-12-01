@@ -3,111 +3,111 @@
     <div class="box">
       <div ref="prizeWrap" :style="bgColor" class="prize-list">
         <div v-for="(item, index) in eatList" :style="prizeStyle(index)" class="prize-item">
-          <p :style="eatList.length > 2 ? 'transform:rotate(-90deg);': 'font-size: 18px;'">{{ item }}</p>
+          <p :style="eatList.length > 2 ? 'transform:rotate(-90deg);' : 'font-size: 18px;'">{{ item }}</p>
         </div>
       </div>
-      <div class="box-btn" style="z-index:9;" @click.stop="start">GO</div>
+      <div class="box-btn" style="z-index: 9" @click.stop="start">GO</div>
     </div>
   </div>
 </template>
 
 <script>
-import { computed, onMounted, onUnmounted, reactive, ref, toRefs } from 'vue'
+import { computed, onMounted, onUnmounted, reactive, ref, toRefs } from 'vue';
 
 export default {
   props: ['eatList'],
-  setup (props, ctx) {
-    const eatList = props.eatList
+  setup(props, ctx) {
+    const eatList = props.eatList;
     const state = reactive({
       isRunning: false, // 是否正在转动
       baseRunAngle: 360 * 5, // 总共转动角度 至少5圈
       prizeId: 0, // 选中id
-    })
-    const prizeWrap = ref(null)
+    });
+    const prizeWrap = ref(null);
 
     const rotateAngle = computed(() => {
-      const _degree = 360 / eatList?.length
-      return _degree
-    })
+      const _degree = 360 / eatList?.length;
+      return _degree;
+    });
 
     const totalRunAngle = computed(() => {
-      return state.baseRunAngle + 360 - state.prizeId * rotateAngle.value - rotateAngle.value / 2
-    })
+      return state.baseRunAngle + 360 - state.prizeId * rotateAngle.value - rotateAngle.value / 2;
+    });
 
     const bgColor = computed(() => {
-      const _len = eatList?.length
+      const _len = eatList?.length;
       // const colorList = ['#F7D8A7', '#F2B1A2','#A9A9A9','#F2E8CF']
-      const colorList = ['#5352b3', '#363589']
-      let colorVal = ''
+      const colorList = ['#5352b3', '#363589'];
+      let colorVal = '';
       for (let i = 0; i < _len; i++) {
-        colorVal += `${colorList[i % 2]} ${rotateAngle.value * i}deg ${rotateAngle.value * (i + 1)}deg,`
+        colorVal += `${colorList[i % 2]} ${rotateAngle.value * i}deg ${rotateAngle.value * (i + 1)}deg,`;
       }
       return `
         background: conic-gradient(${colorVal.slice(0, -1)});
-      `
-    })
+      `;
+    });
     const prizeStyle = computed(() => {
-      const _degree = rotateAngle.value
+      const _degree = rotateAngle.value;
       return (i) => {
         return `
-          width: ${2 * 120 * Math.sin(_degree / 2 * Math.PI / 180)}px;
+          width: ${2 * 120 * Math.sin(((_degree / 2) * Math.PI) / 180)}px;
           height: 120px;
           transform: rotate(${_degree * i + _degree / 2}deg);
           transform-origin: 50% 100%;
-        `
-      }
-    })
+        `;
+      };
+    });
 
     onMounted(() => {
-      prizeWrap.value.style = `${bgColor.value} transform: rotate(-${rotateAngle.value / 2}deg)`
-    })
+      prizeWrap.value.style = `${bgColor.value} transform: rotate(-${rotateAngle.value / 2}deg)`;
+    });
 
     onUnmounted(() => {
-      prizeWrap.value?.removeEventListener('transitionend', stopRun)
-    })
+      prizeWrap.value?.removeEventListener('transitionend', stopRun);
+    });
 
     const getRandomNum = () => {
-      const num = Math.floor(Math.random() * eatList?.length)
-      return num
-    }
+      const num = Math.floor(Math.random() * eatList?.length);
+      return num;
+    };
 
     const start = () => {
       if (!state.isRunning) {
-        state.isRunning = true
+        state.isRunning = true;
 
-        const prizeId = getRandomNum()
+        const prizeId = getRandomNum();
         // console.log('选中', prizeId, eatList[prizeId])
-        state.prizeId = prizeId
-        startRun()
+        state.prizeId = prizeId;
+        startRun();
       }
-    }
+    };
 
     const startRun = () => {
       prizeWrap.value.style = `
         ${bgColor.value}
         transform: rotate(${totalRunAngle.value}deg);
         transition: all 4s ease;
-      `
-      prizeWrap.value.addEventListener('transitionend', stopRun)
-    }
+      `;
+      prizeWrap.value.addEventListener('transitionend', stopRun);
+    };
 
     const stopRun = (e) => {
-      state.isRunning = false
+      state.isRunning = false;
       prizeWrap.value.style = `
         ${bgColor.value}
         transform: rotate(${totalRunAngle.value - state.baseRunAngle}deg);
-      `
-    }
+      `;
+    };
 
     return {
       ...toRefs(state),
       bgColor,
       prizeStyle,
       prizeWrap,
-      start
-    }
-  }
-}
+      start,
+    };
+  },
+};
 </script>
 <style lang="scss" scoped>
 * {
@@ -174,7 +174,7 @@ export default {
 }
 
 .box-btn::before {
-  content: "";
+  content: '';
   position: absolute;
   left: 16px;
   right: 0;

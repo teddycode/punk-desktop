@@ -6,15 +6,14 @@
 </template>
 
 <script>
-import Main from './main/index.vue'
-import { mapWritableState } from 'pinia'
-import { aiStore } from '../../../store/ai'
-
+import Main from './main/index.vue';
+import { mapWritableState } from 'pinia';
+import { aiStore } from '../../../store/ai';
 export default {
-  data () {
+  data() {
     return {
       showRightPanel: false,
-    }
+    };
   },
   computed: {
     ...mapWritableState(aiStore, ['isFull']),
@@ -22,7 +21,7 @@ export default {
   components: {
     Main,
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

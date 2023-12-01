@@ -19,14 +19,14 @@
 </template>
 
 <script>
-import Background from "@page/core/components/Background.vue";
+import Background from '@page/core/components/Background.vue';
 
 export default {
-  name: "EmergencyResponse",
+  name: 'EmergencyResponse',
   components: {
     Background,
-  }
-}
+  },
+};
 </script>
 
 <style scoped>
@@ -79,7 +79,8 @@ export default {
   justify-content: center;
 }
 
-h1, h2 {
+h1,
+h2 {
   color: white;
 }
 </style>

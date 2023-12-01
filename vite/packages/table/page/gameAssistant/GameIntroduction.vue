@@ -1,49 +1,44 @@
 <template>
   <div class="flex flex-row items-center pt-3.5" style="margin-left: 1em">
-    <div class="flex flex-row mr-3">
-      <a-select v-model:value="currentGame.appid" :bordered="false"
-                class="w-60 h-12 rounded-lg mr-3 text-xs s-bg right-nav" size="large"
-                style="border: 1px solid rgba(255, 255, 255, 0.1);">
+    <div class="flex flex-row mr-3" >
+      <a-select style="border: 1px solid rgba(255, 255, 255, 0.1);" v-model:value="currentGame.appid"
+                class="w-60 h-12 rounded-lg mr-3 text-xs s-bg right-nav" size="large" :bordered="false">
         <a-select-option v-for="item in selectOptions" :value="item.appid">{{ item.chineseName }}</a-select-option>
       </a-select>
-      <HorizontalPanel v-model:selectType="introductionType" :navList="introductionSubList"
-                       class="ml-2"></HorizontalPanel>
+      <HorizontalPanel class="ml-2" :navList="introductionSubList" v-model:selectType="introductionType"></HorizontalPanel>
       <!-- <a-select style="border: 1px solid rgba(255, 255, 255, 0.1);" v-model:value="defaultSortType.name"
         @change="selectHotType($event)"
         class="w-60 h-12 ml-3 rounded-lg s-bg text-xs right-nav" size="large" :bordered="false" >
         <a-select-option v-for="item in sortType" :value="item.name">{{item.title}}</a-select-option>
       </a-select> -->
     </div>
-    <div class="flex flex-row ">
-      <div class="pointer h-12 w-12 rounded-lg flex justify-center items-center"
-           style="background: var(--primary-bg); color: var(--primary-text);"
-           @click="openDrawer('search')">
+    <div class="flex flex-row "  >
+      <div @click="openDrawer('search')" style="background: var(--primary-bg); color: var(--primary-text);"
+           class="pointer h-12 w-12 rounded-lg flex justify-center items-center">
         <Icon icon="sousuo"></Icon>
       </div>
-      <div class="pointer h-12 w-12 rounded-lg flex justify-center items-center ml-3"
-           style="background: var(--primary-bg);color: var(--primary-text);"
-           @click="openDrawer('tip')">
+      <div @click="openDrawer('tip')" style="background: var(--primary-bg);color: var(--primary-text);"
+           class="pointer h-12 w-12 rounded-lg flex justify-center items-center ml-3">
         <Icon icon="tishi-xianxing"></Icon>
       </div>
     </div>
   </div>
-  <div v-if="currentGame.appid==='0' && !displayResult " class="p-5" style="text-align: center;margin-top: 10%">
+  <div class="p-5" v-if="currentGame.appid==='0' && !displayResult " style="text-align: center;margin-top: 10%">
     <div style="width: 360px;display: inline-block">
 
       <div class="flex items-center justify-center">
         <div class="line">
-          <a-input v-model:value="searchData" allow-clear class="no-drag h-10 w-full" placeholder="搜索"
+          <a-input allow-clear @keydown.enter="searchEnter" v-model:value="searchData" class="no-drag h-10 w-full" @pressEnter="searchEnter" placeholder="搜索"
                    style="
-    border-radius: 12px;background:var(--secondary-bg);" @pressEnter="searchEnter"
-                   @keydown.enter="searchEnter">
+    border-radius: 12px;background:var(--secondary-bg);">
             <template #prefix>
               <Icon icon="sousuo" style="color: var(--secondary-text);"></Icon>
             </template>
           </a-input>
         </div>
         <div class="line">
-          <xt-button :h="38" :w="100" class="rounded-lg" type="theme" @click="searchEnter"
-          >搜索
+          <xt-button :w="100" :h="38" type="theme"  class="rounded-lg"   @click="searchEnter"
+                     >搜索
           </xt-button>
         </div>
       </div>
@@ -54,33 +49,32 @@
 
   <template v-else-if="introductionType.name==='video'">
     <vue-custom-scrollbar :settings="settingsScroller"
-                          class="mt-3 mr-3  rounded-lg"
-                          style="height: calc(100vh - 15.8em);margin-left: 1em;background: var(--primary-bg);">
+                          style="height: calc(100vh - 15.8em);margin-left: 1em;background: var(--primary-bg);"
+                          class="mt-3 mr-3  rounded-lg">
       <div class="flex flex-row flex-wrap -ml-3  p-3">
-        <div v-for="(item,index) in gameVideoList" class="pb-3  pl-3 game-list-item flex-shrink-0"
-             @click="openUrl(item.arcurl)">
+        <div @click="openUrl(item.arcurl)" class="pb-3  pl-3 game-list-item flex-shrink-0"
+             v-for="(item,index) in gameVideoList">
           <div class=" rounded-lg w-auto pointer mb-2" style="height: 65.5%;position: relative;">
-            <img :src="`${getVideoCover(item.pic)}`" alt="" class="w-full h-full rounded-lg object-cover">
+            <img :src="`${getVideoCover(item.pic)}`" class="w-full h-full rounded-lg object-cover" alt="">
             <div class="bfl px-2 mb-1 flex justify-between">
               <div class="flex">
                 <div class="flex items-center justify-center">
-                  <Icon class="text-color" icon="play-square" style="font-size: 1.2em;"></Icon>
+                  <Icon icon="play-square" class="text-color" style="font-size: 1.2em;"></Icon>
                   <span
-                      class="ml-1 text-color">{{
+                    class="ml-1 text-color">{{
                       item.play.toString().slice(0, 2) + '.' + item.play.toString().slice(0, 4).slice(3)
                     }}万</span>
                 </div>
                 <div class="mx-2">
-                  <Icon class="text-color" icon="detail" style="font-size: 1.2em;"></Icon>
+                  <Icon icon="detail" class="text-color" style="font-size: 1.2em;"></Icon>
                   <span class="ml-1 text-color">{{ item.danmaku }}</span>
                 </div>
               </div>
               <div class="text-color">{{ item.duration }}</div>
             </div>
           </div>
-          <div class="text-white mb-2 px-1 pointer my-primary-title"
-               style="overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;  "
-               @click="openUrl(item.arcurl)">
+          <div class="text-white mb-2 px-1 pointer my-primary-title" @click="openUrl(item.arcurl)"
+               style="overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;  ">
             {{ item.title.replace( /<em[^>]*>/g, '').replace(/<\/em>/g, '')}}
           </div>
           <div class="flex flex-row justify-between items-center px-2">
@@ -101,12 +95,10 @@
     </vue-custom-scrollbar>
   </template>
   <template v-else>
-    <vue-custom-scrollbar :settings="settingsScroller" class="mt-3 mr-3"
-                          style="height: calc(100vh - 15.8em);margin-left: 1em">
-      <div v-for="item in gameIntroductionList"
-           class="h-14 guide-bg mb-3 rounded-xl nav-top-game flex flex-row items-center px-4 inline-block pointer"
-           style="width: calc(100vw - 275px)"
-           @click="openUrl(item.href)">
+    <vue-custom-scrollbar :settings="settingsScroller" style="height: calc(100vh - 15.8em);margin-left: 1em"
+                          class="mt-3 mr-3">
+      <div v-for="item in gameIntroductionList" style="width: calc(100vw - 275px)" @click="openUrl(item.href)"
+           class="h-14 guide-bg mb-3 rounded-xl nav-top-game flex flex-row items-center px-4 inline-block pointer">
         <div class="round-dot mr-4 flex-shrink-0"></div>
         <div class="text-more inline-block" style="color: var(--primary-text);">{{ item.title }}</div>
         <div class="ml-auto flex-shrink-0" style="color: var(--secondary-text);">{{ item.date }}</div>
@@ -115,10 +107,10 @@
   </template>
 
 
-  <a-drawer v-model:visible="drawerVisible" :width="500" placement="right" @close="this.searchData=''">
+  <a-drawer :width="500" @close="this.searchData=''" v-model:visible="drawerVisible" placement="right">
     <template #title>
-      <div v-if="drawerType==='search'" class="text-center">搜索</div>
-      <div v-else class="text-center">说明</div>
+      <div class="text-center" v-if="drawerType==='search'">搜索</div>
+      <div class="text-center" v-else>说明</div>
     </template>
     <template v-if="drawerType==='search'">
       <template v-if="currentGame.appid!=='0'">
@@ -126,16 +118,16 @@
         <div class="line">当游戏名存在无法被搜索到的情况时，请手动自定义关键词</div>
         <div class="line">视频攻略关键词：</div>
         <div class="line">
-          <a-input v-if="drawerType==='search'" v-model:value="currentSearchWords.video" class="no-drag h-10 w-full"
+          <a-input v-model:value="currentSearchWords.video" class="no-drag h-10 w-full" @pressEnter="searchEnter"
                    placeholder="视频关键词" style="
-    border-radius: 12px;background:var(--secondary-bg);" @pressEnter="searchEnter">
+    border-radius: 12px;background:var(--secondary-bg);" v-if="drawerType==='search'">
           </a-input>
         </div>
         <div class="line">图文攻略关键词：</div>
         <div class="line">
-          <a-input v-if="drawerType==='search'" v-model:value="currentSearchWords.text" class="no-drag h-10 w-full"
+          <a-input v-model:value="currentSearchWords.text" class="no-drag h-10 w-full" @pressEnter="searchEnter"
                    placeholder="图文关键词" style="
-    border-radius: 12px;background:var(--secondary-bg);" @pressEnter="searchEnter">
+    border-radius: 12px;background:var(--secondary-bg);" v-if="drawerType==='search'">
           </a-input>
         </div>
       </template>
@@ -144,24 +136,24 @@
         搜索
       </div>
       <div class="line">
-        <a-input v-model:value="searchData" class="no-drag h-10 w-full" placeholder="搜索" style="
-    border-radius: 12px;background:var(--secondary-bg);"
-                 @pressEnter="searchEnter">
+        <a-input v-model:value="searchData" class="no-drag h-10 w-full" @pressEnter="searchEnter" placeholder="搜索"
+                 style="
+    border-radius: 12px;background:var(--secondary-bg);">
           <template #prefix>
             <Icon icon="sousuo" style="color: var(--secondary-text);"></Icon>
           </template>
         </a-input>
       </div>
       <div class="line">
-        <a-button block class="rounded-lg" size="large" style="color: var(--active-text);" type="primary"
-                  @click="searchEnter">搜索
+        <a-button type="primary" class="rounded-lg" style="color: var(--active-text);" @click="searchEnter" size="large"
+                  block>搜索
         </a-button>
       </div>
     </template>
     <div v-else class="px-14">
       <div>视频攻略数据均来自「Bilibili」，本应用不提供任何攻略数据</div>
       <div class="h-10  xt-bg-2 rounded-lg w-20 mx-auto flex justify-center items-center mt-3 pointer"
-           style="color:var(--primary-text);" @click="goBil">访问官网
+           @click="goBil" style="color:var(--primary-text);">访问官网
       </div>
       <div class="mt-3">图文攻略数据均来自「游民星空」，本应用不提供任何攻略数据</div>
       <div class="h-10 rounded-lg xt-bg-2 w-20 mx-auto flex justify-center items-center mt-3 pointer"
@@ -169,33 +161,33 @@
       </div>
     </div>
   </a-drawer>
-  <!--  <Modal v-if="addVisible" v-model:visible="addVisible" :blurFlag="true">-->
-  <!--    <div class="p-5">-->
-  <!--      <div class="line-title">搜索</div>-->
-  <!--      <div class="line">当关键词不同的时候，请对输入框单独输入。</div>-->
-  <!--      <div class="line">视频攻略关键词：</div>-->
-  <!--      <div class="line">-->
-  <!--        <a-input v-if="addSearchWords.video!=='undefined'" @change="ensureAddWords"-->
-  <!--                 v-model:value.lazy="addSearchWords.video" class="no-drag h-10 w-full"-->
-  <!--                 placeholder="视频关键词" style="-->
-  <!--    border-radius: 12px;background:var(&#45;&#45;secondary-bg);">-->
-  <!--        </a-input>-->
-  <!--      </div>-->
-  <!--      <div class="line">图文攻略关键词：</div>-->
-  <!--      <div class="line">-->
-  <!--        <a-input v-if="addSearchWords.text!=='undefined'" @change="ensureAddWords"-->
-  <!--                 v-model:value.lazy="addSearchWords.text" class="no-drag h-10 w-full"-->
-  <!--                 placeholder="图文关键词" style="-->
-  <!--    border-radius: 12px;background:var(&#45;&#45;secondary-bg);">-->
-  <!--        </a-input>-->
-  <!--      </div>-->
-  <!--    </div>-->
-  <!--    <div class="justify-center items-center flex mb-5">-->
-  <!--      <xt-button @click="doSearch" class="mr-5" type="theme">添加</xt-button>-->
-  <!--      <xt-button @click="addVisible=false" type="default">取消</xt-button>-->
-  <!--    </div>-->
+<!--  <Modal v-if="addVisible" v-model:visible="addVisible" :blurFlag="true">-->
+<!--    <div class="p-5">-->
+<!--      <div class="line-title">搜索</div>-->
+<!--      <div class="line">当关键词不同的时候，请对输入框单独输入。</div>-->
+<!--      <div class="line">视频攻略关键词：</div>-->
+<!--      <div class="line">-->
+<!--        <a-input v-if="addSearchWords.video!=='undefined'" @change="ensureAddWords"-->
+<!--                 v-model:value.lazy="addSearchWords.video" class="no-drag h-10 w-full"-->
+<!--                 placeholder="视频关键词" style="-->
+<!--    border-radius: 12px;background:var(&#45;&#45;secondary-bg);">-->
+<!--        </a-input>-->
+<!--      </div>-->
+<!--      <div class="line">图文攻略关键词：</div>-->
+<!--      <div class="line">-->
+<!--        <a-input v-if="addSearchWords.text!=='undefined'" @change="ensureAddWords"-->
+<!--                 v-model:value.lazy="addSearchWords.text" class="no-drag h-10 w-full"-->
+<!--                 placeholder="图文关键词" style="-->
+<!--    border-radius: 12px;background:var(&#45;&#45;secondary-bg);">-->
+<!--        </a-input>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div class="justify-center items-center flex mb-5">-->
+<!--      <xt-button @click="doSearch" class="mr-5" type="theme">添加</xt-button>-->
+<!--      <xt-button @click="addVisible=false" type="default">取消</xt-button>-->
+<!--    </div>-->
 
-  <!--  </Modal>-->
+<!--  </Modal>-->
 </template>
 
 <script>
@@ -205,7 +197,7 @@ import cheerio from 'cheerio'
 import browser from '../../js/common/browser'
 import axios from 'axios'
 import { steamUserStore } from '../../store/steamUser'
-import { mapState, mapWritableState } from 'pinia'
+import { mapActions, mapState, mapWritableState } from 'pinia'
 import { fixHttp } from '../../util'
 import Modal from '../../components/Modal.vue'
 
@@ -218,10 +210,10 @@ export default {
   data () {
 
     return {
-      displayResult: false,
+      displayResult:false,
       addVisible: false,
       customSearchWords: {
-        searchWords: '',
+        searchWords:'',
         text: '',
         video: ''
       },
@@ -261,26 +253,26 @@ export default {
   computed: {
     ...mapWritableState(steamUserStore, ['searchWords']),
     ...mapState(steamUserStore, ['recentGameList', 'runningGame']),
-    selectOptions () {
+    selectOptions(){
       return [
         {
-          appid: '0',
-          name: '自由搜索',
-          chineseName: '自由搜索'
+          appid:'0',
+          name:'自由搜索',
+          chineseName:'自由搜索'
         },
         ...this.recentGameList
 
-      ]
+        ]
     },
     currentSearchWords: {
       get () {
-        if (this.currentGame.appid === '0') {
+        if(this.currentGame.appid==='0'){
           return this.customSearchWords
         }
         return this.searchWords[this.currentGame.appid]
       },
       set (val) {
-        if (this.currentGame.appid === '0') {
+        if(this.currentGame.appid==='0'){
           return this.customSearchWords
         }
         this.searchWords[this.currentGame.appid] = val
@@ -305,8 +297,8 @@ export default {
   watch: {
     'introductionType.name': {
       handler () {
-        if (this.currentGame.appid === '0') {
-          this.displayResult = false
+        if(this.currentGame.appid==='0'){
+          this.displayResult=false
         }
         this.refreshData()
       }
@@ -346,10 +338,10 @@ export default {
       this.$router.push({ name: 'myGame' })
     },
     ensureSearchWords () {
-      if (!this.currentGame.appid) {
-        return this.customSearchWords = {
-          video: '',
-          text: ''
+      if(!this.currentGame.appid){
+        return this.customSearchWords={
+          video:'',
+          text:''
         }
       }
       if (!this.searchWords[this.currentGame.appid]) {
@@ -369,10 +361,10 @@ export default {
     openDrawer (e) {
       this.drawerType = e
       this.drawerVisible = true
-      if (this.currentGame.appid === '0') {
+      if(this.currentGame.appid ==='0'){
         //如果当前没有游戏设置了
 
-      } else {
+      }else{
         if (this.searchData === '') {
           if (this.introductionType.name === 'video') {
             if (this.currentSearchWords.video) {
@@ -411,7 +403,7 @@ export default {
 
     searchEnter () {
       this.drawerVisible = false
-      this.displayResult = true
+      this.displayResult=true
       if (this.introductionType.name === 'video') {
         this.searchVideoData()
       } else {
@@ -446,8 +438,8 @@ export default {
      */
     encodeBiliWords (words) {
       return encodeURIComponent(words)
-          .replaceAll('%20', '+')
-          .replaceAll('\'', '%27')
+        .replaceAll('%20', '+')
+        .replaceAll('\'', '%27')
     },
     // 搜索接口
     async searchVideoData () {

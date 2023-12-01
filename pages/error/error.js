@@ -1,19 +1,19 @@
-var searchParams = new URLSearchParams(window.location.search.replace('?', ''))
-var h1 = document.getElementById('error-name')
-var h2 = document.getElementById('error-desc')
-var primaryButton = document.getElementById('primary-button')
-var secondaryButton = document.getElementById('secondary-button')
-var continueButton = document.querySelector('#continueButton')
+var searchParams = new URLSearchParams(window.location.search.replace('?', ''));
+var h1 = document.getElementById('error-name');
+var h2 = document.getElementById('error-desc');
+var primaryButton = document.getElementById('primary-button');
+var secondaryButton = document.getElementById('secondary-button');
+var continueButton = document.querySelector('#continueButton');
 
-var ec = searchParams.get('ec')
-var url = searchParams.get('url')
+var ec = searchParams.get('ec');
+var url = searchParams.get('url');
 
-function retry () {
+function retry() {
   // make the page blank while the replacement page is loading, so it doesn't look like the error condition still exists
-  document.body.innerHTML = ''
-  document.body.style.backgroundColor = '#fff'
+  document.body.innerHTML = '';
+  document.body.style.backgroundColor = '#fff';
 
-  window.location = url
+  window.location = url;
 }
 
 var websiteNotFound = {
@@ -21,26 +21,26 @@ var websiteNotFound = {
   message: l('serverNotFoundSubtitle'),
   secondaryAction: {
     title: l('archiveSearchAction'),
-    url: 'https://web.archive.org/web/*/' + url
+    url: 'https://web.archive.org/web/*/' + url,
   },
-  retryOnReconnect: true
-}
+  retryOnReconnect: true,
+};
 
 var sslError = {
   name: l('sslErrorTitle'),
-  message: l('sslErrorMessage')
-}
+  message: l('sslErrorMessage'),
+};
 
 var dnsError = {
   name: l('dnsErrorTitle'),
-  messge: l('dnsErrorMessage')
-}
+  messge: l('dnsErrorMessage'),
+};
 
 var offlineError = {
   name: l('offlineErrorTitle'),
   message: l('offlineErrorMessage'),
-  retryOnReconnect: true
-}
+  retryOnReconnect: true,
+};
 
 // from https://source.chromium.org/chromium/chromium/src/+/master:net/base/net_error_list.h
 const errorCodes = {
@@ -254,18 +254,18 @@ const errorCodes = {
   '-804': 'DNS_CACHE_MISS',
   '-805': 'DNS_SEARCH_EMPTY',
   '-806': 'DNS_SORT_ERROR',
-  '-808': 'DNS_SECURE_RESOLVER_HOSTNAME_RESOLUTION_FAILED'
-}
+  '-808': 'DNS_SECURE_RESOLVER_HOSTNAME_RESOLUTION_FAILED',
+};
 
 // list: https://source.chromium.org/chromium/chromium/src/+/master:net/base/net_error_list.h
 const erorDescriptions = {
   crash: {
     name: l('crashErrorTitle'),
-    message: l('crashErrorSubtitle')
+    message: l('crashErrorSubtitle'),
   },
   '-21': offlineError, // network changed
   '-104': {
-    message: l('genericConnectionFail')
+    message: l('genericConnectionFail'),
   },
   '-105': websiteNotFound,
   '-106': offlineError,
@@ -290,7 +290,7 @@ const erorDescriptions = {
   '-212': sslError,
   '-213': sslError,
   '-300': {
-    name: l('addressInvalidTitle')
+    name: l('addressInvalidTitle'),
   },
   '-501': sslError,
   '-800': dnsError,
@@ -299,39 +299,39 @@ const erorDescriptions = {
   '-803': dnsError,
   '-804': dnsError,
   '-805': dnsError,
-  '-806': dnsError
-}
+  '-806': dnsError,
+};
 
 // show the error message and detail
 
-var errDesc = erorDescriptions[ec]
+var errDesc = erorDescriptions[ec];
 
 if (errDesc && errDesc.retryOnReconnect) {
   window.addEventListener('online', function () {
-    retry()
-  })
+    retry();
+  });
 }
 
-var title, subtitle
+var title, subtitle;
 
 if (errDesc) {
-  title = errDesc.name || ''
-  subtitle = errDesc.message || ''
+  title = errDesc.name || '';
+  subtitle = errDesc.message || '';
 } else {
-  title = l('genericError')
-  subtitle = (errorCodes[ec] || '') + ' (' + ec + ')'
+  title = l('genericError');
+  subtitle = (errorCodes[ec] || '') + ' (' + ec + ')';
 }
 
-h1.textContent = title
-h2.textContent = subtitle
-document.title = title
+h1.textContent = title;
+h2.textContent = subtitle;
+document.title = title;
 
 if (errDesc && errDesc.secondaryAction) {
-  secondaryButton.hidden = false
-  secondaryButton.textContent = errDesc.secondaryAction.title
+  secondaryButton.hidden = false;
+  secondaryButton.textContent = errDesc.secondaryAction.title;
   secondaryButton.addEventListener('click', function () {
-    window.location = errDesc.secondaryAction.url
-  })
+    window.location = errDesc.secondaryAction.url;
+  });
 }
 
 // if an ssl error occured, "try again" should go to the http:// version, which might work
@@ -340,30 +340,30 @@ if (errDesc && errDesc.secondaryAction) {
 //   url = url.replace('https://', 'http://')
 // }
 //证书类的都允许用户强制跳过，如果用户强制跳过，则无需进行协议转换，故不需要此代码了
-console.log(erorDescriptions[ec], sslError)
+console.log(erorDescriptions[ec], sslError);
 
 if (erorDescriptions[ec] === sslError || ec === '-2') {
   //证书类的都允许
-  continueButton.hidden = false
+  continueButton.hidden = false;
 }
 
 if (url) {
   primaryButton.addEventListener('click', function () {
-    retry()
-  })
+    retry();
+  });
   continueButton.addEventListener('click', () => {
     if (erorDescriptions[ec] === sslError) {
       settings.get('whiteCertInvalid', (whiteCertInvalid) => {
-        const reg = /^http(s)?:\/\/(.*)\.(\w*)/
-        const regedUrl = reg.exec(url)[0]
-        whiteCertInvalid.push(regedUrl)
-        settings.set('whiteCertInvalid', whiteCertInvalid)
-      })
+        const reg = /^http(s)?:\/\/(.*)\.(\w*)/;
+        const regedUrl = reg.exec(url)[0];
+        whiteCertInvalid.push(regedUrl);
+        settings.set('whiteCertInvalid', whiteCertInvalid);
+      });
       setTimeout(() => {
-        retry()
-      }, 1000)
+        retry();
+      }, 1000);
     }
-  })
+  });
 }
 
-primaryButton.focus()
+primaryButton.focus();

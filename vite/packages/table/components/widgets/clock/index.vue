@@ -1,24 +1,24 @@
 <template>
   <Widget
-      ref="homelSlotRef"
-      :customData="customData"
-      :customIndex="customIndex"
-      :desk="desk"
-      :menuList="menuList"
-      :options="options"
-      :size="reSize"
+    ref="homelSlotRef"
+    :customData="customData"
+    :customIndex="customIndex"
+    :desk="desk"
+    :menuList="menuList"
+    :options="options"
+    :size="reSize"
   >
     <cardDrag ref="drag" class="drag" @reSizeInit="reSizeInit">
       <template #="{ row }">
         <div class="box no-drag" @click="fullScreen()">
           <component
-              :is="customData.clockId"
-              :class="{
+            :is="customData.clockId"
+            :class="{
               isClock5: isClock5 == true,
               isClock5w420: isClock5w420 == true,
             }"
-              :isSnow="isSnow"
-              :style="{ zoom: zoom }"
+            :isSnow="isSnow"
+            :style="{ zoom: zoom }"
           />
         </div>
       </template>
@@ -34,33 +34,33 @@
   </a-drawer>
 
   <ClockFullScreen
-      v-if="isClockFullScreen"
-      :bgZoom="bgZoom"
-      :blur="customData.blurs"
-      :clock="customData.clockId"
-      :imgUrl="customData.imgUrl"
-      @exit="isClockFullScreen = false"
-      @updateBgZoom="updateBgZoom"
-      @updateBlur="updateBlur"
-      @updateClockStyle="updateClockStyle"
-      @updateImgUrl="updateImgUrl"
+    v-if="isClockFullScreen"
+    :bgZoom="bgZoom"
+    :blur="customData.blurs"
+    :clock="customData.clockId"
+    :imgUrl="customData.imgUrl"
+    @exit="isClockFullScreen = false"
+    @updateBgZoom="updateBgZoom"
+    @updateBlur="updateBlur"
+    @updateClockStyle="updateClockStyle"
+    @updateImgUrl="updateImgUrl"
   >
   </ClockFullScreen>
 </template>
 
 <script>
-import Widget from '../../card/Widget.vue'
-import ClockStyle from './clockState/ClockStyle.vue'
-import ClockFullScreen from './clockState/ClockFullScreen.vue'
+import Widget from '../../card/Widget.vue';
+import ClockStyle from './clockState/ClockStyle.vue';
+import ClockFullScreen from './clockState/ClockFullScreen.vue';
 
-import mixin from './hooks/clockMixin.js'
-import { cardStore } from '../../../store/card.ts'
-import { mapActions } from 'pinia'
+import mixin from './hooks/clockMixin.js';
+import { cardStore } from '../../../store/card.ts';
+import { mapActions } from 'pinia';
 
-import cardDrag from '../../card/hooks/cardDrag.vue'
-import cardDragHook from '../../card/hooks/cardDragHook'
+import cardDrag from '../../card/hooks/cardDrag.vue';
+import cardDragHook from '../../card/hooks/cardDragHook';
 
-import cardSizeHook from '../../card/hooks/cardSizeHook'
+import cardSizeHook from '../../card/hooks/cardSizeHook';
 
 export default {
   mixins: [mixin, cardDragHook, cardSizeHook],
@@ -71,14 +71,13 @@ export default {
     },
     customData: {
       type: Object,
-      default: () => {
-      },
+      default: () => {},
     },
     desk: {
       type: Object,
     },
   },
-  data () {
+  data() {
     return {
       key: Date.now(),
       options: {
@@ -92,8 +91,8 @@ export default {
           icon: 'shezhi1',
           title: '设置',
           fn: () => {
-            this.$refs.homelSlotRef.visible = false
-            this.settingVisible = true
+            this.$refs.homelSlotRef.visible = false;
+            this.settingVisible = true;
           },
         },
       ],
@@ -115,7 +114,7 @@ export default {
       },
       bgZoom: 0,
       widthHeightObj: {},
-    }
+    };
   },
   components: {
     Widget,
@@ -123,169 +122,159 @@ export default {
     ClockFullScreen,
     cardDrag,
   },
-  created () {
-  },
-  mounted () {
-    let setData = {}
+  created() {},
+  mounted() {
+    let setData = {};
     if (!this.customData.clockId) {
-      setData.clockId = 'clock4'
+      setData.clockId = 'clock4';
     }
     if (!this.customData.imgUrl) {
-      setData.imgUrl =
-          'https://p.ananas.chaoxing.com/star3/origin/fa7d6f2c69aae528484d8278575c28ef.jpg'
+      setData.imgUrl = 'https://p.ananas.chaoxing.com/star3/origin/fa7d6f2c69aae528484d8278575c28ef.jpg';
     }
     if (this.customData.blurs === undefined) {
-      setData.blurs = 3
+      setData.blurs = 3;
     }
     if (!this.customData.bgZoom) {
-      setData.bgZoom = 0
+      setData.bgZoom = 0;
     }
     if (Object.keys(setData).length) {
-      this.updateCustomData(this.customIndex, setData, this.desk)
+      this.updateCustomData(this.customIndex, setData, this.desk);
     }
-    this.bgZoom = this.customData.bgZoom
-    this.updateTime()
+    this.bgZoom = this.customData.bgZoom;
+    this.updateTime();
   },
 
   methods: {
     ...mapActions(cardStore, ['updateCustomData']),
-    onReSize (e, i, clock, widthHeightObj) {
-      clock = clock ?? this.customData.clockId
-      i = widthHeightObj ?? i
-      let { width, height } = i
-      this.widthHeightObj = i
-      let zoomRatio = 0
-      let max = width > height ? width : height
-      let zoom
+    onReSize(e, i, clock, widthHeightObj) {
+      clock = clock ?? this.customData.clockId;
+      i = widthHeightObj ?? i;
+      let { width, height } = i;
+      this.widthHeightObj = i;
+      let zoomRatio = 0;
+      let max = width > height ? width : height;
+      let zoom;
       if (height <= 1 || width <= 1) {
-        zoom = 100 + zoomRatio
+        zoom = 100 + zoomRatio;
         if (width <= 1) {
-          this.isSnow = false
-          zoom = 0
+          this.isSnow = false;
+          zoom = 0;
         } else {
-          this.isSnow = true
+          this.isSnow = true;
           // zoom = this.zooms[this.customData.clockId][1]
         }
       } else if (width - height > 1 || height - width > 1) {
-        this.isSnow = true
-        zoomRatio = this.zooms[clock][0]
-        let h = height - width
-        let w = width - height
-        let x
+        this.isSnow = true;
+        zoomRatio = this.zooms[clock][0];
+        let h = height - width;
+        let w = width - height;
+        let x;
         if (h > w) {
           switch (h) {
             case 2:
-              x = 1
-              break
+              x = 1;
+              break;
             case 3:
-              x = 4
-              break
+              x = 4;
+              break;
             case 4:
-              x = 2
-              break
+              x = 2;
+              break;
             default:
-              x = 0.5
+              x = 0.5;
           }
-          zoomRatio /= h + x
+          zoomRatio /= h + x;
         } else {
-          zoomRatio /= w * 0.25
-          zoomRatio /= 3
+          zoomRatio /= w * 0.25;
+          zoomRatio /= 3;
         }
-        zoom = 100 + zoomRatio * (max - 3)
+        zoom = 100 + zoomRatio * (max - 3);
       } else {
-        this.isSnow = true
+        this.isSnow = true;
         if (width > 2 && height > 2) {
-          zoomRatio = this.zooms[clock][0]
-          zoom = 100 + zoomRatio * (max - 2)
+          zoomRatio = this.zooms[clock][0];
+          zoom = 100 + zoomRatio * (max - 2);
         } else if (width >= 2 || height <= 2) {
-          zoomRatio = this.zooms[clock][2]
-          zoom = 100 + zoomRatio
+          zoomRatio = this.zooms[clock][2];
+          zoom = 100 + zoomRatio;
         }
       }
-      this.zoom = `${zoom}%`
+      this.zoom = `${zoom}%`;
       if (clock == 'clock5') {
         if (height > 1 && width > 1) {
-          this.isClock5 = false
-          this.isSnow = true
+          this.isClock5 = false;
+          this.isSnow = true;
         } else {
           if (height <= 1 && width > 1) {
-            this.isClock5w420 = true
+            this.isClock5w420 = true;
           } else {
-            this.isClock5w420 = false
+            this.isClock5w420 = false;
           }
-          this.isClock5 = true
-          this.isSnow = false
+          this.isClock5 = true;
+          this.isSnow = false;
         }
       }
     },
-    updateBlur (e) {
+    updateBlur(e) {
       this.updateCustomData(
-          this.customIndex,
-          {
-            blurs: e,
-          },
-          this.desk
-      )
-      this.blur = e
+        this.customIndex,
+        {
+          blurs: e,
+        },
+        this.desk,
+      );
+      this.blur = e;
     },
-    updateBgZoom (e) {
+    updateBgZoom(e) {
       this.updateCustomData(
-          this.customIndex,
-          {
-            bgZoom: e,
-          },
-          this.desk
-      )
-      this.bgZoom = e
+        this.customIndex,
+        {
+          bgZoom: e,
+        },
+        this.desk,
+      );
+      this.bgZoom = e;
     },
-    updateClockStyle (e) {
-      this.onReSize(0, 0, e, this.widthHeightObj)
+    updateClockStyle(e) {
+      this.onReSize(0, 0, e, this.widthHeightObj);
       this.updateCustomData(
-          this.customIndex,
-          {
-            clockId: e,
-          },
-          this.desk
-      )
+        this.customIndex,
+        {
+          clockId: e,
+        },
+        this.desk,
+      );
     },
-    updateImgUrl (url) {
+    updateImgUrl(url) {
       this.updateCustomData(
-          this.customIndex,
-          {
-            imgUrl: url,
-          },
-          this.desk
-      )
+        this.customIndex,
+        {
+          imgUrl: url,
+        },
+        this.desk,
+      );
     },
-    fullScreen () {
-      this.isClockFullScreen = true
+    fullScreen() {
+      this.isClockFullScreen = true;
     },
-    zeroPadding (num, digit) {
-      let zero = ''
+    zeroPadding(num, digit) {
+      let zero = '';
       for (let i = 0; i < digit; i++) {
-        zero += '0'
+        zero += '0';
       }
-      return (zero + num).slice(-digit)
+      return (zero + num).slice(-digit);
     },
-    updateTime () {
-      let currentDate = new Date()
+    updateTime() {
+      let currentDate = new Date();
 
-      const month = currentDate.getMonth() + 1 // 注意：月份从0开始，所以需要加1
-      const day = currentDate.getDate()
-      const daysOfWeek = [
-        '周日',
-        '周一',
-        '周二',
-        '周三',
-        '周四',
-        '周五',
-        '周六',
-      ]
-      const dayOfWeek = daysOfWeek[currentDate.getDay()]
-      this.options.title = month + '月' + day + '日 ' + dayOfWeek
+      const month = currentDate.getMonth() + 1; // 注意：月份从0开始，所以需要加1
+      const day = currentDate.getDate();
+      const daysOfWeek = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+      const dayOfWeek = daysOfWeek[currentDate.getDay()];
+      this.options.title = month + '月' + day + '日 ' + dayOfWeek;
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

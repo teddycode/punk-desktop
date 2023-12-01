@@ -1,11 +1,11 @@
 <template>
   <div>
-    <input id="" ref="fileRef" name="" style="display: block" type="file"/>
+    <input style="display: block" ref="fileRef" type="file" name="" id="" />
   </div>
 </template>
 
 <script>
-export default {}
+export default {};
 </script>
 
 <style lang="scss" scoped></style>

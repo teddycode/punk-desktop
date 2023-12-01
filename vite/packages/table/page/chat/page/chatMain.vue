@@ -1,42 +1,47 @@
 <!-- 聊天页面 -->
 <template>
   <div class="home-TUIKit-main w-full">
-    <div v-show="!env?.isH5 || currentModel === 'conversation'" :class="env?.isH5 ? 'conversation-h5' : 'conversation'">
-      <TUIConversation @current="handleCurrentConversation"/>
+    <div :class="env?.isH5 ? 'conversation-h5' : 'conversation'" v-show="!env?.isH5 || currentModel === 'conversation'">
+      <TUIConversation @current="handleCurrentConversation" />
       <!-- <TUISearch class="search"/> -->
     </div>
 
-    <div v-show="!env?.isH5 || currentModel === 'message'" class="chat">
+    <div class="chat" v-show="!env?.isH5 || currentModel === 'message'">
       <TUIChat></TUIChat>
       <!-- <TUIChat :isNeedEmojiReact="true">
-        <h1 style="font-size: 42px;margin: auto;text-align: center;margin-top: 20px">欢迎使用磐古跨链客户端</h1>
-      </TUIChat> -->
+       <h1 style="font-size: 42px;margin: auto;text-align: center;margin-top: 20px">欢迎使用想天工作台</h1>
+     </TUIChat> -->
     </div>
 
     <Drag :show="showCall" class="callkit-drag-container" domClassName="callkit-drag-container">
       <!-- TUICallKit 组件：通话 UI 组件主体 -->
-      <TUICallKit :afterCalling="afterCalling" :allowedFullScreen="false" :allowedMinimized="true"
-                  :beforeCalling="beforeCalling" :onMessageSentByMe="onMessageSentByMe" :onMinimized="onMinimized"
+      <TUICallKit
+        :allowedMinimized="true"
+        :allowedFullScreen="false"
+        :beforeCalling="beforeCalling"
+        :afterCalling="afterCalling"
+        :onMinimized="onMinimized"
+        :onMessageSentByMe="onMessageSentByMe"
       />
     </Drag>
 
     <Drag :show="showCallMini" class="callkit-drag-container-mini" domClassName="callkit-drag-container-mini">
       <!-- TUICallKitMini 组件：通话 UI 悬浮窗组件，提供最小化功能 -->
-      <TUICallKitMini style="position: static"/>
+      <TUICallKitMini style="position: static" />
     </Drag>
   </div>
 </template>
 
-
 <script lang="ts">
-import {defineComponent, onMounted, reactive, toRefs} from 'vue';
-import {TUIEnv} from '../../../TUIKit/TUIPlugin';
+import { defineComponent, reactive, toRefs, onMounted, ref, nextTick } from 'vue';
+import { TUIEnv } from '../../../TUIKit/TUIPlugin';
 import Drag from '../../../TUIKit/TUIComponents/components/drag';
-import {handleErrorPrompts} from '../../../TUIKit/TUIComponents/container/utils';
-import TUIContact from "../../../TUIKit/TUIComponents/container/TUIContact/index.vue";
-import SecondPanel from "../../../components/SecondPanel.vue";
-import {onBeforeRouteUpdate, useRoute, useRouter} from 'vue-router'
-import {chatStore} from '../../../store/chat'
+import { handleErrorPrompts } from '../../../TUIKit/TUIComponents/container/utils';
+import TUIContact from '../../../TUIKit/TUIComponents/container/TUIContact/index.vue';
+import SecondPanel from '../../../components/SecondPanel.vue';
+import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
+import { message } from 'ant-design-vue';
+import { chatStore } from '../../../store/chat';
 
 export default defineComponent({
   name: 'App',
@@ -47,25 +52,23 @@ export default defineComponent({
   },
 
   setup() {
-
     const data = reactive({
       env: TUIEnv(),
       currentModel: 'conversation',
       showCall: false,
       showCallMini: false,
-
     });
 
-    const route = useRoute()
-    const router = useRouter()
-    const store = chatStore()
+    const route = useRoute();
+    const router = useRouter();
+    const store = chatStore();
     const TUIServer = (window as any)?.TUIKitTUICore?.TUIServer;
     //const TIM = TUIServer.TUICallKit.TUICore.TIM
     //const tim = TUIServer.TUICallKit.tim
 
     const handleCurrentConversation = (value: string) => {
       //  console.log('检测::>>',value)
-      store.conversations.conversationID = value
+      store.conversations.conversationID = value;
       data.currentModel = value ? 'message' : 'conversation';
     };
     // beforeCalling：在拨打电话前与收到通话邀请前执行
@@ -94,30 +97,30 @@ export default defineComponent({
 
     const handlerParams = (to = route) => {
       if (to.params.action === 'sendMessage') {
-        const {uid} = to.params
-        const type = 'C2C'
+        const { uid } = to.params;
+        const type = 'C2C';
         const name = `${type}${uid}`;
         (window as any).TUIKitTUICore.TUIServer.TUIConversation.getConversationProfile(name).then((imResponse: any) => {
           // 通知 TUIConversation 添加当前会话
           // Notify TUIConversation to toggle the current conversation
-          (window as any).TUIKitTUICore.TUIServer.TUIConversation.handleCurrentConversation(imResponse.data.conversation);
-
+          (window as any).TUIKitTUICore.TUIServer.TUIConversation.handleCurrentConversation(
+            imResponse.data.conversation,
+          );
         });
       }
-    }
+    };
 
     onMounted(() => {
-      handlerParams()
-    })
-
+      handlerParams();
+    });
 
     onBeforeRouteUpdate((to, from) => {
-      handlerParams(to)
-    })
-
+      handlerParams(to);
+    });
 
     return {
-      router, route,
+      router,
+      route,
       ...toRefs(data),
       handleCurrentConversation,
       beforeCalling,
@@ -128,7 +131,6 @@ export default defineComponent({
   },
 });
 </script>
-
 
 <style scoped>
 .home-TUIKit-main {

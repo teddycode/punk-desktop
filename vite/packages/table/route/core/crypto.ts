@@ -1,12 +1,12 @@
-import CryptoPage from "@page/core/Crypto/CryptoPage.vue";
-import {CodeOutlined} from "@ant-design/icons-vue";
+import CryptoPage from '@page/core/Crypto/CryptoPage.vue';
+import { CodeOutlined } from '@ant-design/icons-vue';
 
 export default {
   path: 'crypto',
-  redirect: {name: "CryptoPage"},
+  redirect: { name: 'CryptoPage' },
   component: CryptoPage,
   meta: {
-    icon: CodeOutlined
+    icon: CodeOutlined,
   },
   children: [
     {
@@ -17,7 +17,6 @@ export default {
         icon: CodeOutlined,
         title: 'cryptoHome',
       },
-    }
-  ]
+    },
+  ],
 };
-

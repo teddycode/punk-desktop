@@ -1,23 +1,19 @@
 .TUI-contact {
   font-weight: 400;
-
   &-left {
     border-right: 1px solid var(--divider);
-
     &-header {
-      background: #FFFFFF;
+      background: #ffffff;
       border-bottom: 1px solid var(--divider);
     }
   }
-
   &-column {
     &-item {
       .num {
-        background: #FF584C;
+        background: #ff584c;
         font-weight: 400;
-        color: #FFFFFF;
+        color: #ffffff;
       }
-
       header {
         main {
           font-weight: 400;
@@ -26,42 +22,35 @@
       }
     }
   }
-
   &-main {
     &-info {
       &-header {
-        border-bottom: 1px solid #DDDDDD;
-
+        border-bottom: 1px solid #dddddd;
         .list {
           h1 {
             font-weight: 400;
             color: #000000;
           }
-
           li {
             font-weight: 400;
             color: #999999;
           }
         }
       }
-
       &-main {
         label {
-
           font-weight: 400;
           color: #666666;
         }
-
         textarea {
-          background: #FFFFFF;
-          border: 1px solid #DDDDDD;
+          background: #ffffff;
+          border: 1px solid #dddddd;
 
           font-weight: 400;
           color: #999999;
           letter-spacing: 0;
         }
       }
-
       &-footer {
         p {
           opacity: 0.3;
@@ -69,11 +58,9 @@
       }
     }
   }
-
   &-system {
     &-header {
       h1 {
-
         font-weight: 500;
         color: #000000;
         letter-spacing: 0;
@@ -85,16 +72,14 @@
 .TUI-contact-list {
   &-item {
     &:hover {
-      background: #EDF0F5;
+      background: #edf0f5;
     }
-
     .left {
       .num {
         background: red;
-        color: #FFFFFF;
+        color: #ffffff;
       }
     }
-
     .content {
       ul {
         li {
@@ -102,54 +87,47 @@
           color: #000000;
         }
       }
-
       .type {
         font-weight: 400;
-        color: rgba(0, 0, 0, 0.30);
-        border: 1px solid rgba(0, 0, 0, 0.30);
+        color: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(0, 0, 0, 0.3);
       }
     }
   }
 }
 
 .selected {
-  background: #EDF0F5;
+  background: #edf0f5;
 }
 
 .reduce {
-  border: 1px solid #DDDDDD;
-
+  border: 1px solid #dddddd;
   &::before {
-    background: #DDDDDD;
+    background: #dddddd;
   }
 }
 
-
 .btn {
   font-weight: 400;
-  color: #FFFFFF;
+  color: #ffffff;
   letter-spacing: 0;
-
   &-cancel {
-    border: 1px solid #DDDDDD;
+    border: 1px solid #dddddd;
     color: #666666;
   }
-
   &-default {
-    background: #006EFF;
-    border: 1px solid #006EFF;
+    background: #006eff;
+    border: 1px solid #006eff;
   }
-
   &:disabled {
     opacity: 0.3;
   }
 }
 
 input {
-  border: 1px solid #DDDDDD;
-
+  border: 1px solid #dddddd;
   &:focus {
-    border: 1px solid #006EFF;
+    border: 1px solid #006eff;
   }
 }
 
@@ -160,7 +138,6 @@ input {
       color: #000000;
       letter-spacing: 0;
     }
-
     .search-cancel {
       font-weight: 400;
       color: #000000;

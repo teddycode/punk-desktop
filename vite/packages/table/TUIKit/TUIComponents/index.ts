@@ -5,14 +5,7 @@ import TUIGroup from './container/TUIGroup';
 import TUIContact from './container/TUIContact';
 import TUISearch from './container/TUISearch';
 
-const list = [
-    TUIChat,
-    TUIConversation,
-    TUIProfile,
-    TUIGroup,
-    TUIContact,
-    TUISearch,
-];
+const list = [TUIChat, TUIConversation, TUIProfile, TUIGroup, TUIContact, TUISearch];
 
 /**
  * 组件挂载
@@ -20,9 +13,9 @@ const list = [
  * @param {app} app 挂载到主体
  */
 const install = (app: any) => {
-    list.forEach((component: any) => {
-        component.install(app);
-    });
+  list.forEach((component: any) => {
+    component.install(app);
+  });
 };
 
 /**
@@ -31,31 +24,24 @@ const install = (app: any) => {
  * @param {TUICore} TUICore 主体TUICore
  */
 const plugin = (TUICore: any) => {
-    list.forEach((component: any) => {
-        component.plugin(TUICore);
-    });
+  list.forEach((component: any) => {
+    component.plugin(TUICore);
+  });
 };
 
 const TUIComponents = {
-    name: 'TUIComponents',
-    version: '1.0.0',
-    TUIChat,
-    TUIConversation,
-    TUIProfile,
-    TUIGroup,
-    TUIContact,
-    TUISearch,
-    install,
-    plugin,
+  name: 'TUIComponents',
+  version: '1.0.0',
+  TUIChat,
+  TUIConversation,
+  TUIProfile,
+  TUIGroup,
+  TUIContact,
+  TUISearch,
+  install,
+  plugin,
 };
 
 export default TUIComponents;
 
-export {
-    TUIChat,
-    TUIConversation,
-    TUIProfile,
-    TUIGroup,
-    TUIContact,
-    TUISearch,
-};
+export { TUIChat, TUIConversation, TUIProfile, TUIGroup, TUIContact, TUISearch };

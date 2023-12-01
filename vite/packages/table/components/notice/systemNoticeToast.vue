@@ -1,29 +1,36 @@
 <template>
-  <div class="flex" style="width: 380px;">
+  <div class="flex" style="width: 380px">
     <div class="flex flex-col w-full">
-      <div class="flex items-center justify-between" style="margin-bottom: 13px;">
+      <div class="flex items-center justify-between" style="margin-bottom: 13px">
         <div class="flex items-center">
-          <div class="flex items-center justify-center" style="width: 32px;height: 32px;">
-            <img :src="content.icon" alt="" class="w-full rounded-full h-full object-cover">
+          <div class="flex items-center justify-center" style="width: 32px; height: 32px">
+            <img :src="content.icon" alt="" class="w-full rounded-full h-full object-cover" />
           </div>
-          <div class="font-16 ml-3" style="color: var(--primary-text);">{{ content.title }}</div>
+          <div class="font-16 ml-3" style="color: var(--primary-text)">{{ content.title }}</div>
         </div>
 
-        <div v-if="styles" class="flex items-center active-button pointer justify-center"
-             style="width:21px;height:21px;">
-          <img alt="" class="w-full rounded-full h-full object-cover" src="/img/icon/close-circle-fill1.png">
+        <div
+          v-if="styles"
+          class="flex items-center active-button pointer justify-center"
+          style="width: 21px; height: 21px"
+        >
+          <img alt="" class="w-full rounded-full h-full object-cover" src="/img/icon/close-circle-fill1.png" />
         </div>
-        <div v-else class="flex items-center pointer active-button justify-center" style="width:21px;height:21px;">
-          <img alt="" class="w-full rounded-full h-full object-cover" src="/img/icon/close-circle-fill.png">
+        <div v-else class="flex items-center pointer active-button justify-center" style="width: 21px; height: 21px">
+          <img alt="" class="w-full rounded-full h-full object-cover" src="/img/icon/close-circle-fill.png" />
         </div>
       </div>
 
-      <div class="font-16" style="color: var(--secondary-text);margin-bottom: 24px;">{{ content.body }}</div>
+      <div class="font-16" style="color: var(--secondary-text); margin-bottom: 24px">{{ content.body }}</div>
 
       <div class="flex items-center justify-between">
-        <div class="font-16" style="color:var(--secondary-text);">{{ formatTime(parseInt(content.time) * 1000) }}</div>
-        <div class="px-5 py-2 rounded-lg flex pointer items-center justify-center active-button"
-             style="background: var(--active-bg);color: var(--active-text);" @click="viewNow">查看
+        <div class="font-16" style="color: var(--secondary-text)">{{ formatTime(parseInt(content.time) * 1000) }}</div>
+        <div
+          class="px-5 py-2 rounded-lg flex pointer items-center justify-center active-button"
+          style="background: var(--active-bg); color: var(--active-text)"
+          @click="viewNow"
+        >
+          查看
         </div>
       </div>
     </div>
@@ -33,68 +40,67 @@
 
         </div>
      -->
-
   </div>
 
   <audio ref="notice" src="/sound/notice.mp3"></audio>
 </template>
 
 <script>
-import { defineComponent, } from 'vue'
-import { mapActions, mapWritableState } from 'pinia'
-import { formatTime } from '../../util'
-import { appStore } from '../../store'
+import { defineComponent } from 'vue';
+import { mapActions, mapWritableState } from 'pinia';
+import { formatTime } from '../../util';
+import { appStore } from '../../store';
 
 export default defineComponent({
   props: ['content', 'noticeType', 'isPlay'],
 
   computed: {
-    ...mapWritableState(appStore, ['settings'])
+    ...mapWritableState(appStore, ['settings']),
   },
   methods: {
     ...mapActions(appStore, ['setNoticePlay']),
   },
   watch: {
-    'noticeType': {
-      handler (newVal) {
+    noticeType: {
+      handler(newVal) {
         if (this.noticeType === 'notice' && this.isPlay) {
-          this.setNoticePlay()
+          this.setNoticePlay();
           if (this.settings.noticePlay) {
             this.$nextTick(() => {
-              this.$refs.notice.play()
-            })
+              this.$refs.notice.play();
+            });
           } else {
             this.$nextTick(() => {
-              this.$refs.notice.pause()
-            })
+              this.$refs.notice.pause();
+            });
           }
         }
       },
       immediate: true,
       deep: true,
-    }
+    },
   },
 
-  setup (props, ctx) {
+  setup(props, ctx) {
+    const talkLater = () => {
+      // 点击稍后再说按钮
+      ctx.emit('closeToast');
+      ctx.emit('nowCheck');
+    };
 
-    const talkLater = () => {  // 点击稍后再说按钮
-      ctx.emit('closeToast')
-      ctx.emit('nowCheck')
-    }
-
-    const viewNow = () => {  // 点击立即查看
-      ctx.emit('closeToast')
-      ctx.emit('systemExamine')
-    }
+    const viewNow = () => {
+      // 点击立即查看
+      ctx.emit('closeToast');
+      ctx.emit('systemExamine');
+    };
 
     return {
       formatTime,
       talkLater,
-      viewNow
-    }
-  }
-})
-
+      viewNow,
+    };
+  },
+});
 </script>
 
 <style lang="scss" scoped>
@@ -109,9 +115,7 @@ export default defineComponent({
   }
 }
 
-
 .font-16 {
-
   font-size: 16px;
   font-weight: 400;
 }

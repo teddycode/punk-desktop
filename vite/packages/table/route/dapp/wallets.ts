@@ -4,6 +4,6 @@ export default [
   {
     path: '',
     name: 'walletsDetail',
-    component: CollectionPage
+    component: CollectionPage,
   },
-]
+];

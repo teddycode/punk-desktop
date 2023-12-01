@@ -1,17 +1,12 @@
 <template>
-  <div
-      :class="[bgClass]"
-      :style="[boxStyle, boxBgStyle]"
-      class="xt-active xt-base-btn xt-text"
-  >
+  <div class="xt-active xt-base-btn xt-text" :style="[boxStyle, boxBgStyle]" :class="[bgClass]">
     <myIcon :icon="icon" :style="iconSize"></myIcon>
   </div>
 </template>
 
 <script setup>
-import { Icon as myIcon } from '@iconify/vue'
-import { computed } from 'vue'
-
+import { Icon as myIcon } from '@iconify/vue';
+import { computed } from 'vue';
 const props = defineProps({
   icon: {
     type: String,
@@ -37,14 +32,14 @@ const props = defineProps({
   color: {
     default: 'var(--secondary-text)',
   },
-})
+});
 
 const iconSize = computed(() => {
   return {
     width: props.size + 'px',
     height: props.size + 'px',
-  }
-})
+  };
+});
 
 const boxStyle = computed(() => {
   if (props.bgStyle || props.bgClass) {
@@ -53,22 +48,22 @@ const boxStyle = computed(() => {
       height: props.w + 'px',
       'border-radius': props.radius + 'px',
       color: props.color,
-    }
+    };
   } else {
     return {
       width: props.size + 'px',
       color: props.color,
-    }
+    };
   }
-})
+});
 
 const boxBgStyle = computed(() => {
   if (props.bgStyle) {
     return {
       background: props.bgStyle,
-    }
+    };
   }
-})
+});
 </script>
 
 <style lang="scss" scoped>

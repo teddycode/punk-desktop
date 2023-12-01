@@ -3,14 +3,26 @@
     <!-- <a-empty style="margin-top: 10px" description="您还没有好友或未绑定Steam">
 
     </a-empty> -->
-    <XtState v-if="myFriends.length===0" :state="'null'" :text="{'null':'您还没有好友或未绑定Steam'}" bg="" class="mt-2"
-             style="width: 100%;height: 80%;" zoom="30"></XtState>
+    <XtState
+      v-if="myFriends.length === 0"
+      :state="'null'"
+      :text="{ null: '您还没有好友或未绑定Steam' }"
+      bg=""
+      class="mt-2"
+      style="width: 100%; height: 80%"
+      zoom="30"
+    ></XtState>
     <vue-custom-scrollbar v-else :settings="scrollbarSettings" style="height: 90%">
       <div class="mt-5 my-friends">
-        <div v-for="item in myFriends" class=" avatar-item">
+        <div v-for="item in myFriends" class="avatar-item">
           <a-popover :content="item.player_name">
-            <a-avatar :size="48" :src="item.avatar_url_medium" class="mb-4 rounded-md" shape="square"
-                      style="border:3px solid rgba(82, 196, 26, 1);"></a-avatar>
+            <a-avatar
+              :size="48"
+              :src="item.avatar_url_medium"
+              class="mb-4 rounded-md"
+              shape="square"
+              style="border: 3px solid rgba(82, 196, 26, 1)"
+            ></a-avatar>
           </a-popover>
         </div>
       </div>
@@ -18,11 +30,10 @@
   </Widget>
 </template>
 <script>
-
-import Widget from '../../card/Widget.vue'
-import { steamUserStore } from '../../../store/steamUser'
-import { mapState } from 'pinia'
-import VueCustomScrollbar from '../../../../../src/components/vue-scrollbar.vue'
+import Widget from '../../card/Widget.vue';
+import { steamUserStore } from '../../../store/steamUser';
+import { mapState } from 'pinia';
+import VueCustomScrollbar from '../../../../../src/components/vue-scrollbar.vue';
 
 export default {
   name: 'SteamFriends',
@@ -33,38 +44,37 @@ export default {
   props: {
     customIndex: {
       type: Number,
-      default: 0
+      default: 0,
     },
     customData: {
       type: Object,
-      default: () => {
-      }
+      default: () => {},
     },
     desk: {
-      type: Object
-    }
+      type: Object,
+    },
   },
-  data () {
+  data() {
     return {
       scrollbarSettings: {
         useBothWheelAxes: true,
         swipeEasing: true,
         suppressScrollY: false,
         suppressScrollX: true,
-        wheelPropagation: true
+        wheelPropagation: true,
       },
       options: {
         className: 'card small',
         title: 'Steam好友',
         icon: 'steam',
         type: 'games',
-      }
-    }
+      },
+    };
   },
   computed: {
-    ...mapState(steamUserStore, ['myFriends'])
-  }
-}
+    ...mapState(steamUserStore, ['myFriends']),
+  },
+};
 </script>
 
 <style lang="scss" scoped>

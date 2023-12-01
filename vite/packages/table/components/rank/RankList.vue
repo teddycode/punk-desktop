@@ -1,16 +1,23 @@
 <template>
   <div v-if="rankList.length" class="flex flex-col overflow pt-1">
-    <div v-for="item in rankList" :key="item.id"
-         class="w-full flex items-center rounded-lg justify-between pointer set-type" style="margin: 6px 0 6px;">
+    <div
+      v-for="item in rankList"
+      :key="item.id"
+      class="w-full flex items-center rounded-lg justify-between pointer set-type"
+      style="margin: 6px 0 6px"
+    >
       <span class="ranking">{{ item.id }}</span>
       <div class="flex-1 flex ml-3 items-center">
         <a-avatar :src="item.avatar" @click="showCard(item.uid)"></a-avatar>
-        <div class="ml-3 truncate" style="color: var(--primary-text);font-size: 16px;max-width: 120px;"
-             @click="showCard(item.uid)">
+        <div
+          class="ml-3 truncate"
+          style="color: var(--primary-text); font-size: 16px; max-width: 120px"
+          @click="showCard(item.uid)"
+        >
           {{ item.nickname }}
         </div>
       </div>
-      <div style="color:var(--secondary-text);font-size: 16px;">
+      <div style="color: var(--secondary-text); font-size: 16px">
         {{ item[lastName] }}
         <span> {{ unit }}</span>
       </div>
@@ -22,8 +29,8 @@
 </template>
 
 <script>
-import { mapActions } from 'pinia'
-import { appStore } from '../../store'
+import { mapActions } from 'pinia';
+import { appStore } from '../../store';
 
 export default {
   name: 'RankList',
@@ -32,34 +39,32 @@ export default {
     // 排行榜列表
     rankList: {
       type: Array,
-      default: []
+      default: [],
     },
     // 每列的最后一个属性
     lastName: {
       type: String,
-      default: () => ''
+      default: () => '',
     },
     // 单位
     unit: {
       type: String,
-      default: () => ''
-    }
+      default: () => '',
+    },
   },
-  data () {
-    return {}
+  data() {
+    return {};
   },
   methods: {
     ...mapActions(appStore, ['showUserCard']),
-    showCard (uid) {
-      this.showUserCard(uid)
+    showCard(uid) {
+      this.showUserCard(uid);
     },
-
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-
 .ranking {
   width: 24px;
   height: 24px;
@@ -72,15 +77,15 @@ export default {
 }
 
 .set-type:nth-of-type(1) > span {
-  background: #FE2C46;
+  background: #fe2c46;
 }
 
 .set-type:nth-of-type(2) > span {
-  background: #FF6600;
+  background: #ff6600;
 }
 
 .set-type:nth-of-type(3) > span {
-  background: #FAAA10;
+  background: #faaa10;
 }
 
 .active-index {

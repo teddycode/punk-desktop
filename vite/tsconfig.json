@@ -13,43 +13,23 @@
     "lib": ["esnext", "dom"],
     "skipLibCheck": true,
     "types": [
-//      "pinia-plugin-persist",
-//      "ts-api-types",
+      //      "pinia-plugin-persist",
+      //      "ts-api-types",
     ],
     "baseUrl": "./vite",
     "paths": {
-      "@package/*": [
-        "packages/*"
-      ],
-      "@table/*": [
-        "packages/table/*"
-      ],
-      "@page/*": [
-        "packages/table/page/*"
-      ],
-      "@store/*": [
-        "packages/table/store/*"
-      ],
-      "@route/*": [
-        "packages/table/route/*"
-      ],
-      "@apps/*": [
-        "packages/table/apps/*"
-      ],
-      "@components/*": [
-        "packages/table/components/*"
-      ],
-      "@assets/*": [
-        "packages/table/assets/*"
-      ],
-      "@js/*": [
-        "packages/table/js/*"
-      ]
+      "@package/*": ["packages/*"],
+      "@table/*": ["packages/table/*"],
+      "@page/*": ["packages/table/page/*"],
+      "@store/*": ["packages/table/store/*"],
+      "@route/*": ["packages/table/route/*"],
+      "@apps/*": ["packages/table/apps/*"],
+      "@components/*": ["packages/table/components/*"],
+      "@assets/*": ["packages/table/assets/*"],
+      "@js/*": ["packages/table/js/*"]
     },
-    "typeRoots": [
-      "node_modules/@types"
-    ]
+    "typeRoots": ["node_modules/@types"]
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "packages/**/*.d.ts","typings/*"],
-  "references": [{ "path": "./tsconfig.node.json" }],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "packages/**/*.d.ts", "typings/*"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

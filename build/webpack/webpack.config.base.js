@@ -1,4 +1,4 @@
-const webpack = require('webpack')
+const webpack = require('webpack');
 
 const base = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
@@ -31,6 +31,6 @@ const base = {
 
     new webpack.NamedModulesPlugin(),
   ],
-}
+};
 
-module.exports = base
+module.exports = base;

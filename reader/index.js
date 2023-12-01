@@ -1,48 +1,29 @@
-import useMark from "./hooks/mark.js";
-import useAnnotation from "./hooks/annotation.js";
-import {
-  setLocal,
-  getLocal,
-  clearItemLocal,
-} from "./js/localStorage.js";
+import useMark from './hooks/mark.js';
+import useAnnotation from './hooks/annotation.js';
+import { setLocal, getLocal, clearItemLocal } from './js/localStorage.js';
 
-const cssStyle = [
-  "annotator-h1",
-  "annotator-hl",
-  "annotator-h2",
-  "annotator-h3",
-  "annotator-h4",
-  "annotator-h5",
-];
+const cssStyle = ['annotator-h1', 'annotator-hl', 'annotator-h2', 'annotator-h3', 'annotator-h4', 'annotator-h5'];
 
 const { ref, onMounted, nextTick } = Vue;
 let activeUid;
 
 const App = {
   setup() {
-
     const settingOpen = ref(false);
-    const textDesc = ref("");
-    const searchValue = ref("");
+    const textDesc = ref('');
+    const searchValue = ref('');
     const activeClassName = ref(cssStyle[0]);
 
-    const { renderStore, search, initMark, replaceMarkClass, deleteMark } =
-      useMark();
+    const { renderStore, search, initMark, replaceMarkClass, deleteMark } = useMark();
 
-    const {
-      antRecords,
-      addAntRecords,
-      addEditRecord,
-      removeAnt,
-      setAntBorderColor,
-    } = useAnnotation();
+    const { antRecords, addAntRecords, addEditRecord, removeAnt, setAntBorderColor } = useAnnotation();
 
     onMounted(() => {
-      const markContainer = document.querySelector("#reader-main");
+      const markContainer = document.querySelector('#reader-main');
 
       initMark(markContainer, activeClassName, {
         onSelected({ uid, offsetTop, desc, hasStoreRender }) {
-          textDesc.value = "";
+          textDesc.value = '';
           if (hasStoreRender) {
             addAntRecords({
               uid,
@@ -65,11 +46,11 @@ const App = {
           //   endTextNode.parentNode.append(ele);
         },
         onClick({ uid }) {
-          console.log(uid)
-          if(activeUid==uid)return;
+          console.log(uid);
+          if (activeUid == uid) return;
           activeUid = uid;
           const marked = document.querySelector(`[data-uid="${uid}"]`);
-          console.log(marked)
+          console.log(marked);
           textDesc.value = marked.textContent;
           addAntRecords({
             uid,
@@ -107,7 +88,7 @@ const App = {
     }
 
     function save(uid) {
-      activeUid=0;
+      activeUid = 0;
       addAntRecords({
         uid,
         desc: textDesc.value,
@@ -131,4 +112,4 @@ const App = {
 };
 const app = Vue.createApp(App);
 app.use(ElementPlus);
-app.mount("#app");
+app.mount('#app');

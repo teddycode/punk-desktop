@@ -1,8 +1,12 @@
 <template>
   <div class="flex flex-wrap tab-item">
-    <div v-for="(item,index) in navList" :class="navIndex === index ? 's-bg':''"
-         class="flex items-center  s-text  pointer p-3 mr-2 rounded-lg" @click="clickNav(item,index)">
-      <Icon :icon="item.icon" class="s-text" style="font-size: 1.25em;"></Icon>
+    <div
+      v-for="(item, index) in navList"
+      :class="navIndex === index ? 's-bg' : ''"
+      class="flex items-center s-text pointer p-3 mr-2 rounded-lg"
+      @click="clickNav(item, index)"
+    >
+      <Icon :icon="item.icon" class="s-text" style="font-size: 1.25em"></Icon>
       <span class="ml-2">{{ item.title }}</span>
     </div>
   </div>
@@ -14,49 +18,48 @@ export default {
   props: {
     navList: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     activeType: {
       type: Object,
-      default: () => {
-      }
-    }
+      default: () => {},
+    },
   },
-  data () {
+  data() {
     return {
       navIndex: 0,
-    }
+    };
   },
 
   watch: {
-    'activeType': {
-      handler () {
-        this.defaultSelect()
-      }
-    }
+    activeType: {
+      handler() {
+        this.defaultSelect();
+      },
+    },
   },
 
-  mounted () {
-    this.defaultSelect()
+  mounted() {
+    this.defaultSelect();
   },
 
   methods: {
-    defaultSelect () {
+    defaultSelect() {
       if (this.activeType) {
         if (this.activeType.textname && this.navList.length > 0) {
-          this.navIndex = this.navList.findIndex(item => {
-            return item.textname === this.activeType.textname
-          })
+          this.navIndex = this.navList.findIndex((item) => {
+            return item.textname === this.activeType.textname;
+          });
         }
       }
     },
-    clickNav (item, index) {
-      this.navIndex = index
-      item.state = false  // 将消息未读状态隐藏
-      this.$emit('update:activeType', item)
-    }
-  }
-}
+    clickNav(item, index) {
+      this.navIndex = index;
+      item.state = false; // 将消息未读状态隐藏
+      this.$emit('update:activeType', item);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

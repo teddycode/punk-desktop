@@ -2,21 +2,50 @@
   <!-- <div class="side-panel common-panel s-bg " style=" z-index: 999;
   width: 6em;max-height: 446px;overflow: hidden;" ref="sideContent"> -->
 
-  <div ref="sideContent" class="box common-panel hide-scrollbar s-bg "
-       style="display: flex;flex-direction: row;justify-items: center;justify-content: center;
-          background: var(--primary-bg); z-index: 99;width: 80px;max-height: 100%;
+  <div
+    ref="sideContent"
+    class="box common-panel hide-scrollbar s-bg"
+    style="
+      display: flex;
+      flex-direction: row;
+      justify-items: center;
+      justify-content: center;
+      background: var(--primary-bg);
+      z-index: 99;
+      width: 80px;
+      max-height: 100%;
+      overflow-x: hidden;
+      padding-top: 0;
+      padding-bottom: 0;
+      position: relative;
+    "
+    @click.stop
+    @contextmenu.stop="showMenu"
+  >
+    <div style="width: 67px; overflow-x: hidden">
+      <div
+        :id="sortId"
+        class="scroller-wrapper hide-scrollbar xt-container"
+        style="
+          width: 80px;
+          overflow-y: auto;
+          max-height: 100%;
+          display: flex;
+          flex-direction: column;
           overflow-x: hidden;
-          padding-top: 0;padding-bottom: 0;position:relative;" @click.stop
-       @contextmenu.stop="showMenu">
-    <div style="width: 67px;overflow-x: hidden">
-      <div :id="sortId" class="scroller-wrapper hide-scrollbar xt-container"
-           style="width: 80px;overflow-y:auto;max-height: 100%;display: flex;flex-direction: column;overflow-x: hidden;align-items: flex-start">
+          align-items: flex-start;
+        "
+      >
         <a-tooltip v-for="item in sideNavigationList" :title="item.name" placement="right">
           <div :key="item.name" @click.stop="clickNavigation(item)">
             <div :class="{ 'active-back': current(item) }" class="item-content item-nav" @contextmenu.stop="enableDrag">
               <div v-if="item.type === 'systemApp'" class="icon-color">
-                <navIcon :class="{ 'active-color': current(item) }" :icon="item.icon" class="icon-color xt-text"
-                         style="width:2.5em;height:2.5em;"></navIcon>
+                <navIcon
+                  :class="{ 'active-color': current(item) }"
+                  :icon="item.icon"
+                  class="icon-color xt-text"
+                  style="width: 2.5em; height: 2.5em"
+                ></navIcon>
               </div>
               <a-avatar v-else :size="37" :src="renderIcon(item.icon)" shape="square"></a-avatar>
             </div>
@@ -24,13 +53,16 @@
         </a-tooltip>
       </div>
     </div>
-
   </div>
 
-
-  <a-drawer :closable="true" :contentWrapperStyle="{ backgroundColor: '#212121', height: '216px' }"
-            :visible="menuVisible"
-            class="drawer" placement="bottom" @close="onClose">
+  <a-drawer
+    :closable="true"
+    :contentWrapperStyle="{ backgroundColor: '#212121', height: '216px' }"
+    :visible="menuVisible"
+    class="drawer"
+    placement="bottom"
+    @close="onClose"
+  >
     <a-row>
       <a-col>
         <div class="relative btn" @click="editNavigation">
@@ -40,7 +72,9 @@
         </div>
         <div v-for="item in builtInFeatures" :key="item.name" class="btn" @click="clickNavigation(item)">
           <navIcon :icon="item.icon" style="font-size: 3em"></navIcon>
-          <div><span>{{ item.name }}</span></div>
+          <div>
+            <span>{{ item.name }}</span>
+          </div>
         </div>
       </a-col>
     </a-row>
@@ -54,224 +88,221 @@
 </template>
 
 <script>
-import { mapWritableState } from 'pinia'
-import EditNavigation from './bottomPanel/EditNavigation.vue'
-import { navStore } from '@store/nav'
-import { cardStore } from '@store/card'
-import Sortable from 'sortablejs'
-import { message } from 'ant-design-vue'
-import routerTab from '../js/common/routerTab'
-import { Icon as navIcon } from '@iconify/vue'
-import { renderIcon } from '@js/common/common'
+import { mapWritableState } from 'pinia';
+import EditNavigation from './bottomPanel/EditNavigation.vue';
+import { navStore } from '@store/nav';
+import { cardStore } from '@store/card';
+import Sortable from 'sortablejs';
+import { message } from 'ant-design-vue';
+import routerTab from '../js/common/routerTab';
+import { Icon as navIcon } from '@iconify/vue';
+import { renderIcon } from '@js/common/common';
 
 export default {
   name: 'SidePanel',
   components: {
     EditNavigation,
-    navIcon
+    navIcon,
   },
-  data () {
+  data() {
     return {
       menuVisible: false,
       quick: false,
       delNav: false,
       sortable: null,
       dragEnable: false,
-      dragEvent: null
-    }
+      dragEvent: null,
+    };
   },
   props: {
     // 当前导航列表
     sideNavigationList: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     // 排序的方法
     sortNavigationList: {
       type: Function,
-      default: () => {
-      }
+      default: () => {},
     },
     //要排序的容器id
     sortId: {
       type: Function,
-      default: () => {
-      }
+      default: () => {},
     },
     //删除的方法
     delNavList: {
       type: Function,
-      default: () => {
-      }
+      default: () => {},
     },
     // 其他开关1
     otherSwitch1: {
       type: Boolean,
-      default: () => false
+      default: () => false,
     },
     // 其他开关2
     otherSwitch2: {
       type: Boolean,
-      default: () => false
+      default: () => false,
     },
     // 其他导航列表1
     otherNavList1: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     // 其他导航列表2
     otherNavList2: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     // 删除区域的开关
     delZone: {
       type: Boolean,
-      default: () => false
-    }
+      default: () => false,
+    },
   },
   computed: {
     ...mapWritableState(navStore, ['builtInFeatures', 'mainNavigationList']),
     ...mapWritableState(cardStore, ['routeParams']),
   },
-  mounted () {
-    this.colDrop()
+  mounted() {
+    this.colDrop();
     // this.scrollNav('sideContent', 'scrollTop')
   },
   watch: {
-    delZone (val) {
-      this.delNav = val
-    }
+    delZone(val) {
+      this.delNav = val;
+    },
   },
   methods: {
     renderIcon,
-    disableDrag () {
+    disableDrag() {
       if (this.sortable) {
-        document.removeEventListener('click', this.disableDrag)
-        this.sortable.destroy()
-        this.sortable = null
-        message.info('已中止侧栏调整')
+        document.removeEventListener('click', this.disableDrag);
+        this.sortable.destroy();
+        this.sortable = null;
+        message.info('已中止侧栏调整');
       }
     },
-    enableDrag () {
+    enableDrag() {
       if (this.sortable) {
-        return
+        return;
       }
-      let that = this
-      let drop = document.getElementById(this.sortId)
-      document.addEventListener('click', this.disableDrag)
+      let that = this;
+      let drop = document.getElementById(this.sortId);
+      document.addEventListener('click', this.disableDrag);
 
       this.sortable = Sortable.create(drop, {
         sort: true,
         animation: 150,
         onStart: function (event) {
-          let delIcon = document.getElementById('delIcon2')
-          that.$emit('getDelIcon', true)
-          this.delNav = true
+          let delIcon = document.getElementById('delIcon2');
+          that.$emit('getDelIcon', true);
+          this.delNav = true;
           if (this.delNav) {
             delIcon.ondragover = function (ev) {
-              ev.preventDefault()
-            }
+              ev.preventDefault();
+            };
           }
           delIcon.ondrop = function (ev) {
-            let oneNav = that.sideNavigationList[event.oldIndex]
+            let oneNav = that.sideNavigationList[event.oldIndex];
             //将要删除的是否是主要功能
-            if (!that.mainNavigationList.find(f => f.name === oneNav.name)) {
-              that.delNavList(event.oldIndex)
-              return
+            if (!that.mainNavigationList.find((f) => f.name === oneNav.name)) {
+              that.delNavList(event.oldIndex);
+              return;
             }
-            let sumList = []
+            let sumList = [];
             // 判断其他导航栏是否是打开状态，是则获取功能列表
             if (that.otherSwitch1 && that.otherSwitch2) {
-              sumList = that.otherNavList1.concat(that.otherNavList2)
+              sumList = that.otherNavList1.concat(that.otherNavList2);
             } else if (that.otherSwitch1 && !that.otherSwitch2) {
-              sumList = that.otherNavList1
+              sumList = that.otherNavList1;
             } else if (!that.otherSwitch1 && that.otherSwitch2) {
-              sumList = that.otherNavList2
+              sumList = that.otherNavList2;
             } else {
-              message.info(`导航栏中至少保留一个「${oneNav.name}」`)
+              message.info(`导航栏中至少保留一个「${oneNav.name}」`);
               // console.log('不可删除')
-              return
+              return;
             }
-            that.delNavigation(sumList, oneNav, event.oldIndex, that.delNavList)
-          }
+            that.delNavigation(sumList, oneNav, event.oldIndex, that.delNavList);
+          };
         },
         onUpdate: function (event) {
           let newIndex = event.newIndex,
-              oldIndex = event.oldIndex
-          let newItem = drop.children[newIndex]
-          let oldItem = drop.children[oldIndex]
+            oldIndex = event.oldIndex;
+          let newItem = drop.children[newIndex];
+          let oldItem = drop.children[oldIndex];
 
           // 先删除移动的节点
-          drop.removeChild(newItem)
+          drop.removeChild(newItem);
           // 再插入移动的节点到原有节点，还原了移动的操作
           if (newIndex > oldIndex) {
-            drop.insertBefore(newItem, oldItem)
+            drop.insertBefore(newItem, oldItem);
           } else {
-            drop.insertBefore(newItem, oldItem.nextSibling)
+            drop.insertBefore(newItem, oldItem.nextSibling);
           }
-          that.sortNavigationList(event)
+          that.sortNavigationList(event);
         },
         onEnd: function (event) {
-          that.$emit('getDelIcon', false)
-        }
-      })
-      message.success('开始拖拽调整侧边栏。调整完毕后点击外部即可终止。')
+          that.$emit('getDelIcon', false);
+        },
+      });
+      message.success('开始拖拽调整侧边栏。调整完毕后点击外部即可终止。');
     },
-    current (item) {
+    current(item) {
       if (item.tab) {
-        return routerTab.isActive(item.tab, 1)
+        return routerTab.isActive(item.tab, 1);
       }
       if (item.data?.name) {
-        return this.$route.params.name === item.data.name
+        return this.$route.params.name === item.data.name;
       } else if (item.event) {
-        return this.$route.name === item.event
+        return this.$route.name === item.event;
       } else {
-        return false
+        return false;
       }
     },
-    clickNavigation (item) {
+    clickNavigation(item) {
       switch (item.type) {
         case 'systemApp':
           if (item.event === 'fullscreen') {
             if (this.full) {
-              this.full = false
-              tsbApi.window.setFullScreen(false)
+              this.full = false;
+              tsbApi.window.setFullScreen(false);
             } else {
-              this.full = true
-              tsbApi.window.setFullScreen(true)
+              this.full = true;
+              tsbApi.window.setFullScreen(true);
             }
           } else if (item.event === 'goback') {
-            this.$router.go(-1)
+            this.$router.go(-1);
           } else if (item.event === '/status') {
             if (this.$route.path === '/status') {
-              this.$router.go(-1)
+              this.$router.go(-1);
             } else {
-              this.$router.push({ path: '/status' })
+              this.$router.push({ path: '/status' });
             }
           } else if (item.data) {
             this.$router.push({
               name: 'app',
-              params: item.data
-            })
+              params: item.data,
+            });
           } else {
-            this.$router.push({ name: item.event })
+            this.$router.push({ name: item.event });
           }
-          break
+          break;
         case 'coolApp':
           this.$router.push({
             name: 'app',
-            params: item.data
-          })
-          break
+            params: item.data,
+          });
+          break;
         case 'localApp':
-          require('electron').shell.openPath(item.path)
-          break
+          require('electron').shell.openPath(item.path);
+          break;
         case 'lightApp':
-          ipc.send('executeAppByPackage', { package: item.package })
-          break
+          ipc.send('executeAppByPackage', { package: item.package });
+          break;
         default:
-          require('electron').shell.openPath(item.path)
+          require('electron').shell.openPath(item.path);
       }
     },
     // scrollNav(refVal, scrollDirection) {
@@ -282,51 +313,47 @@ export default {
     //   //   content[scrollDirection] += event.deltaY
     //   // });
     // },
-    closeDrawer () {
-      this.menuVisible = false
+    closeDrawer() {
+      this.menuVisible = false;
     },
-    editNavigation () {
-      this.quick = true
-      this.menuVisible = false
+    editNavigation() {
+      this.quick = true;
+      this.menuVisible = false;
     },
-    showMenu () {
-      this.routeParams.url && ipc.send('hideTableApp', { app: JSON.parse(JSON.stringify(this.routeParams)) })
-      this.menuVisible = true
+    showMenu() {
+      this.routeParams.url && ipc.send('hideTableApp', { app: JSON.parse(JSON.stringify(this.routeParams)) });
+      this.menuVisible = true;
     },
-    setQuick () {
-      this.quick = false
+    setQuick() {
+      this.quick = false;
     },
-    onClose () {
-      this.routeParams.url && this.$router.push({ name: 'app', params: this.routeParams })
-      this.menuVisible = false
+    onClose() {
+      this.routeParams.url && this.$router.push({ name: 'app', params: this.routeParams });
+      this.menuVisible = false;
     },
-    colDrop () {
-
-    },
-    delNavigation (sumList, oneNav, index, delMethod) {
-      if (!this.mainNavigationList.find(item => item.name === oneNav.name)) {
+    colDrop() {},
+    delNavigation(sumList, oneNav, index, delMethod) {
+      if (!this.mainNavigationList.find((item) => item.name === oneNav.name)) {
         //如果不是必须的
-        delMethod(index)
+        delMethod(index);
       } else {
-        if (sumList.find(item => item.name === oneNav.name)) {
+        if (sumList.find((item) => item.name === oneNav.name)) {
           //正常移除
-          delMethod(index)
+          delMethod(index);
         } else {
           //不可移除
-          message.info(`导航栏中至少保留一个「${oneNav.name}」`)
+          message.info(`导航栏中至少保留一个「${oneNav.name}」`);
         }
       }
     },
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-
 :deep(.icon) {
   fill: var(--secondary-text);
 }
-
 
 .item:hover {
   background: var(--active-bg) !important;

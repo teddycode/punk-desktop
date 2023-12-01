@@ -40,21 +40,21 @@
 </template>
 
 <script>
-import { computed } from "vue";
-import { useRoute } from "vue-router";
-import { useBaseStore } from "@store/baseboard";
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+import { useBaseStore } from '@store/baseboard';
 export default {
   setup() {
     const items = [
       {
-        icon: "el-icon-apple",
-        index: "/consensus",
-        title: "共识",
+        icon: 'el-icon-apple',
+        index: '/consensus',
+        title: '共识',
       },
       {
-        icon: "el-icon-apple",
-        index: "/self",
-        title: "我的共识",
+        icon: 'el-icon-apple',
+        index: '/self',
+        title: '我的共识',
       },
     ];
     const route = useRoute();

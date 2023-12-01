@@ -3,20 +3,8 @@
     <div class="container-ricardian">
       <!-- 单选框部分 -->
       <div class="radio-div">
-        <div
-            class="custom-radio"
-            :class="{ selected: selected === 'edit' }"
-            @click="select('edit')"
-        >
-          编辑
-        </div>
-        <div
-            class="custom-radio"
-            :class="{ selected: selected === 'view' }"
-            @click="select('view')"
-        >
-          查看
-        </div>
+        <div class="custom-radio" :class="{ selected: selected === 'edit' }" @click="select('edit')">编辑</div>
+        <div class="custom-radio" :class="{ selected: selected === 'view' }" @click="select('view')">查看</div>
       </div>
 
       <!-- 编辑布局 -->
@@ -49,25 +37,26 @@
 </template>
 
 <script>
-import ShapeButton from '@page/core/components/ShapeButton.vue'
-import Background from '@page/core/components/Background.vue'
+import ShapeButton from '@page/core/components/ShapeButton.vue';
+import Background from '@page/core/components/Background.vue';
 
 export default {
   name: 'RicardianContract',
   components: {
-    Background, ShapeButton,
+    Background,
+    ShapeButton,
   },
   data() {
     return {
-      selected: 'edit'
-    }
+      selected: 'edit',
+    };
   },
   methods: {
     select(choice) {
-      this.selected = choice
-    }
-  }
-}
+      this.selected = choice;
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -150,7 +139,8 @@ export default {
   align-items: center;
 }
 
-.left-view, .right-view {
+.left-view,
+.right-view {
   height: 100%;
   width: 40%;
   margin-right: 10%;
@@ -160,7 +150,8 @@ export default {
   border: 1px solid white;
 }
 
-.top-view, .bottom-view {
+.top-view,
+.bottom-view {
   margin-top: 5%;
   height: 45%;
   width: 100%;

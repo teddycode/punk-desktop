@@ -1,17 +1,17 @@
 <template>
   <div>
     <Widget
-        ref="cardSlot"
-        :customData="customData"
-        :customIndex="customIndex"
-        :desk="desk"
-        :options="options"
-        :sizeList="sizeList"
+      ref="cardSlot"
+      :customData="customData"
+      :customIndex="customIndex"
+      :desk="desk"
+      :options="options"
+      :sizeList="sizeList"
     >
       <template #left-title>
         <div
-            class="icon"
-            style="
+          class="icon"
+          style="
             width: 38px;
             height: 24px;
             display: flex;
@@ -21,53 +21,34 @@
             left: 2px;
           "
         >
-          <RobotOutlined style="font-size: 20px"/>
+          <RobotOutlined style="font-size: 20px" />
         </div>
       </template>
       <div class="content">
         <!-- {{ recentList.slice(0,4).length }} -->
         <div class="input xt-bg" style="position: relative">
-          <a-input
-              v-model:value="inputValue"
-              :bordered="false"
-              placeholder="问我任何问题"
-              @keyup.enter="enterMsg"
-          />
+          <a-input v-model:value="inputValue" :bordered="false" placeholder="问我任何问题" @keyup.enter="enterMsg" />
           <SendOutlined
-              style="
-              position: absolute;
-              font-size: 22px;
-              right: 16px;
-              color: var(--primary-text);
-            "
-              @click="enterMsg"
+            style="position: absolute; font-size: 22px; right: 16px; color: var(--primary-text)"
+            @click="enterMsg"
           />
         </div>
         <div
-            class="ai-con"
-            style="
-            display: flex;
-            text-align: left;
-            margin-top: 14px;
-            margin-bottom: 12px;
-            color: var(--primary-text);
-          "
+          class="ai-con"
+          style="display: flex; text-align: left; margin-top: 14px; margin-bottom: 12px; color: var(--primary-text)"
         >
           最近对话
         </div>
-        <template v-if=" recentList">
+        <template v-if="recentList">
           <div v-for="index in copyNum">
             <div class="ai-msg xt-bg-2" @click="goPage(index - 1)">
-              <xt-base-icon
-                  :icon="recentList[index - 1]?.icon.name || 'message'"
-                  class="msg-icon"
-              ></xt-base-icon>
+              <xt-base-icon :icon="recentList[index - 1]?.icon.name || 'message'" class="msg-icon"></xt-base-icon>
               <div
-                  :style="{
+                :style="{
                   height: copyNum !== 1 ? '56px' : '48px',
                   lineHeight: copyNum !== 1 ? '56px' : '48px',
                 }"
-                  class="msg-title"
+                class="msg-title"
               >
                 {{ recentList[index - 1]?.name }}
               </div>
@@ -77,11 +58,11 @@
         <template v-else>
           <div v-if="copyNum == 1">暂无数据</div>
           <DataStatu
-              v-else
-              :btnToggle="false"
-              imgDisplay="/img/test/load-ail.png"
-              style="margin-top: 200px"
-              textPrompt="暂无数据"
+            v-else
+            :btnToggle="false"
+            imgDisplay="/img/test/load-ail.png"
+            style="margin-top: 200px"
+            textPrompt="暂无数据"
           ></DataStatu>
         </template>
       </div>
@@ -90,11 +71,11 @@
 </template>
 
 <script>
-import Widget from '../card/Widget.vue'
-import { MessageOutlined, RobotOutlined, SendOutlined, } from '@ant-design/icons-vue'
-import DataStatu from './DataStatu.vue'
-import { aiStore } from '../../store/ai'
-import { mapWritableState } from 'pinia'
+import Widget from '../card/Widget.vue';
+import { MessageOutlined, RobotOutlined, SendOutlined } from '@ant-design/icons-vue';
+import DataStatu from './DataStatu.vue';
+import { aiStore } from '../../store/ai';
+import { mapWritableState } from 'pinia';
 
 export default {
   name: 'AIaides',
@@ -112,14 +93,13 @@ export default {
     },
     customData: {
       type: Object,
-      default: () => {
-      },
+      default: () => {},
     },
     desk: {
       type: Object,
     },
   },
-  data () {
+  data() {
     return {
       sizeList: [
         { title: '2x2', height: 1, width: 1, name: '2x2' },
@@ -134,40 +114,40 @@ export default {
       currentIndex: 0,
       settingVisible: false,
       inputValue: '',
-    }
+    };
   },
   methods: {
     // 跳转至AI，并创建新对话
-    enterMsg () {
+    enterMsg() {
       if (this.inputValue == '') {
-        return
+        return;
       }
 
-      this.$router.push({ name: 'ai', params: { value: this.inputValue } })
-      this.inputValue = ''
+      this.$router.push({ name: 'ai', params: { value: this.inputValue } });
+      this.inputValue = '';
     },
     // 跳转至具体会话
-    goPage (index) {
-      console.log(index)
-      this.selectTopicIndex = this.recentList[index].id
-      this.$router.push({ name: 'ai' })
+    goPage(index) {
+      console.log(index);
+      this.selectTopicIndex = this.recentList[index].id;
+      this.$router.push({ name: 'ai' });
     },
   },
   computed: {
     ...mapWritableState(aiStore, ['recentList', 'selectTopicIndex']),
     // 判断尺寸大小
-    showSize () {
+    showSize() {
       if (this.customData && this.customData.width && this.customData.height) {
-        return { width: this.customData.width, height: this.customData.height }
+        return { width: this.customData.width, height: this.customData.height };
       }
-      return this.sizeList[0]
+      return this.sizeList[0];
     },
     // 判断不同高度返回不同具体会话个数
-    copyNum () {
-      return this.showSize.height == 1 ? 1 : this.recentList?.slice(0, 4).length
+    copyNum() {
+      return this.showSize.height == 1 ? 1 : this.recentList?.slice(0, 4).length;
     },
   },
-}
+};
 </script>
 <style lang="scss" scoped>
 .content {
@@ -194,7 +174,6 @@ export default {
       padding-left: 16px;
 
       &::placeholder {
-
         font-size: 14px;
         font-weight: 400;
         color: var(--secondary-text);
@@ -203,7 +182,6 @@ export default {
   }
 
   .ai-con {
-
     font-size: 16px;
     font-weight: 400;
     // margin-top: -5px;
@@ -228,7 +206,6 @@ export default {
     }
 
     .msg-title {
-
       font-size: 16px;
       // width: 80%;
       color: var(--primary-text);

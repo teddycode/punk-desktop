@@ -1,11 +1,11 @@
 <script lang="ts">
-import {IListInfo} from "../interfaces";
-import {mapActions, mapState} from "pinia";
-import {listStore} from "../stores/list";
-import {OrderedListOutlined} from "@ant-design/icons-vue";
-
+import { IListInfo } from '../interfaces';
+import dayjs from 'dayjs';
+import { mapActions, mapState } from 'pinia';
+import { listStore } from '../stores/list';
+import { OrderedListOutlined } from '@ant-design/icons-vue';
 export default {
-  name: "ListList",
+  name: 'ListList',
   props: {
     data: [] as IListInfo[],
   },
@@ -20,12 +20,12 @@ export default {
     };
   },
   computed: {
-    ...mapState(listStore, ["activeList"]),
+    ...mapState(listStore, ['activeList']),
   },
   methods: {
     ...mapActions(listStore, {
-      removeList: "remove",
-      setActiveList: "setActiveList",
+      removeList: 'remove',
+      setActiveList: 'setActiveList',
     }),
   },
 };
@@ -33,32 +33,15 @@ export default {
 
 <template>
   <div class="nav-items">
-    <a-dropdown v-for="list in data" :trigger="['contextmenu']">
-      <div :class="{ active: list === activeList }"
-           :title="list.title"
-           class="item"
-           @click="setActiveList(list)"
-      >
+    <a-dropdown :trigger="['contextmenu']" v-for="list in data">
+      <div class="item" :title="list.title" :class="{ active: list === activeList }" @click="setActiveList(list)">
         <div class="nav-wrapper">
           <div class="flex items-center">
-            <Icon icon="detail" style="color:var(--secondary-text);font-size:20px"></Icon>
-            <div
-                style="
-                flex: auto;
-                text-wrap: normal;
-                word-break: break-all;
-                width: 0;
-                margin-left:10px;
-              "
-            >
-              <div
-                  :class="{ completed: list.completed }"
-                  class="flex justify-between"
-              >
+            <Icon icon="detail" style="color: var(--secondary-text); font-size: 20px"></Icon>
+            <div style="flex: auto; text-wrap: normal; word-break: break-all; width: 0; margin-left: 10px">
+              <div :class="{ completed: list.completed }" class="flex justify-between">
                 <span class="truncate" style="">{{ list.title }} </span>
-                <span>{{
-                    list.count > 0 ? list.count : ""
-                  }}</span>
+                <span>{{ list.count > 0 ? list.count : '' }}</span>
               </div>
             </div>
           </div>
@@ -66,7 +49,7 @@ export default {
       </div>
       <template #overlay>
         <span class="pointer" @click="removeList(list.nanoid)">
-          <a-menu class="del-btn" theme="dark">
+          <a-menu theme="dark" class="del-btn">
             <a-menu-item class="xt-text">删除</a-menu-item>
           </a-menu>
         </span>
@@ -74,12 +57,11 @@ export default {
     </a-dropdown>
   </div>
 </template>
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .nav-items {
   // background: red;
   font-size: 12px;
   color: var(--primary-text);
-
   .item {
     .nav-wrapper {
       cursor: pointer;
@@ -88,18 +70,15 @@ export default {
       border-radius: 10px;
       line-height: 48px;
     }
-
     &.active,
     &:hover {
       .nav-wrapper {
         background: var(--active-secondary-bg) !important;
       }
     }
-
     font-size: 13px;
   }
 }
-
 .del-btn {
   width: 120px;
   height: 60px;
@@ -112,7 +91,6 @@ export default {
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);
   font-size: 16px;
 }
-
 .del-btn:hover {
   opacity: 0.8;
 }

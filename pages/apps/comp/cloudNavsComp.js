@@ -10,20 +10,19 @@ const tpls = `
     </a-col>
   </a-row>
 </div>
-`
+`;
 
 Vue.component('CloudNavsComp', {
   props: {
     Clouds: [],
-
   },
-  data () {
-    return {}
+  data() {
+    return {};
   },
   template: tpls,
-  mounted () {},
+  mounted() {},
   methods: {
-    clickCard (item) {
+    clickCard(item) {
       if (item.groupId) {
         this.$router.push({
           name: 'group',
@@ -33,18 +32,18 @@ Vue.component('CloudNavsComp', {
             t: Date.now(),
             type: item.type,
             name: item.name,
-            summary: item.summary
-          }
-        })
-        const spliceStr = `L2-${item.groupId}-${item.id}`
-        resetOtherTree('group', [spliceStr])
+            summary: item.summary,
+          },
+        });
+        const spliceStr = `L2-${item.groupId}-${item.id}`;
+        resetOtherTree('group', [spliceStr]);
       } else {
         this.$router.push({
           name: 'cloud',
-          query: { listId: item.id, t: Date.now(), type: item.type, name: item.name, summary: item.summary }
-        })
-        resetOtherTree('cloud', [item.id])
+          query: { listId: item.id, t: Date.now(), type: item.type, name: item.name, summary: item.summary },
+        });
+        resetOtherTree('cloud', [item.id]);
       }
-    }
-  }
-})
+    },
+  },
+});

@@ -6,8 +6,8 @@
 
 <script lang="ts">
 export default {
-  name: "ShapeButton",
-}
+  name: 'ShapeButton',
+};
 </script>
 
 <style scoped>

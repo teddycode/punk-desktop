@@ -2,9 +2,8 @@
   <div id="ec" class="echarts"></div>
 </template>
 <script>
-import * as echarts from 'echarts'
-import { getDateTime } from '../../../../src/util/dateTime.js'
-
+import * as echarts from 'echarts';
+import { getDateTime } from '../../../../src/util/dateTime.js';
 export default {
   name: 'WeatherChart',
   props: {
@@ -13,30 +12,29 @@ export default {
       default: () => [],
     },
   },
-  data () {
+  data() {
     return {
       tempMin: [],
       tempMax: [],
       fxDate: [],
-    }
+    };
   },
-  mounted () {
-    this.fxDate = this.daily.map((item) => this.getMonthAndDay(item.fxDate))
-    this.tempMin = this.daily.map((item) => item.tempMin)
-    this.tempMax = this.daily.map((item) => item.tempMax)
-    this.wertherEcharts()
+  mounted() {
+    this.fxDate = this.daily.map((item) => this.getMonthAndDay(item.fxDate));
+    this.tempMin = this.daily.map((item) => item.tempMin);
+    this.tempMax = this.daily.map((item) => item.tempMax);
+    this.wertherEcharts();
   },
 
   methods: {
-    getMonthAndDay (time) {
-      let format = getDateTime(new Date(time))
-      return format.month + '月' + format.day + '日'
+    getMonthAndDay(time) {
+      let format = getDateTime(new Date(time));
+      return format.month + '月' + format.day + '日';
     },
-    wertherEcharts () {
-      var myChart = echarts.init(document.getElementById('ec'), 'dark')
+    wertherEcharts() {
+      var myChart = echarts.init(document.getElementById('ec'), 'dark');
 
       myChart.setOption({
-
         backgroundColor: '',
         tooltip: {
           trigger: 'axis',
@@ -44,7 +42,7 @@ export default {
 
         xAxis: {
           axisTick: {
-            show: false
+            show: false,
           },
           type: 'category',
           boundaryGap: false,
@@ -61,12 +59,11 @@ export default {
           type: 'value',
           boundaryGap: ['20%', '20%'],
           show: false,
-
         },
         grid: {
           left: 80,
           right: 250,
-          width: '80%'
+          width: '80%',
         },
 
         series: [
@@ -93,7 +90,7 @@ export default {
               position: 'bottom',
               fontSize: 15,
               color: '#FFFFFF',
-              formatter: '{c}℃'
+              formatter: '{c}℃',
             },
             itemStyle: { color: '#009dff' },
             // markLine: {
@@ -119,13 +116,13 @@ export default {
             // },
           },
         ],
-      })
+      });
     },
   },
-}
+};
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .echarts {
   height: 376px;
 }

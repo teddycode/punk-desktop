@@ -7,12 +7,12 @@
  * Copyright (c) 2023 by buaa.ioase.dcl, All Rights Reserved.
 -->
 <template>
-  <h3 style="margin-bottom: 1em;color:var(--primary-text) ">
+  <h3 style="margin-bottom: 1em; color: var(--primary-text)">
     <a-avatar src="https://up.apps.vip/logo/yuan.png"></a-avatar>
     元社区
 
     <div style="float: right">
-      <a-button style="color:var(--primary-text)" @click="go('https://s.apps.vip')">
+      <a-button style="color: var(--primary-text)" @click="go('https://s.apps.vip')">
         <Icon icon="yichu"></Icon>
         前往元社区
       </a-button>
@@ -20,12 +20,8 @@
   </h3>
   <div>
     <a-row :gutter="[0, 10]">
-      <a-col :span="24">
-        UID：{{ userInfo.uid }} （用于社区活动身份）
-      </a-col>
-      <a-col :span="24">
-        社区等级：{{ userInfo.grade?.new_name }}
-      </a-col>
+      <a-col :span="24"> UID：{{ userInfo.uid }} （用于社区活动身份） </a-col>
+      <a-col :span="24"> 社区等级：{{ userInfo.grade?.new_name }} </a-col>
       <a-col :span="24" style="text-align: center">
         <a-row>
           <a-col :span="8">
@@ -50,31 +46,32 @@
 </template>
 
 <script>
-import { appStore } from '../../store'
-import { mapState } from 'pinia'
-import { EditOutlined, EyeOutlined, SendOutlined, UserAddOutlined } from '@ant-design/icons-vue '
-import browser from '../../js/common/browser'
+import { appStore } from '../../store';
+import { mapState } from 'pinia';
+import { EditOutlined, EyeOutlined, SendOutlined, UserAddOutlined } from '@ant-design/icons-vue ';
+import browser from '../../js/common/browser';
 
 export default {
   name: 'ComPanel',
   components: {
-    SendOutlined, UserAddOutlined, EyeOutlined, EditOutlined
+    SendOutlined,
+    UserAddOutlined,
+    EyeOutlined,
+    EditOutlined,
   },
-  data () {
-    return {}
+  data() {
+    return {};
   },
   computed: {
-    ...mapState(appStore, ['userInfo'])
+    ...mapState(appStore, ['userInfo']),
   },
-  mounted () {
-
-  },
+  mounted() {},
   methods: {
-    go (url) {
-      browser.openInInner(url)
-    }
-  }
-}
+    go(url) {
+      browser.openInInner(url);
+    },
+  },
+};
 </script>
 
 <style scoped>

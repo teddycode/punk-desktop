@@ -12,13 +12,13 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       hours: 0,
       min: 0,
       second: 0,
       timerID: 0,
-    }
+    };
   },
   props: {
     isSnow: {
@@ -26,29 +26,29 @@ export default {
       default: true,
     },
   },
-  mounted () {
-    this.timerID = setInterval(this.updateTime, 1000)
-    this.updateTime()
+  mounted() {
+    this.timerID = setInterval(this.updateTime, 1000);
+    this.updateTime();
   },
   methods: {
-    zeroPadding (num, digit) {
-      let zero = ''
+    zeroPadding(num, digit) {
+      let zero = '';
       for (let i = 0; i < digit; i++) {
-        zero += '0'
+        zero += '0';
       }
-      return (zero + num).slice(-digit)
+      return (zero + num).slice(-digit);
     },
-    updateTime () {
-      let cd = new Date()
-      this.hours = this.zeroPadding(cd.getHours(), 2)
-      this.min = this.zeroPadding(cd.getMinutes(), 2)
-      this.second = this.zeroPadding(cd.getSeconds(), 2)
+    updateTime() {
+      let cd = new Date();
+      this.hours = this.zeroPadding(cd.getHours(), 2);
+      this.min = this.zeroPadding(cd.getMinutes(), 2);
+      this.second = this.zeroPadding(cd.getSeconds(), 2);
     },
   },
-  destroyed () {
-    clearInterval(this.timerID)// 销毁定时器
+  destroyed() {
+    clearInterval(this.timerID); // 销毁定时器
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

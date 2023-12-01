@@ -1,16 +1,9 @@
 <template>
-  <div
-      :style="{ height: height + 'px' ,width:'100%'}"
-      style="position: relative; overflow: hidden"
-  >
+  <div :style="{ height: height + 'px', width: '100%' }" style="position: relative; overflow: hidden">
     <div class="sxd-square" name="绘制一个正方形">
-      <div
-          class="sxd-box"
-          name="继承正方形高度并旋转"
-          style="width: 100%"
-      >
+      <div class="sxd-box" name="继承正方形高度并旋转" style="width: 100%">
         <div class="sxd-rebox" name="旋转回原来的方向" v-bind="$attrs">
-          <slot/>
+          <slot />
         </div>
       </div>
     </div>
@@ -23,10 +16,10 @@ export default {
   props: {
     height: {
       type: Number,
-      default: 0
-    }
-  }
-}
+      default: 0,
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

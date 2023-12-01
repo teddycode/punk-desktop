@@ -1,40 +1,43 @@
 <template>
   <!-- 预览 -->
-  <div v-show="showModal" class="prompt-modal xt-mask">
+  <div class="prompt-modal xt-mask" v-show="showModal">
     <div class="head-icon">
       <div class="icon" @click="close">
-        <Icon icon="guanbi" style="width: 24px;height: 24px;"></Icon>
+        <Icon icon="guanbi" style="width: 24px; height: 24px"></Icon>
       </div>
       <div class="icon" @click="openDrawer = true">
-        <Icon icon="tishi-xianxing" style="width: 24px;height: 24px;"></Icon>
+        <Icon icon="tishi-xianxing" style="width: 24px; height: 24px"></Icon>
       </div>
     </div>
-    <div style="width:98%;height:80%;">
-      <ShortcutKeyList :keyBoxStyle="{background:'var(--primary-bg)'}" :keyList="keyScheme.keyList"></ShortcutKeyList>
+    <div style="width: 98%; height: 80%">
+      <ShortcutKeyList
+        :keyList="keyScheme.keyList"
+        :keyBoxStyle="{ background: 'var(--primary-bg)' }"
+      ></ShortcutKeyList>
     </div>
     <div class="foot">
-      <xt-button :w="140" class="mr-5">{{ keyScheme.number }} 个快捷键</xt-button>
-      <xt-button :w="140" type="theme" @click="importScheme">下载方案</xt-button>
+      <xt-button class="mr-5" :w="140">{{ keyScheme.number }} 个快捷键</xt-button>
+      <xt-button @click="importScheme" type="theme" :w="140">下载方案</xt-button>
     </div>
   </div>
   <!-- 预览添加抽屉 -->
-  <a-drawer v-model:visible="openDrawer" placement="right" style="z-index:9999;" width="320">
+  <a-drawer v-model:visible="openDrawer" style="z-index: 9999" width="320" placement="right">
     <template #closeIcon>
       <Icon icon="xiangyou"></Icon>
     </template>
-    <template v-if="!keyScheme.isMyCreate" #extra>
+    <template #extra v-if="!keyScheme.isMyCreate">
       <a-space>
         <div class="add-scheme" @click="addPlan(keyScheme)">立即添加</div>
       </a-space>
     </template>
     <div class="drawer-center">
       <span class="h-14 w-14 flex justify-center items-center">
-        <a-avatar :size="48" :src="keyScheme.icon" shape="square"></a-avatar>
+        <a-avatar shape="square" :src="keyScheme.icon" :size="48"></a-avatar>
       </span>
-      <span class="mt-4" style="font-size: 18px;color: var(--primary-text);font-weight: 500;">{{
-          keyScheme.name
-        }}</span>
-      <span class="mt-1" style="font-size: 16px;color: var(--secondary-text);">{{ keyScheme.commonUse }}</span>
+      <span class="mt-4" style="font-size: 18px; color: var(--primary-text); font-weight: 500">{{
+        keyScheme.name
+      }}</span>
+      <span class="mt-1" style="font-size: 16px; color: var(--secondary-text)">{{ keyScheme.commonUse }}</span>
       <!--      <span class="flex items-center my-4">-->
       <!--        <div>-->
       <!--          <a-avatar size="24">-->
@@ -58,25 +61,25 @@
 </template>
 
 <script>
-import ShortcutKeyList from '../shortcutKey/ShortcutKeyList.vue'
-import { message } from 'ant-design-vue'
-import { mapActions } from 'pinia'
-import { keyStore } from '../store'
-
+import ShortcutKeyList from '../shortcutKey/ShortcutKeyList.vue';
+import { message } from 'ant-design-vue';
+import { mapActions, mapWritableState } from 'pinia';
+import { keyStore } from '../store';
+import { appStore } from '../../../store';
 export default {
   name: 'Preview',
   components: {
-    ShortcutKeyList
+    ShortcutKeyList,
   },
-  data () {
+  data() {
     return {
       // 快捷方案
       // keyScheme: {},
       // 预览
       // showModal: false,
       // 添加
-      openDrawer: false
-    }
+      openDrawer: false,
+    };
   },
   props: {
     // 快捷方案
@@ -87,33 +90,33 @@ export default {
     //显示与隐藏
     showModal: {
       type: Boolean,
-      default: () => false
-    }
+      default: () => false,
+    },
   },
   computed: {},
   watch: {},
   methods: {
     ...mapActions(keyStore, ['setShortcutKeyList', 'import']),
-    addPlan (keyScheme) {
-      this.setShortcutKeyList(keyScheme)
-      message.success('添加成功')
-      this.openDrawer = false
-      this.$emit('closePreview', false)
+    addPlan(keyScheme) {
+      this.setShortcutKeyList(keyScheme);
+      message.success('添加成功');
+      this.openDrawer = false;
+      this.$emit('closePreview', false);
     },
-    close () {
-      this.$emit('closePreview', false)
-      this.fullScreen = false
+    close() {
+      this.$emit('closePreview', false);
+      this.fullScreen = false;
     },
-    async importScheme () {
+    async importScheme() {
       if (await this.import([this.keyScheme])) {
-        message.success('下载方案成功。')
-        this.close()
+        message.success('下载方案成功。');
+        this.close();
       } else {
-        message.error('下载方案失败。')
+        message.error('下载方案失败。');
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -129,13 +132,11 @@ export default {
   justify-content: center;
   padding: 12px;
   z-index: 99;
-
   .head-icon {
     width: 100%;
     display: flex;
     justify-content: space-between;
     height: 10%;
-
     .icon {
       background: var(--secondary-bg);
       color: var(--primary-text);
@@ -148,14 +149,12 @@ export default {
       cursor: pointer;
     }
   }
-
   .foot {
     display: flex;
     justify-items: center;
     align-items: end;
   }
 }
-
 .add-scheme {
   background: var(--active-bg);
   font-size: 16px;
@@ -167,7 +166,6 @@ export default {
   justify-content: center;
   align-items: center;
 }
-
 .drawer-center {
   height: 100%;
   display: flex;

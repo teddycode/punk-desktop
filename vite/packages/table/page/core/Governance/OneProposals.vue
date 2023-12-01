@@ -4,10 +4,18 @@
       <div class="header">
         <div class="proposal-title">提案标题</div>
         <div class="details">
-          <span>创建者: <span>{{ proposalInfo ? proposalInfo.creator : '' }}</span></span>
-          <span>提案 Id: <span>{{ $route.params.proposalId }}</span></span>
-          <span>类型: <span>{{ proposalInfo ? proposalInfo.proposalType : '' }}</span></span>
-          <span>状态: <span>{{ proposalInfo ? proposalInfo.state : '' }}</span></span>
+          <span
+            >创建者: <span>{{ proposalInfo ? proposalInfo.creator : '' }}</span></span
+          >
+          <span
+            >提案 Id: <span>{{ $route.params.proposalId }}</span></span
+          >
+          <span
+            >类型: <span>{{ proposalInfo ? proposalInfo.proposalType : '' }}</span></span
+          >
+          <span
+            >状态: <span>{{ proposalInfo ? proposalInfo.state : '' }}</span></span
+          >
         </div>
       </div>
       <div class="content">
@@ -21,23 +29,24 @@
 </template>
 
 <script>
-import Background from '@page/core/components/Background.vue'
-import { governance } from '@page/core/Governance/services/address'
-import selfInfo from './components/selfInfo.vue'
+import Background from '@page/core/components/Background.vue';
+import { governance } from '@page/core/Governance/services/address';
+import selfInfo from './components/selfInfo.vue';
 
 export default {
   name: 'OneProposals',
   components: {
-    Background, selfInfo,
+    Background,
+    selfInfo,
   },
   data() {
     return {
       proposalInfo: null,
-    }
+    };
   },
   async mounted() {
-    let proposalInfo
-    let proposalState
+    let proposalInfo;
+    let proposalState;
     const numberToState = new Map([
       [0, 'Pending'],
       [1, 'Canceled'],
@@ -47,13 +56,13 @@ export default {
       [5, 'Expired'],
       [6, 'Executed'],
       [7, 'Queued'],
-    ])
-    proposalInfo = await governance.getProposalById(this.$route.params.proposalId)
-    proposalInfo = this.convertObjectToExtend(proposalInfo)
-    proposalState = await governance.getProposalState(this.$route.params.proposalId)
-    proposalInfo.state = numberToState.get(proposalState)
-    this.proposalInfo = proposalInfo
-    console.log(this.proposalInfo)
+    ]);
+    proposalInfo = await governance.getProposalById(this.$route.params.proposalId);
+    proposalInfo = this.convertObjectToExtend(proposalInfo);
+    proposalState = await governance.getProposalState(this.$route.params.proposalId);
+    proposalInfo.state = numberToState.get(proposalState);
+    this.proposalInfo = proposalInfo;
+    console.log(this.proposalInfo);
   },
   methods: {
     convertObjectToExtend(obj) {
@@ -76,10 +85,10 @@ export default {
         stakeAmount: obj.stakeAmount,
         strategy: obj.strategy,
         ipfsHash: obj.ipfsHash,
-      }
+      };
     },
-  }
-}
+  },
+};
 </script>
 
 <style scoped>
@@ -147,4 +156,5 @@ export default {
   width: 25%;
   height: 100%;
   border: 1px solid white;
-}</style>
+}
+</style>

@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { defineComponent, reactive, toRefs, watchEffect } from 'vue'
+import { defineComponent, watchEffect, reactive, toRefs } from 'vue';
 
 export default defineComponent({
   props: {
@@ -15,29 +15,29 @@ export default defineComponent({
       default: () => ({}),
     },
   },
-  setup (props, ctx) {
+  setup(props, ctx) {
     const data = reactive({
       message: {},
-    })
+    });
 
     watchEffect(() => {
-      data.message = props.data
-    })
+      data.message = props.data;
+    });
 
     const hasCreateGroup = (text) => {
-      return text.includes('创建')
-    }
+      return text.includes('创建');
+    };
 
     return {
-      ...toRefs(data), hasCreateGroup
-    }
+      ...toRefs(data),
+      hasCreateGroup,
+    };
   },
-})
+});
 </script>
 <style lang="scss" scoped>
 @import url('../../../styles/common.scss');
 @import url('../../../styles/icon.scss');
-
 .message-tip {
   margin: 0 auto;
   color: var(--secondary-text);

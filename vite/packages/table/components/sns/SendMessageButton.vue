@@ -1,24 +1,21 @@
 <script lang="ts">
-import {mapState} from "pinia";
-import {appStore} from "../../store";
+import { mapState } from 'pinia';
+import { appStore } from '../../store';
 
 export default {
-  name: "SendMessageButton",
-  props: [
-    'uid',
-    'enable'
-  ],
+  name: 'SendMessageButton',
+  props: ['uid', 'enable'],
   emits: [],
   computed: {
     ...mapState(appStore, {
-      'myUserInfo': 'userInfo'
+      myUserInfo: 'userInfo',
     }),
   },
   async mounted() {
-    this.$emit('loaded')
+    this.$emit('loaded');
   },
   data() {
-    return {}
+    return {};
   },
   methods: {
     sendMessage() {
@@ -30,19 +27,17 @@ export default {
       //   }
 
       // })
-      this.$emit('send', this.uid)
-    }
-  }
-}
+      this.$emit('send', this.uid);
+    },
+  },
+};
 </script>
 
 <template>
-  <XtButton :type="enable || enable===undefined?'theme':'default'" style="width:100%" @click="sendMessage">
+  <XtButton :type="enable || enable === undefined ? 'theme' : 'default'" style="width: 100%" @click="sendMessage">
     <icon icon="message"></icon>
     发消息
   </XtButton>
 </template>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

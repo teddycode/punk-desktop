@@ -7,12 +7,7 @@
     "size": 5828,
     "parentHash": "b8ddef407208b55f89b0ecacf5da4f7e3b302d2530373a9137d76983911d3993",
     "time": "2023/08/25 19:56:22",
-    "committee": [
-      "replica_1",
-      "replica_2",
-      "replica_3",
-      "replica_4"
-    ],
+    "committee": ["replica_1", "replica_2", "replica_3", "replica_4"],
     "consensus": "hotstuff"
   },
   {
@@ -23,12 +18,7 @@
     "size": 5679,
     "parentHash": "ecad5b1fd4d68d0d167ff0e7b34eb3ab233e221db564a4c1dda1bd3629e75eeb",
     "time": "2023/08/25 19:56:22",
-    "committee": [
-      "replica_1",
-      "replica_2",
-      "replica_3",
-      "replica_4"
-    ],
+    "committee": ["replica_1", "replica_2", "replica_3", "replica_4"],
     "consensus": "hotstuff"
   },
   {
@@ -39,12 +29,7 @@
     "size": 4023,
     "parentHash": "5e3bf4d7fc80e9a03cf3acd5b1767013561a998edaaece7d93fe5987f0351a62",
     "time": "2023/08/25 19:56:22",
-    "committee": [
-      "replica_1",
-      "replica_2",
-      "replica_3",
-      "replica_4"
-    ],
+    "committee": ["replica_1", "replica_2", "replica_3", "replica_4"],
     "consensus": "hotstuff"
   },
   {
@@ -55,12 +40,7 @@
     "size": 5120,
     "parentHash": "39faed6c9e5dfdb258deef8471df8b2528973c2aec7f3cdf219f5e5df94f9761",
     "time": "2023/08/25 19:56:22",
-    "committee": [
-      "replica_1",
-      "replica_2",
-      "replica_3",
-      "replica_4"
-    ],
+    "committee": ["replica_1", "replica_2", "replica_3", "replica_4"],
     "consensus": "hotstuff"
   },
   {
@@ -71,12 +51,7 @@
     "size": 6634,
     "parentHash": "d8e67179b97b6238c4dde3fc42d7c0ea59c094c868fe355f59044901ce526631",
     "time": "2023/08/25 19:56:22",
-    "committee": [
-      "replica_1",
-      "replica_2",
-      "replica_3",
-      "replica_4"
-    ],
+    "committee": ["replica_1", "replica_2", "replica_3", "replica_4"],
     "consensus": "hotstuff"
   },
   {
@@ -87,12 +62,7 @@
     "size": 5720,
     "parentHash": "9e51e2ca38648138b2ab925e8b56b09868606096034cfb357df91b90c7f5ead8",
     "time": "2023/08/25 19:56:22",
-    "committee": [
-      "replica_1",
-      "replica_2",
-      "replica_3",
-      "replica_4"
-    ],
+    "committee": ["replica_1", "replica_2", "replica_3", "replica_4"],
     "consensus": "hotstuff"
   },
   {
@@ -103,12 +73,7 @@
     "size": 4390,
     "parentHash": "47b0f911f8b38a776b13a20b00eb9c27a61f3879db530d241b6e13c1843025c9",
     "time": "2023/08/25 19:56:22",
-    "committee": [
-      "replica_1",
-      "replica_2",
-      "replica_3",
-      "replica_4"
-    ],
+    "committee": ["replica_1", "replica_2", "replica_3", "replica_4"],
     "consensus": "hotstuff"
   },
   {
@@ -119,12 +84,7 @@
     "size": 4390,
     "parentHash": "17047b452f478bba6ef62757aa873268a40faaac9e956813779b6da8cefce249",
     "time": "2023/08/25 19:56:22",
-    "committee": [
-      "replica_1",
-      "replica_2",
-      "replica_3",
-      "replica_4"
-    ],
+    "committee": ["replica_1", "replica_2", "replica_3", "replica_4"],
     "consensus": "hotstuff"
   },
   {
@@ -135,12 +95,7 @@
     "size": 4390,
     "parentHash": "2d35d3910f85e80d540942aa1e3aa75ecfdda5ed42c0c250f6a77a3b48a03a34",
     "time": "2023/08/25 19:56:22",
-    "committee": [
-      "replica_1",
-      "replica_2",
-      "replica_3",
-      "replica_4"
-    ],
+    "committee": ["replica_1", "replica_2", "replica_3", "replica_4"],
     "consensus": "hotstuff"
   },
   {
@@ -151,12 +106,7 @@
     "size": 4390,
     "parentHash": "c8759e85e6efcb7c6b3fa701d9a77670bc52acd84649fa098578f8a87e2cfbfb",
     "time": "2023/08/25 19:56:22",
-    "committee": [
-      "replica_1",
-      "replica_2",
-      "replica_3",
-      "replica_4"
-    ],
+    "committee": ["replica_1", "replica_2", "replica_3", "replica_4"],
     "consensus": "hotstuff"
   }
 ]

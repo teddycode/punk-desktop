@@ -1,26 +1,22 @@
 <template>
   <div class="s-bg rounded-lg xt-text" style="height: 100%">
     <keep-alive>
-      <router-view/>
+      <router-view />
     </keep-alive>
   </div>
 </template>
 
 <script>
-
 // 功能区入口
 export default {
   name: 'coreMain',
-  data () {
-    return {}
+  data() {
+    return {};
   },
-  mounted () {
-  },
+  mounted() {},
   computed: {},
-  methods: {}
-}
+  methods: {},
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

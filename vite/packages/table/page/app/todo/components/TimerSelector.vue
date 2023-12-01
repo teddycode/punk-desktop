@@ -3,14 +3,19 @@
     @click="selectTime"
     :style="{ color: this.modelValue ? '#1890ff' : '#BBBBBB' }"
   /> -->
-  <Icon :style="{ color: this.modelValue ? '#1890ff' : 'var(--disable-text)' }" class="pointer" icon="calendar-check"
-        style="font-size:20px" @click="selectTime"></Icon>
+  <Icon
+    class="pointer"
+    @click="selectTime"
+    :style="{ color: this.modelValue ? '#1890ff' : 'var(--disable-text)' }"
+    icon="calendar-check"
+    style="font-size: 20px"
+  ></Icon>
   <teleport to="body">
-
-
-    <Modal v-if="promptVisible" v-model:visible="promptVisible" blurFlag="true" style="z-index:99999;">
-      <div class="px-5 pb-5 xt-modal flex flex-col justify-between items-center"
-           style="width:380px;height:300px;border-radius:16px">
+    <Modal blurFlag="true" v-model:visible="promptVisible" v-if="promptVisible" style="z-index: 99999">
+      <div
+        class="px-5 pb-5 xt-modal flex flex-col justify-between items-center"
+        style="width: 380px; height: 300px; border-radius: 16px"
+      >
         <div class="head-nav">
           <div class="ml-8">
             <a-tag class="tag-item" @click="setToday">今天</a-tag>
@@ -20,29 +25,29 @@
             <a-tag class="tag-item" @click="setNextYear">明年</a-tag>
           </div>
           <div>
-            <Icon icon="guanbi" style="color:var(--primary-text);font-size:24px" @click="close"></Icon>
+            <Icon @click="close" icon="guanbi" style="color: var(--primary-text); font-size: 24px"></Icon>
           </div>
         </div>
         <div class="flex justify-center">
           <a-row type="flex">
             <a-col>
               <a-date-picker
-                  v-model:value="newDate"
-                  class="input"
-                  placeholder="选择日期"
-                  style="width: 100%;"
-                  @change="onDatePickerChange"
+                @change="onDatePickerChange"
+                placeholder="选择日期"
+                style="width: 100%"
+                v-model:value="newDate"
+                class="input"
               />
               <a-time-picker
-                  v-model:value="newTime"
-                  class="input"
-                  format="HH:mm"
-                  placeholder="选择时间"
-                  style="width: 100%; margin-top: 10px"
-                  @change="onTimePickerChange"
+                @change="onTimePickerChange"
+                style="width: 100%; margin-top: 10px"
+                v-model:value="newTime"
+                placeholder="选择时间"
+                format="HH:mm"
+                class="input"
               />
             </a-col>
-            <a-col flex="140px"></a-col>
+            <a-col flex="140px"> </a-col>
           </a-row>
         </div>
         <div class="modal-btn">
@@ -93,20 +98,19 @@
 </template>
 
 <script lang="ts">
-import dayjs from "dayjs";
-import objectSupport from "dayjs/plugin/objectSupport";
-import {CalendarOutlined} from "@ant-design/icons-vue";
-import Modal from "../../../../components/Modal.vue";
-import {appStore} from "../../../../store";
-import {mapWritableState} from "pinia";
-
-dayjs.locale("zh-cn");
+import dayjs from 'dayjs';
+import objectSupport from 'dayjs/plugin/objectSupport';
+import { CalendarOutlined } from '@ant-design/icons-vue';
+import Modal from '../../../../components/Modal.vue';
+import { appStore } from '../../../../store';
+import { mapActions, mapWritableState } from 'pinia';
+dayjs.locale('zh-cn');
 dayjs.extend(objectSupport);
 export default {
-  name: "TimerSelector",
+  name: 'TimerSelector',
   components: {
     CalendarOutlined,
-    Modal
+    Modal,
   },
   props: {
     modelValue: {
@@ -127,7 +131,7 @@ export default {
       dateTimePickerVisible: false,
       newDate: null,
       newTime: null,
-      promptVisible: false
+      promptVisible: false,
     };
   },
   computed: {
@@ -136,7 +140,7 @@ export default {
   methods: {
     selectTime() {
       // this.dateTimePickerVisible = true;
-      this.promptVisible = true
+      this.promptVisible = true;
       // this.fullScreen = true
     },
     setTimeDayEnd(force = false) {
@@ -152,19 +156,19 @@ export default {
       this.setTimeDayEnd();
     },
     setTomorrow() {
-      this.newDate = dayjs().add(1, "day");
+      this.newDate = dayjs().add(1, 'day');
       this.setTimeDayEnd();
     },
     setNextWeek() {
-      this.newDate = dayjs().add(7, "day");
+      this.newDate = dayjs().add(7, 'day');
       this.setTimeDayEnd();
     },
     setNextYear() {
-      this.newDate = dayjs().add(1, "year");
+      this.newDate = dayjs().add(1, 'year');
       this.setTimeDayEnd();
     },
     setNextMonth() {
-      this.newDate = dayjs().add(1, "month");
+      this.newDate = dayjs().add(1, 'month');
       this.setTimeDayEnd();
     },
     seTime() {
@@ -184,14 +188,14 @@ export default {
       let time = newTime.unix();
       // this.dateTimePickerVisible = false;
       // this.fullScreen = false
-      this.promptVisible = false
-      this.$emit("update:modelValue", time);
+      this.promptVisible = false;
+      this.$emit('update:modelValue', time);
     },
     clearDeadTime(e) {
-      if (e.target.nodeName.toLowerCase() === "span") {
+      if (e.target.nodeName.toLowerCase() === 'span') {
         this.newDate = null;
         this.newTime = null;
-        this.$emit("update:modelValue", null);
+        this.$emit('update:modelValue', null);
       }
     },
     onTimePickerChange() {
@@ -209,20 +213,20 @@ export default {
       }
     },
     close() {
-      this.fullScreen = false
-      this.promptVisible = false
+      this.fullScreen = false;
+      this.promptVisible = false;
     },
     clearTime() {
       this.newDate = null;
       this.newTime = null;
-      this.$emit("update:modelValue", null);
-      this.close()
-    }
+      this.$emit('update:modelValue', null);
+      this.close();
+    },
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .head-nav {
   width: 100%;
   height: 68px;
@@ -233,12 +237,10 @@ export default {
   color: var(--primary-text);
   font-weight: 500;
   border-bottom: 1px solid var(--divider);
-
   .tag-item {
     color: var(--secondary-text);
     cursor: pointer;
   }
-
   > div:nth-child(2) {
     width: 44px;
     height: 44px;
@@ -252,12 +254,10 @@ export default {
     right: 0px;
   }
 }
-
 .modal-btn {
   display: flex;
   font-size: 16px;
   color: var(--primary-text);
-
   > div {
     width: 120px;
     height: 44px;
@@ -267,7 +267,6 @@ export default {
     border-radius: 12px;
     background: var(--mask-bg);
   }
-
   > div:nth-child(2) {
     background: var(--active-bg) !important;
   }

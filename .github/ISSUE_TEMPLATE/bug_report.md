@@ -1,9 +1,9 @@
 ---
 name: Bug report
 about: Report unexpected behavior in Min
-title: ""
+title: ''
 labels: bug
-assignees: ""
+assignees: ''
 ---
 
 - **Min Version:**

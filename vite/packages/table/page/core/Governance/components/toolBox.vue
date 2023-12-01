@@ -2,32 +2,31 @@
   <div class="toolbox-container">
     <h1 class="toolbox-title">
       工具箱
-      <font-awesome-icon class="icon" icon="wrench"/>
+      <font-awesome-icon class="icon" icon="wrench" />
     </h1>
     <p class="description" @click="navToRC">李嘉图合约</p>
     <p class="description">测试环境入口</p>
-    <p class="description" @click="navToER">紧急投票 </p>
+    <p class="description" @click="navToER">紧急投票</p>
   </div>
 </template>
 
 <script>
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 export default {
   name: 'toolBox',
   components: {
-    FontAwesomeIcon
+    FontAwesomeIcon,
   },
   methods: {
-    navToRC () {
-      this.$router.push({ name: 'RicardianContract' })
+    navToRC() {
+      this.$router.push({ name: 'RicardianContract' });
     },
-    navToER () {
-      this.$router.push({ name: 'EmergencyResponse' })
-    }
-  }
-}
-
+    navToER() {
+      this.$router.push({ name: 'EmergencyResponse' });
+    },
+  },
+};
 </script>
 
 <style scoped>

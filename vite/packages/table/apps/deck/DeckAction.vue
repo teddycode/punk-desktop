@@ -3,9 +3,9 @@
 
   <!--  </SecondPanel>-->
 
-  <a-tabs v-model:activeKey="activeTab" style="margin-top: 4em" tab-position="left">
-    <a-tab-pane v-for="group in actionGroups" :key="group.name" :tab="group.title">
-      <ActionBuilder :key="'ab-'+resetActionBuilder" :ref="group.name" :actions="group.actions" :group="group">
+  <a-tabs style="margin-top: 4em" v-model:activeKey="activeTab" tab-position="left">
+    <a-tab-pane :key="group.name" :tab="group.title" v-for="group in actionGroups">
+      <ActionBuilder :key="'ab-' + resetActionBuilder" :ref="group.name" :group="group" :actions="group.actions">
       </ActionBuilder>
     </a-tab-pane>
     <!--    <a-tab-pane key="audio" tab="系统设置">-->
@@ -44,88 +44,79 @@
     <!--        打开酷应用-->
     <!--      </div>-->
     <!--    </a-tab-pane>-->
-
   </a-tabs>
   <div style="text-align: center">
-    <a-button type="primary" @click="addAction">确认</a-button>
+    <a-button @click="addAction" type="primary">确认</a-button>
 
     <a-button @click="back">取消</a-button>
   </div>
-  <div>
-
-
-  </div>
+  <div></div>
 </template>
 
 <script lang="ts">
-import BackBtn from '../../components/comp/BackBtn.vue'
-import ActionBuilder from "../../components/deck/ActionBuilder.vue";
-import {ActionGroups} from "../../consts";
-import _ from 'lodash-es'
-
+import BackBtn from '../../components/comp/BackBtn.vue';
+import ActionBuilder from '../../components/deck/ActionBuilder.vue';
+import { ActionGroups } from '../../consts';
+import _ from 'lodash-es';
 /**
  * 添加一个新的Tab行为
  */
 interface AAddTab {
   //链接
-  url: string,
+  url: string;
   //builtin system table
-  position: string,
+  position: string;
   //current new
-  tab: string,
-
+  tab: string;
 }
-
 
 export default {
   name: 'DeckAction',
   data() {
     return {
-      current: '',//当前的
+      current: '', //当前的
       activeTab: 'cmd',
-      resetActionBuilder: 0,//用于重载组件
+      resetActionBuilder: 0, //用于重载组件
       actionGroups: ActionGroups,
-      actionData: {}//指令数据
-    }
+      actionData: {}, //指令数据
+    };
   },
   props: ['data'],
   emits: ['click'],
-  components: {ActionBuilder, BackBtn},
+  components: { ActionBuilder, BackBtn },
   computed: {},
   mounted() {
-    this.reset()
+    this.reset();
     if (this.data) {
       this.$nextTick(() => {
-        this.activeTab = this.data.group.name
+        this.activeTab = this.data.group.name;
         this.$nextTick(() => {
-          this.$refs[this.activeTab][0].setActionData(this.data)
-        })
-
-      })
+          this.$refs[this.activeTab][0].setActionData(this.data);
+        });
+      });
 
       //this.$refs[this.activeTab][0].setActionData(this.data)
     }
   },
   methods: {
     reset() {
-      this.actionGroups = _.cloneDeep(ActionGroups)
-      this.activeTab = this.actionGroups[0].name
-      this.resetActionBuilder = Date.now()
+      this.actionGroups = _.cloneDeep(ActionGroups);
+      this.activeTab = this.actionGroups[0].name;
+      this.resetActionBuilder = Date.now();
     },
-    change(tab) {
-    },
+    change(tab) {},
     back() {
-      this.$emit('click')
+      this.$emit('click');
     },
     addAction() {
-      let actionData = this.$refs[this.activeTab][0].getActionData()
+      let actionData = this.$refs[this.activeTab][0].getActionData();
       if (!actionData) {
-        return
+        return;
       }
-      this.$emit('click', actionData)
-    }
-  }
-}
+      this.$emit('click', actionData);
+    },
+  },
+};
 </script>
 
 <style scoped>

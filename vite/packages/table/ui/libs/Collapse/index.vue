@@ -1,10 +1,6 @@
 <template>
   <div class="box rounded-xl">
-    <a-collapse
-        class="xt-text xt-bg-2 rounded-xl"
-        expandIconPosition="right"
-        ghost
-    >
+    <a-collapse ghost class="xt-text xt-bg-2 rounded-xl" expandIconPosition="right">
       <a-collapse-panel>
         <template #header>
           <slot name="title"> {{ title }}</slot>
@@ -15,15 +11,15 @@
       </a-collapse-panel>
     </a-collapse>
   </div>
-  <br/>
+  <br />
 </template>
 <script lang="ts" setup>
 const props = defineProps({
   title: {
-    default: "test title",
+    default: 'test title',
   },
   content: {
-    default: "test content",
+    default: 'test content',
   },
 });
 </script>
@@ -32,12 +28,10 @@ const props = defineProps({
 .ant-collapse {
   border-radius: 12px;
 }
-
 .box {
   :deep(.ant-collapse-header) {
     color: var(--primary-text) !important;
   }
-
   :deep(.ant-collapse-content-box) {
     padding-top: 0 !important;
 

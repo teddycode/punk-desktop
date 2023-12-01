@@ -22,44 +22,41 @@ const groupNavsTpl = `
     </a-layout-content>
   </a-layout>
 </div>
-`
+`;
 
-const CloudNavsComp = require('../comp/cloudNavsComp.js')
+const CloudNavsComp = require('../comp/cloudNavsComp.js');
 
 module.exports = Vue.component('group-navs-page', {
   name: 'group-navs-page',
   template: groupNavsTpl,
   component: { CloudNavsComp },
-  beforeRouteEnter (to, from, next) {
-    next(async vm => {
-      vm.groupClouds = []
-      vm.groupId = Number(to.query.id)
-      await vm.load(vm, to.query.id)
-    })
+  beforeRouteEnter(to, from, next) {
+    next(async (vm) => {
+      vm.groupClouds = [];
+      vm.groupId = Number(to.query.id);
+      await vm.load(vm, to.query.id);
+    });
   },
-  async beforeRouteUpdate (to, from, next) {
-    this.groupId = Number(to.query.id)
-    await this.load(this, to.query.id)
+  async beforeRouteUpdate(to, from, next) {
+    this.groupId = Number(to.query.id);
+    await this.load(this, to.query.id);
   },
-  data () {
+  data() {
     return {
       groupClouds: [],
-      groupId: Number
-    }
+      groupId: Number,
+    };
   },
   computed: {},
-  mounted () {
-  },
-  beforeCreate () {
-
-  },
+  mounted() {},
+  beforeCreate() {},
   methods: {
-    async load (vm, params) {
-      await this.$store.dispatch('getAppGroupNavs', params)
-      vm.groupClouds = vm.$store.getters.getAppGroupNavs
-      vm.groupClouds.forEach(e => {
-        e.groupId = vm.groupId
-      })
-    }
-  }
-})
+    async load(vm, params) {
+      await this.$store.dispatch('getAppGroupNavs', params);
+      vm.groupClouds = vm.$store.getters.getAppGroupNavs;
+      vm.groupClouds.forEach((e) => {
+        e.groupId = vm.groupId;
+      });
+    },
+  },
+});

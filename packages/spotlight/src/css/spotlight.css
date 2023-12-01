@@ -77,12 +77,12 @@
   opacity: 0;
 }
 .spl-spinner.spin {
-  background-image: url("../img/preloader.svg");
+  background-image: url('../img/preloader.svg');
   transition: opacity 0.2s linear 0.25s;
   opacity: 1;
 }
 .spl-spinner.error {
-  background-image: url("../img/error.svg");
+  background-image: url('../img/error.svg');
   background-size: 128px;
   transition: none;
   opacity: 0.5;
@@ -202,41 +202,41 @@
   float: right;
 }
 .spl-fullscreen {
-  background-image: url("../img/maximize.svg");
+  background-image: url('../img/maximize.svg');
 }
 .spl-fullscreen.on {
-  background-image: url("../img/minimize.svg");
+  background-image: url('../img/minimize.svg');
 }
 .spl-autofit {
-  background-image: url("../img/autofit.svg");
+  background-image: url('../img/autofit.svg');
 }
 .spl-zoom-out {
-  background-image: url("../img/zoom-out.svg");
+  background-image: url('../img/zoom-out.svg');
   background-size: 22px;
 }
 .spl-zoom-in {
-  background-image: url("../img/zoom-in.svg");
+  background-image: url('../img/zoom-in.svg');
   background-size: 22px;
 }
 .spl-download {
-  background-image: url("../img/download.svg");
+  background-image: url('../img/download.svg');
   background-size: 20px;
 }
 .spl-theme {
-  background-image: url("../img/theme.svg");
+  background-image: url('../img/theme.svg');
 }
 .spl-play {
-  background-image: url("../img/play.svg");
+  background-image: url('../img/play.svg');
 }
 .spl-play.on {
-  background-image: url("../img/pause.svg");
+  background-image: url('../img/pause.svg');
   animation: pulsate 1s ease infinite;
 }
 .spl-close {
-  background-image: url("../img/close.svg");
+  background-image: url('../img/close.svg');
 }
 .spl-info {
-  background-image: url("../img/info.svg");
+  background-image: url('../img/info.svg');
 }
 .spl-prev,
 .spl-next {
@@ -252,7 +252,7 @@
   margin-top: -25px;
   transform: translateX(-100px);
   transition: transform 0.35s ease;
-  background-image: url("../img/arrow.svg");
+  background-image: url('../img/arrow.svg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: 30px;

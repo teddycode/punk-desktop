@@ -1,79 +1,75 @@
 <script lang="ts">
-import KeyInput from "./KeyInput.vue";
-import {message} from "ant-design-vue";
-import {taskStore} from "../../apps/task/store"
-import {mapWritableState} from "pinia";
+import KeyInput from './KeyInput.vue';
+import { message } from 'ant-design-vue';
+import { taskStore } from '../../apps/task/store';
+import { mapWritableState } from 'pinia';
 
 export default {
-  name: "KeySetting",
-  components: {KeyInput},
+  name: 'KeySetting',
+  components: { KeyInput },
   data() {
     return {
-      keys: {//默认键位
+      keys: {
+        //默认键位
         table: {
           key: 'alt+z',
-          title: '工作台'
+          title: '工作台',
         },
         globalSearch: {
           key: 'alt+f',
-          title: '浏览器搜索'
+          title: '浏览器搜索',
         },
         superTools: {
           key: 'alt+x',
-          title: '超级工具箱'
+          title: '超级工具箱',
         },
       },
-      keyMap: {}//设置中取回的键位
-    }
+      keyMap: {}, //设置中取回的键位
+    };
   },
   computed: {
-    ...mapWritableState(taskStore, ["taskID", "step"]),
+    ...mapWritableState(taskStore, ['taskID', 'step']),
     m04012() {
-      return this.taskID == "M0401" && this.step == 2
-    }
+      return this.taskID == 'M0401' && this.step == 2;
+    },
   },
   async mounted() {
-    this.refreshKeys()
+    this.refreshKeys();
   },
   methods: {
     getKeyMap(key) {
       if (this.keyMap[key]) {
-        this.keys[key].key = this.keyMap[key]
+        this.keys[key].key = this.keyMap[key];
       }
     },
     async refreshKeys() {
-      this.keyMap = await tsbApi.settings.get('keyMap')
-      Object.keys(this.keys).forEach(key => {
-        this.getKeyMap(key)
-      })
+      this.keyMap = await tsbApi.settings.get('keyMap');
+      Object.keys(this.keys).forEach((key) => {
+        this.getKeyMap(key);
+      });
     },
 
     setKeyMap(event) {
-      let rs = ipc.sendSync('setKeyMap', {key: event.key, shortcut: event.shortcut})
+      let rs = ipc.sendSync('setKeyMap', { key: event.key, shortcut: event.shortcut });
       if (rs) {
-        this.refreshKeys()
-        message.success('快捷键设置成功')
+        this.refreshKeys();
+        message.success('快捷键设置成功');
       } else {
-        message.error('注册快捷键失败，可能是快捷键冲突，请更换快捷键重试。')
+        message.error('注册快捷键失败，可能是快捷键冲突，请更换快捷键重试。');
       }
     },
-  }
-}
+  },
+};
 </script>
 
 <template>
   <xt-task :modelValue="m04012"></xt-task>
   <div v-for="key in Object.keys(this.keys)">
+    <div class="line">{{ this.keys[key].title }}快捷键</div>
     <div class="line">
-      {{ this.keys[key].title }}快捷键
-    </div>
-    <div class="line">
-      <key-input :name="key" :title=" this.keys[key].title" :value="keys[key].key"
-                 @changeKeys="setKeyMap"></key-input>
+      <key-input :name="key" :title="this.keys[key].title" :value="keys[key].key" @changeKeys="setKeyMap"></key-input>
     </div>
   </div>
 </template>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

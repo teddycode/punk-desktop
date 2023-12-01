@@ -15,5 +15,5 @@ module.exports = (on, config) => {
   //  watchOptions: {}
   // }))
 
-  return Object.assign({}, config)
-}
+  return Object.assign({}, config);
+};

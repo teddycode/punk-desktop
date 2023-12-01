@@ -1,7 +1,7 @@
-const path = require('path')
-const fs = require('fs')
+const path = require('path');
+const fs = require('fs');
 
-const outFile = path.resolve(__dirname, '../dist/bundle.css')
+const outFile = path.resolve(__dirname, '../dist/bundle.css');
 
 const modules = [
   'css/base.css',
@@ -21,21 +21,21 @@ const modules = [
   'css/passwordCapture.css',
   'css/passwordViewer.css',
   'node_modules/dragula/dist/dragula.min.css',
-  'css/toolbar.css'
-]
+  'css/toolbar.css',
+];
 
-function buildBrowserStyles () {
+function buildBrowserStyles() {
   /* concatenate modules */
-  let output = ''
+  let output = '';
   modules.forEach(function (script) {
-    output += fs.readFileSync(path.resolve(__dirname, '../', script)) + '\n'
-  })
+    output += fs.readFileSync(path.resolve(__dirname, '../', script)) + '\n';
+  });
 
-  fs.writeFileSync(outFile, output, 'utf-8')
+  fs.writeFileSync(outFile, output, 'utf-8');
 }
 
 if (module.parent) {
-  module.exports = buildBrowserStyles
+  module.exports = buildBrowserStyles;
 } else {
-  buildBrowserStyles()
+  buildBrowserStyles();
 }

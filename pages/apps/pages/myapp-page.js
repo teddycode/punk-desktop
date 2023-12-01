@@ -1,5 +1,4 @@
-myappTpl =
-  `
+myappTpl = `
 <div style="width: 100%">
   <a-layout>
     <a-layout-header style="background: #fff; padding: 0">
@@ -230,71 +229,69 @@ myappTpl =
   </template>
 </div>
 
-`
-const ipc = require('electron').ipcRenderer
-
-function parseNumber (str) {
-  const num = Number(str)
-  return isNaN(num) ? 0 : num
+`;
+const ipc = require('electron').ipcRenderer;
+function parseNumber(str) {
+  const num = Number(str);
+  return isNaN(num) ? 0 : num;
 }
 
-const appListModel = require('../../util/model/appListModel.js').appListModel
-const VueSelecto = require('vue-selecto')
+const appListModel = require('../../util/model/appListModel.js').appListModel;
+const VueSelecto = require('vue-selecto');
 module.exports = Vue.component('myapp-page', {
   name: 'myapp-page',
   template: myappTpl,
   components: {
-    VueSelecto
+    VueSelecto,
   },
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      vm.myApps = []
-      console.log('before enter' + to.query.listId)
-      vm.listId = parseNumber(to.query.listId)// 通过 `vm` 访问组件实例
-      window.$listId = vm.listId
-      vm.load()
-    })
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.myApps = [];
+      console.log('before enter' + to.query.listId);
+      vm.listId = parseNumber(to.query.listId); // 通过 `vm` 访问组件实例
+      window.$listId = vm.listId;
+      vm.load();
+    });
   },
-  beforeRouteUpdate (to, from, next) {
-    this.listId = parseNumber(to.query.listId)
-    window.$listId = this.listId
-    this.load()
+  beforeRouteUpdate(to, from, next) {
+    this.listId = parseNumber(to.query.listId);
+    window.$listId = this.listId;
+    this.load();
   },
-  data () {
+  data() {
     return {
       //selecto
       selectedElements: [],
       selected: [],
       //selecto end
       pagination: {
-        onChange: page => {
-        },
+        onChange: (page) => {},
         pageSize: 10,
-        hideOnSinglePage: true
+        hideOnSinglePage: true,
       },
       listId: this.$route.query.listId,
       visible: false,
       type: 0,
       myApps: [],
       appList: {
-        name: ''
+        name: '',
       },
       //表单布局用字段
       formItemLayout: {
         labelCol: {
           xs: {
-            span: 8
+            span: 8,
           },
           sm: {
-            span: 6
+            span: 6,
           },
         },
         wrapperCol: {
           xs: {
-            span: 24
+            span: 24,
           },
           sm: {
-            span: 16
+            span: 16,
           },
         },
       },
@@ -307,236 +304,233 @@ module.exports = Vue.component('myapp-page', {
       name: '',
       url: '',
       summary: '',
-    }
+    };
   },
   computed: {
     allApps: {
       get: function () {
         if (typeof window.$appsApiData == 'undefined' || window.$appsApiData == null) {
-          return window.nativeData.allApps
+          return window.nativeData.allApps;
         }
-        return window.$appsApiData.allApps
-      }
+        return window.$appsApiData.allApps;
+      },
     },
     appUpdateTime: {
       get: function () {
         if (typeof window.$appsApiData == 'undefined' || window.$appsApiData == null) {
-          return window.nativeData.updateTime
+          return window.nativeData.updateTime;
         } else {
-          return window.$appsApiData.updateTime
+          return window.$appsApiData.updateTime;
         }
-
-      }
-    }
+      },
+    },
   },
-  mounted () {
+  mounted() {
     // this.myApps = []
     // this.load()
   },
-  beforeCreate () {
+  beforeCreate() {
     this.form = this.$form.createForm(this, {
-      name: 'register'
-    })
+      name: 'register',
+    });
   },
-  methods: {//判断是否是我的应用
+  methods: {
+    //判断是否是我的应用
     //添加应用到任务栏
-    addTask (app) {
+    addTask(app) {
       postMessage({
         message: 'addTask',
         name: app.name,
         url: app.url,
-        icon: app.icon
-      })
-      this.$message.success('成功在左侧栏添加了应用：' + app.name + '。')
+        icon: app.icon,
+      });
+      this.$message.success('成功在左侧栏添加了应用：' + app.name + '。');
     },
-    getAppList () {
-
-    },
-    isInMyApps () {
-
+    getAppList() {},
+    isInMyApps() {
       if (this.currentApp == null) {
-        return -1
+        return -1;
       }
-      let apps = this.myApps
-      let app = this.currentApp
-      let findIndex = -1
+      let apps = this.myApps;
+      let app = this.currentApp;
+      let findIndex = -1;
       apps.forEach(function (item, index) {
-        if (item.name == app.name)
-          findIndex = index
-      })
-      return findIndex
-
+        if (item.name == app.name) findIndex = index;
+      });
+      return findIndex;
     },
-    addCurrentApp () {
-      let that = this
-      let app = this.currentApp
-      let index = this.isInMyApps(app)
+    addCurrentApp() {
+      let that = this;
+      let app = this.currentApp;
+      let index = this.isInMyApps(app);
       if (index != -1) {
-        this.myApps.splice(index, 1)
-        that.$message.warning('移除了应用：' + app.name + '')
-        window.$appsRestore.deleteApp(app.id)
-        this.btnText = '添加收藏'
+        this.myApps.splice(index, 1);
+        that.$message.warning('移除了应用：' + app.name + '');
+        window.$appsRestore.deleteApp(app.id);
+        this.btnText = '添加收藏';
       } else {
-        let apps = this.myApps
-        apps.unshift(app)
-        this.myApps = apps
-        this.btnText = '移出收藏'
+        let apps = this.myApps;
+        apps.unshift(app);
+        this.myApps = apps;
+        this.btnText = '移出收藏';
 
-        app.listId = this.listId
-        window.$appsRestore.addApp(app)
-        this.$message.success('添加了应用：' + app.name)
+        app.listId = this.listId;
+        window.$appsRestore.addApp(app);
+        this.$message.success('添加了应用：' + app.name);
       }
     },
-    addApp (app) {
-      this.currentApp = app
-      this.addCurrentApp()
+    addApp(app) {
+      this.currentApp = app;
+      this.addCurrentApp();
     },
-    handleSubmit (e) {
-      e.preventDefault()
-      let that = this
+    handleSubmit(e) {
+      e.preventDefault();
+      let that = this;
       this.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
-          console.log(values)
+          console.log(values);
           const app = {
-            'name': values.name,
-            'url': values.url,
-            'summary': values.summary,
-            'icon': '../../icons/default.svg'
-          }
-          that.addApp(app)
+            name: values.name,
+            url: values.url,
+            summary: values.summary,
+            icon: '../../icons/default.svg',
+          };
+          that.addApp(app);
 
           that.$nextTick(() => {
-            that.form.resetFields()
-
-          })
+            that.form.resetFields();
+          });
         }
-      })
-    }, handleWebsiteChange (value) {
-      let autoCompleteResult
-      if (!value) {
-        autoCompleteResult = []
-      } else {
-        autoCompleteResult = ['.com', '.org', '.net'].map(domain => `${value}${domain}`)
-      }
-      this.autoCompleteResult = autoCompleteResult
+      });
     },
-    showModal () {
-      this.visible = true
+    handleWebsiteChange(value) {
+      let autoCompleteResult;
+      if (!value) {
+        autoCompleteResult = [];
+      } else {
+        autoCompleteResult = ['.com', '.org', '.net'].map((domain) => `${value}${domain}`);
+      }
+      this.autoCompleteResult = autoCompleteResult;
+    },
+    showModal() {
+      this.visible = true;
     },
     load: function () {
-      window.$appsRestore.restoreFromDB(this.listId).then((data) => {
-        this.myApps = data
-        return data
-      }).catch(e => {
-        console.log(e)
-        this.myApps = []
-      })
-      console.log(this.listId)
+      window.$appsRestore
+        .restoreFromDB(this.listId)
+        .then((data) => {
+          this.myApps = data;
+          return data;
+        })
+        .catch((e) => {
+          console.log(e);
+          this.myApps = [];
+        });
+      console.log(this.listId);
       if (this.listId === 0) {
-        appListModel.getDefaultList().then(defaultList => {
+        appListModel.getDefaultList().then((defaultList) => {
           if (!!!defaultList) {
             this.appList = {
               id: 0,
               name: '默认列表',
-              type: '0'
-            }
+              type: '0',
+            };
           } else {
-            this.appList = defaultList.value
-            this.appList.type = String(this.appList.type)
+            this.appList = defaultList.value;
+            this.appList.type = String(this.appList.type);
           }
-        })
+        });
       } else {
-        const data = appListModel.get(this.listId).catch(err => console.log(err))
-        data.then(data => {
-          this.appList = null
-          this.appList = data
-          this.appList.type = String(this.appList.type)
-        })
+        const data = appListModel.get(this.listId).catch((err) => console.log(err));
+        data.then((data) => {
+          this.appList = null;
+          this.appList = data;
+          this.appList.type = String(this.appList.type);
+        });
       }
     },
-    onListTypeChange (e) {
-      this.appList.type = e.target.value
-      let saveData = {}
-      Object.assign(saveData, this.appList)
-      saveData.type = Number(saveData.type)
+    onListTypeChange(e) {
+      this.appList.type = e.target.value;
+      let saveData = {};
+      Object.assign(saveData, this.appList);
+      saveData.type = Number(saveData.type);
       if (this.appList.id !== 0) {
-        appListModel.put(saveData).then().catch()
+        appListModel.put(saveData).then().catch();
       } else {
-        appListModel.putDefaultList(saveData)
+        appListModel.putDefaultList(saveData);
       }
       //todo 去保存appList的type
     },
-    openUrl (url) {
-      window.open(url)
+    openUrl(url) {
+      window.open(url);
     },
-    addTab (url) {
-      ipc.send('addTab', { url: url })
+    addTab(url) {
+      ipc.send('addTab', { url: url });
     },
     //selecto
-    onSelect (e) {
-
-      e.added.forEach(el => {
-        el.classList.add('selected')
-      })
-      e.removed.forEach(el => {
-        el.classList.remove('selected')
-        this.selected = []
-      })
+    onSelect(e) {
+      e.added.forEach((el) => {
+        el.classList.add('selected');
+      });
+      e.removed.forEach((el) => {
+        el.classList.remove('selected');
+        this.selected = [];
+      });
     },
     // 框选结束存储数据
-    selectEnd (e) {
-      this.selectedElements = []
-      window.$selectedApps = []
-      e.selected.map(item => {
-        this.selectedElements.push(item)
-        this.selected.push(item.id)
-      })
-      window.$selectedApps = this.selected
+    selectEnd(e) {
+      this.selectedElements = [];
+      window.$selectedApps = [];
+      e.selected.map((item) => {
+        this.selectedElements.push(item);
+        this.selected.push(item.id);
+      });
+      window.$selectedApps = this.selected;
     },
 
     //selecto end
 
     //drag
-    dragStart (e, app) {
+    dragStart(e, app) {
       if (!!!window.$selectedApps) {
-        window.$selectedApps = [String(app.id)]
+        window.$selectedApps = [String(app.id)];
       } else if (window.$selectedApps.length === 0) {
-        window.$selectedApps.push(String(app.id))
+        window.$selectedApps.push(String(app.id));
       }
       window.$removeApps = () => {
-        this.selected = []
-        this.selectedElements.forEach(el => {
-          el.classList.remove('selected')
-        })
-        this.load()
-      }
+        this.selected = [];
+        this.selectedElements.forEach((el) => {
+          el.classList.remove('selected');
+        });
+        this.load();
+      };
     },
     //drag end
 
     /***
      * 分享整组
      */
-    shareList () {
-      let apps = this.myApps
-      let filterList = apps.filter(e => !e.url.startsWith('file:///'))    //过滤掉file层面的tab
-      let args = []
+    shareList() {
+      let apps = this.myApps;
+      let filterList = apps.filter((e) => !e.url.startsWith('file:///')); //过滤掉file层面的tab
+      let args = [];
       for (let i = 0; i < filterList.length; i++) {
         const obj = {
           url: filterList[i].url,
           favicon: filterList[i].icon,
-          title: filterList[i].name
-        }
-        args.push(obj)
+          title: filterList[i].name,
+        };
+        args.push(obj);
       }
-      ipc.send('shareTask', args)
+      ipc.send('shareTask', args);
     },
     /***
      * 分享整个列表
      */
-    openList () {
-      this.myApps.forEach(app => {
-        ipc.send('addTab', { url: app.url })
-      })
-    }
-  }
-})
+    openList() {
+      this.myApps.forEach((app) => {
+        ipc.send('addTab', { url: app.url });
+      });
+    },
+  },
+});

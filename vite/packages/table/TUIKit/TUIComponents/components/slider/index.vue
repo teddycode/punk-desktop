@@ -1,11 +1,11 @@
 <template>
-  <div :class="[open && 'slider-open']" class="slider-box" @click="toggle">
+  <div class="slider-box" :class="[open && 'slider-open']" @click="toggle">
     <span class="slider-block"></span>
   </div>
 </template>
 
 <script lang="ts">
-import {defineComponent, reactive, toRefs, watchEffect} from 'vue';
+import { defineComponent, reactive, watchEffect, toRefs } from 'vue';
 
 export default defineComponent({
   props: {
@@ -23,7 +23,6 @@ export default defineComponent({
       data.open = props.open;
     });
 
-
     const toggle = () => {
       data.open = !data.open;
       ctx.emit('change', data.open);
@@ -40,7 +39,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import url('../../styles/common.scss');
 @import url('../../styles/icon.scss');
-
 .slider {
   &-box {
     display: flex;
@@ -48,23 +46,21 @@ export default defineComponent({
     width: 34px;
     height: 20px;
     border-radius: 10px;
-    background: #E1E1E3;
+    background: #e1e1e3;
   }
-
   &-open {
-    background: #006EFF !important;
+    background: #006eff !important;
     justify-content: flex-end;
   }
-
   &-block {
     display: inline-block;
     width: 16px;
     height: 16px;
     border-radius: 8px;
     margin: 0 2px;
-    background: #FFFFFF;
+    background: #ffffff;
     border: 0 solid rgba(0, 0, 0, 0.85);
-    box-shadow: 0 2px 4px 0 #D1D1D1;
+    box-shadow: 0 2px 4px 0 #d1d1d1;
   }
 }
 </style>

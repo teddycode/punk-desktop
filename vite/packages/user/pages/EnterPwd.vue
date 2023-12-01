@@ -1,77 +1,89 @@
 <template>
   <div style="margin-top: 100px">
-    <h1 style="font-size: 18px;margin:auto;margin-top: 20px;margin-bottom:10px;text-align: center">
-
-    </h1>
+    <h1 style="font-size: 18px; margin: auto; margin-top: 20px; margin-bottom: 10px; text-align: center"></h1>
     <div style="text-align: center">
-      <a-avatar :size="60" :src="user.user_info.avatar">
-
-      </a-avatar>
+      <a-avatar :size="60" :src="user.user_info.avatar"> </a-avatar>
       <div>{{ user.user_info.nickname }}</div>
     </div>
-    <p style="text-align: center;color: #999;margin-top: 20px;">
-      <a-input-password id="pwdInput" v-model:value="pwd" :style="{'margin-left': shake+'px'}"
-                        placeholder="输入访问密码" style="width: 200px" @keyup.enter="doEnter">
+    <p style="text-align: center; color: #999; margin-top: 20px">
+      <a-input-password
+        :style="{ 'margin-left': shake + 'px' }"
+        placeholder="输入访问密码"
+        @keyup.enter="doEnter"
+        id="pwdInput"
+        v-model:value="pwd"
+        style="width: 200px"
+      >
       </a-input-password>
     </p>
     <div style="text-align: center">
-      <a-button :disabled="this.pwd===''" :type="this.pwd!==''?'primary':'default'" @click="doEnter">确定</a-button>
+      <a-button @click="doEnter" :disabled="this.pwd === ''" :type="this.pwd !== '' ? 'primary' : 'default'"
+        >确定</a-button
+      >
     </div>
-    <p style="text-align: center;color: #999;margin-top: 10px;position: absolute;bottom: 10px;left: 50%;margin-left: -20px">
-      忘记密码？重新登录账号即可解锁。</p>
+    <p
+      style="
+        text-align: center;
+        color: #999;
+        margin-top: 10px;
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        margin-left: -20px;
+      "
+    >
+      忘记密码？重新登录账号即可解锁。
+    </p>
   </div>
 </template>
 
 <script>
-const { userModel } = window.$models
+const { userModel } = window.$models;
 export default {
   name: 'EnterPwd',
-  data () {
+  data() {
     return {
       user: {
-        user_info: {}
+        user_info: {},
       },
       pwd: '',
-      shake: 0
-    }
+      shake: 0,
+    };
   },
-  async mounted () {
-    let user = await userModel.get({ uid: this.$route.params.uid })
+  async mounted() {
+    let user = await userModel.get({ uid: this.$route.params.uid });
     if (user) {
-      this.user = user
+      this.user = user;
     } else {
-      console.error('user can\'t find')
+      console.error("user can't find");
     }
     setTimeout(() => {
-      document.getElementById('pwdInput').focus()
-    }, 200)
+      document.getElementById('pwdInput').focus();
+    }, 200);
   },
   methods: {
-    async doEnter () {
-      let right = await userModel.compareEnterPwd(this.pwd, this.user.uid)
+    async doEnter() {
+      let right = await userModel.compareEnterPwd(this.pwd, this.user.uid);
       if (right) {
-        this.$router.replace({ name: 'space', params: { uid: this.user.uid } })
+        this.$router.replace({ name: 'space', params: { uid: this.user.uid } });
       } else {
-        let timer
-        let i = 0
+        let timer;
+        let i = 0;
         timer = setInterval(() => {
-          this.shake = ((i % 3) - 1) * 60
-          i++
+          this.shake = ((i % 3) - 1) * 60;
+          i++;
           if (i === 5) {
-            clearInterval(timer)
+            clearInterval(timer);
           }
-        }, 50)
-
+        }, 50);
       }
     },
 
-    goLogin () {
-      ipc.send('login')
-    }
-  }
-}
+    goLogin() {
+      ipc.send('login');
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

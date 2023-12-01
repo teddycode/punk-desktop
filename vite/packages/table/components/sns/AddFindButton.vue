@@ -1,70 +1,66 @@
 <script>
-import { message } from 'ant-design-vue'
-import TencentCloudChat from 'tim-js-sdk'
-import { mapState } from 'pinia'
-import { appStore } from '../../store'
-import * as sns from '../../js/common/sns'
+import { message } from 'ant-design-vue';
+import TencentCloudChat from 'tim-js-sdk';
+import { mapState } from 'pinia';
+import { appStore } from '../../store';
+import * as sns from '../../js/common/sns';
 
 export default {
   name: 'AddFriendButton',
-  props: [
-    'uid',
-    'bgColor',
-  ],
+  props: ['uid', 'bgColor'],
   emits: ['loaded', 'relationshipChanged'],
   computed: {
     ...mapState(appStore, {
-      'myUserInfo': 'userInfo'
+      myUserInfo: 'userInfo',
     }),
   },
-  async mounted () {
-    await this.checkFriendship()
-    this.$emit('loaded')
+  async mounted() {
+    await this.checkFriendship();
+    this.$emit('loaded');
   },
-  data () {
+  data() {
     return {
-      relationship: 'unload'
-    }
+      relationship: 'unload',
+    };
   },
   methods: {
-    addFriend () {
+    addFriend() {
       let promise = window.$chat.addFriend({
         to: String(this.uid),
         source: 'AddSource_Type_UserCard',
         remark: '通过好友列表添加',
         wording: '加为好友',
-        type: TencentCloudChat.TYPES.SNS_ADD_TYPE_BOTH
-      })
-      promise.then((imResponse) => {
-        const { code } = imResponse.data
-        if (code === 30539) {
-          message.info('申请加为好友成功，等待对方通过。')
-        } else if (code === 0) {
-          message.success('添加好友成功。')
-          this.relationship = 'yes'
-          this.$emit('relationshipChanged', { relationship: this.relationship })
-        }
-      }).catch((imError) => {
-        message.error('添加好友失败。')
-        console.error(imError)
-      })
+        type: TencentCloudChat.TYPES.SNS_ADD_TYPE_BOTH,
+      });
+      promise
+        .then((imResponse) => {
+          const { code } = imResponse.data;
+          if (code === 30539) {
+            message.info('申请加为好友成功，等待对方通过。');
+          } else if (code === 0) {
+            message.success('添加好友成功。');
+            this.relationship = 'yes';
+            this.$emit('relationshipChanged', { relationship: this.relationship });
+          }
+        })
+        .catch((imError) => {
+          message.error('添加好友失败。');
+          console.error(imError);
+        });
     },
-    async checkFriendship () {
-      this.relationship = await sns.checkFriendship(this.uid)
-      this.$emit('relationshipChanged', { relationship: this.relationship })
+    async checkFriendship() {
+      this.relationship = await sns.checkFriendship(this.uid);
+      this.$emit('relationshipChanged', { relationship: this.relationship });
     },
-  }
-}
+  },
+};
 </script>
 
 <template>
-  <XtButton class="rounded-full w-full" style="width: 100%" type="theme"
-            @click="addFriend">
+  <XtButton class="rounded-full w-full" style="width: 100%" type="theme" @click="addFriend">
     <icon class="mr-1" icon="tianjia1" style="font-size: 16px"></icon>
     加为好友
   </XtButton>
 </template>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

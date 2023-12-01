@@ -1,13 +1,13 @@
 .progressive {
   overflow: hidden;
   position: relative;
-  background: #efefef
+  background: #efefef;
 }
 
 .progressive__img {
   width: 100%;
   height: 100%;
-  transform: translateZ(0)
+  transform: translateZ(0);
 }
 
 .progressive--not-loaded {
@@ -16,7 +16,7 @@
 
 .progressive--is-loaded {
   opacity: 1;
-  animation: a .5s both
+  animation: a 0.5s both;
 }
 
 @keyframes a {

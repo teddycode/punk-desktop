@@ -20,7 +20,7 @@
   &-safe-tips {
     padding: 12px 20px;
     background-color: rgba(255, 149, 0, 0.1);
-    color: #FF8C39;
+    color: #ff8c39;
     line-height: 18px;
     font-family: 'PingFang SC';
     font-style: normal;
@@ -29,7 +29,7 @@
     font-size: 12px;
 
     a {
-      color: #006EFF;
+      color: #006eff;
       float: right;
     }
   }
@@ -114,7 +114,7 @@
           border-radius: 3px;
 
           &::before {
-            content: "";
+            content: '';
             position: absolute;
             width: 0;
             height: 0;
@@ -178,8 +178,8 @@
     width: 92px;
     height: 28px;
     padding: 0 5px;
-    background: #FFFFFF;
-    border: 1px solid #E0E0E0;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
     box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.06);
     display: flex;
     flex-direction: row;
@@ -193,10 +193,9 @@
     }
 
     &-cont {
-
       font-weight: 400;
       font-size: 10px;
-      color: #147AFF;
+      color: #147aff;
       letter-spacing: 0;
       text-align: center;
       padding-left: 3px;
@@ -353,7 +352,7 @@
   width: 21.94rem;
   max-height: 10rem;
   overflow-y: auto;
-  background: #FFFFFF;
+  background: #ffffff;
   box-shadow: 0 0.06rem 0.63rem 0 rgba(2, 16, 43, 0.15);
   border-radius: 0.13rem;
 
@@ -363,12 +362,11 @@
     cursor: pointer;
 
     &:hover {
-      background: rgba(0, 110, 255, 0.10);
+      background: rgba(0, 110, 255, 0.1);
     }
   }
 
   span {
-
     font-weight: 400;
     font-size: 0.88rem;
     color: #000000;
@@ -383,7 +381,7 @@
     align-items: center;
 
     &:hover {
-      background: rgba(0, 110, 255, 0.10);
+      background: rgba(0, 110, 255, 0.1);
     }
   }
 
@@ -394,7 +392,7 @@
   }
 
   .selected {
-    background: rgba(0, 110, 255, 0.10);
+    background: rgba(0, 110, 255, 0.1);
   }
 }
 
@@ -410,7 +408,7 @@
 
     i {
       height: 3.5rem;
-      border: 1px solid #E8E8E9;
+      border: 1px solid #e8e8e9;
     }
 
     label {
@@ -433,7 +431,7 @@
 
         font-weight: 400;
         font-size: 0.88rem;
-        color: #BFC1C5;
+        color: #bfc1c5;
         letter-spacing: 0;
         text-overflow: ellipsis;
         width: 100%;
@@ -496,7 +494,7 @@
   &::before {
     position: fixed;
     z-index: 1;
-    content: "";
+    content: '';
     width: 100vw;
     height: 100vh;
     top: 0;
@@ -517,5 +515,5 @@
 
 ::-webkit-scrollbar-thumb {
   border-radius: 10px;
-  background-color: #9A999C;
+  background-color: #9a999c;
 }

@@ -1,18 +1,13 @@
 <template>
   <XtTitle titleClass="mt-0 mb-5">名称</XtTitle>
-  <XtInput
-      v-model="namehValue"
-      placeholder="请输入名称"
-      style="width: 100%; height: 48px"
-  >
-  </XtInput>
+  <XtInput style="width: 100%; height: 48px" v-model="namehValue" placeholder="请输入名称"> </XtInput>
   <XtTitle>图标</XtTitle>
   <div class="flex flex-wrap">
     <div
-        v-for="(item, index) in iconList"
-        :class="{ 'xt-theme-b': item.id == selectIndex }"
-        class="xt-bg-2 w-10 h-10 rounded-xl m-2 flex justify-center items-center cursor-pointer"
-        @click="itemClick(item, index)"
+      v-for="(item, index) in iconList"
+      @click="itemClick(item, index)"
+      :class="{ 'xt-theme-b': item.id == selectIndex }"
+      class="xt-bg-2 w-10 h-10 rounded-xl m-2 flex justify-center items-center cursor-pointer"
     >
       <Icon :icon="item.name" class="text-xl"></Icon>
     </div>
@@ -20,21 +15,20 @@
 </template>
 
 <script>
-import { iconList } from './config.ts'
-
+import { iconList } from './config.ts';
 export default {
-  data () {
+  data() {
     return {
       selectIndex: this.index,
       iconList,
       iconValue: iconList[0],
       namehValue: this.name,
-    }
+    };
   },
   methods: {
-    itemClick (item, index) {
-      this.selectIndex = index
-      this.iconValue = item
+    itemClick(item, index) {
+      this.selectIndex = index;
+      this.iconValue = item;
     },
   },
   props: {
@@ -46,16 +40,16 @@ export default {
   },
   watch: {
     iconValue: {
-      handler (newV) {
-        this.$emit('update:icon', newV)
+      handler(newV) {
+        this.$emit('update:icon', newV);
       },
       immediate: true,
     },
-    namehValue (newV) {
-      this.$emit('update:name', newV)
+    namehValue(newV) {
+      this.$emit('update:name', newV);
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped></style>

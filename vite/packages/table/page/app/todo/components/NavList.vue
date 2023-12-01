@@ -1,31 +1,23 @@
 <template>
   <div class="nav-items">
-    <div :class="{ active: this.isActive('personal') }"
-         class="item"
-         @click="setTab('personal')"
-    >
+    <div class="item" @click="setTab('personal')" :class="{ active: this.isActive('personal') }">
       <div class="nav-wrapper font-color flex items-center justify-between">
         <div>
-          <Icon icon="user" style="color:var(--secondary-text);font-size:20px"></Icon>
+          <Icon icon="user" style="color: var(--secondary-text); font-size: 20px"></Icon>
           <span class="ml-2.5">个人</span>
         </div>
-        <span>{{
-            this.tasks.filter((task) => !task.completed).length
-          }}</span>
+        <span>{{ this.tasks.filter((task) => !task.completed).length }}</span>
       </div>
     </div>
-    <div :class="{ active: this.isActive('today') }"
-         class="item"
-         @click="this.setTab('today')"
-    >
+    <div class="item" @click="this.setTab('today')" :class="{ active: this.isActive('today') }">
       <div class="nav-wrapper font-color flex items-center">
-        <Icon icon="shoucang" style="color:var(--secondary-text);font-size:20px"></Icon>
+        <Icon icon="shoucang" style="color: var(--secondary-text); font-size: 20px"></Icon>
         <span class="ml-2.5">今天</span>
       </div>
     </div>
-    <div :class="{ active: this.isActive('week') }" class="item" @click="this.setTab('week')">
+    <div class="item" @click="this.setTab('week')" :class="{ active: this.isActive('week') }">
       <div class="nav-wrapper font-color flex items-center">
-        <Icon icon="carryout" style="color:var(--secondary-text);font-size:20px"></Icon>
+        <Icon icon="carryout" style="color: var(--secondary-text); font-size: 20px"></Icon>
         <span class="ml-2.5">7天</span>
       </div>
     </div>
@@ -39,13 +31,13 @@
 </template>
 
 <script lang="ts">
-import {mapState, mapWritableState} from "pinia";
-import {listStore} from "../stores/list";
-import {taskStore} from "../stores/task";
-import {AlertOutlined, CalendarOutlined, TeamOutlined, UserOutlined,} from "@ant-design/icons-vue";
-
+import { mapState, mapWritableState } from 'pinia';
+import { listStore } from '../stores/list';
+import { taskStore } from '../stores/task';
+import { AlertOutlined, UserOutlined, TeamOutlined, CalendarOutlined } from '@ant-design/icons-vue';
+import dayjs from 'dayjs';
 export default {
-  name: "NavList",
+  name: 'NavList',
   components: {
     AlertOutlined,
     UserOutlined,
@@ -55,61 +47,55 @@ export default {
   data() {
     return {
       currentTab: {
-        name: "personal",
+        name: 'personal',
       },
       tabs: [
         {
           index: 0,
-          alias: "个人",
-          name: "personal",
+          alias: '个人',
+          name: 'personal',
         },
         {
           index: 1,
-          alias: "今天",
-          name: "today",
+          alias: '今天',
+          name: 'today',
         },
         {
           index: 2,
-          alias: "最近七天",
-          name: "week",
+          alias: '最近七天',
+          name: 'week',
         },
         {
           index: 3,
-          alias: "团队",
-          name: "group",
+          alias: '团队',
+          name: 'group',
         },
       ],
     };
   },
   computed: {
-    ...mapState(listStore, ["lists", "displayLists"]),
-    ...mapWritableState(taskStore, ["taskFilter"]),
-    ...mapWritableState(listStore, ["activeList"]),
-    ...mapState(taskStore, [
-      "activeTask",
-      "currentTasks",
-      "tasks",
-      "displayList",
-    ]),
+    ...mapState(listStore, ['lists', 'displayLists']),
+    ...mapWritableState(taskStore, ['taskFilter']),
+    ...mapWritableState(listStore, ['activeList']),
+    ...mapState(taskStore, ['activeTask', 'currentTasks', 'tasks', 'list']),
   },
   methods: {
     setTab(name) {
       this.activeList = {};
       this.currentTab.name = name;
       switch (name) {
-        case "personal":
+        case 'personal':
           this.taskFilter = null;
           break;
-        case "today":
+        case 'today':
           this.taskFilter = (task) => {
             if (!task.deadTime) return false;
             else {
-
               return task.deadTime - Date.now() / 1000 <= 86400;
             }
           };
           break;
-        case "week":
+        case 'week':
           this.taskFilter = (task) => {
             if (!task.deadTime) return false;
             else {
@@ -134,14 +120,12 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .nav-items {
   color: var(--primary-text);
   border-bottom: 1px solid var(--divider);
-
   .item {
     font-size: 13px;
-
     .nav-wrapper {
       cursor: pointer;
       height: 48px;
@@ -149,7 +133,6 @@ export default {
       border-radius: 10px;
       line-height: 48px;
     }
-
     &.active,
     &:hover {
       .nav-wrapper {

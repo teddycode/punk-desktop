@@ -9,30 +9,27 @@ export default {
   name: 'BackBtn',
   props: ['onClick'],
   emits: ['click'],
-  mounted () {
-
-  }, methods: {
-    click () {
+  mounted() {},
+  methods: {
+    click() {
       if (!this.onClick) {
-        console.log(this.$route)
-        console.log(window.history)
+        console.log(this.$route);
+        console.log(window.history);
         if (window.history.length > 2) {
-          this.$router.go(-1)
+          this.$router.go(-1);
         } else {
           this.$router.push({
-            name: 'home'
-          })
+            name: 'home',
+          });
         }
-        this.$emit('click')
+        this.$emit('click');
       } else {
-        this.$emit('click')
+        this.$emit('click');
         //this.onClick()
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

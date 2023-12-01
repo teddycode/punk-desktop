@@ -1,11 +1,15 @@
 <template>
   <div>
     <div class="left">
-      <div v-for="( item, index ) in  list" :key="item.name" :class="{ 'xt-active-btn': currenIndex == item.id }"
-           :style="navStyle"
-           class="no-drag nav" @click="updateNavIndex(item, index)">{{
-          item.cname
-        }}
+      <div
+        v-for="(item, index) in list"
+        :key="item.name"
+        :class="{ 'xt-active-btn': currenIndex == item.id }"
+        :style="navStyle"
+        class="no-drag nav"
+        @click="updateNavIndex(item, index)"
+      >
+        {{ item.cname }}
       </div>
     </div>
   </div>
@@ -17,7 +21,7 @@ export default {
     // 导航列表
     list: {
       type: Array,
-      default: []
+      default: [],
     },
     // 选中索引
     currenIndex: {
@@ -27,16 +31,16 @@ export default {
     // 导航样式
     navStyle: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   methods: {
     // 修改导航索引
-    updateNavIndex (item, index) {
-      this.$emit('changeNav', item)
-    }
-  }
-}
+    updateNavIndex(item, index) {
+      this.$emit('changeNav', item);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

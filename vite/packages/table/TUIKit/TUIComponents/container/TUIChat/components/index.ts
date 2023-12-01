@@ -14,24 +14,24 @@ import MessageSystem from './message-system.vue';
 import MessageTool from './message-tool.vue';
 import MessageEmojiReact from './message-emoji-react.vue';
 import MessageItem from './index.vue';
-import MessageTimestamp from './message-timestamp.vue'
+import MessageTimestamp from './message-timestamp.vue';
 
 export {
-    MessageText,
-    MessageImage,
-    MessageVideo,
-    MessageAudio,
-    MessageFile,
-    MessageFace,
-    MessageLocation,
-    MessageMerger,
-    MessageCustom,
-    MessageTip,
-    MessageTimestamp,
-    MessageBubble,
-    MessageRevoked,
-    MessageSystem,
-    MessageTool,
-    MessageEmojiReact,
-    MessageItem
+  MessageText,
+  MessageImage,
+  MessageVideo,
+  MessageAudio,
+  MessageFile,
+  MessageFace,
+  MessageLocation,
+  MessageMerger,
+  MessageCustom,
+  MessageTip,
+  MessageTimestamp,
+  MessageBubble,
+  MessageRevoked,
+  MessageSystem,
+  MessageTool,
+  MessageEmojiReact,
+  MessageItem,
 };

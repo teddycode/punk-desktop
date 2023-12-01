@@ -1,33 +1,42 @@
 <template>
   <!-- 音频输入设备的选项 -->
   <div class="mt-4 flex flex-col">
-    <vue-custom-scrollbar :settings="settingsScroller" style="height: 300px;" @touchstart.stop @touchmove.stop
-                          @touchend.stop>
-      <template v-for="(item,index) in inputList">
-        <div :class="item.isDefaultForMultimedia ? 's-item xt-bg-2':''"
-             class="flex rounded-lg voice-item-hover  pointer items-center  " style="padding: 7px 10px;"
-             @click="selectAudio(item,inputList)">
-          <span class="item-name" style="font-size: 14.64px; font-weight: 400;">
+    <vue-custom-scrollbar
+      :settings="settingsScroller"
+      style="height: 300px"
+      @touchstart.stop
+      @touchmove.stop
+      @touchend.stop
+    >
+      <template v-for="(item, index) in inputList">
+        <div
+          :class="item.isDefaultForMultimedia ? 's-item xt-bg-2' : ''"
+          class="flex rounded-lg voice-item-hover pointer items-center"
+          style="padding: 7px 10px"
+          @click="selectAudio(item, inputList)"
+        >
+          <span class="item-name" style="font-size: 14.64px; font-weight: 400">
             {{ item.name }}（{{ item.deviceName }}）
           </span>
         </div>
       </template>
     </vue-custom-scrollbar>
     <div
-        class="flex items-center select-active voice-item-hover justify-center rounded-lg py-3 my-2 pointer s-item w-full xt-bg-2 xt-text"
-        @click="backInput">
-      <Icon icon="xiangzuo" style="font-size: 1.429em;"></Icon>
-      <span class="text-center" style="font-size: 16px;  font-weight: 400;">返回</span>
+      class="flex items-center select-active voice-item-hover justify-center rounded-lg py-3 my-2 pointer s-item w-full xt-bg-2 xt-text"
+      @click="backInput"
+    >
+      <Icon icon="xiangzuo" style="font-size: 1.429em"></Icon>
+      <span class="text-center" style="font-size: 16px; font-weight: 400">返回</span>
     </div>
   </div>
 </template>
 
 <script>
-import { listInputs, setAsDefault } from '../../../js/ext/audio/audio'
+import { listInputs, setAsDefault } from '../../../js/ext/audio/audio';
 
 export default {
   name: 'VoiceInputDetail',
-  data () {
+  data() {
     return {
       inputList: [],
       settingsScroller: {
@@ -35,28 +44,28 @@ export default {
         swipeEasing: true,
         suppressScrollY: false,
         suppressScrollX: true,
-        wheelPropagation: true
+        wheelPropagation: true,
       },
       selectIndex: 0,
       defaultItem: {},
-    }
+    };
   },
-  async mounted () {
-    this.inputList = await listInputs()
+  async mounted() {
+    this.inputList = await listInputs();
   },
   methods: {
-    selectAudio (item, list) {
-      list.forEach(li => {
-        li.isDefaultForMultimedia = false
-      })
-      item.isDefaultForMultimedia = true
-      setAsDefault(item)
+    selectAudio(item, list) {
+      list.forEach((li) => {
+        li.isDefaultForMultimedia = false;
+      });
+      item.isDefaultForMultimedia = true;
+      setAsDefault(item);
     },
-    backInput () {
-      this.$emit('updateInput', this.defaultItem)
-    }
-  }
-}
+    backInput() {
+      this.$emit('updateInput', this.defaultItem);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

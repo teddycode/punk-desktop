@@ -2,7 +2,7 @@
   <div class="TUI-group">TUIGroup</div>
 </template>
 <script lang="ts">
-import {defineComponent, reactive, toRefs} from 'vue';
+import { defineComponent, reactive, toRefs } from 'vue';
 
 const TUIGroup = defineComponent({
   name: 'TUIGroup',

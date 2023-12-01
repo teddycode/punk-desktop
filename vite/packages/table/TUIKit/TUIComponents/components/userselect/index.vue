@@ -1,12 +1,17 @@
 <template>
-  <div class="flex" style="color: var(--primary-text);width: 650px;height: 534px;padding: 16px;">
-    <div style="width:293px;">
-      <vue-custom-scrollbar :settings="settingsScroller" style="height:100%; margin-bottom: 16px;">
-        <div v-for="(item,index) in userList" :class="{'select-bg':isSelected(index)}"
-             class="flex pointer px-4 py-3 rounded-lg" style="margin-bottom: 16px;" @click="selectAdmin(item)">
+  <div class="flex" style="color: var(--primary-text); width: 650px; height: 534px; padding: 16px">
+    <div style="width: 293px">
+      <vue-custom-scrollbar :settings="settingsScroller" style="height: 100%; margin-bottom: 16px">
+        <div
+          v-for="(item, index) in userList"
+          class="flex pointer px-4 py-3 rounded-lg"
+          :class="{ 'select-bg': isSelected(index) }"
+          style="margin-bottom: 16px"
+          @click="selectAdmin(item)"
+        >
           <div class="flex items-center">
             <a-avatar :size="32" :src="item.avatar"></a-avatar>
-            <div class="font-16 flex items-center" style="color: var(--primary-text);margin-left: 16px;">
+            <div class="font-16 flex items-center" style="color: var(--primary-text); margin-left: 16px">
               {{ item.nick }}
             </div>
           </div>
@@ -14,171 +19,188 @@
       </vue-custom-scrollbar>
     </div>
 
-    <a-divider style="height: 502px; background-color:var(--divider);" type="vertical"></a-divider>
+    <a-divider type="vertical" style="height: 502px; background-color: var(--divider)"></a-divider>
 
-    <div class="flex flex-col" style="width: 293px;">
-      <vue-custom-scrollbar :settings="settingsScroller" style="height:88%; margin-bottom: 16px;">
-        <div v-for="item in adminList" class="flex items-center justify-between pointer" style="margin-bottom: 16px;">
+    <div class="flex flex-col" style="width: 293px">
+      <vue-custom-scrollbar :settings="settingsScroller" style="height: 88%; margin-bottom: 16px">
+        <div v-for="item in adminList" class="flex items-center justify-between pointer" style="margin-bottom: 16px">
           <div class="flex items-center">
             <a-avatar :size="32" :src="item.avatar"></a-avatar>
-            <div class="font-16 flex items-center" style="color: var(--primary-text);margin-left: 16px;">
+            <div class="font-16 flex items-center" style="color: var(--primary-text); margin-left: 16px">
               {{ item.nick }}
             </div>
           </div>
 
           <div class="pointer" @click="clearAdmin(item)">
-            <Icon icon="jinzhi-yin" style="color: var(--secondary-text);width: 20px;height: 20px;"></Icon>
+            <Icon icon="jinzhi-yin" style="color: var(--secondary-text); width: 20px; height: 20px"></Icon>
           </div>
-
         </div>
       </vue-custom-scrollbar>
 
       <div class="flex justify-end">
         <a-button
-            style="width: 100px; border-radius: 8px; height: 44px; background: var(--secondary-bg);color: var(--secondary-text);"
-            @click="cancel">取消
-        </a-button>
-        <a-button style="width: 100px;height: 44px;margin-left: 16px;border-radius: 8px;" type="primary"
-                  @click="submit">确定
-        </a-button>
+          style="
+            width: 100px;
+            border-radius: 8px;
+            height: 44px;
+            background: var(--secondary-bg);
+            color: var(--secondary-text);
+          "
+          @click="cancel"
+          >取消</a-button
+        >
+        <a-button
+          type="primary"
+          style="width: 100px; height: 44px; margin-left: 16px; border-radius: 8px"
+          @click="submit"
+          >确定</a-button
+        >
       </div>
-
     </div>
   </div>
 </template>
 
 <script>
-import { computed, defineComponent, reactive, toRefs } from 'vue'
-import _ from 'lodash-es'
+import { defineComponent, ref, reactive, toRefs, computed } from 'vue';
+import _ from 'lodash-es';
 
 export default defineComponent({
   props: ['list', 'type', 'groupID'],
 
-  setup (props, ctx) {
-
-    const TIM = window.$TUIKit.TIM
-    const tim = window.$TUIKit.tim
+  setup(props, ctx) {
+    const TIM = window.$TUIKit.TIM;
+    const tim = window.$TUIKit.tim;
 
     const data = reactive({
-      settingsScroller: {  // 滚动条配置
+      settingsScroller: {
+        // 滚动条配置
         useBothWheelAxes: true,
         swipeEasing: true,
         suppressScrollY: false,
         suppressScrollX: true,
-        wheelPropagation: true
+        wheelPropagation: true,
       },
       adminList: [], // 接收选中用户数据
-    })
+    });
 
-    const userList = computed(() => {  // 通过计算属性将群主去掉,不作为群管理员的候选人
-      const list = []
+    const userList = computed(() => {
+      // 通过计算属性将群主去掉,不作为群管理员的候选人
+      const list = [];
       for (let i = 0; i < props.list.length; i++) {
         if (props.list[i].role !== 'Owner') {
-          list.push(props.list[i])
+          list.push(props.list[i]);
         }
       }
-      return list
-    })
+      return list;
+    });
 
-    const selectAdmin = (item) => {  // 选中指定群管理候选人
+    const selectAdmin = (item) => {
+      // 选中指定群管理候选人
       const index = _.findIndex(data.adminList, function (o) {
-        return o.userID === item.userID
-      })
+        return o.userID === item.userID;
+      });
       if (index === -1 && data.adminList.length < 1) {
-        data.adminList.push(item)
+        data.adminList.push(item);
       } else {
-
+        return;
       }
-    }
+    };
 
-    const clearAdmin = (item) => {  // 取消选中指定群管理候选人
+    const clearAdmin = (item) => {
+      // 取消选中指定群管理候选人
       const index = _.findIndex(data.adminList, function (o) {
-        return o.userID === item.userID
-      })
-      data.adminList.splice(index, 1)
-    }
+        return o.userID === item.userID;
+      });
+      data.adminList.splice(index, 1);
+    };
 
     const submit = async () => {
       switch (props.type) {
-        case 'addAdmin':  // 添加管理员
+        case 'addAdmin': // 添加管理员
           const adminOption = {
             groupID: props.groupID,
             userID: data.adminList[0].userID,
-            role: TIM.TYPES.GRP_MBR_ROLE_ADMIN
-          }
-          await tim.setGroupMemberRole(adminOption)
-          ctx.emit('close')
-          break
-        case 'delAdmin':  // 删除管理员
+            role: TIM.TYPES.GRP_MBR_ROLE_ADMIN,
+          };
+          await tim.setGroupMemberRole(adminOption);
+          ctx.emit('close');
+          break;
+        case 'delAdmin': // 删除管理员
           const option = {
             groupID: props.groupID,
             userID: data.adminList[0].userID,
-            role: TIM.TYPES.GRP_MBR_ROLE_MEMBER
-          }
-          await tim.setGroupMemberRole(option)
-          ctx.emit('close')
-          break
-        case 'change':  // 转让群聊
+            role: TIM.TYPES.GRP_MBR_ROLE_MEMBER,
+          };
+          await tim.setGroupMemberRole(option);
+          ctx.emit('close');
+          break;
+        case 'change': // 转让群聊
           const options = {
             groupID: props.groupID,
             newOwnerID: data.adminList[0].userID,
-          }
-          await tim.changeGroupOwner(options)
-          ctx.emit('close')
-          break
-        case 'addMuteUser':  // 新增禁言用户
+          };
+          await tim.changeGroupOwner(options);
+          ctx.emit('close');
+          break;
+        case 'addMuteUser': // 新增禁言用户
           const muteOption = {
             groupID: props.groupID,
             muteTime: 60 * 60 * 24 * 30,
-            userID: data.adminList[0].userID
-          }
-          await tim.setGroupMemberMuteTime(muteOption)
-          ctx.emit('close')
-          break
-        case 'removeMuteUser':  // 取消禁言用户
+            userID: data.adminList[0].userID,
+          };
+          await tim.setGroupMemberMuteTime(muteOption);
+          ctx.emit('close');
+          break;
+        case 'removeMuteUser': // 取消禁言用户
           const mOption = {
             groupID: props.groupID,
             muteTime: 0,
-            userID: data.adminList[0].userID
-          }
-          await tim.setGroupMemberMuteTime(mOption)
-          ctx.emit('close')
-          break
+            userID: data.adminList[0].userID,
+          };
+          await tim.setGroupMemberMuteTime(mOption);
+          ctx.emit('close');
+          break;
         case 'removeMember':
           const removeMemberOption = {
             groupID: props.groupID,
             userIDList: [`${data.adminList[0].userID}`],
-          }
-          await tim.deleteGroupMember(removeMemberOption)
-          ctx.emit('closeUser')
-          break
+          };
+          await tim.deleteGroupMember(removeMemberOption);
+          ctx.emit('closeUser');
+          break;
         case 'addMember':
           const addMemberOption = {
             groupID: props.groupID,
             userIDList: [`${data.adminList[0].userID}`],
-          }
-          await tim.addGroupMember(addMemberOption)
-          ctx.emit('closeUser')
-          break
+          };
+          await tim.addGroupMember(addMemberOption);
+          ctx.emit('closeUser');
+          break;
         default:
-          break
+          break;
       }
-    }
+    };
 
-    const cancel = () => {  // 取消弹窗
-      ctx.emit('closeUser')
-    }
+    const cancel = () => {
+      // 取消弹窗
+      ctx.emit('closeUser');
+    };
 
     const isSelected = (index) => {
-      return data.adminList.includes(userList.value[index])
-    }
+      return data.adminList.includes(userList.value[index]);
+    };
 
     return {
       userList,
-      ...toRefs(data), selectAdmin, clearAdmin, submit, cancel, isSelected
-    }
-  }
-})
+      ...toRefs(data),
+      selectAdmin,
+      clearAdmin,
+      submit,
+      cancel,
+      isSelected,
+    };
+  },
+});
 </script>
 
 <style lang="scss" scoped>

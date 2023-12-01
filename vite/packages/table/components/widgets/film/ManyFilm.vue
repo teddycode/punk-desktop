@@ -1,56 +1,77 @@
 <template>
   <Widget
-      v-if="!detailToggle"
-      :custom-data="customData"
-      :customIndex="customIndex"
-      :desk="desk"
-      :menuList="menuList"
-      :options="options"
-      :sizeList="sizeList"
+    v-if="!detailToggle"
+    :custom-data="customData"
+    :customIndex="customIndex"
+    :desk="desk"
+    :menuList="menuList"
+    :options="options"
+    :sizeList="sizeList"
   >
-    <span style="position: absolute;top: 18px;left: 115px"><icon icon="shuaxin" style="font-size: 18px"></icon></span>
+    <span style="position: absolute; top: 18px; left: 115px"><icon icon="shuaxin" style="font-size: 18px"></icon></span>
     <div v-if="pageToggle">
       <div v-if="isLoading" class="example">
-        <a-spin/>
+        <a-spin />
       </div>
       <div v-else>
         <div class="pointer title-refresh" @click="refreshPage"></div>
-        <div v-if="customData.width ? customData.width === 1 :  'true' " class="film-box">
-          <div v-for="item in filmArrange" :key="item.id"
-               class="w-full  cursor-pointer one-film"
-               style="display:hiddle;"
-               @click="btnDetail(item.id)">
+        <div v-if="customData.width ? customData.width === 1 : 'true'" class="film-box">
+          <div
+            v-for="item in filmArrange"
+            :key="item.id"
+            class="w-full cursor-pointer one-film"
+            style="display: hiddle"
+            @click="btnDetail(item.id)"
+          >
             <!-- <img :src="item.img" alt="" class="rounded-lg img-film"> -->
-            <a-image :preview="false" :src="item.img" class="rounded-lg" height="171px" style="object-fit: cover;"
-                     width="116px"/>
-            <div class="right-top text-center bg-black bg-opacity-70" style="background: var(--primary-bg) !important;">
-              <span v-if="item.sc"
-                    style="font-family: PingFangSC-Semibold;font-weight: 600;color: var(--primary-text);">
-                猫眼：<span style="font-weight: 700;font-family: Oswald-Bold;">{{ item.score }}</span>
+            <a-image
+              :preview="false"
+              :src="item.img"
+              class="rounded-lg"
+              height="171px"
+              style="object-fit: cover"
+              width="116px"
+            />
+            <div class="right-top text-center bg-black bg-opacity-70" style="background: var(--primary-bg) !important">
+              <span
+                v-if="item.sc"
+                style="font-family: PingFangSC-Semibold; font-weight: 600; color: var(--primary-text)"
+              >
+                猫眼：<span style="font-weight: 700; font-family: Oswald-Bold">{{ item.score }}</span>
               </span>
-              <span v-else style="font-weight: 700;font-family: Oswald-Bold;color: var(--primary-text);">{{
-                  item.comingDate
-                }}</span>
+              <span v-else style="font-weight: 700; font-family: Oswald-Bold; color: var(--primary-text)">{{
+                item.comingDate
+              }}</span>
             </div>
           </div>
         </div>
         <div v-else-if="customData.width === 2" class="film-item">
-          <div v-for="item in filmArrange" :key="item.id" class="w-full rounded-t-lg  cursor-pointer mr-5 one-film"
-               @click="btnDetail(item.id)">
+          <div
+            v-for="item in filmArrange"
+            :key="item.id"
+            class="w-full rounded-t-lg cursor-pointer mr-5 one-film"
+            @click="btnDetail(item.id)"
+          >
             <!-- <img :src="item.img" alt="" class="rounded-lg img-film"> -->
-            <a-image :preview="false" :src="item.img" alt="" class="rounded-lg" height="171px"
-                     style="object-fit: cover;"
-                     width="116px"/>
-            <div class="right-top text-center bg-black bg-opacity-70" style="background: var(--primary-bg) !important;">
-                <span v-if="item.sc" style="font-family: PingFangSC-Semibold;font-weight: 600;">
-                  猫眼：<span
-                    style="font-weight: 700;font-family: Oswald-Bold;color: var(--primary-text);background: background: var(--primary-bg);">{{
-                    item.score
-                  }}</span>
-                </span>
-              <span v-else style="font-weight: 700;font-family: Oswald-Bold;color: var(--primary-text);">{{
-                  item.comingDate
-                }}</span>
+            <a-image
+              :preview="false"
+              :src="item.img"
+              alt=""
+              class="rounded-lg"
+              height="171px"
+              style="object-fit: cover"
+              width="116px"
+            />
+            <div class="right-top text-center bg-black bg-opacity-70" style="background: var(--primary-bg) !important">
+              <span v-if="item.sc" style="font-family: PingFangSC-Semibold; font-weight: 600">
+                猫眼：<span
+                  style="font-weight: 700;font-family: Oswald-Bold;color: var(--primary-text);background: background: var(--primary-bg);"
+                  >{{ item.score }}</span
+                >
+              </span>
+              <span v-else style="font-weight: 700; font-family: Oswald-Bold; color: var(--primary-text)">{{
+                item.comingDate
+              }}</span>
             </div>
           </div>
         </div>
@@ -58,53 +79,58 @@
     </div>
     <DataStatu v-else :btnToggle="false" imgDisplay="/img/test/load-ail.png" textPrompt="暂无数据"></DataStatu>
   </Widget>
-  <FilmDetail v-if="detailToggle" :detailId="detailId" :fatherWidth="customData.width"
-              @detailBack="detailBack"></FilmDetail>
+  <FilmDetail
+    v-if="detailToggle"
+    :detailId="detailId"
+    :fatherWidth="customData.width"
+    @detailBack="detailBack"
+  ></FilmDetail>
 </template>
 
 <script>
-import { mapActions, mapWritableState } from 'pinia'
-import Widget from '../../card/Widget.vue'
-import { filmStore } from '../../../store/douBan'
-import DataStatu from '../DataStatu.vue'
-import FilmDetail from './FilmDetail.vue'
-import _ from 'lodash-es'
+import { mapActions, mapWritableState } from 'pinia';
+import Widget from '../../card/Widget.vue';
+import { filmStore } from '../../../store/douBan';
+import DataStatu from '../DataStatu.vue';
+import FilmDetail from './FilmDetail.vue';
+import _ from 'lodash-es';
 
 export default {
   name: 'ManyFilm',
   components: {
     Widget,
     FilmDetail,
-    DataStatu
+    DataStatu,
   },
   props: {
     customIndex: {
       type: Number,
-      default: 0
+      default: 0,
     },
     customData: {
       type: Object,
-      default: () => {
-
-      },
+      default: () => {},
     },
     desk: {
-      type: Object
-    }
+      type: Object,
+    },
   },
-  data () {
+  data() {
     return {
-      sizeList: [{ title: '1x2', height: 2, width: 1, name: '1x2' }, {
-        title: '2x2',
-        height: 2,
-        width: 2,
-        name: '2x2'
-      },],
+      sizeList: [
+        { title: '1x2', height: 2, width: 1, name: '1x2' },
+        {
+          title: '2x2',
+          height: 2,
+          width: 2,
+          name: '2x2',
+        },
+      ],
       options: {
         className: 'card',
         title: '正在热映',
         icon: 'video',
-        type: 'singleFilm'
+        type: 'singleFilm',
       },
       mySize: { title: '1x2', height: 2, width: 1, name: '1x2' },
       filmList: [],
@@ -114,59 +140,59 @@ export default {
       detailId: -1,
       isLoading: false,
       pageToggle: true,
-    }
+    };
   },
   computed: {
     ...mapWritableState(filmStore, ['data']),
   },
   watch: {
     'customData.width': {
-      handler () {
-        this.getDoubanList()
+      handler() {
+        this.getDoubanList();
       },
       deep: true,
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   methods: {
     ...mapActions(filmStore, ['getData']),
-    getDoubanList () {
+    getDoubanList() {
       if (this.customData.width ? this.customData.width === 1 : 'true') {
-        this.filmArrange = this.filmPart.slice(0, 4)
+        this.filmArrange = this.filmPart.slice(0, 4);
       } else if (this.customData.width === 2) {
-        this.filmArrange = this.filmPart
+        this.filmArrange = this.filmPart;
       }
     },
-    refreshPage () {
-      this.filmPart = _.sampleSize(this.filmList, 8)
-      this.getDoubanList()
+    refreshPage() {
+      this.filmPart = _.sampleSize(this.filmList, 8);
+      this.getDoubanList();
     },
-    btnDetail (id) {
-      this.detailId = id
-      this.detailToggle = true
+    btnDetail(id) {
+      this.detailId = id;
+      this.detailToggle = true;
     },
-    detailBack (val) {
-      this.detailToggle = val
-    }
+    detailBack(val) {
+      this.detailToggle = val;
+    },
   },
-  async mounted () {
-    this.isLoading = true
-    await this.getData()
+  async mounted() {
+    this.isLoading = true;
+    await this.getData();
     if (!this.data) {
-      this.pageToggle = false
+      this.pageToggle = false;
     } else {
-      this.filmList = this.data.list || []
+      this.filmList = this.data.list || [];
       if (!this.filmList.length) {
-        this.pageToggle = false
+        this.pageToggle = false;
       }
-      this.filmPart = _.sampleSize(this.filmList, 8)
-      this.getDoubanList()
+      this.filmPart = _.sampleSize(this.filmList, 8);
+      this.getDoubanList();
     }
     setTimeout(() => {
-      this.isLoading = false
-    })
+      this.isLoading = false;
+    });
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

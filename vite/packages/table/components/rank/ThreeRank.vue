@@ -1,7 +1,7 @@
 <template>
   <!-- 排名前三 -->
   <div class="top-three-box">
-    <div class="box-item pointer" @click="showCard(rankList[1].userInfo.uid,rankList[1].userInfo)">
+    <div class="box-item pointer" @click="showCard(rankList[1].userInfo.uid, rankList[1].userInfo)">
       <div class="item-avatar two-avatar">
         <a-avatar :src="rankList[1].avatar" class="other-img"></a-avatar>
       </div>
@@ -14,7 +14,7 @@
         </span>
       </span>
     </div>
-    <div class="one-box-item pointer" @click="showCard(rankList[0].userInfo.uid,rankList[0].userInfo)">
+    <div class="one-box-item pointer" @click="showCard(rankList[0].userInfo.uid, rankList[0].userInfo)">
       <div class="one-avatar">
         <div class="avatar-img">
           <a-avatar :src="rankList[0].avatar" class="one-img"></a-avatar>
@@ -29,7 +29,7 @@
         </span>
       </span>
     </div>
-    <div class="box-item pointer" @click="showCard(rankList[2].userInfo.uid,rankList[2].userInfo)">
+    <div class="box-item pointer" @click="showCard(rankList[2].userInfo.uid, rankList[2].userInfo)">
       <div class="item-avatar three-avatar">
         <a-avatar :src="rankList[2].avatar" class="other-img"></a-avatar>
       </div>
@@ -46,8 +46,8 @@
 </template>
 
 <script>
-import { mapActions } from 'pinia'
-import { appStore } from '../../store'
+import { mapActions } from 'pinia';
+import { appStore } from '../../store';
 
 export default {
   name: 'RankList',
@@ -56,47 +56,47 @@ export default {
     // 排行榜列表
     rankList: {
       type: Array,
-      default: []
+      default: [],
     },
     // 切换类型的值
     selectValue: {
       type: String,
-      default: () => ''
+      default: () => '',
     },
     showSelect: {
       type: Boolean,
-      default: () => false
+      default: () => false,
     },
     // 最后一个属性
     lastName: {
       type: String,
-      default: () => ''
+      default: () => '',
     },
     // 单位
     unit: {
       type: String,
-      default: () => ''
-    }
+      default: () => '',
+    },
   },
-  data () {
+  data() {
     return {
-      selectVal: ''
-    }
+      selectVal: '',
+    };
   },
   methods: {
     ...mapActions(appStore, ['showUserCard']),
-    showCard (uid, userInfo) {
+    showCard(uid, userInfo) {
       if (uid) {
-        this.showUserCard(uid, userInfo)
+        this.showUserCard(uid, userInfo);
       }
-
     },
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-.box-item, .one-box-item {
+.box-item,
+.one-box-item {
   &:hover {
     opacity: 0.8;
   }
@@ -124,7 +124,6 @@ export default {
     }
   }
   .box-item {
-
     width: 178px;
 
     .item-avatar {
@@ -241,14 +240,14 @@ export default {
   }
 
   .text-back {
-    background: rgba(255, 255, 255, 0.40);
+    background: rgba(255, 255, 255, 0.4);
     border-radius: 4px;
     width: 24px;
     height: 24px;
     text-align: center;
     display: inline-block;
     font-size: 14px;
-    color: var(--secondary-text)
+    color: var(--secondary-text);
   }
 }
 </style>

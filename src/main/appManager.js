@@ -1,47 +1,47 @@
-const path = require('path')
-const fs = require('fs')
-const { app, BrowserWindow, BrowserView, nativeImage, Notification } = require('electron')
+const path = require('path');
+const fs = require('fs');
+const { app, BrowserWindow, BrowserView, nativeImage, Notification } = require('electron');
 
-const remote = require('@electron/remote/main')
-const _ = require('lodash')
-const SaApp = require('./saAppClass')
-const appModel = require('../model/appModel')
-appModel.initDb()
-const userModel = require('../model/userModel')
-const ipc = require('electron').ipcMain
-const ipcMessageMain = require('./ipcMessageMain.js')
+const remote = require('@electron/remote/main');
+const _ = require('lodash');
+const SaApp = require('./saAppClass');
+const appModel = require('../model/appModel');
+appModel.initDb();
+const userModel = require('../model/userModel');
+const ipc = require('electron').ipcMain;
+const ipcMessageMain = require('./ipcMessageMain.js');
 
 /**
  * 运行中的应用窗体，结构{window:窗体对象,saApp:独立窗体app对象}
  * @type {*[]}
  */
-let processingAppWindows = []//运行中的应用
+let processingAppWindows = []; //运行中的应用
 
-let notificationSettingStatus = null
-let protocolManager = require('./protocolManager.js')
+let notificationSettingStatus = null;
+let protocolManager = require('./protocolManager.js');
 
 class AppManager {
-  dockBadge = 0
-  settingWindow = null
-  protocolManager = protocolManager
-  saApps = []
-  installInfo = {}
+  dockBadge = 0;
+  settingWindow = null;
+  protocolManager = protocolManager;
+  saApps = [];
+  installInfo = {};
 
   /**
    * 启动自启动的应用
    * @returns {Promise<void>}
    */
-  async executeAutoRunApps () {
-    let apps = await appModel.getAutoRunApps()
-    apps.forEach(app => {
-      appManager.openApp(app.nanoid, true, app)
-    })
+  async executeAutoRunApps() {
+    let apps = await appModel.getAutoRunApps();
+    apps.forEach((app) => {
+      appManager.openApp(app.nanoid, true, app);
+    });
   }
 
-  async executeAppByPackage (pkg, cb) {
-    let app = await appModel.get({ package: pkg })
+  async executeAppByPackage(pkg, cb) {
+    let app = await appModel.get({ package: pkg });
     if (app) {
-      appManager.openApp(app.nanoid, false, app, undefined, cb)
+      appManager.openApp(app.nanoid, false, app, undefined, cb);
     }
   }
 
@@ -51,12 +51,12 @@ class AppManager {
    * @param event
    * @param args
    */
-  sendIPCToApp (pkg, event, args) {
-    let win = this.getWindowByPackage(pkg)
+  sendIPCToApp(pkg, event, args) {
+    let win = this.getWindowByPackage(pkg);
     if (win) {
-      win.view.webContents.send(event, args)
+      win.view.webContents.send(event, args);
     } else {
-      return false
+      return false;
     }
   }
 
@@ -65,31 +65,31 @@ class AppManager {
    * @param id
    * @param saApp
    */
-  updateSaApp (id, saApp) {
+  updateSaApp(id, saApp) {
     for (let i = 0; i < processingAppWindows.length; i++) {
       if (processingAppWindows[i].saApp.nanoid === id) {
-        processingAppWindows[i].saApp = saApp
-        return true
+        processingAppWindows[i].saApp = saApp;
+        return true;
       }
     }
-    return false
+    return false;
   }
 
   /**
    * 聚焦窗体
    * @param windowId
    */
-  focusWindow (windowId) {
+  focusWindow(windowId) {
     processingAppWindows.forEach((item) => {
       if (item.saApp.windowId === windowId) {
         if (!item.window.isVisible()) {
-          item.window.show()
+          item.window.show();
         }
-        item.window.focus()
+        item.window.focus();
         // if (barrageManager)
         //   barrageManager.changeUrl(item.saApp.url)
       }
-    })
+    });
   }
 
   /**
@@ -98,18 +98,18 @@ class AppManager {
    * @param app
    * @param {object} message 消息体
    */
-  beforeEachNotification (settingStatus, app, args) {
+  beforeEachNotification(settingStatus, app, args) {
     //前置判断
     let packageMap = {
       'com.thisky.group': 1,
-      'com.thisky.com': 2
-    } //增加一个id和packageMap来兼容新的api的定位方式
-    let message = args.options
+      'com.thisky.com': 2,
+    }; //增加一个id和packageMap来兼容新的api的定位方式
+    let message = args.options;
     if (settingStatus) {
-      let index = settingStatus.findIndex(v => v.appId === packageMap[app.package])
-      let childIndex = settingStatus[index].childs.findIndex(v => {
-        return v.title === message.category
-      })
+      let index = settingStatus.findIndex((v) => v.appId === packageMap[app.package]);
+      let childIndex = settingStatus[index].childs.findIndex((v) => {
+        return v.title === message.category;
+      });
 
       if (settingStatus[index].notice && settingStatus[index].childs[childIndex].notice) {
         //消息中心的收录做在这里
@@ -118,28 +118,28 @@ class AppManager {
             title: message.title,
             body: message.body,
             indexName: message.indexName ?? null,
-            avatar: message.icon ? message.icon.length > 0 ? message.icon : '' : '',
-            type: 'groupChat'
-          })
+            avatar: message.icon ? (message.icon.length > 0 ? message.icon : '') : '',
+            type: 'groupChat',
+          });
         } else if (app.package === 'com.thisky.com') {
           SidePanel.send('storeMessage', {
             title: message.title,
             body: message.body,
-            avatar: message.avatar ? message.avatar.length > 0 ? message.avatar : '' : '',
-            type: 'community'
-          })
+            avatar: message.avatar ? (message.avatar.length > 0 ? message.avatar : '') : '',
+            type: 'community',
+          });
         }
       }
 
-      return true
+      return true;
     }
-    return false
+    return false;
   }
 
-  getSaApp (nanoid) {
-    return this.saApps.find(app => {
-      return app.instance.info.nanoid === nanoid
-    })
+  getSaApp(nanoid) {
+    return this.saApps.find((app) => {
+      return app.instance.info.nanoid === nanoid;
+    });
   }
 
   /**
@@ -148,28 +148,32 @@ class AppManager {
    * @param option  option.body为消息体  可参考此处参数说明 https://www.electronjs.org/zh/docs/latest/api/notification
    * @param ignoreWhenFocus 是否在窗体可见的时候直接跳过消息提示和badge设置，仅添加到消息记录，默认为false
    */
-  async notification (appId = 0, option = {
-    title: '应用消息', body: '消息内容'
-  }, ignoreWhenFocus = false) {
-    let saAppInstance = this.getSaApp(appId)
-    let logoUri = await saAppInstance.getLogoUri()
-    option.icon = option.icon ? option.icon : nativeImage.createFromPath(logoUri)
-    let saAppWindow = appManager.getWindowByAppId(appId)
+  async notification(
+    appId = 0,
+    option = {
+      title: '应用消息',
+      body: '消息内容',
+    },
+    ignoreWhenFocus = false,
+  ) {
+    let saAppInstance = this.getSaApp(appId);
+    let logoUri = await saAppInstance.getLogoUri();
+    option.icon = option.icon ? option.icon : nativeImage.createFromPath(logoUri);
+    let saAppWindow = appManager.getWindowByAppId(appId);
     if (ignoreWhenFocus && saAppWindow.isFocused()) {
       //不提示，不加badage，仅添加到消息记录
     } else {
       //否则则推送消息并设置badge
-      let noti = Notification(option)
+      let noti = Notification(option);
 
       noti.on('click', (e) => {
-        let saApp = appManager.getSaAppByAppId(appId)
-        appManager.openApp(appId, false, saApp)
-      })
-      noti.show()
+        let saApp = appManager.getSaAppByAppId(appId);
+        appManager.openApp(appId, false, saApp);
+      });
+      noti.show();
       //add给badge进行加减调试，优先使用add，存在add则badge参数无效; badge强行设置badge的值，不推荐使用。
-      appManager.incAppBadge(appId, 1)
+      appManager.incAppBadge(appId, 1);
     }
-
   }
 
   /**
@@ -177,14 +181,14 @@ class AppManager {
    * @param appId
    * @param add
    */
-  incAppBadge (appId = 0, add = 1) {
-    processingAppWindows.forEach(processApp => {
+  incAppBadge(appId = 0, add = 1) {
+    processingAppWindows.forEach((processApp) => {
       if (processApp.saApp.nanoid === appId) {
-        processApp.saApp.badge = processApp.saApp.badge ? processApp.saApp.badge + add : add
+        processApp.saApp.badge = processApp.saApp.badge ? processApp.saApp.badge + add : add;
       }
-    })
-    SidePanel.send('appBadge', { nanoid: appId, add: add })
-    appManager.updateDockBadge()
+    });
+    SidePanel.send('appBadge', { nanoid: appId, add: add });
+    appManager.updateDockBadge();
   }
 
   /**
@@ -192,27 +196,27 @@ class AppManager {
    * @param appId
    * @param add
    */
-  clearAppBadge (appId = '', add = 1) {
-    processingAppWindows.forEach(processApp => {
+  clearAppBadge(appId = '', add = 1) {
+    processingAppWindows.forEach((processApp) => {
       if (processApp.saApp.nanoid === appId) {
-        processApp.saApp.badge = 0
+        processApp.saApp.badge = 0;
       }
-    })
-    SidePanel.send('appBadge', { nanoid: appId, badge: 0 })
-    appManager.updateDockBadge()
+    });
+    SidePanel.send('appBadge', { nanoid: appId, badge: 0 });
+    appManager.updateDockBadge();
   }
 
   /**
    * 自动统计全部的app的badge，进行汇总
    */
-  updateDockBadge () {
+  updateDockBadge() {
     if (process.platform === 'darwin') {
-      let count = 0
-      processingAppWindows.forEach(processApp => {
-        count += processApp.saApp.badge ? processApp.saApp.badge : 0
-      })
-      count === 0 ? app.dock.setBadge('') : app.dock.setBadge(count.toString())
-      appManager.dockBadge = count
+      let count = 0;
+      processingAppWindows.forEach((processApp) => {
+        count += processApp.saApp.badge ? processApp.saApp.badge : 0;
+      });
+      count === 0 ? app.dock.setBadge('') : app.dock.setBadge(count.toString());
+      appManager.dockBadge = count;
     }
   }
 
@@ -220,10 +224,10 @@ class AppManager {
    * 给当前dockBage+1，此操作可能导致不同步
    * @param add
    */
-  incDockBadge (add = 1) {
+  incDockBadge(add = 1) {
     if (process.platform === 'darwin') {
-      appManager.dockBadge += add
-      app.dock.setBadge(appManager.dockBadge.toString())
+      appManager.dockBadge += add;
+      app.dock.setBadge(appManager.dockBadge.toString());
     }
   }
 
@@ -231,19 +235,19 @@ class AppManager {
    * 设置dock栏的badge，不建议直接使用，请使用updateDockBadge（更新统计）或者incDockBadge（单独增加值）
    * @param count
    */
-  setDockBadge (count) {
+  setDockBadge(count) {
     if (process.platform === 'darwin') {
-      appManager.dockBadge = count
-      app.dock.setBadge(appManager.dockBadge.toString())
+      appManager.dockBadge = count;
+      app.dock.setBadge(appManager.dockBadge.toString());
     }
   }
 
   /**
    * 清理dock栏的badge，置零，不建议直接使用，这是临时性的，建议先调整每个应用的badge，然后使用updateDockBadge进行dock栏汇总更新
    */
-  clearDockBadge () {
+  clearDockBadge() {
     if (process.platform === 'darwin') {
-      app.dock.setBadge('0')
+      app.dock.setBadge('0');
     }
   }
 
@@ -251,32 +255,32 @@ class AppManager {
    * 隐藏窗体
    * @param windowId
    */
-  hideWindow (windowId) {
+  hideWindow(windowId) {
     processingAppWindows.forEach((item) => {
       if (item.saApp.windowId === windowId) {
         if (item.window.isFullScreen()) {
-          item.window.setFullScreen(false)
+          item.window.setFullScreen(false);
           setTimeout(() => {
-            item.window.hide()
-          }, 600)
+            item.window.hide();
+          }, 600);
         } else {
-          item.window.hide()
+          item.window.hide();
         }
       }
-    })
+    });
   }
 
   /**
    * 切换窗体的可见度，适用于不需要确认窗体是否可见的场景
    * @param appId
    */
-  toggleAppWindowVisible (appId) {
-    let appWindow = appManager.getWindowByAppId(appId)
+  toggleAppWindowVisible(appId) {
+    let appWindow = appManager.getWindowByAppId(appId);
     if (appWindow.isVisible()) {
-      appWindow.hide()
+      appWindow.hide();
     } else {
-      appWindow.show()
-      appWindow.focus()
+      appWindow.show();
+      appWindow.focus();
     }
   }
 
@@ -284,27 +288,27 @@ class AppManager {
    * 隐藏窗体
    * @param appId
    */
-  hideAppWindow (appId) {
-    appManager.getWindowByAppId(appId).hide()
+  hideAppWindow(appId) {
+    appManager.getWindowByAppId(appId).hide();
   }
 
   /**
    * 显示窗体
    * @param appId
    */
-  showAppWindow (appId) {
-    appManager.getWindowByAppId(appId).show()
-    appManager.getWindowByAppId(appId).focus()
+  showAppWindow(appId) {
+    appManager.getWindowByAppId(appId).show();
+    appManager.getWindowByAppId(appId).focus();
   }
 
   /**
    * 显示窗体
    * @param package
    */
-  showAppWindowByPackage (pkg) {
-    let window = appManager.getWindowByPackage(pkg)
-    window.show()
-    window.focus()
+  showAppWindowByPackage(pkg) {
+    let window = appManager.getWindowByPackage(pkg);
+    window.show();
+    window.focus();
   }
 
   /**
@@ -312,14 +316,14 @@ class AppManager {
    * @param saAppId appId
    * @returns {boolean}
    */
-  isAppProcessing (saAppId) {
-    let processing = false
+  isAppProcessing(saAppId) {
+    let processing = false;
     processingAppWindows.forEach((item) => {
       if (item.saApp.nanoid === saAppId) {
-        processing = !item.window.isDestroyed()
+        processing = !item.window.isDestroyed();
       }
-    })
-    return processing
+    });
+    return processing;
   }
 
   /**
@@ -327,26 +331,25 @@ class AppManager {
    * @param saAppId appId
    * @returns {boolean}
    */
-  isAppProcessingByPackage (pkg) {
-    let processing = false
+  isAppProcessingByPackage(pkg) {
+    let processing = false;
     processingAppWindows.forEach((item) => {
       if (item.saApp.package === pkg) {
-        processing = !item.window.isDestroyed()
+        processing = !item.window.isDestroyed();
       }
-    })
-    return processing
+    });
+    return processing;
   }
 
   /**
    * 移除appWindow
    * @param saAppWindowId 窗体id,这里不适用appid，因为未来可能是多开窗体的
    */
-  removeAppWindow (saAppWindowId) {
+  removeAppWindow(saAppWindowId) {
     for (let i = 0; i < processingAppWindows.length; i++) {
       if (processingAppWindows[i].saApp.windowId === saAppWindowId) {
-        processingAppWindows.splice(i, 1)
+        processingAppWindows.splice(i, 1);
       }
-
     }
   }
 
@@ -355,8 +358,8 @@ class AppManager {
    * @param saAppId
    * @param settings
    */
-  setOriginAppSettings (saAppId, settings) {
-    SidePanel.send('updateSetting', { nanoid: saAppId, settings: settings })
+  setOriginAppSettings(saAppId, settings) {
+    SidePanel.send('updateSetting', { nanoid: saAppId, settings: settings });
   }
 
   /**
@@ -364,14 +367,14 @@ class AppManager {
    * @param saAppId 应用id
    * @param settings 应用设置，一个对象，类似{isAlwaysHide:true,runAtStart:true} 参考开发文档
    */
-  setAppSettings (saAppId, settings = []) {
-    let saApp = appManager.getSaAppByAppId(saAppId)
+  setAppSettings(saAppId, settings = []) {
+    let saApp = appManager.getSaAppByAppId(saAppId);
     if (saApp) {
-      appManager.setOriginAppSettings(saAppId, settings)
-      saApp.settings = Object.assign(saApp.settings, settings)
-      appManager.updateSaApp(saAppId, saApp)
+      appManager.setOriginAppSettings(saAppId, settings);
+      saApp.settings = Object.assign(saApp.settings, settings);
+      appManager.updateSaApp(saAppId, saApp);
     } else {
-      appManager.setOriginAppSettings(saAppId, settings)
+      appManager.setOriginAppSettings(saAppId, settings);
     }
   }
 
@@ -381,12 +384,11 @@ class AppManager {
    * @param settingName 设置名称
    * @returns {*}
    */
-  getAppSettings (saAppId, settingName) {
+  getAppSettings(saAppId, settingName) {
     for (let i = 0; i < processingAppWindows.length; i++) {
       if (processingAppWindows[i].saApp.nanoid === saAppId) {
-        return processingAppWindows[i].saApp.settings[settingName]
+        return processingAppWindows[i].saApp.settings[settingName];
       }
-
     }
   }
 
@@ -394,10 +396,10 @@ class AppManager {
    * 通过窗体获得saApp实体
    * @returns {*}
    */
-  getSaAppByWindowId (saAppWindowId) {
+  getSaAppByWindowId(saAppWindowId) {
     for (let i = 0; i < processingAppWindows.length; i++) {
       if (processingAppWindows[i].saApp.windowId === saAppWindowId) {
-        return processingAppWindows[i]
+        return processingAppWindows[i];
       }
     }
   }
@@ -406,10 +408,10 @@ class AppManager {
    * 通过WindowId获得对应索引
    * @returns {number}
    */
-  getIndexByWindowId (saAppWindowId) {
+  getIndexByWindowId(saAppWindowId) {
     for (let i = 0; i < processingAppWindows.length; i++) {
       if (processingAppWindows[i].saApp.windowId === saAppWindowId) {
-        return i
+        return i;
       }
     }
   }
@@ -419,13 +421,13 @@ class AppManager {
    * @returns {*}
    * @param nanoid
    */
-  getSaAppByAppId (nanoid) {
+  getSaAppByAppId(nanoid) {
     for (let i = 0; i < processingAppWindows.length; i++) {
       if (processingAppWindows[i].saApp.nanoid === nanoid) {
-        return processingAppWindows[i].saApp
+        return processingAppWindows[i].saApp;
       }
     }
-    return null
+    return null;
   }
 
   /**
@@ -433,27 +435,27 @@ class AppManager {
    * @param {string} domian 主域名
    * @returns
    */
-  getSaAppByDomian (domain) {
+  getSaAppByDomian(domain) {
     for (let i = 0; i < processingAppWindows.length; i++) {
       if (processingAppWindows[i].saApp.url.includes(domain)) {
-        return processingAppWindows[i].saApp
+        return processingAppWindows[i].saApp;
       }
     }
-    return null
+    return null;
   }
 
   /**
    * 根据包名获得运行中的窗体
    * @param pkg
    */
-  getWindowByPackage (pkg) {
+  getWindowByPackage(pkg) {
     let find = _.find(processingAppWindows, (win) => {
-      return win.saApp.package === pkg
-    })
+      return win.saApp.package === pkg;
+    });
     if (!find) {
-      return false
+      return false;
     }
-    return find.window
+    return find.window;
   }
 
   /**
@@ -461,13 +463,13 @@ class AppManager {
    * @param appId
    * @returns {null|*}
    */
-  getWindowByAppId (nanoid) {
+  getWindowByAppId(nanoid) {
     for (let i = 0; i < processingAppWindows.length; i++) {
       if (processingAppWindows[i].saApp.nanoid === nanoid) {
-        return processingAppWindows[i].window
+        return processingAppWindows[i].window;
       }
     }
-    return null
+    return null;
   }
 
   /**
@@ -475,13 +477,13 @@ class AppManager {
    * @param windowId
    * @returns {null|*}
    */
-  getWindowByWindowId (windowId) {
+  getWindowByWindowId(windowId) {
     for (let i = 0; i < processingAppWindows.length; i++) {
       if (processingAppWindows[i].saApp.windowId === windowId) {
-        return processingAppWindows[i].window
+        return processingAppWindows[i].window;
       }
     }
-    return null
+    return null;
   }
 
   /**
@@ -489,29 +491,29 @@ class AppManager {
    * @param id 应用id
    * @returns {Promise<{memoryUsage: {}, capture: (boolean|*)}>} 包含内存使用和快照
    */
-  async getAppRunningInfo (id) {
-    let saApp = appManager.getSaAppByAppId(id)
+  async getAppRunningInfo(id) {
+    let saApp = appManager.getSaAppByAppId(id);
     if (!!!saApp) {
-      return //如果不存在这个saApp
+      return; //如果不存在这个saApp
     }
-    let capture = await appManager.capture(saApp.windowId)
-    let memoryUsage = appManager.memoryUsageInfo(saApp.windowId)
+    let capture = await appManager.capture(saApp.windowId);
+    let memoryUsage = appManager.memoryUsageInfo(saApp.windowId);
     let info = {
-      'capture': capture,
-      'memoryUsage': memoryUsage
-    }
-    return info
+      capture: capture,
+      memoryUsage: memoryUsage,
+    };
+    return info;
   }
 
   /**
    * 获取应用内存信息
    * @param saAppWindowId
    */
-  memoryUsageInfo (saAppWindowId) {
-    let saApp = appManager.getSaAppByWindowId(saAppWindowId)
-    let appWindow = saApp.window //窗体
-    let memoryInfo = {}
-    let allMetrics = app.getAppMetrics() //全局内存统计
+  memoryUsageInfo(saAppWindowId) {
+    let saApp = appManager.getSaAppByWindowId(saAppWindowId);
+    let appWindow = saApp.window; //窗体
+    let memoryInfo = {};
+    let allMetrics = app.getAppMetrics(); //全局内存统计
     /*
     *[
 [1]   {
@@ -524,44 +526,44 @@ class AppManager {
 [1]   },
 * https://www.electronjs.org/zh/docs/latest/api/structures/process-metric
 * */
-    let pid = appWindow.webContents.getOSProcessId()
+    let pid = appWindow.webContents.getOSProcessId();
     allMetrics.forEach((met) => {
       if (met.pid === pid) {
-        memoryInfo = met
+        memoryInfo = met;
       }
-    })
-    return memoryInfo
+    });
+    return memoryInfo;
   }
 
   /**
    * 通过windowId给APP截图
    * @param saAppWindowId
    */
-  async capture (saAppWindowId) {
-    let saApp = appManager.getSaAppByWindowId(saAppWindowId)
-    let imagePath = path.resolve(userDataPath + '/app/screen' + saApp.saApp.nanoid + '.jpg')
+  async capture(saAppWindowId) {
+    let saApp = appManager.getSaAppByWindowId(saAppWindowId);
+    let imagePath = path.resolve(userDataPath + '/app/screen' + saApp.saApp.nanoid + '.jpg');
     if (saApp.window.isDestroyed()) {
-      return
+      return;
     }
-    let capturedImage = await saApp.window.view.webContents.capturePage()
+    let capturedImage = await saApp.window.view.webContents.capturePage();
     if (capturedImage.isEmpty()) {
       //如果截图为空，则直接返回路径，而不进行覆盖，以提升截图成功率
-      return imagePath
+      return imagePath;
     }
     if (!fs.existsSync(userDataPath + '/app')) {
-      fs.mkdirSync(userDataPath + '/app')
+      fs.mkdirSync(userDataPath + '/app');
     }
 
     try {
-      fs.writeFileSync(imagePath, capturedImage.toJPEG(50))
+      fs.writeFileSync(imagePath, capturedImage.toJPEG(50));
     } catch (err) {
-      return false
+      return false;
     }
-    return imagePath
+    return imagePath;
   }
 
-  async openAppVite (path, additionalArguments = [], options = {}) {
-    async function loadSettingWindow () {
+  async openAppVite(path, additionalArguments = [], options = {}) {
+    async function loadSettingWindow() {
       const windowOption = {
         frame: options.frame === undefined ? true : options.frame,
         width: options.width || 920,
@@ -570,7 +572,7 @@ class AppManager {
         minimizable: false,
         maximizable: options.maximizable === undefined ? true : options.maximizable,
         acceptFirstMouse: true,
-      }
+      };
       appManager.settingWindow = await windowManager.create({
         name: 'appManager',
         windowOption: windowOption,
@@ -584,28 +586,26 @@ class AppManager {
           safeDialogs: false,
           safeDialogsMessage: false,
           partition: null,
-          additionalArguments: [
-            ...additionalArguments,
-          ]
+          additionalArguments: [...additionalArguments],
         },
-        url: render.getUrl('app.html#' + path)
-      })
-      appManager.settingWindow.window.setMenu(null)
+        url: render.getUrl('app.html#' + path),
+      });
+      appManager.settingWindow.window.setMenu(null);
       // if (isDevelopmentMode) {
       //   appManager.settingWindow.window.webContents.openDevTools()
       // }
 
       appManager.settingWindow.window.on('close', () => {
-        appManager.settingWindow = null
-      })
-      return appManager.settingWindow
+        appManager.settingWindow = null;
+      });
+      return appManager.settingWindow;
     }
 
     if (appManager.settingWindow === null) {
-      return await loadSettingWindow()
+      return await loadSettingWindow();
     } else {
-      appManager.settingWindow.close()
-      return await loadSettingWindow()
+      appManager.settingWindow.close();
+      return await loadSettingWindow();
     }
   }
 
@@ -613,13 +613,15 @@ class AppManager {
    * 打开应用的设置窗口
    * @param appId
    */
-  openSetting (appId) {
+  openSetting(appId) {
     this.openAppVite('/setting/' + appId, [
       '--app-version=' + app.getVersion(),
       '--app-name=' + app.getName(),
-      '--app-id=' + appId
-    ])
+      '--app-id=' + appId,
+    ]);
   }
+
+  installInfo = {};
 
   /**
    * 询问安装应用，在此阶段用户可以手动取消授权
@@ -628,7 +630,7 @@ class AppManager {
    * @param callback
    * @param parent
    */
-  async installAppConfirm (appJson, from, callback, parent) {
+  async installAppConfirm(appJson, from, callback, parent) {
     let installWindowInstance = await windowManager.create({
       name: 'appInstall',
       windowOption: {
@@ -648,30 +650,23 @@ class AppManager {
         safeDialogs: false,
         safeDialogsMessage: false,
         partition: null,
-        additionalArguments: [
-          '--user-data-path=' + userDataPath,
-        ]
-      }
-    })
-    const installWindow = installWindowInstance.window
-    installWindow.setMenu(null)
-    appManager.installInfo.appJson = appJson
-    appManager.installInfo.from = from
+        additionalArguments: ['--user-data-path=' + userDataPath],
+      },
+    });
+    const installWindow = installWindowInstance.window;
+    installWindow.setMenu(null);
+    appManager.installInfo.appJson = appJson;
+    appManager.installInfo.from = from;
 
-    installWindow.webContents.loadURL(render.getUrl('app.html#/installApp'))
+    installWindow.webContents.loadURL(render.getUrl('app.html#/installApp'));
     ipc.once('installAppReturn', (event, args) => {
-      callback(args)
-    })
+      callback(args);
+    });
   }
 
-  openAppManage () {
-    this.openAppVite('/allApps', [
-      '--app-version=' + app.getVersion(),
-      '--app-name=' + app.getName(),
-
-    ])
+  openAppManage() {
+    this.openAppVite('/allApps', ['--app-version=' + app.getVersion(), '--app-name=' + app.getName()]);
   }
-
   // findInPage(appId,args){
   //   let window=appManager.getWindowByAppId(appId)
   //   let view=window.view
@@ -685,74 +680,73 @@ class AppManager {
   //   let view=appManager.getWindowByAppId(appId).view
   //   view.webContents.stopFindInPage(action)
   // },
-  releaseFocus (appId) {
-    let window = appManager.getWindowByAppId(appId)
-    window.webContents.focus()
+  releaseFocus(appId) {
+    let window = appManager.getWindowByAppId(appId);
+    window.webContents.focus();
   }
 
-  appFocusView (appId) {
-    let view = appManager.getWindowByAppId(appId).view
-    view.webContents.focus()
+  appFocusView(appId) {
+    let view = appManager.getWindowByAppId(appId).view;
+    view.webContents.focus();
   }
 
   /**
    * 关闭并删除应用
    * @param appId
    */
-  deleteApp (appId) {
-    appManager.closeApp(appId)
+  deleteApp(appId) {
+    appManager.closeApp(appId);
     setTimeout(() => {
-      SidePanel.send('deleteApp', { nanoid: appId })
-    }, 1000)
+      SidePanel.send('deleteApp', { nanoid: appId });
+    }, 1000);
   }
 
-  closeApp (nanoid) {
-    let window = appManager.getWindowByAppId(nanoid)
-    let saApp = appManager.getSaAppByAppId(nanoid)
-    appManager.clearAppBadge(nanoid)
+  closeApp(nanoid) {
+    let window = appManager.getWindowByAppId(nanoid);
+    let saApp = appManager.getSaAppByAppId(nanoid);
+    appManager.clearAppBadge(nanoid);
     if (window && !window.isDestroyed()) {
-      saApp.canClose = true
-      appManager.removeAppWindow(saApp.windowId)
+      saApp.canClose = true;
+      appManager.removeAppWindow(saApp.windowId);
       let found = appManager.saApps.find((app) => {
-        return app.instance.info.nanoid === nanoid
-      })
+        return app.instance.info.nanoid === nanoid;
+      });
       if (found) {
         //有时候可能不存在对应的app
-        windowManager.close(found.windowName)//通过windowManager关闭实例
-        appManager.saApps.splice(found, 1)
-        SidePanel.send('closeApp', { nanoid: nanoid })
+        windowManager.close(found.windowName); //通过windowManager关闭实例
+        appManager.saApps.splice(found, 1);
+        SidePanel.send('closeApp', { nanoid: nanoid });
       }
     }
-
   }
 
-  closeAll () {
-    let closed = 0
+  closeAll() {
+    let closed = 0;
     processingAppWindows.forEach((item) => {
       if (!item.window.isDestroyed()) {
-        appManager.closeApp(item.saApp.nanoid)
-        closed++
+        appManager.closeApp(item.saApp.nanoid);
+        closed++;
       }
-    })
-    return closed
+    });
+    return closed;
   }
 
-  getViewWebPreferences (saApp) {
-    let preload = ''
+  getViewWebPreferences(saApp) {
+    let preload = '';
     if (saApp.isSystemApp) {
       if (!!!saApp.preload || saApp.preload === '') {
-        preload = path.join(___dirname + '/src/preload/appPreload.js')
+        preload = path.join(___dirname + '/src/preload/appPreload.js');
       } else {
-        preload = path.join(___dirname + '/' + saApp.preload)
+        preload = path.join(___dirname + '/' + saApp.preload);
       }
     } else {
-      preload = path.join(___dirname + '/src/preload/appPreload.js')
+      preload = path.join(___dirname + '/src/preload/appPreload.js');
     }
-    let partition = 'persist:webcontent'
+    let partition = 'persist:webcontent';
     if (saApp.isSystemApp) {
-      partition = null
+      partition = null;
     } else if (saApp.authAll.indexOf('node') > -1) {
-      partition = 'persist:' + saApp.package
+      partition = 'persist:' + saApp.package;
     }
     let webPreferences = {
       preload,
@@ -770,49 +764,52 @@ class AppManager {
         '--app-version=' + app.getVersion(),
         '--app-name=' + app.getName(),
         //'--saApp='+encodeURI(JSON.stringify(saApp)),
-        ...((isDevelopmentMode ? ['--development-mode'] : [])),
-      ]
-    }
+        ...(isDevelopmentMode ? ['--development-mode'] : []),
+      ],
+    };
 
-    return webPreferences
+    return webPreferences;
 
     //todo 兼容在应用内打开新窗体的操作
-    appView.webContents.on('new-window', (event, url, frameName, disposition, options, additionalFeatures, referrer, postBody) => {
-      if (!!!saApp.openNewWindow || saApp.openNewWindow === 'redirect') {
-        //默认为重定向
-        event.preventDefault()
-        appView.webContents.loadURL(url)
-        updateView(url)
-      } else if (saApp.openNewWindow === 'allow') {
-        event.preventDefault()
-        //允许，则不修改默认事件
-        const win = new BrowserWindow({
-          webContents: options.webContents, // use existing webContents if provided
-          show: false
-        })
-        win.webContents.on('new-window', (event, url) => {
-          event.preventDefault()
-          win.webContents.loadURL(url)
-        })
-        win.once('ready-to-show', () => win.show())
-        win.setMenu(null)
-        if (!options.webContents) {
-          const loadOptions = {
-            httpReferrer: referrer
+    appView.webContents.on(
+      'new-window',
+      (event, url, frameName, disposition, options, additionalFeatures, referrer, postBody) => {
+        if (!!!saApp.openNewWindow || saApp.openNewWindow === 'redirect') {
+          //默认为重定向
+          event.preventDefault();
+          appView.webContents.loadURL(url);
+          updateView(url);
+        } else if (saApp.openNewWindow === 'allow') {
+          event.preventDefault();
+          //允许，则不修改默认事件
+          const win = new BrowserWindow({
+            webContents: options.webContents, // use existing webContents if provided
+            show: false,
+          });
+          win.webContents.on('new-window', (event, url) => {
+            event.preventDefault();
+            win.webContents.loadURL(url);
+          });
+          win.once('ready-to-show', () => win.show());
+          win.setMenu(null);
+          if (!options.webContents) {
+            const loadOptions = {
+              httpReferrer: referrer,
+            };
+            if (postBody != null) {
+              const { data, contentType, boundary } = postBody;
+              loadOptions.postData = postBody.data;
+              loadOptions.extraHeaders = `content-type: ${contentType}; boundary=${boundary}`;
+            }
+            win.loadURL(url, loadOptions);
           }
-          if (postBody != null) {
-            const { data, contentType, boundary } = postBody
-            loadOptions.postData = postBody.data
-            loadOptions.extraHeaders = `content-type: ${contentType}; boundary=${boundary}`
-          }
-          win.loadURL(url, loadOptions)
+          event.newGuest = win;
+        } else if (saApp.openNewWindow === 'deny') {
+          //禁止打开
+          event.preventDefault();
         }
-        event.newGuest = win
-      } else if (saApp.openNewWindow === 'deny') {
-        //禁止打开
-        event.preventDefault()
-      }
-    })
+      },
+    );
     // function _handleExternalProtocol(e, url, isInPlace, isMainFrame, frameProcessId, frameRoutingId){
     //   console.log(url)
     //   var knownProtocols = ['http', 'https', 'file', 'min', 'about', 'data', 'javascript', 'chrome','tsb'] // TODO anything else? tsb是新增的协议
@@ -860,15 +857,14 @@ class AppManager {
     // appView.webContents.on('found-in-page',(event,result)=>{
     //   appWindow.webContents.send('found-in-page',{data:result})
     // })
-
   }
 
-  openApp (appId, background = false, app, option = {}, cb) {
-    let saApp = appManager.getSaAppByAppId(appId)
+  openApp(appId, background = false, app, option = {}, cb) {
+    let saApp = appManager.getSaAppByAppId(appId);
     if (!!!saApp) {
       //首先必须是没运行的
-      saApp = JSON.parse(JSON.stringify(app))
-      appManager.executeApp(saApp, background, option, cb)
+      saApp = JSON.parse(JSON.stringify(app));
+      appManager.executeApp(saApp, background, option, cb);
       // if (!saApp) {
       //   //如果不存在，直接运行
       //   appManager.executeApp(saApp, background)
@@ -877,30 +873,29 @@ class AppManager {
       //   appManager.executeApp(saApp, background)
       // }
     } else {
-      let window = appManager.getWindowByAppId(saApp.nanoid)
-      appManager.focusWindow(saApp.windowId)
+      let window = appManager.getWindowByAppId(saApp.nanoid);
+      appManager.focusWindow(saApp.windowId);
 
       if (option) {
         if (option.action) {
-          appManager.protocolManager.handleAction(window, option.action, option)
+          appManager.protocolManager.handleAction(window, option.action, option);
         }
       }
-      appManager.clearAppBadge(saApp.nanoid)
+      appManager.clearAppBadge(saApp.nanoid);
     }
   }
 
-  getUrl (saApp) {
+  getUrl(saApp) {
     //todo 真实实现debug_url功能
     if (saApp.debug_url) {
-
       //debug_url优先级最高
-      return saApp.debug_url
+      return saApp.debug_url;
     }
-    let url = ''
+    let url = '';
     if (saApp.type === 'local' && saApp.package) {
-      url = 'file://' + path.join(___dirname, saApp.url)
+      url = 'file://' + path.join(___dirname, saApp.url);
     } else {
-      url = saApp.url
+      url = saApp.url;
     }
     /**
      * 在dev模式下，group引用开发环境
@@ -908,15 +903,15 @@ class AppManager {
     if (saApp.package === 'com.thisky.group' && isDevelopmentMode) {
       // 当为开发环境下的时候，将团队强行更改为本地开发
       //todo 根据实际需求更改
-      url = serverConfig.IM.FRONT_URL_DEV + serverConfig.IM.AUTO_LOGIN
+      url = serverConfig.IM.FRONT_URL_DEV + serverConfig.IM.AUTO_LOGIN;
     }
     if (saApp.package === 'com.thisky.fav' && isDevelopmentMode) {
       // 当为开发环境下的时候，将团队强行更改为本地开发
       //todo 根据实际需求更改
-      url = 'file://' + path.join(___dirname, '/pages/fav/index.html')
+      url = 'file://' + path.join(___dirname, '/pages/fav/index.html');
       //saApp.url = 'http://localhost:8080/'
     } else if (saApp.package === 'com.thisky.fav') {
-      url = 'file://' + path.join(___dirname, '/pages/fav/index.html')
+      url = 'file://' + path.join(___dirname, '/pages/fav/index.html');
     }
     // if (saApp.package === 'com.thisky.appStore' ) {
     //   url = 'http://localhost:5008/'
@@ -925,7 +920,7 @@ class AppManager {
     if (saApp.package === 'com.thisky.fav' && isDevelopmentMode) {
       // appView.webContents.openDevTools()
     }
-    return url
+    return url;
   }
 
   /**
@@ -934,17 +929,21 @@ class AppManager {
    * @param args
    * @returns {{msg: string, code: number}}
    */
-  onNotice (app, args) {
+  onNotice(app, args) {
     //需要前置处理消息设置的状态决定到底发不发消息
-    const result = appManager.beforeEachNotification(notificationSettingStatus, app, args)
+    const result = appManager.beforeEachNotification(notificationSettingStatus, app, args);
     if (result) {
-      appManager.notification(app.nanoid, {
-        title: args.options.title,
-        body: args.options.body,
-      }, typeof args.ignoreWhenFocus == 'undefined' ? false : args.ignoreWhenFocus)
-      return { code: 200, msg: '成功' }
+      appManager.notification(
+        app.nanoid,
+        {
+          title: args.options.title,
+          body: args.options.body,
+        },
+        typeof args.ignoreWhenFocus == 'undefined' ? false : args.ignoreWhenFocus,
+      );
+      return { code: 200, msg: '成功' };
     } else {
-      return { code: 500, msg: '失败' }
+      return { code: 500, msg: '失败' };
     }
   }
 
@@ -953,22 +952,21 @@ class AppManager {
    * @param source
    * @returns {{}}
    */
-  convertToWindowParams (source) {
-    let target = {}
+  convertToWindowParams(source) {
+    let target = {};
     if (typeof source === 'undefined') {
-      target = source
+      target = source;
     } else {
-      target.maxWidth = Number(source.maxWidth) || undefined
-      target.minWidth = Number(source.minWidth) || undefined
-      target.maxHeight = Number(source.maxHeight) || undefined
-      target.minHeight = Number(source.minHeight) || undefined
-      target.width = Number(source.width) || undefined
-      target.height = Number(source.height) || undefined
-      target.alwaysOnTop = source.top//将参数转换为可识别参数
-      target.resizable = source.canResize
-
+      target.maxWidth = Number(source.maxWidth) || undefined;
+      target.minWidth = Number(source.minWidth) || undefined;
+      target.maxHeight = Number(source.maxHeight) || undefined;
+      target.minHeight = Number(source.minHeight) || undefined;
+      target.width = Number(source.width) || undefined;
+      target.height = Number(source.height) || undefined;
+      target.alwaysOnTop = source.top; //将参数转换为可识别参数
+      target.resizable = source.canResize;
     }
-    return _.cloneDeep(target)//复制出去，防止引用错误
+    return _.cloneDeep(target); //复制出去，防止引用错误
   }
 
   /**
@@ -976,12 +974,12 @@ class AppManager {
    * @param target
    * @param source
    */
-  removeUndefinedKey (target, source) {
+  removeUndefinedKey(target, source) {
     Object.keys(target).forEach((key) => {
       if (typeof source[key] === 'undefined') {
-        delete target[key]
+        delete target[key];
       }
-    })
+    });
   }
 
   /**
@@ -991,54 +989,56 @@ class AppManager {
    * @param option
    * @param cb 启动后的回调
    */
-  async executeApp (saApp, background = false, option, cb) {
-    saApp.settings = saApp.settings ? saApp.settings : {}
-    let auth = []
+  async executeApp(saApp, background = false, option, cb) {
+    saApp.settings = saApp.settings ? saApp.settings : {};
+    let auth = [];
     if (saApp.auth) {
       if (typeof saApp.auth === 'string') {
         try {
-          saApp.auth = JSON.parse(saApp.auth)//防止老的string格式错误
+          saApp.auth = JSON.parse(saApp.auth); //防止老的string格式错误
         } catch (e) {
           saApp.auth = {
             base: {},
             api: {},
-            ability: {}
-          }
+            ability: {},
+          };
         }
-
       }
       if (typeof saApp.auth.base === 'object') {
         //兼容最新的auth格式，因为最新的auth变成了对象
-        Object.keys(saApp.auth.base).forEach(key => {
-          if (saApp.auth.base[key]) auth.push(key)
-        })
+        Object.keys(saApp.auth.base).forEach((key) => {
+          if (saApp.auth.base[key]) auth.push(key);
+        });
       } else {
         if (saApp.auth.base) {
-
-          auth = auth.concat(Object.keys(saApp.auth.base).map(key => {
-            if (saApp.auth.base[key]) {
-              return key
-            }
-          }))
+          auth = auth.concat(
+            Object.keys(saApp.auth.base).map((key) => {
+              if (saApp.auth.base[key]) {
+                return key;
+              }
+            }),
+          );
         }
         if (saApp.auth.api) {
-          auth = auth.concat(Object.keys(saApp.auth.api).map(key => {
-            if (saApp.auth.api[key]) {
-              return key
-            }
-          }))
+          auth = auth.concat(
+            Object.keys(saApp.auth.api).map((key) => {
+              if (saApp.auth.api[key]) {
+                return key;
+              }
+            }),
+          );
         }
       }
-      saApp.authAll = auth
+      saApp.authAll = auth;
     } else {
-      saApp.authAll = [] //修复后面的判断报错的问题
+      saApp.authAll = []; //修复后面的判断报错的问题
     }
-    let url = this.getUrl(saApp)
-    let name = appModel.getName(saApp)
-    let config = saApp.window[saApp.window.defaultType]
-    let windowParams = this.convertToWindowParams(config) || []
+    let url = this.getUrl(saApp);
+    let name = appModel.getName(saApp);
+    let config = saApp.window[saApp.window.defaultType];
+    let windowParams = this.convertToWindowParams(config) || [];
     if (typeof saApp.window === 'string') {
-      saApp.window = JSON.parse(saApp.window)
+      saApp.window = JSON.parse(saApp.window);
     }
     if (saApp.window.defaultType === 'frameWindow') {
       //带边框窗体
@@ -1052,9 +1052,9 @@ class AppManager {
         height: 800,
         resizable: true,
         alwaysOnTop: false,
-      }
-      this.removeUndefinedKey(defaultFrameWindowConfig, windowParams)
-      let frameWindowConfig = Object.assign(defaultFrameWindowConfig, windowParams)
+      };
+      this.removeUndefinedKey(defaultFrameWindowConfig, windowParams);
+      let frameWindowConfig = Object.assign(defaultFrameWindowConfig, windowParams);
       let appWindow = await windowManager.createFrameWindow({
         name: name,
         app: saApp,
@@ -1063,32 +1063,39 @@ class AppManager {
         url: url,
         viewOptions: {},
         viewWebPreferences: appManager.getViewWebPreferences(saApp),
-        windowOption: _.cloneDeep(Object.assign({
-          trafficLightPosition: {
-            x: 10, y: 7
-          },
-          show: !background,
-          frame: false,
-          titleBarStyle: 'hidden',
-          acceptFirstMouse: true,
-          alwaysOnTop: saApp.settings.alwaysTop ? saApp.settings.alwaysTop : frameWindowConfig.alwaysOnTop,//
-        }, frameWindowConfig)), onReadyToShow: (frame) => {
+        windowOption: _.cloneDeep(
+          Object.assign(
+            {
+              trafficLightPosition: {
+                x: 10,
+                y: 7,
+              },
+              show: !background,
+              frame: false,
+              titleBarStyle: 'hidden',
+              acceptFirstMouse: true,
+              alwaysOnTop: saApp.settings.alwaysTop ? saApp.settings.alwaysTop : frameWindowConfig.alwaysOnTop, //
+            },
+            frameWindowConfig,
+          ),
+        ),
+        onReadyToShow: (frame) => {
           frame.webContents.send('init', {
             url: saApp.url,
             nanoid: saApp.nanoid,
             title: saApp.name,
             windowId: saApp.windowId,
-            app: saApp
-          })
+            app: saApp,
+          });
           if (cb) {
-            cb(appWindow.window)//执行启动后的回调
-            cb = undefined
+            cb(appWindow.window); //执行启动后的回调
+            cb = undefined;
           }
         },
         onDomReady: () => {
           if (option) {
             if (option.action) {
-              appManager.protocolManager.handleAction(appWindow, option.action, option)
+              appManager.protocolManager.handleAction(appWindow, option.action, option);
             }
           }
         },
@@ -1102,61 +1109,57 @@ class AppManager {
             '--user-data-path=' + userDataPath,
             '--app-version=' + app.getVersion(),
             '--app-name=' + app.getName(),
-            ...((isDevelopmentMode ? ['--development-mode'] : [])),
-          ]
-        }
-      })
-      let frame = appWindow.frame
+            ...(isDevelopmentMode ? ['--development-mode'] : []),
+          ],
+        },
+      });
+      let frame = appWindow.frame;
       frame.on('close', (event, args) => {
         if (saApp.canClose) {
-          return
+          return;
         }
         if (saApp.settings.keepRunning) {
-          appManager.hideWindow(saApp.windowId)
-          event.preventDefault()
+          appManager.hideWindow(saApp.windowId);
+          event.preventDefault();
         } else {
-          appManager.closeApp(saApp.nanoid)//暂时改为直接关闭
+          appManager.closeApp(saApp.nanoid); //暂时改为直接关闭
         }
-
-      })
+      });
       frame.on('ready-to-show', (event) => {
         //连续4秒都获取一次截图，保障能够截取到最新的图
-        appManager.capture(saApp.windowId)
+        appManager.capture(saApp.windowId);
         setTimeout(() => {
-          if (!frame.isDestroyed())
-            appManager.capture(saApp.windowId)
-        }, 2000)
+          if (!frame.isDestroyed()) appManager.capture(saApp.windowId);
+        }, 2000);
         setTimeout(() => {
-          if (!frame.isDestroyed())
-            appManager.capture(saApp.windowId)
-        }, 3000)
+          if (!frame.isDestroyed()) appManager.capture(saApp.windowId);
+        }, 3000);
         setTimeout(() => {
-          if (!frame.isDestroyed())
-            appManager.capture(saApp.windowId)
-        }, 4000)
-      })
+          if (!frame.isDestroyed()) appManager.capture(saApp.windowId);
+        }, 4000);
+      });
       frame.on('blur', async (event) => {
         SidePanel.send('updateRunningInfo', {
           nanoid: saApp.nanoid,
-          'info': await appManager.getAppRunningInfo(saApp.nanoid)
-        })
-      })
+          info: await appManager.getAppRunningInfo(saApp.nanoid),
+        });
+      });
 
-      SidePanel.send('executedAppSuccess', { app: saApp })
-      saApp.windowId = appWindow.windowId
+      SidePanel.send('executedAppSuccess', { app: saApp });
+      saApp.windowId = appWindow.windowId;
       processingAppWindows.push({
-        window: frame,//在本地的对象中插入window对象，方便后续操作
+        window: frame, //在本地的对象中插入window对象，方便后续操作
         saApp: saApp,
-        windowId: appWindow.windowId
-      })
+        windowId: appWindow.windowId,
+      });
       let saAppInstance = new SaApp({
         info: saApp,
         type: 'frameWindow',
         windowName: name,
         window: frame,
-        view: appWindow.view
-      })
-      this.saApps.push(saAppInstance)
+        view: appWindow.view,
+      });
+      this.saApps.push(saAppInstance);
     } else if (saApp.window.defaultType === 'window') {
       let defaultWindowConfig = {
         //默认参数
@@ -1168,9 +1171,9 @@ class AppManager {
         height: 400,
         resizable: true,
         alwaysOnTop: false,
-      }
-      this.removeUndefinedKey(defaultWindowConfig, windowParams)
-      let windowConfig = Object.assign(defaultWindowConfig, windowParams)
+      };
+      this.removeUndefinedKey(defaultWindowConfig, windowParams);
+      let windowConfig = Object.assign(defaultWindowConfig, windowParams);
       let appWindowInstance = await windowManager.create({
         name,
         app: saApp,
@@ -1180,7 +1183,8 @@ class AppManager {
         windowOption: {
           ...windowConfig,
           trafficLightPosition: {
-            x: 10, y: 7
+            x: 10,
+            y: 7,
           },
           show: !background,
           frame: false,
@@ -1196,73 +1200,72 @@ class AppManager {
             nanoid: saApp.nanoid,
             title: saApp.name,
             windowId: saApp.windowId,
-            app: saApp
-          })
+            app: saApp,
+          });
           if (cb) {
-            cb()//执行启动后的回调
-            cb = undefined
+            cb(); //执行启动后的回调
+            cb = undefined;
           }
-        }
-      })
-      SidePanel.send('executedAppSuccess', { app: saApp })
-      saApp.windowId = appWindowInstance.window.windowId
+        },
+      });
+      SidePanel.send('executedAppSuccess', { app: saApp });
+      saApp.windowId = appWindowInstance.window.windowId;
 
       if (saApp.window.window.blurAction === 'close') {
         appWindowInstance.window.on('blur', () => {
-          appManager.closeApp(saApp.nanoid)
-        })
+          appManager.closeApp(saApp.nanoid);
+        });
       } else if (saApp.window.window.blurAction === 'hide') {
         appWindowInstance.window.on('blur', () => {
-          appWindowInstance.window.hide()
-        })
+          appWindowInstance.window.hide();
+        });
       }
 
       processingAppWindows.push({
-        window: appWindowInstance.window,//在本地的对象中插入window对象，方便后续操作
+        window: appWindowInstance.window, //在本地的对象中插入window对象，方便后续操作
         saApp: saApp,
-        windowId: appWindowInstance.window.windowId
-      })
+        windowId: appWindowInstance.window.windowId,
+      });
       let saAppInstance = new SaApp({
         info: saApp,
         windowName: name,
         type: 'window',
         window: appWindowInstance.window,
-        view: appWindowInstance.window
-      })
-      this.saApps.push(saAppInstance)
+        view: appWindowInstance.window,
+      });
+      this.saApps.push(saAppInstance);
       //todo 继续开发window模式
     }
-
   }
 
-  goChat (args) {
-    let circleId = ''
+  goChat(args) {
+    let circleId = '';
     if (args && args.circleId) {
-      circleId = args.circleId
+      circleId = args.circleId;
     }
 
-    const GROUP_PKG = 'com.thisky.group'
+    const GROUP_PKG = 'com.thisky.group';
 
-    async function loadChatUrl () {
-      appManager.showAppWindowByPackage(GROUP_PKG)
-      const appInfo = await appModel.get({ package: GROUP_PKG })
-      let url = appInfo.url
+    async function loadChatUrl() {
+      appManager.showAppWindowByPackage(GROUP_PKG);
+      const appInfo = await appModel.get({ package: GROUP_PKG });
+      let url = appInfo.url;
       if (circleId) {
-        const reg = /^http(s)?:\/\/(.*?)\//
-        const host = reg.exec(appInfo.url)[0]
-        url = `${host}?fid=${circleId}`
+        const reg = /^http(s)?:\/\/(.*?)\//;
+        const host = reg.exec(appInfo.url)[0];
+        url = `${host}?fid=${circleId}`;
       }
-      appManager.getWindowByPackage(GROUP_PKG).view.webContents.loadURL(url)
+      appManager.getWindowByPackage(GROUP_PKG).view.webContents.loadURL(url);
     }
 
     if (appManager.isAppProcessingByPackage(GROUP_PKG)) {
-      appManager.showAppWindowByPackage(GROUP_PKG)
+      appManager.showAppWindowByPackage(GROUP_PKG);
       //通过url跳转的方式
-      loadChatUrl()
+      loadChatUrl();
     } else {
       appManager.executeAppByPackage(GROUP_PKG, () => {
-        loadChatUrl()
-      })
+        loadChatUrl();
+      });
     }
   }
 }
@@ -1271,99 +1274,100 @@ class AppManager {
  * 执行一个应用
  */
 app.whenReady().then(() => {
-  let saAppApplyPermission = null
-  remote.initialize()
+  let saAppApplyPermission = null;
+  remote.initialize();
   setTimeout(() => {
-    appManager.executeAutoRunApps() //启动启动运行的应用们
-  }, 3000)
+    appManager.executeAutoRunApps(); //启动启动运行的应用们
+  }, 3000);
 
   ipc.on('executeApp', (event, args) => {
     //这里传app，代表app未运行则直接执行起来
     try {
       if (args.app && args.app.id) {
-        args.app.nanoid = args.app.id
+        args.app.nanoid = args.app.id;
       }
-      appManager.openApp(args.app.nanoid, args.background, args.app, args.option)
+      appManager.openApp(args.app.nanoid, args.background, args.app, args.option);
     } catch (e) {
-      console.warn(e)
+      console.warn(e);
     }
-  })
+  });
   ipc.on('executeAppByPackage', async (event, args) => {
     //这里传app，代表app未运行则直接执行起来
     try {
-      args.package
-      let app = await appModel.get({ package: args.package })
+      args.package;
+      let app = await appModel.get({ package: args.package });
       if (app) {
-        appManager.openApp(app.nanoid, false, app)
+        appManager.openApp(app.nanoid, false, app);
       }
     } catch (e) {
-      console.warn(e)
+      console.warn(e);
     }
-  })
+  });
   ipc.on(ipcMessageMain.saApps.createAppMenu, async (event, args) => {
-    let appId = args.nanoid
-    let saApp = appManager.getSaAppByAppId(appId)
-    let appWindow = appManager.getWindowByAppId(appId)
-    let app = await appModel.get(appId)
+    let appId = args.nanoid;
+    let saApp = appManager.getSaAppByAppId(appId);
+    let appWindow = appManager.getWindowByAppId(appId);
+    let app = await appModel.get(appId);
     ipc.once('gotDesks', (e, a) => {
       let template = [
         {
           label: '选项',
-          submenu: [{
-            type: 'checkbox',
-            checked: app.settings['alwaysTop'],
-            label: '窗口置顶',
-            click () {
-              if (app.settings['alwaysTop']) {
-                appManager.setAppSettings(appId, {
-                  'alwaysTop': false
-                })
-                if (appWindow && !appWindow.isDestroyed()) {
-                  appWindow.setAlwaysOnTop(false)
+          submenu: [
+            {
+              type: 'checkbox',
+              checked: app.settings['alwaysTop'],
+              label: '窗口置顶',
+              click() {
+                if (app.settings['alwaysTop']) {
+                  appManager.setAppSettings(appId, {
+                    alwaysTop: false,
+                  });
+                  if (appWindow && !appWindow.isDestroyed()) {
+                    appWindow.setAlwaysOnTop(false);
+                  }
+                } else {
+                  appManager.setAppSettings(appId, {
+                    alwaysTop: true,
+                  });
+                  if (appWindow && !appWindow.isDestroyed()) {
+                    appWindow.setAlwaysOnTop(true, 'screen-saver');
+                  }
                 }
-              } else {
-                appManager.setAppSettings(appId, {
-                  'alwaysTop': true
-                })
-                if (appWindow && !appWindow.isDestroyed()) {
-                  appWindow.setAlwaysOnTop(true, 'screen-saver')
-                }
-              }
-            }
-          },
+              },
+            },
             {
               type: 'checkbox',
               checked: app.settings['showInSideBar'],
               label: '在左侧栏保留',
-              click () {
+              click() {
                 if (app.settings['showInSideBar']) {
                   appManager.setAppSettings(appId, {
-                    'showInSideBar': false
-                  })
+                    showInSideBar: false,
+                  });
                   //todo 更新左侧栏
                 } else {
                   appManager.setAppSettings(appId, {
-                    'showInSideBar': true
-                  })
+                    showInSideBar: true,
+                  });
                   //todo 在左侧栏显示
                 }
-              }
+              },
             },
             {
               checked: app.settings['autoRun'],
               type: 'checkbox',
               label: '打开浏览器时运行',
-              click () {
+              click() {
                 if (app.settings['autoRun']) {
                   appManager.setAppSettings(appId, {
-                    'autoRun': false
-                  })
+                    autoRun: false,
+                  });
                 } else {
                   appManager.setAppSettings(appId, {
-                    'autoRun': true
-                  })
+                    autoRun: true,
+                  });
                 }
-              }
+              },
             },
             // {
             //   type: 'separator'
@@ -1371,18 +1375,17 @@ app.whenReady().then(() => {
             // {
             //   label:'发送到当前桌面'
             // }
-          ]
-
+          ],
         },
         {
           label: '设置',
-          click () {
-            appManager.openSetting(appId)
-          }
-        }
-      ]
-      let addToDeskMenus = []
-      let desks = a.desks
+          click() {
+            appManager.openSetting(appId);
+          },
+        },
+      ];
+      let addToDeskMenus = [];
+      let desks = a.desks;
       if (!!desks) {
         desks.forEach((desk) => {
           addToDeskMenus.push({
@@ -1396,224 +1399,228 @@ app.whenReady().then(() => {
                   appId: app.nanoid,
                   name: app.name,
                   icon: app.logo,
-                  summary: app.summary
-                }
-              }
-              SidePanel.send('addToDesk', { app: appIcon, deskId: desk.id })
-
-            }
-          })
-        })
+                  summary: app.summary,
+                },
+              };
+              SidePanel.send('addToDesk', { app: appIcon, deskId: desk.id });
+            },
+          });
+        });
       }
       template.push({
         id: 'addToDesk',
         label: '添加到桌面',
-        submenu: addToDeskMenus
-      })
+        submenu: addToDeskMenus,
+      });
       if (appWindow) {
         if (!appWindow.isDestroyed()) {
           template.unshift(
             {
               type: 'checkbox',
               checked: appWindow.isVisible(),
-              label: (saApp.name.length > 18) ? saApp.name.substring(0, 15) + '...' : saApp.name,
-              click () {
-                appManager.toggleAppWindowVisible(appId)
-              }
-            }, {
-              type: 'separator'
-            }
-          )
+              label: saApp.name.length > 18 ? saApp.name.substring(0, 15) + '...' : saApp.name,
+              click() {
+                appManager.toggleAppWindowVisible(appId);
+              },
+            },
+            {
+              type: 'separator',
+            },
+          );
 
           if (appWindow.isVisible()) {
             template.push({
               label: '隐藏',
-              click () {
-                appManager.hideAppWindow(appId)
-              }
-            })
+              click() {
+                appManager.hideAppWindow(appId);
+              },
+            });
           } else {
             template.push({
               label: '显示',
-              click () {
-                appManager.showAppWindow(appId)
-              }
-            })
+              click() {
+                appManager.showAppWindow(appId);
+              },
+            });
           }
           template.push({
             label: '重置窗口',
-            click () {
-              let bounds = renderPage.getMainWindowCenterBounds(appWindow.view.getBounds().width, appWindow.view.getBounds().height)
-              appWindow.setPosition(bounds.x, bounds.y)
-              appWindow.moveTop()
-              appWindow.focus()
-            }
-          })
+            click() {
+              let bounds = renderPage.getMainWindowCenterBounds(
+                appWindow.view.getBounds().width,
+                appWindow.view.getBounds().height,
+              );
+              appWindow.setPosition(bounds.x, bounds.y);
+              appWindow.moveTop();
+              appWindow.focus();
+            },
+          });
           template.push({
-            type: 'separator'
-          })
+            type: 'separator',
+          });
           template.push({
             label: '退出',
-            click () {
-              appManager.closeApp(appId)
-            }
-          })
+            click() {
+              appManager.closeApp(appId);
+            },
+          });
         }
       } else {
         template.push({
           label: '打开',
-          click () {
-            appManager.executeApp(app)
-          }
-        })
+          click() {
+            appManager.executeApp(app);
+          },
+        });
       }
-      let menu = require('electron').Menu.buildFromTemplate(template)
+      let menu = require('electron').Menu.buildFromTemplate(template);
 
-      menu.popup()
-    })
-    sendIPCToMainWindow('getDesks')
-
-  })
+      menu.popup();
+    });
+    sendIPCToMainWindow('getDesks');
+  });
   ipc.on(ipcMessageMain.saApps.openSetting, (event, args) => {
-    appManager.openSetting(args.nanoid)
-  })
+    appManager.openSetting(args.nanoid);
+  });
   ipc.on('closeApp', (event, args) => {
-    appManager.closeApp(args.nanoid)
-  })
+    appManager.closeApp(args.nanoid);
+  });
   ipc.on('getAppRunningInfo', async (event, args) => {
     event.reply('updateRunningInfo', {
       nanoid: args.nanoid,
-      'info': await appManager.getAppRunningInfo(args.nanoid)
-    })
-  })
+      info: await appManager.getAppRunningInfo(args.nanoid),
+    });
+  });
   /**
    * 获取并更新一个app的截图
    */
   ipc.on('getAppCapture', (event, args) => {
-    let saApp = appManager.getSaAppByAppId(args.nanoid)
+    let saApp = appManager.getSaAppByAppId(args.nanoid);
     if (!!!saApp) {
-      return //如果不存在这个saApp
+      return; //如果不存在这个saApp
     }
-    let image = appManager.capture(saApp.windowId)
-    if (!!image)
-      event.reply('updateAppCapture', { nanoid: saApp.saApp.nanoid, captureSrc: image })
-  })
+    let image = appManager.capture(saApp.windowId);
+    if (!!image) event.reply('updateAppCapture', { nanoid: saApp.saApp.nanoid, captureSrc: image });
+  });
   /**
    * 获取到全部正在运行的app清单
    */
   ipc.on('getRunningApps', (event, args) => {
-    let runningApps = []
-    let windows = []
-    processingAppWindows.forEach(window => {
-      runningApps.push(window.saApp.nanoid)
-      windows.push(window.saApp.windowId)
-    })
-    event.reply('updateRunningApps', { runningApps: runningApps, windows: windows })
-  })
+    let runningApps = [];
+    let windows = [];
+    processingAppWindows.forEach((window) => {
+      runningApps.push(window.saApp.nanoid);
+      windows.push(window.saApp.windowId);
+    });
+    event.reply('updateRunningApps', { runningApps: runningApps, windows: windows });
+  });
   ipc.on(ipcMessageMain.saApps.deleteApp, (event, args) => {
-    let appId = args.nanoid
+    let appId = args.nanoid;
     // if (appManager.settingWindow) {
     //   appManager.settingWindow.close()
     //   appManager.settingWindow = null
     // }
-    appManager.deleteApp(appId)
-    event.returnValue = true
-  })
+    appManager.deleteApp(appId);
+    event.returnValue = true;
+  });
 
   /**
    * ipc触发安装应用询问
    */
   ipc.on('installAppConfirm', (event, args) => {
-
-    appManager.installAppConfirm(args.appJson, '开发项目管理', (data) => {
-      if (data.result) {
-        event.reply('installResult', { result: true, index: args.index })
-        SidePanel.send('installApp', { nanoid: data.nanoid, background: args.background })
-        event.returnValue = { result: true, nanoid: data.nanoid }
-      } else {
-        event.reply('installResult', { result: false, index: args.index })
-        event.returnValue = { result: false }
-      }
-    }, BrowserWindow.fromWebContents(event.sender))
-  })
+    appManager.installAppConfirm(
+      args.appJson,
+      '开发项目管理',
+      (data) => {
+        if (data.result) {
+          event.reply('installResult', { result: true, index: args.index });
+          SidePanel.send('installApp', { nanoid: data.nanoid, background: args.background });
+          event.returnValue = { result: true, nanoid: data.nanoid };
+        } else {
+          event.reply('installResult', { result: false, index: args.index });
+          event.returnValue = { result: false };
+        }
+      },
+      BrowserWindow.fromWebContents(event.sender),
+    );
+  });
 
   ipc.on(ipcMessageMain.saApps.installApp, (event, args) => {
-    SidePanel.send('installApp', { nanoid: args.nanoid, background: args.background })
-  })
+    SidePanel.send('installApp', { nanoid: args.nanoid, background: args.background });
+  });
   /**
    * 应用关闭前，将所有开启的窗体销毁掉
    */
   app.on('before-quit', () => {
-    forceClose = true
+    forceClose = true;
     processingAppWindows.forEach((item) => {
       if (!item.window.isDestroyed()) {
-        appManager.closeApp(item.saApp.nanoid)
+        appManager.closeApp(item.saApp.nanoid);
       }
-    })
-  })
+    });
+  });
 
   ipc.handle('minimizeAppWindow', (event, args) => {
-    appManager.getWindowByAppId(args.nanoid).minimize()
-  })
+    appManager.getWindowByAppId(args.nanoid).minimize();
+  });
   ipc.handle('closeAppWindow', (event, args) => {
-    appManager.getWindowByAppId(args.nanoid).close()
-  })
+    appManager.getWindowByAppId(args.nanoid).close();
+  });
   ipc.handle('unmaximizeAppWindow', (event, args) => {
-    appManager.getWindowByAppId(args.nanoid).unmaximize()
-  })
+    appManager.getWindowByAppId(args.nanoid).unmaximize();
+  });
   ipc.handle('maximizeAppWindow', (event, args) => {
-    appManager.getWindowByAppId(args.nanoid).maximize()
-  })
+    appManager.getWindowByAppId(args.nanoid).maximize();
+  });
   ipc.handle('setFullScreenAppWindow', (event, args) => {
-    appManager.getWindowByAppId(args.nanoid).setFullScreen(args.flag)
-
-  })
+    appManager.getWindowByAppId(args.nanoid).setFullScreen(args.flag);
+  });
 
   ipc.handle('saAppGetUserProfile', async () => {
     try {
-      let currentRs = await userModel.getCurrent()
+      let currentRs = await userModel.getCurrent();
       if (currentRs.status === 1)
         return {
           code: 200,
           msg: '成功',
-          data: Object.assign(currentRs.data.user_info, { accessToken: currentRs.data.token })
-        }
+          data: Object.assign(currentRs.data.user_info, { accessToken: currentRs.data.token }),
+        };
     } catch (err) {
-      console.error(err)
-      return { code: 500, msg: '失败' }
+      console.error(err);
+      return { code: 500, msg: '失败' };
     }
-  })
+  });
 
   ipc.handle('saAppCheckBrowserLogin', async () => {
     try {
-      let isLogged = await userModel.isLogged()
+      let isLogged = await userModel.isLogged();
       if (!isLogged) {
-        return { code: 500, msg: '浏览器未登录' }
+        return { code: 500, msg: '浏览器未登录' };
       } else {
-        return { code: 200, msg: '浏览器已登录' }
+        return { code: 200, msg: '浏览器已登录' };
       }
     } catch (err) {
-      console.error(err)
-      return { code: 500, msg: '浏览器未登录' }
+      console.error(err);
+      return { code: 500, msg: '浏览器未登录' };
     }
-  })
+  });
 
   ipc.on('saAppGoBack', (event, args) => {
-    appManager.getWindowByAppId(args.nanoid).view.webContents.goBack()
-  })
+    appManager.getWindowByAppId(args.nanoid).view.webContents.goBack();
+  });
 
   ipc.on('saAppGoForward', (event, args) => {
-    appManager.getWindowByAppId(args.nanoid).view.webContents.goForward()
-  })
+    appManager.getWindowByAppId(args.nanoid).view.webContents.goForward();
+  });
 
   ipc.on('saAppRefresh', (event, args) => {
-    appManager.getWindowByAppId(args.nanoid).view.webContents.reload()
-  })
+    appManager.getWindowByAppId(args.nanoid).view.webContents.reload();
+  });
 
   ipc.on('saAppHome', (event, args) => {
-    let saApp = appManager.getSaAppByAppId(args.nanoid)
-    appManager.getWindowByAppId(args.nanoid).view.webContents.loadURL(saApp.url)
-  })
+    let saApp = appManager.getSaAppByAppId(args.nanoid);
+    appManager.getWindowByAppId(args.nanoid).view.webContents.loadURL(saApp.url);
+  });
   // ipc.on('saAppFindInPage',(event,args)=>{
   //   appManager.findInPage(args.nanoid,args)
   // })
@@ -1623,81 +1630,81 @@ app.whenReady().then(() => {
   //  })
 
   ipc.on('saAppFocusView', (event, args) => {
-    appManager.appFocusView(args.nanoid)
-  })
+    appManager.appFocusView(args.nanoid);
+  });
 
   ipc.on('releaseFocus', (event, args) => {
-    appManager.releaseFocus(args.nanoid)
-  })
+    appManager.releaseFocus(args.nanoid);
+  });
 
   ipc.handle('imPreloadReady', async () => {
-    return await appModel.get({ package: 'com.thisky.group' })
-  })
+    return await appModel.get({ package: 'com.thisky.group' });
+  });
 
   //暂时先用domain去判断第三方应用的saApp，后续应用市场完全后前置一个用groupName去判断saApp
   ipc.handle('appPreloadReady', (event, args) => {
     return {
-      saApp: appManager.getSaAppByDomian(args)
-    }
-  })
+      saApp: appManager.getSaAppByDomian(args),
+    };
+  });
 
   ipc.on('webOsNotice', (event, args) => {
     //只有存在且notice为true，才允许转发webOsNotice到vuex处理
-    let noticeWebOrigin = settings.get('noticeWebOrigin')
-    let index = noticeWebOrigin.findIndex(v => v.link === args.url)
+    let noticeWebOrigin = settings.get('noticeWebOrigin');
+    let index = noticeWebOrigin.findIndex((v) => v.link === args.url);
     if (index >= 0 && noticeWebOrigin[index].notice) {
-      SidePanel.send('webOsNotice', args)
+      SidePanel.send('webOsNotice', args);
     }
-  })
+  });
 
   ipc.on('notificationSettingStatus', (event, args) => {
-    notificationSettingStatus = args
-  })
+    notificationSettingStatus = args;
+  });
 
   ipc.handle('saAppOpenSysApp', (event, args) => {
-    appManager.goChat(args)
-  })
+    appManager.goChat(args);
+  });
 
   ipc.on('channelReloadGroup', () => {
     if (appManager.isAppProcessing(1)) {
-      appManager.getWindowByAppId(1).view.webContents.send('reloadGroup')
+      appManager.getWindowByAppId(1).view.webContents.send('reloadGroup');
     }
-  })
+  });
 
   ipc.handle('saAppTabLinkJump', (event, args) => {
-    sendIPCToWindow(mainWindow, 'tabNavigateTo', { url: args.url })
-    return { code: 200, msg: '成功' }
-  })
+    sendIPCToWindow(mainWindow, 'tabNavigateTo', { url: args.url });
+    return { code: 200, msg: '成功' };
+  });
 
   ipc.handle('saAppHideApp', (event, args) => {
     try {
-      appManager.getWindowByAppId(args.appId).hide()
-      return { code: 200, msg: '成功' }
+      appManager.getWindowByAppId(args.appId).hide();
+      return { code: 200, msg: '成功' };
     } catch (err) {
-      return { code: 500, msg: '失败' }
+      return { code: 500, msg: '失败' };
     }
-  })
+  });
 
   ipc.on('handleFileAssign', (event, args) => {
     //转发到sidePanel
-    appManager.protocolManager.handleFileAssign(args.type, args.args, args.target)
-  })
+    appManager.protocolManager.handleFileAssign(args.type, args.args, args.target);
+  });
 
   //处理TSB协议，对象传入url参数即可
   ipc.on('handleTsbProtocol', (event, args) => {
-    appManager.protocolManager.handleProtocol(args.url)
-  })
+    appManager.protocolManager.handleProtocol(args.url);
+  });
 
   app.whenReady().then(() => {
     //注册tsb协议
-    appManager.protocolManager.initialize(SidePanel)
-  })
+    appManager.protocolManager.initialize(SidePanel);
+  });
 
-  let ApplyPermissionOptions
+  let ApplyPermissionOptions;
   ipc.handle('saAppOpenPermissionWindow', (event, args) => {
     try {
       if (saAppApplyPermission !== null) {
-        saAppApplyPermission.close()
+        saAppApplyPermission.close();
       }
       saAppApplyPermission = new BrowserWindow({
         minimizable: false,
@@ -1716,58 +1723,57 @@ app.whenReady().then(() => {
             '--user-data-path=' + userDataPath,
             '--app-version=' + app.getVersion(),
             '--app-name=' + app.getName(),
-            ...((isDevelopmentMode ? ['--development-mode'] : [])),
+            ...(isDevelopmentMode ? ['--development-mode'] : []),
             '--saAppName=' + args.appName,
-            '--saAppFavicon=' + args.favicon
-          ]
-        }
-      })
-      saAppApplyPermission.setMenu(null)
-      saAppApplyPermission.webContents.loadURL('file://' + ___dirname + '/pages/saApp/applyPermission/index.html')
+            '--saAppFavicon=' + args.favicon,
+          ],
+        },
+      });
+      saAppApplyPermission.setMenu(null);
+      saAppApplyPermission.webContents.loadURL('file://' + ___dirname + '/pages/saApp/applyPermission/index.html');
       saAppApplyPermission.on('close', () => {
-        saAppApplyPermission = null
-      })
-      ApplyPermissionOptions = args
-      return { code: 200, msg: '授权窗口打开成功' }
+        saAppApplyPermission = null;
+      });
+      ApplyPermissionOptions = args;
+      return { code: 200, msg: '授权窗口打开成功' };
     } catch (err) {
-      return { code: 500, msg: '授权窗口打开失败' }
+      return { code: 500, msg: '授权窗口打开失败' };
     }
-  })
+  });
 
   ipc.on('entityLogin', async (event, args) => {
-    let returnData = {}
-    let user = await userModel.getCurrent()
-    if (user.status !== 1) return
+    let returnData = {};
+    let user = await userModel.getCurrent();
+    if (user.status !== 1) return;
     if (args.includes('publicUserInfo')) {
-      returnData.userInfo = user.data.user_info
+      returnData.userInfo = user.data.user_info;
     }
     let data = {
       userToken: user.data.token,
       clientId: ApplyPermissionOptions.clientId,
       bindId: ApplyPermissionOptions.bindId,
-      returnData
-    }
+      returnData,
+    };
     //if todo //args之所以一定要把permission传过来 为未来具体授权内容进行不同的返回
-    appManager.getWindowByWindowId(ApplyPermissionOptions.windowId).view.webContents.send('replyEntityLogin', data)
-  })
+    appManager.getWindowByWindowId(ApplyPermissionOptions.windowId).view.webContents.send('replyEntityLogin', data);
+  });
 
   ipc.on('closePermissionWin', () => {
-    saAppApplyPermission.close()
-  })
+    saAppApplyPermission.close();
+  });
 
   ipc.on('openAppManage', () => {
-    appManager.openAppManage()
-  })
+    appManager.openAppManage();
+  });
   /**
    * 获取到当前正在安装中的应用信息
    */
   ipc.on('getInstallAppJson', (event, args) => {
     event.sender.send('returnInstallAppJson', {
       appJson: appManager.installInfo.appJson,
-      from: appManager.installInfo.from
-    })
-  })
+      from: appManager.installInfo.from,
+    });
+  });
+});
 
-})
-
-module.exports = { AppManager }
+module.exports = { AppManager };

@@ -1,43 +1,37 @@
-const settings = require('../../../js/util/settings/settings.js')
-const Bitwarden = require('../../../js/passwordManager/bitwarden.js')
-const OnePassword = require('../../../js/passwordManager/onePassword.js')
-const Keychain = require('../../../js/passwordManager/keychain.js')
-const { ipcRenderer } = require('electron')
-const tools = require('../util').tools
+const settings = require('../../../js/util/settings/settings.js');
+const Bitwarden = require('../../../js/passwordManager/bitwarden.js');
+const OnePassword = require('../../../js/passwordManager/onePassword.js');
+const Keychain = require('../../../js/passwordManager/keychain.js');
+const { ipcRenderer } = require('electron');
+const tools = require('../util').tools;
 const PasswordModel = {
-  managers: [
-    new Bitwarden(),
-    new OnePassword(),
-    new Keychain()
-  ],
+  managers: [new Bitwarden(), new OnePassword(), new Keychain()],
   activeManager: {},
 
   //获取设置 用于使用不同的密码管理器
-  getSettings: function () {
-
-  },
+  getSettings: function () {},
   getActivePasswordManager: function () {
     if (PasswordModel.managers.length === 0) {
-      return null
+      return null;
     }
 
-    const managerSetting = settings.get('passwordManager')
+    const managerSetting = settings.get('passwordManager');
     if (managerSetting == null) {
-      return PasswordModel.managers.find(mgr => mgr.name === 'Built-in password manager')
+      return PasswordModel.managers.find((mgr) => mgr.name === 'Built-in password manager');
     }
 
-    return PasswordModel.managers.find(mgr => mgr.name === managerSetting.name)
+    return PasswordModel.managers.find((mgr) => mgr.name === managerSetting.name);
   },
   getConfiguredPasswordManager: async function () {
-    const manager = PasswordModel.getActivePasswordManager()
+    const manager = PasswordModel.getActivePasswordManager();
     if (!manager) {
-      return null
+      return null;
     }
-    const configured = await manager.checkIfConfigured()
+    const configured = await manager.checkIfConfigured();
     if (!configured) {
-      return null
+      return null;
     }
-    return manager
+    return manager;
   },
   // Shows a prompt dialog for password store's master password.
   promptForMasterPassword: async function (manager) {
@@ -47,81 +41,79 @@ const PasswordModel = {
         values: [{ placeholder: l('password'), id: 'password', type: 'password' }],
         ok: l('dialogConfirmButton'),
         cancel: l('dialogSkipButton'),
-        height: 160
-      })
+        height: 160,
+      });
       if (password === null || password === '') {
-        reject(new Error('No password provided'))
+        reject(new Error('No password provided'));
       } else {
-        resolve(password)
+        resolve(password);
       }
-    })
+    });
   },
   unlock: async function (manager) {
-    let success = false
+    let success = false;
     while (!success) {
-      let password
+      let password;
       try {
-        password = await PasswordModel.promptForMasterPassword(manager)
+        password = await PasswordModel.promptForMasterPassword(manager);
       } catch (e) {
         // dialog was canceled
-        break
+        break;
       }
       try {
-        success = await manager.unlockStore(password)
+        success = await manager.unlockStore(password);
       } catch (e) {
         // incorrect password, prompt again
       }
     }
-    return success
+    return success;
   },
   initialize: async function () {
     //获取到真实在用的密码管理器
-    PasswordModel.activeManager = await PasswordModel.getConfiguredPasswordManager()
+    PasswordModel.activeManager = await PasswordModel.getConfiguredPasswordManager();
   },
-  async getAllPwds () {
-    await PasswordModel.initialize()
-    const domain = tools.getDomainFromUrl(siteUrl)
-    const rootDomain = tools.getRootDomain(siteUrl)
+  async getAllPwds() {
+    await PasswordModel.initialize();
+    const domain = tools.getDomainFromUrl(siteUrl);
+    const rootDomain = tools.getRootDomain(siteUrl);
     let pwds = {
       item: [],
-      rootItem: []
-    }
-    return pwds
+      rootItem: [],
+    };
+    return pwds;
   },
   getSiteCredit: async function (siteUrl, includeRoot = false) {
-    await PasswordModel.initialize()
-    const domain = tools.getDomainFromUrl(siteUrl)
-    const rootDomain = tools.getRootDomain(siteUrl)
+    await PasswordModel.initialize();
+    const domain = tools.getDomainFromUrl(siteUrl);
+    const rootDomain = tools.getRootDomain(siteUrl);
     let pwds = {
       item: [],
-      rootItem: []
-    }
+      rootItem: [],
+    };
 
-    let result
+    let result;
     try {
-      result = await PasswordModel.activeManager.getAllCredentials()
+      result = await PasswordModel.activeManager.getAllCredentials();
     } catch (err) {
-      result = []
+      result = [];
     }
 
     if (!!!result) {
-      return []
+      return [];
     }
     result.forEach((pwd) => {
       if (pwd.domain === domain) {
-        pwds.item.push(pwd)
+        pwds.item.push(pwd);
       }
       if (includeRoot) {
         if (pwd.domain) {
           if (pwd.domain.indexOf(rootDomain) > -1) {
-            pwds.rootItem.push(pwd)
+            pwds.rootItem.push(pwd);
           }
         }
-
       }
-    })
-    return pwds
+    });
+    return pwds;
   },
-
-}
-module.exports = PasswordModel
+};
+module.exports = PasswordModel;

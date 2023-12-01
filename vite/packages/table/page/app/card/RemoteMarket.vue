@@ -1,15 +1,16 @@
 <template>
-  <div v-if="openRemote" class="fixed inset-0 home-blur xt-mask" style="z-index: 99999;">
+  <div class="fixed inset-0 home-blur xt-mask" style="z-index: 99999" v-if="openRemote">
     <div
-        class="xt-modal fixed text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  rounded-lg flex flex-col"
-        style=";width: 600px;height: 80%;background: var(--modal-bg);">
+      class="xt-modal fixed text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg flex flex-col"
+      style="width: 600px; height: 80%; background: var(--modal-bg)"
+    >
       <div class="head-nav">
-        <span class="ml-2" style="font-size: 16px;color: var(--primary-text);font-weight: 500;">1外部小组件</span>
-        <div class="h-11 w-11 flex justify-center items-center xt-bg-2 rounded-lg pointer" @click="close">
-          <Icon icon="guanbi" style="color:var(--primary-text);font-size:24px"></Icon>
+        <span class="ml-2" style="font-size: 16px; color: var(--primary-text); font-weight: 500">1外部小组件</span>
+        <div @click="close" class="h-11 w-11 flex justify-center items-center xt-bg-2 rounded-lg pointer">
+          <Icon icon="guanbi" style="color: var(--primary-text); font-size: 24px"></Icon>
         </div>
       </div>
-      <div id="scroll-box" class="content" @scroll="scrollBox">
+      <div class="content" @scroll="scrollBox" id="scroll-box">
         <div class="box xt-bg-2">
           <div class="add no-drag" @click="addNewCard(custom)">
             <div class="icons">
@@ -17,7 +18,7 @@
             </div>
           </div>
           <div class="left no-drag" @click="fullScreen(custom)">
-            <img :src="getImg(custom.option[0].name)" :style="{ zoom: '6%' }" alt=""/>
+            <img :src="getImg(custom.option[0].name)" alt="" :style="{ zoom: '6%' }" />
             <span class="size-bg">{{ custom.option[0].size }}</span>
           </div>
           <div class="right" style="">
@@ -31,115 +32,107 @@
         </div>
         <Market :desk="desk" @closeMarket="close"></Market>
       </div>
-
     </div>
   </div>
   <NewPreviewCardDetails
-      v-if="isCardDetails"
-      :cardDetails="cardDetails"
-      @addCardAchieve="addCardAchieve"
-      @closeCardDetails="closeCardDetails"
+    v-if="isCardDetails"
+    @addCardAchieve="addCardAchieve"
+    @closeCardDetails="closeCardDetails"
+    :cardDetails="cardDetails"
   >
   </NewPreviewCardDetails>
 </template>
 
 <script>
-import { mapActions } from 'pinia'
-import { cardStore } from '../../../store/card'
-import { message } from 'ant-design-vue'
-import NewPreviewCardDetails from './NewPreviewCardDetails.vue'
-import Market from '../../../components/card/remote/Market.vue'
-
+import { mapActions, mapWritableState } from 'pinia';
+import { cardStore } from '../../../store/card';
+import { message } from 'ant-design-vue';
+import NewPreviewCardDetails from './NewPreviewCardDetails.vue';
+import Market from '../../../components/card/remote/Market.vue';
 export default {
   components: {
     NewPreviewCardDetails,
-    Market
+    Market,
   },
   props: {
     openRemote: {
       type: Boolean,
-      default: () => false
+      default: () => false,
     },
     custom: {
       type: Object,
-      default: () => {
-      }
+      default: () => {},
     },
     desk: {
       type: Object,
       required: true,
-      default: () => {
-      },
+      default: () => {},
     },
   },
-  data () {
+  data() {
     return {
       carouselIndex: 0,
       isCardDetails: false,
       cardDetails: {},
       remoteContent: {},
       showModal: false,
-      fixed: false
-    }
+      fixed: false,
+    };
   },
   methods: {
     ...mapActions(cardStore, ['addCard']),
-    close () {
-      this.$emit('closeMarket', false)
+    close() {
+      this.$emit('closeMarket', false);
     },
-    getImg (url) {
-      return '/img/addCard/' + url + '.png'
+    getImg(url) {
+      return '/img/addCard/' + url + '.png';
     },
-    addNewCard (item) {
+    addNewCard(item) {
       if (item.option[1] != undefined) {
-        this.fullScreen(item)
+        this.fullScreen(item);
       } else {
-        this.addCardAchieve(item)
+        this.addCardAchieve(item);
       }
     },
-    addCardAchieve (item, i) {
-      this.add(item, i)
+    addCardAchieve(item, i) {
+      this.add(item, i);
     },
-    fullScreen (item) {
-      this.cardDetails = item
-      this.isCardDetails = true
+    fullScreen(item) {
+      this.cardDetails = item;
+      this.isCardDetails = true;
     },
-    add (item, index = 0) {
-      console.log('item :>> ', item)
-      console.log(' item.option[index].name :>> ', item.option[index].name)
-      index = index ?? this.carouselIndex
-      this.addCard(
-          { name: item.option[index].name, id: Date.now(), customData: {} },
-          this.desk
-      )
-      this.$emit('closeMarket', false)
-      message.success('添加成功！')
+    add(item, index = 0) {
+      console.log('item :>> ', item);
+      console.log(' item.option[index].name :>> ', item.option[index].name);
+      index = index ?? this.carouselIndex;
+      this.addCard({ name: item.option[index].name, id: Date.now(), customData: {} }, this.desk);
+      this.$emit('closeMarket', false);
+      message.success('添加成功！');
     },
-    closeCardDetails () {
-      this.isCardDetails = false
+    closeCardDetails() {
+      this.isCardDetails = false;
     },
-    scrollBox (val) {
-      let scroll = document.getElementById('scroll-box')
+    scrollBox(val) {
+      let scroll = document.getElementById('scroll-box');
       // console.log(scroll.scrollHeight - scroll.scrollTop == scroll.clientHeight)
-      let nav = document.getElementById('nav')
-      let navList = document.getElementById('navList')
+      let nav = document.getElementById('nav');
+      let navList = document.getElementById('navList');
       if (scroll.scrollTop > 120) {
-        nav.classList.add('suspension-r-nav')
-        navList.classList.add('classList-contnet')
+        nav.classList.add('suspension-r-nav');
+        navList.classList.add('classList-contnet');
       } else {
-        nav.classList.remove('suspension-r-nav')
-        navList.classList.remove('classList-contnet')
+        nav.classList.remove('suspension-r-nav');
+        navList.classList.remove('classList-contnet');
       }
-    }
+    },
   },
   watch: {
-    openRemote (val) {
+    openRemote(val) {
       if (val) {
-
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -151,13 +144,11 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-
   > div {
     position: absolute;
     right: 12px;
   }
 }
-
 .box {
   box-shadow: rgb(0 0 0 / 30%) 0px 0px 3px 0px;
   width: 542px;
@@ -167,7 +158,6 @@ export default {
   position: relative;
   border-radius: 12px;
   margin: 16px auto 0;
-
   .add {
     position: absolute;
     right: 22px;
@@ -212,7 +202,6 @@ export default {
     cursor: pointer;
     background: var(--mask-bg);
     position: relative;
-
     .size-bg {
       position: absolute;
       bottom: 8px;
@@ -223,7 +212,6 @@ export default {
       padding: 0 8px;
       border-radius: 4px;
     }
-
     .top {
       background: var(--secondary-bg);
       width: 100%;
@@ -232,12 +220,10 @@ export default {
       justify-content: center;
       align-items: center;
       border-radius: 10px 0 0 0;
-
       img {
         zoom: 0.07 !important;
         object-fit: contain;
       }
-
       .zoom {
         zoom: 0.05 !important;
       }
@@ -327,13 +313,11 @@ export default {
     }
   }
 }
-
 .content {
   width: 100%;
   height: 100%;
   overflow: auto;
 }
-
 .content::-webkit-scrollbar {
   display: none;
 }
@@ -348,7 +332,6 @@ export default {
   padding: 16px 0;
   background: var(--modal-bg);
 }
-
 .classList-contnet {
   padding-top: 76px;
 }

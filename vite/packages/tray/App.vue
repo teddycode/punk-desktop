@@ -1,23 +1,19 @@
 <template>
   <div class="box">
-    <router-view>
-
-    </router-view>
+    <router-view> </router-view>
   </div>
 </template>
 
 <script lang="ts">
-
-import {defineComponent} from 'vue'
-
+import { defineComponent } from 'vue';
 export default defineComponent({
   components: {},
   mounted() {
     ipc.on('loginCallback', async (e, args) => {
-      window.loginCallback()
-    })
-  }
-})
+      window.loginCallback();
+    });
+  },
+});
 </script>
 
 <style>
@@ -26,7 +22,6 @@ body {
   user-select: none;
   overflow: hidden;
 }
-
 .box {
   width: 400px;
   background-color: #323232;

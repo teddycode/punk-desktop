@@ -1,61 +1,74 @@
 <template>
-  <vue-custom-scrollbar :settings="settingsScroller" style="height:100%;" @touchstart.stop @touchmove.stop
-                        @touchend.stop>
-    <div v-for="(item,index) in list" class="flex flex-col mb-3 p-4 rounded-lg"
-         style=" background: var(--secondary-bg);position: relative;"
+  <vue-custom-scrollbar
+    :settings="settingsScroller"
+    style="height: 100%"
+    @touchstart.stop
+    @touchmove.stop
+    @touchend.stop
+  >
+    <div
+      v-for="(item, index) in list"
+      class="flex flex-col mb-3 p-4 rounded-lg"
+      style="background: var(--secondary-bg); position: relative"
     >
-      <div class="flex flex-col" @contextmenu="handleRightKey(item,$event)">
+      <div class="flex flex-col" @contextmenu="handleRightKey(item, $event)">
         <div class="flex justify-between mb-4">
           <div class="flex items-center">
             <a-avatar :size="24" :src="item.doc.content.icon"></a-avatar>
             <span class="pl-3">{{ item.doc.content.title }}</span>
           </div>
           <div class="flex items-center pointer active-button" @click="delNotice(item)">
-            <Icon icon="close-circle-fill" style="font-size: 1.5em;color: var(--secondary-text);"></Icon>
+            <Icon icon="close-circle-fill" style="font-size: 1.5em; color: var(--secondary-text)"></Icon>
           </div>
-
         </div>
 
-        <div class="font-400 mb-1" style="color: var(--secondary-text);">{{ item.doc.content.body }}</div>
+        <div class="font-400 mb-1" style="color: var(--secondary-text)">{{ item.doc.content.body }}</div>
 
         <!-- <span class="font-400" style="color:var(--secondary-text);">{{ formatTime(parseInt(item.doc.content.time)*1000) }}</span> -->
         <div class="flex items-center justify-between">
-          <span class="font-400"
-                style="color:var(--secondary-text);">{{ formatTime(parseInt(item.doc.content.time) * 1000) }}</span>
-          <div class="font-14 px-3.5 py-1.5 pointer rounded-lg active-button"
-               style="color:var(--active-bg);background: var(--active-secondary-bg);" @click="noticeDetail">
+          <span class="font-400" style="color: var(--secondary-text)">{{
+            formatTime(parseInt(item.doc.content.time) * 1000)
+          }}</span>
+          <div
+            class="font-14 px-3.5 py-1.5 pointer rounded-lg active-button"
+            style="color: var(--active-bg); background: var(--active-secondary-bg)"
+            @click="noticeDetail"
+          >
             查看
           </div>
         </div>
       </div>
-
     </div>
   </vue-custom-scrollbar>
 
-  <a-menu v-if="toggle"
-          :style="{position: 'fixed',top:`${contextMenuPosition.y}px`,left:`${contextMenuPosition.x}px`,zIndex: '999'}"
-          class="dropdown-menu rounded-lg flex flex-col items-center justify-center"
-          style="width: 120px;">
-    <a-menu-item v-for="(item,index) in rightMenuControls" class="active-button" style="color:var(--secondary-text);"
-                 @click="handleMenuItemClick(item,index)">{{ item.title }}
+  <a-menu
+    v-if="toggle"
+    :style="{ position: 'fixed', top: `${contextMenuPosition.y}px`, left: `${contextMenuPosition.x}px`, zIndex: '999' }"
+    class="dropdown-menu rounded-lg flex flex-col items-center justify-center"
+    style="width: 120px"
+  >
+    <a-menu-item
+      v-for="(item, index) in rightMenuControls"
+      class="active-button"
+      style="color: var(--secondary-text)"
+      @click="handleMenuItemClick(item, index)"
+      >{{ item.title }}
     </a-menu-item>
   </a-menu>
-
-
 </template>
 
 <script>
-import { defineComponent, reactive, ref, toRefs } from 'vue'
-import { formatTime } from '../../util'
-import { noticeStore } from '../../store/notice'
-import { useRouter } from 'vue-router'
+import { defineComponent, reactive, ref, toRefs } from 'vue';
+import { formatTime } from '../../util';
+import { noticeStore } from '../../store/notice';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   props: ['list'],
 
-  setup (props, ctx) {
-    const store = noticeStore()
-    const router = useRouter()
+  setup(props, ctx) {
+    const store = noticeStore();
+    const router = useRouter();
 
     const data = reactive({
       settingsScroller: {
@@ -63,68 +76,75 @@ export default defineComponent({
         swipeEasing: true,
         suppressScrollY: false,
         suppressScrollX: true,
-        wheelPropagation: true
+        wheelPropagation: true,
       },
       toggle: false, // 控制右键下拉菜单
       contextMenuPosition: { x: 0, y: 0 }, // 右键菜单的位置
-      rightMenuControls: [{ title: '打开应用', name: 'Open' }, { title: '删除通知', name: 'remove' }],
-      removeDoc: '',// 需要删除的数据
-    })
+      rightMenuControls: [
+        { title: '打开应用', name: 'Open' },
+        { title: '删除通知', name: 'remove' },
+      ],
+      removeDoc: '', // 需要删除的数据
+    });
 
-    const dialog = ref()
-    const content = ref()
+    const dialog = ref();
+    const content = ref();
 
     // 鼠标右键点击
     const handleRightKey = (item, e) => {
-      e.preventDefault()
-      data.toggle = true
-      data.removeDoc = item
+      e.preventDefault();
+      data.toggle = true;
+      data.removeDoc = item;
 
       // 获取鼠标点击位置
-      const x = e.clientX
-      const y = e.clientY
+      const x = e.clientX;
+      const y = e.clientY;
 
       // 设置右键菜单的位置和可见状态
-      data.contextMenuPosition = { x, y }
+      data.contextMenuPosition = { x, y };
 
       // 点击其他地方时隐藏右键菜单
-      document.addEventListener('click', removeContextmenu)
-    }
+      document.addEventListener('click', removeContextmenu);
+    };
 
-    const removeContextmenu = () => {  // 移除隐藏鼠标右键下拉菜单
-      data.toggle = false
-      document.removeEventListener('click', removeContextmenu)
-    }
+    const removeContextmenu = () => {
+      // 移除隐藏鼠标右键下拉菜单
+      data.toggle = false;
+      document.removeEventListener('click', removeContextmenu);
+    };
 
     const handleMenuItemClick = (item, index) => {
       if (item.name === 'remove') {
-        store.removeIMChatData(data.removeDoc)
-        store.loadNoticeDB()
+        store.removeIMChatData(data.removeDoc);
+        store.loadNoticeDB();
       } else {
-
       }
-    }
+    };
 
     // 根据指定消息通知进行删除
     const delNotice = (item) => {
-      store.removeIMChatData(item)
-      store.loadNoticeDB()
-    }
+      store.removeIMChatData(item);
+      store.loadNoticeDB();
+    };
 
     const noticeDetail = () => {
-      router.push({ name: 'chatMain' })
-      ctx.emit('closeMessage')
-    }
+      router.push({ name: 'chatMain' });
+      ctx.emit('closeMessage');
+    };
 
     return {
-      content, dialog,
-      ...toRefs(data), formatTime, delNotice,
-      handleRightKey, removeContextmenu, handleMenuItemClick,
+      content,
+      dialog,
+      ...toRefs(data),
+      formatTime,
+      delNotice,
+      handleRightKey,
+      removeContextmenu,
+      handleMenuItemClick,
       noticeDetail,
-    }
-  }
-
-})
+    };
+  },
+});
 
 // import { mapActions } from 'pinia'
 // import { noticeStore } from '../../store/notice'
@@ -196,17 +216,14 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .font-400 {
-
   font-size: 16px;
   font-weight: 400;
 }
 
 .font-500 {
-
   font-size: 16px;
   font-weight: 500;
 }
-
 
 .dropdown-menu {
   background-color: var(--secondary-bg);
@@ -242,7 +259,6 @@ export default defineComponent({
   opacity: 0;
 }
 
-
 .dialog {
   width: 120px;
   position: absolute;
@@ -251,7 +267,6 @@ export default defineComponent({
 }
 
 .font-14 {
-
   font-size: 14px;
   font-weight: 400;
 }

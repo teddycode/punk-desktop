@@ -63,86 +63,88 @@
 </template>
 
 <script>
-import { appStore } from '../../../store'
-import { mapActions, mapWritableState } from 'pinia'
-import { keyStore } from '../store'
-import Preview from '../components/Preview.vue'
-
+import { appStore } from '../../../store';
+import { mapActions, mapWritableState } from 'pinia';
+import { keyStore } from '../store';
+import Preview from '../components/Preview.vue';
 export default {
   name: 'NotShortcutKey',
   components: {
-    Preview
+    Preview,
   },
   emits: ['createScheme'],
   props: {
     detailJump: {
       type: Boolean,
-      default: false
+      default: false,
     },
     appMessage: {
       type: Object,
-      default: {}
+      default: {},
     },
     // notDownloadList: {
     //   type: Array,
     //   default: []
     // }
   },
-  data () {
+  data() {
     return {
       notAppList: [],
       keyScheme: {},
-      showModal: false
-    }
+      showModal: false,
+    };
   },
   computed: {
     ...mapWritableState(keyStore, ['marketList']),
   },
   methods: {
     ...mapActions(appStore, ['showUserCard']),
-    showCard (id) {
-      this.showUserCard(id)
+    showCard(id) {
+      this.showUserCard(id);
     },
     //跳转到分享页
-    share () {
-      this.$emit('createScheme')
+    share() {
+      this.$emit('createScheme');
     },
     // 跳转到创意市场
-    market () {
-      this.$router.push({ name: 'creativeMarket' })
+    market() {
+      this.$router.push({ name: 'creativeMarket' });
     },
     // 返回
-    onBack () {
-      this.$router.go(-1)
+    onBack() {
+      this.$router.go(-1);
     },
-    previewKay (item) {
-      this.keyScheme = item
-      this.showModal = true
+    previewKay(item) {
+      this.keyScheme = item;
+      this.showModal = true;
     },
-    closePreview (val) {
-      this.showModal = val
+    closePreview(val) {
+      this.showModal = val;
     },
-    goDownload () {
-      this.$router.push({
-        name: 'shortcutStore'
-      })
-    }
+    goDownload() {
+      if (window.$isOffline) {
+        this.$message.error('离线模式暂无法使用');
+      } else {
+        this.$router.push({
+          name: 'shortcutStore',
+        });
+      }
+    },
   },
-  mounted () {
+  mounted() {
     if (this.detailJump) {
-      this.notAppList = this.marketList[0].children.slice(0, 3)
+      this.notAppList = this.marketList[0].children.slice(0, 3);
     } else {
-      this.notAppList = this.marketList[0].children
+      this.notAppList = this.marketList[0].children;
     }
   },
-}
+};
 </script>
 <style lang="scss" scoped>
 .box {
   height: 98%;
   width: 98%;
 }
-
 .head-item {
   margin-right: 12px;
   padding: 6px 12px;
@@ -151,7 +153,6 @@ export default {
   min-width: 80px;
   white-space: nowrap;
 }
-
 .container {
   margin: 0 auto 12px;
   padding: 16px 0;
@@ -160,7 +161,6 @@ export default {
   background: var(--primary-bg);
   overflow: hidden;
 }
-
 .item-content {
   width: 100%;
   height: 80%;
@@ -171,11 +171,9 @@ export default {
   padding-bottom: 40px;
   justify-content: center;
 }
-
 .item-content::-webkit-scrollbar {
   display: none;
 }
-
 .recommend {
   background: var(--mask-bg);
   border-radius: 12px;
@@ -184,11 +182,9 @@ export default {
   margin: 0 8px 16px;
   padding: 12px;
 }
-
 .btn-item {
   display: flex;
   font-size: 16px;
-
   > div {
     color: var(--primary-text);
     background: var(--mask-bg);
@@ -200,13 +196,11 @@ export default {
     border-radius: 12px;
   }
 }
-
 .button-active {
   &:active {
     filter: brightness(0.8);
     background: rgba(42, 42, 42, 0.25);
   }
-
   &:hover {
     background: rgba(42, 42, 42, 0.25);
   }

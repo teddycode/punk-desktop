@@ -1,4 +1,4 @@
-export  function deepCopy(obj) {
+export function deepCopy(obj) {
   if (typeof obj !== 'object') return;
   var newObj = obj instanceof Array ? [] : {};
   for (var key in obj) {

@@ -2,11 +2,17 @@
   <background>
     <div class="transaction-view">
       <div class="header-transaction">
-        <router-link :class="{active: $route.path === '/myTransfer/TransferMain'}" class="btn-transaction"
-                     to="/myTransfer/TransferMain">转账
+        <router-link
+          :class="{ active: $route.path === '/myTransfer/TransferMain' }"
+          class="btn-transaction"
+          to="/myTransfer/TransferMain"
+          >转账
         </router-link>
-        <router-link :class="{active: $route.path === '/myTransfer/TransferRecord'}" class="btn-transaction"
-                     to="/myTransfer/TransferRecord">转账记录
+        <router-link
+          :class="{ active: $route.path === '/myTransfer/TransferRecord' }"
+          class="btn-transaction"
+          to="/myTransfer/TransferRecord"
+          >转账记录
         </router-link>
       </div>
       <div class="content-transaction">
@@ -17,14 +23,14 @@
 </template>
 
 <script>
-import Background from '@page/core/components/Background.vue'
+import Background from '@page/core/components/Background.vue';
 
 export default {
   name: 'myTransfer',
   components: {
-    Background
-  }
-}
+    Background,
+  },
+};
 </script>
 
 <style scoped>
@@ -45,15 +51,15 @@ export default {
   border: none;
   cursor: pointer;
   background-color: transparent;
-  color: #1F2937;
+  color: #1f2937;
   border-radius: 5px;
   margin-right: 15px;
   text-decoration: none; /* add this to remove the underline */
 }
 
 .btn-transaction.active {
-  background-color: #34D399;
-  color: #F9FAFB;
+  background-color: #34d399;
+  color: #f9fafb;
 }
 
 .content-transaction {

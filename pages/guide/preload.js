@@ -1,4 +1,4 @@
-window.$browser = 'tsbrowser'
-const ipc = require('electron').ipcRenderer
+window.$browser = 'tsbrowser';
+const ipc = require('electron').ipcRenderer;
 
-window.$ipc = ipc
+window.$ipc = ipc;

@@ -10,31 +10,31 @@ const eventNames = [
   'onHistoryStateUpdated',
   'onReferenceFragmentUpdated',
   'onTabReplaced',
-]
+];
 
-let activeTabId
+let activeTabId;
 
-let eventLog = []
+let eventLog = [];
 const logEvent = (eventName) => {
-  if (eventName) eventLog.push(eventName)
-  if (typeof activeTabId === 'undefined') return
+  if (eventName) eventLog.push(eventName);
+  if (typeof activeTabId === 'undefined') return;
 
-  eventLog.forEach(eventName => {
-    chrome.tabs.sendMessage(activeTabId, { name: 'logEvent', args: eventName })
-  })
+  eventLog.forEach((eventName) => {
+    chrome.tabs.sendMessage(activeTabId, { name: 'logEvent', args: eventName });
+  });
 
-  eventLog = []
-}
+  eventLog = [];
+};
 
 eventNames.forEach((eventName) => {
   chrome.webNavigation[eventName].addListener(() => {
-    logEvent(eventName)
-  })
-})
+    logEvent(eventName);
+  });
+});
 
 chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT }, ([tab]) => {
-  activeTabId = tab.id
-  logEvent()
-})
+  activeTabId = tab.id;
+  logEvent();
+});
 
-console.log('background-script-evaluated')
+console.log('background-script-evaluated');

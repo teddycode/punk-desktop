@@ -1,10 +1,10 @@
 <template>
-  <div class="w-full h-[78px] pl-3  pt-3 pb-2 mb-2 pointer">
+  <div class="w-full h-[78px] pl-3 pt-3 pb-2 mb-2 pointer">
     <div class="flex items-center justify-between">
       <div class="mr-3">
         <div class="flex items-center h-[24px]" style="">
           <a-avatar :size="24" :src="detailPost.user.avatar"></a-avatar>
-          <div class="ml-2 xt-text-2 font-14 nickname" style="text-align: left;">
+          <div class="ml-2 xt-text-2 font-14 nickname" style="text-align: left">
             {{ detailPost.user.nickname }}
           </div>
           <div class="xt-text-2 font-14">
@@ -12,52 +12,49 @@
           </div>
         </div>
 
-        <div :innerHTML="contentText" class="xt-text font-16 content-text" style="text-align: left;">
+        <div :innerHTML="contentText" class="xt-text font-16 content-text" style="text-align: left">
           <!-- {{ contentText }} -->
         </div>
       </div>
-      <div v-if="showImg" :style="{ backgroundImage: img ? `url(${img})` : '' }" class="right ">
-      </div>
+      <div v-if="showImg" :style="{ backgroundImage: img ? `url(${img})` : '' }" class="right"></div>
     </div>
   </div>
 </template>
 
-<script lang='ts' setup>
-import {computed} from 'vue'
-import emojiReplace from '../../../js/chat/emoji'
+<script lang="ts" setup>
+import { computed } from 'vue';
+import emojiReplace from '../../../js/chat/emoji';
 
 const props = defineProps({
   showForumPost: {
     type: Array,
-    default: () => []
+    default: () => [],
   },
-})
-const detailPost = computed(() => props.showForumPost)
+});
+const detailPost = computed(() => props.showForumPost);
 const imageList = computed(() => {
-  return detailPost.value.image_170_170
-})
+  return detailPost.value.image_170_170;
+});
 const showImg = computed(() => {
   if (imageList.value && imageList.value[0]) {
-    return true
+    return true;
   }
-  return false
-})
+  return false;
+});
 const img = computed(() => {
-  return imageList.value[0].image
-})
+  return imageList.value[0].image;
+});
 const contentText = computed(() => {
-  return emojiReplace(detailPost.value.summary)
-})
+  return emojiReplace(detailPost.value.summary);
+});
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .font-14 {
-
   font-size: 14px;
   font-weight: 400;
 }
 
 .font-16 {
-
   font-size: 16px;
   line-height: 26px;
   font-weight: 400;

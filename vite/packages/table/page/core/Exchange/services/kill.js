@@ -1,12 +1,11 @@
 // @ts-ignore
-import {hook} from "./address"
-import {calculateTickFromPriceWithSpacing} from "./cauculateliq"
-
+import { hook } from './address';
+import { calculateTickFromPriceWithSpacing } from './cauculateliq';
 
 async function killLimitOrder(contract, poolKey, tickLower, zeroForOne, to) {
   let tx = await contract.kill(poolKey, tickLower, zeroForOne, to);
   await tx.wait();
-  console.log("kill successfully");
+  console.log('kill successfully');
   //emit Kill(msg.sender, epoch, key, tickLower, zeroForOne, liquidity);
   // await contract.on("Kill", (owner, epoch, key, tickLower, zeroForOne, liquidity, event) => {
   //     console.log("Kill event emitted:");
@@ -22,12 +21,12 @@ async function killLimitOrder(contract, poolKey, tickLower, zeroForOne, to) {
 }
 
 export async function killLimitOrderFrontend(tokenup, tokendown, price, poolkey, myaddress) {
-  let tick = calculateTickFromPriceWithSpacing(price)
-  let zeroForOne = tokenup < tokendown
-  console.log("zeroForOne:", zeroForOne)
+  let tick = calculateTickFromPriceWithSpacing(price);
+  let zeroForOne = tokenup < tokendown;
+  console.log('zeroForOne:', zeroForOne);
   let tx = await hook.kill(poolkey, tick, zeroForOne, myaddress);
   await tx.wait();
-  console.log("kill successfully");
+  console.log('kill successfully');
 }
 
 // async function approveERC20(contract:Contract, toAddress: string, amount: ethers.BigNumber) {
@@ -37,7 +36,6 @@ export async function killLimitOrderFrontend(tokenup, tokendown, price, poolkey,
 //     let receipt = await tx.wait();
 //     console.log(`Transaction hash: ${receipt.transactionHash}`);
 // }
-
 
 // async function main(){
 //     //approve ERC20 token to limitOrder
@@ -52,5 +50,3 @@ export async function killLimitOrderFrontend(tokenup, tokendown, price, poolkey,
 //     await killLimitOrderFrontend(token1.address,token0.address,price,limitOrderPoolKey,wallets.address)
 // }
 // main()
-
-

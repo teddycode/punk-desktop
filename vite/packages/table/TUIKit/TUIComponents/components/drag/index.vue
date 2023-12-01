@@ -1,12 +1,11 @@
 <template>
-  <div v-show="show" class="drag-container">
-    <slot/>
+  <div class="drag-container" v-show="show">
+    <slot />
   </div>
 </template>
 
 <script lang="ts">
-import {defineComponent, onMounted, reactive, toRefs, watch, watchEffect} from 'vue';
-
+import { defineComponent, reactive, toRefs, onMounted, watch, watchEffect } from 'vue';
 export default defineComponent({
   props: {
     show: {
@@ -36,21 +35,21 @@ export default defineComponent({
 
     onMounted(() => {
       const dragDom = document.getElementsByClassName(
-          props.domClassName ? props.domClassName : 'drag-container'
+        props.domClassName ? props.domClassName : 'drag-container',
       )[0] as HTMLElement;
       if (!dragDom) return;
       let isDrag = false;
       watch(
-          () => data.show,
-          (newVal, oldVal) => {
-            data.show = newVal;
-            if (newVal === oldVal) return;
-            if (data.show === true) {
-              dragDom.style.left = data.startPosition?.left;
-              dragDom.style.top = data.startPosition?.top;
-              dragDom.style.cssText = data.startPosition?.cssText;
-            }
+        () => data.show,
+        (newVal, oldVal) => {
+          data.show = newVal;
+          if (newVal === oldVal) return;
+          if (data.show === true) {
+            dragDom.style.left = data.startPosition?.left;
+            dragDom.style.top = data.startPosition?.top;
+            dragDom.style.cssText = data.startPosition?.cssText;
           }
+        },
       );
       const mouseDown = (e: MouseEvent) => {
         isDrag = true;
@@ -72,10 +71,7 @@ export default defineComponent({
       dragDom.addEventListener('mousedown', mouseDown);
     });
 
-    function throttle(fn: {
-      (e: MouseEvent): void;
-      apply?: any
-    }, timer: number) {
+    function throttle(fn: { (e: MouseEvent): void; apply?: any }, timer: number) {
       let initTime = 0;
       return function (...args: any) {
         const nowTime = +new Date();
@@ -96,7 +92,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import url('../../styles/common.scss');
 @import url('../../styles/icon.scss');
-
 .drag-container {
   position: fixed;
   z-index: 100;

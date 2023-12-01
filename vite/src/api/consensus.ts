@@ -6,8 +6,8 @@ export const getAllBlock = (query) => {
     url: '/consensus/block/list',
     method: 'get',
     params: query,
-  })
-}
+  });
+};
 
 export const getBlockByHeight = (query) => {
   console.log('get a block by height');
@@ -15,8 +15,8 @@ export const getBlockByHeight = (query) => {
     url: '/consensus/block/byHeight',
     method: 'get',
     params: query,
-  })
-}
+  });
+};
 
 export const getBlockByHash = (query) => {
   console.log('get a block by hash');
@@ -24,8 +24,8 @@ export const getBlockByHash = (query) => {
     url: '/consensus/block/byHash',
     method: 'get',
     params: query,
-  })
-}
+  });
+};
 
 export const getMicBlockByHeight = (query) => {
   console.log('get a micro block by height');
@@ -33,8 +33,8 @@ export const getMicBlockByHeight = (query) => {
     url: '/consensus/block/mic/byHeight',
     method: 'get',
     params: query,
-  })
-}
+  });
+};
 
 export const getMicBlockByHash = (query) => {
   console.log('get a micro block by hash');
@@ -42,8 +42,8 @@ export const getMicBlockByHash = (query) => {
     url: '/consensus/block/mic/byHash',
     method: 'get',
     params: query,
-  })
-}
+  });
+};
 
 export const getMyBlock = (query) => {
   console.log('get my block');
@@ -51,8 +51,8 @@ export const getMyBlock = (query) => {
     url: '/consensus/block/mine',
     method: 'get',
     params: query,
-  })
-}
+  });
+};
 
 export const getMyMicBlock = (query) => {
   console.log('get my micro block');
@@ -60,8 +60,5 @@ export const getMyMicBlock = (query) => {
     url: '/consensus/block/mic/mine',
     method: 'get',
     params: query,
-  })
-}
-
-
-
+  });
+};

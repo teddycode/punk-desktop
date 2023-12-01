@@ -1,92 +1,81 @@
-@import url("../../../styles/common.scss");
-@import url("../../../styles/icon.scss");
-
+@import url('../../../styles/common.scss');
+@import url('../../../styles/icon.scss');
 .TUI-search header h1 {
-    font-weight: 400;
-    color: #000000;
+  font-weight: 400;
+  color: #000000;
 }
-
 .TUI-search header .more {
-    background: #F3F3F3;
+  background: #f3f3f3;
 }
 
 input {
-    border: 1px solid #DDDDDD;
+  border: 1px solid #dddddd;
 }
 
 .TUI-search-H5 header ul {
-    background: #FFFFFF;
-    border: 2px solid #E0E0E0;
-    box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.06);
+  background: #ffffff;
+  border: 2px solid #e0e0e0;
+  box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.06);
 }
-
 .TUI-search-H5 header ul h1 {
-    font-weight: 400;
-    color: #444444;
-    letter-spacing: 0;
+  font-weight: 400;
+  color: #444444;
+  letter-spacing: 0;
 }
 
 .TUI-search header {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
-
 .TUI-search header h1 {
-    padding: 0 8px;
-    font-size: 14px;
+  padding: 0 8px;
+  font-size: 14px;
 }
-
 .TUI-search header .more {
-    display: inline-block;
-    width: 28px;
-    height: 28px;
-    border-radius: 4px;
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
 }
-
 .TUI-search header ul {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
-
 .TUI-search header ul li {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 input {
-    box-sizing: border-box;
-    width: 100%;
-    height: 24px;
-    border-radius: 5px;
-    padding: 0 10px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 24px;
+  border-radius: 5px;
+  padding: 0 10px;
 }
 
 .TUI-search-H5 header {
-    display: flex;
-    align-items: center;
-    position: relative;
+  display: flex;
+  align-items: center;
+  position: relative;
 }
-
 .TUI-search-H5 header h1 {
-    font-size: 16px;
+  font-size: 16px;
 }
-
 .TUI-search-H5 header ul {
-    flex-direction: column;
-    top: 100%;
-    z-index: 3;
-    position: absolute;
-    padding: 7px 9px;
+  flex-direction: column;
+  top: 100%;
+  z-index: 3;
+  position: absolute;
+  padding: 7px 9px;
 }
-
 .TUI-search-H5 header ul h1 {
-    padding: 7px;
-    text-align: center;
-    word-break: keep-all;
+  padding: 7px;
+  text-align: center;
+  word-break: keep-all;
 }
-
 .TUI-search-H5 header ul .icon-group {
-    margin-left: 0;
+  margin-left: 0;
 }
 
 /*# sourceMappingURL=index.css.map */

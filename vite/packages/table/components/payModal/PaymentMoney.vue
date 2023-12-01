@@ -1,61 +1,89 @@
 <template>
   <div class="px-7">
-    <div class="h-24 flex rounded-xl p-4 mb-4" style="color: var(--primary-text);background: var(--secondary-bg);">
-      <div class="flex items-center justify-center" style="width:64px;height:64px;">
-        <img :src="needPayAvatar.url" alt="" class="w-full h-full object-cover">
+    <div class="h-24 flex rounded-xl p-4 mb-4" style="color: var(--primary-text); background: var(--secondary-bg)">
+      <div class="flex items-center justify-center" style="width: 64px; height: 64px">
+        <img :src="needPayAvatar.url" alt="" class="w-full h-full object-cover" />
       </div>
       <div class="flex flex-col justify-center ml-4">
-        <span class="avatar-font" style="color: var(--primary-text);user-select: text">{{ needPayAvatar.name }}</span>
-        <span class="avatar-font" style="color: var(--primary-text);">道具</span>
-        <span class="avatar-font" style="color: var(--primary-text);user-select: text">
-              <template v-if="gettingOrder">正在生成订单…</template>
-              <template v-else>订单号：{{ order.nanoid }} <icon class="pointer" icon="fuzhi"
-                                                               style="font-size: 18px"
-                                                               @click="copyOrder(order.nanoid)"></icon></template></span>
+        <span class="avatar-font" style="color: var(--primary-text); user-select: text">{{ needPayAvatar.name }}</span>
+        <span class="avatar-font" style="color: var(--primary-text)">道具</span>
+        <span class="avatar-font" style="color: var(--primary-text); user-select: text">
+          <template v-if="gettingOrder">正在生成订单…</template>
+          <template v-else
+            >订单号：{{ order.nanoid }}
+            <icon
+              class="pointer"
+              icon="fuzhi"
+              style="font-size: 18px"
+              @click="copyOrder(order.nanoid)"
+            ></icon></template
+        ></span>
       </div>
     </div>
-    <div v-if="error" style="font-size: 14px;line-height: 24px">
+    <div v-if="error" style="font-size: 14px; line-height: 24px">
       <icon icon="tishi-xianxing" style="font-size: 14px"></icon>
       拉取支付二维码出错，可能是系统正在维护，请稍后再试。
     </div>
-    <HorzontanlPanelIcon v-if="!error" v-model:selectType="payWeixin" :navList="payMethod"
-                         style="background: var(--secondary-bg);!important"></HorzontanlPanelIcon>
+    <HorzontanlPanelIcon
+      v-if="!error"
+      v-model:selectType="payWeixin"
+      :navList="payMethod"
+      style="background: var(--secondary-bg);!important"
+    ></HorzontanlPanelIcon>
 
     <template v-if="payWeixin.type === 'wechat' && !error">
       <div class="flex my-8 px-1">
-        <div class="flex rounded-lg items-center justify-center" style="width:200px;height:200px;">
-          <a-avatar :src="qrCode.wechat" alt="" class="  object-cover" shape="square"
-                    style="width: 100%;height: 100%"></a-avatar>
+        <div class="flex rounded-lg items-center justify-center" style="width: 200px; height: 200px">
+          <a-avatar
+            :src="qrCode.wechat"
+            alt=""
+            class="object-cover"
+            shape="square"
+            style="width: 100%; height: 100%"
+          ></a-avatar>
         </div>
         <div class="flex flex-col ml-8 justify-center">
-          <span v-if="needPayAvatar.price.originPrice" class="mb-2  " style="font-size: 18px">原价： <span
-              class="  line-through">￥{{ needPayAvatar.price.originPrice }}</span></span>
+          <span v-if="needPayAvatar.price.originPrice" class="mb-2" style="font-size: 18px"
+            >原价： <span class="line-through">￥{{ needPayAvatar.price.originPrice }}</span></span
+          >
           <span class="mb-2 avatar-price">￥{{ needPayAvatar.price.price }}</span>
           <div class="flex items-center">
-            <Icon icon="weixinzhifu" style="font-size: 0.55em;"></Icon>
-            <span class="avatar-font  ml-2" style="color: var(--primary-text);">微信扫码支付</span>
+            <Icon icon="weixinzhifu" style="font-size: 0.55em"></Icon>
+            <span class="avatar-font ml-2" style="color: var(--primary-text)">微信扫码支付</span>
           </div>
         </div>
       </div>
     </template>
     <template v-else-if="!error">
       <div class="flex my-8 px-1">
-        <div class="flex rounded-lg items-center justify-center" style="width:200px;height:200px;">
-          <div v-if="qrCode.alipay " class="w-full h-full rounded-sm" style="background: white;padding: 10px;">
+        <div class="flex rounded-lg items-center justify-center" style="width: 200px; height: 200px">
+          <div v-if="qrCode.alipay" class="w-full h-full rounded-sm" style="background: white; padding: 10px">
             <iframe
-                id="alipayCode"
-                class=" object-cover" scrolling="no"
-                style="border: none;background: transparent;width: 120px;height: 120px;overflow: hidden;transform: scale(1.3);margin-left: 30px;margin-top: 30px"></iframe>
+              id="alipayCode"
+              class="object-cover"
+              scrolling="no"
+              style="
+                border: none;
+                background: transparent;
+                width: 120px;
+                height: 120px;
+                overflow: hidden;
+                transform: scale(1.3);
+                margin-left: 30px;
+                margin-top: 30px;
+              "
+            ></iframe>
           </div>
           <a-avatar v-else alt="" class="w-full h-full object-cover" shape="square"></a-avatar>
         </div>
         <div class="flex flex-col ml-8 justify-center">
-          <span v-if="needPayAvatar.price.originPrice" class="mb-2  " style="font-size: 18px">原价： <span
-              class="  line-through">￥{{ needPayAvatar.price.originPrice }}</span></span>
+          <span v-if="needPayAvatar.price.originPrice" class="mb-2" style="font-size: 18px"
+            >原价： <span class="line-through">￥{{ needPayAvatar.price.originPrice }}</span></span
+          >
           <span class="mb-2 avatar-price avatar-font">￥{{ needPayAvatar.price.price }}</span>
           <div class="flex items-center">
-            <Icon icon="zhifubao" style="font-size: 0.55em;"></Icon>
-            <span class="avatar-font ml-2" style="color: var(--primary-text);">支付宝扫码支付</span>
+            <Icon icon="zhifubao" style="font-size: 0.55em"></Icon>
+            <span class="avatar-font ml-2" style="color: var(--primary-text)">支付宝扫码支付</span>
           </div>
         </div>
       </div>
@@ -64,163 +92,159 @@
 </template>
 
 <script>
-import HorzontanlPanelIcon from '../HorzontanlPanelIcon.vue'
-import { message, Modal } from 'ant-design-vue'
-import { mapActions } from 'pinia'
-import { frameStore } from '../../store/avatarFrame'
+import HorzontanlPanelIcon from '../HorzontanlPanelIcon.vue';
+import { message, Modal } from 'ant-design-vue';
+import { mapActions } from 'pinia';
+import { frameStore } from '../../store/avatarFrame';
 
 export default {
   name: 'CollectionCodeModal',
   props: {
     needPayAvatar: {
       type: Object,
-      default: () => {
-      }
+      default: () => {},
     },
-    order: {//当前订单信息
+    order: {
+      //当前订单信息
       type: Object,
     },
-    gettingOrder: {//正在生成订单
+    gettingOrder: {
+      //正在生成订单
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   components: {
-    HorzontanlPanelIcon
+    HorzontanlPanelIcon,
   },
-  data () {
+  data() {
     return {
       error: false,
-      payMethod: [   // 头像框购买的支付方式数据
+      payMethod: [
+        // 头像框购买的支付方式数据
         { icon: 'weixinzhifu', title: '微信支付', type: 'wechat' },
-        { icon: 'zhifubao', title: '支付宝', type: 'alipay' }
+        { icon: 'zhifubao', title: '支付宝', type: 'alipay' },
       ],
       payWeixin: { icon: 'weixinzhifu', title: '微信支付', type: 'wechat' }, // 默认微信支付
-      qrCode: {//二维码
+      qrCode: {
+        //二维码
         wechat: '',
-        alipay: ''
+        alipay: '',
       },
 
       pointVisible: false, // 头像框积分兑换
       checkTimer: null,
-    }
+    };
   },
   watch: {
-    'payWeixin': {
-      handler (newVal) {
-        this.generateQrcode(newVal.type)
+    payWeixin: {
+      handler(newVal) {
+        this.generateQrcode(newVal.type);
       },
       immediate: true,
     },
-    'order': {
-      handler (newVal) {
-        this.generateQrcode(this.payWeixin.type)
-      }
-    }
+    order: {
+      handler(newVal) {
+        this.generateQrcode(this.payWeixin.type);
+      },
+    },
   },
-  mounted () {
-    this.startTimer()
+  mounted() {
+    this.startTimer();
   },
-  unmounted () {
-    this.closeTimer()
+  unmounted() {
+    this.closeTimer();
   },
   methods: {
     ...mapActions(frameStore, ['getQrcode', 'checkOrderPaid']),
-    startTimer () {
+    startTimer() {
       if (!this.checkTimer) {
         this.checkTimer = setInterval(() => {
-          this.checkOrderPaidStatus()
-        }, 1000)
+          this.checkOrderPaidStatus();
+        }, 1000);
       }
     },
-    closeTimer () {
+    closeTimer() {
       if (this.checkTimer) {
-        clearInterval(this.checkTimer)
-        this.checkTimer = null
+        clearInterval(this.checkTimer);
+        this.checkTimer = null;
       }
     },
-    async checkOrderPaidStatus () {
+    async checkOrderPaidStatus() {
       if (this.order) {
-        let rs = await this.checkOrderPaid(this.order.nanoid)
+        let rs = await this.checkOrderPaid(this.order.nanoid);
         if (rs.status) {
-          this.closeTimer()
+          this.closeTimer();
           setTimeout(() => {
-            this.$emit('payOk')
-          }, 500)
+            this.$emit('payOk');
+          }, 500);
           Modal.success({
             centered: true,
             content: '感谢支持，系统已经为您自动发放道具。',
-            onOk: () => {
-
-            }
-          })
+            onOk: () => {},
+          });
         } else {
         }
       }
     },
-    generateQrcode (payment) {
+    generateQrcode(payment) {
       if (!this.order.nanoid) {
-        return
+        return;
       }
       if (payment === 'wechat') {
-        this.getWechat()
+        this.getWechat();
       } else {
-        this.getAlipay()
+        this.getAlipay();
       }
     },
-    getWechat () {
-      this.qrCode.wechat = ''
-      this.error = false
+    getWechat() {
+      this.qrCode.wechat = '';
+      this.error = false;
       this.getQrcode(this.order.nanoid, 'wechat').then((rs) => {
-        console.log('微信二维码返回', rs)
+        console.log('微信二维码返回', rs);
         if (rs.status) {
-          this.qrCode.wechat = rs.data.qrCode
-          return
+          this.qrCode.wechat = rs.data.qrCode;
+          return;
         }
-        this.error = true
-        message.error('获取微信订单二维码失败，请稍后再试。')
-
-      })
+        this.error = true;
+        message.error('获取微信订单二维码失败，请稍后再试。');
+      });
     },
-    copyOrder (text) {
+    copyOrder(text) {
       try {
-        require('electron').clipboard.writeText(text)
+        require('electron').clipboard.writeText(text);
         //Navigator.clipboard.writeText(text)
-        message.success('复制订单号成功')
-      } catch (e) {
-
-      }
+        message.success('复制订单号成功');
+      } catch (e) {}
     },
-    getAlipay () {
-      this.qrCode.alipay = ''
-      this.error = false
+    getAlipay() {
+      this.qrCode.alipay = '';
+      this.error = false;
       this.getQrcode(this.order.nanoid, 'alipay').then((rs) => {
-        console.log('微信二维码返回', rs)
+        console.log('微信二维码返回', rs);
         if (rs.status) {
-          this.qrCode.alipay = rs.data.qrCode
+          this.qrCode.alipay = rs.data.qrCode;
           this.$nextTick(() => {
-            let alipay = document.getElementById('alipayCode')
+            let alipay = document.getElementById('alipayCode');
             if (alipay) {
-              let iframedoc = alipay.contentDocument || alipay.contentWindow.document
-              iframedoc.body.innerHTML = this.qrCode.alipay
-              iframedoc.forms['alipaysubmit'].submit()
+              let iframedoc = alipay.contentDocument || alipay.contentWindow.document;
+              iframedoc.body.innerHTML = this.qrCode.alipay;
+              iframedoc.forms['alipaysubmit'].submit();
             }
-          })
+          });
 
-          return
+          return;
         }
-        this.error = true
-        message.error('获取支付宝订单二维码失败，请稍后再试。')
-
-      })
+        this.error = true;
+        message.error('获取支付宝订单二维码失败，请稍后再试。');
+      });
     },
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 .avatar-font {
-
   font-size: 16px;
   font-weight: 500;
 }
@@ -237,7 +261,6 @@ export default {
 }
 
 .avatar-pay {
-
   font-size: 16px;
   font-weight: 400;
 }
@@ -245,12 +268,11 @@ export default {
 .avatar-price {
   font-family: Oswald;
   font-size: 24px;
-  color: #FF4D4F;
+  color: #ff4d4f;
   font-weight: 400;
 }
 
 .success-text {
-
   font-size: 16px;
   color: var(--secondary-text);
   font-weight: 400;
@@ -269,7 +291,6 @@ export default {
   }
 
   & > .panel-title {
-
     font-size: 16px;
     font-weight: 400;
   }

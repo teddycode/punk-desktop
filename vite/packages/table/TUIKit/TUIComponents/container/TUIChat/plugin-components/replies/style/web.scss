@@ -10,7 +10,7 @@
   height: calc(100% - 40px);
   z-index: 2;
   top: 40px;
-  background: #FFFFFF;
+  background: #ffffff;
   box-shadow: 0 1px 10px 0 rgb(2 16 43 / 15%);
 
   .header {
@@ -54,7 +54,7 @@
     overflow: hidden;
 
     .body-message {
-      border-bottom: 1px dashed #E0E0E0;
+      border-bottom: 1px dashed #e0e0e0;
     }
 
     .body-list {
@@ -68,7 +68,6 @@
         flex-direction: row;
         flex-wrap: nowrap;
         align-items: center;
-
         .replies-item {
           flex: 1;
         }

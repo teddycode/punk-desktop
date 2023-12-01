@@ -1,417 +1,287 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8"/>
+  <head>
+    <meta charset="UTF-8" />
 
     <!-- title is set in JS -->
 
-    <link href="../../css/base.css" rel="stylesheet"/>
-    <link href="settings.css" rel="stylesheet"/>
-    <link href="../../ext/icons/iconfont.css" rel="stylesheet"/>
-    <link href="../../icons/setting.svg" rel="icon" type="image/svg+xml"/>
-</head>
+    <link href="../../css/base.css" rel="stylesheet" />
+    <link href="settings.css" rel="stylesheet" />
+    <link href="../../ext/icons/iconfont.css" rel="stylesheet" />
+    <link href="../../icons/setting.svg" rel="icon" type="image/svg+xml" />
+  </head>
 
-<body>
-<div class="short-hero blue-gradient-background">
-    <div class="container">
+  <body>
+    <div class="short-hero blue-gradient-background">
+      <div class="container">
         <h2 data-string="settingsPreferencesHeading"></h2>
+      </div>
     </div>
-</div>
 
-<div id="privacy-settings-container" class="settings-container">
-    <h3 data-string="settingsPrivacyHeading"></h3>
+    <div id="privacy-settings-container" class="settings-container">
+      <h3 data-string="settingsPrivacyHeading"></h3>
 
-    <div id="content-blocking-statistics" class="settings-info-subheading">
+      <div id="content-blocking-statistics" class="settings-info-subheading">
         <i class="i carbon:manage-protection"></i>
-        <span
-                id="content-blocking-blocked-requests"
-                data-allowHTML
-                data-string="settingsBlockedRequestCount"
-        >
-        </span>
-    </div>
+        <span id="content-blocking-blocked-requests" data-allowHTML data-string="settingsBlockedRequestCount"> </span>
+      </div>
 
-    <div id="tracking-level-container" class="setting-section">
+      <div id="tracking-level-container" class="setting-section">
         <div class="setting-option">
-            <input id="blocking-allow-all" name="blockingLevel" type="radio"/>
-            <label
-                    data-string="settingsContentBlockingLevel0"
-                    for="blocking-allow-all"
-            ></label>
+          <input id="blocking-allow-all" name="blockingLevel" type="radio" />
+          <label data-string="settingsContentBlockingLevel0" for="blocking-allow-all"></label>
         </div>
         <div class="setting-option">
-            <input id="blocking-third-party" name="blockingLevel" type="radio"/>
-            <label
-                    data-string="settingsContentBlockingLevel1"
-                    for="blocking-third-party"
-            ></label>
+          <input id="blocking-third-party" name="blockingLevel" type="radio" />
+          <label data-string="settingsContentBlockingLevel1" for="blocking-third-party"></label>
         </div>
         <div class="setting-option">
-            <input id="blocking-block-all" name="blockingLevel" type="radio"/>
-            <label
-                    data-string="settingsContentBlockingLevel2"
-                    for="blocking-block-all"
-            ></label>
+          <input id="blocking-block-all" name="blockingLevel" type="radio" />
+          <label data-string="settingsContentBlockingLevel2" for="blocking-block-all"></label>
         </div>
 
         <div id="content-blocking-information" hidden>
-            <div>
-                <label
-                        data-string="settingsContentBlockingExceptions"
-                        for="content-blocking-exceptions"
-                ></label>
-                <textarea
-                        id="content-blocking-exceptions"
-                        rows="1"
-                        spellcheck="false"
-                        style="width: 100%; max-width: 500px"
-                ></textarea>
-            </div>
-            <a
-                    id="customize-filters-link"
-                    data-string="settingsCustomizeFiltersLink"
-                    href="https://www.yuque.com/tswork/ngd5zk/vch5wr"
-                    target="_blank"
-            ></a>
+          <div>
+            <label data-string="settingsContentBlockingExceptions" for="content-blocking-exceptions"></label>
+            <textarea
+              id="content-blocking-exceptions"
+              rows="1"
+              spellcheck="false"
+              style="width: 100%; max-width: 500px"
+            ></textarea>
+          </div>
+          <a
+            id="customize-filters-link"
+            data-string="settingsCustomizeFiltersLink"
+            href="https://www.yuque.com/tswork/ngd5zk/vch5wr"
+            target="_blank"
+          ></a>
         </div>
+      </div>
+
+      <div id="content-type-blocking"></div>
     </div>
 
-    <div id="content-type-blocking"></div>
-</div>
+    <div id="appearance-settings-container" class="settings-container">
+      <h3 data-string="settingsAppearanceHeading"></h3>
 
-<div id="appearance-settings-container" class="settings-container">
-    <h3 data-string="settingsAppearanceHeading"></h3>
+      <label data-string="settingsEnableDarkMode" for="dark-mode-container"></label>
+      <div id="dark-mode-container" class="setting-section">
+        <div class="setting-option">
+          <input id="dark-mode-never" name="darkMode" type="radio" />
+          <label data-string="settingsDarkModeNever" for="dark-mode-never"></label>
+        </div>
+        <div class="setting-option">
+          <input id="dark-mode-night" name="darkMode" type="radio" />
+          <label data-string="settingsDarkModeNight" for="dark-mode-night"></label>
+        </div>
+        <div class="setting-option">
+          <input id="dark-mode-always" name="darkMode" type="radio" />
+          <label data-string="settingsDarkModeAlways" for="dark-mode-always"></label>
+        </div>
+        <div class="setting-option">
+          <input id="dark-mode-system" name="darkMode" type="radio" />
+          <label data-string="settingsDarkModeSystem" for="dark-mode-system"></label>
+        </div>
+      </div>
 
-    <label
-            data-string="settingsEnableDarkMode"
-            for="dark-mode-container"
-    ></label>
-    <div id="dark-mode-container" class="setting-section">
-        <div class="setting-option">
-            <input id="dark-mode-never" name="darkMode" type="radio"/>
-            <label
-                    data-string="settingsDarkModeNever"
-                    for="dark-mode-never"
-            ></label>
-        </div>
-        <div class="setting-option">
-            <input id="dark-mode-night" name="darkMode" type="radio"/>
-            <label
-                    data-string="settingsDarkModeNight"
-                    for="dark-mode-night"
-            ></label>
-        </div>
-        <div class="setting-option">
-            <input id="dark-mode-always" name="darkMode" type="radio"/>
-            <label
-                    data-string="settingsDarkModeAlways"
-                    for="dark-mode-always"
-            ></label>
-        </div>
-        <div class="setting-option">
-            <input id="dark-mode-system" name="darkMode" type="radio"/>
-            <label
-                    data-string="settingsDarkModeSystem"
-                    for="dark-mode-system"
-            ></label>
-        </div>
+      <div class="setting-section">
+        <input id="checkbox-site-theme" type="checkbox" />
+        <label data-string="settingsSiteThemeToggle" for="checkbox-site-theme"></label>
+      </div>
+
+      <div class="setting-section">
+        <input id="checkbox-show-divider" type="checkbox" />
+        <label data-string="settingsShowDividerToggle" for="checkbox-show-divider"></label>
+      </div>
     </div>
 
-    <div class="setting-section">
-        <input id="checkbox-site-theme" type="checkbox"/>
-        <label
-                data-string="settingsSiteThemeToggle"
-                for="checkbox-site-theme"
-        ></label>
-    </div>
+    <div id="additional-settings-container" class="settings-container">
+      <h3 data-string="settingsAdditionalFeaturesHeading"></h3>
 
-    <div class="setting-section">
-        <input id="checkbox-show-divider" type="checkbox"/>
-        <label
-                data-string="settingsShowDividerToggle"
-                for="checkbox-show-divider"
-        ></label>
-    </div>
-</div>
-
-<div id="additional-settings-container" class="settings-container">
-    <h3 data-string="settingsAdditionalFeaturesHeading"></h3>
-
-    <div class="setting-section">
-        <input id="checkbox-userscripts" type="checkbox"/>
-        <label
-                data-string="settingsUserscriptsToggle"
-                for="checkbox-userscripts"
-        ></label>
+      <div class="setting-section">
+        <input id="checkbox-userscripts" type="checkbox" />
+        <label data-string="settingsUserscriptsToggle" for="checkbox-userscripts"></label>
         <div
-                class="settings-info-subheading setting-secondary-label"
-                data-allowHTML
-                data-string="settingsUserscriptsExplanation"
+          class="settings-info-subheading setting-secondary-label"
+          data-allowHTML
+          data-string="settingsUserscriptsExplanation"
         ></div>
-    </div>
+      </div>
 
-    <div id="section-separate-titlebar" class="setting-section" hidden>
-        <input id="checkbox-separate-titlebar" type="checkbox"/>
-        <label
-                data-string="settingsSeparateTitlebarToggle"
-                for="checkbox-separate-titlebar"
-        ></label>
-    </div>
+      <div id="section-separate-titlebar" class="setting-section" hidden>
+        <input id="checkbox-separate-titlebar" type="checkbox" />
+        <label data-string="settingsSeparateTitlebarToggle" for="checkbox-separate-titlebar"></label>
+      </div>
 
-    <div id="section-open-tabs-in-foreground" class="setting-section">
-        <input id="checkbox-open-tabs-in-foreground" type="checkbox"/>
-        <label
-                data-string="settingsOpenTabsInForegroundToggle"
-                for="checkbox-open-tabs-in-foreground"
-        ></label>
-    </div>
+      <div id="section-open-tabs-in-foreground" class="setting-section">
+        <input id="checkbox-open-tabs-in-foreground" type="checkbox" />
+        <label data-string="settingsOpenTabsInForegroundToggle" for="checkbox-open-tabs-in-foreground"></label>
+      </div>
 
-    <div id="section-user-agent" class="setting-section">
-        <input id="checkbox-user-agent" type="checkbox"/>
-        <label
-                data-string="settingsUserAgentToggle"
-                for="checkbox-user-agent"
-        ></label>
+      <div id="section-user-agent" class="setting-section">
+        <input id="checkbox-user-agent" type="checkbox" />
+        <label data-string="settingsUserAgentToggle" for="checkbox-user-agent"></label>
         <input
-                id="input-user-agent"
-                style="
-            vertical-align: middle;
-            margin-left: 1em;
-            width: 375px;
-            max-width: 80vw;
-            visibility: hidden;
-          "
-                type="text"
+          id="input-user-agent"
+          style="vertical-align: middle; margin-left: 1em; width: 375px; max-width: 80vw; visibility: hidden"
+          type="text"
         />
+      </div>
+
+      <div class="setting-section">
+        <input id="checkbox-enable-autoplay" type="checkbox" />
+        <label data-string="settingsAutoplayToggle" for="checkbox-enable-autoplay"></label>
+      </div>
+
+      <!-- 暂不支持自动检测更新关闭     <div class="setting-section">-->
+      <!--        <input type="checkbox" id="checkbox-update-notifications" />-->
+      <!--        <label-->
+      <!--          for="checkbox-update-notifications"-->
+      <!--          data-string="settingsUpdateNotificationsToggle"-->
+      <!--        ></label>-->
+      <!--      </div>-->
+      <div class="setting-section">
+        <input id="checkbox-usage-statistics" type="checkbox" />
+        <label data-allowHTML data-string="settingsUsageStatisticsToggle" for="checkbox-usage-statistics"></label>
+      </div>
     </div>
 
-    <div class="setting-section">
-        <input id="checkbox-enable-autoplay" type="checkbox"/>
-        <label
-                data-string="settingsAutoplayToggle"
-                for="checkbox-enable-autoplay"
-        ></label>
-    </div>
+    <div id="search-engine-settings-container" class="settings-container">
+      <h3 data-string="settingsSearchEngineHeading"></h3>
 
-    <!-- 暂不支持自动检测更新关闭     <div class="setting-section">-->
-    <!--        <input type="checkbox" id="checkbox-update-notifications" />-->
-    <!--        <label-->
-    <!--          for="checkbox-update-notifications"-->
-    <!--          data-string="settingsUpdateNotificationsToggle"-->
-    <!--        ></label>-->
-    <!--      </div>-->
-    <div class="setting-section">
-        <input id="checkbox-usage-statistics" type="checkbox"/>
-        <label
-                data-allowHTML
-                data-string="settingsUsageStatisticsToggle"
-                for="checkbox-usage-statistics"
-        ></label>
-    </div>
-</div>
-
-<div id="search-engine-settings-container" class="settings-container">
-    <h3 data-string="settingsSearchEngineHeading"></h3>
-
-    <div class="setting-section">
-        <label
-                data-string="settingsDefaultSearchEngine"
-                for="defaultSearchEngine"
-        ></label>
+      <div class="setting-section">
+        <label data-string="settingsDefaultSearchEngine" for="defaultSearchEngine"></label>
         <select id="default-search-engine" name="defaultSearchEngine"></select>
-        <input
-                id="custom-search-engine"
-                hidden
-                style="margin-left: 0.5em; min-width: 325px"
-        />
+        <input id="custom-search-engine" hidden style="margin-left: 0.5em; min-width: 325px" />
 
-        <div
-                class="settings-info-subheading"
-                data-string="settingsDDGExplanation"
-                style="padding-top: 0.4em"
-        ></div>
+        <div class="settings-info-subheading" data-string="settingsDDGExplanation" style="padding-top: 0.4em"></div>
+      </div>
     </div>
-</div>
 
-<div id="browser-settings-container" class="settings-container">
-    <h3>便捷操作</h3>
-    <div class="setting-section">
-        <label
-        ><input id="dropOpenLink" type="checkbox"/>
-            拖拽链接以新标签页打开</label
-        >
-        <div class="settings-info-subheading">
-            当拖拽网页中的链接时，以新标签页打开。
-        </div>
+    <div id="browser-settings-container" class="settings-container">
+      <h3>便捷操作</h3>
+      <div class="setting-section">
+        <label><input id="dropOpenLink" type="checkbox" /> 拖拽链接以新标签页打开</label>
+        <div class="settings-info-subheading">当拖拽网页中的链接时，以新标签页打开。</div>
+      </div>
+      <div class="setting-section">
+        <label><input id="dbClickClose" type="checkbox" /> 双击关闭标签</label>
+        <div class="settings-info-subheading">当双击标签栏的标签时，直接将其关闭（非锁定标签）</div>
+      </div>
     </div>
-    <div class="setting-section">
-        <label><input id="dbClickClose" type="checkbox"/> 双击关闭标签</label>
-        <div class="settings-info-subheading">
-            当双击标签栏的标签时，直接将其关闭（非锁定标签）
-        </div>
-    </div>
-</div>
-<div id="browser-settings-container" class="settings-container">
-    <h3 data-string="settingsBrowserHeading"></h3>
-    <p>当前：<span id="os_name"></span> <span id="os_type"></span></p>
-    <div class="setting-section">
-        <input
-                id="custom-browser"
-                hidden
-                style="margin-left: 0.5em; min-width: 325px"
-        />
+    <div id="browser-settings-container" class="settings-container">
+      <h3 data-string="settingsBrowserHeading"></h3>
+      <p>当前：<span id="os_name"></span> <span id="os_type"></span></p>
+      <div class="setting-section">
+        <input id="custom-browser" hidden style="margin-left: 0.5em; min-width: 325px" />
         <button
-                id="button-default-browser"
-                onclick="callSetDefaultBrowser()"
-                style="border-radius: 4px; border: solid 1px #ccc; padding: 5px"
+          id="button-default-browser"
+          onclick="callSetDefaultBrowser()"
+          style="border-radius: 4px; border: solid 1px #ccc; padding: 5px"
         ></button>
-    </div>
-</div>
-
-<div id="browser-tab-container" class="settings-container">
-    <h3>起始页</h3>
-    <div id="tab-choose" class="setting-section">
-        <div class="setting-option">
-            <input id="tstab-input" name="tabChoosed" type="radio"/>
-            <label for="tstab-input">磐古桌面（官方尝鲜版）</label>
-        </div>
-        <div class="setting-option">
-            <input id="qingning-input" name="tabChoosed" type="radio"/>
-            <label for="qingning-input">青柠起始页（极致简约）</label>
-        </div>
-        <div class="setting-option">
-            <input id="infinity-input" name="tabChoosed" type="radio"/>
-            <label for="infinity-input">infinity（功能强大）</label>
-        </div>
-        <div class="setting-option">
-            <input id="itab-input" name="tabChoosed" type="radio"/>
-            <label for="itab-input">iTab（热门新秀）</label>
-        </div>
-        <div class="setting-option">
-            <input id="tab-custom-input" name="tabChoosed" type="radio"/>
-            <label for="ab-custom-input">自定义</label>
-            <input
-                    id="tab-text-input"
-                    hidden
-                    placeholder="请输入"
-                    style="width: 100%; max-width: 300px"
-                    type="text"
-            />
-        </div>
-    </div>
-</div>
-
-<div id="password-autofill-container" class="settings-container">
-    <h3 data-string="settingsPasswordAutoFillHeadline"></h3>
-
-    <div class="setting-section">
-        <label
-                data-string="settingsSelectPasswordManager"
-                for="selectedPasswordManagers"
-        ></label>
-        <select
-                id="selected-password-manager"
-                name="selectedPasswordManager"
-        ></select>
+      </div>
     </div>
 
-    <div id="keychain-view-link" class="setting-section" hidden>
+    <div id="browser-tab-container" class="settings-container">
+      <h3>起始页</h3>
+      <div id="tab-choose" class="setting-section">
+        <div class="setting-option">
+          <input id="tstab-input" name="tabChoosed" type="radio" />
+          <label for="tstab-input">磐古桌面（官方尝鲜版）</label>
+        </div>
+        <div class="setting-option">
+          <input id="qingning-input" name="tabChoosed" type="radio" />
+          <label for="qingning-input">青柠起始页（极致简约）</label>
+        </div>
+        <div class="setting-option">
+          <input id="infinity-input" name="tabChoosed" type="radio" />
+          <label for="infinity-input">infinity（功能强大）</label>
+        </div>
+        <div class="setting-option">
+          <input id="itab-input" name="tabChoosed" type="radio" />
+          <label for="itab-input">iTab（热门新秀）</label>
+        </div>
+        <div class="setting-option">
+          <input id="tab-custom-input" name="tabChoosed" type="radio" />
+          <label for="ab-custom-input">自定义</label>
+          <input id="tab-text-input" hidden placeholder="请输入" style="width: 100%; max-width: 300px" type="text" />
+        </div>
+      </div>
+    </div>
+
+    <div id="password-autofill-container" class="settings-container">
+      <h3 data-string="settingsPasswordAutoFillHeadline"></h3>
+
+      <div class="setting-section">
+        <label data-string="settingsSelectPasswordManager" for="selectedPasswordManagers"></label>
+        <select id="selected-password-manager" name="selectedPasswordManager"></select>
+      </div>
+
+      <div id="keychain-view-link" class="setting-section" hidden>
         <a data-string="keychainViewPasswords"></a>
+      </div>
     </div>
-</div>
 
-<div id="proxy-settings-container" class="settings-container">
-    <h3 data-string="settingsProxyHeading"></h3>
+    <div id="proxy-settings-container" class="settings-container">
+      <h3 data-string="settingsProxyHeading"></h3>
 
-    <div id="proxy-type-container" class="setting-section">
+      <div id="proxy-type-container" class="setting-section">
         <select id="selected-proxy-type">
-            <option data-string="settingsNoProxy"></option>
-            <option data-string="settingsManualProxy"></option>
-            <option data-string="settingsAutomaticProxy"></option>
-            <option data-string="settingsSystemProxy"></option>
+          <option data-string="settingsNoProxy"></option>
+          <option data-string="settingsManualProxy"></option>
+          <option data-string="settingsAutomaticProxy"></option>
+          <option data-string="settingsSystemProxy"></option>
         </select>
-    </div>
+      </div>
 
-    <div id="manual-proxy-section" class="setting-section">
+      <div id="manual-proxy-section" class="setting-section">
         <div class="setting-option">
-            <label
-                    data-string="settingsProxyRules"
-                    for="proxy-rules-input"
-            ></label>
-            <input
-                    id="proxy-rules-input"
-                    name="proxyRules"
-                    placeholder="proxy.example.com:8080"
-                    type="text"
-            />
+          <label data-string="settingsProxyRules" for="proxy-rules-input"></label>
+          <input id="proxy-rules-input" name="proxyRules" placeholder="proxy.example.com:8080" type="text" />
         </div>
 
         <div class="setting-option">
-            <label
-                    data-string="settingsProxyBypassRules"
-                    for="proxy-bypass-rules-input"
-            ></label>
-            <input
-                    id="proxy-bypass-rules-input"
-                    name="proxyBypassRules"
-                    placeholder="localhost, 127.0.0.1/8, ::1"
-            />
+          <label data-string="settingsProxyBypassRules" for="proxy-bypass-rules-input"></label>
+          <input id="proxy-bypass-rules-input" name="proxyBypassRules" placeholder="localhost, 127.0.0.1/8, ::1" />
         </div>
+      </div>
+
+      <div id="pac-option" class="setting-option">
+        <label data-string="settingsProxyConfigurationURL" for="pac-url-input"></label>
+        <input id="pac-url-input" placeholder="https://example.com/proxy.pac" type="text" />
+      </div>
     </div>
 
-    <div id="pac-option" class="setting-option">
-        <label
-                data-string="settingsProxyConfigurationURL"
-                for="pac-url-input"
-        ></label>
-        <input
-                id="pac-url-input"
-                placeholder="https://example.com/proxy.pac"
-                type="text"
-        />
-    </div>
-</div>
+    <div id="keymap-settings-container" class="settings-container">
+      <h3 data-string="settingsKeyboardShortcutsHeading"></h3>
+      <div class="settings-info-subheading" data-string="settingsKeyboardShortcutsHelp"></div>
 
-<div id="keymap-settings-container" class="settings-container">
-    <h3 data-string="settingsKeyboardShortcutsHeading"></h3>
-    <div
-            class="settings-info-subheading"
-            data-string="settingsKeyboardShortcutsHelp"
-    ></div>
-
-    <div class="setting-section">
+      <div class="setting-section">
         <ul id="key-map-list"></ul>
+      </div>
     </div>
-</div>
-<div id="custom-bangs-container" class="settings-container">
-    <h3 data-string="settingsCustomBangs"></h3>
-    <div class="setting-section">
+    <div id="custom-bangs-container" class="settings-container">
+      <h3 data-string="settingsCustomBangs"></h3>
+      <div class="setting-section">
         <ul id="custom-bangs"></ul>
-        <button
-                id="add-custom-bang"
-                data-string="settingsCustomBangsAdd"
-        ></button>
+        <button id="add-custom-bang" data-string="settingsCustomBangsAdd"></button>
+      </div>
     </div>
-</div>
-<!-- this needs to be placed at the bottom so that sticky positioning works correctly -->
-<div
-        id="restart-required-banner"
-        class="banner yellow-background"
-        hidden
-        role="alert"
->
-    <div class="container">
+    <!-- this needs to be placed at the bottom so that sticky positioning works correctly -->
+    <div id="restart-required-banner" class="banner yellow-background" hidden role="alert">
+      <div class="container">
         <i class="i carbon:information"></i>
         <span data-string="settingsRestartRequired"></span>
+      </div>
     </div>
-</div>
 
-<script src="../../js/util/keyMap.js"></script>
-<script src="../../js/util/settings/settingsContent.js"></script>
-<script src="../../js/util/searchEngine.js"></script>
-<script src="../../js/util/theme.js"></script>
-<script src="../../js/util/passwordManager.js"></script>
-<script src="../../dist/localization.build.js"></script>
-<script src="settings.js"></script>
-</body>
+    <script src="../../js/util/keyMap.js"></script>
+    <script src="../../js/util/settings/settingsContent.js"></script>
+    <script src="../../js/util/searchEngine.js"></script>
+    <script src="../../js/util/theme.js"></script>
+    <script src="../../js/util/passwordManager.js"></script>
+    <script src="../../dist/localization.build.js"></script>
+    <script src="settings.js"></script>
+  </body>
 </html>

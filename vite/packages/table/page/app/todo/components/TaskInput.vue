@@ -1,32 +1,36 @@
 <template>
-  <a-input ref="inputer"
-           v-model:value="newTask.title" :placeholder="getPlaceholder()"
-           :size="runtime.windowWidth >= 600 ? 'normal' : 'small'"
-           class="input main-input"
-           style="background:--var(primary-bg);color:var(--active-text) !important; "
-           @pressEnter="addNewTask"
+  <a-input
+    ref="inputer"
+    class="input main-input"
+    style="background: --var(primary-bg); color: var(--active-text) !important"
+    :size="runtime.windowWidth >= 600 ? 'normal' : 'small'"
+    v-model:value="newTask.title"
+    @pressEnter="addNewTask"
+    :placeholder="getPlaceholder()"
   >
     <template #suffix>
-      <TimerSelector v-model="newTask.deadTime"/>
+      <TimerSelector v-model="newTask.deadTime" />
     </template>
   </a-input>
 </template>
 
 <script lang="ts">
-import dayjs from "dayjs";
-import {mapActions, mapState} from "pinia";
-import {taskStore} from "../stores/task";
-import {CalendarOutlined} from "@ant-design/icons-vue";
-import objectSupport from "dayjs/plugin/objectSupport";
-import TimerSelector from "./TimerSelector.vue";
-import {configStore, listStore} from "../store";
+import dayjs from 'dayjs';
+import { mapActions, mapState, mapWritableState } from 'pinia';
+import { taskStore } from '../stores/task';
+import { CalendarOutlined } from '@ant-design/icons-vue';
+import objectSupport from 'dayjs/plugin/objectSupport';
+import TimerSelector from './TimerSelector.vue';
+import listStore from '../stores/list';
+import configStore from '../stores/config';
 // import { completeTask } from "../apps/task/page/branch/task"
-import {completeTask} from "../../../../apps/task/page/branch/task.ts"
+import { completeTask } from '../../../../apps/task/page/branch/task.ts';
+import { message } from 'ant-design-vue';
 
-dayjs.locale("zh-cn");
+dayjs.locale('zh-cn');
 dayjs.extend(objectSupport);
 export default {
-  name: "TaskInput",
+  name: 'TaskInput',
   components: {
     TimerSelector,
     CalendarOutlined,
@@ -34,66 +38,70 @@ export default {
   emits: ['added'],
   props: ['addToList'],
   computed: {
-    ...mapState(taskStore, ["currentTasks", "tasks"]),
-    ...mapState(listStore, ["activeList"]),
-    ...mapState(configStore, ["runtime"]),
+    ...mapWritableState(taskStore, ['currentTasks', 'tasks']),
+    ...mapWritableState(listStore, ['activeList']),
+    ...mapWritableState(configStore, ['runtime']),
     currentList() {
       if (this.addToList && !['T00111', 'T00222', 'T00333'].includes(this.addToList.nanoid)) {
-        return this.addToList
+        return this.addToList;
       }
       if (Object.keys(this.activeList).length > 0) {
-        return this.activeList
+        return this.activeList;
       }
-
-    }
-
+    },
   },
   data() {
     return {
       newTask: {
-        title: "",
+        title: '',
         deadTime: null,
         listNanoid: 0,
       },
     };
   },
-  mounted() {
-
-  },
-  updated() {
-  },
+  mounted() {},
+  updated() {},
   methods: {
     focus() {
-      this.$refs.inputer.focus()
+      this.$refs.inputer.focus();
     },
     getPlaceholder() {
       if (this.currentList) {
-        return "添加到「" + this.currentList.title + "」";
+        return '添加到「' + this.currentList.title + '」';
       } else {
-        return "输入待办，回车确认";
+        return '输入待办，回车确认';
       }
     },
 
     ...mapActions(taskStore, {
-      addTask: "add",
+      addTask: 'add',
     }),
 
     addNewTask() {
       let task = this.newTask;
       if (this.currentList) {
-        task.listNanoid = [this.currentList.nanoid]
+        task.listNanoid = [this.currentList.nanoid];
       } else {
-        task.listNanoid = []
+        task.listNanoid = [];
+      }
+      if (this.newTask.title.trim() === '') {
+        message.error('请输入待办内容');
+        return;
       }
       // 支线任务点
-      completeTask('Z0203')
+      completeTask('Z0203');
 
       task = Object.assign(this.newTask, {});
-      this.addTask(task);
-      this.newTask.title = "";
-      this.newTask.deadTime = null;
-      this.newTask.listNanoid = [];
-      this.$emit('added')
+      console.log('添加的任务', task);
+      let rs = this.addTask(task);
+      if (rs) {
+        this.newTask.title = '';
+        this.newTask.deadTime = null;
+        this.newTask.listNanoid = [];
+        this.$emit('added');
+      } else {
+        message.error('数据库写入失败');
+      }
     },
   },
 };

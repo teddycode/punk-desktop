@@ -67,57 +67,57 @@ const tpl = `
   </div>
 </div>
 
-`
-const spaceModel = require('../../../src/model/spaceModel')
-const backupSpaceModel = require('../../../src/model/backupSpaceModel')
-const configModel = require('../../../src/model/configModel')
-const ipc = require('electron').ipcRenderer
+`;
+const spaceModel = require('../../../src/model/spaceModel');
+const backupSpaceModel = require('../../../src/model/backupSpaceModel');
+const configModel = require('../../../src/model/configModel');
+const ipc = require('electron').ipcRenderer;
 const disconnect = {
   template: tpl,
-  data () {
+  data() {
     return {
       save: true,
       savePosition: 'cloud',
       user: null,
       space: null,
       title: '',
-      fatal: true,//非致命意外
+      fatal: true, //非致命意外
       description: '',
       spaceId: 0,
-      dontShowDisconnect: false //不再询问
-    }
+      dontShowDisconnect: false, //不再询问
+    };
   },
-  async mounted () {
+  async mounted() {
     try {
-      this.spaceId = window.globalArgs['spaceId']
-      let space = await spaceModel.getSpace(window.globalArgs['spaceId'])
-      this.space = space
-      this.user = space.userInfo
+      this.spaceId = window.globalArgs['spaceId'];
+      let space = await spaceModel.getSpace(window.globalArgs['spaceId']);
+      this.space = space;
+      this.user = space.userInfo;
     } catch (e) {
-      console.warn('无法获取到space')
+      console.warn('无法获取到space');
     }
-    this.title = window.globalArgs['title'] || '保存冲突，无法保存空间至云端'
-    this.description = window.globalArgs['description'] || '系统检测到当前空间已被<strong>其他设备占用</strong>。无法再保存当前空间。'
-
+    this.title = window.globalArgs['title'] || '保存冲突，无法保存空间至云端';
+    this.description =
+      window.globalArgs['description'] || '系统检测到当前空间已被<strong>其他设备占用</strong>。无法再保存当前空间。';
   },
   methods: {
-    closeAndSaveCnf () {
-      configModel.set('dontShowDisconnect', this.dontShowDisconnect)
-      ipc.send('closeUserWindow')
+    closeAndSaveCnf() {
+      configModel.set('dontShowDisconnect', this.dontShowDisconnect);
+      ipc.send('closeUserWindow');
     },
     /**
      * 切换到云空间，不保存
      */
-    async changeWithoutSave () {
-      await spaceModel.setUser(this.user).changeCurrent(this.space)
-      this.closeAndSaveCnf()
+    async changeWithoutSave() {
+      await spaceModel.setUser(this.user).changeCurrent(this.space);
+      this.closeAndSaveCnf();
     },
     /**
      * 切换到云空间，保存
      */
-    async reconnect () {
+    async reconnect() {
       try {
-        let result = await spaceModel.setUser(this.user).clientOnline(this.spaceId)
+        let result = await spaceModel.setUser(this.user).clientOnline(this.spaceId);
         if (result.status === 1) {
           if (result.data === '-1') {
             antd.Modal.confirm({
@@ -128,8 +128,8 @@ const disconnect = {
               cancelText: '取消',
               onOk: async () => {
                 //todo 切换到致命错误
-              }
-            })
+              },
+            });
           } else if (result.data === '-2') {
             antd.Modal.confirm({
               title: '云空间已被其他设备占用',
@@ -139,37 +139,36 @@ const disconnect = {
               cancelText: '取消',
               onOk: async () => {
                 //todo 切换到致命错误
-              }
-            })
+              },
+            });
           } else {
             //连接成功
-            ipc.send('reconnect')
+            ipc.send('reconnect');
             antd.Modal.success({
               title: '重连成功，点击确定关闭窗口',
               content: Vue.h('div', {}, [Vue.h('p', '重连成功')]),
               onOk: async () => {
-                this.closeAndSaveCnf()
-              }
-            })
+                this.closeAndSaveCnf();
+              },
+            });
           }
         }
       } catch (e) {
         try {
           if (e.response.status === 401) {
-            window.antd.message.error('账号信息失效，请先离线使用，然后重新登录此账号，即可恢复空间连接。')
+            window.antd.message.error('账号信息失效，请先离线使用，然后重新登录此账号，即可恢复空间连接。');
           } else {
-            window.antd.message.error('重连失败，请稍后再试。')
+            window.antd.message.error('重连失败，请稍后再试。');
           }
         } catch (e) {
-          window.antd.message.error('重连失败，请稍后再试。')
+          window.antd.message.error('重连失败，请稍后再试。');
         }
       }
-
     },
     /**
      * 不保存直接
      */
-    switchToOtherSpace () {
+    switchToOtherSpace() {
       antd.Modal.confirm({
         title: '确认切换到其他空间？',
         content: '不再使用此空间，更换到其他空间。',
@@ -177,30 +176,30 @@ const disconnect = {
         okText: '确定',
         cancelText: '取消',
         onOk: async () => {
-          this.$router.replace('/')
-        }
-      })
-
+          this.$router.replace('/');
+        },
+      });
     },
-    switchToBackup () {
+    switchToBackup() {
       //todo 添加新一个空间到本地
       //todo 写入一次空间内容
       //todo 切换到这个空间
       //todo 关闭当前窗体
     },
-    continueUse () {
+    continueUse() {
       antd.Modal.confirm({
         title: '离线使用空间？',
-        content: '此模式下依然可使用空间。系统会在后台尝试重连，一旦成功连接会自动转入线上空间并将离线改动同步上去。可放心使用。',
+        content:
+          '此模式下依然可使用空间。系统会在后台尝试重连，一旦成功连接会自动转入线上空间并将离线改动同步上去。可放心使用。',
         centered: true,
         okText: '确定',
         cancelText: '取消',
         onOk: async () => {
-          this.closeAndSaveCnf()
-        }
-      })
-    }
-  }
-}
+          this.closeAndSaveCnf();
+        },
+      });
+    },
+  },
+};
 
-module.exports = disconnect
+module.exports = disconnect;

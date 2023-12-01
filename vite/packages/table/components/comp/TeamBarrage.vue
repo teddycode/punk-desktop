@@ -1,28 +1,30 @@
 <template>
-  <vueCustomScrollbar :settings="scrollbarSettingsBarrage" style="height:100%;padding-top: 15px">
+  <vueCustomScrollbar :settings="scrollbarSettingsBarrage" style="height: 100%; padding-top: 15px">
     <a-row :gutter="[10, 15]" class="mb-5">
       <a-col v-if="barrages.length === 0 && loading === false" :span="24" style="text-align: center">
         <a-empty description="暂无弹幕" style="margin-top: 40px"></a-empty>
       </a-col>
       <template v-for="barrage in barrages">
         <a-col :span="5">
-          <FrameAvatar :avatar-size="55" :avatar-url="barrage.avatar"
-                       :frame-url="barrage.userInfo?.equippedItems?.frameDetail?.image" :size="36"
-                       class="mt-2 pointer ml-6" style="zoom:0.65;"
-                       @click="showUserCard(barrage.uid)"></FrameAvatar>
+          <FrameAvatar
+            :avatar-size="55"
+            :avatar-url="barrage.avatar"
+            :frame-url="barrage.userInfo?.equippedItems?.frameDetail?.image"
+            :size="36"
+            class="mt-2 pointer ml-6"
+            style="zoom: 0.65"
+            @click="showUserCard(barrage.uid)"
+          ></FrameAvatar>
         </a-col>
         <a-col :span="19">
           <div class="barrage-name">
-            <strong style="color:var(--main-text)">{{ barrage.nickname }}</strong> <span
-              style="color:var(--primary-text)">· {{
-              barrage.create_time_text
-            }}</span>
+            <strong style="color: var(--main-text)">{{ barrage.nickname }}</strong>
+            <span style="color: var(--primary-text)">· {{ barrage.create_time_text }}</span>
           </div>
-          <div class="barrage-content" style="color:var(--main-text)">
+          <div class="barrage-content" style="color: var(--main-text)">
             {{ barrage.content }}
           </div>
-          <div class="barrage-time">
-          </div>
+          <div class="barrage-time"></div>
         </a-col>
       </template>
     </a-row>
@@ -30,33 +32,31 @@
 </template>
 
 <script>
-
-import { appStore } from '../../store'
-import { mapActions } from 'pinia'
-import FrameAvatar from '../avatar/FrameAvatar.vue'
+import { appStore } from '../../store';
+import { mapActions } from 'pinia';
+import FrameAvatar from '../avatar/FrameAvatar.vue';
 
 export default {
   name: 'TeamBarrage',
   components: { FrameAvatar },
   props: ['barrages', 'loading'],
-  data () {
+  data() {
     return {
       scrollbarSettingsBarrage: {
         useBothWheelAxes: true,
         swipeEasing: true,
         suppressScrollY: false,
         suppressScrollX: true,
-        wheelPropagation: true
+        wheelPropagation: true,
       },
       barragesTeam: [],
-      CONST: {}
-    }
+      CONST: {},
+    };
   },
   methods: {
-    ...mapActions(appStore, ['showUserCard'])
-  }
-
-}
+    ...mapActions(appStore, ['showUserCard']),
+  },
+};
 </script>
 
 <style scoped>

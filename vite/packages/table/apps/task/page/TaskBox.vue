@@ -1,27 +1,20 @@
 <template>
   <xt-task id="firstTask" no="1" @cb="resetting">
-    <xt-menu v-if="store.isTask" :menus="menus" style="">
+    <xt-menu :menus="menus" style="" v-if="store.isTask">
       <!-- <xt-button @click="store.firstTask = false"></xt-button> -->
       <div
-          class="xt-bg relative s-bg h-full xt-base-btn"
-          style="width: 70px; height: 70px; border-radius: 8px"
-          @click="store.isTaskDrawer = true"
+        @click="store.isTaskDrawer = true"
+        class="relative h-full xt-bg s-bg xt-base-btn"
+        style="width: 70px; height: 70px; border-radius: 18px"
       >
-        <img
-            alt=""
-            src="/img/task/star.png"
-            style="width: 56px; height: 56px"
-        />
+        <img src="/img/task/star.png" style="width: 56px; height: 56px" alt="" />
         <div
-            class="absolute text-center xt-text rounded-md left-1/2 -translate-x-1/2 flex overflow-hidden"
-            style="width: 90%; bottom: 4px; height: 20px; z-index: 9999"
+          class="absolute flex overflow-hidden text-center -translate-x-1/2 rounded-md xt-text left-1/2"
+          style="width: 90%; bottom: 4px; height: 20px; z-index: 9999"
         >
-          <div :style="[progress]" class="xt-active-bg"></div>
+          <div class="xt-active-bg" :style="[progress]"></div>
           <div class="flex-1 xt-bg-2"></div>
-          <div
-              class="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2"
-              style="width: 60px; font-size: 11px"
-          >
+          <div class="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2" style="width: 60px; font-size: 11px">
             主线 {{ width }} %
           </div>
         </div>
@@ -32,12 +25,11 @@
 </template>
 
 <script setup>
-import { computed, reactive, ref } from 'vue'
-import { taskStore } from '../store'
-import { tasks } from '../page/primary/Primary'
-import Task from './Task.vue'
-
-const store = taskStore()
+import { reactive, ref, computed } from 'vue';
+import { taskStore } from '../store';
+import { tasks } from '../page/primary/Primary';
+import Task from './Task.vue';
+const store = taskStore();
 
 /**
  * 首次引导任务
@@ -53,45 +45,45 @@ const store = taskStore()
  * 回归主线任务
  */
 const resetting = () => {
-  store.firstTask = true
-  store.taskID = 'M0101'
-  store.step = -9
+  store.firstTask = true;
+  store.taskID = 'M0101';
+  store.step = -9;
   // firstTask.value = false;
-}
+};
 // 主线任务进展
-let width = ref()
+let width = ref();
 
 const progress = computed(() => {
-  let currentCount = ref(0)
-  let count = ref(0)
-  let flag = ref(true)
+  let currentCount = ref(0);
+  let count = ref(0);
+  let flag = ref(true);
   tasks.forEach((item) => {
     item.tasks.forEach((task) => {
-      if (task.id == 'firstTask') return
+      if (task.id == 'firstTask') return;
       if (store.taskID == task.id) {
-        flag.value = false
+        flag.value = false;
       }
       if (flag.value) {
-        currentCount.value++
+        currentCount.value++;
       }
-      count.value++
-    })
-  })
-  let res = (currentCount.value / count.value) * 100
-  width.value = Math.round(res)
+      count.value++;
+    });
+  });
+  let res = (currentCount.value / count.value) * 100;
+  width.value = Math.round(res);
   return {
     width: res + '%',
-  }
-})
+  };
+});
 
 const menus = reactive([
   {
     label: '关闭任务中心',
     callBack: () => {
-      store.isTask = false
+      store.isTask = false;
     },
   },
-])
+]);
 </script>
 
 <style lang="scss" scoped></style>

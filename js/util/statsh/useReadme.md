@@ -11,7 +11,7 @@
 
 ### 二、使用方法
 
-###### 参数: 1、必填【action: String】埋点行为  包含增加和设置两种行为: 'increase' | 'set'
+###### 参数: 1、必填【action: String】埋点行为 包含增加和设置两种行为: 'increase' | 'set'
 
 ###### 参数: 2、必填【key: String】埋点数据的键名
 
@@ -20,14 +20,14 @@
 ###### 返回: 无
 
 ```javascript
-  //举例
-  statsh.do({
-    action: 'set',
-    key: 'blockAds',
-    value: 12
-  })
+//举例
+statsh.do({
+  action: 'set',
+  key: 'blockAds',
+  value: 12,
+});
 ```
 
 ### 三、注意事项
 
-- 通过`statsh.do`添加了了一个新的key，必须在`statistics`上报接口中添加对应的key
+- 通过`statsh.do`添加了了一个新的 key，必须在`statistics`上报接口中添加对应的 key

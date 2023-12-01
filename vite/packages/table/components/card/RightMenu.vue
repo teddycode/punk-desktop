@@ -1,27 +1,24 @@
 <!-- 处理右键菜单内容 -->
 <template>
   <Menu
-      v-model:trigger="trigger"
-      :menus="menuList"
-      :model="model"
-      :start="menuState"
-      fn="fn"
-      name="title"
-      @closeMenu="close"
+    v-model:trigger="trigger"
+    :menus="menuList"
+    :model="model"
+    :start="menuState"
+    fn="fn"
+    name="title"
+    @closeMenu="close"
   >
-    <div
-        @contextmenu="rightMenuState()"
-
-    >
+    <div @contextmenu="rightMenuState()">
       <slot></slot>
     </div>
     <template v-if="sizes.length > 0" #cardSize>
       <div class="flex flex-wrap mb-2 ml-3 my-1">
         <div
-            v-for="item in sizes"
-            class="h-8 w-12 xt-bg-2 text-sm xt-base-btn mr-3"
-            style="border-radius: 16px"
-            @click="updateCardSize(item)"
+          v-for="item in sizes"
+          class="h-8 w-12 xt-bg-2 text-sm xt-base-btn mr-3"
+          style="border-radius: 16px"
+          @click="updateCardSize(item)"
         >
           {{ item.title }}
         </div>
@@ -30,38 +27,27 @@
   </Menu>
 
   <a-drawer
-      v-model:visible="menuVisible"
-      :closable="true"
-      :width="120"
-      class="drawer"
-      height="auto"
-      placement="bottom"
-      @close="menuVisible = false"
+    v-model:visible="menuVisible"
+    :closable="true"
+    :width="120"
+    class="drawer"
+    height="auto"
+    placement="bottom"
+    @close="menuVisible = false"
   >
-    <div
-        v-if="sizes && sizes.length > 0"
-        class="flex flex-row items-center mb-3 ml-4"
-    >
+    <div v-if="sizes && sizes.length > 0" class="flex flex-row items-center mb-3 ml-4">
       <div class="mr-4">小组件尺寸</div>
-      <HorizontalPanel
-          v-model:selectType="cardSize"
-          :navList="sizes"
-          bgColor="drawer-item-select-bg"
-      />
+      <HorizontalPanel v-model:selectType="cardSize" :navList="sizes" bgColor="drawer-item-select-bg" />
       <slot name="old"></slot>
     </div>
     <hr
-        v-if="sizes && sizes.length > 0"
-        class="my-8 ml-4 mr-4"
-        style="border: none; border-top: 1px solid rgba(255, 255, 255, 0.1)"
+      v-if="sizes && sizes.length > 0"
+      class="my-8 ml-4 mr-4"
+      style="border: none; border-top: 1px solid rgba(255, 255, 255, 0.1)"
     />
     <div class="flex flex-row">
       <slot name="menuExtra"></slot>
-      <BottomEdit
-          :menuList="menuList"
-          @close="menuVisible = false"
-          @removeCard="doRemoveCard"
-      />
+      <BottomEdit :menuList="menuList" @close="menuVisible = false" @removeCard="doRemoveCard" />
       <!--      <div class="w-24 h-24 ml-4 option" @click="onCopy"-->
       <!--           v-if="options.type.includes('CPU') || options.type.includes('GPU')">-->
       <!--        <Icon class="icon" icon="fuzhi"></Icon>-->
@@ -72,26 +58,26 @@
 </template>
 
 <script setup>
-import { computed, ref, toRefs, watch } from 'vue'
-import { storeToRefs } from 'pinia'
-import { useWidgetStore } from './store.ts'
-import Menu from '../../ui/components/Menu/index.vue'
-import BottomEdit from './BottomEdit.vue'
-import HorizontalPanel from '../HorizontalPanel.vue'
+import { computed, ref, toRefs, watch } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useWidgetStore } from './store.ts';
+import Menu from '../../ui/components/Menu/index.vue';
+import BottomEdit from './BottomEdit.vue';
+import HorizontalPanel from '../HorizontalPanel.vue';
 
-const emits = defineEmits(['removeCard', 'sizeType'])
+const emits = defineEmits(['removeCard', 'sizeType']);
 
 const props = defineProps({
   // 右键菜单数据
   menus: {
     default: () => {
-      return []
+      return [];
     },
   },
   // 卡片大小数据
   sizes: {
     default: () => {
-      return []
+      return [];
     },
   },
   //
@@ -100,18 +86,18 @@ const props = defineProps({
   },
   oldMenuVisible: {},
   sizeType: {},
-})
-const { menus, sizes, oldMenuVisible, currentEvent, event } = toRefs(props)
+});
+const { menus, sizes, oldMenuVisible, currentEvent, event } = toRefs(props);
 
-const widgetStore = useWidgetStore()
-const { rightModel } = storeToRefs(widgetStore)
+const widgetStore = useWidgetStore();
+const { rightModel } = storeToRefs(widgetStore);
 
 // 新版右键和点击事件切换
-const model = ref('contextmenu')
+const model = ref('contextmenu');
 // 是否启动跟随菜单
 const menuState = computed(() => {
-  return rightModel.value == 'follow' ? true : false
-})
+  return rightModel.value == 'follow' ? true : false;
+});
 
 // 处理不同右键模式的菜单数据
 const menuList = computed(() => {
@@ -126,51 +112,51 @@ const menuList = computed(() => {
         divider: true,
       },
       ...menus.value,
-    ]
-    return array
+    ];
+    return array;
   }
-  return menus.value
-})
+  return menus.value;
+});
 
 // 卡片大小监听
-const cardSize = ref(props.sizeType)
+const cardSize = ref(props.sizeType);
 watch(cardSize, (newV) => {
-  emits('update:sizeType', newV)
-})
+  emits('update:sizeType', newV);
+});
 // 旧版菜单展示
-const menuVisible = ref(false)
-const menuRef = ref()
+const menuVisible = ref(false);
+const menuRef = ref();
 // 旧版右键监听
-const trigger = ref(false)
+const trigger = ref(false);
 const close = () => {
-  trigger.value = false
-}
+  trigger.value = false;
+};
 watch(oldMenuVisible, (newV) => {
   // 如果不处于主应用模式
-  if (!menuState.value) menuVisible.value = newV
+  if (!menuState.value) menuVisible.value = newV;
   else if (menuState.value) {
-    trigger.value = true
-    emits('update:oldMenuVisible', false)
+    trigger.value = true;
+    emits('update:oldMenuVisible', false);
   }
-})
+});
 watch(menuVisible, (newV) => {
-  emits('update:oldMenuVisible', newV)
-  oldMenuVisible.value = newV
-})
+  emits('update:oldMenuVisible', newV);
+  oldMenuVisible.value = newV;
+});
 
 // 更新卡片大小
 const updateCardSize = (item) => {
-  cardSize.value = item
+  cardSize.value = item;
 
-  emits('update:sizeType', item)
-}
+  emits('update:sizeType', item);
+};
 // 删除卡片
 const removeCard = () => {
-  emits('removeCard')
-}
+  emits('removeCard');
+};
 const rightMenuState = () => {
-  if (!menuState.value) menuVisible.value = true
-}
+  if (!menuState.value) menuVisible.value = true;
+};
 </script>
 
 <style lang="scss" scoped></style>

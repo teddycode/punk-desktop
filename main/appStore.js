@@ -1,30 +1,30 @@
 app.whenReady().then(() => {
   ipc.on('openSystemApp', (event, args) => {
-    SidePanel.send('openSystemApp', args)
-  })
+    SidePanel.send('openSystemApp', args);
+  });
 
-  let result
+  let result;
   ipc.on('result', (event, args) => {
-    result = args
-  })
+    result = args;
+  });
 
   ipc.on('contrast', function (event, args) {
-    SidePanel.send('contrast', args)
+    SidePanel.send('contrast', args);
     const myVar = setInterval(function () {
       if (result !== undefined) {
-        event.reply('result', result)
-        clearInterval(myVar)
+        event.reply('result', result);
+        clearInterval(myVar);
       }
-    }, 20)
-  })
+    }, 20);
+  });
 
-  let allAppList
+  let allAppList;
   ipc.on('allAppList', (event, args) => {
-    allAppList = args
-  })
+    allAppList = args;
+  });
 
   ipc.on('needOpenApp', function (event, args) {
-    SidePanel.send('openApp')
+    SidePanel.send('openApp');
     // const myVar = setInterval(function () {
     //   if (allAppList !== undefined) {
     //     event.reply('openAppList',allAppList)
@@ -32,44 +32,44 @@ app.whenReady().then(() => {
     //   }
     // }, 20);
     setTimeout(() => {
-      event.reply('openAppList', allAppList)
-    }, 100)
-  })
+      event.reply('openAppList', allAppList);
+    }, 100);
+  });
 
   ipc.on('openSet', (event, args) => {
-    SidePanel.send('openSet', args)
-  })
+    SidePanel.send('openSet', args);
+  });
   ipc.on('uninstallApp', (event, args) => {
-    SidePanel.send('uninstallApp', args)
-  })
+    SidePanel.send('uninstallApp', args);
+  });
 
-  let allMyApps
+  let allMyApps;
   ipc.on('allMyApps', (event, args) => {
-    allMyApps = args
-  })
+    allMyApps = args;
+  });
   ipc.on('myApps', function (event, args) {
-    SidePanel.send('myApps')
+    SidePanel.send('myApps');
     const myVar = setInterval(function () {
       if (allMyApps !== '') {
-        event.reply('allMyApps', allMyApps)
-        clearInterval(myVar)
+        event.reply('allMyApps', allMyApps);
+        clearInterval(myVar);
       }
-    }, 20)
-  })
+    }, 20);
+  });
 
   ipc.on('openAppCircle', (event, args) => {
-    SidePanel.send('openAppCircle', args)
-  })
+    SidePanel.send('openAppCircle', args);
+  });
 
   ipc.on('openAppGroupChat', (event, args) => {
-    SidePanel.send('openAppGroupChat', args)
-  })
+    SidePanel.send('openAppGroupChat', args);
+  });
 
   ipc.on('openInvite', (event, args) => {
-    SidePanel.send('openInvite', args)
-  })
+    SidePanel.send('openInvite', args);
+  });
 
   ipc.on('openAppStore', (event, args) => {
-    SidePanel.send('openAppStore', args)
-  })
-})
+    SidePanel.send('openAppStore', args);
+  });
+});

@@ -7,8 +7,7 @@ export const TranslateUsingGET = async (from: string, to: string, text: string) 
     params: {
       from,
       to,
-      text
-    }
-  })
-}
-
+      text,
+    },
+  });
+};

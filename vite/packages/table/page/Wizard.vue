@@ -1,82 +1,87 @@
 <template>
-  <div style="background: #333333;height: 100vh;width: 100vw">
-    <h2 style="text-align: center;padding: 1em;-webkit-app-region:drag">
+  <div style="background: #333333; height: 100vh; width: 100vw">
+    <h2 style="text-align: center; padding: 1em; -webkit-app-region: drag">
       <Icon icon="jurassic_nav" style="font-size: 1.2em"></Icon>
       工作台使用向导
     </h2>
     <div
-        style="text-align: left;font-size: 1.2em;line-height: 2;width: 600px;margin: auto;position: relative;height: 80vh">
+      style="
+        text-align: left;
+        font-size: 1.2em;
+        line-height: 2;
+        width: 600px;
+        margin: auto;
+        position: relative;
+        height: 80vh;
+      "
+    >
       <div style="padding: 0.5em">
         <a-steps :current="step" size="large">
-          <a-step v-for="item in steps" :title="item.title"/>
+          <a-step v-for="item in steps" :title="item.title" />
         </a-steps>
       </div>
-      <div v-if="step===0">
-        <div v-if="true" style="margin-bottom: 2em;margin-top:1em">
-          如果您正在使用副屏，您可以选择副屏模式获得更好的体验。
-          <div style="color:#999;font-size: 0.9em">
-            <bulb-filled/>
+      <div v-if="step === 0">
+        <div style="margin-bottom: 2em; margin-top: 1em" v-if="true">
+          如果您正在使用副屏，则推荐您使用副屏模式获得最佳体验。
+          <div style="color: #999; font-size: 0.9em">
+            <bulb-filled />
             还没有扩展屏？
-            <br/><a @click="openVideo">
-            <play-circle-filled/>
-            点击了解</a> Spacedesk | 把任意设备变成你的第二屏幕，手机、平板、电脑都可以！
+            <br /><a @click="openVideo">
+              <play-circle-filled />
+              点击了解</a
+            >
+            Spacedesk | 把任意设备变成你的第二屏幕，手机、平板、电脑都可以！
           </div>
         </div>
-        <div v-else style="margin-bottom: 1em">
+        <div style="margin-bottom: 1em" v-else>
           您当前仅有一块屏幕，无法启用副屏模式，您可在增添副屏后启用。<a>了解更多</a>
         </div>
         <a-row :gutter="20">
           <a-col :span="12">
-            <div :class="{'active':mod==='bootstrap'}" class="panel pointer" @click="this.mod='bootstrap'">
+            <div :class="{ active: mod === 'bootstrap' }" class="panel pointer" @click="this.mod = 'bootstrap'">
               <div class="title">
                 <icon icon="kuaijie" style="font-size: 1.2em"></icon>
                 窗口模式
               </div>
-              <p>
-                在主屏上以窗口模式运行，通过默认快捷键 【Alt】+【Z】 显示/隐藏。
-              </p></div>
+              <p>在主屏上以窗口模式运行，通过默认快捷键 【Alt】+【Z】 显示/隐藏。</p>
+            </div>
           </a-col>
           <a-col :span="12">
-            <div :class="{'active':mod==='second-screen'}" class="panel pointer" @click="this.mod='second-screen'">
+            <div :class="{ active: mod === 'second-screen' }" class="panel pointer" @click="this.mod = 'second-screen'">
               <div class="title">
                 <icon icon="touping" style="font-size: 1.2em"></icon>
                 副屏全屏模式
               </div>
-              <p>
-                此模式专为副屏优化，将自动放大字体。并提供更适合触摸的交互。
-              </p>
+              <p>此模式专为副屏优化，将自动放大字体。并提供更适合触摸的交互。</p>
             </div>
           </a-col>
         </a-row>
-
-
       </div>
-      <div v-if="step===1 && mod==='second-screen'">
-
-        <div v-if="screenSettingTab==='none'">
-
+      <div v-if="step === 1 && mod === 'second-screen'">
+        <div v-if="screenSettingTab === 'none'">
           <a-row class="screen-section">
             <a-col :span="20">
               <div style="font-size: 1.3em">
-                <Icon icon="Touch"/>
+                <Icon icon="Touch" />
                 副屏是否已经可正确识别触摸？
               </div>
               <div style="color: #999">异常情况：触摸副屏，反馈在主屏的情况。</div>
             </a-col>
             <a-col :span="4">
-              <a-button v-if="screenSettingTab!=='touch'" type="primary" @click="screenSettingTab='touch'"> 矫正屏幕
+              <a-button v-if="screenSettingTab !== 'touch'" type="primary" @click="screenSettingTab = 'touch'">
+                矫正屏幕
               </a-button>
             </a-col>
           </a-row>
           <a-row class="screen-section">
             <a-col :span="20">
               <div style="font-size: 1.3em">
-                <Icon icon="touping"/>
+                <Icon icon="touping" />
                 工作台是否显示在了您期望的屏幕上？
               </div>
             </a-col>
             <a-col :span="4">
-              <a-button type="primary" @click="screenSettingTab='choose'">选择屏幕</a-button>
+              <a-button type="primary" @click="screenSettingTab = 'choose'">选择屏幕</a-button>
             </a-col>
           </a-row>
           <a-row class="screen-section">
@@ -88,16 +93,17 @@
               <div style="color: #999">异常情况：字体过小、难以触摸、边缘留白过大、显示不全。</div>
             </a-col>
             <a-col :span="4">
-              <a-button type="primary" @click="screenSettingTab='scale'">设置缩放</a-button>
+              <a-button type="primary" @click="screenSettingTab = 'scale'">设置缩放</a-button>
             </a-col>
           </a-row>
           <div></div>
         </div>
 
-        <div v-if="screenSettingTab==='touch'">
-          <div v-if="screenSettingTab==='touch'" class="screen-section" style="line-height: 2;margin-top: 3em">
+        <div v-if="screenSettingTab === 'touch'">
+          <div v-if="screenSettingTab === 'touch'" class="screen-section" style="line-height: 2; margin-top: 3em">
             <p>
-              如果您点击副屏没有任何反馈（包括主屏和副屏），请先检查是否正确连接数据。不支持一线通的屏幕需要同时连接HDMI和USB，分别负责视频传输和数据传输。</p>
+              如果您点击副屏没有任何反馈（包括主屏和副屏），请先检查是否正确连接数据。不支持一线通的屏幕需要同时连接HDMI和USB，分别负责视频传输和数据传输。
+            </p>
             <p>矫正方法：</p>
             <p>在非触摸屏上按下Enter键，在触摸屏上进行触摸。</p>
             <p style="text-align: center">
@@ -105,31 +111,25 @@
               <a-button size="large" type="primary" @click="adjustPen">笔矫正</a-button>
             </p>
           </div>
-
         </div>
 
-
-        <div v-if="screenSettingTab==='choose'" class="screen-section" style="height: 17em;margin-top: 2em">
+        <div v-if="screenSettingTab === 'choose'" class="screen-section" style="height: 17em; margin-top: 2em">
           选择您要显示工作台的屏幕，直接点击屏幕即可。
           <a-button v-if="canTouch" style="margin-bottom: 2em" type="primary">
-            <Icon icon="touping"/>
+            <Icon icon="touping" />
             矫正屏幕
           </a-button>
           <ChooseScreen></ChooseScreen>
         </div>
 
-        <div v-if="screenSettingTab==='scale'" class="screen-section" style="margin-top: 1em">
-          <div style="color: #999">
-            如果您不确定需要缩放多少尺寸，可在后期设置界面重新调整。
-          </div>
+        <div v-if="screenSettingTab === 'scale'" class="screen-section" style="margin-top: 1em">
+          <div style="color: #999">如果您不确定需要缩放多少尺寸，可在后期设置界面重新调整。</div>
           <ZoomUI></ZoomUI>
         </div>
-
-
       </div>
-      <div v-if="(step===1 && mod==='bootstrap') || (step===2 && mod==='second-screen')">
-        <div class="mt-3 mb-3" style="background: #f15460;padding: 1em;border-radius: 8px 8px;color: white">
-          <AutoRun/>
+      <div v-if="(step === 1 && mod === 'bootstrap') || (step === 2 && mod === 'second-screen')">
+        <div class="mt-3 mb-3" style="background: #f15460; padding: 1em; border-radius: 8px 8px; color: white">
+          <AutoRun />
         </div>
         <div style="text-align: center">
           <KeySetting></KeySetting>
@@ -144,18 +144,20 @@
         </div>
       </div>
 
-      <div style="position: fixed;bottom: 1em;width:100%;left: 0;right: 0">
-        <div v-if="screenSettingTab==='none'" class="flex item-content">
-          <xt-button v-if="step!==0" size="large" style="" @click="prevStep">上一步</xt-button>
-          <xt-button v-if="(mod==='second-screen' && step!==2 ) || (mod==='bootstrap' && step!==1) " size="large"
-                     type="theme"
-                     @click="nextStep">下一步
+      <div style="position: fixed; bottom: 1em; width: 100%; left: 0; right: 0">
+        <div class="flex item-content" v-if="screenSettingTab === 'none'">
+          <xt-button v-if="step !== 0" @click="prevStep" style="" size="large">上一步</xt-button>
+          <xt-button
+            v-if="(mod === 'second-screen' && step !== 2) || (mod === 'bootstrap' && step !== 1)"
+            @click="nextStep"
+            size="large"
+            type="theme"
+            >下一步
           </xt-button>
-          <xt-button v-else size="large" style="margin-left: 6em" type="theme" @click="finish">完成
-          </xt-button>
+          <xt-button type="theme" v-else @click="finish" style="margin-left: 6em" size="large">完成 </xt-button>
         </div>
         <div v-else class="pl-20">
-          <a-button size="large" type="primary" @click="screenSettingTab='none'">
+          <a-button @click="screenSettingTab = 'none'" type="primary" size="large">
             <Icon class="mr-3" icon="yixuan"></Icon>
             问题解决
           </a-button>
@@ -163,25 +165,25 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
-import ChooseScreen from './ChooseScreen.vue'
-import { appStore } from '../store'
-import { mapActions, mapWritableState } from 'pinia'
-import KeyInput from '../components/comp/KeyInput.vue'
-import { message } from 'ant-design-vue'
-import { BulbFilled, PlayCircleFilled } from '@ant-design/icons-vue'
-import ZoomUI from '../components/comp/ZoomUI.vue'
-import AutoRun from '../components/comp/AutoRun.vue'
-import browser from '../js/common/browser'
-import navigationData from '../js/data/tableData'
-import { navStore } from '../store/nav'
-import KeySetting from '../components/comp/KeySetting.vue'
-import { useWidgetStore } from '../components/card/store'
+import ChooseScreen from './ChooseScreen.vue';
+import { appStore } from '../store';
+import { mapWritableState, mapActions } from 'pinia';
+import cp from 'child_process';
+import KeyInput from '../components/comp/KeyInput.vue';
+import { message } from 'ant-design-vue';
+import { BulbFilled, PlayCircleFilled } from '@ant-design/icons-vue';
+import ZoomUI from '../components/comp/ZoomUI.vue';
+import AutoRun from '../components/comp/AutoRun.vue';
+import browser from '../js/common/browser';
+import navigationData from '../js/data/tableData';
+import { navStore } from '../store/nav';
+import KeySetting from '../components/comp/KeySetting.vue';
+import { useWidgetStore } from '../components/card/store';
 
-const { settings } = window.$models
+const { settings } = window.$models;
 export default {
   name: 'Wizard',
   components: {
@@ -189,58 +191,58 @@ export default {
     AutoRun,
     ZoomUI,
     KeyInput,
-    ChooseScreen, BulbFilled, PlayCircleFilled
+    ChooseScreen,
+    BulbFilled,
+    PlayCircleFilled,
   },
   computed: {
     ...mapWritableState(navStore, ['sideNavigationList', 'footNavigationList', 'rightNavigationList']),
     ...mapWritableState(appStore, ['settings', 'init']),
     ...mapWritableState(useWidgetStore, ['rightModel']),
-    fitWidth () {
-      const width = Number(this.currentWidth)
+    fitWidth() {
+      const width = Number(this.currentWidth);
       if (width < 800) {
         return {
-          status: -1,//适合
+          status: -1, //适合
           text: '过小',
-          suggest: 800
-        }
-
+          suggest: 800,
+        };
       } else if (width > 2000) {
         return {
-          status: 1,//适合
+          status: 1, //适合
           text: '过大',
-          suggest: 2000
-        }
+          suggest: 2000,
+        };
       } else {
         return {
-          status: 0,//适合
-          text: '适合'
-        }
+          status: 0, //适合
+          text: '适合',
+        };
       }
     },
-    fitHeight () {
-      const height = Number(this.currentHeight)
+    fitHeight() {
+      const height = Number(this.currentHeight);
       if (height < 480) {
         return {
-          status: -1,//适合
+          status: -1, //适合
           text: '过小',
-          suggest: 480
-        }
-
+          suggest: 480,
+        };
       } else if (height > 1500) {
         return {
-          status: 1,//适合
+          status: 1, //适合
           text: '过大',
-          suggest: 1500
-        }
+          suggest: 1500,
+        };
       } else {
         return {
-          status: 0,//适合
-          text: '适合'
-        }
+          status: 0, //适合
+          text: '适合',
+        };
       }
-    }
+    },
   },
-  data () {
+  data() {
     return {
       screenSettingTab: 'none',
       currentWidth: '-',
@@ -255,171 +257,172 @@ export default {
       canTouch: true,
       shortKeysTable: 'alt+z',
       shortKeysSearch: 'alt+f',
-      mod: 'bootstrap',//bootstrap
+      mod: 'bootstrap', //bootstrap
       steps: [
         {
-          title: '设置模式'
-
-        }, {
-          title: '基础配置'
+          title: '设置模式',
         },
         {
-          title: '完成'
-        }
-      ], stepsBoot: [
-        {
-          title: '设置模式'
-
+          title: '基础配置',
         },
         {
-          title: '基础配置'
-        }
+          title: '完成',
+        },
+      ],
+      stepsBoot: [
+        {
+          title: '设置模式',
+        },
+        {
+          title: '基础配置',
+        },
       ],
       stepsSecond: [
         {
-          title: '设置模式'
-
-        }, {
-          title: '屏幕设置'
-        }, {
-          title: '基础配置'
+          title: '设置模式',
         },
         {
-          title: '完成'
-        }
-      ]
-    }
+          title: '屏幕设置',
+        },
+        {
+          title: '基础配置',
+        },
+        {
+          title: '完成',
+        },
+      ],
+    };
   },
-  async mounted () {
-    let keyMap = await tsbApi.settings.get('keyMap')
+  async mounted() {
+    let keyMap = await tsbApi.settings.get('keyMap');
     if (keyMap?.table) {
-      this.shortKeysTable = keyMap.table
+      this.shortKeysTable = keyMap.table;
     }
     if (keyMap?.globalSearch) {
-      this.shortKeysSearch = keyMap.globalSearch
+      this.shortKeysSearch = keyMap.globalSearch;
     }
 
-    this.settings.zoomFactor = await tsbApi.window.getZoomFactor() * 100
-    this.getSize()
-
+    this.settings.zoomFactor = (await tsbApi.window.getZoomFactor()) * 100;
+    this.getSize();
   },
-  unmounted () {
-  },
+  unmounted() {},
 
   methods: {
     ...mapActions(appStore, ['finishWizard', 'settings']),
 
-    async restore () {
-      await tsbApi.window.setZoomFactor(1)
+    async restore() {
+      await tsbApi.window.setZoomFactor(1);
       setTimeout(() => {
-        this.settings.zoomFactor = 100
-        this.getSize()
-      }, 300)
+        this.settings.zoomFactor = 100;
+        this.getSize();
+      }, 300);
     },
-    getSize () {
-      this.currentWidth = document.body.offsetWidth
-      this.currentHeight = document.body.offsetHeight
+    getSize() {
+      this.currentWidth = document.body.offsetWidth;
+      this.currentHeight = document.body.offsetHeight;
     },
-    async setZoomFactor () {
-      await tsbApi.window.setZoomFactor(+this.settings.zoomFactor / 100)
+    async setZoomFactor() {
+      await tsbApi.window.setZoomFactor(+this.settings.zoomFactor / 100);
       setTimeout(() => {
-        this.getSize()
-      }, 300)
+        this.getSize();
+      }, 300);
     },
-    openVideo () {
-      browser.openInUserSelect('https://www.bilibili.com/video/BV17t4y127no/?spm_id_from=333.337.search-card.all.click')
+    openVideo() {
+      browser.openInUserSelect(
+        'https://www.bilibili.com/video/BV17t4y127no/?spm_id_from=333.337.search-card.all.click',
+      );
     },
-    setTableKeys (args) {
-      let rs = ipc.sendSync('setTableShortcut', { shortcut: args.keys })
+    setTableKeys(args) {
+      let rs = ipc.sendSync('setTableShortcut', { shortcut: args.keys });
       if (!rs) {
-        message.error('设置快捷键失败，请更换快捷键')
-
+        message.error('设置快捷键失败，请更换快捷键');
+        return;
       } else {
-        message.success('快捷键设置成功')
-        this.shortKeysTable = args.keys
+        message.success('快捷键设置成功');
+        this.shortKeysTable = args.keys;
       }
     },
-    setSearchKeys (args) {
-      this.shortKeysSearch = args.keys
+    setSearchKeys(args) {
+      this.shortKeysSearch = args.keys;
     },
-    async startAdjust () {
-      await tsbApi.window.setAlwaysOnTop(false)
-      let cp = require('child_process')
+    async startAdjust() {
+      await tsbApi.window.setAlwaysOnTop(false);
+      let cp = require('child_process');
       cp.exec('MultiDigiMon.exe -touch', async (err) => {
-        await tsbApi.window.setAlwaysOnTop(true)
-      })
+        await tsbApi.window.setAlwaysOnTop(true);
+      });
     },
-    async adjustPen () {
-      await tsbApi.window.setAlwaysOnTop(false)
-      let cp = require('child_process')
+    async adjustPen() {
+      await tsbApi.window.setAlwaysOnTop(false);
+      let cp = require('child_process');
       cp.exec('MultiDigiMon.exe -pen', async (err) => {
-        await tsbApi.window.setAlwaysOnTop(true)
-      })
+        await tsbApi.window.setAlwaysOnTop(true);
+      });
     },
-    prevStep () {
+    prevStep() {
       if (this.mod === 'second-screen') {
-        this.steps = this.stepsSecond
+        this.steps = this.stepsSecond;
       } else {
-        this.steps = this.stepsBoot
+        this.steps = this.stepsBoot;
       }
-      this.step--
+      this.step--;
     },
-    nextStep () {
+    nextStep() {
       if (this.mod === 'second-screen') {
-        this.rightModel = 'default'
-        this.steps = this.stepsSecond
+        this.rightModel = 'default';
+        this.steps = this.stepsSecond;
       } else {
-        this.rightModel = 'follow'
-        this.steps = this.stepsBoot
+        this.rightModel = 'follow';
+        this.steps = this.stepsBoot;
       }
-      this.step++
+      this.step++;
     },
-    finish () {
-      this.finishWizard()
-      this.$router.replace({ name: 'home' })
+    finish() {
+      this.finishWizard();
+      this.$router.replace({ name: 'home' });
     },
-    getKeys (e) {
-      let key = ''
+    getKeys(e) {
+      let key = '';
       if (e.ctrlKey) {
-        key += 'ctrl+'
+        key += 'ctrl+';
       }
       if (e.altKey) {
-        key += 'alt+'
+        key += 'alt+';
       }
       if (e.shiftKey) {
-        key += 'shift+'
+        key += 'shift+';
       }
-      key += e.code
-      return key
+      key += e.code;
+      return key;
     },
-    replaceIcon () {
+    replaceIcon() {
       navigationData.systemFillAppList.forEach((item) => {
         this.sideNavigationList.forEach((i) => {
           if (item.name === i.name) {
-            i.icon = item.icon
+            i.icon = item.icon;
           }
-        })
-      })
+        });
+      });
       navigationData.systemFillAppList.forEach((item) => {
         this.rightNavigationList.forEach((i) => {
           if (item.name === i.name) {
-            i.icon = item.icon
+            i.icon = item.icon;
           }
-        })
-      })
+        });
+      });
       navigationData.systemAppList.forEach((item) => {
         this.footNavigationList.forEach((i) => {
           if (item.name === i.name) {
-            i.icon = item.icon
+            i.icon = item.icon;
           }
-        })
-      })
-    }
-  }
-}
+        });
+      });
+    },
+  },
+};
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .panel {
   border: 1px #7a7a7a solid;
   border-radius: 0.5em;
@@ -448,7 +451,6 @@ export default {
 }
 
 .unfit {
-  color: orangered
+  color: orangered;
 }
-
 </style>

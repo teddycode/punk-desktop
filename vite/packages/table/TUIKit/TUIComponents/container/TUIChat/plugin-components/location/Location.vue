@@ -1,27 +1,29 @@
 <template>
   <div class="location">
     <i class="icon icon-location" @click="toggleShow"></i>
-    <main v-if="show" class="location-main">
+    <main class="location-main" v-if="show">
       <ul class="location-list">
         <li class="location-list-item">
           <label>{{ $t('TUIChat.描述') }}</label>
-          <input v-model="location.description" type="text">
+          <input type="text" v-model="location.description" />
         </li>
         <li class="location-list-item">
           <label>{{ $t('TUIChat.经度') }}</label>
-          <input v-model="location.longitude" type="number">
+          <input type="number" v-model="location.longitude" />
         </li>
         <li class="location-list-item">
           <label>{{ $t('TUIChat.纬度') }}</label>
-          <input v-model="location.latitude" type="number">
+          <input type="number" v-model="location.latitude" />
         </li>
       </ul>
       <ul class="location-footer">
         <button class="btn btn-cancel" @click="cancel">{{ $t('取消') }}</button>
         <button
-            :disabled="!location.data && !location.description && location.extension"
-            class="btn btn-default"
-            @click="submit">{{ $t('发送') }}
+          class="btn btn-default"
+          :disabled="!location.data && !location.description && location.extension"
+          @click="submit"
+        >
+          {{ $t('发送') }}
         </button>
       </ul>
     </main>
@@ -30,7 +32,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, reactive, toRefs, watchEffect} from 'vue';
+import { defineComponent, reactive, watchEffect, toRefs } from 'vue';
 
 const Location = defineComponent({
   props: {
@@ -49,7 +51,6 @@ const Location = defineComponent({
       },
     });
 
-
     watchEffect(() => {
       data.show = props.show;
     });
@@ -57,7 +58,6 @@ const Location = defineComponent({
     const toggleShow = () => {
       data.show = !data.show;
     };
-
 
     const cancel = () => {
       toggleShow();
@@ -82,85 +82,72 @@ export default Location;
 <style lang="scss" scoped>
 @import url('../../../../styles/common.scss');
 @import url('../../../../styles/icon.scss');
-
 .location {
   display: inline-block;
   position: relative;
-
   &-main {
     position: absolute;
     z-index: 5;
     width: 315px;
     background: #ffffff;
     top: -180px;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     padding: 10px;
     display: flex;
     flex-direction: column;
   }
-
   &-list {
     flex: 1;
     display: flex;
     flex-direction: column;
-
     &-item {
       padding-bottom: 15px;
-
       label {
         width: 88px;
         font-size: 18px;
         padding: 0 20px;
         display: inline-block;
       }
-
       input {
         flex: 1;
         height: 24px;
         padding: 0 10px;
         border: 1px solid #dddddd;
         border-radius: 5px;
-
         &::-webkit-inner-spin-button {
           display: none;
         }
       }
     }
   }
-
   &-footer {
     display: flex;
     align-items: center;
     justify-content: space-around;
   }
 }
-
 .btn {
   padding: 8px 20px;
   border-radius: 4px;
   border: none;
   font-weight: 400;
   font-size: 14px;
-  color: #FFFFFF;
+  color: #ffffff;
   letter-spacing: 0;
   text-align: center;
   line-height: 20px;
-
   &-cancel {
     border: 1px solid #dddddd;
     color: #666666;
   }
-
   &-default {
-    background: #006EFF;
-    border: 1px solid #006EFF;
+    background: #006eff;
+    border: 1px solid #006eff;
   }
-
   &:disabled {
     opacity: 0.3;
   }
 }
-
 .mask {
   position: fixed;
   width: 100vw;

@@ -8,11 +8,10 @@
 </template>
 
 <script>
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent } from 'vue';
 
-import { mapWritableState } from 'pinia'
-import { aiStore } from '../../../store/ai'
-
+import { mapWritableState } from 'pinia';
+import { aiStore } from '../../../store/ai';
 export default {
   computed: {
     ...mapWritableState(aiStore, ['mode', 'isMode']),
@@ -22,7 +21,7 @@ export default {
     User: defineAsyncComponent(() => import('./user/index.vue')),
     Use: defineAsyncComponent(() => import('./use/index.vue')),
   },
-}
+};
 </script>
 
 <style lang="scss" scoped></style>

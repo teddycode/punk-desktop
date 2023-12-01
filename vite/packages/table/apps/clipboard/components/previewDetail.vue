@@ -1,66 +1,69 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
-import {formatFileSize, getDateTime} from "../../../util";
+import { defineComponent } from 'vue';
+import { formatFileSize, getDateTime } from '../../../util';
 
 export default defineComponent({
-  name: "previewDetail",
-  props: [
-    'previewContent'
-  ], computed: {
+  name: 'previewDetail',
+  props: ['previewContent'],
+  computed: {
     timeText() {
-      const time = getDateTime(new Date(this.previewContent.createTime))
-      return `${time.hours}:${time.minutes}:${time.seconds}` + '&nbsp;&nbsp;&nbsp;' + `${time.month}月${time.day}日`
+      const time = getDateTime(new Date(this.previewContent.createTime));
+      return `${time.hours}:${time.minutes}:${time.seconds}` + '&nbsp;&nbsp;&nbsp;' + `${time.month}月${time.day}日`;
     },
     itemType() {
-      const type = this.previewContent.type
+      const type = this.previewContent.type;
       switch (type) {
         case 'text':
           return {
             icon: 'text-align-left',
-            title: '文本'
-          }
+            title: '文本',
+          };
         case 'image':
           return {
             icon: 'image',
-            title: '图片'
-          }
+            title: '图片',
+          };
         case 'file':
           return {
             icon: 'file',
-            title: '文件'
-          }
+            title: '文件',
+          };
         case 'video':
           return {
             icon: 'video',
-            title: '视频'
-          }
+            title: '视频',
+          };
         case 'audio':
           return {
             title: '音频',
-            icon: 'erji1'
-          }
+            icon: 'erji1',
+          };
       }
     },
     ext() {
-      return require('path').extname(this.previewContent.path || this.previewContent.filepath)
+      return require('path').extname(this.previewContent.path || this.previewContent.filepath);
     },
     isSingleFile() {
-      return this.previewContent.type === 'image' || this.previewContent.type === 'video' || this.previewContent.type === 'audio'
+      return (
+        this.previewContent.type === 'image' ||
+        this.previewContent.type === 'video' ||
+        this.previewContent.type === 'audio'
+      );
     },
     capacity() {
       switch (this.previewContent.type) {
         case 'text':
-          return this.previewContent.content.length + '个字符'
+          return this.previewContent.content.length + '个字符';
         case 'file':
-          return this.previewContent.files?.length + '个文件'
+          return this.previewContent.files?.length + '个文件';
         case 'image':
         case 'audio':
         case 'video':
-          return formatFileSize(this.previewContent.size)
+          return formatFileSize(this.previewContent.size);
       }
     },
-  }
-})
+  },
+});
 </script>
 
 <template>
@@ -82,12 +85,10 @@ export default defineComponent({
   </div>
   <div v-if="isSingleFile" class="flex justify-between flex-col mb-6">
     <span class="type-text">路径</span>
-    <span v-if="previewContent.type === 'image'" class="type-right">
-                      {{ previewContent.path }}
-                    </span>
+    <span class="type-right" v-if="previewContent.type === 'image'">
+      {{ previewContent.path }}
+    </span>
   </div>
 </template>
 
-<style lang="scss" scoped>
-
-</style>
+<style scoped lang="scss"></style>

@@ -64,7 +64,7 @@ export const themeType = [
   { title: 'yeti', name: 'yeti', id: 'yeti' },
   { title: 'yonce', name: 'yonce', id: 'yonce' },
   { title: 'zenburn', name: 'zenburn', id: 'zenburn' },
-]
+];
 
 // 将剪切板代码块语言包的配置移动到这里,方便后期需要添加的语言包就在这里改动即可
 export const codeLanguage = [
@@ -74,5 +74,5 @@ export const codeLanguage = [
   { title: 'C++', name: 'C++', abbr: 'text/x-c++src', id: 'text/x-c++src' },
   { title: 'C#', name: 'C#', abbr: 'text/x-csharp', id: 'text/x-csharp' },
   { title: 'PHP', name: 'PHP', abbr: 'application/x-httpd-php', id: 'application/x-httpd-php' },
-  { title: 'Swift', name: 'Swift', abbr: 'swift', id: 'swift' }
-]
+  { title: 'Swift', name: 'Swift', abbr: 'swift', id: 'swift' },
+];

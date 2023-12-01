@@ -1,73 +1,75 @@
 <template>
-  <vueCustomScrollbar :settings="scrollbarSettings" style="padding: 15px;white-space: nowrap;height: 100%">
-    <div class="page-container rounded-xl xt-bg box-body flex"
-         style="height: 100%;min-width: 1000px;min-height: 800px;">
-
+  <vueCustomScrollbar :settings="scrollbarSettings" style="padding: 15px; white-space: nowrap; height: 100%">
+    <div
+      class="page-container rounded-xl xt-bg box-body flex"
+      style="height: 100%; min-width: 1000px; min-height: 800px"
+    >
       <div class="left-box overflow-hidden overflow-y-auto xt-scrollbar beautiful-sm-scroll">
         <!-- 头像 -->
         <div class="head-user">
-          <img :src="this.userInfo.avatar" alt="">
+          <img :src="this.userInfo.avatar" alt="" />
           <p>{{ this.userInfo.nickname }}</p>
-          <div class="xt-active-btn" style="width:84px;height:32px;border-radius:8px;">联系客服</div>
+          <div class="xt-active-btn" style="width: 84px; height: 32px; border-radius: 8px">联系客服</div>
         </div>
         <!-- 左侧列表 -->
         <div class="nav-list">
-          <div v-for="item in dataList" :key="item.key" :class="indexKey == item.key ?'active-list':''"
-               class="pointer flex nav-col" @click="onChangeList(item.key)">
-            <Icon :icon="item.icon" class="ml-4" height="20" width="20"/>
+          <div
+            class="pointer flex nav-col"
+            v-for="item in dataList"
+            :class="indexKey == item.key ? 'active-list' : ''"
+            :key="item.key"
+            @click="onChangeList(item.key)"
+          >
+            <Icon class="ml-4" :icon="item.icon" width="20" height="20" />
             <div class="ml-4">{{ item.title }}</div>
             <span v-if="item.isAdmin">管</span>
           </div>
         </div>
       </div>
       <div class="right-box">
-        <Dashboard v-if="indexKey == 1"/>
-        <Invite v-if="indexKey == 2"/>
-        <Agent v-if="indexKey == 3"/>
-        <Income v-if="indexKey == 4"/>
-        <Explain v-if="indexKey == 5"/>
-        <Records v-if="indexKey == 6"/>
-        <Promoter v-if="indexKey == 7"/>
-        <Withdrawal v-if="indexKey == 8"/>
+        <Dashboard v-if="indexKey == 1" />
+        <Invite v-if="indexKey == 2" />
+        <Agent v-if="indexKey == 3" />
+        <Income v-if="indexKey == 4" />
+        <Explain v-if="indexKey == 5" />
+        <Records v-if="indexKey == 6" />
+        <Promoter v-if="indexKey == 7" />
+        <Withdrawal v-if="indexKey == 8" />
       </div>
     </div>
   </vueCustomScrollbar>
-
-
 </template>
 
 <script>
-
-
 // import {
 //   FileDoneOutlined,
 //   DashboardOutlined,
 //   GiftOutlined,
 //   ClusterOutlined,
 // } from '@ant-design/icons-vue';
-import { Icon } from '@iconify/vue'
-import Agent from '../components/agent.vue'
-import Dashboard from '../components/dashboard.vue'
-import Explain from '../components/explain.vue'
-import Income from '../components/income.vue'
-import Invite from '../components/invite.vue'
-import Promoter from '../components/promoter.vue'
-import Records from '../components/records.vue'
-import Withdrawal from '../components/withdrawal.vue'
-import { mapActions, mapState } from 'pinia'
-import { appStore } from '../../../store'
-import VueCustomScrollbar from '../../../../../src/components/vue-scrollbar.vue'
+import { Icon } from '@iconify/vue';
+import Agent from '../components/agent.vue';
+import Dashboard from '../components/dashboard.vue';
+import Explain from '../components/explain.vue';
+import Income from '../components/income.vue';
+import Invite from '../components/invite.vue';
+import Promoter from '../components/promoter.vue';
+import Records from '../components/records.vue';
+import Withdrawal from '../components/withdrawal.vue';
+import { mapActions, mapState } from 'pinia';
+import { appStore } from '../../../store';
+import VueCustomScrollbar from '../../../../../src/components/vue-scrollbar.vue';
 
-import dataPie24Regular from '@iconify-icons/fluent/data-pie-24-regular'
-import peopleAdd16Regular from '@iconify-icons/fluent/people-add-16-regular'
-import arrowTrendingLines20Filled from '@iconify-icons/fluent/arrow-trending-lines-20-filled'
-import gift16Regular from '@iconify-icons/fluent/gift-16-regular'
-import documentBulletListMultiple24Regular from '@iconify-icons/fluent/document-bullet-list-multiple-24-regular'
-import appsListDetail24Regular from '@iconify-icons/fluent/apps-list-detail-24-regular'
-import peopleCommunity16Regular from '@iconify-icons/fluent/people-community-16-regular'
-import money16Regular from '@iconify-icons/fluent/money-16-regular'
+import dataPie24Regular from '@iconify-icons/fluent/data-pie-24-regular';
+import peopleAdd16Regular from '@iconify-icons/fluent/people-add-16-regular';
+import arrowTrendingLines20Filled from '@iconify-icons/fluent/arrow-trending-lines-20-filled';
+import gift16Regular from '@iconify-icons/fluent/gift-16-regular';
+import documentBulletListMultiple24Regular from '@iconify-icons/fluent/document-bullet-list-multiple-24-regular';
+import appsListDetail24Regular from '@iconify-icons/fluent/apps-list-detail-24-regular';
+import peopleCommunity16Regular from '@iconify-icons/fluent/people-community-16-regular';
+import money16Regular from '@iconify-icons/fluent/money-16-regular';
 
-const { appModel } = window.$models
+const { appModel } = window.$models;
 
 export default {
   name: 'Promotion',
@@ -91,9 +93,8 @@ export default {
     //   ...mapState(appStore, ['userInfo','secondaryVisible'])
 
     ...mapState(appStore, ['userInfo']),
-
   },
-  data () {
+  data() {
     return {
       icons: {
         dataPie24Regular,
@@ -110,7 +111,7 @@ export default {
         swipeEasing: true,
         suppressScrollY: false,
         suppressScrollX: true,
-        wheelPropagation: true
+        wheelPropagation: true,
       },
       indexKey: 1,
       dataList: [
@@ -149,7 +150,6 @@ export default {
           title: '推广记录',
           key: 6,
           isAdmin: true,
-
         },
         {
           icon: peopleCommunity16Regular,
@@ -163,28 +163,25 @@ export default {
           key: 8,
           isAdmin: true,
         },
-      ]
-
-    }
+      ],
+    };
   },
-  mounted () {
-
-    this.getUserInfo()
+  mounted() {
+    this.getUserInfo();
     // this.apps = await appModel.getAll({order:"create_time"})
   },
   watch: {},
   methods: {
-    onChangeList (key) {
+    onChangeList(key) {
       // console.log(key);s
-      this.indexKey = key
+      this.indexKey = key;
     },
     ...mapActions(appStore, ['getUserInfo']),
   },
-}
+};
 </script>
 
 <style scoped>
-
 .box-body {
   background: rgba(26, 26, 26, 0.65);
   box-shadow: 0px 0px 3.12px 0px rgba(0, 0, 0, 0.03);
@@ -192,7 +189,6 @@ export default {
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.2);
   border-radius: 12px 12px 12px 0px 0px 12px;
 }
-
 .left-box {
   width: 20%;
   min-width: 200px;
@@ -208,11 +204,9 @@ export default {
   overflow: hidden;
   overflow-y: auto;
 }
-
 :deep(.ant-transfer-list-content::-webkit-scrollbar) {
   width: 5px;
 }
-
 :deep(.ant-transfer-list-content::-webkit-scrollbar-thumb) {
   background: #aaa !important;
   border-radius: 3px;
@@ -226,7 +220,6 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
 }
 
 .head-user img {
@@ -236,7 +229,6 @@ export default {
   border-radius: 50%;
   position: relative;
 }
-
 .head-user p {
   margin-top: 12px;
 
@@ -251,7 +243,6 @@ export default {
   flex-direction: column;
 }
 
-
 .nav-col {
   height: 56px;
   font-size: 16px;
@@ -263,28 +254,25 @@ export default {
 .nav-col span {
   position: absolute;
   right: 18px;
-  background: rgba(80, 139, 254, 0.20);
+  background: rgba(80, 139, 254, 0.2);
   border: 1px solid rgba(80, 139, 254, 1);
   border-radius: 4px;
   font-size: 12px;
-  color: #508BFE;
+  color: #508bfe;
   padding: 1.5px 4px;
 }
 
 .nav-list > div:hover {
-  background: rgba(80, 139, 254, 0.20);
+  background: rgba(80, 139, 254, 0.2);
 }
 
 .active-list {
-  background: rgba(80, 139, 254, 0.20);
+  background: rgba(80, 139, 254, 0.2);
 }
-
 
 .right-box {
   width: 100%;
   height: 100%;
   min-width: 800px;
 }
-
-
 </style>

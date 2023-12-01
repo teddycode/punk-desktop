@@ -1,19 +1,23 @@
 <template>
-  <div ref="skeleton" class="message-image">
-    <img :src="data.url" :style="
+  <div class="message-image" ref="skeleton">
+    <img
+      class="message-img"
+      :src="data.url"
+      :style="
         isH5
           ? {
               maxWidth: data.width ? data.width + 'px' : 'calc(100vw - 180px)',
               maxHeight: data.height ? data.height + 'px' : 'calc(100vw - 180px)',
             }
           : {}
-      " class="message-img"/>
+      "
+    />
   </div>
 </template>
 
 <script lang="ts">
-import {defineComponent, nextTick, reactive, ref, toRefs, watchEffect} from 'vue';
-import {handleSkeletonSize} from '../utils/utils';
+import { defineComponent, watchEffect, reactive, toRefs, nextTick, ref } from 'vue';
+import { handleSkeletonSize } from '../utils/utils';
 
 export default defineComponent({
   props: {
@@ -54,12 +58,10 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import url('../../../styles/common.scss');
 @import url('../../../styles/icon.scss');
-
 .text-img {
   width: 20px;
   height: 20px;
 }
-
 .message-img {
   max-width: min(calc(100vw - 180px), 300px);
   max-height: min(calc(100vw - 180px), 300px);

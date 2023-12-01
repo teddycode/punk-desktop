@@ -44,7 +44,7 @@
         width: calc(100% - 40px);
         height: 56px;
         line-height: 56px;
-        border-bottom: 1px solid #EFEFEF;
+        border-bottom: 1px solid #efefef;
       }
     }
 
@@ -62,7 +62,6 @@
         font-size: 16px;
         height: 22px;
 
-
         &-title,
         &-count {
           height: 22px;
@@ -71,7 +70,7 @@
           text-align: center;
           line-height: 20px;
           font-weight: 400;
-          color: #8D8D8D;
+          color: #8d8d8d;
         }
 
         &-count {
@@ -80,20 +79,20 @@
         }
 
         &-now {
-          color: #147AFF;
+          color: #147aff;
           padding-bottom: 3px;
-          border-bottom: 2.6px solid #147AFF;
+          border-bottom: 2.6px solid #147aff;
 
           .tab-item-title,
           .tab-item-count {
-            color: #147AFF;
+            color: #147aff;
           }
         }
       }
     }
 
     .body-message {
-      background-color: #F7F8FA;
+      background-color: #f7f8fa;
 
       .message {
         margin: 10px 0;

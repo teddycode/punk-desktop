@@ -49,98 +49,96 @@ const groupTpl = `
 <!--                      </a-menu-item>-->
                     </a-menu>
                   </a-dropdown>
-  `
+  `;
 
 Vue.component('group', {
   template: groupTpl,
   name: 'app',
   props: ['item', 'w', 'h'],
-  data () {
+  data() {
     return {
       mouseFlag: 0,
-    }
+    };
   },
-  mounted () {
-    const saAppModel = require('../../src/model/appModel.js')
+  mounted() {
+    const saAppModel = require('../../src/model/appModel.js');
     this.item.element.data.forEach(async (icon, index) => {
       if (icon.element.data.type === 'saApp') {
-        icon.element.data.saApp = await saAppModel.get(icon.element.data.appId)
+        icon.element.data.saApp = await saAppModel.get(icon.element.data.appId);
       }
-    })
+    });
   },
   methods: {
-    mouseDown () {
-      this.mouseFlag = 0
+    mouseDown() {
+      this.mouseFlag = 0;
     },
-    mouseMove () {
-      this.mouseFlag = 1
+    mouseMove() {
+      this.mouseFlag = 1;
     },
-    mouseUp (event) {
+    mouseUp(event) {
       if (this.mouseFlag === 0) {
-        this.$emit('open-group')
+        this.$emit('open-group');
       }
-      event.stopPropagation()
+      event.stopPropagation();
     },
-    openGroup () {
-      this.$emit('open-group')
+    openGroup() {
+      this.$emit('open-group');
     },
-    editElement () {
-      this.$emit('edit-group')
+    editElement() {
+      this.$emit('edit-group');
     },
-    removeElement () {
-      this.$emit('remove-element')
+    removeElement() {
+      this.$emit('remove-element');
     },
     iconStyle: function (item) {
-      const style = {}
+      const style = {};
       if (item.type === 'saApp') {
-        let saApp = item.saApp
+        let saApp = item.saApp;
         if (saApp) {
-          style['border-radius'] = '50%'
-          style['background-color'] = 'white'
-          style['padding'] = '1px'
-          let bg = saApp.user_theme_color ? saApp.user_theme_color : saApp.theme_color
-          style['border'] = '2px solid ' + bg.toString()
+          style['border-radius'] = '50%';
+          style['background-color'] = 'white';
+          style['padding'] = '1px';
+          let bg = saApp.user_theme_color ? saApp.user_theme_color : saApp.theme_color;
+          style['border'] = '2px solid ' + bg.toString();
         }
 
-        return style
+        return style;
       }
       if (!!item.useBg) {
-        style['background-color'] = item.color
+        style['background-color'] = item.color;
       }
       if (!!item.useRadius) {
-        style['border-radius'] = item.radius + '%'
+        style['border-radius'] = item.radius + '%';
       }
-      return style
+      return style;
     },
     /**
      * app按钮上鼠标事件，区分移动和拖拽
      */
-    appMouseDown () {
-      this.mouseFlag = 0
+    appMouseDown() {
+      this.mouseFlag = 0;
     },
-    appMouseMove () {
-      this.mouseFlag = 1
+    appMouseMove() {
+      this.mouseFlag = 1;
     },
-    async appMouseUp (e, url, iconEl) {
-      const saAppModel = require('../../src/model/appModel.js')
+    async appMouseUp(e, url, iconEl) {
+      const saAppModel = require('../../src/model/appModel.js');
       if (this.mouseFlag === 0 && e.button === 0) {
         if (iconEl.element.data.type === 'saApp') {
-          let saApp = await saAppModel.get(iconEl.element.data.appId)
+          let saApp = await saAppModel.get(iconEl.element.data.appId);
           if (saApp) {
-            ipc.send('executeApp', { app: saApp })
+            ipc.send('executeApp', { app: saApp });
           } else {
-            appVue.$message.error({ content: '此应用已经被卸载。无法打开。' })
+            appVue.$message.error({ content: '此应用已经被卸载。无法打开。' });
           }
         } else {
-          this.openUrl(url)
+          this.openUrl(url);
         }
       }
     },
-    openUrl (url) {
-
-      location.href = url
+    openUrl(url) {
+      location.href = url;
     },
   },
-  destroyed () {
-  }
-})
+  destroyed() {},
+});

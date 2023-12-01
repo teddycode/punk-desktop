@@ -1,16 +1,15 @@
 <script lang="ts">
-import {CheckOutlined, CloseOutlined, DeleteOutlined} from '@ant-design/icons-vue'
+import { CloseOutlined, CheckOutlined, DeleteOutlined } from '@ant-design/icons-vue';
 import '../assets/task-list.css';
-import vueCustomScrollbar from '../../../src/components/vue-scrollbar.vue'
-
-const ipc = eval('require')('electron').ipcRenderer
+import vueCustomScrollbar from '../../../src/components/vue-scrollbar.vue';
+const ipc = eval('require')('electron').ipcRenderer;
 
 export default {
-  components: {vueCustomScrollbar, CloseOutlined, CheckOutlined, DeleteOutlined},
+  components: { vueCustomScrollbar, CloseOutlined, CheckOutlined, DeleteOutlined },
   props: {
     list: Array,
     selectedKeys: Array,
-    config: Object
+    config: Object,
   },
   emits: ['update:selectedKeys', 'remove'],
   data() {
@@ -20,94 +19,98 @@ export default {
         swipeEasing: true,
         suppressScrollY: false,
         suppressScrollX: true,
-        wheelPropagation: true
+        wheelPropagation: true,
       },
-    }
+    };
   },
   computed: {
     dataList() {
-      return this.list.map(task => {
-        task.icon = this.getIcon(task.tabs[0].favicon)
-        return task
-      })
-    }
+      return this.list.map((task) => {
+        task.icon = this.getIcon(task.tabs[0].favicon);
+        return task;
+      });
+    },
   },
   mounted() {
-    this.ipc = eval('require')('electron').ipcRenderer
+    this.ipc = eval('require')('electron').ipcRenderer;
   },
   methods: {
     getTabName(tab) {
-      let title = tab.title == '' ? '新标签' : tab.title
+      let title = tab.title == '' ? '新标签' : tab.title;
       if (tab.newName) {
-        title = `<span style="color:#2181ff;font-weight: bold">${tab.newName}</span>` + "|" + `<span style="color: grey">${title}</span>`
+        title =
+          `<span style="color:#2181ff;font-weight: bold">${tab.newName}</span>` +
+          '|' +
+          `<span style="color: grey">${title}</span>`;
       } else {
-        title = `<span style="">${title}</span>`
+        title = `<span style="">${title}</span>`;
       }
-      return title
+      return title;
     },
     remove(id) {
-      this.$emit('remove', id)
+      this.$emit('remove', id);
     },
     getUserIconName(userIcon) {
-      let iconPath = userIcon.split('.')
-      return iconPath[2]
+      let iconPath = userIcon.split('.');
+      return iconPath[2];
     },
     selected(task) {
-      let index = this.selectedKeysData.indexOf(task.id)
+      let index = this.selectedKeysData.indexOf(task.id);
       if (index > -1) {
-        this.selectedKeysData.splice(index, 1)
+        this.selectedKeysData.splice(index, 1);
       } else {
-        this.selectedKeysData.push(task.id)
+        this.selectedKeysData.push(task.id);
       }
-      this.$emit('update:selectedKeys', this.selectedKeysData)
+      this.$emit('update:selectedKeys', this.selectedKeysData);
     },
     //获取图标的方法
     getIcon(favicon) {
-      var defaultIcon = '../../icons/empty.png'
+      var defaultIcon = '../../icons/empty.png';
       if (typeof favicon == 'undefined') {
-        return defaultIcon
+        return defaultIcon;
       } else if (favicon == null) {
-        return defaultIcon
+        return defaultIcon;
       } else {
-        return favicon.url
+        return favicon.url;
       }
     },
-  }
-}
+  },
+};
 </script>
 
 <template>
   <div>
     <div>
       <a-row :gutter="16">
-        <a-col v-if="dataList.length===0" :span="24" style="text-align: center;padding-top: 20vh">
-          <a-empty description="全新空间，进入后自动初始化">
-          </a-empty>
+        <a-col :span="24" style="text-align: center; padding-top: 20vh" v-if="dataList.length === 0">
+          <a-empty description="全新空间，进入后自动初始化"> </a-empty>
         </a-col>
-        <a-col v-for="(task,index) in dataList" :key="index" :lg="8" :sm="12" :xl="6" :xxl="4">
-          <a-card
-              :bordered="false" class="task">
+        <a-col :sm="12" :lg="8" :xl="6" :xxl="4" v-for="(task, index) in dataList" :key="index">
+          <a-card :bordered="false" class="task">
             <div slot="title" slot-scope="title">
               <div class="task-title" style="position: relative">
-                <svg v-if="task.userIcon" aria-hidden="true" class="icon task-icon">
-                  <use v-bind:xlink:href="'#icon-'+getUserIconName(task.userIcon)"></use>
+                <svg v-if="task.userIcon" class="icon task-icon" aria-hidden="true">
+                  <use v-bind:xlink:href="'#icon-' + getUserIconName(task.userIcon)"></use>
                 </svg>
-                <img v-else :src="task.icon" class="icon" onerror="this.src='/icons/default.svg'"/>
+                <img v-else class="icon" :src="task.icon" onerror="this.src='/icons/default.svg'" />
                 &nbsp; {{ task.name || '标签组' }}
 
-                <img v-if="task.partition !=='persist:webcontent'" class="single-avatar"
-                     src="/public/icons/randomuser.svg">
+                <img
+                  class="single-avatar"
+                  v-if="task.partition !== 'persist:webcontent'"
+                  src="/public/icons/randomuser.svg"
+                />
               </div>
             </div>
-            <vue-custom-scrollbar :settings="settings" style="position:relative;height: 250px ;margin-right: -10px">
+            <vue-custom-scrollbar :settings="settings" style="position: relative; height: 250px; margin-right: -10px">
               <ul class="tabs">
                 <li
-                    v-for="(tab, Dindex) in task.tabs"
-                    :key="Dindex"
-                    class="tab-title"
-                    @click="selectTab(task, tab, task.id, Dindex)"
+                  class="tab-title"
+                  v-for="(tab, Dindex) in task.tabs"
+                  :key="Dindex"
+                  @click="selectTab(task, tab, task.id, Dindex)"
                 >
-                  <a-avatar :src="getIcon(tab.favicon)" class="tab-icon" shape="square" size="small"></a-avatar>
+                  <a-avatar shape="square" size="small" class="tab-icon" :src="getIcon(tab.favicon)"></a-avatar>
                   <span v-html="getTabName(tab)"></span>
                 </li>
               </ul>
@@ -123,6 +126,4 @@ export default {
   padding: 10px !important;
 }
 </style>
-<style lang="scss" scoped>
-
-</style>
+<style scoped lang="scss"></style>

@@ -1,5 +1,5 @@
-@import "darkMod";
-@import "splitBar";
+@import 'darkMod';
+@import 'splitBar';
 #navbar {
   display: flex;
   height: calc(36px + var(--control-space-top));
@@ -25,11 +25,11 @@
   color: #333 !important;
   box-shadow: 0 0 5px rgba(80, 80, 80, 0.42);
 }
-.tab-name{
+.tab-name {
   font-weight: bold;
   font-size: 13px;
 }
-.gu-transit{
+.gu-transit {
   opacity: 0 !important;
 }
 
@@ -37,8 +37,8 @@
   top: var(--control-space-top) !important;
   background: rgba(255, 255, 255, 1) !important;
   height: 26px !important;
-  line-height:26px !important;
-  margin-top:6px !important;
+  line-height: 26px !important;
+  margin-top: 6px !important;
   opacity: 1;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.25);
 }
@@ -57,7 +57,7 @@
 /* when the tab-group is white, we need a line to separate it from the webviews */
 
 #navbar:before {
-  content: "";
+  content: '';
   width: 100vw;
   height: 1px;
   position: absolute;
@@ -92,12 +92,13 @@ body.is-edit-mode #toolbar-navigation-buttons {
   display: none;
 }
 
-#back-button, #forward-button {
+#back-button,
+#forward-button {
   opacity: 1;
   transition: none;
   padding: 0 0rem;
 }
-.navbar-action-button:hover{
+.navbar-action-button:hover {
   background: rgba(215, 215, 215, 0.47);
 }
 #back-button {
@@ -106,7 +107,8 @@ body.is-edit-mode #toolbar-navigation-buttons {
 #forward-button {
   margin-left: -0em;
 }
-#back-button:disabled, #forward-button:disabled {
+#back-button:disabled,
+#forward-button:disabled {
   opacity: 0.2;
 }
 
@@ -131,7 +133,7 @@ body.linux #menu-button {
   position: relative;
   overflow: hidden;
   line-height: 1;
-  &.fixWidth{
+  &.fixWidth {
     width: 100%;
   }
 }
@@ -147,11 +149,11 @@ body.linux #menu-button {
 #tabs #tabs-inner.disable-scroll {
   overflow-x: hidden;
 }
-.mac .tab-item{
-  margin:5px
+.mac .tab-item {
+  margin: 5px;
 }
 .tab-item {
-  flex:1;
+  flex: 1;
   display: flex;
   width: 230px;
   min-width: 0px;
@@ -163,7 +165,7 @@ body.linux #menu-button {
   position: relative;
   /*padding: 0 10px;*/
   border-radius: 6px;
-  margin: 6px ;
+  margin: 6px;
   &:not(.active):hover {
     background-color: rgba(0, 0, 0, 0.03);
   }
@@ -187,7 +189,7 @@ body.linux #menu-button {
       left: -1px;
     }
     &:not(.permission-request-icon):hover:after {
-      content: "";
+      content: '';
       width: 20px;
       height: 20px;
       border-radius: 50%;
@@ -203,23 +205,22 @@ body.linux #menu-button {
       top: 0;
       left: -1px;
     }
-    &:is(.tab-close-button):hover:before{
+    &:is(.tab-close-button):hover:before {
       z-index: 2;
       color: white;
       top: -5px;
       left: -3px;
     }
-
   }
 }
 
 #navbar.show-dividers .tab-item:not(:last-child) {
-  &.active{
+  &.active {
     border-right: none;
     margin-left: -1px;
   }
 
-  border-right:1px solid #d2d2d2;
+  border-right: 1px solid #d2d2d2;
   border-radius: 0;
   margin-right: 0;
   margin-left: 0;
@@ -231,7 +232,7 @@ body.linux #menu-button {
   padding-right: 5px;
 }
 .dark-theme #navbar.show-dividers .tab-item:not(:last-child) {
-  border-right:1px solid rgb(210, 210, 210);
+  border-right: 1px solid rgb(210, 210, 210);
   border-radius: 0;
   margin-right: 0;
   margin-left: 0;
@@ -248,16 +249,15 @@ body.linux #menu-button {
   background-color: rgba(255, 255, 255, 0.15);
 }
 
-
-.windows .tab-item .tab-icon:is(.tab-close-button):hover:after{
-      top: 2px;
-      left: -1px;
+.windows .tab-item .tab-icon:is(.tab-close-button):hover:after {
+  top: 2px;
+  left: -1px;
 }
 
 .dark-theme .tab-item .tab-icon:hover:after {
   background: rgba(255, 255, 255, 0.15);
 }
-.tab-item.active:not(:only-child ) {
+.tab-item.active:not(:only-child) {
   /*background: rgba(0, 0, 0, 0.06);*/
   //background: rgba(211, 211, 211, 0.84);
   //color: white;
@@ -267,24 +267,23 @@ body.linux #menu-button {
   color: white;
   /*text-shadow: 0 0 3px rgba(107, 107, 107, 0.42);*/
 }
-.use-theme{
-  &.theme-background-low-contrast .tab-item.active:not(:only-child ){
+.use-theme {
+  &.theme-background-low-contrast .tab-item.active:not(:only-child) {
     background: rgb(69, 132, 250);
-    .title{
+    .title {
       color: #fff;
     }
-    .active .theme-text-color{
-      color: #fff
+    .active .theme-text-color {
+      color: #fff;
     }
   }
-  .tab-item.active:not(:only-child ) {
+  .tab-item.active:not(:only-child) {
     background: rgba(255, 255, 255, 1);
-    .title{
-      color: #333 ;
+    .title {
+      color: #333;
     }
   }
 }
-
 
 .tab-item.fade {
   opacity: 0.55;
@@ -308,7 +307,7 @@ body.linux #menu-button {
 .tab-item:not(.active) .icon-tab-not-secure {
   display: none;
 }
-.tab-item:hover .title{
+.tab-item:hover .title {
   max-width: calc(100% - 10px);
 }
 .tab-item .title {
@@ -332,27 +331,26 @@ body.linux #menu-button {
   }
 }
 
-
 /* buttons */
-.windows .no-drag{
+.windows .no-drag {
   position: absolute;
   right: 0;
   width: 138px;
   height: 36px;
 }
-.window-drag-area{
+.window-drag-area {
   -webkit-app-region: drag;
 }
-.no-drag{
-
+.no-drag {
   -webkit-app-region: no-drag;
 }
-.windows-caption-buttons,body.windows:not(.separate-titlebar) .windows-caption-buttons{
+.windows-caption-buttons,
+body.windows:not(.separate-titlebar) .windows-caption-buttons {
   -webkit-app-region: no-drag;
 }
 .navbar-action-button {
   padding: 0 1rem;
-  height:26px;
+  height: 26px;
   width: 26px;
   font-size: 1.4em !important;
   border-radius: 4px;
@@ -374,45 +372,44 @@ body.windows.dark-theme .navbar-action-button:not(:disabled):hover {
 .navbar-right-actions {
   margin-right: 2.3em;
 }
-.min{
-  #tab-editor{
+.min {
+  #tab-editor {
     margin-top: 5px;
   }
-  #toolbar-navigation-buttons{
-    #back-button,#forward-button{
+  #toolbar-navigation-buttons {
+    #back-button,
+    #forward-button {
       line-height: 26px;
     }
   }
-  #mouseRcoverArea{
-    display: none !important;;
+  #mouseRcoverArea {
+    display: none !important;
   }
-  #webview-placeholder{
-    width: 100% !important;;
-    margin-left: 0 !important;;
+  #webview-placeholder {
+    width: 100% !important;
+    margin-left: 0 !important;
   }
-  #searchbar{
-    left: calc((100% ) * 0.02 ) !important;
-    width: calc((100% ) * 0.96) !important;;
+  #searchbar {
+    left: calc((100%) * 0.02) !important;
+    width: calc((100%) * 0.96) !important;
   }
 }
 .max {
-
   #tabs {
     margin-right: 55px;
   }
-  .switch-task-button{
+  .switch-task-button {
     display: none;
   }
-
 }
 
-.switch-task-button{
-  &.active{
+.switch-task-button {
+  &.active {
     background: red;
-    path{
+    path {
       fill: white;
     }
-    line{
+    line {
       stroke: white;
     }
   }
@@ -421,10 +418,10 @@ body.windows.dark-theme .navbar-action-button:not(:disabled):hover {
   z-index: 4;
 }
 .min {
-  #tabs{
-  margin-right: 85px;
+  #tabs {
+    margin-right: 85px;
   }
-  .switch-task-button{
+  .switch-task-button {
     display: inline-block;
   }
 }
@@ -436,22 +433,21 @@ body.windows.dark-theme .navbar-action-button:not(:disabled):hover {
   -webkit-app-region: none;
 }
 
-
 /* audio button */
-.use-theme .tab-item .tab-audio-button{
+.use-theme .tab-item .tab-audio-button {
   color: #333;
 }
-.use-theme .tab-item .reader-button{
+.use-theme .tab-item .reader-button {
   color: #333;
 }
 .tab-item .tab-audio-button {
   vertical-align: text-bottom;
   padding: 0 0.5em 0 0;
-  font-size: .9em !important;
+  font-size: 0.9em !important;
 }
-.tab-item .tab-audio-button:hover:before{
-    top: 10px !important;
-    left: 7px !important;
+.tab-item .tab-audio-button:hover:before {
+  top: 10px !important;
+  left: 7px !important;
 }
 
 /* reader button */
@@ -511,16 +507,16 @@ body.windows.dark-theme .navbar-action-button:not(:disabled):hover {
 /* in Carbon, close icon is a bit smaller than other icons, enlarge it in order to match with other icons */
 .tab-item .tab-close-button {
   font-size: 1.13em;
-  padding:0.1em 0.1em 0.1em 0.0em;
+  padding: 0.1em 0.1em 0.1em 0em;
   margin-top: 0.15em;
   color: #ffb8b8;
 }
-.windows .tab-item .tab-close-button{
+.windows .tab-item .tab-close-button {
   margin-top: 1px;
   padding-top: 3px;
 }
 
-.tab-item  .tab-item:hover .tab-close-button:after {
+.tab-item .tab-item:hover .tab-close-button:after {
   top: 4px !important;
   left: 7px !important;
   font-size: 0.9em;
@@ -578,4 +574,3 @@ body:not(.dark-theme) .progress-bar {
   transform: translateX(0%);
   transition: transform 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
-

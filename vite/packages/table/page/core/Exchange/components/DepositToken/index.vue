@@ -37,20 +37,19 @@
             <h2 class="h2-2">输入数额</h2>
             <div class="token-input">
               <!-- <input v-model.number="inputAmount" id="tokenA" class="custom-input" type="number" autocomplete="off"> -->
-              <input v-model="inputAmount" class="custom-input hook-address-longer" type="text">
+              <input v-model="inputAmount" class="custom-input hook-address-longer" type="text" />
             </div>
             <h2 class="h2-2">输入地址</h2>
             <div class="token-input">
               <!-- <input v-model.number="inputAddress" id="tokenB" class="custom-input" type="text" autocomplete="off"> -->
-              <input v-model="inputAddress" class="custom-input hook-address-longer" type="text">
+              <input v-model="inputAddress" class="custom-input hook-address-longer" type="text" />
             </div>
           </div>
         </div>
         <div class="divider"></div>
         <div class="price-range-section">
           <h2 class="price-range-title">近期充提记录</h2>
-          <div class="downPic">
-          </div>
+          <div class="downPic"></div>
         </div>
         <div class="divider"></div>
         <div class="button-container">
@@ -63,10 +62,10 @@
 </template>
 
 <script>
-import ShapeButton from '@page/core/components/ShapeButton.vue'
+import ShapeButton from '@page/core/components/ShapeButton.vue';
 // import {addLiq} from "@page/core/Exchange/function/addLiquidity";
-import { burn, deposit } from '@page/core/Exchange/services/bridge'
-import Background from '@page/core/components/Background.vue'
+import { burn, deposit } from '@page/core/Exchange/services/bridge';
+import Background from '@page/core/components/Background.vue';
 // import {limitOrderPoolKey} from "@page/core/Exchange/function/address.js";
 // import {ethers} from "ethers";
 // import { initializeWallet } from "@page/core/Exchange/function/address";
@@ -109,14 +108,14 @@ export default {
         tickLower: 0,
         tickUpper: 0,
         liquidityDelta: 0,
-      }
-    }
+      },
+    };
   },
   watch: {
     hookAddress(newVal) {
       if (newVal === '') {
-        this.isAddButtonClicked = false
-        this.addressError = false
+        this.isAddButtonClicked = false;
+        this.addressError = false;
       }
     },
   },
@@ -128,52 +127,52 @@ export default {
     //     }
     // },
     validateToken() {
-      return 1
+      return 1;
     },
     validateNetwork() {
-      return 1
+      return 1;
     },
     async validateAndDeposit() {
-      this.isAddButtonClicked = true
-      console.log('begin deposit')
-      console.log('selectedToken: ', this.selectedToken)
-      console.log('selectedNetwork: ', this.selectedNetwork)
-      console.log('inputAmount: ', this.inputAmount)
-      console.log('inputAddress: ', this.inputAddress)
+      this.isAddButtonClicked = true;
+      console.log('begin deposit');
+      console.log('selectedToken: ', this.selectedToken);
+      console.log('selectedNetwork: ', this.selectedNetwork);
+      console.log('inputAmount: ', this.inputAmount);
+      console.log('inputAddress: ', this.inputAddress);
       if (this.selectedNetwork !== 'Ethereum') {
-        alert('暂时只支持Ethereum网络')
+        alert('暂时只支持Ethereum网络');
       }
       if (this.selectedToken !== 'ETH') {
-        alert('暂时只支持ETH')
+        alert('暂时只支持ETH');
       } else {
         try {
-          await deposit(1, '0x0000000000000000000000000000000000000000', this.inputAmount, this.inputAddress)
-          alert('充币成功')
+          await deposit(1, '0x0000000000000000000000000000000000000000', this.inputAmount, this.inputAddress);
+          alert('充币成功');
         } catch (err) {
-          console.log(err)
-          alert('充币失败')
+          console.log(err);
+          alert('充币失败');
         }
       }
     },
     async validateAndWithdraw() {
-      this.isAddButtonClicked = true
-      console.log('begin withdraw')
-      console.log('selectedToken: ', this.selectedToken)
-      console.log('selectedNetwork: ', this.selectedNetwork)
-      console.log('inputAmount: ', this.inputAmount)
-      console.log('inputAddress: ', this.inputAddress)
+      this.isAddButtonClicked = true;
+      console.log('begin withdraw');
+      console.log('selectedToken: ', this.selectedToken);
+      console.log('selectedNetwork: ', this.selectedNetwork);
+      console.log('inputAmount: ', this.inputAmount);
+      console.log('inputAddress: ', this.inputAddress);
       if (this.selectedNetwork !== 'Ethereum') {
-        alert('暂时只支持Ethereum网络')
+        alert('暂时只支持Ethereum网络');
       }
       if (this.selectedToken !== 'ETH') {
-        alert('暂时只支持ETH')
+        alert('暂时只支持ETH');
       } else {
         try {
-          await burn(1, '0x0000000000000000000000000000000000000000', this.inputAmount, this.inputAddress)
-          alert('提币成功')
+          await burn(1, '0x0000000000000000000000000000000000000000', this.inputAmount, this.inputAddress);
+          alert('提币成功');
         } catch (err) {
-          console.log(err)
-          alert('提币失败')
+          console.log(err);
+          alert('提币失败');
         }
       }
     },
@@ -209,12 +208,11 @@ export default {
     //         }
     //     }
     // }
-  }
-}
+  },
+};
 </script>
 
 <style scoped>
-
 .liquidity-wrapper {
   border-radius: 10px;
   padding: 2%;
@@ -245,7 +243,8 @@ export default {
   gap: 5%;
 }
 
-.liquidity-left, .liquidity-right {
+.liquidity-left,
+.liquidity-right {
   flex: 0.5;
   display: flex;
   flex-direction: column;
@@ -275,7 +274,8 @@ export default {
   margin-left: -10%;
 }
 
-.token-pair, .token-input {
+.token-pair,
+.token-input {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -349,7 +349,8 @@ export default {
   width: 100%;
 }
 
-.custom-select:hover, .custom-input:hover {
+.custom-select:hover,
+.custom-input:hover {
   border-color: #007bff;
 }
 
@@ -359,7 +360,7 @@ export default {
 
 .select-option {
   color: white;
-  background-color: #2D3748;
+  background-color: #2d3748;
 }
 
 .token-label {
@@ -470,5 +471,4 @@ export default {
   justify-content: space-between;
   width: 60%;
 }
-
 </style>

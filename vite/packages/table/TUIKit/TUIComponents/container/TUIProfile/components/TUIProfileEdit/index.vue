@@ -1,5 +1,5 @@
 <template>
-  <div :class="[isH5 ? 'edit-h5': '']" class="edit">
+  <div class="edit" :class="[isH5 ? 'edit-h5' : '']">
     <header class="edit-header">
       <i v-if="isH5" class="icon icon-back" @click="cancel"></i>
       <h1 class="edit-header-title">{{ $t('TUIProfile.资料设置') }}</h1>
@@ -9,13 +9,16 @@
         <main class="edit-list-item-content" @click="setProfile('avatar')">
           <label>{{ $t('TUIProfile.头像') }}</label>
           <span v-if="isH5">
-              <img
-                  :src="profile.avatar ? profile.avatar : 'https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'"
-                  onerror="this.src='https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'">
-            </span>
-          <ul v-else class="avatar-list">
-            <li v-for="(item,index) in avatarList" :key="index" class="avatar-list-item" @click="chooseAvatar(item)">
-              <img :class="[profile.avatar === item.avatar &&  'selected']" :src="item.avatar">
+            <img
+              :src="
+                profile.avatar ? profile.avatar : 'https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'
+              "
+              onerror="this.src='https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'"
+            />
+          </span>
+          <ul class="avatar-list" v-else>
+            <li class="avatar-list-item" v-for="(item, index) in avatarList" :key="index" @click="chooseAvatar(item)">
+              <img :class="[profile.avatar === item.avatar && 'selected']" :src="item.avatar" />
             </li>
           </ul>
         </main>
@@ -25,7 +28,7 @@
         <main class="edit-list-item-content" @click="setProfile('nick')">
           <label>{{ $t('TUIProfile.昵称') }}</label>
           <span v-if="isH5">{{ profile.nick }}</span>
-          <input v-else v-model="profile.nick" type="text">
+          <input v-else type="text" v-model="profile.nick" />
         </main>
         <i v-if="isH5" class="icon icon-right"></i>
       </li>
@@ -39,7 +42,7 @@
         <main class="edit-list-item-content" @click="setProfile('selfSignature')">
           <label>{{ $t('TUIProfile.个性签名') }}</label>
           <span v-if="isH5">{{ profile.selfSignature }}</span>
-          <input v-else v-model="profile.selfSignature" type="text">
+          <input v-else type="text" v-model="profile.selfSignature" />
         </main>
         <i v-if="isH5" class="icon icon-right"></i>
       </li>
@@ -48,8 +51,8 @@
           <label>{{ $t('TUIProfile.性别') }}</label>
           <span v-if="isH5">{{ profile.gender ? $t(`TUIProfile.${genderLabel[profile.gender]}`) : '' }}</span>
           <ul v-else class="gender-list">
-            <li v-for="(item, index) in type" :key="index" class="gender-list-item" @click="showChooseGender(item)">
-              <i :class="[profile.gender === item.type && 'gender-selected']" class="gender"></i>
+            <li class="gender-list-item" v-for="(item, index) in type" :key="index" @click="showChooseGender(item)">
+              <i class="gender" :class="[profile.gender === item.type && 'gender-selected']"></i>
               <p class="name">{{ $t(`TUIProfile.${item.label}`) }}</p>
             </li>
           </ul>
@@ -61,61 +64,71 @@
           <label>{{ $t('TUIProfile.出生年月') }}</label>
           <span v-if="isH5">{{ profile.birthday }}</span>
           <Datepicker
-              v-else
-              :enableTimePicker="false"
-              :format="format"
-              :modelValue="birthday"
-              :placeholder="$t(`TUIProfile.请选择出生日期`)"
-              :previewFormat="format"
-              @update:modelValue="showBirthday"/>
+            v-else
+            :placeholder="$t(`TUIProfile.请选择出生日期`)"
+            :enableTimePicker="false"
+            :format="format"
+            :previewFormat="format"
+            :modelValue="birthday"
+            @update:modelValue="showBirthday"
+          />
         </main>
         <i v-if="isH5" class="icon icon-right"></i>
       </li>
     </ul>
-    <footer v-if="!isH5" class="edit-footer">
+    <footer class="edit-footer" v-if="!isH5">
       <button class="btn-default" @click="cancel">{{ $t('TUIProfile.取消') }}</button>
       <button class="btn-submit" @click="submit">{{ $t('TUIProfile.保存') }}</button>
     </footer>
-    <div v-if="setName&&isH5" class="mask" @click.self="closeMask">
+    <div class="mask" v-if="setName && isH5" @click.self="closeMask">
       <div class="mask-main">
         <header class="edit-h5-header">
           <h1>{{ $t(`TUIProfile.${editConfig.title}`) }}</h1>
           <span class="close" @click="closeMask">{{ $t(`关闭`) }}</span>
         </header>
         <main class="edit-h5-main">
-          <ul v-if="editConfig.type === 'select'" class="list">
-            <li v-for="(item,index) in editConfig.list" :key="index" class="list-item" @click="choose(item)">
-              <img v-if="item?.avatar" :class="[editConfig.value === item.avatar &&  'selected']" :src="item.avatar">
-              <span v-else
-                    :class="[editConfig.value === item.type &&  'selected']">{{ $t(`TUIProfile.${item.label}`) }}</span>
+          <ul class="list" v-if="editConfig.type === 'select'">
+            <li class="list-item" v-for="(item, index) in editConfig.list" :key="index" @click="choose(item)">
+              <img v-if="item?.avatar" :class="[editConfig.value === item.avatar && 'selected']" :src="item.avatar" />
+              <span v-else :class="[editConfig.value === item.type && 'selected']">{{
+                $t(`TUIProfile.${item.label}`)
+              }}</span>
             </li>
           </ul>
-          <div v-else class="input">
-            <textarea v-if="editConfig.type === 'textarea'" v-model="editConfig.value"
-                      :placeholder="editConfig.placeholder"></textarea>
+          <div class="input" v-else>
+            <textarea
+              v-if="editConfig.type === 'textarea'"
+              :placeholder="editConfig.placeholder"
+              v-model="editConfig.value"
+            ></textarea>
             <Datepicker
-                v-else-if="editConfig.type === 'date'"
-                :enableTimePicker="false"
-                :format="format"
-                :modelValue="birthday"
-                :placeholder="$t(`TUIProfile.请选择出生日期`)"
-                :previewFormat="format"
-                class="datePicker"
-                @update:modelValue="showBirthday"/>
-            <input v-else v-model="editConfig.value" :placeholder="$t(`TUIProfile.${editConfig.placeholder}`)"
-                   :type="editConfig.type">
+              class="datePicker"
+              :placeholder="$t(`TUIProfile.请选择出生日期`)"
+              v-else-if="editConfig.type === 'date'"
+              :enableTimePicker="false"
+              :format="format"
+              :previewFormat="format"
+              :modelValue="birthday"
+              @update:modelValue="showBirthday"
+            />
+            <input
+              v-else
+              :type="editConfig.type"
+              :placeholder="$t(`TUIProfile.${editConfig.placeholder}`)"
+              v-model="editConfig.value"
+            />
           </div>
           <sub v-if="editConfig.subText">{{ $t(`TUIProfile.${editConfig.subText}`) }}</sub>
         </main>
         <footer class="edit-h5-footer">
-          <button :disabled="!editConfig.value" class="btn btn-submit" @click="submit">{{ $t(`确定`) }}</button>
+          <button class="btn btn-submit" :disabled="!editConfig.value" @click="submit">{{ $t(`确定`) }}</button>
         </footer>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts">
-import {computed, defineComponent, reactive, toRefs, watchEffect} from 'vue';
+import { computed, defineComponent, reactive, toRefs, watchEffect } from 'vue';
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 
@@ -130,7 +143,7 @@ const TUIProfileEdit: any = defineComponent({
       default: () => false,
     },
   },
-  components: {Datepicker},
+  components: { Datepicker },
   setup(props: any, ctx: any) {
     const TUIServer: any = TUIProfileEdit?.TUIServer;
     const data = reactive({
@@ -199,7 +212,6 @@ const TUIProfileEdit: any = defineComponent({
       data.profile = JSON.parse(JSON.stringify(props.userInfo));
     });
 
-
     const birthday = computed(() => {
       let value = (data.profile as any).birthday;
       if (data.setName === 'birthday' && props.isH5) {
@@ -219,11 +231,9 @@ const TUIProfileEdit: any = defineComponent({
       return '';
     };
 
-
     const showChooseGender = (options: any) => {
       (data.profile as any).gender = options.type;
     };
-
 
     const chooseAvatar = (item: any) => {
       (data.profile as any).avatar = item.avatar;

@@ -1,12 +1,20 @@
 <template>
   <viewer :images="list" :options="options">
-    <a-row id="bingImages" :gutter="[20,20]" style="margin-right: 1em">
-      <a-col v-for="(img,index) in list" :span="6" class="image-wrapper " style="">
-        <img :data-source="img.path" :src="img.src" class="image-item pointer" style="position: relative"
-             @contextmenu.stop="paperShowMenu(img)">
-        <div style="position: absolute;right: 0;top: -10px ;padding: 10px">
-          <div :style="{background:isInMyPapers(img)?'#009d00a8':''}" class="bottom-actions pointer"
-               @click.stop="addToMy(img)">
+    <a-row id="bingImages" :gutter="[20, 20]" style="margin-right: 1em">
+      <a-col v-for="(img, index) in list" :span="6" class="image-wrapper" style="">
+        <img
+          :data-source="img.path"
+          :src="img.src"
+          class="image-item pointer"
+          style="position: relative"
+          @contextmenu.stop="paperShowMenu(img)"
+        />
+        <div style="position: absolute; right: 0; top: -10px; padding: 10px">
+          <div
+            :style="{ background: isInMyPapers(img) ? '#009d00a8' : '' }"
+            class="bottom-actions pointer"
+            @click.stop="addToMy(img)"
+          >
             <Icon v-if="!isInMyPapers(img)" icon="tianjia1"></Icon>
             <Icon v-else icon="yiwancheng" style=""></Icon>
           </div>
@@ -42,110 +50,109 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia'
-import { appStore } from '../../store'
-import { paperStore } from '../../store/paper'
-import GradeSmallTip from '../GradeSmallTip.vue'
-import { message, Modal } from 'ant-design-vue'
+import { mapActions, mapState } from 'pinia';
+import { appStore } from '../../store';
+import { paperStore } from '../../store/paper';
+import GradeSmallTip from '../GradeSmallTip.vue';
+import { message, Modal } from 'ant-design-vue';
 
 export default {
   name: 'PaperList',
   props: ['list'],
   components: {
-    GradeSmallTip
+    GradeSmallTip,
   },
-  data () {
+  data() {
     return {
       options: {
         url: 'data-source',
       },
       visibleMenu: false,
-      paperCurrent: null
-    }
+      paperCurrent: null,
+    };
   },
 
-  mounted () {
-  },
+  mounted() {},
   methods: {
     ...mapActions(paperStore, ['removeToMyPaper']),
     ...mapActions(appStore, ['setBackgroundImage']),
-    addToMy (img) {
+    addToMy(img) {
       let image = {
         src: img.src,
-        path: img.src
-      }
-      this.removeToMyPaper(image)
+        path: img.src,
+      };
+      this.removeToMyPaper(image);
     },
-    isInMyPapers (image) {
-      return this.myPapers.findIndex(img => {
-        return image.src === img.src
-      }) > -1
+    isInMyPapers(image) {
+      return (
+        this.myPapers.findIndex((img) => {
+          return image.src === img.src;
+        }) > -1
+      );
     },
-    paperShowMenu (item) {
-      this.paperCurrent = item
-      this.visibleMenu = true
+    paperShowMenu(item) {
+      this.paperCurrent = item;
+      this.visibleMenu = true;
     },
-    setDesktopPaper () {
+    setDesktopPaper() {
       Modal.confirm({
         content: '确定将此壁纸设置为系统桌面壁纸？注意，此处设置不是工作台的壁纸。',
         okText: '设置桌面壁纸',
         onOk: () => {
-          message.info('正在为您下载并设桌面壁纸')
-          tsbApi.system.setPaper(this.paperCurrent.src)
-          this.visibleMenu = false
-        }
-      })
+          message.info('正在为您下载并设桌面壁纸');
+          tsbApi.system.setPaper(this.paperCurrent.src);
+          this.visibleMenu = false;
+        },
+      });
     },
-    setAppPaper () {
-      message.info('正在为您设置壁纸')
-      this.setBackgroundImage(this.paperCurrent)
-      this.visibleMenu = false
+    setAppPaper() {
+      message.info('正在为您设置壁纸');
+      this.setBackgroundImage(this.paperCurrent);
+      this.visibleMenu = false;
     },
-    add () {
+    add() {
       if (this.settings.savePath === '') {
         Modal.confirm({
           centered: true,
           style: { 'z-index': 999999 },
           content: '您尚未设置壁纸保存目录，请设置目录，设置目录后下载将自动开始。',
           onOk: async () => {
-            await this.queryStart()
-          }
-        })
+            await this.queryStart();
+          },
+        });
       } else {
         // console.log('测试::>>',this.paperCurrent)
-        this.doStartDownload(this.paperCurrent.src)
-
+        this.doStartDownload(this.paperCurrent.src);
       }
     },
 
     // 开始下载
-    doStartDownload (item) {
-      message.info('开始下载壁纸')
-      const name = item.split('&')[1].slice(3)
+    doStartDownload(item) {
+      message.info('开始下载壁纸');
+      const name = item.split('&')[1].slice(3);
       tsbApi.download.start({
         url: item,
         savePath: this.settings.savePath + '/static/' + name,
         done: (args) => {
-          message.success('壁纸下载完成')
-        }
-      })
-      this.visibleMenu = false
+          message.success('壁纸下载完成');
+        },
+      });
+      this.visibleMenu = false;
     },
 
     // 选择目录
-    async queryStart () {
+    async queryStart() {
       let savePath = await tsbApi.dialog.showOpenDialog({
-        title: '选择目录', message: '请选择下载壁纸的目录', properties: [
-          'openDirectory', 'createDirectory',
-        ]
-      })
+        title: '选择目录',
+        message: '请选择下载壁纸的目录',
+        properties: ['openDirectory', 'createDirectory'],
+      });
       if (savePath) {
-        this.settings.savePath = savePath[0]
-        this.doStartDownload(this.paperCurrent.src)
+        this.settings.savePath = savePath[0];
+        this.doStartDownload(this.paperCurrent.src);
       } else {
       }
     },
-
   },
   computed: {
     ...mapState(paperStore, ['myPapers', 'settings']),
@@ -154,8 +161,8 @@ export default {
     //     'papers':'appData.wallpapers.myPapers'
     //   }
     // ])
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss">
@@ -185,5 +192,4 @@ export default {
 
   zoom: 1.6;
 }
-
 </style>

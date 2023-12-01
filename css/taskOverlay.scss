@@ -63,14 +63,12 @@
   right: var(--control-space-right);
   z-index: 4;
   padding: 0.6em;
-&.switch-task-button svg{
-
-  margin-top: -9px;
-  margin-left: -12px;
+  &.switch-task-button svg {
+    margin-top: -9px;
+    margin-left: -12px;
+  }
 }
-
-}
-#layout-button svg{
+#layout-button svg {
   margin-top: -10px;
   margin-left: -12px;
 }
@@ -117,24 +115,24 @@
   margin-left: 55px;
 
   .task-container {
-    &.gu-transit{
+    &.gu-transit {
       background: white;
     }
-    .searchbar-item{
+    .searchbar-item {
       padding: 3px 9px 6px 3px;
       border-bottom: dashed 1px #ccc;
     }
-    .title{
+    .title {
       font-size: 14px;
       line-height: 18px;
 
-      width:85%;
+      width: 85%;
       max-width: 85%;
     }
-    .secondary-text{
+    .secondary-text {
       display: none;
     }
-    width:24%;
+    width: 24%;
     height: 360px;
     overflow-y: auto;
     margin: 5px;
@@ -148,7 +146,6 @@
     border: 1px solid #ececec;
     background: white;
   }
-
 }
 
 #task-overlay[hidden] {
@@ -157,7 +154,6 @@
   opacity: 0;
   pointer-events: none;
 }
-
 
 .task-container.collapsed {
   opacity: 0.8;
@@ -352,7 +348,7 @@ body:not(.touch) .task-container:not(.collapsed):not(:hover) .task-collapse-butt
 }
 
 .task-info-container span + span:before {
-  content: " - ";
+  content: ' - ';
 }
 
 .task-container:not(.collapsed) .task-info-container .task-last-tab-title {
@@ -392,11 +388,9 @@ body.dark-mode #task-overlay {
 
 /*优化一下任务栏的显示，增强区分度，减少认知成本*/
 
-
 #task-overlay {
   background-color: #f7f7f7;
 }
-
 
 /*夜间模式下*/
 .dark-mode .task-container {
@@ -420,7 +414,6 @@ body.dark-mode #task-overlay {
   margin-left: 0;
 
   z-index: 0;
-
 }
 
 .dark-mode .searchbar-item {

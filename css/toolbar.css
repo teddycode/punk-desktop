@@ -13,7 +13,7 @@
 #third-toolbar .third-bar-lf .feature-btn {
   margin-left: 10px;
   cursor: pointer;
-  background-color: #F3F3F3;
+  background-color: #f3f3f3;
   color: rgba(0, 0, 0, 0.65);
   padding: 6px;
   height: 70%;
@@ -92,15 +92,16 @@
   background: rgba(238, 238, 238, 0.8);
 }
 #toolbar .is-reader img {
-  border: 1px solid #1E90FF;
+  border: 1px solid #1e90ff;
   border-radius: 50%;
 }
 #toolbar .action-wrapper {
   width: 40px;
   position: relative;
 }
-#toolbar .action-wrapper.open::after, #toolbar .action-wrapper:hover::after {
-  content: "";
+#toolbar .action-wrapper.open::after,
+#toolbar .action-wrapper:hover::after {
+  content: '';
   display: inline-block;
   width: 30px;
   height: 30px;

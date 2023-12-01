@@ -1,30 +1,25 @@
 .TUI-conversation {
-  background: #FFFFFF;
-
+  background: #ffffff;
   header {
-    background: #FFFFFF;
-    border-bottom: 0.06rem solid #F4F5F9;
-
+    background: #ffffff;
+    border-bottom: 0.06rem solid #f4f5f9;
     h1 {
       font-weight: 400;
       color: #000000;
     }
-
     .more {
-      background: #F3F3F3;
+      background: #f3f3f3;
     }
   }
-
   .network {
     p {
-
       font-weight: 400;
-      color: #E54545;
+      color: #e54545;
       letter-spacing: 0;
     }
   }
 }
 
 input {
-  border: 1px solid #DDDDDD;
+  border: 1px solid #dddddd;
 }

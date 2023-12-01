@@ -1,7 +1,5 @@
-@import "linear";
-
+@import 'linear';
 .card {
-
   border-radius: 8px;
   vertical-align: text-top;
   width: 280px;
@@ -14,25 +12,20 @@
       display: inline-block;
     }
   }
-
   .right-title {
     display: none;
   }
-
   .right-title {
     position: absolute;
     top: 1em;
     right: 1em;
   }
-
   .no-title {
     .title-icon {
       width: 24px;
       height: 24px;
       color: #818181;
     }
-
-
   }
 
   .content-title {
@@ -41,12 +34,10 @@
     justify-content: space-between;
 
     .left-title {
-
       display: flex;
       flex: 1;
 
       align-items: center;
-
 
       .title-icon {
         width: 24px;
@@ -54,11 +45,9 @@
       }
 
       :last-child {
-        margin-left: .5em;
+        margin-left: 0.5em;
       }
     }
-
-
   }
 
   .content {
@@ -69,7 +58,6 @@
       position: absolute;
       right: 1em;
     }
-
   }
 
   &.auto-height {
@@ -95,10 +83,9 @@
   .sub-card {
     text-align: center;
     padding: 1em;
-    border-radius: .3em;
+    border-radius: 0.3em;
     font-size: 1.2em;
   }
-
 }
 
 .card-wrapper {
@@ -108,9 +95,7 @@
   vertical-align: middle;
   display: flex;
   align-items: center;
-
 }
-
 
 .option {
   background: #161616;

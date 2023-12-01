@@ -7,13 +7,13 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       isFlipping: false,
       flipType: 'down',
       frontTextFromData: 0,
       backTextFromData: 1,
-    }
+    };
   },
   props: {
     // front paper text
@@ -36,48 +36,48 @@ export default {
     },
   },
   methods: {
-    _textClass (number) {
-      return 'number' + number
+    _textClass(number) {
+      return 'number' + number;
     },
-    _flip (type, front, back) {
+    _flip(type, front, back) {
       // 如果处于翻转中，则不执行
       if (this.isFlipping) {
-        return false
+        return false;
       }
-      this.frontTextFromData = front
-      this.backTextFromData = back
+      this.frontTextFromData = front;
+      this.backTextFromData = back;
       // 根据传递过来的type设置翻转方向
-      this.flipType = type
+      this.flipType = type;
       // 设置翻转状态为true
-      this.isFlipping = true
+      this.isFlipping = true;
       setTimeout(() => {
         // 设置翻转状态为false
-        this.isFlipping = false
-        this.frontTextFromData = back
-      }, this.duration)
+        this.isFlipping = false;
+        this.frontTextFromData = back;
+      }, this.duration);
     },
     // 下翻牌
-    flipDown (front, back) {
-      this._flip('down', front, back)
+    flipDown(front, back) {
+      this._flip('down', front, back);
     },
     // 上翻牌
-    flipUp (front, back) {
-      this._flip('up', front, back)
+    flipUp(front, back) {
+      this._flip('up', front, back);
     },
     // 设置前牌文字
-    setFront (text) {
-      this.frontTextFromData = text
+    setFront(text) {
+      this.frontTextFromData = text;
     },
     //  设置后牌文字
-    setBack (text) {
-      this.backTextFromData = text
+    setBack(text) {
+      this.backTextFromData = text;
     },
   },
-  created () {
-    this.frontTextFromData = this.frontText
-    this.backTextFromData = this.backText
+  created() {
+    this.frontTextFromData = this.frontText;
+    this.backTextFromData = this.backText;
   },
-}
+};
 </script>
 
 <style scoped></style>

@@ -1,56 +1,56 @@
-const execa = require('execa')
+const execa = require('execa');
 
-async function amixer (...args) {
-  return (await execa('amixer', args)).stdout
+async function amixer(...args) {
+  return (await execa('amixer', args)).stdout;
 }
 
-let defaultDeviceCache = null
-const reDefaultDevice = /Simple mixer control '([a-z0-9 -]+)',[0-9]+/i
+let defaultDeviceCache = null;
+const reDefaultDevice = /Simple mixer control '([a-z0-9 -]+)',[0-9]+/i;
 
-function parseDefaultDevice (data) {
-  const result = reDefaultDevice.exec(data)
+function parseDefaultDevice(data) {
+  const result = reDefaultDevice.exec(data);
 
   if (result === null) {
-    throw new Error('Alsa Mixer Error: failed to parse output')
+    throw new Error('Alsa Mixer Error: failed to parse output');
   }
 
-  return result[1]
+  return result[1];
 }
 
-async function getDefaultDevice () {
-  if (defaultDeviceCache) return defaultDeviceCache
+async function getDefaultDevice() {
+  if (defaultDeviceCache) return defaultDeviceCache;
 
-  return (defaultDeviceCache = parseDefaultDevice(await amixer()))
+  return (defaultDeviceCache = parseDefaultDevice(await amixer()));
 }
 
-const reInfo = /[a-z][a-z ]*: Playback [0-9-]+ \[([0-9]+)%\] (?:[[0-9.-]+dB\] )?\[(on|off)\]/i
+const reInfo = /[a-z][a-z ]*: Playback [0-9-]+ \[([0-9]+)%\] (?:[[0-9.-]+dB\] )?\[(on|off)\]/i;
 
-function parseInfo (data) {
-  const result = reInfo.exec(data)
+function parseInfo(data) {
+  const result = reInfo.exec(data);
 
   if (result === null) {
-    throw new Error('Alsa Mixer Error: failed to parse output')
+    throw new Error('Alsa Mixer Error: failed to parse output');
   }
 
-  return { volume: parseInt(result[1], 10), muted: (result[2] === 'off') }
+  return { volume: parseInt(result[1], 10), muted: result[2] === 'off' };
 }
 
-async function getInfo () {
-  return parseInfo(await amixer('get', await getDefaultDevice()))
+async function getInfo() {
+  return parseInfo(await amixer('get', await getDefaultDevice()));
 }
 
-exports.getVolume = async function getVolume () {
-  return (await getInfo()).volume
-}
+exports.getVolume = async function getVolume() {
+  return (await getInfo()).volume;
+};
 
-exports.setVolume = async function setVolume (val) {
-  await amixer('set', await getDefaultDevice(), val + '%')
-}
+exports.setVolume = async function setVolume(val) {
+  await amixer('set', await getDefaultDevice(), val + '%');
+};
 
-exports.getMuted = async function getMuted () {
-  return (await getInfo()).muted
-}
+exports.getMuted = async function getMuted() {
+  return (await getInfo()).muted;
+};
 
-exports.setMuted = async function setMuted (val) {
-  await amixer('set', await getDefaultDevice(), val ? 'mute' : 'unmute')
-}
+exports.setMuted = async function setMuted(val) {
+  await amixer('set', await getDefaultDevice(), val ? 'mute' : 'unmute');
+};

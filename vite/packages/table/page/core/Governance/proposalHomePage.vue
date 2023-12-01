@@ -6,9 +6,7 @@
           <h1 class="title">提案</h1>
           <shape-button>创建提案</shape-button>
         </div>
-        <div class="proposal-card">
-          一条提案
-        </div>
+        <div class="proposal-card">一条提案</div>
       </div>
       <div class="right-section">
         <div class="upper-div">
@@ -23,17 +21,20 @@
 </template>
 
 <script>
-import ShapeButton from '@page/core/components/ShapeButton.vue'
-import selfInfo from '@page/core/Governance/components/selfInfo.vue'
-import myEntrust from '@page/core/Governance/components/myEntrust.vue'
-import Background from '@page/core/components/Background.vue'
+import ShapeButton from '@page/core/components/ShapeButton.vue';
+import selfInfo from '@page/core/Governance/components/selfInfo.vue';
+import myEntrust from '@page/core/Governance/components/myEntrust.vue';
+import Background from '@page/core/components/Background.vue';
 
 export default {
   name: 'proposalHomePage',
   components: {
-    Background, ShapeButton, selfInfo, myEntrust,
-  }
-}
+    Background,
+    ShapeButton,
+    selfInfo,
+    myEntrust,
+  },
+};
 </script>
 
 <style scoped>
@@ -64,7 +65,6 @@ export default {
   color: white;
 }
 
-
 .proposal-card {
   color: white;
   width: 90%;
@@ -83,7 +83,8 @@ export default {
   justify-content: space-between;
 }
 
-.upper-div, .lower-div {
+.upper-div,
+.lower-div {
   border: 2px solid white;
   width: 90%;
   margin-right: 5%;

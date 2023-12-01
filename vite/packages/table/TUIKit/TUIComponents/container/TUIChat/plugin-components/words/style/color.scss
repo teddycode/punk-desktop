@@ -1,58 +1,48 @@
 .words {
   &-main {
     background: #ffffff;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
-
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     header {
       aside {
         font-weight: 500;
         color: #000000;
-
         h1 {
           font-weight: 500;
           color: #000000;
         }
-
         a {
-          color: #006EFF;
+          color: #006eff;
         }
       }
     }
   }
-
   &-list {
     &-item {
       cursor: pointer;
       font-weight: 400;
-      color: #50545C;
-
+      color: #50545c;
       &:hover {
-        color: #006EFF;
+        color: #006eff;
       }
     }
   }
 }
-
 .words-H5-main {
-  background: rgba(0, 0, 0, .5);
-
+  background: rgba(0, 0, 0, 0.5);
   .words-main-content {
-    background: #FFFFFF;
-
+    background: #ffffff;
     .words-list {
       &-item {
-        border-bottom: 1px solid #EEEEEE;
+        border-bottom: 1px solid #eeeeee;
 
         font-weight: 400;
         color: #333333;
         letter-spacing: 0;
       }
     }
-
     .close {
-
       font-weight: 400;
-      color: #3370FF;
+      color: #3370ff;
       letter-spacing: 0;
     }
   }

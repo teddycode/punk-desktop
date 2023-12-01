@@ -4,19 +4,18 @@
       <div v-if="judgeSize(data.size)" class="model-preview">
         <model-file :data="data"></model-file>
       </div>
-      <div v-else class="text-center ">
+      <div class="text-center" v-else>
+        <xt-button @click="showModel = true" type="theme" style="width: 200px; margin-bottom: 10px" :h="200"
+          >点击预览
 
-        <xt-button :h="200" style="width: 200px;margin-bottom:10px" type="theme" @click="showModel=true">点击预览
-
-          <br>
-          <div class="text-center xt-active-text" style="opacity: 0.5;zoom:0.8">模型超过10MB</div>
-        </xt-button>
-
+          <br />
+          <div class="text-center xt-active-text" style="opacity: 0.5; zoom: 0.8">模型超过10MB</div></xt-button
+        >
       </div>
     </div>
 
-    <div :title="$t('TUIChat.单击下载')" class="box" @click="download">
-      <CodepenOutlined v-if="is3dFile(data.name)" class="model-icon"/>
+    <div class="box" @click="download" :title="$t('TUIChat.单击下载')">
+      <CodepenOutlined class="model-icon" v-if="is3dFile(data.name)" />
       <i v-else class="icon icon-files"></i>
       <div class="message-file-content">
         <label>{{ data.name }}</label>
@@ -29,13 +28,12 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, reactive, toRefs, watchEffect} from 'vue';
-import _3dFile from "./model-file.vue";
-import ModelFile from "./model-file.vue";
-import {CodepenOutlined} from '@ant-design/icons-vue'
-
+import { defineComponent, watchEffect, reactive, toRefs } from 'vue';
+import _3dFile from './model-file.vue';
+import ModelFile from './model-file.vue';
+import { CodepenOutlined } from '@ant-design/icons-vue';
 export default defineComponent({
-  components: {ModelFile, _3dFile, CodepenOutlined},
+  components: { ModelFile, _3dFile, CodepenOutlined },
   props: {
     data: {
       type: Object,
@@ -45,7 +43,7 @@ export default defineComponent({
   setup(props: any, ctx: any) {
     const data = reactive({
       data: {},
-      showModel: false,//强制显示模型
+      showModel: false, //强制显示模型
     });
 
     watchEffect(() => {
@@ -64,14 +62,14 @@ export default defineComponent({
       // If the browser supports fetch, use blob to download, so as to avoid the browser clicking the a tag and jumping to the preview of the new page
       if ((window as any).fetch) {
         fetch(file.url, option)
-            .then((res) => res.blob())
-            .then((blob) => {
-              const a = document.createElement('a');
-              const url = window.URL.createObjectURL(blob);
-              a.href = url;
-              a.download = file.name;
-              a.click();
-            });
+          .then((res) => res.blob())
+          .then((blob) => {
+            const a = document.createElement('a');
+            const url = window.URL.createObjectURL(blob);
+            a.href = url;
+            a.download = file.name;
+            a.click();
+          });
       } else {
         const a = document.createElement('a');
         a.href = file.url;
@@ -82,22 +80,42 @@ export default defineComponent({
     };
 
     const is3dFile = (filename) => {
-      const ext = require('path').extname(filename)
-      if (['.stl', '.obj', '.3ds', '.ply', '.gltf', '.off', '.3dm', '.fbx', '.dae', '.wrl', '.3mf', '.amf', '.ifc',
-        '.brep', '.step', '.iges', '.fcstd', '.bim'].includes(ext)) {
-        return true
+      const ext = require('path').extname(filename);
+      if (
+        [
+          '.stl',
+          '.obj',
+          '.3ds',
+          '.ply',
+          '.gltf',
+          '.off',
+          '.3dm',
+          '.fbx',
+          '.dae',
+          '.wrl',
+          '.3mf',
+          '.amf',
+          '.ifc',
+          '.brep',
+          '.step',
+          '.iges',
+          '.fcstd',
+          '.bim',
+        ].includes(ext)
+      ) {
+        return true;
       }
-    }
+    };
     const judgeSize = (size) => {
       if (data.showModel) {
-        return true
+        return true;
       }
       if (size.includes('Mb')) {
         return Number(size.replace('Mb', '')) <= 10;
       } else {
-        return true
+        return true;
       }
-    }
+    };
     return {
       ...toRefs(data),
       download,
@@ -110,23 +128,19 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import url('../../../styles/common.scss');
 @import url('../../../styles/icon.scss');
-
 .message-file {
   display: flex;
   flex-direction: column;
-
   .box {
     flex: 1;
     display: flex;
     cursor: pointer;
-
     .message-file-content {
       flex: 1;
       display: flex;
       flex-direction: column;
     }
   }
-
   progress {
     width: 100%;
     color: #006eff;
@@ -135,17 +149,14 @@ export default defineComponent({
     background: rgba(#ffffff, 1);
     width: 100%;
     height: 0.5rem;
-
     &::-webkit-progress-value {
       background-color: #006eff;
       border-radius: 0.25rem;
     }
-
     &::-webkit-progress-bar {
       border-radius: 0.25rem;
       background: rgba(#ffffff, 1);
     }
-
     &::-moz-progress-bar {
       color: #006eff;
       background: #006eff;
@@ -153,11 +164,9 @@ export default defineComponent({
     }
   }
 }
-
 .model-icon {
   color: #666;
   margin-right: 5px;
-  vertical-align: text-top
-
+  vertical-align: text-top;
 }
 </style>

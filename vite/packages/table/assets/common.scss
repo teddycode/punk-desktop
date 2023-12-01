@@ -1,58 +1,46 @@
-@import "card";
-@import "reset";
+@import 'card';
+@import 'reset';
 @import 'dark';
-@import "deck";
-@import "custom";
-@import "rgb";
-@import "game";
-@import "./chat/fixChat";
+@import 'deck';
+@import 'custom';
+@import 'rgb';
+@import 'game';
+@import './chat/fixChat';
 
 body {
   //background-color: rgb(50, 50, 50);
   overflow: hidden;
 }
-
 .s-bg {
   background: var(--primary-bg);
   backdrop-filter: blur(var(--suspensiondBackGroundBlur, 50px));
-  box-shadow: var(--suspensiondBackGroundBoxShadow, 0px 0px 10px 0px rgba(0, 0, 0, 0.5))
-}
-
-//suspension-background
+  box-shadow: var(--suspensiondBackGroundBoxShadow, 0px 0px 10px 0px rgba(0, 0, 0, 0.5));
+} //suspension-background
 .s-text {
   text-shadow: 0 3px 6px #000000;
-
-}
-
-//suspension-text
+} //suspension-text
 .s-icon {
   svg {
     filter: drop-shadow(0 3px 6px #000000);
   }
-}
-
-//suspension-icon
+} //suspension-icon
 .s-select-bg {
   background: var(--suspensionSelectBackGround, rgba(255, 255, 255, 0.1));
 }
-
 .s-item {
-  background: var(--suspensionItemBackGround, rgba(0, 0, 0, 0.30));
-}
-
-//suspension-item
+  background: var(--suspensionItemBackGround, rgba(0, 0, 0, 0.3));
+} //suspension-item
 .bottom-panel {
   .item {
     background: transparent !important;
   }
 }
-
 .video-container {
   z-index: -100;
 }
 
 .video-container:before {
-  content: "";
+  content: '';
   position: absolute;
   width: 100%;
   height: 100%;
@@ -60,7 +48,7 @@ body {
   z-index: -1;
   top: 0;
   left: 0;
-  background: rgba(25, 29, 34, .65);
+  background: rgba(25, 29, 34, 0.65);
   background-size: cover;
 }
 
@@ -94,13 +82,10 @@ body {
 
     border-radius: 6px;
     font-size: 1.2em;
-
     &:hover {
-
     }
 
     &.active {
-
     }
   }
 
@@ -108,57 +93,48 @@ body {
     font-size: 0.6em;
   }
 }
-
 .card-list-icon {
   width: 20px;
   height: 20px;
 }
-
 .drag {
-  -webkit-app-region: drag
+  -webkit-app-region: drag;
 }
-
 .no-drag {
-  -webkit-app-region: no-drag
+  -webkit-app-region: no-drag;
 }
-
 .bottom-panel {
   .item {
   }
 }
-
 .middle-button {
   width: 120px;
   height: 48px;
   border-radius: 12px;
 }
-
 .small-button {
   width: 56px;
   height: 56px;
   border-radius: 12px;
   background: rgba(0, 0, 0, 0.65);
 }
-
 .big-button {
   width: 120px;
   height: 56px;
   border-radius: 12px;
   background: rgba(0, 0, 0, 0.65);
 }
-
 .home-blur {
   background: rgba(0, 0, 0, 0.65);
   backdrop-filter: blur(8px);
 }
-
 .key-button {
   border: 1px solid #c1c1c1;
   border-radius: 4px;
   display: inline-block;
   height: 1.8em;
   line-height: 1.8em;
-  font-size: .8em;
+  font-size: 0.8em;
   width: 1.8em;
   background: linear-gradient(to right, #ececec, white, #e5e5e5);
 }
@@ -166,7 +142,6 @@ body {
 body {
   user-select: none;
 }
-
 .round-dot {
   left: 12px;
   top: 25px;
@@ -176,15 +151,13 @@ body {
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.85);
 }
-
 .main {
   position: fixed;
   bottom: 0;
   top: 0;
   left: 0;
-  right: 0
+  right: 0;
 }
-
 .btn.sm {
   padding: 0.4em 0.8em;
 }
@@ -195,20 +168,18 @@ body {
   background: $suspensionItemBackGround;
   display: inline-block;
   border-radius: 0.5em;
-
-  &:hover, &:active {
+  &:hover,
+  &:active {
     background: rgba(0, 0, 0, 0.2);
     color: white;
   }
 }
-
 .text-btn {
   cursor: pointer;
   padding: 0.8em;
   background: rgba(0, 0, 0, 0.3);
   display: inline-block;
   border-radius: 0.5em;
-
   &:hover {
     background: rgba(0, 0, 0, 0.2);
     color: white;
@@ -218,17 +189,14 @@ body {
 .pointer {
   cursor: pointer;
 }
-
 .playing {
   animation: rotate 30s linear infinite;
   -webkit-animation: rotate 30s linear infinite;
 }
-
 .replace-it {
-  animation: rotate .5s linear infinite;
-  -webkit-animation: rotate .5s linear infinite;
+  animation: rotate 0.5s linear infinite;
+  -webkit-animation: rotate 0.5s linear infinite;
 }
-
 @keyframes rotate {
   0% {
     transform: rotate(0);
@@ -273,11 +241,8 @@ body {
   }
 }
 
-
 body.full-screen {
-
 }
-
 
 .text-more {
   text-overflow: ellipsis;
@@ -286,18 +251,16 @@ body.full-screen {
   overflow: hidden;
 }
 
-
-.line, .line-title {
+.line,
+.line-title {
   margin-bottom: 1em;
   padding-left: 1em;
 }
-
 .line-title {
   padding-left: 0em;
   font-size: 1.2em;
   font-weight: bold;
 }
-
 .back-btn {
   padding: 0.8em;
   background: rgba(0, 0, 0, 0.3);
@@ -308,7 +271,6 @@ body.full-screen {
   top: 2em;
   z-index: 999;
   cursor: pointer;
-
   &:hover {
     background: rgba(0, 0, 0, 0.2);
     color: white;
@@ -328,7 +290,6 @@ body.full-screen {
   justify-content: center;
   color: white;
   align-items: center;
-
   &.small-tip {
     width: 34px;
     font-size: 10px;
@@ -336,22 +297,18 @@ body.full-screen {
     height: 18px;
   }
 }
-
 //.scroll-content::-webkit-scrollbar { width: 0 !important }
 .scroll-content {
   -ms-overflow-style: none;
 }
-
 .scroll-content {
   overflow: -moz-scrollbars-none;
 }
-
 body {
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
 }
-
 .background-img-blur-light {
   background: rgba(0, 0, 0, 0); //  background: rgba(0, 0, 0,var(--backGroundImgLight,0));
   backdrop-filter: blur(var(--backGroundImgBlur, 0px));
@@ -360,23 +317,19 @@ body {
 .game-page-nav {
   max-width: 932px;
 }
-
 .game-item-title-bg {
   border-radius: 8px;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.08) 0%, rgba(0, 0, 0, .3) 100%);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.08) 0%, rgba(0, 0, 0, 0.3) 100%);
   color: rgba(255, 255, 255, 0.85);
-
   &.first {
     border-radius: 0 0 12px 12px;
     background: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(20px);
   }
 }
-
 .bg-mask {
   background: var(--secondary-bg) !important;
 }
-
 .drawer-item-bg {
   background: rgba(42, 42, 42, 1); //右侧抽屉按钮和输入框统一颜色
 }
@@ -385,16 +338,14 @@ body {
   background: rgba(255, 255, 255, 0.1); //右侧抽屉选择器统一颜色
 }
 
-
-.btn-active:active { // 按钮点击状态
+.btn-active:active {
+  // 按钮点击状态
   filter: brightness(0.8);
   background: rgba(42, 42, 42, 0.25);
 }
-
 .btn-hover:hover {
   background: rgba(42, 42, 42, 0.25);
 }
-
 
 .setting-menu {
   .btn {

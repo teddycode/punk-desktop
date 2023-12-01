@@ -17,10 +17,10 @@
 </template>
 
 <script>
-import { computed } from "vue";
-import vSidebar from "@page/core/Consensus/componnents/Sidebar.vue";
-import vTags from "@page/core/Consensus/componnents/Tags.vue";
-import { useBaseStore } from "@store/baseboard";
+import { computed } from 'vue';
+import vSidebar from './componnents/Sidebar.vue';
+import vTags from './componnents/Tags.vue';
+import { useBaseStore } from '@store/baseboard';
 export default {
   components: {
     vSidebar,

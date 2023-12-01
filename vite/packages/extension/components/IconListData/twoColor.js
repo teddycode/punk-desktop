@@ -4,200 +4,252 @@ export default {
   icon: 'xuanzhong',
   list: [
     {
-      'name': 'daka',
-      'alias': '打卡'
+      name: 'daka',
+      alias: '打卡',
     },
     {
-      'name': 'kabao',
-      'alias': '卡包'
+      name: 'kabao',
+      alias: '卡包',
     },
     {
       name: 'zhekouquan',
-      alias: '折扣券'
-    }, {
+      alias: '折扣券',
+    },
+    {
       name: 'dianpu',
-      alias: '店铺'
+      alias: '店铺',
     },
     {
       name: 'jifen',
-      alias: '积分'
+      alias: '积分',
     },
     {
       name: 'jine',
-      alias: '金额'
-    }, {
+      alias: '金额',
+    },
+    {
       name: 'naozhong',
-      alias: '闹钟'
+      alias: '闹钟',
     },
     {
       name: 'ziliao',
-      alias: '资料'
+      alias: '资料',
     },
     {
       name: 'bangzhu',
-      alias: '帮助'
-    }, {
+      alias: '帮助',
+    },
+    {
       name: 'huiyuan',
-      alias: '会员'
-    }, {
+      alias: '会员',
+    },
+    {
       name: 'shangpin',
-      alias: '商品'
+      alias: '商品',
     },
     {
       name: 'shoucang',
-      alias: '收藏'
+      alias: '收藏',
     },
     {
       name: 'xiaoxi',
-      alias: '消息'
-    }, {
+      alias: '消息',
+    },
+    {
       name: 'yingli',
-      alias: '盈利'
-    }, {
+      alias: '盈利',
+    },
+    {
       name: 'fenxiang',
-      alias: '分享'
-    }, {
+      alias: '分享',
+    },
+    {
       name: 'sheying',
-      alias: '摄影'
+      alias: '摄影',
     },
     {
       name: 'yaoqing',
-      alias: '邀请'
-    }, {
+      alias: '邀请',
+    },
+    {
       name: 'yinhangka',
-      alias: '银行卡'
-    }, {
+      alias: '银行卡',
+    },
+    {
       name: 'duanxin',
-      alias: '短信'
-    }, {
+      alias: '短信',
+    },
+    {
       name: 'shipin',
-      alias: '视频'
-    }, {
+      alias: '视频',
+    },
+    {
       name: 'shouye',
-      alias: '首页'
-    }, {
+      alias: '首页',
+    },
+    {
       name: 'tupian',
-      alias: '图片'
-    }, {
+      alias: '图片',
+    },
+    {
       name: 'wenjianjia',
-      alias: '文件夹'
-    }, {
+      alias: '文件夹',
+    },
+    {
       name: 'chucun',
-      alias: '储存'
-    }, {
+      alias: '储存',
+    },
+    {
       name: 'shouji',
-      alias: '手机'
-    }, {
+      alias: '手机',
+    },
+    {
       name: 'wode',
-      alias: '我的'
-    }, {
+      alias: '我的',
+    },
+    {
       name: 'xihuan',
-      alias: '喜欢'
-    }, {
+      alias: '喜欢',
+    },
+    {
       name: 'chucha',
-      alias: '出差'
-    }, {
+      alias: '出差',
+    },
+    {
       name: 'faxian',
-      alias: '发现'
-    }, {
+      alias: '发现',
+    },
+    {
       name: 'jiami',
-      alias: '加密'
-    }, {
+      alias: '加密',
+    },
+    {
       name: 'jiesuo',
-      alias: '解锁'
-    }, {
+      alias: '解锁',
+    },
+    {
       name: 'yiliao',
-      alias: '医疗'
-    }, {
+      alias: '医疗',
+    },
+    {
       name: 'rili',
-      alias: '日历'
-    }, {
+      alias: '日历',
+    },
+    {
       name: 'shezhi',
-      alias: '设置'
-    }, {
+      alias: '设置',
+    },
+    {
       name: 'xiangji',
-      alias: '相机'
-    }, {
+      alias: '相机',
+    },
+    {
       name: 'yujing',
-      alias: '预警'
-    }, {
+      alias: '预警',
+    },
+    {
       name: 'biaoqian',
-      alias: '标签'
-    }, {
+      alias: '标签',
+    },
+    {
       name: 'fenlei',
-      alias: '分类'
-    }, {
+      alias: '分类',
+    },
+    {
       name: 'xiangqing',
-      alias: '详情'
-    }, {
+      alias: '详情',
+    },
+    {
       name: 'fukuan',
-      alias: '付款'
-    }, {
+      alias: '付款',
+    },
+    {
       name: 'guanjun',
-      alias: '冠军'
-    }, {
+      alias: '冠军',
+    },
+    {
       name: 'hongbao',
-      alias: '红包'
-    }, {
+      alias: '红包',
+    },
+    {
       name: 'xuanzhong',
-      alias: '选中'
-    }, {
+      alias: '选中',
+    },
+    {
       name: 'anquan',
-      alias: '安全'
-    }, {
+      alias: '安全',
+    },
+    {
       name: 'pifu',
-      alias: '皮肤'
-    }, {
+      alias: '皮肤',
+    },
+    {
       name: 'qingjie',
-      alias: '清洁'
-    }, {
+      alias: '清洁',
+    },
+    {
       name: 'gouwuche',
-      alias: '购物车'
-    }, {
+      alias: '购物车',
+    },
+    {
       name: 'liwu',
-      alias: '礼物'
-    }, {
+      alias: '礼物',
+    },
+    {
       name: 'shanchu',
-      alias: '删除'
-    }, {
+      alias: '删除',
+    },
+    {
       name: 'sousuo',
-      alias: '搜索'
-    }, {
+      alias: '搜索',
+    },
+    {
       name: 'shangchuan',
-      alias: '上传'
-    }, {
+      alias: '上传',
+    },
+    {
       name: 'xiazai',
-      alias: '下载'
-    }, {
+      alias: '下载',
+    },
+    {
       name: 'youhuiquan',
-      alias: '优惠券'
-    }, {
+      alias: '优惠券',
+    },
+    {
       name: 'dingwei',
-      alias: '定位'
-    }, {
+      alias: '定位',
+    },
+    {
       name: 'huodong',
-      alias: '活动'
-    }, {
+      alias: '活动',
+    },
+    {
       name: 'daojishi',
-      alias: '倒计时'
-    }, {
+      alias: '倒计时',
+    },
+    {
       name: 'gonggao',
-      alias: '公告'
-    }, {
+      alias: '公告',
+    },
+    {
       name: 'yinle',
-      alias: '音乐'
-    }, {
+      alias: '音乐',
+    },
+    {
       name: 'yingshi',
-      alias: '影视'
-    }, {
+      alias: '影视',
+    },
+    {
       name: 'tongzhi',
-      alias: '通知'
-    }, {
+      alias: '通知',
+    },
+    {
       name: 'yunpan',
-      alias: '云盘'
-    }, {
+      alias: '云盘',
+    },
+    {
       name: 'dingdan',
-      alias: '订单'
-    }
-  ]
-}
+      alias: '订单',
+    },
+  ],
+};

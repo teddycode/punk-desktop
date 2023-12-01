@@ -3,11 +3,9 @@
     padding: 14px 18px;
     flex-direction: row;
     align-items: center;
-
     &-header {
       border: none;
     }
-
     &-avatar {
       .avatar {
         width: 78px;
@@ -15,7 +13,6 @@
         border-radius: 8px;
       }
     }
-
     &-main {
       padding-left: 16px !important;
     }

@@ -7,12 +7,12 @@
 </template>
 
 <script>
-import Background from '@page/core/components/Background.vue'
+import Background from '@page/core/components/Background.vue';
 
 export default {
   name: 'myStorage',
-  components: { Background }
-}
+  components: { Background },
+};
 </script>
 
 <style scoped>

@@ -1,45 +1,59 @@
 <template>
-  <Widget ref="cardSlot" :customIndex="customIndex" :desk="desk" :menuList="menuList" :options="options"
-          :sizeList="sizeList">
-    <div v-if="countdownDays.length <= 0"
-         class="content mt-4"
-         style="display: flex;flex-direction: column;justify-content: space-between;padding: 0;align-items: center">
-      <a-empty :description="null" image="/img/test/load-ail.png"/>
-      <a-button class=" xt-text xt--active-bg rounded-full" type="primary"
-                @click="()=>{settingVisible=true;goAddEvent()}">立即添加
+  <Widget
+    ref="cardSlot"
+    :customIndex="customIndex"
+    :desk="desk"
+    :menuList="menuList"
+    :options="options"
+    :sizeList="sizeList"
+  >
+    <div
+      v-if="countdownDays.length <= 0"
+      class="content mt-4"
+      style="display: flex; flex-direction: column; justify-content: space-between; padding: 0; align-items: center"
+    >
+      <a-empty :description="null" image="/img/test/load-ail.png" />
+      <a-button
+        class="xt-text xt--active-bg rounded-full"
+        type="primary"
+        @click="
+          () => {
+            settingVisible = true;
+            goAddEvent();
+          }
+        "
+        >立即添加
       </a-button>
     </div>
-    <div v-else class="content  mt-1 " style="height: calc(100% - 20px);overflow: hidden;">
-      <div class="cursor-pointer " style="padding-top: 0.2em" @click="settingVisible=true">
-
-
-        <div
-            v-for="(item) in countdownDays" class="event-list px-4 mb-3 s-item xt-bg-2"
-            style=""
-        >
+    <div v-else class="content mt-1" style="height: calc(100% - 20px); overflow: hidden">
+      <div class="cursor-pointer" style="padding-top: 0.2em" @click="settingVisible = true">
+        <div v-for="item in countdownDays" class="event-list px-4 mb-3 s-item xt-bg-2" style="">
           <div class="flex flex-row items-center">
             <div class="round-dot mr-4"></div>
             <div class="event-title">
               <span class="text-more w-28 xt-text" style="font-size: 16px">{{ item.eventValue }}</span>
-              <span class="event xt-text" style="font-size: 12px;"
-              >{{ item.dateValue.year }}/{{ item.dateValue.month }}/{{
-                  item.dateValue.day
-                }}</span
+              <span class="event xt-text" style="font-size: 12px"
+                >{{ item.dateValue.year }}/{{ item.dateValue.month }}/{{ item.dateValue.day }}</span
               >
             </div>
           </div>
-          <span
-              class="xt-text"
-              style="font-size: 18px;"><span v-if="item.type">还有</span>
-        <span v-else>已过</span> {{
-              differenceDay(item)
-            }} 天</span
+          <span class="xt-text" style="font-size: 18px"
+            ><span v-if="item.type">还有</span> <span v-else>已过</span> {{ differenceDay(item) }} 天</span
           >
         </div>
       </div>
     </div>
   </Widget>
-  <a-drawer v-model:visible="settingVisible" :width="500" placement="right" @close="()=>{this.goAddFlag = false}">
+  <a-drawer
+    v-model:visible="settingVisible"
+    :width="500"
+    placement="right"
+    @close="
+      () => {
+        this.goAddFlag = false;
+      }
+    "
+  >
     <template #title>
       <div class="text-center">纪念日设置</div>
     </template>
@@ -47,60 +61,69 @@
       已设置的纪念日
       <div>
         <vue-custom-scrollbar
-            :settings="outerSettings"
-            class="scroll"
-            style="position: relative; height: calc(100vh - 15em);margin-top: 10px"
+          :settings="outerSettings"
+          class="scroll"
+          style="position: relative; height: calc(100vh - 15em); margin-top: 10px"
         >
-          <div
-              v-for="(item,index) in countdownDays"
-              class="event-list px-4 mb-3 s-item xt-bg-2 xt-text"
-          >
-
+          <div v-for="(item, index) in countdownDays" class="event-list px-4 mb-3 s-item xt-bg-2 xt-text">
             <div class="flex flex-row justify-between items-center w-full">
               <div class="flex flex-row items-center">
                 <div class="round-dot mr-4"></div>
                 <div class="event-title">
-                  <span class="text-more" style="font-size: 16px;">{{ item.eventValue }}</span>
-                  <span class="event" style="font-size: 12px;"
-                  >{{ item.dateValue.year }}/{{ item.dateValue.month }}/{{
-                      item.dateValue.day
-                    }}</span
+                  <span class="text-more" style="font-size: 16px">{{ item.eventValue }}</span>
+                  <span class="event" style="font-size: 12px"
+                    >{{ item.dateValue.year }}/{{ item.dateValue.month }}/{{ item.dateValue.day }}</span
                   >
                 </div>
               </div>
-              <span
-                  style="font-size: 18px;"><span v-if="item.type">还有</span>
-        <span v-else>已过</span> {{
-                  differenceDay(item)
-                }} 天</span
+              <span style="font-size: 18px"
+                ><span v-if="item.type">还有</span> <span v-else>已过</span> {{ differenceDay(item) }} 天</span
               >
 
               <a-button class="rounded-full" type="danger" @click="(e) => onContextMenuClick(e, index)">删除</a-button>
             </div>
           </div>
-        </vue-custom-scrollbar
-        >
+        </vue-custom-scrollbar>
       </div>
       <div class="flex flex-row items-center w-full justify-center mt-4">
-
-        <div class="xt-active-bg rounded-lg h-10 w-full flex justify-center items-center pointer "
-             style="color: var(--primary-text);" @click="goAddEvent">添加事件
+        <div
+          class="xt-active-bg rounded-lg h-10 w-full flex justify-center items-center pointer"
+          style="color: var(--primary-text)"
+          @click="goAddEvent"
+        >
+          添加事件
         </div>
       </div>
     </div>
     <div v-else>
       <div>事件名称</div>
-      <xt-input v-model="eventValue" class="rounded-lg  h-12 mt-4 xt-text" placeholder="请输入"
-                style="height: 48px;"></xt-input>
+      <xt-input
+        v-model="eventValue"
+        class="rounded-lg h-12 mt-4 xt-text"
+        placeholder="请输入"
+        style="height: 48px"
+      ></xt-input>
       <!-- <a-input class="rounded-lg  h-10 mt-4 xt-text" allow-clear v-model:value="eventValue" placeholder="请输入"/> -->
       <div class="mt-4">日期</div>
-      <a-date-picker v-model:value="dateValue" class="mt-4"/>
-      <div class="flex flex-row items-center w-full justify-center mt-4 xt-text" style="color: var(--primary-text);">
-        <div class="rounded-lg h-10 w-24 flex justify-center items-center mr-4 pointer xt-bg-2 "
-             style="  ;color: var(--primary-text);" @click="()=>{this.goAddFlag = false}">取消
+      <a-date-picker v-model:value="dateValue" class="mt-4" />
+      <div class="flex flex-row items-center w-full justify-center mt-4 xt-text" style="color: var(--primary-text)">
+        <div
+          class="rounded-lg h-10 w-24 flex justify-center items-center mr-4 pointer xt-bg-2"
+          style="color: var(--primary-text)"
+          @click="
+            () => {
+              this.goAddFlag = false;
+            }
+          "
+        >
+          取消
         </div>
-        <div class="rounded-lg h-10 w-24 flex justify-center items-center pointer xt-active-bg"
-             style="color: var(--primary-text);" @click="addEvent">确定添加
+        <div
+          class="rounded-lg h-10 w-24 flex justify-center items-center pointer xt-active-bg"
+          style="color: var(--primary-text)"
+          @click="addEvent"
+        >
+          确定添加
         </div>
       </div>
     </div>
@@ -138,35 +161,34 @@
 </template>
 
 <script>
-import { mapActions, mapWritableState } from 'pinia'
-import { cardStore } from '../../store/card'
-import { transDate } from '../../../../src/util/dateTime'
-import Widget from '../card/Widget.vue'
-import { message } from 'ant-design-vue'
-import { timeStamp } from '../../util'
-import { timerStore } from '../../store/timer'
+import { mapActions, mapWritableState } from 'pinia';
+import { cardStore } from '../../store/card';
+import { transDate } from '../../../../src/util/dateTime';
+import Widget from '../card/Widget.vue';
+import { message } from 'ant-design-vue';
+import { timeStamp } from '../../util';
+import { timerStore } from '../../store/timer';
 
 export default {
   name: 'CountdownDay',
   props: {
     customIndex: {
       type: Number,
-      default: 0
+      default: 0,
     },
     customData: {
       type: Object,
-      default: () => {
-      }
+      default: () => {},
     },
     desk: {
-      type: Object
-    }
+      type: Object,
+    },
   },
   components: {
-    Widget
+    Widget,
   },
 
-  data () {
+  data() {
     return {
       outerSettings: {
         useBothWheelAxes: true,
@@ -176,115 +198,117 @@ export default {
         wheelPropagation: true,
       },
       eventValue: '',
-      sizeList: [{ title: '1x1', height: 1, width: 1, name: '1x1' }, {
-        title: '1x2',
-        height: 2,
-        width: 1,
-        name: '1x2'
-      },],
+      sizeList: [
+        { title: '1x1', height: 1, width: 1, name: '1x1' },
+        {
+          title: '1x2',
+          height: 2,
+          width: 1,
+          name: '1x2',
+        },
+      ],
       dateValue: null,
       options: {
         className: 'card small',
         title: '纪念日',
         icon: 'calendar-check',
-        type: 'countdownDay'
+        type: 'countdownDay',
       },
-      menuList: [{
-        icon: 'shezhi1', title: '设置', fn: () => {
-          this.settingVisible = true
-          this.$refs.cardSlot.visible = false
-        }
-      },],
+      menuList: [
+        {
+          icon: 'shezhi1',
+          title: '设置',
+          fn: () => {
+            this.settingVisible = true;
+            this.$refs.cardSlot.visible = false;
+          },
+        },
+      ],
       settingVisible: false,
       status: 'pause',
       value: null,
       visible: false,
       goAddFlag: false,
-      countdownDays: []
-    }
+      countdownDays: [],
+    };
   },
   computed: {
     ...mapWritableState(cardStore, ['countdownDay']),
-    ...mapWritableState(timerStore, ['appDate'])
+    ...mapWritableState(timerStore, ['appDate']),
   },
-  mounted () {
-    this.sortCountdown()
-    this.setCountdownDay()
+  mounted() {
+    this.sortCountdown();
+    this.setCountdownDay();
   },
   methods: {
     ...mapActions(cardStore, ['removeCountdownDay', 'addCountdownDay', 'sortCountdown']),
-    onPanelChange (value, mode) {
-    },
+    onPanelChange(value, mode) {},
     transDate,
-    differenceDay (item) {
+    differenceDay(item) {
       return transDate(
-          this.appDate.year + '-' + this.appDate.month + '-' + this.appDate.day,
-          item.dateValue.year +
-          '-' +
-          item.dateValue.month +
-          '-' +
-          item.dateValue.day
-      )
+        this.appDate.year + '-' + this.appDate.month + '-' + this.appDate.day,
+        item.dateValue.year + '-' + item.dateValue.month + '-' + item.dateValue.day,
+      );
     },
-    closeDrawer () {
-      this.goAddFlag = false
-      this.settingVisible = false
+    closeDrawer() {
+      this.goAddFlag = false;
+      this.settingVisible = false;
     },
-    onSetup () {
+    onSetup() {
       this.$router.push({
         name: 'addCardSetting',
         params: {
           name: 'countdownDay',
           cname: '纪念日',
         },
-      })
+      });
     },
 
-    onContextMenuClick (e, index) {
-      this.removeCountdownDay(index)
+    onContextMenuClick(e, index) {
+      this.removeCountdownDay(index);
     },
-    goAddEvent () {
-      this.goAddFlag = true
+    goAddEvent() {
+      this.goAddFlag = true;
     },
-    addEvent () {
+    addEvent() {
       if (this.eventValue === '' || this.dateValue === null) {
-        message.info('不可为空！')
-        return
+        message.info('不可为空！');
+        return;
       }
-      this.goAddFlag = false
+      this.goAddFlag = false;
       this.addCountdownDay({
         eventValue: this.eventValue,
         dateValue: timeStamp(this.dateValue.valueOf()),
-        customIndex: this.customIndex
-      })
-      this.eventValue = ''
-      this.dateValue = null
-      message.info('添加成功！')
+        customIndex: this.customIndex,
+      });
+      this.eventValue = '';
+      this.dateValue = null;
+      message.info('添加成功！');
     },
-    setCountdownDay () {
-      let countdownDay = JSON.parse(JSON.stringify(this.countdownDay))
+    setCountdownDay() {
+      let countdownDay = JSON.parse(JSON.stringify(this.countdownDay));
       if (this.customData.notRetain) {
         for (let i = 0; i < countdownDay.length; i++) {
           if (countdownDay[i].customIndex) {
-            countdownDay.splice(i, 1)
-            i--
+            countdownDay.splice(i, 1);
+            i--;
           }
         }
-        this.countdownDays = countdownDay
+        this.countdownDays = countdownDay;
       } else {
-        this.countdownDays = this.countdownDay
+        this.countdownDays = this.countdownDay;
       }
-    }
+    },
   },
   watch: {
     countdownDay: {
       deep: true,
-      handler (val) {
-        this.setCountdownDay()
-      }
-    }
-  }
-}
+      handler(val) {
+        this.setCountdownDay();
+      },
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

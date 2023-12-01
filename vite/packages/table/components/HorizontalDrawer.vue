@@ -1,14 +1,24 @@
 <template>
-  <a-drawer v-model:visible="detailDisplay" :bodyStyle="{textAlign:'left',overflow:'hidden',}" :title="drawerTitle"
-            placement="right" width="500" @close="onClose"
+  <a-drawer
+    v-model:visible="detailDisplay"
+    :bodyStyle="{ textAlign: 'left', overflow: 'hidden' }"
+    :title="drawerTitle"
+    placement="right"
+    width="500"
+    @close="onClose"
   >
-
-    <vue-custom-scrollbar :settings="settingsScroller" style="height: 86vh;" @touchstart.stop @touchmove.stop
-                          @touchend.stop>
-      <div v-for="(item,index) in rightSelect"
-           :class="defaultGameIndex === index ? 'drawer-active':''"
-           class="w-full h-12 flex items-center  justify-center pointer my-4 rounded-lg s-list"
-           @click="selectedAreaSuit(item,index)"
+    <vue-custom-scrollbar
+      :settings="settingsScroller"
+      style="height: 86vh"
+      @touchstart.stop
+      @touchmove.stop
+      @touchend.stop
+    >
+      <div
+        v-for="(item, index) in rightSelect"
+        :class="defaultGameIndex === index ? 'drawer-active' : ''"
+        class="w-full h-12 flex items-center justify-center pointer my-4 rounded-lg s-list"
+        @click="selectedAreaSuit(item, index)"
       >
         {{ item.name }}
       </div>
@@ -22,11 +32,11 @@ export default {
     drawerTitle: String,
     rightSelect: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     selectRegion: String,
   },
-  data () {
+  data() {
     return {
       detailDisplay: false,
       settingsScroller: {
@@ -34,44 +44,44 @@ export default {
         swipeEasing: true,
         suppressScrollY: false,
         suppressScrollX: true,
-        wheelPropagation: true
+        wheelPropagation: true,
       },
       defaultGameIndex: 0,
-    }
+    };
   },
-  mounted () {
-    this.posRegion()
+  mounted() {
+    this.posRegion();
   },
   watch: {
-    'selectRegion': {
-      handler () {
-        this.posRegion()
-      }
-    }
+    selectRegion: {
+      handler() {
+        this.posRegion();
+      },
+    },
   },
   methods: {
-    openDrawer () {
-      this.detailDisplay = true
+    openDrawer() {
+      this.detailDisplay = true;
     },
-    selectedAreaSuit (item, index) {
-      this.$emit('getArea', item)
-      this.defaultGameIndex = index
-      this.detailDisplay = false
+    selectedAreaSuit(item, index) {
+      this.$emit('getArea', item);
+      this.defaultGameIndex = index;
+      this.detailDisplay = false;
     },
-    posRegion () {
+    posRegion() {
       if (this.selectRegion) {
         if (this.selectRegion && this.rightSelect.length > 0) {
-          this.defaultGameIndex = this.rightSelect.findIndex(el => {
-            return el.id === this.selectRegion
-          })
-          this.defaultGameIndex = this.rightSelect.findIndex(el => {
-            return el.appid === this.selectRegion
-          })
+          this.defaultGameIndex = this.rightSelect.findIndex((el) => {
+            return el.id === this.selectRegion;
+          });
+          this.defaultGameIndex = this.rightSelect.findIndex((el) => {
+            return el.appid === this.selectRegion;
+          });
         }
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -80,13 +90,11 @@ export default {
   color: var(--active-text);
 }
 
-
 :deep(.ps__thumb-y) {
   display: none !important;
 }
 </style>
 <style>
-
 .s-list {
   background: var(--secondary-bg);
 }

@@ -31,59 +31,51 @@
  */
 export const waitForEvent = (target: EventTarget, eventName: string) => {
   return new Promise((resolve) => {
-    target.addEventListener(eventName, resolve, { once: true })
-  })
-}
+    target.addEventListener(eventName, resolve, { once: true });
+  });
+};
 
 /**
  * @param {!EventEmitter} emitter
  * @param {string} eventName
  * @return {!Promise<!Array>} With Event as the first item.
  */
-export const emittedOnce = (
-  emitter: NodeJS.EventEmitter,
-  eventName: string,
-  trigger?: () => void
-) => {
-  return emittedNTimes(emitter, eventName, 1, trigger).then(([result]) => result)
-}
+export const emittedOnce = (emitter: NodeJS.EventEmitter, eventName: string, trigger?: () => void) => {
+  return emittedNTimes(emitter, eventName, 1, trigger).then(([result]) => result);
+};
 
 export const emittedNTimes = async (
   emitter: NodeJS.EventEmitter,
   eventName: string,
   times: number,
-  trigger?: () => void
+  trigger?: () => void,
 ) => {
-  const events: any[][] = []
+  const events: any[][] = [];
   const p = new Promise<any[][]>((resolve) => {
     const handler = (...args: any[]) => {
-      events.push(args)
+      events.push(args);
       if (events.length === times) {
-        emitter.removeListener(eventName, handler)
-        resolve(events)
+        emitter.removeListener(eventName, handler);
+        resolve(events);
       }
-    }
-    emitter.on(eventName, handler)
-  })
+    };
+    emitter.on(eventName, handler);
+  });
   if (trigger) {
-    await Promise.resolve(trigger())
+    await Promise.resolve(trigger());
   }
-  return p
-}
+  return p;
+};
 
-export const emittedUntil = async (
-  emitter: NodeJS.EventEmitter,
-  eventName: string,
-  untilFn: Function
-) => {
+export const emittedUntil = async (emitter: NodeJS.EventEmitter, eventName: string, untilFn: Function) => {
   const p = new Promise<any[]>((resolve) => {
     const handler = (...args: any[]) => {
       if (untilFn(...args)) {
-        emitter.removeListener(eventName, handler)
-        resolve(args)
+        emitter.removeListener(eventName, handler);
+        resolve(args);
       }
-    }
-    emitter.on(eventName, handler)
-  })
-  return p
-}
+    };
+    emitter.on(eventName, handler);
+  });
+  return p;
+};

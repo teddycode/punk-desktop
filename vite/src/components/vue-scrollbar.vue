@@ -1,8 +1,18 @@
 <template>
-  <section :is="$props.tagname" class="ps-container" @ps-scroll-y="scrollHandle" @ps-scroll-x="scrollHandle"
-           @ps-scroll-up="scrollHandle" @ps-scroll-down="scrollHandle" @ps-scroll-left="scrollHandle"
-           @ps-scroll-right="scrollHandle" @ps-y-reach-start="scrollHandle" @ps-y-reach-end="scrollHandle"
-           @ps-x-reach-start="scrollHandle" @ps-x-reach-end="scrollHandle">
+  <section
+    :is="$props.tagname"
+    class="ps-container"
+    @ps-scroll-y="scrollHandle"
+    @ps-scroll-x="scrollHandle"
+    @ps-scroll-up="scrollHandle"
+    @ps-scroll-down="scrollHandle"
+    @ps-scroll-left="scrollHandle"
+    @ps-scroll-right="scrollHandle"
+    @ps-y-reach-start="scrollHandle"
+    @ps-y-reach-end="scrollHandle"
+    @ps-x-reach-start="scrollHandle"
+    @ps-x-reach-end="scrollHandle"
+  >
     <slot></slot>
   </section>
 </template>
@@ -13,8 +23,8 @@
 </style>
 <script lang="ts">
 // @ts-nocheck
-import 'perfect-scrollbar/css/perfect-scrollbar.css'
-import PerfectScrollbar from 'perfect-scrollbar'
+import 'perfect-scrollbar/css/perfect-scrollbar.css';
+import PerfectScrollbar from 'perfect-scrollbar';
 
 export default {
   name: 'vue-custom-scrollbar',
@@ -25,87 +35,87 @@ export default {
         swipeEasing: true,
         suppressScrollY: true,
         suppressScrollX: false,
-        wheelPropagation: true
-      }
+        wheelPropagation: true,
+      },
     },
     swicher: {
       type: Boolean,
-      default: true
+      default: true,
     },
     tagname: {
       type: String,
-      default: 'section'
-    }
+      default: 'section',
+    },
   },
   data() {
     return {
-      ps: null
-    }
+      ps: null,
+    };
   },
   methods: {
     scrollHandle(evt) {
-      this.$emit(evt.type, evt)
+      this.$emit(evt.type, evt);
     },
     update() {
       if (this.ps) {
-        this.ps.update()
+        this.ps.update();
       }
     },
     __init() {
       if (this.swicher) {
         if (!this._ps_inited) {
-          this._ps_inited = true
-          this.ps = new PerfectScrollbar(this.$el, this.settings)
+          this._ps_inited = true;
+          this.ps = new PerfectScrollbar(this.$el, this.settings);
         } else {
-          this.ps.update()
+          this.ps.update();
         }
       }
     },
     __uninit() {
       if (this.ps) {
-        this.ps.destroy()
-        this.ps = null
-        this._ps_inited = false
+        this.ps.destroy();
+        this.ps = null;
+        this._ps_inited = false;
       }
-    }
+    },
   },
   watch: {
     swicher(val) {
       if (val && !this._ps_inited) {
-        this.__init()
+        this.__init();
       }
       if (!val && this._ps_inited) {
-        this.__uninit()
+        this.__uninit();
       }
     },
     settings: {
       deep: true,
       handler() {
-        this.__uninit()
-        this.__init()
-      }
+        this.__uninit();
+        this.__init();
+      },
     },
     $route() {
-      this.update()
-    }
+      this.update();
+    },
   },
   mounted() {
     // for support ssr
     if (!this.$isServer) {
-      this.__init()
+      this.__init();
     }
   },
   updated() {
-    this.$nextTick(this.update)
+    this.$nextTick(this.update);
   },
   activated() {
-    this.__init()
+    this.__init();
   },
   deactivated() {
-    this.__uninit()
+    this.__uninit();
   },
   beforeDestroy() {
-    this.__uninit()
-  }
-}
+    this.__uninit();
+  },
+};
 </script>

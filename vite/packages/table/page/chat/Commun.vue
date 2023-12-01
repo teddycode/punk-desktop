@@ -1,27 +1,31 @@
 <template>
-  <div class="container flex flex-col xt-text" @resize="updateScroller">
+  <div @resize="updateScroller" class="container flex flex-col xt-text">
     <div class="top-bar">
       <div class="left shrink h-[40px] flex">
-        <div class=" h-[40px] xt-bg rounded-lg text-center font-16 mr-3 xt-text-2 pl-1 pr-1" style="line-height: 40px;">
+        <div class="h-[40px] xt-bg rounded-lg text-center font-16 mr-3 xt-text-2 pl-1 pr-1" style="line-height: 40px">
           <span class="mr-1">ID:</span>{{ props.forumId }}
         </div>
-        <div class="flex  w-[200px] h-[40px] justify-center xt-bg rounded-lg">
-          <div v-for="(item, index) in menuList" :key="index"
-               :class="[{ action: currentIndex == index }]"
-               class="w-[64px] h-[32px]  mt-1 mb-1 text-center leading-8 font-16" style="cursor: pointer;"
-               @click="setCurrentIndex(index)">{{
-              item.name
-            }}
+        <div class="flex w-[200px] h-[40px] justify-center xt-bg rounded-lg">
+          <div
+            v-for="(item, index) in menuList"
+            :key="index"
+            class="w-[64px] h-[32px] mt-1 mb-1 text-center leading-8 font-16"
+            :class="[{ action: currentIndex == index }]"
+            style="cursor: pointer"
+            @click="setCurrentIndex(index)"
+          >
+            {{ item.name }}
           </div>
         </div>
         <div class="xt-bg w-[115px] h-[40px] text-center ml-3 leading-10 rounded-lg font-16" style="cursor: pointer">
           <a-dropdown
-              overlayStyle="background-color: var(--primary-bg); padding-left:3px ;padding-right:3px; width: 100px;"
-              placement="bottom"
-              trigger="click">
-            <span class=" ant-dropdown-link" @click.prevent>
+            trigger="click"
+            placement="bottom"
+            overlayStyle="background-color: var(--primary-bg); padding-left:3px ;padding-right:3px; width: 100px;"
+          >
+            <span class="ant-dropdown-link" @click.prevent>
               {{ checkMenuList[checkMenuCurrentIndex].type }}
-              <DownOutlined class="text-sm"/>
+              <DownOutlined class="text-sm" />
             </span>
             <template #overlay>
               <a-menu class="text-center xt-bg">
@@ -35,65 +39,98 @@
       </div>
       <div class="flex mr-6 right">
         <!-- <div class="flex items-center"> -->
-        <xt-button style="color: var(--active-bg); width: 83px;height: 40px;background: rgba(80,139,254,0.20);"
-                   type="primary"
-                   @click="visibleModal">
-          <Icon class="pr-1 text-xl xt-theme-text" icon="akar-icons:circle-plus-fill"
-                style="font-size: 22px;vertical-align: sub;margin-right:6px ;"/>
-          发布
+        <xt-button
+          type="primary"
+          style="color: var(--active-bg); width: 83px; height: 40px; background: rgba(80, 139, 254, 0.2)"
+          @click="visibleModal"
+        >
+          <Icon
+            class="pr-1 text-xl xt-theme-text"
+            style="font-size: 22px; vertical-align: sub; margin-right: 6px"
+            icon="akar-icons:circle-plus-fill"
+          />发布
         </xt-button>
-        <a-tooltip placement="bottom" title="刷新">
-          <xt-button class="ml-3 border-0 rounded-md xt-bg pointer " style="flex-shrink: 0;width: 40px;height: 40px;"
-                     @click="refreshPost">
-            <Icon class="text-lg xt-text" icon="akar-icons:arrow-clockwise" style="vertical-align: sub;"/>
+        <a-tooltip title="刷新" placement="bottom">
+          <xt-button
+            class="ml-3 border-0 rounded-md xt-bg pointer"
+            @click="refreshPost"
+            style="flex-shrink: 0; width: 40px; height: 40px"
+          >
+            <Icon class="text-lg xt-text" style="vertical-align: sub" icon="akar-icons:arrow-clockwise" />
           </xt-button>
         </a-tooltip>
-        <a-tooltip placement="bottom" title="前往元社区">
-          <xt-button class="ml-3 border-0 rounded-md xt-bg pointer" style="flex-shrink: 0;width: 40px;height: 40px;"
-                     @click="goYuan">
-            <Icon class="text-lg xt-text" icon="majesticons:open" style="vertical-align: sub;"/>
+        <a-tooltip title="前往元社区" placement="bottom">
+          <xt-button
+            class="ml-3 border-0 rounded-md xt-bg pointer"
+            @click="goYuan"
+            style="flex-shrink: 0; width: 40px; height: 40px"
+          >
+            <Icon class="text-lg xt-text" style="vertical-align: sub" icon="majesticons:open" />
           </xt-button>
         </a-tooltip>
-
 
         <!-- </div> -->
-
       </div>
-      <publishModal v-if="showPublishModal" :forumId="props.forumId" :showPublishModal="showPublishModal"
-                    @handleOk="modalVisible"/>
-
+      <publishModal
+        v-if="showPublishModal"
+        :showPublishModal="showPublishModal"
+        @handleOk="modalVisible"
+        :forumId="props.forumId"
+      />
     </div>
     <!-- {{ store.communityPost.count }} -->
-    <a-spin v-if="refreshFlag" size="large" style=" margin-top: 28%;" tip="Loading..."></a-spin>
-    <div v-else class="flex justify-center flex-auto " style="height: 0;">
+    <a-spin tip="Loading..." v-if="refreshFlag" size="large" style="margin-top: 28%"></a-spin>
+    <div class="flex justify-center flex-auto" style="height: 0" v-else>
       <!-- 左侧卡片区域 -->
-      <vue-custom-scrollbar :key="current" ref="threadListRef" :class="{ 'detail-visible': detailVisible }"
-                            :settings="settingsScroller" :style="{ width: detailVisible ? '40%' : '70%' }"
-                            class="w-full thread-list"
-                            style="height: 100%;overflow: hidden;flex-shrink: 0; ">
+      <vue-custom-scrollbar
+        ref="threadListRef"
+        :key="current"
+        :class="{ 'detail-visible': detailVisible }"
+        class="w-full thread-list"
+        :settings="settingsScroller"
+        style="height: 100%; overflow: hidden; flex-shrink: 0"
+        :style="{ width: detailVisible ? '40%' : '70%' }"
+      >
         <div class="flex justify-center content">
           <!-- {{ checkMenuList.value[currentIndex.value].order }} -->
           <!-- 循环渲染多个 ComCard -->
-          <a-empty v-if="comCards.list?.length === 0" description="暂无内容" image="/img/test/load-ail.png"
-                   style="margin-top: 30%;"></a-empty>
+          <a-empty
+            v-if="comCards.list?.length === 0"
+            description="暂无内容"
+            image="/img/test/load-ail.png"
+            style="margin-top: 30%"
+          ></a-empty>
           <template v-else>
-            <ComCard v-for="(card, index) in comCards.list" :key="index" :cardData="card" :detailVisible="detailVisible"
-                     :style="{ backgroundColor: selectedIndex === index ? 'var(--active-secondary-bg) !important' : 'var(--primary-bg) !important', flex: 1 }"
-                     class="xt-bg"
-                     @click="showDetail(index)">
+            <ComCard
+              v-for="(card, index) in comCards.list"
+              :key="index"
+              :cardData="card"
+              @click="showDetail(index)"
+              :detailVisible="detailVisible"
+              class="xt-bg"
+              :style="{
+                backgroundColor:
+                  selectedIndex === index ? 'var(--active-secondary-bg) !important' : 'var(--primary-bg) !important',
+                flex: 1,
+              }"
+            >
             </ComCard>
-            <a-pagination v-model:current="current" :total="totalPost" class="xt-text-2" simple @change="changePage"/>
+            <a-pagination v-model:current="current" :total="totalPost" simple @change="changePage" class="xt-text-2" />
+            <!-- <a-pagination v-model:current="current" :total="totalPost"  class="pagination" @change="changePage" /> -->
           </template>
-
         </div>
       </vue-custom-scrollbar>
       <!-- <DataStatu v-else imgDisplay="/img/test/load-ail.png" :btnToggle="false" textPrompt="暂无数据"></DataStatu> -->
       <!-- 右侧详情区域 -->
-      <vue-custom-scrollbar v-if="detailVisible" :key="selectedIndex" :settings="settingsScroller"
-                            :style="{ width: detailVisible ? '55%' : '40%' }"
-                            class="ml-2 rounded-lg thread-detail xt-bg"
-                            style="height: 100%;">
-        <div v-if="detailVisible" class="h-full detail">
+      <vue-custom-scrollbar
+        class="ml-2 rounded-lg thread-detail xt-bg"
+        :key="selectedIndex"
+        v-if="detailVisible"
+        :settings="settingsScroller"
+        style="height: 100%"
+        :style="{ width: detailVisible ? '55%' : '40%' }"
+      >
+        <div class="h-full detail" v-if="detailVisible">
           <DetailCard :cardData="detailText" @closeDetail="closeDetail"></DetailCard>
           <!-- <a-pagination v-model:current="detailCurrent" :total="totalReply" simple @change="changePage" /> -->
         </div>
@@ -102,100 +139,118 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-import {computed, onBeforeMount, onBeforeUpdate, onMounted, onUpdated, reactive, ref, watch} from 'vue';
-import {DownOutlined} from '@ant-design/icons-vue';
+<script setup lang="ts">
+import { ref, reactive, onBeforeMount, onMounted, computed, watch, onBeforeUpdate, onUpdated } from 'vue';
+import { DownOutlined } from '@ant-design/icons-vue';
 import ComCard from './com/ComList.vue';
 import DetailCard from './com/Detail.vue';
 import publishModal from './com/PublishModal.vue';
-import {useCommunityStore} from './commun'
-import NProgress from 'nprogress'
-import 'nprogress/nprogress.css'
-import {Icon} from '@iconify/vue'
+import { useCommunityStore } from './commun';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
+import { Icon } from '@iconify/vue';
 import browser from '../../js/common/browser';
-
-const current = ref(1)
+const current = ref(1);
 // 更新帖子列表
-const refreshFlag = ref(false)
+const refreshFlag = ref(false);
 const store = useCommunityStore();
 const props = defineProps({
   forumId: {
     type: Number,
-    required: false
-  }
-})
+    required: false,
+  },
+});
 const menuList = ref([
   {
     name: '全部',
-    type: 'all'
-  }, {
+    type: 'all',
+  },
+  {
     name: '热门',
-    type: 'hot'
-  }, {
+    type: 'hot',
+  },
+  {
     name: '精华',
-    type: 'essence'
-  }])
+    type: 'essence',
+  },
+]);
 const comCards = computed(() => {
-  return store.communityPost
-})
+  return store.communityPost;
+});
 
-const checkMenuList = ref([{
-  type: '最近更新',
-  order: 'create_time',
-}, {
-  type: '最近回复',
-  order: 'reply_time'
+const checkMenuList = ref([
+  {
+    type: '最近更新',
+    order: 'create_time',
+  },
+  {
+    type: '最近回复',
+    order: 'reply_time',
+  },
+]);
 
-}])
-
-const currentIndex = ref(0)
-const checkMenuCurrentIndex = ref(0)
+const currentIndex = ref(0);
+const checkMenuCurrentIndex = ref(0);
 // 选择最近更新与最近回复
 const handleMenuItemClick = (index) => {
-  checkMenuCurrentIndex.value = index
+  checkMenuCurrentIndex.value = index;
   // store.getCommunityPostReply(index+1234,1)
-  store.getCommunityPost(props.forumId, current.value, menuList.value[currentIndex.value].type, checkMenuList.value[checkMenuCurrentIndex.value].order)
+  store.getCommunityPost(
+    props.forumId,
+    current.value,
+    menuList.value[currentIndex.value].type,
+    checkMenuList.value[checkMenuCurrentIndex.value].order,
+  );
   // console.log(menuList.value[currentIndex.value].type,checkMenuList.value[checkMenuCurrentIndex.value].order);
-}
+};
 // 选择全部，热门的内容
 const setCurrentIndex = (index) => {
-  currentIndex.value = index
-  detailVisible.value = false
-  current.value = 1
+  currentIndex.value = index;
+  detailVisible.value = false;
+  current.value = 1;
   store.getCommunityPost(
-      props.forumId,
-      current.value,
-      menuList.value[currentIndex.value].type,
-      checkMenuList.value[checkMenuCurrentIndex.value].order)
+    props.forumId,
+    current.value,
+    menuList.value[currentIndex.value].type,
+    checkMenuList.value[checkMenuCurrentIndex.value].order,
+  );
   // let tid = store.communityPost.list[index].pay_set.tid ? store.communityPost.list[index].pay_set.tid : store.communityPost.list[index].id
   // if (detailVisible.value === true) {
   //   store.getCommunityPostDetail(tid)
   // }
-
-}
+};
 const goYuan = () => {
-  browser.openInUserSelect(`https://s.apps.vip/forum?id=${props.forumId}`)
-}
+  browser.openInUserSelect(`https://s.apps.vip/forum?id=${props.forumId}`);
+};
 const refreshPost = () => {
-  refreshFlag.value = true
+  refreshFlag.value = true;
   setTimeout(async () => {
-    await store.getCommunityPost(props.forumId, current.value, menuList.value[currentIndex.value].type, checkMenuList.value[currentIndex.value].order)
-    refreshFlag.value = false
+    await store.getCommunityPost(
+      props.forumId,
+      current.value,
+      menuList.value[currentIndex.value].type,
+      checkMenuList.value[currentIndex.value].order,
+    );
+    refreshFlag.value = false;
   });
-
-}
+};
 const changePage = (page) => {
-  refreshFlag.value = true
-  detailVisible.value = false
-  current.value = page
-  store.getCommunityPost(props.forumId, current.value, menuList.value[currentIndex.value].type, checkMenuList.value[currentIndex.value].order)
-  refreshFlag.value = false
-}
+  refreshFlag.value = true;
+  detailVisible.value = false;
+  current.value = page;
+  store.getCommunityPost(
+    props.forumId,
+    current.value,
+    menuList.value[currentIndex.value].type,
+    checkMenuList.value[currentIndex.value].order,
+  );
+  refreshFlag.value = false;
+};
 const totalPost = computed(() => {
-  return store.communityPost.count
-})
+  return store.communityPost.count;
+});
 //当前选中的详情帖子的索引
-let selectedIndex = ref(-1)
+let selectedIndex = ref(-1);
 const settingsScroller = reactive({
   useBothWheelAxes: true,
   swipeEasing: true,
@@ -204,28 +259,29 @@ const settingsScroller = reactive({
   wheelPropagation: true,
 });
 
-watch(() => props.forumId, (newValue) => {
-  setCurrentIndex(currentIndex.value)
-})
+watch(
+  () => props.forumId,
+  (newValue) => {
+    setCurrentIndex(currentIndex.value);
+  },
+);
 //
-const showPublishModal = ref(false)
+const showPublishModal = ref(false);
 const modalVisible = (val) => {
-  showPublishModal.value = val.value
-}
+  showPublishModal.value = val.value;
+};
 const visibleModal = () => {
-  showPublishModal.value = !showPublishModal.value
-}
+  showPublishModal.value = !showPublishModal.value;
+};
 
-const threadListRef = ref()
-
+const threadListRef = ref();
 function updateScroller() {
   // console.log(threadListRef)
-  threadListRef.value.update()
+  threadListRef.value.update();
 }
-
 // 控制显示状态和选中状态的变量
 const detailVisible = ref(false);
-let detailStorage
+let detailStorage;
 // 切换选中状态的函数
 const showDetail = async (index) => {
   // console.log(index, '点钟了')
@@ -233,55 +289,56 @@ const showDetail = async (index) => {
   detailVisible.value = true;
   // 切换选中状态
   selectedIndex.value = index;
-  let tid = store.communityPost.list[index].pay_set.tid ? store.communityPost.list[index].pay_set.tid : store.communityPost.list[index].id
+  let tid = store.communityPost.list[index].pay_set.tid
+    ? store.communityPost.list[index].pay_set.tid
+    : store.communityPost.list[index].id;
   // console.log(tid);
-  await store.getCommunityPostDetail(tid)
-  await store.getCommunityPostReply(tid)
-}
+  await store.getCommunityPostDetail(tid);
+  await store.getCommunityPostReply(tid);
+};
 const detailText = computed(() => {
   if (store.communityPostDetail.pay_set === undefined) {
     // console.log(detailStorage);
-    detailVisible.value = false
-    return detailStorage
+    detailVisible.value = false;
+    return detailStorage;
   } else {
-    detailStorage = store.communityPostDetail
-    return store.communityPostDetail
+    detailStorage = store.communityPostDetail;
+    return store.communityPostDetail;
   }
-})
+});
 // 关闭详情页
 const closeDetail = (value) => {
   if (detailVisible.value) {
     detailVisible.value = value;
-    selectedIndex.value = -1
+    selectedIndex.value = -1;
   }
-  updateScroller()
-}
+  updateScroller();
+};
 onBeforeMount(async () => {
-  NProgress.start()
-  NProgress.configure({showSpinner: false});
-  await NProgress.configure({parent: '.container'})
-})
+  NProgress.start();
+  NProgress.configure({ showSpinner: false });
+  await NProgress.configure({ parent: '.container' });
+});
 onMounted(() => {
   // setCurrentIndex(0)
-  store.getCommunityPost(props.forumId)
-  NProgress.done()
-})
+  store.getCommunityPost(props.forumId);
+  NProgress.done();
+});
 onBeforeUpdate(() => {
-  NProgress.start()
+  NProgress.start();
   // NProgress.configure({ showSpinner: false });
-})
+});
 onUpdated(() => {
-  NProgress.done()
+  NProgress.done();
   // NProgress.configure({ showSpinner: false });
-})
+});
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @media screen and (max-width: 1200px) {
   .thread-list {
     width: 100% !important;
     margin-left: 10px;
     margin-right: 10px;
-
   }
 
   .thread-detail {
@@ -328,21 +385,18 @@ onUpdated(() => {
       color: var(--active-text);
       border: none;
     }
-
   }
 
   .right {
-
     // margin-right: 24px;
 
     :deep(.ant-btn) {
       width: 100%;
       height: 100%;
-      background: rgba(80, 139, 254, 0.20);
+      background: rgba(80, 139, 254, 0.2);
       border-radius: 10px;
     }
   }
-
 
   .content {
     // max-width: 40%;
@@ -351,7 +405,6 @@ onUpdated(() => {
     align-items: center;
     flex-direction: column;
     justify-content: center;
-
 
     // overflow: scroll;
     .card-content {
@@ -389,25 +442,23 @@ onUpdated(() => {
         .context {
           margin-top: 8px;
           font-size: 14px;
-          color: rgba(255, 255, 255, 0.60);
+          color: rgba(255, 255, 255, 0.6);
           text-align: justify;
           line-height: 22px;
           font-weight: 400;
-
         }
       }
     }
   }
 
   .select {
-    background-color: rgba(80, 139, 254, 0.20);
+    background-color: rgba(80, 139, 254, 0.2);
   }
 
   #nprogress .bar {
-    background: #66B1FF !important;
+    background: #66b1ff !important;
     height: 10px !important;
   }
-
 
   .omit {
     white-space: pre-wrap;
@@ -427,4 +478,5 @@ onUpdated(() => {
       display: none;
     }
   }
-}</style>
+}
+</style>

@@ -1,24 +1,24 @@
 <template>
   <div style="margin-top: 10px">
-    <a-empty v-if="versions.length===0" description="" style="margin-top: 30px">
-    </a-empty>
+    <a-empty style="margin-top: 30px" v-if="versions.length === 0" description=""> </a-empty>
     <a-timeline>
-      <a-timeline-item v-for="version in versions" color="green" @click="setActive(version)"
-                       @dblclick="restoreVersion(version)">
-        <div :class="{active:this.activeVersion===version}" class="version-item">
+      <a-timeline-item
+        @dblclick="restoreVersion(version)"
+        @click="setActive(version)"
+        v-for="version in versions"
+        color="green"
+      >
+        <div :class="{ active: this.activeVersion === version }" class="version-item">
           <div class="name">{{ version.name }}</div>
           <div class="info">
             <a-tag>{{ version.count_task }}组</a-tag>
             <a-tag>{{ version.count_tab }}标签</a-tag>
           </div>
-          <div class="summary" v-html="friendlyDate(version.save_time)">
-          </div>
+          <div class="summary" v-html="friendlyDate(version.save_time)"></div>
         </div>
-
       </a-timeline-item>
     </a-timeline>
   </div>
-
 </template>
 
 <script>
@@ -26,37 +26,35 @@ export default {
   name: 'VersionList',
   props: {
     versions: [],
-    activeVersion: {}
+    activeVersion: {},
   },
-  data () {
+  data() {
     return {
-      activeVersion: {}
-    }
+      activeVersion: {},
+    };
   },
-  emits: ['setActive']
-  , methods: {
+  emits: ['setActive'],
+  methods: {
     friendlyDate: window.tsbApi.util.friendlyDate,
-    setActive (version) {
-      this.activeVersion = version
-      this.$emit('setActive', version)
+    setActive(version) {
+      this.activeVersion = version;
+      this.$emit('setActive', version);
     },
-    restoreVersion (version) {
-      this.$emit('restoreVersion', version)
-    }
-  }
-}
+    restoreVersion(version) {
+      this.$emit('restoreVersion', version);
+    },
+  },
+};
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .version-item {
   cursor: pointer;
   box-sizing: border-box;
-
   &.active {
     border: 1px solid #c1c1c1;
     background: rgba(227, 227, 227, 0.71);
   }
-
   .name {
     font-size: 14px;
     font-weight: bold;

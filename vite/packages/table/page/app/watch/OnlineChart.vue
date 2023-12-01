@@ -3,69 +3,67 @@
 </template>
 
 <script>
-
-import * as echarts from 'echarts'
-import _ from 'lodash-es'
-import { getDateTime } from '../../../util'
+import * as echarts from 'echarts';
+import _ from 'lodash-es';
+import { getDateTime } from '../../../util';
 
 export default {
   name: 'OnlineChart',
   props: ['data'],
-  data () {
+  data() {
     return {
       xData: [],
       yData: [],
       myChart: null,
-    }
+    };
   },
-  mounted () {
-
-    this.initChart()
+  mounted() {
+    this.initChart();
   },
   watch: {
-    'data': {
-      handler (newVal) {
+    data: {
+      handler(newVal) {
         if (this.myChart) {
-          this.formatData()
+          this.formatData();
           this.myChart.setOption({
             series: {
-              data: this.yData
+              data: this.yData,
             },
             xAxis: {
               data: this.xData,
-            }
-          })
+            },
+          });
         }
-      }
-    }
+      },
+    },
   },
   methods: {
-    formatOnline (num) {
-      let str = String(num).replace('+', '')
-      let rs = num
+    formatOnline(num) {
+      let str = String(num).replace('+', '');
+      let rs = num;
       if (str.indexOf('万') > -1) {
-        str = str.replace('万', '')
-        rs = Number(str) * 10000
+        str = str.replace('万', '');
+        rs = Number(str) * 10000;
       } else if (str.indexOf('千') > -1) {
-        str = str.replace('千', '')
-        rs = Number(str) * 1000
+        str = str.replace('千', '');
+        rs = Number(str) * 1000;
       }
-      return rs
+      return rs;
     },
-    formatData () {
-      this.xData = this.data.map(d => {
-        const time = getDateTime(new Date(d.time))
-        return time.month + '/' + time.day + ' ' + time.hours + ':' + time.minutes
-      })
-      this.yData = this.data.map(d => {
-        return this.formatOnline(d.online)
-      })
-      _.reverse(this.xData)
-      _.reverse(this.yData)
+    formatData() {
+      this.xData = this.data.map((d) => {
+        const time = getDateTime(new Date(d.time));
+        return time.month + '/' + time.day + ' ' + time.hours + ':' + time.minutes;
+      });
+      this.yData = this.data.map((d) => {
+        return this.formatOnline(d.online);
+      });
+      _.reverse(this.xData);
+      _.reverse(this.yData);
     },
-    initChart () {
-      var myChart = echarts.init(document.getElementById('ec'), 'dark')
-      this.myChart = myChart
+    initChart() {
+      var myChart = echarts.init(document.getElementById('ec'), 'dark');
+      this.myChart = myChart;
       myChart.setOption({
         backgroundColor: '',
         tooltip: {
@@ -76,12 +74,12 @@ export default {
           feature: {
             magicType: { type: ['line', 'bar'] },
 
-            saveAsImage: {}
-          }
+            saveAsImage: {},
+          },
         },
         xAxis: {
           axisTick: {
-            show: false
+            show: false,
           },
           type: 'category',
           boundaryGap: ['20%', '20%'],
@@ -93,23 +91,22 @@ export default {
           type: 'value',
           // boundaryGap: ['20%', '20%'],
           show: true,
-
         },
         grid: {
           left: 80,
           right: 250,
-          width: '80%'
+          width: '80%',
         },
         dataZoom: [
           {
             type: 'inside',
             start: 0,
-            end: 10
+            end: 10,
           },
           {
             start: 0,
-            end: 10
-          }
+            end: 10,
+          },
         ],
         series: [
           {
@@ -121,25 +118,20 @@ export default {
             label: { show: false, fontSize: 15, color: '#FFFFFF', formatter: '{c}' },
             itemStyle: { color: 'rgba(72,210,1,0.78)' },
             markPoint: {
-              data: [
-                { type: 'max', name: 'Max' }
-              ]
+              data: [{ type: 'max', name: 'Max' }],
             },
             markLine: {
-              data: [
-                { type: 'average', name: 'Avg' },
-              ]
-            }
+              data: [{ type: 'average', name: 'Avg' }],
+            },
             // markLine: {
             //   data: [{ type: "average", name: "Avg" }],
             // },
           },
-
         ],
-      })
-    }
-  }
-}
+      });
+    },
+  },
+};
 </script>
 
 <style scoped>

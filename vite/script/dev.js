@@ -1,19 +1,20 @@
-let vite = require('vite')
-let vue = require('@vitejs/plugin-vue')
-const path = require('path')
+let vite = require('vite');
+let vue = require('@vitejs/plugin-vue');
+const path = require('path');
 
 let dev = {
   server: null,
   serverPort: 1600,
-  async createServer () {
+  async createServer() {
     let options = {
       configFile: false,
       root: process.cwd(),
       server: {
-        port: this.serverPort
+        port: this.serverPort,
       },
       plugins: [vue()],
-      resolve: {  // 与vite.config.ts相同
+      resolve: {
+        // 与vite.config.ts相同
         alias: {
           '@package': path.resolve('./packages'),
           '@table': path.resolve('./packages/table'),
@@ -26,26 +27,26 @@ let dev = {
           '@js': path.resolve('./packages/table/js'),
         },
       },
-    }
-    this.server = await vite.createServer(options)
-    await this.server.listen()
-    this.server.printUrls()
+    };
+    this.server = await vite.createServer(options);
+    await this.server.listen();
+    this.server.printUrls();
   },
 
-  getEnvScript () {
-    let env = require('./dev/env.js')
-    env.WEB_PORT = this.serverPort
-    env.RES_DIR = path.join(process.cwd(), 'resource/release')
-    let script = ''
+  getEnvScript() {
+    let env = require('./dev/env.js');
+    env.WEB_PORT = this.serverPort;
+    env.RES_DIR = path.join(process.cwd(), 'resource/release');
+    let script = '';
     for (let v in env) {
-      script += 'process.env.${v}="${env[v]}";'
+      script += 'process.env.${v}="${env[v]}";';
     }
-    return script
+    return script;
   },
 
-  async start () {
-    await this.createServer()
-  }
-}
+  async start() {
+    await this.createServer();
+  },
+};
 
-dev.start()
+dev.start();

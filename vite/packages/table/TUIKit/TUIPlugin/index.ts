@@ -4,4 +4,4 @@ import TUIEnv from './TUIEnv';
 import TUIDirective from './TUIDirective';
 import TUINotification from './TUINotification';
 
-export {TUITheme, TUIi18n, TUIEnv, TUIDirective, TUINotification};
+export { TUITheme, TUIi18n, TUIEnv, TUIDirective, TUINotification };

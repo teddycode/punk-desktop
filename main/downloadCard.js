@@ -1,19 +1,19 @@
-const { Notification } = require('electron')
-let downloadWindow = null
+const { Notification } = require('electron');
+let downloadWindow = null;
 
-function getDownloadWindow (cb) {
+function getDownloadWindow(cb) {
   if (downloadWindow === null || downloadWindow.isDestroyed() === true) {
-    createDownloadWin(cb)
+    createDownloadWin(cb);
     //修正下载窗口位置
     if (mainWindow != null && !mainWindow.isDestroyed()) {
-      let x = (mainWindow.getBounds().x + mainWindow.getBounds().width - downloadWindow.getBounds().width - 15)
-      downloadWindow.setPosition(x, mainWindow.getBounds().y + 90)
+      let x = mainWindow.getBounds().x + mainWindow.getBounds().width - downloadWindow.getBounds().width - 15;
+      downloadWindow.setPosition(x, mainWindow.getBounds().y + 90);
     }
   }
-  return downloadWindow
+  return downloadWindow;
 }
 
-function createDownloadWin (cb) {
+function createDownloadWin(cb) {
   downloadWindow = new BrowserWindow({
     frame: true,
     width: 385,
@@ -29,77 +29,75 @@ function createDownloadWin (cb) {
     alwaysOnTop: false, // 调整窗口层级
     webPreferences: {
       nodeIntegration: true,
-      contextIsolation: false
-    }
-  })
+      contextIsolation: false,
+    },
+  });
 
   if (cb) {
     downloadWindow.on('ready-to-show', () => {
-      if (cb) cb(downloadWindow)
-    })
+      if (cb) cb(downloadWindow);
+    });
   }
-  downloadWindow.webContents.loadURL('file://' + __dirname + '/pages/download/index.html')
+  downloadWindow.webContents.loadURL('file://' + __dirname + '/pages/download/index.html');
 
   downloadWindow.on('close', (event) => {
     if (forceClose) {
-      downloadWindow = null
+      downloadWindow = null;
     } else {
-      sendIPCToDownloadWindow('isCloseWin')
+      sendIPCToDownloadWindow('isCloseWin');
       // downloadWindow.close()
-      event.preventDefault()
+      event.preventDefault();
     }
-  })
+  });
 
   setTimeout(() => {
     if (mainWindow) {
       mainWindow.on('close', () => {
-        forceClose = true
+        forceClose = true;
         if (downloadWindow && !downloadWindow.isDestroyed()) {
-          downloadWindow.hide()
+          downloadWindow.hide();
         }
-        downloadWindow = null
-      })
+        downloadWindow = null;
+      });
     }
-  }, 2000)
+  }, 2000);
 }
 
 app.whenReady().then(() => {
-
   ipc.on('openDownload', (event, args) => {
-    getDownloadWindow().show()
+    getDownloadWindow().show();
     // downloadWindow.show()
-  })
+  });
 
   const content = {
     title: '完成提示',
-    body: '您有一项下载任务已经完成'
-  }
-  const notification = new Notification(content)
+    body: '您有一项下载任务已经完成',
+  };
+  const notification = new Notification(content);
 
   notification.on('click', () => {
-    getDownloadWindow()
-    downloadWindow.show()
-  })
+    getDownloadWindow();
+    downloadWindow.show();
+  });
   ipc.on('inform', () => {
-    notification.show()
-  })
-
-})
+    notification.show();
+  });
+});
 
 ipc.on('closeWin', (event, args) => {
   if (args == 0) {
-    downloadWindow.destroy()
+    downloadWindow.destroy();
   } else {
-    downloadWindow.hide()
+    downloadWindow.hide();
   }
-})
+});
 
 ipc.on('deleteFile', function (e, deletepath) {
-  const { shell } = require('electron')
+  const { shell } = require('electron');
   shell.trashItem(deletepath).then(() => {
-    return true
-  })
-})
+    return true;
+  });
+});
 
 // ipc.on('originalPage',(args)=>{
 //   let originalPageUrl = args
@@ -110,37 +108,36 @@ ipc.on('deleteFile', function (e, deletepath) {
 // })
 
 ipc.on('willDownload', () => {
-  getDownloadWindow()
-
-})
+  getDownloadWindow();
+});
 
 ipc.on('showBreakMenu', (event, args) => {
   const template = [
     {
       label: '重新下载',
       click: () => {
-        event.sender.send('breakMenuAgain')
-      }
+        event.sender.send('breakMenuAgain');
+      },
     },
 
     {
       label: '删除任务',
       click: () => {
-        event.sender.send('breakMenuDel')
-      }
-    }
-  ]
-  const menu = Menu.buildFromTemplate(template)
-  menu.popup(BrowserWindow.fromWebContents(event.sender))
-})
+        event.sender.send('breakMenuDel');
+      },
+    },
+  ];
+  const menu = Menu.buildFromTemplate(template);
+  menu.popup(BrowserWindow.fromWebContents(event.sender));
+});
 
 ipc.on('showMenuIng', (event, args) => {
   const template = [
     {
-      label: (args === true) ? '继续下载' : '暂停下载',
+      label: args === true ? '继续下载' : '暂停下载',
       click: () => {
-        event.sender.send('menuIngStart')
-      }
+        event.sender.send('menuIngStart');
+      },
     },
 
     { label: '分享' },
@@ -148,93 +145,92 @@ ipc.on('showMenuIng', (event, args) => {
     {
       label: '复制下载链接',
       click: () => {
-        event.sender.send('menuIngUrl')
-      }
+        event.sender.send('menuIngUrl');
+      },
     },
 
     {
       label: '删除任务',
       click: () => {
-        event.sender.send('menuIngDelete')
-      }
-    }
-  ]
-  const menu = Menu.buildFromTemplate(template)
-  menu.popup(BrowserWindow.fromWebContents(event.sender))
-})
+        event.sender.send('menuIngDelete');
+      },
+    },
+  ];
+  const menu = Menu.buildFromTemplate(template);
+  menu.popup(BrowserWindow.fromWebContents(event.sender));
+});
 
 ipc.on('showMenuDone', (event, args) => {
   const template = [
     {
       label: '打开',
       click: () => {
-        event.sender.send('menuDoneOpen', args)
-      }
+        event.sender.send('menuDoneOpen', args);
+      },
     },
 
     {
       label: '打开文件夹',
       click: () => {
-        event.sender.send('menuDoneOpenPath')
-      }
+        event.sender.send('menuDoneOpenPath');
+      },
     },
     {
       label: '打开下载页',
 
       click: () => {
-        event.sender.send('menuDoneOpenPage')
-      }
+        event.sender.send('menuDoneOpenPage');
+      },
     },
     {
       label: '复制下载链接',
 
       click: () => {
-        event.sender.send('menuDoneUrl')
-      }
+        event.sender.send('menuDoneUrl');
+      },
     },
 
     {
       label: '删除',
       click: () => {
-        event.sender.send('menuDoneDelete')
-      }
-    }
-  ]
-  const menu = Menu.buildFromTemplate(template)
-  menu.popup(BrowserWindow.fromWebContents(event.sender))
-})
+        event.sender.send('menuDoneDelete');
+      },
+    },
+  ];
+  const menu = Menu.buildFromTemplate(template);
+  menu.popup(BrowserWindow.fromWebContents(event.sender));
+});
 
 ipc.on('showMenuTrash', (event) => {
   const template = [
-
     {
       label: '重新下载',
       click: () => {
-        event.sender.send('menuTrashAgain')
-      }
+        event.sender.send('menuTrashAgain');
+      },
     },
     {
       label: '打开下载页',
 
       click: () => {
-        event.sender.send('menuTrashOpenPage')
-      }
+        event.sender.send('menuTrashOpenPage');
+      },
     },
     {
       label: '复制下载链接',
 
       click: () => {
-        event.sender.send('menuTrashUrl')
-      }
+        event.sender.send('menuTrashUrl');
+      },
     },
 
     {
       label: '删除记录',
       click: () => {
-        event.sender.send('menuTrashDelete')
-      }
-    }
-  ]
-  const menu = Menu.buildFromTemplate(template)
-  menu.popup(BrowserWindow.fromWebContents(event.sender))
-})
+        event.sender.send('menuTrashDelete');
+      },
+    },
+  ];
+  const menu = Menu.buildFromTemplate(template);
+  menu.popup(BrowserWindow.fromWebContents(event.sender));
+});

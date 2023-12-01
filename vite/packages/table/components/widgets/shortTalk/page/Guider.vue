@@ -1,29 +1,31 @@
 <template>
-
-  <Widget ref="homelSlotRef" :customData="customData" :customIndex="customIndex" :desk="desk"
-          :options="options" @click="onHistoryMessage">
+  <Widget
+    ref="homelSlotRef"
+    :customData="customData"
+    :customIndex="customIndex"
+    :desk="desk"
+    :options="options"
+    @click="onHistoryMessage"
+  >
     <div class="top-icon">
-      <Icon icon="akar-icons:chat-question"/>
+      <Icon icon="akar-icons:chat-question" />
     </div>
     <div class="guider-body">
-      <div v-for="(item,index) in dataList" :key="index" class="guider-cell pointer">
+      <div v-for="(item, index) in dataList" :key="index" class="guider-cell pointer">
         <div class="cell-icon flex items-center">
-          <Icon :icon="item.icon" height="20" width="20"/>
+          <Icon :icon="item.icon" height="20" width="20" />
         </div>
-        <span style="margin-left: 10px;">{{ item.title }}</span>
+        <span style="margin-left: 10px">{{ item.title }}</span>
       </div>
     </div>
-
   </Widget>
-
-
 </template>
 
 <script>
-import Widget from '../../../card/Widget.vue'
+import Widget from '../../../card/Widget.vue';
 // import {mapActions, mapState,mapWritableState} from "pinia";
 // import { shortTalkStore } from '../store'
-import { Icon } from '@iconify/vue'
+import { Icon } from '@iconify/vue';
 
 export default {
   components: {
@@ -38,8 +40,7 @@ export default {
     },
     customData: {
       type: Object,
-      default: () => {
-      },
+      default: () => {},
     },
     menuList: {
       type: Array,
@@ -51,7 +52,7 @@ export default {
       type: Boolean,
     },
   },
-  data () {
+  data() {
     return {
       options: {
         className: 'card',
@@ -87,14 +88,12 @@ export default {
           title: '短说企业文化社区解决方案',
           icon: 'fluent-emoji-flat:thought-balloon',
         },
-      ]
-    }
+      ],
+    };
   },
-  async mounted () {
-
-  },
-  methods: {}
-}
+  async mounted() {},
+  methods: {},
+};
 </script>
 
 <style lang="scss" scoped>
@@ -120,7 +119,7 @@ export default {
   width: 100%;
   height: 50px;
   line-height: 50px;
-  background: rgba(0, 0, 0, 0.30);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 12px;
   display: flex;
   padding: 0 14px;

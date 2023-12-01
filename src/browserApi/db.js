@@ -1,55 +1,55 @@
-const PouchDB = require('pouchdb')
-const path = require('path')
-const fs = require('fs-extra')
-const dbDir = path.join(window.globalArgs['user-data-dir'], 'pdb')
-PouchDB.plugin(require('pouchdb-paginators'))
-PouchDB.plugin(require('pouchdb-find'))
-let pdb
+const PouchDB = require('pouchdb');
+const path = require('path');
+const fs = require('fs-extra');
+const dbDir = path.join(window.globalArgs['user-data-dir'], 'pdb');
+PouchDB.plugin(require('pouchdb-paginators'));
+PouchDB.plugin(require('pouchdb-find'));
+let pdb;
 
 const db = {
   instance: pdb,
-  put (doc) {
-    return pdb.put(doc)
+  put(doc) {
+    return pdb.put(doc);
   },
-  get (id) {
-    return pdb.get(id)
+  get(id) {
+    return pdb.get(id);
   },
-  remove (doc) {
-    return pdb.remove(doc)
+  remove(doc) {
+    return pdb.remove(doc);
   },
-  bulkDocs (docs) {
-    return pdb.bulkDocs(docs)
+  bulkDocs(docs) {
+    return pdb.bulkDocs(docs);
   },
-  find (options) {
-    return pdb.find(options)
+  find(options) {
+    return pdb.find(options);
   },
-  createIndex (options) {
-    return pdb.createIndex(options)
+  createIndex(options) {
+    return pdb.createIndex(options);
   },
-  allDocs (key) {
+  allDocs(key) {
     if (!key) {
-      return pdb.allDocs()
+      return pdb.allDocs();
     }
     if (typeof key === 'string') {
       return pdb.allDocs({
         include_docs: true,
         start_key: key,
-        end_key: key + '\ufff0'
-      })
+        end_key: key + '\ufff0',
+      });
     } else {
       return pdb.allDocs({
-        keys: key
-      })
+        keys: key,
+      });
     }
   },
-  allDocsQuery (options) {
-    return pdb.allDocs(options)
+  allDocsQuery(options) {
+    return pdb.allDocs(options);
   },
-}
+};
 fs.ensureDir(dbDir).then((rs) => {
-  const name = window.globalArgs['name']
-  pdb = new PouchDB(path.join(dbDir, 'db.' + name))
-  db.instance = pdb
-})
+  const name = window.globalArgs['name'];
+  pdb = new PouchDB(path.join(dbDir, 'db.' + name));
+  db.instance = pdb;
+});
 
-module.exports = db
+module.exports = db;

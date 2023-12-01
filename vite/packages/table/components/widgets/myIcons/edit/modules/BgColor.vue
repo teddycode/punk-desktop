@@ -9,11 +9,11 @@
 </template>
 
 <script>
-import editMixins from '../hooks/mixins'
+import editMixins from '../hooks/mixins';
 
 export default {
   mixins: [editMixins],
-}
+};
 </script>
 
 <style lang="scss" scoped></style>

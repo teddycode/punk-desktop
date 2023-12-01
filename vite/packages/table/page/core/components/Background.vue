@@ -1,7 +1,7 @@
 <template>
   <div class="s-bg rounded-lg xt-text" style="height: 100%">
     <div class="back-btn ml-2" @click="goBack">
-      <Icon icon="xiangzuo" style="font-size: 2em;"></Icon>
+      <Icon icon="xiangzuo" style="font-size: 2em"></Icon>
     </div>
   </div>
 </template>
@@ -11,16 +11,14 @@
 export default {
   name: 'Background',
   data() {
-    return {}
+    return {};
   },
   methods: {
     goBack() {
-      this.$router.go(-1)
+      this.$router.go(-1);
     },
-  }
-}
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,113 +1,120 @@
 <template>
-  <div class="main" style="text-align: center;padding-top: 10em">
-
-    <div class="power-btn" style="background-color:var(--primary-bg) ; color: var(--primary-text);" @click="exit">退出
+  <div class="main" style="text-align: center; padding-top: 10em">
+    <div @click="exit" class="power-btn" style="background-color: var(--primary-bg); color: var(--primary-text)">
+      退出
     </div>
-    <div style="margin:auto;width: 51em;text-align: center; ">
+    <div style="margin: auto; width: 51em; text-align: center">
       <a-row>
         <a-col>
-          <div class="power-btn" style="background-color:var(--primary-bg) ; color: var(--primary-text);"
-               @click="shutdown">关机
+          <div
+            @click="shutdown"
+            style="background-color: var(--primary-bg); color: var(--primary-text)"
+            class="power-btn"
+          >
+            关机
           </div>
-          <div class="power-btn" style="background-color:var(--primary-bg) ; color: var(--primary-text);"
-               @click="logout">注销
+          <div
+            @click="logout"
+            style="background-color: var(--primary-bg); color: var(--primary-text)"
+            class="power-btn"
+          >
+            注销
           </div>
         </a-col>
         <a-col>
-          <div class="power-btn" style="background-color:var(--primary-bg) ; color: var(--primary-text);"
-               @click="reboot">重启
+          <div
+            @click="reboot"
+            style="background-color: var(--primary-bg); color: var(--primary-text)"
+            class="power-btn"
+          >
+            重启
           </div>
-          <div class="power-btn" style="background-color:var(--primary-bg) ; color: var(--primary-text);"
-               @click="sleep">休眠
+          <div @click="sleep" style="background-color: var(--primary-bg); color: var(--primary-text)" class="power-btn">
+            休眠
           </div>
         </a-col>
       </a-row>
     </div>
 
-
-    <br/>
-
+    <br />
   </div>
 </template>
 
 <script>
-import BackBtn from '../components/comp/BackBtn.vue'
-import { message, Modal } from 'ant-design-vue'
-import { runNir } from '../js/common/exec'
-import { getSign, isMain } from '../js/common/screenUtils'
-
-const execShell = require('child_process').exec
+import BackBtn from '../components/comp/BackBtn.vue';
+import { Modal, message } from 'ant-design-vue';
+import { runNir } from '../js/common/exec';
+import { getSign, isMain } from '../js/common/screenUtils';
+const execShell = require('child_process').exec;
 export default {
   name: 'Power',
   components: { BackBtn },
   methods: {
-
-    exit () {
+    exit() {
       if (isMain()) {
-        ipc.send('exitTable')
+        ipc.send('exitTable');
       } else {
-        ipc.send('closeScreen', { fullDomain: getSign() })
+        ipc.send('closeScreen', { fullDomain: getSign() });
       }
-
     },
-    shutdown () {
+    shutdown() {
       Modal.confirm({
         content: '关闭系统？请保存文件后确认。',
-        onOk () {
-          let shell = 'shutdown -s -t 00'
+        onOk() {
+          let shell = 'shutdown -s -t 00';
           if (require('os').platform() != 'win32') {
-            shell = 'shutdown now'
+            shell = 'shutdown now';
           }
           let command = execShell(shell, (err, stdout, stderr) => {
             if (err || stderr) {
-              message.error('关机失败，请确认软件权限。')
+              message.error('关机失败，请确认软件权限。');
             }
-          })
-        }
-      })
+          });
+        },
+      });
     },
-    logout () {
+    logout() {
       Modal.confirm({
         content: '注销系统？',
-        onOk () {
-          let shell = 'shutdown -l'
+        onOk() {
+          let shell = 'shutdown -l';
           let command = execShell(shell, (err, stdout, stderr) => {
             if (err || stderr) {
-              message.error('注销失败，请确认软件权限。')
+              message.error('注销失败，请确认软件权限。');
             }
-          })
-        }
-      })
+          });
+        },
+      });
     },
-    sleep () {
+    sleep() {
       Modal.confirm({
         content: '休眠系统？',
-        onOk () {
-          runNir('standby')
-        }
-      })
+        onOk() {
+          runNir('standby');
+        },
+      });
     },
-    reboot () {
+    reboot() {
       Modal.confirm({
         content: '重启系统？请保存文件后确认。',
-        onOk () {
-          let shell = 'shutdown -r -t 0'
+        onOk() {
+          let shell = 'shutdown -r -t 0';
           if (require('os').platform() != 'win32') {
-            shell = 'shutdown -r now'
+            shell = 'shutdown -r now';
           }
           let command = execShell(shell, (err, stdout, stderr) => {
             if (err || stderr) {
-              message.error('重启失败，请确认软件权限。')
+              message.error('重启失败，请确认软件权限。');
             }
-          })
-        }
-      })
-    }
-  }
-}
+          });
+        },
+      });
+    },
+  },
+};
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .power-btn {
   display: inline-block;
   border-radius: 100%;

@@ -6,14 +6,14 @@
       <article v-else>{{ groupProfile.notification }}</article>
     </section>
     <footer v-if="isAuth">
-      <button v-if="isEdit" class="btn" @click="updateProfile">{{ $t(`TUIChat.manage.发布`) }}</button>
-      <button v-else class="btn" @click="isEdit = !isEdit">{{ $t(`TUIChat.manage.编辑`) }}</button>
+      <button class="btn" v-if="isEdit" @click="updateProfile">{{ $t(`TUIChat.manage.发布`) }}</button>
+      <button class="btn" v-else @click="isEdit = !isEdit">{{ $t(`TUIChat.manage.编辑`) }}</button>
     </footer>
   </main>
 </template>
 
 <script lang="ts">
-import {defineComponent, reactive, toRefs, watchEffect} from 'vue';
+import { defineComponent, watchEffect, reactive, toRefs } from 'vue';
 
 const ManageNotification = defineComponent({
   props: {
@@ -41,7 +41,7 @@ const ManageNotification = defineComponent({
     // 更新群资料
     const updateProfile = async () => {
       if (data.input && data.input !== data.groupProfile.notification) {
-        ctx.emit('update', {key: 'notification', value: data.input});
+        ctx.emit('update', { key: 'notification', value: data.input });
         data.groupProfile.notification = data.input;
         data.input = '';
       }
@@ -60,53 +60,46 @@ export default ManageNotification;
 <style lang="scss" scoped>
 @import url('../../../styles/common.scss');
 @import url('../../../styles/icon.scss');
-
 .notification {
   flex: 1;
   padding: 20px;
   display: flex;
   flex-direction: column;
-
   section {
     flex: 1;
     font-size: 14px;
-
     p {
       text-align: center;
       padding-bottom: 20px;
     }
   }
-
   textarea {
     margin-bottom: 20px;
     flex: 1;
     box-sizing: border-box;
     padding: 10px;
-    border: 1px solid #E8E8E9;
+    border: 1px solid #e8e8e9;
     resize: none;
     font-size: 14px;
   }
-
   footer {
     display: flex;
     justify-content: flex-end;
     padding: 10px;
   }
 }
-
 .btn {
-  background: #3370FF;
-  border: 0 solid #2F80ED;
+  background: #3370ff;
+  border: 0 solid #2f80ed;
   padding: 4px 28px;
   font-weight: 400;
   font-size: 12px;
-  color: #FFFFFF;
+  color: #ffffff;
   line-height: 24px;
   border-radius: 4px;
-
   &-cancel {
-    background: #FFFFFF;
-    border: 1px solid #DDDDDD;
+    background: #ffffff;
+    border: 1px solid #dddddd;
     color: #828282;
   }
 }

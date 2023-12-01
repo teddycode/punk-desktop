@@ -1,20 +1,19 @@
-const knex = require('knex')
-const { nanoid } = require('nanoid')
-const dbUtil = require('../util/dbUtil')
+const knex = require('knex');
+const { nanoid } = require('nanoid');
+const dbUtil = require('../util/dbUtil');
 
 class SqlDb {
-  knex
-
-  constructor (dbName = 'db') {
-    const dbPath = dbUtil.getDbPath(dbName)
+  knex;
+  constructor(dbName = 'db') {
+    const dbPath = dbUtil.getDbPath(dbName);
     this.knex = knex({
       client: 'sqlite3',
       connection: {
-        filename: dbPath
+        filename: dbPath,
       },
-      useNullAsDefault: true
-    })
-    return this
+      useNullAsDefault: true,
+    });
+    return this;
   }
 
   /**
@@ -22,18 +21,20 @@ class SqlDb {
    * @param key 键名 三段式包名结构，参考system.space.currentUser
    * @param defaultValue
    */
-  async getConfig (key, defaultValue) {
+  async getConfig(key, defaultValue) {
     try {
-      var configData = await this.knex('config').where({
-        key
-      }).first()
+      var configData = await this.knex('config')
+        .where({
+          key,
+        })
+        .first();
     } catch (e) {
-      console.error(e)
+      console.error(e);
     }
     if (!!configData) {
-      return JSON.parse(configData.value)
+      return JSON.parse(configData.value);
     } else {
-      return defaultValue
+      return defaultValue;
     }
   }
 
@@ -44,35 +45,38 @@ class SqlDb {
    * @param remark
    * @returns {Promise<void>}
    */
-  async setConfig (key, value, remark = '') {
-    let find = await this.knex('config').where({
-      key
-    }).first()
+  async setConfig(key, value, remark = '') {
+    let find = await this.knex('config')
+      .where({
+        key,
+      })
+      .first();
     if (!!!find) {
       try {
         await this.knex('config').insert({
           nanoid: nanoid(),
           key,
           value: JSON.stringify(value),
-          remark
-        })
+          remark,
+        });
       } catch (e) {
-        console.error('设置configerror=', e)
+        console.error('设置configerror=', e);
       }
     } else {
       try {
-        await this.knex('config').where({
-          key
-        }).update({
-          key,
-          value: JSON.stringify(value)
-        })
+        await this.knex('config')
+          .where({
+            key,
+          })
+          .update({
+            key,
+            value: JSON.stringify(value),
+          });
       } catch (e) {
-        console.error('更新configerror=', e)
+        console.error('更新configerror=', e);
       }
-
     }
   }
 }
 
-module.exports = { SqlDb }
+module.exports = { SqlDb };

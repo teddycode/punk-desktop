@@ -1,23 +1,20 @@
-const BarrageApi = require('../api/barrageApi')
-const standReturn = require('../util/standReturn')
+const BarrageApi = require('../api/barrageApi');
+const standReturn = require('../util/standReturn');
 
 class BarrageModel {
-  api
+  api;
   BARRAGE_CONST = {
     CHANNEL: {
       PUBLIC: 10001,
       GROUP: 10002,
       TEAM: 10003,
-    }
-  }
+    },
+  };
+  constructor() {}
 
-  constructor () {
-
-  }
-
-  async init () {
-    this.api = new BarrageApi()
-    this.api.init()
+  async init() {
+    this.api = new BarrageApi();
+    this.api.init();
   }
 
   /**
@@ -25,38 +22,36 @@ class BarrageModel {
    * @param barrage
    * @returns {Promise<{data: {}, status: number}|{data: *, status: number, info: string}>}
    */
-  async add (barrage) {
-    let rs = await this.api.add(barrage)
+  async add(barrage) {
+    let rs = await this.api.add(barrage);
     if (rs.code === 1000) {
-      return standReturn.success(barrage)
+      return standReturn.success(barrage);
     } else {
-      return standReturn.failure(rs)
+      return standReturn.failure(rs);
     }
   }
-
-  async delete (id) {
-    let rs = await this.api.delete(id)
+  async delete(id) {
+    let rs = await this.api.delete(id);
     if (rs.code === 1000) {
-      return standReturn.success(id)
+      return standReturn.success(id);
     } else {
-      return standReturn.failure()
+      return standReturn.failure();
     }
   }
-
   /**
    * 获取页面上的全部弹幕
    * @param channel
    * @param pageUrl
    * @returns {Promise<{data: {}, status: number}|{data: *, status: number, info: string}>}
    */
-  async getList (channel, pageUrl) {
-    let rs = await this.api.list(channel, pageUrl)
+  async getList(channel, pageUrl) {
+    let rs = await this.api.list(channel, pageUrl);
     if (rs.code === 1000) {
-      return standReturn.success(rs.data)
+      return standReturn.success(rs.data);
     } else {
-      return standReturn.failure()
+      return standReturn.failure();
     }
   }
 }
 
-module.exports = BarrageModel
+module.exports = BarrageModel;

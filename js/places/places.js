@@ -1,39 +1,39 @@
 /* global Worker tabs */
 
-var webviews = require('webviews.js')
-const db = require('util/database.js').db
-const searchEngine = require('util/searchEngine.js')
-const urlParser = require('util/urlParser.js')
+var webviews = require('webviews.js');
+const db = require('util/database.js').db;
+const searchEngine = require('util/searchEngine.js');
+const urlParser = require('util/urlParser.js');
 
 const places = {
   savePage: function (tabId, extractedText) {
     /* this prevents pages that are immediately left from being saved to history, and also gives the page-favicon-updated event time to fire (so the colors saved to history are correct). */
     setTimeout(function () {
-      const tab = tabs.get(tabId)
+      const tab = tabs.get(tabId);
       if (tab) {
         const data = {
           url: urlParser.getSourceURL(tab.url), // for PDF viewer and reader mode, save the original page URL and not the viewer URL
           title: tab.title,
           color: tab.backgroundColor,
           extractedText: extractedText,
-          favicon: tab.favicon // 补充图标
-        }
+          favicon: tab.favicon, // 补充图标
+        };
 
         places.worker.postMessage({
           action: 'updatePlace',
           pageData: data,
           flags: {
-            isNewVisit: true
-          }
-        })
+            isNewVisit: true,
+          },
+        });
       }
-    }, 500)
+    }, 500);
   },
   receiveHistoryData: function (tabId, args) {
     // called when js/preload/textExtractor.js returns the page's text content
 
-    var tab = tabs.get(tabId)
-    var data = args[0]
+    var tab = tabs.get(tabId);
+    var data = args[0];
 
     if (tab.url.startsWith('data:') || tab.url.length > 5000) {
       /*
@@ -42,35 +42,35 @@ const places = {
       * they can cause the browser to hang when they are displayed in search results
       To avoid this, don't save them to history
       */
-      return
+      return;
     }
 
     /* if the page is an internal page, it normally shouldn't be saved,
      unless the page represents another page (such as the PDF viewer or reader view) */
-    var isNonIndexableInternalPage = urlParser.isInternalURL(tab.url) && urlParser.getSourceURL(tab.url) === tab.url
-    var isSearchPage = !!(searchEngine.getSearch(tab.url))
+    var isNonIndexableInternalPage = urlParser.isInternalURL(tab.url) && urlParser.getSourceURL(tab.url) === tab.url;
+    var isSearchPage = !!searchEngine.getSearch(tab.url);
 
     // full-text data from search results isn't useful
     if (isSearchPage) {
-      data.extractedText = ''
+      data.extractedText = '';
     }
 
     // don't save to history if in private mode, or the page is a browser page (unless it contains the content of a normal page)
     if (tab.private === false && !isNonIndexableInternalPage) {
-      places.savePage(tabId, data.extractedText)
+      places.savePage(tabId, data.extractedText);
     }
   },
   callbacks: [],
   addWorkerCallback: function (callback) {
-    const callbackId = (Date.now() / 1000) + Math.random()
-    places.callbacks.push({ id: callbackId, fn: callback })
-    return callbackId
+    const callbackId = Date.now() / 1000 + Math.random();
+    places.callbacks.push({ id: callbackId, fn: callback });
+    return callbackId;
   },
   runWorkerCallback: function (id, data) {
     for (var i = 0; i < places.callbacks.length; i++) {
       if (places.callbacks[i].id === id) {
-        places.callbacks[i].fn(data)
-        places.callbacks.splice(i, 1)
+        places.callbacks[i].fn(data);
+        places.callbacks.splice(i, 1);
       }
     }
   },
@@ -78,133 +78,137 @@ const places = {
     places.worker.postMessage({
       action: 'deleteHistory',
       pageData: {
-        url: url
-      }
-    })
+        url: url,
+      },
+    });
   },
   deleteAllHistory: function () {
     places.worker.postMessage({
-      action: 'deleteAllHistory'
-    })
+      action: 'deleteAllHistory',
+    });
   },
   searchPlaces: function (text, callback, options) {
-    const callbackId = places.addWorkerCallback(callback)
+    const callbackId = places.addWorkerCallback(callback);
     places.worker.postMessage({
       action: 'searchPlaces',
       text: text,
       callbackId: callbackId,
-      options: options
-    })
+      options: options,
+    });
   },
   searchPlacesFullText: function (text, callback) {
-    const callbackId = places.addWorkerCallback(callback)
+    const callbackId = places.addWorkerCallback(callback);
     places.worker.postMessage({
       action: 'searchPlacesFullText',
       text: text,
-      callbackId: callbackId
-    })
+      callbackId: callbackId,
+    });
   },
   getPlaceSuggestions: function (url, callback) {
-    const callbackId = places.addWorkerCallback(callback)
+    const callbackId = places.addWorkerCallback(callback);
     places.worker.postMessage({
       action: 'getPlaceSuggestions',
       text: url,
-      callbackId: callbackId
-    })
+      callbackId: callbackId,
+    });
   },
-  onMessage: function (e) { // assumes this is from a search operation
-    places.runWorkerCallback(e.data.callbackId, e.data.result)
+  onMessage: function (e) {
+    // assumes this is from a search operation
+    places.runWorkerCallback(e.data.callbackId, e.data.result);
   },
   getItem: function (url, callback) {
-    const callbackId = places.addWorkerCallback(callback)
+    const callbackId = places.addWorkerCallback(callback);
     places.worker.postMessage({
       action: 'getPlace',
       pageData: {
-        url: url
+        url: url,
       },
-      callbackId: callbackId
-    })
+      callbackId: callbackId,
+    });
   },
   updateItem: function (url, fields, callback) {
-    const callbackId = places.addWorkerCallback(callback)
+    const callbackId = places.addWorkerCallback(callback);
     places.worker.postMessage({
       action: 'updatePlace',
       pageData: {
         url: url,
-        ...fields
+        ...fields,
       },
-      callbackId: callbackId
-    })
+      callbackId: callbackId,
+    });
   },
   toggleTag: function (url, tag) {
-    db.places.where('url').equals(url).first(function (item) {
-      if (!item) {
-        return
-      }
-      if (item.tags.includes(tag)) {
-        item.tags = item.tags.filter(t => t !== tag)
-      } else {
-        item.tags.push(tag)
-      }
-      places.worker.postMessage({
-        action: 'updatePlace',
-        pageData: {
-          url: url,
-          tags: item.tags
+    db.places
+      .where('url')
+      .equals(url)
+      .first(function (item) {
+        if (!item) {
+          return;
         }
-      })
-    })
+        if (item.tags.includes(tag)) {
+          item.tags = item.tags.filter((t) => t !== tag);
+        } else {
+          item.tags.push(tag);
+        }
+        places.worker.postMessage({
+          action: 'updatePlace',
+          pageData: {
+            url: url,
+            tags: item.tags,
+          },
+        });
+      });
   },
   getSuggestedTags: function (url, callback) {
-    const callbackId = places.addWorkerCallback(callback)
+    const callbackId = places.addWorkerCallback(callback);
     places.worker.postMessage({
       action: 'getSuggestedTags',
       pageData: {
-        url: url
+        url: url,
       },
-      callbackId: callbackId
-    })
+      callbackId: callbackId,
+    });
   },
   getAllTagsRanked: function (url, callback) {
-    const callbackId = places.addWorkerCallback(callback)
+    const callbackId = places.addWorkerCallback(callback);
     places.worker.postMessage({
       action: 'getAllTagsRanked',
       pageData: {
-        url: url
+        url: url,
       },
-      callbackId: callbackId
-    })
+      callbackId: callbackId,
+    });
   },
   getSuggestedItemsForTags: function (tags, callback) {
-    const callbackId = places.addWorkerCallback(callback)
+    const callbackId = places.addWorkerCallback(callback);
     places.worker.postMessage({
       action: 'getSuggestedItemsForTags',
       pageData: {
-        tags: tags
+        tags: tags,
       },
-      callbackId: callbackId
-    })
+      callbackId: callbackId,
+    });
   },
   autocompleteTags: function (tags, callback) {
-    const callbackId = places.addWorkerCallback(callback)
+    const callbackId = places.addWorkerCallback(callback);
     places.worker.postMessage({
       action: 'autocompleteTags',
       pageData: {
-        tags: tags
+        tags: tags,
       },
-      callbackId: callbackId
-    })
+      callbackId: callbackId,
+    });
   },
   initialize: function () {
     if (places.worker) {
-      places.worker.terminate()
+      places.worker.terminate();
     }
-    places.worker = new Worker('js/places/placesWorker.js')
-    places.worker.onmessage = places.onMessage
+    places.worker = new Worker('js/places/placesWorker.js');
+    places.worker.onmessage = places.onMessage;
 
-    webviews.bindIPC('pageData', places.receiveHistoryData)
-  }
-}
+    webviews.bindIPC('pageData', places.receiveHistoryData);
+  },
+};
 
-places.initialize()
-module.exports = places
+places.initialize();
+module.exports = places;

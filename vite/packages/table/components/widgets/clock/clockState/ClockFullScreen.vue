@@ -1,70 +1,37 @@
 <template>
   <teleport to="body">
-    <img :src="imgUrl" alt="" class="popContainer"/>
+    <img :src="imgUrl" alt="" class="popContainer" />
     <div class="box">
-      <component
-          :is="clock"
-          v-if="clock !== 'clock3'"
-          :key="clock"
-          :style="{ zoom: zoom }"
-      />
-      <clock3
-          v-if="clock == 'clock3'"
-          key="clock3"
-          :style="{ zoom: zoom }"
-      ></clock3>
-      <div
-          :style="optAction == true ? 'display: none' : ''"
-          class="flex bottom"
-      >
-        <div
-            class="item-icon flex justify-center items-center pointer mr-4 no-drag"
-            @click="up()"
-        >
+      <component :is="clock" v-if="clock !== 'clock3'" :key="clock" :style="{ zoom: zoom }" />
+      <clock3 v-if="clock == 'clock3'" key="clock3" :style="{ zoom: zoom }"></clock3>
+      <div :style="optAction == true ? 'display: none' : ''" class="flex bottom">
+        <div class="item-icon flex justify-center items-center pointer mr-4 no-drag" @click="up()">
           <Icon class="icon" icon="caret-left"></Icon>
         </div>
-        <div
-            class="item-icon flex justify-center items-center pointer mr-4 no-drag"
-            @click="down()"
-        >
+        <div class="item-icon flex justify-center items-center pointer mr-4 no-drag" @click="down()">
           <Icon class="icon" icon="caret-right"></Icon>
         </div>
-        <div
-            class="item-icon flex justify-center items-center pointer mr-4 no-drag"
-            @click="random()"
-        >
+        <div class="item-icon flex justify-center items-center pointer mr-4 no-drag" @click="random()">
           <Icon class="icon" icon="reload"></Icon>
         </div>
-        <div
-            class="item-icon flex justify-center items-center pointer mr-4 no-drag"
-            @click="setting()"
-        >
+        <div class="item-icon flex justify-center items-center pointer mr-4 no-drag" @click="setting()">
           <Icon class="icon" icon="setting"></Icon>
         </div>
-        <div
-            class="item-icon flex justify-center items-center pointer mr-4 no-drag"
-            @click="exit()"
-        >
+        <div class="item-icon flex justify-center items-center pointer mr-4 no-drag" @click="exit()">
           <Icon class="icon" icon="guanbi2"></Icon>
         </div>
       </div>
     </div>
     <a-drawer
-        v-model:visible="settingVisible"
-        :width="500"
-        placement="right"
-        style="z-index: 999999999; scrollbar-width: none"
+      v-model:visible="settingVisible"
+      :width="500"
+      placement="right"
+      style="z-index: 999999999; scrollbar-width: none"
     >
       <template #title>
         <div class="text-center">设置</div>
       </template>
-      <ClockBackground
-          :bgZoom="bgZoom"
-          :blur="blur"
-          @img="img"
-          @updateBgZoom="updateBgZoom"
-          @updateBlur="updateBlur"
-      >
+      <ClockBackground :bgZoom="bgZoom" :blur="blur" @img="img" @updateBgZoom="updateBgZoom" @updateBlur="updateBlur">
       </ClockBackground>
       <ClockStyle @updateClockStyle="updateClockStyle"></ClockStyle>
     </a-drawer>
@@ -72,10 +39,10 @@
 </template>
 
 <script>
-import mixin from '../hooks/clockMixin.js'
+import mixin from '../hooks/clockMixin.js';
 
-import ClockStyle from './ClockStyle.vue'
-import ClockBackground from './ClockBackground.vue'
+import ClockStyle from './ClockStyle.vue';
+import ClockBackground from './ClockBackground.vue';
 
 export default {
   mixins: [mixin],
@@ -103,26 +70,26 @@ export default {
     },
   },
   watch: {
-    blur (a, b) {
-      this.updateBlur(a)
+    blur(a, b) {
+      this.updateBlur(a);
     },
   },
-  mounted () {
-    window.addEventListener('keyup', this.esc)
-    this.blurs = `blur(${parseInt(this.blur / 2)}px)`
-    this.zoom = `${this.bgZoom + 100}%`
-    this.touchEvent()
+  mounted() {
+    window.addEventListener('keyup', this.esc);
+    this.blurs = `blur(${parseInt(this.blur / 2)}px)`;
+    this.zoom = `${this.bgZoom + 100}%`;
+    this.touchEvent();
 
     //鼠标事件
-    document.addEventListener('mousemove', this.touchEvent, { capture: true }) //鼠标移动
-    document.addEventListener('mousedown', this.touchEvent, { capture: true }) //鼠标按下
+    document.addEventListener('mousemove', this.touchEvent, { capture: true }); //鼠标移动
+    document.addEventListener('mousedown', this.touchEvent, { capture: true }); //鼠标按下
     //触摸事件
-    document.addEventListener('touchstart', this.touchEvent, { capture: true }) //手指放到屏幕上时触发
-    document.addEventListener('touchmove', this.touchEvent, { capture: true }) //手指在屏幕上滑动式触发
+    document.addEventListener('touchstart', this.touchEvent, { capture: true }); //手指放到屏幕上时触发
+    document.addEventListener('touchmove', this.touchEvent, { capture: true }); //手指在屏幕上滑动式触发
     //键盘事件
-    document.addEventListener('keydown', this.touchEvent, { capture: true }) //键盘按下事件
+    document.addEventListener('keydown', this.touchEvent, { capture: true }); //键盘按下事件
   },
-  data () {
+  data() {
     return {
       optAction: false,
       settingVisible: false,
@@ -130,83 +97,83 @@ export default {
       src: 'https://p.ananas.chaoxing.com/star3/origin/fa7d6f2c69aae528484d8278575c28ef.jpg',
       blurs: 'blur(10px}',
       zoom: '100%',
-    }
+    };
   },
   methods: {
-    esc (e) {
-      if (e.keyCode === 27) this.exit()
+    esc(e) {
+      if (e.keyCode === 27) this.exit();
     },
-    touchEvent () {
-      const that = this
+    touchEvent() {
+      const that = this;
       // console.log("操作中")
-      that.optAction = false //让判断条件为true
-      clearTimeout(this.autoTime) //清除自动刷新页面定时器
-      if (that.settingVisible) return
+      that.optAction = false; //让判断条件为true
+      clearTimeout(this.autoTime); //清除自动刷新页面定时器
+      if (that.settingVisible) return;
       this.autoTime = setTimeout(function () {
-        that.optAction = true //页面无操作后3秒，重时开启定时器
+        that.optAction = true; //页面无操作后3秒，重时开启定时器
         // console.log("无操作")
         // that.settingVisible = false;
-      }, 3000)
+      }, 3000);
     },
-    setting () {
-      this.settingVisible = true
-      this.optAction = false
+    setting() {
+      this.settingVisible = true;
+      this.optAction = false;
     },
-    exit () {
+    exit() {
       document.removeEventListener('mousemove', this.touchEvent, {
         capture: true,
-      })
+      });
       document.removeEventListener('mousedown', this.touchEvent, {
         capture: true,
-      })
+      });
       document.removeEventListener('touchstart', this.touchEvent, {
         capture: true,
-      })
+      });
       document.removeEventListener('touchmove', this.touchEvent, {
         capture: true,
-      })
+      });
       document.removeEventListener('keydown', this.touchEvent, {
         capture: true,
-      })
-      this.$emit('exit')
+      });
+      this.$emit('exit');
     },
-    updateBlur (e) {
-      this.blurs = `blur(${parseInt(e / 2)}px)`
-      this.$emit('updateBlur', e)
+    updateBlur(e) {
+      this.blurs = `blur(${parseInt(e / 2)}px)`;
+      this.$emit('updateBlur', e);
     },
-    updateBgZoom (e) {
-      this.zoom = `${e + 100}%`
-      this.$emit('updateBgZoom', e)
+    updateBgZoom(e) {
+      this.zoom = `${e + 100}%`;
+      this.$emit('updateBgZoom', e);
     },
 
-    updateClockStyle (e) {
-      this.$emit('updateClockStyle', e)
+    updateClockStyle(e) {
+      this.$emit('updateClockStyle', e);
     },
-    img (img) {
-      this.$emit('updateImgUrl', img)
+    img(img) {
+      this.$emit('updateImgUrl', img);
     },
-    random () {
-      let randNum = Math.floor(Math.random() * 5) + 1
-      this.$emit('updateClockStyle', `clock${randNum}`)
+    random() {
+      let randNum = Math.floor(Math.random() * 5) + 1;
+      this.$emit('updateClockStyle', `clock${randNum}`);
     },
-    down () {
+    down() {
       if (this.clock == 'clock6') {
-        this.$emit('updateClockStyle', `clock1`)
-        return
+        this.$emit('updateClockStyle', `clock1`);
+        return;
       }
-      let num = this.clock.slice(-1)
-      this.$emit('updateClockStyle', `clock${1 + parseInt(num)}`)
+      let num = this.clock.slice(-1);
+      this.$emit('updateClockStyle', `clock${1 + parseInt(num)}`);
     },
-    up () {
+    up() {
       if (this.clock == 'clock1') {
-        this.$emit('updateClockStyle', `clock6`)
-        return
+        this.$emit('updateClockStyle', `clock6`);
+        return;
       }
-      let num = this.clock.slice(-1)
-      this.$emit('updateClockStyle', `clock${parseInt(num) - 1}`)
+      let num = this.clock.slice(-1);
+      this.$emit('updateClockStyle', `clock${parseInt(num) - 1}`);
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

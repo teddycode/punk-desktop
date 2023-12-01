@@ -1,42 +1,39 @@
 <template>
   <Widget ref="homelSlotRef" :customData="customData" :customIndex="customIndex" :desk="desk" :options="options">
-
     <!-- icon图标<icon icon="shuaxin"></icon> -->
-    <MyIcon class="myIcon" icon="fluent:games-16-filled"/>
+    <MyIcon class="myIcon" icon="fluent:games-16-filled" />
     <div class="box-border">
-      <div ref="refreshButton" class="pointer" style="position: absolute;left: 120px;top: 15px;" @click="refreshNow">
+      <div ref="refreshButton" class="pointer" style="position: absolute; left: 120px; top: 15px" @click="refreshNow">
         <icon icon="shuaxin"></icon>
       </div>
-      <div v-for="(value,index) in gameData" :key="index" class="card-body" @click="jump(value.url)">
+      <div v-for="(value, index) in gameData" :key="index" class="card-body" @click="jump(value.url)">
         <div class="left-card">
           <div class="title-article">{{ value.title }}</div>
           <div class="message-article">{{ value.description }}</div>
-          <div class="bottom-article" style="margin-top: 9px;">
+          <div class="bottom-article" style="margin-top: 9px">
             <div class="time-article">{{ value.ctime }}</div>
             <div class="source-article">{{ value.source }}</div>
           </div>
         </div>
         <div class="right_card">
-          <img :src="value.picUrl" alt="" class="img-article">
+          <img :src="value.picUrl" alt="" class="img-article" />
         </div>
       </div>
     </div>
-
-
   </Widget>
 </template>
 
 <script>
-import Widget from '../../card/Widget.vue'
-import { Icon as MyIcon } from '@iconify/vue'
-import { message } from 'ant-design-vue'
-import { getGameInfo } from '../../../store/gameInfomation'
-import browser from '../../../js/common/browser'
+import Widget from '../../card/Widget.vue';
+import { Icon as MyIcon } from '@iconify/vue';
+import { message } from 'ant-design-vue';
+import { getGameInfo } from '../../../store/gameInfomation';
+import browser from '../../../js/common/browser';
 
 export default {
   components: {
     Widget,
-    MyIcon
+    MyIcon,
   },
 
   props: {
@@ -46,8 +43,7 @@ export default {
     },
     customData: {
       type: Object,
-      default: () => {
-      },
+      default: () => {},
     },
     menuList: {
       type: Array,
@@ -59,7 +55,7 @@ export default {
       type: Boolean,
     },
   },
-  data () {
+  data() {
     return {
       options: {
         className: 'card double',
@@ -69,30 +65,30 @@ export default {
         // icon: "games-16-filled",
       },
       gameData: [],
-    }
+    };
   },
-  async mounted () {
-    await this.onGetInfo()
+  async mounted() {
+    await this.onGetInfo();
   },
   methods: {
-    async onGetInfo () {
-      let dataList = await getGameInfo('/app/juhe/get')
-      this.gameData = dataList
+    async onGetInfo() {
+      let dataList = await getGameInfo('/app/juhe/get');
+      this.gameData = dataList;
     },
-    jump (url) {
+    jump(url) {
       // console.log("https:"+url);
-      browser.openInUserSelect('https:' + url)
+      browser.openInUserSelect('https:' + url);
     },
-    refreshNow () {
-      this.$refs.refreshButton.classList.add('animate-spin')
+    refreshNow() {
+      this.$refs.refreshButton.classList.add('animate-spin');
       setTimeout(() => {
-        this.$refs.refreshButton.classList.remove('animate-spin')
-        message.success({ content: '刷新资讯成功', key: 'refreshZixun' })
-      }, 500)
-      this.onGetInfo()
-    }
-  }
-}
+        this.$refs.refreshButton.classList.remove('animate-spin');
+        message.success({ content: '刷新资讯成功', key: 'refreshZixun' });
+      }, 500);
+      this.onGetInfo();
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -105,7 +101,6 @@ export default {
 
 .box {
   overflow: hidden;
-
 }
 
 .card-body {

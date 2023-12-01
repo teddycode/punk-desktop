@@ -95,8 +95,7 @@
 
 ### 新增
 
-- 支持本地审核功能,使用本地审核功能请点击 [控制台](https://console.cloud.tencent.com/im/local-audit-setting)
-  开启，详情参见 [内容审核](https://cloud.tencent.com/document/product/269/79139)。
+- 支持本地审核功能,使用本地审核功能请点击 [控制台](https://console.cloud.tencent.com/im/local-audit-setting) 开启，详情参见 [内容审核](https://cloud.tencent.com/document/product/269/79139)。
 - 支持群聊点击群成员列表头像跳转至用户信息界面
 - 支持接口开关直接控制 消息已读回执、对方正在输入、用户在线状态、消息表情评论 等功能
 
@@ -110,7 +109,7 @@
 
 - 支持消息回复功能
 - 支持表情回应功能
-- 支持C2C会话单条消息已读
+- 支持 C2C 会话单条消息已读
 
 ### 修复
 
@@ -152,8 +151,8 @@
 
 ### 新增
 
-- [TUIKit界面库 - Web](https://cloud.tencent.com/document/product/269/79737)
-- [TUIKit界面库 - H5](https://cloud.tencent.com/document/product/269/79738)
+- [TUIKit 界面库 - Web](https://cloud.tencent.com/document/product/269/79737)
+- [TUIKit 界面库 - H5](https://cloud.tencent.com/document/product/269/79738)
 - [集成基础功能 - Web & H5](https://cloud.tencent.com/document/product/269/68493)
 - [设置界面风格 - Web](https://cloud.tencent.com/document/product/269/79113)
 - [设置界面风格 - H5](https://cloud.tencent.com/document/product/269/79836)

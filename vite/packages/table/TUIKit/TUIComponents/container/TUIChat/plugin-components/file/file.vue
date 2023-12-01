@@ -1,22 +1,28 @@
 <template>
-  <div id="file" class="file" style="padding-left: 18px;">
+  <div class="file" id="file" style="padding-left: 18px">
     <!-- 重新将UI样式以及进行修改 -->
-    <a-tooltip class="pointer" title="文件" @click="openFile">
-      <icon icon="file" style="width: 24px;height: 24px;color: var(--secondary-text) !important;"></icon>
+    <a-tooltip title="文件" class="pointer" @click="openFile">
+      <icon icon="file" style="width: 24px; height: 24px; color: var(--secondary-text) !important"></icon>
     </a-tooltip>
   </div>
 
-
   <span id="fileIcon" class="upload-btn icon icon-files" hidden="">
-      <input v-if="!isMute" ref="fileRef" accept="*" data-type="file" title="文件" type="file"
-             @change="sendUploadMessage"/>
-      <slot/>
+    <input
+      title="文件"
+      ref="fileRef"
+      v-if="!isMute"
+      type="file"
+      data-type="file"
+      accept="*"
+      @change="sendUploadMessage"
+    />
+    <slot />
   </span>
 </template>
 
 <script lang="ts">
-import {defineComponent, reactive, toRefs, watchEffect} from 'vue';
-import {handleErrorPrompts} from '../../../utils';
+import { defineComponent, reactive, toRefs, watchEffect } from 'vue';
+import { handleErrorPrompts } from '../../../utils';
 
 const File = defineComponent({
   props: {
@@ -36,8 +42,8 @@ const File = defineComponent({
 
   methods: {
     openFile() {
-      this.$refs.fileRef.click()
-    }
+      this.$refs.fileRef.click();
+    },
   },
 
   setup(props: any, ctx: any) {
@@ -66,18 +72,15 @@ const File = defineComponent({
       sendUploadMessage,
     };
   },
-
-})
+});
 export default File;
 </script>
 
 <style lang="scss" scoped>
 @import url('../../../../styles/common.scss');
 @import url('../../../../styles/icon.scss');
-
 .upload-btn {
   position: relative;
-
   input {
     position: absolute;
     cursor: pointer;

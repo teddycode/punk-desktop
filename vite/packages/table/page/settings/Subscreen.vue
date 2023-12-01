@@ -55,46 +55,45 @@
 </template>
 
 <script lang="ts">
-import {screenStore} from '../../store/screen'
-import {mapActions, mapWritableState} from 'pinia'
-import {nanoid} from 'nanoid'
-import {Modal} from 'ant-design-vue'
-import ChooseScreen from "../ChooseScreen.vue";
-import ScreenManage from "../../components/bottomPanel/ScreenManage.vue";
+import { screenStore } from '../../store/screen';
+import { mapWritableState, mapActions } from 'pinia';
+import { nanoid } from 'nanoid';
+import { Modal } from 'ant-design-vue';
+import ChooseScreen from '../ChooseScreen.vue';
+import ScreenManage from '../../components/bottomPanel/ScreenManage.vue';
 
 export default {
   name: 'subScreen',
-  components: {ScreenManage, ChooseScreen},
+  components: { ScreenManage, ChooseScreen },
   data() {
     return {
       activeKey: 'main',
-
-    }
+    };
   },
   mounted() {
-    this.resetTips()
-    this.getTip()
+    this.resetTips();
+    this.getTip();
   },
   methods: {
     ...mapActions(screenStore, ['reset', 'tips', 'currentTip', 'resetTips']),
     getTip() {
-      this.currentTip = ''
-      Object.keys(this.tips).forEach(key => {
+      this.currentTip = '';
+      Object.keys(this.tips).forEach((key) => {
         if (this.tips[key].status) {
-          this.currentTip = key
-          return false
+          this.currentTip = key;
+          return false;
         }
-      })
+      });
     },
     closeTip(tag) {
-      this.tips[tag].status = false
-      this.getTip()
+      this.tips[tag].status = false;
+      this.getTip();
     },
     onEdit(targetKey: string | MouseEvent, action: string) {
       if (action === 'add') {
-        this.add()
+        this.add();
       } else {
-        this.remove(targetKey as String)
+        this.remove(targetKey as String);
       }
     },
     add() {
@@ -103,29 +102,32 @@ export default {
         title: '分屏',
         closable: true,
         settings: {
-          autoRun: false
+          autoRun: false,
         },
         apps: {
-          deck: false
-        }
-      })
+          deck: false,
+        },
+      });
     },
     remove(targetKey) {
       Modal.confirm({
         content: '确认删除分屏？此操作不可恢复，将丢失分屏全部的设置，请谨慎操作。',
         onOk: () => {
-          this.screens.splice(this.screens.findIndex(s => {
-            return s.key === targetKey
-          }), 1)
+          this.screens.splice(
+            this.screens.findIndex((s) => {
+              return s.key === targetKey;
+            }),
+            1,
+          );
         },
-        okText: '确认删除'
-      })
-    }
+        okText: '确认删除',
+      });
+    },
   },
   computed: {
-    ...mapWritableState(screenStore, ['screens'])
-  }
-}
+    ...mapWritableState(screenStore, ['screens']),
+  },
+};
 </script>
 
 <style scoped></style>

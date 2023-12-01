@@ -1,18 +1,19 @@
 <template>
   <ul
-      ref="list"
-      :class="[isH5 ? 'list-h5' : '']"
-      class="TUI-conversation-list"
-      @mousewheel="scrollChange"
-      @scroll="scrollChange"
+    class="TUI-conversation-list"
+    :class="[isH5 ? 'list-h5' : '']"
+    ref="list"
+    @mousewheel="scrollChange"
+    @scroll="scrollChange"
   >
     <LiteItem
-        v-for="(item, index) in data.list"
-        :key="index"
-        :conversation="item"
-        :currentID="currentID"
-        :displayOnlineStatus="displayOnlineStatus"
-        :handleConversation="{
+      :isH5="isH5"
+      v-for="(item, index) in data.list"
+      :key="index"
+      :currentID="currentID"
+      :conversation="item"
+      :toggleID="toggleID"
+      :handleConversation="{
         avator: data.handleItemAvator,
         name: data.handleItemName,
         showAt: data.handleShowAt,
@@ -20,18 +21,17 @@
         time: data.handleItemTime,
         userID: data.handleItemUserID,
       }"
-        :isH5="isH5"
-        :toggleID="toggleID"
-        :types="types"
-        :userStatusList="userStatusList"
-        @handle="handleItem"
-        @open="handleListItem"
-        @toggle="handleToggleListItem"
+      :displayOnlineStatus="displayOnlineStatus"
+      :userStatusList="userStatusList"
+      @toggle="handleToggleListItem"
+      @open="handleListItem"
+      @handle="handleItem"
+      :types="types"
     />
   </ul>
 </template>
 <script lang="ts">
-import {defineComponent, reactive, ref, toRefs, watch, watchEffect} from 'vue';
+import { defineComponent, reactive, ref, toRefs, watch, watchEffect } from 'vue';
 import LiteItem from '../list-item';
 
 const TUIConversationList: any = defineComponent({
@@ -57,7 +57,7 @@ const TUIConversationList: any = defineComponent({
       default: () => new Map(),
     },
   },
-  components: {LiteItem},
+  components: { LiteItem },
   setup(props: any, ctx: any) {
     const TUIServer: any = TUIConversationList?.TUIServer;
     const obj = reactive({
@@ -78,11 +78,11 @@ const TUIConversationList: any = defineComponent({
     });
 
     watch(
-        () => props.userStatusList,
-        () => {
-          obj.userStatusList = props.userStatusList;
-        },
-        {deep: true}
+      () => props.userStatusList,
+      () => {
+        obj.userStatusList = props.userStatusList;
+      },
+      { deep: true },
     );
 
     const handleListItem = (item: any) => {
@@ -90,7 +90,7 @@ const TUIConversationList: any = defineComponent({
     };
 
     const handleItem = (params: any) => {
-      const {name, conversation} = params;
+      const { name, conversation } = params;
       switch (name) {
         case 'delete':
           handleDeleteConversation(conversation);
@@ -112,8 +112,8 @@ const TUIConversationList: any = defineComponent({
 
     const handleDeleteConversation = (conversation: any) => {
       TUIServer.deleteConversation(conversation.conversationID).then((imResponse: any) => {
-        const {conversationID} = imResponse.data;
-        const {conversation} = TUIServer.TUICore.getStore().TUIChat;
+        const { conversationID } = imResponse.data;
+        const { conversation } = TUIServer.TUICore.getStore().TUIChat;
         // 删除会话，判断当前删除的会话是否为打开的会话
         // 若为打开的会话，通知 TUIChat 关闭当前会话
         // Delete session: judge whether the currently deleted session is an open session
@@ -164,7 +164,6 @@ const TUIConversationList: any = defineComponent({
     const scrollChange = () => {
       obj.toggleID && (obj.toggleID = '');
     };
-
 
     return {
       ...toRefs(obj),

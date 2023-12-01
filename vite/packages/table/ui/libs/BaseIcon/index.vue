@@ -1,5 +1,5 @@
 <template>
-  <svg :style="style" aria-hidden="true" class="icon cursor-pointer">
+  <svg class="icon cursor-pointer" :style="style" aria-hidden="true">
     <use v-bind:xlink:href="'#icons-' + icon"></use>
   </svg>
 </template>
@@ -8,7 +8,7 @@
 export default {
   name: 'Icon',
   props: ['icon', 'style'],
-}
+};
 </script>
 
 <style scoped>

@@ -13,45 +13,47 @@
 // }
 
 ipc.on('open-context-menu', function (e, data) {
-  var menu = new Menu()
+  var menu = new Menu();
 
   data.template.forEach(function (section) {
     section.forEach(function (item) {
-      var id = item.click
+      var id = item.click;
       item.click = function () {
-        e.sender.send('context-menu-item-selected', { menuId: data.id, itemId: id })
-      }
+        e.sender.send('context-menu-item-selected', { menuId: data.id, itemId: id });
+      };
       if (item.submenu) {
         for (var i = 0; i < item.submenu.length; i++) {
           (function (id) {
             item.submenu[i].click = function () {
-              e.sender.send('context-menu-item-selected', { menuId: data.id, itemId: id })
-            }
-          })(item.submenu[i].click)
+              e.sender.send('context-menu-item-selected', { menuId: data.id, itemId: id });
+            };
+          })(item.submenu[i].click);
           if (item.submenu[i].submenu) {
             for (var j = 0; j < item.submenu[i].submenu.length; j++) {
               (function (id) {
                 item.submenu[i].submenu[j].click = function () {
-                  e.sender.send('context-menu-item-selected', { menuId: data.id, itemId: id })
-                }
-              })(item.submenu[i].submenu[j].click)
+                  e.sender.send('context-menu-item-selected', { menuId: data.id, itemId: id });
+                };
+              })(item.submenu[i].submenu[j].click);
             }
           }
         }
       }
-      menu.append(new MenuItem(item))
-    })
-    menu.append(new MenuItem({ type: 'separator' }))
-  })
+      menu.append(new MenuItem(item));
+    });
+    menu.append(new MenuItem({ type: 'separator' }));
+  });
 
   // 拼接扩展菜单进去
   if (extensionsMenu.length > 0) {
-    menu.append(new MenuItem({
-      type: 'separator'
-    }))
-    extensionsMenu.forEach(menuItem => {
-      menu.append(new MenuItem(menuItem))
-    })
+    menu.append(
+      new MenuItem({
+        type: 'separator',
+      }),
+    );
+    extensionsMenu.forEach((menuItem) => {
+      menu.append(new MenuItem(menuItem));
+    });
   }
 
   // data.template.forEach(function (section) {
@@ -75,10 +77,10 @@ ipc.on('open-context-menu', function (e, data) {
   // })
 
   menu.on('menu-will-close', function () {
-    e.sender.send('context-menu-will-close', { menuId: data.id })
-  })
-  const cursorPosition = require('electron').screen.getCursorScreenPoint()
-  const windowBounds = mainWindow.getBounds()
+    e.sender.send('context-menu-will-close', { menuId: data.id });
+  });
+  const cursorPosition = require('electron').screen.getCursorScreenPoint();
+  const windowBounds = mainWindow.getBounds();
   // menu.popup({ x: data.x, y: data.y })
-  menu.popup({ x: cursorPosition.x - windowBounds.x, y: cursorPosition.y - windowBounds.y }) // 修复popup弹出位置，以屏幕鼠标位置为准
-})
+  menu.popup({ x: cursorPosition.x - windowBounds.x, y: cursorPosition.y - windowBounds.y }); // 修复popup弹出位置，以屏幕鼠标位置为准
+});

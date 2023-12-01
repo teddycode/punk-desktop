@@ -1,61 +1,62 @@
-import Setting from "@page/Setting.vue";
-import Weather from "@page/app/Weather.vue";
-import Watch from "@page/app/watch/Index.vue";
-import Social from "@page/Social.vue";
-import BasicSetting from "@page/settings/Basic.vue";
-import Apps from "@page/Apps.vue";
-import AppFrame from "@page/AppFrame.vue";
-import Music from "@page/Music.vue";
-import Status from "@page/Status.vue";
-import Home from "@page/Home.vue";
-import SetupCard from "@page/app/card/SetupClock.vue";
-import Sensor from "@page/Sensor.vue";
-import Dashboard from "@page/app/watch/Dashboard.vue";
-import CPUIndex from "@page/app/CPUIndex.vue";
-import Gallery from "@page/Gallery.vue";
-import GalleryChild from "./main/galllery";
-import GameAssistant from "@page/gameAssistant/GameAssistant.vue";
+import Setting from '@page/Setting.vue';
+import Weather from '@page/app/Weather.vue';
+import Watch from '@page/app/watch/Index.vue';
+import Social from '@page/Social.vue';
+import BasicSetting from '@page/settings/Basic.vue';
+import Apps from '@page/Apps.vue';
+import AppFrame from '@page/AppFrame.vue';
+import Music from '@page/Music.vue';
+import Status from '@page/Status.vue';
+import Home from '@page/Home.vue';
+import SetupCard from '@page/app/card/SetupClock.vue';
+import Sensor from '@page/Sensor.vue';
+import Dashboard from '@page/app/watch/Dashboard.vue';
+import CPUIndex from '@page/app/CPUIndex.vue';
+import Gallery from '@page/Gallery.vue';
+import GalleryChild from './main/galllery';
+import GameAssistant from '@page/gameAssistant/GameAssistant.vue';
 
-import Inspector from "@page/app/Inspector.vue";
+import Inspector from '@page/app/Inspector.vue';
 
 import BrowserMain from '@page/app/browser/Browser.vue';
-import BrowserChild from "./main/browser";
+import BrowserChild from './main/browser';
 
-import BasicSettingsChild from "./main/basicSetting";
+import BasicSettingsChild from './main/basicSetting';
 
-import SocialChild from "./main/social"
+import SocialChild from './main/social';
 import MarketIndex from '@page/market/MarketIndex.vue';
-import MarketChild from './main/market'
-import RemoteCommunity from '@page/app/card/RemoteCommunity.vue'
-import GameAssistChild from "./main/GameAssist";
+import MarketChild from './main/market';
+import RemoteCommunity from '@page/app/card/RemoteCommunity.vue';
+import GameAssistChild from './main/GameAssist';
 /*办公助手*/
-import WorkIndex from '@page/work/WorkIndex.vue'
-import WorkChild from "./main/work";
+import WorkIndex from '@page/work/WorkIndex.vue';
+import WorkChild from './main/work';
 
-import ChatIndex from '@page/chat/index.vue'
-import ChatChild from "./main/chat"
+import ChatIndex from '@page/chat/index.vue';
+import ChatChild from './main/chat';
 
-import Power from "@page/Power.vue";
+import Power from '@page/Power.vue';
 // import coreBasicLayout from "@page/core/Layouts/BaseLayout.vue";
-import BasicLayout2 from "@page/core/Layouts/BaseLayout2.vue";
-import computing from "./core/computing";
-import consensus from "./core/consensus";
-import crypto from "./core/crypto";
-import exchange from "./core/exchange";
-import governance from "./core/governance";
-import network from "./core/network";
-import transfer from "./core/transfers";
-import collection from "./core/collection";
+import BasicLayout2 from '@page/core/Layouts/BaseLayout2.vue';
+import computing from './core/computing';
+import consensus from './core/consensus';
+import crypto from './core/crypto';
+import exchange from './core/exchange';
+import governance from './core/governance';
+import network from './core/network';
+import transfer from './core/transfers';
+import collection from './core/collection';
 // import BackgroundPage from "@page/core/components/BackgroundPage.vue";
 
 // 二级路由，
 export default [
-  {   // 系统核心功能路由
-    path: "/core",
-    name: "core",
+  {
+    // 系统核心功能路由
+    path: '/core',
+    name: 'core',
     component: BasicLayout2,
     meta: {
-      title: "核心功能",
+      title: '核心功能',
     },
     children: [
       computing,
@@ -69,65 +70,67 @@ export default [
       collection,
     ],
   },
-  {   // 其他Dapp功能路由
-    path: "/dapps",
-    name: "dapps",
+  {
+    // 其他Dapp功能路由
+    path: '/dapps',
+    name: 'dapps',
     component: BasicLayout2,
   },
-  {   // 钱包区路由
-    path: "/wallet",
-    name: "wallet",
+  {
+    // 钱包区路由
+    path: '/wallet',
+    name: 'wallet',
     component: BasicLayout2,
   },
   {
     path: '/power',
     name: 'power',
-    component: Power
+    component: Power,
   },
   {
-    path: "/inspector",
-    name: "inspector",
+    path: '/inspector',
+    name: 'inspector',
     component: Inspector,
   },
   {
-    path: "/home",
-    name: "home",
+    path: '/home',
+    name: 'home',
     component: Home,
     meta: {
-      tab1: 'home'
-    }
+      tab1: 'home',
+    },
   },
   {
-    path: "/app",
-    name: "app",
+    path: '/app',
+    name: 'app',
     component: AppFrame,
     children: [],
   },
   {
-    path: "/watch",
-    name: "watch",
+    path: '/watch',
+    name: 'watch',
     component: Watch,
   },
   {
-    path: "/dashboard",
-    name: "dashboard",
+    path: '/dashboard',
+    name: 'dashboard',
     component: Dashboard,
   },
   {
-    path: "/social",
-    name: "social",
+    path: '/social',
+    name: 'social',
     component: Social,
     children: SocialChild,
   },
   {
-    path: "/apps",
-    name: "apps",
+    path: '/apps',
+    name: 'apps',
     component: Apps,
   },
   {
     path: '/browser',
     component: BrowserMain,
-    children: BrowserChild
+    children: BrowserChild,
   },
   {
     path: '/chat',
@@ -135,83 +138,83 @@ export default [
     component: ChatIndex,
     rememberChildrenPosition: true,
     redirect: {
-      name: 'chat'
+      name: 'chat',
     },
-    children: ChatChild
+    children: ChatChild,
   },
   {
-    path: "/music",
-    name: "music",
+    path: '/music',
+    name: 'music',
     component: Music,
   },
   {
-    path: "/weather",
-    name: "weather",
+    path: '/weather',
+    name: 'weather',
     component: Weather,
   },
   {
-    path: "/gameAssistant",
-    name: "gameAssistant",
+    path: '/gameAssistant',
+    name: 'gameAssistant',
     component: GameAssistant,
-    children: GameAssistChild
+    children: GameAssistChild,
   },
   {
-    path: "/work",
+    path: '/work',
     name: 'work',
     component: WorkIndex,
     meta: {
-      rememberChildrenPosition: true
+      rememberChildrenPosition: true,
     },
     redirect: 'desk',
-    children: WorkChild
+    children: WorkChild,
   },
 
   {
-    path: "/status",
-    name: "status",
+    path: '/status',
+    name: 'status',
     component: Status,
   },
   {
-    path: "/sensor",
-    name: "sensor",
+    path: '/sensor',
+    name: 'sensor',
     component: Sensor,
   },
   {
-    path: "/setting",
-    name: "setting",
+    path: '/setting',
+    name: 'setting',
     component: Setting,
   },
   {
-    path: "/basicSetting",
-    name: "basicSetting",
+    path: '/basicSetting',
+    name: 'basicSetting',
     component: BasicSetting,
     children: BasicSettingsChild,
   },
   {
-    path: "/setting",
-    name: "addCardSetting",
+    path: '/setting',
+    name: 'addCardSetting',
     component: SetupCard,
   },
   {
-    path: "/CPUIndex",
-    name: "CPUIndex",
+    path: '/CPUIndex',
+    name: 'CPUIndex',
     component: CPUIndex,
   },
   {
-    path: "/gallery",
-    name: "gallery",
+    path: '/gallery',
+    name: 'gallery',
     component: Gallery,
     children: GalleryChild,
   },
   {
-    path: "/market",
-    name: "marketIndex",
+    path: '/market',
+    name: 'marketIndex',
     component: MarketIndex,
     children: MarketChild,
   },
   {
-    path: "/remoteCommunity",
-    name: "remoteCommunity",
+    path: '/remoteCommunity',
+    name: 'remoteCommunity',
     component: RemoteCommunity,
   },
 ];

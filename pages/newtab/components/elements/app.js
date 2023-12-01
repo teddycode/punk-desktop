@@ -112,18 +112,18 @@ const appTpl = `
         </template>
       </a-modal>
 </div>
-  `
-const saAppModel = require('../../src/model/appModel.js')
-saAppModel.initDb()
-const swatches = window['vue-swatches']
+  `;
+const saAppModel = require('../../src/model/appModel.js');
+saAppModel.initDb();
+const swatches = window['vue-swatches'];
 Vue.component('app', {
   template: appTpl,
   name: 'app',
   props: ['item', 'groupId', 'selectedMenuVisible', 'groups'],
   components: {
-    'v-swatches': swatches
+    'v-swatches': swatches,
   },
-  data () {
+  data() {
     return {
       saApp: {},
       visibleEdit: false,
@@ -148,182 +148,179 @@ Vue.component('app', {
         radius: '20',
 
         element: {
-          type: ''
-        }
+          type: '',
+        },
       },
-    }
+    };
   },
   computed: {},
-  async mounted () {
-    this.saApp = await saAppModel.get(this.item.element.data.appId)
+  async mounted() {
+    this.saApp = await saAppModel.get(this.item.element.data.appId);
   },
   methods: {
-    moveAppTo (group) {
-      group.element.data.push(this.item)
+    moveAppTo(group) {
+      group.element.data.push(this.item);
       for (let i = 0; i < appVue.layout.length; i++) {
         if (appVue.layout[i].i === this.item.i) {
-          appVue.layout.splice(i, 1)
-          break
+          appVue.layout.splice(i, 1);
+          break;
         }
       }
     },
-    moveAppsTo (group) {
+    moveAppsTo(group) {
       for (let selectedI = 0; selectedI < appVue.selectedElements.length; selectedI++) {
-        let item = appVue.selectedElements[selectedI]
+        let item = appVue.selectedElements[selectedI];
         for (let i = 0; i < appVue.layout.length; i++) {
           if (appVue.layout[i].i === Number(item)) {
-            console.log(item)
-            group.element.data.push(appVue.layout[i])
-            appVue.layout.splice(i, 1)
-            break
+            console.log(item);
+            group.element.data.push(appVue.layout[i]);
+            appVue.layout.splice(i, 1);
+            break;
           }
         }
       }
-
     },
     // url 是图片地址，如，http://wximg.233.com/attached/image/20160815/20160815162505_0878.png
-// filepath 是文件下载的本地目录
-// name 是下载后的文件名
-    async downloadFile (url, filepath, name) {
-      const fs = require('fs')
-      const path = require('path')
+    // filepath 是文件下载的本地目录
+    // name 是下载后的文件名
+    async downloadFile(url, filepath, name) {
+      const fs = require('fs');
+      const path = require('path');
       if (!fs.existsSync(filepath)) {
-        fs.mkdirSync(filepath)
+        fs.mkdirSync(filepath);
       }
-      const mypath = path.resolve(filepath, name)
-      const writer = fs.createWriteStream(mypath)
-      const axios = require('axios')
+      const mypath = path.resolve(filepath, name);
+      const writer = fs.createWriteStream(mypath);
+      const axios = require('axios');
       let { data } = await axios({
         url,
         method: 'get',
         responseType: 'arraybuffer',
-      })
+      });
       // let fd=fs.openSync(filepath+name,'w')
       // fs.writeSync(fd,response.data)
       // fs.closeSync(fd)
-      console.log(data)
+      console.log(data);
 
-      fs.writeFileSync(filepath + name, new DataView(data))
+      fs.writeFileSync(filepath + name, new DataView(data));
       //response.data.pipe(writer)
-      return true
+      return true;
       // return new Promise((resolve, reject) => {
       //   writer.on('finish', resolve)
       //   writer.on('error', reject)
       // })
     },
-    restoreIcon () {
-      let icon = this.formEdit.element.data.icon
-      this.formEdit.icon = icon
+    restoreIcon() {
+      let icon = this.formEdit.element.data.icon;
+      this.formEdit.icon = icon;
     },
-    async getIcon () {
-      function hash (str) {
-        const crypto = require('crypto')
-        const shasum = crypto.createHash('sha1')
-        shasum.update(str)
-        return shasum.digest('hex')
+    async getIcon() {
+      function hash(str) {
+        const crypto = require('crypto');
+        const shasum = crypto.createHash('sha1');
+        shasum.update(str);
+        return shasum.digest('hex');
       }
-
-      this.iconLoading = true
-      let domain = this.formEdit.url.slice(this.formEdit.url.indexOf('://') + 3)
-      let iconUrl = 'https://favicon.cccyun.cc/' + domain
-      let localPath = window.globalArgs['user-data-dir'] + '/favicons/'
-      let filename = hash(iconUrl)
-      this.downloadFile(iconUrl, localPath, filename).then(() => {
-        this.formEdit.icon = localPath + filename
-        this.iconLoading = false
-      }).catch((err) => {
-        console.log(err)
-        this.iconLoading = false
-      })
+      this.iconLoading = true;
+      let domain = this.formEdit.url.slice(this.formEdit.url.indexOf('://') + 3);
+      let iconUrl = 'https://favicon.cccyun.cc/' + domain;
+      let localPath = window.globalArgs['user-data-dir'] + '/favicons/';
+      let filename = hash(iconUrl);
+      this.downloadFile(iconUrl, localPath, filename)
+        .then(() => {
+          this.formEdit.icon = localPath + filename;
+          this.iconLoading = false;
+        })
+        .catch((err) => {
+          console.log(err);
+          this.iconLoading = false;
+        });
     },
-    selectedElementsLength () {
-      return window.selectedElements.length
+    selectedElementsLength() {
+      return window.selectedElements.length;
     },
     /**
      * 编辑组件
      * @param item
      * @param groupId 组id用于分组组件编辑
      */
-    editElement (item) {
-      const element = item.element
-      this.formEdit.type = element.type
+    editElement(item) {
+      const element = item.element;
+      this.formEdit.type = element.type;
       if (element.type === 'app' && !!!item.name) {
-        this.formEdit.name = element.data.name
+        this.formEdit.name = element.data.name;
       } else {
-        this.formEdit.name = item.name
+        this.formEdit.name = item.name;
       }
       if (this.groupId !== 0) {
-        this.formEdit.groupId = this.groupId
+        this.formEdit.groupId = this.groupId;
       } else {
-        this.formEdit.groupId = 0
+        this.formEdit.groupId = 0;
       }
-      this.formEdit.url = element.data.url
-      this.formEdit.icon = element.data.icon
-      this.formEdit.useBg = element.data.useBg
-      this.formEdit.color = element.data.color
-      this.formEdit.textColor = element.data.textColor
-      this.formEdit.useTextBg = element.data.useTextBg
-      this.formEdit.useRadius = element.data.useRadius
-      this.formEdit.radius = element.data.radius
+      this.formEdit.url = element.data.url;
+      this.formEdit.icon = element.data.icon;
+      this.formEdit.useBg = element.data.useBg;
+      this.formEdit.color = element.data.color;
+      this.formEdit.textColor = element.data.textColor;
+      this.formEdit.useTextBg = element.data.useTextBg;
+      this.formEdit.useRadius = element.data.useRadius;
+      this.formEdit.radius = element.data.radius;
 
-      this.formEdit.summary = element.data.summary
-      this.formEdit.element = item.element
-      this.formEdit.id = item.i
-      this.visibleEdit = true
+      this.formEdit.summary = element.data.summary;
+      this.formEdit.element = item.element;
+      this.formEdit.id = item.i;
+      this.visibleEdit = true;
     },
-    onSubmitEdit () {
-      this.$emit('edit-app', { data: this.formEdit })
-      this.visibleEdit = false
+    onSubmitEdit() {
+      this.$emit('edit-app', { data: this.formEdit });
+      this.visibleEdit = false;
     },
-    async openUrl () {
+    async openUrl() {
       if (this.item.element.data.type === 'saApp') {
-        let saApp = await saAppModel.get(this.saApp.nanoid)
+        let saApp = await saAppModel.get(this.saApp.nanoid);
         if (saApp) {
-          ipc.send('executeApp', { app: saApp })
+          ipc.send('executeApp', { app: saApp });
         } else {
-          appVue.$message.error({ content: '此应用已经被卸载。无法打开。' })
+          appVue.$message.error({ content: '此应用已经被卸载。无法打开。' });
         }
       } else {
-        this.$emit('open-url')
+        this.$emit('open-url');
       }
-
     },
-    removeElement () {
-      this.$emit('remove-element')
+    removeElement() {
+      this.$emit('remove-element');
     },
     iconStyle: function (item) {
-      const style = {}
+      const style = {};
       if (!!item.useBg) {
-        style['background-color'] = item.color
+        style['background-color'] = item.color;
       }
       if (!!item.useRadius) {
-        style['border-radius'] = item.radius + '%'
+        style['border-radius'] = item.radius + '%';
       }
-      return style
+      return style;
     },
     /**
      * app按钮上鼠标事件，区分移动和拖拽
      */
-    appMouseDown () {
-      this.mouseFlag = 0
+    appMouseDown() {
+      this.mouseFlag = 0;
     },
-    appMouseMove () {
-      this.mouseFlag = 1
+    appMouseMove() {
+      this.mouseFlag = 1;
     },
-    appMouseUp (e, url) {
-      console.log(e)
+    appMouseUp(e, url) {
+      console.log(e);
       if (this.mouseFlag === 0 && e.button === 0) {
-        this.openUrl(url)
+        this.openUrl(url);
       }
     },
-    composeGroup () {
-      this.$emit('compose-group')
+    composeGroup() {
+      this.$emit('compose-group');
     },
-    removeSelected () {
-      this.$emit('remove-selected')
-    }
-
+    removeSelected() {
+      this.$emit('remove-selected');
+    },
   },
-  destroyed () {
-  }
-})
+  destroyed() {},
+});

@@ -4,15 +4,15 @@
 </template>
 
 <script>
-import CodeMirror from 'codemirror'
+import CodeMirror from 'codemirror';
 
 export default {
   props: {
     editorContent: {
       type: String,
-    }
+    },
   },
-  mounted () {
+  mounted() {
     this.myClipRefs = CodeMirror(this.$refs.myClip, {
       value: this.editorContent,
       smartIndent: true,
@@ -21,21 +21,19 @@ export default {
       direction: 'ltr',
       lineWrapping: true,
       viewportMargin: Infinity,
-      mode: null
-    })
-  }
-}
+      mode: null,
+    });
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 :deep(.CodeMirror-vscrollbar) {
   display: none !important;
 }
-
 :deep(.CodeMirror-hscrollbar) {
   display: none !important;
 }
-
 :deep(.CodeMirror-scrollbar-filler) {
   display: none !important;
 }
@@ -47,7 +45,6 @@ export default {
   color: var(--primary-text);
   width: 100% !important;
 }
-
 .CodeMirror-gutters {
   border: none !important;
 }

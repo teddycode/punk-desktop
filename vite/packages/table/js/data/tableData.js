@@ -1,7 +1,7 @@
-let vm = null
+let vm = null;
 const sendThis = (_this) => {
-  vm = _this
-}
+  vm = _this;
+};
 export default {
   sendThis,
   navigationClassify: [
@@ -16,17 +16,18 @@ export default {
       icon: 'https://s1.hdslb.com/bfs/static/jinkela/popular/assets/icon_popular.png',
       name: '网页数据监控小助手',
       type: 'coolApp',
-      summary: '一个用于检测网页数据的工具，可以实时监测一个网页数据动态，并组织成可视化的报表，目前支持B站视频数据追踪。',
+      summary:
+        '一个用于检测网页数据的工具，可以实时监测一个网页数据动态，并组织成可视化的报表，目前支持B站视频数据追踪。',
       needInstall: false,
       data: {
         fullScreen: false,
         theme: '#030c13',
         name: 'watch',
-        type: 'system',//网页助手
+        type: 'system', //网页助手
         route: JSON.stringify({
           name: 'watch',
-        })
-      }
+        }),
+      },
     },
     {
       icon: 'https://a.apps.vip/icons/ppet.png',
@@ -35,8 +36,8 @@ export default {
       summary: '一款开源桌面看板娘，让你不再孤单。',
       needInstall: true,
       data: {
-        security: true
-      }
+        security: true,
+      },
     },
     {
       icon: 'https://a.apps.vip/wallpaper/favicon.png',
@@ -51,8 +52,8 @@ export default {
         preload: 'wallpaper',
         background: true,
         node: true,
-        security: false
-      }
+        security: false,
+      },
     },
     {
       icon: 'https://a.apps.vip/icons/kook.png',
@@ -68,7 +69,7 @@ export default {
         node: false,
         security: true,
         fullScreen: false,
-      }
+      },
     },
     {
       icon: 'https://res.wx.qq.com/a/wx_fed/assets/res/OTE0YTAw.png',
@@ -83,8 +84,8 @@ export default {
         preload: 'weixin',
         background: true,
         node: false,
-        security: true
-      }
+        security: true,
+      },
     },
     {
       icon: 'https://p1-hera.byteimg.com/tos-cn-i-jbbdkfciu3/22718e94fbd9483ea54301cf431ce2ee~tplv-jbbdkfciu3-image:0:0.image',
@@ -99,8 +100,8 @@ export default {
         preload: 'app',
         background: true,
         node: false,
-        security: true
-      }
+        security: true,
+      },
     },
     {
       icon: 'https://a.apps.vip/todo/logo.png',
@@ -116,9 +117,9 @@ export default {
         preload: 'app',
         background: true,
         node: true,
-        security: true
-      }
-    }
+        security: true,
+      },
+    },
   ],
   systemAppList: [
     {
@@ -126,26 +127,26 @@ export default {
       icon: 'fluent:home-16-regular',
       name: '主页',
       event: 'home',
-      tab: 'home'
+      tab: 'home',
     },
     {
-      'type': 'systemApp',
-      'icon': 'fluent:games-16-regular',
-      'name': '游戏',
-      'event': 'gameIndex',
-      tab: 'game'
+      type: 'systemApp',
+      icon: 'fluent:games-16-regular',
+      name: '游戏',
+      event: 'gameIndex',
+      tab: 'game',
     },
     {
-      'type': 'systemApp',
-      'icon': 'fluent:globe-16-regular',
-      'name': '浏览器',
-      'event': 'browser',
+      type: 'systemApp',
+      icon: 'fluent:globe-16-regular',
+      name: '浏览器',
+      event: 'browser',
     },
     {
-      'type': 'systemApp',
-      'icon': 'fluent:music-note-2-16-regular',
-      'name': '音乐',
-      'event': 'music'
+      type: 'systemApp',
+      icon: 'fluent:music-note-2-16-regular',
+      name: '音乐',
+      event: 'music',
     },
     {
       type: 'systemApp',
@@ -159,9 +160,9 @@ export default {
       icon: 'fluent:lock-closed-16-regular',
       name: '锁定屏幕',
       event: 'lock',
-      fn () {
-        vm.$router.push({ path: '/lock' })
-      }
+      fn() {
+        vm.$router.push({ path: '/lock' });
+      },
     },
     {
       type: 'systemApp',
@@ -170,11 +171,11 @@ export default {
       event: 'status',
       fn: () => {
         if (vm.$route.path === '/status') {
-          vm.$router.go(-1)
+          vm.$router.go(-1);
         } else {
-          vm.$router.push({ path: '/status' })
+          vm.$router.push({ path: '/status' });
         }
-      }
+      },
     },
     {
       type: 'systemApp',
@@ -183,13 +184,13 @@ export default {
       event: 'fullscreen',
       fn: () => {
         if (vm.full) {
-          vm.$emit('setFull', false)
-          tsbApi.window.setFullScreen(false)
+          vm.$emit('setFull', false);
+          tsbApi.window.setFullScreen(false);
         } else {
-          vm.$emit('setFull', true)
-          tsbApi.window.setFullScreen(true)
+          vm.$emit('setFull', true);
+          tsbApi.window.setFullScreen(true);
         }
-      }
+      },
     },
     {
       type: 'systemApp',
@@ -197,8 +198,8 @@ export default {
       name: '返回',
       event: 'goback',
       fn: (parent) => {
-        parent.$router.go(-1)
-      }
+        parent.$router.go(-1);
+      },
     },
     {
       type: 'systemApp',
@@ -206,23 +207,25 @@ export default {
       name: '基础设置',
       event: 'setting',
       fn: () => {
-        vm.$router.push({ name: 'setting' })
-      }
-    }, {
+        vm.$router.push({ name: 'setting' });
+      },
+    },
+    {
       type: 'systemApp',
       icon: 'fluent:power-20-filled',
       name: '电源',
       event: 'power',
       fn: () => {
-        vm.$router.push({ path: '/power' })
-      }
+        vm.$router.push({ path: '/power' });
+      },
     },
     {
       type: 'systemApp',
       icon: 'fluent:flash-16-regular',
       name: '快捷指令',
       event: 'deck',
-    }, {
+    },
+    {
       type: 'systemApp',
       icon: 'fluent:cloud-sync-16-regular',
       name: '文件传输',
@@ -233,7 +236,7 @@ export default {
         url: 'https://szfilehelper.weixin.qq.com/',
         preload: 'fileHelper',
         background: false,
-      }
+      },
     },
     {
       type: 'systemApp',
@@ -247,8 +250,18 @@ export default {
       name: '待办',
       event: 'todo',
       fn: () => {
-        vm.$router.push({ name: 'todo' })
-      }
+        vm.$router.push({ name: 'todo' });
+      },
+      // data:
+      //   {
+      //     fullScreen: false,
+      //     theme: 'transparent',
+      //     name: 'todo',
+      //     url: 'https://a.apps.vip/todo',
+      //     background: true,
+      //     node: true,
+      //     security: true
+      //   }
     },
     {
       type: 'systemApp',
@@ -263,6 +276,12 @@ export default {
       name: '创意市场',
       event: 'market',
     },
+    {
+      type: 'systemApp',
+      icon: 'fluent:bot-24-regular',
+      name: 'AI助手',
+      event: 'ai',
+    },
   ],
   systemFillAppList: [
     {
@@ -270,7 +289,7 @@ export default {
       icon: 'fluent:home-16-filled',
       name: '主页',
       event: 'home',
-      tab: 'home'
+      tab: 'home',
     },
     {
       type: 'systemApp',
@@ -280,23 +299,23 @@ export default {
       event: 'work',
     },
     {
-      'type': 'systemApp',
-      'icon': 'fluent:games-16-filled',
-      'name': '游戏',
-      'event': 'gameIndex',
-      tab: 'game'
+      type: 'systemApp',
+      icon: 'fluent:games-16-filled',
+      name: '游戏',
+      event: 'gameIndex',
+      tab: 'game',
     },
     {
-      'type': 'systemApp',
-      'icon': 'fluent:globe-16-filled',
-      'name': '浏览器',
-      'event': 'browser',
+      type: 'systemApp',
+      icon: 'fluent:globe-16-filled',
+      name: '浏览器',
+      event: 'browser',
     },
     {
-      'type': 'systemApp',
-      'icon': 'fluent:music-note-2-16-filled',
-      'name': '音乐',
-      'event': 'music'
+      type: 'systemApp',
+      icon: 'fluent:music-note-2-16-filled',
+      name: '音乐',
+      event: 'music',
     },
     {
       type: 'systemApp',
@@ -310,21 +329,22 @@ export default {
       icon: 'fluent:lock-closed-16-filled',
       name: '锁定屏幕',
       event: 'lock',
-      fn () {
-        vm.$router.push({ path: '/lock' })
-      }
-    }, {
+      fn() {
+        vm.$router.push({ path: '/lock' });
+      },
+    },
+    {
       type: 'systemApp',
       icon: 'fluent:slide-settings-24-filled',
       name: '设备设置',
       event: 'status',
       fn: () => {
         if (vm.$route.path === '/status') {
-          vm.$router.go(-1)
+          vm.$router.go(-1);
         } else {
-          vm.$router.push({ path: '/status' })
+          vm.$router.push({ path: '/status' });
         }
-      }
+      },
     },
     {
       type: 'systemApp',
@@ -333,13 +353,13 @@ export default {
       event: 'fullscreen',
       fn: () => {
         if (vm.full) {
-          vm.$emit('setFull', false)
-          tsbApi.window.setFullScreen(false)
+          vm.$emit('setFull', false);
+          tsbApi.window.setFullScreen(false);
         } else {
-          vm.$emit('setFull', true)
-          tsbApi.window.setFullScreen(true)
+          vm.$emit('setFull', true);
+          tsbApi.window.setFullScreen(true);
         }
-      }
+      },
     },
     {
       type: 'systemApp',
@@ -347,23 +367,25 @@ export default {
       name: '基础设置',
       event: 'setting',
       fn: () => {
-        vm.$router.push({ name: 'setting' })
-      }
-    }, {
+        vm.$router.push({ name: 'setting' });
+      },
+    },
+    {
       type: 'systemApp',
       icon: 'fluent:power-20-filled',
       name: '电源',
       event: 'power',
       fn: () => {
-        vm.$router.push({ path: '/power' })
-      }
+        vm.$router.push({ path: '/power' });
+      },
     },
     {
       type: 'systemApp',
       icon: 'fluent:flash-16-filled',
       name: '快捷指令',
       event: 'deck',
-    }, {
+    },
+    {
       type: 'systemApp',
       icon: 'fluent:cloud-sync-16-filled',
       name: '文件传输',
@@ -374,7 +396,7 @@ export default {
         url: 'https://szfilehelper.weixin.qq.com/',
         preload: 'fileHelper',
         background: false,
-      }
+      },
     },
     {
       type: 'systemApp',
@@ -388,8 +410,8 @@ export default {
       name: '待办',
       event: 'todo',
       fn: () => {
-        vm.$router.push({ name: 'todo' })
-      }
+        vm.$router.push({ name: 'todo' });
+      },
       // data:
       //   {
       //     fullScreen: false,
@@ -407,76 +429,115 @@ export default {
       name: '创意市场',
       event: 'market',
     },
+    {
+      type: 'systemApp',
+      icon: 'fluent:bot-24-filled',
+      name: 'AI助手',
+      event: 'ai',
+    },
   ],
-}
+};
 
 export const testData = [
   {
-    date: '2023-07-03', name: '小恶魔头像框', price: '￥9.90', use: '自用',
+    date: '2023-07-03',
+    name: '小恶魔头像框',
+    price: '￥9.90',
+    use: '自用',
     user: { avatar_url: '/img/001.png', username: 'Victor Ruiz' },
     frame_url: 'https://a.apps.vip/icons/frame/demon.png',
-    order_number: 'kWOLwUAMcZ'
+    order_number: 'kWOLwUAMcZ',
   },
   {
-    date: '2023-07-03', name: '小恶魔头像框', price: '￥9.90', use: '赠送',
+    date: '2023-07-03',
+    name: '小恶魔头像框',
+    price: '￥9.90',
+    use: '赠送',
     user: { avatar_url: '/img/001.png', username: 'Victor Ruiz' },
     frame_url: 'https://a.apps.vip/icons/frame/demon.png',
-    order_number: 'kWOLwUAMcZ'
+    order_number: 'kWOLwUAMcZ',
   },
   {
-    date: '2023-07-03', name: '小恶魔头像框', price: '￥9.90', use: '自用',
+    date: '2023-07-03',
+    name: '小恶魔头像框',
+    price: '￥9.90',
+    use: '自用',
     user: { avatar_url: '/img/001.png', username: 'Victor Ruiz' },
     frame_url: 'https://a.apps.vip/icons/frame/demon.png',
-    order_number: 'kWOLwUAMcZ'
+    order_number: 'kWOLwUAMcZ',
   },
   {
-    date: '2023-07-03', name: '小恶魔头像框', price: '￥9.90', use: '自用',
+    date: '2023-07-03',
+    name: '小恶魔头像框',
+    price: '￥9.90',
+    use: '自用',
     user: { avatar_url: '/img/001.png', username: 'Victor Ruiz' },
     frame_url: 'https://a.apps.vip/icons/frame/demon.png',
-    order_number: 'kWOLwUAMcZ'
+    order_number: 'kWOLwUAMcZ',
   },
   {
-    date: '2023-07-03', name: '小恶魔头像框', price: '￥9.90', use: '自用',
+    date: '2023-07-03',
+    name: '小恶魔头像框',
+    price: '￥9.90',
+    use: '自用',
     user: { avatar_url: '/img/001.png', username: 'Victor Ruiz' },
     frame_url: 'https://a.apps.vip/icons/frame/demon.png',
-    order_number: 'kWOLwUAMcZ'
+    order_number: 'kWOLwUAMcZ',
   },
   {
-    date: '2023-07-03', name: '小恶魔头像框', price: '￥9.90', use: '自用',
+    date: '2023-07-03',
+    name: '小恶魔头像框',
+    price: '￥9.90',
+    use: '自用',
     user: { avatar_url: '/img/001.png', username: 'Victor Ruiz' },
     frame_url: 'https://a.apps.vip/icons/frame/demon.png',
-    order_number: 'kWOLwUAMcZ'
+    order_number: 'kWOLwUAMcZ',
   },
   {
-    date: '2023-07-03', name: '小恶魔头像框', price: '￥9.90', use: '赠送',
+    date: '2023-07-03',
+    name: '小恶魔头像框',
+    price: '￥9.90',
+    use: '赠送',
     user: { avatar_url: '/img/001.png', username: 'Victor Ruiz' },
     frame_url: 'https://a.apps.vip/icons/frame/demon.png',
-    order_number: 'kWOLwUAMcZ'
+    order_number: 'kWOLwUAMcZ',
   },
   {
-    date: '2023-07-03', name: '小恶魔头像框', price: '￥9.90', use: '自用',
+    date: '2023-07-03',
+    name: '小恶魔头像框',
+    price: '￥9.90',
+    use: '自用',
     user: { avatar_url: '/img/001.png', username: 'Victor Ruiz' },
     frame_url: 'https://a.apps.vip/icons/frame/demon.png',
   },
   {
-    date: '2023-07-03', name: '小恶魔头像框', price: '￥9.90', use: '自用',
+    date: '2023-07-03',
+    name: '小恶魔头像框',
+    price: '￥9.90',
+    use: '自用',
     user: { avatar_url: '/img/001.png', username: 'Victor Ruiz' },
     frame_url: 'https://a.apps.vip/icons/frame/demon.png',
-    order_number: 'kWOLwUAMcZ'
+    order_number: 'kWOLwUAMcZ',
   },
   {
-    date: '2023-07-03', name: '小恶魔头像框', price: '￥9.90', use: '赠送',
+    date: '2023-07-03',
+    name: '小恶魔头像框',
+    price: '￥9.90',
+    use: '赠送',
     user: { avatar_url: '/img/001.png', username: 'Victor Ruiz' },
     frame_url: 'https://a.apps.vip/icons/frame/demon.png',
-    order_number: 'kWOLwUAMcZ'
+    order_number: 'kWOLwUAMcZ',
   },
   {
-    date: '2023-07-03', name: '小恶魔头像框', price: '￥9.90', use: '自用',
+    date: '2023-07-03',
+    name: '小恶魔头像框',
+    price: '￥9.90',
+    use: '自用',
     user: { avatar_url: '/img/001.png', username: 'Victor Ruiz' },
     frame_url: 'https://a.apps.vip/icons/frame/demon.png',
-    order_number: 'kWOLwUAMcZ'
+    order_number: 'kWOLwUAMcZ',
   },
-]
+];
 
 export const checkColumns = [
   {
@@ -506,8 +567,8 @@ export const checkColumns = [
     dataIndex: 'controls',
     key: 'controls',
     width: '20%',
-  }
-]
+  },
+];
 
 export const giftColumns = [
   {
@@ -534,5 +595,5 @@ export const giftColumns = [
   {
     dataIndex: 'controls',
     width: '15%',
-  }
-]
+  },
+];

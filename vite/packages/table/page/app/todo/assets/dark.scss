@@ -2,7 +2,6 @@
 
 .todo-style {
   ul {
-
     li {
       border-radius: 5px;
       margin: 0 10px;
@@ -11,7 +10,6 @@
         background-color: #444444;
       }
     }
-
   }
 
   .sidebar {
@@ -20,7 +18,7 @@
   }
 
   .main-content {
-    background: #2A2A2A;
+    background: #2a2a2a;
   }
 
   .right-content {
@@ -28,14 +26,12 @@
   }
 
   .ant-checkbox {
-    border: 2px solid #DFDFDF;
-
+    border: 2px solid #dfdfdf;
   }
 
   .select-input {
     background-color: #555555;
     border-radius: 5px;
     padding: 8px;
-
   }
 }

@@ -1,3 +1,3 @@
-import TIM from 'tim-js-sdk/tim-js-friendship.js'
+import TIM from 'tim-js-sdk/tim-js-friendship.js';
 
-export default TIM
+export default TIM;

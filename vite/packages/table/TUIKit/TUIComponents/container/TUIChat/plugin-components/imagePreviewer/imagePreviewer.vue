@@ -1,35 +1,37 @@
 <template>
-  <div :class="[isH5 && 'image-previewer-h5']" class="image-previewer pointer"
-       style="color: var(--primary-text);width: 100% !important;height: 100% !important;"
+  <div
+    class="image-previewer pointer"
+    :class="[isH5 && 'image-previewer-h5']"
+    style="color: var(--primary-text); width: 100% !important; height: 100% !important"
   >
-    <div ref="image" class="image-wrapper">
+    <div class="image-wrapper" ref="image">
       <ul
-          ref="ul"
-          :style="{
+        class="image-list"
+        :style="{
           width: `${imageList.length * 100}%`,
           transform: `translateX(-${(currentImageIndex * 100) / imageList.length}%)`,
         }"
-          class="image-list"
+        ref="ul"
       >
-        <li v-for="(item, index) in imageList" :key="index" class="image-item">
+        <li class="image-item" v-for="(item, index) in imageList" :key="index">
           <img
-              :src="item?.payload?.imageInfoArray[0]?.url"
-              :style="{
+            class="image-preview"
+            :style="{
               transform: `scale(${zoom}) rotate(${rotate}deg)`,
             }"
-              class="image-preview"
+            :src="item?.payload?.imageInfoArray[0]?.url"
           />
         </li>
       </ul>
     </div>
-    <i v-show="!isH5" class="icon icon-close" @click="close"/>
-    <div v-show="!isH5 && currentImageIndex > 0" class="image-button image-button-left" @click="goPrev">
+    <i class="icon icon-close" @click="close" v-show="!isH5" />
+    <div class="image-button image-button-left" v-show="!isH5 && currentImageIndex > 0" @click="goPrev">
       <i class="icon icon-left-arrow"></i>
     </div>
     <div
-        v-show="!isH5 && currentImageIndex < imageList?.length - 1"
-        class="image-button image-button-right"
-        @click="goNext"
+      class="image-button image-button-right"
+      v-show="!isH5 && currentImageIndex < imageList?.length - 1"
+      @click="goNext"
     >
       <i class="icon icon-right-arrow"></i>
     </div>
@@ -43,11 +45,10 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import TUIEnv from '../../../../../TUIPlugin/TUIEnv';
-import {defineEmits, defineProps, onMounted, onUnmounted, ref, watchEffect} from 'vue';
-import {Message} from '../../interface';
-
+import { defineProps, ref, defineEmits, watchEffect, onMounted, onUnmounted } from 'vue';
+import { Message } from '../../interface';
 // import { isNumber } from '@vueuse/core';
 
 interface touchesPosition {
@@ -74,7 +75,7 @@ const minZoom = ref(0.1);
 const currentImageIndex = ref(0);
 const image = ref();
 const ul = ref();
-const {isH5} = TUIEnv();
+const { isH5 } = TUIEnv();
 // touch
 let startX = 0;
 let touchStore = {} as touchesPosition;
@@ -130,7 +131,7 @@ const handleTouchEnd = (e: any) => {
   // H5 touch move to right to go to next image
   if (timer === null) {
     switch (moveFlag) {
-        // touch event
+      // touch event
       case true:
         moveEndX = e?.changedTouches[0]?.pageX;
         X = moveEndX - startX;
@@ -140,7 +141,7 @@ const handleTouchEnd = (e: any) => {
           goNext();
         }
         break;
-        // click event
+      // click event
       case false:
         close();
         break;
@@ -197,16 +198,16 @@ const handleTwoTouches = (e: any) => {
     return Math.hypot(stopX - startX, stopY - startY);
   };
   if (
-      !isNumber(touchStore.pageX1) ||
-      !isNumber(touchStore.pageY1) ||
-      !isNumber(touchStore.pageX2) ||
-      !isNumber(touchStore.pageY2)
+    !isNumber(touchStore.pageX1) ||
+    !isNumber(touchStore.pageY1) ||
+    !isNumber(touchStore.pageX2) ||
+    !isNumber(touchStore.pageY2)
   ) {
     return;
   }
   let touchZoom =
-      getDistance(touch1.pageX, touch1.pageY, touch2.pageX, touch2.pageY) /
-      getDistance(touchStore.pageX1, touchStore.pageY1, touchStore.pageX2, touchStore.pageY2);
+    getDistance(touch1.pageX, touch1.pageY, touch2.pageX, touch2.pageY) /
+    getDistance(touchStore.pageX1, touchStore.pageY1, touchStore.pageX2, touchStore.pageY2);
   zoom.value = Math.min(Math.max(0.5, zoom.value * touchZoom), 4);
 };
 
@@ -270,10 +271,9 @@ onUnmounted(() => {
 <style lang="scss" scoped>
 @import url('../../../../styles/common.scss');
 @import url('../../../../styles/icon.scss');
-
 .image-previewer {
   position: fixed;
-  z-index: 12;
+  z-index: 200;
   width: 100vw;
   height: 100vh;
   background: rgba(#000000, 0.3);
@@ -282,7 +282,6 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-
   .image-wrapper {
     position: relative;
     width: 100%;
@@ -292,7 +291,6 @@ onUnmounted(() => {
     align-items: center;
     overflow: hidden;
   }
-
   .image-list {
     position: absolute;
     height: 100%;
@@ -303,7 +301,6 @@ onUnmounted(() => {
     flex-direction: row;
     justify-content: center;
     align-content: center;
-
     .image-item {
       width: 100%;
       height: 100%;
@@ -313,14 +310,12 @@ onUnmounted(() => {
       overflow: hidden;
     }
   }
-
   .image-preview {
     max-width: 100%;
     max-height: 100%;
     transition: transform 0.1s ease 0s;
     pointer-events: auto;
   }
-
   .image-button {
     position: absolute;
     cursor: pointer;
@@ -329,15 +324,12 @@ onUnmounted(() => {
     border-radius: 50%;
     top: calc(50% - 20px);
     background: rgba(255, 255, 255, 0.8);
-
     &-left {
       left: 10px;
     }
-
     &-right {
       right: 10px;
     }
-
     .icon {
       position: absolute;
       bottom: 0;
@@ -348,7 +340,6 @@ onUnmounted(() => {
       line-height: 40px;
     }
   }
-
   .icon-close {
     position: absolute;
     cursor: pointer;
@@ -359,14 +350,12 @@ onUnmounted(() => {
     right: 3%;
     padding: 6px;
     background: rgba(255, 255, 255, 0.8);
-
     &::before,
     &::after {
       background-color: #444444;
     }
   }
 }
-
 .image-previewer-h5 {
   width: 100%;
   height: 100%;
@@ -374,7 +363,6 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
 }
-
 .actions-bar {
   display: flex;
   justify-content: space-around;
@@ -384,7 +372,6 @@ onUnmounted(() => {
   padding: 12px;
   border-radius: 6px;
   background: rgba(255, 255, 255, 0.8);
-
   .icon {
     position: static;
     font-size: 24px;
@@ -395,7 +382,6 @@ onUnmounted(() => {
     margin: 5px;
   }
 }
-
 .image-counter {
   background: rgba(20, 18, 20, 0.53);
   padding: 3px 5px;

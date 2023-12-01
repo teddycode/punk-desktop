@@ -1,51 +1,43 @@
 <template>
   <div class="text-base" style="margin-bottom: 10px">背景图片</div>
-  <div
-      class="xt-text"
-      style=" font-size: 16px; font-weight: 400"
-  >
-    支持直接复制粘贴图片到此处
-  </div>
-  <div
-      class="flex flex-row justify-between items-center mt-6 drag"
-      style="margin: 12px 0"
-  >
+  <div class="xt-text" style="font-size: 16px; font-weight: 400">支持直接复制粘贴图片到此处</div>
+  <div class="flex flex-row justify-between items-center mt-6 drag" style="margin: 12px 0">
     <div
-        class="flex justify-center items-center rounded-lg h-12 drawer-item-bg w-1/2 pointer text-base no-drag xt-bg-2"
-        @click="importFile"
+      class="flex justify-center items-center rounded-lg h-12 drawer-item-bg w-1/2 pointer text-base no-drag xt-bg-2"
+      @click="importFile"
     >
       选择图片
     </div>
     <div
-        class="flex justify-center items-center rounded-lg h-12 drawer-item-bg w-1/2 ml-3 pointer text-base no-drag xt-bg-2"
-        @click="openMy"
+      class="flex justify-center items-center rounded-lg h-12 drawer-item-bg w-1/2 ml-3 pointer text-base no-drag xt-bg-2"
+      @click="openMy"
     >
       选自壁纸收藏
     </div>
   </div>
 
   <div class="text-base" style="margin-bottom: 10px">背景模糊度</div>
-  <a-slider v-model:value="blurs" :max="100" :step="1" class="no-drag"/>
+  <a-slider v-model:value="blurs" :max="100" :step="1" class="no-drag" />
   <div class="text-base" style="margin-bottom: 10px">调整时钟比例</div>
-  <a-slider v-model:value="zoom" :max="100" :step="1"/>
+  <a-slider v-model:value="zoom" :max="100" :step="1" />
   <ModalList
-      v-if="myImgShow"
-      v-model:visible="myImgShow"
-      :imgList="myPapers"
-      style="z-index: 99999"
-      title="我的收藏"
-      @sendImg="sendImg"
+    v-if="myImgShow"
+    v-model:visible="myImgShow"
+    :imgList="myPapers"
+    style="z-index: 99999"
+    title="我的收藏"
+    @sendImg="sendImg"
   ></ModalList>
-  <input id="" ref="fileRef" name="" style="display: none" type="file"/>
+  <input id="" ref="fileRef" name="" style="display: none" type="file" />
 </template>
 
 <script>
-import ModalList from '../../../comp/ModalList.vue'
-import { paperStore } from '../../../../store/paper'
-import { message } from 'ant-design-vue'
+import ModalList from '../../../comp/ModalList.vue';
+import { paperStore } from '../../../../store/paper';
+import { message } from 'ant-design-vue';
 
-import { validateFile } from '../../../card/hooks/imageProcessing'
-import { mapWritableState } from 'pinia'
+import { validateFile } from '../../../card/hooks/imageProcessing';
+import { mapWritableState } from 'pinia';
 
 export default {
   computed: {
@@ -54,13 +46,13 @@ export default {
   components: {
     ModalList,
   },
-  data () {
+  data() {
     return {
       myData: { title: '', link: undefined, img: {} },
       myImgShow: false,
       blurs: 0,
       zoom: 0,
-    }
+    };
   },
   props: {
     blur: {
@@ -72,52 +64,52 @@ export default {
       default: 0,
     },
   },
-  mounted () {
-    this.blurs = this.blur
-    this.zoom = this.bgZoom
+  mounted() {
+    this.blurs = this.blur;
+    this.zoom = this.bgZoom;
   },
   watch: {
-    blurs (newVal, oldVal) {
-      this.$emit('updateBlur', newVal)
+    blurs(newVal, oldVal) {
+      this.$emit('updateBlur', newVal);
     },
-    zoom (newVal, oldVal) {
-      this.$emit('updateBgZoom', newVal)
+    zoom(newVal, oldVal) {
+      this.$emit('updateBgZoom', newVal);
     },
   },
   methods: {
-    openMy () {
-      this.myImgShow = true
+    openMy() {
+      this.myImgShow = true;
     },
-    sendImg (img) {
-      this.myData.img = img
-      this.$emit('img', img.path)
+    sendImg(img) {
+      this.myData.img = img;
+      this.$emit('img', img.path);
     },
-    async importFile () {
-      let fileRef = this.$refs.fileRef
+    async importFile() {
+      let fileRef = this.$refs.fileRef;
       // 点击上传图片按钮
-      fileRef.click()
+      fileRef.click();
       // 上传图片回调
-      let that = this
+      let that = this;
       fileRef.onchange = async function () {
-        if (this.files.length === 0) return // 没有选择文件
-        const file = this.files[0] // 获取文件
-        let validate = validateFile(file, 10)
-        if (validate !== true) return message.error(validate)
-        that.$emit('img', file.path)
-      }
+        if (this.files.length === 0) return; // 没有选择文件
+        const file = this.files[0]; // 获取文件
+        let validate = validateFile(file, 10);
+        if (validate !== true) return message.error(validate);
+        that.$emit('img', file.path);
+      };
     },
-    async showOpenFileDialog () {
+    async showOpenFileDialog() {
       let savePath = await tsbApi.dialog.showOpenDialog({
         title: '选择',
         message: '请选择文件',
         properties: ['openFile '],
-      })
+      });
       if (savePath) {
       } else {
       }
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

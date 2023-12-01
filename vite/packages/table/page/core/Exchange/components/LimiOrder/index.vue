@@ -11,9 +11,8 @@
           <label class="limitOrder-token-label">Sell</label>
           <div class="limitOrder-select-wrapper">
             <select v-model="selectedToken1" class="limitOrder-custom-select">
-              <option v-for="token in tokens" :key="token.value" :value="token.value" class="select-option">{{
-                  token.label
-                }}
+              <option v-for="token in tokens" :key="token.value" :value="token.value" class="select-option">
+                {{ token.label }}
               </option>
             </select>
           </div>
@@ -23,9 +22,8 @@
           <label class="limitOrder-token-label">Buy</label>
           <div class="limitOrder-select-wrapper">
             <select v-model="selectedToken2" class="limitOrder-custom-select">
-              <option v-for="token in tokens" :key="token.value" :value="token.value" class="select-option">{{
-                  token.label
-                }}
+              <option v-for="token in tokens" :key="token.value" :value="token.value" class="select-option">
+                {{ token.label }}
               </option>
             </select>
           </div>
@@ -35,8 +33,8 @@
         <!-- Fee Tiers -->
         <!-- <div class="fee-tiers-title">Fee Tiers</div> -->
         <div class="fee-options">
-          <label v-for="fee in fees" :key="fee" :class="{ 'selected': selectedFee === fee }" class="limitOrder-fee-box">
-            <input v-model="selectedFee" :value="fee" class="limitOrder-hidden-radio" name="fee" type="radio"/>
+          <label v-for="fee in fees" :key="fee" :class="{ selected: selectedFee === fee }" class="limitOrder-fee-box">
+            <input v-model="selectedFee" :value="fee" class="limitOrder-hidden-radio" name="fee" type="radio" />
             {{ fee }}
           </label>
         </div>
@@ -44,35 +42,34 @@
         <!-- <div class="divider"/> -->
         <div class="limitOrder-token-input">
           <label class="limitOrder-token-label">Amount</label>
-          <input v-model="amount" class="limitOrder-custom-input" type="text"/>
+          <input v-model="amount" class="limitOrder-custom-input" type="text" />
         </div>
         <div class="limitOrder-token-input">
           <label class="limitOrder-token-label">Price</label>
           <div class="input-with-token">
-            <input v-model="price" class="limitOrder-custom-input" type="text"/>
+            <input v-model="price" class="limitOrder-custom-input" type="text" />
             <span class="selected-tokens">{{ selectedToken1 }}/{{ selectedToken2 }}</span>
           </div>
         </div>
-        <shape-button style="width: 150px;height: 40px" @click="place">Add</shape-button>
+        <shape-button style="width: 150px; height: 40px" @click="place">Add</shape-button>
       </div>
     </div>
   </Background>
 </template>
 
-
 <script>
-import axios from 'axios'
-import * as echarts from 'echarts'
-import ShapeButton from '@page/core/components/ShapeButton.vue'
-import { limitOrderPoolKey } from '@page/core/Exchange/services/address'
-import { placeLimitOrderFrontend } from '@page/core/Exchange/services/place'
-import { ethers } from 'ethers'
-import Background from '@page/core/components/Background.vue'
+import axios from 'axios';
+import * as echarts from 'echarts';
+import ShapeButton from '@page/core/components/ShapeButton.vue';
+import { limitOrderPoolKey } from '@page/core/Exchange/services/address';
+import { placeLimitOrderFrontend } from '@page/core/Exchange/services/place';
+import { ethers } from 'ethers';
+import Background from '@page/core/components/Background.vue';
 
 export default {
   components: {
     Background,
-    ShapeButton
+    ShapeButton,
   },
   data() {
     return {
@@ -95,118 +92,118 @@ export default {
       amount: '',
       price: '',
       fromAccount: '',
-    }
+    };
   },
   watch: {
     selectedToken1() {
-      this.fetchData()
+      this.fetchData();
     },
     selectedToken2() {
-      this.fetchData()
-    }
+      this.fetchData();
+    },
   },
   created: function () {
-    this.fetchData()
+    this.fetchData();
   },
   methods: {
     async fetchData() {
       const coinMapping = {
-        'ETH': 'ethereum',
-        'BTC': 'bitcoin',
-        'BNB': 'binancecoin',
-        'ADA': 'cardano',
-        'DOGE': 'dogecoin',
-        'XRP': 'ripple',
-        'USDC': 'usd-coin',
-        'DAI': 'dai',
-        'token0': 'token0',
-        'token1': 'token1'
-      }
-      let coin1 = coinMapping[this.selectedToken1]
-      let coin2 = coinMapping[this.selectedToken2]
+        ETH: 'ethereum',
+        BTC: 'bitcoin',
+        BNB: 'binancecoin',
+        ADA: 'cardano',
+        DOGE: 'dogecoin',
+        XRP: 'ripple',
+        USDC: 'usd-coin',
+        DAI: 'dai',
+        token0: 'token0',
+        token1: 'token1',
+      };
+      let coin1 = coinMapping[this.selectedToken1];
+      let coin2 = coinMapping[this.selectedToken2];
       try {
         let response1 = await axios.get(`https://api.coingecko.com/api/v3/coins/${coin1}/market_chart`, {
           params: {
             vs_currency: 'usd',
             days: 1,
-          }
-        })
+          },
+        });
 
         let response2 = await axios.get(`https://api.coingecko.com/api/v3/coins/${coin2}/market_chart`, {
           params: {
             vs_currency: 'usd',
             days: 1,
-          }
-        })
+          },
+        });
 
-        let prices1 = response1.data.prices.map(p => p[1])
-        let prices2 = response2.data.prices.map(p => p[1])
-        console.log(`Fetching data for: ${this.selectedToken1} and ${this.selectedToken2}`)
+        let prices1 = response1.data.prices.map((p) => p[1]);
+        let prices2 = response2.data.prices.map((p) => p[1]);
+        console.log(`Fetching data for: ${this.selectedToken1} and ${this.selectedToken2}`);
 
         // 计算比值并确保结果总是大于1
         this.ratioValues = prices1.map((price1, index) => {
-          const price2 = prices2[index]
-          return (price1 >= price2) ? (price1 / price2) : (price2 / price1)
-        })
+          const price2 = prices2[index];
+          return price1 >= price2 ? price1 / price2 : price2 / price1;
+        });
 
-        this.times = response1.data.prices.map(p => {
-          const date = new Date(p[0])
-          return `${date.getHours()}:${date.getMinutes()}`
-        })
+        this.times = response1.data.prices.map((p) => {
+          const date = new Date(p[0]);
+          return `${date.getHours()}:${date.getMinutes()}`;
+        });
         //this.calculateYAxisRange();
-        this.drawChart()
+        this.drawChart();
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
     },
     drawChart() {
-      let currentHour = new Date().getHours()
-      let times = []
+      let currentHour = new Date().getHours();
+      let times = [];
       for (let i = 1; i <= 24; i++) {
-        let hour = (currentHour - i + 24) % 24
-        times.unshift(hour + ':00')
+        let hour = (currentHour - i + 24) % 24;
+        times.unshift(hour + ':00');
       }
 
-      let validRatioValues = this.ratioValues.filter(val => typeof val === 'number' && !isNaN(val))
+      let validRatioValues = this.ratioValues.filter((val) => typeof val === 'number' && !isNaN(val));
 
-      let minY = Math.min(...validRatioValues) * 0.999
-      let maxY = Math.max(...validRatioValues) * 1.001
+      let minY = Math.min(...validRatioValues) * 0.999;
+      let maxY = Math.max(...validRatioValues) * 1.001;
       // 修改 minY 和 maxY 的取整方法
-      minY = minY > 100 ? Math.floor(minY) : parseFloat(minY.toFixed(2))
-      maxY = maxY > 100 ? Math.ceil(maxY) : parseFloat(maxY.toFixed(2))
+      minY = minY > 100 ? Math.floor(minY) : parseFloat(minY.toFixed(2));
+      maxY = maxY > 100 ? Math.ceil(maxY) : parseFloat(maxY.toFixed(2));
       // 确保 minY 和 maxY 不相等
       if (minY === maxY) {
-        minY -= 0.01
-        maxY += 0.01
+        minY -= 0.01;
+        maxY += 0.01;
       }
-      console.log(minY, maxY)
-      let items = []
+      console.log(minY, maxY);
+      let items = [];
       for (let i = 1; i < this.ratioValues.length; i++) {
-        let startValue = this.ratioValues[i - 1]
-        let endValue = this.ratioValues[i]
-        let color = endValue < startValue ? 'red' : 'green'
+        let startValue = this.ratioValues[i - 1];
+        let endValue = this.ratioValues[i];
+        let color = endValue < startValue ? 'red' : 'green';
         items.push({
           value: [times[i - 1], startValue, endValue],
           itemStyle: {
-            color: color
-          }
-        })
+            color: color,
+          },
+        });
       }
       // 我们从索引1开始，所以times数组也要相应地减少一个元素
-      times.shift()
-      let chart = echarts.init(document.getElementById('chart'))
+      times.shift();
+      let chart = echarts.init(document.getElementById('chart'));
       let option = {
         title: {
           text: `${this.selectedToken1} / ${this.selectedToken2}`,
           left: 'center',
           textStyle: {
-            color: '#FFFFFF'
-          }
+            color: '#FFFFFF',
+          },
         },
         grid: {
           left: '15%',
           right: '5%',
-          bottom: '15%'
+          bottom: '15%',
         },
         xAxis: {
           type: 'category',
@@ -214,92 +211,102 @@ export default {
           axisLabel: {
             rotate: 45,
             textStyle: {
-              color: '#FFFFFF'
-            }
+              color: '#FFFFFF',
+            },
           },
           axisLine: {
             lineStyle: {
-              color: '#FFFFFF'
-            }
-          }
+              color: '#FFFFFF',
+            },
+          },
         },
         yAxis: {
           type: 'value',
           min: minY,
           max: maxY,
-          show: true,  // 确保 y 轴显示
+          show: true, // 确保 y 轴显示
           axisLine: {
             lineStyle: {
-              color: '#FFFFFF'
-            }
+              color: '#FFFFFF',
+            },
           },
           splitLine: {
             lineStyle: {
               type: 'dashed',
-              color: '#CCCCCC'
-            }
-          }
+              color: '#CCCCCC',
+            },
+          },
         },
         tooltip: {
           trigger: 'axis',
           formatter: function (params) {
-            let startValue = params[0].value[1]
-            let endValue = params[0].value[2]
-            return `${params[0].name}: 从 ${startValue} 到 ${endValue}`
-          }
-        },
-        series: [{
-          type: 'custom',
-          renderItem: function (params, api) {
-            let categoryIndex = api.value(0)
-            let start = api.coord([categoryIndex, api.value(1)])
-            let end = api.coord([categoryIndex, api.value(2)])
-            return {
-              type: 'rect',
-              shape: {
-                x: start[0] - 5,
-                y: end[1],
-                width: 10,
-                height: start[1] - end[1]
-              },
-              style: api.style()
-            }
+            let startValue = params[0].value[1];
+            let endValue = params[0].value[2];
+            return `${params[0].name}: 从 ${startValue} 到 ${endValue}`;
           },
-          data: items
-        }]
-      }
-      chart.setOption(option)
+        },
+        series: [
+          {
+            type: 'custom',
+            renderItem: function (params, api) {
+              let categoryIndex = api.value(0);
+              let start = api.coord([categoryIndex, api.value(1)]);
+              let end = api.coord([categoryIndex, api.value(2)]);
+              return {
+                type: 'rect',
+                shape: {
+                  x: start[0] - 5,
+                  y: end[1],
+                  width: 10,
+                  height: start[1] - end[1],
+                },
+                style: api.style(),
+              };
+            },
+            data: items,
+          },
+        ],
+      };
+      chart.setOption(option);
     },
     async place() {
-      let epoch
-      let flag = 0
+      let epoch;
+      let flag = 0;
       if (typeof window.ethereum !== 'undefined') {
         // 使用MetaMask提供的provider
-        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
         try {
           // 请求账户访问
-          await window.ethereum.request({ method: 'eth_requestAccounts' })
-          const signer = provider.getSigner()
-          this.fromAccount = await signer.getAddress() // 设置第一个账户为默认账户
-          console.log('address:' + this.fromAccount)
+          await window.ethereum.request({ method: 'eth_requestAccounts' });
+          const signer = provider.getSigner();
+          this.fromAccount = await signer.getAddress(); // 设置第一个账户为默认账户
+          console.log('address:' + this.fromAccount);
         } catch (error) {
-          console.error('Error accessing accounts: ', error)
+          console.error('Error accessing accounts: ', error);
         }
       } else {
-        console.log('Non-Ethereum browser detected. You should consider trying MetaMask!')
+        console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
       }
       try {
         try {
-          epoch = await placeLimitOrderFrontend(limitOrderPoolKey, this.price, this.selectedToken1, this.selectedToken2, ethers.utils.parseUnits(this.amount.toString(), 18))
-          console.log('address2:' + this.fromAccount)
-          flag = 1
+          epoch = await placeLimitOrderFrontend(
+            limitOrderPoolKey,
+            this.price,
+            this.selectedToken1,
+            this.selectedToken2,
+            ethers.utils.parseUnits(this.amount.toString(), 18),
+          );
+          console.log('address2:' + this.fromAccount);
+          flag = 1;
         } catch (err) {
-          console.log(err)
+          console.log(err);
         }
         if (flag === 1) {
           // 发送POST请求到后端
-          const currentDate = new Date()
-          const formattedDate = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()} ${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`
+          const currentDate = new Date();
+          const formattedDate = `${currentDate.getFullYear()}-${
+            currentDate.getMonth() + 1
+          }-${currentDate.getDate()} ${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`;
 
           const requestBody = {
             userAddress: this.fromAccount,
@@ -310,23 +317,23 @@ export default {
             feeRates: this.selectedFee,
             status: '待成交',
             epoch: epoch,
-            submitTime: formattedDate
-          }
-          console.log('requestBody', requestBody)
-          const response = await axios.post('http://localhost:8080/Exchanges/limitOrder', requestBody)
+            submitTime: formattedDate,
+          };
+          console.log('requestBody', requestBody);
+          const response = await axios.post('http://localhost:8080/Exchanges/limitOrder', requestBody);
           if (response.data.message) {
-            alert('Order added successfully!')
+            alert('Order added successfully!');
           } else {
-            alert('插入数据失败！')
+            alert('插入数据失败！');
           }
         }
       } catch (err) {
-        console.log(err)
-        alert('操作失败')
+        console.log(err);
+        alert('操作失败');
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -417,7 +424,7 @@ export default {
 
 .select-option {
   color: white;
-  background-color: #2D3748;
+  background-color: #2d3748;
 }
 
 .limitOrder-token-label {
@@ -462,7 +469,6 @@ export default {
   outline: none;
   transition: border-color 0.15s ease-in-out;
 }
-
 
 .limitOrder-custom-input:hover {
   border-color: #007bff;
@@ -513,5 +519,4 @@ export default {
   color: rgba(255, 255, 255, 0.7);
   pointer-events: none;
 }
-
 </style>

@@ -1,88 +1,125 @@
 <template>
   <div class="flex items-center justify-between w-full mt-2">
-    <a-avatar :size="32" :src="userInfo.avatar" class="pointer" @click.stop="showCard(uid, Info)"></a-avatar>
+    <a-avatar :src="userInfo.avatar" :size="32" class="pointer" @click.stop="showCard(uid, Info)"></a-avatar>
     <!-- <div class="w-full ml-3 "> -->
-    <a-input v-model:value="value" :placeholder="replyPlaceholder" bordered="false" class=" xt-bg comment-input btn"
-             style="cursor: default;" @keyup.enter="addComment"/>
+    <a-input
+      v-model:value="value"
+      :placeholder="replyPlaceholder"
+      class="xt-bg comment-input btn"
+      bordered="false"
+      style="cursor: default"
+      @keyup.enter="addComment"
+    />
     <!-- </div> -->
   </div>
-  <div v-if="imageVis" class="clearfix mt-3 ml-11">
-    <a-upload v-model:file-list="fileList" list-type="picture-card" multiple @preview="handlePreview">
+  <div class="clearfix mt-3 ml-11" v-if="imageVis">
+    <a-upload v-model:file-list="fileList" list-type="picture-card" @preview="handlePreview" multiple>
       <div v-if="fileList.length < 3">
-        <plus-outlined style="font-size: 20px;"/>
+        <plus-outlined style="font-size: 20px" />
       </div>
     </a-upload>
-    <a-modal v-model:visible="previewVisible" :footer="null" :title="previewTitle" @cancel="handleCancel">
-      <img :src="previewImage" style="width: 100%"/>
+    <a-modal v-model:visible="previewVisible" :title="previewTitle" :footer="null" @cancel="handleCancel">
+      <img style="width: 100%" :src="previewImage" />
     </a-modal>
   </div>
   <div class="flex justify-between w-full mt-2 mb-4 font-14 input-btm">
     <div class="flex w-full">
-      <tippy :interactive="true" placement="bottom" trigger=" click">
+      <tippy trigger=" click" placement="bottom" :interactive="true">
         <template #content>
           <!-- <div class="w-full"> -->
-          <vue-custom-scrollbar :settings="settingsScroller" class="w-full h-[150px] xt-bg-2 rounded-lg flex  "
-                                style="flex-wrap: wrap;">
-            <div v-for="(item, index) in folderPath" :key="index"
-                 class="mb-2 ml-1 mr-1  pointer w-[32px] h-[32px]" style="cursor: pointer;" @click="addEmoji(item)">
-              <img :src="item" class="w-[32px] h-[32px]">
+          <vue-custom-scrollbar
+            :settings="settingsScroller"
+            class="w-full h-[150px] xt-bg-2 rounded-lg flex"
+            style="flex-wrap: wrap"
+          >
+            <div
+              v-for="(item, index) in folderPath"
+              class="mb-2 ml-1 mr-1 pointer w-[32px] h-[32px]"
+              @click="addEmoji(item)"
+              :key="index"
+              style="cursor: pointer"
+            >
+              <img :src="item" class="w-[32px] h-[32px]" />
             </div>
           </vue-custom-scrollbar>
           <!-- </div> -->
         </template>
-        <a-tooltip placement="bottom" title="添加表情">
-          <xt-button class="rounded-lg xt-text-2 ml-9 active-btn"
-                     style="color: var(--secondary-text) !important; text-align: center !important; border: none;width: 50px;height: 32px;">
-            <replyIcon icon="fluent:emoji-smile-slight-24-regular"
-                       style="font-size: 20px !important; margin-right: 4px; vertical-align: sub;"></replyIcon>
+        <a-tooltip title="添加表情" placement="bottom">
+          <xt-button
+            class="rounded-lg xt-text-2 ml-9 active-btn"
+            style="
+              color: var(--secondary-text) !important;
+              text-align: center !important;
+              border: none;
+              width: 50px;
+              height: 32px;
+            "
+          >
+            <replyIcon
+              icon="fluent:emoji-smile-slight-24-regular"
+              style="font-size: 20px !important; margin-right: 4px; vertical-align: sub"
+            ></replyIcon>
           </xt-button>
         </a-tooltip>
       </tippy>
-      <a-upload v-model:file-list="fileList" multiple @preview="handlePreview">
-        <a-tooltip placement="bottom" title="添加图片">
-          <xt-button class="ml-1 rounded-lg xt-text-2 active-btn"
-                     style="color: var(--secondary-text) !important; text-align: center !important; border: none;width: 50px;height: 32px;">
-            <replyIcon icon="fluent:image-sparkle-16-regular"
-                       style="font-size: 20px !important; margin-right: 4px; vertical-align: sub;"></replyIcon>
+      <a-upload v-model:file-list="fileList" @preview="handlePreview" multiple>
+        <a-tooltip title="添加图片" placement="bottom">
+          <xt-button
+            class="ml-1 rounded-lg xt-text-2 active-btn"
+            style="
+              color: var(--secondary-text) !important;
+              text-align: center !important;
+              border: none;
+              width: 50px;
+              height: 32px;
+            "
+          >
+            <replyIcon
+              icon="fluent:image-sparkle-16-regular"
+              style="font-size: 20px !important; margin-right: 4px; vertical-align: sub"
+            ></replyIcon>
           </xt-button>
         </a-tooltip>
       </a-upload>
     </div>
-    <xt-button class=" reply xt-text"
-               style="color: var(--secondary-text) !important; border-radius: 8px;width: 68px; height: 32px;background: var(--active-bg) !important;"
-               type="primary"
-               @click="addComment">回复
-    </xt-button>
+    <xt-button
+      type="primary"
+      class="reply"
+      :radius="8"
+      :w="68"
+      :h="32"
+      style="color: rgba(255, 255, 255, 0.85) !important; background: var(--active-bg) !important"
+      @click="addComment"
+      >回复</xt-button
+    >
   </div>
   <!-- <tippy trigger="mouseenter click" placement="bottom">
 
-  </tippy> -->
+    </tippy> -->
 </template>
 
-<script lang='ts' setup>
-import {computed, onMounted, reactive, ref} from 'vue'
-import {PlusOutlined} from '@ant-design/icons-vue'
-import {appStore} from '../../../../table/store'
-import {fileUpload} from '../../../components/card/hooks/imageProcessing'
-import {useCommunityStore} from '../commun'
-import {Icon as replyIcon} from '@iconify/vue'
-import fluentEmojis from '../../../js/chat/fulentEmojis'
-import type {UploadProps} from 'ant-design-vue';
-
-const useCommunStore = useCommunityStore()
-const userStore = appStore()
-const value = ref('')
-const commentList = ref([])
+<script setup lang="ts">
+import { ref, reactive, computed, onMounted } from 'vue';
+import { PlusOutlined } from '@ant-design/icons-vue';
+import { appStore } from '../../../../table/store';
+import { fileUpload } from '../../../components/card/hooks/imageProcessing';
+import { useCommunityStore } from '../commun';
+import { Icon as replyIcon } from '@iconify/vue';
+import fluentEmojis from '../../../js/chat/fulentEmojis';
+const useCommunStore = useCommunityStore();
+const userStore = appStore();
+const value = ref('');
+const commentList = ref([]);
 const props = defineProps({
   replyCom: {
     type: Object,
-    default: () => []
-  }
-})
+    default: () => [],
+  },
+});
 // const emojiVis = ref(false)
 const replyPlaceholder = computed(() => {
-  return `回复${props.replyCom.user.nickname}`
-})
+  return `回复${props.replyCom.user.nickname}`;
+});
 // const imageVis = ref(false)
 // 添加表情
 const addEmoji = (item) => {
@@ -90,54 +127,63 @@ const addEmoji = (item) => {
   const emoiiValue = item.substring(lastSlashIndex + 1);
   // console.log(emoiiValue);
 
-  const key = Object.entries(fluentEmojis).find(([k, v]) => v === (emoiiValue))[0]
-  value.value += `${key}`
-
-}
+  const key = Object.entries(fluentEmojis).find(([k, v]) => v === emoiiValue)[0];
+  value.value += `${key}`;
+};
 const fileList = ref<UploadProps['fileList']>([]);
-const emit = defineEmits(['addComment'])
+const emit = defineEmits(['addComment']);
 const addComment = async () => {
   if (value.value || fileList.value.length > 0) {
-    const imageUrlList = await Promise.all(fileList.value.map(async (item) => {
-      const url = await fileUpload(item.originFileObj);
-      return url;
-    }));
+    const imageUrlList = await Promise.all(
+      fileList.value.map(async (item) => {
+        const url = await fileUpload(item.originFileObj);
+        return url;
+      }),
+    );
     // console.log(imageUrlList.value, 'imageurl')
     // console.log(props.replyCom,'props');
 
-    let authorid: number = props.replyCom.to_reply_uid === 0 ? props.replyCom.author_uid : props.replyCom.to_reply_uid
-    let content: string = value.value
-    let threadId: number = useCommunStore.communityPostDetail.pay_set.tid ? useCommunStore.communityPostDetail.pay_set.tid : useCommunStore.communityPostDetail.id
+    let authorid: number = props.replyCom.to_reply_uid === 0 ? props.replyCom.author_uid : props.replyCom.to_reply_uid;
+    let content: string = value.value;
+    let threadId: number = useCommunStore.communityPostDetail.pay_set.tid
+      ? useCommunStore.communityPostDetail.pay_set.tid
+      : useCommunStore.communityPostDetail.id;
     // let imageList:Array<string>=imageUrlList.value
-    let to_reply_id = props.replyCom.to_reply_id === 0 ? props.replyCom.id : props.replyCom.to_reply_id
-    let to_reply_second_id = props.replyCom.to_reply_second_id === 0 ? props.replyCom.id : props.replyCom.to_reply_id
+    let to_reply_id = props.replyCom.to_reply_id === 0 ? props.replyCom.id : props.replyCom.to_reply_id;
+    let to_reply_second_id = props.replyCom.to_reply_second_id === 0 ? props.replyCom.id : props.replyCom.to_reply_id;
     // console.log(JSON.stringify(imageUrlList.value), 'image');
     // console.log(props.replyCom.to_reply_id,props.replyCom.id);
     setTimeout(async () => {
       const imageList = JSON.stringify(imageUrlList);
-      await useCommunStore.getCommunitythreadReply(authorid, content, threadId, imageList, to_reply_id, to_reply_second_id)
-      await useCommunStore.getCommunityPostDetail(threadId)
-      await useCommunStore.getCommunityPostReply(threadId)
-      value.value = ''
-      fileList.value = []
-    })
+      await useCommunStore.getCommunitythreadReply(
+        authorid,
+        content,
+        threadId,
+        imageList,
+        to_reply_id,
+        to_reply_second_id,
+      );
+      await useCommunStore.getCommunityPostDetail(threadId);
+      await useCommunStore.getCommunityPostReply(threadId);
+      value.value = '';
+      fileList.value = [];
+    });
 
     // console.log(props.replyCom);
-
-
   }
-  emit('addComment', commentList)
-}
+  emit('addComment', commentList);
+};
 const imageVis = computed(() => {
-  return fileList.value?.length > 0
-})
+  return fileList.value?.length > 0;
+});
+import type { UploadProps } from 'ant-design-vue';
 
 function getBase64(file: File) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
+    reader.onerror = (error) => reject(error);
   });
 }
 
@@ -154,14 +200,12 @@ const settingsScroller = reactive({
 // 用于在动态和评论中使用的表情
 // str.replace(/\[([^(\]|\[)]*)\]/g,(item,index) => {})
 // https://sad.apps.vip/public/static/emoji/emojistatic/
-let folderPath = reactive([])
+let folderPath = reactive([]);
 onMounted(() => {
   Object.values(fluentEmojis).forEach((item) => {
-    folderPath.push(`https://sad.apps.vip/public/static/emoji/emojistatic/${item}`)
-  })
-
-})
-
+    folderPath.push(`https://sad.apps.vip/public/static/emoji/emojistatic/${item}`);
+  });
+});
 
 const handleCancel = () => {
   previewVisible.value = false;
@@ -176,23 +220,22 @@ const handlePreview = async (file: UploadProps['fileList'][number]) => {
   previewTitle.value = file.name || file.url.substring(file.url.lastIndexOf('/') + 1);
 };
 const userInfo = computed(() => {
-  return userStore.userInfo
-})
-let uid = userInfo.value.uid
+  return userStore.userInfo;
+});
+let uid = userInfo.value.uid;
 let Info = {
   uid: uid,
   nickname: userInfo.nickname,
-  avatar: userInfo.avatar
-}
+  avatar: userInfo.avatar,
+};
 const showCard = (uid, Info) => {
-  userStore.showUserCard(uid, Info)
-}
+  userStore.showUserCard(uid, Info);
+};
 onMounted(async () => {
-  await userStore.getUserInfo()
-
-})
+  await userStore.getUserInfo();
+});
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 :deep(.ant-upload.ant-upload-select-picture-card) {
   width: 64px;
   height: 64px;
@@ -218,11 +261,9 @@ onMounted(async () => {
     background-color: var(--secondary-bg);
   }
 }
-
 :deep(.ant-upload-list-text-container) {
   display: none;
 }
-
 .comment-input {
   border-radius: 8px;
   height: 40px;

@@ -1,52 +1,62 @@
 <template>
-  <div class="flex flex-col" style="padding:12px;width: 400px;height: 400px;">
+  <div class="flex flex-col" style="padding: 12px; width: 400px; height: 400px">
     <div class="flex items-center justify-between">
-      <div class="font-16 flex items-center justify-center" style="color:var(--primary-text);width: 95%;">加入群聊</div>
-      <div class="flex rounded-lg active-button pointer items-center w-12 h-12 justify-center"
-           style="background: var(--secondary-bg);" @click="closeJoinGroup"
+      <div class="font-16 flex items-center justify-center" style="color: var(--primary-text); width: 95%">
+        加入群聊
+      </div>
+      <div
+        class="flex rounded-lg active-button pointer items-center w-12 h-12 justify-center"
+        style="background: var(--secondary-bg)"
+        @click="closeJoinGroup"
       >
-        <Icon icon="guanbi" style="color: var(--primary-text);width: 24px;height: 24px;"></Icon>
+        <Icon icon="guanbi" style="color: var(--primary-text); width: 24px; height: 24px"></Icon>
       </div>
     </div>
 
-    <div style="margin: 24px 0;">
-      <a-input v-model:value="searchId" :spellcheck="false" class="h-12" placeholder="输入群ID搜索"
-               style="border-radius: 12px;"
-               @keyup.enter="searchGroup"
+    <div style="margin: 24px 0">
+      <a-input
+        placeholder="输入群ID搜索"
+        :spellcheck="false"
+        v-model:value="searchId"
+        class="h-12"
+        style="border-radius: 12px"
+        @keyup.enter="searchGroup"
       >
         <template #suffix>
-          <SearchOutlined @click="searchGroup"/>
+          <SearchOutlined @click="searchGroup" />
         </template>
       </a-input>
     </div>
 
-    <div v-if="searchResult.length === 0" class="flex items-center  justify-center"
-         style="color: var(--primary-text);margin-top: 50px;">
-      <a-empty :image="simpleImage"/>
+    <div
+      class="flex items-center justify-center"
+      style="color: var(--primary-text); margin-top: 50px"
+      v-if="searchResult.length === 0"
+    >
+      <a-empty :image="simpleImage" />
     </div>
 
     <template v-else>
-      <vue-custom-scrollbar :settings="settingsScroller" style="height:100%; margin-bottom: 16px;">
-        <div v-for="item in searchResult" class="flex justify-between items-center" style="margin-bottom: 8px;">
+      <vue-custom-scrollbar :settings="settingsScroller" style="height: 100%; margin-bottom: 16px">
+        <div class="flex justify-between items-center" v-for="item in searchResult" style="margin-bottom: 8px">
           <div class="flex">
-            <a-avatar :size="48" :src="item.avatar" shape="square"></a-avatar>
-            <div class="flex flex-col" style="margin-left:16px;">
-              <span style="color: var(--primary-text);">{{ item.name }}</span>
-              <span style="color: var(--primary-text);">{{ total }}人</span>
+            <a-avatar shape="square" :size="48" :src="item.avatar"></a-avatar>
+            <div class="flex flex-col" style="margin-left: 16px">
+              <span style="color: var(--primary-text)">{{ item.name }}</span>
+              <span style="color: var(--primary-text)">{{ total }}人</span>
             </div>
           </div>
-          <div class="flex items-center rounded-lg pointer  justify-center active-button"
-               style="padding: 9px 18px; color: var(--active-text);background: var(--active-bg);"
-               @click="joinGroup(item)"
+          <div
+            class="flex items-center rounded-lg pointer justify-center active-button"
+            style="padding: 9px 18px; color: var(--active-text); background: var(--active-bg)"
+            @click="joinGroup(item)"
           >
             加入
           </div>
         </div>
       </vue-custom-scrollbar>
     </template>
-
   </div>
-
 
   <!-- <div class="group" :class="[isH5 ? 'group-h5' : '']">
       <div  class="group-box">
@@ -142,14 +152,14 @@
         </footer>
       </div>
     </div> -->
-
 </template>
 <script>
-import { defineComponent, reactive, toRefs, watch } from 'vue'
+import { computed, defineComponent, reactive, toRefs, watch } from 'vue';
 // import Link from '../../../../../utils/link';
-import { SearchOutlined } from '@ant-design/icons-vue'
-import { message } from 'ant-design-vue'
-import { chatStore } from '../../../../../../store/chat'
+import { SearchOutlined } from '@ant-design/icons-vue';
+import _ from 'lodash-es';
+import { message } from 'ant-design-vue';
+import { chatStore } from '../../../../../../store/chat';
 
 const TUISearch = defineComponent({
   name: 'group',
@@ -164,14 +174,13 @@ const TUISearch = defineComponent({
     SearchOutlined,
   },
 
-  setup (props, ctx) {
-
+  setup(props, ctx) {
     // const TUIServer = TUISearch?.TUIServer?.TUICore.TUIServer.TUIGroup;
-    const TUIServer = window.$chat
-    const { t } = window.$TUIKit.config.i18n.useI18n()
-    const Server = window.$TUIKit
+    const TUIServer = window.$chat;
+    const { t } = window.$TUIKit.config.i18n.useI18n();
+    const Server = window.$TUIKit;
 
-    const chat = chatStore()
+    const chat = chatStore();
 
     const data = reactive({
       searchId: '',
@@ -179,71 +188,81 @@ const TUISearch = defineComponent({
       env: Server.TUIEnv,
       searchResult: [],
       simpleImage: '/img/state/null.png',
-      settingsScroller: {  // 滚动条配置
+      settingsScroller: {
+        // 滚动条配置
         useBothWheelAxes: true,
         swipeEasing: true,
         suppressScrollY: false,
         suppressScrollX: true,
-        wheelPropagation: true
+        wheelPropagation: true,
       },
-      total: chat.$state.limitTotal
-    })
+      total: chat.$state.limitTotal,
+    });
 
-    const closeJoinGroup = () => {  // 关闭加入群聊弹窗
-      ctx.emit('close')
-    }
+    const closeJoinGroup = () => {
+      // 关闭加入群聊弹窗
+      ctx.emit('close');
+    };
 
-    const searchGroup = () => {  // 根据群组id进行群组搜索
-      TUIServer.searchGroupByID(data.searchId).then((res => {
-        if (data.searchResult.some(item => item.groupID === res.data.group.groupID)) {
+    const searchGroup = () => {
+      // 根据群组id进行群组搜索
+      TUIServer.searchGroupByID(data.searchId)
+        .then((res) => {
+          if (data.searchResult.some((item) => item.groupID === res.data.group.groupID)) {
+            return;
+          } else {
+            data.searchResult.push(res.data.group);
+          }
+        })
+        .catch((error) => {
+          message.warn('该群聊为私群,不支持搜索');
+          console.error(error);
+        });
+    };
 
-        } else {
-          data.searchResult.push(res.data.group)
-        }
-      })).catch(error => {
-        message.warn('该群聊为私群,不支持搜索')
-        console.error(error)
-      })
-    }
-
-    const joinGroup = async (group) => { // 加入群组方法
+    const joinGroup = async (group) => {
+      // 加入群组方法
       // console.log('排查问题::>>',group)
-      const disabledJoin = group.joinOption === 'DisableApply'
+      const disabledJoin = group.joinOption === 'DisableApply';
       if (disabledJoin) {
-        message.warn('群管理员开启了禁止加群设置')
-        ctx.emit('close')
+        message.warn('群管理员开启了禁止加群设置');
+        ctx.emit('close');
       } else {
         const options = {
           groupID: group.groupID,
           applyMessage: group.applyMessage || t('TUIContact.加群'),
           // t('TUIContact.加群')
           type: group?.type,
-        }
-        const res = await TUIServer.joinGroup(options)
+        };
+        const res = await TUIServer.joinGroup(options);
         // console.log('检测::>>',res);
         if (res.data.status === 'WaitAdminApproval') {
-          message.success('入群申请已发出,等待群主和管理员审核')
-          data.currentGroup = { apply: true }
+          message.success('入群申请已发出,等待群主和管理员审核');
+          data.currentGroup = { apply: true };
         }
-        ctx.emit('close')
+        ctx.emit('close');
       }
 
-    }
+      const res = await window.$TUIKit.tim.getGroupApplicationList();
+      console.log('获取申请群聊列表', res);
+    };
 
-    watch(() => data.searchId, (newVal) => {
-      if (newVal === '') {
-        data.searchResult = []
-      }
-    })
+    watch(
+      () => data.searchId,
+      (newVal) => {
+        if (newVal === '') {
+          data.searchResult = [];
+        }
+      },
+    );
 
     return {
-      closeJoinGroup, ...toRefs(data), searchGroup, joinGroup,
-    }
-
-  }
-
-
-
+      closeJoinGroup,
+      ...toRefs(data),
+      searchGroup,
+      joinGroup,
+    };
+  },
 
   // setup(props, ctx) {
   //   const data = reactive({
@@ -372,18 +391,17 @@ const TUISearch = defineComponent({
   //     groupTypeDetail,
   //   };
   // },
-})
+});
 
-export default TUISearch
+export default TUISearch;
 </script>
 
 <style lang="scss" scoped src="./style/index.scss"></style>
 
 <style lang="scss" scoped>
 .font-16 {
-
   font-size: 16px;
-  font-weight: 500
+  font-weight: 500;
 }
 
 .active-button {
@@ -391,7 +409,6 @@ export default TUISearch
     filter: brightness(0.8);
     opacity: 0.8;
   }
-
   &:hover {
     opacity: 0.8;
   }
@@ -400,12 +417,10 @@ export default TUISearch
 :deep(.ant-input) {
   color: var(--secondary-text) !important;
   font-size: 1.15em;
-
   &::placeholder {
     color: var(--secondary-text) !important;
   }
 }
-
 :deep(.ant-input-suffix) {
   color: var(--secondary-text) !important;
   font-size: 1.5em;

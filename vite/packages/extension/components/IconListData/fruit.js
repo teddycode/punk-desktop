@@ -4,161 +4,200 @@ export default {
   icon: 'pingguo',
   list: [
     {
-      'name': 'caomei',
-      'alias': '草莓'
+      name: 'caomei',
+      alias: '草莓',
     },
     {
-      'name': 'ningmeng',
-      'alias': '柠檬'
+      name: 'ningmeng',
+      alias: '柠檬',
     },
     {
       name: 'shanzhu',
-      alias: '山竹'
-    }, {
+      alias: '山竹',
+    },
+    {
       name: 'taozi',
-      alias: '桃子'
+      alias: '桃子',
     },
     {
       name: 'hongluobu',
-      alias: '红萝卜'
+      alias: '红萝卜',
     },
     {
       name: 'putao',
-      alias: '葡萄'
-    }, {
+      alias: '葡萄',
+    },
+    {
       name: 'qingpingguo',
-      alias: '青苹果'
+      alias: '青苹果',
     },
     {
       name: 'xigua',
-      alias: '西瓜'
+      alias: '西瓜',
     },
     {
       name: 'xiangjiao',
-      alias: '香蕉'
-    }, {
+      alias: '香蕉',
+    },
+    {
       name: 'juzi',
-      alias: '橘子'
-    }, {
+      alias: '橘子',
+    },
+    {
       name: 'li',
-      alias: '梨子'
+      alias: '梨子',
     },
     {
       name: 'pingguo',
-      alias: '苹果'
+      alias: '苹果',
     },
     {
       name: 'shiliu',
-      alias: '石榴'
-    }, {
+      alias: '石榴',
+    },
+    {
       name: 'boluo',
-      alias: '菠萝'
-    }, {
+      alias: '菠萝',
+    },
+    {
       name: 'chelizi',
-      alias: '车厘子'
-    }, {
+      alias: '车厘子',
+    },
+    {
       name: 'liulian',
-      alias: '榴莲'
+      alias: '榴莲',
     },
     {
       name: 'pipa',
-      alias: '枇杷'
-    }, {
+      alias: '枇杷',
+    },
+    {
       name: 'xing',
-      alias: '杏'
-    }, {
+      alias: '杏',
+    },
+    {
       name: 'hamigua',
-      alias: '哈密瓜'
-    }, {
+      alias: '哈密瓜',
+    },
+    {
       name: 'hetao',
-      alias: '核桃'
-    }, {
+      alias: '核桃',
+    },
+    {
       name: 'shanzha',
-      alias: '山楂'
-    }, {
+      alias: '山楂',
+    },
+    {
       name: 'shizi',
-      alias: '柿子'
-    }, {
+      alias: '柿子',
+    },
+    {
       name: 'lanmei',
-      alias: '蓝莓'
-    }, {
+      alias: '蓝莓',
+    },
+    {
       name: 'niuyouguo',
-      alias: '牛油果'
-    }, {
+      alias: '牛油果',
+    },
+    {
       name: 'yingtao',
-      alias: '樱桃'
-    }, {
+      alias: '樱桃',
+    },
+    {
       name: 'youzi',
-      alias: '柚子'
-    }, {
+      alias: '柚子',
+    },
+    {
       name: 'huolongguo',
-      alias: '火龙果'
-    }, {
+      alias: '火龙果',
+    },
+    {
       name: 'mangguo',
-      alias: '芒果'
-    }, {
+      alias: '芒果',
+    },
+    {
       name: 'lizi',
-      alias: '李子'
-    }, {
+      alias: '李子',
+    },
+    {
       name: 'huluobu',
-      alias: '胡萝卜'
-    }, {
+      alias: '胡萝卜',
+    },
+    {
       name: 'qingli',
-      alias: '青梨'
-    }, {
+      alias: '青梨',
+    },
+    {
       name: 'tudou',
-      alias: '土豆'
-    }, {
+      alias: '土豆',
+    },
+    {
       name: 'xihongshi',
-      alias: '西红柿'
-    }, {
+      alias: '西红柿',
+    },
+    {
       name: 'mihoutao',
-      alias: '猕猴桃'
-    }, {
+      alias: '猕猴桃',
+    },
+    {
       name: 'yangtao',
-      alias: '阳桃'
-    }, {
+      alias: '阳桃',
+    },
+    {
       name: 'baixiangguo',
-      alias: '百香果'
-    }, {
+      alias: '百香果',
+    },
+    {
       name: 'juqi',
-      alias: '枸杞'
-    }, {
+      alias: '枸杞',
+    },
+    {
       name: 'yezi',
-      alias: '椰子'
-    }, {
+      alias: '椰子',
+    },
+    {
       name: 'biji',
-      alias: '荸荠'
-    }, {
+      alias: '荸荠',
+    },
+    {
       name: 'mugua',
-      alias: '木瓜'
-    }, {
+      alias: '木瓜',
+    },
+    {
       name: 'sangshen',
-      alias: '桑葚'
-    }, {
+      alias: '桑葚',
+    },
+    {
       name: 'shengnvguo',
-      alias: '圣女果'
-    }, {
+      alias: '圣女果',
+    },
+    {
       name: 'wuhuaguo',
-      alias: '无花果'
-    }, {
+      alias: '无花果',
+    },
+    {
       name: 'huanggua',
-      alias: '黄瓜'
-    }, {
+      alias: '黄瓜',
+    },
+    {
       name: 'longyan',
-      alias: '龙眼'
-    }, {
+      alias: '龙眼',
+    },
+    {
       name: 'xuelianguo',
-      alias: '雪莲果'
-    }, {
+      alias: '雪莲果',
+    },
+    {
       name: 'yangmei',
-      alias: '杨梅'
-    }, {
+      alias: '杨梅',
+    },
+    {
       name: 'huangtao',
-      alias: '黄桃'
-    }, {
+      alias: '黄桃',
+    },
+    {
       name: 'dasuan',
-      alias: '大蒜'
-    }
-  ]
-}
+      alias: '大蒜',
+    },
+  ],
+};

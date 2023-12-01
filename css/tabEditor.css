@@ -1,4 +1,4 @@
-.clip-tip{
+.clip-tip {
   position: absolute;
   background: #3a8ee6;
   /* padding: 0px; */
@@ -13,7 +13,7 @@
   height: 28px;
   cursor: pointer;
 }
-.sweep-light{
+.sweep-light {
   position: absolute;
   left: 0;
   right: 20px;
@@ -21,7 +21,7 @@
   bottom: 0;
   margin: auto;
   pointer-events: none;
-  background-color: rgba(255,255,255,.4);
+  background-color: rgba(255, 255, 255, 0.4);
   -webkit-border-radius: 100%;
   -moz-border-radius: 100%;
   -o-border-radius: 100%;
@@ -44,32 +44,32 @@
 @-webkit-keyframes ball-scale {
   0% {
     -webkit-transform: scale(0);
-    transform: scale(0)
+    transform: scale(0);
   }
   100% {
     -webkit-transform: scale(1);
     transform: scale(1);
-    opacity: 0
+    opacity: 0;
   }
 }
 @keyframes ball-scale {
   0% {
     -webkit-transform: scale(0);
-    transform: scale(0)
+    transform: scale(0);
   }
   100% {
     -webkit-transform: scale(1);
     transform: scale(1);
-    opacity: 0
+    opacity: 0;
   }
 }
-#toolbar #tab-editor-input{
+#toolbar #tab-editor-input {
   width: 100%;
 }
 #tab-editor {
   padding: 0 0.55em;
   position: absolute;
-  overflow:hidden;
+  overflow: hidden;
   top: 0;
   left: 0;
   width: 100%;
@@ -78,7 +78,6 @@
   align-items: center;
   transform-origin: top left;
   z-index: 1;
-
 }
 
 #tab-editor-input {
@@ -115,8 +114,6 @@
   background-color: rgba(255, 255, 255, 0.15);
 }
 
-#tab-editor
-  .tab-editor-button:not([hidden])
-  + .tab-editor-button:not([hidden]) {
+#tab-editor .tab-editor-button:not([hidden]) + .tab-editor-button:not([hidden]) {
   margin-left: 0.25em;
 }

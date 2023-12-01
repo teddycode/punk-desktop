@@ -25,8 +25,7 @@
               <div class="box-title-more" @click="navToPL">更多>></div>
             </div>
             <div class="box-main-content">
-              <img alt="" class="main-img" src="/images/governance/pos_gov.jpg"
-                   @click="navToInfo">
+              <img alt="" class="main-img" src="/images/governance/pos_gov.jpg" @click="navToInfo" />
             </div>
           </div>
           <div class="content-box">
@@ -35,7 +34,7 @@
               <div class="box-title-more" @click="navToPL">更多>></div>
             </div>
             <div class="box-main-content">
-              <img alt="" class="main-img" src="/images/governance/treasure.jpg">
+              <img alt="" class="main-img" src="/images/governance/treasure.jpg" />
             </div>
           </div>
           <div class="content-box">
@@ -83,27 +82,30 @@
 </template>
 
 <script>
-import processGuide from './components/processGuide.vue'
-import toolBox from './components/toolBox.vue'
-import newProposal from './components/newProposal.vue'
-import myProposals from './components/myProposals.vue'
+import processGuide from './components/processGuide.vue';
+import toolBox from './components/toolBox.vue';
+import newProposal from './components/newProposal.vue';
+import myProposals from './components/myProposals.vue';
 
 export default {
   components: {
-    processGuide, toolBox, newProposal, myProposals
+    processGuide,
+    toolBox,
+    newProposal,
+    myProposals,
   },
-  data () {
-    return {}
+  data() {
+    return {};
   },
   methods: {
-    navToInfo () {
-      this.$router.push({ name: 'OneProposals' })
+    navToInfo() {
+      this.$router.push({ name: 'OneProposals' });
     },
-    navToPL () {
-      this.$router.push({ name: 'ProposalHomePage' })
+    navToPL() {
+      this.$router.push({ name: 'ProposalHomePage' });
     },
-  }
-}
+  },
+};
 </script>
 
 <style scoped>
@@ -142,7 +144,7 @@ export default {
   justify-content: space-between;
   width: 95%;
   margin: 20px;
-  background-color: #2D3748;
+  background-color: #2d3748;
   padding: 10px;
 }
 
@@ -157,7 +159,7 @@ export default {
 }
 
 .nav-btn:hover {
-  background-color: #4FD1C5;
+  background-color: #4fd1c5;
 }
 
 .left-div,
@@ -231,7 +233,7 @@ export default {
   padding-left: 4%;
   border-bottom-width: 1px;
   border-bottom-style: solid;
-  border-bottom-color: #CADFF3;
+  border-bottom-color: #cadff3;
 }
 
 .box-main-content {
@@ -256,5 +258,4 @@ export default {
   height: auto; /* 保持图片宽高比 */
   display: block; /* 去掉默认行内元素的下方空白间隙 */
 }
-
 </style>

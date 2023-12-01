@@ -1,41 +1,33 @@
 .dialog {
-  background: rgba(0, 0, 0, .3);
-
+  background: rgba(0, 0, 0, 0.3);
   header {
     h1 {
-
       font-weight: 500;
       color: #333333;
     }
   }
-
   &-main {
-    background: #FFFFFF;
-
+    background: #ffffff;
     header {
       font-weight: 500;
       color: #333333;
     }
-
     &-content {
       font-weight: 400;
       color: #333333;
     }
   }
 }
-
 .btn {
   font-weight: 400;
-  color: #FFFFFF;
+  color: #ffffff;
   letter-spacing: 0;
-
   &-cancel {
     border: 1px solid #dddddd;
     color: #666666;
   }
-
   &-default {
-    background: #006EFF;
-    border: 1px solid #006EFF;
+    background: #006eff;
+    border: 1px solid #006eff;
   }
 }

@@ -1,5 +1,8 @@
 .horse_run {
-  background-image: linear-gradient(90deg, rgba(196, 233, 64, 0) 0%, rgb(62, 224, 84) 100%), linear-gradient(0deg, rgb(62, 224, 84) 0%, rgba(196, 233, 64, 0) 100%), linear-gradient(-90deg, rgba(196, 233, 64, 0) 0%, rgb(62, 224, 84) 100%), linear-gradient(0deg, rgba(196, 233, 64, 0) 0%, rgb(62, 224, 84) 100%);
+  background-image: linear-gradient(90deg, rgba(196, 233, 64, 0) 0%, rgb(62, 224, 84) 100%),
+    linear-gradient(0deg, rgb(62, 224, 84) 0%, rgba(196, 233, 64, 0) 100%),
+    linear-gradient(-90deg, rgba(196, 233, 64, 0) 0%, rgb(62, 224, 84) 100%),
+    linear-gradient(0deg, rgba(196, 233, 64, 0) 0%, rgb(62, 224, 84) 100%);
   background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
   background-size: 100px 4px, 4px 100px, 100px 4px, 4px 100px;
   background-position: -100px 1px, calc(100% - 1px) -100px, calc(100% + 100px) calc(100% - 1px), 1px 0px;
@@ -23,13 +26,16 @@
     background-position: calc(100% + 100px) 1px, calc(100% - 1px) 0px, calc(100% + 100px) calc(100% - 1px), 1px -100px;
   }
   50% {
-    background-position: calc(100% + 100px) 1px, calc(100% - 1px) 100%, calc(100% + 100px) calc(100% - 1px), -100px -100px;
+    background-position: calc(100% + 100px) 1px, calc(100% - 1px) 100%, calc(100% + 100px) calc(100% - 1px),
+      -100px -100px;
   }
   55% {
-    background-position: calc(100% + 100px) 1px, calc(100% - 1px) calc(100% + 100px), 100% calc(100% - 1px), -100px calc(100% + 100px);
+    background-position: calc(100% + 100px) 1px, calc(100% - 1px) calc(100% + 100px), 100% calc(100% - 1px),
+      -100px calc(100% + 100px);
   }
   80% {
-    background-position: calc(100% + 100px) 1px, calc(100% - 1px) calc(100% + 100px), 0px calc(100% - 1px), 1px calc(100% + 100px);
+    background-position: calc(100% + 100px) 1px, calc(100% - 1px) calc(100% + 100px), 0px calc(100% - 1px),
+      1px calc(100% + 100px);
   }
   85% {
     background-position: calc(100% + 100px) 1px, calc(100% - 1px) calc(100% + 100px), -100px calc(100% - 1px), 1px 100%;
@@ -38,7 +44,6 @@
     background-position: calc(100% + 100px) 1px, calc(100% - 1px) calc(100% + 100px), -100px calc(100% - 1px), 1px 0px;
   }
 }
-
 
 .snowflake {
   --size: 2vw;
@@ -74,7 +79,6 @@
 .snowflake:nth-child(6n) {
   filter: blur(1px);
 }
-
 .rainflake {
   --size: 2px;
   width: var(--size);
@@ -82,11 +86,7 @@
   border-radius: 200% 200% 0 0;
   position: absolute;
   top: -5vh;
-  background: linear-gradient(
-                  to bottom,
-                  rgba(255, 255, 255, 0.1),
-                  rgba(255, 255, 255, 0.6)
-  );
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.6));
 }
 
 @keyframes rainfall {
@@ -118,18 +118,13 @@
   filter: blur(1px);
 }
 
-
 .leafflake {
   --size: 3vw;
   width: var(--size);
   height: var(--size);
   position: absolute;
   top: -5vh;
-  background-image: linear-gradient(
-                  135deg,
-                  rgb(224, 127, 126),
-                  rgb(235, 187, 190)
-  );
+  background-image: linear-gradient(135deg, rgb(224, 127, 126), rgb(235, 187, 190));
   border-radius: var(--radius);
 }
 

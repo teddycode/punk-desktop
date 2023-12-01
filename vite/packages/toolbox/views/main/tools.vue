@@ -1,27 +1,26 @@
 <template>
   <div class="flex flex-wrap">
     <div
-        v-for="tool in toolsList"
-        :key="tool.route"
-        class="xt-text flex flex-col items-center justify-center m-1 cursor-pointer"
-        style="width: 100px; height: 100px"
-        @click="toolClick(tool)"
+      v-for="tool in toolsList"
+      :key="tool.route"
+      class="xt-text flex flex-col items-center justify-center m-1 cursor-pointer"
+      style="width: 100px; height: 100px"
+      @click="toolClick(tool)"
     >
-      <img :src="'/tools/' + tool.img + '.png'" alt="" class="w-12 h-12 mb-2"/>
+      <img class="w-12 h-12 mb-2" :src="'/tools/' + tool.img + '.png'" alt="" />
       <div class="text-sm">{{ tool.name }}</div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapWritableState } from 'pinia'
-import { main } from '../../store/main'
-
+import { mapWritableState } from 'pinia';
+import { main } from '../../store/main';
 export default {
   computed: {
     ...mapWritableState(main, ['useTool']),
   },
-  data () {
+  data() {
     return {
       toolsList: [
         { name: '计算器', img: 'calculator', route: 'calculator' },
@@ -60,15 +59,15 @@ export default {
         // },
         // { name: "emoji搜索", img: "emojiSearch", route: "emojiSearch" },
       ],
-    }
+    };
   },
   methods: {
-    toolClick (tool) {
-      this.$router.push(tool.route)
-      this.useTool = tool
+    toolClick(tool) {
+      this.$router.push(tool.route);
+      this.useTool = tool;
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped></style>

@@ -1,80 +1,74 @@
 <template>
-  <div style="display: flex;height: 100%">
+  <div style="display: flex; height: 100%">
     <SecondPanel :menus="tabs" @change-tab="changeTab"></SecondPanel>
-    <div style="flex-grow: 1;flex-shrink: 1;height: 100%;display: flex;flex-direction: column;overflow: hidden;">
-      <router-view>
-      </router-view>
+    <div style="flex-grow: 1; flex-shrink: 1; height: 100%; display: flex; flex-direction: column; overflow: hidden">
+      <router-view> </router-view>
     </div>
   </div>
-
 </template>
 
 <script>
-import GradePanel from '../components/comp/GradePanel.vue'
-import ComPanel from '../components/comp/ComPanel.vue'
-import ComActionPanel from '../components/comp/ComActionPanel.vue'
-import GroupPanel from '../components/comp/GroupPanel.vue'
+import GradePanel from '../components/comp/GradePanel.vue';
+import ComPanel from '../components/comp/ComPanel.vue';
+import ComActionPanel from '../components/comp/ComActionPanel.vue';
+import GroupPanel from '../components/comp/GroupPanel.vue';
 
-import SecondPanel from '../components/SecondPanel.vue'
-import browser from '../js/common/browser'
+import SecondPanel from '../components/SecondPanel.vue';
+import browser from '../js/common/browser';
 
 export default {
   name: 'Social',
   components: { SecondPanel, GroupPanel, GradePanel, ComPanel, ComActionPanel },
-  data () {
+  data() {
     return {
       tabs: [
         {
           index: 'com',
           title: '版本历史',
           icon: 'xiaoxi',
-          route:
-              {
-                name: 'com'
-              }
+          route: {
+            name: 'com',
+          },
         },
         {
           title: '我的',
           index: 'user',
           icon: 'chengyuan',
-          route:
-              {
-                name: 'socialMy',
-              }
+          route: {
+            name: 'socialMy',
+          },
         },
         {
           title: '邀请',
           index: 'invite',
           icon: 'tianjiachengyuan',
-          route:
-              {
-                name: 'invite',
-              }
+          route: {
+            name: 'invite',
+          },
         },
         {
           title: '等级权益',
           index: 'grade',
           icon: 'star',
-          route:
-              {
-                name: 'grade',
-              }
+          route: {
+            name: 'grade',
+          },
         },
         {
           title: '消息',
           index: 'message',
           icon: 'message',
           route: {
-            name: 'message'
-          }
+            name: 'message',
+          },
         },
         {
           title: '榜单',
           index: 'rank',
           icon: 'trophy',
           route: {
-            name: 'rank'
-          }
+            name: 'rank',
+          },
         },
         //  {
         //   title:'推广中心',
@@ -99,27 +93,24 @@ export default {
         swipeEasing: true,
         suppressScrollY: true,
         suppressScrollX: false,
-        wheelPropagation: true
+        wheelPropagation: true,
       },
-
-    }
+    };
   },
-  async mounted () {
-
-  },
+  async mounted() {},
   methods: {
-    goUrl (url) {
-      browser.openInInner(url)
+    goUrl(url) {
+      browser.openInInner(url);
     },
-    changeTab (data) {
-      this.$router.push(data.menu.route)
+    changeTab(data) {
+      this.$router.push(data.menu.route);
     },
-  }
-}
+  },
+};
 </script>
 
-<style lang="scss" scoped>
-:deep(.muuri-item ) {
+<style scoped lang="scss">
+:deep(.muuri-item) {
   /* any styles to card on the item container */
   /* only to override positioning */
   margin: 5px;
@@ -137,5 +128,4 @@ export default {
   &.muuri-item-hidden {
   }
 }
-
 </style>

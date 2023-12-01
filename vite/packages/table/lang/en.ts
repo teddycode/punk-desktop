@@ -13,7 +13,6 @@ export default {
   },
   language: {
     tips: 'The project only handles the internationalization of menus, and other pages and functions need to be handled by yourself',
-    SelectLanguage: 'Select language'
-  }
-}
-
+    SelectLanguage: 'Select language',
+  },
+};

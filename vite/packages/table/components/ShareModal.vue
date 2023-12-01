@@ -1,31 +1,37 @@
 <template>
   <!-- 分享成功的模态框 -->
-  <div v-if="shareModal" class="fixed inset-0 home-blur xt-mask" style="z-index: 99999;">
+  <div v-if="shareModal" class="fixed inset-0 home-blur xt-mask" style="z-index: 99999">
     <div
-        class="xt-modal fixed text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  rounded-lg flex flex-col justify-evenly items-center"
-        style="padding: 24px 32px;width: 480px;height: 221px;background:  #282828">
+      class="xt-modal fixed text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg flex flex-col justify-evenly items-center"
+      style="padding: 24px 32px; width: 480px; height: 221px; background: #282828"
+    >
       <div>
-        <Icon icon="yiwancheng" style="color:#52C41A;font-size:20px"></Icon>
-        <span class="ml-2" style="font-size: 18px;color: var(--primary-text);font-weight: 500;">分享成功</span>
+        <Icon icon="yiwancheng" style="color: #52c41a; font-size: 20px"></Icon>
+        <span class="ml-2" style="font-size: 18px; color: var(--primary-text); font-weight: 500">分享成功</span>
       </div>
-      <div style="font-size: 16px;margin:24px 0;color: var(--secondary-text);">
+      <div style="font-size: 16px; margin: 24px 0; color: var(--secondary-text)">
         「 {{ shareName }} 」成功分享至创意市场，选择分享到元社区让更多人看到吧～
       </div>
       <div class="flex">
-        <div class="flex justify-center items-center bg-blue-500 rounded-lg pointer"
-             style="width: 160px;height: 48px;"
-             @click="openDrawer">
+        <div
+          class="flex justify-center items-center bg-blue-500 rounded-lg pointer"
+          style="width: 160px; height: 48px"
+          @click="openDrawer"
+        >
           同时分享到元社区
         </div>
-        <div class=" ml-3 flex justify-center items-center xt-text xt-bg-2 rounded-lg pointer"
-             style="width: 160px;height: 48px;" @click="close">
+        <div
+          class="ml-3 flex justify-center items-center xt-text xt-bg-2 rounded-lg pointer"
+          style="width: 160px; height: 48px"
+          @click="close"
+        >
           完成
         </div>
       </div>
     </div>
   </div>
   <!-- 发布抽屉 -->
-  <a-drawer v-model:visible="release" placement="right" style="z-index:999999;" width="500">
+  <a-drawer v-model:visible="release" placement="right" style="z-index: 999999" width="500">
     <template #extra>
       <a-space>
         <div class="add-scheme" @click="saveVal">发布</div>
@@ -44,43 +50,42 @@
 </template>
 
 <script>
-
 export default {
   name: 'ShareModal',
   components: {},
-  data () {
+  data() {
     return {
       release: false,
-    }
+    };
   },
   props: {
     shareModal: {
       type: Boolean,
-      default: () => false
+      default: () => false,
     },
     shareName: {
       type: String,
-      default: () => ''
+      default: () => '',
     },
     back: {
       type: Boolean,
-      default: () => false
-    }
+      default: () => false,
+    },
   },
 
   methods: {
-    close () {
-      this.$emit('closeShare', false)
+    close() {
+      this.$emit('closeShare', false);
       if (this.back) {
-        this.$router.go(-1)
+        this.$router.go(-1);
       }
     },
-    openDrawer () {
-      this.$emit('closeShare', false)
-      this.release = true
+    openDrawer() {
+      this.$emit('closeShare', false);
+      this.release = true;
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

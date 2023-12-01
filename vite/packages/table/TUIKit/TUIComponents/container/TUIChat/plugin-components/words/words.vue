@@ -1,23 +1,25 @@
 <template>
-  <div :class="[isH5 ? 'words-H5' : '']" class="words" style="padding: 0 18px !important;outline: none !important;">
+  <div class="words" :class="[isH5 ? 'words-H5' : '']" style="padding: 0 18px !important; outline: none !important">
     <!-- 重新将UI结构进行更改 -->
-    <a-tooltip style="outline: none !important;" title="快速回复" @click="toggleShow">
-      <Icon icon="message"
-            style="height: 24px; color: var(--secondary-text) !important; width: 24px;margin: 0 !important;"></Icon>
+    <a-tooltip title="快速回复" @click="toggleShow" style="outline: none !important">
+      <Icon
+        icon="message"
+        style="height: 24px; color: var(--secondary-text) !important; width: 24px; margin: 0 !important"
+      ></Icon>
     </a-tooltip>
 
     <!-- <i class="icon icon-message" title="快速回复" @click="toggleShow"></i> -->
 
-    <main v-show="show&&!isMute" :class="[isH5 ? 'words-H5-main' : '']" class="words-main">
-      <div ref="dialog" class="words-main-content">
+    <main class="words-main" :class="[isH5 ? 'words-H5-main' : '']" v-show="show && !isMute">
+      <div class="words-main-content" ref="dialog">
         <header>
           <aside>
-            <h1 style="color: var(--primary-text) !important;">{{ $t('Words.常用语-快捷回复工具') }}</h1>
+            <h1 style="color: var(--primary-text) !important">{{ $t('Words.常用语-快捷回复工具') }}</h1>
           </aside>
           <span v-if="isH5" class="close" @click="toggleShow">关闭</span>
         </header>
         <ul class="words-list">
-          <li v-for="(item, index) in list" :key="index" class="words-list-item" @click="select(item)">
+          <li class="words-list-item" v-for="(item, index) in list" :key="index" @click="select(item)">
             <label>{{ item.value }}</label>
           </li>
         </ul>
@@ -27,9 +29,9 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, reactive, ref, toRefs, watch, watchEffect} from 'vue';
-import {useI18nLocale} from '../../../../../TUIPlugin/TUIi18n';
-import {onClickOutside} from '@vueuse/core';
+import { defineComponent, reactive, watchEffect, toRefs, watch, ref } from 'vue';
+import { useI18nLocale } from '../../../../../TUIPlugin/TUIi18n';
+import { onClickOutside } from '@vueuse/core';
 
 const Words = defineComponent({
   type: 'custom',
@@ -48,7 +50,7 @@ const Words = defineComponent({
     },
   },
   setup(props: any, ctx: any) {
-    const {t} = (window as any).TUIKitTUICore.config.i18n.useI18n();
+    const { t } = (window as any).TUIKitTUICore.config.i18n.useI18n();
     const list: any = [
       {
         value: '在吗？在吗？在吗？重要的话说三遍。',
@@ -87,11 +89,14 @@ const Words = defineComponent({
 
     const dialog: any = ref();
 
-    watch(() => data.locale, (newVal: any, oldVal: any) => {
-      data.list = list.map((item: any) => ({
-        value: t(`Words.${item.value}`),
-      }));
-    });
+    watch(
+      () => data.locale,
+      (newVal: any, oldVal: any) => {
+        data.list = list.map((item: any) => ({
+          value: t(`Words.${item.value}`),
+        }));
+      },
+    );
 
     watchEffect(() => {
       data.show = props.show;
@@ -132,19 +137,15 @@ export default Words;
   top: -220px !important;
   overflow-y: scroll !important;
   background: var(--secondary-bg) !important;
-
   &::-webkit-scrollbar {
     width: 4px !important;
   }
-
   &::-webkit-scrollbar-track {
     background-color: #f1f1f1 !important;
   }
-
   &::-webkit-scrollbar-track {
     background-color: #f1f1f1 !important;
   }
-
   &::-webkit-scrollbar-thumb {
     background-color: #888 !important;
   }
@@ -153,10 +154,8 @@ export default Words;
     background-color: #555 !important;
   }
 }
-
 :deep(.words-list-item) {
   color: var(--secondary-text) !important;
-
   &:hover {
     color: var(--active-bg) !important;
   }

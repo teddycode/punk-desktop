@@ -1,5 +1,2 @@
-class EntryModel {
-
-}
-
-module.exports = EntryModel
+class EntryModel {}
+module.exports = EntryModel;

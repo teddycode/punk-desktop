@@ -3,10 +3,9 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, nextTick, reactive, toRefs, watch, watchEffect} from 'vue';
-import {handleName, isTypingMessage, JSONToObject} from '../../utils/utils';
+import { defineComponent, watchEffect, watch, reactive, toRefs, computed, nextTick } from 'vue';
+import { handleName, JSONToObject, isTypingMessage } from '../../utils/utils';
 import constant from '../../../constant';
-
 const TypingHeader = defineComponent({
   props: {
     needTyping: {
@@ -53,15 +52,15 @@ const TypingHeader = defineComponent({
       data.needTyping = props.needTyping;
     });
     const conversationID = computed(() => {
-      const {conversation}: any = data;
+      const { conversation }: any = data;
       return conversation?.conversationID ? conversation.conversationID : '';
     });
     const conversationName = computed(() => {
-      const {conversation}: any = data;
+      const { conversation }: any = data;
       return handleName(conversation);
     });
     const conversationType = computed(() => {
-      const {conversation}: any = data;
+      const { conversation }: any = data;
       return conversation?.type ? conversation?.type : '';
     });
 
@@ -71,7 +70,6 @@ const TypingHeader = defineComponent({
       }
       return conversationName?.value;
     });
-
 
     const onTyping = (inputContentEmpty: boolean, inputBlur: boolean) => {
       if (!data.needTyping || conversationType.value !== 'C2C') return;
@@ -100,41 +98,41 @@ const TypingHeader = defineComponent({
     });
 
     watch(
-        () => data.needTyping,
-        (newVal: any, oldVal: any) => {
-          if (!newVal) {
-            data.myTypingStatus = 0;
-            data.otherTypingStatus = 0;
-            data.lastOtherMessageTime = 0;
-          }
+      () => data.needTyping,
+      (newVal: any, oldVal: any) => {
+        if (!newVal) {
+          data.myTypingStatus = 0;
+          data.otherTypingStatus = 0;
+          data.lastOtherMessageTime = 0;
         }
+      },
     );
 
     watch(
-        () => data.messageList,
-        (newVal: any, oldVal: any) => {
-          nextTick(() => {
-            if (newVal.length === 0 || conversationType.value !== 'C2C') {
-              return;
+      () => data.messageList,
+      (newVal: any, oldVal: any) => {
+        nextTick(() => {
+          if (newVal.length === 0 || conversationType.value !== 'C2C') {
+            return;
+          }
+          data.lastOtherMessageTime = getLastOtherMessageTime(newVal);
+          if (newVal[newVal.length - 1]?.flow === 'in') {
+            if (!isTypingMessage(newVal[newVal.length - 1])) {
+              data.lastOtherMessageTime = newVal[newVal.length - 1]?.time;
+              data.otherTypingStatus = 0;
+            } else {
+              data.otherTypingStatus = handleTypingMessageStatus(newVal[newVal.length - 1]);
+              waitTypingEnd();
             }
-            data.lastOtherMessageTime = getLastOtherMessageTime(newVal);
-            if (newVal[newVal.length - 1]?.flow === 'in') {
-              if (!isTypingMessage(newVal[newVal.length - 1])) {
-                data.lastOtherMessageTime = newVal[newVal.length - 1]?.time;
-                data.otherTypingStatus = 0;
-              } else {
-                data.otherTypingStatus = handleTypingMessageStatus(newVal[newVal.length - 1]);
-                waitTypingEnd();
-              }
-            }
-          });
-        },
-        {deep: true}
+          }
+        });
+      },
+      { deep: true },
     );
 
     const handleTypingMessageStatus = (item: any) => {
       try {
-        const {typingStatus, actionParam}: any = JSONToObject(item?.payload?.data);
+        const { typingStatus, actionParam }: any = JSONToObject(item?.payload?.data);
         if (typingStatus === 1 && actionParam === constant.typeInputStatusIng) {
           return 1;
         }
@@ -203,7 +201,6 @@ export default TypingHeader;
 <style scoped>
 @import url('../../../../styles/common.scss');
 @import url('../../../../styles/icon.scss');
-
 h1 {
   overflow: hidden;
   white-space: nowrap;

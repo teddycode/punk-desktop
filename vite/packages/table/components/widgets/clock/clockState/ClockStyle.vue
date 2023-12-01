@@ -20,17 +20,17 @@
   </div>
 </template>
 <script>
-import mixin from '../hooks/clockMixin.js'
+import mixin from '../hooks/clockMixin.js';
 
 export default {
   mixins: [mixin],
   emits: ['updateClockStyle'],
   methods: {
-    updateClockStyle (e) {
-      this.$emit('updateClockStyle', e)
+    updateClockStyle(e) {
+      this.$emit('updateClockStyle', e);
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

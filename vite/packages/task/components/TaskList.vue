@@ -1,83 +1,90 @@
 <script lang="ts">
-import {CheckOutlined, CloseOutlined, DeleteOutlined} from '@ant-design/icons-vue'
+import { CloseOutlined, CheckOutlined, DeleteOutlined } from '@ant-design/icons-vue';
 
-const ipc = eval('require')('electron').ipcRenderer
+const ipc = eval('require')('electron').ipcRenderer;
 export default {
-  components: {CloseOutlined, CheckOutlined, DeleteOutlined},
+  components: { CloseOutlined, CheckOutlined, DeleteOutlined },
   props: {
     list: Array,
     selectedKeys: Array,
-    config: Object
+    config: Object,
   },
   emits: ['update:selectedKeys', 'remove'],
   data() {
     return {
       dataList: [],
-      selectedKeysData: []
-    }
+      selectedKeysData: [],
+    };
   },
   computed: {
     dataList() {
-      return this.list.map(task => {
-        task.icon = this.getIcon(task.data.tabs[0].favicon)
-        return task
-      })
-    }
+      return this.list.map((task) => {
+        task.icon = this.getIcon(task.data.tabs[0].favicon);
+        return task;
+      });
+    },
   },
   mounted() {
-    this.ipc = eval('require')('electron').ipcRenderer
+    this.ipc = eval('require')('electron').ipcRenderer;
   },
   methods: {
     remove(id) {
-      this.$emit('remove', id)
+      this.$emit('remove', id);
     },
     getUserIconName(userIcon) {
-      let iconPath = userIcon.split('.')
-      return iconPath[2]
+      let iconPath = userIcon.split('.');
+      return iconPath[2];
     },
     selected(task) {
-      let index = this.selectedKeysData.indexOf(task.id)
+      let index = this.selectedKeysData.indexOf(task.id);
       if (index > -1) {
-        this.selectedKeysData.splice(index, 1)
+        this.selectedKeysData.splice(index, 1);
       } else {
-        this.selectedKeysData.push(task.id)
+        this.selectedKeysData.push(task.id);
       }
-      this.$emit('update:selectedKeys', this.selectedKeysData)
+      this.$emit('update:selectedKeys', this.selectedKeysData);
     },
     //获取图标的方法
     getIcon(favicon) {
-      var defaultIcon = '../../icons/empty.png'
+      var defaultIcon = '../../icons/empty.png';
       if (typeof favicon == 'undefined') {
-        return defaultIcon
+        return defaultIcon;
       } else if (favicon == null) {
-        return defaultIcon
+        return defaultIcon;
       } else {
-        return favicon.url
+        return favicon.url;
       }
     },
-  }
-}
+  },
+};
 </script>
 
 <template>
-  <div style="padding-bottom:40px;height: 100%; overflow-y: auto">
-    <div style="padding: 20px;height: 100%;">
+  <div style="padding-bottom: 40px; height: 100%; overflow-y: auto">
+    <div style="padding: 20px; height: 100%">
       <a-row :gutter="16">
-        <a-col v-for="(task,index) in dataList" :key="index" :span="8">
-          <a-card :bordered="false" :class="{'selected':this.selectedKeysData.indexOf(task.id)>-1}"
-                  class="task" @click="selected(task)">
-            <div slot="title" slot-scope="title" @click.stop="()=>{}">
+        <a-col :span="8" v-for="(task, index) in dataList" :key="index">
+          <a-card
+            :class="{ selected: this.selectedKeysData.indexOf(task.id) > -1 }"
+            @click="selected(task)"
+            :bordered="false"
+            class="task"
+          >
+            <div @click.stop="() => {}" slot="title" slot-scope="title">
               <div style="position: relative">
-                <svg v-if="task.data.userIcon" aria-hidden="true" class="icon task-icon">
-                  <use v-bind:xlink:href="'#icon-'+getUserIconName(task.data.userIcon)"></use>
+                <svg v-if="task.data.userIcon" class="icon task-icon" aria-hidden="true">
+                  <use v-bind:xlink:href="'#icon-' + getUserIconName(task.data.userIcon)"></use>
                 </svg>
-                <img v-else :src="task.icon" class="icon" onerror="this.src='/icons/default.svg'"/>
+                <img v-else class="icon" :src="task.icon" onerror="this.src='/icons/default.svg'" />
                 &nbsp; {{ task.data.name || '标签组' }}
 
-                <img v-if="task.data.partition !=='persist:webcontent'" class="single-avatar"
-                     src="/public/icons/randomuser.svg">
-                <div class="operation" style="position:absolute;right: 0;top: 0">
-                  <DeleteOutlined @click="remove(task.id)"/>
+                <img
+                  class="single-avatar"
+                  v-if="task.data.partition !== 'persist:webcontent'"
+                  src="/public/icons/randomuser.svg"
+                />
+                <div class="operation" style="position: absolute; right: 0; top: 0">
+                  <DeleteOutlined @click="remove(task.id)" />
                 </div>
               </div>
             </div>
@@ -85,15 +92,13 @@ export default {
             <div style="border-top: 1px solid #f1f1f1"></div>
             <ul class="tabs" style="height: 220px; overflow-y: auto; margin-right: -10px">
               <li
-                  v-for="(tab, Dindex) in task.data.tabs"
-                  :key="Dindex"
-                  class="tab-title"
-                  @click="selectTab(task, tab, task.id, Dindex)"
+                class="tab-title"
+                v-for="(tab, Dindex) in task.data.tabs"
+                :key="Dindex"
+                @click="selectTab(task, tab, task.id, Dindex)"
               >
-                <a-avatar :src="getIcon(tab.favicon)" class="tab-icon" shape="square" size="small"></a-avatar>
-                {{
-                  tab.title == '' ? '新标签' : tab.title
-                }}
+                <a-avatar shape="square" size="small" class="tab-icon" :src="getIcon(tab.favicon)"></a-avatar>
+                {{ tab.title == '' ? '新标签' : tab.title }}
               </li>
             </ul>
           </a-card>
@@ -102,9 +107,5 @@ export default {
     </div>
   </div>
 </template>
-<style>
-
-</style>
-<style lang="scss" scoped>
-
-</style>
+<style></style>
+<style scoped lang="scss"></style>

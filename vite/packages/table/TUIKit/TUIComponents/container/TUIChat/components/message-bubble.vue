@@ -1,9 +1,10 @@
 <template>
-  <div ref="htmlRefHook" :class="[message.flow === 'in' ? '' : 'reverse']" class="message-bubble">
+  <div class="message-bubble" :class="[message.flow === 'in' ? '' : 'reverse']" ref="htmlRefHook">
     <div class="avatar rounded-full pointer" @click="clickPersonalInfo(message)">
-      <img :src="message?.avatar || 'https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'"
-           class="w-full h-full object-cover rounded-full"
-           onerror="this.src='https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'"
+      <img
+        class="w-full h-full object-cover rounded-full"
+        :src="message?.avatar || 'https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'"
+        onerror="this.src='https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'"
       />
     </div>
 
@@ -13,73 +14,75 @@
       onerror="this.src='https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'"
     /> -->
 
-
     <main class="message-area">
-      <label v-if="message.flow === 'in' && message.conversationType === 'GROUP'" class="name">
+      <label class="name" v-if="message.flow === 'in' && message.conversationType === 'GROUP'">
         {{ message.nameCard || message.nick || message.from }}
       </label>
       <div :class="handleImageOrVideoBubbleStyle(message)" @click.prevent.right="toggleDialog">
         <div
-            v-if="message?.cloudCustomData && referenceMessage && referenceMessage?.messageRootID"
-            :class="[message?.flow === 'in' ? '' : 'message-replies-area-reverse']"
-            class="message-replie-area"
-            @click="showRepliesDialog(message, false)"
+          class="message-replie-area"
+          :class="[message?.flow === 'in' ? '' : 'message-replies-area-reverse']"
+          v-if="message?.cloudCustomData && referenceMessage && referenceMessage?.messageRootID"
+          @click="showRepliesDialog(message, false)"
         >
           <MessageReference
-              :allMessageID="allMessageID"
-              :face="face"
-              :message="message"
-              :referenceForShow="referenceForShow"
-              :referenceMessage="referenceMessage"
-              :url="url"
-              type="reply"
+            :message="message"
+            :referenceMessage="referenceMessage"
+            :referenceForShow="referenceForShow"
+            :url="url"
+            :face="face"
+            :allMessageID="allMessageID"
+            type="reply"
           />
         </div>
-        <slot/>
+        <slot />
         <div v-if="dropdown" ref="dropdownRef" class="dropdown-inner">
-          <div :class="[message.flow === 'in' ? '' : 'dialog-right']" class="dialog" @click="dropdown = false">
-            <slot name="dialog"/>
+          <div class="dialog" :class="[message.flow === 'in' ? '' : 'dialog-right']" @click="dropdown = false">
+            <slot name="dialog" />
           </div>
         </div>
-        <MessageEmojiReact v-if="needEmojiReact && isEmojiReactionInMessage(message)" :message="message"
-                           type="content"/>
+        <MessageEmojiReact
+          :message="message"
+          type="content"
+          v-if="needEmojiReact && isEmojiReactionInMessage(message)"
+        />
       </div>
     </main>
 
-    <label v-if="message.status === 'fail'" class="message-label fail" @click="resendMessage(message)">!</label>
+    <label class="message-label fail" v-if="message.status === 'fail'" @click="resendMessage(message)">!</label>
 
     <label
-        v-if="showReadReceiptTag(message)"
-        :class="readReceiptStyle(message)"
-        class="message-label"
-        @click="showReadReceiptDialog(message)"
+      class="message-label"
+      :class="readReceiptStyle(message)"
+      v-if="showReadReceiptTag(message)"
+      @click="showReadReceiptDialog(message)"
     >
       <span>{{ readReceiptCont(message) }}</span>
     </label>
   </div>
 
   <div
-      v-if="message?.cloudCustomData && referenceMessage && !referenceMessage?.messageRootID"
-      :class="[message.flow === 'in' ? '' : 'message-reference-area-reverse']"
-      class="message-reference-area"
-      @click="jumpToAim(referenceMessage)"
+    class="message-reference-area"
+    :class="[message.flow === 'in' ? '' : 'message-reference-area-reverse']"
+    v-if="message?.cloudCustomData && referenceMessage && !referenceMessage?.messageRootID"
+    @click="jumpToAim(referenceMessage)"
   >
     <MessageReference
-        :allMessageID="allMessageID"
-        :face="face"
-        :message="message"
-        :referenceForShow="referenceForShow"
-        :referenceMessage="referenceMessage"
-        :url="url"
-        type="reference"
+      :message="message"
+      :referenceMessage="referenceMessage"
+      :referenceForShow="referenceForShow"
+      :url="url"
+      :face="face"
+      :allMessageID="allMessageID"
+      type="reference"
     />
   </div>
 
   <label
-      v-if="replies?.length"
-      :class="[message.flow === 'in' ? '' : 'message-replies-reverse']"
-      class="message-replies"
-      @click="showRepliesDialog(message, true)"
+    class="message-replies"
+    :class="[message.flow === 'in' ? '' : 'message-replies-reverse']"
+    v-if="replies?.length"
+    @click="showRepliesDialog(message, true)"
   >
     <i class="icon icon-msg-replies"></i>
     <span>{{ replies?.length + $t('TUIChat.条回复') }}</span>
@@ -91,34 +94,31 @@
       <!-- <MemberInfo :info="memberInfo" @submit="show = false"></MemberInfo> -->
     </Modal>
   </Teleport>
-
 </template>
 
 <script lang="ts">
-import {decodeText} from '../utils/decodeText';
+import { decodeText } from '../utils/decodeText';
 import constant from '../../constant';
-import {defineComponent, nextTick, reactive, ref, toRefs, watchEffect} from 'vue';
-import {onClickOutside, onLongPress, useElementBounding} from '@vueuse/core';
-import {deepCopy, JSONToObject} from '../utils/utils';
-import {handleErrorPrompts} from '../../utils';
+import { defineComponent, watchEffect, reactive, toRefs, ref, nextTick, watch } from 'vue';
+import { onClickOutside, onLongPress, useElementBounding } from '@vueuse/core';
+import { deepCopy, JSONToObject } from '../utils/utils';
+import { handleErrorPrompts } from '../../utils';
 import TUIChat from '../index.vue';
 import MessageReference from './message-reference.vue';
-import {Message} from '../interface';
-import {TUIEnv} from '../../../../TUIPlugin';
+import { Message } from '../interface';
+import { TUIEnv } from '../../../../TUIPlugin';
 import MessageEmojiReact from './message-emoji-react.vue';
 import TIM from '../../../../TUICore/tim/index';
 import Modal from '../../../../../components/Modal.vue';
 // import MemberInfo from './memberInfo.vue';
-import {appStore} from '../../../../../store'
-import {get, post} from "../../../../../js/axios/request";
-import {sUrl} from '../../../../../consts'
+import { appStore } from '../../../../../store';
+import { post, get } from '../../../../../js/axios/request';
+import { sUrl } from '../../../../../consts';
 import UserCard from '../../../../../components/small/UserCard.vue';
 
-
-const userCardUrl = sUrl('/app/com/userCard')  // 用户卡片信息
-const getUserGradeUrl = sUrl('/app/getUserGrade')   // 用户等级信息
-const getUserMedalUrl = sUrl('/app/medal/getUserMedal')  // 用户排名信息
-
+const userCardUrl = sUrl('/app/com/userCard'); // 用户卡片信息
+const getUserGradeUrl = sUrl('/app/getUserGrade'); // 用户等级信息
+const getUserMedalUrl = sUrl('/app/medal/getUserMedal'); // 用户排名信息
 
 const messageBubble = defineComponent({
   props: {
@@ -158,12 +158,13 @@ const messageBubble = defineComponent({
     MessageReference,
     // MemberInfo,
     UserCard,
-    MessageEmojiReact, Modal
+    MessageEmojiReact,
+    Modal,
   },
 
   setup(props: any, ctx: any) {
-    const {t} = (window as any).TUIKitTUICore.config.i18n.useI18n();
-    const {TUIServer} = TUIChat;
+    const { t } = (window as any).TUIKitTUICore.config.i18n.useI18n();
+    const { TUIServer } = TUIChat;
     const data = reactive({
       env: TUIEnv(),
       message: {} as Message,
@@ -180,19 +181,19 @@ const messageBubble = defineComponent({
       url: '',
       needEmojiReact: false,
       memberInfo: {},
-      userCardUid: "",
-      uid: "",
+      userCardUid: '',
+      uid: '',
     });
 
-    const store = appStore()
-    data.userCardUid = store.$state?.userCardUid
+    const store = appStore();
+    data.userCardUid = store.$state?.userCardUid;
 
     watchEffect(() => {
       data.type = constant;
       data.messagesList = props.messagesList;
       data.needEmojiReact = props.needEmojiReact;
       data.message = deepCopy(
-          data.messagesList?.find((item: any) => (item as any)?.ID === props.message?.ID) || props.data
+        data.messagesList?.find((item: any) => (item as any)?.ID === props.message?.ID) || props.data,
       );
       data.needGroupReceipt = props.needGroupReceipt;
       data.needReplies = props.needReplies;
@@ -212,7 +213,7 @@ const messageBubble = defineComponent({
             }
             if ((data.referenceMessage as any).messageType === constant.typeFace) {
               (data as any).url = `https://web.sdk.qcloud.com/im/assets/face-elem/${
-                  (data.referenceForShow as any).payload.data
+                (data.referenceForShow as any).payload.data
               }@2x.png`;
             }
           }
@@ -239,11 +240,11 @@ const messageBubble = defineComponent({
           const messageListBound = useElementBounding(messageListDom);
           const leftRange = messageListBound?.left?.value;
           const rightRange =
-              messageListBound?.left?.value + (messageListDom as any).clientWidth - dialogDom.clientWidth + 76;
+            messageListBound?.left?.value + (messageListDom as any).clientWidth - dialogDom.clientWidth + 76;
           const topRange = messageListBound?.top?.value;
           const bottomRange =
-              messageListBound?.top?.value + (messageListDom as any).clientHeight - dialogDom.clientHeight;
-          const {clientX, clientY} = e;
+            messageListBound?.top?.value + (messageListDom as any).clientHeight - dialogDom.clientHeight;
+          const { clientX, clientY } = e;
           if (data?.env?.isH5) {
             if (parentBound?.top?.value <= dialogElement?.clientHeight) {
               dialogDom.style.bottom = `-${dialogElement?.clientHeight}px`;
@@ -256,8 +257,8 @@ const messageBubble = defineComponent({
             }
             const centerWidth = parentBound?.left?.value + parentBound?.width?.value / 2;
             if (
-                centerWidth > dialogElement.clientWidth / 2 &&
-                centerWidth < messageListDom?.clientWidth - dialogElement.clientWidth / 2
+              centerWidth > dialogElement.clientWidth / 2 &&
+              centerWidth < messageListDom?.clientWidth - dialogElement.clientWidth / 2
             ) {
               dialogDom.style.left = 'calc(50% - 135px)';
             } else if (centerWidth <= dialogElement.clientWidth / 2) {
@@ -276,8 +277,8 @@ const messageBubble = defineComponent({
               break;
             case clientX >= rightRange:
               dialogDom.style.right = `${Math.max(
-                  parentBound?.left?.value + parentDom?.clientWidth - e.clientX - 256,
-                  -10
+                parentBound?.left?.value + parentDom?.clientWidth - e.clientX - 256,
+                -10,
               )}px`;
               break;
           }
@@ -301,8 +302,8 @@ const messageBubble = defineComponent({
 
     const jumpToAim = (message: any) => {
       if (
-          (data.referenceMessage as any)?.messageID &&
-          data.allMessageID.includes((data.referenceMessage as any)?.messageID)
+        (data.referenceMessage as any)?.messageID &&
+        data.allMessageID.includes((data.referenceMessage as any)?.messageID)
       ) {
         ctx.emit('jumpID', (data.referenceMessage as any).messageID);
       } else {
@@ -335,9 +336,9 @@ const messageBubble = defineComponent({
 
     const readReceiptStyle = (message: any) => {
       if (
-          message?.readReceiptInfo?.isPeerRead ||
-          (message?.readReceiptInfo?.isPeerRead === undefined && message?.isPeerRead) ||
-          message?.readReceiptInfo?.unreadCount === 0
+        message?.readReceiptInfo?.isPeerRead ||
+        (message?.readReceiptInfo?.isPeerRead === undefined && message?.isPeerRead) ||
+        message?.readReceiptInfo?.unreadCount === 0
       ) {
         return '';
       }
@@ -348,8 +349,8 @@ const messageBubble = defineComponent({
       switch (message.conversationType) {
         case TUIServer.TUICore.TIM.TYPES.CONV_C2C:
           if (
-              message?.readReceiptInfo?.isPeerRead ||
-              (message?.readReceiptInfo?.isPeerRead === undefined && message?.isPeerRead)
+            message?.readReceiptInfo?.isPeerRead ||
+            (message?.readReceiptInfo?.isPeerRead === undefined && message?.isPeerRead)
           ) {
             return t('TUIChat.已读');
           }
@@ -359,8 +360,8 @@ const messageBubble = defineComponent({
             return t('TUIChat.全部已读');
           }
           if (
-              message.readReceiptInfo.readCount === 0 ||
-              (message.readReceiptInfo.unreadCount === undefined && message.readReceiptInfo.readCount === undefined)
+            message.readReceiptInfo.readCount === 0 ||
+            (message.readReceiptInfo.unreadCount === undefined && message.readReceiptInfo.readCount === undefined)
           ) {
             return t('TUIChat.未读');
           }
@@ -381,7 +382,7 @@ const messageBubble = defineComponent({
       }
       if ((data.referenceMessage as any)?.messageRootID) {
         const message = data.messagesList?.find(
-            (item: Message) => item.ID === (data.referenceMessage as any)?.messageRootID
+          (item: Message) => item.ID === (data.referenceMessage as any)?.messageRootID,
         );
         if (message) {
           ctx.emit('showRepliesDialog', message, 'replies');
@@ -418,32 +419,33 @@ const messageBubble = defineComponent({
       }
     };
 
-    const clickPersonalInfo = async (message: Message) => {  // 点击消息列表头像显示用户信息
-      data.userCardVisible = true
+    const clickPersonalInfo = async (message: Message) => {
+      // 点击消息列表头像显示用户信息
+      data.userCardVisible = true;
 
-      const uid = message.from
-      const userResult = await post(userCardUrl, {uid: uid}) // 用户基本信息
-      const gradeRes = await get(getUserGradeUrl, {uid: uid}) // 用户等级信息
-      const medalRes = await get(getUserMedalUrl, {uid: uid}) // 用户排名信息
+      const uid = message.from;
+      const userResult = await post(userCardUrl, { uid: uid }); // 用户基本信息
+      const gradeRes = await get(getUserGradeUrl, { uid: uid }); // 用户等级信息
+      const medalRes = await get(getUserMedalUrl, { uid: uid }); // 用户排名信息
 
-      data.uid = uid
+      data.uid = uid;
 
       data.memberInfo = {
         userinfo: {
           avatar: userResult.data.user.avatar,
           nickname: userResult.data.user.nickname,
-          uid: userResult.data.user.uid
+          uid: userResult.data.user.uid,
         },
         eq: userResult.data.equippedItems,
         grade: gradeRes,
         medal: medalRes,
         add: message,
-      }
-
-    }
+      };
+    };
 
     return {
-      ...toRefs(data), clickPersonalInfo,
+      ...toRefs(data),
+      clickPersonalInfo,
       toggleDialog,
       htmlRefHook,
       jumpToAim,
@@ -458,38 +460,32 @@ const messageBubble = defineComponent({
       handleImageOrVideoBubbleStyle,
       isEmojiReactionInMessage,
       TIM,
-    }
+    };
   },
-})
+});
 export default messageBubble;
 </script>
-
 
 <style lang="scss" scoped>
 @import url('../../../styles/common.scss');
 @import url('../../../styles/icon.scss');
-
 .reverse {
   flex-direction: row-reverse;
   justify-content: flex-start;
 }
-
 .avatar {
   width: 36px;
   height: 36px;
   border-radius: 5px;
 }
-
 .message-bubble {
   width: 100%;
   display: flex;
   padding-bottom: 5px;
 }
-
 .line-left {
   border: 1px solid rgba(0, 110, 255, 0.5);
 }
-
 .message-reference-area {
   display: flex;
   background: #f2f2f2;
@@ -498,16 +494,13 @@ export default messageBubble;
   align-self: start;
   margin-left: 44px;
   margin-right: 8px;
-
   &-show {
     width: 100%;
     display: flex;
     flex-direction: inherit;
     justify-content: center;
     padding: 6px;
-
     p {
-
       font-weight: 400;
       font-size: 0.88rem;
       color: #999999;
@@ -515,7 +508,6 @@ export default messageBubble;
       word-break: keep-all;
       padding-right: 5px;
     }
-
     span {
       height: 1.25rem;
 
@@ -527,7 +519,6 @@ export default messageBubble;
     }
   }
 }
-
 .message-replies {
   display: flex;
   align-self: start;
@@ -536,32 +527,26 @@ export default messageBubble;
   padding: 2px;
   color: #999999;
   font-size: 10px;
-
   i {
     margin: 4px;
   }
-
   span {
     line-height: 20px;
   }
 }
-
 .message-reference-area-reverse,
 .message-replies-reverse {
   align-self: end;
   margin-right: 44px;
   margin-left: 8px;
 }
-
 .message-img {
   max-width: min(calc(100vw - 180px), 300px);
   max-height: min(calc(100vw - 180px), 300px);
 }
-
 .message-video-cover {
   display: inline-block;
   position: relative;
-
   &::before {
     position: absolute;
     z-index: 1;
@@ -577,49 +562,40 @@ export default messageBubble;
     margin: auto;
   }
 }
-
 .message-videoimg {
   max-width: min(calc(100vw - 160px), 300px);
   max-height: min(calc(100vw - 160px), 300px);
 }
-
 .face-box {
   display: flex;
   align-items: center;
 }
-
 .text-img {
   width: 20px;
   height: 20px;
 }
-
 .message-audio {
   padding-left: 10px;
   display: flex;
   align-items: center;
   position: relative;
-
   .icon {
     margin: 0 4px;
   }
-
   audio {
     width: 0;
     height: 0;
   }
 }
-
 .reserve {
   flex-direction: row-reverse;
 }
-
 .message-area {
   max-width: calc(100% - 54px);
   position: relative;
   display: flex;
   flex-direction: column;
   padding: 0 8px;
-
   .name {
     padding-bottom: 4px;
     font-weight: 400;
@@ -627,7 +603,6 @@ export default messageBubble;
     color: var(--secondary-text);
     letter-spacing: 0;
   }
-
   .reference-content {
     padding: 12px;
     font-weight: 400;
@@ -638,7 +613,6 @@ export default messageBubble;
     word-break: break-all;
     animation: reference 800ms;
   }
-
   @-webkit-keyframes reference {
     from {
       opacity: 1;
@@ -661,7 +635,6 @@ export default messageBubble;
       opacity: 1;
     }
   }
-
   .content {
     padding: 12px;
     font-weight: 400;
@@ -672,23 +645,19 @@ export default messageBubble;
     word-break: break-all;
     width: fit-content;
     user-select: text !important;
-
     &-in {
       background: #fbfbfb;
       border-radius: 0px 10px 10px 10px;
     }
-
     &-out {
       background: #dceafd;
       border-radius: 10px 0px 10px 10px;
     }
-
     &-image {
       padding: 0px;
       height: fit-content;
       border-radius: 10px 0px 10px 10px;
     }
-
     &-video {
       padding: 0px;
       height: fit-content;
@@ -697,7 +666,6 @@ export default messageBubble;
     }
   }
 }
-
 .message-label {
   align-self: flex-end;
 
@@ -706,7 +674,6 @@ export default messageBubble;
   color: #b6b8ba;
   word-break: keep-all;
 }
-
 .fail {
   width: 15px;
   height: 15px;
@@ -717,11 +684,9 @@ export default messageBubble;
   justify-content: center;
   align-items: center;
 }
-
 .unRead {
   color: #679ce1;
 }
-
 .dropdown-inner {
   position: absolute;
   width: 100%;
@@ -729,14 +694,12 @@ export default messageBubble;
   left: 0;
   top: 0;
 }
-
 .dialog {
   position: absolute;
   z-index: 1;
   display: flex;
   flex-direction: row;
   width: fit-content;
-
   &-right {
     right: 0;
   }

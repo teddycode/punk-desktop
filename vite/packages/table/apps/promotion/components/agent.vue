@@ -1,32 +1,25 @@
 <template>
   <vueCustomScrollbar :settings="scrollbarSettings" style="height: 100%">
-    <div>
-
-    </div>
+    <div></div>
     <div class="flex-box">
       <div class="box-title">{{ this.incomeList.title }}</div>
       <div class="select-box">
-        <input v-model="userName" class="ant-input ant-input-borderless search" placeholder="代理名称" type="text">
-        <input v-model="userAcc" class="ant-input ant-input-borderless search" placeholder="代理账号" type="text">
-        <button class="text-center rounded-lg center pointer sel-btn btn-active " @click="onTest">重置</button>
-        <button class="text-center rounded-lg center pointer sel-btn btn-active ">查询</button>
+        <input type="text" class="ant-input ant-input-borderless search" placeholder="代理名称" v-model="userName" />
+        <input type="text" class="ant-input ant-input-borderless search" placeholder="代理账号" v-model="userAcc" />
+        <button class="text-center rounded-lg center pointer sel-btn btn-active" @click="onTest">重置</button>
+        <button class="text-center rounded-lg center pointer sel-btn btn-active">查询</button>
       </div>
-      <a-table :columns="incomeCol" :dataSource="incomeList.data" class="table-box"/>
+      <a-table :dataSource="incomeList.data" :columns="incomeCol" class="table-box" />
     </div>
-
   </vueCustomScrollbar>
-
-
 </template>
 
 <script>
-
-
 export default {
   name: 'Promotion',
   components: {},
   computed: {},
-  data () {
+  data() {
     return {
       userName: '',
       userAcc: '',
@@ -65,66 +58,60 @@ export default {
             monthIncome: '0.0',
             dayIncome: '0.0',
           },
-        ]
+        ],
       },
       incomeCol: [
         {
           title: '下级代理',
           dataIndex: 'belowAgent',
-          key: 'belowAgent'
+          key: 'belowAgent',
         },
         {
           title: '下级代理账号',
           dataIndex: 'belowAgentUser',
-          key: 'belowAgentUser'
+          key: 'belowAgentUser',
         },
         {
           title: '代理层级',
           dataIndex: 'agentLevel',
-          key: 'agentLevel'
+          key: 'agentLevel',
         },
         {
           title: '总收益',
           dataIndex: 'totalIncome',
-          key: 'totalIncome'
+          key: 'totalIncome',
         },
         {
           title: '本月收益',
           dataIndex: 'monthIncome',
-          key: 'monthIncome'
+          key: 'monthIncome',
         },
         {
           title: '当日收益',
           dataIndex: 'dayIncome',
-          key: 'dayIncome'
+          key: 'dayIncome',
         },
-      ]
-
-    }
+      ],
+    };
   },
-  mounted () {
-
-  },
+  mounted() {},
   watch: {},
   methods: {
-    onTest () {
-      console.log(this.userAcc)
-      console.log(this.userName)
-    }
-
+    onTest() {
+      console.log(this.userAcc);
+      console.log(this.userName);
+    },
   },
-}
+};
 </script>
 
 <style scoped>
-
 .flex-box {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
   padding: 0 20px;
 }
-
 
 .box-title {
   height: 22px;
@@ -136,31 +123,26 @@ export default {
   border-left: 4px solid;
   border-color: var(--active-bg);
 }
-
 .table-box {
   width: 100%;
   background-color: none;
   margin-top: 24px;
 }
-
 /* atd table */
 .table-box :deep(.ant-table-tbody > tr > td) {
   background: transparent;
 }
-
 .table-box :deep(.ant-table-thead > tr > th) {
   background: transparent;
   border-bottom: transparent;
 }
-
 .table-box :deep(.ant-table) {
   background: transparent;
 }
 
-
 /* select */
 .select-box :deep(.ant-input) {
-  background: rgba(0, 0, 0, 0.30);
+  background: rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   margin-top: 24px;
@@ -172,7 +154,7 @@ export default {
   color: rgba(255, 255, 255, 0.85);
   margin-left: 12px;
   border: none;
-  background: rgba(0, 0, 0, 0.30);
+  background: rgba(0, 0, 0, 0.3);
 }
 
 .sel-btn:nth-of-type(2) {
@@ -186,10 +168,8 @@ export default {
 }
 
 .select-box input:nth-of-type(2) {
-
   margin-left: 12px;
 }
-
 /* .select-box input:nth-of-type(2){
-} */
+    } */
 </style>

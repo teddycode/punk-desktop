@@ -1,54 +1,54 @@
-import { BrowserWindow, Session } from 'electron'
+import { BrowserWindow, Session } from 'electron';
 
-const debug = require('debug')('electron-chrome-extensions:popup')
+const debug = require('debug')('electron-chrome-extensions:popup');
 
 export interface PopupAnchorRect {
-  x: number
-  y: number
-  width: number
-  height: number
+  x: number;
+  y: number;
+  width: number;
+  height: number;
 }
 
 interface PopupViewOptions {
-  extensionId: string
-  session: Session
-  parent: BrowserWindow
-  url: string
-  anchorRect: PopupAnchorRect
+  extensionId: string;
+  session: Session;
+  parent: BrowserWindow;
+  url: string;
+  anchorRect: PopupAnchorRect;
 }
 
 const supportsPreferredSize = () => {
-  const major = parseInt(process.versions.electron.split('.').shift() || '', 10)
-  return major >= 12
-}
+  const major = parseInt(process.versions.electron.split('.').shift() || '', 10);
+  return major >= 12;
+};
 
 export class PopupView {
-  static POSITION_PADDING = 5
+  static POSITION_PADDING = 5;
 
   static BOUNDS = {
     minWidth: 25,
     minHeight: 25,
     maxWidth: 800,
     maxHeight: 600,
-  }
+  };
 
-  browserWindow?: BrowserWindow
-  parent?: BrowserWindow
-  extensionId: string
+  browserWindow?: BrowserWindow;
+  parent?: BrowserWindow;
+  extensionId: string;
 
-  private anchorRect: PopupAnchorRect
-  private destroyed: boolean = false
-  private hidden: boolean = true
+  private anchorRect: PopupAnchorRect;
+  private destroyed: boolean = false;
+  private hidden: boolean = true;
 
   /** Preferred size changes are only received in Electron v12+ */
-  private usingPreferredSize = supportsPreferredSize()
+  private usingPreferredSize = supportsPreferredSize();
 
-  private readyPromise: Promise<void>
+  private readyPromise: Promise<void>;
 
   constructor(opts: PopupViewOptions) {
-    this.parent = opts.parent
-    this.extensionId = opts.extensionId
-    this.anchorRect = opts.anchorRect
+    this.parent = opts.parent;
+    this.extensionId = opts.extensionId;
+    this.anchorRect = opts.anchorRect;
 
     this.browserWindow = new BrowserWindow({
       show: false,
@@ -68,177 +68,175 @@ export class PopupView {
         contextIsolation: true,
         enablePreferredSizeMode: true,
       },
-    })
+    });
 
-    const untypedWebContents = this.browserWindow.webContents as any
-    untypedWebContents.on('preferred-size-changed', this.updatePreferredSize)
+    const untypedWebContents = this.browserWindow.webContents as any;
+    untypedWebContents.on('preferred-size-changed', this.updatePreferredSize);
 
-    this.browserWindow.webContents.on('devtools-closed', this.maybeClose)
-    this.browserWindow.on('blur', this.maybeClose)
-    this.browserWindow.on('closed', this.destroy)
-    this.parent.once('closed', this.destroy)
+    this.browserWindow.webContents.on('devtools-closed', this.maybeClose);
+    this.browserWindow.on('blur', this.maybeClose);
+    this.browserWindow.on('closed', this.destroy);
+    this.parent.once('closed', this.destroy);
 
-    this.readyPromise = this.load(opts.url)
+    this.readyPromise = this.load(opts.url);
   }
 
   private show() {
-    this.hidden = false
-    this.browserWindow?.show()
+    this.hidden = false;
+    this.browserWindow?.show();
   }
 
   private async load(url: string): Promise<void> {
-    const win = this.browserWindow!
+    const win = this.browserWindow!;
 
     try {
-      await win.webContents.loadURL(url)
+      await win.webContents.loadURL(url);
     } catch (e) {
-      console.error(e)
+      console.error(e);
     }
 
-    if (this.destroyed) return
+    if (this.destroyed) return;
 
     if (this.usingPreferredSize) {
       // Set small initial size so the preferred size grows to what's needed
-      this.setSize({ width: PopupView.BOUNDS.minWidth, height: PopupView.BOUNDS.minHeight })
+      this.setSize({ width: PopupView.BOUNDS.minWidth, height: PopupView.BOUNDS.minHeight });
     } else {
       // Set large initial size to avoid overflow
-      this.setSize({ width: PopupView.BOUNDS.maxWidth, height: PopupView.BOUNDS.maxHeight })
+      this.setSize({ width: PopupView.BOUNDS.maxWidth, height: PopupView.BOUNDS.maxHeight });
 
       // Wait for content and layout to load
-      await new Promise((resolve) => setTimeout(resolve, 100))
-      if (this.destroyed) return
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      if (this.destroyed) return;
 
-      await this.queryPreferredSize()
-      if (this.destroyed) return
+      await this.queryPreferredSize();
+      if (this.destroyed) return;
 
-      this.show()
+      this.show();
     }
   }
 
   destroy = () => {
-    if (this.destroyed) return
+    if (this.destroyed) return;
 
-    this.destroyed = true
+    this.destroyed = true;
 
-    debug(`destroying ${this.extensionId}`)
+    debug(`destroying ${this.extensionId}`);
 
     if (this.parent) {
       if (!this.parent.isDestroyed()) {
-        this.parent.off('closed', this.destroy)
+        this.parent.off('closed', this.destroy);
       }
-      this.parent = undefined
+      this.parent = undefined;
     }
 
     if (this.browserWindow) {
       if (!this.browserWindow.isDestroyed()) {
-        const { webContents } = this.browserWindow
+        const { webContents } = this.browserWindow;
 
         if (!webContents.isDestroyed() && webContents.isDevToolsOpened()) {
-          webContents.closeDevTools()
+          webContents.closeDevTools();
         }
 
-        this.browserWindow.off('closed', this.destroy)
-        this.browserWindow.destroy()
+        this.browserWindow.off('closed', this.destroy);
+        this.browserWindow.destroy();
       }
 
-      this.browserWindow = undefined
+      this.browserWindow = undefined;
     }
-  }
+  };
 
   isDestroyed() {
-    return this.destroyed
+    return this.destroyed;
   }
 
   /** Resolves when the popup finishes loading. */
   whenReady() {
-    return this.readyPromise
+    return this.readyPromise;
   }
 
   setSize(rect: Partial<Electron.Rectangle>) {
-    if (!this.browserWindow || !this.parent) return
+    if (!this.browserWindow || !this.parent) return;
 
-    const width = Math.floor(
-      Math.min(PopupView.BOUNDS.maxWidth, Math.max(rect.width || 0, PopupView.BOUNDS.minWidth))
-    )
+    const width = Math.floor(Math.min(PopupView.BOUNDS.maxWidth, Math.max(rect.width || 0, PopupView.BOUNDS.minWidth)));
 
     const height = Math.floor(
-      Math.min(PopupView.BOUNDS.maxHeight, Math.max(rect.height || 0, PopupView.BOUNDS.minHeight))
-    )
+      Math.min(PopupView.BOUNDS.maxHeight, Math.max(rect.height || 0, PopupView.BOUNDS.minHeight)),
+    );
 
-    debug(`setSize`, { width, height })
+    debug(`setSize`, { width, height });
 
     this.browserWindow?.setBounds({
       ...this.browserWindow.getBounds(),
       width,
       height,
-    })
+    });
   }
 
   private maybeClose = () => {
     // Keep open if webContents is being inspected
     if (!this.browserWindow?.isDestroyed() && this.browserWindow?.webContents.isDevToolsOpened()) {
-      debug('preventing close due to DevTools being open')
-      return
+      debug('preventing close due to DevTools being open');
+      return;
     }
 
     // For extension popups with a login form, the user may need to access a
     // program outside of the app. Closing the popup would then add
     // inconvenience.
     if (!BrowserWindow.getFocusedWindow()) {
-      debug('preventing close due to focus residing outside of the app')
-      return
+      debug('preventing close due to focus residing outside of the app');
+      return;
     }
 
-    this.destroy()
-  }
+    this.destroy();
+  };
 
   private updatePosition() {
-    if (!this.browserWindow || !this.parent) return
+    if (!this.browserWindow || !this.parent) return;
 
-    const winBounds = this.parent.getBounds()
-    const viewBounds = this.browserWindow.getBounds()
+    const winBounds = this.parent.getBounds();
+    const viewBounds = this.browserWindow.getBounds();
 
     // TODO: support more orientations than just top-right
-    let x = winBounds.x + this.anchorRect.x + this.anchorRect.width - viewBounds.width
-    let y = winBounds.y + this.anchorRect.y + this.anchorRect.height + PopupView.POSITION_PADDING
+    let x = winBounds.x + this.anchorRect.x + this.anchorRect.width - viewBounds.width;
+    let y = winBounds.y + this.anchorRect.y + this.anchorRect.height + PopupView.POSITION_PADDING;
 
     // Convert to ints
-    x = Math.floor(x)
-    y = Math.floor(y)
+    x = Math.floor(x);
+    y = Math.floor(y);
 
-    debug(`updatePosition`, { x, y })
+    debug(`updatePosition`, { x, y });
 
     this.browserWindow.setBounds({
       ...this.browserWindow.getBounds(),
       x,
       y,
-    })
+    });
   }
 
   /** Backwards compat for Electron <12 */
   private async queryPreferredSize() {
-    if (this.usingPreferredSize || this.destroyed) return
+    if (this.usingPreferredSize || this.destroyed) return;
 
     const rect = await this.browserWindow!.webContents.executeJavaScript(
       `((${() => {
-        const rect = document.body.getBoundingClientRect()
-        return { width: rect.width, height: rect.height }
-      }})())`
-    )
+        const rect = document.body.getBoundingClientRect();
+        return { width: rect.width, height: rect.height };
+      }})())`,
+    );
 
-    if (this.destroyed) return
+    if (this.destroyed) return;
 
-    this.setSize({ width: rect.width, height: rect.height })
-    this.updatePosition()
+    this.setSize({ width: rect.width, height: rect.height });
+    this.updatePosition();
   }
 
   private updatePreferredSize = (event: Electron.Event, size: Electron.Size) => {
-    debug('updatePreferredSize', size)
-    this.usingPreferredSize = true
-    this.setSize(size)
-    this.updatePosition()
+    debug('updatePreferredSize', size);
+    this.usingPreferredSize = true;
+    this.setSize(size);
+    this.updatePosition();
 
     // Wait to reveal popup until it's sized and positioned correctly
-    if (this.hidden) this.show()
-  }
+    if (this.hidden) this.show();
+  };
 }

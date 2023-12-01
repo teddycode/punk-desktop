@@ -1,5 +1,3 @@
 import Manage from './manage.vue';
 
-export {
-    Manage,
-};
+export { Manage };

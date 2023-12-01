@@ -1,56 +1,57 @@
 /* list of the available custom !bangs */
 
-const { ipcRenderer } = require('electron')
-const fs = require('fs')
+const { ipcRenderer } = require('electron');
+const fs = require('fs');
 
-var bangsPlugin = require('searchbar/bangsPlugin.js')
+var bangsPlugin = require('searchbar/bangsPlugin.js');
 
-var webviews = require('webviews.js')
-var browserUI = require('browserUI.js')
-var focusMode = require('focusMode.js')
-var places = require('places/places.js')
-var contentBlockingToggle = require('navbar/contentBlockingToggle.js')
-var taskOverlay = require('taskOverlay/taskOverlay.js')
-var bookmarkConverter = require('bookmarkConverter.js')
+var webviews = require('webviews.js');
+var browserUI = require('browserUI.js');
+var focusMode = require('focusMode.js');
+var places = require('places/places.js');
+var contentBlockingToggle = require('navbar/contentBlockingToggle.js');
+var taskOverlay = require('taskOverlay/taskOverlay.js');
+var bookmarkConverter = require('bookmarkConverter.js');
 
-function initialize () {
+function initialize() {
   bangsPlugin.registerCustomBang({
     phrase: '!settings',
     snippet: l('viewSettings'),
     isAction: true,
     fn: function (text) {
-      webviews.update(tabs.getSelected(), 'min://settings')
-    }
-  })
+      webviews.update(tabs.getSelected(), 'min://settings');
+    },
+  });
 
   bangsPlugin.registerCustomBang({
     phrase: '!back',
     snippet: l('goBack'),
     isAction: true,
     fn: function (text) {
-      webviews.callAsync(tabs.getSelected(), 'goBack')
-    }
-  })
+      webviews.callAsync(tabs.getSelected(), 'goBack');
+    },
+  });
 
   bangsPlugin.registerCustomBang({
     phrase: '!forward',
     snippet: l('goForward'),
     isAction: true,
     fn: function (text) {
-      webviews.callAsync(tabs.getSelected(), 'goForward')
-    }
-  })
+      webviews.callAsync(tabs.getSelected(), 'goForward');
+    },
+  });
 
   bangsPlugin.registerCustomBang({
     phrase: '!screenshot',
     snippet: l('takeScreenshot'),
     isAction: true,
     fn: function (text) {
-      setTimeout(function () { // wait so that the view placeholder is hidden
-        ipcRenderer.send('saveViewCapture', { id: tabs.getSelected() })
-      }, 400)
-    }
-  })
+      setTimeout(function () {
+        // wait so that the view placeholder is hidden
+        ipcRenderer.send('saveViewCapture', { id: tabs.getSelected() });
+      }, 400);
+    },
+  });
 
   bangsPlugin.registerCustomBang({
     phrase: '!clearhistory',
@@ -58,36 +59,35 @@ function initialize () {
     isAction: true,
     fn: function (text) {
       if (confirm(l('clearHistoryConfirmation'))) {
-        places.deleteAllHistory()
-        ipc.invoke('clearStorageData')
+        places.deleteAllHistory();
+        ipc.invoke('clearStorageData');
       }
-    }
-  })
+    },
+  });
 
   bangsPlugin.registerCustomBang({
     phrase: '!enableblocking',
     snippet: l('enableBlocking'),
     isAction: true,
     fn: function (text) {
-      contentBlockingToggle.enableBlocking(tabs.get(tabs.getSelected()).url)
-    }
-  })
+      contentBlockingToggle.enableBlocking(tabs.get(tabs.getSelected()).url);
+    },
+  });
 
   bangsPlugin.registerCustomBang({
     phrase: '!disableblocking',
     snippet: l('disableBlocking'),
     isAction: true,
     fn: function (text) {
-      contentBlockingToggle.disableBlocking(tabs.get(tabs.getSelected()).url)
-    }
-  })
+      contentBlockingToggle.disableBlocking(tabs.get(tabs.getSelected()).url);
+    },
+  });
 
   // returns a task with the same name or index ("1" returns the first task, etc.)
-  function getTaskByNameOrNumber (text) {
-    const textAsNumber = parseInt(text)
+  function getTaskByNameOrNumber(text) {
+    const textAsNumber = parseInt(text);
 
-    return tasks.find((task, index) => (task.name && task.name.toLowerCase() === text) || index + 1 === textAsNumber
-    )
+    return tasks.find((task, index) => (task.name && task.name.toLowerCase() === text) || index + 1 === textAsNumber);
   }
 
   bangsPlugin.registerCustomBang({
@@ -97,25 +97,25 @@ function initialize () {
     fn: function (text) {
       /* disabled in focus mode */
       if (focusMode.enabled()) {
-        focusMode.warn()
-        return
+        focusMode.warn();
+        return;
       }
 
-      text = text.toLowerCase()
+      text = text.toLowerCase();
 
       // no task was specified, show all of the tasks
       if (!text) {
-        taskOverlay.show()
-        return
+        taskOverlay.show();
+        return;
       }
 
-      var task = getTaskByNameOrNumber(text)
+      var task = getTaskByNameOrNumber(text);
 
       if (task) {
-        browserUI.switchToTask(task.id)
+        browserUI.switchToTask(task.id);
       }
-    }
-  })
+    },
+  });
 
   bangsPlugin.registerCustomBang({
     phrase: '!newtask',
@@ -124,20 +124,20 @@ function initialize () {
     fn: function (text) {
       /* disabled in focus mode */
       if (focusMode.enabled()) {
-        focusMode.warn()
-        return
+        focusMode.warn();
+        return;
       }
 
-      taskOverlay.show()
+      taskOverlay.show();
 
       setTimeout(function () {
-        browserUI.addTask()
+        browserUI.addTask();
         if (text) {
-          tasks.getSelected().name = text
+          tasks.getSelected().name = text;
         }
-      }, 600)
-    }
-  })
+      }, 600);
+    },
+  });
 
   bangsPlugin.registerCustomBang({
     phrase: '!movetotask',
@@ -146,76 +146,76 @@ function initialize () {
     fn: function (text) {
       /* disabled in focus mode */
       if (focusMode.enabled()) {
-        focusMode.warn()
-        return
+        focusMode.warn();
+        return;
       }
 
       // remove the tab from the current task
 
-      var currentTab = tabs.get(tabs.getSelected())
-      tabs.destroy(currentTab.id)
+      var currentTab = tabs.get(tabs.getSelected());
+      tabs.destroy(currentTab.id);
 
       // make sure the task has at least one tab in it
       if (tabs.count() === 0) {
-        tabs.add()
+        tabs.add();
       }
 
-      var newTask = getTaskByNameOrNumber(text)
+      var newTask = getTaskByNameOrNumber(text);
 
       if (newTask) {
-        newTask.tabs.add(currentTab, { atEnd: true })
+        newTask.tabs.add(currentTab, { atEnd: true });
       } else {
         // create a new task with the given name
-        newTask = tasks.get(tasks.add(undefined, tasks.getIndex(tasks.getSelected().id) + 1))
-        newTask.name = text
+        newTask = tasks.get(tasks.add(undefined, tasks.getIndex(tasks.getSelected().id) + 1));
+        newTask.name = text;
 
-        newTask.tabs.add(currentTab)
+        newTask.tabs.add(currentTab);
       }
 
-      browserUI.switchToTask(newTask.id)
-      browserUI.switchToTab(currentTab.id)
-      taskOverlay.show()
+      browserUI.switchToTask(newTask.id);
+      browserUI.switchToTab(currentTab.id);
+      taskOverlay.show();
 
       setTimeout(function () {
-        taskOverlay.hide()
-      }, 600)
-    }
-  })
+        taskOverlay.hide();
+      }, 600);
+    },
+  });
 
   bangsPlugin.registerCustomBang({
     phrase: '!closetask',
     snippet: l('closeTask'),
     isAction: false,
     fn: function (text) {
-      var currentTask = tasks.getSelected()
-      var taskToClose
+      var currentTask = tasks.getSelected();
+      var taskToClose;
 
       if (text) {
-        taskToClose = getTaskByNameOrNumber(text)
+        taskToClose = getTaskByNameOrNumber(text);
       } else {
-        taskToClose = tasks.getSelected()
+        taskToClose = tasks.getSelected();
       }
 
       if (taskToClose) {
-        browserUI.closeTask(taskToClose.id)
+        browserUI.closeTask(taskToClose.id);
         if (currentTask.id === taskToClose.id) {
-          taskOverlay.show()
+          taskOverlay.show();
           setTimeout(function () {
-            taskOverlay.hide()
-          }, 600)
+            taskOverlay.hide();
+          }, 600);
         }
       }
-    }
-  })
+    },
+  });
 
   bangsPlugin.registerCustomBang({
     phrase: '!nametask',
     snippet: l('nameTask'),
     isAction: false,
     fn: function (text) {
-      tasks.getSelected().name = text
-    }
-  })
+      tasks.getSelected().name = text;
+    },
+  });
 
   bangsPlugin.registerCustomBang({
     phrase: '!importbookmarks',
@@ -223,50 +223,52 @@ function initialize () {
     isAction: true,
     fn: async function () {
       var filePath = await ipc.invoke('showOpenDialog', {
-        filters: [
-          { name: 'HTML files', extensions: ['htm', 'html'] }
-        ]
-      })
+        filters: [{ name: 'HTML files', extensions: ['htm', 'html'] }],
+      });
 
       if (!filePath) {
-        return
+        return;
       }
       fs.readFile(filePath[0], 'utf-8', function (err, data) {
         if (err || !data) {
-          console.warn(err)
-          return
+          console.warn(err);
+          return;
         }
-        bookmarkConverter.import(data)
-      })
-    }
-  })
+        bookmarkConverter.import(data);
+      });
+    },
+  });
 
   bangsPlugin.registerCustomBang({
     phrase: '!exportbookmarks',
     snippet: l('exportBookmarks'),
     isAction: true,
     fn: async function () {
-      var data = await bookmarkConverter.exportAll()
+      var data = await bookmarkConverter.exportAll();
       // save the result
-      var savePath = await ipc.invoke('showSaveDialog', { defaultPath: 'bookmarks.html' })
-      require('fs').writeFileSync(savePath, data)
-    }
-  })
+      var savePath = await ipc.invoke('showSaveDialog', { defaultPath: 'bookmarks.html' });
+      require('fs').writeFileSync(savePath, data);
+    },
+  });
 
   bangsPlugin.registerCustomBang({
     phrase: '!addbookmark',
     alias: '快捷指令',
     snippet: l('addBookmark'),
     fn: function (text) {
-      var url = tabs.get(tabs.getSelected()).url
+      var url = tabs.get(tabs.getSelected()).url;
       if (url) {
-        places.updateItem(url, {
-          isBookmarked: true,
-          tags: (text ? text.split(/\s/g).map(t => t.replace('#', '').trim()) : [])
-        }, () => {})
+        places.updateItem(
+          url,
+          {
+            isBookmarked: true,
+            tags: text ? text.split(/\s/g).map((t) => t.replace('#', '').trim()) : [],
+          },
+          () => {},
+        );
       }
-    }
-  })
+    },
+  });
 }
 
-module.exports = { initialize }
+module.exports = { initialize };

@@ -1,13 +1,9 @@
-<template>
-  社区
-</template>
+<template>社区</template>
 
 <script>
 export default {
-  name: 'GameCommunity'
-}
+  name: 'GameCommunity',
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

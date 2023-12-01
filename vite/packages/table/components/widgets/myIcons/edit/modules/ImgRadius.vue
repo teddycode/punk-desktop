@@ -5,21 +5,15 @@
       <a-switch v-model:checked="edit.isRadius"></a-switch>
     </template>
   </XtTitle>
-  <a-slider
-      v-if="edit.isRadius"
-      v-model:value="edit.radius"
-      :max="50"
-      :step="1"
-      class="no-drag"
-  />
+  <a-slider v-if="edit.isRadius" v-model:value="edit.radius" :max="50" :step="1" class="no-drag" />
 </template>
 
 <script>
-import editMixins from '../hooks/mixins'
+import editMixins from '../hooks/mixins';
 
 export default {
   mixins: [editMixins],
-}
+};
 </script>
 
 <style lang="scss" scoped></style>

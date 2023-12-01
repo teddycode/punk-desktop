@@ -31,21 +31,19 @@ var defaultKeyMap = {
   fillPassword: 'mod+\\',
   toggleTabAudio: 'shift+mod+m',
   showHistory: 'shift+mod+h',
-  globalSearch: 'alt+f'
-}
-
+  globalSearch: 'alt+f',
+};
 /* Utility function to override default mapping with user settings */
-function userKeyMap (settings) {
-  var keyMapCopy = Object.assign({}, defaultKeyMap)
+function userKeyMap(settings) {
+  var keyMapCopy = Object.assign({}, defaultKeyMap);
   if (settings) {
     // override the default keymap by the user defined ones
     Object.keys(keyMapCopy).forEach(function (key) {
       if (settings[key]) {
-        keyMapCopy[key] = settings[key]
+        keyMapCopy[key] = settings[key];
       }
-    })
+    });
   }
-  return keyMapCopy
+  return keyMapCopy;
 }
-
-export { defaultKeyMap, userKeyMap }
+export { defaultKeyMap, userKeyMap };

@@ -3,97 +3,92 @@
     <div>{{ cardType.cname }}</div>
     <div>{{ cardType.detail }}</div>
     <div>
-      <a-carousel v-if="cardType.images.length > 1" :after-change="imgChang" arrows
-                  effect="fade"
-                  style="width: 200px;height: 295.86px;">
-
-
+      <a-carousel
+        arrows
+        v-if="cardType.images.length > 1"
+        :after-change="imgChang"
+        style="width: 200px; height: 295.86px"
+        effect="fade"
+      >
         <template #prevArrow>
-          <div class="custom-slick-arrow" style=" z-index: 1;left: -89px">
-            <Icon class="carousel-icon" icon="left-circle-fill"></Icon>
+          <div class="custom-slick-arrow" style="z-index: 1; left: -89px">
+            <Icon icon="left-circle-fill" class="carousel-icon"></Icon>
           </div>
         </template>
         <template #nextArrow>
           <div class="custom-slick-arrow" style="right: -66px">
-            <Icon class="carousel-icon" icon="right-circle-fill"></Icon>
+            <Icon icon="right-circle-fill" class="carousel-icon"></Icon>
           </div>
         </template>
 
-        <img v-for="i in cardType.images" :src="getImg(i)" alt="" style="">
+        <img :src="getImg(i)" style="" alt="" v-for="i in cardType.images" />
       </a-carousel>
-      <div v-else class="one-img">
-        <img :src="getImg(cardType.images)" alt="" style="height: 100%;border-radius: 8px">
+      <div class="one-img" v-else>
+        <img :src="getImg(cardType.images)" style="height: 100%; border-radius: 8px" alt="" />
       </div>
     </div>
-    <div class="add-button pointer" @click="addCard">
-      {{ getSize }} 添加
-    </div>
+    <div class="add-button pointer" @click="addCard">{{ getSize }} 添加</div>
     <!--      <div class="btn">-->
     <!--        <a-button type="primary" style="background: #2266D1;border: none;"  @click="addCard()">添加</a-button>-->
     <!--        <a-button type="primary" style="background: #2266D1;border: none;"  @click="onBack">取消</a-button>-->
     <!--      </div>-->
-
   </div>
 </template>
 
 <script>
-import { mapActions } from 'pinia'
-import { cardStore } from '../../../store/card'
-import { message } from 'ant-design-vue'
-import { LeftCircleOutlined, RightCircleOutlined } from '@ant-design/icons-vue'
-
+import { mapActions, mapWritableState } from 'pinia';
+import { cardStore } from '../../../store/card';
+import { message } from 'ant-design-vue';
+import { LeftCircleOutlined, RightCircleOutlined } from '@ant-design/icons-vue';
 export default {
-  data () {
+  data() {
     return {
       visibility: false,
-      carouselIndex: 0
-    }
+      carouselIndex: 0,
+    };
   },
-  mounted () {
-  },
+  mounted() {},
   components: {
     LeftCircleOutlined,
-    RightCircleOutlined
+    RightCircleOutlined,
   },
   name: 'CardPreview',
   props: {
     cardType: {
       type: Object,
-      default: () => {
-      }
+      default: () => {},
     },
     desk: {
       type: Object,
       required: true,
-      default: () => {
-      }
-    }
+      default: () => {},
+    },
   },
 
   computed: {
-    getSize () {
+    getSize() {
       if (this.cardType.images.length === 1) {
-        return this.cardType.size[0]
+        return this.cardType.size[0];
       }
     },
-    getImg (url) {
-      return '/img/homeComponent/' + url + '.png'
-    }
+    getImg(url) {
+      return '/img/homeComponent/' + url + '.png';
+    },
   },
 
   methods: {
     ...mapActions(cardStore, ['addCard']),
-    imgChang (i) {
-      this.carouselIndex = i
+    imgChang(i) {
+      this.carouselIndex = i;
     },
-    onBack () {
-      this.$emit('onBack')
-      this.show = true
+    onBack() {
+      this.$emit('onBack');
+      this.show = true;
     },
 
-    addCard () {
-      this.addCard({ name: this.cardType.images[this.carouselIndex], id: Date.now(), data: {} }, this.desk)
-      this.$emit('addSuccess')
+    addCard() {
+      this.addCard({ name: this.cardType.images[this.carouselIndex], id: Date.now(), data: {} }, this.desk);
+      this.$emit('addSuccess');
       // this.$router.push({
       //   name: "home",
       //   params: {
@@ -101,11 +96,10 @@ export default {
       //     cname: this.cardType.cname,
       //   },
       // });
-      message.info('添加成功！')
-    }
-  }
-
-}
+      message.info('添加成功！');
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -191,7 +185,6 @@ export default {
 }
 
 .cartoon {
-
   animation-name: example;
   animation-duration: 4s;
   animation-iteration-count: infinite;
@@ -199,23 +192,23 @@ export default {
 
 @keyframes example {
   0% {
-    transform: scale(0.8) rotate3d(1, 1, 0, 0deg)
+    transform: scale(0.8) rotate3d(1, 1, 0, 0deg);
   }
 
   25% {
-    transform: scale(0.8) rotate3d(1, 1, 0, 20deg)
+    transform: scale(0.8) rotate3d(1, 1, 0, 20deg);
   }
 
   50% {
-    transform: scale(0.8) rotate3d(1, 1, 0, 0deg)
+    transform: scale(0.8) rotate3d(1, 1, 0, 0deg);
   }
 
   75% {
-    transform: scale(0.8) rotate3d(-1, -1, 0, 20deg)
+    transform: scale(0.8) rotate3d(-1, -1, 0, 20deg);
   }
 
   100% {
-    transform: scale(0.8) rotate3d(1, 1, 0, 0deg)
+    transform: scale(0.8) rotate3d(1, 1, 0, 0deg);
   }
 }
 
@@ -234,7 +227,6 @@ export default {
 
 :deep(.ant-carousel .slick-dots li) {
   width: 30px !important;
-
 }
 
 :deep(.ant-carousel .slick-dots li.slick-active button) {
@@ -257,7 +249,6 @@ export default {
   opacity: 0.3;
   border-radius: 5px;
   background: rgba(255, 255, 255, 0.4);
-
 }
 
 :deep(.ant-carousel .slick-dots-bottom) {

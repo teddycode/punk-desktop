@@ -1,17 +1,17 @@
 <template>
   <teleport to="body">
-    <div class='popContainer'></div>
+    <div class="popContainer"></div>
     <div class="boxs card">
       <div class="main">
-        <div v-for="(item, index) in cardDetails.option" class="card-box">
-          <img v-if="item.img" :src="item.img" :style="setImg(item.img)" alt="" class="mb-6"/>
-          <div v-else class="img"><img ref="imgRef" :src="getImg(item.name)" :style="[{ zoom: item.zoom * 1.8 + '%' }]"
-                                       alt="">
+        <div class="card-box" v-for="(item, index) in cardDetails.option">
+          <img v-if="item.img" class="mb-6" :src="item.img" alt="" :style="setImg(item.img)" />
+          <div v-else class="img">
+            <img ref="imgRef" :src="getImg(item.name)" alt="" :style="[{ zoom: item.zoom * 1.8 + '%' }]" />
           </div>
           <div class="size xt-active-bg-2 xt-text-2">{{ item.size }}</div>
           <div class="add-btn no-drag xt-active-btn" @click="addCard(item, index)">
             <div class="icons">
-              <Icon icon="tianjia2" style="color: #000;font-size: 12px;"></Icon>
+              <Icon icon="tianjia2" style="color: #000; font-size: 12px"></Icon>
             </div>
             立即添加
           </div>
@@ -20,8 +20,6 @@
       <div class="btn no-drag xt-bg xt-text" @click="onBack">
         <Icon icon="xiangzuo" style="height: 24px; width: 24px"></Icon>
       </div>
-
-
     </div>
   </teleport>
 </template>
@@ -30,36 +28,35 @@
 export default {
   props: {
     cardDetails: {
-      type: Object
+      type: Object,
     },
   },
   methods: {
-    getImg (url) {
-      return '/img/addCard/' + url + '.png'
+    getImg(url) {
+      return '/img/addCard/' + url + '.png';
     },
-    addCard (item, index) {
-      this.onBack()
-      this.$emit('addCardAchieve', this.cardDetails, index)
+    addCard(item, index) {
+      this.onBack();
+      this.$emit('addCardAchieve', this.cardDetails, index);
     },
-    onBack () {
-      this.$emit('closeCardDetails', false)
+    onBack() {
+      this.$emit('closeCardDetails', false);
     },
-    setImg (src) {
-      var img = new Image()
-      img.src = src
+    setImg(src) {
+      var img = new Image();
+      img.src = src;
       let size = {
         width: img.width,
-        height: img.height
-      }
+        height: img.height,
+      };
       if (size.width > size.height) {
-        return { width: '360px' }
+        return { width: '360px' };
       } else {
-        return { height: '320px' }
+        return { height: '320px' };
       }
-    }
-
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -92,14 +89,13 @@ export default {
   bottom: 0;
   z-index: 99911199;
 
-
   .btn {
     position: absolute;
     z-index: 99919199;
     cursor: pointer;
     top: 20px;
     left: 20px;
-    background: rgba(0, 0, 0, 0.30);
+    background: rgba(0, 0, 0, 0.3);
     border-radius: 12px;
     display: flex;
     justify-content: center;
@@ -140,7 +136,6 @@ export default {
         }
 
         margin-bottom: 25px;
-
       }
 
       .size {
@@ -158,7 +153,7 @@ export default {
         cursor: pointer;
 
         align-items: center;
-        background: rgba(0, 0, 0, 0.30);
+        background: rgba(0, 0, 0, 0.3);
         border-radius: 12px;
         width: 142px;
         height: 48px;
@@ -177,7 +172,6 @@ export default {
     }
   }
 }
-
 .box {
   z-index: 99911199;
   position: fixed;
@@ -190,4 +184,3 @@ export default {
   align-items: center;
 }
 </style>
-

@@ -1,117 +1,118 @@
 <template>
-  <div v-if="conversationType === 'chat'" :class="[env.isH5 ? 'TUIChat-H5' : '']" class="TUIChat">
+  <div class="TUIChat" :class="[env.isH5 ? 'TUIChat-H5' : '']" v-if="conversationType === 'chat'">
     <header class="TUIChat-header">
-      <i v-if="env.isH5" class="icon icon-back" @click="back"></i>
-      <TypingHeader ref="typingRef" :conversation="conversation" :messageList="messageList" :needTyping="needTyping"/>
+      <i class="icon icon-back" @click="back" v-if="env.isH5"></i>
+      <TypingHeader :needTyping="needTyping" :conversation="conversation" :messageList="messageList" ref="typingRef" />
 
-      <div v-if="conversation.groupProfile" class="flex">
+      <div class="flex" v-if="conversation.groupProfile">
         <div class="flex items-center pointer" @click="openNotice">
-          <SoundOutlined style="color: var(--secondary-text);font-size: 1.25em;"/>
+          <SoundOutlined style="color: var(--secondary-text); font-size: 1.25em" />
           <!-- <Icon icon="akar-icons:sound-on" /> -->
         </div>
 
-        <div class="flex items-center pointer " style="margin-left:12px;" @click="openGroup">
-          <Icon icon="gengduo1" style="color: var(--secondary-text);"></Icon>
+        <div class="flex items-center pointer" style="margin-left: 12px" @click="openGroup">
+          <Icon icon="gengduo1" style="color: var(--secondary-text)"></Icon>
         </div>
       </div>
     </header>
 
-
     <div class="TUIChat-main">
-      <ul id="messageEle" ref="messageEle" class="TUI-message-list" @click="dialogID = ''">
-        <p v-if="!isCompleted" class="message-more" @click="getHistoryMessageList">
+      <ul class="TUI-message-list" @click="dialogID = ''" ref="messageEle" id="messageEle">
+        <p class="message-more" @click="getHistoryMessageList" v-if="!isCompleted">
           {{ $t('TUIChat.查看更多') }}
         </p>
-        <li v-for="(item, index) in messages" :id="item?.ID" :key="index" ref="messageAimID">
-          <MessageTimestamp :currTime="item?.time"
-                            :prevTime="index > 0 ? (messages[index-1]?.time) : 0"></MessageTimestamp>
+        <li v-for="(item, index) in messages" :key="index" :id="item?.ID" ref="messageAimID">
+          <MessageTimestamp
+            :currTime="item?.time"
+            :prevTime="index > 0 ? messages[index - 1]?.time : 0"
+          ></MessageTimestamp>
           <MessageItem
-              :displayEmojiReactions="isNeedEmojiReact"
-              :displayGroupMessageReadReceipt="needGroupReceipt"
-              :env="env"
-              :message="item"
-              :messageList="messages"
-              :types="types"
-              @handleEditor="handleEditor"
-              @jumpID="jumpID"
-              @resendMessage="resendMessage"
-              @showDialog="showDialog"
-              @uploading="handleUploadingImageOrVideo"
+            :message="item"
+            :env="env"
+            :types="types"
+            :displayGroupMessageReadReceipt="needGroupReceipt"
+            :displayEmojiReactions="isNeedEmojiReact"
+            :messageList="messages"
+            @handleEditor="handleEditor"
+            @showDialog="showDialog"
+            @uploading="handleUploadingImageOrVideo"
+            @jumpID="jumpID"
+            @resendMessage="resendMessage"
           >
           </MessageItem>
         </li>
-        <div v-if="needToBottom" class="to-bottom-tip" @click="scrollToTarget('bottom')">
+        <div class="to-bottom-tip" v-if="needToBottom" @click="scrollToTarget('bottom')">
           <i class="icon icon-bottom-double"></i>
           <div class="to-bottom-tip-cont">
             <span>{{ toBottomTipCont }}</span>
           </div>
         </div>
       </ul>
-      <div v-if="forwardStatus && messageComponents.Forward" class="dialog dialog-conversation">
+      <div class="dialog dialog-conversation" v-if="forwardStatus && messageComponents.Forward">
         <component
-            :is="'Forward'"
-            :isH5="env.isH5"
-            :list="conversationData.list"
-            :message="currentMessage"
-            :show="forwardStatus"
-            @update:show="(e: any) => (forwardStatus = e)"
+          :is="'Forward'"
+          :list="conversationData.list"
+          :message="currentMessage"
+          :show="forwardStatus"
+          :isH5="env.isH5"
+          @update:show="(e: any) => (forwardStatus = e)"
         >
           <template #left="{ data }">
-            <img :src="conversationData.handleAvatar(data)" class="avatar"/>
+            <img class="avatar" :src="conversationData.handleAvatar(data)" />
             <label class="name">{{ conversationData.handleName(data) }}</label>
           </template>
           <template #right="{ data }">
-            <img :src="conversationData.handleAvatar(data)" class="avatar"/>
-            <label v-if="!env.isH5" class="name">{{ conversationData.handleName(data) }}</label>
+            <img class="avatar" :src="conversationData.handleAvatar(data)" />
+            <label class="name" v-if="!env.isH5">{{ conversationData.handleName(data) }}</label>
           </template>
         </component>
       </div>
       <div class="dialog dialog-conversation">
         <ReadReceiptDialog
-            ref="readReceiptDialog"
-            :conversation="conversation"
-            :isH5="env.isH5"
-            :message="currentMessage"
-            :show="receiptDialogStatus"
-            @closeDialog="closeDialog"
+          :message="currentMessage"
+          :conversation="conversation"
+          :show="receiptDialogStatus"
+          :isH5="env.isH5"
+          @closeDialog="closeDialog"
+          ref="readReceiptDialog"
         />
       </div>
       <imagePreviewer
-          v-if="showImagePreview"
-          :currentImage="currentImagePreview"
-          :imageList="imageList"
-          @close="showImagePreview = false"
+        v-if="showImagePreview"
+        :currentImage="currentImagePreview"
+        :imageList="imageList"
+        @close="showImagePreview = false"
       />
     </div>
 
-    <div :class="[isMute && 'disabled', env.isH5 && 'TUIChat-H5-footer']" class="TUIChat-footer">
-      <div id="func" class="func">
+    <div class="TUIChat-footer" :class="[isMute && 'disabled', env.isH5 && 'TUIChat-H5-footer']">
+      <div class="func" id="func">
         <main class="func-main px-2.5 py-3 flex items-center">
           <component
-              :is="item"
-              v-for="(item, index) in hasPluginComponentList"
-              :key="index"
-              :conversation="conversation"
-              :isH5="env.isH5"
-              :isMute="isMute"
-              parentID="func"
-              @send="handleSend"
+            v-for="(item, index) in hasPluginComponentList"
+            :key="index"
+            :isMute="isMute"
+            :is="item"
+            :isH5="env.isH5"
+            :conversation="conversation"
+            parentID="func"
+            @send="handleSend"
           ></component>
         </main>
       </div>
       <MessageInput
-          ref="messageInput"
-          :conversation="conversation"
-          :env="env"
-          :isGroup="userInfo?.isGroup"
-          :isMute="isMute"
-          :memberList="allMemberList"
-          :muteText="muteText"
-          :placeholder="$t('TUIChat.请输入消息')"
-          :replyOrReference="reference"
-          @onTyping="handleTyping"
-          @resetReplyOrReference="resetReplyOrReference"
-          @sendMessage="reportMessageSend"
+        ref="messageInput"
+        :conversation="conversation"
+        :memberList="allMemberList"
+        :env="env"
+        :isGroup="userInfo?.isGroup"
+        :replyOrReference="reference"
+        :isMute="isMute"
+        :muteText="muteText"
+        :placeholder="$t('TUIChat.请输入消息')"
+        @sendMessage="reportMessageSend"
+        @resetReplyOrReference="resetReplyOrReference"
+        @onTyping="handleTyping"
       ></MessageInput>
     </div>
 
@@ -127,17 +128,22 @@
     </div>
   </div>
 
-  <div v-else-if="conversationType === 'system'" class="TUIChat">
+  <div class="TUIChat" v-else-if="conversationType === 'system'">
     <header class="TUIChat-header">
       <h1>{{ conversationName }}</h1>
     </header>
-    <MessageSystem :data="messages" :types="types" @application="handleApplication"/>
+    <MessageSystem :data="messages" :types="types" @application="handleApplication" />
   </div>
 
-  <slot v-else-if="slotDefault"/>
+  <slot v-else-if="slotDefault" />
 
-  <a-drawer v-model:visible="groupVisible" :bodyStyle="{padding:'24px 24px 40px 24px'}" placement="right" title="群管理"
-            width="500">
+  <a-drawer
+    placement="right"
+    width="500"
+    title="群管理"
+    v-model:visible="groupVisible"
+    :bodyStyle="{ padding: '24px 24px 40px 24px' }"
+  >
     <!-- :closable="false" -->
     <!-- <div class="flex items-center" style="margin-bottom:16px;">
       <div class="flex items-center active-button pointer justify-center rounded-lg" style="width: 48px;height: 48px;background: var(--secondary-bg);" @click="groupVisible = false">
@@ -145,103 +151,124 @@
       </div>
       <div class="flex items-center justify-center font-16" style="color: var(--primary-text);margin-left: 12px;">群管理</div>
     </div> -->
-    <Manage v-if="conversation.groupProfile" :conversation="newManagerList" :manageData="conversation"
-            :memberList="memberList" :openGroup="openGroup" @close="groupVisible = false" @updateName="getManege"/>
+    <Manage
+      v-if="conversation.groupProfile"
+      @close="groupVisible = false"
+      :manageData="conversation"
+      :openGroup="openGroup"
+      :conversation="newManagerList"
+      :memberList="memberList"
+      @updateName="getManege"
+    />
   </a-drawer>
 
-  <a-drawer v-model:visible="updateVisible" :closable="false" placement="right" width="500">
-    <div class="flex items-center" style="margin-bottom:16px;">
-      <div class="flex items-center active-button pointer justify-center rounded-lg"
-           style="width: 48px;height: 48px;background: var(--secondary-bg);" @click="updateVisible = false">
-        <Icon icon="xiangzuo" style="color: var(--primary-text);height: 24px;width: 24px;"></Icon>
+  <a-drawer placement="right" width="500" :closable="false" v-model:visible="updateVisible">
+    <div class="flex items-center" style="margin-bottom: 16px">
+      <div
+        class="flex items-center active-button pointer justify-center rounded-lg"
+        style="width: 48px; height: 48px; background: var(--secondary-bg)"
+        @click="updateVisible = false"
+      >
+        <Icon icon="xiangzuo" style="color: var(--primary-text); height: 24px; width: 24px"></Icon>
       </div>
-      <div class="flex items-center font-16 justify-center" style="color: var(--primary-text);margin-left: 12px;">
+      <div class="flex items-center font-16 justify-center" style="color: var(--primary-text); margin-left: 12px">
         {{ title }}
       </div>
     </div>
 
     <template v-if="index === 1">
-      <UpdateGroupName :info="info" :server="GroupServer" @close="updateVisible = false"
-                       @updateGroupInfo="openGroup"></UpdateGroupName>
+      <UpdateGroupName
+        @close="updateVisible = false"
+        :info="info"
+        :server="GroupServer"
+        @updateGroupInfo="openGroup"
+      ></UpdateGroupName>
     </template>
 
     <template v-if="index === 2">
-      <UpdateGroupNotice :noticeInfo="info" :server="GroupServer" @close="updateVisible = false"
-                         @updateGroupInfo="openGroup"></UpdateGroupNotice>
+      <UpdateGroupNotice
+        :noticeInfo="info"
+        @close="updateVisible = false"
+        :server="GroupServer"
+        @updateGroupInfo="openGroup"
+      ></UpdateGroupNotice>
     </template>
 
     <template v-if="index === 3">
-      <UpdateMemeber :memberInfo="info" :server="GroupServer" @close="updateVisible = false"></UpdateMemeber>
+      <UpdateMemeber :memberInfo="info" @close="updateVisible = false" :server="GroupServer"></UpdateMemeber>
     </template>
 
     <template v-if="index === 4">
-      <UpdateGroupManage :groupManageInfo="info" :server="GroupServer"
-                         @close="updateVisible = false"></UpdateGroupManage>
+      <UpdateGroupManage
+        :groupManageInfo="info"
+        :server="GroupServer"
+        @close="updateVisible = false"
+      ></UpdateGroupManage>
     </template>
 
     <template v-if="index === 5">
-      <UpdateJoinGroupWay :updateGroupInfo="info" @close="updateVisible = false" @updateGroupInfo="openGroup"/>
+      <UpdateJoinGroupWay :updateGroupInfo="info" @close="updateVisible = false" @updateGroupInfo="openGroup" />
     </template>
     <template v-if="index === 6">
-      <UpdateInviteWay :updateInviteInfo="info" @close="updateVisible = false"
-                       @updateGroupInfo="openGroup"></UpdateInviteWay>
+      <UpdateInviteWay
+        :updateInviteInfo="info"
+        @close="updateVisible = false"
+        @updateGroupInfo="openGroup"
+      ></UpdateInviteWay>
     </template>
   </a-drawer>
 
-
-  <teleport to='body'>
-    <Modal v-if="inForward" v-model:visible="inForward" :blurFlag="true">
-      <ForwardModal :content="currentMessage" @close="inForward =false"></ForwardModal>
+  <teleport to="body">
+    <Modal v-model:visible="inForward" v-if="inForward" :blurFlag="true">
+      <ForwardModal :content="currentMessage" @close="inForward = false"></ForwardModal>
     </Modal>
   </teleport>
-
-
 </template>
 
 <script lang="ts">
 import {
-  computed,
   defineComponent,
-  nextTick,
-  onMounted,
   reactive,
-  ref,
   toRefs,
-  useSlots,
+  ref,
+  computed,
+  nextTick,
   watch,
+  useSlots,
+  onMounted,
   watchEffect,
 } from 'vue';
-import {MessageItem, MessageSystem, MessageTimestamp} from './components';
-import {onClickOutside} from '@vueuse/core';
-import {Manage} from './manage-components';
-import {SoundOutlined} from '@ant-design/icons-vue'
+import { MessageSystem, MessageItem, MessageTimestamp } from './components';
+import { onClickOutside } from '@vueuse/core';
+import { Manage } from './manage-components';
+import { SoundOutlined } from '@ant-design/icons-vue';
 
 import {
-  deepCopy,
-  getImgLoad,
   handleAvatar,
   handleName,
-  handleReferenceForShow,
-  isMessageTip,
+  getImgLoad,
   isTypingMessage,
+  deepCopy,
+  isMessageTip,
+  handleReferenceForShow,
 } from './utils/utils';
 
-import {getComponents} from './index';
+import { getComponents } from './index';
 
-import {useStore} from 'vuex';
+import { useStore } from 'vuex';
 import constant from '../constant';
-import {handleErrorPrompts} from '../utils';
+import { handleErrorPrompts } from '../utils';
 import Link from '../../../utils/link';
-import {Message} from './interface';
-import {Conversation} from '../TUIConversation/interface';
+import { Message } from './interface';
+import { Conversation } from '../TUIConversation/interface';
 
 import MessageInput from './message-input';
-import UpdateGroupName from '../TUIChat/updateMange/updateGroupName.vue'
-import UpdateMemeber from '../TUIChat/updateMange/updateGroupMember.vue'
-import UpdateGroupManage from './updateMange/updateGroupManage.vue'
+import UpdateGroupName from '../TUIChat/updateMange/updateGroupName.vue';
+import UpdateMemeber from '../TUIChat/updateMange/updateGroupMember.vue';
+import UpdateGroupManage from './updateMange/updateGroupManage.vue';
 import UpdateGroupNotice from './updateMange/updateGroupNotice.vue';
 import UpdateJoinGroupWay from './updateMange/updateJoinGroupWay.vue';
-import UpdateInviteWay from './updateMange/updateInviteWay.vue'
+import UpdateInviteWay from './updateMange/updateInviteWay.vue';
 import Modal from '../../../../components/Modal.vue';
 import ForwardModal from './components/forwardModal.vue';
 // import { Icon } from '@iconify/vue'
@@ -250,10 +277,20 @@ import ForwardModal from './components/forwardModal.vue';
 const TUIChat: any = defineComponent({
   name: 'TUIChat',
   components: {
-    MessageSystem, MessageTimestamp, Manage, MessageInput,
-    MessageItem, UpdateGroupName, UpdateMemeber, UpdateGroupManage,
-    UpdateGroupNotice, UpdateJoinGroupWay, UpdateInviteWay,
-    Modal, ForwardModal, SoundOutlined
+    MessageSystem,
+    MessageTimestamp,
+    Manage,
+    MessageInput,
+    MessageItem,
+    UpdateGroupName,
+    UpdateMemeber,
+    UpdateGroupManage,
+    UpdateGroupNotice,
+    UpdateJoinGroupWay,
+    UpdateInviteWay,
+    Modal,
+    ForwardModal,
+    SoundOutlined,
   },
   props: {
     isMsgNeedReadReceipt: {
@@ -271,8 +308,9 @@ const TUIChat: any = defineComponent({
   },
 
   computed: {
-    hasPluginComponentList() {   // 这里进行修改的地方,根据设计稿将不同的图标以及交互进行提取
-      const requiredElements = ["Image", "Face", "File", "Words", "Call"]
+    hasPluginComponentList() {
+      // 这里进行修改的地方,根据设计稿将不同的图标以及交互进行提取
+      const requiredElements = ['Image', 'Face', 'File', 'Words', 'Call'];
       return this.pluginComponentList.filter((item: string) => requiredElements.includes(item));
     },
   },
@@ -280,43 +318,43 @@ const TUIChat: any = defineComponent({
   data() {
     return {
       updateVisible: false, // 群组名称编辑控制
-      title: '',  // 不同群组模块的标题
-      index: '',   // 不同群组模块的标记
+      title: '', // 不同群组模块的标题
+      index: '', // 不同群组模块的标记
       info: '', // 不同群组模块的公告
-    }
+    };
   },
 
   methods: {
     getManege(val: any) {
-      this.title = val.title
-      this.index = val.id
-      this.info = val.info
-      this.updateVisible = true
+      this.title = val.title;
+      this.index = val.id;
+      this.info = val.info;
+      this.updateVisible = true;
     },
     // 点击公告打开公告界面
     openNotice() {
       const info = {
         groupID: this.conversation.groupProfile.groupID,
         notification: this.conversation.groupProfile.notification,
-        role: this.conversation.groupProfile.selfInfo.role
-      }
-      this.updateVisible = true
-      this.index = 2
-      this.info = info
-    }
+        role: this.conversation.groupProfile.selfInfo.role,
+      };
+      this.updateVisible = true;
+      this.index = 2;
+      this.info = info;
+    },
   },
 
   setup(props) {
-    const {TUIServer} = TUIChat;
+    const { TUIServer } = TUIChat;
     const GroupServer = TUIServer?.TUICore?.TUIServer?.TUIGroup;
     const ProfileServer = TUIServer?.TUICore?.TUIServer?.TUIProfile;
     const VuexStore = (TUIServer.TUICore.isOfficial && useStore && useStore()) || {};
-    const {t} = (window as any).TUIKitTUICore.config.i18n.useI18n();
+    const { t } = (window as any).TUIKitTUICore.config.i18n.useI18n();
     const data = reactive({
       GroupServer: GroupServer,
       messageList: [] as Message[],
       conversation: {} as Conversation,
-      groupVisible: false,   // 群组管理信息控制
+      groupVisible: false, // 群组管理信息控制
       text: '',
       atText: '',
       types: TUIServer.TUICore.TIM.TYPES,
@@ -375,7 +413,7 @@ const TUIChat: any = defineComponent({
       typingRef: null,
       newManagerList: {}, // 接收群组管理信息
       memberList: [], // 获取群组成员数据
-      inForward: false,// 点击转发功能
+      inForward: false, // 点击转发功能
       // forWardContent:'',// 接收转发的内容
     });
 
@@ -391,7 +429,7 @@ const TUIChat: any = defineComponent({
 
     const sendMessageReadReceipt = async (messageList: Message[]) => {
       const needReceiptMessageList = messageList.filter(
-          (item: Message) => item?.flow === 'in' && item?.needReadReceipt && !data.readSet.has(item?.ID)
+        (item: Message) => item?.flow === 'in' && item?.needReadReceipt && !data.readSet.has(item?.ID),
       );
       if (needReceiptMessageList.length) {
         await TUIServer?.sendMessageReadReceipt(needReceiptMessageList).then(() => {
@@ -430,7 +468,7 @@ const TUIChat: any = defineComponent({
     });
 
     const conversationType = computed(() => {
-      const {conversation} = data;
+      const { conversation } = data;
       if (!conversation?.conversationID) {
         return '';
       }
@@ -441,7 +479,7 @@ const TUIChat: any = defineComponent({
     });
 
     const isMute = computed(() => {
-      const {conversation} = data;
+      const { conversation } = data;
       if (conversation?.type === TUIServer.TUICore.TIM.TYPES.CONV_GROUP) {
         const userRole = conversation?.groupProfile?.selfInfo.role;
         const isMember = userRole === TUIServer.TUICore.TIM.TYPES.GRP_MBR_ROLE_MEMBER;
@@ -466,29 +504,29 @@ const TUIChat: any = defineComponent({
     });
 
     watch(
-        () => data?.conversation?.conversationID,
-        (newVal: () => string | undefined, oldVal: () => string | undefined) => {
-          if (newVal === oldVal) return;
-          data.scroll.scrollTop = 0;
-          data.scroll.scrollHeight = 0;
-          data.scroll.scrollTopMin = Infinity;
-          data.scroll.scrollTopMax = 0;
-          data.text = '';
-          data.atText = '';
-          data.reference = {
-            message: {} as Message,
-            content: '',
-            type: 0,
-            show: '',
-          };
-        },
-        {
-          deep: true,
-        }
+      () => data?.conversation?.conversationID,
+      (newVal: () => string | undefined, oldVal: () => string | undefined) => {
+        if (newVal === oldVal) return;
+        data.scroll.scrollTop = 0;
+        data.scroll.scrollHeight = 0;
+        data.scroll.scrollTopMin = Infinity;
+        data.scroll.scrollTopMax = 0;
+        data.text = '';
+        data.atText = '';
+        data.reference = {
+          message: {} as Message,
+          content: '',
+          type: 0,
+          show: '',
+        };
+      },
+      {
+        deep: true,
+      },
     );
 
     watch(isMute, (newVal: any, oldVal: any) => {
-      const {conversation} = data;
+      const { conversation } = data;
       if (newVal && conversation?.type === TUIServer.TUICore.TIM.TYPES.CONV_GROUP) {
         const userRole = conversation?.groupProfile?.selfInfo.role;
         const isMember = userRole === TUIServer.TUICore.TIM.TYPES.GRP_MBR_ROLE_MEMBER;
@@ -503,19 +541,19 @@ const TUIChat: any = defineComponent({
     });
 
     const conversationName = computed(() => {
-      const {conversation} = data;
+      const { conversation } = data;
       return handleName(conversation);
     });
 
     const messages = computed(() => data.messageList.filter((item: any) => !item.isDeleted && !isTypingMessage(item)));
     const imageList = computed(() =>
-        messages?.value?.filter((item: Message) => {
-          return !item.isRevoked && item.type === data.types.MSG_IMAGE;
-        })
+      messages?.value?.filter((item: Message) => {
+        return !item.isRevoked && item.type === data.types.MSG_IMAGE;
+      }),
     );
 
     const needGroupReceipt = computed(() => {
-      const {conversation, needReadReceipt} = data;
+      const { conversation, needReadReceipt } = data;
       if (conversation?.type === TUIServer.TUICore.TIM.TYPES.CONV_C2C || needReadReceipt) {
         return true;
       }
@@ -523,63 +561,63 @@ const TUIChat: any = defineComponent({
     });
 
     watch(
-        messages,
-        (newVal: Array<Message>, oldVal: Array<Message>) => {
-          nextTick(() => {
-            const isTheSameMessage = newVal[newVal.length - 1]?.ID === oldVal[oldVal.length - 1]?.ID;
-            if (newVal.length === 0 || isTheSameMessage) {
-              return;
-            }
-            handleScroll();
-          });
-          if (data.currentMessage) {
-            const messageID = data.currentMessage?.ID;
-            const message = newVal.find((item: any) => item.ID === messageID);
-            if (message) {
-              data.currentMessage = deepCopy(message);
+      messages,
+      (newVal: Array<Message>, oldVal: Array<Message>) => {
+        nextTick(() => {
+          const isTheSameMessage = newVal[newVal.length - 1]?.ID === oldVal[oldVal.length - 1]?.ID;
+          if (newVal.length === 0 || isTheSameMessage) {
+            return;
+          }
+          handleScroll();
+        });
+        if (data.currentMessage) {
+          const messageID = data.currentMessage?.ID;
+          const message = newVal.find((item: any) => item.ID === messageID);
+          if (message) {
+            data.currentMessage = deepCopy(message);
+          }
+        }
+        if (data.historyReference) {
+          for (let index = 0; index < messages.value.length; index++) {
+            if (messages?.value[index]?.ID === data?.referenceID) {
+              scrollToTarget('target', messageAimID.value[index]);
+              messageAimID.value[index].getElementsByClassName('content')[0].classList.add('reference-content');
             }
           }
-          if (data.historyReference) {
-            for (let index = 0; index < messages.value.length; index++) {
-              if (messages?.value[index]?.ID === data?.referenceID) {
-                scrollToTarget('target', messageAimID.value[index]);
-                messageAimID.value[index].getElementsByClassName('content')[0].classList.add('reference-content');
-              }
-            }
-            data.historyReference = false;
-          }
-        },
-        {deep: true}
+          data.historyReference = false;
+        }
+      },
+      { deep: true },
     );
 
     watch(
-        () => data.scroll.scrollTop,
-        (newVal: number) => {
-          setTimeout(() => {
-            // scrolling end
-            if (newVal === messageEle?.value?.scrollTop) {
-              if (data.scroll.scrollTopMin !== Infinity && data.scroll.scrollTopMax !== 0) {
-                sendMessageReadInView('scroll');
-              }
-              data.scroll.scrollTopMin = Infinity;
-              data.scroll.scrollTopMax = 0;
+      () => data.scroll.scrollTop,
+      (newVal: number) => {
+        setTimeout(() => {
+          // scrolling end
+          if (newVal === messageEle?.value?.scrollTop) {
+            if (data.scroll.scrollTopMin !== Infinity && data.scroll.scrollTopMax !== 0) {
+              sendMessageReadInView('scroll');
             }
-          }, 20);
-        },
-        {deep: true}
+            data.scroll.scrollTopMin = Infinity;
+            data.scroll.scrollTopMax = 0;
+          }
+        }, 20);
+      },
+      { deep: true },
     );
 
     onMounted(() => {
       watch(
-          () => messageEle?.value,
-          () => {
-            if (messageEle?.value) {
-              messageEle.value.addEventListener('scroll', onScrolling);
-            }
-          },
-          {
-            deep: true,
+        () => messageEle?.value,
+        () => {
+          if (messageEle?.value) {
+            messageEle.value.addEventListener('scroll', onScrolling);
           }
+        },
+        {
+          deep: true,
+        },
       );
     });
 
@@ -611,7 +649,8 @@ const TUIChat: any = defineComponent({
       }
     };
 
-    const forwardMessage = (message: Message) => {   // 转发回调函数
+    const forwardMessage = (message: Message) => {
+      // 转发回调函数
       data.currentMessage = message;
       conversationData.list = TUIServer.TUICore.getStore().TUIConversation.conversationList;
       data.forwardStatus = true;
@@ -629,13 +668,13 @@ const TUIChat: any = defineComponent({
 
     const submit = () => {
       TUIServer.resendMessage(data.resendMessage)
-          .then(() => {
-            data.showResend = false;
-          })
-          .catch((error: any) => {
-            handleErrorPrompts(error, data.env);
-            data.showResend = false;
-          });
+        .then(() => {
+          data.showResend = false;
+        })
+        .catch((error: any) => {
+          handleErrorPrompts(error, data.env);
+          data.showResend = false;
+        });
     };
 
     const handleEdit = (item: any) => {
@@ -718,8 +757,8 @@ const TUIChat: any = defineComponent({
       switch (type) {
         case 'receipt':
           if (
-              message.conversationType !== TUIServer.TUICore.TIM.TYPES.CONV_GROUP ||
-              message.readReceiptInfo?.unreadCount === 0
+            message.conversationType !== TUIServer.TUICore.TIM.TYPES.CONV_GROUP ||
+            message.readReceiptInfo?.unreadCount === 0
           ) {
             return;
           }
@@ -730,7 +769,7 @@ const TUIChat: any = defineComponent({
           data.currentMessage = message;
           data.repliesDialogStatus = true;
           break;
-        case 'forward':   // 显示转发内容的回调函数
+        case 'forward': // 显示转发内容的回调函数
           data.inForward = true;
           // console.log('测试转发功能是否有用::>>',message)
           // data.forWardContent = message.payload
@@ -770,10 +809,10 @@ const TUIChat: any = defineComponent({
         return;
       }
       if (messageEle.value) {
-        const {scrollHeight, scrollTop, clientHeight} = messageEle.value;
+        const { scrollHeight, scrollTop, clientHeight } = messageEle.value;
         if (
-            scrollHeight - (scrollTop + clientHeight) <= clientHeight ||
-            messages.value[messages.value.length - 1]?.flow === 'out'
+          scrollHeight - (scrollTop + clientHeight) <= clientHeight ||
+          messages.value[messages.value.length - 1]?.flow === 'out'
         ) {
           scrollToTarget('bottom');
         } else {
@@ -830,16 +869,16 @@ const TUIChat: any = defineComponent({
     };
 
     const onScrolling = () => {
-      const {scrollHeight, scrollTop, clientHeight} = messageEle.value;
+      const { scrollHeight, scrollTop, clientHeight } = messageEle.value;
       if (needGroupReceipt.value) {
         data.scroll.scrollHeight = scrollHeight;
         data.scroll.scrollTop = scrollTop;
         data.scroll.scrollTopMin = data.isUserAction
-            ? data.scroll.scrollTopMin
-            : Math.min(data.scroll.scrollTopMin, data.scroll.scrollTop);
+          ? data.scroll.scrollTopMin
+          : Math.min(data.scroll.scrollTopMin, data.scroll.scrollTop);
         data.scroll.scrollTopMax = data.isUserAction
-            ? data.scroll.scrollTopMax
-            : Math.max(data.scroll.scrollTopMax, data.scroll.scrollTop);
+          ? data.scroll.scrollTopMax
+          : Math.max(data.scroll.scrollTopMax, data.scroll.scrollTop);
       }
       if (scrollHeight - (scrollTop + clientHeight) > clientHeight) {
         handleToBottomTip(true);
@@ -900,15 +939,15 @@ const TUIChat: any = defineComponent({
     const isInView = (type: string, dom: HTMLElement, viewStart: number, viewEnd: number) => {
       const containerTop = messageEle.value.getBoundingClientRect().top;
       const containerBottom = messageEle.value.getBoundingClientRect().bottom;
-      const {top, bottom} = dom.getBoundingClientRect();
-      const {offsetTop, clientHeight} = dom;
+      const { top, bottom } = dom.getBoundingClientRect();
+      const { offsetTop, clientHeight } = dom;
       switch (type) {
         case constant.inViewType.page:
           return Math.round(top) >= Math.round(containerTop) && Math.round(bottom) <= Math.round(containerBottom);
         case constant.inViewType.scroll:
           return (
-              Math.round(offsetTop) >= Math.round(viewStart) &&
-              Math.round(offsetTop + clientHeight) <= Math.round(viewEnd)
+            Math.round(offsetTop) >= Math.round(viewStart) &&
+            Math.round(offsetTop + clientHeight) <= Math.round(viewEnd)
           );
         default:
           return false;
@@ -944,21 +983,22 @@ const TUIChat: any = defineComponent({
       (data?.typingRef as any)?.onTyping(inputContentEmpty, inputBlur);
     };
 
-    const openGroup = async () => {  // 打开右侧抽屉
-      data.groupVisible = true
+    const openGroup = async () => {
+      // 打开右侧抽屉
+      data.groupVisible = true;
 
       const option = {
-        groupID: data.conversation.groupProfile?.groupID
-      }
+        groupID: data.conversation.groupProfile?.groupID,
+      };
       const options = {
-        groupID: data.conversation.groupProfile?.groupID,  // 群组id
-        count: 500,  //
-        offset: 0
-      }
-      const res = await TUIServer.TUICore?.tim.getGroupProfile(option)  // 获取群组详细资料
-      data.newManagerList = res.data.group
+        groupID: data.conversation.groupProfile?.groupID, // 群组id
+        count: 500, //
+        offset: 0,
+      };
+      const res = await TUIServer.TUICore?.tim.getGroupProfile(option); // 获取群组详细资料
+      data.newManagerList = res.data.group;
 
-      const result = await GroupServer.getGroupMemberList(options)
+      const result = await GroupServer.getGroupMemberList(options);
       // 将群组成员进行排序,将群主和管理员放在最前面
       const list = result.data.memberList.sort((a: any, b: any) => {
         if (a.role === 'Owner' && b.role !== 'Owner') {
@@ -972,10 +1012,9 @@ const TUIChat: any = defineComponent({
         } else {
           return 0; // 保持原有顺序
         }
-      })
-      data.memberList = list
-    }
-
+      });
+      data.memberList = list;
+    };
 
     return {
       ...toRefs(data),
@@ -1007,7 +1046,8 @@ const TUIChat: any = defineComponent({
       back,
       slotDefault,
       toggleshowGroupMemberList,
-      resendMessage, openGroup,
+      resendMessage,
+      openGroup,
       submit,
       Link,
       openLink,
@@ -1044,14 +1084,12 @@ export default TUIChat;
     filter: brightness(0.8);
     opacity: 0.8;
   }
-
   &:hover {
     opacity: 0.8;
   }
 }
 
 .font-16 {
-
   font-size: 16px;
   font-weight: 400;
 }

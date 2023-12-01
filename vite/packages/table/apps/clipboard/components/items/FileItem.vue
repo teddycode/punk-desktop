@@ -1,26 +1,25 @@
 <script lang="ts">
-import ClipItemWidget from "../ClipItemWidget.vue";
-import ClipCodemirror from "../clipPreview/ClipCodemirror.vue";
-import textCodeMirror from "../clipPreview/textCodeMirror.vue";
-import {codeLanguage} from '../../../../js/data/clipTheme.js'
-import {mapWritableState} from "pinia";
-import {clipboardStore} from "../../store";
-import {FileOutlined} from '@ant-design/icons-vue'
-import VueCustomScrollbar from "../../../../../../src/components/vue-scrollbar.vue";
-
+import ClipItemWidget from '../ClipItemWidget.vue';
+import ClipCodemirror from '../clipPreview/ClipCodemirror.vue';
+import textCodeMirror from '../clipPreview/textCodeMirror.vue';
+import { codeLanguage } from '../../../../js/data/clipTheme.js';
+import { mapWritableState } from 'pinia';
+import { clipboardStore } from '../../store';
+import { FileOutlined } from '@ant-design/icons-vue';
+import VueCustomScrollbar from '../../../../../../src/components/vue-scrollbar.vue';
 export default {
   props: ['clipItem'],
-  components: {VueCustomScrollbar, textCodeMirror, ClipCodemirror, ClipItemWidget, FileOutlined},
+  components: { VueCustomScrollbar, textCodeMirror, ClipCodemirror, ClipItemWidget, FileOutlined },
   computed: {
     ...mapWritableState(clipboardStore, ['settings']),
   },
   watch: {
     'settings.codeHighlight': {
       handler() {
-        this.textType.reverse()
-        this.textDisplayTypes = this.textType[0]
-      }
-    }
+        this.textType.reverse();
+        this.textDisplayTypes = this.textType[0];
+      },
+    },
   },
   data() {
     return {
@@ -29,35 +28,33 @@ export default {
         swipeEasing: true,
         suppressScrollY: false,
         suppressScrollX: true,
-        wheelPropagation: true
+        wheelPropagation: true,
       },
       codeLanguage,
       textDisplayType: {
-        name: 'text'
+        name: 'text',
       },
       tab: '',
       menuList: [],
       // 文本底部切换
       textType: [],
-
-
-    }
+    };
   },
   methods: {
     tabChanged(event) {
       if (event.tab === 'lang') {
-        this.tab = 'lang'
+        this.tab = 'lang';
       } else {
-        this.tab = ''
+        this.tab = '';
       }
     },
     // 文本底部tab切换
     selectItem(item) {
       if (this.textDisplayType.name === 'code' && item.name === 'code') {
-        this.$refs.widget.switchTab('other')
-        this.tab = 'lang'
+        this.$refs.widget.switchTab('other');
+        this.tab = 'lang';
       }
-      this.textDisplayType = item
+      this.textDisplayType = item;
 
       // if (this.firstSwitch) {  // 判断是否第一次切换
       //   this.defaultTextType = item
@@ -72,29 +69,31 @@ export default {
       // }
     },
     switchTab(tab) {
-      this.$refs.widget.switchTab('item')
+      this.$refs.widget.switchTab('item');
     },
     previewItem(item) {
-      this.$emit('previewItem', item)
+      this.$emit('previewItem', item);
     },
     getFilename(path) {
-      return require('path').basename(path)
-    }
-
-  }
-}
-
-
+      return require('path').basename(path);
+    },
+  },
+};
 </script>
 
 <template>
-  <ClipItemWidget ref="widget" :clipItem="clipItem" :menu-list="menuList" @previewItem="previewItem"
-                  @tabChanged="tabChanged">
+  <ClipItemWidget
+    @previewItem="previewItem"
+    ref="widget"
+    @tabChanged="tabChanged"
+    :menu-list="menuList"
+    :clipItem="clipItem"
+  >
     <template #body>
-      <vue-custom-scrollbar :settings="settingsScroller" style="height: 100%;width: 100%">
-        <a-row v-for="file in clipItem.files" class=" m-1 line">
-          <a-col :span="3" class="text-left pt-1">
-            <file-outlined style="font-size: 24px"/>
+      <vue-custom-scrollbar :settings="settingsScroller" style="height: 100%; width: 100%">
+        <a-row class="m-1 line" v-for="file in clipItem.files">
+          <a-col class="text-left pt-1" :span="3">
+            <file-outlined style="font-size: 24px" />
           </a-col>
           <a-col :span="21">
             <div class="font-bold font-14">
@@ -103,21 +102,16 @@ export default {
             <div :title="file" class="xt-text-2 font-12 truncate">
               {{ file }}
             </div>
-
           </a-col>
-
         </a-row>
       </vue-custom-scrollbar>
       <!--      {{clipItem.files}}-->
-
     </template>
-    <template #footer>
-
-    </template>
+    <template #footer> </template>
   </ClipItemWidget>
 </template>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 // 切换状态
 .s-active {
   background: var(--active-bg);
@@ -150,7 +144,6 @@ export default {
 .btn-list {
   background: var(--primary-bg);
 }
-
 .line {
 }
 </style>

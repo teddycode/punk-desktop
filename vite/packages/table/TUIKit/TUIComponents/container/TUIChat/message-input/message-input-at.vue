@@ -1,20 +1,20 @@
 <template>
-  <div v-if="showAtList" ref="MessageInputAt" :class="[isH5 && 'message-input-at-h5']" class="message-input-at">
-    <div ref="dialog" class="memberList">
-      <header v-if="isH5" class="memberList-title">
+  <div class="message-input-at" :class="[isH5 && 'message-input-at-h5']" v-if="showAtList" ref="MessageInputAt">
+    <div class="memberList" ref="dialog">
+      <header class="memberList-title" v-if="isH5">
         <span class="title">{{ $t('TUIChat.选择提醒的人') }}</span>
         <i class="icon icon-close close" @click="closeAt"></i>
       </header>
       <ul class="memberList-box">
         <li
-            v-for="(item, index) in showMemberList"
-            :key="index"
-            ref="memberListItems"
-            :class="[index === selectedIndex && 'selected']"
-            class="memberList-box-body"
-            @click="selectItem(index)"
+          class="memberList-box-body"
+          :class="[index === selectedIndex && 'selected']"
+          v-for="(item, index) in showMemberList"
+          :key="index"
+          @click="selectItem(index)"
+          ref="memberListItems"
         >
-          <img :src="(item as any)?.avatar || 'https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'"/>
+          <img :src="(item as any)?.avatar || 'https://web.sdk.qcloud.com/component/TUIKit/assets/avatar_21.png'" />
           <span>{{ (item as any)?.nick ? (item as any)?.nick : (item as any)?.userID }}</span>
         </li>
       </ul>
@@ -22,11 +22,11 @@
   </div>
 </template>
 <script lang="ts">
-import {defineComponent, ref, toRefs, watch, watchEffect} from 'vue';
-import {SuggestionKeyDownProps, SuggestionProps} from '@tiptap/suggestion';
+import { defineComponent, ref, toRefs, watchEffect, watch } from 'vue';
+import { SuggestionProps, SuggestionKeyDownProps } from '@tiptap/suggestion';
 import atIcon from '../../../assets/icon/at.svg';
 import TIM from '../../../../TUICore/tim';
-import {onClickOutside} from '@vueuse/core';
+import { onClickOutside } from '@vueuse/core';
 
 const MessageInputAt = ref();
 const showAtList = ref(false);
@@ -44,24 +44,18 @@ const isH5 = ref(false);
 const MessageInputAtSuggestion = () => {
   return {
     allowedPrefixes: null,
-    items: (props: {
-      query: string
-    }) => {
+    items: (props: { query: string }) => {
       const queryResult = allMemberList?.value?.filter(
-          (item) =>
-              item?.nick?.toLowerCase()?.startsWith(props?.query?.toLowerCase()) ||
-              item?.userID?.toLowerCase()?.startsWith(props?.query?.toLowerCase())
+        (item) =>
+          item?.nick?.toLowerCase()?.startsWith(props?.query?.toLowerCase()) ||
+          item?.userID?.toLowerCase()?.startsWith(props?.query?.toLowerCase()),
       );
       showMemberList.value = queryResult?.length ? queryResult : allMemberList.value;
       return showMemberList.value;
     },
     render: () => {
       return {
-        onStart: (props: SuggestionProps<{
-          id?: string;
-          userID?: string;
-          isAll?: boolean
-        }>) => {
+        onStart: (props: SuggestionProps<{ id?: string; userID?: string; isAll?: boolean }>) => {
           showAtList.value = true;
           if (!props?.clientRect) {
             return;
@@ -148,10 +142,10 @@ const selectItem = (index: number) => {
   const item = showMemberList?.value[index];
   if (item) {
     command.value &&
-    command.value({
-      id: (item as any)?.userID,
-      label: (item as any)?.nick || (item as any)?.userID,
-    });
+      command.value({
+        id: (item as any)?.userID,
+        label: (item as any)?.nick || (item as any)?.userID,
+      });
   }
 };
 
@@ -175,7 +169,7 @@ const MessageInputAtComponent = defineComponent({
     },
   },
   setup(props) {
-    const {memberList, isGroup, selfInfo} = toRefs(props);
+    const { memberList, isGroup, selfInfo } = toRefs(props);
     const all = {
       userID: TIM.TYPES.MSG_AT_ALL,
       nick: '所有人',
@@ -189,38 +183,38 @@ const MessageInputAtComponent = defineComponent({
     });
 
     watch(
-        () => memberList.value,
-        () => {
-          // add all
-          if (!(memberList?.value[0] as any)?.isAll) {
-            memberList?.value?.unshift(all);
-          }
-          // delete self in @ list
-          const list = memberList?.value?.filter((item: any) => {
-            return item?.userID !== selfInfo?.value?.userID;
-          });
-          allMemberList.value = list;
-          showMemberList.value = list;
-        },
-        {
-          deep: true,
-          immediate: true,
+      () => memberList.value,
+      () => {
+        // add all
+        if (!(memberList?.value[0] as any)?.isAll) {
+          memberList?.value?.unshift(all);
         }
+        // delete self in @ list
+        const list = memberList?.value?.filter((item: any) => {
+          return item?.userID !== selfInfo?.value?.userID;
+        });
+        allMemberList.value = list;
+        showMemberList.value = list;
+      },
+      {
+        deep: true,
+        immediate: true,
+      },
     );
 
     watch(
-        () => [position.value, MessageInputAt?.value],
-        () => {
-          if (isH5.value || !MessageInputAt?.value || !MessageInputAt?.value?.style) {
-            return;
-          }
-          MessageInputAt.value.style.left = position.value.left + 'px';
-          MessageInputAt.value.style.top = position.value.top - MessageInputAt.value.clientHeight + 'px';
-        },
-        {
-          deep: true,
-          immediate: true,
+      () => [position.value, MessageInputAt?.value],
+      () => {
+        if (isH5.value || !MessageInputAt?.value || !MessageInputAt?.value?.style) {
+          return;
         }
+        MessageInputAt.value.style.left = position.value.left + 'px';
+        MessageInputAt.value.style.top = position.value.top - MessageInputAt.value.clientHeight + 'px';
+      },
+      {
+        deep: true,
+        immediate: true,
+      },
     );
 
     const closeAt = () => {
@@ -245,18 +239,17 @@ const MessageInputAtComponent = defineComponent({
       allMemberList,
       MessageInputAt,
       memberListItems,
-      dialog
+      dialog,
     };
   },
 });
 
 export default MessageInputAtComponent;
-export {MessageInputAtSuggestion, MessageInputAtComponent};
+export { MessageInputAtSuggestion, MessageInputAtComponent };
 </script>
-<style lang="scss" scoped>
+<style scoped lang="scss">
 @import url('../../../styles/common.scss');
 @import url('../../../styles/icon.scss');
-
 .message-input-at {
   position: fixed;
   max-width: 15rem;
@@ -267,7 +260,6 @@ export {MessageInputAtSuggestion, MessageInputAtComponent};
   box-shadow: 0 0.06rem 0.63rem 0 rgba(2, 16, 43, 0.15);
   border-radius: 0.13rem;
 }
-
 .memberList-box {
   &-header {
     height: 2.5rem;
@@ -278,27 +270,22 @@ export {MessageInputAtSuggestion, MessageInputAtComponent};
       background: rgba(0, 110, 255, 0.1);
     }
   }
-
   span {
-
     font-weight: 400;
     font-size: 0.88rem;
     color: #000000;
     letter-spacing: 0;
     padding: 5px;
   }
-
   &-body {
     height: 2.5rem;
     cursor: pointer;
     display: flex;
     align-items: center;
-
     .selected,
     &:hover {
       background: rgba(0, 110, 255, 0.1);
     }
-
     span {
       overflow: hidden;
       white-space: nowrap;
@@ -307,13 +294,11 @@ export {MessageInputAtSuggestion, MessageInputAtComponent};
       text-overflow: ellipsis;
     }
   }
-
   img {
     width: 1.5rem;
     height: 1.5rem;
     padding-left: 10px;
   }
-
   .selected {
     background: rgba(0, 110, 255, 0.1);
   }
@@ -332,7 +317,6 @@ export {MessageInputAtSuggestion, MessageInputAtComponent};
   z-index: 10;
   display: flex;
   align-items: flex-end;
-
   .memberList {
     height: auto;
     max-height: 50%;
@@ -343,20 +327,17 @@ export {MessageInputAtSuggestion, MessageInputAtComponent};
     display: flex;
     flex-direction: column;
     overflow: hidden;
-
     &-title {
       height: fit-content;
       width: calc(100% - 30px);
       text-align: center;
       vertical-align: middle;
       padding: 15px;
-
       .title {
         vertical-align: middle;
         display: inline-block;
         font-size: 16px;
       }
-
       .close {
         vertical-align: middle;
         position: absolute;
@@ -364,19 +345,15 @@ export {MessageInputAtSuggestion, MessageInputAtComponent};
         display: inline-block;
       }
     }
-
     &-box {
       flex: 1;
       overflow-y: scroll;
-
       &-body {
         padding: 10px;
-
         img {
           width: 26px;
           height: 26px;
         }
-
         span {
           font-size: 14px;
         }

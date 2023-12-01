@@ -7,11 +7,11 @@ const groupModel = {
    * @param {String} secondLevelIcon 二级图标
    * @returns
    */
-  convertTreeNode (list, childNode, firsetLevelIcon, secondLevelIcon) {
-    let newArr = []
+  convertTreeNode(list, childNode, firsetLevelIcon, secondLevelIcon) {
+    let newArr = [];
     list.forEach((e) => {
       if (e[childNode]) {
-        e.children = []
+        e.children = [];
         e[childNode].forEach((v) => {
           e.children.push({
             id: v.id,
@@ -20,29 +20,29 @@ const groupModel = {
             scopedSlots: {
               icon: secondLevelIcon,
             },
-          })
-        })
-        delete e[childNode]
+          });
+        });
+        delete e[childNode];
       }
-      let obj = {}
+      let obj = {};
       for (const k in e) {
         if (k === 'name') {
-          obj.title = e[k]
+          obj.title = e[k];
         }
         if (k === 'id') {
-          obj.key = `L1-${e[k]}`
-          obj.id = e[k]
+          obj.key = `L1-${e[k]}`;
+          obj.id = e[k];
         }
         if (k === 'logo' || k === 'children') {
-          obj[k] = e[k]
+          obj[k] = e[k];
         }
         obj.scopedSlots = {
           icon: firsetLevelIcon,
-        }
+        };
       }
-      newArr.push(obj)
-    })
-    return newArr
+      newArr.push(obj);
+    });
+    return newArr;
   },
 
   /**
@@ -50,19 +50,19 @@ const groupModel = {
    * @param {Array} list 树数组
    * @param {String} key 节点key
    */
-  findTreeNode (list, key) {
-    let nodeT
-    list.forEach(e => {
+  findTreeNode(list, key) {
+    let nodeT;
+    list.forEach((e) => {
       if (e.children) {
-        e.children.forEach(v => {
+        e.children.forEach((v) => {
           if (v.key === key) {
-            nodeT = v
+            nodeT = v;
           }
-        })
+        });
       }
-    })
-    return nodeT
-  }
-}
+    });
+    return nodeT;
+  },
+};
 
-module.exports = groupModel
+module.exports = groupModel;

@@ -1,10 +1,17 @@
 <template>
   <Widget :customData="customData" :customIndex="customIndex" :desk="desk" :options="options">
-    <HorizontalPanel v-model:selectType="audioType" :navList="audioTitle" class="mt-4"
-                     style="min-width: 100%"></HorizontalPanel>
+    <HorizontalPanel
+      v-model:selectType="audioType"
+      :navList="audioTitle"
+      class="mt-4"
+      style="min-width: 100%"
+    ></HorizontalPanel>
     <a-tooltip placement="top" title="更多管理">
-      <div class=" px-2 rounded-full" style="position: absolute;top: 16px;right:40px;cursor: pointer;font-size: 12px"
-           @click="goStatus">
+      <div
+        class="px-2 rounded-full"
+        style="position: absolute; top: 16px; right: 40px; cursor: pointer; font-size: 12px"
+        @click="goStatus"
+      >
         <icon icon="tiaoduguanli"></icon>
       </div>
     </a-tooltip>
@@ -12,81 +19,85 @@
       <div class="flex">
         <div class="flex-1 flex flex-col mr-4">
           <div class="flex my-1 justify-between">
-            <span style=" font-size: 14px;font-weight: 400;">音量</span>
-            <span style=" font-size: 14px;font-weight: 400;">{{ defaultOutput.volume }}%</span>
+            <span style="font-size: 14px; font-weight: 400">音量</span>
+            <span style="font-size: 14px; font-weight: 400">{{ defaultOutput.volume }}%</span>
           </div>
           <div class="flex items-center justify-between">
-            <div style="width:180px;">
-              <a-slider v-model:value="defaultOutput.volume" :tooltip-visible="false" @afterChange="changeVolume()"/>
+            <div style="width: 180px">
+              <a-slider v-model:value="defaultOutput.volume" :tooltip-visible="false" @afterChange="changeVolume()" />
             </div>
           </div>
         </div>
         <div class="flex-1">
           <div
-              class="flex btn-active voice-hover items-center rounded-full pointer justify-center px-3 py-3 s-item xt-bg-2"
-              @click.stop="closeVolume">
-            <Icon v-if="muteShow === true" icon="yinliang" style="font-size: 2.286em;"></Icon>
-            <Icon v-else icon="jingyin" style="font-size: 2.286em;"></Icon>
+            class="flex btn-active voice-hover items-center rounded-full pointer justify-center px-3 py-3 s-item xt-bg-2"
+            @click.stop="closeVolume"
+          >
+            <Icon v-if="muteShow === true" icon="yinliang" style="font-size: 2.286em"></Icon>
+            <Icon v-else icon="jingyin" style="font-size: 2.286em"></Icon>
           </div>
         </div>
       </div>
-      <span class="mt-2 mb-2" style="font-size: 14px;font-weight: 400;">输出</span>
-      <vue-custom-scrollbar :settings="settingsScroller" style="height:184px;" @touchstart.stop @touchmove.stop
-                            @touchend.stop>
-        <template v-for="(item,index) in outputList">
-          <div :class="item.isDefaultForMultimedia ? 's-item xt-bg-2' :''"
-               class="w-full py-1 flex btn-active voice-hover  items-center rounded-lg  pointer "
-               style="padding: 8px 10px 6px 10px;font-size: 14.64px;font-weight: 200;"
-               @click.stop="selectDefaultDevice(item,outputList)">
-          <span class="item-name">
-            {{ item.name }}（{{ item.deviceName }}）
-          </span>
+      <span class="mt-2 mb-2" style="font-size: 14px; font-weight: 400">输出</span>
+      <vue-custom-scrollbar
+        :settings="settingsScroller"
+        style="height: 184px"
+        @touchstart.stop
+        @touchmove.stop
+        @touchend.stop
+      >
+        <template v-for="(item, index) in outputList">
+          <div
+            :class="item.isDefaultForMultimedia ? 's-item xt-bg-2' : ''"
+            class="w-full py-1 flex btn-active voice-hover items-center rounded-lg pointer"
+            style="padding: 8px 10px 6px 10px; font-size: 14.64px; font-weight: 200"
+            @click.stop="selectDefaultDevice(item, outputList)"
+          >
+            <span class="item-name"> {{ item.name }}（{{ item.deviceName }}） </span>
           </div>
         </template>
       </vue-custom-scrollbar>
-
     </div>
-    <div v-else class="mt-4" style="color: var(--primary-text);">
+    <div v-else class="mt-4" style="color: var(--primary-text)">
       <div class="flex flex-col">
-        <span style="font-size: 14px;font-weight: 400;">输入检测</span>
+        <span style="font-size: 14px; font-weight: 400">输入检测</span>
         <div class="flex">
-          <div class="mr-4 flex items-center justify-center" style="width: 180px;">
-            <a-progress :percent="audioTest" :showInfo="false"/>
+          <div class="mr-4 flex items-center justify-center" style="width: 180px">
+            <a-progress :percent="audioTest" :showInfo="false" />
           </div>
           <div
-              class="flex btn-active voice-hover items-center rounded-full pointer justify-center px-3 py-3 s-item xt-bg-2"
-              style=""
-              @click.stop="closeMicrophone">
-            <Icon v-if="microphoneShow === true" icon="mic-on" style="font-size: 2.286em;"></Icon>
-            <Icon v-else icon="mic-off" style="font-size: 2.286em;"></Icon>
+            class="flex btn-active voice-hover items-center rounded-full pointer justify-center px-3 py-3 s-item xt-bg-2"
+            style=""
+            @click.stop="closeMicrophone"
+          >
+            <Icon v-if="microphoneShow === true" icon="mic-on" style="font-size: 2.286em"></Icon>
+            <Icon v-else icon="mic-off" style="font-size: 2.286em"></Icon>
           </div>
         </div>
       </div>
-      <span class="mt-2 " style="font-size: 14px;font-weight: 400;">输入</span>
-      <vue-custom-scrollbar :settings="settingsScroller" class="mt-2" style="height:200px;">
-        <template v-for="(item,index) in inputList">
-          <div :class="item.isDefaultForMultimedia ? 's-item xt-bg-2' :''"
-               class="w-full py-1 voice-hover pointer voice-hover rounded-lg flex items-center  py-2 px-2  xt-text"
-               style=" font-size: 15px;font-weight: 200;color: var(--primary-text) !important;"
-               @click.stop="selectDefaultDevice(item,inputList)">
-          <span class="item-name">
-            {{ item.name }}（{{ item.deviceName }}）
-          </span>
+      <span class="mt-2" style="font-size: 14px; font-weight: 400">输入</span>
+      <vue-custom-scrollbar :settings="settingsScroller" class="mt-2" style="height: 200px">
+        <template v-for="(item, index) in inputList">
+          <div
+            :class="item.isDefaultForMultimedia ? 's-item xt-bg-2' : ''"
+            class="w-full py-1 voice-hover pointer voice-hover rounded-lg flex items-center py-2 px-2 xt-text"
+            style="font-size: 15px; font-weight: 200; color: var(--primary-text) !important"
+            @click.stop="selectDefaultDevice(item, inputList)"
+          >
+            <span class="item-name"> {{ item.name }}（{{ item.deviceName }}） </span>
           </div>
         </template>
       </vue-custom-scrollbar>
     </div>
   </Widget>
-  <audio id="speakerAudio" src='/sound/gua.mp3'>
-    您的浏览器暂不支持音频播放
-  </audio>
+  <audio id="speakerAudio" src="/sound/gua.mp3">您的浏览器暂不支持音频播放</audio>
 </template>
 <script>
-import Widget from '../../card/Widget.vue'
-import HorizontalPanel from '../../HorizontalPanel.vue'
-import { inspectorStore } from '../../../store/inspector'
-import { mapActions, mapWritableState } from 'pinia'
-import Template from '../../../../user/pages/Template.vue'
+import Widget from '../../card/Widget.vue';
+import HorizontalPanel from '../../HorizontalPanel.vue';
+import { inspectorStore } from '../../../store/inspector';
+import { mapActions, mapWritableState } from 'pinia';
+import Template from '../../../../user/pages/Template.vue';
 import {
   getDefaultMic,
   getDefaultVolume,
@@ -94,53 +105,52 @@ import {
   listOutputs,
   setAsDefault,
   setDefaultVolume,
-  setMicVolume
-} from '../../../js/ext/audio/audio.ts'
-import { appStore } from '../../../store'
+  setMicVolume,
+} from '../../../js/ext/audio/audio.ts';
+import { appStore } from '../../../store';
 
 export default {
   name: 'Audio',
   components: {
     Template,
     Widget,
-    HorizontalPanel
+    HorizontalPanel,
   },
   props: {
     customIndex: {
       type: Number,
-      default: 0
+      default: 0,
     },
     customData: {
       type: Object,
-      default: () => {
-      }
+      default: () => {},
     },
     desk: {
-      type: Object
-    }
+      type: Object,
+    },
   },
   computed: {
     ...mapWritableState(inspectorStore, ['audioTest']),
-    ...mapWritableState(appStore, ['settings'])
+    ...mapWritableState(appStore, ['settings']),
   },
   watch: {
-    'audioType': {
-      handler (newValue, oldValue) {
+    audioType: {
+      handler(newValue, oldValue) {
         if (newValue.name === 'input') {
-          this.startListenAudioTest()
+          this.startListenAudioTest();
         }
-      }
-    }
+      },
+    },
   },
-  async mounted () {
-    this.outputList = await listOutputs()
-    this.inputList = await listInputs()
-    this.defaultOutput = await getDefaultVolume()
-    this.defaultMic = await getDefaultMic()
-    this.muteShow = !this.defaultOutput.muted
-    this.microphoneShow = !this.defaultMic.muted
+  async mounted() {
+    this.outputList = await listOutputs();
+    this.inputList = await listInputs();
+    this.defaultOutput = await getDefaultVolume();
+    this.defaultMic = await getDefaultMic();
+    this.muteShow = !this.defaultOutput.muted;
+    this.microphoneShow = !this.defaultMic.muted;
   },
-  data () {
+  data() {
     return {
       options: {
         className: 'card',
@@ -151,7 +161,10 @@ export default {
       devices: [],
       defaultOutput: {},
       defaultMic: {},
-      audioTitle: [{ title: '输出', name: 'output' }, { title: '输入', name: 'input' }],
+      audioTitle: [
+        { title: '输出', name: 'output' },
+        { title: '输入', name: 'input' },
+      ],
       audioType: { title: '输出', name: 'output' },
       audioValue: 50,
       settingsScroller: {
@@ -159,73 +172,71 @@ export default {
         swipeEasing: true,
         suppressScrollY: false,
         suppressScrollX: true,
-        wheelPropagation: true
+        wheelPropagation: true,
       },
-      outputList: [],//name
+      outputList: [], //name
       inputList: [],
       inputIndex: 0,
       outputIndex: 0,
       microphoneShow: true,
       muteShow: true,
-    }
+    };
   },
   methods: {
     ...mapActions(inspectorStore, ['startListenAudioTest', 'stopListenerAudioTest']),
     // 选中输入设备
-    selectInputDevice (item, index) {
-      item.isDefaultForMultimedia = true
-
+    selectInputDevice(item, index) {
+      item.isDefaultForMultimedia = true;
     },
     // 选中输出设备
-    selectDefaultDevice (item, list) {
-      list.forEach(li => {
-        li.isDefaultForMultimedia = false
-      })
-      item.isDefaultForMultimedia = true
-      setAsDefault(item)
+    selectDefaultDevice(item, list) {
+      list.forEach((li) => {
+        li.isDefaultForMultimedia = false;
+      });
+      item.isDefaultForMultimedia = true;
+      setAsDefault(item);
     },
     // 关闭麦克风逻辑
-    closeMicrophone () {
-      this.microphoneShow = !this.microphoneShow
-      setMicVolume({ muted: !this.microphoneShow })
+    closeMicrophone() {
+      this.microphoneShow = !this.microphoneShow;
+      setMicVolume({ muted: !this.microphoneShow });
     },
-    goStatus () {
+    goStatus() {
       this.$router.push({
-        name: 'status'
-      })
+        name: 'status',
+      });
     },
-    async gua () {
+    async gua() {
       if (!this.settings.duck) {
-        return
+        return;
       }
-      let audioSpeaker = document.getElementById('speakerAudio')
-      audioSpeaker.play()
+      let audioSpeaker = document.getElementById('speakerAudio');
+      audioSpeaker.play();
     },
     // 关闭音量逻辑
-    closeVolume () {
-      this.muteShow = !this.muteShow
+    closeVolume() {
+      this.muteShow = !this.muteShow;
       setDefaultVolume({
         volume: this.defaultOutput.volume,
-        muted: !this.muteShow
-      })
+        muted: !this.muteShow,
+      });
       if (this.muteShow) {
         setTimeout(() => {
-          this.gua()
-        }, 800)
+          this.gua();
+        }, 800);
       }
     },
-    changeVolume () {
-
+    changeVolume() {
       setDefaultVolume({
-        volume: this.defaultOutput.volume
-      })
-      this.gua()
-    }
+        volume: this.defaultOutput.volume,
+      });
+      this.gua();
+    },
   },
-  unmounted () {
-    this.stopListenerAudioTest()
-  }
-}
+  unmounted() {
+    this.stopListenerAudioTest();
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -268,5 +279,4 @@ export default {
   background: rgba(32, 32, 32, 1);
   opacity: 0.8;
 }
-
 </style>

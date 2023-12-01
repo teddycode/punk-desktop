@@ -1,4 +1,4 @@
-import Spotlight from "./spotlight.js";
+import Spotlight from './spotlight.js';
 
 /** @export */ Spotlight.init;
 /** @export */ Spotlight.theme;
@@ -16,4 +16,4 @@ import Spotlight from "./spotlight.js";
 /** @export */ Spotlight.addControl;
 /** @export */ Spotlight.removeControl;
 
-window["Spotlight"] = Spotlight;
+window['Spotlight'] = Spotlight;

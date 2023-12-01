@@ -1,12 +1,12 @@
-import EventEmitter from 'events'
+import EventEmitter from 'events';
 
 class Events extends EventEmitter {
-  constructor () {
-    super()
-    this.setMaxListeners(1000)
+  constructor() {
+    super();
+    this.setMaxListeners(1000);
   }
 }
 
-const instance = new Events()
+const instance = new Events();
 
-module.exports = instance
+module.exports = instance;

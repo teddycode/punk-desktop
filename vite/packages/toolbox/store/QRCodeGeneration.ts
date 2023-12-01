@@ -1,8 +1,8 @@
-import {defineStore} from "pinia";
+import { defineStore } from 'pinia';
 
-export const QRCodeGeneration = defineStore("QRCodeGeneration", {
-    state: () => ({
-        text: "",
-    }),
-    actions: {},
+export const QRCodeGeneration = defineStore('QRCodeGeneration', {
+  state: () => ({
+    text: '',
+  }),
+  actions: {},
 });

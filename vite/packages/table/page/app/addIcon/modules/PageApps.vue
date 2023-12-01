@@ -1,14 +1,10 @@
 <template>
-  <Icon
-      :data="appList"
-      :isSelect="true"
-      @updateSelectApps="updateSelectApps"
-  ></Icon>
+  <Icon :data="appList" :isSelect="true" @updateSelectApps="updateSelectApps"></Icon>
 </template>
 
 <script>
-import { getPageApps } from '../api/api'
-import syncSelected from '../hooks/syncSelected'
+import { getPageApps } from '../api/api';
+import syncSelected from '../hooks/syncSelected';
 
 export default {
   mixins: [syncSelected],
@@ -16,8 +12,8 @@ export default {
     appList: [],
   },
   async mounted() {
-    let res = await getPageApps()
-    let appList = []
+    let res = await getPageApps();
+    let appList = [];
     res.forEach((item) => {
       if (item?.type === 'card') {
         appList.push({
@@ -32,13 +28,13 @@ export default {
             params: item?.url,
             value: item?.package,
           },
-        })
+        });
       }
-    })
-    console.log('合法的APP:', appList)
-    this.appList = appList
+    });
+    console.log('合法的APP:', appList);
+    this.appList = appList;
   },
-}
+};
 </script>
 
 <style lang="scss" scoped></style>

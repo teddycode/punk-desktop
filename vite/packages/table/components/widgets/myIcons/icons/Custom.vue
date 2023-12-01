@@ -1,71 +1,46 @@
 <template>
   <xt-zoom v-model:height="h" v-model:width="w" :style="[size]">
-    <div
-        :style="[size]"
-        class="xt-bg xt-shadow rounded-xl xt-text relative controller"
-    >
+    <div :style="[size]" class="xt-bg xt-shadow rounded-xl xt-text relative controller">
       <XtBaseIcon
-          class="absolute icon"
-          icon="gengduo1"
-          style="right: 8px; top: 4px"
-          @click="iconsRightClick()"
+        class="absolute icon"
+        icon="gengduo1"
+        style="right: 8px; top: 4px"
+        @click="iconsRightClick()"
       ></XtBaseIcon>
-      <div
-          :style="[titleSize]"
-          class="text-center cursor-pointer mx-auto truncate"
-          @click="titleVisible = true"
-      >
+      <div :style="[titleSize]" class="text-center cursor-pointer mx-auto truncate" @click="titleVisible = true">
         {{ groupTitle }}
       </div>
       <div class="flex flex-wrap justify-between">
         <div v-for="i in count" @contextmenu.prevent.stop="rightClick(i - 1)">
           <Icon
-              v-if="iconList[i - 1]"
-              :data-index="i - 1"
-              :index="i - 1"
-              :size="icons"
-              :state="true"
-              v-bind="iconList[i - 1]"
+            v-if="iconList[i - 1]"
+            :data-index="i - 1"
+            :index="i - 1"
+            :size="icons"
+            :state="true"
+            v-bind="iconList[i - 1]"
           >
           </Icon>
         </div>
         <div
-            v-if="iconList.length > count"
-            :style="[iconsState]"
-            class="flex justify-center items-center flex-col cursor-pointer xt-hover rounded-xl"
-            @click="fullScreenClick($event)"
+          v-if="iconList.length > count"
+          :style="[iconsState]"
+          class="flex justify-center items-center flex-col cursor-pointer xt-hover rounded-xl"
+          @click="fullScreenClick($event)"
         >
           <XtIcon icon="gengduo1" w="38"></XtIcon>
-          <div
-              class="truncate w-full text-center text-xs"
-              style="margin-top: 6px"
-          >
-            更多
-          </div>
+          <div class="truncate w-full text-center text-xs" style="margin-top: 6px">更多</div>
         </div>
         <!-- 占位 -->
-        <div
-            v-for="i in blankLabel"
-            :key="`placeholder-${i}`"
-            style="width: 93px; height: 99px"
-        ></div>
+        <div v-for="i in blankLabel" :key="`placeholder-${i}`" style="width: 93px; height: 99px"></div>
       </div>
     </div>
   </xt-zoom>
   <XtDrawer v-model="visible">
-    <Set
-        v-model:data="visible"
-        @deleteIcons="deleteIcons(index)"
-        @editIcons="editIcons(index)"
-    ></Set>
+    <Set v-model:data="visible" @deleteIcons="deleteIcons(index)" @editIcons="editIcons(index)"></Set>
   </XtDrawer>
   <Teleport to="body">
-    <xt-modal
-        v-model="titleVisible"
-        :isFooter="false"
-        title="修改分组名"
-        @close="titleVisible = false"
-    >
+    <xt-modal v-model="titleVisible" :isFooter="false" title="修改分组名" @close="titleVisible = false">
       <div class="h-12" style="width: 400px">
         <XtInput v-model="title" @blur="titleBlur()"></XtInput>
       </div>
@@ -74,11 +49,11 @@
 </template>
 
 <script>
-import Icon from '../components/icon.vue'
-import Set from './Set.vue'
-import XtZoom from '../../../../ui/components/Zoom/index.vue'
-import { sizeValues } from '../components/iconConfig'
-import { message } from 'ant-design-vue'
+import Icon from '../components/icon.vue';
+import Set from './Set.vue';
+import XtZoom from '../../../../ui/components/Zoom/index.vue';
+import { sizeValues } from '../components/iconConfig';
+import { message } from 'ant-design-vue';
 
 export default {
   props: {
@@ -86,8 +61,7 @@ export default {
     height: {},
     iconList: {
       type: Object,
-      default: () => {
-      },
+      default: () => {},
     },
     groupTitle: {
       type: String,
@@ -96,7 +70,7 @@ export default {
       type: Object,
     },
   },
-  data () {
+  data() {
     return {
       index: 0,
       visible: false,
@@ -106,21 +80,21 @@ export default {
       icons: 'icons1',
       titleVisible: false,
       title: this.groupTitle,
-    }
+    };
   },
   watch: {
     w: {
-      async handler (newV) {
-        await this.setIconState()
-        this.getAppCount()
-        this.$emit('update:width', newV)
+      async handler(newV) {
+        await this.setIconState();
+        this.getAppCount();
+        this.$emit('update:width', newV);
       },
       immediate: true,
     },
-    async h (newV) {
-      await this.setIconState()
-      this.getAppCount()
-      this.$emit('update:height', newV)
+    async h(newV) {
+      await this.setIconState();
+      this.getAppCount();
+      this.$emit('update:height', newV);
     },
   },
   components: {
@@ -128,81 +102,81 @@ export default {
     Icon,
     XtZoom,
   },
-  beforeMount () {
-    this.getAppCount()
+  beforeMount() {
+    this.getAppCount();
   },
   methods: {
-    titleBlur () {
-      message.success('成功修改分组名')
-      this.$emit('updateGroupTitle', this.title)
+    titleBlur() {
+      message.success('成功修改分组名');
+      this.$emit('updateGroupTitle', this.title);
     },
-    setIconState () {
+    setIconState() {
       if (parseFloat(this.h) > 280) {
-        this.icons = 'icons2'
+        this.icons = 'icons2';
       } else {
-        this.icons = 'icons1'
+        this.icons = 'icons1';
       }
     },
-    getAppCount () {
-      const w = parseFloat(this.w)
-      const h = parseFloat(this.h)
-      const title = 22 * w
-      let icons = w * h - title
-      let icon = sizeValues[this.icons].w * sizeValues[this.icons].h
+    getAppCount() {
+      const w = parseFloat(this.w);
+      const h = parseFloat(this.h);
+      const title = 22 * w;
+      let icons = w * h - title;
+      let icon = sizeValues[this.icons].w * sizeValues[this.icons].h;
 
-      let res = parseInt(icons / icon - 1)
-      this.count = res
+      let res = parseInt(icons / icon - 1);
+      this.count = res;
     },
-    iconsRightClick () {
-      this.$emit('iconsRightClick')
+    iconsRightClick() {
+      this.$emit('iconsRightClick');
     },
-    rightClick (index) {
-      this.index = index
-      this.visible = true
+    rightClick(index) {
+      this.index = index;
+      this.visible = true;
     },
-    fullScreenClick (event) {
-      this.$emit('fullScreenClick', event)
+    fullScreenClick(event) {
+      this.$emit('fullScreenClick', event);
     },
     // 删除多图标组件中的单个图标
-    deleteIcons (index) {
-      this.$emit('deleteIcons', index)
+    deleteIcons(index) {
+      this.$emit('deleteIcons', index);
     },
     // 编辑多图标组件中的单个图标
-    editIcons (index) {
-      this.$emit('editIcons', index)
+    editIcons(index) {
+      this.$emit('editIcons', index);
     },
   },
   computed: {
-    titleSize () {
-      let w = parseFloat(this.w) - 80
+    titleSize() {
+      let w = parseFloat(this.w) - 80;
       return {
         width: w + 'px',
-      }
+      };
     },
-    size () {
+    size() {
       return {
         width: `${this.w} !important`,
         height: `${this.h} !important`,
-      }
+      };
     },
-    blankLabel () {
-      let row = parseFloat(this.w) / sizeValues[this.icons].w
-      row = parseInt(row)
-      let count = this.iconList.length
+    blankLabel() {
+      let row = parseFloat(this.w) / sizeValues[this.icons].w;
+      row = parseInt(row);
+      let count = this.iconList.length;
       if (count > this.count) {
-        count++
+        count++;
       }
-      const item = count % row
-      return item === 0 ? 0 : row - item
+      const item = count % row;
+      return item === 0 ? 0 : row - item;
     },
-    iconsState () {
+    iconsState() {
       return {
         width: `${sizeValues[this.icons].w}px !important`,
         height: `${sizeValues[this.icons].h}px !important`,
-      }
+      };
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

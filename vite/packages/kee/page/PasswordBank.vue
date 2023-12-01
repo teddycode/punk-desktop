@@ -1,47 +1,56 @@
 <template>
-  <div class="password-bank-container" @click="unselectBankItem">
+  <div @click="unselectBankItem" class="password-bank-container">
     <!-- <div style="height: 180px;padding-top:84px;width: 100%;text-align: center" v-if="!showAction"
          @mouseenter="showAction=true">
       <span class="password-bank-unlock">
       <UnlockFilled style="color: #ffffff; font-size: 32px"/>
     </span>
     </div> -->
-    <div style="height: 180px;padding-top:44px;;width: 100%;text-align: center" @mouseleave="showAction=false">
-      <a-row :gutter="20" style="margin: auto;width: 220px;text-align: center">
-        <a-col :span="12" class="action" @click="selectDb">
-          <folder-open-outlined class="icon"/>
+    <div style="height: 180px; padding-top: 44px; width: 100%; text-align: center" @mouseleave="showAction = false">
+      <a-row style="margin: auto; width: 220px; text-align: center" :gutter="20">
+        <a-col @click="selectDb" class="action" :span="12">
+          <folder-open-outlined class="icon" />
           <div>打开</div>
         </a-col>
-        <a-col :span="12" class="action" @click="create">
-          <folder-add-outlined class="icon"/>
+        <a-col @click="create" class="action" :span="12">
+          <folder-add-outlined class="icon" />
           <div>新建</div>
         </a-col>
       </a-row>
     </div>
-    <div class="password-bank-input" @click.stop="()=>{}">
-      <a-input-password id="pwdInput" v-model:value="password"
-                        :placeholder="this.bankValue?'请输入「'+this.bankValue+'」的密码':'请先选择一个密码库'"
-                        class="bank-input"
-                        @keypress.enter="openDb">
-
+    <div @click.stop="() => {}" class="password-bank-input">
+      <a-input-password
+        id="pwdInput"
+        @keypress.enter="openDb"
+        class="bank-input"
+        v-model:value="password"
+        :placeholder="this.bankValue ? '请输入「' + this.bankValue + '」的密码' : '请先选择一个密码库'"
+      >
       </a-input-password>
-      <span class="password-bank-button" @click="openDb">
-        <img alt="" src="../../../public/img/enter_submit.svg"/>
+      <span @click="openDb" class="password-bank-button">
+        <img src="../../../public/img/enter_submit.svg" alt="" />
       </span>
     </div>
 
-    <div class="collapse-addon" style="text-align: left;width: 340px;margin-top: -10px">
+    <div class="collapse-addon" style="text-align: left; width: 340px; margin-top: -10px">
       <a-collapse ghost>
-        <a-collapse-panel key="1" class="addon" header="更多选项" style="color: #999">
-          附加凭证（如果有） <a size="small" type="primary" @click="selectKey">
-          <key-outlined/>
-          选择秘钥文件</a>
+        <a-collapse-panel class="addon" style="color: #999" key="1" header="更多选项">
+          附加凭证（如果有）
+          <a @click="selectKey" type="primary" size="small">
+            <key-outlined />
+            选择秘钥文件</a
+          >
           <div v-if="keyPath" style="position: relative">
             <a-tag title="{{keyPath[0]}}">
               <div class="key-file">{{ keyPath[0] }}</div>
-              <a class="remove-icon" size="small" style="color: red;position: absolute;right: 0px;top: 0 "
-                 title="去除秘钥" @click="removeKey">
-                <close-outlined/>
+              <a
+                title="去除秘钥"
+                @click="removeKey"
+                style="color: red; position: absolute; right: 0px; top: 0"
+                class="remove-icon"
+                size="small"
+              >
+                <close-outlined />
               </a>
             </a-tag>
           </div>
@@ -50,47 +59,57 @@
     </div>
 
     <div class="password-bank-list-container">
-      <vue-custom-scrollbar :settings="settings" style="position:relative;height: 185px">
-        <a-empty v-if="dbList.length===0"></a-empty>
-        <a-tooltip :mouseEnterDelay="0.5" placement="top"
-                   title="使用内置的密码库，但是无法被外部网盘同步，建议保存到外部密码库。">
-          <div key="inner" :class="bankIndex == 'inner' ? 'bank_active':''"
-               class="password-bank-list-item" @click.stop="setInnerDb">
-            <img alt="" src="/img/lock-app.svg">
+      <vue-custom-scrollbar :settings="settings" style="position: relative; height: 185px">
+        <a-empty v-if="dbList.length === 0"></a-empty>
+        <a-tooltip
+          :mouseEnterDelay="0.5"
+          placement="top"
+          title="使用内置的密码库，但是无法被外部网盘同步，建议保存到外部密码库。"
+        >
+          <div
+            class="password-bank-list-item"
+            :class="bankIndex == 'inner' ? 'bank_active' : ''"
+            key="inner"
+            @click.stop="setInnerDb"
+          >
+            <img src="/img/lock-app.svg" alt="" />
             <strong class="name">内置密码库</strong>
           </div>
         </a-tooltip>
 
-        <a-tooltip v-for="(item,index) in dbList" :mouseEnterDelay="0.5" :overlay-style="{'min-width':'500px'}"
-                   placement="bottom">
-          <template #title>
-            保存位置：<br>{{ item.path }}
-          </template>
+        <a-tooltip
+          :overlay-style="{ 'min-width': '500px' }"
+          :mouseEnterDelay="0.5"
+          placement="bottom"
+          v-for="(item, index) in dbList"
+        >
+          <template #title> 保存位置：<br />{{ item.path }} </template>
 
-          <div :key="item.id" :class="bankIndex == item.id ? 'bank_active':''"
-               class="password-bank-list-item" @click.stop="selectBankItem(item)">
-            <img alt="" src="/img/lock.svg">
+          <div
+            class="password-bank-list-item"
+            :class="bankIndex == item.id ? 'bank_active' : ''"
+            :key="item.id"
+            @click.stop="selectBankItem(item)"
+          >
+            <img src="/img/lock.svg" alt="" />
             <span class="name">{{ item.text }}</span>
-            <span class="remove-icon" size="small" title="删除记录" @click="removeBank(index)"> <close-outlined/></span>
+            <span title="删除记录" @click="removeBank(index)" class="remove-icon" size="small">
+              <close-outlined
+            /></span>
           </div>
         </a-tooltip>
       </vue-custom-scrollbar>
     </div>
   </div>
 
-
-  <a-modal v-model:visible="visibleInputPwd" :width="380" centered title="主密码" @ok="doCreate">
-    <div style="padding:20px">
-      <a-input v-model:value="newName" default-value="新密码库" placeholder="密码库名称" style="margin-bottom: 10px">
-        <template #addonBefore>
-          库名称
-        </template>
+  <a-modal v-model:visible="visibleInputPwd" centered :width="380" title="主密码" @ok="doCreate">
+    <div style="padding: 20px">
+      <a-input default-value="新密码库" style="margin-bottom: 10px" v-model:value="newName" placeholder="密码库名称">
+        <template #addonBefore> 库名称 </template>
       </a-input>
       <div class="password-bank-input">
-        <a-input-password v-model:value="newPassword" class="bank-input" placeholder="主密码">
-          <template #addonBefore>
-            主密码
-          </template>
+        <a-input-password class="bank-input" v-model:value="newPassword" placeholder="主密码">
+          <template #addonBefore> 主密码 </template>
         </a-input-password>
       </div>
     </div>
@@ -98,24 +117,27 @@
 </template>
 
 <script>
-import { CloseOutlined, FolderAddOutlined, FolderOpenOutlined, KeyOutlined, UnlockFilled } from '@ant-design/icons-vue'
-import { message, Modal } from 'ant-design-vue'
-import vueCustomScrollbar from '../../../src/components/vue-scrollbar.vue'
-import { mapActions, mapWritableState } from 'pinia'
-import { appStore } from '../store'
-
+import { UnlockFilled, FolderOpenOutlined, CloseOutlined, KeyOutlined, FolderAddOutlined } from '@ant-design/icons-vue';
+import { message, Modal } from 'ant-design-vue';
+import vueCustomScrollbar from '../../../src/components/vue-scrollbar.vue';
+import { mapActions, mapWritableState } from 'pinia';
+import { appStore } from '../store';
 export default {
   components: {
     vueCustomScrollbar,
-    UnlockFilled, FolderOpenOutlined, CloseOutlined, KeyOutlined, FolderAddOutlined
+    UnlockFilled,
+    FolderOpenOutlined,
+    CloseOutlined,
+    KeyOutlined,
+    FolderAddOutlined,
   },
-  data () {
+  data() {
     return {
       settings: {
         swipeEasing: true,
         suppressScrollY: false,
         suppressScrollX: true,
-        wheelPropagation: false
+        wheelPropagation: false,
       },
       showAction: false,
       bankValue: '',
@@ -126,31 +148,30 @@ export default {
       newPassword: '',
       newName: '新密码库',
       keyPath: '',
-    }
+    };
   },
   computed: {
-    ...mapWritableState(appStore, ['dbList', 'filterInfo'])
+    ...mapWritableState(appStore, ['dbList', 'filterInfo']),
   },
-  mounted () {
-    let bank = this.$route.params
+  mounted() {
+    let bank = this.$route.params;
     if (bank.name) {
-      message.info('请输入密码库的登录信息，回车进入。')
-      document.getElementById('pwdInput').focus()
+      message.info('请输入密码库的登录信息，回车进入。');
+      document.getElementById('pwdInput').focus();
       this.selectBankItem({
         text: bank.name,
-        path: bank.path
-      })
+        path: bank.path,
+      });
     }
-
   },
   methods: {
     ...mapActions(appStore, ['setDb', 'loadDbList', 'saveDbList']),
-    create () {
-      this.visibleInputPwd = true
+    create() {
+      this.visibleInputPwd = true;
       // const filePath=ipc.sendSync('selectKdbx')
       // kdbxModel.create('kdb',filePath)
     },
-    setInnerDb () {
+    setInnerDb() {
       Modal.confirm({
         content: '设置为内置密码库时，部分功能将被禁用。',
         okText: '确定',
@@ -158,133 +179,132 @@ export default {
           this.setDb({
             tags: [],
             name: '内部密码库',
-            type: 'builtin'
-          })
-          this.$router.push({ name: 'passwords', params: { value: '', type: 'all' } })
-        }
-      })
+            type: 'builtin',
+          });
+          this.$router.push({ name: 'passwords', params: { value: '', type: 'all' } });
+        },
+      });
     },
-    selectDb () {
-      let filePath = ipc.sendSync('selectKdbx')
+    selectDb() {
+      let filePath = ipc.sendSync('selectKdbx');
       if (!filePath) {
-        return
+        return;
       }
-      filePath = filePath[0]
-      const path = require('path')
+      filePath = filePath[0];
+      const path = require('path');
 
       let item = {
         id: Date.now(),
         text: path.basename(filePath).replace(path.extname(filePath), ''),
         path: filePath,
-        lastOpen: Date.now()
-      }
+        lastOpen: Date.now(),
+      };
       let found = this.dbList.findIndex((testItem) => {
-        return testItem.path === filePath
-      })
+        return testItem.path === filePath;
+      });
       if (found > -1) {
-        this.dbList.splice(found, 1)
+        this.dbList.splice(found, 1);
       }
-      this.dbList.unshift(item)
+      this.dbList.unshift(item);
       setTimeout(() => {
-        this.selectBankItem(item)
-        this.saveHistory()
-      }, 300)
-
+        this.selectBankItem(item);
+        this.saveHistory();
+      }, 300);
     },
-    openDb () {
+    openDb() {
       if (!this.selectedItem.path) {
-        message.error('请先选择密码库')
+        message.error('请先选择密码库');
       }
       passwordModel.openFile(this.password, this.selectedItem.path, null, (err, dbInfo) => {
         if (err) {
-          this.password = ''
-          message.error('打开密码库失败，请确认主密码正确且选择了正确的秘钥文件（如果有。点击更多选项进行选择）。')
+          this.password = '';
+          message.error('打开密码库失败，请确认主密码正确且选择了正确的秘钥文件（如果有。点击更多选项进行选择）。');
         } else {
           //message.success('打开密码库成功。')
           Modal.confirm({
             centered: true,
             title: '切换密码库',
-            content: '是否切换当前的密码库到：「' + dbInfo.name + '」，切换密码库会导致浏览器的填充密码被调整为新的密码库中的密码。',
+            content:
+              '是否切换当前的密码库到：「' +
+              dbInfo.name +
+              '」，切换密码库会导致浏览器的填充密码被调整为新的密码库中的密码。',
             okText: '切换',
             onOk: () => {
-
-              this.filterInfo.type = 'all'
+              this.filterInfo.type = 'all';
               this.setDb({
                 filePath: this.selectedItem.path,
                 kdbx: dbInfo.db,
                 tags: dbInfo.tags,
-                name: dbInfo.name
-              })
-              this.$router.push({ name: 'passwords', params: { value: '', type: 'all' } })
-            }
-          })
+                name: dbInfo.name,
+              });
+              this.$router.push({ name: 'passwords', params: { value: '', type: 'all' } });
+            },
+          });
         }
-      })
+      });
     },
-    selectKey () {
-      const keyPath = ipc.sendSync('selectKey')
-      if (keyPath)
-        this.keyPath = keyPath
+    selectKey() {
+      const keyPath = ipc.sendSync('selectKey');
+      if (keyPath) this.keyPath = keyPath;
     },
-    removeKey () {
-      this.keyPath = ''
+    removeKey() {
+      this.keyPath = '';
     },
-    doCreate () {
+    doCreate() {
       if (!this.newPassword) {
-        message.error('请输入密码库主密码。')
-        return
+        message.error('请输入密码库主密码。');
+        return;
       }
 
-      const filePath = ipc.sendSync('createKdbx', { name: this.newName })
+      const filePath = ipc.sendSync('createKdbx', { name: this.newName });
       if (!filePath) {
-        return
+        return;
       }
       passwordModel.create(this.newName, filePath, this.newPassword, () => {
         let item = {
           id: Date.now(),
           text: this.newName,
           path: filePath,
-          lastOpen: Date.now()
-        }
-        this.dbList.unshift(item)
-        this.newPassword = ''
-        this.newName = '新密码库'
-        this.visibleInputPwd = false
-        message.success('密码库创建成功。')
-        this.selectBankItem(item)
-        this.saveHistory()
-      })
+          lastOpen: Date.now(),
+        };
+        this.dbList.unshift(item);
+        this.newPassword = '';
+        this.newName = '新密码库';
+        this.visibleInputPwd = false;
+        message.success('密码库创建成功。');
+        this.selectBankItem(item);
+        this.saveHistory();
+      });
     },
-    saveHistory () {
-      this.saveDbList()
+    saveHistory() {
+      this.saveDbList();
     },
-    removeBank (index) {
+    removeBank(index) {
       Modal.confirm({
         centered: true,
         content: '是否移除记录？此行为不会删除密码库。',
         onOk: () => {
-          this.dbList.splice(index, 1)
-          this.saveHistory()
-        }
-      })
-
+          this.dbList.splice(index, 1);
+          this.saveHistory();
+        },
+      });
     },
-    unselectBankItem () {
+    unselectBankItem() {
       // 点击选中的状态
-      this.bankIndex = 0
+      this.bankIndex = 0;
       // 将点击选中的内容放入输入框中
-      this.bankValue = ''
+      this.bankValue = '';
     },
     // 选中每一项内容放入输入框中
-    selectBankItem (v) {
+    selectBankItem(v) {
       // 点击选中的状态
-      this.bankIndex = v.id
+      this.bankIndex = v.id;
       // 将点击选中的内容放入输入框中
-      this.bankValue = v.text
-      this.selectedItem = v
-    }
+      this.bankValue = v.text;
+      this.selectedItem = v;
+    },
   },
-}
+};
 </script>
 <style>
 .collapse-addon .ant-collapse > .ant-collapse-item > .ant-collapse-header {
@@ -296,7 +316,6 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-
 .action {
   .icon {
     font-size: 44px;
@@ -342,11 +361,7 @@ export default {
     padding-top: 6px;
     height: 64px;
     line-height: 64px;
-    background: linear-gradient(
-            60deg,
-            rgba(45, 74, 253, 0.59) 0%,
-            rgba(20, 99, 250, 1) 100%
-    );
+    background: linear-gradient(60deg, rgba(45, 74, 253, 0.59) 0%, rgba(20, 99, 250, 1) 100%);
     border-radius: 8px;
   }
 

@@ -33,46 +33,44 @@ groupListTpl = `
     </a-result>
   </template>
 </div>
-  `
-const GroupListComp = require('../comp/groupListComp.js')
-const { api } = require('../../../server-config')
-const { ipcRenderer: ipc } = require('electron')
+  `;
+const GroupListComp = require('../comp/groupListComp.js');
+const { api } = require('../../../server-config');
+const { ipcRenderer: ipc } = require('electron');
 
 module.exports = Vue.component('group-list-page', {
   name: 'group-list-page',
   template: groupListTpl,
   component: { GroupListComp },
-  beforeRouteEnter (to, from, next) {
-    next(async vm => {
-      vm.myGroups = []
-      await vm.load(vm)
-    })
+  beforeRouteEnter(to, from, next) {
+    next(async (vm) => {
+      vm.myGroups = [];
+      await vm.load(vm);
+    });
   },
-  async beforeRouteUpdate (to, from, next) {
-    await this.load(this)
+  async beforeRouteUpdate(to, from, next) {
+    await this.load(this);
   },
-  data () {
+  data() {
     return {
       uid: Number,
-      myGroups: []
-    }
+      myGroups: [],
+    };
   },
   computed: {},
-  async mounted () {
-    await this.$store.dispatch('getCurrentUser')
-    this.uid = this.$store.getters.getCurrentUser.value.uid
+  async mounted() {
+    await this.$store.dispatch('getCurrentUser');
+    this.uid = this.$store.getters.getCurrentUser.value.uid;
   },
-  beforeCreate () {
-
-  },
+  beforeCreate() {},
   methods: {
-    async load (vm) {
-      await this.$store.dispatch('getMyGroups')
-      vm.myGroups = vm.$store.getters.getMyGroups
+    async load(vm) {
+      await this.$store.dispatch('getMyGroups');
+      vm.myGroups = vm.$store.getters.getMyGroups;
     },
-    Login () {
+    Login() {
       //location.href = api.getUrl(api.API_URL.user.login)
-      ipc.send('addTab', { url: api.getUrl(api.API_URL.user.login) })
-    }
-  }
-})
+      ipc.send('addTab', { url: api.getUrl(api.API_URL.user.login) });
+    },
+  },
+});

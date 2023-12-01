@@ -1,52 +1,77 @@
 <template>
-  <xt-modal v-model="custom" :boxIndex="100" :esc="true" :isFooter="false" :isHeader="false" :maskIndex="99" title=""
-            zIndex="9">
+  <xt-modal
+    v-model="custom"
+    :boxIndex="100"
+    :esc="true"
+    :isFooter="false"
+    :isHeader="false"
+    :maskIndex="99"
+    title=""
+    zIndex="9"
+  >
     <div class="w-[1000px] h-[700px] pl-4 pr-4">
       <div class="w-full pt-2 card-content">
-        <div class="flex justify-between mb-2 ">
+        <div class="flex justify-between mb-2">
           <span class="xt-text-2 font-16">详情</span>
           <div class="flex items-center">
             <a-tooltip placement="bottom" title="前往元社区">
-              <Icon class=" xt-text pointer active-icon" icon="fluent:chat-16-regular"
-                    style="font-size: 20px;"/>
+              <Icon class="xt-text pointer active-icon" icon="fluent:chat-16-regular" style="font-size: 20px" />
             </a-tooltip>
             <a-tooltip placement="bottom" title="全屏">
-              <Icon class="ml-3 xt-text pointer active-icon" icon="fluent:full-screen-maximize-16-filled"
-                    style="font-size: 20px;"/>
+              <Icon
+                class="ml-3 xt-text pointer active-icon"
+                icon="fluent:full-screen-maximize-16-filled"
+                style="font-size: 20px"
+              />
             </a-tooltip>
             <a-tooltip placement="bottom" title="刷新">
-              <Icon class="ml-3 xt-text pointer active-icon" icon="akar-icons:arrow-clockwise"
-                    style="font-size: 20px;" @click="refresh"/>
+              <Icon
+                class="ml-3 xt-text pointer active-icon"
+                icon="akar-icons:arrow-clockwise"
+                style="font-size: 20px"
+                @click="refresh"
+              />
             </a-tooltip>
             <a-tooltip placement="bottom" title="外部打开">
-              <Icon class="ml-3 xt-text pointer active-icon" icon="majesticons:open" style="font-size: 20px;"
-                    @click="goYuan"/>
+              <Icon
+                class="ml-3 xt-text pointer active-icon"
+                icon="majesticons:open"
+                style="font-size: 20px"
+                @click="goYuan"
+              />
             </a-tooltip>
-            <a-divider class="w-[3px]  " style="color: var(--divider);" type="vertical"/>
+            <a-divider class="w-[3px]" style="color: var(--divider)" type="vertical" />
             <a-tooltip placement="bottom" title="关闭">
-              <Icon class=" xt-text pointer active-icon" icon="akar-icons:cross" style="font-size: 20px;"
-                    @click="closeDetail"/>
+              <Icon
+                class="xt-text pointer active-icon"
+                icon="akar-icons:cross"
+                style="font-size: 20px"
+                @click="closeDetail"
+              />
             </a-tooltip>
           </div>
         </div>
       </div>
-      <div class="flex w-full h-[650px] pl-4 pr-4 xt-bg-2" style="border-radius: 12px;">
-        <vue-custom-scrollbar ref="threadListRef" :settings="settingsScroller" class="w-1/2 thread-list"
-                              style="height: 100%;overflow: hidden;flex-shrink: 0; ">
-          <div class="mt-4 " style="flex-shrink: 0;">
+      <div class="flex w-full h-[650px] pl-4 pr-4 xt-bg-2" style="border-radius: 12px">
+        <vue-custom-scrollbar
+          ref="threadListRef"
+          :settings="settingsScroller"
+          class="w-1/2 thread-list"
+          style="height: 100%; overflow: hidden; flex-shrink: 0"
+        >
+          <div class="mt-4" style="flex-shrink: 0">
             <div class="card-top">
               <div class="flex items-center">
-                <a-avatar :size="32" :src="cardData.user.avatar" class="pointer"
-                          @click.stop="showCard(uid, userInfo)">
+                <a-avatar :size="32" :src="cardData.user.avatar" class="pointer" @click.stop="showCard(uid, userInfo)">
                   <template #icon>
-                    <UserOutlined/>
+                    <UserOutlined />
                   </template>
                 </a-avatar>
                 <div class="ml-3 user-msg">
-                  <div class="username" style="color: var(--primary-text);font-size: 14px;">
+                  <div class="username" style="color: var(--primary-text); font-size: 14px">
                     {{ cardData.user.nickname }}
                   </div>
-                  <div class="self-msg " style="color:  var(--secondary-text);font-size: 12px;">
+                  <div class="self-msg" style="color: var(--secondary-text); font-size: 12px">
                     <span class="date">{{ createTime[0] }}</span>
                     <span class="time">{{ createTime[1] }}</span>
                     <span class="ip">{{ props.cardData.user.ip_home?.region }}</span>
@@ -57,27 +82,31 @@
                 <!-- 当展示文章详情时,需要一个返回按钮去返回上一级 -->
                 <!-- <slot name="top-right"></slot> -->
               </div>
-
             </div>
 
             <div>
               <div>
-                <div v-if="cardData.data?.video" class="flex flex-col items-center ">
+                <div v-if="cardData.data?.video" class="flex flex-col items-center">
                   <video class="object-cover mb-2 rounded-md cover-lm">
-                    <source :src="cardData.data.video" type="video/mp4"/>
-                    <source :src="cardData.data.video" type="video/webm"/>
+                    <source :src="cardData.data.video" type="video/mp4" />
+                    <source :src="cardData.data.video" type="video/webm" />
                   </video>
                 </div>
                 <!-- 正文元素 -->
                 <div class="mt-4 mb-2">
                   <div>
-                    <div v-if="cardData.title" id="title"
-                         :innerHTML="title" style="color: var(--primary-text);font-size: 16px; "></div>
-                    <div id="context"
-                         :innerHTML="content"
-                         style="color:  var(--secondary-text); word-break: pre-wrap;font-size: 14px;"></div>
+                    <div
+                      v-if="cardData.title"
+                      id="title"
+                      :innerHTML="title"
+                      style="color: var(--primary-text); font-size: 16px"
+                    ></div>
+                    <div
+                      id="context"
+                      :innerHTML="content"
+                      style="color: var(--secondary-text); word-break: pre-wrap; font-size: 14px"
+                    ></div>
                   </div>
-
                 </div>
                 <template v-if="cardData.image_170_170">
                   <!-- <ul class="flex flex-wrap items-center p-0 mb-0 ">
@@ -85,111 +114,115 @@
                   class="mb-2 rounded-md cover-lm " :key="index" style="object-fit: fill;">
           </ul> -->
                   <!-- :options="options" -->
-                  <viewer :images="cardData.image_170_170" :options="options"
-                          class="items-center p-0 mb-0 ">
+                  <viewer :images="cardData.image_170_170" :options="options" class="items-center p-0 mb-0">
                     <a-row :gutter="[20, 20]" style="margin-right: 1em" wrap="'true">
-                      <a-col v-for="(img, index) in cardData.image_170_170"
-                             :span="11" class="flex flex-wrap mr-2 image-wrapper" style="">
-                        <img :data-source="cardData.image[index].image"
-                             :src="img.image" class="mb-2 mr-2 rounded-md image-item pointer cover-lm"
-                             style="position: relative object-fit: fill;"
-                             @contextmenu.stop="showMenu(img)">
+                      <a-col
+                        v-for="(img, index) in cardData.image_170_170"
+                        :span="11"
+                        class="flex flex-wrap mr-2 image-wrapper"
+                        style=""
+                      >
+                        <img
+                          :data-source="cardData.image[index].image"
+                          :src="img.image"
+                          class="mb-2 mr-2 rounded-md image-item pointer cover-lm"
+                          style="position: relative object-fit: fill;"
+                          @contextmenu.stop="showMenu(img)"
+                        />
                       </a-col>
                     </a-row>
                   </viewer>
                 </template>
-
               </div>
-
             </div>
-            <div class="mt-4 text-xs card-bottom" style="color:  var(--secondary-text);">
-                            <span class="view" style="cursor: pointer; margin-right: 4px;">{{ cardData.view_count }}
-                                浏览</span>
-              <span class="like" style="cursor: pointer; margin-right: 4px;">{{ cardData.support_count }}
-                                点赞</span>
-              <span class="comments" style="cursor: pointer;">{{ cardData.reply_count }} 评论</span>
+            <div class="mt-4 text-xs card-bottom" style="color: var(--secondary-text)">
+              <span class="view" style="cursor: pointer; margin-right: 4px">{{ cardData.view_count }} 浏览</span>
+              <span class="like" style="cursor: pointer; margin-right: 4px">{{ cardData.support_count }} 点赞</span>
+              <span class="comments" style="cursor: pointer">{{ cardData.reply_count }} 评论</span>
             </div>
-
           </div>
         </vue-custom-scrollbar>
         <!-- 分隔线 -->
-        <a-divider class="w-[3px] h-[700px] " style="color: var(--divider);" type="vertical"/>
-        <vue-custom-scrollbar ref="threadListRef" :settings="settingsScroller" class="w-1/2 pr-4 thread-list"
-                              style="height: 100%;overflow: hidden;flex-shrink: 0; ">
+        <a-divider class="w-[3px] h-[700px]" style="color: var(--divider)" type="vertical" />
+        <vue-custom-scrollbar
+          ref="threadListRef"
+          :settings="settingsScroller"
+          class="w-1/2 pr-4 thread-list"
+          style="height: 100%; overflow: hidden; flex-shrink: 0"
+        >
           <div class="mt-4">
             <div class="flex mb-4">
               <!-- {{ store.communityCollect.info }} -->
-              <div class="flex items-center " style="cursor: pointer;" @click="clickLike">
+              <div class="flex items-center" style="cursor: pointer" @click="clickLike">
                 <!-- <div class="item-content"> -->
-                <xt-button :class="{ 'xt-bg': !isLike, 'xt-active-bg': isLike }"
-                           class="flex items-center justify-center pl-5 mr-3 reply xt-text"
-                           style="width: 57px;height: 32px;border: none;cursor: pointer;">
-                  <img alt="" class="w-[20px] h-[20px] -ml-6" src="../../../../../public/icons/like.png">
+                <xt-button
+                  :class="{ 'xt-bg': !isLike, 'xt-active-bg': isLike }"
+                  class="flex items-center justify-center pl-5 mr-3 reply xt-text"
+                  style="width: 57px; height: 32px; border: none; cursor: pointer"
+                >
+                  <img alt="" class="w-[20px] h-[20px] -ml-6" src="../../../../../public/icons/like.png" />
                   {{ cardData.support_count }}
                 </xt-button>
                 <!-- </div> -->
-
-
               </div>
-              <div class="flex items-center " style="cursor: pointer;" @click="clickCollect">
-                <xt-button :class="{ 'xt-bg': !isCollect, 'xt-active-bg': isCollect }"
-                           class="flex items-center justify-center pl-5 reply xt-text"
-                           style="width: 57px;height: 32px;border: none;cursor: pointer;">
-                  <img alt="" class="w-[20px] h-[20px] -ml-6 mr-1"
-                       src="../../../../../public/icons/collect.png">
+              <div class="flex items-center" style="cursor: pointer" @click="clickCollect">
+                <xt-button
+                  :class="{ 'xt-bg': !isCollect, 'xt-active-bg': isCollect }"
+                  class="flex items-center justify-center pl-5 reply xt-text"
+                  style="width: 57px; height: 32px; border: none; cursor: pointer"
+                >
+                  <img alt="" class="w-[20px] h-[20px] -ml-6 mr-1" src="../../../../../public/icons/collect.png" />
                   {{ cardData.collect_count }}
                 </xt-button>
               </div>
             </div>
-            <Comment :reply="cardData.reply_count" :tid="tid" :uid="cardData.user.uid"/>
+            <Comment :reply="cardData.reply_count" :tid="tid" :uid="cardData.user.uid" />
           </div>
         </vue-custom-scrollbar>
-
       </div>
     </div>
-
   </xt-modal>
 </template>
 
-<script lang='ts' setup>
-import {computed, onMounted, reactive, ref} from 'vue'
-import {UserOutlined} from '@ant-design/icons-vue'
+<script lang="ts" setup>
+import { computed, onMounted, reactive, ref } from 'vue';
+import { UserOutlined } from '@ant-design/icons-vue';
 import Comment from '@page/chat/com/Comment.vue';
-import {useCommunityStore} from '@page/chat/commun'
-import {appStore} from '../../../../table/store'
-import {Icon} from '@iconify/vue';
+import { useCommunityStore } from '@page/chat/commun';
+import { appStore } from '../../../../table/store';
+import { Icon } from '@iconify/vue';
 import browser from '../../../js/common/browser';
-import emojiReplace from '../../../js/chat/emoji'
-import {message} from "ant-design-vue";
+import emojiReplace from '../../../js/chat/emoji';
+import { message } from 'ant-design-vue';
 
-const useUserStore = appStore()
+const useUserStore = appStore();
 const store = useCommunityStore();
-let uid = store.communityPostDetail.user?.uid
+let uid = store.communityPostDetail.user?.uid;
 let userInfo = {
   uid: uid,
   nickname: props.cardData.user?.nickname,
-  avatar: props.cardData.user?.avatar_128
-}
+  avatar: props.cardData.user?.avatar_128,
+};
 onMounted(() => {
-  console.log(props.cardData)
-  refresh()
-})
+  console.log(props.cardData);
+  refresh();
+});
 const custom = computed(() => {
-  return props.showDetailModal
-})
+  return props.showDetailModal;
+});
 // 弹出用户个人卡片
 const showCard = (uid, userInfo) => {
-  useUserStore.showUserCard(uid, userInfo)
-}
+  useUserStore.showUserCard(uid, userInfo);
+};
 const goYuan = () => {
-  browser.openInUserSelect(`https://s.apps.vip/post/${props.cardData.pay_set.tid}`)
-}
-const detailVisible = ref(true)
-const emit = defineEmits(['closeDetail'])
+  browser.openInUserSelect(`https://s.apps.vip/post/${props.cardData.pay_set.tid}`);
+};
+const detailVisible = ref(true);
+const emit = defineEmits(['closeDetail']);
 const closeDetail = () => {
-  detailVisible.value = false
-  emit('closeDetail', detailVisible.value)
-}
+  detailVisible.value = false;
+  emit('closeDetail', detailVisible.value);
+};
 const settingsScroller = reactive({
   useBothWheelAxes: true,
   swipeEasing: true,
@@ -199,62 +232,65 @@ const settingsScroller = reactive({
 });
 // 点赞
 const isLike = computed(() => {
-  return store.communityPostDetail.is_support
-})
+  return store.communityPostDetail.is_support;
+});
 //
 const clickLike = async () => {
   // isLike.value = !isLike.value
-  let tid = store.communityPostDetail.pay_set.tid ? store.communityPostDetail.pay_set.tid : store.communityPostDetail.id
+  let tid = store.communityPostDetail.pay_set.tid
+    ? store.communityPostDetail.pay_set.tid
+    : store.communityPostDetail.id;
   // let thread = thread
-  await store.getCommunityLike("thread", tid)
-  message.success(store.communitySupport.info)
-  refresh()
-}
+  await store.getCommunityLike('thread', tid);
+  message.success(store.communitySupport.info);
+  refresh();
+};
 const isCollect = computed(() => {
-  return store.communityPostDetail.is_collect
-})
+  return store.communityPostDetail.is_collect;
+});
 // 收藏
 const clickCollect = async () => {
-  let tid = store.communityPostDetail.pay_set.tid ? store.communityPostDetail.pay_set.tid : store.communityPostDetail.id
+  let tid = store.communityPostDetail.pay_set.tid
+    ? store.communityPostDetail.pay_set.tid
+    : store.communityPostDetail.id;
   // isCollect.value = !isCollect.value
   if (store.communityPostDetail.is_collect == 0) {
-    await store.getCommunityCollect(tid)
-    message.success(store.communityCollect.info)
-    refresh()
+    await store.getCommunityCollect(tid);
+    message.success(store.communityCollect.info);
+    refresh();
   } else {
-    await store.getCommunityCancelCollect(tid)
-    message.success(store.communityCancelCollect.info)
-    refresh()
+    await store.getCommunityCancelCollect(tid);
+    message.success(store.communityCancelCollect.info);
+    refresh();
   }
-
-}
+};
 const props = defineProps({
   showDetailModal: Boolean,
   cardData: {
     type: Object,
-    default: () => []
-  }
-})
+    default: () => [],
+  },
+});
 const createTime = computed(() => {
-  let [date, time] = props.cardData.create_time.split(' ')
-  return [date, time]
-})
+  let [date, time] = props.cardData.create_time.split(' ');
+  return [date, time];
+});
 // const tid=store.communityPostDetail.pay_set.tid
 let tid = store.communityPostDetail?.pay_set?.tid || store.communityPostDetail?.id;
-const refreshDetailFlag = ref(true)
+const refreshDetailFlag = ref(true);
 const refreshDetail = async () => {
-  let Detailtid = props.cardData.pay_set.tid ? props.cardData.pay_set.tid : props.cardData.id
-  refreshDetailFlag.value = false
-  await store.getCommunityPostDetail(Detailtid)
-  refreshDetailFlag.value = true
-}
+  let Detailtid = props.cardData.pay_set.tid ? props.cardData.pay_set.tid : props.cardData.id;
+  refreshDetailFlag.value = false;
+  await store.getCommunityPostDetail(Detailtid);
+  refreshDetailFlag.value = true;
+};
 const refresh = async () => {
-  let detailTid = props.cardData.pay_set.tid ? props.cardData.pay_set.tid : props.cardData.id
+  let detailTid = props.cardData.pay_set.tid ? props.cardData.pay_set.tid : props.cardData.id;
   // refreshDetailFlag.value = false
-  await store.getCommunityPostDetail(detailTid)
+  await store.getCommunityPostDetail(detailTid);
   // refreshDetailFlag.value = true
-  await store.getCommunityPostReply(detailTid)
-}
+  await store.getCommunityPostReply(detailTid);
+};
 // 用于在动态和评论中使用的表情
 // str.replace(/\[([^(\]|\[)]*)\]/g,(item,index) => {})
 // https://sad.apps.vip/public/static/emoji/emojistatic/
@@ -267,14 +303,14 @@ const title = computed(() => {
 
 const showMenu = (img) => {
   console.log(img);
-}
+};
 // 控制图片画廊的显示
-const vieewerVisible = ref(false)
+const vieewerVisible = ref(false);
 const showImage = () => {
-  vieewerVisible.value = !vieewerVisible.value
-}
+  vieewerVisible.value = !vieewerVisible.value;
+};
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 header {
   display: none !important;
 }
@@ -284,7 +320,6 @@ header {
   // 占满整个父元素
   flex-grow: 1;
   // width: 600px;
-
 
   .card-content {
     margin: 12px;
@@ -311,7 +346,7 @@ header {
 
         .self-msg {
           font-size: 12px;
-          color: rgba(255, 255, 255, 0.40);
+          color: rgba(255, 255, 255, 0.4);
           font-weight: 400;
 
           .date {
@@ -325,8 +360,6 @@ header {
           }
         }
       }
-
-
     }
 
     .card-content {
@@ -383,7 +416,6 @@ header {
       content: '·';
       margin-left: 5px;
       margin-right: 5px;
-
     }
 
     .like::after {
@@ -392,7 +424,6 @@ header {
       margin-right: 5px;
     }
   }
-
 }
 
 .active-icon {

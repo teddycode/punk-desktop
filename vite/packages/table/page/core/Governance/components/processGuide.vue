@@ -19,8 +19,8 @@
 
 <script>
 export default {
-  name: 'processGuide'
-}
+  name: 'processGuide',
+};
 </script>
 
 <style scoped>

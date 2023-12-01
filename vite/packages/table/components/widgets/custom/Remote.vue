@@ -3,21 +3,37 @@
   <!--&lt;!&ndash;  <my-list id="my" > <slot></slot></my-list>&ndash;&gt;-->
   <!--  </div>-->
   <xt-task :modelValue="m03031" @cb="openRightMenu">
-    <Widget ref="remote" :custom-data="customData" :customIndex="customIndex" :desk="desk"
-            :menuList="menuList" :options="options" :showRightIcon="notTrigger ? false : true" :size="customSize">
-      <div ref="cardSize" :class="notTrigger ? 'trigger' : '' "
-           style="align-items: center;align-content: center;width: 100%;height:100%;text-align: center">
-        <div v-if="!customData.url"
-             style="display: flex;flex-direction: column;align-items: center;justify-content: center;height:100%">
+    <Widget
+      ref="remote"
+      :custom-data="customData"
+      :customIndex="customIndex"
+      :desk="desk"
+      :menuList="menuList"
+      :options="options"
+      :showRightIcon="notTrigger ? false : true"
+      :size="customSize"
+    >
+      <div
+        ref="cardSize"
+        :class="notTrigger ? 'trigger' : ''"
+        style="align-items: center; align-content: center; width: 100%; height: 100%; text-align: center"
+      >
+        <div
+          v-if="!customData.url"
+          style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%"
+        >
           <a-button class="xt-active-text" size="large" type="primary" @click="this.panelVisible = true">
             配置卡片
           </a-button>
         </div>
         <template v-else>
-          <iframe ref="myIframe" :src="customData.url"
-                  allowtransparency="true"
-                  sandbox="allow-forms allow-modals allow-popups allow-same-origin allow-scripts"
-                  style="width: 100%;height: 100%;border: none;border-radius: 8px">
+          <iframe
+            ref="myIframe"
+            :src="customData.url"
+            allowtransparency="true"
+            sandbox="allow-forms allow-modals allow-popups allow-same-origin allow-scripts"
+            style="width: 100%; height: 100%; border: none; border-radius: 8px"
+          >
           </iframe>
         </template>
       </div>
@@ -26,18 +42,13 @@
   <a-drawer v-model:visible="panelVisible">
     <div class="line">
       卡片地址：
-      <a-input v-model:value="url" placeholder="请输入远程地址，需带协议" style="width:230px"></a-input>
+      <a-input v-model:value="url" placeholder="请输入远程地址，需带协议" style="width: 230px"></a-input>
     </div>
     <div class="line">卡片尺寸：</div>
     <div class="line">
-      <a-input-number v-model:value="width"
-                      :max="20"
-                      :min="2" :step="2"></a-input-number>
+      <a-input-number v-model:value="width" :max="20" :min="2" :step="2"></a-input-number>
       x
-      <a-input-number v-model:value="height"
-                      :max="20"
-                      :min="2"
-                      :step="2"></a-input-number>
+      <a-input-number v-model:value="height" :max="20" :min="2" :step="2"></a-input-number>
     </div>
     <div class="line">
       隐藏卡片外框：
@@ -53,24 +64,24 @@
 </template>
 
 <script>
-import Widget from '../../card/Widget.vue'
-import { message } from 'ant-design-vue'
-import { taskStore } from '../../../apps/task/store'
-import { mapWritableState } from 'pinia'
+import Widget from '../../card/Widget.vue';
+import { message } from 'ant-design-vue';
+import { taskStore } from '../../../apps/task/store';
+import { mapWritableState } from 'pinia';
 
 // import RemoteShare from '../../card/remote/RemoteShare.vue';
-function loadScript (src, id, callback) {
-  const s = document.createElement('script', id)
-  s.type = 'text/javascript'
-  s.src = src
-  s.id = id
+function loadScript(src, id, callback) {
+  const s = document.createElement('script', id);
+  s.type = 'text/javascript';
+  s.src = src;
+  s.id = id;
   s.onload = s.onreadystatechange = function () {
     if (!this.readyState || this.readyState === 'loaded' || this.readyState === 'complete') {
-      callback && callback()
-      s.onload = s.onreadystatechange = null
+      callback && callback();
+      s.onload = s.onreadystatechange = null;
     }
-  }
-  document.body.appendChild(s)
+  };
+  document.body.appendChild(s);
 }
 
 export default {
@@ -79,23 +90,23 @@ export default {
   props: {
     customIndex: {
       type: Number,
-      default: 0
+      default: 0,
     },
     customData: {
       type: Object,
       default: () => {
-        return {}
-      }
+        return {};
+      },
     },
     desk: {
-      type: Object
+      type: Object,
     },
     notTrigger: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
-  data () {
+  data() {
     return {
       url: '',
       width: 2,
@@ -119,9 +130,9 @@ export default {
           fn: () => {
             this.$router.push({
               name: 'remoteCommunity',
-              params: { id: this.desk.id, cardId: this.customIndex, size: JSON.stringify(this.cardSize) }
-            })
-          }
+              params: { id: this.desk.id, cardId: this.customIndex, size: JSON.stringify(this.cardSize) },
+            });
+          },
         },
         {
           icon: 'fenxiang',
@@ -133,57 +144,56 @@ export default {
                 id: this.desk.id,
                 cardId: this.customIndex,
                 direct: true,
-                size: JSON.stringify(this.cardSize)
-              }
-            })
+                size: JSON.stringify(this.cardSize),
+              },
+            });
             // this.openShare = true
-          }
+          },
         },
         {
           icon: 'shezhi1',
           title: '设置',
           fn: () => {
-            this.panelVisible = true
-            this.$refs.remote.visible = false
-          }
-        }
+            this.panelVisible = true;
+            this.$refs.remote.visible = false;
+          },
+        },
       ],
-    }
+    };
   },
   watch: {
-    width (newWidth) {
-      this.width = this.ensureEvenNumber(newWidth)
+    width(newWidth) {
+      this.width = this.ensureEvenNumber(newWidth);
     },
-    height (newHeight) {
-      this.height = this.ensureEvenNumber(newHeight)
-    }
+    height(newHeight) {
+      this.height = this.ensureEvenNumber(newHeight);
+    },
   },
   methods: {
-    openRightMenu () {
-      this.$refs.remote.menuVisible = true
+    openRightMenu() {
+      this.$refs.remote.menuVisible = true;
     },
-    closeModal (val) {
-      this.showCommunity = val
+    closeModal(val) {
+      this.showCommunity = val;
     },
-    ensureEvenNumber (value) {
-      const parsedValue = parseInt(value)
-      return Math.ceil(parsedValue / 2) * 2
+    ensureEvenNumber(value) {
+      const parsedValue = parseInt(value);
+      return Math.ceil(parsedValue / 2) * 2;
     },
-    save () {
-      this.$refs.remote.visible = false
-      this.panelVisible = false
-      this.customData.width = this.width / 2
-      this.customData.height = this.height / 2
-      this.customData.url = this.url
-      message.success('修改成功')
-
+    save() {
+      this.$refs.remote.visible = false;
+      this.panelVisible = false;
+      this.customData.width = this.width / 2;
+      this.customData.height = this.height / 2;
+      this.customData.url = this.url;
+      message.success('修改成功');
     },
-    closeShare (val) {
-      this.openShare = val
+    closeShare(val) {
+      this.openShare = val;
     },
-    setUA () {
+    setUA() {
       //暂时没有办法实现此处展现为移动端的界面
-    }
+    },
     //   let contentWindow=this.$refs.myIframe.contentWindow
     //   console.log('当前的contentwindow-',contentWindow)
     //   const ua='Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/112.0.0.0'
@@ -210,31 +220,31 @@ export default {
   },
   computed: {
     ...mapWritableState(taskStore, ['taskID', 'step']),
-    m03031 () {
-      return this.customData.task && this.taskID == 'M0303' && this.step == 1
+    m03031() {
+      return this.customData.task && this.taskID == 'M0303' && this.step == 1;
     },
-    customSize () {
+    customSize() {
       return {
         width: (this.customData.width || 1) * 280 + (this.customData.width - 1) * 10 + 'px',
-        height: (this.customData.height || 2) * 205 + (this.customData.height - 1) * 10 + 'px'
-      }
+        height: (this.customData.height || 2) * 205 + (this.customData.height - 1) * 10 + 'px',
+      };
     },
-    cardSize () {
-      const { width, height } = this.$refs.cardSize.getBoundingClientRect()
-      return { width, height }
-    }
+    cardSize() {
+      const { width, height } = this.$refs.cardSize.getBoundingClientRect();
+      return { width, height };
+    },
   },
-  mounted () {
+  mounted() {
     // if(this.customData.url){
     //   this.setUA()
     // }
-    this.width = this.customData.width * 2 || 2
-    this.height = this.customData.height * 2 || 2
+    this.width = this.customData.width * 2 || 2;
+    this.height = this.customData.height * 2 || 2;
     if (!this.customData.width) {
-      this.customData.width = 1
-      this.customData.height = 1
+      this.customData.width = 1;
+      this.customData.height = 1;
     }
-    this.url = this.customData.url || ''
+    this.url = this.customData.url || '';
     // console.log('尝试载入')
     // const node = document.getElementById("my");
     // //我们将变量转换一下格式，就能传递给子组件
@@ -246,10 +256,10 @@ export default {
     //   window.customElements.upgrade(document.getElementById('my'))
     // })
   },
-  unmounted () {
+  unmounted() {
     // document.getElementById(this.id).remove()
-  }
-}
+  },
+};
 </script>
 
 <style scoped>

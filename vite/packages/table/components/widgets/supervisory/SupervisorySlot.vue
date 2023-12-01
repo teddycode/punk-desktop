@@ -1,33 +1,37 @@
 <template>
-  <div :class="options.className" :style="{pointerEvents:(editing?'none':'')}">
+  <div :class="options.className" :style="{ pointerEvents: editing ? 'none' : '' }">
     <div class="content-title">
       <div class="left-title">
         <Icon :icon="options.icon" class="title-icon"></Icon>
         <div style="font-size: 1em">{{ options.title }}</div>
       </div>
       <div class="right-title" @click.stop="showDrawer">
-        <Icon class="title-icon" icon="gengduo1" style="cursor:pointer"></Icon>
+        <Icon class="title-icon" icon="gengduo1" style="cursor: pointer"></Icon>
       </div>
     </div>
 
     <div class="pointer" @click="go">
       <slot></slot>
     </div>
-
   </div>
   <a-drawer
-      :closable="false"
-      :contentWrapperStyle="{ padding:10,marginLeft:'2.5%',
-    backgroundColor:'#1F1F1F',width: '95%',height:'11em',borderRadius:'5%'}"
-      :height="120"
-      :visible="visible"
-      :width="120"
-      class="drawer"
-      placement="bottom"
-      @close="onClose"
+    :closable="false"
+    :contentWrapperStyle="{
+      padding: 10,
+      marginLeft: '2.5%',
+      backgroundColor: '#1F1F1F',
+      width: '95%',
+      height: '11em',
+      borderRadius: '5%',
+    }"
+    :height="120"
+    :visible="visible"
+    :width="120"
+    class="drawer"
+    placement="bottom"
+    @close="onClose"
   >
-    <div style="display: flex;flex-direction: row;height: 100%">
-
+    <div style="display: flex; flex-direction: row; height: 100%">
       <div class="option" @click="removeCard">
         <Icon class="icon" icon="guanbi2"></Icon>
         删除
@@ -38,74 +42,73 @@
       </div>
     </div>
   </a-drawer>
-  <textarea id="textArea" style="opacity: 0;height: 0;width: 0;position: absolute"></textarea>
+  <textarea id="textArea" style="opacity: 0; height: 0; width: 0; position: absolute"></textarea>
 </template>
 
 <script>
-import { mapActions, mapWritableState } from 'pinia'
-import { cardStore } from '../../../store/card'
-import { message } from 'ant-design-vue'
-import { inspectorStore } from '../../../store/inspector'
+import { mapActions, mapWritableState } from 'pinia';
+import { cardStore } from '../../../store/card';
+import { message } from 'ant-design-vue';
+import { inspectorStore } from '../../../store/inspector';
 
 export default {
-  data () {
+  data() {
     return {
       visible: false,
-    }
+    };
   },
   name: 'SupervisorySlot',
   props: {
     options: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     editing: {
       type: Boolean,
-      default: false
+      default: false,
     },
     customIndex: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   computed: {
     ...mapWritableState(cardStore, ['aidaData']),
-
   },
-  mounted () {
-    this.startInspect()
+  mounted() {
+    this.startInspect();
   },
-  unmounted () {
-    this.stopInspect()
+  unmounted() {
+    this.stopInspect();
   },
   methods: {
     ...mapActions(cardStore, ['removeCard']),
     ...mapActions(inspectorStore, ['startInspect', 'stopInspect']),
-    showDrawer () {
-      this.visible = true
+    showDrawer() {
+      this.visible = true;
     },
-    onClose () {
-      this.visible = false
+    onClose() {
+      this.visible = false;
     },
-    removeCard () {
-      this.removeCard(this.customIndex)
-      this.visible = false
+    removeCard() {
+      this.removeCard(this.customIndex);
+      this.visible = false;
     },
-    onCopy () {
+    onCopy() {
       if (this.aidaData) {
-        let textArea = document.getElementById('textArea')
-        textArea.innerText = JSON.stringify(this.aidaData)
-        textArea.select()
-        document.execCommand('copy')
-        this.visible = false
-        message.info('复制成功！')
+        let textArea = document.getElementById('textArea');
+        textArea.innerText = JSON.stringify(this.aidaData);
+        textArea.select();
+        document.execCommand('copy');
+        this.visible = false;
+        message.info('复制成功！');
       } else {
-        message.info('复制失败，请检查是否启动过aida64！')
+        message.info('复制失败，请检查是否启动过aida64！');
       }
     },
-    go () {
-      this.$router.push({ name: 'inspector' })
-    }
-  }
-}
+    go() {
+      this.$router.push({ name: 'inspector' });
+    },
+  },
+};
 </script>

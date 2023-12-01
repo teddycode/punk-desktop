@@ -1,62 +1,93 @@
 <template>
-  <Widget ref="gameSmallSlot" :customData="customData" :customIndex="customIndex" :desk="desk"
-          :menuList="gameMiddleBare" :options="options" :sizeList="sizeList">
-    <div v-if="myDetailShow === false" class="px-1 py-1" style="position: absolute;left: 45px;top:10px">
+  <Widget
+    ref="gameSmallSlot"
+    :customData="customData"
+    :customIndex="customIndex"
+    :desk="desk"
+    :menuList="gameMiddleBare"
+    :options="options"
+    :sizeList="sizeList"
+  >
+    <div v-if="myDetailShow === false" class="px-1 py-1" style="position: absolute; left: 45px; top: 10px">
       我的游戏
     </div>
-    <div v-else class="px-1 py-1" style="position: absolute;left: 45px;top:10px">
-      当前游戏
-    </div>
+    <div v-else class="px-1 py-1" style="position: absolute; left: 45px; top: 10px">当前游戏</div>
     <template v-if="showSize.width === 1 && showSize.height === 2">
       <div v-if="defaultGame.name === 'steam'">
         <div v-if="detailShow === false" class="flex items-center">
           <!-- 这是什么判断 栓q -->
-          <a-spin v-if="gameList.length !== gameList.length " style="margin: 0 auto;"/>
+          <a-spin v-if="gameList.length !== gameList.length" style="margin: 0 auto" />
           <div v-else class="flex flex-col mt-3">
-            <XtState v-if="gameList.length ==0" :state="'null'" bg="" style="width: 250px;height: 352px;"></XtState>
-            <div v-for="item in gameList.slice(0,2)" class="mb-4 flex flex-col s-item pointer rounded-lg"
-                 @click="enterMyGameDetail(item)">
-              <div style="height:118.53px;">
-                <img :src="`https://cdn.cloudflare.steamstatic.com/steam/apps/${item.appid}/header.jpg`"
-                     alt=""
-                     class="rounded-t-lg" style="width: 100%;height: 100%;object-fit: cover;">
+            <XtState v-if="gameList.length == 0" :state="'null'" bg="" style="width: 250px; height: 352px"></XtState>
+            <div
+              v-for="item in gameList.slice(0, 2)"
+              class="mb-4 flex flex-col s-item pointer rounded-lg"
+              @click="enterMyGameDetail(item)"
+            >
+              <div style="height: 118.53px">
+                <img
+                  :src="`https://cdn.cloudflare.steamstatic.com/steam/apps/${item.appid}/header.jpg`"
+                  alt=""
+                  class="rounded-t-lg"
+                  style="width: 100%; height: 100%; object-fit: cover"
+                />
               </div>
-              <span class="px-3 py-3 w-full truncate" style="max-width:207px;">{{ item.name }}</span>
+              <span class="px-3 py-3 w-full truncate" style="max-width: 207px">{{ item.name }}</span>
             </div>
           </div>
         </div>
-        <MySteamDetail v-else :cpuShow="CPUShow" :size="customData" :steamDetail="steamDetail"
-                       @closeDetail="closeGame"></MySteamDetail>
+        <MySteamDetail
+          v-else
+          :cpuShow="CPUShow"
+          :size="customData"
+          :steamDetail="steamDetail"
+          @closeDetail="closeGame"
+        ></MySteamDetail>
       </div>
       <div v-else>
         <div v-if="otherDetailShow === false" class="my-other mt-4">
-          <div v-for="item in otherGameList.slice(0,6)" class="rounded-lg my-other-item pointer relative"
-               style=" width: 100px; height: 100px;" @click="enterOtherGameDetail(item)">
-            <img :src="item.src" alt="" class="rounded-lg " style="width: 100%; height:100%; object-fit: cover;">
-            <span class="small-title  truncate px-2 py-2"
-                  style="width: 100%; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">{{
-                item.title
-              }}</span>
+          <div
+            v-for="item in otherGameList.slice(0, 6)"
+            class="rounded-lg my-other-item pointer relative"
+            style="width: 100px; height: 100px"
+            @click="enterOtherGameDetail(item)"
+          >
+            <img :src="item.src" alt="" class="rounded-lg" style="width: 100%; height: 100%; object-fit: cover" />
+            <span
+              class="small-title truncate px-2 py-2"
+              style="width: 100%; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px"
+              >{{ item.title }}</span
+            >
           </div>
         </div>
-        <MyGameSmallDetail v-else :otherGame="otherData" :size="customData"
-                           @quitGame="closeOtherGame"></MyGameSmallDetail>
+        <MyGameSmallDetail
+          v-else
+          :otherGame="otherData"
+          :size="customData"
+          @quitGame="closeOtherGame"
+        ></MyGameSmallDetail>
       </div>
     </template>
     <template v-else>
       <div v-if="defaultGame.name === 'steam'">
         <div v-if="detailShow === false" class="flex items-center">
-          <a-spin v-if="gameList.length !== gameList.length" style="margin: 0 auto;"/>
+          <a-spin v-if="gameList.length !== gameList.length" style="margin: 0 auto" />
           <div v-else class="my-game">
-            <XtState v-if="gameList.length ==0" :state="'null'" bg="" style="width: 538px;height: 352px;"></XtState>
-            <div v-for="item in gameList.slice(0,4)" class="mb-3 flex my-game-item flex-col s-item pointer rounded-lg"
-                 @click="enterMyGameDetail(item)">
-              <div style="height:118px;">
-                <img :src="`https://cdn.cloudflare.steamstatic.com/steam/apps/${item.appid}/header.jpg`"
-                     alt=""
-                     class="rounded-t-lg" style="width: 100%;height: 100%;object-fit: cover;">
+            <XtState v-if="gameList.length == 0" :state="'null'" bg="" style="width: 538px; height: 352px"></XtState>
+            <div
+              v-for="item in gameList.slice(0, 4)"
+              class="mb-3 flex my-game-item flex-col s-item pointer rounded-lg"
+              @click="enterMyGameDetail(item)"
+            >
+              <div style="height: 118px">
+                <img
+                  :src="`https://cdn.cloudflare.steamstatic.com/steam/apps/${item.appid}/header.jpg`"
+                  alt=""
+                  class="rounded-t-lg"
+                  style="width: 100%; height: 100%; object-fit: cover"
+                />
               </div>
-              <span class="px-3 py-3 w-full truncate" style="max-width:207px;">{{ item.name }}</span>
+              <span class="px-3 py-3 w-full truncate" style="max-width: 207px">{{ item.name }}</span>
             </div>
           </div>
         </div>
@@ -64,17 +95,26 @@
       </div>
       <div v-else>
         <div v-if="otherDetailShow === false" class="my-other-lg mt-4">
-          <div v-for="item in otherGameList" class="rounded-lg my-other-item pointer relative"
-               style=" width: 100px; height: 100px;" @click="enterOtherGameDetail(item)">
-            <img :src="item.src" alt="" class="rounded-lg " style="width: 100%; height:100%; object-fit: cover;">
-            <span class="small-title  truncate px-2 py-2"
-                  style="width: 100%; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">{{
-                item.title
-              }}</span>
+          <div
+            v-for="item in otherGameList"
+            class="rounded-lg my-other-item pointer relative"
+            style="width: 100px; height: 100px"
+            @click="enterOtherGameDetail(item)"
+          >
+            <img :src="item.src" alt="" class="rounded-lg" style="width: 100%; height: 100%; object-fit: cover" />
+            <span
+              class="small-title truncate px-2 py-2"
+              style="width: 100%; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px"
+              >{{ item.title }}</span
+            >
           </div>
         </div>
-        <MyGameSmallDetail v-else :otherGame="otherData" :size="customData"
-                           @quitGame="closeOtherGame"></MyGameSmallDetail>
+        <MyGameSmallDetail
+          v-else
+          :otherGame="otherData"
+          :size="customData"
+          @quitGame="closeOtherGame"
+        ></MyGameSmallDetail>
       </div>
     </template>
   </Widget>
@@ -82,26 +122,29 @@
     <!-- <template #extra>
       <div class="flex justify-center items-center rounded-lg h-10 drawer-item-bg w-16  pointer" @click="saveSize">保存</div>
     </template>  -->
-    <div class="flex flex-col" style="color:var(--primary-text)">
+    <div class="flex flex-col" style="color: var(--primary-text)">
       <!-- <HorizontalPanel :navList="sizeList"  class="nav-list-container mb-3" bg-color="drawer-item-select-bg" v-model:selectType="defaultSize" ></HorizontalPanel> -->
-      <span class="mb-8" style="font-size: 16px;font-weight: 500;">展示游戏</span>
-      <span v-for="(item,index) in showGameType" :class="steamIndex === index ? 'active':''"
-            class="mb-4  text-center pointer change s-item  rounded-lg show-game-time py-3"
-            style="color:var(--primary-text);background: var(--primary-bg);"
-            @click="getGameType(item,index)">
-         {{ item.title }}
+      <span class="mb-8" style="font-size: 16px; font-weight: 500">展示游戏</span>
+      <span
+        v-for="(item, index) in showGameType"
+        :class="steamIndex === index ? 'active' : ''"
+        class="mb-4 text-center pointer change s-item rounded-lg show-game-time py-3"
+        style="color: var(--primary-text); background: var(--primary-bg)"
+        @click="getGameType(item, index)"
+      >
+        {{ item.title }}
       </span>
     </div>
   </a-drawer>
 </template>
 
 <script>
-import Widget from '../../card/Widget.vue'
-import HorizontalPanel from '../../HorizontalPanel.vue'
-import MySteamDetail from './MySteamDetail.vue'
-import MyGameSmallDetail from './MyGameSmallDetail.vue'
-import { mapWritableState } from 'pinia'
-import { steamUserStore } from '../../../store/steamUser'
+import Widget from '../../card/Widget.vue';
+import HorizontalPanel from '../../HorizontalPanel.vue';
+import MySteamDetail from './MySteamDetail.vue';
+import MyGameSmallDetail from './MyGameSmallDetail.vue';
+import { mapWritableState } from 'pinia';
+import { steamUserStore } from '../../../store/steamUser';
 // import { message } from "ant-design-vue";
 
 export default {
@@ -112,49 +155,49 @@ export default {
     MySteamDetail,
     MyGameSmallDetail,
   },
-  mounted () {
+  mounted() {
     if (!this.customData) {
-      this.customData = {}
+      this.customData = {};
     }
   },
   props: {
     customIndex: {
       type: Number,
-      default: 0
+      default: 0,
     },
     customData: {
       type: Object,
       default: () => {
-        return {}
-      }
+        return {};
+      },
     },
     desk: {
-      type: Object
-    }
+      type: Object,
+    },
   },
   computed: {
     ...mapWritableState(steamUserStore, ['gameList']),
-    showSize () {
+    showSize() {
       if (this.customData && this.customData.width && this.customData.height) {
-        return { width: this.customData.width, height: this.customData.height }
+        return { width: this.customData.width, height: this.customData.height };
       }
-      return this.sizeList[0]
+      return this.sizeList[0];
     },
-    defaultGame () {
+    defaultGame() {
       if (this.customData && this.customData.name) {
-        return this.customData
+        return this.customData;
       }
-      return this.showGameType[0]
+      return this.showGameType[0];
     },
   },
-  data () {
+  data() {
     return {
       options: {
         className: 'card ',
         title: '',
         icon: 'game',
         type: 'games',
-        epicShow: true
+        epicShow: true,
       },
       myDetailShow: false,
       middleShow: false,
@@ -163,36 +206,43 @@ export default {
       detailShow: false,
       CPUShow: false,
       otherDetailShow: false,
-      sizeList: [{ title: '1x2', width: 1, height: 2, name: '1x2' }, {
-        title: '2x2',
-        width: 2,
-        height: 2,
-        name: '2x2'
-      }],
-      gameMiddleBare: [{
-        icon: 'shezhi1', title: '设置', fn: () => {
-          this.middleShow = true
-          this.$refs.gameSmallSlot.visible = false
-        }
-      }],
-      showGameType: [{
-        title: 'Steam游戏，按最近游玩时间顺序展示',
-        name: 'steam'
-      }, { title: '其他游戏，按最近游玩时间顺序展示(正在开发中)', name: 'other' }],
+      sizeList: [
+        { title: '1x2', width: 1, height: 2, name: '1x2' },
+        {
+          title: '2x2',
+          width: 2,
+          height: 2,
+          name: '2x2',
+        },
+      ],
+      gameMiddleBare: [
+        {
+          icon: 'shezhi1',
+          title: '设置',
+          fn: () => {
+            this.middleShow = true;
+            this.$refs.gameSmallSlot.visible = false;
+          },
+        },
+      ],
+      showGameType: [
+        {
+          title: 'Steam游戏，按最近游玩时间顺序展示',
+          name: 'steam',
+        },
+        { title: '其他游戏，按最近游玩时间顺序展示(正在开发中)', name: 'other' },
+      ],
       // steamCardSize:[{title:'1x2',className:'',name:'1x2'}, {title:'2x2',className:'double',name:'2x2'}],
       // defaultSize:{title:'2x2',width:2,height:2,name:'2x2'},
       steamDetail: {},
 
-      otherGameList: [
-        { title: '小缇娜的奇幻之地', src: '/img/test/1.png' },
-      ],
+      otherGameList: [{ title: '小缇娜的奇幻之地', src: '/img/test/1.png' }],
       otherData: {},
-
-    }
+    };
   },
   watch: {
-    'defaultSize': {
-      handler () {
+    defaultSize: {
+      handler() {
         // // console.log(this.defaultSize);
         // this.increaseCustomComponents(this.$parent.copiedItems[0].id,{
         //   width:this.defaultSize.width,
@@ -202,32 +252,32 @@ export default {
         // this.$emit('customEvent')
       },
       immediate: true,
-    }
+    },
   },
   methods: {
     // ...mapActions(cardStore,['increaseCustomComponents']),
-    getGameType (item, index) {
-      this.customData.name = item.name
-      this.steamIndex = index
+    getGameType(item, index) {
+      this.customData.name = item.name;
+      this.steamIndex = index;
     },
-    enterMyGameDetail (item) {
-      this.steamDetail = item
-      this.myDetailShow = true
-      this.detailShow = true
+    enterMyGameDetail(item) {
+      this.steamDetail = item;
+      this.myDetailShow = true;
+      this.detailShow = true;
     },
-    closeGame () {
-      this.detailShow = false
-      this.myDetailShow = false
+    closeGame() {
+      this.detailShow = false;
+      this.myDetailShow = false;
     },
-    enterOtherGameDetail (item) {
-      this.otherDetailShow = true
-      this.otherData = item
+    enterOtherGameDetail(item) {
+      this.otherDetailShow = true;
+      this.otherData = item;
     },
-    closeOtherGame () {
-      this.otherDetailShow = false
-    }
-  }
-}
+    closeOtherGame() {
+      this.otherDetailShow = false;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

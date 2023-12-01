@@ -1,16 +1,8 @@
 <template>
-  <XtTitle
-      class="xt-text"
-      style="color: var(--primary-text) !important"
-      type="text"
-  >对话
+  <XtTitle type="text" class="xt-text" style="color: var(--primary-text) !important"
+    >对话
     <template #right>
-      <xt-base-icon
-          class="mr-3 xt-text"
-          icon="tianjia2"
-          style="font-size: 16px"
-          @click="add()"
-      ></xt-base-icon>
+      <xt-base-icon @click="add()" icon="tianjia2" class="mr-3 xt-text" style="font-size: 16px"></xt-base-icon>
     </template>
   </XtTitle>
   <template v-if="topList.length">
@@ -28,10 +20,9 @@
 </template>
 
 <script>
-import Topic from './topic.vue'
-import { mapActions, mapWritableState } from 'pinia'
-import { aiStore } from '../../../../store/ai'
-
+import Topic from './topic.vue';
+import { mapWritableState, mapActions } from 'pinia';
+import { aiStore } from '../../../../store/ai';
 export default {
   computed: {
     ...mapWritableState(aiStore, ['todayList', 'topList', 'previousList']),
@@ -39,11 +30,11 @@ export default {
   components: { Topic },
   methods: {
     ...mapActions(aiStore, ['addTopic']),
-    add () {
-      this.addTopic()
+    add() {
+      this.addTopic();
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped></style>

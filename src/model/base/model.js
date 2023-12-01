@@ -1,125 +1,122 @@
-const EventEmitter = require('events')
-const logger = require('../../util/logger')
-const SymbolEvents = Symbol('events')
-const SymbolDefaults = Symbol('defaults')
-const SymbolExtensions = Symbol('extensions')
+const EventEmitter = require('events');
+const logger = require('../../util/logger');
+const SymbolEvents = Symbol('events');
+const SymbolDefaults = Symbol('defaults');
+const SymbolExtensions = Symbol('extensions');
 
-function emitPropChange (target, property, value, prevValue) {
-  const emitter = target[SymbolEvents]
+function emitPropChange(target, property, value, prevValue) {
+  const emitter = target[SymbolEvents];
   if (!emitter.paused) {
-    emitter.emit('change:' + property, target, value, prevValue)
+    emitter.emit('change:' + property, target, value, prevValue);
     if (!emitter.noChange) {
-      emitter.emit('change', target, { [property]: value })
+      emitter.emit('change', target, { [property]: value });
     }
   }
 }
 
 const ProxyDef = {
-  deleteProperty (target, property) {
+  deleteProperty(target, property) {
     if (Object.prototype.hasOwnProperty.call(target, property)) {
-      const defaults = target[SymbolDefaults]
-      const value = defaults[property]
-      const prevValue = target[property]
+      const defaults = target[SymbolDefaults];
+      const value = defaults[property];
+      const prevValue = target[property];
       if (prevValue !== value) {
         if (Object.prototype.hasOwnProperty.call(defaults, property)) {
-          target[property] = value
+          target[property] = value;
         } else {
-          delete target[property]
+          delete target[property];
         }
-        emitPropChange(target, property, value, prevValue)
+        emitPropChange(target, property, value, prevValue);
       }
-      return true
+      return true;
     }
-    return true
+    return true;
   },
-  set (target, property, value, receiver) {
+  set(target, property, value, receiver) {
     if (Object.prototype.hasOwnProperty.call(target, property) || target[SymbolExtensions]) {
       if (target[property] !== value) {
-        const prevValue = target[property]
-        target[property] = value
-        emitPropChange(target, property, value, prevValue)
+        const prevValue = target[property];
+        target[property] = value;
+        emitPropChange(target, property, value, prevValue);
       }
-      return true
+      return true;
     } else {
-      logger.warn(
-        `Unknown property: ${property}`,
-        new Error().stack
-      )
+      logger.warn(`Unknown property: ${property}`, new Error().stack);
     }
-    return false
-  }
-}
+    return false;
+  },
+};
 
 class Model {
-  constructor (data) {
-    const emitter = new EventEmitter()
-    emitter.setMaxListeners(100)
+  constructor(data) {
+    const emitter = new EventEmitter();
+    emitter.setMaxListeners(100);
 
     const properties = {
-      [SymbolEvents]: { value: emitter }
-    }
+      [SymbolEvents]: { value: emitter },
+    };
     for (const [propName, defaultValue] of Object.entries(this[SymbolDefaults])) {
       properties[propName] = {
         configurable: true,
         enumerable: true,
         writable: true,
-        value: defaultValue
-      }
+        value: defaultValue,
+      };
     }
-    Object.defineProperties(this, properties)
+    Object.defineProperties(this, properties);
 
-    const object = new Proxy(this, ProxyDef)
+    const object = new Proxy(this, ProxyDef);
 
     if (data) {
-      object.set(data, { silent: true })
+      object.set(data, { silent: true });
     }
 
-    return object
+    return object;
   }
 
-  static defineModelProperties (properties, options) {
-    this.prototype[SymbolDefaults] = { ...this.prototype[SymbolDefaults], ...properties }
-    if (options && options.extensions) {
-      this.prototype[SymbolExtensions] = true
-    }
-  }
-
-  static set (properties) {
-    this.prototype[SymbolDefaults] = properties
-  }
-
-  set (props, { silent } = {}) {
-    const emitter = this[SymbolEvents]
+  set(props, { silent } = {}) {
+    const emitter = this[SymbolEvents];
     if (silent) {
-      emitter.paused = true
+      emitter.paused = true;
     }
-    emitter.noChange = true
+    emitter.noChange = true;
     for (const [prop, value] of Object.entries(props)) {
-      this[prop] = value
+      this[prop] = value;
     }
-    emitter.noChange = false
+    emitter.noChange = false;
     if (silent) {
-      emitter.paused = false
+      emitter.paused = false;
     } else {
-      emitter.emit('change', this, props)
+      emitter.emit('change', this, props);
     }
   }
 
-  on (eventName, listener) {
-    this[SymbolEvents].on(eventName, listener)
+  on(eventName, listener) {
+    this[SymbolEvents].on(eventName, listener);
   }
 
-  once (eventName, listener) {
-    this[SymbolEvents].once(eventName, listener)
+  once(eventName, listener) {
+    this[SymbolEvents].once(eventName, listener);
   }
 
-  off (eventName, listener) {
-    this[SymbolEvents].off(eventName, listener)
+  off(eventName, listener) {
+    this[SymbolEvents].off(eventName, listener);
   }
 
-  emit (eventName, ...args) {
-    this[SymbolEvents].emit(eventName, ...args)
+  emit(eventName, ...args) {
+    this[SymbolEvents].emit(eventName, ...args);
+  }
+
+  static defineModelProperties(properties, options) {
+    this.prototype[SymbolDefaults] = { ...this.prototype[SymbolDefaults], ...properties };
+    if (options && options.extensions) {
+      this.prototype[SymbolExtensions] = true;
+    }
+  }
+
+  static set(properties) {
+    this.prototype[SymbolDefaults] = properties;
   }
 }
 
-module.exports = Model
+module.exports = Model;

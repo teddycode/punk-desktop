@@ -3,25 +3,24 @@
   <div v-if="showModal" class="prompt-modal xt-mask">
     <div class="head-icon">
       <div class="icon" @click="close">
-        <Icon icon="guanbi" style="width: 24px;height: 24px;"></Icon>
+        <Icon icon="guanbi" style="width: 24px; height: 24px"></Icon>
       </div>
       <div class="flex">
         <div class="icon" @click="openDrawer = true">
-          <Icon icon="tishi-xianxing" style="width: 24px;height: 24px;"></Icon>
+          <Icon icon="tishi-xianxing" style="width: 24px; height: 24px"></Icon>
         </div>
       </div>
-
     </div>
     <!-- 预览 -->
     <!-- <div class="flex justify-center items-center preview" :style="{'--previewH': previewH}" id="cards" readonly> -->
     <div id="previewContent" class="flex justify-center items-center preview">
       <Desk :currentDesk="displayScheme" :editing="false" :notTrigger="true" :settings="displayScheme.settings"></Desk>
     </div>
-    <div class="foot flex ">
+    <div class="foot flex">
       <div class="flex items-center mr-2">
         <strong class="mr-2">{{ scheme.alias }}</strong> 共{{ template.cards.length }}个组件，尺寸
         {{ layoutSize.width + '*' + layoutSize.height }}
-        <Icon class="ml-3" icon="tishi-xianxing" style="width: 24px;height: 24px;"></Icon>
+        <Icon class="ml-3" icon="tishi-xianxing" style="width: 24px; height: 24px"></Icon>
       </div>
       <div class="flex" style="padding: 0">
         <xt-task :modelValue="m03026" @cb="addPlan">
@@ -38,16 +37,18 @@
     </div>
   </div>
   <!-- 预览添加抽屉 -->
-  <a-drawer v-model:visible="openDrawer" placement="right" style="z-index:9999999999;" width="320">
+  <a-drawer v-model:visible="openDrawer" placement="right" style="z-index: 9999999999" width="320">
     <template #closeIcon>
       <Icon icon="xiangyou"></Icon>
     </template>
-    <template v-if="!displayScheme.uid===userInfo.uid" #extra>
+    <template v-if="!displayScheme.uid === userInfo.uid" #extra>
       <a-space>
         <div class="flex">
-          <div class="pointer mr-3 xt-bg-2 xt-text h-12 w-12 flex items-center rounded-lg justify-center"
-               @click="openSet = true">
-            <Icon icon="dianzan" style="font-size: 1.5em;"></Icon>
+          <div
+            class="pointer mr-3 xt-bg-2 xt-text h-12 w-12 flex items-center rounded-lg justify-center"
+            @click="openSet = true"
+          >
+            <Icon icon="dianzan" style="font-size: 1.5em"></Icon>
           </div>
           <div class="add-scheme" @click="addPlan">
             <icon icon="xiazai1"></icon>
@@ -57,21 +58,21 @@
       </a-space>
     </template>
     <div class="drawer-center no-drag">
-      <span class="drawer-title">{{ scheme.alias }} <span class="xt-text-2 "
-                                                          style="user-select: text">{{ scheme.nanoid }}</span></span>
+      <span class="drawer-title"
+        >{{ scheme.alias }} <span class="xt-text-2" style="user-select: text">{{ scheme.nanoid }}</span></span
+      >
       <span class="drawer-text">{{ scheme.summary }}</span>
-      <div v-if="tagList.length>0" class="flex">
+      <div v-if="tagList.length > 0" class="flex">
         <div v-for="tag in tagList" class="label">{{ tag }}</div>
       </div>
       <div class="flex justify-between items-center">
         <span class="flex items-center my-4">
           <div>
-            <a-avatar :src="displayScheme.userInfo?.avatar" size="24">
-            </a-avatar>
+            <a-avatar :src="displayScheme.userInfo?.avatar" size="24"> </a-avatar>
           </div>
-          <span class="ml-3" style="color: var(--secondary-text);">{{ scheme.userInfo?.nickname }}</span>
+          <span class="ml-3" style="color: var(--secondary-text)">{{ scheme.userInfo?.nickname }}</span>
         </span>
-        <span style="color: var(--secondary-text);">
+        <span style="color: var(--secondary-text)">
           <span>
             <Icon class="mr-2" icon="dianzan"></Icon>
             <span>{{ scheme.support }}</span>
@@ -92,20 +93,20 @@
 </template>
 
 <script>
-import { message } from 'ant-design-vue'
-import { mapActions, mapWritableState } from 'pinia'
-import { appStore } from '../../store'
-import Desk from './Desk.vue'
-import { cardStore } from '../../store/card'
-import { marketStore } from '../../store/market'
-import { taskStore } from '../../apps/task/store'
+import { message } from 'ant-design-vue';
+import { mapActions, mapWritableState } from 'pinia';
+import { appStore } from '../../store';
+import Desk from './Desk.vue';
+import { cardStore } from '../../store/card';
+import { marketStore } from '../../store/market';
+import { taskStore } from '../../apps/task/store';
 
 export default {
   name: 'DeskPreview',
   components: {
-    Desk
+    Desk,
   },
-  data () {
+  data() {
     return {
       // 添加
       openDrawer: false,
@@ -114,7 +115,7 @@ export default {
         title: '',
         nanoid: '',
         cards: [],
-        settings: {}
+        settings: {},
       },
       deskWidth: 0,
       deskHeight: 0,
@@ -125,7 +126,7 @@ export default {
       windowHeight: document.body.clientHeight,
       previewWidth: 0,
       previewHeight: 0,
-    }
+    };
   },
   props: {
     // 方案
@@ -136,56 +137,54 @@ export default {
     //显示与隐藏
     showModal: {
       type: Boolean,
-      default: () => false
+      default: () => false,
     },
     deskList: {
-      type: Array
-    }
+      type: Array,
+    },
   },
   computed: {
     ...mapWritableState(appStore, ['fullScreen', 'userInfo']),
     ...mapWritableState(taskStore, ['taskID', 'step']),
-    m03026 () {
-      return this.taskID == 'M0302' && this.step == 6
+    m03026() {
+      return this.taskID == 'M0302' && this.step == 6;
     },
-    tagList () {
+    tagList() {
       if (this.scheme.tags) {
-        return this.scheme.tags.split(',')
+        return this.scheme.tags.split(',');
       } else {
-        return []
+        return [];
       }
     },
-    layoutSize () {
-      return JSON.parse(this.scheme.layoutSize)
+    layoutSize() {
+      return JSON.parse(this.scheme.layoutSize);
     },
-    template () {
-      return JSON.parse(this.scheme.template)
-    }
+    template() {
+      return JSON.parse(this.scheme.template);
+    },
   },
   watch: {
-    showModal (newVal) {
-      if (newVal) this.fullScreen = true
+    showModal(newVal) {
+      if (newVal) this.fullScreen = true;
       if (this.fullScreen) {
-        this.cardZoom = this.template.settings.cardZoom
-        this.cardMargin = this.template.settings.cardMargin
-        this.zoom = this.cardZoom / 100
-        this.getPreviewHeight()
+        this.cardZoom = this.template.settings.cardZoom;
+        this.cardMargin = this.template.settings.cardMargin;
+        this.zoom = this.cardZoom / 100;
+        this.getPreviewHeight();
         this.displayScheme = {
           ...this.scheme,
           settings: {
-            ...this.template.settings
+            ...this.template.settings,
           },
-          cards: [
-            ...this.template.cards
-          ],
-        }
-        this.deskWidth = this.layoutSize.width
-        this.deskHeight = this.layoutSize.height
-        this.cardHeight = this.layoutSize.height
-        var that = this
+          cards: [...this.template.cards],
+        };
+        this.deskWidth = this.layoutSize.width;
+        this.deskHeight = this.layoutSize.height;
+        this.cardHeight = this.layoutSize.height;
+        var that = this;
         window.addEventListener('resize', () => {
-          that.getPreviewHeight()
-        })
+          that.getPreviewHeight();
+        });
       }
     },
     // windowHeight(val){
@@ -202,28 +201,32 @@ export default {
   methods: {
     ...mapActions(cardStore, ['addShareDesk', 'setDeskSize']),
     ...mapActions(marketStore, ['incSupport']),
-    async doIncSupport () {
-      const rs = await this.incSupport(this.displayScheme.dataNanoid)
+    async doIncSupport() {
+      const rs = await this.incSupport(this.displayScheme.dataNanoid);
       if (rs && rs.msg.includes('取消')) {
-        this.displayScheme.support = rs.supportCount
-        message.success('已取消点赞')
+        this.displayScheme.support = rs.supportCount;
+        message.success('已取消点赞');
       } else {
-        console.log(rs)
-        this.displayScheme.support = rs.supportCount
-        message.success('感谢您的支持，您的支持是对作者最大的鼓励。')
+        console.log(rs);
+        this.displayScheme.support = rs.supportCount;
+        message.success('感谢您的支持，您的支持是对作者最大的鼓励。');
       }
     },
-    addPlan () {
-      this.close()
-      this.addShareDesk({
-        ...this.displayScheme,
-        title: this.displayScheme.alias,
-        cards: this.template.cards,
-        settings: this.template.settings
-      }, this.layoutSize, this.deskList)
-      message.success('添加成功')
-      this.$emit('afterAdded')
-      this.openDrawer = false
+    addPlan() {
+      this.close();
+      this.addShareDesk(
+        {
+          ...this.displayScheme,
+          title: this.displayScheme.alias,
+          cards: this.template.cards,
+          settings: this.template.settings,
+        },
+        this.layoutSize,
+        this.deskList,
+      );
+      message.success('添加成功');
+      this.$emit('afterAdded');
+      this.openDrawer = false;
       // setTimeout(() => {
       //   let cardsHeight = document.getElementById('cardContent')?.offsetHeight
       //   let deskHeight = document.documentElement.clientHeight // 高
@@ -237,33 +240,30 @@ export default {
       //   this.cardsHeight = cardsHeight
       // }, 300)
     },
-    close () {
+    close() {
       // this.cards.settings.cardZoom = this.cardZoom
-      this.$emit('closePreview', false)
-      this.fullScreen = false
+      this.$emit('closePreview', false);
+      this.fullScreen = false;
     },
-    getPreviewHeight () {
+    getPreviewHeight() {
       this.$nextTick(() => {
         if (this.fullScreen) {
           //计算得出修正后的缩放率
-          this.previewHeight = document.getElementById('previewContent')?.offsetHeight
-          let cardZoom = (this.cardZoom * this.previewHeight / this.cardHeight).toFixed()
-          let cardMargin = (this.cardMargin * this.previewHeight / this.cardHeight).toFixed()
-          this.displayScheme.settings.cardZoom = cardZoom
-          this.displayScheme.settings.cardMargin = cardMargin
-          this.displayScheme.settings.enableZoom = true
+          this.previewHeight = document.getElementById('previewContent')?.offsetHeight;
+          let cardZoom = ((this.cardZoom * this.previewHeight) / this.cardHeight).toFixed();
+          let cardMargin = ((this.cardMargin * this.previewHeight) / this.cardHeight).toFixed();
+          this.displayScheme.settings.cardZoom = cardZoom;
+          this.displayScheme.settings.cardMargin = cardMargin;
+          this.displayScheme.settings.enableZoom = true;
         }
-      })
-    }
-
+      });
+    },
   },
-  mounted () {
-  },
-}
+  mounted() {},
+};
 </script>
 
 <style lang="scss" scoped>
-
 .prompt-modal {
   position: absolute;
   top: 0;
@@ -406,7 +406,8 @@ export default {
   padding: 10px;
   cursor: pointer;
 
-  &.active, &:hover {
+  &.active,
+  &:hover {
     background: var(--active-bg);
     color: var(--active-text);
   }

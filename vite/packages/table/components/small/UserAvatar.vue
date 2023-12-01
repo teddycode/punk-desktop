@@ -8,30 +8,41 @@
  * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved.
 -->
 <template>
-  <div style="position: relative;text-align: center;height: 50px">
+  <div style="position: relative; text-align: center; height: 50px">
     <template v-if="showDetail === false">
-      <div v-if="tag" :style="{background:tagColor?tagColor:'rgba(0,0,0,0.8)'}" class="rounded-lg w-10 tag">
+      <div v-if="tag" :style="{ background: tagColor ? tagColor : 'rgba(0,0,0,0.8)' }" class="rounded-lg w-10 tag">
         {{ tag }}
       </div>
-      <FrameAvatar :avatarSize="50" :avatarUrl="avatar" :frame="frame" :frameUrl="frameUrl" framePlacement="left"
-                   style=""></FrameAvatar>
-      <OnlineTag v-if="online" style="position: absolute;right:5px;bottom:0px;z-index: 9"></OnlineTag>
+      <FrameAvatar
+        :avatarSize="50"
+        :avatarUrl="avatar"
+        :frame="frame"
+        :frameUrl="frameUrl"
+        framePlacement="left"
+        style=""
+      ></FrameAvatar>
+      <OnlineTag v-if="online" style="position: absolute; right: 5px; bottom: 0px; z-index: 9"></OnlineTag>
     </template>
     <template v-else>
-      <div v-if="tag" :style="{background:tagColor?tagColor:'rgba(0,0,0,0.8)',}" class="rounded-lg w-10 tag">
+      <div v-if="tag" :style="{ background: tagColor ? tagColor : 'rgba(0,0,0,0.8)' }" class="rounded-lg w-10 tag">
         {{ tag }}
       </div>
-      <FrameAvatar :avatarSize="50" :avatarUrl="avatar" :frame="frame" :frameUrl="frameUrl"
-                   framePlacement="left"></FrameAvatar>
-      <OnlineTag v-if="online" style="position: absolute;right:15px;bottom: 0px;z-index: 9"></OnlineTag>
+      <FrameAvatar
+        :avatarSize="50"
+        :avatarUrl="avatar"
+        :frame="frame"
+        :frameUrl="frameUrl"
+        framePlacement="left"
+      ></FrameAvatar>
+      <OnlineTag v-if="online" style="position: absolute; right: 15px; bottom: 0px; z-index: 9"></OnlineTag>
     </template>
   </div>
 </template>
 
 <script>
-import OnlineTag from './OnlineTag.vue'
-import FrameAvatar from '../avatar/FrameAvatar.vue'
-import BorderAvatar from '../avatar/BorderAvatar.vue'
+import OnlineTag from './OnlineTag.vue';
+import FrameAvatar from '../avatar/FrameAvatar.vue';
+import BorderAvatar from '../avatar/BorderAvatar.vue';
 
 export default {
   name: 'UserAvatar',
@@ -47,10 +58,10 @@ export default {
     //   }
     // },
   },
-  data () {
-    return {}
-  }
-}
+  data() {
+    return {};
+  },
+};
 </script>
 
 <style scoped>
@@ -63,6 +74,6 @@ export default {
   transform: translateX(-50%);
   left: 50%;
   font-size: 0.8em;
-  color: white
+  color: white;
 }
 </style>

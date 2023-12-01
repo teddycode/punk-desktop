@@ -3,8 +3,8 @@
     <div class="xt-modal box">
       <div class="box-head">
         <div class="title">选择需要的组合健</div>
-        <div class="head-icon xt-text" @click="onBack">
-          <Icon icon="guanbi" style="font-size: 1.5em;"></Icon>
+        <div @click="onBack" class="head-icon xt-text">
+          <Icon icon="guanbi" style="font-size: 1.5em"></Icon>
         </div>
       </div>
       <div class="box-body">
@@ -12,60 +12,67 @@
           <div>
             <span class="title">修饰键1</span>
             <div class="key-box mt-6">
-              <div v-for="(item, index) in modifierKeyOne"
-                   :key="item"
-                   :class="[item.checked ? 'xt-active-btn':'', item.isGray ? 'text-gray':'']"
-                   :style="{backgroundColor:item.color}"
-                   class="key-item"
-                   @click="onKeyDown(item, index, 'modifierKeyOne')">
+              <div
+                v-for="(item, index) in modifierKeyOne"
+                :key="item"
+                :style="{ backgroundColor: item.color }"
+                :class="[item.checked ? 'xt-active-btn' : '', item.isGray ? 'text-gray' : '']"
+                @click="onKeyDown(item, index, 'modifierKeyOne')"
+                class="key-item"
+              >
                 {{ item.key }}
               </div>
             </div>
           </div>
           <div class="mt-10">
             <div class="box-foot action-panel">
-              <div class="line-title text-center ">按键确认</div>
+              <div class="line-title text-center">按键确认</div>
               <div class="active">
-
-                <div v-for="(item, index) in keyContent.keyArr" :key="item" class="flex items-center">
+                <div v-for="(item, index) in keyContent.keyArr" class="flex items-center" :key="item">
                   <!-- :style="item.field === 'keyList[0]' || item.field === 'keyList[1]' ? 'width:44px' : 'padding:0 10px;'" -->
-                  <div class="key-item" style="min-width:44px;padding:0 10px;">{{ item.key }}</div>
-                  <span v-if="keyContent.keyArr.length != (index + 1)" class="mx-3">+</span>
+                  <div class="key-item" style="min-width: 44px; padding: 0 10px">{{ item.key }}</div>
+                  <span class="mx-3" v-if="keyContent.keyArr.length != index + 1">+</span>
                 </div>
               </div>
               <div class="btn-box">
-                <xt-button style="width:100%" type="theme" @click="confirm">确定</xt-button>
+                <xt-button type="theme" style="width: 100%" @click="confirm">确定</xt-button>
               </div>
             </div>
           </div>
         </div>
         <div class="box-right">
           <div class="title mb-1">快捷键</div>
-          <div class="key-box ">
-            <div v-for="(item, index) in keyList[0]"
-                 :key="item"
-                 :class="item.checked ? 'xt-active-btn':'' "
-                 class="key-item w-11"
-                 @click="onKeyDown(item, index, 'keyList[0]')">
+          <div class="key-box">
+            <div
+              v-for="(item, index) in keyList[0]"
+              :key="item"
+              :class="item.checked ? 'xt-active-btn' : ''"
+              @click="onKeyDown(item, index, 'keyList[0]')"
+              class="key-item w-11"
+            >
               {{ item.key }}
             </div>
           </div>
           <div class="title mb-1">字母</div>
-          <div class="key-box ">
-            <div v-for="(item, index) in keyList[1]"
-                 :key="item"
-                 :class="item.checked ? 'xt-active-btn':'' "
-                 class="key-item w-11"
-                 @click="onKeyDown(item, index, 'keyList[1]')">
+          <div class="key-box">
+            <div
+              v-for="(item, index) in keyList[1]"
+              :key="item"
+              :class="item.checked ? 'xt-active-btn' : ''"
+              @click="onKeyDown(item, index, 'keyList[1]')"
+              class="key-item w-11"
+            >
               {{ item.key }}
             </div>
           </div>
           <div class="key-box">
-            <div v-for="(item, index) in keyList[2]"
-                 :key="item"
-                 :class="item.checked ? 'xt-active-btn':'' "
-                 class="key-item px-3"
-                 @click="onKeyDown(item, index, 'keyList[2]')">
+            <div
+              v-for="(item, index) in keyList[2]"
+              :key="item"
+              :class="item.checked ? 'xt-active-btn' : ''"
+              @click="onKeyDown(item, index, 'keyList[2]')"
+              class="key-item px-3"
+            >
               {{ item.key }}
             </div>
           </div>
@@ -76,8 +83,8 @@
 </template>
 
 <script>
-import { message } from 'ant-design-vue'
-import XtButton from '../../../ui/libs/Button/index.vue'
+import { message } from 'ant-design-vue';
+import XtButton from '../../../ui/libs/Button/index.vue';
 
 export default {
   name: 'KeyBoard',
@@ -86,15 +93,14 @@ export default {
     //需要修改的内容
     selectKey: {
       type: Object,
-      defalut: () => {
-      }
+      defalut: () => {},
     },
     parentKeyList: {
       type: Array,
-      defalut: () => []
-    }
+      defalut: () => [],
+    },
   },
-  data () {
+  data() {
     return {
       modifierKeyOne: [
         {
@@ -135,7 +141,7 @@ export default {
           key: 'Alt',
           checked: false,
           isGray: false,
-        }
+        },
       ],
       modifierKeyTwo: [
         {
@@ -178,7 +184,6 @@ export default {
           checked: false,
           isGray: false,
         },
-
       ],
       keyList: [
         [
@@ -241,10 +246,11 @@ export default {
           {
             key: '2',
             checked: false,
-          }, {
-          key: '3',
-          checked: false,
-        },
+          },
+          {
+            key: '3',
+            checked: false,
+          },
           {
             key: '4',
             checked: false,
@@ -268,10 +274,11 @@ export default {
           {
             key: '9',
             checked: false,
-          }, {
-          key: '0',
-          checked: false,
-        },
+          },
+          {
+            key: '0',
+            checked: false,
+          },
           {
             key: 'Home',
             checked: false,
@@ -339,7 +346,7 @@ export default {
           {
             key: 'Enter',
             checked: false,
-          }
+          },
         ],
         [
           {
@@ -397,10 +404,11 @@ export default {
           {
             key: 'N',
             checked: false,
-          }, {
-          key: 'O',
-          checked: false,
-        },
+          },
+          {
+            key: 'O',
+            checked: false,
+          },
           {
             key: 'P',
             checked: false,
@@ -424,10 +432,11 @@ export default {
           {
             key: 'U',
             checked: false,
-          }, {
-          key: 'V',
-          checked: false,
-        },
+          },
+          {
+            key: 'V',
+            checked: false,
+          },
           {
             key: 'W',
             checked: false,
@@ -446,7 +455,6 @@ export default {
           },
         ],
         [
-
           {
             key: '[',
             checked: false,
@@ -470,10 +478,11 @@ export default {
           {
             key: ',',
             checked: false,
-          }, {
-          key: '.',
-          checked: false,
-        },
+          },
+          {
+            key: '.',
+            checked: false,
+          },
           {
             key: '/',
             checked: false,
@@ -512,135 +521,136 @@ export default {
             key: 'Back',
             checked: false,
           },
-        ]
+        ],
       ],
       //当前修改的键
-      keyContent: {}
-    }
+      keyContent: {},
+    };
   },
-  mounted () {
-    this.keyContent = this.deepClone(this.selectKey, this.keyContent)
-    this.keyContent.keyArr.forEach(item => {
-      this.isKeyChecked(item.field, item.index, true)
-    })
+  mounted() {
+    this.keyContent = this.deepClone(this.selectKey, this.keyContent);
+    this.keyContent.keyArr.forEach((item) => {
+      this.isKeyChecked(item.field, item.index, true);
+    });
   },
   methods: {
     //深拷贝
-    deepClone (obj, newObj) {
-      var newObj = newObj || {}
+    deepClone(obj, newObj) {
+      var newObj = newObj || {};
       for (let key in obj) {
         if (typeof obj[key] == 'object') {
-          newObj[key] = (obj[key].constructor === Array) ? [] : {}
-          this.deepClone(obj[key], newObj[key])
+          newObj[key] = obj[key].constructor === Array ? [] : {};
+          this.deepClone(obj[key], newObj[key]);
         } else {
-          newObj[key] = obj[key]
+          newObj[key] = obj[key];
         }
       }
-      return newObj
+      return newObj;
     },
     // 取消
-    onBack () {
-      this.keyContent = []
-      this.$emit('closeKeyBoard')
+    onBack() {
+      this.keyContent = [];
+      this.$emit('closeKeyBoard');
     },
     // 确定
-    confirm () {
+    confirm() {
       // if(!this.keyContent.keyArr.length) return message.info('不能为空')
       if (!this.keyContent.keyArr.length) {
-        this.keyContent.keyStr = '?'
-        this.keyContent.keys.splice(0, this.keyContent.keys.length, '?')
-        this.$emit('saveKey', this.keyContent)
-        this.$emit('closeKeyBoard')
-        return
+        this.keyContent.keyStr = '?';
+        this.keyContent.keys.splice(0, this.keyContent.keys.length, '?');
+        this.$emit('saveKey', this.keyContent);
+        this.$emit('closeKeyBoard');
+        return;
       }
-      let keys = []
-      this.keyContent.keyArr.map(item => {
-        keys.push(item.key)
-      })
+      let keys = [];
+      this.keyContent.keyArr.map((item) => {
+        keys.push(item.key);
+      });
 
-      this.keyContent.keys = keys
-      this.keyContent.keyStr = keys.join(' + ')
+      this.keyContent.keys = keys;
+      this.keyContent.keyStr = keys.join(' + ');
 
       // 判断组合键是否重复
-      let arr = this.keyContent.keys
-      let retArr = this.parentKeyList.find(item => {
-        return item.keys?.length === arr.length && item.keys?.slice().sort().toString() === arr.slice().sort().toString()
-      })
-      if (retArr && retArr.id !== this.keyContent.id && false) return message.info('组合键重复')//取消重复判断
-      this.$emit('saveKey', this.keyContent)
-      this.$emit('closeKeyBoard')
-
+      let arr = this.keyContent.keys;
+      let retArr = this.parentKeyList.find((item) => {
+        return (
+          item.keys?.length === arr.length && item.keys?.slice().sort().toString() === arr.slice().sort().toString()
+        );
+      });
+      if (retArr && retArr.id !== this.keyContent.id && false) return message.info('组合键重复'); //取消重复判断
+      this.$emit('saveKey', this.keyContent);
+      this.$emit('closeKeyBoard');
     },
     // 按键
-    onKeyDown (item, index, field) {
-      let flag = false // 阻止触发改变数据操作
-      let isChecked = true
+    onKeyDown(item, index, field) {
+      let flag = false; // 阻止触发改变数据操作
+      let isChecked = true;
 
       //置灰不能点击
       if (item.isGray) {
-        return
+        return;
       }
 
-      const hasKeyIndex = this.keyContent.keyArr.findIndex(data => {
-        return item.key == data.key
-      })
+      const hasKeyIndex = this.keyContent.keyArr.findIndex((data) => {
+        return item.key == data.key;
+      });
 
       //选择数不能大于三
-      flag = this.keyContent.keyArr.length >= 3
+      flag = this.keyContent.keyArr.length >= 3;
       // 再次点击选择的【取消选择】
       if (hasKeyIndex != -1) {
-        flag = false
+        flag = false;
       }
 
       if (flag) {
-        message.info('最多选择三个快捷按钮')
-        return
+        message.info('最多选择三个快捷按钮');
+        return;
       }
 
       let keyItem = {
         field,
         index,
-        key: item.key
-      }
+        key: item.key,
+      };
       // 移除已存在
       if (hasKeyIndex != -1) {
-        isChecked = false
+        isChecked = false;
         this.isKeyChecked(
-            this.keyContent.keyArr[hasKeyIndex].field,
-            this.keyContent.keyArr[hasKeyIndex].index,
-            isChecked
-        )
-        this.keyContent.keyArr.splice(hasKeyIndex, 1)
+          this.keyContent.keyArr[hasKeyIndex].field,
+          this.keyContent.keyArr[hasKeyIndex].index,
+          isChecked,
+        );
+        this.keyContent.keyArr.splice(hasKeyIndex, 1);
       } else {
-        this.keyContent.keyArr.push(keyItem)
-        isChecked = true
-        this.isKeyChecked(field, index, isChecked)
+        this.keyContent.keyArr.push(keyItem);
+        isChecked = true;
+        this.isKeyChecked(field, index, isChecked);
       }
     },
     // 设置是否选中
-    isKeyChecked (field, index, isChecked) {
+    isKeyChecked(field, index, isChecked) {
       switch (field) {
         case 'modifierKeyOne':
-          this.modifierKeyOne[index].checked = isChecked
-          this.modifierKeyTwo[index].isGray = isChecked
-          break
+          this.modifierKeyOne[index].checked = isChecked;
+          this.modifierKeyTwo[index].isGray = isChecked;
+          break;
         case 'modifierKeyTwo':
-          this.modifierKeyTwo[index].checked = isChecked
-          this.modifierKeyOne[index].isGray = isChecked
-          break
+          this.modifierKeyTwo[index].checked = isChecked;
+          this.modifierKeyOne[index].isGray = isChecked;
+          break;
         case 'keyList[0]':
-          this.keyList[0][index].checked = isChecked
-          break
+          this.keyList[0][index].checked = isChecked;
+          break;
         case 'keyList[1]':
-          this.keyList[1][index].checked = isChecked
-          break
+          this.keyList[1][index].checked = isChecked;
+          break;
         case 'keyList[2]':
-          this.keyList[2][index].checked = isChecked
-          break
+          this.keyList[2][index].checked = isChecked;
+          break;
       }
-    }
+    },
   },
-}
+};
 </script>
 <style lang="scss" scoped>
 .prompt-modal {
@@ -774,11 +784,10 @@ export default {
 .box::-webkit-scrollbar {
   display: none;
 }
-
 .action-panel {
   padding: 20px;
   border-radius: 8px;
   border: 1px solid var(--active-bg);
-  background-color: var(--secondary-bg)
+  background-color: var(--secondary-bg);
 }
 </style>

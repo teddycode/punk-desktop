@@ -1,13 +1,14 @@
-const mobileViews = {}
-const mobileWindows = {}
-const mobiles = [ // {view,window,newName}
-]
+const mobileViews = {};
+const mobileWindows = {};
+const mobiles = [
+  // {view,window,newName}
+];
 
-let mobileCount = 0
+let mobileCount = 0;
 const initSize = {
   width: 480,
-  height: 800
-}
+  height: 800,
+};
 
 /**
  * 计算窗口尺寸，主要用于修复部分平台的尺寸偏差
@@ -15,56 +16,55 @@ const initSize = {
  * @param height
  * @returns {{width: number, height: number}}
  */
-function computeSize (width = initSize.width, height = initSize.height) {
+function computeSize(width = initSize.width, height = initSize.height) {
   if (process.platform === 'darwin') {
     // mac不做处理
   } else if (process.platform === 'win32') {
     // todo 不知道为什么windows上获取到的尺寸有16，10个像素的差距
-    width -= 16
-    height -= 10
+    width -= 16;
+    height -= 10;
   } else {
   }
   return {
     width: width,
-    height: height
-  }
+    height: height,
+  };
 }
 
 const mobileMod = {
-
-  getPos () {
-    const space = 10
-    const { screen } = require('electron')
-    const maxWidth = screen.getPrimaryDisplay().workAreaSize.width
+  getPos() {
+    const space = 10;
+    const { screen } = require('electron');
+    const maxWidth = screen.getPrimaryDisplay().workAreaSize.width;
     const sourcePoint = {
       x: mainWindow.getBounds().x + 300,
-      y: mainWindow.getBounds().y + 300
-    }
+      y: mainWindow.getBounds().y + 300,
+    };
     if (sourcePoint.x + (mobileCount + 1) * initSize.width < maxWidth) {
-      return { x: sourcePoint.x + mobileCount * (initSize.width + space), y: sourcePoint.y }
+      return { x: sourcePoint.x + mobileCount * (initSize.width + space), y: sourcePoint.y };
     } else {
-      return { x: sourcePoint.x + mobileCount * space, y: sourcePoint.y + mobileCount * space }
+      return { x: sourcePoint.x + mobileCount * space, y: sourcePoint.y + mobileCount * space };
     }
   },
-  getBounds (mobileWindow) {
-    const size = computeSize(mobileWindow.getBounds().width, mobileWindow.getBounds().height - 70)
+  getBounds(mobileWindow) {
+    const size = computeSize(mobileWindow.getBounds().width, mobileWindow.getBounds().height - 70);
     const bounds = {
       x: 0,
       y: 40,
       width: size.width,
-      height: size.height
-    }
+      height: size.height,
+    };
     if (process.platform === 'darwin') {
-      bounds.y = 70 // 修正mac上的y位置
+      bounds.y = 70; // 修正mac上的y位置
     }
-    return bounds
+    return bounds;
   },
-  add (option) {
-    let id = ''
+  add(option) {
+    let id = '';
     do {
-      id = String(Math.floor((Math.random() * 10000) + 1))
-    } while (typeof mobileViews[id] !== 'undefined')
-    const pos = mobileMod.getPos()
+      id = String(Math.floor(Math.random() * 10000 + 1));
+    } while (typeof mobileViews[id] !== 'undefined');
+    const pos = mobileMod.getPos();
     const mobileWindow = new BrowserWindow({
       frame: true,
       backgroundColor: 'white',
@@ -87,11 +87,11 @@ const mobileMod = {
           '--user-data-path=' + userDataPath,
           '--app-version=' + app.getVersion(),
           '--app-name=' + app.getName(),
-          ...((isDevelopmentMode ? ['--development-mode'] : []))
-        ]
-      }
-    })
-    mobileWindow.setAlwaysOnTop(true, 'screen-saver')
+          ...(isDevelopmentMode ? ['--development-mode'] : []),
+        ],
+      },
+    });
+    mobileWindow.setAlwaysOnTop(true, 'screen-saver');
     const view = new BrowserView({
       width: computeSize().width,
       height: computeSize().height - 70,
@@ -108,7 +108,7 @@ const mobileMod = {
         allowPopups: false,
         partition: option.partition ? option.partition : 'persist:webcontent',
         enableWebSQL: false,
-        autoplayPolicy: (settings.get('enableAutoplay') ? 'no-user-gesture-required' : 'user-gesture-required')
+        autoplayPolicy: settings.get('enableAutoplay') ? 'no-user-gesture-required' : 'user-gesture-required',
         // partition:'persist:webcontent',
         // preload: path.join(__dirname, '/dist/preload.js'),
         // additionalArguments: [
@@ -117,89 +117,87 @@ const mobileMod = {
         //   '--app-name=' + app.getName(),
         //   ...((isDevelopmentMode ? ['--development-mode'] : [])),
         // ]
-      }
-    })
-    mobileWindow.setBrowserView(view)
+      },
+    });
+    mobileWindow.setBrowserView(view);
 
-    view.setBounds(mobileMod.getBounds(mobileWindow))
+    view.setBounds(mobileMod.getBounds(mobileWindow));
     mobileWindow.webContents.send('init', {
       windowId: mobileWindow.id,
       url: option.url,
       id: id,
       partition: option.partition,
-      newName: option.newName
-    })
-    view.webContents.setUserAgent('Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1')
-    view.webContents.loadURL(option.url)
+      newName: option.newName,
+    });
+    view.webContents.setUserAgent(
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1',
+    );
+    view.webContents.loadURL(option.url);
     view.webContents.on('did-navigate-in-page', (event, url) => {
       mobileWindow.webContents.send('updateView', {
         url: url,
         canGoBack: view.webContents.canGoBack(),
-        canGoForward: view.webContents.canGoForward()
-      })
-    })
+        canGoForward: view.webContents.canGoForward(),
+      });
+    });
     view.webContents.on('did-navigate', (event, url) => {
       mobileWindow.webContents.send('updateView', {
         url: url,
         canGoBack: view.webContents.canGoBack(),
-        canGoForward: view.webContents.canGoForward()
-      })
-    })
+        canGoForward: view.webContents.canGoForward(),
+      });
+    });
     view.webContents.on('new-window', (event, url) => {
-      event.preventDefault()
-      view.webContents.loadURL(url)
+      event.preventDefault();
+      view.webContents.loadURL(url);
       mobileWindow.webContents.send('updateView', {
         url: url,
         canGoBack: view.webContents.canGoBack(),
-        canGoForward: view.webContents.canGoForward()
-      })
-    })
-
-    function loadDevtool (input) {
+        canGoForward: view.webContents.canGoForward(),
+      });
+    });
+    function loadDevtool(input) {
       if (input.key.toLowerCase() === 'f12') {
         view.webContents.openDevTools({
-          mode: 'detach'
-        })
+          mode: 'detach',
+        });
       }
     }
-
     view.webContents.on('before-input-event', (event, input) => {
-        loadDevtool(input)
-      }
-    )
-    mobileWindow.webContents.setUserAgent(oldAgent)
-    mobileWindow.loadURL('file://' + __dirname + '/pages/mobile/index.html')
+      loadDevtool(input);
+    });
+    mobileWindow.webContents.setUserAgent(oldAgent);
+    mobileWindow.loadURL('file://' + __dirname + '/pages/mobile/index.html');
     mobileWindow.on('resize', () => {
-      view.setBounds(mobileMod.getBounds(mobileWindow))
-    })
+      view.setBounds(mobileMod.getBounds(mobileWindow));
+    });
 
     mobileWindow.webContents.on('before-input-event', (event, input) => {
-        loadDevtool(input)
-      }
-    )
+      loadDevtool(input);
+    });
 
     mobileWindow.on('closed', () => {
-      mobileViews[id].webContents.destroy() //销毁内部的网页
-      mobileViews[id] = undefined
-      mobileWindows[id] = undefined
-      const found = mobiles.findIndex(mob => {
-        return mob.id === id
-      })
-      delete mobileViews[id]
-      mobiles.splice(found, 1)
-      mobileCount--
-    })
+      mobileViews[id].webContents.destroy(); //销毁内部的网页
+      mobileViews[id] = undefined;
+      mobileWindows[id] = undefined;
+      const found = mobiles.findIndex((mob) => {
+        return mob.id === id;
+      });
+      delete mobileViews[id];
+      mobiles.splice(found, 1);
+      mobileCount--;
+    });
 
-    mobileViews[id] = view
-    mobileWindows[id] = mobileWindow
+    mobileViews[id] = view;
+    mobileWindows[id] = mobileWindow;
     mobiles.push({
       id,
       window: mobileWindow,
       view: view,
       partition: option.partition,
-      newName: option.newName
-    })
-    mobileCount++
+      newName: option.newName,
+    });
+    mobileCount++;
     // var view=viewMap[data.id]
     // var index=emulationViews.indexOf(data.id)
     // if(index!=-1){
@@ -229,26 +227,25 @@ const mobileMod = {
     // view.webContents.openDevTools({
     // 	 mode: 'bottom'
     // })
-  }
-
-}
+  },
+};
 
 app.whenReady().then(() => {
   ipc.on('mobileGoBack', (event, args) => {
-    mobileViews[args.id].webContents.goBack()
-  })
+    mobileViews[args.id].webContents.goBack();
+  });
 
   ipc.on('mobileGoForward', (event, args) => {
-    mobileViews[args.id].webContents.goForward()
-  })
+    mobileViews[args.id].webContents.goForward();
+  });
 
   ipc.on('mobileRefresh', (event, args) => {
-    mobileViews[args.id].webContents.reload()
-  })
+    mobileViews[args.id].webContents.reload();
+  });
 
   ipc.on('mobileResetSize', (event, args) => {
-    mobileWindows[args.id].setSize(initSize.width, initSize.height)
-  })
-})
+    mobileWindows[args.id].setSize(initSize.width, initSize.height);
+  });
+});
 
-module.exports = mobileMod
+module.exports = mobileMod;

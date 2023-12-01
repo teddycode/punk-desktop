@@ -5,7 +5,7 @@
       <div><span>1200R</span><span>风扇转速</span></div>
       <div><span>41%</span><span>磁盘占用</span></div>
     </div>
-    <div style="width: 95%;height: 1px;background: #ACACAC;transform: scaleY(0.2);margin: 0 auto"></div>
+    <div style="width: 95%; height: 1px; background: #acacac; transform: scaleY(0.2); margin: 0 auto"></div>
     <div class="title">
       <Icon class="icon" icon="neicun"></Icon>
       <span>内存</span>
@@ -42,24 +42,24 @@
 </template>
 
 <script>
-import SupervisorySlot from './SupervisorySlot.vue'
+import SupervisorySlot from './SupervisorySlot.vue';
 
 export default {
   name: 'InternalList',
-  data () {
+  data() {
     return {
       options: {
         className: 'card',
         title: '性能',
-        icon: 'xingneng'
+        icon: 'xingneng',
       },
-    }
+    };
   },
 
   components: {
-    SupervisorySlot
-  }
-}
+    SupervisorySlot,
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -75,7 +75,7 @@ export default {
     align-items: center;
     width: 6em;
     height: 6em;
-    padding: .5em 0;
+    padding: 0.5em 0;
 
     span:first-child {
       font-weight: 600;
@@ -83,7 +83,7 @@ export default {
     }
 
     span:last-child {
-      color: #ACACAC;
+      color: #acacac;
     }
   }
 }
@@ -93,14 +93,14 @@ export default {
   flex-direction: row;
   align-items: center;
   font-size: 1em;
-  margin-top: .5em;
+  margin-top: 0.5em;
 
   span {
-    margin-left: .5em;
+    margin-left: 0.5em;
   }
 
   span:last-child {
-    color: #FAAD14;
+    color: #faad14;
     font-weight: 700;
   }
 }
@@ -113,7 +113,7 @@ export default {
 
   > div {
     height: 3em;
-    background: #2B2B2B;
+    background: #2b2b2b;
     border-radius: 10px;
     display: flex;
     flex-direction: row;

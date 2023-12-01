@@ -1,199 +1,199 @@
-var searchbar = document.getElementById('searchbar')
-var searchbarUtils = require('searchbar/searchbarUtils.js')
+var searchbar = document.getElementById('searchbar');
+var searchbarUtils = require('searchbar/searchbarUtils.js');
 
-var plugins = [] // format is {name, container, trigger, showResults}
-var results = {} // format is {pluginName: [results]}
-var URLOpener
-var URLHandlers = [] // format is {trigger, action}
+var plugins = []; // format is {name, container, trigger, showResults}
+var results = {}; // format is {pluginName: [results]}
+var URLOpener;
+var URLHandlers = []; // format is {trigger, action}
 
 var topAnswer = {
   plugin: null,
-  item: null
-}
+  item: null,
+};
 
 const searchbarPlugins = {
   topAnswerArea: searchbar.querySelector('.top-answer-area'),
   // empties all containers in the searchbar
   clearAll: function () {
-    empty(searchbarPlugins.topAnswerArea)
+    empty(searchbarPlugins.topAnswerArea);
     topAnswer = {
       plugin: null,
-      item: null
-    }
+      item: null,
+    };
     for (var i = 0; i < plugins.length; i++) {
-      empty(plugins[i].container)
+      empty(plugins[i].container);
     }
   },
 
   reset: function (pluginName) {
-    empty(searchbarPlugins.getContainer(pluginName))
+    empty(searchbarPlugins.getContainer(pluginName));
 
-    var ta = searchbarPlugins.getTopAnswer(pluginName)
+    var ta = searchbarPlugins.getTopAnswer(pluginName);
     if (ta) {
-      ta.remove()
+      ta.remove();
       topAnswer = {
         plugin: null,
-        item: null
-      }
+        item: null,
+      };
     }
 
-    results[pluginName] = []
+    results[pluginName] = [];
   },
 
   getTopAnswer: function (pluginName) {
     if (pluginName) {
       if (topAnswer.plugin === pluginName) {
-        return topAnswer.item
+        return topAnswer.item;
       } else {
-        return null
+        return null;
       }
     } else {
-      return searchbarPlugins.topAnswerArea.firstChild
+      return searchbarPlugins.topAnswerArea.firstChild;
     }
   },
 
   setTopAnswer: function (pluginName, data) {
-    empty(searchbarPlugins.topAnswerArea)
+    empty(searchbarPlugins.topAnswerArea);
 
-    var item = searchbarUtils.createItem(data)
-    item.setAttribute('data-plugin', pluginName)
-    item.setAttribute('data-url', data.url)
-    searchbarPlugins.topAnswerArea.appendChild(item)
+    var item = searchbarUtils.createItem(data);
+    item.setAttribute('data-plugin', pluginName);
+    item.setAttribute('data-url', data.url);
+    searchbarPlugins.topAnswerArea.appendChild(item);
 
     item.addEventListener('click', function (e) {
-      URLOpener(data.url, e)
-    })
+      URLOpener(data.url, e);
+    });
 
     topAnswer = {
       plugin: pluginName,
-      item: item
-    }
+      item: item,
+    };
 
-    results[pluginName].push(data)
+    results[pluginName].push(data);
   },
 
   addResult: function (pluginName, data, options = {}) {
     if (options.allowDuplicates) {
-      data.allowDuplicates = true
+      data.allowDuplicates = true;
     }
     if (data.url && !data.allowDuplicates) {
       // skip duplicates
       for (var plugin in results) {
         for (var i = 0; i < results[plugin].length; i++) {
           if (results[plugin][i].url === data.url && !results[plugin][i].allowDuplicates) {
-            return
+            return;
           }
         }
       }
     }
-    var item = searchbarUtils.createItem(data)
+    var item = searchbarUtils.createItem(data);
 
     if (data.url) {
-      item.setAttribute('data-url', data.url)
+      item.setAttribute('data-url', data.url);
       item.addEventListener('click', function (e) {
-        URLOpener(data.url, e)
-      })
+        URLOpener(data.url, e);
+      });
 
       item.addEventListener('keyup', function (e) {
         /*  right arrow or space should autocomplete with selected item if it's
             a search suggestion */
         if (e.keyCode === 39 || e.keyCode === 32) {
-          const input = document.getElementById('tab-editor-input')
-          input.value = data.url
-          input.focus()
+          const input = document.getElementById('tab-editor-input');
+          input.value = data.url;
+          input.focus();
         }
-      })
+      });
     }
 
     const pluginObject = plugins.find((plg) => {
-      return plg.name === pluginName
-    })
+      return plg.name === pluginName;
+    });
 
     if (pluginObject.alias) {
-      const el = document.createElement('span')
-      el.classList.add('plugin-alias')
-      el.innerText = pluginObject.alias
-      item.insertBefore(el, item.children[0])
+      const el = document.createElement('span');
+      el.classList.add('plugin-alias');
+      el.innerText = pluginObject.alias;
+      item.insertBefore(el, item.children[0]);
     }
 
-    searchbarPlugins.getContainer(pluginName).appendChild(item)
+    searchbarPlugins.getContainer(pluginName).appendChild(item);
 
-    results[pluginName].push(data)
+    results[pluginName].push(data);
   },
 
   addHeading: function (pluginName, data) {
-    searchbarPlugins.getContainer(pluginName).appendChild(searchbarUtils.createHeading(data))
+    searchbarPlugins.getContainer(pluginName).appendChild(searchbarUtils.createHeading(data));
   },
 
   getContainer: function (pluginName) {
     for (var i = 0; i < plugins.length; i++) {
       if (plugins[i].name === pluginName) {
-        return plugins[i].container
+        return plugins[i].container;
       }
     }
-    return null
+    return null;
   },
 
   register: function (name, object) {
     // add the container
-    var container = document.createElement('div')
-    container.classList.add('searchbar-plugin-container')
-    container.setAttribute('data-plugin', name)
-    searchbar.insertBefore(container, searchbar.childNodes[object.index + 2])
+    var container = document.createElement('div');
+    container.classList.add('searchbar-plugin-container');
+    container.setAttribute('data-plugin', name);
+    searchbar.insertBefore(container, searchbar.childNodes[object.index + 2]);
 
     plugins.push({
       name: name,
       alias: object.alias, // 加入中文名称，提升可读性
       container: container,
       trigger: object.trigger,
-      showResults: object.showResults
-    })
+      showResults: object.showResults,
+    });
 
-    results[name] = []
+    results[name] = [];
   },
 
   run: function (text, input, event) {
     for (var i = 0; i < plugins.length; i++) {
       try {
         if (plugins[i].showResults && (!plugins[i].trigger || plugins[i].trigger(text))) {
-          plugins[i].showResults(text, input, event)
+          plugins[i].showResults(text, input, event);
         } else {
-          searchbarPlugins.reset(plugins[i].name)
+          searchbarPlugins.reset(plugins[i].name);
         }
       } catch (e) {
-        console.error('error in searchbar plugin "' + plugins[i].name + '":', e)
+        console.error('error in searchbar plugin "' + plugins[i].name + '":', e);
       }
     }
   },
 
   registerURLHandler: function (handler) {
-    URLHandlers.push(handler)
+    URLHandlers.push(handler);
   },
 
   runURLHandlers: function (text) {
     for (var i = 0; i < URLHandlers.length; i++) {
       if (URLHandlers[i](text)) {
-        return true
+        return true;
       }
     }
-    return false
+    return false;
   },
 
   getResultCount: function (pluginName) {
     if (pluginName) {
-      return results[pluginName].length
+      return results[pluginName].length;
     } else {
-      var resultCount = 0
+      var resultCount = 0;
       for (var plugin in results) {
-        resultCount += results[plugin].length
+        resultCount += results[plugin].length;
       }
-      return resultCount
+      return resultCount;
     }
   },
 
   initialize: function (opener) {
-    URLOpener = opener
-  }
-}
+    URLOpener = opener;
+  },
+};
 
-module.exports = searchbarPlugins
+module.exports = searchbarPlugins;

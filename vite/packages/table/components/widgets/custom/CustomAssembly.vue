@@ -1,59 +1,62 @@
 <template>
   <Widget
-      ref="customAssembly"
-      :custom-data="customData"
-      :customIndex="customIndex"
-      :desk="desk"
-      :menuList="menuList"
-      :options="options">
+    ref="customAssembly"
+    :custom-data="customData"
+    :customIndex="customIndex"
+    :desk="desk"
+    :menuList="menuList"
+    :options="options"
+  >
     <div class="absolute inset-0" style="border-radius: 8px; z-index: -1">
-      <div
-          v-if="Object.keys(myData.img).length > 0"
-          class="h-full w-full pointer"
-          @click="openApp"
-      >
+      <div v-if="Object.keys(myData.img).length > 0" class="h-full w-full pointer" @click="openApp">
         <video
-            v-if="myData.img.srcProtocol"
-            ref="wallpaperVideo"
-            autoplay=""
-            class="fullscreen-video"
-            loop=""
-            muted=""
-            playsinline=""
-            style="border-radius: 8px; object-fit: cover"
+          v-if="myData.img.srcProtocol"
+          ref="wallpaperVideo"
+          autoplay=""
+          class="fullscreen-video"
+          loop=""
+          muted=""
+          playsinline=""
+          style="border-radius: 8px; object-fit: cover"
         >
-          <source id="bgVid" :src="myData.img.srcProtocol" type="video/mp4"/>
+          <source id="bgVid" :src="myData.img.srcProtocol" type="video/mp4" />
         </video>
         <img
-            v-else-if="myData.img.path && imgState"
-            :src="myData.img.path"
-            alt=""
-            class="h-full w-full"
-            style="border-radius: 8px; object-fit: cover"
-            @error="imgError"
+          v-else-if="myData.img.path && imgState"
+          :src="myData.img.path"
+          alt=""
+          class="h-full w-full"
+          style="border-radius: 8px; object-fit: cover"
+          @error="imgError"
         />
         <img
-            v-else-if="myData.img.src && imgState"
-            :src="myData.img.src"
-            class="h-full w-full"
-            style="border-radius: 8px; object-fit: cover"
-            @error="imgError"
+          v-else-if="myData.img.src && imgState"
+          :src="myData.img.src"
+          class="h-full w-full"
+          style="border-radius: 8px; object-fit: cover"
+          @error="imgError"
         />
         <img
-            v-else
-            class="h-full w-full"
-            src="/img/addCard/smallWallpaper.png"
-            style="border-radius: 8px; object-fit: cover"
+          v-else
+          class="h-full w-full"
+          src="/img/addCard/smallWallpaper.png"
+          style="border-radius: 8px; object-fit: cover"
         />
       </div>
       <div v-else class="flex justify-center items-center flex-col h-full">
         <!-- <a-empty description="" /> -->
-        <XtState :state="'null'" :text="{'null':' '}" bg="" class="mt-5" style="width: 100%;height: 30%;"
-                 zoom="30"></XtState>
+        <XtState
+          :state="'null'"
+          :text="{ null: ' ' }"
+          bg=""
+          class="mt-5"
+          style="width: 100%; height: 30%"
+          zoom="30"
+        ></XtState>
         <div
-            class="flex justify-center items-center rounded-lg h-12 drawer-item-bg w-40 pointer mt-3 text-base"
-            style="background: var(--secondary-bg);color: var(--primary-text);"
-            @click="
+          class="flex justify-center items-center rounded-lg h-12 drawer-item-bg w-40 pointer mt-3 text-base"
+          style="background: var(--secondary-bg); color: var(--primary-text)"
+          @click="
             () => {
               this.panelVisible = true;
             }
@@ -63,34 +66,31 @@
         </div>
       </div>
       <div
-          v-if="showName"
-          class="game-item-title-bg w-full h-12 absolute bottom-0 flex items-center pl-3"
-          style="border-radius: 0 0 8px 8px;color: var(--primary-text);"
+        v-if="showName"
+        class="game-item-title-bg w-full h-12 absolute bottom-0 flex items-center pl-3"
+        style="border-radius: 0 0 8px 8px; color: var(--primary-text)"
       >
         {{ myData.title }}
       </div>
     </div>
   </Widget>
   <a-drawer
-      v-model:visible="panelVisible"
-      :bodyStyle="{ padding: '0 24px ' }"
-      :headerStyle="{ border: 0 }"
-      :width="500"
-      title="设置"
+    v-model:visible="panelVisible"
+    :bodyStyle="{ padding: '0 24px ' }"
+    :headerStyle="{ border: 0 }"
+    :width="500"
+    title="设置"
   >
     <template #extra>
       <div
-          class="flex justify-center items-center rounded-lg h-10 drawer-item-bg w-16 pointer"
-          style="background: #508BFE ;color:white" @click="saveData"
+        class="flex justify-center items-center rounded-lg h-10 drawer-item-bg w-16 pointer"
+        style="background: #508bfe; color: white"
+        @click="saveData"
       >
         保存
       </div>
     </template>
-    <vue-custom-scrollbar
-        :settings="rightScrollbarSettings"
-        class="relative"
-        style="height: calc(100% - 10px)"
-    >
+    <vue-custom-scrollbar :settings="rightScrollbarSettings" class="relative" style="height: calc(100% - 10px)">
       <!-- <div class="text-base ">小组件尺寸</div> -->
       <XtRadio v-model:data="mySize.className" :list="sizeList" value="className"></XtRadio>
 
@@ -105,31 +105,30 @@
       <div class="flex flex-row justify-between items-center mt-2">
         <div class="text-base">显示名称</div>
         <div>
-          <a-switch v-model:checked="showName"/>
+          <a-switch v-model:checked="showName" />
         </div>
       </div>
       <a-input
-          v-model:value="myData.title"
-          class="rounded-lg mt-6 drawer-item-bg xt-bg-2"
-          placeholder=""
-          style="height: 48px;color: var(--primary-text);border: 0px;"
+        v-model:value="myData.title"
+        class="rounded-lg mt-6 drawer-item-bg xt-bg-2"
+        placeholder=""
+        style="height: 48px; color: var(--primary-text); border: 0px"
       >
       </a-input>
       <div class="mt-6 text-base">小组件封面</div>
       <!--    <div class=" mt-2 text-base" style="color: rgba(255, 255, 255, 0.4);">支持直接复制粘贴图片到此处</div>-->
-      <div
-          v-if="!Object.keys(myData.img).length > 0"
-          class="flex flex-row justify-between items-center mt-6"
-      >
+      <div v-if="!Object.keys(myData.img).length > 0" class="flex flex-row justify-between items-center mt-6">
         <div
-            class="flex justify-center items-center rounded-lg h-12 drawer-item-bg w-1/2 pointer text-base xt-bg-2"
-            style="color: var(--primary-text);" @click="importFile"
+          class="flex justify-center items-center rounded-lg h-12 drawer-item-bg w-1/2 pointer text-base xt-bg-2"
+          style="color: var(--primary-text)"
+          @click="importFile"
         >
           选择图片
         </div>
         <div
-            class="flex justify-center items-center rounded-lg h-12 drawer-item-bg w-1/2 ml-3 pointer text-base xt-bg-2"
-            style="color: var(--primary-text);" @click="openMy"
+          class="flex justify-center items-center rounded-lg h-12 drawer-item-bg w-1/2 ml-3 pointer text-base xt-bg-2"
+          style="color: var(--primary-text)"
+          @click="openMy"
         >
           选自壁纸收藏
         </div>
@@ -137,34 +136,34 @@
       <div v-else>
         <div class="h-16 w-16 mt-6 relative">
           <video
-              v-if="myData.img.srcProtocol"
-              ref="wallpaperVideo"
-              autoplay=""
-              class="fullscreen-video"
-              loop=""
-              muted=""
-              playsinline=""
-              style="border-radius: 8px; object-fit: cover"
+            v-if="myData.img.srcProtocol"
+            ref="wallpaperVideo"
+            autoplay=""
+            class="fullscreen-video"
+            loop=""
+            muted=""
+            playsinline=""
+            style="border-radius: 8px; object-fit: cover"
           >
-            <source id="bgVid" :src="myData.img.srcProtocol" type="video/mp4"/>
+            <source id="bgVid" :src="myData.img.srcProtocol" type="video/mp4" />
           </video>
           <img
-              v-else-if="myData.img.middleSrc"
-              :src="myData.img.middleSrc"
-              alt=""
-              class="h-full w-full"
-              style="border-radius: 8px; object-fit: cover"
+            v-else-if="myData.img.middleSrc"
+            :src="myData.img.middleSrc"
+            alt=""
+            class="h-full w-full"
+            style="border-radius: 8px; object-fit: cover"
           />
           <img
-              v-else-if="myData.img.src"
-              :src="myData.img.src"
-              class="h-full w-full"
-              style="border-radius: 8px; object-fit: cover"
+            v-else-if="myData.img.src"
+            :src="myData.img.src"
+            class="h-full w-full"
+            style="border-radius: 8px; object-fit: cover"
           />
           <div
-              class="rounded-full flex-shrink-0 w-5 h-5 flex justify-center items-center pointer absolute top-0 right-0 translate-x-1/2 -translate-y-1/2"
-              style="background: rgba(255, 255, 255, 0.5)"
-              @click="deleteImg"
+            class="rounded-full flex-shrink-0 w-5 h-5 flex justify-center items-center pointer absolute top-0 right-0 translate-x-1/2 -translate-y-1/2"
+            style="background: rgba(255, 255, 255, 0.5)"
+            @click="deleteImg"
           >
             <Icon icon="guanbi" style="color: black; height: 10px"></Icon>
           </div>
@@ -176,29 +175,31 @@
       </div>
       <div class="flex flex-row justify-between items-center mt-6">
         <div
-            v-if="!myData.link"
-            class="flex justify-center items-center rounded-lg h-12 drawer-item-bg w-1/2 pointer xt-bg-2"
-            style="color: var(--primary-text);" @click="customClick"
+          v-if="!myData.link"
+          class="flex justify-center items-center rounded-lg h-12 drawer-item-bg w-1/2 pointer xt-bg-2"
+          style="color: var(--primary-text)"
+          @click="customClick"
         >
           本地应用
         </div>
         <div
-            v-if="!myData.link"
-            class="flex justify-center items-center rounded-lg h-12 drawer-item-bg w-1/2 ml-3 pointer xt-bg-2"
-            style="color: var(--primary-text);" @click="showAppNav"
+          v-if="!myData.link"
+          class="flex justify-center items-center rounded-lg h-12 drawer-item-bg w-1/2 ml-3 pointer xt-bg-2"
+          style="color: var(--primary-text)"
+          @click="showAppNav"
         >
           选自应用导航
         </div>
         <div
-            v-else
-            class="w-full rounded-lg h-9 flex justify-between items-center px-2"
-            style="background: rgba(42, 42, 42, 1)"
+          v-else
+          class="w-full rounded-lg h-9 flex justify-between items-center px-2"
+          style="background: rgba(42, 42, 42, 1)"
         >
           <div class="text-more w-2/3">{{ title }}</div>
           <div
-              class="rounded-full flex-shrink-0 w-5 h-5 flex justify-center items-center pointer"
-              style="background: rgba(255, 255, 255, 0.5)"
-              @click="deleteApp"
+            class="rounded-full flex-shrink-0 w-5 h-5 flex justify-center items-center pointer"
+            style="background: rgba(255, 255, 255, 0.5)"
+            @click="deleteApp"
           >
             <Icon icon="guanbi" style="color: black; height: 10px"></Icon>
           </div>
@@ -206,54 +207,42 @@
       </div>
     </vue-custom-scrollbar>
     <div v-if="editFlag || myImgShow" class="fixed inset-0"></div>
-    <Classification
-        v-if="editFlag"
-        v-model:show="editFlag"
-        :navClassify="navClassify"
-        @clickLeftList="clickItem"
-    >
+    <Classification v-if="editFlag" v-model:show="editFlag" :navClassify="navClassify" @clickLeftList="clickItem">
       <div v-show="nowClassify !== 'localApp'" class="h-full">
         <a-input
-            v-model:value="selectContent"
-            class="no-drag h-10 rounded-lg"
-            placeholder="搜索"
-            style="background: rgba(42, 42, 42, 0.6)"
+          v-model:value="selectContent"
+          class="no-drag h-10 rounded-lg"
+          placeholder="搜索"
+          style="background: rgba(42, 42, 42, 0.6)"
         >
           <template #prefix>
             <Icon class="text-gray-600" icon="sousuo"></Icon>
           </template>
         </a-input>
         <vue-custom-scrollbar
-            key="scrollbar"
-            :settings="rightScrollbarSettings"
-            class="relative"
-            style="height: calc(100% - 40px); padding: 5px 0"
+          key="scrollbar"
+          :settings="rightScrollbarSettings"
+          class="relative"
+          style="height: calc(100% - 40px); padding: 5px 0"
         >
           <listItem
-              v-for="(item, index) in filterList"
-              :item="item"
-              class="rounded-lg right-scroll-list"
-              @click="clickRightListItem(item, index)"
+            v-for="(item, index) in filterList"
+            :item="item"
+            class="rounded-lg right-scroll-list"
+            @click="clickRightListItem(item, index)"
           ></listItem>
         </vue-custom-scrollbar>
       </div>
-      <div
-          v-show="nowClassify === 'localApp'"
-          class="flex flex-col items-start text-zinc-500 h-full"
-      >
+      <div v-show="nowClassify === 'localApp'" class="flex flex-col items-start text-zinc-500 h-full">
         <div>1. 点击选择需要添加的应用快捷方式</div>
         <div>2. 拖动应用快捷方式拖放到下方</div>
         <div>3. 支持批量添加</div>
         <div
-            class="border-dashed w-full h-1/2 mt-2.5 rounded-lg flex flex-row justify-center items-center"
-            @dragover.prevent=""
-            @drop.prevent="drop"
+          class="border-dashed w-full h-1/2 mt-2.5 rounded-lg flex flex-row justify-center items-center"
+          @dragover.prevent=""
+          @drop.prevent="drop"
         >
-          <Icon
-              class="mr-2"
-              icon="tianjia2"
-              style="width: 18px; height: 18px"
-          ></Icon>
+          <Icon class="mr-2" icon="tianjia2" style="width: 18px; height: 18px"></Icon>
           添加快捷方式
         </div>
         <ScrolX :height="66">
@@ -262,52 +251,50 @@
               <a-badge>
                 <template #count>
                   <Icon
-                      class="pointer"
-                      icon="guanbi2"
-                      style="height: 24px; width: 24px; color: crimson"
-                      @click="deleteDropList(index)"
+                    class="pointer"
+                    icon="guanbi2"
+                    style="height: 24px; width: 24px; color: crimson"
+                    @click="deleteDropList(index)"
                   ></Icon>
                 </template>
-                <a-avatar :size="40" :src="item.icon" shape="square">
-                </a-avatar>
+                <a-avatar :size="40" :src="item.icon" shape="square"> </a-avatar>
               </a-badge>
             </div>
           </div>
         </ScrolX>
         <div
-            class="pointer flex justify-center items-center mt-2 w-24 h-12 rounded-lg"
-            style="background: rgb(42, 42, 42); color: rgba(255, 255, 255, 0.85)"
-            @click="clickRightListItem(dropList)"
+          class="pointer flex justify-center items-center mt-2 w-24 h-12 rounded-lg"
+          style="background: rgb(42, 42, 42); color: rgba(255, 255, 255, 0.85)"
+          @click="clickRightListItem(dropList)"
         >
           确定添加
         </div>
       </div>
     </Classification>
     <ModalList
-        v-if="myImgShow"
-        v-model:visible="myImgShow"
-        :imgList="myPapers"
-        title="我的收藏"
-        @sendImg="sendImg"
+      v-if="myImgShow"
+      v-model:visible="myImgShow"
+      :imgList="myPapers"
+      title="我的收藏"
+      @sendImg="sendImg"
     ></ModalList>
   </a-drawer>
 </template>
 
-
 <script>
-import Widget from '../../card/Widget.vue'
-import HorizontalPanel from '../../HorizontalPanel.vue'
-import Classification from '../../comp/Classification.vue'
-import navigationData from '../../../js/data/tableData'
-import listItem from '../../../components/bottomPanel/listItem.vue'
-import ModalList from '../../comp/ModalList.vue'
-import { mapActions, mapWritableState } from 'pinia'
-import { paperStore } from '../../../store/paper'
-import Template from '../../../../user/pages/Template.vue'
-import { cardStore } from '../../../store/card'
-import { message } from 'ant-design-vue'
+import Widget from '../../card/Widget.vue';
+import HorizontalPanel from '../../HorizontalPanel.vue';
+import Classification from '../../comp/Classification.vue';
+import navigationData from '../../../js/data/tableData';
+import listItem from '../../../components/bottomPanel/listItem.vue';
+import ModalList from '../../comp/ModalList.vue';
+import { mapActions, mapWritableState } from 'pinia';
+import { paperStore } from '../../../store/paper';
+import Template from '../../../../user/pages/Template.vue';
+import { cardStore } from '../../../store/card';
+import { message } from 'ant-design-vue';
 
-const { appModel } = window.$models
+const { appModel } = window.$models;
 export default {
   name: 'CustomAssembly',
   components: {
@@ -325,14 +312,13 @@ export default {
     },
     customData: {
       type: Object,
-      default: () => {
-      },
+      default: () => {},
     },
     desk: {
-      type: Object
-    }
+      type: Object,
+    },
   },
-  data () {
+  data() {
     return {
       dropList: [],
       imgState: true,
@@ -365,92 +351,87 @@ export default {
         type: 'remote',
         noTitle: true,
       },
-      ClassifyData: [
-        ...navigationData.coolAppList,
-        ...navigationData.systemAppList,
-      ],
+      ClassifyData: [...navigationData.coolAppList, ...navigationData.systemAppList],
       menuList: [
         {
           icon: 'shezhi1',
           title: '设置',
           fn: () => {
-            this.panelVisible = true
-            this.$refs.customAssembly.visible = false
+            this.panelVisible = true;
+            this.$refs.customAssembly.visible = false;
           },
         },
       ],
-    }
+    };
   },
   computed: {
     ...mapWritableState(paperStore, ['settings', 'myPapers']),
-    filterList () {
+    filterList() {
       return this.ClassifyData.filter((i) => {
-        return (
-            i.type === this.nowClassify && i.name.includes(this.selectContent)
-        )
-      })
+        return i.type === this.nowClassify && i.name.includes(this.selectContent);
+      });
     },
-    title () {
-      return this.myData.link.name || this.myData.link
+    title() {
+      return this.myData.link.name || this.myData.link;
     },
   },
-  created () {
-    this.loadDeskIconApps()
+  created() {
+    this.loadDeskIconApps();
   },
   methods: {
     ...mapActions(cardStore, ['updateCustomData']),
-    async loadDeskIconApps () {
-      const lightApps = await appModel.getAllApps()
+    async loadDeskIconApps() {
+      const lightApps = await appModel.getAllApps();
       for (let i = 0; i < lightApps.length; i++) {
-        lightApps[i].icon = lightApps[i].logo
-        lightApps[i].type = 'lightApp'
+        lightApps[i].icon = lightApps[i].logo;
+        lightApps[i].type = 'lightApp';
       }
-      const desktopApps = await ipc.sendSync('getDeskApps')
+      const desktopApps = await ipc.sendSync('getDeskApps');
       for (let i = 0; i < desktopApps.length; i++) {
-        desktopApps[i].type = 'tableApp'
+        desktopApps[i].type = 'tableApp';
       }
-      this.ClassifyData.push(...desktopApps, ...lightApps)
+      this.ClassifyData.push(...desktopApps, ...lightApps);
     },
-    showAppNav () {
-      this.editFlag = true
+    showAppNav() {
+      this.editFlag = true;
     },
-    deleteApp () {
-      this.myData.link = undefined
+    deleteApp() {
+      this.myData.link = undefined;
     },
-    deleteImg () {
-      this.myData.img = {}
+    deleteImg() {
+      this.myData.img = {};
     },
-    clickItem (item) {
-      this.activeRightItem = 0
-      this.nowClassify = item.name
+    clickItem(item) {
+      this.activeRightItem = 0;
+      this.nowClassify = item.name;
     },
-    async drop (e) {
-      let files = e.dataTransfer.files
-      let filesArr = []
+    async drop(e) {
+      let files = e.dataTransfer.files;
+      let filesArr = [];
       if (files && files.length > 0) {
         for (let i = 0; i < files.length; i++) {
-          filesArr.push(files[i].path)
+          filesArr.push(files[i].path);
         }
       }
       this.dropFiles = await ipc.sendSync('getFilesIcon', {
         files: JSON.parse(JSON.stringify(filesArr)),
-      })
-      this.dropList.push(...this.dropFiles)
+      });
+      this.dropList.push(...this.dropFiles);
     },
-    deleteDropList (index) {
-      this.dropList.splice(index, 1)
+    deleteDropList(index) {
+      this.dropList.splice(index, 1);
     },
-    clickRightListItem (item, index) {
-      this.activeRightItem = index
-      this.editFlag = false
+    clickRightListItem(item, index) {
+      this.activeRightItem = index;
+      this.editFlag = false;
       if (item instanceof Array) {
-        this.myData.link = item[0]
-        this.dropList = []
+        this.myData.link = item[0];
+        this.dropList = [];
       } else {
-        this.myData.link = item
+        this.myData.link = item;
       }
     },
-    async importFile () {
+    async importFile() {
       let openPath = await tsbApi.dialog.showOpenDialog({
         title: '选择导入的代码',
         filters: [
@@ -462,129 +443,128 @@ export default {
           { name: '全部', extensions: ['*'] },
         ],
         properties: ['multiSelections'],
-      })
+      });
       if (!openPath) {
-
       } else {
-        const imgReg = /.(jpg|jpeg|gif|bmp|png)$/ // 匹配图片正则
-        const videoReg = /.(mp4|mpeg|avi|rmvb)$/ // 匹配视频正则
-        this.myData.img = {}
+        const imgReg = /.(jpg|jpeg|gif|bmp|png)$/; // 匹配图片正则
+        const videoReg = /.(mp4|mpeg|avi|rmvb)$/; // 匹配视频正则
+        this.myData.img = {};
         if (imgReg.test(openPath[0])) {
-          this.myData.img.src = openPath[0]
+          this.myData.img.src = openPath[0];
         } else if (videoReg.test(openPath[0])) {
-          this.myData.img.srcProtocol = openPath[0]
+          this.myData.img.srcProtocol = openPath[0];
           this.$nextTick(() => {
-            this.$refs.wallpaperVideo.load()
-            this.$refs.wallpaperVideo.play().catch((err) => {
-            })
-          })
+            this.$refs.wallpaperVideo.load();
+            this.$refs.wallpaperVideo.play().catch((err) => {});
+          });
         }
       }
     },
-    sendImg (img) {
-      this.myData.img = img
+    sendImg(img) {
+      this.myData.img = img;
     },
-    async customClick () {
+    async customClick() {
       let openPath = await tsbApi.dialog.showOpenDialog({
         title: '选择导入的代码',
         filters: [{ name: '全部', extensions: ['*'] }],
         properties: ['multiSelections'],
-      })
+      });
       if (!openPath) {
-
       } else {
-        this.myData.link = openPath[0]
+        this.myData.link = openPath[0];
       }
     },
-    openMy () {
-      this.myImgShow = true
+    openMy() {
+      this.myImgShow = true;
     },
-    openApp () {
+    openApp() {
       if (typeof this.myData.link === 'object' && this.myData.link.type) {
         switch (this.myData.link.type) {
           case 'systemApp':
             if (this.myData.link.event === 'fullscreen') {
               if (this.full) {
-                this.full = false
-                tsbApi.window.setFullScreen(false)
+                this.full = false;
+                tsbApi.window.setFullScreen(false);
               } else {
-                this.full = true
-                tsbApi.window.setFullScreen(true)
+                this.full = true;
+                tsbApi.window.setFullScreen(true);
               }
             } else if (this.myData.link.event === '/status') {
               if (this.$route.path === '/status') {
-                this.$router.go(-1)
+                this.$router.go(-1);
               } else {
-                this.$router.push({ path: '/status' })
+                this.$router.push({ path: '/status' });
               }
             } else if (this.myData.link.data) {
               this.$router.push({
                 name: 'app',
                 params: this.myData.link.data,
-              })
+              });
             } else {
-              this.$router.push({ name: this.myData.link.event })
+              this.$router.push({ name: this.myData.link.event });
             }
-            break
+            break;
           case 'coolApp':
             this.$router.push({
               name: 'app',
               params: this.myData.link.data,
-            })
-            break
+            });
+            break;
           case 'localApp':
-            require('electron').shell.openPath(this.myData.link.path)
-            break
+            require('electron').shell.openPath(this.myData.link.path);
+            break;
           case 'lightApp':
             ipc.send('executeAppByPackage', {
               package: this.myData.link.package,
-            })
-            break
+            });
+            break;
           default:
-            require('electron').shell.openPath(this.myData.link.path)
+            require('electron').shell.openPath(this.myData.link.path);
         }
       } else if (this.myData.link) {
         this.myData.link.path
-            ? require('electron').shell.openPath(this.myData.link.path)
-            : require('electron').shell.openPath(
-                require('path').normalize(this.myData.link)
-            )
+          ? require('electron').shell.openPath(this.myData.link.path)
+          : require('electron').shell.openPath(require('path').normalize(this.myData.link));
       }
     },
-    saveData () {
+    saveData() {
       if (!Object.keys(this.myData.img).length > 0) {
-        message.warning('未添加小组件封面')
-        return
+        message.warning('未添加小组件封面');
+        return;
       }
-      this.updateCustomData(this.customIndex, {
-        showName: this.showName,
-        mySize: this.mySize,
-        myData: this.myData,
-      }, this.desk)
-      message.success('保存成功')
-      this.panelVisible = false
+      this.updateCustomData(
+        this.customIndex,
+        {
+          showName: this.showName,
+          mySize: this.mySize,
+          myData: this.myData,
+        },
+        this.desk,
+      );
+      message.success('保存成功');
+      this.panelVisible = false;
     },
-    imgError () {
-      this.imgState = false
+    imgError() {
+      this.imgState = false;
     },
   },
-  mounted () {
-    const { showName, mySize, myData } = this.customData
-    if (showName) this.showName = showName
-    if (mySize) this.mySize = { ...this.mySize, ...mySize }
-    if (myData) this.myData = { ...this.myData, ...myData }
+  mounted() {
+    const { showName, mySize, myData } = this.customData;
+    if (showName) this.showName = showName;
+    if (mySize) this.mySize = { ...this.mySize, ...mySize };
+    if (myData) this.myData = { ...this.myData, ...myData };
   },
   watch: {
     mySize: {
-      handler (newV) {
-        this.options.className = 'card' + ' ' + this.mySize.className
-        this.$emit('customEvent')
+      handler(newV) {
+        this.options.className = 'card' + ' ' + this.mySize.className;
+        this.$emit('customEvent');
       },
       immediate: true,
-      deep: true
+      deep: true,
     },
   },
-}
+};
 </script>
 
 <style scoped></style>

@@ -99,182 +99,186 @@ const tpl = `
 </div>
 </div>
 
-`
+`;
 
-const spaceModel = require('../../../src/model/spaceModel')
-const backupSpaceModel = require('../../../src/model/backupSpaceModel')
+const spaceModel = require('../../../src/model/spaceModel');
+const backupSpaceModel = require('../../../src/model/backupSpaceModel');
 
 const fatal = {
   template: tpl,
-  data () {
+  data() {
     return {
       save: true,
       savePosition: 'cloud',
       user: null,
       space: null,
       title: '',
-      fatal: true,//非致命意外
-      canSaveToCloud: true,//是否可以保存到云端，当出现帐号凭证错误的时候是无法保存至云端的。
+      fatal: true, //非致命意外
+      canSaveToCloud: true, //是否可以保存到云端，当出现帐号凭证错误的时候是无法保存至云端的。
       description: '',
       spaceId: 0,
       backupName: '', //备份空间名称输入框
-      isDestroyed: false,//是否是无法恢复了
-    }
+      isDestroyed: false, //是否是无法恢复了
+    };
   },
-  async mounted () {
+  async mounted() {
     try {
-      let space = await backupSpaceModel.getSpace(window.globalArgs['spaceId'])
-      await backupSpaceModel.setOfflineUse(this.spaceId)
+      let space = await backupSpaceModel.getSpace(window.globalArgs['spaceId']);
+      await backupSpaceModel.setOfflineUse(this.spaceId);
       if (!!!space) {
-        this.isDestroyed = true
+        this.isDestroyed = true;
       } else {
-        this.space = space
-        this.backupName = space.name + '_备份_副本'
+        this.space = space;
+        this.backupName = space.name + '_备份_副本';
         setTimeout(() => {
-          let backupNameInputRef = document.getElementById('backupNameInputRef')
-          backupNameInputRef.focus()
-          backupNameInputRef.select()
-        }, 500)
-        this.user = space.userInfo
+          let backupNameInputRef = document.getElementById('backupNameInputRef');
+          backupNameInputRef.focus();
+          backupNameInputRef.select();
+        }, 500);
+        this.user = space.userInfo;
       }
-      this.spaceId = window.globalArgs['spaceId']
+      this.spaceId = window.globalArgs['spaceId'];
     } catch (e) {
-      console.warn(e)
-      console.warn('无法获取到space')
+      console.warn(e);
+      console.warn('无法获取到space');
     }
-    this.title = window.globalArgs['title'] || '保存冲突，无法保存空间至云端'
-    this.canSaveToCloud = !(window.globalArgs['canSaveToCloud'] === 'false')
+    this.title = window.globalArgs['title'] || '保存冲突，无法保存空间至云端';
+    this.canSaveToCloud = !(window.globalArgs['canSaveToCloud'] === 'false');
     if (!this.canSaveToCloud) {
-      this.savePosition = 'local'
+      this.savePosition = 'local';
     }
-    this.description = window.globalArgs['description'] || '系统检测到当前空间已被<strong>其他设备占用</strong>。无法再保存当前空间。'
-
+    this.description =
+      window.globalArgs['description'] || '系统检测到当前空间已被<strong>其他设备占用</strong>。无法再保存当前空间。';
   },
   methods: {
     /**
      * 切换到云空间，不保存
      */
-    async changeToCloudSpace () {
+    async changeToCloudSpace() {
       try {
-        let latestSpace = await this.getLatestSpace()
-        if (latestSpace)
-          this.changeToSpace(latestSpace)
+        let latestSpace = await this.getLatestSpace();
+        if (latestSpace) this.changeToSpace(latestSpace);
       } catch (e) {
-        console.warn(e)
-        window.antd.message.error('切换到最新的空间失败。请稍后再试。')
+        console.warn(e);
+        window.antd.message.error('切换到最新的空间失败。请稍后再试。');
       }
     },
     /**
      * 切换到云端空间
      * @param space
      */
-    changeToSpace (space) {
-      spaceModel.setUser(this.user).changeCurrent(space).then().catch((e) => {
-        console.warn(e)
-        window.antd.message.error('切换空间失败。')
-      })
+    changeToSpace(space) {
+      spaceModel
+        .setUser(this.user)
+        .changeCurrent(space)
+        .then()
+        .catch((e) => {
+          console.warn(e);
+          window.antd.message.error('切换空间失败。');
+        });
     },
     /**
      * 获取到最新的云端空间
      * @returns {Promise<boolean|*>}
      */
-    async getLatestSpace () {
+    async getLatestSpace() {
       try {
-        let latestResult = await spaceModel.setUser(this.user).getSpace(this.space.id)
+        let latestResult = await spaceModel.setUser(this.user).getSpace(this.space.id);
         if (latestResult.status) {
           if (latestResult.data.id === -1) {
-            window.antd.message.error('云空间已被删除，无法载入。')
-            return false
+            window.antd.message.error('云空间已被删除，无法载入。');
+            return false;
           }
-          return latestResult.data
+          return latestResult.data;
         } else {
-          console.warn(latestResult)
-          window.antd.message.error('获取最新的空间失败，请稍后重试。')
+          console.warn(latestResult);
+          window.antd.message.error('获取最新的空间失败，请稍后重试。');
         }
       } catch (e) {
-        console.warn(e)
-        window.antd.message.error('获取最新的空间失败，请稍后重试。')
-        return false
+        console.warn(e);
+        window.antd.message.error('获取最新的空间失败，请稍后重试。');
+        return false;
       }
     },
     /**
      * 切换到云空间，保存
      */
-    async saveAndChange () {
-      let latestSpace = await this.getLatestSpace() //先获取最新的空间，如果获取失败，则不进行任何的操作了
+    async saveAndChange() {
+      let latestSpace = await this.getLatestSpace(); //先获取最新的空间，如果获取失败，则不进行任何的操作了
       if (latestSpace) {
-        if (await this.doSave()) { //处理保存的事件
-          this.changeToSpace(latestSpace)
+        if (await this.doSave()) {
+          //处理保存的事件
+          this.changeToSpace(latestSpace);
         }
       } else {
-        antd.message.error('未获取到最新的空间，无法切换。')
+        antd.message.error('未获取到最新的空间，无法切换。');
       }
     },
     /**
      * 不保存切换空间
      * @returns {Promise<void>}
      */
-    async changeWithoutSave () {
-      let latestSpace = await this.getLatestSpace() //先获取最新的空间，如果获取失败，则不进行任何的操作了
+    async changeWithoutSave() {
+      let latestSpace = await this.getLatestSpace(); //先获取最新的空间，如果获取失败，则不进行任何的操作了
       if (latestSpace) {
-        this.changeToSpace(latestSpace)
+        this.changeToSpace(latestSpace);
       } else {
-        antd.message.error('未获取到最新的空间，无法切换。')
+        antd.message.error('未获取到最新的空间，无法切换。');
       }
     },
-    async doSave () {
+    async doSave() {
       if (this.backupName.trim() === '') {
-        antd.message.error('空间名必填')
-        return
+        antd.message.error('空间名必填');
+        return;
       }
       try {
-        let result = {}
+        let result = {};
         if (this.savePosition === 'local') {
-          result = await backupSpaceModel.copyById(this.spaceId, this.backupName)
+          result = await backupSpaceModel.copyById(this.spaceId, this.backupName);
         } else {
-          result = await backupSpaceModel.copyToCloudById(this.spaceId, this.backupName)
+          result = await backupSpaceModel.copyToCloudById(this.spaceId, this.backupName);
         }
         if (result.status) {
-          return result.data
+          return result.data;
         } else {
-          console.warn(this.space)
-          antd.message.error('复制备份空间失败。请更改保存位置或者选择不保存备份重试。')
-          return false
+          console.warn(this.space);
+          antd.message.error('复制备份空间失败。请更改保存位置或者选择不保存备份重试。');
+          return false;
         }
       } catch (e) {
-        console.warn(e)
-        antd.message.error('复制备份空间失败。非常遗憾，备份空间损坏。请更改保存位置或者选择不保存备份重试。')
-        return false
+        console.warn(e);
+        antd.message.error('复制备份空间失败。非常遗憾，备份空间损坏。请更改保存位置或者选择不保存备份重试。');
+        return false;
       }
     },
     /**
      * 不保存直接
      */
-    switchToOtherSpace () {
-      this.$router.replace('/')
+    switchToOtherSpace() {
+      this.$router.replace('/');
     },
-    async switchToBackup () {
-      let resultChange = {}
-      let copySpace = await this.doSave()
+    async switchToBackup() {
+      let resultChange = {};
+      let copySpace = await this.doSave();
       if (copySpace) {
         try {
           if (this.savePosition === 'local') {
-            resultChange = await spaceModel.setAdapter('local').changeCurrent(copySpace)
+            resultChange = await spaceModel.setAdapter('local').changeCurrent(copySpace);
           } else {
-            resultChange = await spaceModel.setUser(this.user).changeCurrent(copySpace)
+            resultChange = await spaceModel.setUser(this.user).changeCurrent(copySpace);
           }
           if (resultChange.status === 1) {
             //会自动关闭窗体
           } else {
-            window.antd.message.error('切换使用空间失败。')
+            window.antd.message.error('切换使用空间失败。');
           }
         } catch (e) {
-          console.warn(e)
-          window.antd.message.error('切换使用空间失败。意外错误。')
+          console.warn(e);
+          window.antd.message.error('切换使用空间失败。意外错误。');
         }
       }
-    }
-  }
-}
+    },
+  },
+};
 
-module.exports = fatal
+module.exports = fatal;

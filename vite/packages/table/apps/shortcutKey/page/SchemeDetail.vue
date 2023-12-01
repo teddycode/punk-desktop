@@ -1,20 +1,16 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
-import ShortcutKeyDetail from "../shortcutKey/ShortcutKeyDetail.vue";
+import { defineComponent } from 'vue';
+import ShortcutKeyDetail from '../shortcutKey/ShortcutKeyDetail.vue';
 
 export default defineComponent({
-  name: "SchemeDetail",
-  components: {ShortcutKeyDetail},
-  mounted() {
-
-  }
-})
+  name: 'SchemeDetail',
+  components: { ShortcutKeyDetail },
+  mounted() {},
+});
 </script>
 
 <template>
   <ShortcutKeyDetail></ShortcutKeyDetail>
 </template>
 
-<style lang="scss" scoped>
-
-</style>
+<style scoped lang="scss"></style>

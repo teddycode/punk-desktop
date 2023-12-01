@@ -5,7 +5,7 @@
         <template v-if="item.type === types.MSG_GRP_TIP || item.type === types.MSG_GRP_SYS_NOTICE">
           <i class="icon icon-system"></i>
           <span>{{ getSystemInfo(item) }}</span>
-          <div v-if="item?.payload?.operationType === 1" class="btn-box">
+          <div class="btn-box" v-if="item?.payload?.operationType === 1">
             <button class="btn btn-default" @click="handleApplication('Agree', item)">接受</button>
             <button class="btn btn-cancel" @click="handleApplication('Reject', item)">拒绝</button>
           </div>
@@ -16,8 +16,8 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, reactive, toRefs, watchEffect} from 'vue';
-import {translateGroupSystemNotice} from '../utils/utils';
+import { defineComponent, watchEffect, reactive, toRefs } from 'vue';
+import { translateGroupSystemNotice } from '../utils/utils';
 
 export default defineComponent({
   props: {
@@ -52,24 +52,28 @@ export default defineComponent({
 
     const getSystemInfo = (item: any) => {
       // console.log('右侧main中的数据',item);
-      const uid = item.payload.operatorID
-      window.$chat.getUserProfile({userIDList: [`${uid}`]}).then((res: any) => {
-        // console.log('获取数据',res.data[0].nick);
+      const uid = item.payload.operatorID;
+      window.$chat
+        .getUserProfile({ userIDList: [`${uid}`] })
+        .then((res: any) => {
+          // console.log('获取数据',res.data[0].nick);
 
-        data.nick = res.data[0].nick
-      }).finally(() => {
-        return;
-      })
-      const result = translateGroupSystemNotice(item, data?.nick)
+          data.nick = res.data[0].nick;
+        })
+        .finally(() => {
+          return;
+        });
+      const result = translateGroupSystemNotice(item, data?.nick);
       console.log('测试::>>', result);
 
       // return result;
-    }
+    };
 
     return {
       ...toRefs(data),
       translateGroupSystemNotice,
-      handleApplication, getSystemInfo,
+      handleApplication,
+      getSystemInfo,
     };
   },
 });
@@ -77,13 +81,11 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import url('../../../styles/common.scss');
 @import url('../../../styles/icon.scss');
-
 .list {
   flex: 1;
   height: 100%;
   overflow-y: auto;
   min-width: 600px;
-
   li {
     display: flex;
     align-items: center;
@@ -93,37 +95,31 @@ export default defineComponent({
     font-size: 14px;
     color: #000000;
     letter-spacing: 0;
-
     .icon {
       margin-right: 10px;
     }
-
     .message-label {
       max-width: 50px;
     }
-
     .btn-box {
       padding: 0 12px;
     }
   }
 }
-
 .icon {
   display: inline-block;
   width: 16px;
   height: 16px;
-
   &-warn {
     border-radius: 50%;
     background: coral;
-    color: #FFFFFF;
+    color: #ffffff;
     font-style: normal;
     display: flex;
     justify-content: center;
     align-items: center;
   }
 }
-
 .btn {
   padding: 2px 10px;
   margin-right: 12px;
@@ -131,25 +127,21 @@ export default defineComponent({
   border: none;
   font-weight: 400;
   font-size: 14px;
-  color: #FFFFFF;
+  color: #ffffff;
   letter-spacing: 0;
   text-align: center;
   line-height: 20px;
-
   &:last-child {
     margin-right: 0;
   }
-
   &-cancel {
     border: 1px solid #dddddd;
     color: #666666;
   }
-
   &-default {
-    background: #006EFF;
-    border: 1px solid #006EFF;
+    background: #006eff;
+    border: 1px solid #006eff;
   }
-
   &:disabled {
     opacity: 0.3;
   }

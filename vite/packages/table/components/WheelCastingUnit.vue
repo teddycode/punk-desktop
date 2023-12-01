@@ -1,79 +1,101 @@
 <template>
-
-  <div class="wheel-content flex flex-col" style="width:600px;">
+  <div class="wheel-content flex flex-col" style="width: 600px">
     <div ref="slider" class="keen-slider rounded-lg wheel-bg">
       <div v-for="item in wheelList" class="keen-slider__slide rounded-lg">
-        <video v-if="item.mp4" ref="wheelVideo" autoplay=""
-               class="w-full h-full rounded-lg"
-               controls="controls" controlslist="nodownload  noremoteplayback noplaybackrate" disablePictureInPicture
-               muted="" playsinline="" @ended="next">
-          <source id="bgVid" :src="item.mp4.max" class="w-full rounded-lg" type="video/mp4">
+        <video
+          v-if="item.mp4"
+          ref="wheelVideo"
+          autoplay=""
+          class="w-full h-full rounded-lg"
+          controls="controls"
+          controlslist="nodownload  noremoteplayback noplaybackrate"
+          disablePictureInPicture
+          muted=""
+          playsinline=""
+          @ended="next"
+        >
+          <source id="bgVid" :src="item.mp4.max" class="w-full rounded-lg" type="video/mp4" />
         </video>
-        <viewer v-else :images="item.path_full" :options="options" class="w-full h-full rounded-lg object-cover ">
-          <img :data-source="item.path_full" :src="item.path_full"
-               alt="" class="w-full pointer h-full rounded-lg object-cover ">
+        <viewer v-else :images="item.path_full" :options="options" class="w-full h-full rounded-lg object-cover">
+          <img
+            :data-source="item.path_full"
+            :src="item.path_full"
+            alt=""
+            class="w-full pointer h-full rounded-lg object-cover"
+          />
         </viewer>
       </div>
     </div>
-    <div class="flex mt-3 " style="height: 72px;">
-      <button class="keen-slider__arrow btn-active mr-2 wheel-bg pointer rounded-md keen-slider__arrow--left "
-              style="border: none;" @click="prev()">
-        <Icon icon="xiangzuo" style="font-size: 1.5em;"></Icon>
+    <div class="flex mt-3" style="height: 72px">
+      <button
+        class="keen-slider__arrow btn-active mr-2 wheel-bg pointer rounded-md keen-slider__arrow--left"
+        style="border: none"
+        @click="prev()"
+      >
+        <Icon icon="xiangzuo" style="font-size: 1.5em"></Icon>
       </button>
       <div ref="thumbnail" class="keen-slider thumbnail">
         <div v-for="item in wheelList" class="keen-slider__slide rounded-lg">
-          <img :src="item.mp4 ? item.thumbnail : item.path_thumbnail" alt=""
-               class="w-full h-full  rounded-md  object-cover">
-          <div v-if="item.mp4"
-               class="thumbnail-bofang w-8 h-8  rounded-full flex items-center justify-center"
-               style="background: var(--primary-bg);">
-            <Icon icon="bofang" style="font-size: 2em;color: var(--primary-text);"></Icon>
+          <img
+            :src="item.mp4 ? item.thumbnail : item.path_thumbnail"
+            alt=""
+            class="w-full h-full rounded-md object-cover"
+          />
+          <div
+            v-if="item.mp4"
+            class="thumbnail-bofang w-8 h-8 rounded-full flex items-center justify-center"
+            style="background: var(--primary-bg)"
+          >
+            <Icon icon="bofang" style="font-size: 2em; color: var(--primary-text)"></Icon>
           </div>
         </div>
       </div>
-      <button class="keen-slider__arrow ml-2 wheel-bg pointer btn-active rounded-md keen-slider__arrow--right "
-              style="border: none;" @click="next()">
-        <Icon icon="xiangyou" style="font-size: 1.5em;"></Icon>
+      <button
+        class="keen-slider__arrow ml-2 wheel-bg pointer btn-active rounded-md keen-slider__arrow--right"
+        style="border: none"
+        @click="next()"
+      >
+        <Icon icon="xiangyou" style="font-size: 1.5em"></Icon>
       </button>
     </div>
   </div>
 </template>
 
 <script>
-import KeenSlider from 'keen-slider'
-import 'keen-slider/keen-slider.min.css'
+import KeenSlider from 'keen-slider';
+import 'keen-slider/keen-slider.min.css';
 
-function ThumbnailPlugin (main) {
+function ThumbnailPlugin(main) {
   return (slider) => {
-    function removeActive () {
+    function removeActive() {
       slider.slides.forEach((slide) => {
-        slide.classList.remove('active')
-      })
+        slide.classList.remove('active');
+      });
     }
 
-    function addActive (idx) {
-      slider.slides[idx].classList.add('active')
+    function addActive(idx) {
+      slider.slides[idx].classList.add('active');
     }
 
-    function addClickEvents () {
+    function addClickEvents() {
       slider.slides.forEach((slide, idx) => {
         slide.addEventListener('click', () => {
-          main.moveToIdx(idx)
-        })
-      })
+          main.moveToIdx(idx);
+        });
+      });
     }
 
     slider.on('created', () => {
-      addActive(slider.track.details.rel)
-      addClickEvents()
+      addActive(slider.track.details.rel);
+      addClickEvents();
       main.on('animationStarted', (main) => {
-        removeActive()
-        const next = main.animator.targetIdx || 0
-        addActive(main.track.absToRel(next))
-        slider.moveToIdx(Math.min(slider.track.details.maxIdx, next))
-      })
-    })
-  }
+        removeActive();
+        const next = main.animator.targetIdx || 0;
+        addActive(main.track.absToRel(next));
+        slider.moveToIdx(Math.min(slider.track.details.maxIdx, next));
+      });
+    });
+  };
 }
 
 export default {
@@ -81,29 +103,29 @@ export default {
   props: {
     wheelList: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     loading: {
-      type: Boolean
-    }
+      type: Boolean,
+    },
   },
 
-  mounted () {
+  mounted() {
     if (this.loading === false) {
-      this.loaded = true
-      this.initComponent()
+      this.loaded = true;
+      this.initComponent();
     }
   },
   watch: {
-    'loading': {
-      handler (newVal) {
+    loading: {
+      handler(newVal) {
         if (newVal === false) {
-          this.initComponent()
+          this.initComponent();
         }
-      }
-    }
+      },
+    },
   },
-  data () {
+  data() {
     return {
       loaded: false,
 
@@ -112,44 +134,44 @@ export default {
         toolbar: false,
         title: false,
         tooltip: false,
-        navbar: false
+        navbar: false,
       },
-    }
+    };
   },
   methods: {
-    initComponent () {
-      this.slider = new KeenSlider(this.$refs.slider)
+    initComponent() {
+      this.slider = new KeenSlider(this.$refs.slider);
       this.thumbnail = new KeenSlider(
-          this.$refs.thumbnail,
-          {
-            initial: 0,
-            slides: {
-              perView: 4,
-              spacing: 10,
-            },
+        this.$refs.thumbnail,
+        {
+          initial: 0,
+          slides: {
+            perView: 4,
+            spacing: 10,
           },
-          [ThumbnailPlugin(this.slider)]
-      )
+        },
+        [ThumbnailPlugin(this.slider)],
+      );
     },
-    prev () {
-      this.slider.prev()
+    prev() {
+      this.slider.prev();
       if (this.$refs.wheelVideo[this.slider.track.details.rel] !== undefined) {
-        this.$refs.wheelVideo[this.slider.track.details.rel].pause()
+        this.$refs.wheelVideo[this.slider.track.details.rel].pause();
       }
     },
-    next () {
-      this.slider.next()
+    next() {
+      this.slider.next();
       // 切换下一个,上一个视频暂停
       if (this.$refs.wheelVideo[this.slider.track.details.rel] !== undefined) {
-        this.$refs.wheelVideo[this.slider.track.details.rel].pause()
+        this.$refs.wheelVideo[this.slider.track.details.rel].pause();
       }
     },
   },
-  beforeDestroy () {
-    if (this.slider) this.slider.destroy()
-    if (this.thumbnail) this.thumbnail.destroy()
+  beforeDestroy() {
+    if (this.slider) this.slider.destroy();
+    if (this.thumbnail) this.thumbnail.destroy();
   },
-}
+};
 </script>
 
 <style>
@@ -160,8 +182,8 @@ export default {
 </style>
 
 <style>
-[class^="number-slide"],
-[class*=" number-slide"] {
+[class^='number-slide'],
+[class*=' number-slide'] {
   background: grey;
   display: flex;
   align-items: center;
@@ -173,61 +195,33 @@ export default {
 
 .number-slide1 {
   background: rgb(64, 175, 255);
-  background: linear-gradient(
-      128deg,
-      rgba(64, 175, 255, 1) 0%,
-      rgba(63, 97, 255, 1) 100%
-  );
+  background: linear-gradient(128deg, rgba(64, 175, 255, 1) 0%, rgba(63, 97, 255, 1) 100%);
 }
 
 .number-slide2 {
   background: rgb(255, 75, 64);
-  background: linear-gradient(
-      128deg,
-      rgba(255, 154, 63, 1) 0%,
-      rgba(255, 75, 64, 1) 100%
-  );
+  background: linear-gradient(128deg, rgba(255, 154, 63, 1) 0%, rgba(255, 75, 64, 1) 100%);
 }
 
 .number-slide3 {
   background: rgb(182, 255, 64);
-  background: linear-gradient(
-      128deg,
-      rgba(182, 255, 64, 1) 0%,
-      rgba(63, 255, 71, 1) 100%
-  );
-  background: linear-gradient(
-      128deg,
-      rgba(189, 255, 83, 1) 0%,
-      rgba(43, 250, 82, 1) 100%
-  );
+  background: linear-gradient(128deg, rgba(182, 255, 64, 1) 0%, rgba(63, 255, 71, 1) 100%);
+  background: linear-gradient(128deg, rgba(189, 255, 83, 1) 0%, rgba(43, 250, 82, 1) 100%);
 }
 
 .number-slide4 {
   background: rgb(64, 255, 242);
-  background: linear-gradient(
-      128deg,
-      rgba(64, 255, 242, 1) 0%,
-      rgba(63, 188, 255, 1) 100%
-  );
+  background: linear-gradient(128deg, rgba(64, 255, 242, 1) 0%, rgba(63, 188, 255, 1) 100%);
 }
 
 .number-slide5 {
   background: rgb(255, 64, 156);
-  background: linear-gradient(
-      128deg,
-      rgba(255, 64, 156, 1) 0%,
-      rgba(255, 63, 63, 1) 100%
-  );
+  background: linear-gradient(128deg, rgba(255, 64, 156, 1) 0%, rgba(255, 63, 63, 1) 100%);
 }
 
 .number-slide6 {
   background: rgb(64, 76, 255);
-  background: linear-gradient(
-      128deg,
-      rgba(64, 76, 255, 1) 0%,
-      rgba(174, 63, 255, 1) 100%
-  );
+  background: linear-gradient(128deg, rgba(64, 76, 255, 1) 0%, rgba(174, 63, 255, 1) 100%);
 }
 
 .thumbnail .keen-slider__slide {

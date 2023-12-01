@@ -1,22 +1,33 @@
 <template>
   <!-- 快捷键列表 -->
-  <vue-custom-scrollbar :settings="settingsScroller" :style="keyBoxStyle"
-                        style="width:100%;height:100%;border-radius: 12px;">
-    <div id="keyBox" class="key-box">
-      <div v-for="(item,index) in keyList" :key="item.id">
+  <vue-custom-scrollbar
+    :settings="settingsScroller"
+    style="width: 100%; height: 100%; border-radius: 12px"
+    :style="keyBoxStyle"
+  >
+    <div class="key-box" id="keyBox">
+      <div v-for="(item, index) in keyList" :key="item.id">
         <!-- 分组名称 -->
-        <div v-if="item.groupName" class="key-item border-right">
-          <span class="truncate"><div :style="{backgroundColor:getColor(keyList,index)}" class="color-dot"></div>  {{
-              item.groupName
-            }}</span>
+        <div class="key-item border-right" v-if="item.groupName">
+          <span class="truncate"
+            ><div class="color-dot" :style="{ backgroundColor: getColor(keyList, index) }"></div>
+            {{ item.groupName }}</span
+          >
         </div>
         <!-- 快捷键 -->
-        <div v-else :style="{backgroundColor:getColor(keyList,index)}" class="border-right key-item"
-             @click="toggleKey(item.id)">
+        <div
+          v-else
+          class="border-right key-item"
+          :style="{ backgroundColor: getColor(keyList, index) }"
+          @click="toggleKey(item.id)"
+        >
           <div class="flex">
             <div v-for="i in item.keys" :key="i" class="flex">
-              <span class="xt-mask h-8 flex items-center rounded-lg justify-center mr-3"
-                    style="min-width:32px;padding:0 8px;">{{ i }}</span>
+              <span
+                style="min-width: 32px; padding: 0 8px"
+                class="xt-mask h-8 flex items-center rounded-lg justify-center mr-3"
+                >{{ i }}</span
+              >
             </div>
           </div>
           <div class="key-title truncate">{{ item.title }}</div>
@@ -30,7 +41,7 @@
 </template>
 
 <script>
-import { getColor } from '../lib/lib'
+import { getColor } from '../lib/lib';
 
 export default {
   name: 'ShortcutKeyList',
@@ -38,45 +49,43 @@ export default {
     // 快捷键列表
     keyList: {
       type: Array,
-      default: []
+      default: [],
     },
     // 选中的索引
     keyIndex: {
       type: Number,
-      default: 0
+      default: 0,
     },
     // 列表样式
     keyBoxStyle: {
       type: Object,
-      default: () => {
-      }
+      default: () => {},
     },
     //是否显示编辑
     showEdit: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
-  data () {
+  data() {
     return {
       settingsScroller: {
         useBothWheelAxes: true,
         swipeEasing: true,
         suppressScrollY: true,
         suppressScrollX: false,
-        wheelPropagation: true
-      }
-    }
+        wheelPropagation: true,
+      },
+    };
   },
   methods: {
     getColor,
-    toggleKey (id) {
-      this.$emit('setKeyItem', id)
+    toggleKey(id) {
+      this.$emit('setKeyItem', id);
     },
   },
-  mounted () {
-  },
-}
+  mounted() {},
+};
 </script>
 <style lang="scss" scoped>
 .key-box {
@@ -88,7 +97,6 @@ export default {
   flex-wrap: wrap;
   height: 100%;
   width: 100%;
-
 }
 
 .key-box::-webkit-scrollbar {
@@ -132,7 +140,6 @@ export default {
   color: var(--primary-text);
 }
 
-
 .text-note {
   margin: 0 20px 8px;
   padding: 0 12px;
@@ -158,5 +165,4 @@ export default {
   margin-left: 10px;
   border-right: solid rgba(255, 255, 255, 0.1) 1px;
 }
-
 </style>

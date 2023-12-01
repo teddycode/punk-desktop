@@ -1,74 +1,68 @@
 <script lang="ts">
-import twoColor from '../../../public/iconLists/twoColor.json'
-import fruit from '../../../public/iconLists/fruit.json'
-import animal from '../../../public/iconLists/animal.json'
-import jingling from '../../../public/iconLists/jingling.json'
-
-const ipc = eval('require')('electron').ipcRenderer
+import twoColor from '../../../public/iconLists/twoColor.json';
+import fruit from '../../../public/iconLists/fruit.json';
+import animal from '../../../public/iconLists/animal.json';
+import jingling from '../../../public/iconLists/jingling.json';
+const ipc = eval('require')('electron').ipcRenderer;
 export default {
   data() {
     return {
       callerId: 0,
       activeKey: 'twoColor',
 
-      iconLists: [
-        twoColor,
-        fruit,
-        animal,
-        jingling
-      ]
-    }
+      iconLists: [twoColor, fruit, animal, jingling],
+    };
   },
   mounted() {
     ipc.on('show', () => {
-      this.getCaller()
-    })
+      this.getCaller();
+    });
   },
   methods: {
     getCaller() {
       ipc.invoke('getPopCallerId').then((data) => {
-        console.log(data)
-        this.callerId = data
-      })
+        console.log(data);
+        this.callerId = data;
+      });
     },
     selectIcon(icon, iconList) {
       let param = {
         list: iconList.key,
         name: icon.name,
-        alias: icon.alias
-      }
+        alias: icon.alias,
+      };
       ipc.sendTo(this.callerId, 'selectedIcon', {
-        icon: param
-      })
-    }
-  }
-}
+        icon: param,
+      });
+    },
+  },
+};
 </script>
 
 <template>
   <div class="card-container">
-    <a-tabs v-model:activeKey="activeKey" type="card">
-      <a-tab-pane v-for="iconList in iconLists" :key="iconList.key">
+    <a-tabs type="card" v-model:activeKey="activeKey">
+      <a-tab-pane :key="iconList.key" v-for="iconList in iconLists">
         <template #tab>
-        <span>
-           <a-tooltip placement="bottom">
-         <template #title>
-            <span style="user-select: none">{{ iconList.alias }}</span>
-          </template>
-          <svg aria-hidden="true" class="icon group-icon">
-            <use v-bind:xlink:href="'#icon-'+iconList.icon"></use>
-          </svg>
-           </a-tooltip>
-        </span>
+          <span>
+            <a-tooltip placement="bottom">
+              <template #title>
+                <span style="user-select: none">{{ iconList.alias }}</span>
+              </template>
+              <svg class="icon group-icon" aria-hidden="true">
+                <use v-bind:xlink:href="'#icon-' + iconList.icon"></use>
+              </svg>
+            </a-tooltip>
+          </span>
         </template>
-        <p class="group-items" style="display: flex;flex-wrap: wrap">
-          <a-tooltip v-for="icon in iconList.list" placement="top">
+        <p class="group-items" style="display: flex; flex-wrap: wrap">
+          <a-tooltip placement="top" v-for="icon in iconList.list">
             <template #title>
               <span style="user-select: none">{{ icon.alias }}</span>
             </template>
-            <div @click="selectIcon(icon,iconList)">
-              <svg aria-hidden="true" class="icon">
-                <use v-bind:xlink:href="'#icon-'+icon.name"></use>
+            <div @click="selectIcon(icon, iconList)">
+              <svg class="icon" aria-hidden="true">
+                <use v-bind:xlink:href="'#icon-' + icon.name"></use>
               </svg>
             </div>
           </a-tooltip>
@@ -88,7 +82,6 @@ export default {
   </div>
 </template>
 <style>
-
 .card-container p {
   margin: 0;
 }
@@ -102,7 +95,6 @@ export default {
 
 .card-container > .ant-tabs-card .ant-tabs-content > .ant-tabs-tabpane {
   padding: 16px;
-
 }
 
 .card-container > .ant-tabs-card > .ant-tabs-nav::before {
@@ -150,7 +142,7 @@ export default {
   border-color: #141414;
 }
 </style>
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .icon {
   width: 1em;
   height: 1em;
@@ -181,8 +173,5 @@ export default {
 }
 
 .scrollbar {
-
 }
-
-
 </style>

@@ -1,65 +1,79 @@
 <template>
-  <Widget ref="aggregateSearchSlot" :customData="customData" :customIndex="customIndex" :desk="desk" :editing="editing"
-          :menuList="gameMiddleBare"
-          :options="options" :sizeList="bottomSizeList">
-    <div class="flex items-center justify-center w-full p-2 mt-8 mb-3 rounded-xl pointer"
-         style="border: 1px solid var(--divider); background: var(--secondary-bg);" @click="enterSearchEngine">
-      <div class="flex items-center justify-center" style="width: 20px;height:20px;">
-        <Icon :icon="aggInputValue" style="font-size: 4em;color: rgba(82,196,26, 1);"></Icon>
+  <Widget
+    ref="aggregateSearchSlot"
+    :customData="customData"
+    :customIndex="customIndex"
+    :desk="desk"
+    :editing="editing"
+    :menuList="gameMiddleBare"
+    :options="options"
+    :sizeList="bottomSizeList"
+  >
+    <div
+      class="flex items-center justify-center w-full p-2 mt-8 mb-3 rounded-xl pointer"
+      style="border: 1px solid var(--divider); background: var(--secondary-bg)"
+      @click="enterSearchEngine"
+    >
+      <div class="flex items-center justify-center" style="width: 20px; height: 20px">
+        <Icon :icon="aggInputValue" style="font-size: 4em; color: rgba(82, 196, 26, 1)"></Icon>
       </div>
       <a-input :bordered="false" class="search" placeholder="搜索" @change="enterSearchEngine"></a-input>
     </div>
 
     <div class="flex">
       <template v-if="showSize.width === 1">
-        <div v-for="(item, index) in  aggList.slice(0, 3)" :key="item.id" @click="clickSearchItem(index)">
-          <div v-if="index !== 0" :style="showSize.width === 1 ? { width: '92px' } : { width: '113px' }"
-               class="flex rounded-xl active-button pointer items-center justify-center mr-2.5 h-11"
-               style="background: var(--secondary-bg);">
-            <div class="flex items-center justify-center" style="width: 20px;height:20px;">
-              <Icon :icon="item.icon" style="font-size: 2em;color: rgba(82,196,26, 1);"></Icon>
+        <div v-for="(item, index) in aggList.slice(0, 3)" :key="item.id" @click="clickSearchItem(index)">
+          <div
+            v-if="index !== 0"
+            :style="showSize.width === 1 ? { width: '92px' } : { width: '113px' }"
+            class="flex rounded-xl active-button pointer items-center justify-center mr-2.5 h-11"
+            style="background: var(--secondary-bg)"
+          >
+            <div class="flex items-center justify-center" style="width: 20px; height: 20px">
+              <Icon :icon="item.icon" style="font-size: 2em; color: rgba(82, 196, 26, 1)"></Icon>
             </div>
             <span class="ml-2">{{ item.title }}</span>
           </div>
         </div>
       </template>
-
 
       <template v-else>
         <div v-for="(item, index) in aggList.slice(0, 5)" @click="clickSearchItem(index)">
-          <div v-if="index !== 0" :style="showSize.width === 2 ? { width: '113px' } : { width: '92px' }"
-               class="flex rounded-xl active-button pointer items-center justify-center mr-2.5 h-11"
-               style="background: var(--secondary-bg);">
-            <div class="flex items-center justify-center" style="width: 20px;height:20px;">
-              <Icon :icon="item.icon" style="font-size: 2em;color: rgba(82,196,26, 1);"></Icon>
+          <div
+            v-if="index !== 0"
+            :style="showSize.width === 2 ? { width: '113px' } : { width: '92px' }"
+            class="flex rounded-xl active-button pointer items-center justify-center mr-2.5 h-11"
+            style="background: var(--secondary-bg)"
+          >
+            <div class="flex items-center justify-center" style="width: 20px; height: 20px">
+              <Icon :icon="item.icon" style="font-size: 2em; color: rgba(82, 196, 26, 1)"></Icon>
             </div>
             <span class="ml-2">{{ item.title }}</span>
           </div>
         </div>
       </template>
 
-
-      <div class="flex items-center justify-center w-11 h-11 active-button rounded-xl pointer"
-           style="background: var(--secondary-bg);" @click="aggSearchShow = true">
-        <Icon icon="gengduo1" style="font-size: 1.5em;"></Icon>
+      <div
+        class="flex items-center justify-center w-11 h-11 active-button rounded-xl pointer"
+        style="background: var(--secondary-bg)"
+        @click="aggSearchShow = true"
+      >
+        <Icon icon="gengduo1" style="font-size: 1.5em"></Icon>
       </div>
     </div>
   </Widget>
 
-
   <a-drawer v-model:visible="aggSearchShow" :width="500" placement="right" title="设置" @close="aggSearchShow = false">
-    <vue-custom-scrollbar :settings="settingsScroller" style="height: 100%;">
-      <div class="primary-title" style="color: var(--primary-text);">搜索引擎</div>
-      <div class="mt-2 mb-6 secondary-title" style="color: var(--secondary-text);">
+    <vue-custom-scrollbar :settings="settingsScroller" style="height: 100%">
+      <div class="primary-title" style="color: var(--primary-text)">搜索引擎</div>
+      <div class="mt-2 mb-6 secondary-title" style="color: var(--secondary-text)">
         长按拖拽排序，最多支持在卡片上的展示5个搜索引擎
       </div>
       <AggregateSearchDrawer :drawerList="aggList" @setSortedList="setSortedList"></AggregateSearchDrawer>
-      <div class="mb-6 primary-title " style="color: var(--primary-text);">链接打开方式</div>
-      <XtTab v-model="customData.sortType" :list="linkType" boxClass="p-1 xt-bg-2" style="height: 52px">
-      </XtTab>
+      <div class="mb-6 primary-title" style="color: var(--primary-text)">链接打开方式</div>
+      <XtTab v-model="customData.sortType" :list="linkType" boxClass="p-1 xt-bg-2" style="height: 52px"> </XtTab>
     </vue-custom-scrollbar>
   </a-drawer>
-
 
   <teleport to="body">
     <Modal v-if="searchVisible" v-model:visible="searchVisible" :blurFlag="true">
@@ -70,22 +84,22 @@
 </template>
 
 <script>
-import { mapActions } from 'pinia'
-import { cardStore } from '../../../store/card'
+import { mapActions } from 'pinia';
+import { cardStore } from '../../../store/card';
 
-import Widget from '../../card/Widget.vue'
-import Modal from '../../Modal.vue'
-import AggregateSearchFullScreen from './AggregateSearchFullScreen.vue'
-import AggregateSearchDrawer from './AggregateSearchDrawer.vue'
+import Widget from '../../card/Widget.vue';
+import Modal from '../../Modal.vue';
+import AggregateSearchFullScreen from './AggregateSearchFullScreen.vue';
+import AggregateSearchDrawer from './AggregateSearchDrawer.vue';
 
-import { AggregateList } from '../../../js/data/searchData'
+import { AggregateList } from '../../../js/data/searchData';
 
 export default {
   components: {
     Widget,
     Modal,
     AggregateSearchFullScreen,
-    AggregateSearchDrawer
+    AggregateSearchDrawer,
   },
   props: {
     editing: {
@@ -97,15 +111,14 @@ export default {
     },
     customData: {
       type: Object,
-      default: () => {
-      },
+      default: () => {},
     },
     desk: {
       type: Object,
     },
   },
 
-  data () {
+  data() {
     return {
       options: {
         className: 'card small',
@@ -118,92 +131,101 @@ export default {
       searchVisible: false, // 显示模态弹窗
       AggregateList, // 没有排序过的聚合搜索数据
 
-      bottomSizeList: [{ title: '2x2', width: 1, height: 1, name: '1x1' }, {
-        title: '4x2',
-        width: 2,
-        height: 1,
-        name: '2x1'
-      }], // 底部设置中尺寸大小切换
-      gameMiddleBare: [{
-        icon: 'shezhi1', title: '设置', fn: () => {
-          this.aggSearchShow = true
-          this.$refs.aggregateSearchSlot.visible = false
-        }
-      }],
+      bottomSizeList: [
+        { title: '2x2', width: 1, height: 1, name: '1x1' },
+        {
+          title: '4x2',
+          width: 2,
+          height: 1,
+          name: '2x1',
+        },
+      ], // 底部设置中尺寸大小切换
+      gameMiddleBare: [
+        {
+          icon: 'shezhi1',
+          title: '设置',
+          fn: () => {
+            this.aggSearchShow = true;
+            this.$refs.aggregateSearchSlot.visible = false;
+          },
+        },
+      ],
 
       settingsScroller: {
         useBothWheelAxes: true,
         swipeEasing: true,
         suppressScrollY: false,
         suppressScrollX: true,
-        wheelPropagation: true
+        wheelPropagation: true,
       },
 
-      linkType: [  // 设置中打开方式类型
+      linkType: [
+        // 设置中打开方式类型
         { name: '工作台内打开', value: 'work' },
         { name: '磐古跨链客户端', value: 'thisky' },
-        { name: '系统默认浏览器', value: 'system' }
+        { name: '系统默认浏览器', value: 'system' },
       ],
       defaultLink: this.updateLink,
 
-      openId: ''  // 根据卡片外部的id进行弹窗内搜索引擎的锁定
-    }
+      openId: '', // 根据卡片外部的id进行弹窗内搜索引擎的锁定
+    };
   },
 
   computed: {
-    aggList () {
+    aggList() {
       if (this.customData && this.customData.sortList) {
-        return this.customData.sortList
+        return this.customData.sortList;
       } else {
-        return this.AggregateList
+        return this.AggregateList;
       }
     },
-    showSize () {
+    showSize() {
       if (this.customData && this.customData.width && this.customData.height) {
-        return { width: this.customData.width, height: this.customData.height }
+        return { width: this.customData.width, height: this.customData.height };
       }
-      return this.bottomSizeList[0]
+      return this.bottomSizeList[0];
     },
-    aggInputValue () {
-      return this.aggList[0].icon
+    aggInputValue() {
+      return this.aggList[0].icon;
     },
   },
 
-  mounted () {
+  mounted() {
     if (this.customData.sortType === undefined) {
-      let setData = {}
-      setData.sortType = 'work' // 初始化分组名称
-      this.updateCustomData(this.customIndex, setData, this.desk)
+      let setData = {};
+      setData.sortType = 'work'; // 初始化分组名称
+      this.updateCustomData(this.customIndex, setData, this.desk);
     }
   },
 
   methods: {
-    setSortedList (arrList) { // 获取拖拽排序后数据
-      this.customData.sortList = arrList
+    setSortedList(arrList) {
+      // 获取拖拽排序后数据
+      this.customData.sortList = arrList;
     },
     ...mapActions(cardStore, ['updateCustomData']),
-    enterSearchEngine () {  // 点击展开弹窗
-      this.searchVisible = true
-      this.openId = 0
+    enterSearchEngine() {
+      // 点击展开弹窗
+      this.searchVisible = true;
+      this.openId = 0;
     },
 
-    clickSearchItem (index) { // 点击选中打开
-      this.searchVisible = true
-      this.openId = index
+    clickSearchItem(index) {
+      // 点击选中打开
+      this.searchVisible = true;
+      this.openId = index;
     },
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 .primary-title {
-
   font-size: 16px;
   font-weight: 500;
 }
 
 .secondary-title {
-
   font-size: 14px;
   font-weight: 400;
 }
@@ -213,5 +235,4 @@ export default {
     color: var(--secondary-text);
   }
 }
-
 </style>

@@ -1,59 +1,81 @@
 <template>
-  <Modal v-show="updateInfoVisible" v-model:visible="updateInfoVisible" :blurFlag="true" style="z-index: 5000;">
+  <Modal v-show="updateInfoVisible" v-model:visible="updateInfoVisible" :blurFlag="true" style="z-index: 5000">
     <div class="flex flex-col items-center myinfo-container justify-between w-full p-3">
       <vue-custom-scrollbar :settings="settingsScroller" class="w-full">
         <div class="flex justify-between items-center w-full h-12 mb-3">
-          <div class="flex items-center update-title justify-center" style="width:95%;">
-            我的信息
-          </div>
-          <div class="w-12 h-12 flex items-center com-button pointer justify-center rounded-lg"
-               style="background: var(--secondary-bg);" @click="closeUpdateMyInfo">
-            <Icon icon="guanbi" style="font-size: 1.45em;"></Icon>
+          <div class="flex items-center update-title justify-center" style="width: 95%">我的信息</div>
+          <div
+            class="w-12 h-12 flex items-center com-button pointer justify-center rounded-lg"
+            style="background: var(--secondary-bg)"
+            @click="closeUpdateMyInfo"
+          >
+            <Icon icon="guanbi" style="font-size: 1.45em"></Icon>
           </div>
         </div>
         <div class="flex-grow flex w-full justify-between px-5">
           <div class="w-1/2 flex flex-col">
             <span class="update-title mb-3">昵称</span>
-            <div class="flex items-center rounded-xl justify-center h-10 px-3 mb-3"
-                 style="border: 1px solid var(--divider);background: var(--secondary-bg);">
-              <a-input v-model:value="randomNickname" :bordered="false" placeholder="请输入"
-                       style="padding: 0;width:90%;"></a-input>
-              <div class="flex p-1 rounded-md pointer" style="background: var(--active-bg);" @click="roll">
+            <div
+              class="flex items-center rounded-xl justify-center h-10 px-3 mb-3"
+              style="border: 1px solid var(--divider); background: var(--secondary-bg)"
+            >
+              <a-input
+                v-model:value="randomNickname"
+                :bordered="false"
+                placeholder="请输入"
+                style="padding: 0; width: 90%"
+              ></a-input>
+              <div class="flex p-1 rounded-md pointer" style="background: var(--active-bg)" @click="roll">
                 <Icon id="touzi" ref="touzi" class=" " icon="touzi" style="font-size: 1.8em"></Icon>
               </div>
             </div>
             <span class="update-title mb-3">头像</span>
-            <div class="flex w-full mx-1.5 flex-wrap justify-between" style="position: relative;">
+            <div class="flex w-full mx-1.5 flex-wrap justify-between" style="position: relative">
               <UploadImage :key="key" class="avatar-box rounded-lg"></UploadImage>
-              <div v-for="item in avatarNumber" :class="{'select-active':presetIndex === item.id}"
-                   class="avatar-box rounded-lg pointer  mb-3" @click="selectPreset(item)">
+              <div
+                v-for="item in avatarNumber"
+                :class="{ 'select-active': presetIndex === item.id }"
+                class="avatar-box rounded-lg pointer mb-3"
+                @click="selectPreset(item)"
+              >
                 <a-avatar :size="48" :src="getAvatarUrl(item.id)"></a-avatar>
               </div>
             </div>
           </div>
-          <a-divider class="mx-6" style="height:380px;" type="vertical"/>
+          <a-divider class="mx-6" style="height: 380px" type="vertical" />
           <div class="w-1/2 flex flex-col">
             <span class="update-title mb-3">个性签名</span>
-            <a-textarea v-model:value="areaValue" :maxlength="200" :rows="3" class="rounded-lg no-scrollbar mb-6"
-                        placeholder="请输入"
-                        style="height: 100px;background: var(--secondary-bg);border: 1px solid var(--divider);"/>
+            <a-textarea
+              v-model:value="areaValue"
+              :maxlength="200"
+              :rows="3"
+              class="rounded-lg no-scrollbar mb-6"
+              placeholder="请输入"
+              style="height: 100px; background: var(--secondary-bg); border: 1px solid var(--divider)"
+            />
             <span class="update-title mt-3 mb-3">性别</span>
             <HorizontalPanel v-model:selectType="gender" :navList="sexType"></HorizontalPanel>
             <div class="my-16 flex mx-auto">
-              <span class="com-title" style="color: var(--secondary-text);">更多个人信息编辑、账号设置等，请前往</span>
+              <span class="com-title" style="color: var(--secondary-text)">更多个人信息编辑、账号设置等，请前往</span>
               <span class="go-com pl-2 pointer" @click="go('https://s.apps.vip/user/info')">元社区</span>
             </div>
           </div>
         </div>
         <div class="flex w-full items-center justify-center mt-6">
-          <a-button class="h-48 rounded-xl mr-3"
-                    style="width:120px;color: var(--primary-text);border:none;background: var(--secondary-bg);"
-                    type="primary"
-                    @click="closeUpdateMyInfo">
+          <a-button
+            class="h-48 rounded-xl mr-3"
+            style="width: 120px; color: var(--primary-text); border: none; background: var(--secondary-bg)"
+            type="primary"
+            @click="closeUpdateMyInfo"
+          >
             稍后设置
           </a-button>
-          <a-button class="h-48 rounded-xl" style="width:120px;color: var(--active-text);" type="primary"
-                    @click="comSave">
+          <a-button
+            class="h-48 rounded-xl"
+            style="width: 120px; color: var(--active-text)"
+            type="primary"
+            @click="comSave"
+          >
             保存
           </a-button>
         </div>
@@ -63,30 +85,31 @@
 </template>
 
 <script>
-import { mapActions, mapWritableState } from 'pinia'
-import { message } from 'ant-design-vue'
-import Modal from '../Modal.vue'
-import UploadImage from '../UploadImage.vue'
-import HorizontalPanel from '../HorizontalPanel.vue'
-import { avatarNumber } from '../../js/common/teamAvatar'
-import browser from '../../js/common/browser'
-import { frameStore } from '../../store/avatarFrame'
-import { appStore } from '../../store'
+import { mapActions, mapWritableState } from 'pinia';
+import { message } from 'ant-design-vue';
+import Modal from '../Modal.vue';
+import UploadImage from '../UploadImage.vue';
+import HorizontalPanel from '../HorizontalPanel.vue';
+import { avatarNumber } from '../../js/common/teamAvatar';
+import browser from '../../js/common/browser';
+import { frameStore } from '../../store/avatarFrame';
+import { appStore } from '../../store';
 
-const screenname = '灵魂虐杀,浅寐,夏微凉っ゛,鱼哭了,陌屿,彼岸,青山独归晚,温唇,忻芝兰,喵咕嘟,皂白七'
+const screenname = '灵魂虐杀,浅寐,夏微凉っ゛,鱼哭了,陌屿,彼岸,青山独归晚,温唇,忻芝兰,喵咕嘟,皂白七';
 export default {
   components: {
-    Modal, UploadImage,
-    HorizontalPanel
+    Modal,
+    UploadImage,
+    HorizontalPanel,
   },
   emits: ['infoUpdated'],
   props: {
     updateVisible: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
-  data () {
+  data() {
     return {
       key: Date.now(),
       updateInfoVisible: this.updateVisible,
@@ -95,136 +118,132 @@ export default {
         swipeEasing: true,
         suppressScrollY: false,
         suppressScrollX: true,
-        wheelPropagation: true
+        wheelPropagation: true,
       },
       avatarNumber,
-      sexType: [    // 性别类型
+      sexType: [
+        // 性别类型
         { title: '保密', sex: 0 },
         { title: '男', sex: 1 },
-        { title: '女', sex: 2 }
+        { title: '女', sex: 2 },
       ],
       gender: '', // 接收切换到的性别
-      areaValue: '',  // 接收文本输入框值
+      areaValue: '', // 接收文本输入框值
       randomNickname: '',
-      presetIndex: '',  // 预设头像选中下标
+      presetIndex: '', // 预设头像选中下标
       i: 1,
       j: 1,
       k: 0,
       no: 0,
-    }
+    };
   },
   computed: {
     ...mapWritableState(appStore, ['userInfo']),
-    ...mapWritableState(frameStore, ['frameData'])
+    ...mapWritableState(frameStore, ['frameData']),
   },
-  mounted () {
+  mounted() {
     if (this.userInfo) {
-      this.randomNickname = this.userInfo.nickname
-      this.areaValue = this.userInfo.signature
+      this.randomNickname = this.userInfo.nickname;
+      this.areaValue = this.userInfo.signature;
     }
   },
   methods: {
     ...mapActions(appStore, ['editPresetAvatar', 'setInfoVisible', 'setSecondaryVisible', 'getUserInfo']),
     ...mapActions(frameStore, ['updateMyinfo']),
-    openMyInfo () {
-      this.key = Date.now()
-      this.updateInfoVisible = true
-
+    openMyInfo() {
+      this.key = Date.now();
+      this.updateInfoVisible = true;
     },
     // 随机筛选
-    roll (animate = true) {
+    roll(animate = true) {
       if (animate) {
         if (this.timer) {
-          clearTimeout(this.timer)
+          clearTimeout(this.timer);
         }
-        $('#touzi').addClass('animate-spin')
+        $('#touzi').addClass('animate-spin');
         this.timer = setTimeout(() => {
-          this.rollName()
-          $('#touzi').removeClass('animate-spin')
-        }, 400)
+          this.rollName();
+          $('#touzi').removeClass('animate-spin');
+        }, 400);
       } else {
-        this.rollName()
+        this.rollName();
       }
-
     },
-    rollName () {  // 掷骰子随机昵称
-      let groups = screenname.split(',')
-      let j = Math.ceil((Math.random() * groups.length)) - 1
+    rollName() {
+      // 掷骰子随机昵称
+      let groups = screenname.split(',');
+      let j = Math.ceil(Math.random() * groups.length) - 1;
       if (this.j === j) {
-        this.rollName()
-        return
+        this.rollName();
+        return;
       }
-      this.j = j
-      this.randomNickname = groups[j]
+      this.j = j;
+      this.randomNickname = groups[j];
     },
     // 预设头像拼接
-    getAvatarUrl (item) {
-      return 'https://up.apps.vip/avatar/' + item + '.png'
+    getAvatarUrl(item) {
+      return 'https://up.apps.vip/avatar/' + item + '.png';
     },
     // 点击选中预设头像
-    selectPreset (item) {
-      this.presetIndex = item.id
-      this.frameData.avatar_url = this.getAvatarUrl(item.id)
+    selectPreset(item) {
+      this.presetIndex = item.id;
+      this.frameData.avatar_url = this.getAvatarUrl(item.id);
     },
     // 点击保存
-    async comSave () {
+    async comSave() {
       const saveUpdateMyInfo = {
         nickname: this.randomNickname,
         sex: this.gender.sex,
         signature: this.areaValue,
-        avatar: this.frameData.avatar_url
-      }
-      let rs = await this.updateMyinfo(saveUpdateMyInfo)
-      console.log(rs)
+        avatar: this.frameData.avatar_url,
+      };
+      let rs = await this.updateMyinfo(saveUpdateMyInfo);
+      console.log(rs);
       if (rs.code === 200) {
-        this.$emit('infoUpdated', {})
-        message.success('信息修改成功')
+        this.$emit('infoUpdated', {});
+        message.success('信息修改成功');
 
-        this.updateInfoVisible = false
-        this.setInfoVisible(false)
-        this.setSecondaryVisible(true)
+        this.updateInfoVisible = false;
+        this.setInfoVisible(false);
+        this.setSecondaryVisible(true);
         setTimeout(() => {
-          this.getUserInfo()
-        }, 10)
+          this.getUserInfo();
+        }, 10);
       } else {
-        message.error('修改失败')
+        message.error('修改失败');
       }
-
     },
-    go (url) {
-      browser.openInInner(url)
+    go(url) {
+      browser.openInInner(url);
     },
-    closeUpdateMyInfo () {
-      this.updateInfoVisible = false
-      this.setInfoVisible(false)
-      this.setSecondaryVisible(true)
-    }
+    closeUpdateMyInfo() {
+      this.updateInfoVisible = false;
+      this.setInfoVisible(false);
+      this.setSecondaryVisible(true);
+    },
   },
   watch: {
-    'gender': {
-      handler (newVal) {
-        this.gender = newVal
-      }
-    }
-  }
-}
+    gender: {
+      handler(newVal) {
+        this.gender = newVal;
+      },
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 .animate-spin {
-  animation: spin .6s linear infinite !important;
+  animation: spin 0.6s linear infinite !important;
 }
 
-
 .update-title {
-
   font-size: 16px;
   color: var(--primary-text);
   font-weight: 500;
 }
 
 .com-title {
-
   font-size: 16px;
   font-weight: 400;
 }
@@ -251,7 +270,6 @@ export default {
 }
 
 .go-com {
-
   font-size: 16px;
   color: var(--active-bg);
   font-weight: 500;
@@ -269,7 +287,7 @@ export default {
 
 .select-active {
   border: 1px solid var(--active-bg);
-  background: rgba(80, 139, 254, 0.20);
+  background: rgba(80, 139, 254, 0.2);
 }
 
 :deep(.nav-item) {

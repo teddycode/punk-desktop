@@ -1,12 +1,12 @@
 <template>
   <template v-for="(item, index) in data.text" :key="index">
-    <span v-if="item.name === 'text'" class="text-box">{{ item.text }}</span>
-    <img v-else-if="item.name === 'img'" :src="item.src" class="text-img"/>
+    <span class="text-box" v-if="item.name === 'text'">{{ item.text }}</span>
+    <img class="text-img" v-else-if="item.name === 'img'" :src="item.src" />
   </template>
 </template>
 
 <script lang="ts">
-import {defineComponent, reactive, toRefs, watchEffect} from 'vue';
+import { defineComponent, watchEffect, reactive, toRefs } from 'vue';
 
 export default defineComponent({
   props: {
@@ -32,12 +32,10 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import url('../../../styles/common.scss');
 @import url('../../../styles/icon.scss');
-
 .text-img {
   width: 20px;
   height: 20px;
 }
-
 .text-box {
   white-space: pre-wrap;
   font-size: inherit;

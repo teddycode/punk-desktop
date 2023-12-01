@@ -1,12 +1,12 @@
-import cache from "../cache";
-import {BG_COLOR, SECONDARY_BG_COLOR, TEXT_COLOR, WALLPAPER_COLOR,} from "./types";
+import cache from '../cache';
+import { BG_COLOR, SECONDARY_BG_COLOR, TEXT_COLOR, WALLPAPER_COLOR } from './types';
 
 /**
  * 设置背景颜色
  * @param {string} color - 必填，颜色参数，支持十六进制和命名颜色
  */
 export const setBgColor = (color) => {
-    setStyleName(BG_COLOR, color);
+  setStyleName(BG_COLOR, color);
 };
 
 /**
@@ -14,7 +14,7 @@ export const setBgColor = (color) => {
  * @param {string} color - 必填，颜色参数，支持十六进制和命名颜色
  */
 export const setSecondaryBgColor = (color) => {
-    setStyleName(SECONDARY_BG_COLOR, color, 0.2);
+  setStyleName(SECONDARY_BG_COLOR, color, 0.2);
 };
 
 /**
@@ -22,7 +22,7 @@ export const setSecondaryBgColor = (color) => {
  * @param {string} color - 必填，颜色参数，支持十六进制和命名颜色
  */
 export const setTextColor = (color) => {
-    setStyleName(TEXT_COLOR, color);
+  setStyleName(TEXT_COLOR, color);
 };
 
 /**
@@ -30,7 +30,7 @@ export const setTextColor = (color) => {
  * @param {string} color - 必填，颜色参数，支持十六进制和命名颜色
  */
 export const setWallpaperColor = (color) => {
-    setStyleName(WALLPAPER_COLOR, color);
+  setStyleName(WALLPAPER_COLOR, color);
 };
 
 /**
@@ -40,8 +40,8 @@ export const setWallpaperColor = (color) => {
  * @param {number} [opacity] - 可选，透明度参数，范围从 0 到 1，默认值为 1
  */
 export const setStyleName = (styleName, color, opacity?) => {
-    const StyleColor = setColor(styleName, color, opacity);
-    cache.set(styleName, StyleColor);
+  const StyleColor = setColor(styleName, color, opacity);
+  cache.set(styleName, StyleColor);
 };
 
 /**
@@ -52,12 +52,12 @@ export const setStyleName = (styleName, color, opacity?) => {
  * @returns {string} 修改后的颜色参数
  */
 export const setColor = (text, color, opacity?) => {
-    if ((opacity != undefined && opacity < 0) || opacity > 1) {
-        console.warn("Opacity value 需要在 0 和 1 之间");
-    }
-    const rgbaColor = opacity !== undefined ? convertRGBA(color, opacity) : color;
-    document.documentElement.style.cssText += `${text}:${rgbaColor} !important;`;
-    return rgbaColor;
+  if ((opacity != undefined && opacity < 0) || opacity > 1) {
+    console.warn('Opacity value 需要在 0 和 1 之间');
+  }
+  const rgbaColor = opacity !== undefined ? convertRGBA(color, opacity) : color;
+  document.documentElement.style.cssText += `${text}:${rgbaColor} !important;`;
+  return rgbaColor;
 };
 
 /**
@@ -67,8 +67,8 @@ export const setColor = (text, color, opacity?) => {
  * @returns
  */
 export const convertRGBA = (color, opacity) => {
-    var r = parseInt(color.slice(1, 3), 16);
-    var g = parseInt(color.slice(3, 5), 16);
-    var b = parseInt(color.slice(5, 7), 16);
-    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+  var r = parseInt(color.slice(1, 3), 16);
+  var g = parseInt(color.slice(3, 5), 16);
+  var b = parseInt(color.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${opacity})`;
 };

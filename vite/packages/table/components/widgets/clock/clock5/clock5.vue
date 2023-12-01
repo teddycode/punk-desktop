@@ -6,30 +6,28 @@
         <div class="time-separator">:</div>
         <div id="minutes" class="time">{{ minutes }}</div>
         <div :style="{ display: isSnow == true ? 'inline-block' : 'none' }" class="time-separator a">:</div>
-        <div id="seconds" :style="{ display: isSnow == true ? 'inline-block' : 'none' }" class="time a">{{
-            seconds
-          }}
+        <div id="seconds" :style="{ display: isSnow == true ? 'inline-block' : 'none' }" class="time a">
+          {{ seconds }}
         </div>
       </div>
       <div id="timezone" class="timezone"></div>
       <template :style="{ display: isSnow == true ? 'inline-block' : 'none' }">
         <button id="toggle-button" class="toggle-button no-drag" @click="toggleFormat()">{{ textContent }}</button>
       </template>
-
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       hours: 0,
       minutes: 0,
       seconds: 0,
       timerID: 0,
-      textContent: '12-Hour Format'
-    }
+      textContent: '12-Hour Format',
+    };
   },
   props: {
     isSnow: {
@@ -37,41 +35,41 @@ export default {
       default: true,
     },
   },
-  mounted () {
-    this.timerID = setInterval(this.setTime, 1000)
-    this.setTime()
+  mounted() {
+    this.timerID = setInterval(this.setTime, 1000);
+    this.setTime();
   },
   methods: {
-    setTime () {
-      const now = new Date()
-      let hours = now.getHours()
-      this.minutes = now.getMinutes().toString().padStart(2, '0')
-      this.seconds = now.getSeconds().toString().padStart(2, '0')
-      const is12HourFormat = this.textContent === '12-Hour Format'
+    setTime() {
+      const now = new Date();
+      let hours = now.getHours();
+      this.minutes = now.getMinutes().toString().padStart(2, '0');
+      this.seconds = now.getSeconds().toString().padStart(2, '0');
+      const is12HourFormat = this.textContent === '12-Hour Format';
       if (is12HourFormat) {
-        hours = hours % 12
-        if (hours === 0) hours = 12
+        hours = hours % 12;
+        if (hours === 0) hours = 12;
       }
 
-      this.hours = hours.toString().padStart(2, '0')
+      this.hours = hours.toString().padStart(2, '0');
     },
-    toggleFormat () {
-      const is12HourFormat = this.textContent === '12-Hour Format'
+    toggleFormat() {
+      const is12HourFormat = this.textContent === '12-Hour Format';
 
       if (is12HourFormat) {
-        this.textContent = '24-Hour Format'
+        this.textContent = '24-Hour Format';
       } else {
-        this.textContent = '12-Hour Format'
+        this.textContent = '12-Hour Format';
       }
 
       // Update the time format immediately after toggling
-      this.setTime()
-    }
+      this.setTime();
+    },
   },
-  destroyed () {
-    clearInterval(this.timerID)// 销毁定时器
+  destroyed() {
+    clearInterval(this.timerID); // 销毁定时器
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -114,7 +112,6 @@ export default {
   padding: 0.5rem;
   margin: 0.5rem;
   color: #141414;
-
 }
 
 .timezone {

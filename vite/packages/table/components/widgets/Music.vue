@@ -1,15 +1,11 @@
 <template>
   <Widget :customIndex="customIndex" :desk="desk" :options="options">
-    <div
-        class="pointer"
-        style="text-align: center; padding: 2em"
-        @click="enterMusic"
-    >
+    <div class="pointer" style="text-align: center; padding: 2em" @click="enterMusic">
       <a-avatar
-          :class="{ playing: status.music.playing }"
-          :size="100"
-          :src="status.music.cover || 'https://a.apps.vip/icons/wyy.png'"
-          style="border: 3px solid #999"
+        :class="{ playing: status.music.playing }"
+        :size="100"
+        :src="status.music.cover || 'https://a.apps.vip/icons/wyy.png'"
+        style="border: 3px solid #999"
       ></a-avatar>
     </div>
     <a-row :gutter="10">
@@ -19,9 +15,9 @@
   </Widget>
 </template>
 <script>
-import { appStore } from '../../store'
-import { mapWritableState } from 'pinia'
-import Widget from '../card/Widget.vue'
+import { appStore } from '../../store';
+import { mapWritableState } from 'pinia';
+import Widget from '../card/Widget.vue';
 
 export default {
   name: 'Music',
@@ -32,14 +28,13 @@ export default {
     },
     customData: {
       type: Object,
-      default: () => {
-      },
+      default: () => {},
     },
     desk: {
-      type: Object
-    }
+      type: Object,
+    },
   },
-  data () {
+  data() {
     return {
       options: {
         className: 'card small',
@@ -47,7 +42,7 @@ export default {
         icon: 'customerservice',
         type: 'music',
       },
-    }
+    };
   },
   components: {
     Widget,
@@ -56,11 +51,11 @@ export default {
     ...mapWritableState(appStore, ['status']),
   },
   methods: {
-    enterMusic () {
-      this.$router.push('/music')
+    enterMusic() {
+      this.$router.push('/music');
     },
   },
-}
+};
 </script>
 
 <style scoped></style>

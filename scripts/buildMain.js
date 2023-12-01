@@ -1,7 +1,7 @@
-const path = require('path')
-const fs = require('fs')
+const path = require('path');
+const fs = require('fs');
 
-const outFile = path.resolve(__dirname, '../main.build.js')
+const outFile = path.resolve(__dirname, '../main.build.js');
 
 const modules = [
   'dist/localization.build.js',
@@ -44,27 +44,27 @@ const modules = [
 
   'js/util/statsh/statshMain.js',
   // 'src/main/windowManager.js',//加入浏览器api处理者
-  'main/handleApi.js',//加入浏览器api处理者
+  'main/handleApi.js', //加入浏览器api处理者
   'main/globalSearch.js',
-]
+];
 
-function buildMain () {
+function buildMain() {
   // build localization support first, since it is included in the bundle
-  require('./buildLocalization.js')()
+  require('./buildLocalization.js')();
 
   /* concatenate modules */
-  let output = ''
+  let output = '';
   modules.forEach(function (script) {
-    output += fs.readFileSync(path.resolve(__dirname, '../', script)) + ';\n'
-  })
+    output += fs.readFileSync(path.resolve(__dirname, '../', script)) + ';\n';
+  });
 
-  output += '})'//拼接回后面部分
+  output += '})'; //拼接回后面部分
 
-  fs.writeFileSync(outFile, output, 'utf-8')
+  fs.writeFileSync(outFile, output, 'utf-8');
 }
 
 if (module.parent) {
-  module.exports = buildMain
+  module.exports = buildMain;
 } else {
-  buildMain()
+  buildMain();
 }

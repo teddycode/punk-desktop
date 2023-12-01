@@ -5,15 +5,14 @@ const apptreeTemplate = `
   </div>
   <div calss="tree-child"></div>
 </div>
-`
+`;
 
 const apptreeComponent = {
   template: apptreeTemplate,
   name: 'apptree',
   props: {},
-  data () {
-    return {}
+  data() {
+    return {};
   },
-  methods: {}
-
-}
+  methods: {},
+};

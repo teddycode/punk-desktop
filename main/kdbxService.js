@@ -19,56 +19,56 @@ file format:
   ]
 }
 */
-const KdbxModel = require('./src/model/kdbxModel.js')
+const KdbxModel = require('./src/model/kdbxModel.js');
 
 /**
  * 用于处理凭证的服务，为了区分和密码所以单列了
  */
 class CredentialService {
-  storageFile
+  storageFile;
 
-  constructor (credentialStorageFile) {
-    this.storageFile = credentialStorageFile
+  constructor(credentialStorageFile) {
+    this.storageFile = credentialStorageFile;
   }
 
   /**
    * 写回凭证
    * @param content 凭证内容
    */
-  saveAll (content) {
-    fs.writeFileSync(this.storageFile, safeStorage.encryptString(JSON.stringify(content)))
+  saveAll(content) {
+    fs.writeFileSync(this.storageFile, safeStorage.encryptString(JSON.stringify(content)));
   }
 
   /**
    * 获取全部的凭证
    * @returns {any|{credentials: *[], version: number}}
    */
-  getAll () {
-    let file
+  getAll() {
+    let file;
     try {
-      file = fs.readFileSync(this.storageFile)
+      file = fs.readFileSync(this.storageFile);
     } catch (e) {
       if (e.code !== 'ENOENT') {
-        console.warn(e)
-        throw new Error(e)
+        console.warn(e);
+        throw new Error(e);
       }
     }
     try {
       if (file) {
-        const creds = JSON.parse(safeStorage.decryptString(file))
-        return creds
+        const creds = JSON.parse(safeStorage.decryptString(file));
+        return creds;
       } else {
         return {
           version: 1,
-          credentials: []
-        }
+          credentials: [],
+        };
       }
     } catch (e) {
-      console.warn(e)
+      console.warn(e);
       return {
         version: 1,
-        credentials: []
-      }
+        credentials: [],
+      };
     }
   }
 
@@ -76,48 +76,48 @@ class CredentialService {
    * 获得当前凭证库中的一个凭证（从加密文件中获取）
    * @returns {boolean|*}
    */
-  get (filePath) {
-    let creds = this.getAll()
-    let currentDbCred = creds.credentials.find(cred => {
-      return cred.filePath === filePath
-    })
+  get(filePath) {
+    let creds = this.getAll();
+    let currentDbCred = creds.credentials.find((cred) => {
+      return cred.filePath === filePath;
+    });
     if (!currentDbCred) {
-      console.warn('不存在记录的凭证，打开失败')
-      return false
+      console.warn('不存在记录的凭证，打开失败');
+      return false;
     }
-    return currentDbCred
+    return currentDbCred;
   }
 
   /**
    * 写回一个凭证
    * @param crd 将一个标准的凭证写回到文件中，自动去重
    */
-  set (crd) {
-    const fileContent = this.getAll()
+  set(crd) {
+    const fileContent = this.getAll();
     // delete duplicate credentials
     for (let i = 0; i < fileContent.credentials.length; i++) {
       if (fileContent.credentials[i].filePath === crd.filePath) {
-        fileContent.credentials.splice(i, 1)
-        i--
+        fileContent.credentials.splice(i, 1);
+        i--;
       }
     }
-    fileContent.credentials.push(crd)
-    this.saveAll(fileContent)
+    fileContent.credentials.push(crd);
+    this.saveAll(fileContent);
   }
 }
 
-let credentialService //凭证的管理器，此服务只用于文件形式密码库的管理
+let credentialService; //凭证的管理器，此服务只用于文件形式密码库的管理
 
 class KdbxService {
-  kdbxFilePath = path.join(userDataPath, 'kdbxStore')
-  kdbxModel = new KdbxModel()
-  dbFile = ''
-  currentCredential = {}
-  credentialService = credentialService
+  kdbxFilePath = path.join(userDataPath, 'kdbxStore');
+  kdbxModel = new KdbxModel();
+  dbFile = '';
+  currentCredential = {};
+  credentialService = credentialService;
 
-  constructor (props) {
-    credentialService = new CredentialService(this.kdbxFilePath)
-    this.credentialService = credentialService
+  constructor(props) {
+    credentialService = new CredentialService(this.kdbxFilePath);
+    this.credentialService = credentialService;
   }
 
   /**
@@ -126,17 +126,17 @@ class KdbxService {
    * 2.准备好凭证
    * @returns {Promise<*[]>}
    */
-  async prepareDb () {
-    const pm = settings.get('passwordManager')
+  async prepareDb() {
+    const pm = settings.get('passwordManager');
     if (pm) {
       //如果已经设置了pm
-      let filePath = pm.filePath
+      let filePath = pm.filePath;
       if (!fs.existsSync(filePath)) {
-        console.warn('当前密码库不存在')
-        return []
+        console.warn('当前密码库不存在');
+        return [];
       }
-      this.dbFile = filePath
-      this.currentCredential = this.credentialService.get(filePath) //获取当前凭证
+      this.dbFile = filePath;
+      this.currentCredential = this.credentialService.get(filePath); //获取当前凭证
     }
   }
 
@@ -144,37 +144,42 @@ class KdbxService {
    * 从配置中重载一下密码管理器
    * @returns {Promise<[]|undefined>}
    */
-  async reload () {
-    return await this.prepareDb()
+  async reload() {
+    return await this.prepareDb();
   }
 
-  async openDb () {
-    let currentCredential = this.currentCredential
-    let openDb = new Promise(resolve => {
-      this.kdbxModel.openFile(currentCredential.password, currentCredential.filePath, currentCredential.keyFile, (err, data) => {
-        if (err) {
-          console.warn('打开失败', err)
-          return
-        }
-        resolve(data)
-      })
-    })
-    return await openDb
+  async openDb() {
+    let currentCredential = this.currentCredential;
+    let openDb = new Promise((resolve) => {
+      this.kdbxModel.openFile(
+        currentCredential.password,
+        currentCredential.filePath,
+        currentCredential.keyFile,
+        (err, data) => {
+          if (err) {
+            console.warn('打开失败', err);
+            return;
+          }
+          resolve(data);
+        },
+      );
+    });
+    return await openDb;
   }
 
   /**
    * 此方法是真正的获取密码方法
    * @returns {Promise<unknown>}
    */
-  async getAllPasswords () {
-    await this.openDb()
-    let allCredentials = await this.kdbxModel.getAllCredentials()
-    allCredentials = allCredentials.filter(crd => {
-      crd.name = crd.title
+  async getAllPasswords() {
+    await this.openDb();
+    let allCredentials = await this.kdbxModel.getAllCredentials();
+    allCredentials = allCredentials.filter((crd) => {
+      crd.name = crd.title;
       //排除掉已删除的密码
-      return crd.originData.parentGroup.uuid.id !== this.kdbxModel.db.meta.recycleBinUuid.id
-    })
-    return allCredentials
+      return crd.originData.parentGroup.uuid.id !== this.kdbxModel.db.meta.recycleBinUuid.id;
+    });
+    return allCredentials;
     // const gotCreds = new Promise(resolve => {
     //   this.kdbxModel.openFile(currentCredential.password, currentCredential.filePath, currentCredential.keyFile, (err, data) => {
     //     if (err) {
@@ -198,19 +203,19 @@ class KdbxService {
    * @param account
    * @returns {Promise<void>}
    */
-  async setPassword (account) {
-    let found = await this.findEntry(account)
+  async setPassword(account) {
+    let found = await this.findEntry(account);
     if (found) {
       if (found.originData.parentGroup.uuid.id === this.kdbxModel.db.meta.recycleBinUuid.id) {
         // 已删除的密码要复原
-        this.kdbxModel.recoveryEntry(found.originData)
+        this.kdbxModel.recoveryEntry(found.originData);
       }
-      this.kdbxModel.updateEntry(found.originData, account)
+      this.kdbxModel.updateEntry(found.originData, account);
     } else {
-      this.kdbxModel.createEntry(account)
+      this.kdbxModel.createEntry(account);
     }
 
-    return await this.kdbxModel.save()
+    return await this.kdbxModel.save();
   }
 
   /**
@@ -218,13 +223,13 @@ class KdbxService {
    * @param account
    * @returns {Promise<*>}
    */
-  async findEntry (account) {
-    await this.openDb()
-    let allCredentials = await this.kdbxModel.getAllCredentials()
-    let found = allCredentials.find(crd => {
-      return (crd.domain = account.domain && crd.username === account.username)
-    })
-    return found
+  async findEntry(account) {
+    await this.openDb();
+    let allCredentials = await this.kdbxModel.getAllCredentials();
+    let found = allCredentials.find((crd) => {
+      return (crd.domain = account.domain && crd.username === account.username);
+    });
+    return found;
   }
 
   /**
@@ -232,42 +237,41 @@ class KdbxService {
    * @param account
    * @returns {Promise<*>}
    */
-  async deletePassword (account) {
-    let found = await this.findEntry(account)
+  async deletePassword(account) {
+    let found = await this.findEntry(account);
     if (found) {
       if (found.originData.parentGroup.uuid.id !== this.kdbxModel.db.meta.recycleBinUuid.id) {
         // 已删除的密码要复原
-        this.kdbxModel.trashEntry(found.originData)
+        this.kdbxModel.trashEntry(found.originData);
       }
     } else {
-      throw '需要删除的密码不存在'
+      throw '需要删除的密码不存在';
     }
-    return await this.kdbxModel.save()
+    return await this.kdbxModel.save();
   }
 }
 
-const kdbxService = new KdbxService()
+const kdbxService = new KdbxService();
 app.whenReady().then(() => {
   setTimeout(() => {
     //延迟准备密码库
-    kdbxService.prepareDb()
-  }, 3000)
-
-})
+    kdbxService.prepareDb();
+  }, 3000);
+});
 
 ipc.handle('kdbxCredentialStoreSetPassword', async function (event, account) {
-  return kdbxService.setPassword(account)// credentialStoreSetPassword(account)
-})
+  return kdbxService.setPassword(account); // credentialStoreSetPassword(account)
+});
 
 ipc.handle('kdbxCredentialStoreDeletePassword', async function (event, account) {
   //删除一个密码 //todo
-  return await kdbxService.deletePassword(account)
-})
+  return await kdbxService.deletePassword(account);
+});
 
 ipc.handle('kdbxCredentialStoreGetCredentials', async function (event) {
   //获取全部密码，已实现
-  return await kdbxService.getAllPasswords()
-})
+  return await kdbxService.getAllPasswords();
+});
 
 /**
  * 存入一下新的凭证
@@ -278,16 +282,15 @@ ipc.handle('setKdbxCredential', async function (event, args) {
     filePath: args.filePath,
     name: args.name,
     password: args.password,
-    keyFile: args.keyFile
-  }
-  credentialService.set(cred)
+    keyFile: args.keyFile,
+  };
+  credentialService.set(cred);
   setTimeout(() => {
-    kdbxService.reload()
-  }, 1000)
-
-})
+    kdbxService.reload();
+  }, 1000);
+});
 
 ipc.handle('getKdbxCredential', async (event, args) => {
-  let cred = credentialService.get(args.filePath)
-  return cred
-})
+  let cred = credentialService.get(args.filePath);
+  return cred;
+});

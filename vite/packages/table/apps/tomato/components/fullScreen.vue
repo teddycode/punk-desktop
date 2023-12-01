@@ -1,49 +1,52 @@
 <template>
   <teleport to="body">
-    <img :src="this.backgroundImage.path" alt="" class="pop-container"/>
+    <img class="pop-container" :src="this.backgroundImage.path" alt="" />
     <div class="box">
-      <div style="width: 100%;">
+      <div style="width: 100%">
         <div class="title">番茄时间</div>
         <div class="time">{{ displayNum(minutes) }}:{{ displayNum(seconds) }}</div>
         <div class="title">今日番茄时间</div>
         <div class="tomato-box">
-          <Icon v-for="index in this.tomatoNum" :key="index" class="ml-2 pointer" icon="fluent-emoji:tomato"
-                style="font-size: 40px;"/>
+          <Icon
+            icon="fluent-emoji:tomato"
+            class="ml-2 pointer"
+            style="font-size: 40px"
+            v-for="index in this.tomatoNum"
+            :key="index"
+          />
         </div>
       </div>
       <div class="icon-box">
         <!-- 重新开始 -->
-        <div v-if="!running" class="icon" @click="onPlay">
-          <Icon icon="fluent:play-16-filled"/>
+        <div class="icon" v-if="!running" @click="onPlay">
+          <Icon icon="fluent:play-16-filled" />
         </div>
         <!-- 开始 -->
-        <div v-else-if="running && !isPause" class="icon" @click="onPause">
-          <Icon icon="akar-icons:pause"/>
+        <div class="icon" v-else-if="running && !isPause" @click="onPause">
+          <Icon icon="akar-icons:pause" />
         </div>
         <!-- 暂停 -->
-        <div v-else class="icon" @click="onPause">
-          <Icon icon="fluent:play-16-filled"/>
+        <div class="icon" v-else @click="onPause">
+          <Icon icon="fluent:play-16-filled" />
         </div>
         <!-- 结束 -->
         <div class="icon" @click="onStop">
-          <Icon icon="fluent:stop-16-filled"/>
+          <Icon icon="fluent:stop-16-filled" />
         </div>
         <!-- 退出全屏 -->
         <div class="icon" @click="exit()">
-          <Icon icon="fluent:full-screen-minimize-16-filled"/>
+          <Icon icon="fluent:full-screen-minimize-16-filled" />
         </div>
-
       </div>
     </div>
   </teleport>
 </template>
 <script>
-import { tomatoStore } from '../store'
-import { appStore } from '../../../store'
+import { tomatoStore } from '../store';
+import { appStore } from '../../../store';
 
-import { Icon } from '@iconify/vue'
-import { mapActions, mapState, mapWritableState } from 'pinia'
-
+import { Icon } from '@iconify/vue';
+import { mapActions, mapState, mapWritableState } from 'pinia';
 export default {
   components: {
     Icon,
@@ -52,20 +55,17 @@ export default {
   watch: {},
   computed: {
     ...mapWritableState(tomatoStore, ['hours', 'minutes', 'seconds', 'isPause', 'running', 'tomatoNum', 'isPause']),
-    ...mapState(appStore, ['userInfo', 'backgroundImage'])
-
+    ...mapState(appStore, ['userInfo', 'backgroundImage']),
   },
-  mounted () {
-
-  },
-  data () {
+  mounted() {},
+  data() {
     return {
       optAction: false,
       autoTime: null,
       src: '',
       blurs: 'blur(10px}',
       zoom: '100%',
-    }
+    };
   },
   methods: {
     ...mapActions(tomatoStore, ['onPlay', 'onStop', 'onPause', 'onPlay', 'exit']),
@@ -73,15 +73,15 @@ export default {
     //     this.$emit("exit");
     // },
     // 时间格式
-    displayNum (num) {
+    displayNum(num) {
       if (num < 10) {
-        return '0' + num
+        return '0' + num;
       } else {
-        return num
+        return num;
       }
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -103,7 +103,6 @@ export default {
   // -webkit-backdrop-filter: blur(5px);
   transform: scale(1.2);
 }
-
 .box {
   z-index: 99919;
   position: fixed;
@@ -116,16 +115,13 @@ export default {
   align-items: center;
   flex-wrap: wrap;
 }
-
 .title {
-
   font-size: 24px;
-  color: rgba(255, 255, 255, 0.60);
+  color: rgba(255, 255, 255, 0.6);
   font-weight: 400;
   width: 100%;
   text-align: center;
 }
-
 .time {
   width: 100%;
   font-family: Oswald-SemiBold;
@@ -134,17 +130,15 @@ export default {
   text-align: center;
   font-weight: 600;
 }
-
 .icon-box {
   display: flex;
   justify-content: space-between;
   width: 300px;
 }
-
 .icon {
   width: 64px;
   height: 64px;
-  background: rgba(0, 0, 0, 0.30);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 35.2px;
   display: flex;
   justify-content: center;
@@ -153,25 +147,23 @@ export default {
 }
 
 .icon:hover {
-  background: rgba(0, 0, 0, 0.60);
+  background: rgba(0, 0, 0, 0.6);
 }
 
 .icon svg {
   font-size: 30px;
 }
-
 .tomato-box {
   margin-top: 20px;
   display: flex;
   width: 100%;
   justify-content: center;
 }
-
 .tomato-box .tomato-icon {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.60);
+  background: rgba(0, 0, 0, 0.6);
   line-height: 40px;
   margin-left: 20px;
   text-align: center;

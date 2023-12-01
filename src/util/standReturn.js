@@ -1,25 +1,24 @@
 const standReturn = {
-
-  success (data = {}) {
+  success(data = {}) {
     return {
       status: 1,
-      data
-    }
+      data,
+    };
   },
-  failure (data, info = '') {
+  failure(data, info = '') {
     return {
       status: 0,
       data,
-      info
+      info,
+    };
+  },
+  autoReturn(result) {
+    if (result.code === 1000) {
+      return standReturn.success(result.data);
+    } else {
+      return standReturn.failure(result.data);
     }
   },
-  autoReturn (result) {
-    if (result.code === 1000) {
-      return standReturn.success(result.data)
-    } else {
-      return standReturn.failure(result.data)
-    }
-  }
-}
+};
 
-module.exports = standReturn
+module.exports = standReturn;

@@ -1,4 +1,4 @@
-const userModel = require('../../../src/model/userModel')
+const userModel = require('../../../src/model/userModel');
 const tpl = `
 <div style="margin-top: 100px">
  <h1 style="font-size: 18px;margin:auto;margin-top: 20px;margin-bottom:10px;text-align: center">
@@ -18,52 +18,51 @@ const tpl = `
       <a-button @click="doEnter" :disabled="this.pwd===''" :type="this.pwd!==''?'primary':'default'">确定</a-button>
       </div>
 </div>
-`
+`;
 const EnterPwd = {
   template: tpl,
-  data () {
+  data() {
     return {
       user: {
-        user_info: {}
+        user_info: {},
       },
       pwd: '',
-      shake: 0
-    }
+      shake: 0,
+    };
   },
-  async mounted () {
-    let user = await userModel.get({ uid: this.$route.params.uid })
+  async mounted() {
+    let user = await userModel.get({ uid: this.$route.params.uid });
     if (user) {
-      this.user = user
+      this.user = user;
     } else {
-      console.error('user can\'t find')
+      console.error("user can't find");
     }
     setTimeout(() => {
-      document.getElementById('pwdInput').focus()
-    }, 200)
+      document.getElementById('pwdInput').focus();
+    }, 200);
   },
   methods: {
-    async doEnter () {
-      let right = await userModel.compareEnterPwd(this.pwd, this.user.uid)
+    async doEnter() {
+      let right = await userModel.compareEnterPwd(this.pwd, this.user.uid);
       if (right) {
-        this.$router.replace({ name: 'space', params: { uid: this.user.uid } })
+        this.$router.replace({ name: 'space', params: { uid: this.user.uid } });
       } else {
-        let timer
-        let i = 0
+        let timer;
+        let i = 0;
         timer = setInterval(() => {
-          this.shake = ((i % 3) - 1) * 60
-          i++
+          this.shake = ((i % 3) - 1) * 60;
+          i++;
           if (i === 5) {
-            clearInterval(timer)
+            clearInterval(timer);
           }
-        }, 50)
-
+        }, 50);
       }
     },
 
-    goLogin () {
-      ipc.send('login')
-    }
-  }
-}
+    goLogin() {
+      ipc.send('login');
+    },
+  },
+};
 
-module.exports = EnterPwd
+module.exports = EnterPwd;

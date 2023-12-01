@@ -1,31 +1,23 @@
 <template>
-  <div :class="typeCalss" class="w-full h-full no-darg">
+  <div class="w-full h-full no-darg" :class="typeCalss">
     <a-input
-        ref="inputRef"
-        v-model:value="searchValue"
-        :class="typeCalss"
-        :placeholder="placeholder"
-        class="xt-text w-full no-darg h-full"
-        spellcheck="false"
-        @blur="handleBlur"
-        @change="handleChange"
-        @focus="handleFocus"
-        @input="handleInput"
-        @keyup="handleKeyUp"
-        @keydown.enter.exact.prevent="handleEnter"
+      ref="inputRef"
+      spellcheck="false"
+      class="xt-text w-full no-darg h-full"
+      :class="typeCalss"
+      :placeholder="placeholder"
+      v-model:value="searchValue"
+      @input="handleInput"
+      @keydown.enter.exact.prevent="handleEnter"
+      @focus="handleFocus"
+      @blur="handleBlur"
+      @change="handleChange"
+      @keyup="handleKeyUp"
     >
-      <template #addonBefore>
-        <slot name="addonBefore"></slot>
-      </template>
-      <template #addonAfter>
-        <slot name="addonAfter"></slot>
-      </template>
-      <template #prefix>
-        <slot name="prefix"></slot>
-      </template>
-      <template #suffix>
-        <slot name="suffix"></slot>
-      </template>
+      <template #addonBefore> <slot name="addonBefore"></slot></template>
+      <template #addonAfter> <slot name="addonAfter"></slot> </template>
+      <template #prefix> <slot name="prefix"></slot> </template>
+      <template #suffix> <slot name="suffix"></slot></template>
     </a-input>
   </div>
 </template>
@@ -34,16 +26,16 @@
 export default {
   name: 'XtInput',
   computed: {
-    typeCalss () {
+    typeCalss() {
       if (this.type) {
-        return 'xt-bg-2  rounded-xl'
+        return 'xt-bg-2  rounded-xl';
       }
     },
   },
-  data () {
+  data() {
     return {
       searchValue: this.modelValue,
-    }
+    };
   },
   props: {
     type: {
@@ -65,71 +57,71 @@ export default {
         return {
           space: false, // 去除空格
           number: false, // 只能输入数字
-        }
+        };
       },
     },
   },
-  mounted () {
+  mounted() {
     if (this.focus) {
       this.$nextTick(() => {
-        this.$refs.inputRef.focus()
-      })
+        this.$refs.inputRef.focus();
+      });
     }
   },
   methods: {
-    limitNumber (event) {
-      this.searchValue = event.target.value.replace(/\D/g, '')
+    limitNumber(event) {
+      this.searchValue = event.target.value.replace(/\D/g, '');
     },
-    limitSpace (event) {
-      this.searchValue = event.target.value.replace(/\s/g, '')
+    limitSpace(event) {
+      this.searchValue = event.target.value.replace(/\s/g, '');
     },
-    handleInput (event) {
+    handleInput(event) {
       if (this.limit.space) {
-        this.limitSpace(event)
+        this.limitSpace(event);
       }
       if (this.limit.number) {
-        this.limitNumber(event)
+        this.limitNumber(event);
       }
 
       if (this.text) {
       }
-      this.$emit('input', event)
+      this.$emit('input', event);
     },
-    handleEnter (event) {
+    handleEnter(event) {
       if (this.text) {
       }
-      this.$emit('enter', event)
+      this.$emit('enter', event);
     },
-    handleFocus (event) {
+    handleFocus(event) {
       if (this.text) {
       }
-      this.$emit('focus', event)
+      this.$emit('focus', event);
     },
-    handleBlur (event) {
+    handleBlur(event) {
       if (this.text) {
       }
-      this.$emit('blur', event)
+      this.$emit('blur', event);
     },
-    handleChange (event) {
+    handleChange(event) {
       if (this.text) {
       }
-      this.$emit('change', event)
+      this.$emit('change', event);
     },
-    handleKeyUp (event) {
+    handleKeyUp(event) {
       if (this.text) {
       }
-      this.$emit('keyup', event)
+      this.$emit('keyup', event);
     },
   },
   watch: {
-    searchValue (newV) {
-      this.$emit('update:modelValue', newV)
+    searchValue(newV) {
+      this.$emit('update:modelValue', newV);
     },
-    modelValue (newV) {
-      this.searchValue = newV
+    modelValue(newV) {
+      this.searchValue = newV;
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -138,26 +130,21 @@ export default {
   padding: 0;
   border: 0;
 }
-
 :deep(.ant-input) {
   color: var(--primary-text);
-
   &:focus {
     box-shadow: none;
   }
-
   border: none;
   background: none;
   font-size: 16px !important;
 }
-
 :deep(.ant-input-affix-wrapper) {
   height: 100%;
   background: none;
   border: 0;
   box-shadow: none;
 }
-
 :deep(.ant-input-group) {
   height: 100%;
 }

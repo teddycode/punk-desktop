@@ -1,44 +1,55 @@
 <template>
-  <a-modal v-model:visible="giftVisible" :bodyStyle="{borderRadius:'12px',padding:'12px',}" :closable="false"
-           :footer="null"
-           :header="null" :height="0" :width="480"
+  <a-modal
+    v-model:visible="giftVisible"
+    :bodyStyle="{ borderRadius: '12px', padding: '12px' }"
+    :closable="false"
+    :footer="null"
+    :header="null"
+    :height="0"
+    :width="480"
   >
     <!-- 赠送方式 -->
     <template v-if="giftShow === false">
       <div class="w-full h-full flex-col flex mb-6">
-        <div class="mb-3 h-12 flex ">
-          <div class="flex items-center justify-center" style="width: 90%;">
-            <span class="avatar-font" style="color: var(--primary-text);">收银台</span>
+        <div class="mb-3 h-12 flex">
+          <div class="flex items-center justify-center" style="width: 90%">
+            <span class="avatar-font" style="color: var(--primary-text)">收银台</span>
           </div>
-          <div class="w-12 flex items-center pointer justify-center h-12 rounded-lg active-button"
-               style="color: var(--secondary-text);background: var(--secondary-bg);" @click="giftVisible = false"
+          <div
+            class="w-12 flex items-center pointer justify-center h-12 rounded-lg active-button"
+            style="color: var(--secondary-text); background: var(--secondary-bg)"
+            @click="giftVisible = false"
           >
-            <Icon icon="guanbi" style="font-size: 0.5715em;"></Icon>
+            <Icon icon="guanbi" style="font-size: 0.5715em"></Icon>
           </div>
         </div>
       </div>
       <div class="flex flex-col mx-7">
-        <span class="avatar-font mb-4" style="color: var(--primary-text);">选择购买方式</span>
+        <span class="avatar-font mb-4" style="color: var(--primary-text)">选择购买方式</span>
         <div class="flex flex-col">
           <!-- 现金方式 -->
-          <div class="w-full px-6 flex pointer items-center active-button justify-between py-5 mb-4 rounded-xl"
-               style="background: var(--secondary-bg);" @click="cashPay"
+          <div
+            class="w-full px-6 flex pointer items-center active-button justify-between py-5 mb-4 rounded-xl"
+            style="background: var(--secondary-bg)"
+            @click="cashPay"
           >
             <!-- @click="pricePay" -->
-            <span class="avatar-font" style="color: var(--secondary-text);">金额</span>
+            <span class="avatar-font" style="color: var(--secondary-text)">金额</span>
             <div class="flex items-center justify-center">
-              <span class="avatar-score mr-4" style="color: var(--primary-text);">￥{{ needPayAvatar.price }}</span>
-              <Icon icon="xiangyou" style="font-size: 0.4765em;color: var(--primary-text);"></Icon>
+              <span class="avatar-score mr-4" style="color: var(--primary-text)">￥{{ needPayAvatar.price }}</span>
+              <Icon icon="xiangyou" style="font-size: 0.4765em; color: var(--primary-text)"></Icon>
             </div>
           </div>
           <!-- 积分方式 -->
-          <div class="w-full px-6 flex pointer active-button items-center justify-between py-5 mb-4 rounded-xl"
-               style="background: var(--secondary-bg);" @click="pointPay"
+          <div
+            class="w-full px-6 flex pointer active-button items-center justify-between py-5 mb-4 rounded-xl"
+            style="background: var(--secondary-bg)"
+            @click="pointPay"
           >
-            <span class="avatar-font" style="color: var(--secondary-text);">积分（可用：2000）</span>
+            <span class="avatar-font" style="color: var(--secondary-text)">积分（可用：2000）</span>
             <div class="flex items-center justify-center">
-              <span class="avatar-score mr-4" style="color: var(--primary-text);">199积分</span>
-              <Icon icon="xiangyou" style="font-size: 0.4765em;color: var(--primary-text);"></Icon>
+              <span class="avatar-score mr-4" style="color: var(--primary-text)">199积分</span>
+              <Icon icon="xiangyou" style="font-size: 0.4765em; color: var(--primary-text)"></Icon>
             </div>
           </div>
         </div>
@@ -48,30 +59,43 @@
     <!-- 用户选择界面 -->
     <template v-else-if="isBilling === false">
       <div class="w-full h-full flex justify-between pb-10">
-        <div class="flex items-center justify-center pointer w-12 h-12 rounded-lg active-button"
-             style="color: var(--secondary-text);background: var(--secondary-bg);" @click="giftShow = false">
-          <Icon icon="xiangzuo" style="font-size: 0.5715em;"></Icon>
+        <div
+          class="flex items-center justify-center pointer w-12 h-12 rounded-lg active-button"
+          style="color: var(--secondary-text); background: var(--secondary-bg)"
+          @click="giftShow = false"
+        >
+          <Icon icon="xiangzuo" style="font-size: 0.5715em"></Icon>
         </div>
         <div class="flex items-center justify-center">
-          <span class="avatar-font" style="color: var(--primary-text);">选择用户</span>
+          <span class="avatar-font" style="color: var(--primary-text)">选择用户</span>
         </div>
-        <div class="flex items-center justify-center pointer w-12 h-12 rounded-lg active-button"
-             style="color: var(--secondary-text);background: var(--secondary-bg);" @click="giftVisible = false">
-          <Icon icon="guanbi" style="font-size: 0.5715em;"></Icon>
+        <div
+          class="flex items-center justify-center pointer w-12 h-12 rounded-lg active-button"
+          style="color: var(--secondary-text); background: var(--secondary-bg)"
+          @click="giftVisible = false"
+        >
+          <Icon icon="guanbi" style="font-size: 0.5715em"></Icon>
         </div>
       </div>
       <!-- 搜索输入框 -->
       <div class="flex flex-col px-7">
-        <a-input v-model:value="userNickName" allow-clear class="h-12 rounded-xl mb-4" placeholder="输入昵称、UID搜索"
-                 @change="searchGiftUser"/>
+        <a-input
+          v-model:value="userNickName"
+          allow-clear
+          class="h-12 rounded-xl mb-4"
+          placeholder="输入昵称、UID搜索"
+          @change="searchGiftUser"
+        />
       </div>
       <template v-if="isSearch === false">
         <div class="flex flex-col px-7">
           <span class="pl-1 mb-4 secondary-title">我的小队成员</span>
-          <div class=" flex flex-wrap items-start">
-            <div v-for="user in memberDevoteDisplay" :class="{'avatar-status':teamIndex === user.uid}"
-                 class="flex rounded-lg pointer avatar-bg mr-2 mb-3 flex-col items-center justify-center"
-                 @click="giftTeamMember(user)"
+          <div class="flex flex-wrap items-start">
+            <div
+              v-for="user in memberDevoteDisplay"
+              :class="{ 'avatar-status': teamIndex === user.uid }"
+              class="flex rounded-lg pointer avatar-bg mr-2 mb-3 flex-col items-center justify-center"
+              @click="giftTeamMember(user)"
             >
               <UserAvatar :avatar="user.userInfo.avatar" :rare="rarity"></UserAvatar>
               <div class="avatar-nickname mt-2.5">{{ user.userInfo.nickname }}</div>
@@ -89,21 +113,27 @@
     <!-- 最后的结算界面 -->
     <template v-else>
       <div class="w-full h-full flex justify-between pb-10">
-        <div class="flex items-center justify-center pointer w-12 h-12 rounded-lg active-button"
-             style="color: var(--secondary-text);background: var(--secondary-bg);" @click="isBilling = false">
-          <Icon icon="xiangzuo" style="font-size: 0.5715em;"></Icon>
+        <div
+          class="flex items-center justify-center pointer w-12 h-12 rounded-lg active-button"
+          style="color: var(--secondary-text); background: var(--secondary-bg)"
+          @click="isBilling = false"
+        >
+          <Icon icon="xiangzuo" style="font-size: 0.5715em"></Icon>
         </div>
         <div class="flex items-center justify-center">
-          <span class="avatar-font" style="color: var(--primary-text);">收银台</span>
+          <span class="avatar-font" style="color: var(--primary-text)">收银台</span>
         </div>
-        <div class="flex items-center justify-center pointer w-12 h-12 rounded-lg active-button"
-             style="color: var(--secondary-text);background: var(--secondary-bg);" @click="giftVisible = false">
-          <Icon icon="guanbi" style="font-size: 0.5715em;"></Icon>
+        <div
+          class="flex items-center justify-center pointer w-12 h-12 rounded-lg active-button"
+          style="color: var(--secondary-text); background: var(--secondary-bg)"
+          @click="giftVisible = false"
+        >
+          <Icon icon="guanbi" style="font-size: 0.5715em"></Icon>
         </div>
       </div>
       <template v-if="billingWay === 0">
         <div class="flex flex-col px-7 mb-4">
-          <div class="flex items-center rounded-lg p-4" style="background: var(--secondary-bg);">
+          <div class="flex items-center rounded-lg p-4" style="background: var(--secondary-bg)">
             <span class="secondary-title">赠送给:</span>
             <a-avatar :size="32" :src="uid.url" class="mx-5"></a-avatar>
             <span class="gift-name">{{ uid.name }}</span>
@@ -113,7 +143,7 @@
       </template>
       <template v-else>
         <div class="flex flex-col px-7 mb-4">
-          <div class="flex items-center rounded-lg p-4" style="background: var(--secondary-bg);">
+          <div class="flex items-center rounded-lg p-4" style="background: var(--secondary-bg)">
             <span class="secondary-title">赠送给:</span>
             <a-avatar :size="32" :src="uid.url" class="mx-5"></a-avatar>
             <span class="gift-name">{{ uid.name }}</span>
@@ -126,75 +156,76 @@
 </template>
 
 <script>
-import UserAvatar from '../small/UserAvatar.vue'
-import PaymentMoney from './PaymentMoney.vue'
-import PointPayment from './PointPayment.vue'
+import UserAvatar from '../small/UserAvatar.vue';
+import PaymentMoney from './PaymentMoney.vue';
+import PointPayment from './PointPayment.vue';
 
 export default {
   name: 'GiftModal',
   components: {
     UserAvatar,
     PaymentMoney,
-    PointPayment
+    PointPayment,
   },
   props: {
     needPayAvatar: {
       type: Object,
-      default: () => {
-      }
+      default: () => {},
     },
     memberDevoteDisplay: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
 
-  data () {
+  data() {
     return {
       giftVisible: false,
       giftShow: false, // 选择赠送方式
       isSearch: false, // 是否搜索用户
       userNickName: '', // 搜索用户昵称
       rarity: 0,
-      teamIndex: '',  // 点击选中用户状态
+      teamIndex: '', // 点击选中用户状态
       isBilling: false, // 是否结算
       billingWay: '',
-      uid: {}
-    }
+      uid: {},
+    };
   },
 
   methods: {
-    openGiftModal () {
-      this.giftVisible = true
+    openGiftModal() {
+      this.giftVisible = true;
     },
-    pointPay () {  // 积分方式赠送
-      this.giftShow = true
-      this.billingWay = 1
+    pointPay() {
+      // 积分方式赠送
+      this.giftShow = true;
+      this.billingWay = 1;
     },
-    cashPay () {  // 现金方式赠送
-      this.giftShow = true
-      this.billingWay = 0
+    cashPay() {
+      // 现金方式赠送
+      this.giftShow = true;
+      this.billingWay = 0;
     },
-    searchGiftUser () {  // 搜索需要将头像赠送的用户回调事件
+    searchGiftUser() {
+      // 搜索需要将头像赠送的用户回调事件
       if (this.userNickName !== '') {
-        this.isSearch = true
+        this.isSearch = true;
       } else {
-        this.isSearch = false
+        this.isSearch = false;
       }
     },
-    giftTeamMember (user) {
-      this.teamIndex = user.uid
-      this.isBilling = true
-      this.uid.url = user.userInfo.avatar
-      this.uid.name = user.userInfo.nickname
-    }
-  }
-}
+    giftTeamMember(user) {
+      this.teamIndex = user.uid;
+      this.isBilling = true;
+      this.uid.url = user.userInfo.avatar;
+      this.uid.name = user.userInfo.nickname;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 .avatar-font {
-
   font-size: 16px;
   font-weight: 500;
 }
@@ -217,7 +248,6 @@ export default {
 }
 
 .secondary-title {
-
   font-size: 14px;
   color: var(--secondary-text);
   font-weight: 400;
@@ -230,14 +260,12 @@ export default {
 }
 
 .avatar-nickname {
-
   font-size: 12px;
   color: var(--primary-text);
   font-weight: 400;
 }
 
 .gift-name {
-
   font-size: 16px;
   color: var(--primary-text);
   font-weight: 400;

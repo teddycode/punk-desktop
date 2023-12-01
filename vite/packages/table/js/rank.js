@@ -8,7 +8,7 @@ export const onLineList = [
     totalDuration: 1453,
     netDuration: 1341,
     team: '铁匠铺',
-    icon: '../../../../public/img/rankingList/rocket.png'
+    icon: '../../../../public/img/rankingList/rocket.png',
   },
   {
     id: 2,
@@ -18,7 +18,7 @@ export const onLineList = [
     totalDuration: 53,
     netDuration: 2011,
     team: '铁匠铺',
-    icon: '../../../../public/img/rankingList/handshake.png'
+    icon: '../../../../public/img/rankingList/handshake.png',
   },
   {
     id: 3,
@@ -28,7 +28,7 @@ export const onLineList = [
     totalDuration: 13,
     netDuration: 1011,
     team: '',
-    icon: ''
+    icon: '',
   },
   {
     id: 4,
@@ -109,8 +109,8 @@ export const onLineList = [
     netDuration: 1052,
     team: '铁匠铺',
     icon: '../../../../public/img/rankingList/mantelpiece.png',
-  }
-]
+  },
+];
 // 我的在线榜排行
 export const myRanking = {
   id: 20,
@@ -120,8 +120,8 @@ export const myRanking = {
   totalDuration: 1113,
   netDuration: 1011,
   team: '铁匠铺',
-  icon: '../../../../public/img/rankingList/rocket.png'
-}
+  icon: '../../../../public/img/rankingList/rocket.png',
+};
 // 小队榜
 export const teamList = [
   {
@@ -141,7 +141,7 @@ export const teamList = [
         netDuration: 1341,
         team: '铁匠铺',
         icon: '../../../../public/img/rankingList/rocket.png',
-        captain: true
+        captain: true,
       },
       {
         id: 2,
@@ -151,7 +151,7 @@ export const teamList = [
         totalDuration: 1253,
         netDuration: 1241,
         team: '铁匠铺',
-        icon: '../../../../public/img/rankingList/handshake.png'
+        icon: '../../../../public/img/rankingList/handshake.png',
       },
       {
         id: 3,
@@ -171,7 +171,7 @@ export const teamList = [
         totalDuration: 1253,
         netDuration: 1241,
         team: '铁匠铺',
-        icon: '../../../../public/img/rankingList/handshake.png'
+        icon: '../../../../public/img/rankingList/handshake.png',
       },
       {
         id: 5,
@@ -181,9 +181,9 @@ export const teamList = [
         totalDuration: 1253,
         netDuration: 1241,
         team: '铁匠铺',
-        icon: '../../../../public/img/rankingList/handshake.png'
+        icon: '../../../../public/img/rankingList/handshake.png',
       },
-    ]
+    ],
   },
   {
     id: 2,
@@ -202,7 +202,7 @@ export const teamList = [
         netDuration: 1341,
         team: '铁匠铺',
         icon: '../../../../public/img/rankingList/rocket.png',
-        captain: true
+        captain: true,
       },
       {
         id: 2,
@@ -212,9 +212,9 @@ export const teamList = [
         totalDuration: 1253,
         netDuration: 1241,
         team: '铁匠铺',
-        icon: '../../../../public/img/rankingList/handshake.png'
+        icon: '../../../../public/img/rankingList/handshake.png',
       },
-    ]
+    ],
   },
   {
     id: 3,
@@ -233,7 +233,7 @@ export const teamList = [
         netDuration: 1341,
         team: '铁匠铺',
         icon: '../../../../public/img/rankingList/rocket.png',
-        captain: true
+        captain: true,
       },
       {
         id: 2,
@@ -243,9 +243,9 @@ export const teamList = [
         totalDuration: 1253,
         netDuration: 1241,
         team: '铁匠铺',
-        icon: '../../../../public/img/rankingList/handshake.png'
+        icon: '../../../../public/img/rankingList/handshake.png',
       },
-    ]
+    ],
   },
   {
     id: 4,
@@ -264,7 +264,7 @@ export const teamList = [
         netDuration: 1341,
         team: '铁匠铺',
         icon: '../../../../public/img/rankingList/rocket.png',
-        captain: true
+        captain: true,
       },
       {
         id: 2,
@@ -274,11 +274,11 @@ export const teamList = [
         totalDuration: 1253,
         netDuration: 1241,
         team: '铁匠铺',
-        icon: '../../../../public/img/rankingList/handshake.png'
+        icon: '../../../../public/img/rankingList/handshake.png',
       },
-    ]
+    ],
   },
-]
+];
 // 我的小队榜排行
 export const myTeam = {
   id: 54,
@@ -297,7 +297,7 @@ export const myTeam = {
       netDuration: 1341,
       team: '铁匠铺',
       icon: '../../../../public/img/rankingList/rocket.png',
-      captain: true
+      captain: true,
     },
     {
       id: 2,
@@ -307,10 +307,10 @@ export const myTeam = {
       totalDuration: 1253,
       netDuration: 1241,
       team: '铁匠铺',
-      icon: '../../../../public/img/rankingList/handshake.png'
+      icon: '../../../../public/img/rankingList/handshake.png',
     },
-  ]
-}
+  ],
+};
 // 邀请榜
 export const inviteList = [
   {
@@ -320,7 +320,7 @@ export const inviteList = [
     nickname: 'Victor Ruiz',
     invite: 354,
     team: '铁匠铺',
-    icon: '../../../../public/img/rankingList/rocket.png'
+    icon: '../../../../public/img/rankingList/rocket.png',
   },
   {
     id: 2,
@@ -329,7 +329,7 @@ export const inviteList = [
     nickname: 'Edith Harvey',
     invite: 222,
     team: '铁匠铺',
-    icon: '../../../../public/img/rankingList/handshake.png'
+    icon: '../../../../public/img/rankingList/handshake.png',
   },
   {
     id: 3,
@@ -338,7 +338,7 @@ export const inviteList = [
     nickname: 'Russell Morgan',
     invite: 111,
     team: '',
-    icon: ''
+    icon: '',
   },
   {
     id: 4,
@@ -357,8 +357,8 @@ export const inviteList = [
     invite: 11,
     team: '铁匠铺',
     icon: '../../../../public/img/rankingList/mantelpiece.png',
-  }
-]
+  },
+];
 // 我的邀请榜排行
 export const myInvite = {
   id: 7,
@@ -367,8 +367,8 @@ export const myInvite = {
   nickname: 'Victor Ruiz',
   invite: 99,
   team: '铁匠铺',
-  icon: '../../../../public/img/rankingList/rocket.png'
-}
+  icon: '../../../../public/img/rankingList/rocket.png',
+};
 // 签到榜
 export const signInList = [
   {
@@ -378,7 +378,7 @@ export const signInList = [
     nickname: 'Victor Ruiz',
     signInTime: '00:00',
     team: '铁匠铺',
-    icon: '../../../../public/img/rankingList/rocket.png'
+    icon: '../../../../public/img/rankingList/rocket.png',
   },
   {
     id: 2,
@@ -387,7 +387,7 @@ export const signInList = [
     nickname: 'Edith Harvey',
     signInTime: '00:01',
     team: '铁匠铺',
-    icon: '../../../../public/img/rankingList/handshake.png'
+    icon: '../../../../public/img/rankingList/handshake.png',
   },
   {
     id: 3,
@@ -396,7 +396,7 @@ export const signInList = [
     nickname: 'Russell Morgan',
     signInTime: '00:10',
     team: '',
-    icon: ''
+    icon: '',
   },
   {
     id: 4,
@@ -415,8 +415,8 @@ export const signInList = [
     signInTime: '12:00',
     team: '铁匠铺',
     icon: '../../../../public/img/rankingList/mantelpiece.png',
-  }
-]
+  },
+];
 // 我的签到榜排行
 export const mySignIn = {
   id: 5,
@@ -425,5 +425,5 @@ export const mySignIn = {
   nickname: 'Victor Ruiz',
   signInTime: '12:00',
   team: '铁匠铺',
-  icon: '../../../../public/img/rankingList/rocket.png'
-}
+  icon: '../../../../public/img/rankingList/rocket.png',
+};

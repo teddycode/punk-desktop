@@ -1,27 +1,25 @@
 class Base {
-  moduleName = '' //模块名，用于挂载
+  moduleName = ''; //模块名，用于挂载
 
-  constructor (moduleName) {
-    this.moduleName = moduleName
+  constructor(moduleName) {
+    this.moduleName = moduleName;
   }
 
   /**
    * 挂载IPC
    */
-  bindIPC () {
+  bindIPC() {}
 
-  }
-
-  on (channel, cb) {
+  on(channel, cb) {
     this._on('api.' + this.moduleName + '.' + channel, (event, args) => {
-      let instance = windowManager.get(args['_name'])
-      cb(event, args['args'], instance)
-    })
+      let instance = windowManager.get(args['_name']);
+      cb(event, args['args'], instance);
+    });
   }
 
-  _on (channel, cb) {
-    require('electron').ipcMain.on(channel, cb)
+  _on(channel, cb) {
+    require('electron').ipcMain.on(channel, cb);
   }
 }
 
-module.exports = Base
+module.exports = Base;

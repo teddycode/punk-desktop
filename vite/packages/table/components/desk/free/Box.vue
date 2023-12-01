@@ -3,24 +3,24 @@
   <!-- <test :data="data" :role="role"></test> -->
   <!-- <CPULineChart></CPULineChart> -->
   <component
-      :is="data?.name"
-      :customData="data?.customData"
-      :customIndex="data?.id"
-      :desk="currentDesk"
-      :role="role"
-      :style="{ backgroundColor }"
-      class="box"
+    :is="data?.name"
+    :customData="data?.customData"
+    :customIndex="data?.id"
+    :desk="currentDesk"
+    :role="role"
+    :style="{ backgroundColor }"
+    class="box"
   ></component>
   <!-- </div> -->
 </template>
 
 <script>
-import CPULineChart from '../../widgets/supervisory/CPULineChart.vue'
-import CPUFourCard from '../../widgets/supervisory/CPUFourCard.vue'
-import InternalList from '../../widgets/supervisory/InternalList.vue'
-import SmallCPUCard from '../../widgets/supervisory/SmallCPUCard.vue'
-import SmallGPUCard from '../../widgets/supervisory/SmallGPUCard.vue'
-import MyIcons from '../../widgets/myIcons/index.vue'
+import CPULineChart from '../../widgets/supervisory/CPULineChart.vue';
+import CPUFourCard from '../../widgets/supervisory/CPUFourCard.vue';
+import InternalList from '../../widgets/supervisory/InternalList.vue';
+import SmallCPUCard from '../../widgets/supervisory/SmallCPUCard.vue';
+import SmallGPUCard from '../../widgets/supervisory/SmallGPUCard.vue';
+import MyIcons from '../../widgets/myIcons/index.vue';
 
 export default {
   components: {
@@ -46,14 +46,14 @@ export default {
     currentDesk: {},
   },
   computed: {
-    backgroundColor () {
-      return this.yellow ? 'yellow' : ''
+    backgroundColor() {
+      return this.yellow ? 'yellow' : '';
     },
-    role () {
-      return this.preview ? 'BoxPreview' : 'Box'
+    role() {
+      return this.preview ? 'BoxPreview' : 'Box';
     },
   },
-}
+};
 </script>
 
 <style lang="less" scoped>

@@ -1,178 +1,129 @@
 <template>
-  <vue-custom-scrollbar :settings="settingsScroller" style="height:100%;" @touchstart.stop @touchmove.stop
-                        @touchend.stop>
-    <div v-for="(item,index) in list" class="flex flex-col mb-3 p-4 rounded-lg"
-         style=" background: var(--secondary-bg);position: relative;"
-         @contextmenu.stop="noticeMenu(item,$event)"
-    >
-      <div class="flex justify-between mb-4">
-        <div class="flex items-center">
-          <a-avatar :size="24" :src="item.doc.content.icon"></a-avatar>
-          <span class="pl-3">{{ item.doc.content.title }}</span>
-        </div>
-        <div class="flex items-center pointer active-button" @click="delNotice(item)">
-          <Icon icon="close-circle-fill" style="font-size: 1.5em;color: var(--secondary-text);"></Icon>
-        </div>
+  <div class="w-full h-full flex items-center justify-center" v-if="filterList.length === 0">
+    <EmptyStatus text="暂时没有消息通知" />
+  </div>
+  <div class="w-full h-full py-2 xt-text" v-else>
+    <vue-custom-scrollbar :settings="settingsScroller" style="height: 94%">
+      <div v-for="item in filterList" class="mb-3">
+        <xt-menu name="name" @contextmenu="revID = item" :menus="menus">
+          <div class="w-full h-full flex flex-col p-4 xt-bg-2 rounded-xl">
+            <div class="flex justify-between mb-3">
+              <div class="flex">
+                <a-avatar :size="24" shape="circle" :src="item.content.icon"></a-avatar>
+                <div class="font-16 font-400 xt-font xt-text ml-3">
+                  {{ item.content.title }}
+                </div>
+              </div>
+              <xt-button w="21" h="21" @click="delSingleHistoryNotice(item)">
+                <div class="flex items-center justify-center">
+                  <DetailIcon
+                    icon="akar-icons:circle-x-fill"
+                    class="category-button pointer"
+                    style="font-size: 1.25rem; color: var(--secondary-text)"
+                  />
+                </div>
+              </xt-button>
+            </div>
+            <div class="font-16 font-400 xt-font xt-text mb-2">
+              {{ item.content.body }}
+            </div>
+            <div class="flex justify-between">
+              <div class="flex items-center justify-center">{{ formatTime(item.createTime) }}</div>
+              <xt-button
+                class="category-button"
+                style="
+                  width: 56px;
+                  height: 32px;
+                  background: var(--active-secondary-bg) !important;
+                  color: var(--active-bg);
+                  border-radius: 8px !important;
+                "
+                @click="reviewMessage(item.content.conversationID)"
+                >查看</xt-button
+              >
+            </div>
+          </div>
+        </xt-menu>
       </div>
-      <div class="font-400 mb-1" style="color: var(--secondary-text);">{{ item.doc.content.body }}</div>
-
-      <div class="flex items-center justify-between">
-        <span class="font-400"
-              style="color:var(--secondary-text);">{{ formatTime(parseInt(item.doc.content.time) * 1000) }}</span>
-        <div class="font-14 rounded-lg pointer px-3.5 py-1.5 active-button"
-             style="color:var(--active-bg);background: var(--active-secondary-bg);"
-             @click="noticeDetail">
-          查看
-        </div>
-      </div>
-
-    </div>
-  </vue-custom-scrollbar>
-
-  <a-menu v-if="showMenu"
-          :style="{position: 'fixed',top:`${contextMenuPosition.y}px`,left:`${contextMenuPosition.x}px`,zIndex: '999'}"
-          class="dropdown-menu rounded-lg flex flex-col items-center justify-center" style="width: 120px;">
-    <a-menu-item v-for="(item,index) in rightMenuControls" style="color:var(--secondary-text);"
-                 @click="handleMenuItemClick(item)">{{ item.title }}
-    </a-menu-item>
-  </a-menu>
-
+    </vue-custom-scrollbar>
+  </div>
 </template>
 
 <script>
+import { mapActions, mapWritableState } from 'pinia';
+import { formatTime } from '../../util';
+import { Icon as DetailIcon } from '@iconify/vue';
+import { chatStore } from '../../store/chat';
+import { noticeStore } from './store/noticeStore';
 
-import { mapActions } from 'pinia'
-import { noticeStore } from '../../store/notice'
-import { formatTime } from '../../util'
+import EmptyStatus from '../chat/components/empty/EmptyStatus.vue';
 
 export default {
-  props: ['list'],
+  props: ['list', 'type'],
 
-  data () {
+  components: {
+    DetailIcon,
+    EmptyStatus,
+  },
+
+  data() {
     return {
-      showMenu: false, // 是否显示
-      contextMenuPosition: { x: 0, y: 0 }, // 右键菜单的位置
-      rightMenuControls: [{ title: '打开应用', name: 'Open' }, { title: '删除通知', name: 'remove' }],
-      delItem: '',  // 接收单个消息通知删除下标
+      revID: '',
+      menus: [
+        {
+          name: '打开应用',
+          callBack: () => {},
+          newIcon: 'fluent:open-20-filled',
+        },
+        {
+          name: '删除通知',
+          callBack: (item) => {
+            // console.log("删除", this.revID);
+            this.delSingleHistoryNotice(this.revID);
+          },
+          newIcon: 'akar-icons:trash-can',
+        },
+      ],
       settingsScroller: {
         useBothWheelAxes: true,
         swipeEasing: true,
         suppressScrollY: false,
         suppressScrollX: true,
-        wheelPropagation: true
+        wheelPropagation: true,
       },
-    }
+    };
+  },
+
+  computed: {
+    filterList() {
+      if (this.type === 'system') {
+        return this.list;
+      } else {
+        const messageList = this.list.filter((item) => {
+          if (item.content.type === 'message') {
+            return item;
+          }
+        });
+        return messageList;
+      }
+    },
   },
 
   methods: {
-    ...mapActions(noticeStore, ['removeIMChatData', 'loadNoticeDB']),
     formatTime,
-    removeNotification () { // 删除指定消息通知
-      this.removeIMChatData(this.delItem)
-      this.loadNoticeDB()
+    ...mapActions(chatStore, ['updateConversation']),
+    ...mapActions(noticeStore, ['delSingleHistoryNotice']),
+    reviewMessage(conversationID) {
+      this.updateConversation(conversationID), this.$emit('close');
+      this.$router.push({ name: 'chatMain' });
+      window.$TUIKit.TUIServer.TUIConversation.getConversationProfile(conversationID).then((imResponse) => {
+        // 通知 TUIConversation 添加当前会话
+        // Notify TUIConversation to toggle the current conversation
+        window.$TUIKit.TUIServer.TUIConversation.handleCurrentConversation(imResponse.data.conversation);
+      });
     },
-
-    noticeMenu (item, evt) {  // 鼠标右键显示下拉菜单
-      evt.preventDefault()
-      this.delItem = item
-
-      // 获取鼠标点击位置
-      const x = evt.clientX
-      const y = evt.clientY
-
-      // 设置右键菜单的位置和可见状态
-      this.contextMenuPosition = { x, y }
-      this.showMenu = true
-      // 点击其他地方时隐藏右键菜单
-      document.addEventListener('click', this.handleOutsideClick)
-    },
-
-    handleOutsideClick () {
-      // 隐藏右键菜单
-      this.showMenu = false
-      // 移除监听器
-      document.removeEventListener('click', this.handleOutsideClick)
-    },
-
-    handleMenuItemClick (item) {
-      if (item.name === 'remove') {  // 右键下拉菜单删除
-        this.removeIMChatData(this.delItem)
-        this.loadNoticeDB()
-      } else {
-        // this.$router.push({name:'gameIndex'}) 模拟消息打开应用通知机制
-      }
-    },
-
-    goNotice () {  // 查看消息通知跳转机制
-      // this.$router.push({name:'gameIndex'}) 模拟消息打开应用通知机制
-    },
-
-    isStringEmpty (item) {  // 判断用户来源
-      // if(item.from !== null && item.from.avatarUrl !== ''){
-      //   return true
-      // }else{
-      //   return false
-      // }
-    },
-
-    noticeDetail () {
-      this.$router.push({ name: 'chatMain' })
-      this.$emit('closeMessage')
-    }
-  }
-
-}
+  },
+};
 </script>
 
-<style lang="scss" scoped>
-.font-400 {
-  font-size: 16px;
-  font-weight: 400;
-}
-
-.font-500 {
-  font-size: 16px;
-  font-weight: 500;
-}
-
-
-.dropdown-menu {
-  background-color: var(--secondary-bg);
-  border: 1px solid var(--divider);
-  padding: 5px;
-  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);
-}
-
-.active-button {
-  &:active {
-    filter: brightness(0.8);
-    opacity: 0.8;
-  }
-
-  &:hover {
-    opacity: 0.8;
-  }
-}
-
-.delete-button {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-}
-
-.font-14 {
-
-  font-size: 14px;
-  font-weight: 400;
-}
-</style>
+<style lang="scss" scoped></style>

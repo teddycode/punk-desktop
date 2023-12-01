@@ -1,23 +1,30 @@
 <template>
-  <div v-if="showMyProp" class="fixed inset-0 home-blur xt-mask" style="z-index: 99;">
+  <div v-if="showMyProp" class="fixed inset-0 home-blur xt-mask" style="z-index: 99">
     <div
-        class="xt-modal fixed text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  rounded-lg flex flex-col justify-evenly items-center"
-        style="padding: 0 16px;width: 656px;height: 480px;background:  #282828">
+      class="xt-modal fixed text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg flex flex-col justify-evenly items-center"
+      style="padding: 0 16px; width: 656px; height: 480px; background: #282828"
+    >
       <div class="box-head">
         <span class="title">我的道具</span>
         <div class="head-icon xt-text" @click="onBack">
-          <Icon icon="guanbi" style="font-size: 1.5em;"></Icon>
+          <Icon icon="guanbi" style="font-size: 1.5em"></Icon>
         </div>
       </div>
-      <div v-if="frameList.length===0">
-        <a-empty description="暂无可用头像框" image="/img/test/load-ail.png" style="margin-top:40%"/>
+      <div v-if="frameList.length === 0">
+        <a-empty description="暂无可用头像框" image="/img/test/load-ail.png" style="margin-top: 40%" />
       </div>
       <div class="prop-scroll">
         <div v-for="item in frameList" :key="item.id">
           <tippy :interactive="true" :z-index="99" trigger="mouseenter">
             <div class="prop-item">
-              <a-avatar :size="80" :src="item.image" alt="" class="w-full h-full object-cover " shape="square"
-                        style=""></a-avatar>
+              <a-avatar
+                :size="80"
+                :src="item.image"
+                alt=""
+                class="w-full h-full object-cover"
+                shape="square"
+                style=""
+              ></a-avatar>
               <span class="rank-font">{{ item.alias }}</span>
               <div v-if="item.equipped" class="prop-text">使用中</div>
             </div>
@@ -26,26 +33,33 @@
                 <div class="mb-2">
                   <a-row>
                     <a-col :span="10">
-                      <a-avatar :size="100" :src="item.image" alt="" class="w-full h-full object-cover "
-                                shape="square" style=""></a-avatar>
+                      <a-avatar
+                        :size="100"
+                        :src="item.image"
+                        alt=""
+                        class="w-full h-full object-cover"
+                        shape="square"
+                        style=""
+                      ></a-avatar>
                     </a-col>
                     <a-col :span="14" class="text-left">
                       <div class="mt-6">
-                      <span :style="titleTagColor(item.detail.rarity)" class="avatar-font mr-2 font-bold">
-                        {{ item.alias }}
-                      </span>
-                        <span :style="avatarTagColor(item.detail.rarity)"
-                              class="h-6 rank-font rounded py-0.5 px-2 my-2.5">
-                        {{ textTag(item.detail.rarity) }}
-                      </span>
+                        <span :style="titleTagColor(item.detail.rarity)" class="avatar-font mr-2 font-bold">
+                          {{ item.alias }}
+                        </span>
+                        <span
+                          :style="avatarTagColor(item.detail.rarity)"
+                          class="h-6 rank-font rounded py-0.5 px-2 my-2.5"
+                        >
+                          {{ textTag(item.detail.rarity) }}
+                        </span>
                       </div>
                       <div class="xt-text-2 mt-1" style="font-size: 12px">
                         {{ item.summary }}
                       </div>
-
                     </a-col>
                   </a-row>
-                  <div class="xt-bg-2 mb-4" style="width:100%;border-radius: 12px;">
+                  <div class="xt-bg-2 mb-4" style="width: 100%; border-radius: 12px">
                     <div class="text-content">
                       <span>获取方式</span>
                       <span>{{ avatarGainMethodText(item.detail.gainMethod) }}</span>
@@ -61,22 +75,33 @@
                     <div v-if="item.ownersCount" class="text-content">
                       <span>已售</span>
                       <span class="flex items-center">
-                      <span class="mr-2">{{ item.ownersCount[1] }} 件</span>
-                      <a-avatar-group>
-                        <a-avatar v-for="owner in item.ownersCount[0]" :src="owner.userInfo.avatar" class="pointer"
-                                  @click="showUserCard(owner.uid,owner.userInfo)"></a-avatar>
-                      </a-avatar-group>
-                    </span>
+                        <span class="mr-2">{{ item.ownersCount[1] }} 件</span>
+                        <a-avatar-group>
+                          <a-avatar
+                            v-for="owner in item.ownersCount[0]"
+                            :src="owner.userInfo.avatar"
+                            class="pointer"
+                            @click="showUserCard(owner.uid, owner.userInfo)"
+                          ></a-avatar>
+                        </a-avatar-group>
+                      </span>
                     </div>
                   </div>
 
-                  <a-button v-if="!item.equipped" class="rounded-xl h-12 w-full"
-                            style="margin-right: 0;color: var(--active-text);" type="primary"
-                            @click="equip(item)">
+                  <a-button
+                    v-if="!item.equipped"
+                    class="rounded-xl h-12 w-full"
+                    style="margin-right: 0; color: var(--active-text)"
+                    type="primary"
+                    @click="equip(item)"
+                  >
                     使用
                   </a-button>
-                  <a-button v-else class="rounded-xl h-12  w-full xt-text-2"
-                            style="background: rgba(80,139,254,0.20);color: var(--disable-text);">
+                  <a-button
+                    v-else
+                    class="rounded-xl h-12 w-full xt-text-2"
+                    style="background: rgba(80, 139, 254, 0.2); color: var(--disable-text)"
+                  >
                     使用中
                   </a-button>
                 </div>
@@ -96,35 +121,35 @@ import {
   avatarTagColor,
   drawHeaderImage,
   textTag,
-  titleTagColor
-} from "../../js/common/avatar";
-import {mapActions, mapState} from "pinia";
-import {frameStore} from "../../store/avatarFrame";
-import {message} from 'ant-design-vue'
-import {appStore} from "../../store";
-import {teamStore} from "../../store/team";
-import FrameAvatar from "../avatar/FrameAvatar.vue";
-import Modal from "../Modal.vue";
+  titleTagColor,
+} from '../../js/common/avatar';
+import { mapActions, mapState } from 'pinia';
+import { frameStore } from '../../store/avatarFrame';
+import { message } from 'ant-design-vue';
+import { appStore } from '../../store';
+import { teamStore } from '../../store/team';
+import FrameAvatar from '../avatar/FrameAvatar.vue';
+import Modal from '../Modal.vue';
 
 export default {
-  name: "MyFrames",
-  components: {Modal, FrameAvatar},
+  name: 'MyFrames',
+  components: { Modal, FrameAvatar },
   props: {
     showMyProp: {
       type: Boolean,
-      default: () => false
+      default: () => false,
     },
   },
   data() {
     return {
       currentItem: {},
-      downloadVisible: false,//下载
+      downloadVisible: false, //下载
       frameList: [],
       canvas: null,
       ctx: null,
       ownersCount: 0,
-      frames: {}
-    }
+      frames: {},
+    };
   },
   computed: {
     ...mapState(teamStore, ['team']),
@@ -132,40 +157,39 @@ export default {
     ...mapState(frameStore, ['frameData']),
   },
   mounted() {
-    let frames = JSON.parse(localStorage.getItem('frames')) || {}
-    if ((Object.keys(this.frameData).length) && JSON.stringify(frames) === JSON.stringify(this.frameData)) {
-      this.frames = frames
+    let frames = JSON.parse(localStorage.getItem('frames')) || {};
+    if (Object.keys(this.frameData).length && JSON.stringify(frames) === JSON.stringify(this.frameData)) {
+      this.frames = frames;
       // console.log('相等',this.frames)
     } else {
       // console.log('不相等')
-      this.getFrameGoods()
+      this.getFrameGoods();
     }
 
-    this.getMyFrames().then(rs => {
+    this.getMyFrames().then((rs) => {
       if (rs.status) {
-        this.frameList = rs.data.map(itemOwner => {
+        this.frameList = rs.data.map((itemOwner) => {
           return {
             ...itemOwner.item,
-          }
-        })
+          };
+        });
       }
-    })
+    });
   },
   watch: {
     showMyProp(val) {
       if (val === true) {
         if (!!this.frames) {
-          this.frames = this.frameData
-          localStorage.setItem('frames', JSON.stringify(this.frameData))
+          this.frames = this.frameData;
+          localStorage.setItem('frames', JSON.stringify(this.frameData));
         }
         this.frames.list.map((item) => {
-          this.frameList.forEach(f => {
+          this.frameList.forEach((f) => {
             if (item.alias === f.alias) {
-              f.ownersCount = item.ownersCount
+              f.ownersCount = item.ownersCount;
             }
-          })
-        })
-
+          });
+        });
       }
     },
   },
@@ -173,71 +197,68 @@ export default {
     ...mapActions(frameStore, ['getMyFrames', 'equipFrame', 'getFrameGoods']),
     ...mapActions(appStore, ['getUserInfo', 'showUserCard']),
     ...mapActions(teamStore, ['refreshTeamUsers']),
-    avatarTagColor, textTag, titleTagColor, avatarBgColor, avatarGainMethodText,
+    avatarTagColor,
+    textTag,
+    titleTagColor,
+    avatarBgColor,
+    avatarGainMethodText,
     async equip(item) {
-      let rs = await this.equipFrame(item.nanoid)
+      let rs = await this.equipFrame(item.nanoid);
       if (rs && rs.status) {
-        this.frameList.forEach(i => {
-          i.equipped = false
-        })
-        item.equipped = true
-        this.getUserInfo()
-        this.refreshTeamUsers()
-        message.success('装备成功。')
+        this.frameList.forEach((i) => {
+          i.equipped = false;
+        });
+        item.equipped = true;
+        this.getUserInfo();
+        this.refreshTeamUsers();
+        message.success('装备成功。');
       } else {
-        message.error('装备失败，请稍后再试。')
+        message.error('装备失败，请稍后再试。');
       }
     },
     download(item) {
-
-      this.currentItem = item
+      this.currentItem = item;
 
       drawHeaderImage(128, 128, 80, 128, item.image, this.userInfo.avatar, (canvas, ctx) => {
-        document.getElementById('downloadContainer').appendChild(canvas)
-        this.canvas = canvas
-        this.ctx = ctx
-      })
-      this.downloadVisible = true
-
+        document.getElementById('downloadContainer').appendChild(canvas);
+        this.canvas = canvas;
+        this.ctx = ctx;
+      });
+      this.downloadVisible = true;
     },
     async doDownload() {
-
-      let filters = {name: '图片', extensions: ['png']}
+      let filters = { name: '图片', extensions: ['png'] };
       let savePath = await tsbApi.dialog.showSaveDialog({
         title: '选择保存位置',
         defaultPath: this.recentFileName,
         message: '选择保存的位置',
         filters: [filters],
-        properties: [
-          'createDirectory',
-          'showOverwriteConfirmation'
-        ]
-      })
-      const base64 = this.canvas.toDataURL('image/png', 1)
+        properties: ['createDirectory', 'showOverwriteConfirmation'],
+      });
+      const base64 = this.canvas.toDataURL('image/png', 1);
 
       function dataURLToBlob(fileDataURL) {
         let arr = fileDataURL.split(','),
-            mime = arr[0].match(/:(.*?);/)[1],
-            bstr = atob(arr[1]),
-            n = bstr.length,
-            u8arr = new Uint8Array(n)
+          mime = arr[0].match(/:(.*?);/)[1],
+          bstr = atob(arr[1]),
+          n = bstr.length,
+          u8arr = new Uint8Array(n);
         while (n--) {
-          u8arr[n] = bstr.charCodeAt(n)
+          u8arr[n] = bstr.charCodeAt(n);
         }
-        return new Blob([u8arr], {type: mime})
+        return new Blob([u8arr], { type: mime });
       }
 
       require('fs').writeFile(savePath, Buffer.from(await dataURLToBlob(base64).arrayBuffer()), (err) => {
         if (err) throw err;
         console.log('The file has been saved!');
       });
-
     },
     onBack() {
-      this.$emit('closeMyProp', false)
-    }
-  }
-}
+      this.$emit('closeMyProp', false);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -310,7 +331,6 @@ export default {
 }
 
 .rank-font {
-
   font-size: 14px;
   color: var(--primary-text);
   font-weight: 500;

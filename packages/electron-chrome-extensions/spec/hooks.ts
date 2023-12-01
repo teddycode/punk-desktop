@@ -1,10 +1,10 @@
-import { ipcMain, BrowserWindow, app, Extension, webContents } from 'electron'
-import * as http from 'http'
-import * as path from 'path'
-import { AddressInfo } from 'net'
-import { ElectronChromeExtensions } from '../dist'
-import { emittedOnce } from './events-helpers'
-import { addCrxPreload, createCrxSession, waitForBackgroundScriptEvaluated } from './crx-helpers'
+import { ipcMain, BrowserWindow, app, Extension, webContents } from 'electron';
+import * as http from 'http';
+import * as path from 'path';
+import { AddressInfo } from 'net';
+import { ElectronChromeExtensions } from '../dist';
+import { emittedOnce } from './events-helpers';
+import { addCrxPreload, createCrxSession, waitForBackgroundScriptEvaluated } from './crx-helpers';
 
 export const useServer = () => {
   const emptyPage = `<!DOCTYPE html>
@@ -15,149 +15,147 @@ export const useServer = () => {
   <body>
   <script>console.log("loaded")</script>
   </body>
-</html>`
+</html>`;
 
   // NB. extensions are only allowed on http://, https:// and ftp:// (!) urls by default.
-  let server: http.Server
-  let url: string
+  let server: http.Server;
+  let url: string;
 
   before(async () => {
     server = http.createServer((req, res) => {
-      res.writeHead(200, { 'Content-Type': 'text/html' })
-      res.end(emptyPage)
-    })
+      res.writeHead(200, { 'Content-Type': 'text/html' });
+      res.end(emptyPage);
+    });
     await new Promise<void>((resolve) =>
       server.listen(0, '127.0.0.1', () => {
-        url = `http://127.0.0.1:${(server.address() as AddressInfo).port}/`
-        resolve()
-      })
-    )
-  })
+        url = `http://127.0.0.1:${(server.address() as AddressInfo).port}/`;
+        resolve();
+      }),
+    );
+  });
   after(() => {
-    server.close()
-  })
+    server.close();
+  });
 
   return {
     getUrl: () => url,
-  }
-}
+  };
+};
 
-const fixtures = path.join(__dirname, 'fixtures')
+const fixtures = path.join(__dirname, 'fixtures');
 
 export const useExtensionBrowser = (opts: {
-  url?: () => string
-  file?: string
-  extensionName: string
-  openDevTools?: boolean
+  url?: () => string;
+  file?: string;
+  extensionName: string;
+  openDevTools?: boolean;
 }) => {
-  let w: Electron.BrowserWindow
-  let extensions: ElectronChromeExtensions
-  let extension: Extension
-  let partition: string
-  let customSession: Electron.Session
+  let w: Electron.BrowserWindow;
+  let extensions: ElectronChromeExtensions;
+  let extension: Extension;
+  let partition: string;
+  let customSession: Electron.Session;
 
   beforeEach(async () => {
-    const sessionDetails = createCrxSession()
+    const sessionDetails = createCrxSession();
 
-    partition = sessionDetails.partition
-    customSession = sessionDetails.session
+    partition = sessionDetails.partition;
+    customSession = sessionDetails.session;
 
-    addCrxPreload(customSession)
+    addCrxPreload(customSession);
 
     extensions = new ElectronChromeExtensions({
       session: customSession,
       async createTab(details) {
-        const tab = (webContents as any).create({ sandbox: true })
-        if (details.url) await tab.loadURL(details.url)
-        return [tab, w!]
+        const tab = (webContents as any).create({ sandbox: true });
+        if (details.url) await tab.loadURL(details.url);
+        return [tab, w!];
       },
-    })
+    });
 
-    extension = await customSession.loadExtension(path.join(fixtures, opts.extensionName))
-    await waitForBackgroundScriptEvaluated(extension, customSession)
+    extension = await customSession.loadExtension(path.join(fixtures, opts.extensionName));
+    await waitForBackgroundScriptEvaluated(extension, customSession);
 
     w = new BrowserWindow({
       show: false,
       webPreferences: { session: customSession, nodeIntegration: false, contextIsolation: true },
-    })
+    });
 
     if (opts.openDevTools) {
-      w.webContents.openDevTools({ mode: 'detach' })
+      w.webContents.openDevTools({ mode: 'detach' });
     }
 
-    extensions.addTab(w.webContents, w)
+    extensions.addTab(w.webContents, w);
 
     if (opts.file) {
-      await w.loadFile(opts.file)
+      await w.loadFile(opts.file);
     } else if (opts.url) {
-      await w.loadURL(opts.url())
+      await w.loadURL(opts.url());
     }
-  })
+  });
 
   afterEach(() => {
     if (!w.isDestroyed()) {
       if (w.webContents.isDevToolsOpened()) {
-        w.webContents.closeDevTools()
+        w.webContents.closeDevTools();
       }
 
-      w.destroy()
+      w.destroy();
     }
-  })
+  });
 
   return {
     get window() {
-      return w
+      return w;
     },
     get webContents() {
-      return w.webContents
+      return w.webContents;
     },
     get extensions() {
-      return extensions
+      return extensions;
     },
     get extension() {
-      return extension
+      return extension;
     },
     get session() {
-      return customSession
+      return customSession;
     },
     get partition() {
-      return partition
+      return partition;
     },
 
     crx: {
       async exec(method: string, ...args: any[]) {
-        const p = emittedOnce(ipcMain, 'success')
-        const rpcStr = JSON.stringify({ type: 'api', method, args })
-        const safeRpcStr = rpcStr.replace(/'/g, "\\'")
-        const js = `exec('${safeRpcStr}')`
-        await w.webContents.executeJavaScript(js)
-        const [, result] = await p
-        return result
+        const p = emittedOnce(ipcMain, 'success');
+        const rpcStr = JSON.stringify({ type: 'api', method, args });
+        const safeRpcStr = rpcStr.replace(/'/g, "\\'");
+        const js = `exec('${safeRpcStr}')`;
+        await w.webContents.executeJavaScript(js);
+        const [, result] = await p;
+        return result;
       },
 
       async eventOnce(eventName: string) {
-        const p = emittedOnce(ipcMain, 'success')
-        await w.webContents.executeJavaScript(
-          `exec('${JSON.stringify({ type: 'event-once', name: eventName })}')`
-        )
-        const [, results] = await p
+        const p = emittedOnce(ipcMain, 'success');
+        await w.webContents.executeJavaScript(`exec('${JSON.stringify({ type: 'event-once', name: eventName })}')`);
+        const [, results] = await p;
 
         if (typeof results === 'string') {
-          throw new Error(results)
+          throw new Error(results);
         }
 
-        return results
+        return results;
       },
     },
-  }
-}
+  };
+};
 
 export const useBackgroundPageLogging = () => {
   app.on('web-contents-created', (event, wc) => {
     if (wc.getType() === 'backgroundPage') {
       wc.on('console-message', (ev, level, message, line, sourceId) => {
-        console.log(`(${sourceId}) ${message}`)
-      })
+        console.log(`(${sourceId}) ${message}`);
+      });
     }
-  })
-}
+  });
+};

@@ -1,66 +1,60 @@
 <template>
-  <div :style="{ marginBottom:copyNum==12?'20px':'12px'}" class="card-item">
-
+  <div :style="{ marginBottom: copyNum == 12 ? '20px' : '12px' }" class="card-item">
     <div :style="{ width: showImg == false ? '260px' : '' }" class="left">
-      <div class="title" style="color: var(--primary-text);" @click="goNews">
+      <div class="title" style="color: var(--primary-text)" @click="goNews">
         {{ newsMsgList.newsMsgList.title }}
       </div>
       <div class="bottom">
-        <div class="flex date" style="text-align: left; flex-shrink: 0;">
+        <div class="flex date" style="text-align: left; flex-shrink: 0">
           <!-- <span style="color: var(--secondary-text); ">{{ timer[0] }} {{ timer[1] }}</span> -->
-          <div v-for="(item,index) in timer" class="xt-text-2 " style="margin-right: 2px;">{{ item }}</div>
+          <div v-for="(item, index) in timer" class="xt-text-2" style="margin-right: 2px">{{ item }}</div>
         </div>
         <div class="name">
-          <span style="color: var(--secondary-text);">{{ newsMsgList.newsMsgList.author_name }}</span>
+          <span style="color: var(--secondary-text)">{{ newsMsgList.newsMsgList.author_name }}</span>
         </div>
       </div>
-
     </div>
     <div v-if="showImg" :style="{ backgroundImage: img ? `url(${img})` : '' }" class="right" @click="goNews">
       <!-- <img :src="img" alt="" class="image"> -->
     </div>
-
   </div>
 </template>
 
-<script lang='ts' setup>
-import {computed, ref} from 'vue'
+<script lang="ts" setup>
+import { computed, ref } from 'vue';
 // vite\packages\table\js\common\browser.ts
-import browser from '../../../js/common/browser'
+import browser from '../../../js/common/browser';
 
-let showImg = ref(true)
+let showImg = ref(true);
 const newsMsgList = defineProps({
   newsMsgList: {
     type: Object,
   },
   copyNum: {
-    type: Number
-  }
-
-})
+    type: Number,
+  },
+});
 const goNews = () => {
-
-  browser.openInUserSelect(newsMsgList.newsMsgList.url)
-}
+  browser.openInUserSelect(newsMsgList.newsMsgList.url);
+};
 const timer = computed(() => {
-  let [updateDate, updateTime] = newsMsgList.newsMsgList.date.split(' ')
-  let [item, ...arr] = updateDate.split('-')
-  let [hour, min, _] = updateTime.split(':')
-  const Utime = [hour, min].join(':')
-  const uDate = arr.join("-")
-  return [uDate, Utime]
-})
+  let [updateDate, updateTime] = newsMsgList.newsMsgList.date.split(' ');
+  let [item, ...arr] = updateDate.split('-');
+  let [hour, min, _] = updateTime.split(':');
+  const Utime = [hour, min].join(':');
+  const uDate = arr.join('-');
+  return [uDate, Utime];
+});
 
 const img = computed(() => {
   if (newsMsgList.newsMsgList.thumbnail_pic_s) {
-    return newsMsgList.newsMsgList.thumbnail_pic_s
+    return newsMsgList.newsMsgList.thumbnail_pic_s;
   } else {
-    return showImg.value = false
+    return (showImg.value = false);
   }
-})
-
+});
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .card-item {
   width: 222px;
   height: 68px;
@@ -92,7 +86,6 @@ const img = computed(() => {
       font-weight: 400;
       text-align: left;
       cursor: pointer;
-
     }
 
     .bottom {
@@ -106,7 +99,6 @@ const img = computed(() => {
 
       .date {
         span {
-
           font-size: 12px;
           font-weight: 400;
         }
@@ -125,19 +117,16 @@ const img = computed(() => {
         text-overflow: ellipsis;
 
         span {
-
           font-size: 12px;
-          color: rgba(255, 255, 255, 0.40);
+          color: rgba(255, 255, 255, 0.4);
           font-weight: 400;
-
         }
       }
-
     }
   }
 
   .right {
-    background: rgba(0, 0, 0, 0.30);
+    background: rgba(0, 0, 0, 0.3);
     border-radius: 10px;
     width: 67px;
     height: 67px;

@@ -1,6 +1,4 @@
-<template>
-  <div class="xt-bb w-full"></div>
-</template>
+<template><div class="xt-bb w-full"></div></template>
 
 <script setup></script>
 

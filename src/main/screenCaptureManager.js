@@ -1,16 +1,16 @@
-const desktopCapturer = require('electron').desktopCapturer
+const desktopCapturer = require('electron').desktopCapturer;
 
 class ScreenCaptureManager {
-  async getSource () {
+  async getSource() {
     let sources = await desktopCapturer.getSources({
       types: ['screen', 'window'], // 设定需要捕获的是"屏幕"，还是"窗口"
       thumbnailSize: {
         height: 300, // 窗口或屏幕的截图快照高度
-        width: 300 // 窗口或屏幕的截图快照宽度
+        width: 300, // 窗口或屏幕的截图快照宽度
       },
-      fetchWindowIcons: true // 如果视频源是窗口且有图标，则设置该值可以捕获到的窗口图标
-    })
-    return sources
+      fetchWindowIcons: true, // 如果视频源是窗口且有图标，则设置该值可以捕获到的窗口图标
+    });
+    return sources;
     // .then(sources => {
     //
     //   sources.forEach(source => {
@@ -36,8 +36,6 @@ class ScreenCaptureManager {
     //     // console.log(source.thumbnail)
     //
     //   })})
-
   }
 }
-
-module.exports = ScreenCaptureManager
+module.exports = ScreenCaptureManager;

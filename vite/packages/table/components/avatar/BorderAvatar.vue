@@ -1,34 +1,32 @@
 <!-- 带边框头像组件 -->
 <template>
   <div>
-    <a-avatar :size="avatarSize" :src="avatarUrl" :style="rarityBorderColor(borderSize,rarity)"></a-avatar>
+    <a-avatar :size="avatarSize" :src="avatarUrl" :style="rarityBorderColor(borderSize, rarity)"></a-avatar>
   </div>
 </template>
 
 <script>
-import { rarityBorderColor } from '../../js/common/avatar'
+import { rarityBorderColor } from '../../js/common/avatar';
 
 export default {
   props: {
     avatarUrl: {
-      type: String
+      type: String,
     },
     rarity: {
-      type: Number
+      type: Number,
     },
     borderSize: {
-      type: Number
+      type: Number,
     },
     avatarSize: {
-      type: Number
-    }
+      type: Number,
+    },
   },
   methods: {
     rarityBorderColor,
-  }
-}
+  },
+};
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

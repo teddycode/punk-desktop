@@ -1,10 +1,7 @@
 <template>
   <div>
-    <div
-        class="m-3"
-        style="width: 320px; margin: auto; text-align: center; margin-top: 1.5em; margin-bottom: 0.5em"
-    >
-      <a-text strong style="font-size: 20px; color: black;">任务管理器</a-text>
+    <div class="m-3" style="width: 320px; margin: auto; text-align: center; margin-top: 1.5em; margin-bottom: 0.5em">
+      <a-text strong style="font-size: 20px; color: black">任务管理器</a-text>
       <!--      <HorizontalPanel-->
       <!--          v-model:selectType="currentTab"-->
       <!--          :navList="tabs"-->
@@ -12,7 +9,6 @@
       <!--          @changed="this.key = Date.now()"-->
       <!--          @click.stop-->
       <!--      ></HorizontalPanel>-->
-
     </div>
   </div>
   <!--  <div v-if="currentTab.name === 'screen'">-->
@@ -23,24 +19,18 @@
   <!--  <div v-else>-->
   <div>
     <div style="max-width: 1200px; margin: auto">
-      <RunningApps/>
+      <RunningApps />
     </div>
   </div>
 
   <div class="p-5 text-base no-drag">
-    <div
-        class="w-96 justify-between flex flex-row absolute bottom-8 left-1/2 -translate-x-1/2"
-    >
-      <div
-          v-for="item in listData"
-          class="flex justify-center items-center"
-          style="width: 56px; height: 56px"
-      >
+    <div class="w-96 justify-between flex flex-row absolute bottom-8 left-1/2 -translate-x-1/2">
+      <div v-for="item in listData" class="flex justify-center items-center" style="width: 56px; height: 56px">
         <Icon
-            :icon="item.icon"
-            class="pointer"
-            style="width: 32px; height: 32px; color: white"
-            @click.stop="clickListItem(item)"
+          :icon="item.icon"
+          class="pointer"
+          style="width: 32px; height: 32px; color: white"
+          @click.stop="clickListItem(item)"
         ></Icon>
       </div>
     </div>
@@ -48,17 +38,17 @@
 </template>
 
 <script>
-import navigationData from '../../js/data/tableData'
-import { appsStore } from '../../store/apps'
-import { mapWritableState } from 'pinia'
-import ScreenManage from './ScreenManage.vue'
-import RunningApps from './RunningApps.vue'
-import HorizontalPanel from '../HorizontalPanel.vue'
+import navigationData from '../../js/data/tableData';
+import { appsStore } from '../../store/apps';
+import { mapWritableState } from 'pinia';
+import ScreenManage from './ScreenManage.vue';
+import RunningApps from './RunningApps.vue';
+import HorizontalPanel from '../HorizontalPanel.vue';
 
 export default {
   name: 'ChangeApp',
   components: { HorizontalPanel, RunningApps, ScreenManage },
-  data () {
+  data() {
     return {
       tabs: [
         {
@@ -74,7 +64,7 @@ export default {
         name: 'screen',
         title: '分屏',
       },
-    }
+    };
   },
   props: {
     tab: {
@@ -86,32 +76,28 @@ export default {
       default: false,
     },
   },
-  created () {
-    navigationData.sendThis(this)
+  created() {
+    navigationData.sendThis(this);
   },
-  mounted () {
+  mounted() {
     if (this.tab === 'screen') {
       this.currentTab = {
         name: 'screen',
         title: '分屏',
-      }
+      };
     } else {
       this.currentTab = {
         name: 'apps',
         title: '应用',
-      }
+      };
     }
   },
   computed: {
-    ...mapWritableState(appsStore, [
-      'runningApps',
-      'runningAppsInfo',
-      'runningTableApps',
-    ]),
-    listData () {
-      return navigationData.systemAppList.slice(0, 5)
+    ...mapWritableState(appsStore, ['runningApps', 'runningAppsInfo', 'runningTableApps']),
+    listData() {
+      return navigationData.systemAppList.slice(0, 5);
     },
   },
   methods: {},
-}
+};
 </script>

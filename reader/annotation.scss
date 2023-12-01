@@ -20,7 +20,7 @@
 }
 .annotator-h4 {
   cursor: pointer;
-  color:white;
+  color: white;
   background: rgba(0, 0, 0, 0.3);
 }
 .annotator-h5 {
@@ -38,7 +38,7 @@
   padding-left: 5px;
   border-color: rgba(0, 0, 255, 0.3);
   box-sizing: border-box;
-  font-family: "Segoe UI", "Helvetica Neue", "Helvetica", Arial, sans-serif;
+  font-family: 'Segoe UI', 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
   font-size: 14px;
   line-height: 1.428571429;
   background: white !important;
@@ -47,8 +47,6 @@
   white-space: nowrap;
   /* transition: top .1s; */
 }
-
-
 
 .annotation .color-block {
   margin-top: 5px;
@@ -61,16 +59,16 @@
 }
 
 .annotation .save {
-  &:hover{
+  &:hover {
     box-shadow: 0 0 3px rgb(104, 154, 255);
     color: white;
   }
   font-size: 12px;
   text-decoration: none;
-  background: #1E90FF;
+  background: #1e90ff;
   color: rgba(255, 255, 255, 0.69);
   cursor: pointer;
-  border:solid 1px #1E90FF;
+  border: solid 1px #1e90ff;
   line-height: 16px;
   padding: 3px;
   border-radius: 4px;
@@ -79,24 +77,22 @@
 }
 
 .annotation .delete {
-  &:hover{
+  &:hover {
     box-shadow: 0 0 3px rgba(108, 108, 108, 0.34);
     color: #333;
   }
   cursor: pointer;
   font-size: 12px;
   text-decoration: none;
-  border:solid 1px #ccc;
+  border: solid 1px #ccc;
   line-height: 16px;
   padding: 3px;
   border-radius: 4px;
   margin-right: 10px;
   color: #666;
-
 }
 
-
-.content{
+.content {
   position: relative;
 }
 .ignore,

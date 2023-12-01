@@ -10,7 +10,7 @@
   height: 36px;
 }
 .searchbar-item:after {
-  content: "";
+  content: '';
   clear: both;
   display: block;
 }
@@ -85,7 +85,7 @@
 /* increase button click area
 :before is already used for icon */
 .searchbar-item .action-button:after {
-  content: "";
+  content: '';
   width: 3em;
   height: 2.5em;
   top: -0.25em;
@@ -136,7 +136,7 @@ body.dark-mode.touch .searchbar-item .action-button {
   padding-right: 0.5em;
 }
 .searchbar-item .secondary-text .md-info + .md-info:before {
-  content: "-";
+  content: '-';
   padding: 0 0.3em;
 }
 .searchbar-item .secondary-text {

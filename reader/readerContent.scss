@@ -1,19 +1,23 @@
-body,html {
+body,
+html {
   padding: 0;
   margin: 0;
   font-size: 16px;
   line-height: 2em;
 }
-body[theme='light'],html[theme='light'] {
+body[theme='light'],
+html[theme='light'] {
   background: #f1f1f1;
-  color:rgb(76, 78, 77);
+  color: rgb(76, 78, 77);
 }
-html[theme='dark'],body[theme="dark"] {
+html[theme='dark'],
+body[theme='dark'] {
   background-color: rgb(36, 41, 47);
   color: rgb(180, 180, 180);
 }
 
-html[theme="sepia"],body[theme="sepia"] {
+html[theme='sepia'],
+body[theme='sepia'] {
   background-color: rgb(247, 231, 199);
   color: rgb(56, 40, 28);
 }
@@ -21,7 +25,7 @@ html[theme="sepia"],body[theme="sepia"] {
 iframe {
   display: none;
 }
-html[theme='light'] .reader-main{
+html[theme='light'] .reader-main {
   background: white;
   box-shadow: 0 0 12px #0000001f;
   border-radius: 4px;
@@ -34,14 +38,11 @@ html[theme='light'] .reader-main{
   margin-top: 1em;
 }
 
-
-
 .visually-hidden {
   display: none;
 }
-html[theme='light']
-h1.article-title{
-  color:#292525;
+html[theme='light'] h1.article-title {
+  color: #292525;
 }
 h1.article-title {
   padding-bottom: 0.5rem;
@@ -107,8 +108,8 @@ span > video {
   display: inline-block;
   vertical-align: middle;
 }
-body[theme="dark"] img,
-body[theme="dark"] picture {
+body[theme='dark'] img,
+body[theme='dark'] picture {
   filter: brightness(0.95);
 }
 p {
@@ -125,16 +126,12 @@ a {
   font-size: 1em;
   text-decoration: none;
 }
-body[theme="dark"] a {
+body[theme='dark'] a {
   color: #65a9ed;
 }
 
 a:hover {
-  background-image: linear-gradient(
-    to bottom,
-    transparent 70%,
-    currentColor 0%
-  );
+  background-image: linear-gradient(to bottom, transparent 70%, currentColor 0%);
   background-size: 1px 3px;
   background-position: 0px 1.03em;
   background-repeat: repeat-x;
@@ -165,12 +162,12 @@ pre {
   padding: 0.5em;
   background: rgba(0, 0, 0, 0.025);
 }
-body[theme="dark"] pre {
+body[theme='dark'] pre {
   background: rgba(0, 0, 0, 0.33);
 }
 
 q,
-blockquote{
+blockquote {
   position: relative;
   display: block;
   margin: 15px auto;
@@ -190,10 +187,10 @@ table {
 
 @media all and (min-width: 600px) {
   /* TODO find a way to simplify this */
-  [domain*="wikipedia.org"] table:first-child,
-  [domain*="wikipedia.org"] table:first-child + table,
-  [domain*="wikipedia.org"] table:first-child + table + table,
-  [domain*="wikipedia.org"] table:first-child + table + table + table {
+  [domain*='wikipedia.org'] table:first-child,
+  [domain*='wikipedia.org'] table:first-child + table,
+  [domain*='wikipedia.org'] table:first-child + table + table,
+  [domain*='wikipedia.org'] table:first-child + table + table + table {
     width: 50%;
     float: right;
     margin-left: 2em;
@@ -208,8 +205,8 @@ th {
   text-align: center;
 }
 
-body[theme="dark"] td,
-body[theme="dark"] th {
+body[theme='dark'] td,
+body[theme='dark'] th {
   border-color: #444;
 }
 
@@ -239,7 +236,7 @@ sup {
   display: none;
 }
 figure figcaption .credit,
-figure figcaption [itemprop="copyrightHolder"] {
+figure figcaption [itemprop='copyrightHolder'] {
   display: block;
   font-style: italic;
   margin-top: 0.25em;

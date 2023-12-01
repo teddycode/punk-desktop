@@ -1,16 +1,29 @@
 <template>
   <div class="p-0 -mt-8 card content">
     <a-row>
-      <a-col :span="12" style="border-right: 1px solid var(--divider); height: calc(100vh - 5em )">
-        <vue-custom-scrollbar :settings="outerSettings"
-                              class="scroll"
-                              style="position: relative; height: calc(100vh -5em );color: var(--primary-text);">
+      <a-col :span="12" style="border-right: 1px solid var(--divider); height: calc(100vh - 5em)">
+        <vue-custom-scrollbar
+          :settings="outerSettings"
+          class="scroll"
+          style="position: relative; height: calc(100vh -5em); color: var(--primary-text)"
+        >
           <div class="pr-6">
             <div class="mb-4 font-16 xt-text">添加闹钟</div>
-            <div class="mb-4 ">
-              <a-input ref="input" v-model:value="eventValue" allow-clear placeholder="新闹钟"
-                       style="border-radius: 10px;height: 40px; width: 100%;border: 1px solid var(--divider);background-color: var(--secondary-bg); "
-                       @click="$refs.input.select()"/>
+            <div class="mb-4">
+              <a-input
+                ref="input"
+                v-model:value="eventValue"
+                allow-clear
+                placeholder="新闹钟"
+                style="
+                  border-radius: 10px;
+                  height: 40px;
+                  width: 100%;
+                  border: 1px solid var(--divider);
+                  background-color: var(--secondary-bg);
+                "
+                @click="$refs.input.select()"
+              />
             </div>
 
             <div class="mb-4 font-16 xt-text">小时</div>
@@ -28,98 +41,128 @@
                       v-for="(i, index) in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]"
                       style="width: 58px;" class="mb-2 text-center xt-text">{{ index }}</a-radio-button>
               </a-radio-group> -->
-              <div class="flex flex-wrap w-[232px] h-[240px] xt-bg-2 rounded-lg " style="">
+              <div class="flex flex-wrap w-[232px] h-[240px] xt-bg-2 rounded-lg" style="">
                 <div
-                    v-for="(i, index) in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]"
-                    :class="{'active': timeHour === index}"
-                    class="flex items-center justify-center xt-text-2 pointer setting-hour"
-                    style="width: 58px;height: 40px;line-height: 40px;text-align: center;flex-shrink: 0;font-size: 16px;"
-                    @click="timeHour = index">
+                  v-for="(i, index) in [
+                    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
+                  ]"
+                  :class="{ active: timeHour === index }"
+                  class="flex items-center justify-center xt-text-2 pointer setting-hour"
+                  style="
+                    width: 58px;
+                    height: 40px;
+                    line-height: 40px;
+                    text-align: center;
+                    flex-shrink: 0;
+                    font-size: 16px;
+                  "
+                  @click="timeHour = index"
+                >
                   {{ index }}
                 </div>
               </div>
-
             </div>
             <div>
               <div class="mt-4 mb-4 font-16 xt-text">分钟</div>
               <!-- <div class="w-full xt-bg-2" style="border-radius: 10px;border: 1px solid var(--secondary-text);"> -->
-              <a-select v-model:value="timeMinute" :bordered="false"
-                        placeholder="选择分钟"
-                        style="width:100%;  height: 40px; border-radius: 10px;border: 1px solid var(--divider); ">
+              <a-select
+                v-model:value="timeMinute"
+                :bordered="false"
+                placeholder="选择分钟"
+                style="width: 100%; height: 40px; border-radius: 10px; border: 1px solid var(--divider)"
+              >
                 <a-select-option v-for="(i, index) in new Array(60)" :value="index" class="xt-bg xt-text-2">
                   {{ index }}
                 </a-select-option>
               </a-select>
               <!-- </div> -->
-
             </div>
             <div class="w-full mt-4 mb-4">
-              <div class="mt-4 mb-4 font-16 xt-text">
-                重复
-              </div>
+              <div class="mt-4 mb-4 font-16 xt-text">重复</div>
               <RadioTab v-model:selectType="defaultType" :navList="dataType"></RadioTab>
             </div>
             <div>
-              <xt-button class=" font-16 xt-text" style="width: 100%; height: 40px; background-color: var(--active-bg);"
-                         type="primary"
-                         @click="addSettingClock">确认添加
+              <xt-button
+                class="font-16 xt-text"
+                style="width: 100%; height: 40px; background-color: var(--active-bg)"
+                type="primary"
+                @click="addSettingClock"
+                >确认添加
               </xt-button>
             </div>
           </div>
-
         </vue-custom-scrollbar>
       </a-col>
       <a-col :span="12">
-        <vue-custom-scrollbar :settings="outerSettings" class="scroll"
-                              style="position: relative; height: calc(100vh - 10em)">
+        <vue-custom-scrollbar
+          :settings="outerSettings"
+          class="scroll"
+          style="position: relative; height: calc(100vh - 10em)"
+        >
           <div class="pl-4">
             <div class="w-full h-[160px] xt-bg-2 mb-2 p-4 rounded-xl">
               <div class="flex justify-between">
                 <div class="font-16 xt-text-2">显示在状态栏</div>
-                <a-switch v-model:checked="checked" @change="changeSwitchStatus(checked)"/>
+                <a-switch v-model:checked="checked" @change="changeSwitchStatus(checked)" />
               </div>
-              <div class="font-14 xt-text-2 " style="margin-top: 10px;margin-bottom: 10px;">
+              <div class="font-14 xt-text-2" style="margin-top: 10px; margin-bottom: 10px">
                 在顶部状态栏显示最近闹钟时间。
               </div>
               <div>
-                <a-select v-model:value="defaultDataType" :bordered="false"
-                          dropdownSyle=""
-                          style="width:100%;  height: 40px; border-radius: 10px;background-color: var(--primary-bg);"
-                          @select="changeDataType(defaultDataType)">
-                  <a-select-option v-for="(item, index) in selectDataType" :value="index"
-                                   class="xt-bg xt-text-2 selsect-options">
+                <a-select
+                  v-model:value="defaultDataType"
+                  :bordered="false"
+                  dropdownSyle=""
+                  style="width: 100%; height: 40px; border-radius: 10px; background-color: var(--primary-bg)"
+                  @select="changeDataType(defaultDataType)"
+                >
+                  <a-select-option
+                    v-for="(item, index) in selectDataType"
+                    :value="index"
+                    class="xt-bg xt-text-2 selsect-options"
+                  >
                     {{ item.title }}
                   </a-select-option>
                 </a-select>
               </div>
-
-
             </div>
-            <div style="color:var(--primary-text)"> 我的闹钟</div>
-            <a-empty v-if="clockEvent.length === 0" description="暂无闹钟" image="/img/test/load-ail.png"
-                     style="margin-top: 40%;"></a-empty>
+            <div style="color: var(--primary-text)">我的闹钟</div>
+            <a-empty
+              v-if="clockEvent.length === 0"
+              description="暂无闹钟"
+              image="/img/test/load-ail.png"
+              style="margin-top: 40%"
+            ></a-empty>
             <!-- <a-row> -->
-            <div v-for="(item, index) in clockEvent" class="flex items-center" style="margin-top: 0.5em;">
-              <div class="rounded-lg event-list "
-                   style="background: var(--secondary-bg);color: var(--primary-text);width: calc(100% - 20px);height: 56px; ">
-                <div class="card-list ">
+            <div v-for="(item, index) in clockEvent" class="flex items-center" style="margin-top: 0.5em">
+              <div
+                class="rounded-lg event-list"
+                style="
+                  background: var(--secondary-bg);
+                  color: var(--primary-text);
+                  width: calc(100% - 20px);
+                  height: 56px;
+                "
+              >
+                <div class="card-list">
                   <div class="event-title">
                     <span class="font-14 xt-text">{{ item.eventValue }}</span>
-                    <span class="font-12 xt-text-2" style="color:var(--secondary-text)">{{
-                        item.clockType
-                      }}</span>
+                    <span class="font-12 xt-text-2" style="color: var(--secondary-text)">{{ item.clockType }}</span>
                   </div>
                   <span class="font-20">{{ item.dateValue.hours }}:{{ item.dateValue.minutes }}</span>
                 </div>
               </div>
-              <clockIcon class="ml-2 xt-bg xt-text-2 pointer" icon="akar-icons:circle-x-fill"
-                         style="font-size: 18px;" @click="onClockMenuClick">
+              <clockIcon
+                class="ml-2 xt-bg xt-text-2 pointer"
+                icon="akar-icons:circle-x-fill"
+                style="font-size: 18px"
+                @click="onClockMenuClick"
+              >
               </clockIcon>
             </div>
 
             <!-- </a-row> -->
           </div>
-
         </vue-custom-scrollbar>
       </a-col>
     </a-row>
@@ -127,22 +170,22 @@
 </template>
 
 <script>
-import { mapActions, mapWritableState } from 'pinia'
-import { cardStore } from '../../store/card'
-import { topClockSettingStore } from '../../store/topClockSetting'
-import { timeStamp, transDate } from '../../util'
-import { message } from 'ant-design-vue'
-import dayjs from 'dayjs'
-import BackBtn from '../../components/comp/BackBtn.vue'
-import { getDateTime } from '../../../../src/util/dateTime'
-import { Icon as clockIcon } from '@iconify/vue'
-import RadioTab from '../../components/RadioTab.vue'
+import { mapActions, mapWritableState } from 'pinia';
+import { cardStore } from '../../store/card';
+import { topClockSettingStore } from '../../store/topClockSetting';
+import { timeStamp, transDate } from '../../util';
+import { message } from 'ant-design-vue';
+import dayjs from 'dayjs';
+import BackBtn from '../../components/comp/BackBtn.vue';
+import { getDateTime } from '../../../../src/util/dateTime';
+import { Icon as clockIcon } from '@iconify/vue';
+import RadioTab from '../../components/RadioTab.vue';
 
 export default {
   name: 'SetupClock',
   components: { BackBtn, clockIcon, RadioTab },
 
-  data () {
+  data() {
     return {
       outerSettings: {
         useBothWheelAxes: true,
@@ -161,14 +204,14 @@ export default {
       flag: true,
       customIndex: 0,
 
-      timeHour: 0,//时钟设置的小时
-      timeMinute: 0,//时钟设置的分钟
+      timeHour: 0, //时钟设置的小时
+      timeMinute: 0, //时钟设置的分钟
 
-      dateTime: {},//当前时间
-      timer: null,//当前时间更新计时器
+      dateTime: {}, //当前时间
+      timer: null, //当前时间更新计时器
       dataType: [
         { title: '不重复', name: '不重复' },
-        { title: '每天', name: '每天' }
+        { title: '每天', name: '每天' },
       ],
       defaultType: { title: '不重复', name: '不重复' },
       selectDataType: [
@@ -178,27 +221,27 @@ export default {
       ],
       defaultDataType: '显示30分钟内的闹钟',
       checked: true,
-    }
+    };
   },
 
-  mounted () {
+  mounted() {
     if (this.$route.params['name']) {
       // console.log(this.$route.params);
-      this.title = this.$route.params['cname']
-      this.cardType = this.$route.params['name']
-      this.customIndex = this.$route.params['customIndex']
+      this.title = this.$route.params['cname'];
+      this.cardType = this.$route.params['name'];
+      this.customIndex = this.$route.params['customIndex'];
     }
-    this.updateTime()
+    this.updateTime();
     this.timer = setInterval(() => {
-      this.updateTime()
-    }, 1000)
+      this.updateTime();
+    }, 1000);
   },
-  unmounted () {
-    clearInterval(this.timer)
+  unmounted() {
+    clearInterval(this.timer);
   },
   computed: {
     ...mapWritableState(cardStore, ['countdownDay', 'appDate', 'clockEvent', 'chooseType']),
-    ...mapWritableState(topClockSettingStore, ['checkTopClock'])
+    ...mapWritableState(topClockSettingStore, ['checkTopClock']),
   },
   methods: {
     dayjs,
@@ -212,138 +255,137 @@ export default {
       'filterClock',
     ]),
     ...mapActions(topClockSettingStore, ['changeTopClockStatus']),
-    updateTime () {
-      this.dateTime = getDateTime()
+    updateTime() {
+      this.dateTime = getDateTime();
     },
-    addCard () {
+    addCard() {
       if (this.eventValue === '' || this.dateValue === null) {
-        if (this.flag !== true) return
-        this.flag = false
+        if (this.flag !== true) return;
+        this.flag = false;
         setTimeout(() => {
-          message.info('不可为空！')
-          this.flag = true
-        }, 500)
-        return
+          message.info('不可为空！');
+          this.flag = true;
+        }, 500);
+        return;
       }
       this.addCountdownDay({
         eventValue: this.eventValue,
         dateValue: timeStamp(this.dateValue.valueOf()),
-        customIndex: this.customIndex
-      })
+        customIndex: this.customIndex,
+      });
       // this.$router.push({
       //   name: "home",
       // });
-      message.success('添加成功！')
+      message.success('添加成功！');
     },
-    addSettingClock () {
+    addSettingClock() {
       if (this.eventValue === '') {
-        if (this.flag !== true) return
-        this.flag = false
-        message.info('闹钟名称不可为空！')
+        if (this.flag !== true) return;
+        this.flag = false;
+        message.info('闹钟名称不可为空！');
         setTimeout(() => {
-          this.flag = true
-        }, 500)
-        return
+          this.flag = true;
+        }, 500);
+        return;
       }
 
-      let date = new Date(Date.now())
+      let date = new Date(Date.now());
       let timeSpan = {
         day: date.getDate(),
         hours: this.timeHour < 10 ? '0' + this.timeHour : this.timeHour,
         minutes: this.timeMinute < 10 ? '0' + this.timeMinute : this.timeMinute,
         month: date.getMonth() + 1,
         seconds: '00',
-        year: date.getFullYear()
-      }
-      let dateSpan = timeStamp(timeSpan)
+        year: date.getFullYear(),
+      };
+      let dateSpan = timeStamp(timeSpan);
 
       this.addClock({
         clockType: this.defaultType.name,
         eventValue: this.eventValue,
         dateValue: timeSpan,
-        clockTimeStamp: timeSpan
-      })
+        clockTimeStamp: timeSpan,
+      });
       // this.$router.push({
       //   name: "home",
       // });
-      message.success('添加成功！')
+      message.success('添加成功！');
     },
-    onContextMenuClick (e, index) {
-      this.removeCountdownDay(index)
+    onContextMenuClick(e, index) {
+      this.removeCountdownDay(index);
     },
-    onClockMenuClick (e, index) {
-      this.removeClock(index, 1)
+    onClockMenuClick(e, index) {
+      this.removeClock(index, 1);
     },
-    changeSwitchStatus (value) {
-      console.log(this.checked)
-      this.changeTopClockStatus(value)
+    changeSwitchStatus(value) {
+      console.log(this.checked);
+      this.changeTopClockStatus(value);
     },
-    changeDataType (value) {
+    changeDataType(value) {
       // console.log(this.selectDataType[value.title]);
       // console.log(value);
-      let tag = this.selectDataType[value].tag
+      let tag = this.selectDataType[value].tag;
 
-      let temp = this.selectDataType[value].type
-      this.filterClock(tag, temp)
-    }
+      let temp = this.selectDataType[value].type;
+      this.filterClock(tag, temp);
+    },
   },
-  mounted () {
+  mounted() {
     // console.log(this.chooseType, 'this.chooseType--isUndefined');
     // console.log(this.checkTopClock,'this.checkTopClock');
-    this.checked = this.checkTopClock
+    this.checked = this.checkTopClock;
     if (this.chooseType == undefined) {
-      this.defaultDataType = '显示30分钟内的闹钟'
+      this.defaultDataType = '显示30分钟内的闹钟';
     } else {
-      let data
+      let data;
       for (let i = 0; i < this.selectDataType.length; i++) {
         if (this.selectDataType[i].type == this.chooseType) {
-          data = this.selectDataType[i].title
+          data = this.selectDataType[i].title;
         }
       }
       // console.log(data, 'beforeMount');
-      this.defaultDataType = data
+      this.defaultDataType = data;
     }
-
   },
   /*
       目前的主要问题是无法保存正确的页面数据，逻辑是没问题，但是表面的数据无法留存
   */
   watch: {
     checkTopClock: {
-      handler (value) {
-        this.checked = value
-      }
+      handler(value) {
+        this.checked = value;
+      },
     },
     chooseType: {
-      handler (value) {
+      handler(value) {
         if (value == undefined) {
-          this.defaultDataType = '显示30分钟内的闹钟'
+          this.defaultDataType = '显示30分钟内的闹钟';
         } else {
           // let data=this.selectDataType.filter(item=>item.type==value)
-          let data
+          let data;
           for (let i = 0; i < this.selectDataType.length; i++) {
             if (this.selectDataType[i].type == value) {
-              data = this.selectDataType[i].title
+              data = this.selectDataType[i].title;
             }
           }
           // console.log(data, 'clock-value-change');
-          this.defaultDataType = data
+          this.defaultDataType = data;
         }
       },
-      deep: true
-    }
-  }
-}
+      deep: true,
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 .active {
-  background: rgba(80, 139, 254, 0.20);
+  background: rgba(80, 139, 254, 0.2);
 }
 
 .setting-hour {
   &:hover {
-    background: rgba(80, 139, 254, 0.20);
+    background: rgba(80, 139, 254, 0.2);
     font-size: 30px;
   }
 
@@ -389,15 +431,12 @@ export default {
   // :nth-child(24)){
   //     border-bottom:1px solid var(--divider);
   // }
-
-
 }
 
 .event-list {
   padding: 0.2em 0.5em;
 
   width: 100%;
-
 
   .card-list {
     width: 100%;
@@ -425,7 +464,6 @@ export default {
 :deep(.ant-radio-button-wrapper) {
   // border: 1px solid var(--primary-text);
   border-bottom: none;
-
 }
 
 :deep(.ant-radio-button-wrapper) {
@@ -476,7 +514,6 @@ export default {
   // border-radius: 10px !important;
   height: 100%;
   border-radius: 10px;
-
 }
 
 :deep(.ant-select-single .ant-select-selector .ant-select-selection-item) {
@@ -484,13 +521,11 @@ export default {
 }
 
 .font-14 {
-
   font-size: 14px;
   font-weight: 400;
 }
 
 .font-12 {
-
   font-size: 12px;
   font-weight: 400;
 }
@@ -553,7 +588,6 @@ export default {
   // border-radius: 10px !important;
   height: 100%;
   border-radius: 10px;
-
 }
 
 :deep(.ant-select-option) {
@@ -568,7 +602,6 @@ export default {
   color: var(--primary-text);
 
   &::placeholder {
-
     font-size: 14px;
     font-weight: 400;
     color: var(--primary-text);
@@ -587,9 +620,7 @@ export default {
   padding-top: 0px;
 }
 
-
 .font-16 {
-
   font-size: 16px;
   font-weight: 400;
 }

@@ -1,194 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8"/>
-    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <head>
+    <meta charset="UTF-8" />
+    <meta content="IE=edge" http-equiv="X-UA-Compatible" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>全局搜索</title>
-    <link href="../../ext/reset.css" rel="stylesheet"/>
-    <link href="../../ext/flex-class.css" rel="stylesheet"/>
+    <link href="../../ext/reset.css" rel="stylesheet" />
+    <link href="../../ext/flex-class.css" rel="stylesheet" />
     <script src="../../ext/vue/vue.js"></script>
     <script src="../../ext/vue/antd.min.js"></script>
     <script src="../../ext/vue/vuex.js"></script>
-    <link href="../../ext/vue/antd.min.css" rel="stylesheet"/>
-    <link href="./style.css" rel="stylesheet"/>
+    <link href="../../ext/vue/antd.min.css" rel="stylesheet" />
+    <link href="./style.css" rel="stylesheet" />
     <style>
-        .app-hover :hover {
-            cursor: pointer;
-            border: 2px solid #0C0C0C;
-            box-shadow: 0 0 5px #0C0C0C;
-            border-radius: 100%;
-        }
+      .app-hover :hover {
+        cursor: pointer;
+        border: 2px solid #0c0c0c;
+        box-shadow: 0 0 5px #0c0c0c;
+        border-radius: 100%;
+      }
     </style>
-</head>
-<body>
-<script>
-  Vue.use(antd)
-  const ipc = require('electron').ipcRenderer
-  const tools = require('../util/util.js').tools
-  const saAppModel = require('../../src/model/appModel.js')
-  saAppModel.initDb()
-</script>
-<div id="globalSearch" class="gs-wrap">
-    <div :class="{'first-gs-dialog': openFirst}" class="gs-dialog">
+  </head>
+  <body>
+    <script>
+      Vue.use(antd);
+      const ipc = require('electron').ipcRenderer;
+      const tools = require('../util/util.js').tools;
+      const saAppModel = require('../../src/model/appModel.js');
+      saAppModel.initDb();
+    </script>
+    <div id="globalSearch" class="gs-wrap">
+      <div :class="{'first-gs-dialog': openFirst}" class="gs-dialog">
         <div class="search flex justify-start align-center">
-            <a-icon
-                    :style="{ fontSize: '26px' }"
-                    class="search-lf"
-                    type="search"
-            ></a-icon>
-            <input
-                    id="myTextField"
-                    :value="searchWord"
-                    class="search-rg"
-                    onfocus="this.select()"
-                    placeholder="搜索应用、网页、标签组"
-                    spellcheck="false"
-                    style="font-size: 20px"
-                    tabindex="-1"
-                    type="text"
-                    @input="handleInput($event)"
-            />
-            <div>
-                <a-avatar :size="35" alt="" class="app-hover"
-                          shape="circle"
-                          src="../appStore/favicon.svg"
-                          @click="openAppstore"
-                ></a-avatar>
-            </div>
+          <a-icon :style="{ fontSize: '26px' }" class="search-lf" type="search"></a-icon>
+          <input
+            id="myTextField"
+            :value="searchWord"
+            class="search-rg"
+            onfocus="this.select()"
+            placeholder="搜索应用、网页、标签组"
+            spellcheck="false"
+            style="font-size: 20px"
+            tabindex="-1"
+            type="text"
+            @input="handleInput($event)"
+          />
+          <div>
+            <a-avatar
+              :size="35"
+              alt=""
+              class="app-hover"
+              shape="circle"
+              src="../appStore/favicon.svg"
+              @click="openAppstore"
+            ></a-avatar>
+          </div>
         </div>
-        <div
-                v-if="openFirst"
-                class="apps flex flex-direction justify-between align-start"
-        >
-            <span class="text-grey">推荐</span>
-            <div class="apps-content flex">
-                <ul class="flex">
-                    <template v-for="(app, index) in apps">
-                        <li
-                                :key="index"
-                                class="flex flex-direction justify-around align-center"
-                                @click="executeApp(app)"
-                        >
-                            <img
-                                    :src="app.logo"
-                                    :style="{'border-color':app.userThemeColor?app.userThemeColor:app.themeColor}"
-                                    alt=""
-                                    onerror="this.src='../../icons/default.svg'"
-                                    shape="circle"
-                            />
-                            <span
-                                    class="text-black sg-omit-sm flex justify-center align-center"
-                            >{{ app.name }}</span
-                            >
-                        </li>
-                    </template>
-                </ul>
-            </div>
+        <div v-if="openFirst" class="apps flex flex-direction justify-between align-start">
+          <span class="text-grey">推荐</span>
+          <div class="apps-content flex">
+            <ul class="flex">
+              <template v-for="(app, index) in apps">
+                <li :key="index" class="flex flex-direction justify-around align-center" @click="executeApp(app)">
+                  <img
+                    :src="app.logo"
+                    :style="{'border-color':app.userThemeColor?app.userThemeColor:app.themeColor}"
+                    alt=""
+                    onerror="this.src='../../icons/default.svg'"
+                    shape="circle"
+                  />
+                  <span class="text-black sg-omit-sm flex justify-center align-center">{{ app.name }}</span>
+                </li>
+              </template>
+            </ul>
+          </div>
         </div>
         <div v-else class="category flex justify-between align-center">
-            <div class="category-lf">
-                <template v-for="(tag, index) in tags">
-                    <a-tag
-                            :key="index"
-                            :color="tag.checked ? 'blue' : ''"
-                            style="font-size: 15px; border-radius: 10px"
-                            @click="handleChange(tag, index)"
-                    >
-                        {{ tag.label }}
-                    </a-tag>
-                </template>
-            </div>
-            <div class="category-rg flex justify-around align-center">
-                <a-icon type="smile"></a-icon>
-                <div
-                        class="flex align-center justify-center"
-                        style="padding-left: 5px"
-                >
-                    按下Tab键切换类型
-                </div>
-            </div>
+          <div class="category-lf">
+            <template v-for="(tag, index) in tags">
+              <a-tag
+                :key="index"
+                :color="tag.checked ? 'blue' : ''"
+                style="font-size: 15px; border-radius: 10px"
+                @click="handleChange(tag, index)"
+              >
+                {{ tag.label }}
+              </a-tag>
+            </template>
+          </div>
+          <div class="category-rg flex justify-around align-center">
+            <a-icon type="smile"></a-icon>
+            <div class="flex align-center justify-center" style="padding-left: 5px">按下Tab键切换类型</div>
+          </div>
         </div>
 
-        <div
-                v-if="openFirst"
-                class="recent-open flex flex-direction justify-between"
-        >
-            <span class="text-grey">最近打开</span>
-            <div class="recent-open-content flex flex-direction recent-list-hook">
-                <ul>
-                    <template v-for="(item, index) in recentOpenedHistory">
-                        <li
-                                :key="index"
-                                :class="{'li-ready': recentReadyedIndex === index}"
-                                class="flex justify-start align-center"
-                                @click="clickRecentHistory(item)"
-                        >
-                            <img
-                                    src="../../icons/default.svg"
-                                    style="width: 30px; height: 30px"
-                            />
-                            <div
-                                    class="flex flex-direction justify-around align-start"
-                                    style="padding-left: 20px; height: 100%"
-                            >
-                                <div class="text-black-lg sg-omit-sm">{{ item.title }}</div>
-                                <div class="text-grey-sm sg-omit-sm">{{ item.url }}</div>
-                            </div>
-                        </li>
-                    </template>
-                </ul>
-            </div>
+        <div v-if="openFirst" class="recent-open flex flex-direction justify-between">
+          <span class="text-grey">最近打开</span>
+          <div class="recent-open-content flex flex-direction recent-list-hook">
+            <ul>
+              <template v-for="(item, index) in recentOpenedHistory">
+                <li
+                  :key="index"
+                  :class="{'li-ready': recentReadyedIndex === index}"
+                  class="flex justify-start align-center"
+                  @click="clickRecentHistory(item)"
+                >
+                  <img src="../../icons/default.svg" style="width: 30px; height: 30px" />
+                  <div class="flex flex-direction justify-around align-start" style="padding-left: 20px; height: 100%">
+                    <div class="text-black-lg sg-omit-sm">{{ item.title }}</div>
+                    <div class="text-grey-sm sg-omit-sm">{{ item.url }}</div>
+                  </div>
+                </li>
+              </template>
+            </ul>
+          </div>
         </div>
         <div v-else class="content flex justify-center list-hook">
-            <template v-if="contentLoading">
-                <div>
-                    <a-spin>
-                        <a-icon
-                                slot="indicator"
-                                spin
-                                style="font-size: 40px"
-                                type="loading"
-                        ></a-icon>
-                    </a-spin>
+          <template v-if="contentLoading">
+            <div>
+              <a-spin>
+                <a-icon slot="indicator" spin style="font-size: 40px" type="loading"></a-icon>
+              </a-spin>
+            </div>
+          </template>
+          <ul v-else>
+            <template v-for="(item, index) in compSearchResult">
+              <li
+                :key="index"
+                :class="{'li-ready': itemReadyedIndex === index}"
+                class="flex justify-start align-center"
+                @click="click(item)"
+              >
+                <img :src="item.icon" onerror="this.src='../../icons/default.svg'" style="width: 30px; height: 30px" />
+                <div class="flex flex-direction justify-around align-start" style="padding-left: 20px; height: 100%">
+                  <div
+                    class="text-black-lg sg-omit-sm"
+                    v-html="item.title.replaceAll(searchWord,`<strong style='color:orangered'>${searchWord}</strong>`)"
+                  ></div>
+                  <div
+                    class="text-grey-sm sg-omit-sm"
+                    v-html="item.attached.replaceAll(searchWord,`<strong style='color:orangered'>${searchWord}</strong>`)"
+                  ></div>
                 </div>
+              </li>
             </template>
-            <ul v-else>
-                <template v-for="(item, index) in compSearchResult">
-                    <li
-                            :key="index"
-                            :class="{'li-ready': itemReadyedIndex === index}"
-                            class="flex justify-start align-center"
-                            @click="click(item)"
-                    >
-                        <img
-                                :src="item.icon"
-                                onerror="this.src='../../icons/default.svg'"
-                                style="width: 30px; height: 30px"
-                        />
-                        <div
-                                class="flex flex-direction justify-around align-start"
-                                style="padding-left: 20px; height: 100%"
-                        >
-                            <div class="text-black-lg sg-omit-sm"
-                                 v-html="item.title.replaceAll(searchWord,`<strong style='color:orangered'>${searchWord}</strong>`)"></div>
-                            <div class="text-grey-sm sg-omit-sm"
-                                 v-html="item.attached.replaceAll(searchWord,`<strong style='color:orangered'>${searchWord}</strong>`)"></div>
-                        </div>
-                    </li>
-                </template>
-                <div
-                        v-show="compSearchResult.length === 0 && !openFirst"
-                        class="text-grey flex justify-center align-center"
-                        style="width: 100%; height: 50px"
-                >
-                    未找到任何结果
-                </div>
-            </ul>
+            <div
+              v-show="compSearchResult.length === 0 && !openFirst"
+              class="text-grey flex justify-center align-center"
+              style="width: 100%; height: 50px"
+            >
+              未找到任何结果
+            </div>
+          </ul>
         </div>
+      </div>
     </div>
-</div>
-<script src="./globalSearchIpc.js"></script>
-<script src="./globalSearchVue.js"></script>
-</body>
+    <script src="./globalSearchIpc.js"></script>
+    <script src="./globalSearchVue.js"></script>
+  </body>
 </html>

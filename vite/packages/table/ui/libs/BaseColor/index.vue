@@ -1,20 +1,19 @@
 <template>
   <XtTitle v-if="text">{{ text }}</XtTitle>
-  <colorPicker v-model:hex="colorData" @click="colorClick()"/>
+  <colorPicker v-model:hex="colorData" @click="colorClick()" />
 </template>
 
 <script>
-import ColorPicker from 'colorpicker-v3'
-import 'colorpicker-v3/style.css'
-
+import ColorPicker from 'colorpicker-v3';
+import 'colorpicker-v3/style.css';
 export default {
   components: {
     ColorPicker,
   },
-  data () {
+  data() {
     return {
       colorData: this.data,
-    }
+    };
   },
   props: {
     data: {
@@ -27,19 +26,19 @@ export default {
     },
   },
   watch: {
-    colorData (newV) {
-      this.$emit('update:data', newV)
+    colorData(newV) {
+      this.$emit('update:data', newV);
     },
-    data (newV) {
-      this.colorData = newV
+    data(newV) {
+      this.colorData = newV;
     },
   },
   methods: {
-    colorClick () {
-      this.$emit('click')
+    colorClick() {
+      this.$emit('click');
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -51,7 +50,6 @@ export default {
 :deep(.zs-color-picker-btn .zs-color-picker-btn-color) {
   border: none !important;
 }
-
 :deep(.zs-color-picker-panel__visible) {
   z-index: 99999 !important;
 }

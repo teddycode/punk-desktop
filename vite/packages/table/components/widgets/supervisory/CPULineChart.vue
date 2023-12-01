@@ -1,13 +1,14 @@
 <template>
   <Widget :desk="desk" :menu-list="menuList" :options="options">
-    <div class="content pointer" style="color:var(--primary-text)" @click="go">
+    <div class="content pointer" style="color: var(--primary-text)" @click="go">
       <div class="cpu">
         <div class="cpu-number">
           <div>
             <Icon class="icon" icon="cpu"></Icon>
             <span>CPU</span>
           </div>
-          <span style="font-weight:700">{{ CPUData.useCPU.value }}%</span></div>
+          <span style="font-weight: 700">{{ CPUData.useCPU.value }}%</span>
+        </div>
       </div>
       <div id="cpu" ref="cpuChart" class="echarts"></div>
 
@@ -17,7 +18,8 @@
             <Icon class="icon" icon="xianka"></Icon>
             <span>GPU</span>
           </div>
-          <span style="font-weight:700">{{ CPUData.useGPU.value }}%</span></div>
+          <span style="font-weight: 700">{{ CPUData.useGPU.value }}%</span>
+        </div>
       </div>
       <div id="gpu" ref="gpuChart" class="echarts"></div>
 
@@ -27,13 +29,18 @@
             <Icon class="icon" icon="neicun"></Icon>
             <span>内存</span>
           </div>
-          <span style="font-weight:700">{{ CPUData.useMemory.value }}%</span></div>
+          <span style="font-weight: 700">{{ CPUData.useMemory.value }}%</span>
+        </div>
       </div>
-      <a-progress :percent="CPUData.useMemory.value" :showInfo="false"
-                  :status="CPUData.useMemory.value==0 || saving?'':'active'" :stroke-color="{
-        '0%': '#60BFFF',
-        '100%': '#348FFF',
-      }"/>
+      <a-progress
+        :percent="CPUData.useMemory.value"
+        :showInfo="false"
+        :status="CPUData.useMemory.value == 0 || saving ? '' : 'active'"
+        :stroke-color="{
+          '0%': '#60BFFF',
+          '100%': '#348FFF',
+        }"
+      />
 
       <!--      <div class="cpu" >-->
       <!--      <div class="cpu-number">-->
@@ -48,7 +55,7 @@
       <!--        '100%': '#FF9035',-->
       <!--      }"/>-->
 
-      <div class="cpu" style="margin-top: 13px;flex-direction: column">
+      <div class="cpu" style="margin-top: 13px; flex-direction: column">
         <div class="cpu-number">
           <div>
             <Icon class="icon" icon="wangluo"></Icon>
@@ -58,50 +65,45 @@
         <div class="cpu">
           <div class="cpu-number">
             <div>
-              <Icon class="icon" icon="xiazai" style="color: #5CBBFF;"></Icon>
+              <Icon class="icon" icon="xiazai" style="color: #5cbbff"></Icon>
               <span>下载</span>
             </div>
-            <span style="font-weight:700">{{ lastDown }}</span>
+            <span style="font-weight: 700">{{ lastDown }}</span>
           </div>
         </div>
 
         <div class="cpu">
           <div class="cpu-number">
             <div>
-              <Icon class="icon" icon="shangchuan" style="color:  #52C41A;"></Icon>
+              <Icon class="icon" icon="shangchuan" style="color: #52c41a"></Icon>
               <span>上传</span>
             </div>
-            <span style="font-weight:700">{{ lastUp }}</span>
+            <span style="font-weight: 700">{{ lastUp }}</span>
           </div>
         </div>
-
-
       </div>
-
     </div>
-
-
   </Widget>
 </template>
 
 <script>
-import { CPUOption, GPUOption } from './echartOptions'
-import * as echarts from 'echarts'
-import { mapActions, mapWritableState } from 'pinia'
-import Widget from '../../card/Widget.vue'
-import { appStore } from '../../../store'
-import { inspectorStore } from '../../../store/inspector'
-import { message } from 'ant-design-vue'
+import { CPUOption, GPUOption } from './echartOptions';
+import * as echarts from 'echarts';
+import { mapActions, mapWritableState } from 'pinia';
+import Widget from '../../card/Widget.vue';
+import { appStore } from '../../../store';
+import { inspectorStore } from '../../../store/inspector';
+import { message } from 'ant-design-vue';
 
 export default {
   props: ['desk'],
-  data () {
+  data() {
     return {
       options: {
         className: 'card',
         title: '性能',
         icon: 'dashboard',
-        type: 'CPULineChart'
+        type: 'CPULineChart',
       },
       CPUOption,
       GPUOption,
@@ -110,7 +112,7 @@ export default {
         useCPU: { value: 0 },
         useMemory: { value: 0 },
         down: 0,
-        up: 0
+        up: 0,
       },
       CPUList: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       GPUList: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -121,53 +123,61 @@ export default {
           title: '复制数据',
           icon: 'fuzhi',
           fn: () => {
-            require('electron').clipboard.writeText(JSON.stringify(this.aidaData))
-            message.success('复制成功')
-          }
-        }
-      ]
-    }
+            require('electron').clipboard.writeText(JSON.stringify(this.aidaData));
+            message.success('复制成功');
+          },
+        },
+      ],
+    };
   },
 
   name: 'CPULineChart',
   components: {
-    Widget
+    Widget,
   },
   computed: {
     ...mapWritableState(appStore, ['saving']),
     ...mapWritableState(inspectorStore, ['displayData', 'aidaData']),
-    lastDown () {
-      return this.CPUData.down < 1000 ? this.CPUData.down + 'KB/S' : this.CPUData.down < 1024000 ? (this.CPUData.down / 1024).toFixed(2) + 'MB/S' : (this.CPUData.down / 1024 / 1024).toFixed(2) + 'GB/S'
+    lastDown() {
+      return this.CPUData.down < 1000
+        ? this.CPUData.down + 'KB/S'
+        : this.CPUData.down < 1024000
+        ? (this.CPUData.down / 1024).toFixed(2) + 'MB/S'
+        : (this.CPUData.down / 1024 / 1024).toFixed(2) + 'GB/S';
     },
-    lastUp () {
-      return this.CPUData.up < 1000 ? this.CPUData.up + 'KB/S' : this.CPUData.up < 1024000 ? (this.CPUData.up / 1024).toFixed(2) + 'MB/S' : (this.CPUData.up / 1024 / 1024).toFixed(2) + 'GB/S'
-    }
+    lastUp() {
+      return this.CPUData.up < 1000
+        ? this.CPUData.up + 'KB/S'
+        : this.CPUData.up < 1024000
+        ? (this.CPUData.up / 1024).toFixed(2) + 'MB/S'
+        : (this.CPUData.up / 1024 / 1024).toFixed(2) + 'GB/S';
+    },
   },
-  mounted () {
-    this.CPUEcharts()
-    this.startInspect()
+  mounted() {
+    this.CPUEcharts();
+    this.startInspect();
   },
-  unmounted () {
-    this.stopInspect()
+  unmounted() {
+    this.stopInspect();
   },
   watch: {
-    'displayData': {
-      handler (newVal, oldVal) {
-        let { useGPU, warmGPU, useMemory, useCPU, warmCPU, FPS, videoStorage, down, up } = this.displayData || {}
+    displayData: {
+      handler(newVal, oldVal) {
+        let { useGPU, warmGPU, useMemory, useCPU, warmCPU, FPS, videoStorage, down, up } = this.displayData || {};
         this.CPUData = {
           useGPU: useGPU,
           useCPU: useCPU,
           useMemory: useMemory,
           down: down,
-          up: up
-        }
+          up: up,
+        };
         if (this.CPUData.useCPU.value !== 0) {
-          this.CPUList.push(this.CPUData.useCPU.value)
-          this.CPUList.shift()
+          this.CPUList.push(this.CPUData.useCPU.value);
+          this.CPUList.shift();
         }
         if (this.CPUData.useGPU.value !== 0) {
-          this.GPUList.push(this.CPUData.useGPU.value)
-          this.GPUList.shift()
+          this.GPUList.push(this.CPUData.useGPU.value);
+          this.GPUList.shift();
         }
         //this.CPUEcharts()
         this.echartsInstance.setOption({
@@ -179,14 +189,13 @@ export default {
               type: 'line',
               stack: 'Total',
               emphasis: {
-                focus: 'series'
+                focus: 'series',
               },
               data: this.CPUList,
               itemStyle: {
                 normal: {
-                  color: '#1890FF'
+                  color: '#1890FF',
                 },
-
               },
               areaStyle: {
                 color: {
@@ -195,7 +204,8 @@ export default {
                   y: 0,
                   x2: 0,
                   y2: 1,
-                  colorStops: [  // 渐变颜色
+                  colorStops: [
+                    // 渐变颜色
                     {
                       offset: 0,
                       color: '#404D61',
@@ -209,8 +219,8 @@ export default {
                 },
               },
             },
-          ]
-        })
+          ],
+        });
         this.echartsGPUInstance.setOption({
           series: [
             {
@@ -220,14 +230,13 @@ export default {
               type: 'line',
               stack: 'Total',
               emphasis: {
-                focus: 'series'
+                focus: 'series',
               },
               data: this.GPUList,
               itemStyle: {
                 normal: {
-                  color: '#1890FF'
+                  color: '#1890FF',
                 },
-
               },
               areaStyle: {
                 color: {
@@ -236,7 +245,8 @@ export default {
                   y: 0,
                   x2: 0,
                   y2: 1,
-                  colorStops: [  // 渐变颜色
+                  colorStops: [
+                    // 渐变颜色
                     {
                       offset: 0,
                       color: '#404D61',
@@ -250,47 +260,47 @@ export default {
                 },
               },
             },
-          ]
-        })
+          ],
+        });
       },
       deep: true,
     },
   },
   methods: {
     ...mapActions(inspectorStore, ['startInspect', 'stopInspect']),
-    go () {
-      this.$router.push({ name: 'inspector' })
+    go() {
+      this.$router.push({ name: 'inspector' });
     },
-    CPUEcharts () {
-      this.echartsInstance = echarts.init(this.$refs.cpuChart)
+    CPUEcharts() {
+      this.echartsInstance = echarts.init(this.$refs.cpuChart);
       this.echartsInstance.setOption({
         title: {
-          text: ''
+          text: '',
         },
         animation: false,
         backgroundColor: 'transparent',
         legend: {
           data: ['normal'],
         },
-        grid: { // 让图表占满容器
+        grid: {
+          // 让图表占满容器
           top: '0px',
           left: '0px',
           right: '0px',
-          bottom: '0px'
+          bottom: '0px',
         },
         xAxis: [
           {
             type: 'category',
             boundaryGap: false,
-            data: []
-          }
+            data: [],
+          },
         ],
         yAxis: [
           {
             type: 'value',
-            show: false
+            show: false,
           },
-
         ],
         series: [
           {
@@ -300,14 +310,13 @@ export default {
             type: 'line',
             stack: 'Total',
             emphasis: {
-              focus: 'series'
+              focus: 'series',
             },
             data: this.CPUList,
             itemStyle: {
               normal: {
-                color: '#1890FF'
+                color: '#1890FF',
               },
-
             },
             areaStyle: {
               color: {
@@ -316,7 +325,8 @@ export default {
                 y: 0,
                 x2: 0,
                 y2: 1,
-                colorStops: [  // 渐变颜色
+                colorStops: [
+                  // 渐变颜色
                   {
                     offset: 0,
                     color: '#404D61',
@@ -330,37 +340,37 @@ export default {
               },
             },
           },
-        ]
-      })
-      this.echartsGPUInstance = echarts.init(this.$refs.gpuChart)
+        ],
+      });
+      this.echartsGPUInstance = echarts.init(this.$refs.gpuChart);
       this.echartsGPUInstance.setOption({
         animation: false,
         title: {
-          text: ''
+          text: '',
         },
         backgroundColor: 'transparent',
         legend: {
           data: ['normal'],
         },
-        grid: { // 让图表占满容器
+        grid: {
+          // 让图表占满容器
           top: '0px',
           left: '0px',
           right: '0px',
-          bottom: '0px'
+          bottom: '0px',
         },
         xAxis: [
           {
             type: 'category',
             boundaryGap: false,
-            data: []
-          }
+            data: [],
+          },
         ],
         yAxis: [
           {
             type: 'value',
-            show: false
+            show: false,
           },
-
         ],
         series: [
           {
@@ -370,14 +380,13 @@ export default {
             type: 'line',
             stack: 'Total',
             emphasis: {
-              focus: 'series'
+              focus: 'series',
             },
             data: this.GPUList,
             itemStyle: {
               normal: {
-                color: '#1890FF'
+                color: '#1890FF',
               },
-
             },
             areaStyle: {
               color: {
@@ -386,7 +395,8 @@ export default {
                 y: 0,
                 x2: 0,
                 y2: 1,
-                colorStops: [  // 渐变颜色
+                colorStops: [
+                  // 渐变颜色
                   {
                     offset: 0,
                     color: '#404D61',
@@ -400,16 +410,15 @@ export default {
               },
             },
           },
-        ]
-      })
-    }
-  }
-}
+        ],
+      });
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 .content {
-
   .cpu {
     display: flex;
     margin-top: 13px;
@@ -445,5 +454,4 @@ export default {
   height: 40px;
   width: calc(100%);
 }
-
 </style>

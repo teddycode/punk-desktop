@@ -6,26 +6,26 @@
  * @Description:
  * Copyright (c) 2023 by buaa.ioase.dcl, All Rights Reserved.
  */
-const api = require('../browserApi/baseApi')
-window.tsbApi = require('../browserApi/baseApi')
-window.tableApi = require('../tableApi/baseApi')
-const groupApi = require('../api/groupApi')
+const api = require('../browserApi/baseApi');
+window.tsbApi = require('../browserApi/baseApi');
+window.tableApi = require('../tableApi/baseApi');
+const groupApi = require('../api/groupApi');
 //
-let ipc = require('electron').ipcRenderer
+let ipc = require('electron').ipcRenderer;
 ipc.on('updateMusicStatus', (e, a) => {
   if (window.updateMusicStatusHandler) {
-    window.updateMusicStatusHandler(a)
+    window.updateMusicStatusHandler(a);
   }
-})
-window.loudness = require('loudness')
-window.iconv = require('iconv-lite')
-window.brightness = require('brightness')
+});
+window.loudness = require('loudness');
+window.iconv = require('iconv-lite');
+window.brightness = require('brightness');
 if (process.platform === 'win32') {
-  window.readAida64 = require('aida64-to-json')
+  window.readAida64 = require('aida64-to-json');
 }
 
-window.fs = require('fs-extra')
-const StorageModel = require('../model/storageModel')
+window.fs = require('fs-extra');
+const StorageModel = require('../model/storageModel');
 window.$models = {
   appModel: require('../model/appModel'),
   axios: require('axios'),
@@ -39,26 +39,30 @@ window.$models = {
   rpc: require('../rpc/rpc'),
   electron: require('electron'),
   osUtils: require('node-os-utils'),
-  win32: require('hmc-win32')
+  win32: require('hmc-win32'),
+};
+try {
+  window.$models.steamUser = require('steam-user');
+} catch (e) {
+  console.error('注册steam包失败，错误信息：', e);
 }
 try {
-  window.$models.steamUser = require('steam-user')
-  window.$models.steamSession = require('steam-session')
+  window.$models.steamSession = require('steam-session');
 } catch (e) {
-  console.error('注册steam包失败，错误信息：', e)
+  console.error('注册steamSession包失败，错误信息：', e);
 }
-window.$models.appModel.initDb()
+window.$models.appModel.initDb();
 
-window.$models.storageModel.initDb()
+window.$models.storageModel.initDb();
 window.$apis = {
-  groupApi
-}
+  groupApi,
+};
 tsbApi.barrage.setOnUrlChanged((a) => {
   if (tsbApi.barrage.urlChangedCallback) {
-    tsbApi.barrage.urlChangedCallback(a.url)
-    tsbApi.barrage.reload()
+    tsbApi.barrage.urlChangedCallback(a.url);
+    tsbApi.barrage.reload();
   }
-})
+});
 window.getSerialNum = async () => {
   try {
     // console.log('尝试获取机器码')
@@ -68,18 +72,16 @@ window.getSerialNum = async () => {
     //   baseboardSerial: s,
     // }
     // console.log(s)
-    let serial = localStorage.getItem('serial')
+    let serial = localStorage.getItem('serial');
     if (serial === null) {
       //去生成
-      serial = tsbApi.runtime.clientId
-      let crypto = require('crypto')
-      serial = crypto.createHash('sha256').update(JSON.stringify(serial)).digest('hex')
-      localStorage.setItem('serial', serial)
+      serial = tsbApi.runtime.clientId;
+      let crypto = require('crypto');
+      serial = crypto.createHash('sha256').update(JSON.stringify(serial)).digest('hex');
+      localStorage.setItem('serial', serial);
     }
-    return serial
+    return serial;
   } catch (e) {
-    console.error(e)
+    console.error(e);
   }
-
-}
-
+};

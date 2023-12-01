@@ -1,48 +1,54 @@
 <template>
   <!-- 导出模态框 -->
-  <div v-if="openModal" class="fixed inset-0 home-blur xt-mask" style="z-index: 99999;">
+  <div v-if="openModal" class="fixed inset-0 home-blur xt-mask" style="z-index: 99999">
     <div
-        class="xt-modal fixed text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  rounded-lg flex flex-col"
-        style=";width: 480px;height: 425px;background:  #282828">
+      class="xt-modal fixed text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg flex flex-col"
+      style="width: 480px; height: 425px; background: #282828"
+    >
       <div class="head-nav">
-        <span class="ml-2" style="font-size: 16px;color: var(--primary-text);font-weight: 500;">导出桌面</span>
+        <span class="ml-2" style="font-size: 16px; color: var(--primary-text); font-weight: 500">导出桌面</span>
         <div class="h-11 w-11 flex justify-center items-center xt-bg-2 rounded-lg pointer" @click="close">
-          <Icon icon="guanbi" style="color:var(--primary-text);font-size:24px"></Icon>
+          <Icon icon="guanbi" style="color: var(--primary-text); font-size: 24px"></Icon>
         </div>
       </div>
       <div class="px-8">
         <span class="title">选择导出桌面：</span>
         <a-select
-            :bordered="false"
-            :default-value="desk"
-            :dropdownStyle="{ 'z-index': 9999999,backgroundColor: 'var(--secondary-bg)' }"
-            class="input rounded-lg  text-xs"
-            mode="multiple"
-            placeholder="请选择"
-            size="large"
-            style="width:416px;height:48px; border:none;"
-            @change="onChange"
+          :bordered="false"
+          :default-value="desk"
+          :dropdownStyle="{ 'z-index': 9999999, backgroundColor: 'var(--secondary-bg)' }"
+          class="input rounded-lg text-xs"
+          mode="multiple"
+          placeholder="请选择"
+          size="large"
+          style="width: 416px; height: 48px; border: none"
+          @change="onChange"
         >
           <template #suffixIcon>
             <Icon class="h-4 w-4" icon="xiangyou" @click="delLabel(index)"></Icon>
           </template>
-          <a-select-option v-for="(item,index) in deskType" :key="index" :value="index">{{ item }}</a-select-option>
+          <a-select-option v-for="(item, index) in deskType" :key="index" :value="index">{{ item }}</a-select-option>
         </a-select>
         <span class="title">桌面数据：</span>
-        <div class="xt-text-2 mt-2 mb-4" style="font-size: 14px;">选择是否需要保留卡片的设置或数据，比如「便签」中的内容。
+        <div class="xt-text-2 mt-2 mb-4" style="font-size: 14px">
+          选择是否需要保留卡片的设置或数据，比如「便签」中的内容。
         </div>
         <RadioTab v-model:selectType="defaultType" :navList="dataType"></RadioTab>
         <div class="title mt-2">桌面显示尺寸：{{ displaySize.width }} * {{ displaySize.height }}</div>
-
       </div>
       <div class="flex justify-center mt-4">
-        <div class="flex justify-center items-center xt-text xt-bg-2 rounded-lg pointer"
-             style="width: 120px;height: 48px;"
-             @click="close">
+        <div
+          class="flex justify-center items-center xt-text xt-bg-2 rounded-lg pointer"
+          style="width: 120px; height: 48px"
+          @click="close"
+        >
           取消
         </div>
-        <div class=" ml-3 flex justify-center items-center rounded-lg pointer"
-             style="width: 120px;height: 48px;background-color: var(--active-bg);" @click="exportBtn">
+        <div
+          class="ml-3 flex justify-center items-center rounded-lg pointer"
+          style="width: 120px; height: 48px; background-color: var(--active-bg)"
+          @click="exportBtn"
+        >
           确定导出
         </div>
       </div>
@@ -51,162 +57,158 @@
 </template>
 
 <script>
-import RadioTab from '../RadioTab.vue'
-import { cardStore } from '../../store/card'
-import { mapWritableState } from 'pinia'
-import { message } from 'ant-design-vue'
+import RadioTab from '../RadioTab.vue';
+import { cardStore } from '../../store/card';
+import { mapWritableState } from 'pinia';
+import { message } from 'ant-design-vue';
 
 export default {
   name: 'ExportDesk',
   components: {
-    RadioTab
+    RadioTab,
   },
-  data () {
+  data() {
     return {
       dataType: [
         { title: '保留数据', name: 'data' },
-        { title: '不保留数据', name: 'notData' }
+        { title: '不保留数据', name: 'notData' },
       ],
       defaultType: { title: '不保留数据', name: 'notData' },
       deskType: [],
       desk: [0],
-      selectedDesk: []
-    }
+      selectedDesk: [],
+    };
   },
   props: {
     openModal: {
       type: Boolean,
-      default: () => false
+      default: () => false,
     },
     desks: {
       type: Array,
     },
-    layoutSize: { //传入此参数，则使用此参数作为桌面布局尺寸，否则则取系统级的
+    layoutSize: {
+      //传入此参数，则使用此参数作为桌面布局尺寸，否则则取系统级的
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
   computed: {
     ...mapWritableState(cardStore, ['settings', 'deskSize', 'countdownDay', 'currentDeskIndex']),
-    displaySize () {
+    displaySize() {
       if (this.layoutSize) {
-        return this.layoutSize
+        return this.layoutSize;
       } else {
-        return this.deskSize
+        return this.deskSize;
       }
-    }
+    },
   },
   methods: {
-    close () {
-      this.$emit('closeExport', false)
+    close() {
+      this.$emit('closeExport', false);
     },
-    onChange (val) {
-      this.selectedDesk = []
-      const deskSize = this.layoutSize || this.deskSize //取出布局尺寸
-      let desks = JSON.parse(JSON.stringify(this.desks))
+    onChange(val) {
+      this.selectedDesk = [];
+      const deskSize = this.layoutSize || this.deskSize; //取出布局尺寸
+      let desks = JSON.parse(JSON.stringify(this.desks));
       desks.map((item, index) => {
-        let settings = {}
+        let settings = {};
 
-        item.cards.forEach(card => {
+        item.cards.forEach((card) => {
           //遍历处理原卡片
           //移除id
-          delete (card._$muuri_id)
-        })
+          delete card._$muuri_id;
+        });
         if (item.settings && item.settings.enableZoom) {
-          settings = item.settings
+          settings = item.settings;
         } else {
           // settings = this.settings
-          settings = { ...this.settings, enableZoom: true }
+          settings = { ...this.settings, enableZoom: true };
         }
-        item.deskHeight = deskSize.height //新版导出修正命名
-        item.settings = settings
+        item.deskHeight = deskSize.height; //新版导出修正命名
+        item.settings = settings;
         val.map((i) => {
           if (index === i) {
-            this.selectedDesk.push(item)
+            this.selectedDesk.push(item);
             // console.log(item)
           }
-        })
-      })
+        });
+      });
     },
-    setData (cards) {
+    setData(cards) {
       cards.cards.forEach((item, index) => {
         switch (item.name) {
           case 'notes':
             if (item.customData) {
-              item.customData.text = ''
+              item.customData.text = '';
             }
-            break
+            break;
           case 'countdownDay':
-            item.customData.notRetain = true
-            break
+            item.customData.notRetain = true;
+            break;
           case 'AggregateSearch':
-            item.customData.sortType = 'work'
-            delete item.customData.sortList
-            break
+            item.customData.sortType = 'work';
+            delete item.customData.sortList;
+            break;
           case 'myIcons':
-            item.customData.iconList[0].backgroundColor = ''
-            item.customData.iconList[0].backgroundIndex = 0
-            item.customData.iconList[0].imgShape = 'square'
-            item.customData.iconList[0].imgState = 'cover'
-            item.customData.iconList[0].isBackground = false
-            item.customData.iconList[0].isRadius = true
-            item.customData.iconList[0].radius = 5
-            item.customData.iconList[0].size = 'mini'
-            break
+            item.customData.iconList[0].backgroundColor = '';
+            item.customData.iconList[0].backgroundIndex = 0;
+            item.customData.iconList[0].imgShape = 'square';
+            item.customData.iconList[0].imgState = 'cover';
+            item.customData.iconList[0].isBackground = false;
+            item.customData.iconList[0].isRadius = true;
+            item.customData.iconList[0].radius = 5;
+            item.customData.iconList[0].size = 'mini';
+            break;
         }
-      })
+      });
     },
-    async exportBtn () {
+    async exportBtn() {
       if (!this.selectedDesk.length) {
-        message.error('您至少选择一个桌面。')
-        return
+        message.error('您至少选择一个桌面。');
+        return;
       }
-      this.selectedDesk.forEach(item => {
-        if (this.defaultType.name === 'notData') this.setData(item)
-      })
+      this.selectedDesk.forEach((item) => {
+        if (this.defaultType.name === 'notData') this.setData(item);
+      });
       let savePath = await tsbApi.dialog.showSaveDialog({
         title: '选择保存位置',
         defaultPath: '我的桌面分享.desk',
         message: '选择保存分享代码位置',
         filters: [{ name: 'desk存档', extensions: ['desk'] }],
-        properties: [
-          'createDirectory',
-          'showOverwriteConfirmation'
-        ]
-      })
-      const fs = require('fs')
+        properties: ['createDirectory', 'showOverwriteConfirmation'],
+      });
+      const fs = require('fs');
       if (!savePath) {
-        return
+        return;
       }
       fs.writeFile(savePath, this.getShareJson(), (err) => {
         if (!err) {
-          message.success('导出成功。为您的分享精神点赞！')
-          require('electron').shell.showItemInFolder(savePath)
-          this.close()
-
+          message.success('导出成功。为您的分享精神点赞！');
+          require('electron').shell.showItemInFolder(savePath);
+          this.close();
         } else {
-          message.error('导出失败，请确认文件权限。')
+          message.error('导出失败，请确认文件权限。');
         }
-      })
+      });
     },
-    getShareJson () {
-      return JSON.stringify(this.selectedDesk)
+    getShareJson() {
+      return JSON.stringify(this.selectedDesk);
     },
   },
-  mounted () {
-  },
+  mounted() {},
   watch: {
-    openModal (val) {
+    openModal(val) {
       if (val) {
-        this.selectedDesk = []
-        this.deskType = this.desks.map(item => item.name)
-        this.defaultType = { title: '不保留数据', icon: 'yuanquan', name: 'notData' }
+        this.selectedDesk = [];
+        this.deskType = this.desks.map((item) => item.name);
+        this.defaultType = { title: '不保留数据', icon: 'yuanquan', name: 'notData' };
         this.desks.map((item, index) => {
           if (item.nanoid === this.currentDeskIndex.name) {
-            this.desk = [index]
-            this.onChange([index])
+            this.desk = [index];
+            this.onChange([index]);
           }
-        })
+        });
 
         // if(desks[0].settings && desks[0].settings.enableZoom){
         //   settings = item.settings
@@ -217,9 +219,9 @@ export default {
         // desks[0].settings = settings
         // this.selectedDesk.push(desks[0])
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

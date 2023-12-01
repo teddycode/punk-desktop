@@ -50,7 +50,7 @@ body:not(.is-ntp) #webviews {
 }
 
 #webview-placeholder {
-  margin-left:45px;
+  margin-left: 45px;
   width: calc(100% - 45px);
   height: 100%;
   /* the built-in blur() function creates white edges around the image, avoid this by using an SVG filter. Source:

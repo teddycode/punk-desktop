@@ -65,13 +65,13 @@ const tpl = `
       </a-tooltip>
 
 </div>
-`
-const userModel = require('../../../src/model/userModel')
-const configModel = require('../../../src/model/configModel')
-const spaceModel = require('../../../src/model/spaceModel')
+`;
+const userModel = require('../../../src/model/userModel');
+const configModel = require('../../../src/model/configModel');
+const spaceModel = require('../../../src/model/spaceModel');
 const UsersSelect = {
   template: tpl,
-  data () {
+  data() {
     return {
       tip: '',
       loaded: false,
@@ -89,29 +89,29 @@ const UsersSelect = {
         //   ]
         // },
       ],
-      showOnStart: false
-    }
+      showOnStart: false,
+    };
   },
-  async mounted () {
-    this.users = await userModel.getAll()
-    this.loaded = true
+  async mounted() {
+    this.users = await userModel.getAll();
+    this.loaded = true;
     if (window.globalArgs['tip']) {
-      this.tip = window.globalArgs['tip']
+      this.tip = window.globalArgs['tip'];
     }
 
-    this.showOnStart = configModel.getShowOnStart()
+    this.showOnStart = configModel.getShowOnStart();
   },
-  async beforeRouteEnter (to, from) {
-    this.users = await userModel.getAll()
+  async beforeRouteEnter(to, from) {
+    this.users = await userModel.getAll();
   },
   methods: {
-    switchShowOnStart () {
-      configModel.setShowOnStart(this.showOnStart)
+    switchShowOnStart() {
+      configModel.setShowOnStart(this.showOnStart);
     },
-    goAddAccount () {
-      this.$router.push('/add')
+    goAddAccount() {
+      this.$router.push('/add');
     },
-    deleteAccount (uid) {
+    deleteAccount(uid) {
       antd.Modal.confirm({
         title: '解绑此帐号',
         content: '解绑帐号并不会影响帐号数据，仅仅是将本地帐号退出。但是退出后无法再使用此帐号下的所有空间。',
@@ -119,62 +119,64 @@ const UsersSelect = {
         okText: '确认',
         cancelText: '取消',
         onOk: () => {
-          userModel.delete({ uid: uid }).then(() => {
-            window.antd.message.success('解绑帐号成功。')
-            this.users.forEach((user, index) => {
-              if (user.uid === uid) {
-                this.users.splice(index, 1)
-                return false
-              }
+          userModel
+            .delete({ uid: uid })
+            .then(() => {
+              window.antd.message.success('解绑帐号成功。');
+              this.users.forEach((user, index) => {
+                if (user.uid === uid) {
+                  this.users.splice(index, 1);
+                  return false;
+                }
+              });
             })
-          }).catch(() => {
-            window.antd.message.error('解绑帐号失败。')
-          })
-        }
-      })
+            .catch(() => {
+              window.antd.message.error('解绑帐号失败。');
+            });
+        },
+      });
     },
-    async enterAccount (user) {
+    async enterAccount(user) {
       //todo 先获取账号信息，确认账号可正常登录
       //网络用户
       if (user.uid) {
         try {
-          let userInfo = await userModel.get({ uid: user.uid })
+          let userInfo = await userModel.get({ uid: user.uid });
           if (userInfo) {
-            let spacesResult = await spaceModel.setUser(userInfo).getUserSpaces()
+            let spacesResult = await spaceModel.setUser(userInfo).getUserSpaces();
             if (spacesResult.status !== 1) {
-              window.antd.message.error('服务器繁忙，获取用户空间失败，请10分钟后后再试。')
-              return
+              window.antd.message.error('服务器繁忙，获取用户空间失败，请10分钟后后再试。');
+              return;
             }
             //走到此处是没有异常了，可以正常执行下去
           } else {
-            console.warn(user)
-            window.antd.message.error('获取用户信息失败，登录信息过期或用户帐号异常。请尝试解绑用户后重新登陆帐号。')
-            return //如果异常，退回上一页，防止后续出错
+            console.warn(user);
+            window.antd.message.error('获取用户信息失败，登录信息过期或用户帐号异常。请尝试解绑用户后重新登陆帐号。');
+            return; //如果异常，退回上一页，防止后续出错
           }
         } catch (e) {
-          console.warn(e)
+          console.warn(e);
           if (e.code && e.code === 'ECONNREFUSED') {
             window.antd.Modal.info({
               title: '服务器维护',
               content: '服务器维护中，建议10分钟后再试。您可以先工作在本地空间。后续可手动导入本地空间到云端。',
-              okText: '确定'
-            })
-            return
+              okText: '确定',
+            });
+            return;
           }
           if (e.response && e.response.data.code === 1001) {
-            window.antd.message.error('用户登录信息过期，请点击【添加账号】重新登录。')
-            return
+            window.antd.message.error('用户登录信息过期，请点击【添加账号】重新登录。');
+            return;
           }
-          window.antd.message.error('意外错误。')
-          return
+          window.antd.message.error('意外错误。');
+          return;
         }
       }
       if (!!!user.password) {
-        this.$router.push({ name: 'space', params: { uid: user.uid } })
-      } else
-        this.$router.push({ name: 'enterPwd', params: { uid: user.uid } })
-    }
-  }
-}
+        this.$router.push({ name: 'space', params: { uid: user.uid } });
+      } else this.$router.push({ name: 'enterPwd', params: { uid: user.uid } });
+    },
+  },
+};
 
-module.exports = UsersSelect
+module.exports = UsersSelect;
