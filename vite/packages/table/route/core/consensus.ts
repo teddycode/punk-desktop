@@ -16,12 +16,12 @@ export default {
       name: 'ConsensusPage',
       component: DetailsPage,
       meta: {
-        title: '共识',
+        title: '共识概览',
         icon: CodeOutlined,
       },
     },
     {
-      path: 'self',
+      path: '/self',
       name: 'ConsensusSelf',
       meta: {
         title: '我的共识',

@@ -146,86 +146,86 @@
     </div>
   </transition>
   <!--添加小组件-->
-  <a-drawer
-    :contentWrapperStyle="{ backgroundColor: '#1F1F1F' }"
-    :height="350"
-    :visible="menuVisible"
-    :width="120"
-    class="drawer"
-    placement="bottom"
-    style="z-index: 99999999999"
-    @close="onClose"
-  >
-    <a-row :gutter="[20, 20]" style="margin-top: 1em">
-      <div class="hidden mb-3" style="height: 200px"></div>
-      <xt-task id="M0101" no="2" to="" @cb="newAddCard()">
-        <a-col>
-          <div class="btn" @click="newAddCard">
-            <xt-new-icon icon="fluent:collections-add-24-regular" size="42" />
-            <div><span>添加小组件</span></div>
-          </div>
-        </a-col>
-      </xt-task>
-      <xt-task id="M0201" no="2" to="" @cb="newAddIcon()">
-        <a-col>
-          <div class="btn flex flex-col items-center" @click="newAddIcon">
-            <xt-new-icon icon="fluent:add-16-filled" size="42" />
-            <div><span>添加图标</span></div>
-          </div>
-        </a-col>
-      </xt-task>
-      <a-col>
-        <div class="btn" @click="toggleEditing">
-          <xt-new-icon v-if="!this.editing" icon="fluent:window-new-16-regular" size="42" />
-          <xt-new-icon v-else icon="fluent:record-stop-16-regular" size="42" />
-          <div><span v-if="!this.editing">调整布局</span><span v-else style="color: red">停止调整</span></div>
-        </div>
-      </a-col>
-      <xt-task id="M0103" no="2" to="" @cb="showSetting">
-        <a-col>
-          <div class="btn" @click="showSetting">
-            <xt-new-icon icon="fluent:settings-16-regular" size="42" />
-            <div><span>桌面设置</span></div>
-          </div>
-        </a-col>
-      </xt-task>
-      <a-col>
-        <div class="btn" @click="clear">
-          <xt-new-icon icon="fluent:circle-off-16-regular" size="42" />
+  <!--  <a-drawer-->
+  <!--    :contentWrapperStyle="{ backgroundColor: '#1F1F1F' }"-->
+  <!--    :height="350"-->
+  <!--    :visible="menuVisible"-->
+  <!--    :width="120"-->
+  <!--    class="drawer"-->
+  <!--    placement="bottom"-->
+  <!--    style="z-index: 99999999999"-->
+  <!--    @close="onClose"-->
+  <!--  >-->
+  <!--    <a-row :gutter="[20, 20]" style="margin-top: 1em">-->
+  <!--      <div class="hidden mb-3" style="height: 200px"></div>-->
+  <!--      <xt-task id="M0101" no="2" to="" @cb="newAddCard()">-->
+  <!--        <a-col>-->
+  <!--          <div class="btn" @click="newAddCard">-->
+  <!--            <xt-new-icon icon="fluent:collections-add-24-regular" size="42" />-->
+  <!--            <div><span>添加小组件</span></div>-->
+  <!--          </div>-->
+  <!--        </a-col>-->
+  <!--      </xt-task>-->
+  <!--      <xt-task id="M0201" no="2" to="" @cb="newAddIcon()">-->
+  <!--        <a-col>-->
+  <!--          <div class="btn flex flex-col items-center" @click="newAddIcon">-->
+  <!--            <xt-new-icon icon="fluent:add-16-filled" size="42" />-->
+  <!--            <div><span>添加图标</span></div>-->
+  <!--          </div>-->
+  <!--        </a-col>-->
+  <!--      </xt-task>-->
+  <!--      <a-col>-->
+  <!--        <div class="btn" @click="toggleEditing">-->
+  <!--          <xt-new-icon v-if="!this.editing" icon="fluent:window-new-16-regular" size="42" />-->
+  <!--          <xt-new-icon v-else icon="fluent:record-stop-16-regular" size="42" />-->
+  <!--          <div><span v-if="!this.editing">调整布局</span><span v-else style="color: red">停止调整</span></div>-->
+  <!--        </div>-->
+  <!--      </a-col>-->
+  <!--      <xt-task id="M0103" no="2" to="" @cb="showSetting">-->
+  <!--        <a-col>-->
+  <!--          <div class="btn" @click="showSetting">-->
+  <!--            <xt-new-icon icon="fluent:settings-16-regular" size="42" />-->
+  <!--            <div><span>桌面设置</span></div>-->
+  <!--          </div>-->
+  <!--        </a-col>-->
+  <!--      </xt-task>-->
+  <!--      <a-col>-->
+  <!--        <div class="btn" @click="clear">-->
+  <!--          <xt-new-icon icon="fluent:circle-off-16-regular" size="42" />-->
 
-          <div><span>清空桌面</span></div>
-        </div>
-      </a-col>
+  <!--          <div><span>清空桌面</span></div>-->
+  <!--        </div>-->
+  <!--      </a-col>-->
 
-      <a-col>
-        <div v-if="!hide" class="btn" @click="hideDesk">
-          <xt-new-icon icon="fluent:eye-off-16-regular" size="42" />
+  <!--      <a-col>-->
+  <!--        <div v-if="!hide" class="btn" @click="hideDesk">-->
+  <!--          <xt-new-icon icon="fluent:eye-off-16-regular" size="42" />-->
 
-          <div><span>隐藏小组件</span></div>
-        </div>
-        <div v-else class="btn" @click="showDesk">
-          <xt-new-icon icon="fluent:eye-16-regular" size="42" />
-          <div><span>显示小组件</span></div>
-        </div>
-      </a-col>
-      <!--      <a-col>-->
-      <!--        <div @click="showAddDeskForm" class="btn">-->
-      <!--          <Icon style="font-size: 3em" icon="desktop"></Icon>-->
-      <!--          <div><span>添加桌面</span></div>-->
-      <!--        </div>-->
-      <!--      </a-col>-->
-      <!--      <a-col>-->
-      <!--        <div @click="delDesk" class="btn">-->
-      <!--          <Icon style="font-size: 3em" icon="shanchu"></Icon>-->
-      <!--          <div><span>删除桌面</span></div>-->
-      <!--        </div>-->
-      <!--      </a-col>-->
+  <!--          <div><span>隐藏小组件</span></div>-->
+  <!--        </div>-->
+  <!--        <div v-else class="btn" @click="showDesk">-->
+  <!--          <xt-new-icon icon="fluent:eye-16-regular" size="42" />-->
+  <!--          <div><span>显示小组件</span></div>-->
+  <!--        </div>-->
+  <!--      </a-col>-->
+  <!--      &lt;!&ndash;      <a-col>&ndash;&gt;-->
+  <!--      &lt;!&ndash;        <div @click="showAddDeskForm" class="btn">&ndash;&gt;-->
+  <!--      &lt;!&ndash;          <Icon style="font-size: 3em" icon="desktop"></Icon>&ndash;&gt;-->
+  <!--      &lt;!&ndash;          <div><span>添加桌面</span></div>&ndash;&gt;-->
+  <!--      &lt;!&ndash;        </div>&ndash;&gt;-->
+  <!--      &lt;!&ndash;      </a-col>&ndash;&gt;-->
+  <!--      &lt;!&ndash;      <a-col>&ndash;&gt;-->
+  <!--      &lt;!&ndash;        <div @click="delDesk" class="btn">&ndash;&gt;-->
+  <!--      &lt;!&ndash;          <Icon style="font-size: 3em" icon="shanchu"></Icon>&ndash;&gt;-->
+  <!--      &lt;!&ndash;          <div><span>删除桌面</span></div>&ndash;&gt;-->
+  <!--      &lt;!&ndash;        </div>&ndash;&gt;-->
+  <!--      &lt;!&ndash;      </a-col>&ndash;&gt;-->
 
-      <!--   菜单插槽    -->
-      <slot name="currentDeskMenu"></slot>
-    </a-row>
-    <slot name="outMenu"></slot>
-  </a-drawer>
+  <!--      &lt;!&ndash;   菜单插槽    &ndash;&gt;-->
+  <!--      <slot name="currentDeskMenu"></slot>-->
+  <!--    </a-row>-->
+  <!--    <slot name="outMenu"></slot>-->
+  <!--  </a-drawer>-->
   <a-drawer v-model:visible="settingVisible" placement="right">
     <XtTab
       v-if="settingVisible"
@@ -420,7 +420,6 @@ export default {
     'currentDesk.settings': {
       handler(newVal) {
         console.log('更改了方向');
-        console.log();
         if (!newVal) {
           newVal = {
             cardZoom: 100,

@@ -108,7 +108,7 @@ export default {
         data: [
           {
             index: '1000345',
-            keyWord: '想天工作台',
+            keyWord: '磐古客户端',
             type: '长期',
             state: '生效中',
           },

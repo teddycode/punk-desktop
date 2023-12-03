@@ -162,6 +162,9 @@ window.USER_DATA_PATH = window.globalArgs['user-data-dir']; //挂载一个用户
 
 window.$app = $app;
 
+// ant 默认样式
+import 'ant-design-vue/dist/antd.css';
+
 //处理路由记录
 processRouter();
 

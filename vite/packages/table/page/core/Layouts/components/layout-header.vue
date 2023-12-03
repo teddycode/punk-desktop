@@ -1,107 +1,69 @@
 <template>
-  <div>
-    <div class="common-layout">
-      <a-row>
-        <a-col :span="6">
-          <div class="layoutheader_Title">
-            <img v-maxImg src="/img/user.png" class="header_logo" tatile="磐古OS" />
-            <span class="project-name">
-              <span class="dynamicText">磐古OS</span>
-            </span>
-          </div>
-        </a-col>
-        <a-col :span="12">
-          <template v-if="!isMenu">
-            <a-config-provider prefixCls="ant">
-              <a-menu mode="horizontal" @select="selectChange" v-model:selectedKeys="selectedKeys">
-                <template v-for="(value, index) in munePath" :key="index">
-                  <template :index="value.path" v-if="value && value.children">
-                    <a-sub-menu :key="value.path" :index="value.path" v-if="value && value.children">
-                      <template #title>
-                        <span class="anticon anticon-desktop">
-                          <EyeOutlined></EyeOutlined>
-                          <!--                              <svgView :svg="value.icon"></svgView>-->
-                        </span>
-                        <span>{{ $t(`menu.${value?.meta?.title}`) }}</span>
-                      </template>
-                      <a-menu-item v-for="item in value.children" :key="item.path">
-                        <span class="anticon anticon-desktop">
-                          <EyeOutlined></EyeOutlined>
-                          <!--                              <svgView :svg="item.icon"></svgView>-->
-                        </span>
-                        <span>{{ $t(`menu.${item.path}`) }}</span>
-                      </a-menu-item>
-                    </a-sub-menu>
-                  </template>
-                  <template v-else>
-                    <a-menu-item :key="value.path">
+  <div class="common-layout">
+    <a-row>
+      <a-col :span="6">
+        <div class="layoutheader_Title">
+          <img v-maxImg src="/img/punkos-logo.png" class="header_logo" tatile="磐古OS" />
+          <span class="project-name">
+            <span class="dynamicText">磐古OS</span>
+          </span>
+        </div>
+      </a-col>
+      <a-col :span="13">
+        <template v-if="!isMenu">
+          <a-config-provider prefixCls="ant">
+            <a-menu mode="horizontal" @select="selectChange" v-model:selectedKeys="selectedKeys">
+              <template v-for="(value, index) in munePath" :key="index">
+                <template :index="value.name" v-if="value && value.children">
+                  <a-sub-menu :key="value.name" :index="value.path" v-if="value && value.children">
+                    <template #title>
                       <span class="anticon anticon-desktop">
-                        <EyeOutlined></EyeOutlined>
-                        <!--                            <svgView :svg="value.icon"></svgView>-->
+                        <!--                        <a-icon type="user"></a-icon>-->
                       </span>
-                      <span>{{ $t(`menu.${value?.meta?.title}`) }}</span>
+                      <span>{{ value?.meta?.title }}</span>
+                    </template>
+                    <a-menu-item v-for="item in value.children" :key="item.name">
+                      <span class="anticon anticon-desktop">
+                        <!--                        <a-icon type="user"></a-icon>-->
+                      </span>
+                      <span>{{ value?.meta?.title }}</span>
                     </a-menu-item>
-                  </template>
+                  </a-sub-menu>
                 </template>
-              </a-menu>
-            </a-config-provider>
-          </template>
-        </a-col>
-        <a-col :span="4">
-          <div class="flex row-reverse">
-            <div class="layout-header-userBox">
-              <a-dropdown>
-                <div class="layout-header-user">
-                  <span>当前用户名</span>
-                  <img src="/img/user.png" class="header_logo" tatile="VUE自定义后台管理模板" />
-                </div>
-                <template #overlay>
-                  <a-menu>
-                    <a-menu-item>个人信息</a-menu-item>
-                    <a-menu-item>修改密码</a-menu-item>
-                    <a-menu-item @click="LogOut">退出登录</a-menu-item>
-                  </a-menu>
+                <template v-else>
+                  <a-menu-item :key="value.name">
+                    <span class="anticon anticon-desktop">
+                      <!--                      <a-icon type="user"></a-icon>-->
+                    </span>
+                    <span>{{ value?.meta?.title }}</span>
+                  </a-menu-item>
                 </template>
-              </a-dropdown>
-            </div>
-            <a-dropdown>
-              <!--              <svgView svg="yingwen" v-if="locales ==='en'"/>-->
-              <!--              <svgView svg="zhongwen" v-else/>-->
-              <template #overlay>
-                <a-menu>
-                  <a-menu-item @click="locales = 'zh-cn'">
-                    <EyeOutlined></EyeOutlined>
-                    <!--                    <svgView svg="yingwen"/>-->
-                    中文
-                  </a-menu-item>
-                  <a-menu-item @click="locales = 'en'">
-                    <EyeOutlined></EyeOutlined>
-                    <!--                    <svgView svg="zhongwen"/>-->
-                    英文
-                  </a-menu-item>
-                </a-menu>
               </template>
-            </a-dropdown>
-            <div style="20px;width:20px;"></div>
+            </a-menu>
+          </a-config-provider>
+        </template>
+      </a-col>
+      <a-col :span="4">
+        <div class="flex row-reverse">
+          <div class="layout-header-userBox">
             <a-dropdown>
-              <Icon icon="shezhi" style="font-size: 1.5em"></Icon>
+              <div class="layout-header-user">
+                <span>当前钱包：0x1NvT...j8ek</span>
+                <img src="/img/wallet.png" class="header_logo" tatile="钱包" />
+              </div>
               <template #overlay>
                 <a-menu>
-                  <a-menu-item @click="themes = false">
-                    <Icon icon="shezhi" style="font-size: 1.5em"></Icon>
-                    白天模式
-                  </a-menu-item>
-                  <a-menu-item @click="themes = true">
-                    <Icon icon="shezhi" style="font-size: 1.5em"></Icon>
-                    黑夜模式
-                  </a-menu-item>
+                  <a-menu-item>切换钱包</a-menu-item>
+                  <a-menu-item>钱包信息</a-menu-item>
+                  <a-menu-item>个人信息</a-menu-item>
+                  <a-menu-item @click="LogOut">退出登录</a-menu-item>
                 </a-menu>
               </template>
             </a-dropdown>
           </div>
-        </a-col>
-      </a-row>
-    </div>
+        </div>
+      </a-col>
+    </a-row>
   </div>
 </template>
 
@@ -134,29 +96,13 @@ const direction = computed(() => (store.direction ? 'rtl' : 'ltr'));
 
 const visible = ref(false);
 
-// 国际化
-const locales = computed({
-  get: () => store.locales,
-  set: (value) => {
-    locale.value = value;
-    store.locales = value;
-  },
-});
-
 const selectedKeys = ref([]);
 const activeTagView = computed(() => store.activeTagView);
 selectedKeys.value = [activeTagView.value];
 
-// 白天/黑夜模式
-const themes = computed({
-  get: () => store.themes,
-  set: (value) => {
-    store.themes = value;
-  },
-});
-
 const selectChange = (item) => {
-  router.push(item.key);
+  console.log('切换菜单：', item);
+  router.push({ name: item?.key || 'home' });
 };
 
 const LogOut = () => {
@@ -167,13 +113,8 @@ const LogOut = () => {
 </script>
 
 <style scoped>
-.a-drawer {
-  padding: 0 !important;
-}
-
 body .a-drawer {
   padding: none;
-  /* --a-drawer-padding-primary:none;1 */
 }
 
 .common-layout >>> .ant-menu {
@@ -188,17 +129,17 @@ body .a-drawer {
 </style>
 <style scoped lang="less">
 .common-layout {
-  // width: 100%;
+  margin-left: -50px;
+  width: 110%;
   height: 64px;
   max-height: 64px;
-  overflow: hidden;
-  background: url(/img/header.png);
-  background-size: 100% 100%;
+  background: #8080803d;
   color: #fff;
   z-index: 1;
 }
 
 .layoutheader_Title {
+  margin-left: 20px;
   display: flex;
   align-items: center;
   height: 64px;
@@ -215,7 +156,7 @@ body .a-drawer {
 }
 
 .header_logo {
-  height: 40px;
+  height: 50px;
   width: auto;
   margin: 10px;
 }

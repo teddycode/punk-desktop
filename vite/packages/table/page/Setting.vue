@@ -19,7 +19,7 @@
         <a-row :gutter="[20, 20]" style="font-size: 1.2em; text-align: center">
           <a-col :span="12" v-if="!this.isOffline">
             <div class="relative btn">
-              弹幕
+              账户校验
               <br />
               <a-switch @change="switchBarrage" v-model:checked="settings.enableBarrage"></a-switch>
             </div>
@@ -48,7 +48,7 @@
 
           <a-col :span="12" v-if="!this.isOffline">
             <div class="relative btn">
-              社群沟通<br />
+              社交网络<br />
               <a-switch v-model:checked="settings.enableChat"></a-switch>
             </div>
           </a-col>

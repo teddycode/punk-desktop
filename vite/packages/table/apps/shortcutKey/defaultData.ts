@@ -3320,7 +3320,7 @@ const appMap = [
   {
     exeName: 'electron.exe',
     alias: 'Electron调试程序',
-    company: '想天软件',
+    company: '磐古软件',
     id: 'qq.exe',
   },
   {

@@ -194,7 +194,7 @@ export default {
     },
     {
       type: 'systemApp',
-      icon: 'fluent-mdl2:navigate-back',
+      icon: 'mingcute:back-fill',
       name: '返回',
       event: 'goback',
       fn: (parent) => {

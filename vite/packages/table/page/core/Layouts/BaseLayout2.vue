@@ -1,5 +1,5 @@
 <template>
-  <div class="s-bg rounded-lg xt-text" style="height: 100%">
+  <div class="s-bg rounded-lg xt-text" style="height: 100%; overflow-y: auto; overflow-x: hidden">
     <router-view></router-view>
   </div>
 </template>

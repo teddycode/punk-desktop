@@ -1,39 +1,57 @@
 <template>
-  <div class="about">
-    <v-sidebar />
-    <div :class="{ 'content-collapse': collapse }" class="content-box">
-      <div class="content">
-        <router-view v-slot="{ Component }">
-          <transition mode="out-in" name="move">
-            <keep-alive :include="tagsList">
-              <component :is="Component" />
-            </keep-alive>
-          </transition>
-        </router-view>
-        <!-- <el-backtop target=".content"></el-backtop> -->
+  <a-layout class="layout">
+    <a-layout-header>
+      <layoutHeader />
+    </a-layout-header>
+    <a-layout-content>
+      <!--      <path-bar :style="{ position: 'fixed', zIndex: 10 }"></path-bar>-->
+      <div :style="{ background: '#fff', padding: '20px', minHeight: '280px' }">
+        <router-view />
       </div>
-    </div>
-  </div>
+    </a-layout-content>
+    <layout-footer />
+  </a-layout>
 </template>
+<script lang="ts">
+import { defineComponent, ref } from 'vue';
+import layoutHeader from '../Layouts/components/layout-header.vue';
+import pathBar from '../Layouts/components/pathBar.vue';
+import LayoutFooter from '@page/core/Layouts/components/layout-footer.vue';
 
-<script>
-import { computed } from 'vue';
-import vSidebar from './componnents/Sidebar.vue';
-import vTags from './componnents/Tags.vue';
-import { useBaseStore } from '@store/baseboard';
-export default {
+export default defineComponent({
   components: {
-    vSidebar,
-    vTags,
+    LayoutFooter,
+    layoutHeader,
+    pathBar,
   },
   setup() {
-    const store = useBaseStore();
-    const tagsList = computed(() => store.tagsList.map((item) => item.name));
-    const collapse = computed(() => store.collapse);
     return {
-      tagsList,
-      collapse,
+      selectedKeys: ref<string[]>(['2']),
     };
   },
-};
+});
 </script>
+<style>
+.site-layout-content {
+  min-height: 280px;
+  padding: 24px;
+  background: #fff;
+}
+
+#components-layout-demo-top .logo {
+  float: left;
+  width: 120px;
+  height: 31px;
+  margin: 16px 24px 16px 0;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.ant-row-rtl #components-layout-demo-top .logo {
+  float: right;
+  margin: 16px 0 16px 24px;
+}
+
+[data-theme='dark'] .site-layout-content {
+  background: #141414;
+}
+</style>

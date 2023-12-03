@@ -84,7 +84,7 @@ let menus = ref([
   },
   {
     newIcon: 'fluent-emoji:thought-balloon',
-    title: '社群沟通',
+    title: '社交网络',
     value: 'chats',
     callBack: selectBranchTab,
   },

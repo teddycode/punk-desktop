@@ -12,7 +12,7 @@
           <sync-outlined :spin="true" v-if="value.path === activeTagView" @click="Refresh" />
           <close-circle-outlined @click="deleteTag(index)" />
         </template>
-        <span @click="changeTag(value)"> {{ $t(`menu.${value.path}`) }}</span>
+        <span @click="changeTag(value)"> {{ vallue?.name }}</span>
       </a-tag>
     </div>
   </div>
@@ -39,7 +39,7 @@ export default {
     const tagView = computed(() => store.tagView);
     // 点击历史菜单
     const changeTag = (item) => {
-      router.push(item.path);
+      router.push({ name: item?.name });
     };
     // 删除历史菜单
     const deleteTag = (index) => {

@@ -127,7 +127,7 @@
 3.安装 python3.10 或以上版本，并设置 yarn 环境变量
 
 > 参考可运行的完整 yarn 环境变量
-> ![img.png](./docs/npmenv.png)
+> ![img.png](docs/image/npmenv.png)
 > 项目推荐使用的环境变量：
 
 ```shell

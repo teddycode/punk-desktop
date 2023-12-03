@@ -95,7 +95,7 @@ const leftList = ref([
     newIcon: '',
     img: '/icons/IM.png',
     alias: 'teamChat',
-    title: '社群沟通',
+    title: '社交网络',
     type: 'message',
     callBack: (item) => {
       selectTab(item);

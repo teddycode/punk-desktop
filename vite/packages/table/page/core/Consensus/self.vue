@@ -1,474 +1,306 @@
 <template>
-  <background>
-    <div class="container">
-      <div style="padding: 10px 10px; margin-bottom: 20px">
-        <span style="font-size: 30px">我的共识数据</span>
-      </div>
-      <div style="padding: 10px 10px; margin-bottom: 20px">
-        <span style="font-size: 20px">我的产出</span>
-      </div>
-      <div style="border: 1px solid; border-radius: 10px; border-color: #cdcbcb; margin-bottom: 20px">
-        <el-space wrap>
-          <div style="padding: 10px 10px">
-            <div style="padding: 10px 5px">
-              <span>PoT区块数目</span>
+  <a-layout style="background-color: #f5f5f5">
+    <a-card size="default" title="我的共识数据" :bordered="true">
+      <a-card-meta :title="'我的产出'"></a-card-meta>
+      <a-card-body>
+        <a-row :gutter="16">
+          <a-col :span="4">
+            <a-statistic title="PoT区块数" :value="5" />
+          </a-col>
+          <a-col :span="4">
+            <a-statistic title="业务区块数" :value="33" />
+          </a-col>
+          <a-col :span="8">
+            <a-statistic title="地址" :value="'1NvTaPya8mMC47fLrtfTZ5F4zWGseaj8ek'" />
+          </a-col>
+          <a-col :span="4">
+            <a-statistic title="挖矿奖励" :value="60" suffix="Token" />
+          </a-col>
+          <a-col :span="4">
+            <a-statistic title="网络ID" value="2a9fc4123b" />
+          </a-col>
+        </a-row>
+      </a-card-body>
+    </a-card>
+    <a-layout-content style="margin-top: 10px; margin-bottom: 20px">
+      <a-row :gutter="[16, 16]">
+        <a-col :span="24">
+          <a-card title="PoT区块产出" size="small">
+            <div style="margin-bottom: 10px">
+              <a-row justify="space-between">
+                <a-col :offset="1" :span="8">
+                  <a-input-search placeholder="区块高度" style="width: 60%" v-model:value="potSearchHeight" />
+                </a-col>
+                <a-col :span="8">
+                  <a-input-search placeholder="区块Hash" style="width: 60%" v-model:value="potSearchHash" />
+                </a-col>
+                <a-col :span="4">
+                  <a-button style="margin-right: 10px" @click="resetPotSearch"> 重置</a-button>
+                  <a-button type="primary" style="margin-right: 10px" @click="searchPotBlocks"> 搜索</a-button>
+                </a-col>
+              </a-row>
             </div>
-            <div style="padding: 10px 5px">
-              <span style="font-size: 20px">5</span>
-            </div>
-          </div>
-          <div style="padding: 10px 10px">
-            <div style="padding: 10px 5px">
-              <span>业务区块数目</span>
-            </div>
-            <div style="padding: 10px 5px">
-              <span style="font-size: 20px">33</span>
-            </div>
-          </div>
-          <div style="padding: 10px 10px">
-            <div style="padding: 10px 5px">
-              <span>地址</span>
-            </div>
-            <div style="padding: 10px 5px">
-              <span style="font-size: 20px">1NvTaPya8mMC47fLrtfTZ5F4zwGseaj8ek</span>
-            </div>
-          </div>
-          <div style="padding: 10px 10px">
-            <div style="padding: 10px 5px">
-              <span>挖矿奖励</span>
-            </div>
-            <div style="padding: 10px 5px">
-              <span style="font-size: 20px">60 Token</span>
-            </div>
-          </div>
-          <div style="padding: 10px 10px">
-            <div style="padding: 10px 5px">
-              <span>网络ID</span>
-            </div>
-            <div style="padding: 10px 5px">
-              <span style="font-size: 20px">2a9fc4123b</span>
-            </div>
-          </div>
-        </el-space>
-      </div>
-      <div style="width: 100%; border: 1px solid; border-color: #cdcbcb; padding: 10px 10px">
-        <el-space wrap>
-          <div style="width: 1000px; border: 1px solid; border-color: #cdcbcb">
-            <div style="padding: 10px 10px">
-              <span style="margin-right: 15px; font-size: 20px; color: blue; padding: 10px 10px">PoT区块产出</span>
-              <span style="margin-right: 15px; font-size: 15px">区块高度：</span>
-              <el-input
-                v-model="tableData.searchBlockHeight"
-                class="handle-input mr10"
-                placeholder="区块高度"
-              ></el-input>
-              <span style="margin-right: 15px; font-size: 15px; margin-left: 30px">区块Hash：</span>
-              <el-input v-model="tableData.searchBlockHash" class="handle-input mr10" placeholder="区块Hash"></el-input>
-              <div style="float: right">
-                <el-button icon="el-icon-refresh" style="color: #696969" @click="handleSearchInputReset()"
-                  >重置
-                </el-button>
-                <el-button icon="el-icon-search" type="primary" @click="handleSearch()">搜索</el-button>
-              </div>
-            </div>
-            <div style="padding: 10px 10px">
-              <el-table
-                ref="multipleTableRef"
-                :data="tableData.displayBlockInfo"
-                :row-key="getRowKey"
-                border
-                height="410"
-                style="width: 100%"
-              >
-                <el-table-column label="区块高度" width="110">
-                  <template #default="scope">
-                    {{ scope.row.height }}
-                  </template>
-                </el-table-column>
-                <el-table-column label="出块人">
-                  <template #default="scope">
-                    <!-- {{ scope.row.number }} -->
-                    {{ scope.row.owner }}
-                  </template>
-                </el-table-column>
-                <el-table-column label="业务块数目">
-                  <template #default="scope">
-                    {{ scope.row.microBlockNum }}
-                  </template>
-                </el-table-column>
-                <el-table-column label="总交易数目">
-                  <template #default="scope">
-                    {{ scope.row.transactionNum }}
-                  </template>
-                </el-table-column>
-                <el-table-column label="时间">
-                  <template #default="scope">
-                    {{ scope.row.time }}
-                  </template>
-                </el-table-column>
-                <el-table-column label="区块大小 (Bytes)">
-                  <template #default="scope">
-                    {{ scope.row.size }}
-                  </template>
-                </el-table-column>
-                <el-table-column align="center" label="操作" width="200">
-                  <template #default="scope">
-                    <el-button
-                      class="green"
-                      icon="el-icon-tickets"
-                      type="text"
-                      @click="
-                        detailDialogVisible = true;
-                        handleDetail(scope.$index, scope.row);
-                      "
-                      >详细
-                    </el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
-              <el-dialog v-model="detailDialogVisible" title="区块详细信息" width="30%">
-                <el-form :model="tableData.nowBlock" label-width="90px">
-                  <el-form-item label="区块高度">
-                    <el-input v-model="tableData.nowBlock.height" :readonly="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="区块哈希">
-                    <el-input v-model="tableData.nowBlock.hash" :readonly="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="出块人">
-                    <el-input v-model="tableData.nowBlock.owner" :readonly="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="微块数目">
-                    <el-input v-model="tableData.nowBlock.microBlockNum" :readonly="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="交易数目">
-                    <el-input v-model="tableData.nowBlock.transactionNum" :readonly="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="大小(Bytes)">
-                    <el-input v-model="tableData.nowBlock.size" :readonly="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="父区块哈希">
-                    <el-input v-model="tableData.nowBlock.parentHash" :readonly="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="叔区块哈希">
-                    <div style="border: 1px solid; border-radius: 4px; border-color: #cdcbcb">
-                      <div v-for="u in tableData.nowBlock.uncleHash" :key="u">
-                        <span style="padding: 10px 10px">
-                          {{ u }}
-                        </span>
-                      </div>
-                    </div>
-                  </el-form-item>
-                  <el-form-item label="mixDigest">
-                    <el-input v-model="tableData.nowBlock.mixDigest" :readonly="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="nonce">
-                    <el-input v-model="tableData.nowBlock.nonce" :readonly="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="难度">
-                    <el-input v-model="tableData.nowBlock.difficulty" :readonly="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="时间">
-                    <el-input v-model="tableData.nowBlock.time" :readonly="true"></el-input>
-                  </el-form-item>
-                </el-form>
-                <template #footer>
-                  <span class="dialog-footer">
-                    <el-button type="primary" @click="detailDialogVisible = false">关闭</el-button>
+            <a-table :columns="potColumns" :data-source="potData" :rowKey="(record) => record.height">
+              <template #bodyCell="{ column, record }">
+                <template v-if="column.dataIndex === 'action'">
+                  <span>
+                    <EyeOutlined />
+                    <a href="javascript:;" @click="showPotBlockDetail(record)">详细</a>
                   </span>
                 </template>
-              </el-dialog>
+              </template>
+            </a-table>
+            <a-modal v-model:visible="potModalVisible" title="区块详情" width="800px" @ok="potModalVisible = false">
+              <a-descriptions :column="2" bordered>
+                <a-descriptions-item label="区块高度">{{ potBlockDetail.height }}</a-descriptions-item>
+                <a-descriptions-item label="区块哈希">{{ potBlockDetail.hash }}</a-descriptions-item>
+                <a-descriptions-item label="出块人">{{ potBlockDetail.owner }}</a-descriptions-item>
+                <a-descriptions-item label="微块数目">{{ potBlockDetail.microBlockCount }}</a-descriptions-item>
+                <a-descriptions-item label="交易数目">{{ potBlockDetail.transactionCount }}</a-descriptions-item>
+                <a-descriptions-item label="大小(Bytes)">{{ potBlockDetail.size }}</a-descriptions-item>
+                <a-descriptions-item label="父区块哈希">{{ potBlockDetail.parentHash }}</a-descriptions-item>
+                <a-descriptions-item label="叔区块哈希">
+                  <div v-for="uncleHash in potBlockDetail.uncleHashes">{{ uncleHash }}</div>
+                </a-descriptions-item>
+                <a-descriptions-item label="mixDigest">{{ potBlockDetail.mixDigest }}</a-descriptions-item>
+                <a-descriptions-item label="nonce">{{ potBlockDetail.nonce }}</a-descriptions-item>
+                <a-descriptions-item label="难度">{{ potBlockDetail.difficulty }}</a-descriptions-item>
+                <a-descriptions-item label="时间">{{ potBlockDetail.time }}</a-descriptions-item>
+              </a-descriptions>
+            </a-modal>
+          </a-card>
+        </a-col>
+        <a-col :span="24">
+          <a-card title="业务区块产出" size="small">
+            <div style="margin-bottom: 10px">
+              <a-row justify="space-between">
+                <a-col :offset="1" :span="8">
+                  <a-input-search placeholder="区块高度" style="width: 60%" v-model:value="businessSearchHeight" />
+                </a-col>
+                <a-col :span="8">
+                  <a-input-search placeholder="区块Hash" style="width: 60%" v-model:value="businessSearchHash" />
+                </a-col>
+                <a-col :span="4">
+                  <a-button style="margin-left: 10px" @click="resetBusinessSearch"> 重置</a-button>
+                  <a-button type="primary" style="margin-left: 10px" @click="searchBusinessBlocks"> 搜索</a-button>
+                </a-col>
+              </a-row>
             </div>
-          </div>
-          <div style="width: 1000px; border: 1px solid; border-color: #cdcbcb">
-            <div style="padding: 10px 10px">
-              <span style="margin-right: 15px; font-size: 20px; color: blue; padding: 10px 10px">业务区块产出</span>
-              <span style="margin-right: 15px; font-size: 15px">区块高度：</span>
-              <el-input
-                v-model="tableData.searchMicBlockHeight"
-                class="handle-input mr10"
-                placeholder="区块高度"
-              ></el-input>
-              <span style="margin-right: 15px; font-size: 15px; margin-left: 30px">区块Hash：</span>
-              <el-input
-                v-model="tableData.searchMicBlockHash"
-                class="handle-input mr10"
-                placeholder="区块Hash"
-              ></el-input>
-              <div style="float: right">
-                <el-button icon="el-icon-refresh" style="color: #696969" @click="handleSearchInputResetForMicBlock()">
-                  重置
-                </el-button>
-                <el-button icon="el-icon-search" type="primary" @click="handleSearchForMicBlock()">搜索</el-button>
-              </div>
-            </div>
-            <div style="padding: 10px 10px">
-              <el-table
-                ref="multipleTableForMicBlockRef"
-                :data="tableData.displayMicBlockInfo"
-                :row-key="getRowKey"
-                border
-                height="410"
-                style="width: 100%"
-              >
-                <el-table-column label="区块高度" width="110">
-                  <template #default="scope">
-                    {{ scope.row.height }}
-                  </template>
-                </el-table-column>
-                <el-table-column label="leader">
-                  <template #default="scope">
-                    <!-- {{ scope.row.number }} -->
-                    {{ scope.row.leader }}
-                  </template>
-                </el-table-column>
-                <el-table-column label="总交易数目">
-                  <template #default="scope">
-                    {{ scope.row.transactionNum }}
-                  </template>
-                </el-table-column>
-                <el-table-column label="时间">
-                  <template #default="scope">
-                    {{ scope.row.time }}
-                  </template>
-                </el-table-column>
-                <el-table-column label="区块大小 (Bytes)">
-                  <template #default="scope">
-                    {{ scope.row.size }}
-                  </template>
-                </el-table-column>
-                <el-table-column align="center" label="操作" width="200">
-                  <template #default="scope">
-                    <el-button
-                      class="green"
-                      icon="el-icon-tickets"
-                      type="text"
-                      @click="
-                        detailDialogVisibleForMicBlock = true;
-                        handleDetailForMicBlock(scope.$index, scope.row);
-                      "
-                    >
-                      详细
-                    </el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
-              <el-dialog v-model="detailDialogVisibleForMicBlock" title="区块详细信息" width="30%">
-                <el-form :model="tableData.nowMicBlock" label-width="90px">
-                  <el-form-item label="区块高度">
-                    <el-input v-model="tableData.nowMicBlock.height" :readonly="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="区块哈希">
-                    <el-input v-model="tableData.nowMicBlock.hash" :readonly="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="leader">
-                    <el-input v-model="tableData.nowMicBlock.leader" :readonly="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="交易数目">
-                    <el-input v-model="tableData.nowMicBlock.transactionNum" :readonly="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="大小(Bytes)">
-                    <el-input v-model="tableData.nowMicBlock.size" :readonly="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="父区块哈希">
-                    <el-input v-model="tableData.nowMicBlock.parentHash" :readonly="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="委员会">
-                    <div style="border: 1px solid; border-radius: 4px; border-color: #cdcbcb">
-                      <div v-for="u in tableData.nowMicBlock.committee" :key="u">
-                        <span style="padding: 10px 10px">
-                          {{ u }}
-                        </span>
-                      </div>
-                    </div>
-                  </el-form-item>
-                  <el-form-item label="时间">
-                    <el-input v-model="tableData.nowMicBlock.time" :readonly="true"></el-input>
-                  </el-form-item>
-                </el-form>
-                <template #footer>
-                  <span class="dialog-footer">
-                    <el-button type="primary" @click="detailDialogVisibleForMicBlock = false">关闭</el-button>
+            <a-table :columns="businessColumns" :data-source="businessData" :rowKey="(record) => record.height">
+              <template #bodyCell="{ column, record }">
+                <template v-if="column.dataIndex === 'action'">
+                  <span>
+                    <EyeOutlined />
+                    <a @click="showBusinessBlockDetail(record)">详细</a>
                   </span>
                 </template>
-              </el-dialog>
-            </div>
-          </div>
-        </el-space>
-      </div>
-
-      <div class="plugins-tips">数据更新时间：{{ nowDate }}</div>
-    </div>
-  </background>
+              </template>
+            </a-table>
+            <a-modal
+              v-model:visible="businessModalVisible"
+              title="区块详情"
+              width="800px"
+              @ok="businessModalVisible = false"
+            >
+              <a-descriptions :column="2" bordered>
+                <a-descriptions-item label="区块高度">{{ businessBlockDetail.height }}</a-descriptions-item>
+                <a-descriptions-item label="区块哈希">{{ businessBlockDetail.hash }}</a-descriptions-item>
+                <a-descriptions-item label="leader">{{ businessBlockDetail.leader }}</a-descriptions-item>
+                <a-descriptions-item label="交易数目">{{ businessBlockDetail.transactionCount }}</a-descriptions-item>
+                <a-descriptions-item label="大小(Bytes)">{{ businessBlockDetail.size }}</a-descriptions-item>
+                <a-descriptions-item label="父区块哈希">{{ businessBlockDetail.parentHash }}</a-descriptions-item>
+                <a-descriptions-item label="委员会">
+                  <div v-for="committeeMember in businessBlockDetail.committee">{{ committeeMember }}</div>
+                </a-descriptions-item>
+                <a-descriptions-item label="时间">{{ businessBlockDetail.time }}</a-descriptions-item>
+              </a-descriptions>
+            </a-modal>
+          </a-card>
+        </a-col>
+      </a-row>
+    </a-layout-content>
+    <a-layout-footer>
+      <div style="text-align: right; color: #000">数据更新时间: {{ currentDate }}</div>
+    </a-layout-footer>
+  </a-layout>
 </template>
 
 <script>
-import { reactive, ref } from 'vue';
-import { message } from 'ant-design-vue';
-import Background from '@page/core/components/Background.vue';
+import { onMounted, ref } from 'vue';
+import dayjs from 'dayjs';
+import { Button, Col, Descriptions, Input, Layout, Modal, PageHeader, Row, Statistic, Table } from 'ant-design-vue';
+import { blockData } from './data/block.js';
+import { myBlockData } from './data/myBlock.js';
+import { EyeOutlined } from '@ant-design/icons-vue';
 
 export default {
-  name: 'SelfConsensus',
-  components: { Background },
   setup() {
-    const multipleTableRef = ref();
-    const multipleTableForMicBlockRef = ref();
-    const tableData = reactive({
-      blockInfo: [],
-      displayBlockInfo: [],
-      micBlockInfo: [],
-      displayMicBlockInfo: [],
-      nowBlock: undefined,
-      nowMicBlock: undefined,
-      searchBlockHeight: '',
-      searchBlockHash: '',
-      searchMicBlockHeight: '',
-      searchMicBlockHash: '',
+    const potColumns = [
+      {
+        title: '区块高度',
+        dataIndex: 'height',
+      },
+      {
+        title: '出块人',
+        dataIndex: 'owner',
+      },
+      {
+        title: '业务区块数',
+        dataIndex: 'microBlockCount',
+      },
+      {
+        title: '总交易数目',
+        dataIndex: 'transactionCount',
+      },
+      {
+        title: '区块大小(Bytes)',
+        dataIndex: 'size',
+      },
+      {
+        title: '时间',
+        dataIndex: 'time',
+      },
+      {
+        title: '操作',
+        dataIndex: 'action',
+      },
+    ];
+    const potData = ref([]);
+    const potModalVisible = ref(false);
+    const potBlockDetail = ref({});
+    const showPotBlockDetail = (record) => {
+      potBlockDetail.value = { ...record };
+      potModalVisible.value = true;
+    };
+    const potSearchHeight = ref('');
+    const potSearchHash = ref('');
+    const searchPotBlocks = () => {
+      const temp = potData.value.filter(
+        (item) =>
+          (potSearchHeight.value && item.height === potSearchHeight.value) ||
+          (potSearchHash.value && item.hash === potSearchHash.value) ||
+          (!potSearchHeight.value && !potSearchHash.value),
+      );
+      potData.value = temp;
+    };
+    const resetPotSearch = () => {
+      potSearchHeight.value = '';
+      potSearchHash.value = '';
+      potData.value = potDataBackup.value;
+    };
+    const potDataBackup = ref([]);
+    const businessColumns = [
+      {
+        title: '区块高度',
+        dataIndex: 'height',
+      },
+      {
+        title: 'leader',
+        dataIndex: 'leader',
+      },
+      {
+        title: '总交易数目',
+        dataIndex: 'transactionCount',
+      },
+      {
+        title: '区块大小(Bytes)',
+        dataIndex: 'size',
+      },
+      {
+        title: '时间',
+        dataIndex: 'time',
+      },
+      {
+        title: '操作',
+        dataIndex: 'action',
+      },
+    ];
+    const businessData = ref([]);
+    const businessModalVisible = ref(false);
+    const businessBlockDetail = ref({});
+    const showBusinessBlockDetail = (record) => {
+      businessBlockDetail.value = { ...record };
+      businessModalVisible.value = true;
+    };
+    const businessSearchHeight = ref('');
+    const businessSearchHash = ref('');
+    const searchBusinessBlocks = () => {
+      const temp = businessData.value.filter(
+        (item) =>
+          (businessSearchHeight.value && item.height === businessSearchHeight.value) ||
+          (businessSearchHash.value && item.hash === businessSearchHash.value) ||
+          (!businessSearchHeight.value && !businessSearchHash.value),
+      );
+      businessData.value = temp;
+    };
+    const resetBusinessSearch = () => {
+      businessSearchHeight.value = '';
+      businessSearchHash.value = '';
+      businessData.value = businessDataBackup.value;
+    };
+    const businessDataBackup = ref([]);
+    const currentDate = ref(dayjs().format('YYYY-MM-DD HH:mm:ss'));
+
+    // 获取共识概览数据
+    async function getPotBlocks() {
+      //  TODO From Remote request
+    }
+
+    // 获取我的共识数据
+    async function getMyBlocks() {
+      //  TODO From Remote request
+    }
+
+    onMounted(async () => {
+      potDataBackup.value = blockData;
+      potData.value = blockData;
+      businessDataBackup.value = myBlockData;
+      businessData.value = myBlockData;
+      // console.log(potData.value);
+      // console.log(businessData.value);
+      //   TODO 字段似乎对不上，微块数目、总交易数、leder未知
     });
 
-    let detailDialogVisible = ref(false);
-    let detailDialogVisibleForMicBlock = ref(false);
-    let nowDate;
-
-    const getRowKey = (row) => {
-      return row.id;
-    };
-
-    // 过滤查询操作
-    const handleSearch = () => {
-      // displayBlockInfo 中的内容将会显示在界面的表格中
-      // 清空 displayBlockInfo 数组
-      tableData.displayBlockInfo.splice(0, tableData.displayBlockInfo.length);
-      if (tableData.searchBlockHeight === '' && tableData.searchBlockHash === '') {
-        tableData.displayBlockInfo = [].concat(tableData.blockInfo);
-      } else if (tableData.searchBlockHeight === '' && tableData.searchBlockHash !== '') {
-        tableData.blockInfo.forEach((item) => {
-          if (item.hash === tableData.searchBlockHash) {
-            tableData.displayBlockInfo.push(item);
-          }
-        });
-      } else if (tableData.searchBlockHeight !== '' && tableData.searchBlockHash === '') {
-        tableData.blockInfo.forEach((item) => {
-          if (item.height === tableData.searchBlockHeight) {
-            tableData.displayBlockInfo.push(item);
-          }
-        });
-      } else {
-        tableData.blockInfo.forEach((item) => {
-          if (item.height === tableData.searchBlockHeight && item.hash === tableData.searchBlockHash) {
-            tableData.displayBlockInfo.push(item);
-          }
-        });
-      }
-    };
-
-    // 过滤查询操作
-    const handleSearchForMicBlock = () => {
-      // displayBlockInfo 中的内容将会显示在界面的表格中
-      // 清空 displayBlockInfo 数组
-      tableData.displayMicBlockInfo.splice(0, tableData.displayMicBlockInfo.length);
-      if (tableData.searchMicBlockHeight === '' && tableData.searchMicBlockHash === '') {
-        tableData.displayMicBlockInfo = [].concat(tableData.micBlockInfo);
-      } else if (tableData.searchMicBlockHeight === '' && tableData.searchMicBlockHash !== '') {
-        tableData.micBlockInfo.forEach((item) => {
-          if (item.hash === tableData.searchMicBlockHash) {
-            tableData.displayMicBlockInfo.push(item);
-          }
-        });
-      } else if (tableData.searchMicBlockHeight !== '' && tableData.searchMicBlockHash === '') {
-        tableData.micBlockInfo.forEach((item) => {
-          if (item.height === tableData.searchMicBlockHeight) {
-            tableData.displayMicBlockInfo.push(item);
-          }
-        });
-      } else {
-        tableData.micBlockInfo.forEach((item) => {
-          if (item.height === tableData.searchMicBlockHeight && item.hash === tableData.searchMicBlockHash) {
-            tableData.displayMicBlockInfo.push(item);
-          }
-        });
-      }
-    };
-
-    const handleSearchInputReset = () => {
-      tableData.searchBlockHeight = '';
-      tableData.searchBlockHash = '';
-    };
-
-    const handleSearchInputResetForMicBlock = () => {
-      tableData.searchMicBlockHeight = '';
-      tableData.searchMicBlockHash = '';
-    };
-
-    const handleDetail = (index, row) => {
-      console.log(row);
-      // 深拷贝如下
-      // 这里最好不直接使用 = ，因为修改失败时，我们不希望 tableData.nowMicBlock 的变化引起 row 的变化
-      tableData.nowBlock = JSON.parse(JSON.stringify(row));
-    };
-
-    const handleDetailForMicBlock = (index, row) => {
-      console.log(row);
-      // 深拷贝如下
-      // 这里最好不直接使用 = ，因为修改失败时，我们不希望 tableData.nowMicBlock 的变化引起 row 的变化
-      tableData.nowMicBlock = JSON.parse(JSON.stringify(row));
-    };
-
-    const getAllBlockData = () => {
-      getMyBlock()
-        .then((res) => {
-          tableData.blockInfo = [].concat(res);
-          tableData.displayBlockInfo = [].concat(res);
-        })
-        .catch((error) => {
-          console.log(error);
-          message.error('获取消息数据失败');
-        });
-      getMyMicBlock()
-        .then((res) => {
-          tableData.micBlockInfo = [].concat(res);
-          tableData.displayMicBlockInfo = [].concat(res);
-        })
-        .catch((error) => {
-          console.log(error);
-          message.error('获取消息数据失败');
-        });
-      var newDate = new Date();
-      nowDate = newDate.toLocaleString();
-    };
-
-    getAllBlockData();
-    // getMicBlock();
-
     return {
-      multipleTableRef,
-      multipleTableForMicBlockRef,
-      tableData,
-      detailDialogVisible,
-      detailDialogVisibleForMicBlock,
-      nowDate,
-      handleSearchInputReset,
-      handleSearchInputResetForMicBlock,
-      handleSearch,
-      handleSearchForMicBlock,
-      handleDetail,
-      handleDetailForMicBlock,
-      getRowKey,
+      potColumns,
+      potData,
+      potModalVisible,
+      potBlockDetail,
+      showPotBlockDetail,
+      potSearchHeight,
+      potSearchHash,
+      searchPotBlocks,
+      resetPotSearch,
+      businessColumns,
+      businessData,
+      businessModalVisible,
+      businessBlockDetail,
+      showBusinessBlockDetail,
+      businessSearchHeight,
+      businessSearchHash,
+      searchBusinessBlocks,
+      resetBusinessSearch,
+      currentDate,
     };
+  },
+  components: {
+    EyeOutlined,
+    Statistic,
+    PageHeader,
+    Layout,
+    Row,
+    Col,
+    Input,
+    Button,
+    Table,
+    Modal,
+    Descriptions,
   },
 };
 </script>
 
-<style scoped>
-.handle-box {
-  margin-bottom: 20px;
-}
-
-.handle-input {
-  width: 150px;
-  display: inline-block;
-}
-
-.mr10 {
-  margin-right: 10px;
+<style lang="scss" scoped>
+a {
+  color: #c1e3ff;
 }
 </style>

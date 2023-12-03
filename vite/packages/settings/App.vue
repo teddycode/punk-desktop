@@ -859,7 +859,7 @@ export default defineComponent({
                     <strong style="font-size: 16px; margin-left: 10px">想天轻密码</strong>
                   </div>
                   <div style="padding-left: 42px">
-                    推荐使用<strong>想天轻密码</strong>管理您的密码，可一键迁移当前浏览器密码至轻应用。
+                    推荐使用<strong>磐古轻密码</strong>管理您的密码，可一键迁移当前浏览器密码至轻应用。
                     <a-button @click="setPasswordManager('file')" type="primary" size="small" style="margin-top: 10px"
                       >点击更改</a-button
                     >

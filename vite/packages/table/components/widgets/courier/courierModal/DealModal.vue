@@ -23,7 +23,7 @@
               <div class="flex items-center w-full">
                 <DealIcon icon="ri:bilibili-line" style="font-size: 1.2rem; color: rgba(0, 174, 236, 1)" />
                 <span style="color: rgba(0, 174, 236, 1)" class="ml-2 font-16 font-400"
-                  >想天工作台「我的快递」小组件技术解析</span
+                  >磐古跨链客户端「我的快递」小组件技术解析</span
                 >
               </div>
             </xt-button>
