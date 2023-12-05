@@ -121,7 +121,7 @@ export default {
   color: #333333;
 }
 
-. content-container {
+.content-container {
   display: flex;
   justify-content: space-between;
   height: 90%;

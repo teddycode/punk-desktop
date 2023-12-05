@@ -48,7 +48,7 @@
           <div class="layout-header-userBox">
             <a-dropdown>
               <div class="layout-header-user">
-                <span>当前钱包：0x1NvT...j8ek</span>
+                <span>当前钱包:0x1NvT...j8ek</span>
                 <img src="/img/wallet.png" class="header_logo" tatile="钱包" />
               </div>
               <template #overlay>

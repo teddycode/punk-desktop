@@ -1,4 +1,4 @@
-## 开源的 Antd 可用示例
+## 开源的 Antd 示例
 
 1. Nginx UI: [code](https://github.com/0xJacky/nginx-ui) -- [preview](https://demo.nginxui.com/#/dashboard)
    ![img.png](image/img.png)
