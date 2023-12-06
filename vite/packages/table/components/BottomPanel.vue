@@ -537,6 +537,7 @@ export default {
 
     clickNavigation(item) {
       this.hideMenu();
+      console.log('底部打开了导航栏图标：', item);
       switch (item.type) {
         case 'systemApp':
           if (item.event === 'fullscreen') {
@@ -567,6 +568,12 @@ export default {
           require('electron').shell.openPath(item.path);
           break;
         case 'lightApp':
+          if (item?.url.startsWith('/web3/')) {
+            let route = { name: item?.package, params: { data: '' } };
+            console.log('跳转路由：', route);
+            this.$router.push(route);
+            break;
+          }
           ipc.send('executeAppByPackage', { package: item.package });
           break;
         default:
