@@ -2,7 +2,7 @@
   <div style="background: #333333; height: 100vh; width: 100vw">
     <h2 style="text-align: center; padding: 1em; -webkit-app-region: drag">
       <Icon icon="jurassic_nav" style="font-size: 1.2em"></Icon>
-      工作台使用向导
+      磐古跨链客户端使用向导
     </h2>
     <div
       style="
@@ -20,114 +20,7 @@
           <a-step v-for="item in steps" :title="item.title" />
         </a-steps>
       </div>
-      <div v-if="step === 0">
-        <div style="margin-bottom: 2em; margin-top: 1em" v-if="true">
-          如果您正在使用副屏，则推荐您使用副屏模式获得最佳体验。
-          <div style="color: #999; font-size: 0.9em">
-            <bulb-filled />
-            还没有扩展屏？
-            <br /><a @click="openVideo">
-              <play-circle-filled />
-              点击了解</a
-            >
-            Spacedesk | 把任意设备变成你的第二屏幕，手机、平板、电脑都可以！
-          </div>
-        </div>
-        <div style="margin-bottom: 1em" v-else>
-          您当前仅有一块屏幕，无法启用副屏模式，您可在增添副屏后启用。<a>了解更多</a>
-        </div>
-        <a-row :gutter="20">
-          <a-col :span="12">
-            <div :class="{ active: mod === 'bootstrap' }" class="panel pointer" @click="this.mod = 'bootstrap'">
-              <div class="title">
-                <icon icon="kuaijie" style="font-size: 1.2em"></icon>
-                窗口模式
-              </div>
-              <p>在主屏上以窗口模式运行，通过默认快捷键 【Alt】+【Z】 显示/隐藏。</p>
-            </div>
-          </a-col>
-          <a-col :span="12">
-            <div :class="{ active: mod === 'second-screen' }" class="panel pointer" @click="this.mod = 'second-screen'">
-              <div class="title">
-                <icon icon="touping" style="font-size: 1.2em"></icon>
-                副屏全屏模式
-              </div>
-              <p>此模式专为副屏优化，将自动放大字体。并提供更适合触摸的交互。</p>
-            </div>
-          </a-col>
-        </a-row>
-      </div>
-      <div v-if="step === 1 && mod === 'second-screen'">
-        <div v-if="screenSettingTab === 'none'">
-          <a-row class="screen-section">
-            <a-col :span="20">
-              <div style="font-size: 1.3em">
-                <Icon icon="Touch" />
-                副屏是否已经可正确识别触摸？
-              </div>
-              <div style="color: #999">异常情况：触摸副屏，反馈在主屏的情况。</div>
-            </a-col>
-            <a-col :span="4">
-              <a-button v-if="screenSettingTab !== 'touch'" type="primary" @click="screenSettingTab = 'touch'">
-                矫正屏幕
-              </a-button>
-            </a-col>
-          </a-row>
-          <a-row class="screen-section">
-            <a-col :span="20">
-              <div style="font-size: 1.3em">
-                <Icon icon="touping" />
-                工作台是否显示在了您期望的屏幕上？
-              </div>
-            </a-col>
-            <a-col :span="4">
-              <a-button type="primary" @click="screenSettingTab = 'choose'">选择屏幕</a-button>
-            </a-col>
-          </a-row>
-          <a-row class="screen-section">
-            <a-col :span="20">
-              <div style="font-size: 1.3em">
-                <Icon icon="wenzidaxiao2"></Icon>
-                工作台界面显示不自然？
-              </div>
-              <div style="color: #999">异常情况：字体过小、难以触摸、边缘留白过大、显示不全。</div>
-            </a-col>
-            <a-col :span="4">
-              <a-button type="primary" @click="screenSettingTab = 'scale'">设置缩放</a-button>
-            </a-col>
-          </a-row>
-          <div></div>
-        </div>
-
-        <div v-if="screenSettingTab === 'touch'">
-          <div v-if="screenSettingTab === 'touch'" class="screen-section" style="line-height: 2; margin-top: 3em">
-            <p>
-              如果您点击副屏没有任何反馈（包括主屏和副屏），请先检查是否正确连接数据。不支持一线通的屏幕需要同时连接HDMI和USB，分别负责视频传输和数据传输。
-            </p>
-            <p>矫正方法：</p>
-            <p>在非触摸屏上按下Enter键，在触摸屏上进行触摸。</p>
-            <p style="text-align: center">
-              <a-button class="mr-10" size="large" type="primary" @click="startAdjust">触摸矫正</a-button>
-              <a-button size="large" type="primary" @click="adjustPen">笔矫正</a-button>
-            </p>
-          </div>
-        </div>
-
-        <div v-if="screenSettingTab === 'choose'" class="screen-section" style="height: 17em; margin-top: 2em">
-          选择您要显示工作台的屏幕，直接点击屏幕即可。
-          <a-button v-if="canTouch" style="margin-bottom: 2em" type="primary">
-            <Icon icon="touping" />
-            矫正屏幕
-          </a-button>
-          <ChooseScreen></ChooseScreen>
-        </div>
-
-        <div v-if="screenSettingTab === 'scale'" class="screen-section" style="margin-top: 1em">
-          <div style="color: #999">如果您不确定需要缩放多少尺寸，可在后期设置界面重新调整。</div>
-          <ZoomUI></ZoomUI>
-        </div>
-      </div>
-      <div v-if="(step === 1 && mod === 'bootstrap') || (step === 2 && mod === 'second-screen')">
+      <div v-if="step === 0 && mod === 'bootstrap'">
         <div class="mt-3 mb-3" style="background: #f15460; padding: 1em; border-radius: 8px 8px; color: white">
           <AutoRun />
         </div>
@@ -147,11 +40,7 @@
       <div style="position: fixed; bottom: 1em; width: 100%; left: 0; right: 0">
         <div class="flex item-content" v-if="screenSettingTab === 'none'">
           <xt-button v-if="step !== 0" @click="prevStep" style="" size="large">上一步</xt-button>
-          <xt-button
-            v-if="(mod === 'second-screen' && step !== 2) || (mod === 'bootstrap' && step !== 1)"
-            @click="nextStep"
-            size="large"
-            type="theme"
+          <xt-button v-if="mod === 'bootstrap' && step !== 1" @click="nextStep" size="large" type="theme"
             >下一步
           </xt-button>
           <xt-button type="theme" v-else @click="finish" style="margin-left: 6em" size="large">完成 </xt-button>
@@ -169,7 +58,7 @@
 
 <script>
 import ChooseScreen from './ChooseScreen.vue';
-import { appStore } from '../store';
+import { appStore } from '@store';
 import { mapWritableState, mapActions } from 'pinia';
 import cp from 'child_process';
 import KeyInput from '../components/comp/KeyInput.vue';
@@ -179,9 +68,9 @@ import ZoomUI from '../components/comp/ZoomUI.vue';
 import AutoRun from '../components/comp/AutoRun.vue';
 import browser from '../js/common/browser';
 import navigationData from '../js/data/tableData';
-import { navStore } from '../store/nav';
+import { navStore } from '@store/nav';
 import KeySetting from '../components/comp/KeySetting.vue';
-import { useWidgetStore } from '../components/card/store';
+import { useWidgetStore } from '@components/card/store';
 
 const { settings } = window.$models;
 export default {
@@ -260,9 +149,6 @@ export default {
       mod: 'bootstrap', //bootstrap
       steps: [
         {
-          title: '设置模式',
-        },
-        {
           title: '基础配置',
         },
         {
@@ -270,20 +156,6 @@ export default {
         },
       ],
       stepsBoot: [
-        {
-          title: '设置模式',
-        },
-        {
-          title: '基础配置',
-        },
-      ],
-      stepsSecond: [
-        {
-          title: '设置模式',
-        },
-        {
-          title: '屏幕设置',
-        },
         {
           title: '基础配置',
         },
@@ -360,21 +232,12 @@ export default {
       });
     },
     prevStep() {
-      if (this.mod === 'second-screen') {
-        this.steps = this.stepsSecond;
-      } else {
-        this.steps = this.stepsBoot;
-      }
+      this.steps = this.stepsBoot;
       this.step--;
     },
     nextStep() {
-      if (this.mod === 'second-screen') {
-        this.rightModel = 'default';
-        this.steps = this.stepsSecond;
-      } else {
-        this.rightModel = 'follow';
-        this.steps = this.stepsBoot;
-      }
+      this.rightModel = 'follow';
+      this.steps = this.stepsBoot;
       this.step++;
     },
     finish() {
