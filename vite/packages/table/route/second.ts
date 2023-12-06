@@ -46,6 +46,7 @@ import governance from './core/governance';
 import network from './core/network';
 import transfer from './core/transfers';
 import collection from './core/collection';
+import storage from './core/storage';
 // import BackgroundPage from "@page/core/components/BackgroundPage.vue";
 
 // 二级路由，
@@ -58,17 +59,7 @@ export default [
     meta: {
       title: '核心功能',
     },
-    children: [
-      computing,
-      consensus,
-      crypto,
-      exchange,
-      governance,
-      network,
-      // socialNet,
-      transfer,
-      collection,
-    ],
+    children: [computing, consensus, crypto, exchange, governance, network, transfer, collection, storage],
   },
   {
     // 其他Dapp功能路由

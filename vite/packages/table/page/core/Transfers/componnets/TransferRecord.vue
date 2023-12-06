@@ -1,41 +1,38 @@
 <template>
-  <background>
-    <div class="transfer-record">
-      <h2>转账记录</h2>
-      <ul>
-        <li v-for="record in transferRecords" :key="record.id">
-          <div class="record-item">
-            <div class="record-field">From:</div>
-            <div>{{ record.blockchainFrom }}</div>
-          </div>
-          <div class="record-item">
-            <div class="record-field">To:</div>
-            <div>{{ record.blockchainTo }} - {{ record.addressTo }}</div>
-          </div>
-          <div class="record-item">
-            <div class="record-field">Token:</div>
-            <div>{{ record.tokenFrom }}</div>
-          </div>
-          <div class="record-item">
-            <div class="record-field">Amount:</div>
-            <div>{{ record.amountFrom }}</div>
-          </div>
-          <div class="record-item">
-            <div class="record-field">Date:</div>
-            <div>{{ record.date }}</div>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </background>
+  <div class="transfer-record">
+    <h2>转账记录</h2>
+    <ul>
+      <li v-for="record in transferRecords" :key="record.id">
+        <div class="record-item">
+          <div class="record-field">From:</div>
+          <div>{{ record.blockchainFrom }}</div>
+        </div>
+        <div class="record-item">
+          <div class="record-field">To:</div>
+          <div>{{ record.blockchainTo }} - {{ record.addressTo }}</div>
+        </div>
+        <div class="record-item">
+          <div class="record-field">Token:</div>
+          <div>{{ record.tokenFrom }}</div>
+        </div>
+        <div class="record-item">
+          <div class="record-field">Amount:</div>
+          <div>{{ record.amountFrom }}</div>
+        </div>
+        <div class="record-item">
+          <div class="record-field">Date:</div>
+          <div>{{ record.date }}</div>
+        </div>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
 import { useUserStore } from '@store/users';
-import Background from '@page/core/components/Background.vue';
 
 export default {
-  components: { Background },
+  components: {},
   data() {
     return {
       store: useUserStore(),

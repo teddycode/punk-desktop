@@ -5,8 +5,6 @@
 </template>
 
 <script>
-import Background from '@page/core/components/Background.vue';
-
 export default {
   name: 'myStorage',
   components: {},

@@ -1,52 +1,49 @@
 <template>
-  <Background>
-    <div class="transfer">
-      <div class="transfer-container">
-        <h2>转账</h2>
-        <div class="input-section">
-          <div class="input-row">
-            <label class="title">From:</label>
-            <select v-model="selectedBlockchainFrom" class="blockchain-select">
-              <option value="">选择区块链</option>
-              <option v-for="blockchain in blockchains" :key="blockchain">{{ blockchain }}</option>
-            </select>
-          </div>
-          <div class="input-row">
-            <select v-model="selectedTokenFrom" class="token-select">
-              <option value="">选择代币</option>
-              <option v-for="token in tokens" :key="token">{{ token }}</option>
-            </select>
-            <input v-model.trim="amountFrom" class="token-input" min="0" placeholder="输入代币数量" type="number" />
-          </div>
+  <div class="transfer">
+    <div class="transfer-container">
+      <h2>转账</h2>
+      <div class="input-section">
+        <div class="input-row">
+          <label class="title">From:</label>
+          <select v-model="selectedBlockchainFrom" class="blockchain-select">
+            <option value="">选择区块链</option>
+            <option v-for="blockchain in blockchains" :key="blockchain">{{ blockchain }}</option>
+          </select>
         </div>
-        <div style="height: 30px"></div>
-        <!-- 空余部分 -->
-        <div class="input-section">
-          <div class="input-row">
-            <label class="title">To:</label>
-            <select v-model="selectedBlockchainTo" class="blockchain-select">
-              <option value="">选择区块链</option>
-              <option v-for="blockchain in blockchains" :key="blockchain">{{ blockchain }}</option>
-            </select>
-          </div>
-          <div class="input-row">
-            <input v-model.trim="ToAccount" class="address-input" placeholder="输入转入地址" type="text" />
-          </div>
+        <div class="input-row">
+          <select v-model="selectedTokenFrom" class="token-select">
+            <option value="">选择代币</option>
+            <option v-for="token in tokens" :key="token">{{ token }}</option>
+          </select>
+          <input v-model.trim="amountFrom" class="token-input" min="0" placeholder="输入代币数量" type="number" />
         </div>
-        <button class="transfer-btn" @click="transferTokens">跨链转账</button>
       </div>
+      <div style="height: 30px"></div>
+      <!-- 空余部分 -->
+      <div class="input-section">
+        <div class="input-row">
+          <label class="title">To:</label>
+          <select v-model="selectedBlockchainTo" class="blockchain-select">
+            <option value="">选择区块链</option>
+            <option v-for="blockchain in blockchains" :key="blockchain">{{ blockchain }}</option>
+          </select>
+        </div>
+        <div class="input-row">
+          <input v-model.trim="ToAccount" class="address-input" placeholder="输入转入地址" type="text" />
+        </div>
+      </div>
+      <button class="transfer-btn" @click="transferTokens">跨链转账</button>
     </div>
-  </Background>
+  </div>
 </template>
 
 <script lang="ts">
 import { onBeforeMount, ref } from 'vue';
 import Web3 from 'web3';
 import { useUserStore } from '@store/users';
-import Background from '@page/core/components/Background.vue';
 
 export default {
-  components: { Background },
+  components: {},
   setup() {
     const store = useUserStore();
     const selectedBlockchainFrom = ref('');
