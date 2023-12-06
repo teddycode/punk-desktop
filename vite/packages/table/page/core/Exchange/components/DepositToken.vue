@@ -1,77 +1,74 @@
 <template>
-  <Background>
-    <div class="liquidity-wrapper">
-      <div class="liquidity-container">
-        <!-- <h1 class="liquidity-title">添加流动性</h1> -->
-        <div class="liquidity-content-top">
-          <!-- Left Section -->
-          <div class="liquidity-left">
-            <h2 class="h2-1">选择币种</h2>
-            <div class="token-pair">
-              <!-- <label class="token-label tokenA"></label> -->
-              <div class="select-wrapper">
-                <select v-model="selectedToken" class="custom-select">
-                  <option v-for="token in tokens" :key="token.value" :value="token.value" class="select-option">
-                    {{ token.label }}
-                  </option>
-                </select>
-                <i class="fas fa-chevron-down select-icon"></i>
-              </div>
-            </div>
-            <h2 class="h2-1">选择网络</h2>
-            <div class="token-pair">
-              <!-- <label class="token-label tokenB">代币B</label> -->
-              <div class="select-wrapper">
-                <select v-model="selectedNetwork" class="custom-select">
-                  <option v-for="network in networks" :key="network.value" :value="network.value" class="select-option">
-                    {{ network.label }}
-                  </option>
-                </select>
-                <i class="fas fa-chevron-down select-icon"></i>
-              </div>
+  <div class="liquidity-wrapper">
+    <div class="liquidity-container">
+      <!-- <h1 class="liquidity-title">添加流动性</h1> -->
+      <div class="liquidity-content-top">
+        <!-- Left Section -->
+        <div class="liquidity-left">
+          <h2 class="h2-1">选择币种</h2>
+          <div class="token-pair">
+            <!-- <label class="token-label tokenA"></label> -->
+            <div class="select-wrapper">
+              <select v-model="selectedToken" class="custom-select">
+                <option v-for="token in tokens" :key="token.value" :value="token.value" class="select-option">
+                  {{ token.label }}
+                </option>
+              </select>
+              <i class="fas fa-chevron-down select-icon"></i>
             </div>
           </div>
-          <!-- Right Section -->
-          <!-- Right Section -->
-          <div class="liquidity-right">
-            <h2 class="h2-2">输入数额</h2>
-            <div class="token-input">
-              <!-- <input v-model.number="inputAmount" id="tokenA" class="custom-input" type="number" autocomplete="off"> -->
-              <input v-model="inputAmount" class="custom-input hook-address-longer" type="text" />
-            </div>
-            <h2 class="h2-2">输入地址</h2>
-            <div class="token-input">
-              <!-- <input v-model.number="inputAddress" id="tokenB" class="custom-input" type="text" autocomplete="off"> -->
-              <input v-model="inputAddress" class="custom-input hook-address-longer" type="text" />
+          <h2 class="h2-1">选择网络</h2>
+          <div class="token-pair">
+            <!-- <label class="token-label tokenB">代币B</label> -->
+            <div class="select-wrapper">
+              <select v-model="selectedNetwork" class="custom-select">
+                <option v-for="network in networks" :key="network.value" :value="network.value" class="select-option">
+                  {{ network.label }}
+                </option>
+              </select>
+              <i class="fas fa-chevron-down select-icon"></i>
             </div>
           </div>
         </div>
-        <div class="divider"></div>
-        <div class="price-range-section">
-          <h2 class="price-range-title">近期充提记录</h2>
-          <div class="downPic"></div>
-        </div>
-        <div class="divider"></div>
-        <div class="button-container">
-          <shape-button class="add-liquidity-button" @click="validateAndDeposit">充币</shape-button>
-          <shape-button class="add-liquidity-button" @click="validateAndWithdraw">提币</shape-button>
+        <!-- Right Section -->
+        <!-- Right Section -->
+        <div class="liquidity-right">
+          <h2 class="h2-2">输入数额</h2>
+          <div class="token-input">
+            <!-- <input v-model.number="inputAmount" id="tokenA" class="custom-input" type="number" autocomplete="off"> -->
+            <input v-model="inputAmount" class="custom-input hook-address-longer" type="text" />
+          </div>
+          <h2 class="h2-2">输入地址</h2>
+          <div class="token-input">
+            <!-- <input v-model.number="inputAddress" id="tokenB" class="custom-input" type="text" autocomplete="off"> -->
+            <input v-model="inputAddress" class="custom-input hook-address-longer" type="text" />
+          </div>
         </div>
       </div>
+      <div class="divider"></div>
+      <div class="price-range-section">
+        <h2 class="price-range-title">近期充提记录</h2>
+        <div class="downPic"></div>
+      </div>
+      <div class="divider"></div>
+      <div class="button-container">
+        <shape-button class="add-liquidity-button" @click="validateAndDeposit">充币</shape-button>
+        <shape-button class="add-liquidity-button" @click="validateAndWithdraw">提币</shape-button>
+      </div>
     </div>
-  </Background>
+  </div>
 </template>
 
 <script>
 import ShapeButton from '@page/core/components/ShapeButton.vue';
 // import {addLiq} from "@page/core/Exchange/function/addLiquidity";
 import { burn, deposit } from '@page/core/Exchange/services/bridge';
-import Background from '@page/core/components/Background.vue';
+import { message } from 'ant-design-vue';
 // import {limitOrderPoolKey} from "@page/core/Exchange/function/address.js";
 // import {ethers} from "ethers";
 // import { initializeWallet } from "@page/core/Exchange/function/address";
 export default {
   components: {
-    Background,
     ShapeButton,
   },
   data() {
@@ -140,17 +137,17 @@ export default {
       console.log('inputAmount: ', this.inputAmount);
       console.log('inputAddress: ', this.inputAddress);
       if (this.selectedNetwork !== 'Ethereum') {
-        alert('暂时只支持Ethereum网络');
+        message.warn('暂时只支持Ethereum网络');
       }
       if (this.selectedToken !== 'ETH') {
-        alert('暂时只支持ETH');
+        message.warn('暂时只支持ETH');
       } else {
         try {
           await deposit(1, '0x0000000000000000000000000000000000000000', this.inputAmount, this.inputAddress);
-          alert('充币成功');
+          message.success('充币成功');
         } catch (err) {
           console.log(err);
-          alert('充币失败');
+          message.error('充币失败');
         }
       }
     },
@@ -165,7 +162,7 @@ export default {
         alert('暂时只支持Ethereum网络');
       }
       if (this.selectedToken !== 'ETH') {
-        alert('暂时只支持ETH');
+        message.warn('暂时只支持ETH');
       } else {
         try {
           await burn(1, '0x0000000000000000000000000000000000000000', this.inputAmount, this.inputAddress);
@@ -220,7 +217,7 @@ export default {
   margin: auto;
   margin-top: 30px;
   align-content: center;
-  border: 1px solid white;
+  border: 2px solid blue;
   background-color: transparent;
 }
 
@@ -231,7 +228,7 @@ export default {
 }
 
 .liquidity-title {
-  color: white;
+  color: black;
   font-size: 14px;
   margin-bottom: 3%;
 }
@@ -253,13 +250,13 @@ export default {
 }
 
 .h2-3 {
-  color: white;
+  color: black;
   font-size: 14px;
   margin-bottom: 1%;
 }
 
 .h2-1 {
-  color: white;
+  color: black;
   font-size: 14px;
   margin-bottom: 1%;
   text-align: left;
@@ -267,7 +264,7 @@ export default {
 }
 
 .h2-2 {
-  color: white;
+  color: black;
   font-size: 14px;
   margin-bottom: 1%;
   text-align: left;
@@ -289,8 +286,8 @@ export default {
   box-sizing: border-box; /* Ensures padding and border are included in the total width */
   width: 95%;
   background-color: transparent;
-  border: 1px solid white;
-  color: white;
+  border: 1px solid black;
+  color: black;
   padding: 8px 12px;
   border-radius: 4px;
   font-size: 14px;
@@ -302,8 +299,8 @@ export default {
   box-sizing: border-box; /* Ensures padding and border are included in the total width */
   width: 90%;
   background-color: transparent;
-  border: 1px solid white;
-  color: white;
+  border: 1px solid black;
+  color: black;
   padding: 8px 12px;
   border-radius: 4px;
   font-size: 14px;
@@ -320,7 +317,7 @@ export default {
 }
 
 .select-icon {
-  color: white;
+  color: black;
   position: absolute;
   right: 10px;
   top: 50%;
@@ -364,14 +361,14 @@ export default {
 }
 
 .token-label {
-  color: white;
+  color: black;
   /*margin-right: 2%;*/
 }
 
 .divider {
   width: 80%;
   height: 1px;
-  background-color: white;
+  background-color: black;
   margin: 2% 0;
 }
 
@@ -393,7 +390,7 @@ export default {
 }
 
 .fee-label {
-  color: white;
+  color: black;
   width: 12%;
   /*margin-right: 2%;*/
 }
@@ -424,7 +421,7 @@ export default {
 }
 
 .price-range-title {
-  color: white;
+  color: black;
   font-size: 14px;
   margin-bottom: 1%;
 }

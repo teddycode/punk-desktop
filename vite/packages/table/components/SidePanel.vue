@@ -262,7 +262,7 @@ export default {
       }
     },
     clickNavigation(item) {
-      console.log('右侧打开了APP：', item);
+      console.log('侧边打开了APP：', item);
       switch (item.type) {
         case 'systemApp':
           if (item.event === 'fullscreen') {

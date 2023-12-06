@@ -16,7 +16,9 @@
                 fill="currentColor">
           </path>
         </svg>
-        欢迎使用磐古跨链客户端，带你探索通往web3的新世界！
+        <div style="color: #2eb9ce">
+          欢迎使用磐古跨链客户端，带你探索通往web3的新世界！
+        </div>
       </div>
     </div>
     <div v-else class="" style="background: #333;width: 100vw;height:auto">
@@ -24,11 +26,13 @@
 
         <h3 style="text-align: center;font-size: 1.5em">
           <a-avatar src="/icons/logo128.png" style="vertical-align: top"></a-avatar>
-          磐古跨链客户端
+          <div style="color: deepskyblue">
+           磐古跨链客户端
+          </div>
         </h3>
-        <div class="mb-10 ml-40 text-center text-md"> —— 连接web2与web3的一站式终端</div>
+        <div style="color: #0a84ff" class="mb-10 ml-40 text-center text-md"> —— 连接web2与web3的一站式终端</div>
         <p v-if="!userInfo">
-          <div class="mb-5 xt-text" style="font-size: 16px">
+          <div class="mb-5 xt-text" style="font-size: 16px;color: whitesmoke">
             本客户端需要借助后端计算服务，<strong>请登录后使用。</strong><br>
 
           </div>
@@ -47,7 +51,7 @@
             <div>
               <a-avatar :size="68" :src="userInfo.avatar"></a-avatar>
             </div>
-            <div class="mt-4 text-lg">
+            <div  style="color: whitesmoke" class="mt-4 text-lg">
               你好，{{ userInfo.nickname }}
             </div>
           </div>
