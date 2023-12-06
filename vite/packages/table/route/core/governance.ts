@@ -3,13 +3,14 @@ import proposalHomePage from '@page/core/Governance/proposalHomePage.vue';
 import RicardianContract from '@page/core/Governance/RicardianContract.vue';
 import OneProposals from '@page/core/Governance/OneProposals.vue';
 import EmergencyResponse from '@page/core/Governance/EmergencyResponse.vue';
+import MainBackground from '@page/core/components/MainBackground.vue';
 import { CodeOutlined } from '@ant-design/icons-vue';
 
 // 三级路由-治理组
 export default {
   path: 'governance',
   redirect: { name: 'GovernancePage' },
-  component: governancePage,
+  component: MainBackground,
   meta: {
     icon: CodeOutlined,
   },

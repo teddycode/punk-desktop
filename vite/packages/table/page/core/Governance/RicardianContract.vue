@@ -1,49 +1,45 @@
 <template>
-  <background>
-    <div class="container-ricardian">
-      <!-- 单选框部分 -->
-      <div class="radio-div">
-        <div class="custom-radio" :class="{ selected: selected === 'edit' }" @click="select('edit')">编辑</div>
-        <div class="custom-radio" :class="{ selected: selected === 'view' }" @click="select('view')">查看</div>
-      </div>
+  <div class="container-ricardian">
+    <!-- 单选框部分 -->
+    <div class="radio-div">
+      <div class="custom-radio" :class="{ selected: selected === 'edit' }" @click="select('edit')">编辑</div>
+      <div class="custom-radio" :class="{ selected: selected === 'view' }" @click="select('view')">查看</div>
+    </div>
 
-      <!-- 编辑布局 -->
-      <div v-if="selected === 'edit'" class="content-div">
-        <div class="box-edit left-edit">
-          <h2>智能合约代码</h2>
-          <div class="button-group">
-            <shape-button class="action-button">生成</shape-button>
-            <shape-button class="action-button">部署</shape-button>
-          </div>
-        </div>
-        <div class="box-edit right-edit">
-          <h2>李嘉图合约代码</h2>
-          <div class="button-group">
-            <shape-button class="action-button">链接</shape-button>
-          </div>
+    <!-- 编辑布局 -->
+    <div v-if="selected === 'edit'" class="content-div">
+      <div class="box-edit left-edit">
+        <h2>智能合约代码</h2>
+        <div class="button-group">
+          <shape-button class="action-button">生成</shape-button>
+          <shape-button class="action-button">部署</shape-button>
         </div>
       </div>
-
-      <!-- 查看布局 -->
-      <div v-if="selected === 'view'" class="view-layout">
-        <div class="left-view">
-          <div class="top-view">智能合约地址</div>
-          <div class="bottom-view">合约函数名</div>
+      <div class="box-edit right-edit">
+        <h2>李嘉图合约代码</h2>
+        <div class="button-group">
+          <shape-button class="action-button">链接</shape-button>
         </div>
-        <div class="right-view">李嘉图合约</div>
       </div>
     </div>
-  </background>
+
+    <!-- 查看布局 -->
+    <div v-if="selected === 'view'" class="view-layout">
+      <div class="left-view">
+        <div class="top-view">智能合约地址</div>
+        <div class="bottom-view">合约函数名</div>
+      </div>
+      <div class="right-view">李嘉图合约</div>
+    </div>
+  </div>
 </template>
 
 <script>
 import ShapeButton from '@page/core/components/ShapeButton.vue';
-import Background from '@page/core/components/Background.vue';
 
 export default {
   name: 'RicardianContract',
   components: {
-    Background,
     ShapeButton,
   },
   data() {

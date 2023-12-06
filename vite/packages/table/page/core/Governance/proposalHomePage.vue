@@ -1,35 +1,31 @@
 <template>
-  <background>
-    <div class="proposal-home-page">
-      <div class="left-section">
-        <div class="header">
-          <h1 class="title">提案</h1>
-          <shape-button>创建提案</shape-button>
-        </div>
-        <div class="proposal-card">一条提案</div>
+  <div class="proposal-home-page">
+    <div class="left-section">
+      <div class="header">
+        <h1 class="title">提案</h1>
+        <shape-button>创建提案</shape-button>
       </div>
-      <div class="right-section">
-        <div class="upper-div">
-          <selfInfo></selfInfo>
-        </div>
-        <div class="lower-div">
-          <my-entrust></my-entrust>
-        </div>
+      <div class="proposal-card">一条提案</div>
+    </div>
+    <div class="right-section">
+      <div class="upper-div">
+        <selfInfo></selfInfo>
+      </div>
+      <div class="lower-div">
+        <my-entrust></my-entrust>
       </div>
     </div>
-  </background>
+  </div>
 </template>
 
 <script>
 import ShapeButton from '@page/core/components/ShapeButton.vue';
 import selfInfo from '@page/core/Governance/components/selfInfo.vue';
 import myEntrust from '@page/core/Governance/components/myEntrust.vue';
-import Background from '@page/core/components/Background.vue';
 
 export default {
   name: 'proposalHomePage',
   components: {
-    Background,
     ShapeButton,
     selfInfo,
     myEntrust,

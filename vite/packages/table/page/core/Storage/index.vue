@@ -1,9 +1,7 @@
 <template>
-  <background>
-    <div class="main">
-      <h2>this is storage page</h2>
-    </div>
-  </background>
+  <div class="main">
+    <h2>this is storage page</h2>
+  </div>
 </template>
 
 <script>
@@ -11,7 +9,7 @@ import Background from '@page/core/components/Background.vue';
 
 export default {
   name: 'myStorage',
-  components: { Background },
+  components: {},
 };
 </script>
 

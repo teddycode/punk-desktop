@@ -1,31 +1,25 @@
 <template>
-  <background>
-    <div class="emergency-response-wrapper">
-      <div class="emergency-response">
-        <div class="left-section">
-          <h1>现任应急委员会列表</h1>
+  <div class="emergency-response-wrapper">
+    <div class="emergency-response">
+      <div class="left-section">
+        <h1>现任应急委员会列表</h1>
+      </div>
+      <div class="right-section">
+        <div class="upper-div">
+          <h2>应急软件发布位置</h2>
         </div>
-        <div class="right-section">
-          <div class="upper-div">
-            <h2>应急软件发布位置</h2>
-          </div>
-          <div class="lower-div">
-            <h2>软件验证</h2>
-          </div>
+        <div class="lower-div">
+          <h2>软件验证</h2>
         </div>
       </div>
     </div>
-  </background>
+  </div>
 </template>
 
 <script>
-import Background from '@page/core/components/Background.vue';
-
 export default {
   name: 'EmergencyResponse',
-  components: {
-    Background,
-  },
+  components: {},
 };
 </script>
 

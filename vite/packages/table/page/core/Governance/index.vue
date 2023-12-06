@@ -71,7 +71,7 @@
       </div>
       <div class="side-div right-div">
         <div class="upper-div">
-          <new-proposal></new-proposal>
+          <!--          <new-proposal></new-proposal>-->
         </div>
         <div class="lower-div">
           <my-proposals></my-proposals>

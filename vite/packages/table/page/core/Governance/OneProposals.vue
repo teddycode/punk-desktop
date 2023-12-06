@@ -1,42 +1,38 @@
 <template>
-  <background>
-    <div class="proposal-detail">
-      <div class="header">
-        <div class="proposal-title">提案标题</div>
-        <div class="details">
-          <span
-            >创建者: <span>{{ proposalInfo ? proposalInfo.creator : '' }}</span></span
-          >
-          <span
-            >提案 Id: <span>{{ $route.params.proposalId }}</span></span
-          >
-          <span
-            >类型: <span>{{ proposalInfo ? proposalInfo.proposalType : '' }}</span></span
-          >
-          <span
-            >状态: <span>{{ proposalInfo ? proposalInfo.state : '' }}</span></span
-          >
-        </div>
-      </div>
-      <div class="content">
-        <div class="left-section"></div>
-        <div class="right-section">
-          <selfInfo></selfInfo>
-        </div>
+  <div class="proposal-detail">
+    <div class="header">
+      <div class="proposal-title">提案标题</div>
+      <div class="details">
+        <span
+          >创建者: <span>{{ proposalInfo ? proposalInfo.creator : '' }}</span></span
+        >
+        <span
+          >提案 Id: <span>{{ $route.params.proposalId }}</span></span
+        >
+        <span
+          >类型: <span>{{ proposalInfo ? proposalInfo.proposalType : '' }}</span></span
+        >
+        <span
+          >状态: <span>{{ proposalInfo ? proposalInfo.state : '' }}</span></span
+        >
       </div>
     </div>
-  </background>
+    <div class="content">
+      <div class="left-section"></div>
+      <div class="right-section">
+        <selfInfo></selfInfo>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import Background from '@page/core/components/Background.vue';
 import { governance } from '@page/core/Governance/services/address';
 import selfInfo from './components/selfInfo.vue';
 
 export default {
   name: 'OneProposals',
   components: {
-    Background,
     selfInfo,
   },
   data() {

@@ -1,4 +1,4 @@
-import storageHomePage from '@pages/Storage/index.vue';
+import storageHomePage from '@page/core/Storage/index.vue';
 
 export default [
   {
