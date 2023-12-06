@@ -80,10 +80,10 @@ import DroppableArea from './components/DroppableArea.vue';
 import BottomEdit from './components/bottomEdit.vue';
 // pinia
 import { mapActions, mapWritableState } from 'pinia';
-import { cardStore } from '../../../store/card.ts';
-import { taskStore } from '../../../apps/task/store';
+import { cardStore } from '@store/card';
+import { taskStore } from '@apps/task/store';
 
-import { myIcons } from '../../../store/myIcons.ts';
+import { myIcons } from '@store/myIcons';
 
 import { message } from 'ant-design-vue';
 
@@ -126,18 +126,18 @@ export default {
     // 是否需要初始化
     let state = false;
     let setData = {};
-    if (this.customData.groupTitle == undefined) {
+    if (this.customData.groupTitle === undefined) {
       state = true;
       setData.groupTitle = '分组'; // 初始化分组名称
     }
-    if (this.customData.zoom == undefined) {
+    if (this.customData.zoom === undefined) {
       state = true;
       setData.zoom = {
         state: true,
         value: '',
       };
     }
-    if (this.customData.size == undefined) {
+    if (this.customData.size === undefined) {
       state = true;
       setData.size = {
         w: '280px',
@@ -150,9 +150,9 @@ export default {
     }
   },
   mounted() {
-    // console.log("this.customData :>> ", this.customData.iconList[0].src);
-    // console.log("this.customData :>> ", this.customData);
-    // console.log("window.globalArgs :>> ", window.globalArgs);
+    console.log('this.customData :>> ', this.customData.iconList[0]);
+    // console.log('this.customData :>> ', this.customData);
+    // console.log('window.globalArgs :>> ', window.globalArgs);
   },
   provide() {
     return {
@@ -174,10 +174,10 @@ export default {
     ]),
     ...mapWritableState(taskStore, ['taskID', 'step']),
     m02021() {
-      return this.customData.copy === true && this.step == 1 && this.taskID == 'M0202';
+      return this.customData.copy === true && this.step === 1 && this.taskID === 'M0202';
     },
     m02023() {
-      return this.customData.merge === true && this.step == 3 && this.taskID == 'M0202';
+      return this.customData.merge === true && this.step === 3 && this.taskID === 'M0202';
     },
     m0202() {
       return this.m02021 || this.m02023;
@@ -385,7 +385,7 @@ export default {
         if (iconIndex === this.customIndex) state = true;
       });
       if (state) {
-        if (this.isDrag == false && this.iconSelect == false) message.error('不能复制到同个图标组件上');
+        if (this.isDrag === false && this.iconSelect === false) message.error('不能复制到同个图标组件上');
         return; // 本次移动被拦截
       }
       this.customData.iconList.forEach((item) => {

@@ -18,6 +18,7 @@
                 :isReSize="true"
                 style="margin: 5px 10px"
                 v-bind="item"
+                :isBoxed="true"
                 @onIconClick="closeFullScreen"
               >
               </icon>
@@ -40,7 +41,7 @@ import DroppableArea from '../components/DroppableArea.vue';
 import BottomEdit from '../components/bottomEdit.vue';
 
 import { mapWritableState } from 'pinia';
-import { myIcons } from '../../../../store/myIcons.ts';
+import { myIcons } from '@store/myIcons';
 
 export default {
   props: {

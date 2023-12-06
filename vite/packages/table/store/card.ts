@@ -5,10 +5,11 @@ import { timerStore } from './timer';
 import { marketStore } from './market';
 import { noteStore } from '../apps/note/store';
 import { homeStore } from './home';
-// @ts-ignore
+
 export const cardStore = defineStore(
   'cardStore',
   {
+    // @ts-ignore
     state: () => {
       return {
         moved: false,
@@ -19,11 +20,13 @@ export const cardStore = defineStore(
             cards: [],
           },
         ],
+        // 通用设置
         settings: {
-          cardZoom: 100,
-          marginTop: 0,
-          cardMargin: 5, //卡片间隙
+          cardZoom: 125,
+          marginTop: 10,
+          cardMargin: 10, //卡片间隙
         },
+        // 单独设置
         aloneSettings: {
           cardZoom: 100,
           marginTop: 0,
@@ -57,6 +60,7 @@ export const cardStore = defineStore(
             type: 'noOver',
           },
         ],
+        iconTextColor: '',
         clockEvent: [],
         customComponents: [],
         clockTag: 'within30min',
@@ -626,6 +630,9 @@ export const cardStore = defineStore(
           ...newData,
         };
       },
+      setIconTextColor(newV: string) {
+        this.iconTextColor = newV;
+      },
     },
     persist: {
       enabled: true,
@@ -645,6 +652,7 @@ export const cardStore = defineStore(
             'lastHeight',
             'clockTag',
             'chooseType',
+            'iconTextColor',
           ],
           storage: dbStorage,
           // state 中的字段名，按组打包储存

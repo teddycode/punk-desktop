@@ -60,8 +60,8 @@
         key="scrollbar"
         :settings="{
           ...scrollbarSettings,
-          suppressScrollY: settings.vDirection ? false : true,
-          suppressScrollX: settings.vDirection ? true : false,
+          suppressScrollY: !settings.vDirection,
+          suppressScrollX: !!settings.vDirection,
         }"
         class="no-drag"
         style="
@@ -145,87 +145,6 @@
       ></NewAddCard>
     </div>
   </transition>
-  <!--添加小组件-->
-  <!--  <a-drawer-->
-  <!--    :contentWrapperStyle="{ backgroundColor: '#1F1F1F' }"-->
-  <!--    :height="350"-->
-  <!--    :visible="menuVisible"-->
-  <!--    :width="120"-->
-  <!--    class="drawer"-->
-  <!--    placement="bottom"-->
-  <!--    style="z-index: 99999999999"-->
-  <!--    @close="onClose"-->
-  <!--  >-->
-  <!--    <a-row :gutter="[20, 20]" style="margin-top: 1em">-->
-  <!--      <div class="hidden mb-3" style="height: 200px"></div>-->
-  <!--      <xt-task id="M0101" no="2" to="" @cb="newAddCard()">-->
-  <!--        <a-col>-->
-  <!--          <div class="btn" @click="newAddCard">-->
-  <!--            <xt-new-icon icon="fluent:collections-add-24-regular" size="42" />-->
-  <!--            <div><span>添加小组件</span></div>-->
-  <!--          </div>-->
-  <!--        </a-col>-->
-  <!--      </xt-task>-->
-  <!--      <xt-task id="M0201" no="2" to="" @cb="newAddIcon()">-->
-  <!--        <a-col>-->
-  <!--          <div class="btn flex flex-col items-center" @click="newAddIcon">-->
-  <!--            <xt-new-icon icon="fluent:add-16-filled" size="42" />-->
-  <!--            <div><span>添加图标</span></div>-->
-  <!--          </div>-->
-  <!--        </a-col>-->
-  <!--      </xt-task>-->
-  <!--      <a-col>-->
-  <!--        <div class="btn" @click="toggleEditing">-->
-  <!--          <xt-new-icon v-if="!this.editing" icon="fluent:window-new-16-regular" size="42" />-->
-  <!--          <xt-new-icon v-else icon="fluent:record-stop-16-regular" size="42" />-->
-  <!--          <div><span v-if="!this.editing">调整布局</span><span v-else style="color: red">停止调整</span></div>-->
-  <!--        </div>-->
-  <!--      </a-col>-->
-  <!--      <xt-task id="M0103" no="2" to="" @cb="showSetting">-->
-  <!--        <a-col>-->
-  <!--          <div class="btn" @click="showSetting">-->
-  <!--            <xt-new-icon icon="fluent:settings-16-regular" size="42" />-->
-  <!--            <div><span>桌面设置</span></div>-->
-  <!--          </div>-->
-  <!--        </a-col>-->
-  <!--      </xt-task>-->
-  <!--      <a-col>-->
-  <!--        <div class="btn" @click="clear">-->
-  <!--          <xt-new-icon icon="fluent:circle-off-16-regular" size="42" />-->
-
-  <!--          <div><span>清空桌面</span></div>-->
-  <!--        </div>-->
-  <!--      </a-col>-->
-
-  <!--      <a-col>-->
-  <!--        <div v-if="!hide" class="btn" @click="hideDesk">-->
-  <!--          <xt-new-icon icon="fluent:eye-off-16-regular" size="42" />-->
-
-  <!--          <div><span>隐藏小组件</span></div>-->
-  <!--        </div>-->
-  <!--        <div v-else class="btn" @click="showDesk">-->
-  <!--          <xt-new-icon icon="fluent:eye-16-regular" size="42" />-->
-  <!--          <div><span>显示小组件</span></div>-->
-  <!--        </div>-->
-  <!--      </a-col>-->
-  <!--      &lt;!&ndash;      <a-col>&ndash;&gt;-->
-  <!--      &lt;!&ndash;        <div @click="showAddDeskForm" class="btn">&ndash;&gt;-->
-  <!--      &lt;!&ndash;          <Icon style="font-size: 3em" icon="desktop"></Icon>&ndash;&gt;-->
-  <!--      &lt;!&ndash;          <div><span>添加桌面</span></div>&ndash;&gt;-->
-  <!--      &lt;!&ndash;        </div>&ndash;&gt;-->
-  <!--      &lt;!&ndash;      </a-col>&ndash;&gt;-->
-  <!--      &lt;!&ndash;      <a-col>&ndash;&gt;-->
-  <!--      &lt;!&ndash;        <div @click="delDesk" class="btn">&ndash;&gt;-->
-  <!--      &lt;!&ndash;          <Icon style="font-size: 3em" icon="shanchu"></Icon>&ndash;&gt;-->
-  <!--      &lt;!&ndash;          <div><span>删除桌面</span></div>&ndash;&gt;-->
-  <!--      &lt;!&ndash;        </div>&ndash;&gt;-->
-  <!--      &lt;!&ndash;      </a-col>&ndash;&gt;-->
-
-  <!--      &lt;!&ndash;   菜单插槽    &ndash;&gt;-->
-  <!--      <slot name="currentDeskMenu"></slot>-->
-  <!--    </a-row>-->
-  <!--    <slot name="outMenu"></slot>-->
-  <!--  </a-drawer>-->
   <a-drawer v-model:visible="settingVisible" placement="right">
     <XtTab
       v-if="settingVisible"
@@ -235,6 +154,7 @@
       class="mb-2"
       style="height: 48px"
     ></XtTab>
+    <!-- 当前桌面设置 - 桌面设置1  -->
     <template v-if="currentSettingTab === 'current' && currentDesk.settings">
       <div class="line-title">基础设置</div>
       <div class="mt-2 line">桌面名称：</div>
@@ -270,6 +190,7 @@
         <a-switch v-model:checked="currentDesk.settings.vDirection"></a-switch>
       </div>
     </template>
+    <!--  通用桌面设置 -->
     <template v-else>
       <div class="line-title">卡片设置：</div>
       <!-- <xt-text class=" xt-bg-2 rounded-xl p-3 mb-1">
@@ -296,6 +217,19 @@
         距离顶部：
         <a-slider v-model:value="globalSettings.marginTop" :max="200" :min="0"></a-slider>
       </div>
+      <div class="xt-bg-2 rounded-xl p-3 mb-4 text-base">
+        <div class="flex justify-between mb-3">
+          <div>文字设置</div>
+        </div>
+        <a-row justify="space-around" align="middle">
+          <a-col offset="1" span="3">
+            <XtBaseColor v-model:data="iconTextColor"></XtBaseColor>
+          </a-col>
+          <a-col span="20">
+            <div class="xt-text-2 text-sm my-3">请选择图标文字颜色.</div>
+          </a-col>
+        </a-row>
+      </div>
       <slot name="settingsAllAfter"> </slot>
     </template>
   </a-drawer>
@@ -312,13 +246,16 @@ import Muuri from 'muuri';
 import { message, Modal } from 'ant-design-vue';
 import { mapActions, mapWritableState } from 'pinia';
 import { appStore } from '@store';
+import { cardStore } from '@store/card';
 
 import { useWidgetStore } from '../card/store.ts';
 import { useFreeDeskStore } from './free/store';
 import componentsMinis from './components.ts';
+import XtColor from '@table/ui/libs/Color/index.vue';
 
 export default {
   name: 'Desk',
+  components: { XtColor },
   emits: ['changeEditing'],
   mixins: [componentsMinis],
   props: {
@@ -443,10 +380,14 @@ export default {
       },
       deep: true,
     },
+    iconTextColor(newV) {
+      console.log('更换了文字颜色：', newV);
+    },
   },
   computed: {
     ...mapWritableState(appStore, ['fullScreen']),
     ...mapWritableState(useWidgetStore, ['rightModel']),
+    ...mapWritableState(cardStore, ['iconTextColor']),
     deskGroupMenus() {
       if (this.deskGroupMenu && this.deskGroupMenu.length > 1) {
         let arr = [...this.deskGroupMenu[1].children];

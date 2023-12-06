@@ -93,6 +93,7 @@
       :desk-list="desks"
       v-model:currentDeskId="this.currentDeskId"
     >
+      <!--   桌面设置 2-->
       <template #settingsAll>
         <div class="xt-bg-2 rounded-xl p-3 mb-4 text-base">
           <div class="flex justify-between mb-3">
@@ -266,7 +267,7 @@ import AggregateSearch from '../components/widgets/aggregate/AggregateSearch.vue
 import UpdateMyInfo from '../components/comp/UpdateMyInfo.vue';
 import ShareDesk from '../components/desk/ShareDesk.vue';
 import DeskMarket from './app/card/DeskMarket.vue';
-import { deskStore } from '../store/desk';
+import { deskStore } from '@store/desk';
 import DeskPreview from '../components/desk/DeskPreview.vue';
 import ExportDesk from '../components/desk/ExportDesk.vue';
 import DeskGroup from '../components/desk/DeskGroup.vue';
@@ -277,11 +278,11 @@ import EatToday from '../components/widgets/eat/EatToday.vue';
 import HotSearch from '../components/widgets/HotSearch.vue';
 import RadioTab from '../components/RadioTab.vue';
 // import News from "../components/widgets/news/NewsCard.vue";
-import { setTransparent, detTransparent } from '../components/card/hooks/themeSwitch';
-import { taskStore } from '../apps/task/store';
+import { setTransparent, detTransparent } from '@components/card/hooks/themeSwitch';
+import { taskStore } from '@apps/task/store';
 import navigationData from '../js/data/tableData';
-import { navStore } from '../store/nav';
-import { homeStore } from '../store/home';
+import { navStore } from '@store/nav';
+import { homeStore } from '@store/home';
 
 const { steamUser, steamSession, path, https, steamFs } = $models;
 if (steamUser && steamSession) {

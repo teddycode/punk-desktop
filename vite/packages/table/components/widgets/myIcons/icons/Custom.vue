@@ -18,6 +18,7 @@
             :index="i - 1"
             :size="icons"
             :state="true"
+            :isBoxed="true"
             v-bind="iconList[i - 1]"
           >
           </Icon>
@@ -48,6 +49,7 @@
   </Teleport>
 </template>
 
+<!-- 分组分栏组件 -->
 <script>
 import Icon from '../components/icon.vue';
 import Set from './Set.vue';

@@ -19,17 +19,20 @@
       />
     </div>
     <div v-if="isTitle" :data-index="index" :style="[textSize]" class="text-center xt-text h-5 truncate mx-auto">
-      {{ titleValue }}
+      <p :style="{ color: isBoxed ? 'black' : this.iconTextColor }">{{ titleValue }}</p>
     </div>
   </div>
   <XtGuided v-if="visible" @close="visible = false"></XtGuided>
 </template>
 
+<!-- 应用图标 -->
 <script>
 import { message } from 'ant-design-vue';
 import editProps from '../hooks/editProps';
 import { sizeValues } from './iconConfig';
 import { renderIcon } from '@js/common/common';
+import { cardStore } from '@store/card';
+import { mapWritableState } from 'pinia';
 
 export default {
   mixins: [editProps],
@@ -37,6 +40,7 @@ export default {
     isReSize: { type: Boolean, default: false },
     state: { type: Boolean, default: false },
     index: { type: Number },
+    isBoxed: { type: Boolean, default: false },
   },
   data() {
     return {
@@ -45,6 +49,7 @@ export default {
   },
   computed: {
     // 动态切换圆角状态
+    ...mapWritableState(cardStore, ['iconTextColor']),
     radiusState() {
       if (this.state) return;
       if (this.isRadius)

@@ -33,14 +33,18 @@
         <div v-else class="img"></div>
       </template>
     </div>
-    <div class="title xt-text">{{ groupTitle }}</div>
+    <div class="title xt-text">
+      <p :style="{ color: this.iconTextColor }">{{ groupTitle }}</p>
+    </div>
   </div>
 </template>
 
 <script>
 import IconsFullScreen from './fullScreen.vue';
 import Custom from './Custom.vue';
-import { renderIcon } from '../../../../js/common/common';
+import { renderIcon } from '@js/common/common';
+import { cardStore } from '@store/card';
+import { mapWritableState } from 'pinia';
 
 export default {
   props: {
@@ -76,6 +80,9 @@ export default {
     h(newV) {
       this.$emit('update:height', newV);
     },
+  },
+  computed: {
+    ...mapWritableState(cardStore, ['iconTextColor']),
   },
   methods: {
     renderIcon,

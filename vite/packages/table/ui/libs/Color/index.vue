@@ -42,7 +42,7 @@ export default {
     },
   },
   mounted() {
-    if (this.color == 'none') this.colorData = '';
+    if (this.color === 'none') this.colorData = '';
     else this.colorData = this.color;
   },
   computed: {
