@@ -1,112 +1,82 @@
+vue
 <template>
-  <Background>
-    <div class="limitOrder">
-      <!-- <div class="chart-container">
-          <div id="chart" style="width: 100%; height: 400px; margin-bottom: 40px;margin-top: 40px"></div>
-      </div> -->
-      <div class="limitOrder-panel-transaction">
-        <!-- <h2 class="exchange-title">限价单</h2> -->
-        <!-- Sell & Buy Dropdowns -->
-        <div class="limitOrder-token-pair">
-          <label class="limitOrder-token-label">Sell</label>
-          <div class="limitOrder-select-wrapper">
-            <select v-model="selectedToken1" class="limitOrder-custom-select">
-              <option v-for="token in tokens" :key="token.value" :value="token.value" class="select-option">
-                {{ token.label }}
-              </option>
-            </select>
-          </div>
+  <div class="limitOrder">
+    <div class="limitOrder-panel-transaction">
+      <div class="limitOrder-token-pair">
+        <label class="limitOrder-token-label">Sell</label>
+        <div class="limitOrder-select-wrapper">
+          <a-select v-model:value="selectedToken1" class="limitOrder-custom-select">
+            <a-select-option v-for="token in tokens" :key="token.value" :value="token.value" class="select-option">
+              {{ token.label }}
+            </a-select-option>
+          </a-select>
         </div>
-
-        <div class="limitOrder-token-pair">
-          <label class="limitOrder-token-label">Buy</label>
-          <div class="limitOrder-select-wrapper">
-            <select v-model="selectedToken2" class="limitOrder-custom-select">
-              <option v-for="token in tokens" :key="token.value" :value="token.value" class="select-option">
-                {{ token.label }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <!-- Divider -->
-        <!-- <div class="divider"/> -->
-        <!-- Fee Tiers -->
-        <!-- <div class="fee-tiers-title">Fee Tiers</div> -->
-        <div class="fee-options">
-          <label v-for="fee in fees" :key="fee" :class="{ selected: selectedFee === fee }" class="limitOrder-fee-box">
-            <input v-model="selectedFee" :value="fee" class="limitOrder-hidden-radio" name="fee" type="radio" />
-            {{ fee }}
-          </label>
-        </div>
-        <!-- Divider -->
-        <!-- <div class="divider"/> -->
-        <div class="limitOrder-token-input">
-          <label class="limitOrder-token-label">Amount</label>
-          <input v-model="amount" class="limitOrder-custom-input" type="text" />
-        </div>
-        <div class="limitOrder-token-input">
-          <label class="limitOrder-token-label">Price</label>
-          <div class="input-with-token">
-            <input v-model="price" class="limitOrder-custom-input" type="text" />
-            <span class="selected-tokens">{{ selectedToken1 }}/{{ selectedToken2 }}</span>
-          </div>
-        </div>
-        <shape-button style="width: 150px; height: 40px" @click="place">Add</shape-button>
       </div>
+      <div class="limitOrder-token-pair">
+        <label class="limitOrder-token-label">Buy</label>
+        <div class="limitOrder-select-wrapper">
+          <a-select v-model:value="selectedToken2" class="limitOrder-custom-select">
+            <a-select-option v-for="token in tokens" :key="token.value" :value="token.value" class="select-option">
+              {{ token.label }}
+            </a-select-option>
+          </a-select>
+        </div>
+      </div>
+      <div class="fee-options">
+        <a-radio-group v-model:value="selectedFee" class="limitOrder-fee-box">
+          <a-radio :value="fee" v-for="fee in fees" :key="fee">{{ fee }}</a-radio>
+        </a-radio-group>
+      </div>
+      <div class="limitOrder-token-input">
+        <label class="limitOrder-token-label">Amount</label>
+        <a-input v-model:value="amount" class="limitOrder-custom-input" type="text" />
+      </div>
+      <div class="limitOrder-token-input">
+        <label class="limitOrder-token-label">Price</label>
+        <div class="input-with-token">
+          <a-input v-model:value="price" class="limitOrder-custom-input" type="text" />
+          <span class="selected-tokens">{{ selectedToken1 }}/{{ selectedToken2 }}</span>
+        </div>
+      </div>
+      <a-button style="width: 150px; height: 40px" @click="place">Add</a-button>
     </div>
-  </Background>
+  </div>
 </template>
 
 <script>
 import axios from 'axios';
 import * as echarts from 'echarts';
-import ShapeButton from '@page/core/components/ShapeButton.vue';
+import { ref, onMounted, watch } from 'vue';
+import { placeLimitOrderFrontend } from '../services/place';
 import { limitOrderPoolKey } from '@page/core/Exchange/services/address';
-import { placeLimitOrderFrontend } from '@page/core/Exchange/services/place';
 import { ethers } from 'ethers';
-import Background from '@page/core/components/Background.vue';
 
 export default {
-  components: {
-    Background,
-    ShapeButton,
-  },
-  data() {
-    return {
-      tokens: [
-        { label: 'ETH', value: 'ETH' },
-        { label: 'BTC', value: 'BTC' },
-        { label: 'BNB', value: 'BNB' },
-        { label: 'ADA', value: 'ADA' },
-        { label: 'DOGE', value: 'DOGE' },
-        { label: 'XRP', value: 'XRP' },
-        { label: 'USDC', value: 'USDC' },
-        { label: 'DAI', value: 'DAI' },
-        { label: 'token0', value: 'token0' },
-        { label: 'token1', value: 'token1' },
-      ],
-      selectedToken1: 'ETH',
-      selectedToken2: 'USDC',
-      fees: ['0.04%', '0.2%', '动态'],
-      selectedFee: '0.04%',
-      amount: '',
-      price: '',
-      fromAccount: '',
-    };
-  },
-  watch: {
-    selectedToken1() {
-      this.fetchData();
-    },
-    selectedToken2() {
-      this.fetchData();
-    },
-  },
-  created: function () {
-    this.fetchData();
-  },
-  methods: {
-    async fetchData() {
+  setup() {
+    const tokens = [
+      { label: 'ETH', value: 'ETH' },
+      { label: 'BTC', value: 'BTC' },
+      { label: 'BNB', value: 'BNB' },
+      { label: 'ADA', value: 'ADA' },
+      { label: 'DOGE', value: 'DOGE' },
+      { label: 'XRP', value: 'XRP' },
+      { label: 'USDC', value: 'USDC' },
+      { label: 'DAI', value: 'DAI' },
+      { label: 'token0', value: 'token0' },
+      { label: 'token1', value: 'token1' },
+    ];
+    const selectedToken1 = ref('ETH');
+    const selectedToken2 = ref('USDC');
+    const fees = ref(['0.04%', '0.2%', '动态']);
+    const selectedFee = ref('0.04%');
+    const amount = ref('');
+    const price = ref('');
+
+    onMounted(fetchData);
+
+    watch([selectedToken1, selectedToken2], fetchData);
+
+    async function fetchData() {
       const coinMapping = {
         ETH: 'ethereum',
         BTC: 'bitcoin',
@@ -119,8 +89,8 @@ export default {
         token0: 'token0',
         token1: 'token1',
       };
-      let coin1 = coinMapping[this.selectedToken1];
-      let coin2 = coinMapping[this.selectedToken2];
+      let coin1 = coinMapping[selectedToken1.value];
+      let coin2 = coinMapping[selectedToken2.value];
       try {
         let response1 = await axios.get(`https://api.coingecko.com/api/v3/coins/${coin1}/market_chart`, {
           params: {
@@ -128,24 +98,20 @@ export default {
             days: 1,
           },
         });
-
         let response2 = await axios.get(`https://api.coingecko.com/api/v3/coins/${coin2}/market_chart`, {
           params: {
             vs_currency: 'usd',
             days: 1,
           },
         });
-
         let prices1 = response1.data.prices.map((p) => p[1]);
         let prices2 = response2.data.prices.map((p) => p[1]);
-        console.log(`Fetching data for: ${this.selectedToken1} and ${this.selectedToken2}`);
-
+        console.log(`Fetching data for: ${selectedToken1.value} and ${selectedToken2.value}`);
         // 计算比值并确保结果总是大于1
         this.ratioValues = prices1.map((price1, index) => {
           const price2 = prices2[index];
           return price1 >= price2 ? price1 / price2 : price2 / price1;
         });
-
         this.times = response1.data.prices.map((p) => {
           const date = new Date(p[0]);
           return `${date.getHours()}:${date.getMinutes()}`;
@@ -155,17 +121,16 @@ export default {
       } catch (err) {
         console.log(err);
       }
-    },
-    drawChart() {
+    }
+
+    function drawChart() {
       let currentHour = new Date().getHours();
       let times = [];
       for (let i = 1; i <= 24; i++) {
         let hour = (currentHour - i + 24) % 24;
         times.unshift(hour + ':00');
       }
-
       let validRatioValues = this.ratioValues.filter((val) => typeof val === 'number' && !isNaN(val));
-
       let minY = Math.min(...validRatioValues) * 0.999;
       let maxY = Math.max(...validRatioValues) * 1.001;
       // 修改 minY 和 maxY 的取整方法
@@ -194,7 +159,7 @@ export default {
       let chart = echarts.init(document.getElementById('chart'));
       let option = {
         title: {
-          text: `${this.selectedToken1} / ${this.selectedToken2}`,
+          text: `${selectedToken1.value} / ${selectedToken2.value}`,
           left: 'center',
           textStyle: {
             color: '#FFFFFF',
@@ -268,8 +233,9 @@ export default {
         ],
       };
       chart.setOption(option);
-    },
-    async place() {
+    }
+
+    async function place() {
       let epoch;
       let flag = 0;
       if (typeof window.ethereum !== 'undefined') {
@@ -291,10 +257,10 @@ export default {
         try {
           epoch = await placeLimitOrderFrontend(
             limitOrderPoolKey,
-            this.price,
-            this.selectedToken1,
-            this.selectedToken2,
-            ethers.utils.parseUnits(this.amount.toString(), 18),
+            price.value,
+            selectedToken1.value,
+            selectedToken2.value,
+            ethers.utils.parseUnits(amount.value.toString(), 18),
           );
           console.log('address2:' + this.fromAccount);
           flag = 1;
@@ -307,14 +273,13 @@ export default {
           const formattedDate = `${currentDate.getFullYear()}-${
             currentDate.getMonth() + 1
           }-${currentDate.getDate()} ${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`;
-
           const requestBody = {
             userAddress: this.fromAccount,
-            sell: this.selectedToken1,
-            buy: this.selectedToken2,
-            amount: this.amount,
-            price: this.price,
-            feeRates: this.selectedFee,
+            sell: selectedToken1.value,
+            buy: selectedToken2.value,
+            amount: amount.value,
+            price: price.value,
+            feeRates: selectedFee.value,
             status: '待成交',
             epoch: epoch,
             submitTime: formattedDate,
@@ -331,7 +296,20 @@ export default {
         console.log(err);
         alert('操作失败');
       }
-    },
+    }
+
+    return {
+      tokens,
+      selectedToken1,
+      selectedToken2,
+      fees,
+      selectedFee,
+      amount,
+      price,
+      fetchData,
+      drawChart,
+      place,
+    };
   },
 };
 </script>
@@ -339,17 +317,15 @@ export default {
 <style scoped>
 .exchange-title {
   margin-top: 10px;
-  font-size: 0.5rem;
+  font-size: 1.5rem;
   font-weight: bold;
-  color: white;
+  color: black;
 }
-
 .fee-tiers-title {
-  color: white;
-  font-size: 0.5rem;
+  color: black;
+  font-size: 1.5rem;
   text-align: left;
 }
-
 .limitOrder {
   display: flex;
   justify-content: space-between;
@@ -357,7 +333,6 @@ export default {
   margin-top: 30px;
   padding: 0 30px; /* 设置左右两侧的间距为40px */
 }
-
 .chart-container {
   flex: 1.5;
   background: transparent; /* 设置为透明背景 */
@@ -365,9 +340,8 @@ export default {
   padding: 20px;
   border-radius: 20px; /* 设置圆角 */
   margin: 75px auto;
-  border: 1px solid white; /* 临时的边框，方便我们看到这个容器，稍后可以删除 */
+  border: 1px solid black; /* 临时的边框，方便我们看到这个容器，稍后可以删除 */
 }
-
 .limitOrder-panel-transaction {
   flex: 1;
   position: relative;
@@ -377,18 +351,16 @@ export default {
   gap: 20px;
   background-color: transparent;
   border-radius: 10px;
-  /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   width: 80%;
   /*margin: 50px auto;*/
   padding: 20px;
-  border: 1px solid white; /* Add a white border */
+  border: 2px solid blue;
 }
-
 .input-section-transaction label {
   margin-right: 10px;
-  color: white;
+  color: black;
 }
-
 .limitOrder-token-pair {
   display: flex;
   justify-content: space-between;
@@ -397,56 +369,48 @@ export default {
   gap: 1%;
   margin-bottom: 1%;
 }
-
 .limitOrder-select-wrapper {
   width: 85%;
   position: relative;
   display: inline-block;
 }
-
 .limitOrder-custom-select {
   /*margin-left: 5%;*/
   box-sizing: border-box; /* Ensure padding and border are included in the total width */
   width: 100%;
   background-color: transparent;
-  border: 1px solid white;
-  color: white;
+  border: 1px solid black;
+  color: black;
   padding: 8px 12px;
   border-radius: 4px;
-  font-size: 5px;
+  font-size: 14px;
   outline: none;
   transition: border-color 0.15s ease-in-out;
 }
-
 .limitOrder-custom-select:hover {
   border-color: #007bff;
 }
-
 .select-option {
-  color: white;
+  color: black;
   background-color: #2d3748;
 }
-
 .limitOrder-token-label {
-  color: white;
+  color: black;
   width: 25%;
   margin-right: 5px;
 }
-
 .divider {
   width: 90%;
   height: 1px;
   background-color: white;
   margin: 2% 0;
 }
-
 .fee-options {
   display: flex;
   justify-content: space-between;
   gap: 15px;
   width: 100%;
 }
-
 .limitOrder-token-input {
   display: flex;
   justify-content: space-between;
@@ -456,28 +420,24 @@ export default {
   margin-bottom: 1%;
   position: relative;
 }
-
 .limitOrder-custom-input {
   width: 100%; /* 调整宽度为100%以使输入框填满其容器 */
   box-sizing: border-box;
   padding: 8px 12px;
   border-radius: 4px;
-  border: 1px solid white;
+  border: 1px solid black;
   background-color: transparent;
-  color: white;
-  font-size: 5px;
+  color: black;
+  font-size: 14px;
   outline: none;
   transition: border-color 0.15s ease-in-out;
 }
-
 .limitOrder-custom-input:hover {
   border-color: #007bff;
 }
-
 .limitOrder-custom-input::placeholder {
   color: rgba(255, 255, 255, 0.7);
 }
-
 .limitOrder-fee-box {
   flex: 1;
   display: flex;
@@ -493,24 +453,19 @@ export default {
   width: 30%; /* 设置宽度为30%以确保三个单选框长度一致 */
   text-align: center; /* 文字居中显示 */
 }
-
 .limitOrder-fee-box:last-child {
   margin-right: 0; /* 为最后一个单选框移除右边距，以确保宽度一致 */
 }
-
 .limitOrder-fee-box.selected {
   border-color: #007bff;
 }
-
 .limitOrder-hidden-radio {
   display: none;
 }
-
 .input-with-token {
   position: relative;
   width: 100%; /* 调整为70%以确保与token-label的宽度相加为100% */
 }
-
 .selected-tokens {
   position: absolute;
   right: 5%; /* 调整到5%以确保在两个输入框中位置一致 */

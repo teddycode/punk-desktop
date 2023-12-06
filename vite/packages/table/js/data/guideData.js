@@ -73,13 +73,10 @@ export const workPanel = {
   left: [
     { type: 'systemApp', icon: 'shouye1', name: '主页', event: 'home' },
     { type: 'systemApp', icon: 'yingyongzhongxin', name: '应用管理', event: 'apps' },
-    {
-      type: 'systemApp',
-      icon: 'rizhi',
-      name: '办公',
-      tab: 'work',
-      event: 'work',
-    },
+    { type: 'systemApp', icon: 'rizhi', name: '办公', tab: 'work', event: 'work' },
+    { type: 'systemApp', icon: 'mingcute:back-fill', name: '返回', tab: '', event: 'goback' },
+    { type: 'systemApp', icon: 'fluent:settings-16-regular', name: '基础设置', tab: '', event: 'setting' },
+    { type: 'systemApp', icon: 'fluent:power-20-filled', name: '电源', tab: '', event: 'power' },
   ],
   bottom: [
     {

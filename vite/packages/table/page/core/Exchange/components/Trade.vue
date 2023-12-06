@@ -1,85 +1,83 @@
 <template>
-  <Background>
-    <div class="liquidity-wrapper">
-      <div class="liquidity-container">
-        <!-- <h1 class="liquidity-title">添加流动性</h1> -->
-        <div class="liquidity-content-top">
-          <!-- Left Section -->
-          <div class="liquidity-left">
-            <h2 class="h2-1">选择币对</h2>
-            <div class="token-pair">
-              <label class="token-label tokenA">代币A</label>
-              <div class="select-wrapper">
-                <select v-model="selectedTokenA" class="custom-select">
-                  <option v-for="token in tokens" :key="token.value" :value="token.value" class="select-option">
-                    {{ token.label }}
-                  </option>
-                </select>
-                <i class="fas fa-chevron-down select-icon"></i>
-              </div>
-            </div>
-            <div class="token-pair">
-              <label class="token-label tokenB">代币B</label>
-              <div class="select-wrapper">
-                <select v-model="selectedTokenB" class="custom-select">
-                  <option v-for="token in tokens" :key="token.value" :value="token.value" class="select-option">
-                    {{ token.label }}
-                  </option>
-                </select>
-                <i class="fas fa-chevron-down select-icon"></i>
-              </div>
-            </div>
-          </div>
-          <!-- Right Section -->
-          <div class="liquidity-right">
-            <h2 class="h2-2">添加数额</h2>
-            <div class="token-input">
-              <input id="tokenA" v-model.number="inputAmountA" autocomplete="off" class="custom-input" type="number" />
-            </div>
-            <div class="token-input">
-              <input id="tokenB" v-model.number="inputAmountB" autocomplete="off" class="custom-input" type="number" />
-            </div>
-          </div>
-        </div>
-        <!-- <div class="divider"></div> -->
-        <div class="price-range-section">
-          <h2 class="price-range-title">价格区间</h2>
-          <div class="input-group">
-            <div class="input-wrapper">
-              <input v-model.number="priceLow" class="custom-input range-input" pattern="\d*" type="text" />
-              <span class="input-hint">MIN</span>
-            </div>
-            <div class="input-wrapper">
-              <input v-model.number="priceUpper" class="custom-input range-input" pattern="\d*" type="text" />
-              <span class="input-hint">MAX</span>
-            </div>
-          </div>
-        </div>
-        <!-- <div class="divider"></div> -->
-        <div class="liquidity-content-bottom">
-          <h2 class="h2-3">选择池信息</h2>
-          <div class="pool-info">
-            <label class="fee-label">手续费</label>
-            <div class="select-wrapper fee-wrapper">
-              <select v-model="selectedFee" class="custom-select fee-select">
-                <option v-for="fee in fees" :key="fee" class="select-option">{{ fee }}</option>
+  <div class="liquidity-wrapper">
+    <div class="liquidity-container">
+      <!-- <h1 class="liquidity-title">添加流动性</h1> -->
+      <div class="liquidity-content-top">
+        <!-- Left Section -->
+        <div class="liquidity-left">
+          <h2 class="h2-1">选择币对</h2>
+          <div class="token-pair">
+            <label class="token-label tokenA">代币A</label>
+            <div class="select-wrapper">
+              <select v-model="selectedTokenA" class="custom-select">
+                <option v-for="token in tokens" :key="token.value" :value="token.value" class="select-option">
+                  {{ token.label }}
+                </option>
               </select>
               <i class="fas fa-chevron-down select-icon"></i>
             </div>
-            <input
-              v-model="hookAddress"
-              class="custom-input hook-address-longer"
-              placeholder="钩子地址"
-              type="text"
-              @input="validateHookAddress"
-            />
           </div>
-          <p v-if="addressError" class="error-message">无效的地址格式</p>
+          <div class="token-pair">
+            <label class="token-label tokenB">代币B</label>
+            <div class="select-wrapper">
+              <select v-model="selectedTokenB" class="custom-select">
+                <option v-for="token in tokens" :key="token.value" :value="token.value" class="select-option">
+                  {{ token.label }}
+                </option>
+              </select>
+              <i class="fas fa-chevron-down select-icon"></i>
+            </div>
+          </div>
         </div>
-        <shape-button class="add-liquidity-button" @click="validateAndAdd">Add</shape-button>
+        <!-- Right Section -->
+        <div class="liquidity-right">
+          <h2 class="h2-2">添加数额</h2>
+          <div class="token-input">
+            <input id="tokenA" v-model.number="inputAmountA" autocomplete="off" class="custom-input" type="number" />
+          </div>
+          <div class="token-input">
+            <input id="tokenB" v-model.number="inputAmountB" autocomplete="off" class="custom-input" type="number" />
+          </div>
+        </div>
       </div>
+      <!-- <div class="divider"></div> -->
+      <div class="price-range-section">
+        <h2 class="price-range-title">价格区间</h2>
+        <div class="input-group">
+          <div class="input-wrapper">
+            <input v-model.number="priceLow" class="custom-input range-input" pattern="\d*" type="text" />
+            <span class="input-hint">MIN</span>
+          </div>
+          <div class="input-wrapper">
+            <input v-model.number="priceUpper" class="custom-input range-input" pattern="\d*" type="text" />
+            <span class="input-hint">MAX</span>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="divider"></div> -->
+      <div class="liquidity-content-bottom">
+        <h2 class="h2-3">选择池信息</h2>
+        <div class="pool-info">
+          <label class="fee-label">手续费</label>
+          <div class="select-wrapper fee-wrapper">
+            <select v-model="selectedFee" class="custom-select fee-select">
+              <option v-for="fee in fees" :key="fee" class="select-option">{{ fee }}</option>
+            </select>
+            <i class="fas fa-chevron-down select-icon"></i>
+          </div>
+          <input
+            v-model="hookAddress"
+            class="custom-input hook-address-longer"
+            placeholder="钩子地址"
+            type="text"
+            @input="validateHookAddress"
+          />
+        </div>
+        <p v-if="addressError" class="error-message">无效的地址格式</p>
+      </div>
+      <shape-button class="add-liquidity-button" @click="validateAndAdd">Add</shape-button>
     </div>
-  </Background>
+  </div>
 </template>
 
 <script>
@@ -88,11 +86,9 @@ import { addLiq } from '@page/core/Exchange/services/addLiquidity';
 import { limitOrderPoolKey } from '@page/core/Exchange/services/address';
 import { ethers } from 'ethers';
 // import { initializeWallet } from "@page/core/Exchange/function/address";
-import Background from '@page/core/components/Background.vue';
 
 export default {
   components: {
-    Background,
     ShapeButton,
   },
   data() {
@@ -198,7 +194,7 @@ export default {
   max-width: 90%;
   margin: auto;
   margin-top: 30px;
-  border: 1px solid white;
+  border: 2px solid blue;
   background-color: transparent;
 }
 
@@ -209,7 +205,7 @@ export default {
 }
 
 .liquidity-title {
-  color: white;
+  color: black;
   font-size: 14px;
   margin-bottom: 3%;
 }
@@ -231,13 +227,13 @@ export default {
 }
 
 .h2-3 {
-  color: white;
+  color: black;
   font-size: 14px;
   margin-bottom: 1%;
 }
 
 .h2-1 {
-  color: white;
+  color: black;
   font-size: 14px;
   margin-bottom: 1%;
   text-align: left;
@@ -245,7 +241,7 @@ export default {
 }
 
 .h2-2 {
-  color: white;
+  color: black;
   font-size: 14px;
   margin-bottom: 1%;
   text-align: left;
@@ -267,8 +263,8 @@ export default {
   box-sizing: border-box; /* Ensures padding and border are included in the total width */
   width: 95%;
   background-color: transparent;
-  border: 1px solid white;
-  color: white;
+  border: 1px solid black;
+  color: black;
   padding: 8px 12px;
   border-radius: 4px;
   font-size: 14px;
@@ -280,8 +276,8 @@ export default {
   box-sizing: border-box; /* Ensures padding and border are included in the total width */
   width: 90%;
   background-color: transparent;
-  border: 1px solid white;
-  color: white;
+  border: 1px solid black;
+  color: black;
   padding: 8px 12px;
   border-radius: 4px;
   font-size: 14px;
@@ -298,7 +294,7 @@ export default {
 }
 
 .select-icon {
-  color: white;
+  color: black;
   position: absolute;
   right: 10px;
   top: 50%;
@@ -329,6 +325,7 @@ export default {
 
 .custom-select:hover,
 .custom-input:hover {
+  color: whitesmoke;
   border-color: #007bff;
 }
 
@@ -342,14 +339,14 @@ export default {
 }
 
 .token-label {
-  color: white;
+  color: black;
   /*margin-right: 2%;*/
 }
 
 .divider {
   width: 80%;
   height: 1px;
-  background-color: white;
+  background-color: black;
   margin: 2% 0;
 }
 
@@ -371,7 +368,7 @@ export default {
 }
 
 .fee-label {
-  color: white;
+  color: black;
   width: 12%;
   /*margin-right: 2%;*/
 }
@@ -401,7 +398,7 @@ export default {
 }
 
 .price-range-title {
-  color: white;
+  color: black;
   font-size: 14px;
   margin-bottom: 1%;
 }
@@ -422,8 +419,8 @@ export default {
   box-sizing: border-box;
   width: 100%;
   background-color: transparent;
-  border: 1px solid white;
-  color: white;
+  border: 1px solid black;
+  color: black;
   padding: 8px 12px 8px 12px;
   border-radius: 4px;
   font-size: 14px;
@@ -432,7 +429,7 @@ export default {
 }
 
 .input-hint {
-  color: white;
+  color: black;
   position: absolute;
   right: 10px;
   top: 50%;

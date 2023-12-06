@@ -1,137 +1,138 @@
 <template>
-  <Background>
-    <div class="exg-container">
-      <div class="left-panel"></div>
-      <div class="middle-panel">
-        <div class="middle-top">
-          <div id="kline_container" ref="klineContainer"></div>
-        </div>
-        <div class="middle-bottom">
-          <div class="exg-transaction-view">
-            <div class="header-transaction">
-              <router-link
-                :class="{ active: this.$route.name === 'MyExchange' }"
-                class="btn-transaction"
-                to="/exchange/myExchange"
-                >市价
-              </router-link>
-              <router-link
-                :class="{ active: this.$route.name === 'LimitOrder' }"
-                class="btn-transaction"
-                to="/exchange/limitOrder"
-                >限价
-              </router-link>
-              <router-link
-                :class="{ active: this.$route.name === 'DepositToken' }"
-                class="btn-transaction"
-                to="/exchange/depositToken"
-                >充提
-              </router-link>
-              <!-- <router-link to="/Exhcange/myToken" class="btn-transaction" :class="{active: $route.path === '/myTransaction/myToken'}">代币</router-link> -->
-              <router-link
-                :class="{ active: this.$route.name === 'MyTrade' }"
-                class="btn-transaction"
-                to="/exchange/myTrade"
-                >流动性
-              </router-link>
-              <router-link
-                :class="{ active: this.$route.name === 'MyOrder' }"
-                class="btn-transaction"
-                to="/exchange/myOrder"
-                >我的订单
-              </router-link>
-            </div>
-            <div class="exg-content-transaction">
-              <router-view></router-view>
-            </div>
+  <div class="container">
+    <div class="left-panel"></div>
+    <div class="middle-panel">
+      <div class="middle-top">
+        <div id="kline_container" ref="klineContainer"></div>
+      </div>
+      <div class="middle-bottom">
+        <div class="transaction-view">
+          <div class="header-transaction">
+            <router-link
+              :to="{ name: 'MyExchange' }"
+              class="btn-transaction"
+              :class="{ active: this.$route.name === 'MyExchange' }"
+              >市价
+            </router-link>
+            <router-link
+              :to="{ name: 'LimitOrder' }"
+              class="btn-transaction"
+              :class="{ active: this.$route.name === 'LimitOrder' }"
+              >限价
+            </router-link>
+            <router-link
+              :to="{ name: 'DepositToken' }"
+              class="btn-transaction"
+              :class="{ active: this.$route.name === 'DepositToken' }"
+              >充提
+            </router-link>
+            <!-- <router-link to="/myTransaction/myToken" class="btn-transaction" :class="{active: $route.path === '/myTransaction/myToken'}">代币</router-link> -->
+            <router-link
+              :to="{ name: 'MyTrade' }"
+              class="btn-transaction"
+              :class="{ active: this.$route.name === 'MyTrade' }"
+              >流动性
+            </router-link>
+            <router-link
+              :to="{ name: 'MyOrder' }"
+              class="btn-transaction"
+              :class="{ active: this.$route.name === 'MyOrder' }"
+              >我的订单
+            </router-link>
+          </div>
+          <div class="content-transaction">
+            <router-view></router-view>
           </div>
         </div>
       </div>
-      <div class="right-panel">
-        <div class="right-top">
-          <TokenPage class="full-size"></TokenPage>
-        </div>
-        <!--        <div class="right-bottom">-->
-        <!--&lt;!&ndash;          <OrderPage class="full-size"></OrderPage>&ndash;&gt;-->
-        <!--        </div>-->
-      </div>
     </div>
-  </Background>
+    <div class="right-panel">
+      <!-- <div class="right-top">
+          <TokenPage class="full-size"></TokenPage>
+      </div>
+      <div class="right-bottom">
+          <myOrder class="full-size"></myOrder>
+      </div> -->
+    </div>
+  </div>
 </template>
-<script lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue';
-import Background from '@page/core/components/Background.vue';
-import OrderPage from '@page/core/Exchange/components/OrderPage/index.vue';
-import TokenPage from '@page/core/Exchange/components/TokenPage/index.vue';
+<script>
+import OrderPage from './components/OrderPage.vue';
+import TokenPage from './components/TokenPage.vue';
 import Kline from 'kline';
 
 export default {
-  name: 'Exchange',
+  name: 'myTransaction',
   components: {
     OrderPage,
     TokenPage,
-    Background,
   },
-  setup() {
-    const kline = ref(null);
-    const container = ref(null);
-    const width = ref(null);
-    const height = ref(null);
-    const setupKline = () => {
-      kline.value = new Kline({
-        element: '#kline_container',
-        symbol: 'BTC',
-        symbolName: '比特币',
-        type: 'poll',
-        url: 'http://127.0.0.1:8081/mock.json',
-      });
-      kline.value.draw();
-      container.value = this.$refs.klineContainer;
-      width.value = container.value.clientWidth;
-      height.value = container.value.clientHeight;
-      console.log(width.value);
-      console.log(height.value);
-      kline.value.resize(width.value, height.value);
-      kline.value.setShowTrade(false);
-    };
-
-    const handleWindowResize = () => {
-      const middleTop = this.$refs.klineContainer.parentElement;
-      if (middleTop && kline.value && typeof kline.value.resize === 'function') {
-        console.log('resize');
-        const width = middleTop.clientWidth;
-        const height = middleTop.clientHeight;
-        kline.value.resize(width, height);
-      }
-    };
-
-    onMounted(() => {
-      setupKline();
-      window.addEventListener('resize', handleWindowResize);
-      handleWindowResize();
-    });
-
-    onBeforeUnmount(() => {
-      window.removeEventListener('resize', handleWindowResize);
-    });
-
+  data() {
     return {
-      kline,
-      container,
-      width,
-      height,
-      setupKline,
-      handleWindowResize,
+      kline: null,
+      container: null,
+      width: null,
+      height: null,
     };
+  },
+
+  methods: {
+    setupKline() {
+      try {
+        // if (this.kline != null || this.container != null) {
+        //   return;
+        // }
+        this.kline = new Kline({
+          element: '#kline_container',
+          symbol: 'BTC',
+          symbolName: '比特币',
+          type: 'poll',
+          url: '/mock/kline.json',
+        });
+        this.kline.draw();
+        this.container = this.$refs.klineContainer;
+        this.width = this.container.clientWidth;
+        this.height = this.container.clientHeight;
+        console.log(this.width);
+        console.log(this.height);
+        this.kline.resize(this.width, this.height);
+        //this.kline.resize(760, 400);
+        this.kline.setShowTrade(false); // true/false
+      } catch (e) {
+        console.error('exchange page error1:', e.toString());
+      }
+    },
+    handleWindowResize() {
+      try {
+        const middleTop = this.$refs.klineContainer.parentElement; // 获取middle-top元素
+        if (middleTop && this.kline && typeof this.kline.resize === 'function') {
+          console.log('resize');
+          const width = middleTop.clientWidth;
+          const height = middleTop.clientHeight;
+          this.kline.resize(width, height);
+        }
+      } catch (e) {
+        console.error('exchange page error2:', e.toString());
+      }
+    },
+  },
+  mounted() {
+    // 此处应该仅设置一次
+    this.setupKline();
+    window.addEventListener('resize', this.handleWindowResize);
+    this.handleWindowResize(); // Call once on mounted to set initial size
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.handleWindowResize);
   },
 };
 </script>
 
 <style scoped>
-.exg-container {
+.container {
   display: flex;
-  height: 100%;
-  width: 100%;
+  height: 100vh;
+  width: 100vw;
 }
 
 .left-panel {
@@ -180,7 +181,7 @@ export default {
   /* background-color: #f5f5f5; */
 }
 
-.exg-transaction-view {
+.transaction-view {
   display: flex;
   flex-direction: column;
   /*min-height: 100vh;*/
@@ -215,7 +216,7 @@ export default {
   color: #f7fafc; /* Use a darker color for the text to make it stand out */
 }
 
-.exg-content-transaction {
+.content-transaction {
   flex: 1;
 }
 </style>

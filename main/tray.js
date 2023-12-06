@@ -158,7 +158,7 @@ app.whenReady().then(() => {
   });
 
   ipc.handle('direct-logout', async (event, args) => {
-    console.log('ready to delete :', args);
+    console.log('ready to delete userinfo:', args);
     try {
       await userModel.logout();
       global.appManager.sendIPCToApp('com.thisky.group', 'imLogout'); // 通知

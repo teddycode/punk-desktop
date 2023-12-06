@@ -59,8 +59,8 @@ const progress = computed(() => {
   let flag = ref(true);
   tasks.forEach((item) => {
     item.tasks.forEach((task) => {
-      if (task.id == 'firstTask') return;
-      if (store.taskID == task.id) {
+      if (task.id === 'firstTask') return;
+      if (store.taskID === task.id) {
         flag.value = false;
       }
       if (flag.value) {

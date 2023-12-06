@@ -1,75 +1,68 @@
 <template>
-  <Background>
-    <div class="myOrder-page">
-      <div v-for="(order, index) in displayedOrders" :key="index" class="myOrder-card">
-        <div class="myOrder-title-container">
-          <h1 class="myOrder-title">My Orders</h1>
-          <font-awesome-icon class="info-icon" icon="info-circle" @click="showDetails(order)" />
-        </div>
-        <div class="myOrder-limitOrder">
-          <!-- 左边框 -->
-          <div class="myOrder-panel">
-            <div class="myOrder-limitOrder-token-pair">
-              <h2 class="token-pair-title">代币对</h2>
-              <div class="data-box">{{ order.sell }}</div>
-              <div class="data-box">{{ order.buy }}</div>
-            </div>
-            <div class="fee-options">
-              <h3 class="fee-title">Fee Rates</h3>
-              <div class="data-box">{{ order.feeRates }}</div>
-            </div>
-            <div class="selected-tokens">{{ order.sell }} -> {{ order.buy }}</div>
+  <div class="myOrder-page">
+    <div v-for="(order, index) in displayedOrders" :key="index" class="myOrder-card">
+      <div class="myOrder-title-container">
+        <h1 class="myOrder-title">My Orders</h1>
+        <font-awesome-icon class="info-icon" icon="info-circle" @click="showDetails(order)" />
+      </div>
+      <div class="myOrder-limitOrder">
+        <!-- 左边框 -->
+        <div class="myOrder-panel">
+          <div class="myOrder-limitOrder-token-pair">
+            <h2 class="token-pair-title">代币对</h2>
+            <div class="data-box">{{ order.sell }}</div>
+            <div class="data-box">{{ order.buy }}</div>
           </div>
-          <!-- 右边框 -->
-          <div class="myOrder-panel">
-            <div class="myOrder-input-section">
-              <label class="myOrder-limitOrder-token-label" for="amount">Amount</label>
-              <div class="input-with-token">
-                <div class="data-box">{{ Number(order.amount) }}</div>
-              </div>
+          <div class="fee-options">
+            <h3 class="fee-title">Fee Rates</h3>
+            <div class="data-box">{{ order.feeRates }}</div>
+          </div>
+          <div class="selected-tokens">{{ order.sell }} -> {{ order.buy }}</div>
+        </div>
+        <!-- 右边框 -->
+        <div class="myOrder-panel">
+          <div class="myOrder-input-section">
+            <label class="myOrder-limitOrder-token-label" for="amount">Amount</label>
+            <div class="input-with-token">
+              <div class="data-box">{{ Number(order.amount) }}</div>
             </div>
-            <div class="myOrder-input-section">
-              <label class="myOrder-limitOrder-token-label" for="price">Price</label>
-              <div class="input-with-token">
-                <div class="data-box">
-                  {{ Number(order.price) }} <span>{{ order.sell }}/{{ order.buy }}</span>
-                </div>
-              </div>
-            </div>
-            <!-- 你的数据中似乎没有Filled字段，如果需要可以自行添加 -->
-            <div class="myOrder-input-section">
-              <label class="myOrder-limitOrder-token-label" for="filled">Filled</label>
-              <div class="input-with-token">
-                <div :class="getStatusClass(order.status)" class="data-box">{{ order.status }}</div>
+          </div>
+          <div class="myOrder-input-section">
+            <label class="myOrder-limitOrder-token-label" for="price">Price</label>
+            <div class="input-with-token">
+              <div class="data-box">
+                {{ Number(order.price) }} <span>{{ order.sell }}/{{ order.buy }}</span>
               </div>
             </div>
           </div>
-        </div>
-        <div class="button-group">
-          <shape-button
-            :disabled="order.status !== '成交'"
-            class="shape-button"
-            @click="withdraw(Number(order.epoch), order.id)"
-          >
-            withdraw
-          </shape-button>
-          <shape-button
-            :disabled="order.status !== '待成交'"
-            class="shape-button"
-            @click="kill(order.sell, order.buy, Number(order.price), order.id)"
-          >
-            cancel
-          </shape-button>
+          <!-- 你的数据中似乎没有Filled字段，如果需要可以自行添加 -->
+          <div class="myOrder-input-section">
+            <label class="myOrder-limitOrder-token-label" for="filled">Filled</label>
+            <div class="input-with-token">
+              <div :class="getStatusClass(order.status)" class="data-box">{{ order.status }}</div>
+            </div>
+          </div>
         </div>
       </div>
+      <div class="button-group">
+        <shape-button
+          :disabled="order.status !== '成交'"
+          class="shape-button"
+          @click="withdraw(Number(order.epoch), order.id)"
+        >
+          withdraw
+        </shape-button>
+        <shape-button
+          :disabled="order.status !== '待成交'"
+          class="shape-button"
+          @click="kill(order.sell, order.buy, Number(order.price), order.id)"
+        >
+          cancel
+        </shape-button>
+      </div>
     </div>
-    <myPagination
-      :currentPage="1"
-      :pagesize="itemsPerPage"
-      :total="totalItems"
-      @change-page="updatePage"
-    ></myPagination>
-  </Background>
+  </div>
+  <myPagination :currentPage="1" :pagesize="itemsPerPage" :total="totalItems" @change-page="updatePage"></myPagination>
 </template>
 
 <script>
@@ -82,13 +75,11 @@ import axios from 'axios';
 import myPagination from '@page/core/components/myPagination.vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import Background from '@page/core/components/Background.vue';
 
 library.add(faInfoCircle);
 export default {
   name: 'myOrder',
   components: {
-    Background,
     myPagination,
     ShapeButton,
   },
