@@ -286,32 +286,32 @@ app.whenReady().then(() => {
     ];
 
     tpl.push(
-      {
-        label: '社区和反馈',
-        click() {
-          require('electron').shell.openPath(userDataPath);
-        },
-        submenu: [
-          {
-            label: '打开官网',
-            click() {
-              require('electron').shell.openExternal('https://www.apps.vip');
-            },
-          },
-          {
-            label: '产品社区',
-            click() {
-              require('electron').shell.openExternal('https://s.apps.vip');
-            },
-          },
-          {
-            label: '提交bug和建议',
-            click() {
-              require('electron').shell.openExternal('https://s.apps.vip/forum?id=100304');
-            },
-          },
-        ],
-      },
+      // {
+      //   label: '社区和反馈',
+      //   click() {
+      //     require('electron').shell.openPath(userDataPath);
+      //   },
+      //   submenu: [
+      //     {
+      //       label: '打开官网',
+      //       click() {
+      //         require('electron').shell.openExternal('https://www.apps.vip');
+      //       },
+      //     },
+      //     {
+      //       label: '产品社区',
+      //       click() {
+      //         require('electron').shell.openExternal('https://s.apps.vip');
+      //       },
+      //     },
+      //     {
+      //       label: '提交bug和建议',
+      //       click() {
+      //         require('electron').shell.openExternal('https://s.apps.vip/forum?id=100304');
+      //       },
+      //     },
+      //   ],
+      // },
       {
         label: '打开用户数据目录',
         click() {

@@ -1,6 +1,7 @@
 import DetailsPage from '@page/core/Consensus/detail.vue';
 import BasePage from '@page/core/Consensus/index.vue';
 import myConsensus from '@page/core/Consensus/self.vue';
+import nodeManager from '@page/core/Consensus/node.vue';
 import { CodeOutlined } from '@ant-design/icons-vue';
 
 export default {
@@ -28,6 +29,15 @@ export default {
         icon: CodeOutlined,
       },
       component: myConsensus,
+    },
+    {
+      path: '/node',
+      name: 'ConsensusNode',
+      meta: {
+        title: '我的节点',
+        icon: CodeOutlined,
+      },
+      component: nodeManager,
     },
   ],
 };

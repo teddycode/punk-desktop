@@ -9,3 +9,6 @@
 5. CloudFish: [code](https://github.com/1esse/vue-clownfish-admin) -- [preview](https://jesse2hao.gitee.io/vue-clownfish-admin/#/dashboard)
 6. 运维管理： [code](https://github.com/dromara/Jpom) -- [preview]()
 7. 文件管理 [code](https://github.com/gaozhangmin/aliyunpan)
+
+### 比较符合的能用的UI案例
+1. RanAdmin: [code](https://gitee.com/ranshaka/ran-admin/tree/ant-design-electron/) -- [preview](![img.png](./image/ranAdmin.png))

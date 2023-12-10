@@ -1,7 +1,7 @@
 <template>
   <a-layout class="layout">
     <a-layout-header>
-      <layoutHeader />
+      <layoutHeader :style="'position: fixed;zIndex:10;width:100%;'"></layoutHeader>
     </a-layout-header>
     <a-layout-content>
       <!--      <path-bar :style="{ position: 'fixed', zIndex: 10 }"></path-bar>-->
