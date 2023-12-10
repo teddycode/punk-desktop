@@ -24,7 +24,7 @@ const dbStorage: Storage = {
   async setItem(key: string, value: string) {
     const time = Date.now();
     model.setItem(key, value, getSign()).then(() => {
-      Date.now() - time > 1 && console.log('写入完成', key, value.slice(0, 8), Date.now() - time + 'ms');
+      Date.now() - time > 1 && console.log('写入完成', key, value?.slice(0, 16), Date.now() - time + 'ms');
     }); //异步写入，防止阻塞
   },
   async getItem(key: string): string | null | Promise<string> {
@@ -43,7 +43,7 @@ const dbStorage: Storage = {
       window.loadedStore = {};
     }
     window.loadedStore[key] = true;
-    console.log('取出数据', key, value.slice(0, 8), Date.now() - time + 'ms');
+    console.log('取出数据', key, value?.slice(0, 16), Date.now() - time + 'ms');
     return value;
   },
 };

@@ -81,6 +81,7 @@ import { cardStore } from '../../store/card';
 import Template from '../../../user/pages/Template.vue';
 import RightMenu from './RightMenu.vue';
 import { IMenuItem, IOption } from './types';
+import WebState from './WebState.vue';
 
 export default {
   components: {
@@ -88,6 +89,7 @@ export default {
     MenuOutlined,
     MyIcon,
     RightMenu,
+    WebState,
   },
   name: 'Widget',
   props: {

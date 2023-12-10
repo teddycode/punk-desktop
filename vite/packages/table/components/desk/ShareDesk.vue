@@ -170,6 +170,7 @@ export default {
       type: Object,
     },
   },
+  emits: ['closeShare'],
   computed: {
     // ...mapWritableState(deskStore,['deskList','deskSize']),
     ...mapWritableState(deskStore, ['apiList']),

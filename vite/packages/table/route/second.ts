@@ -84,7 +84,7 @@ export default [
     component: Inspector,
   },
   {
-    path: '/home',
+    path: '',
     name: 'home',
     component: Home,
     meta: {

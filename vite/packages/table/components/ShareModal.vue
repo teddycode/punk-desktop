@@ -72,7 +72,7 @@ export default {
       default: () => false,
     },
   },
-
+  emits: ['closeShare'],
   methods: {
     close() {
       this.$emit('closeShare', false);

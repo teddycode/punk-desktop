@@ -413,7 +413,7 @@ export default {
     GameListDrawer,
     Desk,
   },
-  emits: ['update:currentDeskId', 'showMore'],
+  emits: ['update:currentDeskId', 'showMore', 'changeDesk'],
   props: {
     settings: {
       type: Object,

@@ -97,12 +97,14 @@ import { message } from 'ant-design-vue';
 import routerTab from '../js/common/routerTab';
 import { Icon as navIcon } from '@iconify/vue';
 import { renderIcon } from '@js/common/common';
+import GradeSmallTip from './GradeSmallTip.vue';
 
 export default {
   name: 'SidePanel',
   components: {
     EditNavigation,
     navIcon,
+    GradeSmallTip,
   },
   data() {
     return {
@@ -114,6 +116,7 @@ export default {
       dragEvent: null,
     };
   },
+  emits: ['getDelIcon'],
   props: {
     // 当前导航列表
     sideNavigationList: {
@@ -127,8 +130,8 @@ export default {
     },
     //要排序的容器id
     sortId: {
-      type: Function,
-      default: () => {},
+      type: String,
+      default: () => '',
     },
     //删除的方法
     delNavList: {

@@ -196,7 +196,7 @@ export default {
       // 链接
       if (item.type === 'link' && item.name !== 'Roadmap') {
         const data = JSON.parse(item.props);
-        // 暂时实现通过想天浏览器打开和电脑系统默认的浏览器打开,当前页面助手无法实现
+        // 暂时实现通过浏览器打开和电脑系统默认的浏览器打开,当前页面助手无法实现
         switch (data.openMethod) {
           case 'userSelect':
             browser.openInUserSelect(data.url);

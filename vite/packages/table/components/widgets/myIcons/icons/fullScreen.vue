@@ -53,6 +53,15 @@ export default {
       type: String,
     },
   },
+  emits: [
+    'deleteIcons',
+    'disbandGroup',
+    'dragAddIcon',
+    'editIcons',
+    'iconsRightClick',
+    'updateGroupTitle',
+    'customEvent',
+  ],
   data() {
     return {
       title: this.groupTitle,

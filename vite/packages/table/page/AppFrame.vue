@@ -91,7 +91,7 @@
 </template>
 
 <script>
-import { appStore } from '../store';
+import { appStore } from '@store';
 import { mapWritableState } from 'pinia';
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons-vue';
 import _ from 'lodash-es';
@@ -118,13 +118,14 @@ export default {
   mounted() {
     let app = this.$route.params;
     if (typeof app.fullScreen === 'undefined') {
-      app.fullScreen = true; //默认全屏
+      app.fullScreen = false; //默认不全屏
     } else {
       app.fullScreen = !(app.fullScreen === 'false');
     }
     if (app.fullScreen) {
       this.fullScreen = app.fullScreen;
     }
+    console.log('查看打开信息：', app);
     if (app.type === 'system') {
       //系统应用则跳转
       this.$router.replace({

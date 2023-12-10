@@ -530,6 +530,7 @@ export default {
       this.addApps(data['default']);
     },
     executeApp(appData) {
+      console.log('即将打开app:', appData);
       this.$router.push({
         name: 'app',
         params: appData,
