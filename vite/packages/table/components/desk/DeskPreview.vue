@@ -95,11 +95,11 @@
 <script>
 import { message } from 'ant-design-vue';
 import { mapActions, mapWritableState } from 'pinia';
-import { appStore } from '../../store';
+import { appStore } from '@store';
 import Desk from './Desk.vue';
-import { cardStore } from '../../store/card';
-import { marketStore } from '../../store/market';
-import { taskStore } from '../../apps/task/store';
+import { cardStore } from '@store/card';
+import { marketStore } from '@store/market';
+import { taskStore } from '@apps/task/store';
 
 export default {
   name: 'DeskPreview',
@@ -128,6 +128,7 @@ export default {
       previewHeight: 0,
     };
   },
+  emits: ['afterAdded', 'closePreview'],
   props: {
     // 方案
     scheme: {
@@ -147,7 +148,7 @@ export default {
     ...mapWritableState(appStore, ['fullScreen', 'userInfo']),
     ...mapWritableState(taskStore, ['taskID', 'step']),
     m03026() {
-      return this.taskID == 'M0302' && this.step == 6;
+      return this.taskID === 'M0302' && this.step === 6;
     },
     tagList() {
       if (this.scheme.tags) {

@@ -223,7 +223,7 @@ export default {
     bindUserInfoResponse () {
       ipc.removeAllListeners('userInfo')
       ipc.on('userInfo', async (event, args) => {
-        console.error('splash接收到登录参数:', args)
+        console.log('splash接收到登录参数:', args)
         if (args.data.uid === -2) {
           this.netError = true
           message.error({
@@ -250,7 +250,7 @@ export default {
         lvInfo.percentage = ((lvInfo.minute - current[0] * 60) / ((current[1] - current[0]) * 60)) * 100
         //this.lvInfo = lvInfo
         window.loadedStore['userInfo'] = true
-        console.error('更新了用户信息:', userInfo)
+        console.info('更新了用户信息:', userInfo)
         this.setUser(userInfo)
         if (this.$route.name === 'splash') {
           this.enter()

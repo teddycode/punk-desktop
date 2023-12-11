@@ -2,8 +2,6 @@
 import { defineStore } from 'pinia';
 import { RouteRecordRaw, useRouter } from 'vue-router';
 
-const router = useRouter();
-
 // @ts-ignore
 export const useLayoutStore = defineStore('layoutStore', {
   state: () => ({
@@ -87,6 +85,7 @@ export const useLayoutStore = defineStore('layoutStore', {
       if (this.tagView.length <= 1) return;
       this.tagView.splice(index, 1);
       if (index >= 1 && index <= this.tagView.length) {
+        const router = useRouter();
         if (index == 0) index = 1;
         this.activeTagView = this.tagView[index - 1].path;
         router.push(this.activeTagView);

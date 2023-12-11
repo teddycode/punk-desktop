@@ -205,7 +205,7 @@ import { navStore } from '../store/nav';
 import { mapActions, mapWritableState } from 'pinia';
 import Template from '../../user/pages/Template.vue';
 import { ThunderboltFilled } from '@ant-design/icons-vue';
-import { message } from 'ant-design-vue';
+import { message, notification } from 'ant-design-vue';
 import SidePanel from './SidePanel.vue';
 import SecondPanel from './SecondPanel.vue';
 import GradeSmallTip from './GradeSmallTip.vue';
@@ -220,7 +220,7 @@ import { teamStore } from '../store/team';
 import { messageStore } from '../store/message';
 import { appsStore } from '../store/apps';
 import { screenStore } from '../store/screen';
-import { renderIcon, toggleFullScreen } from '../js/common/common';
+import { renderIcon } from '../js/common/common';
 import Sortable from 'sortablejs';
 import TaskBox from '../apps/task/page/TaskBox.vue';
 import Emoji from './comp/Emoji.vue';
@@ -463,7 +463,7 @@ export default {
     closeChangeApp() {
       this.routeParams.url &&
         setTimeout(() => {
-          this.$router.push({ name: 'app', params: this.routeParams });
+          this.$router.push({ name: 'app', query: this.routeParams });
         }, 400);
       this.changeFlag = false;
     },
@@ -478,7 +478,7 @@ export default {
       this.menuVisible = false;
     },
     onClose() {
-      this.routeParams.url && this.$router.push({ name: 'app', params: this.routeParams });
+      this.routeParams.url && this.$router.push({ name: 'app', query: this.routeParams });
       this.menuVisible = false;
     },
     editNavigation() {
@@ -515,7 +515,7 @@ export default {
       ipc.send('executeAppByPackage', { package: 'com.thisky.fileHelper' });
       this.$router.push({
         name: 'app',
-        params: {
+        query: {
           theme: '#2c2c2c',
           name: 'fileHelper',
           url: 'https://szfilehelper.weixin.qq.com/',
@@ -525,13 +525,19 @@ export default {
       });
     },
     async setFullScreen() {
-      // await tsbApi.window.isFullScreen()
       if (this.full) {
-        this.full = false;
         tsbApi.window.setFullScreen(false);
+        tsbApi.window.maximize();
+        appStore().showWindowController = true;
+        this.full = false;
       } else {
-        this.full = true;
         tsbApi.window.setFullScreen(true);
+        appStore().showWindowController = false;
+        notification.info({
+          message: '温馨提示',
+          description: '全屏模式将自动隐藏窗口控制按钮，可在设置中重新开启。',
+        });
+        this.full = true;
       }
     },
 
@@ -541,8 +547,7 @@ export default {
       switch (item.type) {
         case 'systemApp':
           if (item.event === 'fullscreen') {
-            toggleFullScreen();
-            this.full = !this.full;
+            this.setFullScreen();
           } else if (item.event === '/status') {
             if (this.$route.path === '/status') {
               this.$router.go(-1);
@@ -552,7 +557,7 @@ export default {
           } else if (item.data) {
             this.$router.push({
               name: 'app',
-              params: item.data,
+              query: item.data,
             });
           } else {
             this.$router.push({ name: item.event });
@@ -561,7 +566,7 @@ export default {
         case 'coolApp':
           this.$router.push({
             name: 'app',
-            params: item.data,
+            query: item.data,
           });
           break;
         case 'localApp':

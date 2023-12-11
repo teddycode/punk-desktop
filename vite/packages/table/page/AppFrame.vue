@@ -116,7 +116,7 @@ export default {
     ...mapWritableState(appStore, ['fullScreen', 'settings', 'saving']),
   },
   mounted() {
-    let app = this.$route.params;
+    let app = this.$route.query;
     if (typeof app.fullScreen === 'undefined') {
       app.fullScreen = false; //默认不全屏
     } else {

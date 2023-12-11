@@ -80,7 +80,7 @@
                 </div>
               </a-col>
               <a-col :span="4">
-                <tempalate v-if="app.needInstall">
+                <template v-if="app.needInstall">
                   <div v-if="!checkInstalled(app)" @click="install(app)" class="btn">
                     <template v-if="app.downloading">
                       <svg
@@ -135,7 +135,7 @@
                     </template>
                   </div>
                   <div v-else @click="executeLocalApp(app)" class="btn">运行软件</div>
-                </tempalate>
+                </template>
                 <template v-else>
                   <div @click="executeApp(app.data)" class="btn">打开</div>
                 </template>
@@ -533,7 +533,7 @@ export default {
       console.log('即将打开app:', appData);
       this.$router.push({
         name: 'app',
-        params: appData,
+        query: appData,
       });
     },
     open(app) {

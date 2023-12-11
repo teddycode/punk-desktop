@@ -16,7 +16,9 @@
         </router-link>
       </div>
       <div class="content-transaction">
-        <router-view></router-view>
+        <keep-alive>
+          <router-view />
+        </keep-alive>
       </div>
     </div>
   </background>

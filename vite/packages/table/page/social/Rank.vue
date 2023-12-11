@@ -345,9 +345,9 @@
           >
           <a-col :xs="0" :sm="0" :md="0" :lg="7" class="box-col last-col">
             <span class="mr-4 team-box">
-              <a-avatar :src="myRank.teamInfo.avatar" :size="40"></a-avatar>
+              <a-avatar :src="myRank.teamInfo?.avatar" :size="40"></a-avatar>
             </span>
-            <span>{{ myRank.teamInfo.name }}</span>
+            <span>{{ myRank.teamInfo?.name }}</span>
           </a-col>
         </a-row>
       </div>

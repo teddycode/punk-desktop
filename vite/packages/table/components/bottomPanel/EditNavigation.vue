@@ -1072,7 +1072,7 @@ export default {
       this.$emit('setQuick');
       this.routeParams.url &&
         setTimeout(() => {
-          this.$router.push({ name: 'app', params: this.routeParams });
+          this.$router.push({ name: 'app', query: this.routeParams });
         }, 400);
     },
     addEdit(val) {

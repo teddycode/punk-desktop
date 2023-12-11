@@ -145,7 +145,7 @@ const $app = app
   .use(WujieVue)
   .use(VueShepherdPlugin)
   .use(XTUI)
-  .use(i18n) // 加载国际化插件
+  // .use(i18n) // 加载国际化插件
   .mount('#app');
 
 registerXTUI(app);

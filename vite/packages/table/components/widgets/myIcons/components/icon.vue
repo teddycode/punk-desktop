@@ -184,7 +184,7 @@ export default {
           break;
         // 酷应用
         case 'coolApp':
-          this.$router.push({ name: 'app', params: this.open.value });
+          this.$router.push({ name: 'app', query: this.open.value });
           break;
         // 本地应用
         case 'tableApp':
@@ -192,7 +192,7 @@ export default {
           break;
         // 桌面内嵌页面，由route跳转并携带参数
         case 'pageApp':
-          let route = { name: this.open?.route, params: { data: this.open?.params } };
+          let route = { name: this.open?.route, query: { data: this.open?.params } };
           console.log('跳转路由：', route);
           this.$router.push(route);
           break;
@@ -223,11 +223,11 @@ export default {
               if (this.$route.path === '/status') this.$router.go(-1);
               else this.$router.push({ path: '/status' });
             } else if (this.linkValue.data) {
-              this.$router.push({ name: 'app', params: this.linkValue.data });
+              this.$router.push({ name: 'app', query: this.linkValue.data });
             } else this.$router.push({ name: this.linkValue.event });
             break;
           case 'coolApp':
-            this.$router.push({ name: 'app', params: this.linkValue.data });
+            this.$router.push({ name: 'app', query: this.linkValue.data });
             break;
           case 'localApp':
             require('electron').shell.openPath(this.linkValue.path);

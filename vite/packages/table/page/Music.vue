@@ -140,7 +140,7 @@ export default {
     enterMusic() {
       this.$router.push({
         name: 'app',
-        params: SystemApps.wyyMusic,
+        query: SystemApps.wyyMusic,
       });
     },
     doAction(action) {

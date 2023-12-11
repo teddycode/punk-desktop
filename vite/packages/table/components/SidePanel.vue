@@ -287,7 +287,7 @@ export default {
           } else if (item.data) {
             this.$router.push({
               name: 'app',
-              params: item.data,
+              query: item.data,
             });
           } else {
             this.$router.push({ name: item.event });
@@ -296,7 +296,7 @@ export default {
         case 'coolApp':
           this.$router.push({
             name: 'app',
-            params: item.data,
+            query: item.data,
           });
           break;
         case 'localApp':
@@ -339,7 +339,7 @@ export default {
       this.quick = false;
     },
     onClose() {
-      this.routeParams.url && this.$router.push({ name: 'app', params: this.routeParams });
+      this.routeParams.url && this.$router.push({ name: 'app', query: this.routeParams });
       this.menuVisible = false;
     },
     colDrop() {},

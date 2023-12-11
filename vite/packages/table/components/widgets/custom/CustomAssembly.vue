@@ -498,7 +498,7 @@ export default {
             } else if (this.myData.link.data) {
               this.$router.push({
                 name: 'app',
-                params: this.myData.link.data,
+                query: this.myData.link.data,
               });
             } else {
               this.$router.push({ name: this.myData.link.event });
@@ -507,7 +507,7 @@ export default {
           case 'coolApp':
             this.$router.push({
               name: 'app',
-              params: this.myData.link.data,
+              query: this.myData.link.data,
             });
             break;
           case 'localApp':
