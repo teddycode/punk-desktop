@@ -3,6 +3,7 @@ import { appStore } from '../../store';
 
 export async function toggleFullScreen() {
   const isFullScreen = await tsbApi.window.isFullScreen();
+  console.log('是否全屏：', isFullScreen);
   if (!isFullScreen) {
     tsbApi.window.setFullScreen(true);
     appStore().showWindowController = false;

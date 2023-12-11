@@ -122,6 +122,7 @@ class Window extends Base {
       }
     });
     this.on('setFullScreen', (event, args, instance) => {
+      console.log('APIHandler setFullScreen：', args);
       if (instance.type === 'frameWindow') {
         instance.frame.setFullScreen(args);
       } else if (instance.type === 'window') {
@@ -134,6 +135,7 @@ class Window extends Base {
       } else if (instance.type === 'frameWindow') {
         event.returnValue = instance.frame.isFullScreen();
       } else if (instance.type === 'window') {
+        // TODO return undefine bug
         event.returnValue = instance.window.isFullScreen();
       }
     });
