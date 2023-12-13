@@ -150,7 +150,7 @@ export default {
     }
   },
   mounted() {
-    console.log('this.customData :>> ', this.customData.iconList[0]);
+    // console.log('this.customData :>> ', this.customData.iconList[0]);
     // console.log('this.customData :>> ', this.customData);
     // console.log('window.globalArgs :>> ', window.globalArgs);
   },

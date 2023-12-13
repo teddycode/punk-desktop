@@ -214,7 +214,7 @@ app.whenReady().then(() => {
     const globalSearch = keyM.getKeyMap('globalSearch', true);
     let tpl = [
       {
-        label: '打开工作台 ' + '         ' + table,
+        label: '打开客户端 ' + '         ' + table,
         Accelerator: table,
         click: () => {
           openWorktable();
@@ -313,7 +313,7 @@ app.whenReady().then(() => {
       //   ],
       // },
       {
-        label: '打开用户数据目录',
+        label: '打开数据目录',
         click() {
           require('electron').shell.showItemInFolder(userDataPath);
         },
@@ -328,7 +328,7 @@ app.whenReady().then(() => {
     );
     if (tableRunning) {
       tpl.splice(tpl.length - 1, 0, {
-        label: '退出工作台',
+        label: '退出客户端',
         click() {
           global.tableManager.close();
         },

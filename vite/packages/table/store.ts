@@ -30,7 +30,7 @@ export const appStore = defineStore(
       },
       style: '', // 指定样式
       styles: false, // 浅色切换功能
-      stylesIndex: 1, // 主题模式下标,默认浅色
+      stylesIndex: 0, // 主题模式下标,默认浅色
       saving: true, //性能模式
 
       simple: false, //极简模式

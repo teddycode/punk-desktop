@@ -482,10 +482,10 @@ export default {
     ...mapWritableState(taskStore, ['taskID', 'step']),
     ...mapWritableState(homeStore, ['currentDeskId', 'currentDeskIndex']),
     m01033() {
-      return this.taskID == 'M0103' && this.step == 3;
+      return this.taskID === 'M0103' && this.step === 3;
     },
     m01034() {
-      return this.taskID == 'M0103' && this.step == 4;
+      return this.taskID === 'M0103' && this.step === 4;
     },
     desksList() {
       return this.desks.map((desk) => {
@@ -668,8 +668,9 @@ export default {
     //      }
     //    });
     if (!this.moved) {
+      console.log('未知变量move:', this.moved, this.customComponents);
       //最早的修复
-      this.desks[0].cards = this.customComponents;
+      // this.desks[0].cards = this.customComponents;
       this.moved = true;
     }
     if (this.currentDeskId === '') {
@@ -844,9 +845,9 @@ export default {
       //   window.localStorage.setItem("style", JSON.stringify(`dark${background || ''}-model`));
       // }
     },
-    initGrids() {
-      this.currentDesk.cards = this.cleanMuuriData(deskTemplate['daily']);
-    },
+    // initGrids() {
+    //   this.currentDesk.cards = this.cleanMuuriData(deskTemplate['daily']);
+    // },
     hideDesk() {
       this.fullScreen = !this.fullScreen;
       this.hide = !this.hide;

@@ -40,7 +40,7 @@
           </a-col>
           <a-col :span="12">
             <div class="relative btn test">
-              浅色模式<br />
+              深色模式<br />
               <!-- <a-switch @click.native.stop="styleSwitch($event)" v-model:checked="styles"></a-switch> -->
               <a-switch @click="themeSwitch()" v-model:checked="styles"></a-switch>
             </div>
@@ -162,20 +162,20 @@
                 </div>
               </xt-task>
             </a-col>
-            <a-col v-if="isMain() && !this.isOffline" :span="6">
-              <div @click="invite" class="btn">
-                <!-- <Icon icon="tianjiachengyuan" style="font-size: 2em"></Icon> -->
-                <Iconify icon="fluent:people-add-16-regular" style="font-size: 2em" />
-                <div>邀请</div>
-              </div>
-            </a-col>
-            <a-col v-if="isMain() && !this.isOffline" :span="6">
-              <div @click="verify" class="btn">
-                <!-- <Icon icon="team" style="font-size: 2em"></Icon> -->
-                <Iconify icon="fluent:people-16-regular" style="font-size: 2em" />
-                <div>受邀</div>
-              </div>
-            </a-col>
+            <!--            <a-col v-if="isMain() && !this.isOffline" :span="6">-->
+            <!--              <div @click="invite" class="btn">-->
+            <!--                &lt;!&ndash; <Icon icon="tianjiachengyuan" style="font-size: 2em"></Icon> &ndash;&gt;-->
+            <!--                <Iconify icon="fluent:people-add-16-regular" style="font-size: 2em" />-->
+            <!--                <div>邀请</div>-->
+            <!--              </div>-->
+            <!--            </a-col>-->
+            <!--            <a-col v-if="isMain() && !this.isOffline" :span="6">-->
+            <!--              <div @click="verify" class="btn">-->
+            <!--                &lt;!&ndash; <Icon icon="team" style="font-size: 2em"></Icon> &ndash;&gt;-->
+            <!--                <Iconify icon="fluent:people-16-regular" style="font-size: 2em" />-->
+            <!--                <div>受邀</div>-->
+            <!--              </div>-->
+            <!--            </a-col>-->
             <a-col v-if="userInfo && userInfo.uid === 4 && isMain() && false" :span="6">
               <div @click="createCodes" class="btn">
                 <Icon icon="shezhi" style="font-size: 2em"></Icon>

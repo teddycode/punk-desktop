@@ -6,7 +6,14 @@ const { nanoid } = require('nanoid');
 const sqlDb = new SqlDb();
 const SettingModel = require('./settingModel.js');
 const _ = require('lodash');
-const { defaultWeb3Apps, authApiList, authBaseList, authAbilityList } = require('./data/appData');
+const {
+  defaultWeb3Apps,
+  authApiList,
+  authBaseList,
+  authAbilityList,
+  defaultLocalSysApp,
+  defaultPunkOSApp,
+} = require('./data/appData');
 
 let settingModel;
 const defaultWindow = {
@@ -26,6 +33,7 @@ const defaultWindow = {
   },
 };
 
+//包名为上述包名的判定为系统应用
 const systemAppPackage = [
   'com.thisky.group',
   'com.thisky.fav',
@@ -36,7 +44,7 @@ const systemAppPackage = [
   'com.thisky.appStore',
   'com.thisky.com',
   'com.thisky.desk',
-]; //包名为上述包名的判定为系统应用
+];
 
 const defaultAuth = {
   base: {
@@ -355,7 +363,6 @@ const appModel = {
    */
   async initialize() {
     await appModel.initDb();
-
     await appModel.ensureAppsData();
   },
   _testPin(target, find) {
@@ -836,11 +843,16 @@ const appModel = {
   },
   /**
    * sqldb
-   * 插入系统内置的web3应用
+   * 插入系统内置的应用
    * @returns {Promise<*>}
    */
   async insertDefaultApps() {
+    // 加入默认磐古应用
+    await sqlDb.knex('app').insert(defaultPunkOSApp);
+    // 加入默认web3应用
     await sqlDb.knex('app').insert(defaultWeb3Apps);
+    // 加入本地默认应用
+    await sqlDb.knex('app').insert(defaultLocalSysApp);
   },
   /**
    * 设置转中文表达

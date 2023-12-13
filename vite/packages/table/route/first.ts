@@ -1,5 +1,4 @@
 import Lock from '@page/Lock.vue';
-import Wizard from '@page/Wizard.vue';
 //设置
 import Splash from '@page/Splash.vue';
 //import index from './index'
@@ -27,11 +26,6 @@ export const routes: RouteRecordRaw[] = [
     path: '',
     name: 'splash',
     component: Splash,
-  },
-  {
-    path: '/wizard',
-    name: 'wizard',
-    component: Wizard,
   },
   {
     path: '/creativeMarket',

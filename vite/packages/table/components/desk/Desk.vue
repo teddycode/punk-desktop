@@ -503,7 +503,7 @@ export default {
   methods: {
     ...mapActions(useFreeDeskStore, ['addFreeDeskState', 'getFreeDeskState', 'delFreeDeskState', 'renewFreeDeskState']),
     learn() {
-      browser.openInTable('https://www.bilibili.com/video/BV1Th4y1o7SZ/?vd_source=2b7e342ffb60104849f5db6262bb1e0b');
+      browser.openInTable('https://www.punkos.com');
     },
     update() {
       if (this.$refs.grid) {

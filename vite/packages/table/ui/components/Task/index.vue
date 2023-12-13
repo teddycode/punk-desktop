@@ -45,13 +45,13 @@ export default defineComponent({
     },
     currentStep() {
       let length = this.taskID ? guide[this.taskID]?.length - 2 : 0;
-      let next = this.step == length ? '完成' : this.task?.next || '下一步';
+      let next = this.step === length ? '完成' : this.task?.next || '下一步';
       return `${next} ${this.step} / ${length}`;
     },
     //
     state() {
       if (this.id && this.no) {
-        let flag = this.taskID == this.id && this.step == this.no;
+        let flag = this.taskID === this.id && this.step === this.no;
         if (flag) this.start();
         return flag;
       } else {
@@ -85,7 +85,7 @@ export default defineComponent({
       this.$emit('cb');
       this.tour.next();
       this.step++;
-      if (this.task.success) {
+      if (this.task?.success) {
         this.success = true;
         // 发奖励
       }

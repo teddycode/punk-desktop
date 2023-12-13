@@ -2,15 +2,16 @@
 import Modal from '../../Modal.vue';
 import SourceSelector from '../../modal/SourceSelector.vue';
 import { mapActions, mapWritableState } from 'pinia';
-import { captureStore } from '../../../store/capture';
+import { captureStore } from '@store/capture';
 import CaptureSettings from '../../modal/CaptureSettings.vue';
-import { getDefaultMic, setMicVolume } from '../../../js/ext/audio/audio';
+import { getDefaultMic, setMicVolume } from '@js/ext/audio/audio';
 import SaveImage from '../../game/SaveImage.vue';
 import { useToast } from 'vue-toastification';
-import { formatSeconds } from '../../../util';
+import { formatSeconds } from '@table/util';
 import { defineComponent } from 'vue';
 
 const toast = useToast();
+// @ts-ignore
 export default defineComponent({
   name: 'CaptureCore',
   components: { Modal, CaptureSettings, SourceSelector },

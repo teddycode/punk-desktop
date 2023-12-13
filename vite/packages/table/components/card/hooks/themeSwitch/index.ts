@@ -23,7 +23,7 @@ export const setThemeSwitch = (flag) => {
   const className = compatible();
   delThemeName(className);
 
-  let model = flag ? LIGHT_THEME : DARK_THEME;
+  let model = flag ? DARK_THEME : LIGHT_THEME;
   let themeName = model + SUFFIX;
   setThemeName(themeName);
 };

@@ -151,14 +151,16 @@ export default {
             delete item.customData.sortList;
             break;
           case 'myIcons':
-            item.customData.iconList[0].backgroundColor = '';
-            item.customData.iconList[0].backgroundIndex = 0;
-            item.customData.iconList[0].imgShape = 'square';
-            item.customData.iconList[0].imgState = 'cover';
-            item.customData.iconList[0].isBackground = false;
-            item.customData.iconList[0].isRadius = true;
-            item.customData.iconList[0].radius = 5;
-            item.customData.iconList[0].size = 'mini';
+            if (item?.customData?.iconList?.length > 0) {
+              item.customData.iconList[0].backgroundColor = '';
+              item.customData.iconList[0].backgroundIndex = 0;
+              item.customData.iconList[0].imgShape = 'square';
+              item.customData.iconList[0].imgState = 'cover';
+              item.customData.iconList[0].isBackground = false;
+              item.customData.iconList[0].isRadius = true;
+              item.customData.iconList[0].radius = 5;
+              item.customData.iconList[0].size = 'mini';
+            }
             break;
         }
       });

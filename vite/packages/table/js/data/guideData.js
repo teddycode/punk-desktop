@@ -1,29 +1,23 @@
-// 步骤一选择工作台模式数据
+// 步骤一选择客户端布局模式数据
 export const guideData = [
   {
-    title: '游戏娱乐',
-    url: 'joystick_3d',
-    id: 'gr',
-    explain: '在左侧栏添加游戏助手，支持steam平台游戏，录屏截屏，查看攻略；支持系统CPU、GPU、内存、游戏帧数检测。',
-  },
-  {
-    title: '效率办公',
+    title: '常规布局',
     url: 'keyboard_3d',
     id: 'wf',
-    explain: '在左侧栏添加办公应用，支持快捷键、剪切板、AI、待办。',
+    explain: '在客户端侧栏添加办公应用，支持快捷键、剪切板、AI、用户状态。',
   },
   {
-    title: '极简DIY',
+    title: '极简布局',
     url: 'magic_wand_3d',
     id: 'dy',
-    explain: '无内置推荐数据，仅保留基础核心功能模块，从0开始DIY你的专属工作台。建议老用户选择。',
+    explain: '无内置推荐数据，仅保留基础核心功能模块，可自定义您的跨链客户端。',
   },
 ];
 
 // 步骤二选择工作台主题模式数据
 export const workTheme = [
-  { title: '浅色模式', url: 'sun_3d', id: 1 },
-  { title: '暗色模式', url: 'new_moon_3d', id: 0 },
+  { title: '浅色模式', url: 'sun_3d', id: 0 },
+  { title: '暗色模式', url: 'new_moon_3d', id: 1 },
 ];
 
 // 步骤三工作台极简模式和完整模式数据
@@ -93,15 +87,15 @@ export const workPanel = {
       },
     },
     {
-      icon: 'https://res.wx.qq.com/a/wx_fed/assets/res/OTE0YTAw.png',
-      name: '微信',
+      icon: 'https://pic.imgdb.cn/item/654517d4c458853aef584a01.png',
+      name: 'Uniswap',
       type: 'coolApp',
-      summary: '在副屏上使用网页版微信聊天。（已适配小屏）',
+      summary: 'Uniswap',
       needInstall: false,
       data: {
         theme: '#2e3238',
-        name: 'weixin',
-        url: 'https://wx.qq.com',
+        name: 'transfer',
+        url: 'https://uniswap.org',
         preload: 'weixin',
         background: true,
         node: false,
@@ -111,8 +105,8 @@ export const workPanel = {
     { type: 'systemApp', icon: 'lock', name: '锁定屏幕', event: 'lock' },
     { type: 'systemApp', icon: 'laptop', name: '设备设置', event: 'status' },
     { type: 'systemApp', icon: 'fullscreen', name: '全屏显示', event: 'fullscreen' },
-    { type: 'systemApp', icon: 'setting', name: '基础设置', event: 'setting' },
-    { type: 'systemApp', icon: 'tuichu', name: '电源', event: 'power' },
+    { type: 'systemApp', icon: 'yinle1', name: '音乐', event: 'music' },
+    { type: 'systemApp', icon: 'banner', name: '壁纸', event: 'my' },
   ],
 };
 // 极简diy左侧和底部栏数据
@@ -120,108 +114,19 @@ export const diyPanel = {
   left: [
     { type: 'systemApp', icon: 'shouye1', name: '主页', event: 'home' },
     { type: 'systemApp', icon: 'yingyongzhongxin', name: '应用管理', event: 'apps' },
-    { type: 'systemApp', icon: 'yinle1', name: '音乐', event: 'music' },
-    { type: 'systemApp', icon: 'kuaijie1', name: '快捷指令', event: 'deck' },
+    { type: 'systemApp', icon: 'mingcute:back-fill', name: '返回', tab: '', event: 'goback' },
   ],
   bottom: [
     { type: 'systemApp', icon: 'lock', name: '锁定屏幕', event: 'lock' },
     { type: 'systemApp', icon: 'setting', name: '基础设置', event: 'setting' },
     { type: 'systemApp', icon: 'fullscreen', name: '全屏显示', event: 'fullscreen' },
     { type: 'systemApp', icon: 'laptop', name: '设备设置', event: 'status' },
-    { type: 'systemApp', icon: 'tuichu', name: '电源', event: 'power' },
-  ],
-};
-
-// 游戏娱乐和效率辅助合并左侧和底部栏数据
-export const mergePanel = {
-  left: [
-    { type: 'systemApp', icon: 'shouye1', name: '主页', event: 'home' },
-    { type: 'systemApp', icon: 'yingyongzhongxin', name: '应用管理', event: 'apps' },
-    {
-      type: 'systemApp',
-      icon: 'rizhi',
-      name: '办公',
-      tab: 'work',
-      event: 'work',
-    },
-    { type: 'systemApp', icon: 'youxishoubing', name: '游戏', event: 'gameIndex' },
-    { type: 'systemApp', icon: 'yinle1', name: '音乐', event: 'music' },
-    { type: 'systemApp', icon: 'banner', name: '壁纸', event: 'my' },
-  ],
-  bottom: [
-    {
-      type: 'systemApp',
-      icon: 'shangchuan',
-      name: '文件传输',
-      event: 'fileHelper',
-      data: {
-        theme: '#2c2c2c',
-        name: 'fileHelper',
-        url: 'https://szfilehelper.weixin.qq.com/',
-        preload: 'fileHelper',
-        background: false,
-      },
-    },
-    {
-      icon: 'https://res.wx.qq.com/a/wx_fed/assets/res/OTE0YTAw.png',
-      name: '微信',
-      type: 'coolApp',
-      summary: '在副屏上使用网页版微信聊天。（已适配小屏）',
-      needInstall: false,
-      data: {
-        theme: '#2e3238',
-        name: 'weixin',
-        url: 'https://wx.qq.com',
-        preload: 'weixin',
-        background: true,
-        node: false,
-        security: true,
-      },
-    },
-    { type: 'systemApp', icon: 'lock', name: '锁定屏幕', event: 'lock' },
-    { type: 'systemApp', icon: 'laptop', name: '设备设置', event: 'status' },
-    { type: 'systemApp', icon: 'fullscreen', name: '全屏显示', event: 'fullscreen' },
-    { type: 'systemApp', icon: 'setting', name: '基础设置', event: 'setting' },
     { type: 'systemApp', icon: 'tuichu', name: '电源', event: 'power' },
   ],
 };
 
 // 工作台桌面
 export const deskTemplate = {
-  game: [
-    {
-      name: 'GamesDiscount',
-      id: 1683361279519,
-      data: {
-        id: 'cn',
-      },
-      _$muuri_id: 'afe08db5-591c-4c03-8535-302485228da7',
-    },
-    {
-      name: 'GameEpic',
-      id: 1683361479503,
-      data: {},
-      _$muuri_id: 'd9775365-ac7a-44eb-9643-f5afd2ce1927',
-    },
-    {
-      name: 'CPULineChart',
-      id: 1683361318879,
-      data: {},
-      _$muuri_id: 'cddb3c87-1dd9-429c-8db5-b626a41b520e',
-    },
-    {
-      name: 'capture',
-      id: 1683361487658,
-      data: {},
-      _$muuri_id: '4f68f51f-12c3-4dfd-a56f-a317eefb2a8d',
-    },
-    {
-      name: 'MyGameSmall',
-      id: 1683361327075,
-      data: {},
-      _$muuri_id: '27f6b805-9460-4b4f-b48a-0fe9f861d4fb',
-    },
-  ],
   work: [
     {
       name: 'customTimer',
@@ -270,7 +175,6 @@ export const deskTemplate = {
     },
   ],
   empty: [],
-  gameName: '游戏娱乐',
-  workName: '效率辅助',
-  emptyName: 'DIY桌面',
+  workName: '工作桌面',
+  emptyName: '简洁桌面',
 };

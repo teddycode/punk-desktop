@@ -23,14 +23,13 @@
     </div>
     <div v-else class="" style="background: #333;width: 100vw;height:auto">
       <div class="p-10 rounded-lg no-drag s-bg" style="width: 600px;margin: auto">
-
         <h3 style="text-align: center;font-size: 1.5em">
           <a-avatar src="/icons/logo128.png" style="vertical-align: top"></a-avatar>
-          <div style="color: deepskyblue">
+          <div style="color: whitesmoke">
            磐古跨链客户端
           </div>
         </h3>
-        <div style="color: #0a84ff" class="mb-10 ml-40 text-center text-md"> —— 连接web2与web3的一站式终端</div>
+        <div style="color: #2eb9ce" class="mb-10 ml-40 text-center text-md"> —— 连接web2与web3的一站式终端</div>
         <p v-if="!userInfo">
           <div class="mb-5 xt-text" style="font-size: 16px;color: whitesmoke">
             本客户端需要借助后端计算服务，<strong>请登录后使用。</strong><br>
@@ -51,13 +50,16 @@
             <div>
               <a-avatar :size="68" :src="userInfo.avatar"></a-avatar>
             </div>
-            <div  style="color: whitesmoke" class="mt-4 text-lg">
+            <div  style="color: orange" class="mt-4 text-lg">
               你好，{{ userInfo.nickname }}
             </div>
           </div>
         </div>
         <div class="flex">
           <a-button v-if="userInfo" block class="m-3" size="large" type="primary" @click="goDirect">开始使用</a-button>
+        </div>
+        <div v-if="userInfo" >
+          <a @click="reLoginUser">切换账号</a>
         </div>
       </div>
     </div>
@@ -88,7 +90,6 @@ import { chatStore } from '@store/chat'
 import navigationData from '../js/data/tableData'
 import taskStore from '../page/app/todo/stores/task'
 import cache from "../components/card/hooks/cache";
-import { offlineStore } from '@js/common/offline'
 
 export default {
   name: 'Code',
@@ -107,7 +108,13 @@ export default {
       version: tsbApi.runtime.appVersion
     }
   },
+  computed: {
+    ...mapWritableState(codeStore, ['myCode', 'serialHash']),
+    ...mapWritableState(appStore, ['settings', 'routeUpdateTime', 'userInfo', 'init', 'lvInfo', 'backgroundImage', 'style']),
+    ...mapWritableState(navStore, ['sideNavigationList', 'footNavigationList', 'rightNavigationList']),
+  },
   async mounted () {
+    // 后端服务器状态监测
     // setTimeout(() => {
     //   if (window.$isOffline && this.init) {
     //     this.$router.replace({ name: 'home' })
@@ -171,17 +178,11 @@ export default {
     this.sortClock()
 
   },
-  computed: {
-    ...mapWritableState(codeStore, ['myCode', 'serialHash']),
-    ...mapWritableState(appStore, ['settings', 'routeUpdateTime', 'userInfo', 'init', 'lvInfo', 'backgroundImage', 'style']),
-    ...mapWritableState(navStore, ['sideNavigationList', 'footNavigationList', 'rightNavigationList']),
-    ...mapWritableState(offlineStore, ['isOffline']),
-  },
   methods: {
     ...mapActions(cardStore, ['sortClock', 'sortCountdown']),
     ...mapActions(screenStore, ['bindMainIPC', 'bindSubIPC', 'onTableStarted']),
     ...mapActions(codeStore, ['active', 'getSerialHash', 'verify']),
-    ...mapActions(appStore, ['getUserInfo', 'setUser']),
+    ...mapActions(appStore, ['getUserInfo','settings', 'setUser', 'finishWizard','deleteUserInfo']),
     ...mapActions(steamUserStore, ['bindClientEvents']),
     ...mapActions(captureStore, ['bindCaptureIPC']),
     timeout () {
@@ -197,28 +198,26 @@ export default {
         })
       }, 5000)
     },
+    //直接进入工作台选择界面
     goDirect () {
-      this.$router.replace({ name: 'wizard' })
-      localStorage.setItem('wizarded', 1)
+      this.doDefaultSettings();
+      this.$router.replace({ name: 'home' })
     },
     enter () {
       clearTimeout(this.timeoutHandler)//清理掉超时提示
       chatStore().login()
-      if (localStorage.getItem('wizarded')) {
-        tsbApi.window.setFullScreen(true) // default fullscreen when app launched
-        const currentRoute = appStore().currentRoute
-        if (currentRoute) {
-          if (['lock', 'power'].includes(currentRoute.name)) {
-            //阻止lock、power页面的自动跳转
-            this.$router.replace({ name: 'home' })
-          } else {
-            this.$router.replace(currentRoute)
-          }
-        } else {
+      tsbApi.window.setFullScreen(true) // default fullscreen when app launched
+      const currentRoute = appStore().currentRoute
+      if (currentRoute) {
+        if (['lock', 'power'].includes(currentRoute.name)) {
+          //阻止lock、power页面的自动跳转
           this.$router.replace({ name: 'home' })
+        } else {
+          this.$router.replace(currentRoute)
         }
+      } else {
+        this.$router.replace({ name: 'home' })
       }
-
     },
     bindUserInfoResponse () {
       ipc.removeAllListeners('userInfo')
@@ -323,11 +322,46 @@ export default {
         this.getUserInfo()
       })
     },
-    offline(){
-      this.$router.replace({ name: 'wizard' })
-      cache.set('isOffline',true)
-      window.$isOffline = true
-      this.isOffline = true
+    replaceIcon() {
+      navigationData.systemFillAppList.forEach((item) => {
+        this.sideNavigationList.forEach((i) => {
+          if (item.name === i.name) {
+            i.icon = item.icon;
+          }
+        });
+      });
+      navigationData.systemFillAppList.forEach((item) => {
+        this.rightNavigationList.forEach((i) => {
+          if (item.name === i.name) {
+            i.icon = item.icon;
+          }
+        });
+      });
+      navigationData.systemAppList.forEach((item) => {
+        this.footNavigationList.forEach((i) => {
+          if (item.name === i.name) {
+            i.icon = item.icon;
+          }
+        });
+      });
+    },
+    // 执行默认快捷键设置
+    async doDefaultSettings() {
+      this.replaceIcon();
+      localStorage.setItem('wizarded', 1)
+      this.finishWizard();
+      this.settings.zoomFactor = (await tsbApi.window.getZoomFactor()) * 100;
+    },
+    //   切换账户
+    async reLoginUser() {
+      await this.deleteUserInfo();
+      let res = await ipc.invoke('direct-logout', this.userInfo?.uid);
+      if (res) {
+        message.success('帐号退出成功,请重新登录');
+        this.login();
+      } else {
+        message.error('账号退出失败，请重试！');
+      }
     }
   },
 }

@@ -9,7 +9,6 @@
         <Icon icon="xiangzuo" style="font-size: 1.75em"></Icon>
       </div>
     </div>
-
     <!-- 引导内容提示 -->
     <div v-if="isShow === false" class="h-full flex items-center justify-center min-content mb-4">
       <!-- 合适工作台模式 -->
@@ -24,12 +23,11 @@
           <div class="flex relative">
             <div class="guide-divider"></div>
             <div
-              v-for="(item, index) in guideData"
+              v-for="item in guideData"
               :class="{ 'mode-active-bg': isActive(item) }"
               class="flex flex-col pointer mode-width max-width mode-width clear-mr guide-page-bg rounded-lg items-center justify-center px-5 py-2 mr-8"
-              @click="selectWorkMode(item, index)"
+              @click="selectWorkMode(item)"
             >
-              <!--  -->
               <div style="width: 100px; height: 100px">
                 <img :src="guideImg(item.url)" alt="" class="w-full h-full" />
               </div>
@@ -156,25 +154,23 @@
 </template>
 
 <script>
-import { mapWritableState, mapActions } from 'pinia';
-import { appStore } from '../../../store';
-import { navStore } from '../../../store/nav';
-import { cardStore } from '../../../store/card';
-import { defaultAvatar } from '../../../js/common/teamAvatar';
-import { taskStore } from '../../../apps/task/store';
+import { mapActions, mapWritableState } from 'pinia';
+import { appStore } from '@store';
+import { navStore } from '@store/nav';
+import { cardStore } from '@store/card';
+import { defaultAvatar } from '@js/common/teamAvatar';
+import { taskStore } from '@apps/task/store';
 // import GradeNotice from './GradeNotice.vue'
 import {
-  guideData,
-  workTheme,
-  teamData,
-  modeData,
   deskTemplate,
   diyPanel,
-  gamePanel,
-  workPanel,
-  mergePanel,
+  guideData,
+  modeData,
   modeImg,
-} from '../../../js/data/guideData';
+  teamData,
+  workPanel,
+  workTheme,
+} from '@js/data/guideData';
 import cache from '../../../components/card/hooks/cache';
 import { setThemeSwitch } from '../../../components/card/hooks/themeSwitch/index';
 import HorizontalPanel from '../../../components/HorizontalPanel.vue';
@@ -198,8 +194,7 @@ export default {
       defaultMode: { title: '完整模式', name: 'intMode' },
       showModal: false,
       defaultTeamData: {},
-      selectItem: [],
-      statusIndex: 0, // 默认引导步骤一的默认选项
+      selectLayout: guideData[0]?.id, // 工作台默认值
       loadShow: false, // 第一次加载
     };
   },
@@ -208,18 +203,15 @@ export default {
     ...mapWritableState(cardStore, ['currentDeskId', 'currentDeskIndex']),
     //是否禁用下一步
     isNext() {
-      return this.statusIndex === 2 || this.selectItem.length > 0;
+      return this.selectLayout !== '';
     },
   },
-  mounted() {
-    this.selectItem = ['wf']; // gr
-  },
+  mounted() {},
   methods: {
     ...mapActions(appStore, ['updateMode', 'updateSimple', 'setAgreeTest', 'setInfoVisible', 'setSecondaryVisible']),
     ...mapActions(cardStore, ['addDesk', 'switchToDesk']),
     ...mapActions(navStore, ['updateLeftNavData', 'updateBottomNavData']),
     ...mapActions(taskStore, ['startfirstTask']),
-
     // 点击返回按钮的回调事件
     backSplash() {
       this.$router.replace({ name: 'splash' });
@@ -243,25 +235,12 @@ export default {
       this.showModal = true;
     },
     // 选择合适的工作台模式
-    selectWorkMode(item, index) {
-      const find = this.selectItem.indexOf(item.id);
-      if (find > -1) {
-        this.selectItem.splice(find, 1);
-      } else {
-        this.selectItem.push(item.id); // 添加选中
-      }
-      this.statusIndex = index;
-      if (index === 2) {
-        this.selectItem = [];
-      }
+    selectWorkMode(item) {
+      this.selectLayout = item.id;
     },
     // 选中状态
     isActive(item) {
-      if (item.id === 'dy') {
-        // 第三个元素选中
-        return this.statusIndex === 2;
-      }
-      return this.selectItem.includes(item.id);
+      return item.id === this.selectLayout;
     },
     // 下一步按钮
     nextButton() {
@@ -269,19 +248,11 @@ export default {
       if (this.step > 2) this.isShow = true;
       if (this.step > 2) {
         // 最后一步生成桌面
-        if (this.selectItem.length !== 0 && this.selectItem.length > 1) {
-          // 多选情况下
-          for (let i = 0; i < this.selectItem.length; i++) {
-            this.addSwitchDesk(this.guideData[i]);
-          }
-        } else if (this.selectItem[0] && this.selectItem[0] !== undefined) {
-          // 单选不极简情况下
-          this.addSwitchDesk({ id: this.selectItem[0] });
-        } else if (this.statusIndex === 2) {
-          // 单选极简情况下
-          this.addSwitchDesk(this.guideData[this.statusIndex]);
+        const selectedItem = this.guideData.find((item) => item.id === this.selectLayout);
+        if (selectedItem) {
+          console.log('last selected: ', selectedItem);
+          this.addSwitchDesk(selectedItem);
         }
-
         // 当所有步骤执行完以后
         this.setAgreeTest();
         this.$router.push({ name: 'home' });
@@ -298,20 +269,6 @@ export default {
             this.setSecondaryVisible(false);
           }
         }, 60000);
-
-        // console.log('多选:>>>',);
-        // console.log('单选::>>> 不极简',this.selectItem[0]);
-        // console.log('单选::>>> 极简',this.statusIndex === 2);
-        // if(this.selectItem.length !==0 && this.selectItem.length > 1){  // 判断是不是多选
-
-        // }else{
-        //   // 单选情况下 分为极简和不极简,
-        //   if(this.selectItem[0]){
-        //     this.addSwitchDesk({id:this.selectItem[0]})
-        //   }else{
-        //     this.addSwitchDesk(this.guideData[this.statusIndex])
-        //   }
-        // }
       } else {
         return;
       }
@@ -320,35 +277,19 @@ export default {
     addSwitchDesk(obj) {
       // 添加桌面和导航
       switch (obj.id) {
-        case 'gr': // 游戏娱乐
-          this.addDesk(this.deskTemplate.gameName, this.deskTemplate.game);
-          if (this.selectItem.length === 1) {
-            this.updateLeftNavData(gamePanel.left);
-            this.updateBottomNavData(gamePanel.bottom);
-          }
-          break;
-        case 'wf': // 效率辅助
+        case 'wf': // 常规模式
           this.addDesk(this.deskTemplate.workName, this.deskTemplate.work);
-          if (this.selectItem.length === 1) {
-            this.updateLeftNavData(workPanel.left);
-            this.updateBottomNavData(workPanel.bottom);
-          }
+          this.updateLeftNavData(workPanel.left);
+          this.updateBottomNavData(workPanel.bottom);
+          // TODO add right panel
           break;
-        case 'dy': // 极简diy
+        case 'dy': // 极简模式
           this.addDesk(this.deskTemplate.emptyName, this.deskTemplate.empty);
-          if (this.statusIndex === 2) {
-            this.updateLeftNavData(diyPanel.left);
-            this.updateBottomNavData(diyPanel.bottom);
-          }
+          this.updateLeftNavData(diyPanel.left);
+          this.updateBottomNavData(diyPanel.bottom);
           break;
       }
-
       this.switchToDesk(0);
-
-      if (this.selectItem.length === 2) {
-        this.updateLeftNavData(mergePanel.left);
-        this.updateBottomNavData(mergePanel.bottom);
-      }
     },
 
     // 图片转换
@@ -357,11 +298,10 @@ export default {
     },
   },
   watch: {
-    // 根据浅色模式监听
     styles: {
       handler(newVal, oldVal) {
-        let model = newVal || this.stylesIndex === 1;
-
+        let model = newVal;
+        console.log('Style:', newVal, oldVal, model);
         setThemeSwitch(model);
       },
       immediate: true,
@@ -382,15 +322,18 @@ export default {
 .guide-page-bg {
   background: var(--secondary-bg);
 }
+
 .button-active {
   &:active {
     filter: brightness(0.8);
     opacity: 0.8;
   }
+
   &:hover {
     opacity: 0.8;
   }
 }
+
 .primary-title {
   font-size: 18px;
   color: var(--primary-text);
@@ -408,9 +351,11 @@ export default {
   color: var(--secondary-text);
   font-weight: 400;
 }
+
 .container {
   max-width: 240px;
 }
+
 .text-clamp {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 4;
@@ -420,15 +365,18 @@ export default {
   color: var(--secondary-text);
   font-weight: 400;
 }
+
 .max-width {
   &:last-of-type {
     margin-left: 32px !important;
     padding: 34px 64px !important;
+
     .container {
       max-width: 272px;
     }
   }
 }
+
 .guide-divider {
   position: absolute;
   top: 0;
@@ -437,6 +385,7 @@ export default {
   height: 100%;
   background: var(--divider);
 }
+
 .px-25 {
   padding-left: 6.875rem;
   padding-right: 6.875rem;
@@ -448,16 +397,19 @@ export default {
   border: 1px solid var(--active-bg);
   color: var(--active-text);
 }
+
 .clear-mr {
   &:last-of-type {
     margin-right: 0 !important;
   }
 }
+
 .guide-button {
   position: fixed;
   top: 12px;
   left: 12px;
 }
+
 .mode-image {
   max-width: 720px;
   max-height: 405px;
@@ -490,6 +442,7 @@ export default {
   }
   .mode-width {
     padding: 10px 5px !important;
+
     &:last-of-type {
       padding: 0 !important;
       margin: 0 !important;
