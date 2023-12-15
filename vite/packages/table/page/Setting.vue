@@ -237,35 +237,35 @@ import {
   delSecondaryBgColor,
   delTextColor,
   delWallpaperColor,
-} from './../components/card/hooks/styleSwitch/delStyle';
-import { getBgColor, getTextColor, getWallpaperColor } from './../components/card/hooks/styleSwitch/getStyle';
+} from '@components/card/hooks/styleSwitch/delStyle';
+import { getBgColor, getTextColor, getWallpaperColor } from '@components/card/hooks/styleSwitch/getStyle';
 import {
   setBgColor,
   setSecondaryBgColor,
   setTextColor,
   setWallpaperColor,
-} from './../components/card/hooks/styleSwitch/setStyle';
-import { setThemeSwitch } from './../components/card/hooks/themeSwitch/';
+} from '@components/card/hooks/styleSwitch/setStyle';
+import { setThemeSwitch } from '@components/card/hooks/themeSwitch';
 import ChooseScreen from './ChooseScreen.vue';
-import { appStore } from '../store';
+import { appStore } from '@store';
 import { mapWritableState } from 'pinia';
 import { message, Modal } from 'ant-design-vue';
 import { mapActions } from 'pinia';
-import { codeStore } from '../store/code';
+import { codeStore } from '@store/code';
 import SecondPanel from '../components/SecondPanel.vue';
 import GradeSmallTip from '../components/GradeSmallTip.vue';
-import { isMain, isWin } from '../js/common/screenUtils';
+import { isMain, isWin } from '@js/common/screenUtils';
 import MyAvatar from '../components/small/MyAvatar.vue';
 import EditNavigation from '../components/bottomPanel/EditNavigation.vue';
-import { taskStore } from '../apps/task/store';
-import { offlineStore } from '../js/common/offline';
+import { taskStore } from '@apps/task/store';
+import { offlineStore } from '@js/common/offline';
 import { Icon as Iconify } from '@iconify/vue';
 export default {
   name: 'Setting',
   components: { EditNavigation, MyAvatar, SecondPanel, ChooseScreen, GradeSmallTip, Iconify },
   data() {
     return {
-      bgColor: '',
+      bgColor: '#FFB342',
       textColor: '',
       wallpaperColor: '',
       styleVisible: false,
@@ -306,13 +306,13 @@ export default {
     ...mapWritableState(offlineStore, ['isOffline']),
 
     m03011() {
-      return this.taskID == 'M0301' && this.step == 1;
+      return this.taskID === 'M0301' && this.step === 1;
     },
     m03012() {
-      return this.taskID == 'M0301' && this.step == 2;
+      return this.taskID === 'M0301' && this.step === 2;
     },
     m04011() {
-      return this.taskID == 'M0401' && this.step == 1;
+      return this.taskID === 'M0401' && this.step === 1;
     },
   },
   methods: {

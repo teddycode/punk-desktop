@@ -234,6 +234,7 @@ let arrData = [
     event: 'power',
   },
 ];
+// @ts-ignore
 export const navStore = defineStore('nav', {
   state: () => ({
     mainNavigationList: [
@@ -313,8 +314,7 @@ export const navStore = defineStore('nav', {
         event: 'status',
       },
     ],
-    // navigationToggle: [true,false,true]
-    navigationToggle: [true, false, true],
+    navigationToggle: [true, true, true],
   }),
   actions: {
     removeFootNavigationList(index) {
@@ -383,6 +383,10 @@ export const navStore = defineStore('nav', {
     updateBottomNavData(val) {
       // console.log('更新底部导航数据',val);
       this.footNavigationList = val;
+    },
+    updateRightNavData(val) {
+      // console.log('更新右侧导航数据',val);
+      this.rightNavigationList = val;
     },
   },
   persist: {

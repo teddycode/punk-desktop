@@ -210,7 +210,7 @@ export default {
   methods: {
     ...mapActions(appStore, ['updateMode', 'updateSimple', 'setAgreeTest', 'setInfoVisible', 'setSecondaryVisible']),
     ...mapActions(cardStore, ['addDesk', 'switchToDesk']),
-    ...mapActions(navStore, ['updateLeftNavData', 'updateBottomNavData']),
+    ...mapActions(navStore, ['updateLeftNavData', 'updateBottomNavData', 'updateRightNavData']),
     ...mapActions(taskStore, ['startfirstTask']),
     // 点击返回按钮的回调事件
     backSplash() {
@@ -281,7 +281,7 @@ export default {
           this.addDesk(this.deskTemplate.workName, this.deskTemplate.work);
           this.updateLeftNavData(workPanel.left);
           this.updateBottomNavData(workPanel.bottom);
-          // TODO add right panel
+          this.updateRightNavData(workPanel.right);
           break;
         case 'dy': // 极简模式
           this.addDesk(this.deskTemplate.emptyName, this.deskTemplate.empty);

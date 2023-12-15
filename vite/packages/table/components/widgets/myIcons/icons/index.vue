@@ -1,4 +1,5 @@
 <template>
+  <!--  小框  -->
   <IconsFullScreen
     v-if="isIconsFullScreen"
     :groupTitle="groupTitle"
@@ -11,6 +12,7 @@
     @updateGroupTitle="updateGroupTitle"
   >
   </IconsFullScreen>
+  <!--  大框  -->
   <Custom
     v-if="zoom.state"
     v-model:height="h"
@@ -75,9 +77,11 @@ export default {
   },
   watch: {
     w(newV) {
+      console.log('update:width:', newV);
       this.$emit('update:width', newV);
     },
     h(newV) {
+      console.log('update:height:', newV);
       this.$emit('update:height', newV);
     },
   },

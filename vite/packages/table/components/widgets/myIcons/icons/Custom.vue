@@ -122,7 +122,7 @@ export default {
     getAppCount() {
       const w = parseFloat(this.w);
       const h = parseFloat(this.h);
-      const title = 22 * w;
+      const title = 30 * w;
       let icons = w * h - title;
       let icon = sizeValues[this.icons].w * sizeValues[this.icons].h;
 

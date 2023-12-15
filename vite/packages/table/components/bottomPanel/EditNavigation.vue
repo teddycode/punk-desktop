@@ -349,15 +349,15 @@
 import vuuri from '../vuuriHome/Vuuri.vue';
 import listItem from './listItem.vue';
 import { mapActions, mapWritableState } from 'pinia';
-import { cardStore } from '../../store/card';
-import { navStore } from '../../store/nav';
+import { cardStore } from '@store/card';
+import { navStore } from '@store/nav';
 import ScrolX from '../ScrolX.vue';
 import Sortable from 'sortablejs';
 import navigationData from '../../js/data/tableData';
 import Classification from '../comp/Classification.vue';
 import { Icon as navIcon } from '@iconify/vue';
 import { message } from 'ant-design-vue';
-import { renderIcon } from '../../js/common/common';
+import { renderIcon } from '@js/common/common';
 
 const { appModel } = window.$models;
 
@@ -491,6 +491,7 @@ export default {
     //   event.preventDefault();
     //   content.scrollLeft += event.deltaY
     // });
+    console.log('右侧内容：', JSON.stringify(this.rightNavigationList));
     let boxContent = document.getElementById('boxContent');
     boxContent.addEventListener('ondragover', () => {
       ev.preventDefault();
