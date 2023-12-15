@@ -36,8 +36,8 @@ const wallPaper = {
       history = JSON.parse(localStorage.getItem('wallPaperHistory'));
     } catch (e) {}
     if (!!!history) {
-      localStorage.setItem('wallPaperHistory', JSON.stringify(['../../img/wallpaper.jpeg']));
-      return ['../../img/wallpaper.jpeg'];
+      localStorage.setItem('wallPaperHistory', JSON.stringify(['../../img/wallpaper.jpg']));
+      return ['../../img/wallpaper.jpg'];
     }
     return history;
   },

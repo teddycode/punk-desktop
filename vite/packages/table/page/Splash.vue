@@ -90,6 +90,7 @@ import { chatStore } from '@store/chat'
 import navigationData from '../js/data/tableData'
 import taskStore from '../page/app/todo/stores/task'
 import cache from "../components/card/hooks/cache";
+const path = require('path')
 
 export default {
   name: 'Code',
@@ -112,6 +113,7 @@ export default {
     ...mapWritableState(codeStore, ['myCode', 'serialHash']),
     ...mapWritableState(appStore, ['settings', 'routeUpdateTime', 'userInfo', 'init', 'lvInfo', 'backgroundImage', 'style']),
     ...mapWritableState(navStore, ['sideNavigationList', 'footNavigationList', 'rightNavigationList']),
+    ...mapWritableState(paperStore,['settings']),
   },
   async mounted () {
     // 后端服务器状态监测
@@ -185,6 +187,7 @@ export default {
     ...mapActions(appStore, ['getUserInfo','settings', 'setUser', 'finishWizard','deleteUserInfo']),
     ...mapActions(steamUserStore, ['bindClientEvents']),
     ...mapActions(captureStore, ['bindCaptureIPC']),
+    ...mapActions(appStore, ['setBackgroundImage']),
     timeout () {
       this.timeoutHandler = setTimeout(() => {
         Modal.error({
@@ -273,6 +276,9 @@ export default {
       clipboardStore().prepare()
       clipboardStore().start()
 
+      // 设置默认壁纸
+      this.setDefaultWallpaper();
+
       //执行分屏的启动操作
       this.onTableStarted().then()
       if (!this.settings.zoomFactor) {
@@ -298,8 +304,8 @@ export default {
       } else {
         this.enter()
       }
-
     },
+
     gradeTableGenerate (num) {
       let lvSys = {}
       for (let i = 0; i < num + 1; i++) {
@@ -362,7 +368,21 @@ export default {
       } else {
         message.error('账号退出失败，请重试！');
       }
-    }
+    },
+    async setDefaultWallpaper() {
+      try{
+        const filePath  = await ipc.sendSync('getPersistPath',{ folder: 'wallpaper'});
+        console.log("获取存储路径：",filePath);
+        if (filePath){
+          this.settings.savePath = filePath;
+          let imgSrc = path.join(filePath,'default_wallpaper.jpg');
+          this.setBackgroundImage({path: imgSrc});
+        }
+      }catch (e){
+        console.error("设置默认壁纸错误：",e);
+      }
+
+    },
   },
 }
 </script>

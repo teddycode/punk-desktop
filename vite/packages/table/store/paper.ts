@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia';
 import dbStorage from './dbStorage';
+
+// 默认壁纸设置
 const DEFAULT_PAPERS_SETTINGS = {
   enable: true,
   playType: 'my',
@@ -15,6 +17,7 @@ const DEFAULT_PAPERS_SETTINGS = {
   tipLock: true, //在状态栏提示多久锁屏
   wallSource: 'picking',
 };
+
 // @ts-ignore
 export const paperStore = defineStore('paper', {
   state: () => ({

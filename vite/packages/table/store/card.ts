@@ -54,7 +54,7 @@ export const cardStore = defineStore(
             type: 'noOver',
           },
         ],
-        iconTextColor: '',
+        iconTextColor: '#EEECE1', // 默认桌面字体色
         clockEvent: [],
         customComponents: [],
         clockTag: 'within30min',

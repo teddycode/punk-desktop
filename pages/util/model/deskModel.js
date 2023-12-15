@@ -97,7 +97,7 @@ const deskModel = {
           layout: [],
           createTime: 1644396372459,
           updateTime: 1644396404065,
-          wallPaper: '../../img/wallpaper.jpeg',
+          wallPaper: '../../img/wallpaper.jpg',
         },
       ];
       defaultDesk = [

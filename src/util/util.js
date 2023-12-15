@@ -1,4 +1,6 @@
 const { pinyin } = require('pinyin-pro');
+const { app } = require('electron');
+const path = require('path');
 
 const tools = {
   getWindowArgs: (window) => {
@@ -248,6 +250,24 @@ const tools = {
       console.warn(err);
       return false;
     }
+  },
+  // 往这儿添加数据目录
+  getPersistPath: function (folder, file = '') {
+    let filename;
+    const postFix = `/${folder}/` + file;
+    if (typeof window !== 'undefined') {
+      window = require('../util/util').tools.getWindowArgs(window);
+      filename = window.globalArgs['user-data-path'] + postFix;
+    } else {
+      const isDevelopmentMode = process.argv.some((arg) => arg === '--development-mode');
+      if (isDevelopmentMode && app.getPath('userData').indexOf('-development') === -1) {
+        //是调试模式，且还未添加development
+        filename = path.join(app.getPath('userData') + '-development', postFix);
+      } else {
+        filename = path.join(app.getPath('userData'), postFix);
+      }
+    }
+    return filename;
   },
 };
 

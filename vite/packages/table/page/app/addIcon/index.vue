@@ -5,7 +5,7 @@
         <div class="overflow-y-auto xt-container" style="border-right: 1px solid var(--divider)" :style="leftTabHeight">
           <div
             :style="{
-              'border-right': item.component == name ? '1px solid var(--active-bg)' : '',
+              'border-right': item.component === name ? '1px solid var(--active-bg)' : '',
             }"
             v-for="item in navList"
           >
@@ -13,7 +13,7 @@
               class="flex justify-center items-center rounded-xl cursor-pointer h-12 w-120 mr-2"
               :key="item.name"
               @click="name = item.component"
-              :class="{ 'xt-bg-2': item.component == name }"
+              :class="{ 'xt-bg-2': item.component === name }"
             >
               {{ item.name }}
             </div>
@@ -37,7 +37,7 @@
     </div>
     <footer class="flex items-center justify-center mt-2">
       <XtTab
-        v-if="name == 'Links'"
+        v-if="name === 'Links'"
         style="width: 380px; height: 48px"
         boxClass="my-2 p-1 xt-bg-2"
         v-model:data="type"

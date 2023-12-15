@@ -84,6 +84,33 @@ function ensureDb () {
 
 ensureDb()
 
+// 初始化默认壁纸
+function ensureWallpaper() {
+  try{
+    const WP_ROOT = require(__dirname + '/src/util/util.js')
+        .tools.getPersistPath('wallpaper','default_wallpaper.jpg')
+    const WP_PATH = path.dirname(WP_ROOT)
+    const TPL_ROOT = path.join(__dirname, '/img/wallpaper.jpg')
+    if (!fs.existsSync(WP_PATH)) {
+      fs.ensureDirSync(WP_PATH)
+      if (!fs.existsSync(WP_ROOT)) {
+        fs.copyFileSync(TPL_ROOT, WP_ROOT)
+      }
+      console.warn('由于壁纸未初始化，尝试复制默认壁纸')
+    }
+    //判断WP_ROOT是否是文件夹，如果是文件夹，则进行清理
+    let stat= fs.statSync(WP_ROOT)
+    if(stat.isDirectory()){
+      fs.rmdirSync(WP_ROOT)
+      fs.copyFileSync(TPL_ROOT,WP_ROOT)
+    }
+  }catch (e) {
+    console.error("初始化默认壁纸失败：",e);
+  }
+}
+
+ensureWallpaper()
+
 global.settings.initSetting(async () => {
   //设置nanoid
   let clientId = settings.get('clientID')

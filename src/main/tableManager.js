@@ -290,6 +290,15 @@ app.whenReady().then(() => {
     e.returnValue = apps;
   });
 
+  ipc.on('getPersistPath', async (e, args) => {
+    if (args?.folder) {
+      const WP_ROOT = require('../util/util.js').tools.getPersistPath(args.folder, args.filename);
+      e.returnValue = WP_ROOT;
+    } else {
+      e.returnValue = undefined;
+    }
+  });
+
   ipc.on('updateMusicStatus', (event, args) => {
     global.tableManager.send('updateMusicStatus', args);
   });
