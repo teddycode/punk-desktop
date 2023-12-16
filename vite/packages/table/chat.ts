@@ -9,7 +9,7 @@ const TUIKit = TUICore.init({
 });
 function loadChat() {
   try {
-    TUIKit.tim.setLogLevel(0); //关闭日志，如果需要调试，改为4
+    TUIKit.tim.setLogLevel(1); //关闭日志，如果需要调试，改为4
     // TUIKit add TUIComponents
     TUIKit.use(TUIComponents);
     // TUIKit add TUICallKit
