@@ -526,6 +526,12 @@ export const cardStore = defineStore(
 
         // console.log(this.filterClockEvent);
       },
+      /**
+       * 添加图标到桌面
+       * @param value
+       * @param desk
+       * @param flag
+       */
       async addCard(value, desk, flag) {
         //if (this.customComponents.includes(value)) return;
         // let desk = this.desks.find(item => {
@@ -563,8 +569,12 @@ export const cardStore = defineStore(
         } else {
           desk.cards.push(value);
         }
-
         // desk.cards.push(value)
+      },
+      async addCards(arr, desk) {
+        if (desk) {
+          desk.cards.push(...arr);
+        }
       },
       /**
        * 更新组件的customData，多个值的变更请一次性提交，newData为对象
@@ -585,6 +595,12 @@ export const cardStore = defineStore(
         }
         findCard.customData = { ...findCard.customData, ...newData };
       },
+      /**
+       * 删除某个card
+       * @param customIndex
+       * @param desk
+       * @param flag
+       */
       async removeCard(customIndex, desk, flag) {
         // 切换卡片时不需要清除
         if (!flag && noteStore().initFlag) {
@@ -612,6 +628,17 @@ export const cardStore = defineStore(
         console.log('删除 卡片:>> ', desk.cards);
 
         // this.customComponents.splice(customIndex,1);
+      },
+      /**
+       * 删除某个桌面所有card
+       * @param customIndex
+       * @param desk
+       * @param flag
+       */
+      async removeCards(desk) {
+        let currentDesk = this.getCurrentDesk();
+        desk = desk || currentDesk;
+        desk.cards = [];
       },
       setDataEmpty() {},
       insetSteamSize(value, newData) {

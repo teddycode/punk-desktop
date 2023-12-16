@@ -90,7 +90,11 @@ import { chatStore } from '@store/chat'
 import navigationData from '../js/data/tableData'
 import taskStore from '../page/app/todo/stores/task'
 import cache from "../components/card/hooks/cache";
-const path = require('path')
+import {myIcons} from "@store/myIcons";
+import {
+  setBgColor,
+  setSecondaryBgColor,
+} from '@components/card/hooks/styleSwitch/setStyle';
 
 export default {
   name: 'Code',
@@ -113,7 +117,8 @@ export default {
     ...mapWritableState(codeStore, ['myCode', 'serialHash']),
     ...mapWritableState(appStore, ['settings', 'routeUpdateTime', 'userInfo', 'init', 'lvInfo', 'backgroundImage', 'style']),
     ...mapWritableState(navStore, ['sideNavigationList', 'footNavigationList', 'rightNavigationList']),
-    ...mapWritableState(paperStore,['settings']),
+    ...mapWritableState(paperStore,[{paperSettings:'settings'}]),
+    ...mapWritableState(myIcons, ['iconOption', 'iconList']),
   },
   async mounted () {
     // 后端服务器状态监测
@@ -181,10 +186,10 @@ export default {
 
   },
   methods: {
-    ...mapActions(cardStore, ['sortClock', 'sortCountdown']),
+    ...mapActions(cardStore, ['sortClock', 'sortCountdown','getCurrentDesk','removeCards','addCards','switchToDesk']),
     ...mapActions(screenStore, ['bindMainIPC', 'bindSubIPC', 'onTableStarted']),
     ...mapActions(codeStore, ['active', 'getSerialHash', 'verify']),
-    ...mapActions(appStore, ['getUserInfo','settings', 'setUser', 'finishWizard','deleteUserInfo']),
+    ...mapActions(appStore, ['getUserInfo', 'setUser', 'finishWizard','deleteUserInfo']),
     ...mapActions(steamUserStore, ['bindClientEvents']),
     ...mapActions(captureStore, ['bindCaptureIPC']),
     ...mapActions(appStore, ['setBackgroundImage']),
@@ -278,6 +283,10 @@ export default {
 
       // 设置默认壁纸
       this.setDefaultWallpaper();
+      // 加载桌面图标
+      this.loadAppIconToDesk();
+      // 设置主题颜色
+      setBgColor('#FFB342');
 
       //执行分屏的启动操作
       this.onTableStarted().then()
@@ -369,20 +378,57 @@ export default {
         message.error('账号退出失败，请重试！');
       }
     },
+    // 默认壁纸
     async setDefaultWallpaper() {
       try{
         const filePath  = await ipc.sendSync('getPersistPath',{ folder: 'wallpaper'});
         console.log("获取存储路径：",filePath);
         if (filePath){
-          this.settings.savePath = filePath;
-          let imgSrc = path.join(filePath,'default_wallpaper.jpg');
+          this.paperSettings.savePath = filePath;
+          let imgSrc = require('path').join(filePath,'default_wallpaper.jpg');
           this.setBackgroundImage({path: imgSrc});
         }
       }catch (e){
         console.error("设置默认壁纸错误：",e);
       }
-
     },
+    // 加载图标到默认本地桌面
+    async loadAppIconToDesk(){
+      console.log("正在加载桌面图标...")
+      async function getDesktopAppList(option){
+        let iconList = [];
+        const apps = await ipc.sendSync('getDeskApps');
+        for (const app of apps) {
+          let newIcon = { ...option };
+          newIcon.titleValue = app.name;
+          newIcon.link = app.link || 'fast';
+          newIcon.src = app.icon;
+          newIcon.open = {
+            type: 'tableApp',
+            value: app.path,
+            name: app.name,
+          };
+          let random = Math.floor(Math.random() * 50) * Math.floor(Math.random() * 100);
+          iconList.push({
+            name: 'myIcons',
+            id: Date.now() - random,
+            customData: { iconList: [newIcon] },
+          },);
+        }
+        return iconList;
+      }
+      try{
+        await this.switchToDesk(0);
+        let desk = this.getCurrentDesk();
+        await this.removeCards(desk);
+        let iconList = await getDesktopAppList(this.iconOption);
+        console.log("处理前：",iconList);
+        this.addCards(iconList,desk);
+      }catch (e) {
+        console.error("加载图标失败：",e);
+      }
+      console.log("加载成功.")
+    }
   },
 }
 </script>

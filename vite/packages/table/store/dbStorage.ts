@@ -29,7 +29,7 @@ const dbStorage: Storage = {
   },
   async getItem(key: string): string | null | Promise<string> {
     const time = Date.now();
-    console.log('准备取数据', key, time);
+    // console.log('准备取数据', key, time);
 
     let value = await model.getItem(key, getSign());
     if (!value) {
@@ -43,7 +43,7 @@ const dbStorage: Storage = {
       window.loadedStore = {};
     }
     window.loadedStore[key] = true;
-    console.log('取出数据', key, value?.slice(0, 16), Date.now() - time + 'ms');
+    // console.log('取出数据', key, value?.slice(0, 16), Date.now() - time + 'ms');
     return value;
   },
 };

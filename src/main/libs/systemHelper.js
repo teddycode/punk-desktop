@@ -63,13 +63,14 @@ module.exports = class SystemHelper {
 
     function getDesktopFiles(_dir) {
       const fs = require('fs');
-      var filepaths = [];
-      //read directory
+      const path = require('path');
+      const filepaths = [];
+      // 读取目录
       let files = fs.readdirSync(_dir);
       console.info('files:', files);
       files.forEach((_file) => {
-        let _p = _dir + '/' + _file;
-        //changes slashing for file paths
+        let _p = path.join(_dir, _file);
+        // 将路径中的反斜杠替换为斜杠
         let _path = _p.replace(/\\\\/g, '/');
         let name = path.parse(_path).name;
         if (_path.endsWith('.lnk')) {
@@ -112,27 +113,20 @@ module.exports = class SystemHelper {
         let icon = '';
         if (withIcon) {
           icon = await SystemHelper.extractFileIcon(file.path);
-          apps.push({
-            name: file.name,
-            ext: file.ext,
-            path: file.path,
-            icon: icon,
-          });
-        } else {
-          apps.push({
-            name: file.name,
-            ext: file.ext,
-            path: file.path,
-            icon: '',
-          });
         }
+
+        apps.push({
+          name: file.name,
+          ext: file.ext,
+          path: file.path,
+          icon: icon,
+        });
       } catch (e) {
         console.warn('存在导入失败的', e, file);
       }
     }
     return apps;
   }
-
   // 保存图标到用户数据
   static async extractFileIcon(uri) {
     let savePath = path.join(app.getPath('userData'), 'icons');

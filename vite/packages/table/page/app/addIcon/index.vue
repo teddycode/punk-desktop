@@ -56,13 +56,13 @@ import MyApps from './modules/MyApps.vue';
 import Desktop from './modules/Desktop.vue';
 import QingApps from './modules/QingApps.vue';
 import PageApps from './modules/PageApps.vue';
-import { cardStore } from '../../../store/card.ts';
-import { myIcons } from '../../../store/myIcons.ts';
+import { cardStore } from '@store/card';
+import { myIcons } from '@store/myIcons';
 import { scrollable } from './hooks/scrollable';
 import { mapActions, mapWritableState } from 'pinia';
-import { useBase64AsImage } from '../../../../table/components/card/hooks/base64';
-import { taskStore } from '../../../apps/task/store';
-import { renderIcon } from '../../../js/common/common';
+import { useBase64AsImage } from '@components/card/hooks/base64';
+import { taskStore } from '@apps/task/store';
+import { renderIcon } from '@js/common/common';
 export default {
   emits: ['update:navName'],
   props: {
@@ -210,7 +210,7 @@ export default {
         return;
       }
       for (let key in this.selectApps) {
-        this.selectApps[key].forEach(async (item) => {
+        for (const item of this.selectApps[key]) {
           let iconOption = { ...this.iconOption };
           iconOption.titleValue = item.name;
           iconOption.link = item.link || 'fast';
@@ -221,7 +221,7 @@ export default {
             iconOption.linkValue = item.path;
           }
           this.addIcon(iconOption);
-        });
+        }
       }
       this.close();
     },

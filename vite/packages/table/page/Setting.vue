@@ -265,7 +265,7 @@ export default {
   components: { EditNavigation, MyAvatar, SecondPanel, ChooseScreen, GradeSmallTip, Iconify },
   data() {
     return {
-      bgColor: '#FFB342',
+      bgColor: '',
       textColor: '',
       wallpaperColor: '',
       styleVisible: false,

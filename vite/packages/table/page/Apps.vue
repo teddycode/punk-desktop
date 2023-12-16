@@ -564,6 +564,7 @@ export default {
      * 安装，区分静默与否
      * @param app
      * @param path
+     * @param silent
      */
     setup(app, path, silent = true) {
       message.success({ content: '正在为您安装', key: 'install' });
