@@ -10,13 +10,24 @@
       :style="[bgSize, backgroundState]"
       class="xt-text overflow-hidden no-drag flex items-center justify-center rounded-xl w-full"
     >
-      <img
-        v-if="src && src.length > 0"
-        :data-index="index"
-        :src="renderIcon(src)"
-        :style="[imgSize, radiusState, imgStateStyle]"
-        alt=""
-      />
+      <!--      <img-->
+      <!--        v-if="src && src.length > 0"-->
+      <!--        :data-index="index"-->
+      <!--        :src="renderIcon(src)"-->
+      <!--        :style="[imgSize, radiusState, imgStateStyle]"-->
+      <!--        alt=""-->
+      <!--      />-->
+      <div class="w-[64px] h-[64px] rounded-xl xt-bg flex items-center justify-center">
+        <div style="width: 45px; height: 45px" class="flex items-center justify-center">
+          <a-avatar
+            :data-index="index"
+            v-if="src && src.length > 0"
+            :size="44"
+            shape="square"
+            :src="renderIcon(src)"
+          ></a-avatar>
+        </div>
+      </div>
     </div>
     <div v-if="isTitle" :data-index="index" :style="[textSize]" class="text-center xt-text h-5 truncate mx-auto">
       <p :style="{ color: isBoxed ? 'black' : this.iconTextColor }">{{ titleValue }}</p>
@@ -46,6 +57,9 @@ export default {
     return {
       visible: false,
     };
+  },
+  mounted() {
+    console.log('图标尺寸：', this.imgSize);
   },
   computed: {
     // 动态切换圆角状态

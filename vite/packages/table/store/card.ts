@@ -843,7 +843,7 @@ const defaultDesks = [
     settings: {
       cardZoom: 120,
       marginTop: 10,
-      cardMargin: 10,
+      cardMargin: 4,
       enableZoom: true,
     },
     layoutSize: {

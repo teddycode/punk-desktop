@@ -117,7 +117,6 @@ export default {
     ...mapWritableState(codeStore, ['myCode', 'serialHash']),
     ...mapWritableState(appStore, ['settings', 'routeUpdateTime', 'userInfo', 'init', 'lvInfo', 'backgroundImage', 'style']),
     ...mapWritableState(navStore, ['sideNavigationList', 'footNavigationList', 'rightNavigationList']),
-    ...mapWritableState(paperStore,[{paperSettings:'settings'}]),
     ...mapWritableState(myIcons, ['iconOption', 'iconList']),
   },
   async mounted () {
@@ -193,6 +192,7 @@ export default {
     ...mapActions(steamUserStore, ['bindClientEvents']),
     ...mapActions(captureStore, ['bindCaptureIPC']),
     ...mapActions(appStore, ['setBackgroundImage']),
+    ...mapActions(paperStore,['setPaperSavePath','addToMyPaper','addToActive']),
     timeout () {
       this.timeoutHandler = setTimeout(() => {
         Modal.error({
@@ -384,9 +384,11 @@ export default {
         const filePath  = await ipc.sendSync('getPersistPath',{ folder: 'wallpaper'});
         console.log("获取存储路径：",filePath);
         if (filePath){
-          this.paperSettings.savePath = filePath;
-          let imgSrc = require('path').join(filePath,'default_wallpaper.jpg');
-          this.setBackgroundImage({path: imgSrc});
+          this.setPaperSavePath(filePath);
+          let img = require('path').join(filePath,'default_wallpaper.jpg');
+          this.addToMyPaper({src: img});
+          this.addToActive({src:img});
+          this.setBackgroundImage({path:img});
         }
       }catch (e){
         console.error("设置默认壁纸错误：",e);

@@ -92,7 +92,7 @@ export default {
     });
 
     this.getBingWallPaper(this.page++, () => {
-      this.getBingWallPaper(this.page++).then();
+      this.getBingWallPaper(this.page++);
     });
   },
   methods: {

@@ -90,6 +90,11 @@ export const paperStore = defineStore('paper', {
         return;
       }
     },
+    setPaperSavePath(p: String) {
+      if (p) {
+        this.settings.savePath = p;
+      }
+    },
   },
 
   persist: {

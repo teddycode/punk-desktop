@@ -14,6 +14,18 @@ function getResPath() {
   }
 }
 
+// async function deduplicate(arr, t = '') {
+//   const newArr = [],
+//     assignList = [];
+//   arr.forEach((item) => {
+//     if (!assignList.includes(item[t])) {
+//       assignList.push(item[t]);
+//       newArr.push(item);
+//     }
+//   });
+//   return newArr;
+// }
+
 /**
  * 获取到res目录，并拼接
  * @param paths
@@ -59,8 +71,6 @@ module.exports = class SystemHelper {
    * @returns {Promise<*[]>}
    */
   static async getDeskFiles(withIcon = true) {
-    let apps = [];
-
     function getDesktopFiles(_dir) {
       const fs = require('fs');
       const path = require('path');
@@ -77,15 +87,15 @@ module.exports = class SystemHelper {
           // 屏蔽其他文件
           try {
             _path = require('electron').shell.readShortcutLink(_path).target;
+            filepaths.push({
+              name: name,
+              path: _path,
+              ext: path.parse(_path).ext,
+            });
           } catch (e) {
             console.warn('存在失败的图标：', _path);
-            _path = '/icons/winapp.png';
+            // _path = '/icons/winapp.png';
           }
-          filepaths.push({
-            name: name,
-            path: _path,
-            ext: path.parse(_path).ext,
-          });
         }
       });
       return filepaths;
@@ -108,13 +118,13 @@ module.exports = class SystemHelper {
       }
     }
 
+    let apps = [];
     for (let file of filepaths) {
       try {
         let icon = '';
         if (withIcon) {
           icon = await SystemHelper.extractFileIcon(file.path);
         }
-
         apps.push({
           name: file.name,
           ext: file.ext,
@@ -125,6 +135,7 @@ module.exports = class SystemHelper {
         console.warn('存在导入失败的', e, file);
       }
     }
+    // return deduplicate(apps, 'name');
     return apps;
   }
   // 保存图标到用户数据
