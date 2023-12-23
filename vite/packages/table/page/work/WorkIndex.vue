@@ -16,7 +16,7 @@
 import { defineComponent } from 'vue';
 import SecondPanel from '../../components/SecondPanel.vue';
 import { mapWritableState } from 'pinia';
-import { appStore } from '../../store';
+import { appStore } from '@store';
 
 export default defineComponent({
   name: 'WorkIndex',

@@ -182,10 +182,10 @@
                       >
                         <navIcon
                           :icon="item.icon"
-                          style="width: 40px; height: 40px; color: var(--secondary-text)"
+                          style="width: 56px; height: 56px; color: var(--secondary-text)"
                         ></navIcon>
                       </div>
-                      <a-avatar v-else :size="40" :src="renderIcon(item.icon)" shape="square"></a-avatar>
+                      <a-avatar v-else :size="46" :src="renderIcon(item.icon)" shape="square"></a-avatar>
                     </a-dropdown>
                   </div>
                 </div>
@@ -201,7 +201,7 @@
             </div>
           </div>
         </div>
-        <!-- 底部导航栏，暂时关闭 -->
+        <!-- 底部导航栏， -->
         <div v-show="footNav" id="footBox" class="box-foot">
           <div class="flex flex-row items-center w-full pl-2" style="height: 73px; overflow: hidden">
             <div
@@ -231,7 +231,7 @@
                       style="width: 32px; height: 32px; color: var(--secondary-text)"
                     ></navIcon>
                   </div>
-                  <a-avatar v-else :size="40" :src="renderIcon(item.icon)" shape="square"></a-avatar>
+                  <a-avatar v-else :size="54" :src="renderIcon(item.icon)" shape="square"></a-avatar>
                 </a-dropdown>
               </div>
             </div>
@@ -491,7 +491,8 @@ export default {
     //   event.preventDefault();
     //   content.scrollLeft += event.deltaY
     // });
-    console.log('右侧内容：', JSON.stringify(this.rightNavigationList));
+    // console.log('右侧内容：', JSON.stringify(this.rightNavigationList));
+    // console.log('左侧内容：', this.sideNavigationList);
     let boxContent = document.getElementById('boxContent');
     boxContent.addEventListener('ondragover', () => {
       ev.preventDefault();
@@ -517,13 +518,14 @@ export default {
           }
         });
       });
-    navigationData.systemFillAppList.forEach((item) => {
-      this.sideNavigationList.forEach((i) => {
-        if (item.name === i.name) {
-          i.icon = item.icon;
-        }
-      });
-    });
+    // 左侧不替换
+    // navigationData.systemAppList.forEach((item) => {
+    //   this.sideNavigationList.forEach((i) => {
+    //     if (item.name === i.name) {
+    //       i.icon = item.icon;
+    //     }
+    //   });
+    // });
     navigationData.systemAppList.forEach((item) => {
       this.footNavigationList.forEach((i) => {
         if (item.name === i.name) {
@@ -531,7 +533,7 @@ export default {
         }
       });
     });
-    navigationData.systemFillAppList.forEach((item) => {
+    navigationData.systemAppList.forEach((item) => {
       this.rightNavigationList.forEach((i) => {
         if (item.name === i.name) {
           i.icon = item.icon;

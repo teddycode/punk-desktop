@@ -47,7 +47,7 @@
                   style="width: 2.5em; height: 2.5em"
                 ></navIcon>
               </div>
-              <a-avatar v-else :size="37" :src="renderIcon(item.icon)" shape="square"></a-avatar>
+              <a-avatar v-else :size="58" :src="renderIcon(item.icon)" shape="square"></a-avatar>
             </div>
           </div>
         </a-tooltip>

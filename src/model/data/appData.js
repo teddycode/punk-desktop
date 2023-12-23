@@ -65,7 +65,7 @@ const defaultWeb3Apps = [
   {
     nanoid: nanoid(8),
     name: 'Uniswap',
-    logo: 'https://pic.imgdb.cn/item/6545ad80c458853aef97bc71.jpg',
+    logo: 'https://pic.imgdb.cn/item/6585149cc458853aefb61698.png',
     summary:
       'Uniswap是去中心化交易协议，允许无信任交易，自动化市场制造和流动性提供，通过恒定乘积模型确定代币价格，鼓励用户提供流动性。',
     type: 'card',
@@ -99,7 +99,7 @@ const defaultWeb3Apps = [
   {
     nanoid: nanoid(8),
     name: 'MakeDAO',
-    logo: 'https://pic.imgdb.cn/item/6545adc6c458853aef986fc7.jpg',
+    logo: 'https://pic.imgdb.cn/item/658514b6c458853aefb6669f.png',
     package: 'MakedaoPage',
     summary:
       'MakeDAO是一个去中心化自治组织，旨在通过区块链技术实现社区成员之间的合作和决策。它的目标是创建一个开放、透明和可持续的生态系统，让参与者能够共同管理和发展项目',
@@ -132,7 +132,7 @@ const defaultWeb3Apps = [
   {
     nanoid: nanoid(8),
     name: 'Compound',
-    logo: 'https://pic.imgdb.cn/item/6545ad36c458853aef96f2be.jpg',
+    logo: 'https://pic.imgdb.cn/item/658514c8c458853aefb698fb.png',
     summary:
       'Compound是一个去中心化的借贷协议，旨在为数字资产持有者提供利息收益。用户可以将他们的加密资产存入Compound的智能合约中，以获取利息，并借出这些资产给其他用户',
     preload: '/pages/fav/preload.js',
@@ -165,7 +165,7 @@ const defaultWeb3Apps = [
   {
     nanoid: nanoid(8),
     name: 'CryptoKitties',
-    logo: 'https://pic.imgdb.cn/item/6545ad69c458853aef977b0a.jpg',
+    logo: 'https://pic.imgdb.cn/item/658514d2c458853aefb6ba9d.png',
     summary: 'Cryptokitties是一款基于区块链技术的虚拟猫收集游戏，每只猫都是独一无二的非同质化代币（NFT）。',
     type: 'card',
     appid: 'N1jPW6',
@@ -200,7 +200,7 @@ const defaultPunkOSApp = [
   {
     nanoid: nanoid(8),
     name: '交易',
-    logo: 'https://pic.imgdb.cn/item/654f419ac458853aef821129.png',
+    logo: 'https://pic.imgdb.cn/item/658514e5c458853aefb6f0f9.png',
     summary: '交易代币',
     type: 'card',
     appid: 'N1jkW6',
@@ -232,7 +232,7 @@ const defaultPunkOSApp = [
   {
     nanoid: nanoid(8),
     name: '转账',
-    logo: 'https://pic.imgdb.cn/item/654f419fc458853aef82208e.png',
+    logo: 'https://pic.imgdb.cn/item/658514f2c458853aefb716c3.png',
     summary: '将代币转给其他人',
     type: 'card',
     appid: 'N1jPl6',
@@ -264,7 +264,7 @@ const defaultPunkOSApp = [
   {
     nanoid: nanoid(8),
     name: '藏品',
-    logo: 'https://pic.imgdb.cn/item/654f419ac458853aef82109b.png',
+    logo: 'https://pic.imgdb.cn/item/65851501c458853aefb73fe5.png',
     summary: '独一无二的数字藏品',
     type: 'card',
     appid: 'N1rPl6',
@@ -296,7 +296,7 @@ const defaultPunkOSApp = [
   {
     nanoid: nanoid(8),
     name: '网络',
-    logo: 'https://pic.imgdb.cn/item/654f4290c458853aef85389b.png',
+    logo: 'https://pic.imgdb.cn/item/65851552c458853aefb81cf8.png',
     summary: '提供点对点网络服务',
     type: 'card',
     appid: 'N1jEl6',
@@ -328,7 +328,7 @@ const defaultPunkOSApp = [
   {
     nanoid: nanoid(8),
     name: '治理',
-    logo: 'https://pic.imgdb.cn/item/654f419ac458853aef8210bf.png',
+    logo: 'https://pic.imgdb.cn/item/65851560c458853aefb84833.png',
     summary: '去中心化链上治理体系',
     type: 'card',
     appid: 'N1WPl6',
@@ -360,7 +360,7 @@ const defaultPunkOSApp = [
   {
     nanoid: nanoid(8),
     name: '共识',
-    logo: 'https://pic.imgdb.cn/item/654f419ac458853aef8210f6.png',
+    logo: 'https://pic.imgdb.cn/item/65851571c458853aefb87b3a.png',
     summary: '分布式共识服务',
     type: 'card',
     appid: 'N1jVl6',
@@ -392,7 +392,7 @@ const defaultPunkOSApp = [
   {
     nanoid: nanoid(8),
     name: '计算',
-    logo: 'https://pic.imgdb.cn/item/654f419fc458853aef8220e2.png',
+    logo: 'https://pic.imgdb.cn/item/65850a6dc458853aef9daa88.png',
     summary: '链上链下计算服务',
     type: 'card',
     appid: 'C1jPl6',
@@ -424,7 +424,7 @@ const defaultPunkOSApp = [
   {
     nanoid: nanoid(8),
     name: '存储',
-    logo: 'https://pic.imgdb.cn/item/654f419fc458853aef822000.png',
+    logo: 'https://pic.imgdb.cn/item/65850a5ec458853aef9d8b37.png',
     summary: '去中心化存储服务',
     type: 'card',
     appid: 'N1jNl6',
@@ -456,7 +456,7 @@ const defaultPunkOSApp = [
   {
     nanoid: nanoid(8),
     name: '密码',
-    logo: 'https://pic.imgdb.cn/item/654f3d61c458853aef739f15.png',
+    logo: 'https://pic.imgdb.cn/item/65850a45c458853aef9d5035.png',
     summary: '密码协作服务',
     type: 'card',
     appid: 'N1jMS6',

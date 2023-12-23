@@ -71,11 +71,11 @@
                       <navIcon
                         :icon="item.icon"
                         class="test"
-                        style="width: 32px; height: 32px; fill: var(--primary-text)"
+                        style="width: 36px; height: 36px; fill: var(--primary-text)"
                       ></navIcon>
                     </div>
-                    <div v-else class="flex items-center justify-center" style="width: 45px; height: 45px">
-                      <a-avatar :size="40" :src="renderIcon(item.icon)" shape="square"></a-avatar>
+                    <div v-else class="flex items-center justify-center" style="width: 56px; height: 56px">
+                      <a-avatar :size="58" :src="renderIcon(item.icon)" shape="square"></a-avatar>
                     </div>
                   </div>
                 </a-tooltip>
