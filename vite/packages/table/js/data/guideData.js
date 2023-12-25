@@ -902,6 +902,6 @@ export const deskTemplate = {
     },
   ],
   empty: [],
-  workName: '工作桌面',
+  workName: '其他桌面',
   emptyName: '简洁桌面',
 };

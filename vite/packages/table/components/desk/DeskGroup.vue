@@ -382,7 +382,7 @@ import ExportDesk from './ExportDesk.vue';
 import { nanoid } from 'nanoid';
 import Template from '../../../user/pages/Template.vue';
 
-import { deskTemplates } from '../../js/data/deskTemplates';
+import { deskTemplates } from '@js/data/deskTemplates';
 import DeskMarket from '@page/app/card/DeskMarket.vue';
 import { deskStore } from '../../store/desk';
 import ShareDesk from './ShareDesk.vue';
