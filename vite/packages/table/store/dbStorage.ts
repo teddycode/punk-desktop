@@ -1,5 +1,5 @@
 const userAgent = window.navigator.userAgent;
-const isXT = userAgent.indexOf('磐古跨链客户端') > -1;
+const isXT = userAgent.indexOf('PunkOS') > -1;
 let model: any = '';
 if (isXT) {
   const { storageModel } = window.$models;

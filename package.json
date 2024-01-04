@@ -1,9 +1,9 @@
 {
   "name": "punkos",
   "private": "true",
-  "productName": "磐古跨链客户端",
+  "productName": "PunkOS",
   "author": "buaa.ioase.blockchain",
-  "version": "1.0.0-alpha",
+  "version": "1.0.1",
   "description": "一款连接web2与web3的多功能跨链操作客户端",
   "electronVersion": "26.4.0",
   "main": "main.build.js",

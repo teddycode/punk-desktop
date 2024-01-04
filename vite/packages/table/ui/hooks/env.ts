@@ -4,7 +4,7 @@
 import cache from '../../components/card/hooks/cache';
 const getCurrentEnv = () => {
   const userAgent = navigator.userAgent;
-  if (userAgent.indexOf('磐古跨链客户端') > -1 && userAgent.indexOf('Windows') > -1) {
+  if (userAgent.indexOf('PunkOS') > -1 && userAgent.indexOf('Windows') > -1) {
     return 'client';
   } else if (
     userAgent.match(
