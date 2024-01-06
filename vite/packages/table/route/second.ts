@@ -37,7 +37,7 @@ import ChatChild from './main/chat';
 
 import Power from '@page/Power.vue';
 // import coreBasicLayout from "@page/core/Layouts/BaseLayout.vue";
-import BasicLayout2 from '@page/core/Layouts/BaseLayout2.vue';
+import SecondLayout from '../page/core/Layouts/SecondLayout.vue';
 import computing from './core/computing';
 import consensus from './core/consensus';
 import crypto from './core/crypto';
@@ -47,6 +47,7 @@ import network from './core/network';
 import transfer from './core/transfers';
 import collection from './core/collection';
 import storage from './core/storage';
+import wallets from './core/wallets';
 // import BackgroundPage from "@page/core/components/BackgroundPage.vue";
 
 // 二级路由，
@@ -55,23 +56,17 @@ export default [
     // 系统核心功能路由
     path: '/core',
     name: 'core',
-    component: BasicLayout2,
+    component: SecondLayout,
     meta: {
       title: '核心功能',
     },
-    children: [computing, consensus, crypto, exchange, governance, network, transfer, collection, storage],
+    children: [computing, consensus, crypto, exchange, governance, network, transfer, collection, storage, wallets],
   },
   {
     // 其他Dapp功能路由
     path: '/dapps',
     name: 'dapps',
-    component: BasicLayout2,
-  },
-  {
-    // 钱包区路由
-    path: '/wallet',
-    name: 'wallet',
-    component: BasicLayout2,
+    component: SecondLayout,
   },
   {
     path: '/power',

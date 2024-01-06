@@ -8,6 +8,7 @@
     <div class="data-content-main-background">
       <div class="data-main-main-background">
         <div class="main-center-main-background">
+          <!--          TODO 替换datav组件-->
           <dv-border-box10 class="main-center-transactions">
             <router-view />
           </dv-border-box10>

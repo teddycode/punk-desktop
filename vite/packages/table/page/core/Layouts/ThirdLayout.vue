@@ -5,7 +5,7 @@
     </a-layout-header>
     <a-layout-content>
       <!--      <path-bar :style="{ position: 'fixed', zIndex: 10 }"></path-bar>-->
-      <div :style="{ background: '#fff', padding: '20px', minHeight: '280px' }">
+      <div :style="{ background: '#fffffa', padding: '20px', minHeight: '280px' }">
         <keep-alive>
           <router-view />
         </keep-alive>

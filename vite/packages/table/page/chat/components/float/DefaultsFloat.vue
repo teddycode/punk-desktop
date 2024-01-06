@@ -217,7 +217,7 @@ export default {
     ...mapActions(chatStore, ['setFloatVisible', 'setDouble']),
     currentItem(item) {
       this.currentID = item.id;
-      this.$mit.emit('clickItem', item);
+      this.$mit.emit('defaultClickItem', item);
     },
     // 展示单列时所有内容
     openHideContent() {

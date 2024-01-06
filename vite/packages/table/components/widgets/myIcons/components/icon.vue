@@ -59,7 +59,7 @@ export default {
     };
   },
   mounted() {
-    console.log('图标尺寸：', this.imgSize);
+    // console.log('图标尺寸：', this.imgSize);
   },
   computed: {
     // 动态切换圆角状态

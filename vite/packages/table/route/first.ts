@@ -1,7 +1,6 @@
 import Lock from '@page/Lock.vue';
 //设置
 import Splash from '@page/Splash.vue';
-//import index from './index'
 // 快捷键
 import CreativeMarket from '@apps/shortcutKey/page/CreativeMarket.vue';
 

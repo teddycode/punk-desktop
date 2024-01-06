@@ -1,7 +1,7 @@
 <template>
   <div class="common-layout">
-    <a-row>
-      <a-col :span="6">
+    <a-row type="flex" justify="space-between" align="middle">
+      <a-col :span="4">
         <div class="layoutheader_Title">
           <img v-maxImg src="/img/punkos-logo.png" class="header_logo" tatile="磐古OS" />
           <span class="project-name">
@@ -9,7 +9,7 @@
           </span>
         </div>
       </a-col>
-      <a-col :span="13">
+      <a-col :span="12">
         <template v-if="!isMenu">
           <a-config-provider prefixCls="ant">
             <a-menu mode="horizontal" @select="selectChange" v-model:selectedKeys="selectedKeys">
@@ -43,20 +43,28 @@
           </a-config-provider>
         </template>
       </a-col>
-      <a-col :span="4">
+      <a-col :span="6">
         <div class="flex row-reverse">
+          <BorderAvatar :avatarSize="48" :avatarUrl="userInfo.avatar" />
           <div class="layout-header-userBox">
             <a-dropdown>
-              <div class="layout-header-user">
-                <span>当前钱包:0x1NvT...j8ek</span>
-                <img src="/img/wallet.png" class="header_logo" tatile="钱包" />
+              <div class="rounded bg-mask">
+                <div v-if="isConnected">
+                  <w3m-account-button />
+                </div>
+                <div class="xt-text" v-else>未连接钱包</div>
               </div>
               <template #overlay>
                 <a-menu>
-                  <a-menu-item>切换钱包</a-menu-item>
-                  <a-menu-item>钱包信息</a-menu-item>
-                  <a-menu-item>个人信息</a-menu-item>
-                  <a-menu-item @click="LogOut">退出登录</a-menu-item>
+                  <div v-if="isConnected">
+                    <a-menu-item @click="changeWallet">切换钱包</a-menu-item>
+                    <a-menu-item @click="getWalletInfo">钱包信息</a-menu-item>
+                    <a-menu-item @click="getUserInfo"> 个人信息</a-menu-item>
+                    <a-menu-item @click="LogOut">退出登录</a-menu-item>
+                  </div>
+                  <div v-else>
+                    <a-menu-item @click="loginWallet">连接钱包</a-menu-item>
+                  </div>
                 </a-menu>
               </template>
             </a-dropdown>
@@ -69,19 +77,25 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
-import { useLayoutStore } from '@store/baseSettings.ts'; // 导入你的 Pinia store
-import { useI18n } from 'vue-i18n';
+import { useLayoutStore } from '@store/baseSettings'; // 导入你的 Pinia store
+import { walletStore } from '@store/wallet';
 import { useRouter } from 'vue-router';
+import { useWeb3Modal } from '@web3modal/ethers5/vue';
 import { EyeOutlined } from '@ant-design/icons-vue';
+import BorderAvatar from '@components/avatar/BorderAvatar.vue';
+import { appStore } from '@store';
 
 // 获取 Pinia store
 const store = useLayoutStore();
+const wStore = walletStore();
+const aStore = appStore();
 
 // 其他逻辑
 const router = useRouter();
-const { locale } = useI18n();
 
 const isMenu = computed(() => store.isMenu);
+const isConnected = computed(() => wStore.isConnected);
+const userInfo = computed(() => aStore.userInfo);
 // 获取父亲路由所有的平行路由作为菜单列表
 const munePath = computed(() => {
   const currentRoute = router.currentRoute.value;
@@ -105,6 +119,28 @@ const selectChange = (item) => {
   router.push({ name: item?.key || 'home' });
 };
 
+// 连接钱包
+const loginWallet = async () => {
+  console.log('login wallet');
+  let modal = useWeb3Modal();
+  await modal.open();
+  wStore.isConnected = true;
+};
+// 切换钱包
+const changeWallet = () => {
+  let modal = useWeb3Modal();
+  modal.close();
+  wStore.isConnected = false;
+  console.log('change wallet');
+};
+// 获取用户信息
+const getUserInfo = () => {
+  console.log('get user info');
+};
+// 获取钱包信息
+const getWalletInfo = () => {
+  console.log('get wallet info');
+};
 const LogOut = () => {
   window.localStorage.removeItem('token');
   router.push('/');

@@ -17,9 +17,11 @@
 </template>
 
 <script>
-import { getSign, isMain } from '../js/common/screenUtils';
+import { getSign, isMain } from '@js/common/screenUtils';
 
 import { BorderOutlined, MinusOutlined } from '@ant-design/icons-vue';
+import { appStore } from '@store';
+import { notification } from 'ant-design-vue';
 
 export default {
   name: 'WindowController',
@@ -29,6 +31,7 @@ export default {
   },
   data() {
     return {
+      full: false,
       alwaysTop: false,
     };
   },
@@ -46,10 +49,13 @@ export default {
     },
     // 窗口放大
     async maximize() {
-      if (await tsbApi.window.isMaximized()) {
-        tsbApi.window.unMaximize();
-      } else {
+      if (this.full) {
+        tsbApi.window.setFullScreen(false);
         tsbApi.window.maximize();
+        this.full = false;
+      } else {
+        tsbApi.window.setFullScreen(true);
+        this.full = true;
       }
     },
     // 关闭窗口放大

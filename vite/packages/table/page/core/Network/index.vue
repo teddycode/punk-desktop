@@ -1,69 +1,64 @@
 <template>
-  <Background>
-    <div class="network-page">
-      <div class="network-top-bar">
-        <select v-model="selectedNetwork" class="network-blockchain-select">
-          <option v-for="network in networks" :key="network" :value="network">{{ network }}</option>
-        </select>
-        <i class="fas fa-cog" />
+  <div class="network-page">
+    <div class="network-top-bar">
+      <select v-model="selectedNetwork" class="network-blockchain-select">
+        <option v-for="network in networks" :key="network" :value="network">{{ network }}</option>
+      </select>
+      <i class="fas fa-cog" />
+    </div>
+    <div class="network-transfer-container">
+      <div class="network-input-section">
+        <div class="network-input-row">
+          <label class="network-title">ID:</label>
+          <input
+            v-model="walletAddress"
+            :class="{ 'invalid-input': !isValidAddress }"
+            class="network-address-input"
+            @input="handleAddressInput"
+          />
+        </div>
       </div>
-      <div class="network-transfer-container">
+      <p v-if="!showTransaction">请输入正确的钱包地址！！！</p>
+      <div v-if="showTransaction && walletAddress === address" class="network-balance">
+        余额：{{ walletbalance }} GoerliETH
+      </div>
+      <div v-if="showTransaction && walletAddress !== address" class="network-balance">不存在该账户！！！</div>
+    </div>
+    <transition name="slide-down">
+      <div v-if="showTransaction" class="network-transfer-container">
+        <div class="network-button-group">
+          <button :class="['network-transfer-btn', { active: activeBtn === 'charge' }]" @click="charge">充值</button>
+          <button :class="['network-transfer-btn', { active: activeBtn === 'withdraw' }]" @click="withdraw">
+            提取
+          </button>
+          <button :class="['network-transfer-btn', { active: activeBtn === 'advanced' }]" @click="advanced">
+            高级
+          </button>
+        </div>
         <div class="network-input-section">
           <div class="network-input-row">
-            <label class="network-title">ID:</label>
-            <input
-              v-model="walletAddress"
-              :class="{ 'invalid-input': !isValidAddress }"
-              class="network-address-input"
-              @input="handleAddressInput"
-            />
+            <label class="network-title">余额:</label>
+            <input v-model="balance" class="network-token-input" />
+          </div>
+          <div class="network-input-row">
+            <label class="network-title">存款:</label>
+            <!-- TODO what`s this-->
+            <input v-model="deposit" class="network-token-input" />
           </div>
         </div>
-        <p v-if="!showTransaction">请输入正确的钱包地址！！！</p>
-        <div v-if="showTransaction && walletAddress === address" class="network-balance">
-          余额：{{ walletbalance }} GoerliETH
-        </div>
-        <div v-if="showTransaction && walletAddress !== address" class="network-balance">不存在该账户！！！</div>
+        <button class="network-transfer-btn-2">充值</button>
       </div>
-      <transition name="slide-down">
-        <div v-if="showTransaction" class="network-transfer-container">
-          <div class="network-button-group">
-            <button :class="['network-transfer-btn', { active: activeBtn === 'charge' }]" @click="charge">充值</button>
-            <button :class="['network-transfer-btn', { active: activeBtn === 'withdraw' }]" @click="withdraw">
-              提取
-            </button>
-            <button :class="['network-transfer-btn', { active: activeBtn === 'advanced' }]" @click="advanced">
-              高级
-            </button>
-          </div>
-          <div class="network-input-section">
-            <div class="network-input-row">
-              <label class="network-title">余额:</label>
-              <input v-model="balance" class="network-token-input" />
-            </div>
-            <div class="network-input-row">
-              <label class="network-title">存款:</label>
-              <!-- TODO what`s this-->
-              <input v-model="deposit" class="network-token-input" />
-            </div>
-          </div>
-          <button class="network-transfer-btn-2">充值</button>
-        </div>
-      </transition>
-    </div>
-  </Background>
+    </transition>
+  </div>
 </template>
 
 <script lang="ts">
 import { ref } from 'vue';
 import { useUserStore } from '@store/users';
 import { storeToRefs } from 'pinia';
-import Background from '@page/core/components/Background.vue';
 
 export default {
-  components: {
-    Background,
-  },
+  components: {},
   setup() {
     const store = useUserStore();
     let { address } = storeToRefs(store);

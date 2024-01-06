@@ -20,7 +20,7 @@ function openGroupChat(e) {
 
 const browser = {
   name: 'ThiskyBrowser',
-  alias: '磐古跨链客户端',
+  alias: 'PunkOS',
   version: '3.4.1',
   short: 'tsb',
 };

@@ -6,12 +6,12 @@ import tokenPage from '@page/core/Exchange/components/TokenPage.vue';
 import tradePage from '@page/core/Exchange/components/Trade.vue';
 import orderPage from '@page/core/Exchange/components/OrderPage.vue';
 import { CodeOutlined } from '@ant-design/icons-vue';
-import BaseLayout2 from '../../page/core/Layouts/BaseLayout2.vue';
+import ThirdLayout from '../../page/core/Layouts/ThirdLayout.vue';
 //  三级路由-交易组
 export default {
   path: 'exchange',
   redirect: { name: 'ExchangePage' },
-  component: BaseLayout2,
+  component: ThirdLayout,
   meta: {
     icon: CodeOutlined,
   },

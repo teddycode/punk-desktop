@@ -43,7 +43,7 @@ export default defineComponent({
           img: '/img/bottomPanel/wallet.png',
           title: '我的钱包',
           route: {
-            name: 'wallets',
+            name: 'myWallets',
           },
           type: 'route',
         },

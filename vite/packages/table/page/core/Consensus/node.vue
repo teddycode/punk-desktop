@@ -13,7 +13,7 @@
         </a-row>
       </a-card-body>
     </a-card>
-    <a-layout-content style="margin-top: 10px; margin-bottom: 20px">
+    <div style="margin-top: 10px; margin-bottom: 20px">
       <div style="margin-bottom: 10px">
         <a-row justify="space-between">
           <a-col :span="2">
@@ -70,7 +70,7 @@
           </template>
         </template>
       </a-table>
-    </a-layout-content>
+    </div>
     <!--    详情信息-->
     <a-modal v-model:visible="openDetailModal" title="节点详情" width="800px" @ok="openDetailModal = false">
       <a-descriptions bordered :column="2">

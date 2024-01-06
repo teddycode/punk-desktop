@@ -4,7 +4,7 @@
       <div class="flex justify-between h-[32px]">
         <div class="flex mt-2">
           <div class="xt-text">
-            <newIcon icon="fluent:box-16-regular" style="font-size: 20px"></newIcon>
+            <newIcon icon="fluent:box-16-regular" style="font-size: 40px"></newIcon>
           </div>
           <div class="flex ml-4 xt-text" style="margin-top: -6px">
             <TopDrop :navList="filterType" v-model:selectType="defaultType" />
@@ -147,7 +147,7 @@ import { Icon as newIcon } from '@iconify/vue';
 import MinCourierItem from './MinCourierItem.vue';
 import Empty from './Empty.vue';
 import MinEmpty from './MinEmpty.vue';
-import { courierStore } from '../../../apps/ecommerce/courier.ts';
+import { courierStore } from '@apps/ecommerce/courier';
 import { mapWritableState, mapActions } from 'pinia';
 import TopDrop from './courierModal/dropdown/index.vue';
 import AddCourierModal from './courierModal/AddCourierModal.vue';
