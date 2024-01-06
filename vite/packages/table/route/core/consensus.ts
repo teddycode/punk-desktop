@@ -1,5 +1,5 @@
 import DetailsPage from '@page/core/Consensus/detail.vue';
-import BasePage from '@page/core/Consensus/index.vue';
+import ThirdLayout from '@page/core/Layouts/ThirdLayout.vue';
 import myConsensus from '@page/core/Consensus/self.vue';
 import nodeManager from '@page/core/Consensus/node.vue';
 import { CodeOutlined } from '@ant-design/icons-vue';
@@ -7,7 +7,7 @@ import { CodeOutlined } from '@ant-design/icons-vue';
 export default {
   path: 'consensusHome',
   redirect: { name: 'ConsensusPage' },
-  component: BasePage,
+  component: ThirdLayout,
   meta: {
     icon: CodeOutlined,
   },

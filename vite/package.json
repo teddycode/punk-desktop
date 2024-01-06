@@ -49,6 +49,7 @@
     "less-loader": "^11.1.2",
     "lodash-es": "^4.17.21",
     "lodash.get": "^4.4.2",
+    "lodash.pick": "^4.4.0",
     "math-expression-evaluator": "^2.0.3",
     "md-editor-v3": "^4.3.0",
     "mitt": "^3.0.1",

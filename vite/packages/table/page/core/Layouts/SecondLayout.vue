@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'BaseLayout2',
+  name: 'SecondLayout',
   data() {
     return {};
   },

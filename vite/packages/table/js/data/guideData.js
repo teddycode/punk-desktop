@@ -885,23 +885,8 @@ export const deskTemplate = {
       data: {},
       _$muuri_id: '698a7d80-23c9-42cf-9e7b-3a580acc7be8',
     },
-    {
-      name: 'smallWallpaper',
-      id: 1683361445577,
-      data: {
-        Code: {
-          id: 1683361445577,
-          value: {
-            value: '贪食鬼',
-            path: 'https://api.nguaduot.cn/glutton/journal',
-            name: 'PickingPaper',
-          },
-        },
-      },
-      _$muuri_id: 'd6f9dfae-8098-4da3-8f15-3913cb506bf7',
-    },
   ],
   empty: [],
-  workName: '其他桌面',
+  workName: '我的桌面',
   emptyName: '简洁桌面',
 };

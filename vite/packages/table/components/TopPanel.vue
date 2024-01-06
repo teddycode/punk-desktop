@@ -29,6 +29,8 @@
           {{ status.music.title }} {{ status.music.singer }}
         </div>
       </a-tooltip>
+      <!--  当前钱包   -->
+      <TopCourier />
     </div>
     <div class="flex max-search" hidden="">
       <div
@@ -149,24 +151,25 @@
 </template>
 
 <script>
-import { countDownStore } from '../store/countDown';
+import { countDownStore } from '@store/countDown';
 import { getDateTime } from '../../../src/util/dateTime';
-import { appStore } from '../store';
-import { cardStore } from '../store/card';
-import { topClockSettingStore } from '../store/topClockSetting';
+import { appStore } from '@store';
+import { cardStore } from '@store/card';
+import { topClockSettingStore } from '@store/topClockSetting';
 import { mapActions, mapState, mapWritableState } from 'pinia';
-import { paperStore } from '../store/paper';
-import { weatherStore } from '../store/weather';
-import { isMain } from '../js/common/screenUtils';
-import { timerStore } from '../store/timer';
+import { paperStore } from '@store/paper';
+import { weatherStore } from '@store/weather';
+import { isMain } from '@js/common/screenUtils';
+import { timerStore } from '@store/timer';
 import WindowController from './WindowController.vue';
 import MessagePopup from '../page/notice/noticeIndex.vue';
-import { steamUserStore } from '../store/steamUser';
-import { getClientIcon, getCover, getIcon } from '../js/common/game';
-import { clipboardStore } from '../apps/clipboard/store';
-import { noticeStore } from '../store/notice';
+import { steamUserStore } from '@store/steamUser';
+import { getClientIcon, getCover, getIcon } from '@js/common/game';
+import { clipboardStore } from '@apps/clipboard/store';
+import { noticeStore } from '@store/notice';
 import TopTomato from '../../table/apps/tomato/widget/TopTomato.vue';
 import TopClockTimer from './widgets/TopClockTimer.vue';
+import TopCourier from './widgets/courier/TopCourier.vue';
 
 export default {
   name: 'TopPanel',
@@ -174,6 +177,7 @@ export default {
     WindowController,
     MessagePopup,
     TopTomato,
+    TopCourier,
     TopClockTimer,
   },
   data() {

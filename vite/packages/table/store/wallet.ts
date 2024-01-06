@@ -8,7 +8,7 @@ export const walletStore = defineStore('walletStore', {
     themeMode: 'light',
     themeVariables: {
       '--w3m-color-mix': '#00BB7F',
-      '--w3m-color-mix-strength': 20,
+      '--w3m-color-mix-strength': 10,
     },
     chains: [
       {

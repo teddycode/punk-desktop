@@ -63,6 +63,7 @@ import HotSearch from '../widgets/HotSearch.vue';
 import AIaides from '../widgets/AIaides.vue';
 import OilPrices from '../widgets/OilPrices.vue';
 import yuanCommunity from '../widgets/yuanCommunity/YuanCommunity.vue';
+import Courier from '../widgets/courier/Courier.vue';
 import RightMenu from './RightMenu.vue';
 import FreeDesk from './free/index';
 
@@ -133,5 +134,6 @@ export default {
     AIaides,
     OilPrices,
     yuanCommunity,
+    Courier,
   },
 };

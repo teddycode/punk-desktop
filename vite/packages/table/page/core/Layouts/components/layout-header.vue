@@ -1,7 +1,7 @@
 <template>
   <div class="common-layout">
-    <a-row>
-      <a-col :span="6">
+    <a-row type="flex" justify="space-between" align="middle">
+      <a-col :span="4">
         <div class="layoutheader_Title">
           <img v-maxImg src="/img/punkos-logo.png" class="header_logo" tatile="磐古OS" />
           <span class="project-name">
@@ -9,7 +9,7 @@
           </span>
         </div>
       </a-col>
-      <a-col :span="13">
+      <a-col :span="12">
         <template v-if="!isMenu">
           <a-config-provider prefixCls="ant">
             <a-menu mode="horizontal" @select="selectChange" v-model:selectedKeys="selectedKeys">
@@ -43,16 +43,16 @@
           </a-config-provider>
         </template>
       </a-col>
-      <a-col :span="4">
+      <a-col :span="6">
         <div class="flex row-reverse">
+          <BorderAvatar :avatarSize="48" :avatarUrl="userInfo.avatar" />
           <div class="layout-header-userBox">
             <a-dropdown>
-              <div class="layout-header-user">
-                <span>
-                  <div v-if="isConnected">当前钱包: <w3m-account-button /></div>
-                  <div v-else>未连接钱包</div>
-                </span>
-                <img src="/img/wallet.png" class="header_logo" tatile="钱包" />
+              <div class="rounded bg-mask">
+                <div v-if="isConnected">
+                  <w3m-account-button />
+                </div>
+                <div class="xt-text" v-else>未连接钱包</div>
               </div>
               <template #overlay>
                 <a-menu>
@@ -80,18 +80,22 @@ import { computed, ref } from 'vue';
 import { useLayoutStore } from '@store/baseSettings'; // 导入你的 Pinia store
 import { walletStore } from '@store/wallet';
 import { useRouter } from 'vue-router';
-import { useWeb3Modal, createWeb3Modal, defaultConfig } from '@web3modal/ethers5/vue';
+import { useWeb3Modal } from '@web3modal/ethers5/vue';
 import { EyeOutlined } from '@ant-design/icons-vue';
+import BorderAvatar from '@components/avatar/BorderAvatar.vue';
+import { appStore } from '@store';
 
 // 获取 Pinia store
 const store = useLayoutStore();
 const wStore = walletStore();
+const aStore = appStore();
 
 // 其他逻辑
 const router = useRouter();
 
 const isMenu = computed(() => store.isMenu);
 const isConnected = computed(() => wStore.isConnected);
+const userInfo = computed(() => aStore.userInfo);
 // 获取父亲路由所有的平行路由作为菜单列表
 const munePath = computed(() => {
   const currentRoute = router.currentRoute.value;
@@ -118,11 +122,9 @@ const selectChange = (item) => {
 // 连接钱包
 const loginWallet = async () => {
   console.log('login wallet');
-  let config = wStore.getWalletOptions();
-  createWeb3Modal(config);
-  wStore.isConnected = true;
   let modal = useWeb3Modal();
   await modal.open();
+  wStore.isConnected = true;
 };
 // 切换钱包
 const changeWallet = () => {

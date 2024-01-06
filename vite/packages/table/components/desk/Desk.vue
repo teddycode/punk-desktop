@@ -226,7 +226,7 @@
             <XtBaseColor v-model:data="iconTextColor"></XtBaseColor>
           </a-col>
           <a-col span="20">
-            <div class="xt-text-2 text-sm my-3">请选择图标文字颜色.</div>
+            <div class="xt-text-2 text-sm my-3">请选择图标文字颜色。</div>
           </a-col>
         </a-row>
       </div>
@@ -523,7 +523,6 @@ export default {
       this.$emit('changeEditing', this.editing);
       this.menuVisible = false;
       this.key = Date.now();
-      console.log(this.muuriOptions, 'ediingt输出');
     },
     showSetting() {
       this.settingVisible = true;
@@ -579,10 +578,11 @@ export default {
      * 暂存布局，与restore结对使用。
      */
     stashLayout() {
-      this.stashBound = {
+      let bound = {
         width: this.$refs.deskContainer.clientWidth,
         height: this.$refs.deskContainer.clientHeight,
       };
+      this.stashBound = bound;
     },
     /**
      * 恢复布局
