@@ -269,6 +269,26 @@ const tools = {
     }
     return filename;
   },
+  /**
+   * 将src目录下的所有文件复制到dest下
+   * @param sourceFolder
+   * @param targetFolder
+   */
+  copySubFolders: function (sourceFolder, targetFolder) {
+    const fs = require('fs-extra');
+    const files = fs.readdirSync(sourceFolder);
+    files.forEach((file) => {
+      const sourcePath = `${sourceFolder}/${file}`;
+      const targetPath = `${targetFolder}/${file}`;
+      const stats = fs.statSync(sourcePath);
+      if (stats.isDirectory()) {
+        fs.mkdirSync(targetPath);
+        this.copySubFolders(sourcePath, targetPath);
+      } else {
+        fs.copyFileSync(sourcePath, targetPath);
+      }
+    });
+  },
 };
 
 module.exports = { tools };
