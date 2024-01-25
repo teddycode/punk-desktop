@@ -184,7 +184,7 @@ export default {
           break;
         // 嵌入浏览器
         case 'internal':
-          browser.openInTable(this.open.value);
+          browser.openInTable(this.open.value, { wallet: this?.open?.wallet });
           break;
         // 磐古跨链客户端
         case 'thinksky':

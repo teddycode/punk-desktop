@@ -172,6 +172,9 @@ processRouter();
 
 // 創建钱包连接对话框
 let config = walletStore().getWalletOptions();
-createWeb3Modal(config);
+let modal = createWeb3Modal(config);
+window.Web3Modal = modal;
+
+notice.messageWeak('测试消息');
 
 export { router };

@@ -88,7 +88,8 @@ window.onload = function () {
 
   let showUpdateLog = localStorage.getItem('3.4');
   if (showUpdateLog !== 'true') {
-    ipc.send('addTab', { url: 'https://www.yuque.com/tswork/browser/by7fgt' });
+    // TODO 配置首页
+    ipc.send('addTab', { url: 'https://www.baidu.com' });
     localStorage.setItem('3.4', 'true');
   }
   const DEFAULT_GUEST = {

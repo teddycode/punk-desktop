@@ -92,7 +92,8 @@
     "vuex": "^4.0.2",
     "web3": "^4.0.2",
     "wujie-vue3": "^1.0.18",
-    "xgplayer": "^2.32.2"
+    "xgplayer": "^2.32.2",
+    "viem": "^1.21.4"
   },
   "devDependencies": {
     "@iconify-icons/fluent": "^1.2.35",

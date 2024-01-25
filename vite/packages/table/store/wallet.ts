@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { defaultConfig, Web3ModalOptions } from '@web3modal/ethers5';
+import { mainnet, arbitrum, goerli } from 'viem/chains';
 
 // @ts-ignore
 export const walletStore = defineStore('walletStore', {
@@ -10,31 +11,16 @@ export const walletStore = defineStore('walletStore', {
       '--w3m-color-mix': '#00BB7F',
       '--w3m-color-mix-strength': 10,
     },
-    chains: [
-      {
-        chainId: 1,
-        name: 'Ethereum',
-        currency: 'ETH',
-        explorerUrl: 'https://etherscan.io',
-        rpcUrl: 'https://cloudflare-eth.com',
-      },
-      {
-        chainId: 42161,
-        name: 'Arbitrum',
-        currency: 'ETH',
-        explorerUrl: 'https://arbiscan.io',
-        rpcUrl: 'https://arb1.arbitrum.io/rpc',
-      },
-    ],
+    chains: [goerli, mainnet, arbitrum], // TODO 在这里添加网络支持
     isConnected: false,
     ethersConfigOptions: {
       metadata: {
-        name: 'PunkOS',
-        description: 'Web3Modal Laboratory',
-        url: 'https://web3modal.com',
+        name: '磐古跨链客户端',
+        description: '一些简介',
+        url: 'https://www.punkos.com',
         icons: ['https://avatars.githubusercontent.com/u/37784886'],
       },
-      defaultChainId: 1,
+      defaultChainId: goerli.id, // 默认使用goerli测试网
       rpcUrl: 'https://cloudflare-eth.com',
     },
   }),

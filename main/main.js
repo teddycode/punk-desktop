@@ -104,7 +104,7 @@ if (process.argv.some((arg) => arg === '-v' || arg === '--version')) {
 }
 
 global.isDevelopmentMode = process.argv.some((arg) => arg === '--development-mode');
-console.log(process.argv, '启动参数们');
+console.log(process.argv, '启动参数');
 if (process.platform === 'win32') {
   //修复通知出现应用名electron.app
   app.setAppUserModelId(app.name);
@@ -158,7 +158,7 @@ if (isDevelopmentMode) {
 
 electronLog.transports.file.file = app.getPath('userData') + '/myLog.log';
 
-electronLog.transports.file.level = 'debug';
+electronLog.transports.file.level = 'info';
 electronLog.transports.console.level = 'debug';
 // workaround for flicker when focusing app (https://github.com/electron/electron/issues/17942)
 app.commandLine.appendSwitch('disable-backgrounding-occluded-windows', 'true');
@@ -211,12 +211,14 @@ function sendIPCToWindow(window, action, data, needCreateWindow = true) {
     if (needCreateWindow) {
       //如果是要求创建后再发的才发，不然就直接放弃了
       createWindow(function () {
+        console.log('即将发送数据：', action, data, global.URLToOpen);
         if (global.URLToOpen) {
           mainWindow.webContents.send('addTab', { url: global.URLToOpen });
           global.URLToOpen = '';
         }
         mainWindow.webContents.on('did-finish-load', function () {
           // if a URL was passed as a command line argument (probably because Min is set as the default browser on Linux), open it.
+          console.log('发送了addTab消息：', action, data);
           mainWindow.webContents.send(action, data || {});
         });
       });
@@ -640,6 +642,10 @@ async function appStart() {
     if (tableMod === 'table' && !global.URLToOpen) {
       //工作台模式，且没有要打开的网址
       console.log('触发工作台模式');
+      // 创建浏览器实例
+      // createWindow(()=>{
+      //   mainWindow.hide();
+      // })
       return;
     } else {
       //浏览器模式

@@ -289,6 +289,16 @@ const tools = {
       }
     });
   },
+  isDirectoryEmpty: function (path) {
+    const fs = require('fs-extra');
+    try {
+      const files = fs.readdirSync(path);
+      return files.length === 0;
+    } catch (err) {
+      console.error(err);
+      return false;
+    }
+  },
 };
 
 module.exports = { tools };
