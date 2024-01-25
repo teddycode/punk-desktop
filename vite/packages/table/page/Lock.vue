@@ -217,16 +217,24 @@ export default {
   methods: {
     ...mapActions(countDownStore, ['setCountDown', 'stopCountDown', 'openCountDown', 'dCountDown']),
     ...mapActions(cardStore, ['removeClock', 'changeClock']),
-    enter(closeSpot = true) {
-      if (closeSpot && !this.singleLively) {
-        window.Spotlight.close();
+    enter() {
+      if (!this.singleLively) {
+        try {
+          window.Spotlight?.close();
+        } catch (e) {
+          console.error(e.toString());
+        }
       }
-      console.log('处罚顶层返回');
+      console.log('顶层返回');
       this.$router.go(-1);
     },
     enterSetting() {
       if (!this.singleLively) {
-        window.Spotlight.close();
+        try {
+          window.Spotlight?.close();
+        } catch (e) {
+          console.error(e.toString());
+        }
       }
       this.$router.go(-1);
       setTimeout(() => {
@@ -237,7 +245,11 @@ export default {
     },
     enterGallery() {
       if (!this.singleLively) {
-        window.Spotlight.close();
+        try {
+          window.Spotlight?.close();
+        } catch (e) {
+          console.error(e.toString());
+        }
       }
       this.$router.go(-1);
       setTimeout(() => {
@@ -248,7 +260,7 @@ export default {
     },
     handleOk() {
       this.visible = false;
-      this.removeClock(0);
+      this?.removeClock(0);
       this.$refs.clock.currentTime = 0;
       this.$refs.clock.pause();
     },

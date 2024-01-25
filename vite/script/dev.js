@@ -27,9 +27,9 @@ let dev = {
           '@js': path.resolve('./packages/table/js'),
         },
       },
-      build: {
-        target: 'es2020',
-      },
+      // build: {
+      //   target: 'es2020',
+      // },
     };
     this.server = await vite.createServer(options);
     await this.server.listen();
