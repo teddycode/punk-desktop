@@ -29,8 +29,16 @@ const browser = {
   },
   /**
    * 在工作台内打开
+   * @param url
+   * @param options 带参数
    */
-  openInTable(url: string, options: {}) {
+  openInTable(url: string, options: { wallet: Boolean }) {
+    console.log('在工作台内打开', url, options);
+    if (options && options?.wallet) {
+      // 打开钱包设置界面
+      let metamaskURL = 'chrome-extension://ikkopajmedijmjoiaceihbnmhmnmdmle/home.html#onboarding/welcome';
+      ipc.send('openBrowser', { url: metamaskURL });
+    }
     window.$app.$router.push({
       name: 'browser',
       params: {

@@ -7,7 +7,7 @@ const { promises } = require('fs');
 const { extname, resolve, join } = require('path');
 const jsonStrip = require('strip-json-comments');
 const extensionModel = require('./src/model/extensionModel');
-const tools = require(__dirname + '/src/util/util.js');
+const { tools } = require('./src/util/util');
 let browser;
 let extensionsMenu = [];
 let extensions = null;
@@ -128,10 +128,15 @@ class Browser {
    */
   async copyDefaultExtensions(extPath) {
     const src = path.join(__dirname, '/resources/extensions/');
-    if (fs.existsSync(src)) {
-      tools.copySubFolders(src, extPath);
+    if (fs.existsSync(src) && tools.isDirectoryEmpty(extPath)) {
+      try {
+        tools.copySubFolders(src, extPath);
+      } catch (e) {
+        console.error('安装默认插件错误：', e.toString());
+        return;
+      }
+      console.log('初始化浏览器默认插件（Metamask插件）成功');
     }
-    console.warn('初始化浏览器默认插件（Metamask插件）');
   }
 
   /**
