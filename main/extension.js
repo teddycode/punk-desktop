@@ -7,6 +7,7 @@ const { promises } = require('fs');
 const { extname, resolve, join } = require('path');
 const jsonStrip = require('strip-json-comments');
 const extensionModel = require('./src/model/extensionModel');
+const { tools } = require('./src/util/util');
 let browser;
 let extensionsMenu = [];
 let extensions = null;
@@ -122,6 +123,23 @@ class Browser {
   }
 
   /**
+   * 复制默认扩展插件到用户目录
+   * @returns {Promise<void>}
+   */
+  async copyDefaultExtensions(extPath) {
+    const src = path.join(__dirname, '/resources/extensions/');
+    if (fs.existsSync(src) && tools.isDirectoryEmpty(extPath)) {
+      try {
+        tools.copySubFolders(src, extPath);
+      } catch (e) {
+        console.error('安装默认插件错误：', e.toString());
+        return;
+      }
+      console.log('初始化浏览器默认插件（Metamask插件）成功');
+    }
+  }
+
+  /**
    * 初始化会话的扩展
    * @param session
    * @returns {Promise<void>}
@@ -132,6 +150,8 @@ class Browser {
     if (!fs.existsSync(extensionPath)) {
       fs.mkdirSync(extensionPath);
     }
+    // copy extension src to dest dir
+    await this.copyDefaultExtensions(extensionPath);
     const installedExtensions = await loadExtensions(session, extensionPath);
   }
 

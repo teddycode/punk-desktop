@@ -136,6 +136,28 @@ app.whenReady().then(() => {
       event.reply('getMemory', data);
     });
   });
+  ipc.on('openBrowser', (event, args) => {
+    if (!mainWindow) {
+      if (args?.url) {
+        console.log('没有窗体，新建并添加tab', args);
+        global.URLToOpen = args.url;
+        createWindow(() => {
+          setTimeout(() => {
+            // 窗体初始化完成后打开
+            console.log('延时打开浏览器窗体');
+            openTabInWindow(global.URLToOpen);
+            global.URLToOpen = '';
+          }, 1000);
+        });
+      }
+    } else if (!mainWindow.isVisible()) {
+      console.log('存在窗体，显示并添加tab', args);
+      mainWindow.show();
+      if (args?.url) {
+        openTabInWindow(args.url);
+      }
+    }
+  });
   ipc.on('getDetailUserInfo', async (event, args) => {
     const isLogged = await userModel.isLogged();
     if (isLogged) {
@@ -273,16 +295,16 @@ app.whenReady().then(() => {
         type: 'separator',
       },
 
-      {
-        label: '切换账号空间',
-        click: () => {
-          showUserWindow();
-        },
-      },
+      // {
+      //   label: '切换账号空间',
+      //   click: () => {
+      //     showUserWindow();
+      //   },
+      // },
 
-      {
-        type: 'separator',
-      },
+      // {
+      //   type: 'separator',
+      // },
     ];
 
     tpl.push(

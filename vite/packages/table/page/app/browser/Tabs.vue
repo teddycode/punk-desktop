@@ -1,6 +1,6 @@
 <script lang="ts">
 import { mapActions, mapWritableState } from 'pinia';
-import { browserStore } from '../../../store/browser';
+import { browserStore } from '@store/browser';
 import BackBtn from '../../../components/comp/BackBtn.vue';
 import Template from '../../../../user/pages/Template.vue';
 import { nanoid } from 'nanoid';
