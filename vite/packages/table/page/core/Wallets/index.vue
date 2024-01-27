@@ -2,10 +2,10 @@
   <a-card :bordered="true" style="margin-top: 10px">
     <a-row>
       <a-col :sm="8" :xs="24">
-        <info title="代币种类" value="2种" :bordered="true" />
+        <info title="代币种类" value="1种" :bordered="true" />
       </a-col>
       <a-col :sm="8" :xs="24">
-        <info title="账户总数" value="3个" :bordered="true" />
+        <info title="账户总数" value="4个" :bordered="true" />
       </a-col>
       <a-col :sm="8" :xs="24">
         <info title="价值估计" value="2000.0000元" :bordered="true" />
@@ -40,7 +40,8 @@
           <template v-else-if="column.key === 'symbol'">
             <a-tooltip>
               <template #title>{{ record.symbol.toUpperCase() }}</template>
-              <a-avatar :src="getCoinIcon(record.symbol)" alt="未知"></a-avatar>
+              <a-avatar :src="getCoinIcon(record.symbol)" alt="未知" style="padding-right: 5px" />
+              {{ record.symbol.toUpperCase() }}
             </a-tooltip>
           </template>
           <template v-else-if="column.key === 'type'">

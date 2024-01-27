@@ -1,160 +1,147 @@
 <template>
   <a-card :bordered="true" style="margin-top: 10px">
     <a-row>
-      <a-col :sm="8" :xs="24">
-        <info title="代币种类" value="2种" :bordered="true" />
+      <a-col :sm="12" :xs="24">
+        <info title="收入" value="约11100.443774元" :bordered="true" />
       </a-col>
-      <a-col :sm="8" :xs="24">
-        <info title="账户总数" value="3个" :bordered="true" />
-      </a-col>
-      <a-col :sm="8" :xs="24">
-        <info title="价值估计" value="2000.0000元" :bordered="true" />
+      <a-col :sm="12" :xs="24">
+        <info title="支出" value="约2020.13443元" :bordered="true" />
       </a-col>
     </a-row>
   </a-card>
   <div style="margin-top: 10px; margin-bottom: 20px">
-    <a-card style="margin-top: 24px" :bordered="true" title="账户列表">
+    <a-card style="margin-top: 24px" :bordered="true" title="交易列表">
       <template #extra>
-        <a-radio-group v-model="status">
-          <a-radio-button value="all">展开所有</a-radio-button>
-          <a-radio-button value="processing">隐藏小额</a-radio-button>
-          <a-radio-button value="waiting">自动分类</a-radio-button>
-        </a-radio-group>
+        时间范围：
+        <a-date-picker placeholder="起始时间" v-model:value="timeRange.start" /> -
+        <a-date-picker placeholder="结束时间" v-model:value="timeRange.end" />
+        代币类型：
+        <a-select placeholder="请选择" default-value="0">
+          <a-select-option value="0">ETH</a-select-option>
+          <a-select-option value="1">BTC</a-select-option>
+          <a-select-option value="2">其他</a-select-option>
+        </a-select>
         <a-input-search style="margin-left: 16px; width: 272px" />
-        <a-button type="dashed" @click="add">
+        <a-button style="margin-left: 5px" type="dashed" @click="add">
           <template #icon> </template>
-          <PlusOutlined />添加</a-button
-        >
+          刷新
+        </a-button>
       </template>
-      <a-table :columns="columns" :data-source="tableData">
+      <a-table :columns="columns" :data-source="data">
         <template #bodyCell="{ column, record }">
-          <template v-if="column.key === 'name'">
-            <a>
-              {{ record.name }}
-            </a>
+          <template v-if="column.key === 'symbol'">
+            <a-tooltip>
+              <template #title>{{ record.symbol.toUpperCase() }}</template>
+              <a-avatar :src="getCoinIcon(record.symbol)" alt="未知" style="padding-right: 5px" />
+              {{ record.symbol.toUpperCase() }}
+            </a-tooltip>
           </template>
-          <template v-else-if="column.key === 'tags'">
-            <span>
-              <a-tag
-                v-for="tag in record.tags"
-                :key="tag"
-                :color="tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'"
-              >
-                {{ tag.toUpperCase() }}
-              </a-tag>
-            </span>
+          <template v-else-if="column.key === 'hash'">
+            <a> {{ record.hash }} </a>
+          </template>
+          <template v-else-if="column.key === 'from'">
+            <a> {{ record.from }} </a>
+          </template>
+          <template v-else-if="column.key === 'to'">
+            <a> {{ record.to }} </a>
+          </template>
+          <template v-else-if="column.key === 'type'">
+            <div v-if="record.type === 1">
+              <a-tag color="green">收入</a-tag>
+            </div>
+            <div v-else-if="record.type === 0">
+              <a-tag color="red">支出</a-tag>
+            </div>
+            <template v-else>
+              <a-tag color="yellow">未知</a-tag>
+            </template>
+          </template>
+          <template v-else-if="column.key === 'amount'">
+            {{ record.amount + ' ' + record.symbol }}
           </template>
           <template v-else-if="column.key === 'action'">
-            <span>
-              <a>Invite 一 {{ record.name }}</a>
-              <a-divider type="vertical" />
-              <a>Delete</a>
-              <a-divider type="vertical" />
-              <a class="ant-dropdown-link">
-                More actions
-                <down-outlined />
-              </a>
-            </span>
+            <span> <EyeOutlined /> <a>详情</a> </span>
           </template>
         </template>
       </a-table>
-      <!--      <a-list-->
-      <!--        size="default"-->
-      <!--        :pagination="{ showSizeChanger: true, showQuickJumper: true, pageSize: 10, total: 50 }"-->
-      <!--        :data-source="data"-->
-      <!--      >-->
-      <!--        <template #renderItem="{ item }">-->
-      <!--          <a-list-item>-->
-      <!--            <template #actions>-->
-      <!--              <div><EditOutlined /> <a key="list-edit">编辑</a></div>-->
-      <!--              <div><BarsOutlined /> <a key="list-transaction">交易记录</a></div>-->
-      <!--              <a-popconfirm-->
-      <!--                title="删除后，将无法通过该账户登录！"-->
-      <!--                ok-text="确认"-->
-      <!--                cancel-text="取消"-->
-      <!--                @confirm="onDeleteAccount"-->
-      <!--                @cancel=""-->
-      <!--              >-->
-      <!--                <DeleteOutlined /> <a href="#">删除</a>-->
-      <!--              </a-popconfirm>-->
-      <!--            </template>-->
-      <!--            <a-skeleton avatar :title="false" :loading="!!item.loading" active>-->
-      <!--              <a-list-item-meta-->
-      <!--                description="Ant Design, a design language for background applications, is refined by Ant UED Team"-->
-      <!--              >-->
-      <!--                <template #title>-->
-      <!--                  <a href="https://www.antdv.com/">{{ item.name.last }}</a>-->
-      <!--                </template>-->
-      <!--                <template #avatar>-->
-      <!--                  <a-avatar :src="item.picture.large" />-->
-      <!--                </template>-->
-      <!--              </a-list-item-meta>-->
-      <!--              <div>ETH</div>-->
-      <!--            </a-skeleton>-->
-      <!--          </a-list-item>-->
-      <!--        </template>-->
-      <!--      </a-list>-->
     </a-card>
   </div>
 </template>
 
 <!--
-元素： 钱包地址、余额、交易记录
-功能： 1.当前活跃钱包切换，2.总资产，钱包信息增删改查
-账户与网络是多对多的关系
+元素： 代币类型，交易哈希，区块高度，付款方，收款方，交易类型，数额，费用，查看详情
 -->
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import info from './components/Info.vue';
 import TaskForm from './components/TaskForm.vue';
 import LayoutFooter from '@page/core/Layouts/components/layout-footer.vue';
-import { BarsOutlined, EditOutlined, EyeOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons-vue';
+import { EyeOutlined, DeleteOutlined } from '@ant-design/icons-vue';
 
 export default defineComponent({
-  name: 'WalletsPage',
+  name: 'TransactionsPage',
   components: {
     LayoutFooter,
     info,
     TaskForm,
-    PlusOutlined,
-    EditOutlined,
     EyeOutlined,
-    BarsOutlined,
     DeleteOutlined,
   },
   setup() {
-    // 列表元素： 账户别名。网络名称、钱包地址、币种符号、资产数额、钱包状态、操作【删除、编辑、交易记录、】
+    // 代币类型，交易哈希，区块高度，付款方，收款方，交易类型，数额，费用，查看详情
     const columns = [
       {
-        name: '主键',
+        title: '主键',
         dataIndex: 'id',
         key: 'id',
+        width: 60,
       },
       {
-        name: '账户别名',
-        dataIndex: 'name',
-        key: 'name',
-      },
-      {
-        title: '账户地址',
-        dataIndex: 'address',
-        key: 'address',
-      },
-      {
-        title: '币种符号',
+        title: '代币符号',
         dataIndex: 'symbol',
         key: 'symbol',
+        width: 100,
+        align: 'center',
       },
       {
-        title: '资产数额',
+        title: '交易哈希',
+        dataIndex: 'hash',
+        key: 'hash',
+        ellipsis: true,
+      },
+      {
+        title: '区块高度',
+        dataIndex: 'height',
+        key: 'height',
+      },
+      {
+        title: '付款方',
+        key: 'from',
+        dataIndex: 'from',
+        ellipsis: true,
+      },
+      {
+        title: '收款方',
+        key: 'to',
+        dataIndex: 'to',
+        ellipsis: true,
+      },
+      {
+        title: '交易类型',
+        key: 'type',
+        dataIndex: 'type',
+      },
+      {
+        title: '数额',
         key: 'amount',
         dataIndex: 'amount',
       },
       {
-        title: '账户状态',
-        key: 'status',
-        dataIndex: 'status',
+        title: '费用',
+        key: 'fee',
+        dataIndex: 'fee',
+        ellipsis: true,
       },
       {
         title: '操作',
@@ -162,206 +149,59 @@ export default defineComponent({
       },
     ];
 
-    const tableData = [
+    const data = [
       {
-        key: '1',
-        name: 'John Brown',
-        age: 32,
-        address: 'New York No. 1 Lake Park',
-        tags: ['nice', 'developer'],
+        id: 1,
+        symbol: 'ETH',
+        hash: '0x3c3f7013840ac8ae006bd68990d1ea6a217cb0afb85efe57ced298e5e61c9a77',
+        height: 10431437,
+        from: '0xEDaf4083F29753753d0Cd6c3C50ACEb08c87b5BD',
+        to: '0x1423f4ceC7fCBE8400A957121ad616C439a0d4CF',
+        type: 1,
+        amount: 0.02,
+        fee: '0.000000000025137 ETH',
       },
       {
-        key: '2',
-        name: 'Jim Green',
-        age: 42,
-        address: 'London No. 1 Lake Park',
-        tags: ['loser'],
+        id: 2,
+        symbol: 'ETH',
+        hash: '0xeda85045e89c98d55618b271657820508296c0d37cba88ada380fb5e34566869',
+        height: 10439797,
+        from: '0x87c9B02A10eC2CB4dcB3b2e573e26169CF3cd9Bf',
+        to: '0x1423f4ceC7fCBE8400A957121ad616C439a0d4CF',
+        type: 1,
+        amount: 0.02,
+        fee: '0.000000000065205 ETH',
       },
       {
-        key: '3',
-        name: 'Joe Black',
-        age: 32,
-        address: 'Sidney No. 1 Lake Park',
-        tags: ['cool', 'teacher'],
+        id: 3,
+        symbol: 'ETH',
+        hash: '0x41aacfc5ff4ff1e066ec5ddad080be11b6901c421c996cfc5265d70c526c261f',
+        height: 10431498,
+        from: '0x1423f4ceC7fCBE8400A957121ad616C439a0d4CF',
+        to: '0x8942E52BE95b4f7e7566A91D77308F415DCf1d5D',
+        type: 0,
+        amount: 0.0,
+        fee: '0.000052501500385011 ETH',
       },
     ];
-    // const data = [
-    //   {
-    //     gender: 'male',
-    //     name: { title: 'Mr', first: 'اميرعلي', last: 'کریمی' },
-    //     email: 'myraaly.khrymy@example.com',
-    //     picture: {
-    //       large: 'https://randomuser.me/api/portraits/men/78.jpg',
-    //       medium: 'https://randomuser.me/api/portraits/med/men/78.jpg',
-    //       thumbnail: 'https://randomuser.me/api/portraits/thumb/men/78.jpg',
-    //     },
-    //     nat: 'IR',
-    //   },
-    //   {
-    //     gender: 'male',
-    //     name: { title: 'Mr', first: 'Antonio', last: 'Romero' },
-    //     email: 'antonio.romero@example.com',
-    //     picture: {
-    //       large: 'https://randomuser.me/api/portraits/men/35.jpg',
-    //       medium: 'https://randomuser.me/api/portraits/med/men/35.jpg',
-    //       thumbnail: 'https://randomuser.me/api/portraits/thumb/men/35.jpg',
-    //     },
-    //     nat: 'ES',
-    //   },
-    //   {
-    //     gender: 'female',
-    //     name: { title: 'Mrs', first: 'Kristen', last: 'Bailey' },
-    //     email: 'kristen.bailey@example.com',
-    //     picture: {
-    //       large: 'https://randomuser.me/api/portraits/women/56.jpg',
-    //       medium: 'https://randomuser.me/api/portraits/med/women/56.jpg',
-    //       thumbnail: 'https://randomuser.me/api/portraits/thumb/women/56.jpg',
-    //     },
-    //     nat: 'AU',
-    //   },
-    //   {
-    //     gender: 'male',
-    //     name: { title: 'Mr', first: 'Ioque', last: 'Souza' },
-    //     email: 'ioque.souza@example.com',
-    //     picture: {
-    //       large: 'https://randomuser.me/api/portraits/men/6.jpg',
-    //       medium: 'https://randomuser.me/api/portraits/med/men/6.jpg',
-    //       thumbnail: 'https://randomuser.me/api/portraits/thumb/men/6.jpg',
-    //     },
-    //     nat: 'BR',
-    //   },
-    //   {
-    //     gender: 'male',
-    //     name: { title: 'Mr', first: 'Sverre', last: 'Kittilsen' },
-    //     email: 'sverre.kittilsen@example.com',
-    //     picture: {
-    //       large: 'https://randomuser.me/api/portraits/men/82.jpg',
-    //       medium: 'https://randomuser.me/api/portraits/med/men/82.jpg',
-    //       thumbnail: 'https://randomuser.me/api/portraits/thumb/men/82.jpg',
-    //     },
-    //     nat: 'NO',
-    //   },
-    //   {
-    //     gender: 'male',
-    //     name: { title: 'Mr', first: 'Hugo', last: 'White' },
-    //     email: 'hugo.white@example.com',
-    //     picture: {
-    //       large: 'https://randomuser.me/api/portraits/men/93.jpg',
-    //       medium: 'https://randomuser.me/api/portraits/med/men/93.jpg',
-    //       thumbnail: 'https://randomuser.me/api/portraits/thumb/men/93.jpg',
-    //     },
-    //     nat: 'NZ',
-    //   },
-    //   {
-    //     gender: 'female',
-    //     name: { title: 'Ms', first: 'Jocenira', last: 'Monteiro' },
-    //     email: 'jocenira.monteiro@example.com',
-    //     picture: {
-    //       large: 'https://randomuser.me/api/portraits/women/43.jpg',
-    //       medium: 'https://randomuser.me/api/portraits/med/women/43.jpg',
-    //       thumbnail: 'https://randomuser.me/api/portraits/thumb/women/43.jpg',
-    //     },
-    //     nat: 'BR',
-    //   },
-    //   {
-    //     gender: 'female',
-    //     name: { title: 'Miss', first: 'Ilona', last: 'Lehto' },
-    //     email: 'ilona.lehto@example.com',
-    //     picture: {
-    //       large: 'https://randomuser.me/api/portraits/women/47.jpg',
-    //       medium: 'https://randomuser.me/api/portraits/med/women/47.jpg',
-    //       thumbnail: 'https://randomuser.me/api/portraits/thumb/women/47.jpg',
-    //     },
-    //     nat: 'FI',
-    //   },
-    //   {
-    //     gender: 'male',
-    //     name: { title: 'Mr', first: 'Dobrolik', last: 'Kadenyuk' },
-    //     email: 'dobrolik.kadenyuk@example.com',
-    //     picture: {
-    //       large: 'https://randomuser.me/api/portraits/men/3.jpg',
-    //       medium: 'https://randomuser.me/api/portraits/med/men/3.jpg',
-    //       thumbnail: 'https://randomuser.me/api/portraits/thumb/men/3.jpg',
-    //     },
-    //     nat: 'UA',
-    //   },
-    //   {
-    //     gender: 'male',
-    //     name: { title: 'Mr', first: 'Alan', last: 'Zacher' },
-    //     email: 'alan.zacher@example.com',
-    //     picture: {
-    //       large: 'https://randomuser.me/api/portraits/men/21.jpg',
-    //       medium: 'https://randomuser.me/api/portraits/med/men/21.jpg',
-    //       thumbnail: 'https://randomuser.me/api/portraits/thumb/men/21.jpg',
-    //     },
-    //     nat: 'DE',
-    //   },
-    // ];
-    function add() {
-      this.$dialog(
-        TaskForm,
-        // component props
-        {
-          record: {},
-          on: {
-            ok() {
-              console.log('ok 回调');
-            },
-            cancel() {
-              console.log('cancel 回调');
-            },
-            close() {
-              console.log('modal close 回调');
-            },
-          },
-        },
-        // modal props
-        {
-          title: '新增',
-          width: 700,
-          centered: true,
-          maskClosable: false,
-        },
-      );
+    function add() {}
+    function edit(record) {}
+    // 获取代币图标
+    function getCoinIcon(name) {
+      return '/icons/coins/svg/' + name.toLowerCase() + '.svg';
     }
-    function edit(record) {
-      console.log('record', record);
-      this.$dialog(
-        TaskForm,
-        // component props
-        {
-          record,
-          on: {
-            ok() {
-              console.log('ok 回调');
-            },
-            cancel() {
-              console.log('cancel 回调');
-            },
-            close() {
-              console.log('modal close 回调');
-            },
-          },
-        },
-        // modal props
-        {
-          title: '操作',
-          width: 700,
-          centered: true,
-          maskClosable: false,
-        },
-      );
-    }
-    function onDeleteAccount() {
-      console.log('即将删除账户');
-    }
+
+    let timeRange = ref({
+      start: '',
+      end: '',
+    });
     return {
       columns,
-      tableData,
-      // data,
+      timeRange,
+      data,
       add,
       edit,
-      onDeleteAccount,
+      getCoinIcon,
     };
   },
 });
