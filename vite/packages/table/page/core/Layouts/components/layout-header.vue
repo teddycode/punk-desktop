@@ -43,9 +43,9 @@
           </a-config-provider>
         </template>
       </a-col>
-      <a-col :span="6">
+      <a-col :span="6" style="margin-right: -10px">
         <div class="flex row-reverse">
-          <BorderAvatar :avatarSize="48" :avatarUrl="userInfo?.avatar" />
+          <BorderAvatar style="padding-right: 5px" :avatarSize="48" :avatarUrl="userInfo?.avatar" />
           <div class="layout-header-userBox">
             <a-dropdown>
               <div class="rounded bg-mask">
