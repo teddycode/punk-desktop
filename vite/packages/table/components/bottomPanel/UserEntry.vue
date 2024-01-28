@@ -50,7 +50,10 @@ export default defineComponent({
         {
           img: '/img/bottomPanel/transaction.png',
           title: '交易记录',
-          type: 'prop',
+          route: {
+            name: 'myTransList',
+          },
+          type: 'route',
         },
         {
           img: '/img/bottomPanel/keymgr.png',

@@ -67,13 +67,13 @@
             <EditOutlined /> <a key="list-edit" @click="onEdit(record)">编辑</a>
             <a-divider type="vertical" />
             <a-popconfirm
-              title="删除后，将无法通过该账户登录！"
+              title="停用后，将无法通过该账户登录！"
               ok-text="确认"
               cancel-text="取消"
               @confirm="onDelete"
               @cancel=""
             >
-              <DeleteOutlined /> <a href="#">删除</a>
+              <DeleteOutlined /> <a href="#">停用</a>
             </a-popconfirm>
           </template>
         </template>
