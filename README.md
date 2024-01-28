@@ -131,13 +131,13 @@
 > 项目推荐使用的环境变量：
 
 ```shell
-electron_mirror=https://npm.taobao.org/mirrors/electron/
-ELECTRON_BUILDER_BINARIES_MIRROR=http://npm.taobao.org/mirrors/electron-builder-binaries/
-node_sqlite3_binary_host_mirror=http://npm.taobao.org/mirrors/
-sass_binary_site=https://npm.taobao.org/mirrors/node-sass/
-PYTHON_MIRROR=http://npm.taobao.org/mirrors/python
-profiler_binary_host_mirror=http://npm.taobao.org/mirrors/node-inspector/
-registry=https://registry.npm.taobao.org
+electron_mirror=https://registry.npmmirror.com/mirrors/electron/
+ELECTRON_BUILDER_BINARIES_MIRROR=http://registry.npmmirror.com/mirrors/electron-builder-binaries/
+node_sqlite3_binary_host_mirror=http://registry.npmmirror.com/mirrors/
+sass_binary_site=https://registry.npmmirror.com/mirrors/node-sass/
+PYTHON_MIRROR=http://registry.npmmirror.com/mirrors/python
+profiler_binary_host_mirror=http://registry.npmmirror.com/mirrors/node-inspector/
+registry=https://registry.registry.npmmirror.com
 canvas_binary_host_mirror=https://registry.npmmirror.com/-/binary/canvas
 ```
 > 若执行以下步骤后，出现项目依赖包安装错误或编译错误，请检查相应环境变量
