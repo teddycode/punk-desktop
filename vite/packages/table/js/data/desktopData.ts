@@ -351,6 +351,29 @@ export const defaultDesks = [
               backgroundColor: '',
               backgroundIndex: 0,
             },
+
+            {
+              size: 'mini',
+              link: 'fast',
+              linkValue: '',
+              open: {
+                type: 'pageApp',
+                route: 'BlockchainBrowser',
+                name: '区块链浏览器',
+                params: '/web3/BlockchainBrowser',
+                value: 'BlockchainBrowser',
+              },
+              isTitle: true,
+              titleValue: '区块链浏览器',
+              src: 'https://pic.imgdb.cn/item/65851560c458853aefb84833.png',
+              isRadius: true,
+              radius: 5,
+              imgState: 'cover',
+              imgShape: 'square',
+              isBackground: false,
+              backgroundColor: '',
+              backgroundIndex: 0,
+            },
           ],
           groupTitle: '系统核心功能',
           zoom: {
@@ -476,6 +499,7 @@ export const defaultDesks = [
               backgroundColor: '',
               backgroundIndex: 0,
             },
+
           ],
           groupTitle: '以太坊应用',
           zoom: {
