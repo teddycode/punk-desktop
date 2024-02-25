@@ -223,6 +223,7 @@ const userModel = {
    */
   async loginWithCode(code) {
     let result = await require('../api/authApi').loginBrowser({ code });
+    console.log('使用code登录浏览器：', JSON.stringify(result));
     let responseData = result.data;
     if (result.code === 1000) {
       let user = userModel.convertUserData(responseData);

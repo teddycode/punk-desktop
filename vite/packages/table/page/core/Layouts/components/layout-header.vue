@@ -81,13 +81,7 @@ import { computed, ref, watch } from 'vue';
 import { useLayoutStore } from '@store/baseSettings'; // 导入你的 Pinia store
 import { walletStore } from '@store/wallet';
 import { useRouter } from 'vue-router';
-import {
-  useDisconnect,
-  useWeb3Modal,
-  useWeb3ModalProvider,
-  useWeb3ModalAccount,
-  useWeb3ModalEvents,
-} from '@web3modal/ethers5/vue';
+import { useDisconnect, useWeb3Modal, useWeb3ModalAccount } from '@web3modal/ethers5/vue';
 import { EyeOutlined } from '@ant-design/icons-vue';
 import BorderAvatar from '@components/avatar/BorderAvatar.vue';
 import { appStore } from '@store';
@@ -171,33 +165,6 @@ const logOutUser = () => {
   router.push('/');
   // window.location.reload()
 };
-
-// 监听钱包事件
-const web3ModalEvents = useWeb3ModalEvents();
-watch(web3ModalEvents, () => {
-  console.log(web3ModalEvents.data);
-  switch (web3ModalEvents.data.event) {
-    case 'MODAL_OPEN':
-      console.log('测试事件响应：打开了窗口');
-      break;
-    case 'SELECT_WALLET':
-      console.log('测试事件响应：选择了钱包');
-      break;
-    case 'CONNECT_SUCCESS':
-      console.log('钱包连接成功');
-      toast.success('钱包连接成功！', null);
-      break;
-    case 'DISCONNECT_SUCCESS':
-      console.log('测试事件响应：断开成功');
-      break;
-    case 'CONNECT_ERROR':
-      console.log('测试事件响应：连接失败');
-      toast.error('钱包连接失败，请重试！', null);
-      break;
-    default:
-      break;
-  }
-});
 </script>
 
 <style scoped>

@@ -178,7 +178,6 @@ export const appStore = defineStore(
        * @param userInfo
        */
       setUser(userInfo) {
-        console.log('接口返回的用户信息', userInfo);
         userInfo.onlineGradeExtra.cumulativeMinutes =
           Number(userInfo.onlineGradeExtra.minutes) - Number(userInfo.onlineGradeExtra.cumulativeHours) * 60;
         userInfo.onlineGradeExtra.cumulativeMinute = userInfo.onlineGradeExtra.minutes;

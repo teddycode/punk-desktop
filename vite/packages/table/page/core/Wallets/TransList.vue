@@ -144,6 +144,12 @@ export default defineComponent({
         ellipsis: true,
       },
       {
+        title: '时间',
+        key: 'timestamp',
+        dataIndex: 'timestamp',
+        ellipsis: true,
+      },
+      {
         title: '操作',
         key: 'action',
       },

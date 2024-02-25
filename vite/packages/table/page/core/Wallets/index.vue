@@ -224,15 +224,6 @@ export default defineComponent({
         amount: '1.336648844',
         status: 'inActive',
       },
-      {
-        id: 4,
-        name: '测试账户',
-        address: '0x8942E52BE95b4f7e7566A91D77308F415DCf1d5D',
-        symbol: 'ETH',
-        type: 'contract',
-        amount: '1.336648844',
-        status: 'inActive',
-      },
     ];
 
     const currentAccount = useWeb3ModalAccount();

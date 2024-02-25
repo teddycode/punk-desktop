@@ -51,7 +51,7 @@ app.whenReady().then(async () => {
     console.error(e);
   }
 
-  // 游览器登录
+  // 浏览器登录
   ipc.on('loginBrowser', async (event, arg) => {
     let result = {};
     try {

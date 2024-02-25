@@ -95,9 +95,18 @@ import {
   setBgColor,
   setSecondaryBgColor,
 } from '@components/card/hooks/styleSwitch/setStyle';
+import {
+  useWeb3Modal, useWeb3ModalAccount,
+  useWeb3ModalEvents,
+    useDisconnect,
+} from '@web3modal/ethers5/vue';
+import {preHandle} from "@components/widgets/courier/courierTool";
+import {useToast} from "vue-toastification";
+import {setupWalletListener} from "@page/core/Wallets/services/events";
+
 
 export default {
-  name: 'Code',
+  name: 'Splash',
   components: { RayMedal },
   data () {
     return {
@@ -109,8 +118,10 @@ export default {
       storeReadyTimer: null,
       launched: false,
       modal: null,
+      reloginFlg: false,
       timeoutHandler: null,
-      version: tsbApi.runtime.appVersion
+      version: tsbApi.runtime.appVersion,
+      web3ModalEvents: useWeb3ModalEvents()
     }
   },
   computed: {
@@ -118,6 +129,12 @@ export default {
     ...mapWritableState(appStore, ['settings', 'routeUpdateTime', 'userInfo', 'init', 'lvInfo', 'backgroundImage', 'style']),
     ...mapWritableState(navStore, ['sideNavigationList', 'footNavigationList', 'rightNavigationList']),
     ...mapWritableState(myIcons, ['iconOption', 'iconList']),
+  },
+  // 监听钱包连接成功
+  watch: {
+      web3ModalEvents(newVal){
+        console.log(newVal);
+      }
   },
   async mounted () {
     // 后端服务器状态监测
@@ -182,6 +199,56 @@ export default {
 
     this.getUserInfo()
     this.sortClock()
+    // 设置钱包事件监听器
+    setupWalletListener((data)=>{
+      const userInfo = {
+        ...data?.userInfo,
+        uid: data.userInfo.id,
+        "fans": 0,
+        "follow": 0,
+        "grade": {
+          "id": 2,
+          "name": "3级",
+          "new_name": "2级",
+          "grade": 2,
+          "diff": 26,
+          "next": 50,
+          "icon": "https://jxxt-1257689580.cos.ap-chengdu.myqcloud.com/ef3c43f233adc069819fa367032238a3.png?upload_type",
+          "pc_icon": "https://jxxt-1257689580.cos.ap-chengdu.myqcloud.com/ef3c43f233adc069819fa367032238a3.png?imageMogr2/crop/64x32/gravity/center",
+          "image": "https://jxxt-1257689580.cos.ap-chengdu.myqcloud.com/ef3c43f233adc069819fa367032238a3.png?upload_type",
+          "now": 20,
+          "true_id": 2
+        },
+        "post_count": 0,
+        "signature": "",
+        "frame": "",
+        "onlineGrade": {
+          "crown": 0,
+          "sun": 0,
+          "moon": 1,
+          "star": 0
+        },
+        "onlineGradeExtra": {
+          "cumulativeHours": 171,
+          "lv": 4,
+          "minutes": 10269,
+          "rank": 3469,
+          "distance": 2,
+          "percentage": 0.8569602507009731
+        }
+      }
+      console.log('回调成功:',userInfo);
+      this.setUser(userInfo)
+      if (this.$route.name === 'splash') {
+        this.enter()
+      }
+      // ipc.send('userInfo', {
+      //     data: {
+      //         ...data?.userInfo,
+      //         uid: data.userInfo?.id,
+      //     },
+      // });
+    });
 
   },
   methods: {
@@ -230,7 +297,7 @@ export default {
     bindUserInfoResponse () {
       ipc.removeAllListeners('userInfo')
       ipc.on('userInfo', async (event, args) => {
-        console.log('splash接收到登录参数:', args)
+        console.log('splash接收到登录参数:', JSON.stringify(args))
         if (args.data.uid === -2) {
           this.netError = true
           message.error({
@@ -257,7 +324,7 @@ export default {
         lvInfo.percentage = ((lvInfo.minute - current[0] * 60) / ((current[1] - current[0]) * 60)) * 100
         //this.lvInfo = lvInfo
         window.loadedStore['userInfo'] = true
-        console.info('更新了用户信息:', userInfo)
+        console.info('更新了用户信息:', JSON.stringify(userInfo))
         this.setUser(userInfo)
         if (this.$route.name === 'splash') {
           this.enter()
@@ -333,9 +400,22 @@ export default {
       return lvSys
     },
     login () {
-      tsbApi.user.login((data) => {
-        this.getUserInfo()
-      })
+      // 打开登录对话框
+      const toast = useToast();
+      let modal = useWeb3Modal();
+      modal.open().then(()=>{
+        let account = useWeb3ModalAccount();
+        if (account.isConnected.value){
+          toast.success("钱包已连接，正在登录...");
+          setTimeout(()=>{
+            modal.close();
+          },2000);
+        }
+      });
+
+      // tsbApi.user.login((data) => {
+      //   this.getUserInfo()
+      // })
     },
     replaceIcon() {
       navigationData.systemAppList.forEach((item) => {
@@ -373,7 +453,9 @@ export default {
       let res = await ipc.invoke('direct-logout', this.userInfo?.uid);
       if (res) {
         message.success('帐号退出成功,请重新登录');
-        this.login();
+        useDisconnect().disconnect().then(()=>{
+          this.login();
+        });
       } else {
         message.error('账号退出失败，请重试！');
       }

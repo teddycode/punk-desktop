@@ -1,17 +1,17 @@
 // 仅示例
 import request from '../util/request';
 
-export function users(data) {
+export function UserDoAuthReq(data) {
   return request({
-    url: '/user/login',
+    url: '/users/login/auth',
     method: 'post',
-    data,
+    params: data,
   });
 }
 
 export function getInfo(token) {
   return request({
-    url: '/user/info',
+    url: '/users/info',
     method: 'get',
     params: { token },
   });
@@ -21,5 +21,14 @@ export function message() {
   return request({
     url: '/test/message',
     method: 'post',
+  });
+}
+
+// 获取登录的随机数值
+export function RequestLoginNonce(address: string) {
+  return request({
+    url: '/users/login/nonce',
+    method: 'get',
+    params: { address: address },
   });
 }

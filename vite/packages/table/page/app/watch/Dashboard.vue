@@ -421,7 +421,7 @@ import { fixHttp, formatSeconds } from '../../../util';
 import Template from '../../../../user/pages/Template.vue';
 import OnlineChart from './OnlineChart.vue';
 import html2canvas from 'html2canvas';
-import viewer from 'viewerjs';
+// import viewer from 'viewerjs';
 import browser from '../../../js/common/browser';
 
 export default {

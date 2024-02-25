@@ -43,6 +43,7 @@ const server = {
   login() {
     if (window.location.href.includes('code=')) {
       const code = server.matchIntercept(window.location.href, 'code', '\\&');
+      console.log('获取code：', code);
       ipc.on('callback-loginBrowser', (event, arg) => {
         if (arg.code === 1000) {
           ipc.send('userLogin', arg.data);
@@ -54,7 +55,7 @@ const server = {
           setTimeout(() => {
             window.close();
             //window.location.href = api.getUrl(api.API_URL.group.index)
-          }, 500);
+          }, 1500);
         } else {
           console.log(arg.message);
           window.location.href = api.getUrl(api.API_URL.user.login);
