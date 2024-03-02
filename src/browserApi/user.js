@@ -11,7 +11,9 @@ const user = {
     ipc.once('loginCallback', (event, args) => {
       apiUserInfo = args.data;
       callback(args.data.userInfo);
+      console.info('第一步成功:', args);
     });
+    console.info('登录第一步');
     ipc.send('login');
   },
   /**

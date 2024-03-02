@@ -25,7 +25,7 @@ import PanelButton from './components/PanelButton.vue';
 import BackBtn from './components/comp/BackBtn.vue';
 
 import { setupCalendar } from 'v-calendar';
-import 'viewerjs/dist/viewer.css';
+// import 'viewerjs/dist/viewer.css';
 /*消息提示组件*/
 import Toast, { PluginOptions } from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
@@ -53,8 +53,8 @@ import 'codemirror/mode/php/php';
 
 import piniaPersist from './js/ext/pinia-plugin-persist/index';
 
-import 'viewerjs/dist/viewer.css';
-import VueViewer from 'v-viewer';
+// import 'viewerjs/dist/viewer.css';
+// import VueViewer from 'v-viewer';
 
 import $ from 'jquery';
 
@@ -124,7 +124,7 @@ const $app = app
   .use(Antd)
   .use(ColorPicker)
   .use(router)
-  .use(VueViewer)
+  // .use(VueViewer)
   .use(setupCalendar, {})
   .use(
     VueTippy,
@@ -165,13 +165,13 @@ window.$app = $app;
 // ant 默认样式
 import 'ant-design-vue/dist/antd.css';
 import { createWeb3Modal } from '@web3modal/ethers5/vue';
-import { walletStore } from './store/wallet';
+import { walletConfig } from './store/wallet';
+import { setupWalletListener } from './page/core/Wallets/services/events';
 
 //处理路由记录
 processRouter();
 
 // 創建钱包连接对话框
-let config = walletStore().getWalletOptions();
-createWeb3Modal(config);
+createWeb3Modal(walletConfig());
 
 export { router };

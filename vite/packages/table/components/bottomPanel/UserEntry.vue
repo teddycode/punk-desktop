@@ -50,7 +50,10 @@ export default defineComponent({
         {
           img: '/img/bottomPanel/transaction.png',
           title: '交易记录',
-          type: 'prop',
+          route: {
+            name: 'myTransList',
+          },
+          type: 'route',
         },
         {
           img: '/img/bottomPanel/keymgr.png',
@@ -118,21 +121,21 @@ export default defineComponent({
     },
     logout(uid) {
       Modal.confirm({
-        title: '退出此帐号:' + this.userInfo.uid,
+        title: '退出此帐号:' + this.userInfo.nickname,
         content: '退出帐号并不会影响帐号数据，仅仅是将本地帐号退出。但是退出后无法再使用此帐号下的所有空间。',
         centered: true,
         okText: '确认',
         cancelText: '取消',
         onOk: async () => {
-          console.log('uid:', uid);
-          await this.deleteUserInfo();
-          let res = await ipc.invoke('direct-logout', uid);
-          if (res) {
-            message.success('帐号退出成功。');
-            this.$router.replace('/');
-          } else {
-            message.error('账号退出失败，请重试！');
-          }
+          try {
+            // TODO 无法取消
+            this.deleteUserInfo();
+            ipc.invoke('direct-logout', uid);
+            setTimeout(() => {
+              message.success('帐号退出成功。');
+              this.$router.replace('/');
+            }, 1500);
+          } catch (e) {}
         },
       });
     },

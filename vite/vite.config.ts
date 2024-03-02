@@ -47,7 +47,8 @@ export const config = {
     },
   },
   build: {
-    //sourcemap:true,//不打包sourcemap
+    sourcemap: true, //不打包sourcemap
+    // target: 'es2020',
     rollupOptions: {
       input: inputs,
       output: {

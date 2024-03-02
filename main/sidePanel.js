@@ -1426,11 +1426,12 @@ app.whenReady().then(() => {
       });
       loginWindow.setMenu(null);
       if (isDevelopmentMode) {
-        loginWindow.webContents.openDevTools({ mode: 'bottom' });
+        loginWindow.webContents.openDevTools({ mode: 'detach' });
       }
       loginWindow.on('close', () => {
         loginWindow = null;
       });
+      // loginWindow.loadURL('http://localhost:1600/html/login/index.html');
       let api = require(path.join(__dirname, 'server-config.js')).api;
       loginWindow.loadURL(api.getUrl(api.API_URL.user.login));
       loginWindow.on('ready-to-show', () => {

@@ -43,27 +43,28 @@
           </a-config-provider>
         </template>
       </a-col>
-      <a-col :span="6">
+      <a-col :span="6" style="margin-right: -10px">
         <div class="flex row-reverse">
-          <BorderAvatar :avatarSize="48" :avatarUrl="userInfo.avatar" />
+          <BorderAvatar style="padding-right: 5px" :avatarSize="48" :avatarUrl="userInfo?.avatar" />
           <div class="layout-header-userBox">
             <a-dropdown>
               <div class="rounded bg-mask">
                 <div v-if="isConnected">
-                  <w3m-account-button />
+                  <w3m-button />
                 </div>
-                <div class="xt-text" v-else>未连接钱包</div>
+                <div class="xt-text" v-else>点击连接钱包</div>
               </div>
               <template #overlay>
                 <a-menu>
                   <div v-if="isConnected">
+                    <a-menu-item @click="closeWallet">断开连接</a-menu-item>
                     <a-menu-item @click="changeWallet">切换钱包</a-menu-item>
                     <a-menu-item @click="getWalletInfo">钱包信息</a-menu-item>
                     <a-menu-item @click="getUserInfo"> 个人信息</a-menu-item>
-                    <a-menu-item @click="LogOut">退出登录</a-menu-item>
+                    <a-menu-item @click="logOutUser">用户退出</a-menu-item>
                   </div>
                   <div v-else>
-                    <a-menu-item @click="loginWallet">连接钱包</a-menu-item>
+                    <a-menu-item @click="connectWallet">连接钱包</a-menu-item>
                   </div>
                 </a-menu>
               </template>
@@ -76,25 +77,29 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useLayoutStore } from '@store/baseSettings'; // 导入你的 Pinia store
 import { walletStore } from '@store/wallet';
 import { useRouter } from 'vue-router';
-import { useWeb3Modal } from '@web3modal/ethers5/vue';
+import { useDisconnect, useWeb3Modal, useWeb3ModalAccount } from '@web3modal/ethers5/vue';
 import { EyeOutlined } from '@ant-design/icons-vue';
 import BorderAvatar from '@components/avatar/BorderAvatar.vue';
 import { appStore } from '@store';
+import { useToast } from 'vue-toastification';
+import { ethers } from 'ethers';
+
+const toast = useToast();
 
 // 获取 Pinia store
-const store = useLayoutStore();
+const layoutStore = useLayoutStore();
 const wStore = walletStore();
 const aStore = appStore();
 
 // 其他逻辑
 const router = useRouter();
 
-const isMenu = computed(() => store.isMenu);
-const isConnected = computed(() => wStore.isConnected);
+const isMenu = computed(() => layoutStore.isMenu);
+const isConnected = useWeb3ModalAccount().isConnected;
 const userInfo = computed(() => aStore.userInfo);
 // 获取父亲路由所有的平行路由作为菜单列表
 const munePath = computed(() => {
@@ -106,31 +111,39 @@ const munePath = computed(() => {
 console.log('current router:', router.currentRoute.value);
 console.log('menu path:', munePath.value);
 // 系统设置
-const direction = computed(() => (store.direction ? 'rtl' : 'ltr'));
+const direction = computed(() => (layoutStore.direction ? 'rtl' : 'ltr'));
 
-const visible = ref(false);
-
-const selectedKeys = ref([]);
-const activeTagView = computed(() => store.activeTagView);
-selectedKeys.value = [activeTagView.value];
+// const visible = ref(false);
+// const selectedKeys = ref([]);
+// const activeTagView = computed(() => store.activeTagView);
+// selectedKeys.value = [activeTagView.value];
 
 const selectChange = (item) => {
   console.log('切换菜单：', item);
   router.push({ name: item?.key || 'home' });
 };
 
+// 断开钱包连接
+const closeWallet = async () => {
+  const key = useDisconnect();
+  key.disconnect().then(() => {
+    toast.success('钱包已断开连接', null);
+  });
+};
+
 // 连接钱包
-const loginWallet = async () => {
-  console.log('login wallet');
+const connectWallet = async () => {
   let modal = useWeb3Modal();
   await modal.open();
-  wStore.isConnected = true;
 };
 // 切换钱包
 const changeWallet = () => {
-  let modal = useWeb3Modal();
-  modal.close();
-  wStore.isConnected = false;
+  const key = useDisconnect();
+  key.disconnect().then(() => {
+    toast.success('钱包已断开连接', null);
+    let modal = useWeb3Modal();
+    modal.open();
+  });
   console.log('change wallet');
 };
 // 获取用户信息
@@ -138,10 +151,16 @@ const getUserInfo = () => {
   console.log('get user info');
 };
 // 获取钱包信息
-const getWalletInfo = () => {
-  console.log('get wallet info');
+const getWalletInfo = async () => {
+  const account = useWeb3ModalAccount();
+  if (account.isConnected) {
+    const etherscanProvider = new ethers.providers.EtherscanProvider();
+    const list = await etherscanProvider.getHistory(account.address.value.toString());
+    console.log('交易记录：', list);
+  }
 };
-const LogOut = () => {
+// 退出登录的用户
+const logOutUser = () => {
   window.localStorage.removeItem('token');
   router.push('/');
   // window.location.reload()
