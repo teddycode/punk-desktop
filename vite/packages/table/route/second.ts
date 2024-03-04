@@ -48,6 +48,7 @@ import transfer from './core/transfers';
 import collection from './core/collection';
 import storage from './core/storage';
 import wallets from './core/wallets';
+import BlockchainBrowser from "./core/BlockchainBrowser";
 // import BackgroundPage from "@page/core/components/BackgroundPage.vue";
 
 // 二级路由，
@@ -60,7 +61,7 @@ export default [
     meta: {
       title: '核心功能',
     },
-    children: [computing, consensus, crypto, exchange, governance, network, transfer, collection, storage, wallets],
+    children: [computing, consensus, crypto, exchange, governance, network, transfer, collection, storage, wallets,BlockchainBrowser],
   },
   {
     // 其他Dapp功能路由

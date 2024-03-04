@@ -485,6 +485,38 @@ const defaultPunkOSApp = [
     }),
     is_new: true,
   },
+  // {
+  //   nanoid: nanoid(8),
+  //   name: '区块链浏览器',
+  //   logo: 'https://pic.imgdb.cn/item/65851552c458853aefb81cf8.png',
+  //   summary: '提供区块信息等查询',
+  //   type: 'card',
+  //   appid: 'N1jEl6',
+  //   //url: serverConfig.IM.FRONT_URL+ serverConfig.IM.AUTO_LOGIN,
+  //   url: '/web3/BlockchainBrowser',
+  //   preload: '/pages/group/imPreload.js',
+  //   package: 'BlockchainBrowser',
+  //   theme_color: '#689aff',
+  //   user_theme_color: '',
+  //   create_time: Date.now(),
+  //   update_time: Date.now(),
+  //   account_avatar: '',
+  //   order: 0,
+  //   use_count: 0,
+  //   attribute: JSON.stringify({
+  //     isOffical: 1,
+  //     integration: 2,
+  //   }),
+  //   last_execute_time: Date.now(),
+  //   settings: JSON.stringify({
+  //     bounds: {
+  //       width: 610,
+  //       height: 500,
+  //     },
+  //     showInSideBar: false,
+  //   }),
+  //   is_new: true,
+  // },
 ];
 
 module.exports = {
