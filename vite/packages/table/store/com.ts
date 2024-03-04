@@ -13,6 +13,18 @@ export const comStore = defineStore('comStore', {
   state: () => ({
     signIn: {},
     todayRank: [],
+    user : {
+      id:1,
+      nickname: 'luckysheep',
+      avatar: 'https://static.juzicon.com/avatars/avatar-200602130320-HMR2.jpeg?x-oss-process=image/resize,w_100',
+      ip_home: {
+        region: '河南',
+      },
+      likeNum:2,
+      likeIds: [0,1],
+      collectNum:1,
+      collectIds:[0]
+    }
   }),
   actions: {
     async updateTodayRank() {

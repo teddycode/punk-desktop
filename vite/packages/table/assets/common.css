@@ -4283,4 +4283,11 @@ body {
   background: var(--active-secondary-bg);
 }
 
+.hover_underline {
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 /*# sourceMappingURL=common.css.map */

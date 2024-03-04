@@ -1,6 +1,6 @@
 <template>
   <!-- 团队聊天主页面 -->
-  <div class="flex" style="width: 100%; height: 100%">
+  <div class="flex" style="width: 100%; height: 100%;background-color: white; border-radius: 10px;" >
     <!-- 左侧tab切换 -->
     <SecondPanel v-if="!fullScreen" @changeTab="changeTab" :menus="menus"></SecondPanel>
 
@@ -33,38 +33,81 @@ export default defineComponent({
         //   title:'桌面',index:'desk',icon:'desktop',
         //   route:{name:'chatDesk'},
         // },
+        // {
+        //   title: '聊天',
+        //   index: 'chat',
+        //   icon: 'message',
+        //   tab: 'chat',
+        //   route: { name: 'chat' },
+        // },
         {
-          title: '聊天',
-          index: 'chat',
-          icon: 'message',
-          tab: 'chat',
-          route: { name: 'chat' },
+          title: '首页',
+          icon: 'home',
+          route: { name: 'forum' },
         },
+        {
+          title: '话题',
+          icon: 'message',
+          route: { name: 'topic' },
+        },
+        {
+          title: '用户',
+          icon: 'user',
+          route: { name: 'users' },
+        },
+        {
+          title: '通知',
+          icon: 'notification',
+          route: { name: 'notification' },
+        },
+        {
+          title: '喜欢',
+          icon: 'star',
+          route: { name: 'likes' },
+        },
+        {
+          title: '收藏',
+          icon: 'star',
+          route: { name: 'collects' },
+        },
+
+        // {
+        //   title: '聊天',
+        //   index: 'chat',
+        //   icon: 'message',
+        //   tab: 'chat',
+        //   route: { name: 'chat' },
+        // },
         // {
         //   title: '通讯录',index: 'contact',icon:'team',
         //   route:{ name: 'contact' }
         // },
-        {
-          title: '小队',
-          index: 'team',
-          icon: 'smile',
-          route: { name: 'hall' },
-          tab: 'team',
-        },
-        {
-          title: '社区',
-          index: 'channel',
-          icon: 'star',
-          route: { name: 'channel' },
-          tab: 'channel',
-        },
-        {
-          title: '弹幕',
-          index: 'barrage',
-          icon: 'text-align-left',
-          route: { name: 'barrage' },
-          tab: 'barrage',
-        },
+        // {
+        //   title: '小队',
+        //   index: 'team',
+        //   icon: 'smile',
+        //   route: { name: 'hall' },
+        //   tab: 'team',
+        // },
+        // {
+        //   title: '社区',
+        //   index: 'channel',
+        //   icon: 'star',
+        //   route: { name: 'channel' },
+        //   tab: 'channel',
+        // },
+        // {
+        //   title: '弹幕',
+        //   index: 'barrage',
+        //   icon: 'text-align-left',
+        //   route: { name: 'barrage' },
+        //   tab: 'barrage',
+        // },
+        // {
+        //   title: '测试',
+        //   icon: 'text-align-left',
+        //   route: { name: 'test' },
+        // },
       ],
     };
   },

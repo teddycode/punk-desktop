@@ -1,8 +1,8 @@
 import axios from 'axios';
 import message from 'ant-design-vue/es/message';
 
-// export const API_PREFIX: string = 'http://127.0.0.1:9090/api'; // local env
-export const API_PREFIX: string = 'http://123.157.213.104:18081/api'; //prod env
+export const API_PREFIX: string = 'http://127.0.0.1:9090/api'; // local env
+// export const API_PREFIX: string = 'http://123.157.213.104:18081/api'; //prod env
 
 const instance = axios.create({
   baseURL: API_PREFIX,
