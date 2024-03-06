@@ -129,7 +129,6 @@ export default defineComponent({
         okText: '确认',
         cancelText: '取消',
         onOk: async (closer) => {
-          // TODO 销毁异常
           await this.deleteUserInfo();
           let res = await ipc.invoke('direct-logout', uid);
           if (res) {
