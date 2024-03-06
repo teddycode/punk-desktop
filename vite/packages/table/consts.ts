@@ -1,7 +1,8 @@
 //系统应用变量
 const Server = {
-  baseUrl: 'https://wad.apps.vip/api',
+  // baseUrl: 'https://wad.apps.vip/api',
   //baseUrl:'http://test1.com:9001'
+  baseUrl: 'http://127.0.0.1:9090/api',
 };
 
 /**

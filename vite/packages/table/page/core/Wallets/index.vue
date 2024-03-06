@@ -2,13 +2,13 @@
   <a-card :bordered="true" style="margin-top: 10px">
     <a-row>
       <a-col :sm="8" :xs="24">
-        <info title="代币种类" value="1种" :bordered="true" />
+        <info title="代币种类" :value="countStatus.types + ' 种'" :bordered="true" />
       </a-col>
       <a-col :sm="8" :xs="24">
-        <info title="账户总数" value="4个" :bordered="true" />
+        <info title="账户总数" :value="countStatus.accounts + ' 个'" :bordered="true" />
       </a-col>
       <a-col :sm="8" :xs="24">
-        <info title="价值估计" value="2000.0000元" :bordered="true" />
+        <info title="价值估计" :value="countStatus.values + ' USDT'" :bordered="true" />
       </a-col>
     </a-row>
   </a-card>
@@ -26,13 +26,13 @@
           <PlusOutlined />添加</a-button
         >
       </template>
-      <a-table bordered :columns="columns" :data-source="data" row-key="id">
+      <a-table bordered :columns="columns" :data-source="tableData" :pagination="pageConfig" row-key="id">
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'address'">
             <a-tooltip>
               <template #title>点击查看交易记录</template>
               <WalletTwoTone style="padding-right: 5px" />
-              <router-link :to="{ name: 'myTransList' }">
+              <router-link :to="{ name: 'myTransList', query: { address: record?.address } }">
                 {{ record.address }}
               </router-link>
             </a-tooltip>
@@ -70,7 +70,7 @@
               title="停用后，将无法通过该账户登录！"
               ok-text="确认"
               cancel-text="取消"
-              @confirm="onDelete"
+              @confirm="onDisable"
               @cancel=""
             >
               <DeleteOutlined /> <a href="#">停用</a>
@@ -114,6 +114,18 @@
         </a-select>
       </p>
       <p></p>
+      <!-- 新增状态下徐亚验证钱包 -->
+      <template v-if="!isEdit">
+        <h6>签名随机数</h6>
+        <p>
+          <a-input ref="walletSecret" disabled v-model:value="walletAdd.secret"></a-input>
+        </p>
+        <h6>签名信息</h6>
+        <p>
+          <a-input ref="walletSignature" disabled v-model:value="walletAdd.signature"></a-input>
+        </p>
+        <a-button @click="bindWallet"> 点击获取绑定的钱包信息 </a-button>
+      </template>
     </a-modal>
   </div>
 </template>
@@ -127,7 +139,6 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import info from './components/Info.vue';
-import TaskForm from './components/TaskForm.vue';
 import LayoutFooter from '@page/core/Layouts/components/layout-footer.vue';
 import {
   BarsOutlined,
@@ -137,14 +148,21 @@ import {
   WalletTwoTone,
   DeleteOutlined,
 } from '@ant-design/icons-vue';
-import { useWeb3ModalAccount } from '@web3modal/ethers5/vue';
+import { useDisconnect, useWeb3Modal, useWeb3ModalAccount } from '@web3modal/ethers5/vue';
+import datas from './data';
+import { GetForWalletStatus, PostWalletPageList, PutForWalletInfo } from '@js/service/wallets';
+import { appStore } from '@store';
+import { appsStore } from '@store/apps';
+import { PageParams } from '@js/service/typing';
+import { message } from 'ant-design-vue';
+import { GetForLoginNonce, PostForAuthReq } from '@js/service/users';
+import { signMessage } from '@page/core/Wallets/events';
 
 export default defineComponent({
   name: 'WalletsPage',
   components: {
     LayoutFooter,
     info,
-    TaskForm,
     PlusOutlined,
     EditOutlined,
     EyeOutlined,
@@ -154,77 +172,9 @@ export default defineComponent({
   },
   setup() {
     // 列表元素： 账户别名。网络名称、钱包地址、币种符号、资产数额、钱包状态、操作【删除、编辑、交易记录、】
-    const columns = [
-      {
-        title: '序号',
-        dataIndex: 'id',
-        key: 'id',
-      },
-      {
-        title: '账户别名',
-        dataIndex: 'name',
-        key: 'name',
-      },
-      {
-        title: '账户地址',
-        dataIndex: 'address',
-        key: 'address',
-      },
-      {
-        title: '币种符号',
-        dataIndex: 'symbol',
-        key: 'symbol',
-      },
-      {
-        title: '资产数额',
-        key: 'amount',
-        dataIndex: 'amount',
-      },
-      {
-        title: '账户类型',
-        key: 'type',
-        dataIndex: 'type',
-      },
-      {
-        title: '账户状态',
-        key: 'status',
-        dataIndex: 'status',
-      },
-      {
-        title: '操作',
-        key: 'action',
-      },
-    ];
+    const columns = datas.walletColumn;
     // 样例数据
-    let data = [
-      {
-        id: 1,
-        name: '工资账户',
-        address: '0x1423f4ceC7fCBE8400A957121ad616C439a0d4CF',
-        symbol: 'ETH',
-        type: 'address',
-        amount: '0.038',
-        status: 'active',
-      },
-      {
-        id: 2,
-        name: '日常消费',
-        address: '0x437a5079CE5f89A62bc74e66e5f5a772Eb31CaB9',
-        symbol: 'ETH',
-        type: 'address',
-        amount: '0.133',
-        status: 'inActive',
-      },
-      {
-        id: 3,
-        name: '理财账户',
-        address: '0x8942E52BE95b4f7e7566A91D77308F415DCf1d5D',
-        symbol: 'ETH',
-        type: 'contract',
-        amount: '1.336648844',
-        status: 'inActive',
-      },
-    ];
+    let tableData = ref([]);
 
     const currentAccount = useWeb3ModalAccount();
 
@@ -233,25 +183,52 @@ export default defineComponent({
       symbol: 'ETH',
       type: 'address',
     });
+    // 统计数据
+    let countStatus = ref({
+      types: 0,
+      accounts: 0,
+      values: 0.0,
+    });
+
+    let pageConfig = ref({
+      current: 1,
+      pageSize: 10,
+      total: 0,
+    });
+
+    let walletAdd = ref({
+      secret: '',
+      signature: '',
+    });
+
+    let currentRow = null;
+
+    const userInfo = appStore().userInfo;
+
     let isEdit = ref(false);
     let modalVisible = ref(false);
+
     function onAdd() {
       isEdit.value = false;
       modalVisible.value = true;
     }
+
     function onEdit(record) {
+      currentRow = record;
       account.value.name = record.name;
       account.value.type = record.type;
       isEdit.value = true;
       modalVisible.value = true;
     }
-    function onDelete() {
-      console.log('即将删除账户');
+
+    function onDisable() {
+      console.log('即将停用账户');
     }
     // 获取代币图标
     function getCoinIcon(name) {
       return '/icons/coins/svg/' + name.toLowerCase() + '.svg';
     }
+
     function renderStatus(record) {
       if (currentAccount && currentAccount.isConnected && currentAccount.address) {
         let address = currentAccount.address.value;
@@ -265,6 +242,24 @@ export default defineComponent({
     function doModalConfirm() {
       console.log('Editding');
       if (isEdit) {
+        if (currentRow) {
+          const params = {
+            id: currentRow?.id,
+            name: account.value?.name,
+            coin: account.value?.symbol,
+            type: account.value?.type,
+          };
+          PutForWalletInfo(params).then((resp) => {
+            console.log('钱包信息更新结果：', resp);
+            if (resp.data === true) {
+              message.info('钱包信息更新成功！');
+              fetchTableData();
+              modalVisible.value = false;
+            } else {
+              message.warning('钱包信息更新失败！');
+            }
+          });
+        }
       } else {
       }
     }
@@ -282,20 +277,61 @@ export default defineComponent({
         },
       ];
     }
+    // 获取后端数据
+    async function fetchStatusData() {
+      const userId = parseInt(userInfo.id);
+      GetForWalletStatus(userId).then((data) => {
+        console.log('钱包统计数据：', data);
+        countStatus.value.types = data?.data.types;
+        countStatus.value.accounts = data?.data.accounts;
+        countStatus.value.values = data?.data.values;
+      });
+    }
+    //   获取表格数据
+    async function fetchTableData() {
+      const param: PageParams = {
+        ...pageConfig.value,
+        userId: parseInt(userInfo.id),
+      };
+      PostWalletPageList(param).then((resp) => {
+        console.log('钱包分页数据：', resp);
+        tableData.value = resp?.data?.records;
+        pageConfig.value.current = resp?.data?.pageNumber;
+      });
+    }
+    // 绑定钱包的信息
+    async function bindWallet() {
+      // 断开现有钱包的连接
+      // TODO 封装web3Modal作为身份认证器
+    }
+
     return {
       account,
+      currentAccount,
+      userInfo,
       columns,
       isEdit,
       modalVisible,
       doModalConfirm,
+      currentRow,
       getCoinTypeList,
-      data,
+      tableData,
+      pageConfig,
+      countStatus,
       onAdd,
+      walletAdd,
+      bindWallet,
       onEdit,
-      onDelete,
+      onDisable,
       renderStatus,
       getCoinIcon,
+      fetchStatusData,
+      fetchTableData,
     };
+  },
+  mounted() {
+    this.fetchStatusData();
+    this.fetchTableData();
   },
 });
 </script>

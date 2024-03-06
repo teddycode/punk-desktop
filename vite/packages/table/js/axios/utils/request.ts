@@ -1,8 +1,9 @@
 import axios from 'axios';
 import message from 'ant-design-vue/es/message';
+import { getConfig } from '../serverApi';
 
-// export const API_PREFIX: string = 'http://127.0.0.1:9090/api'; // local env
-export const API_PREFIX: string = 'http://123.157.213.104:18081/api'; //prod env
+export const API_PREFIX: string = 'http://127.0.0.1:9090/api'; // local env
+// export const API_PREFIX: string = 'http://123.157.213.104:18081/api'; //prod env
 
 const instance = axios.create({
   baseURL: API_PREFIX,
@@ -11,12 +12,13 @@ const instance = axios.create({
 
 // 请求发送之前的拦截器
 instance.interceptors.request.use(
-  (config) => {
+  async (config) => {
     // 设置发送之前数据需要做什么处理
-    // TODO 携带token
+    let { headers } = await getConfig();
+    config.headers['Authorization'] = headers.Authorization || 'none';
     return config;
   },
-  (error) => {
+  async (error) => {
     message.error(error);
     Promise.reject(error);
   },
@@ -34,12 +36,13 @@ const onResponseHandler = (response) => {
   if (data.code && data.code === 200) {
     return data;
   }
-  message.warn(data.message || 'Response error');
+  message.warn(data.msg || 'Response error');
   return Promise.reject(response);
 };
 
 // 请求拒绝后的错误处理
 const onRejectHandler = (error) => {
+  console.log('请求响应错误：', error);
   if (error.response) {
     let res = error.response;
     switch (res.status) {
@@ -80,8 +83,7 @@ const onRejectHandler = (error) => {
     }
   } else {
     message.error({
-      icon: 'close',
-      content: '请检查网络连接状态!',
+      content: '请求无响应，请检查网络连接状态!',
     });
   }
 };

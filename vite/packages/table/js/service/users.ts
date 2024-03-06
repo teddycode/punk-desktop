@@ -1,7 +1,7 @@
 // 仅示例
-import request from '../util/request';
+import request from '../axios/utils/request';
 
-export function UserDoAuthReq(data) {
+export function PostForAuthReq(data) {
   return request({
     url: '/users/login/auth',
     method: 'post',
@@ -25,7 +25,7 @@ export function message() {
 }
 
 // 获取登录的随机数值
-export function RequestLoginNonce(address: string) {
+export function GetForLoginNonce(address: string) {
   return request({
     url: '/users/login/nonce',
     method: 'get',
