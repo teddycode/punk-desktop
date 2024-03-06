@@ -1,4 +1,4 @@
-@import url(../../../../../../node_modules/ant-design-vue/dist/antd.dark.css);
+@import url(../../../../../../node_modules/ant-design-vue/dist/reset.css);
 .todo-style {
   ul li {
     border-radius: 5px;
