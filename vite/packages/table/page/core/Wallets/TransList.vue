@@ -46,10 +46,10 @@
             <a> {{ record.to }} </a>
           </template>
           <template v-else-if="column.key === 'type'">
-            <div v-if="record.type === 1">
+            <div v-if="record?.to === address">
               <a-tag color="green">收入</a-tag>
             </div>
-            <div v-else-if="record.type === 0">
+            <div v-else-if="record?.from === address">
               <a-tag color="red">支出</a-tag>
             </div>
             <template v-else>

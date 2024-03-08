@@ -104,7 +104,7 @@
   >
   </HorizontalDrawer>
 
-  <a-drawer v-model:visible="searchShow" placement="right" title="搜索" width="500">
+  <a-drawer v-model:open="searchShow" placement="right" title="搜索" width="500">
     <div class="line">
       <a-input
         v-model:value="searchWord"

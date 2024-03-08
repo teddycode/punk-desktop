@@ -1,6 +1,6 @@
 <template>
   <a-drawer
-    v-model:visible="detailDisplay"
+    v-model:open="detailDisplay"
     :bodyStyle="{ textAlign: 'left', overflow: 'hidden' }"
     :title="drawerTitle"
     placement="right"

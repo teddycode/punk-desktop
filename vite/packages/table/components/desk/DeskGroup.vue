@@ -248,7 +248,7 @@
     </template>
   </div>
 
-  <a-drawer v-model:visible="allDeskListVisible" height="220" placement="bottom">
+  <a-drawer v-model:open="allDeskListVisible" height="220" placement="bottom">
     <AllDeskList
       :activeId="currentDeskId"
       :items="deskList"
@@ -262,13 +262,7 @@
     ></AllDeskList>
   </a-drawer>
 
-  <a-drawer
-    v-if="addDeskVisible"
-    v-model:visible="addDeskVisible"
-    title="添加桌面"
-    width="500"
-    @close="shareCode = false"
-  >
+  <a-drawer v-if="addDeskVisible" v-model:open="addDeskVisible" title="添加桌面" width="500" @close="shareCode = false">
     <HorizontalPanel v-model:select-type="currentAddTab" :nav-list="currentAddMethod"> </HorizontalPanel>
     <xt-task :modelValue="M03023"> </xt-task>
     <div v-if="currentAddTab.name === 'market'">

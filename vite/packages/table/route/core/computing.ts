@@ -1,12 +1,12 @@
 import HomePage from '@page/core/Computing/index.vue';
 import { CodeOutlined, FileOutlined } from '@ant-design/icons-vue';
-import BaseLayout from "../../page/core/Layouts/BaseLayout.vue";
+import ThirdLayout from '@page/core/Layouts/ThirdLayout.vue';
 
 //  三级路由-计算组
 export default {
   path: 'computing',
   redirect: { name: 'ComputingPage' },
-  component: BaseLayout,
+  component: ThirdLayout,
   meta: {
     icon: CodeOutlined,
   },

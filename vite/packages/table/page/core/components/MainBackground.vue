@@ -52,8 +52,8 @@ export default {
 
 #main {
   background-image: url('/images/background/mainbg.png');
-  background-size: cover;
-  overflow: hidden;
+  background-size: 100% auto;
+  //overflow: hidden;
   //min-width: 1600px;
   background-repeat: no-repeat; // 防止背景重复
   background-attachment: fixed; // 背景图像固定

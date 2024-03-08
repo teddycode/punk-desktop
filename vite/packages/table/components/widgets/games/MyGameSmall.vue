@@ -118,7 +118,7 @@
       </div>
     </template>
   </Widget>
-  <a-drawer v-model:visible="middleShow" placement="right" title="设置" width="500">
+  <a-drawer v-model:open="middleShow" placement="right" title="设置" width="500">
     <!-- <template #extra>
       <div class="flex justify-center items-center rounded-lg h-10 drawer-item-bg w-16  pointer" @click="saveSize">保存</div>
     </template>  -->

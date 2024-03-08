@@ -194,7 +194,7 @@
   >
     <ChangeApp :full="full" :tab="tab" @closeChangeApp="closeChangeApp" @setFull="setFull"></ChangeApp>
   </div>
-  <TeamTip :key="teamKey" v-model:visible="showTeamTip"></TeamTip>
+  <TeamTip :key="teamKey" v-model:open="showTeamTip"></TeamTip>
 </template>
 
 <script>

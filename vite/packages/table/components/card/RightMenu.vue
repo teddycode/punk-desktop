@@ -27,7 +27,7 @@
   </Menu>
 
   <a-drawer
-    v-model:visible="menuVisible"
+    v-model:open="menuVisible"
     :closable="true"
     :width="120"
     class="drawer"

@@ -21,7 +21,7 @@
     </div>
   </div>
   <!-- 预览添加抽屉 -->
-  <a-drawer v-model:visible="openDrawer" style="z-index: 9999" width="320" placement="right">
+  <a-drawer v-model:open="openDrawer" style="z-index: 9999" width="320" placement="right">
     <template #closeIcon>
       <Icon icon="xiangyou"></Icon>
     </template>

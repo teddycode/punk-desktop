@@ -20,7 +20,7 @@
     </vue-custom-scrollbar>
   </div>
 
-  <a-drawer placement="right" v-model:visible="actionVisible">
+  <a-drawer placement="right" v-model:open="actionVisible">
     <div class="line-title" style="color: var(--primary-text)">选中的小队：</div>
     <div
       style="color: var(--primary-text); background: var(--primary-bg)"

@@ -44,7 +44,7 @@
     <FullScreen v-if="this.isFullScreen" @exit="this.isFullScreen = false"> </FullScreen>
 
     <!-- 设置面板 -->
-    <a-drawer :width="500" title="设置" v-model:visible="settingVisible" placement="right">
+    <a-drawer :width="500" title="设置" v-model:open="settingVisible" placement="right">
       <vue-custom-scrollbar :settings="settingsScroller" style="height: 100%">
         <div class="setting-box">
           <div class="setting">

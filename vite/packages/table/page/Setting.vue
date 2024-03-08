@@ -199,7 +199,7 @@
   <div class="fixed inset-0 home-blur" style="z-index: 999" v-if="editNavigationVisible">
     <EditNavigation @setQuick="editNavigationVisible = false"></EditNavigation>
   </div>
-  <a-drawer :width="500" v-if="styleVisible" v-model:visible="styleVisible" placement="right" style="z-index: 9999999">
+  <a-drawer :width="500" v-if="styleVisible" v-model:open="styleVisible" placement="right" style="z-index: 9999999">
     <xt-task :modelValue="m03012"></xt-task>
     <XtColor v-model:color="bgColor" title="主题" btnText="恢复默认主题颜色" @onBtnClick="clearBgColor"></XtColor>
     <XtColor v-model:color="textColor" title="文本" btnText="恢复默认文本颜色" @onBtnClick="clearTextColor"></XtColor>
@@ -212,7 +212,7 @@
   </a-drawer>
 
   <a-modal
-    v-model:visible="visibleChooseScreen"
+    v-model:open="visibleChooseScreen"
     :title="null"
     width="100%"
     :footer="null"

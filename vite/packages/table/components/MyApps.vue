@@ -29,7 +29,7 @@
       </template>
     </a-dropdown>
   </vue-custom-scrollbar>
-  <a-drawer v-model:visible="menuVisible" :height="250" placement="bottom">
+  <a-drawer v-model:open="menuVisible" :height="250" placement="bottom">
     <a-row :gutter="[20, 20]" style="margin-top: 1em">
       <a-col>
         <div class="btn" @click="clear">

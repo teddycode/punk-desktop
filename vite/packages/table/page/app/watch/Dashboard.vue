@@ -311,7 +311,7 @@
                   </a-col>
                   <a-col :span="6">
                     <a-button type="primary" @click="visibleStages = true">参考</a-button>
-                    <a-drawer placement="right" v-model:visible="visibleStages">
+                    <a-drawer placement="right" v-model:open="visibleStages">
                       <pre>
 1.初始流量池：200-500
 2.千人流量池：3K-5K

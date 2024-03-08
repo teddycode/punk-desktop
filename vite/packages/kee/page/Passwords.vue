@@ -111,7 +111,7 @@
     class="filter-list-container"
     :width="216"
     placement="left"
-    v-model:visible="sideDrawerVisible"
+    v-model:open="sideDrawerVisible"
     @close="sideDrawerVisible = false"
   >
     <div class="password-filter-container">
@@ -190,7 +190,7 @@
     </div>
   </a-drawer>
 
-  <a-modal v-model:visible="importVisible" title="导入密码" width="80%" centered @ok="doImport">
+  <a-modal v-model:open="importVisible" title="导入密码" width="80%" centered @ok="doImport">
     <a-steps :current="importStep">
       <a-step>
         <!-- <span slot="title">Finished</span> -->

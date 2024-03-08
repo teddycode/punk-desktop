@@ -391,7 +391,7 @@
   </div>
 
   <a-drawer
-    v-model:visible="topClockSettingVisible"
+    v-model:open="topClockSettingVisible"
     :width="600"
     class="custom-class xt-text"
     placement="right"

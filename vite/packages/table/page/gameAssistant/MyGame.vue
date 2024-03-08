@@ -269,7 +269,7 @@
         </div>
       </div>
     </Modal>
-    <a-drawer :width="500" v-model:visible="drawerVisible" placement="right">
+    <a-drawer :width="500" v-model:open="drawerVisible" placement="right">
       <template #title>
         <div class="text-center">搜索</div>
       </template>
@@ -281,7 +281,7 @@
       >
       </a-input>
     </a-drawer>
-    <a-drawer :width="500" v-model:visible="settingVisible" placement="right">
+    <a-drawer :width="500" v-model:open="settingVisible" placement="right">
       <template #title>
         <div class="text-center">设置</div>
       </template>

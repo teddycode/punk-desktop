@@ -39,7 +39,7 @@
       </div>
     </Widget>
   </xt-task>
-  <a-drawer v-model:visible="panelVisible">
+  <a-drawer v-model:open="panelVisible">
     <div class="line">
       卡片地址：
       <a-input v-model:value="url" placeholder="请输入远程地址，需带协议" style="width: 230px"></a-input>

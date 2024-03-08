@@ -43,7 +43,7 @@
       </div>
     </div>
   </Widget>
-  <a-drawer v-model:visible="openSettings" placement="right" title="设置" width="500">
+  <a-drawer v-model:open="openSettings" placement="right" title="设置" width="500">
     <div class="flex flex-col" style="color: var(--primary-text)">
       <span class="drawer-title" style="margin-top: 0">类型</span>
       <span

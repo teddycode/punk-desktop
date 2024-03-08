@@ -119,7 +119,7 @@
     <!-- <teleport to="body" :disabled="false">
     </teleport> -->
 
-    <a-drawer v-model:visible="settingVisible" :width="500" placement="right" title="元社区小组件设置">
+    <a-drawer v-model:open="settingVisible" :width="500" placement="right" title="元社区小组件设置">
       <template #extra>
         <xt-button
           :h="32"

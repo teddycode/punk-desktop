@@ -32,7 +32,7 @@ export const goerli: ChainNetInfo = {
 
 // 磐古测试网
 export const punkos: ChainNetInfo = {
-  chainId: 123456789,
+  chainId: 11223344,
   name: 'PunkOS Test Network',
   currency: 'ETH',
   explorerUrl: 'https://goerli.etherscan.io',

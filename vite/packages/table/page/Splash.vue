@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import {message, Modal, Spin} from 'ant-design-vue'
+import {message, Modal} from 'ant-design-vue'
 import { appStore } from '@store'
 import { mapWritableState, mapActions } from 'pinia'
 import { codeStore } from '@store/code'
@@ -96,15 +96,12 @@ import {
 } from '@components/card/hooks/styleSwitch/setStyle';
 import {
   useWeb3Modal, useWeb3ModalAccount,
-  useWeb3ModalEvents,
   useDisconnect, createWeb3Modal,
 } from '@web3modal/ethers5/vue';
 import {preHandle} from "@components/widgets/courier/courierTool";
 import {useToast} from "vue-toastification";
-import {signMessage} from "./core/Wallets/events";
+import {setupWalletListener} from "./core/Wallets/events";
 import {walletConfig} from "@store/wallet";
-import {watch,h} from "vue";
-import {GetForLoginNonce, PostForAuthReq} from "@js/service/users";
 
 
 export default {
@@ -131,6 +128,10 @@ export default {
     ...mapWritableState(navStore, ['sideNavigationList', 'footNavigationList', 'rightNavigationList']),
     ...mapWritableState(myIcons, ['iconOption', 'iconList']),
   },
+  async beforeMount(){
+    // 創建钱包连接对话框
+    createWeb3Modal(walletConfig());
+  },
   async mounted () {
     // 后端服务器状态监测
     // setTimeout(() => {
@@ -143,10 +144,8 @@ export default {
     // }, 3000)
     // this.timeout()
 
-    // 創建钱包连接对话框
-    createWeb3Modal(walletConfig());
     // 设置钱包事件监听器
-    this.setupWalletListener();
+    setupWalletListener(this.processUserInfo,this.userInfo);
 
     //启动检测项的store，必须已经载入的项目，如果这边不写，就不确保必须载入完成
     //注意，此处的第二个参数，必须和此store同名，尤其注意有些命名里带了store的
@@ -197,6 +196,7 @@ export default {
       }, 1000)
     }, 100)
 
+    // TODO 获取本地已登录的用户
     this.getUserInfo()
     this.sortClock()
   },
@@ -244,41 +244,43 @@ export default {
       }
     },
     bindUserInfoResponse () {
-      ipc.removeAllListeners('userInfo')
-      ipc.on('userInfo', async (event, args) => {
-        console.log('splash接收到登录参数:', JSON.stringify(args))
-        if (args.data.uid === -2) {
-          this.netError = true
-          message.error({
-            content: '网络错误，请重试', key: 'net'
-          })
-        }
-        this.tipped = false
-        this.loading = false
-        if (args.data.uid <= 0) {
-          window.loadedStore['userInfo'] = true
-          return
-        }
-
-        const userInfo = args.data
-
-        let lvInfo = this.lvInfo
-        lvInfo.lv = userInfo.onlineGradeExtra.lv
-        let current = this.gradeTableGenerate(64)[lvInfo.lv]
-        let section = this.gradeTableGenerate(64)[lvInfo.lv + 1]
-        let remain = section[0] * 60 - (userInfo.onlineGradeExtra.minutes)
-        lvInfo.remainHour = Math.floor(remain / 60)
-        lvInfo.remainMinute = remain - (Math.floor(remain / 60) * 60)
-        lvInfo.minute = userInfo.onlineGradeExtra.minutes
-        lvInfo.percentage = ((lvInfo.minute - current[0] * 60) / ((current[1] - current[0]) * 60)) * 100
-        //this.lvInfo = lvInfo
-        window.loadedStore['userInfo'] = true
-        console.info('更新了用户信息:', JSON.stringify(userInfo))
-        this.setUser(userInfo)
-        if (this.$route.name === 'splash') {
-          this.enter()
-        }
-      })
+      window.loadedStore['userInfo'] = true
+      // ipc.removeAllListeners('userInfo')
+      // ipc.on('userInfo', async (event, args) => {
+      //   // TODO 搞嘛了，不知道这是从哪儿调的
+      //   console.log('splash接收到参数:', event ,JSON.stringify(args))
+      //   if (args.data.uid === -2) {
+      //     this.netError = true
+      //     message.error({
+      //       content: '网络错误，请重试', key: 'net'
+      //     })
+      //   }
+      //   this.tipped = false
+      //   this.loading = false
+      //   if (args.data.uid <= 0) {
+      //     window.loadedStore['userInfo'] = true
+      //     return
+      //   }
+      //
+      //   const userInfo = args.data
+      //
+      //   let lvInfo = this.lvInfo
+      //   lvInfo.lv = userInfo.onlineGradeExtra.lv
+      //   let current = this.gradeTableGenerate(64)[lvInfo.lv]
+      //   let section = this.gradeTableGenerate(64)[lvInfo.lv + 1]
+      //   let remain = section[0] * 60 - (userInfo.onlineGradeExtra.minutes)
+      //   lvInfo.remainHour = Math.floor(remain / 60)
+      //   lvInfo.remainMinute = remain - (Math.floor(remain / 60) * 60)
+      //   lvInfo.minute = userInfo.onlineGradeExtra.minutes
+      //   lvInfo.percentage = ((lvInfo.minute - current[0] * 60) / ((current[1] - current[0]) * 60)) * 100
+      //   //this.lvInfo = lvInfo
+      //   window.loadedStore['userInfo'] = true
+      //   console.info('更新了用户信息:', JSON.stringify(userInfo))
+      //   this.setUser(userInfo)
+      //   if (this.$route.name === 'splash') {
+      //     this.enter()
+      //   }
+      // })
     },
     initStore (store, name) {
       if (!window.loadedStore) {
@@ -463,139 +465,56 @@ export default {
       console.log("加载成功.")
     },
     async processUserInfo(data){
-        const userInfo = {
-            ...data?.userInfo,
-            uid: data.userInfo.id,
-            "fans": 100,
-            "follow": 10,
-            "grade": {
-                "id": 2,
-                "name": "6级",
-                "new_name": "6级",
-                "grade": 6,
-                "diff": 26,
-                "next": 50,
-                "icon": "https://jxxt-1257689580.cos.ap-chengdu.myqcloud.com/ef3c43f233adc069819fa367032238a3.png?upload_type",
-                "pc_icon": "https://jxxt-1257689580.cos.ap-chengdu.myqcloud.com/ef3c43f233adc069819fa367032238a3.png?imageMogr2/crop/64x32/gravity/center",
-                "image": "https://jxxt-1257689580.cos.ap-chengdu.myqcloud.com/ef3c43f233adc069819fa367032238a3.png?upload_type",
-                "now": 20,
-                "true_id": 2
-            },
-            "post_count": 0,
-            "signature": "",
-            "frame": "",
-            "onlineGrade": {
-                "crown": 0,
-                "sun": 0,
-                "moon": 1,
-                "star": 0
-            },
-            "onlineGradeExtra": {
-                "cumulativeHours": 171,
-                "lv": 4,
-                "minutes": 10269,
-                "rank": 3469,
-                "distance": 2,
-                "percentage": 0.8569602507009731
-            }
+      const userInfo = {
+        ...data?.userInfo,
+        uid: data.userInfo.id,
+        "fans": 100,
+        "follow": 10,
+        "grade": {
+            "id": 2,
+            "name": "6级",
+            "new_name": "6级",
+            "grade": 6,
+            "diff": 26,
+            "next": 50,
+            "icon": "https://jxxt-1257689580.cos.ap-chengdu.myqcloud.com/ef3c43f233adc069819fa367032238a3.png?upload_type",
+            "pc_icon": "https://jxxt-1257689580.cos.ap-chengdu.myqcloud.com/ef3c43f233adc069819fa367032238a3.png?imageMogr2/crop/64x32/gravity/center",
+            "image": "https://jxxt-1257689580.cos.ap-chengdu.myqcloud.com/ef3c43f233adc069819fa367032238a3.png?upload_type",
+            "now": 20,
+            "true_id": 2
+        },
+        "post_count": 0,
+        "signature": "",
+        "frame": "",
+        "onlineGrade": {
+            "crown": 0,
+            "sun": 0,
+            "moon": 1,
+            "star": 0
+        },
+        "onlineGradeExtra": {
+            "cumulativeHours": 171,
+            "lv": 4,
+            "minutes": 10269,
+            "rank": 3469,
+            "distance": 2,
+            "percentage": 0.8569602507009731
         }
-        this.setUser(userInfo)
-        if (this.$route.name === 'splash') {
-            this.enter();
-        }
-        // ipc.send('userInfo', {
-        //     data: {
-        //         ...data?.userInfo,
-        //         uid: data.userInfo?.id,
-        //     },
-        // });
+      }
+      window.loadedStore['userInfo'] = true
+      ipc.invoke("saveUserToDB",userInfo);
+      this.setUser(userInfo)
+      if (this.$route.name === 'splash') {
+          this.enter();
+      }
+      // ipc.send('userInfo', {
+      //     data: {
+      //         ...data?.userInfo,
+      //         uid: data.userInfo?.id,
+      //     },
+      // });
     },
-    async setupWalletListener(){
-      const toast = useToast();
-      // 监听钱包事件
-      const w3mEvent = useWeb3ModalEvents();
-      watch(w3mEvent, () => {
-        switch (w3mEvent.data.event) {
-          case 'MODAL_OPEN':
-            console.log('测试事件响应：打开了窗口');
-            break;
-          case 'SELECT_WALLET':
-            console.log('测试事件响应：选择了钱包');
-            break;
-          case 'CONNECT_ERROR':
-            console.log('测试事件响应：连接失败');
-            toast.error('钱包连接失败，请重试！', null);
-            break;
-          case 'CONNECT_SUCCESS': // TODO Bug here, no events emitted when connect or disconnect
-            console.log('钱包连接成功');
-            toast.success('钱包连接成功！', this);
-            break;
-          case 'DISCONNECT_SUCCESS':
-            console.log('测试事件响应：断开成功');
-            break;
-          case 'MODAL_CLOSE': // 只能通过监听close事件实现
-            const w3mAccount = useWeb3ModalAccount();
-            let connectStatus = w3mAccount.isConnected.value;
-            console.log('测试事件响应：关闭了窗口');
-            if (this.userInfo) {
-              console.log('登录后的钱包操作');
-              if (connectStatus) {
-                  console.log('还是处于登录状态！');
-              } else {
-                  console.log('已经断开钱包连接了！');
-              }
-            } else {
-              if (connectStatus) {
-                  console.log('钱包连接成功了');
-                toast.success('钱包连接成功');
-                // 向后端请求一个随机数
-                GetForLoginNonce(useWeb3ModalAccount().address.value).then((res) => {
-                  console.log('获取后端数据：', res);
-                  if (res === undefined || res === null) {
-                    message.error('认证失败，请稍后重试');
-                    return;
-                  }
-                  // 向钱包请求签名
-                  toast.success('正在请求签名');
-                  const modal = Modal.info({
-                    title:"正在请求认证...",
-                    centered: true,
-                    content: h('div', {
-                      style: { display: 'flex', justifyContent: 'center', alignItems: 'center' } },
-                        h(Spin, { size: 'large' })),
-                  });
-                  signMessage(res?.data).then((data) => {
-                    console.log('获取返回数据：', data);
-                    // 返回签名到后端并获取登录结果
-                    toast.success('请求验证');
-                    PostForAuthReq(data).then((resp) => {
-                      console.log('登录认证返回的数据：', resp);
-                      if (resp?.code === 200 && resp?.data !== null) {
-                          message.success('认证成功！');
-                          this.processUserInfo(resp?.data);
-                      } else {
-                          message.error('认证失败：', resp?.msg);
-                      }
-                      modal.destroy();
-                    });
-                  })
-                .catch((error) => {
-                    if (error?.code === 5000) {
-                        message.error('用户拒绝认证请求！');
-                    }
-                    modal.destroy();
-                  });
-                });
-              } else {
-                console.log('连接失败了，请重试');
-              }
-            }
-            break;
-          default:
-              break;
-    }
-      });
-    }
+
   },
 }
 </script>

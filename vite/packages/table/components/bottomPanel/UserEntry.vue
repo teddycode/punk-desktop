@@ -113,22 +113,23 @@ export default defineComponent({
       this.showMyProp = val;
     },
     login() {
-      tsbApi.user.login((data) => {
-        console.log('用户已登录：', data);
-        this.userInfo = data;
-        ipc.send('getDetailUserInfo');
-      });
+      // tsbApi.user.login((data) => {
+      //   console.log('用户已登录：', data);
+      //   this.userInfo = data;
+      //   ipc.send('getDetailUserInfo');
+      // });
+      this.$router.replace('/');
     },
     logout(uid) {
       Modal.confirm({
-        title: '退出此帐号:' + this.userInfo.nickname,
+        title: '退出此帐号: ' + this.userInfo.nickname,
         content: '退出帐号并不会影响帐号数据，仅仅是将本地帐号退出。但是退出后无法再使用此帐号下的所有空间。',
         centered: true,
         confirmLoading: true,
         destroyOnClose: true,
         okText: '确认',
         cancelText: '取消',
-        onOk: async (closer) => {
+        onOk: async () => {
           await this.deleteUserInfo();
           let res = await ipc.invoke('direct-logout', uid);
           if (res) {

@@ -2,8 +2,8 @@ import axios from 'axios';
 import message from 'ant-design-vue/es/message';
 import { getConfig } from '../serverApi';
 
-export const API_PREFIX: string = 'http://127.0.0.1:9090/api'; // local env
-// export const API_PREFIX: string = 'http://123.157.213.104:18081/api'; //prod env
+// export const API_PREFIX: string = 'http://127.0.0.1:9090/api'; // local env
+export const API_PREFIX: string = 'http://123.157.213.104:18081/api'; //prod env
 
 const instance = axios.create({
   baseURL: API_PREFIX,
@@ -15,7 +15,7 @@ instance.interceptors.request.use(
   async (config) => {
     // 设置发送之前数据需要做什么处理
     let { headers } = await getConfig();
-    config.headers['Authorization'] = headers.Authorization || 'none';
+    config.headers['Authorization'] = headers?.Authorization || 'none';
     return config;
   },
   async (error) => {
@@ -36,7 +36,7 @@ const onResponseHandler = (response) => {
   if (data.code && data.code === 200) {
     return data;
   }
-  message.warn(data.msg || 'Response error');
+  message.warn(data.msg || '响应异常');
   return Promise.reject(response);
 };
 
@@ -70,7 +70,7 @@ const onRejectHandler = (error) => {
         message.error(res.msg || '请求资源不存在');
         break;
       case 408:
-        message.error(res.message || '已经收藏过该视频');
+        message.error(res.msg || '已经收藏过该视频');
         break;
       case 500:
         message.error(res.msg || '服务器开小差啦');

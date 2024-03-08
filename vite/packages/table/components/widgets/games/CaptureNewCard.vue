@@ -35,12 +35,12 @@
     </div>
   </Widget>
   <teleport to="#app">
-    <Modal v-if="visibleSource" v-model:visible="visibleSource" :blurFlag="true">
+    <Modal v-if="visibleSource" v-model:open="visibleSource" :blurFlag="true">
       <SourceSelector @choosenSource="choosenSource"> </SourceSelector>
     </Modal>
   </teleport>
   <a-drawer
-    v-model:visible="visibleSettings"
+    v-model:open="visibleSettings"
     :bodyStyle="{ overflow: 'hidden' }"
     title="设置"
     width="500"

@@ -1,5 +1,5 @@
 <template>
-  <a-drawer v-model:visible="showDrawer" placement="right" style="z-index: 9999" width="500" @close="close">
+  <a-drawer v-model:open="showDrawer" placement="right" style="z-index: 9999" width="500" @close="close">
     <template #extra>
       <a-space>
         <div class="add-scheme" @click="addPlan">

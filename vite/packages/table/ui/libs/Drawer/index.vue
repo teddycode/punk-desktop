@@ -6,7 +6,7 @@
       :height="200"
       :placement="placement"
       style="z-index: 99999999"
-      v-model:visible="visible"
+      v-model:open="visible"
       @close="close()"
       :bodyStyle="{ padding: '12px' }"
     >

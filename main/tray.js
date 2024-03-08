@@ -158,11 +158,30 @@ app.whenReady().then(() => {
       }
     }
   });
+  ipc.handle('saveUserToDB', async (event, args) => {
+    console.log('saving userInfo:', args);
+    if (args) {
+      const userInfo = {
+        uid: args?.id,
+        code: args?.token,
+        token: args?.token,
+        user_info: args,
+        refresh_token: args.token,
+        expire_time: new Date().getTime() + 7 * 24 * 3600 * 1000,
+        refresh_expire_time: new Date().getTime() + 7 * 24 * 3600 * 1000,
+        last_login_time: Date.now(),
+        is_current: true,
+      };
+      await userModel.setCurrent(userInfo);
+    }
+  });
   ipc.on('getDetailUserInfo', async (event, args) => {
+    console.log('查询用户信息详情：', args);
     const isLogged = await userModel.isLogged();
     if (isLogged) {
       getUserInfo()
         .then((result) => {
+          console.log('get detail success:', result);
           if (result.data.data.uid) {
             event.reply('userInfo', result.data);
           } else {
@@ -170,6 +189,7 @@ app.whenReady().then(() => {
           }
         })
         .catch(() => {
+          console.log('get detail failed:', result);
           event.reply('userInfo', { data: { uid: -2 } }); // -2代表异常
         });
     } else {

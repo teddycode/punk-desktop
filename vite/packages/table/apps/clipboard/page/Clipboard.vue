@@ -79,7 +79,7 @@
   <HorizontalDrawer ref="clipRef" :rightSelect="filterList" @getArea="getClipItem"></HorizontalDrawer>
 
   <!-- 搜索右侧抽屉开始 -->
-  <a-drawer :width="500" v-model:visible="drawerVisible" title="搜索" placement="right">
+  <a-drawer :width="500" v-model:open="drawerVisible" title="搜索" placement="right">
     <div class="flex mb-3">
       <a-input
         @keydown.enter="clickSearch"

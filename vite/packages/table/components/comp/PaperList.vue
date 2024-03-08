@@ -23,7 +23,7 @@
       </a-col>
     </a-row>
   </viewer>
-  <a-drawer v-model:visible="visibleMenu" :height="200" placement="bottom">
+  <a-drawer v-model:open="visibleMenu" :height="200" placement="bottom">
     <a-row :gutter="20" style="text-align: center">
       <a-col :span="4">
         <div class="btn" @click="setDesktopPaper">

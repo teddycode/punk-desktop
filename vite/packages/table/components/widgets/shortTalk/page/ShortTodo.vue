@@ -31,7 +31,7 @@
       </div>
     </div>
     <!-- 设置面板 -->
-    <a-drawer v-model:visible="settingVisible" :width="500" placement="right" title="设置">
+    <a-drawer v-model:open="settingVisible" :width="500" placement="right" title="设置">
       <template #extra>
         <div class="xt-active-btn" style="width: 64px; height: 40px" @click="changeVisible">提交</div>
       </template>

@@ -428,7 +428,7 @@
     title="设置"
     :bodyStyle="{ overflow: 'hidden' }"
     :placement="right"
-    v-model:visible="recordSetShow"
+    v-model:open="recordSetShow"
     @close="recordSetShow = false"
   >
     <div class="flex flex-col scroll-container">
@@ -501,7 +501,7 @@
     </div>
   </a-drawer>
 
-  <a-drawer width="500" title="设置" :placement="right" v-model:visible="setShow">
+  <a-drawer width="500" title="设置" :placement="right" v-model:open="setShow">
     <div class="flex flex-col">
       <div
         v-for="item in monitorSetData"

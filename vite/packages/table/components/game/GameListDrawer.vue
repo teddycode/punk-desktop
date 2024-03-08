@@ -48,7 +48,7 @@ export default {
 </script>
 
 <template>
-  <a-drawer v-model:visible="drawerVisible" :height="270" placement="bottom" @close="visibleChanged">
+  <a-drawer v-model:open="drawerVisible" :height="270" placement="bottom" @close="visibleChanged">
     <vue-custom-scrollbar :settings="outerSettings" style="width: 100%; height: 100%; white-space: nowrap">
       <div
         v-for="game in items"

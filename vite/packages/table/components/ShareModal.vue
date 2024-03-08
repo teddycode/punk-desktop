@@ -31,7 +31,7 @@
     </div>
   </div>
   <!-- 发布抽屉 -->
-  <a-drawer v-model:visible="release" placement="right" style="z-index: 999999" width="500">
+  <a-drawer v-model:open="release" placement="right" style="z-index: 999999" width="500">
     <template #extra>
       <a-space>
         <div class="add-scheme" @click="saveVal">发布</div>

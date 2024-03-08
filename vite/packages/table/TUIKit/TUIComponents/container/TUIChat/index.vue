@@ -141,7 +141,7 @@
     placement="right"
     width="500"
     title="群管理"
-    v-model:visible="groupVisible"
+    v-model:open="groupVisible"
     :bodyStyle="{ padding: '24px 24px 40px 24px' }"
   >
     <!-- :closable="false" -->
@@ -162,7 +162,7 @@
     />
   </a-drawer>
 
-  <a-drawer placement="right" width="500" :closable="false" v-model:visible="updateVisible">
+  <a-drawer placement="right" width="500" :closable="false" v-model:open="updateVisible">
     <div class="flex items-center" style="margin-bottom: 16px">
       <div
         class="flex items-center active-button pointer justify-center rounded-lg"
@@ -219,7 +219,7 @@
   </a-drawer>
 
   <teleport to="body">
-    <Modal v-model:visible="inForward" v-if="inForward" :blurFlag="true">
+    <Modal v-model:open="inForward" v-if="inForward" :blurFlag="true">
       <ForwardModal :content="currentMessage" @close="inForward = false"></ForwardModal>
     </Modal>
   </teleport>

@@ -23,7 +23,7 @@
       </div>
     </div>
     <a-drawer
-      v-model:visible="settingVisible"
+      v-model:open="settingVisible"
       :width="500"
       placement="right"
       style="z-index: 999999999; scrollbar-width: none"

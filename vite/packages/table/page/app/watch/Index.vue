@@ -289,7 +289,7 @@
     </a-tabs>
   </div>
 
-  <a-drawer :width="600" class="no-drag" v-model:visible="addTaskVisible" style="overflow: hidden">
+  <a-drawer :width="600" class="no-drag" v-model:open="addTaskVisible" style="overflow: hidden">
     <div style="margin: 1em; overflow: hidden">
       <div class="line-title">任务信息</div>
       <div class="line">
@@ -347,7 +347,7 @@
     </div>
   </a-drawer>
 
-  <a-drawer :title="null" placement="bottom" :closable="true" v-model:visible="menuVisible" @close="onClose">
+  <a-drawer :title="null" placement="bottom" :closable="true" v-model:open="menuVisible" @close="onClose">
     <a-row :gutter="20">
       <template v-if="currentTask">
         <a-col>
@@ -374,7 +374,7 @@
     </a-row>
   </a-drawer>
   <a-modal
-    v-model:visible="clickTipShow"
+    v-model:open="clickTipShow"
     :closable="false"
     title=""
     @ok="() => {}"

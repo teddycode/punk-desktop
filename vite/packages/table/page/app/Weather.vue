@@ -59,7 +59,7 @@
 
     <a-empty class="mt-20" v-if="cities.length === 0" description="请先添加城市"></a-empty>
   </div>
-  <a-drawer v-model:visible="visibleAdd">
+  <a-drawer v-model:open="visibleAdd">
     <h3 style="color: var(--primary-text)">添加城市</h3>
     <a-input-search
       id="searchInput"

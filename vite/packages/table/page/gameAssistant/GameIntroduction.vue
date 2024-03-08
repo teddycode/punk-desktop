@@ -107,7 +107,7 @@
   </template>
 
 
-  <a-drawer :width="500" @close="this.searchData=''" v-model:visible="drawerVisible" placement="right">
+  <a-drawer :width="500" @close="this.searchData=''" v-model:open="drawerVisible" placement="right">
     <template #title>
       <div class="text-center" v-if="drawerType==='search'">搜索</div>
       <div class="text-center" v-else>说明</div>
@@ -161,7 +161,7 @@
       </div>
     </div>
   </a-drawer>
-<!--  <Modal v-if="addVisible" v-model:visible="addVisible" :blurFlag="true">-->
+<!--  <Modal v-if="addVisible" v-model:open="addVisible" :blurFlag="true">-->
 <!--    <div class="p-5">-->
 <!--      <div class="line-title">搜索</div>-->
 <!--      <div class="line">当关键词不同的时候，请对输入框单独输入。</div>-->

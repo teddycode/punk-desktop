@@ -44,10 +44,12 @@
           align-content: center;
           flex-direction: column;
           position: relative;
-          overflow: hidden;
+          overflow-x: hidden;
+          overflow-y: auto;
         "
       >
         <!-- 子内容区域        -->
+        <!--        一级页面模板 -->
         <keep-alive>
           <router-view></router-view>
         </keep-alive>

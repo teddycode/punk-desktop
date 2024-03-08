@@ -4,8 +4,7 @@
       <layoutHeader :style="'position: fixed;zIndex:10;width:100%;'"></layoutHeader>
     </a-layout-header>
     <a-layout-content>
-      <!--      <path-bar :style="{ position: 'fixed', zIndex: 10 }"></path-bar>-->
-      <div :style="{ background: '#fffffa', padding: '20px', minHeight: '280px' }">
+      <div style="background: #fffffa; min-height: 100%; overflow-y: auto; overflow-x: hidden">
         <keep-alive>
           <router-view />
         </keep-alive>
