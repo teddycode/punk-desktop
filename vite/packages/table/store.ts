@@ -80,6 +80,7 @@ export const appStore = defineStore(
         relevanceEnable: false, //开启关联的电商平台快递
         customCourier: false, // 自定义快递
         tagVisible: true, // 快递组件排序tag提示
+        language: 'zh-CN', // 语言
       },
 
       routeUpdateTime: Date.now(), //用于更新滚动条

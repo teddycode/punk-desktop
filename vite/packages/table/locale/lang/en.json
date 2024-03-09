@@ -1,0 +1,95 @@
+{
+  "appName": "Pangu cross-chain client",
+  "backgroud": "background",
+  "bg": {
+    "addMark": "Increases background blur when turned on",
+    "choose": "Choose your favorite picture as your workbench desktop background.",
+    "clea": "clear background",
+    "clear": "clear background",
+    "desktop": "desktop background",
+    "masrk": "background blur",
+    "openTPTip": "This type of function consumes high performance, please enable it as appropriate.",
+    "openTransparent": "Transparent background after turning on",
+    "setting": "Background settings",
+    "transparent": "Transparent Background"
+  },
+  "btn": {
+    "change": "switch",
+    "recoverTextColor": "Restore default text color",
+    "recoverThemeColor": "Restore default theme colors",
+    "wallpapperColor": "Restore default wallpaper color"
+  },
+  "chooseLang": "Choose a language",
+  "desktop": {
+    "effectFlow": "falling effect",
+    "effectFlowTip": "After turning it on, the page will have a cool falling effect.",
+    "effectNum": "Number of falling objects",
+    "effectRain": "rain",
+    "effects": "Falling objects",
+    "ligh": "Frame RGB light",
+    "lightTip": "Display RGB effects around the workbench window."
+  },
+  "menu": {
+    "name": "front page"
+  },
+  "message": {
+    "Danger": "WeChat",
+    "Info": "information",
+    "Primary": "primary color",
+    "Success": "success",
+    "Warning": "warn",
+    "logoutFail": "Account logout failed, please try again!",
+    "logoutSuccess": "Account logged out successfully, please log in again",
+    "offlineTip": "After using offline mode, some entertainment and social functions, such as games, weather, etc., will be hidden.",
+    "serverTimeout": "Server connection timed out. \nThe server may be under maintenance, please try again later.",
+    "teamTip": "After using the minimalist mode, some entertainment and social functions, such as the squad function, will be hidden."
+  },
+  "name": "English",
+  "setting": "Setting",
+  "settings": {
+    "account": "Address verification",
+    "appInfo": "Application information",
+    "appManage": "Application management",
+    "base": "Basic Settings",
+    "chooseScr": "selection screen",
+    "common": "Commonly used",
+    "dark": "dark mode",
+    "enableAccValid": "Address verification",
+    "general": "General settings",
+    "guideBar": "Navigation bar editing",
+    "language": "language setting",
+    "msg": {
+      "save": "After using performance mode, various interface animations will be turned off, and processes stuck in memory will be cleaned up as much as possible. \nIt may cause the opening interface effect to be compromised or application switching to be slow. \nBut it can significantly reduce memory, CPU, and GPU usage."
+    },
+    "offline": "Offline mode",
+    "otherScr": "Split screen settings",
+    "others": "other",
+    "power": "power supply",
+    "quiet": "Do not disturb messages",
+    "save": "Energy saving mode",
+    "simple": "minimalist mode",
+    "social": "Social network",
+    "switch": "Quick switch function",
+    "text": "text",
+    "theme": "theme",
+    "themeColor": "theme color",
+    "touch": "Set up a touch screen",
+    "wallpaper": "wallpaper",
+    "window": "window control"
+  },
+  "startUsage": "start using",
+  "toast": {
+    "walletConnected": "Wallet is connected, logging in..."
+  },
+  "welcome": {
+    "call": "Hello",
+    "changeAcc": "Switch account",
+    "description": "——One-stop terminal connecting web2 and web3",
+    "hello": "Welcome to use Pangu cross-chain client to take you to explore the new world of web3!",
+    "loginOrReg": "Login/Register account",
+    "netErr": "If you encounter network problems, please check the system proxy or wait patiently.",
+    "retry": "Retry",
+    "say1": "This client requires the help of back-end computing services.",
+    "say2": "Please log in to use."
+  }
+}

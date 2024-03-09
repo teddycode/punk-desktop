@@ -1,0 +1,95 @@
+{
+  "appName": "Pangu oʻzaro zanjirli mijoz",
+  "backgroud": "fon",
+  "bg": {
+    "addMark": "Yoqilganda fon xiralashishini oshiradi",
+    "choose": "Ish stoli ish stoli foni sifatida sevimli rasmingizni tanlang.",
+    "clea": "aniq fon",
+    "clear": "aniq fon",
+    "desktop": "ish stoli foni",
+    "masrk": "fon xiralashishi",
+    "openTPTip": "Ushbu turdagi funksiya yuqori unumdorlikni sarflaydi, iltimos, uni mos ravishda yoqing.",
+    "openTransparent": "Yoqilgandan keyin shaffof fon",
+    "setting": "Fon sozlamalari",
+    "transparent": "Shaffof fon"
+  },
+  "btn": {
+    "change": "almashtirish",
+    "recoverTextColor": "Standart matn rangini tiklang",
+    "recoverThemeColor": "Standart mavzu ranglarini tiklang",
+    "wallpapperColor": "Standart fon rasmi rangini tiklang"
+  },
+  "chooseLang": "Til tanlang",
+  "desktop": {
+    "effectFlow": "tushish effekti",
+    "effectFlowTip": "Uni yoqgandan so'ng, sahifa salqin tushish effektiga ega bo'ladi.",
+    "effectNum": "Tushgan narsalar soni",
+    "effectRain": "yomg'ir",
+    "effects": "Yiqilgan narsalar",
+    "ligh": "Ramka RGB nuri",
+    "lightTip": "Ish stoli oynasi atrofida RGB effektlarini ko'rsatish."
+  },
+  "menu": {
+    "name": "oldingi sahifa"
+  },
+  "message": {
+    "Danger": "WeChat",
+    "Info": "ma `lumot",
+    "Primary": "asosiy rang",
+    "Success": "muvaffaqiyat",
+    "Warning": "ogohlantir",
+    "logoutFail": "Hisobdan chiqish amalga oshmadi, qayta urinib ko‘ring!",
+    "logoutSuccess": "Hisob qaydnomasidan muvaffaqiyatli chiqdi, qayta kiring",
+    "offlineTip": "Oflayn rejimdan foydalangandan so'ng, o'yinlar, ob-havo va boshqalar kabi ba'zi ko'ngilochar va ijtimoiy funktsiyalar yashiriladi.",
+    "serverTimeout": "Serverga ulanish vaqti tugadi. \nServerga texnik xizmat ko‘rsatilayotgan bo‘lishi mumkin, keyinroq qayta urinib ko‘ring.",
+    "teamTip": "Minimalist rejimdan foydalangandan so'ng, ba'zi ko'ngilochar va ijtimoiy funktsiyalar, masalan, otryad funksiyasi yashiriladi."
+  },
+  "name": "Uzbek",
+  "setting": "Sozlama",
+  "settings": {
+    "account": "Manzilni tekshirish",
+    "appInfo": "Ilova ma'lumotlari",
+    "appManage": "Ilova boshqaruvi",
+    "base": "Asosiy sozlamalar",
+    "chooseScr": "tanlash ekrani",
+    "common": "Odatda ishlatiladi",
+    "dark": "qorong'u rejim",
+    "enableAccValid": "Manzilni tekshirish",
+    "general": "Umumiy sozlamalar",
+    "guideBar": "Navigatsiya panelini tahrirlash",
+    "language": "til sozlamalari",
+    "msg": {
+      "save": "Ishlash rejimidan foydalangandan so'ng, turli xil interfeys animatsiyalari o'chiriladi va xotirada tiqilib qolgan jarayonlar imkon qadar tozalanadi. \nBu ochilish interfeysi effektining buzilishiga yoki dastur almashinuvining sekinlashishiga olib kelishi mumkin. \nAmmo bu xotira, protsessor va GPU foydalanishni sezilarli darajada kamaytirishi mumkin."
+    },
+    "offline": "Oflayn rejim",
+    "otherScr": "Ekran sozlamalarini ajratish",
+    "others": "boshqa",
+    "power": "quvvatlantirish manbai",
+    "quiet": "Xabarlarni bezovta qilmang",
+    "save": "Energiyani tejash rejimi",
+    "simple": "minimalist rejim",
+    "social": "Ijtimoiy tarmoq",
+    "switch": "Tez almashtirish funktsiyasi",
+    "text": "matn",
+    "theme": "mavzu",
+    "themeColor": "mavzu rangi",
+    "touch": "Sensorli ekranni sozlang",
+    "wallpaper": "fon rasmi",
+    "window": "oynani boshqarish"
+  },
+  "startUsage": "foydalanishni boshlang",
+  "toast": {
+    "walletConnected": "Hamyon ulandi, tizimga kirmoqda..."
+  },
+  "welcome": {
+    "call": "Salom",
+    "changeAcc": "Hisobni almashtirish",
+    "description": "——web2 va web3-ni bir-biriga bog‘lovchi bir martalik terminal",
+    "hello": "Sizni web3 ning yangi dunyosini kashf qilish uchun Pangu kross-zanjir mijozidan foydalanishga xush kelibsiz!",
+    "loginOrReg": "Hisobga kirish/ro'yxatdan o'tish",
+    "netErr": "Agar tarmoq muammolariga duch kelsangiz, tizim proksi-serverini tekshiring yoki sabr bilan kuting.",
+    "retry": "Qayta urinish",
+    "say1": "Bu mijoz backend hisoblash xizmatlari yordamini talab qiladi.",
+    "say2": "Foydalanish uchun tizimga kiring."
+  }
+}

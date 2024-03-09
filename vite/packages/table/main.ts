@@ -83,7 +83,7 @@ import ElementPlus from 'element-plus';
 // 导入fontawesomeIcon
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 //国际化
-import i18n from './lang/index';
+import i18n from './locale/index';
 
 import mitt from 'mitt';
 // const { bus, setupApp, preloadApp, destroyApp } = WujieVue;
@@ -145,7 +145,7 @@ const $app = app
   .use(WujieVue)
   .use(VueShepherdPlugin)
   .use(XTUI)
-  // .use(i18n) // 加载国际化插件
+  .use(i18n) // 加载国际化插件
   .mount('#app');
 
 registerXTUI(app);

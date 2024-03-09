@@ -1,0 +1,95 @@
+{
+  "appName": "磐古跨鏈客戶端",
+  "backgroud": "背景",
+  "bg": {
+    "addMark": "開啟後增加背景模糊度",
+    "choose": "選擇喜歡的圖片作為工作台桌面背景。",
+    "clea": "清除背景",
+    "clear": "清除背景",
+    "desktop": "桌面背景",
+    "masrk": "背景模糊度",
+    "openTPTip": "此類功能性能消耗較高，請酌情開啟",
+    "openTransparent": "開啟後透明背景",
+    "setting": "背景設定",
+    "transparent": "透明背景"
+  },
+  "btn": {
+    "change": "切換",
+    "recoverTextColor": "恢復預設文字顏色",
+    "recoverThemeColor": "恢復預設主題顏色",
+    "wallpapperColor": "恢復預設桌布顏色"
+  },
+  "chooseLang": "選擇語言",
+  "desktop": {
+    "effectFlow": "飄落效果",
+    "effectFlowTip": "開啟後頁面會有酷炫的飄落效果",
+    "effectNum": "飄落物數量",
+    "effectRain": "雨",
+    "effects": "飄落物",
+    "ligh": "邊框RGB燈",
+    "lightTip": "在工作台視窗四周顯示RGB效果。"
+  },
+  "menu": {
+    "name": "首頁"
+  },
+  "message": {
+    "Danger": "微信",
+    "Info": "資訊",
+    "Primary": "原色",
+    "Success": "成功",
+    "Warning": "警告",
+    "logoutFail": "帳號退出失敗，請重試！",
+    "logoutSuccess": "帳號退出成功,請重新登錄",
+    "offlineTip": "使用離線模式後，將隱藏部分娛樂、社交類的功能，例如遊戲、天氣等。",
+    "serverTimeout": "伺服器連接逾時。\n可能伺服器正在維護，請稍後再試。",
+    "teamTip": "使用極簡模式後，將隱藏部分娛樂、社交類別的功能，例如小隊功能。"
+  },
+  "name": "中文 (繁體中文)",
+  "setting": "Setting",
+  "settings": {
+    "account": "地址校驗",
+    "appInfo": "應用程式資訊",
+    "appManage": "應用程式管理",
+    "base": "基礎設定",
+    "chooseScr": "選擇螢幕",
+    "common": "常用",
+    "dark": "深色模式",
+    "enableAccValid": "地址校驗",
+    "general": "通用設定",
+    "guideBar": "導覽列編輯",
+    "language": "設定語言",
+    "msg": {
+      "save": "使用效能模式後，將關閉各種介面動畫，同時盡可能清理掉滯留記憶體中的進程。\n可能導致開啟介面效果折損或套用切換緩慢。\n但可以顯著降低記憶體、CPU、GPU佔用。"
+    },
+    "offline": "離線模式",
+    "otherScr": "分割畫面設定",
+    "others": "其他",
+    "power": "電源",
+    "quiet": "訊息免打擾",
+    "save": "節能模式",
+    "simple": "極簡模式",
+    "social": "社群網路",
+    "switch": "快速開關功能",
+    "text": "文字",
+    "theme": "主題",
+    "themeColor": "主題顏色",
+    "touch": "設定觸控螢幕",
+    "wallpaper": "壁紙",
+    "window": "視窗控制"
+  },
+  "startUsage": "開始使用",
+  "toast": {
+    "walletConnected": "錢包已連接，正在登入..."
+  },
+  "welcome": {
+    "call": "你好",
+    "changeAcc": "切換帳號",
+    "description": "—— 連接web2與web3的一站式終端",
+    "hello": "歡迎使用磐古跨鏈客戶端，帶你探索通往web3的新世界！",
+    "loginOrReg": "登入/註冊帳號",
+    "netErr": "如遇網路問題，請檢查系統代理或耐心等待。",
+    "retry": "重試",
+    "say1": "本客戶端需要藉助後端運算服務，",
+    "say2": "請登入後使用。"
+  }
+}

@@ -1,4 +1,4 @@
-import request from '../util/request';
+import request from '../axios/utils/request';
 
 export const TranslateUsingGET = async (from: string, to: string, text: string) => {
   return await request({

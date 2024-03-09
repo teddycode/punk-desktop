@@ -16,7 +16,7 @@
           </path>
         </svg>
         <div style="color: #2eb9ce">
-          欢迎使用磐古跨链客户端，带你探索通往web3的新世界！
+          {{$t('welcome.hello')}}
         </div>
       </div>
     </div>
@@ -25,22 +25,27 @@
         <h3 style="text-align: center;font-size: 1.5em">
           <a-avatar src="/icons/logo128.png" style="vertical-align: top"></a-avatar>
           <div style="color: whitesmoke">
-           磐古跨链客户端
+            {{$t('appName')}}
           </div>
         </h3>
-        <div style="color: #2eb9ce" class="mb-10 ml-40 text-center text-md"> —— 连接web2与web3的一站式终端</div>
+        <div style="color: #2eb9ce" class="mb-10 ml-40 text-center text-md">
+          {{$t('welcome.description')}}
+        </div>
         <p v-if="!userInfo">
           <div class="mb-5 xt-text" style="font-size: 16px;color: whitesmoke">
-            本客户端需要借助后端计算服务，<strong>请登录后使用。</strong><br>
-
+            {{$t('welcome.say1')}}
+            <strong>
+            {{$t('welcome.say2')}}
+          </strong><br>
           </div>
-          <div class="mb-10 xt-text-2">如遇网络问题，请检查系统代理或耐心等待。</div>
+          <div class="mb-10 xt-text-2">{{$t('welcome.netErr')}}</div>
           <a-row :gutter="10" class="w-full">
             <a-col flex="1">
-              <xt-button size="mini" style="width: 100%" type="theme" @click="login">登录/注册账号</xt-button>
+              <xt-button size="mini" style="width: 100%" type="theme" @click="login">
+                {{$t('welcome.loginOrReg')}}</xt-button>
             </a-col>
             <a-col v-if="netError" flex="150px">
-              <xt-button style="width: 100%" @click="getUserInfo">重试</xt-button>
+              <xt-button style="width: 100%" @click="getUserInfo">{{$t('welcome.retry')}}</xt-button>
             </a-col>
           </a-row>
         </p>
@@ -50,15 +55,15 @@
               <a-avatar :size="68" :src="userInfo.avatar"></a-avatar>
             </div>
             <div  style="color: orange" class="mt-4 text-lg">
-              你好，{{ userInfo.nickname }}
+              {{$t('welcome.call')}}，{{ userInfo.nickname }}
             </div>
           </div>
         </div>
         <div class="flex">
-          <a-button v-if="userInfo" block class="m-3" size="large" type="primary" @click="goDirect">开始使用</a-button>
+          <a-button v-if="userInfo" block class="m-3" size="large" type="primary" @click="goDirect">{{ $t('startUsage') }}</a-button>
         </div>
         <div v-if="userInfo" >
-          <a @click="reLoginUser">切换账号</a>
+          <a @click="reLoginUser"> {{$t('welcome.changeAcc')}}</a>
         </div>
       </div>
     </div>
@@ -212,9 +217,9 @@ export default {
     timeout () {
       this.timeoutHandler = setTimeout(() => {
         Modal.error({
-          content: '服务器连接超时。可能服务器正在维护，请稍后再试。',
+          content: this.$t('message.serverTimeout'),
           key: 'error',
-          okText: '重试',
+          okText: this.$t('welcome.retry'),
           centered: true,
           onOk: () => {
             window.location.reload()
@@ -357,7 +362,7 @@ export default {
       modal.open().then(()=>{
         let account = useWeb3ModalAccount();
         if (account.isConnected.value){
-          toast.success("钱包已连接，正在登录...");
+          toast.success(this.$t('toast.walletConnected'));
           setTimeout(()=>{
             modal.close();
           },2000);
@@ -403,12 +408,12 @@ export default {
       await this.deleteUserInfo();
       let res = await ipc.invoke('direct-logout', this.userInfo?.uid);
       if (res) {
-        message.success('帐号退出成功,请重新登录');
+        message.success(this.$t('message.logoutSuccess'));
         useDisconnect().disconnect().then(()=>{
           this.login();
         });
       } else {
-        message.error('账号退出失败，请重试！');
+        message.error(this.$t('message.logoutFail'));
       }
     },
     // 默认壁纸

@@ -1,0 +1,95 @@
+{
+  "appName": "Klient międzyłańcuchowy Pangu",
+  "backgroud": "tło",
+  "bg": {
+    "addMark": "Zwiększa rozmycie tła po włączeniu",
+    "choose": "Wybierz swoje ulubione zdjęcie jako tło pulpitu warsztatowego.",
+    "clea": "jasne tło",
+    "clear": "jasne tło",
+    "desktop": "tło pulpitu",
+    "masrk": "rozmycie tła",
+    "openTPTip": "Ten typ funkcji zużywa dużą wydajność. Włącz ją w razie potrzeby.",
+    "openTransparent": "Przezroczyste tło po włączeniu",
+    "setting": "Ustawienia tła",
+    "transparent": "Przezroczyste tło"
+  },
+  "btn": {
+    "change": "przełącznik",
+    "recoverTextColor": "Przywróć domyślny kolor tekstu",
+    "recoverThemeColor": "Przywróć domyślne kolory motywu",
+    "wallpapperColor": "Przywróć domyślny kolor tapety"
+  },
+  "chooseLang": "Wybierz język",
+  "desktop": {
+    "effectFlow": "efekt opadania",
+    "effectFlowTip": "Po włączeniu strona będzie miała fajny efekt spadania.",
+    "effectNum": "Liczba spadających obiektów",
+    "effectRain": "deszcz",
+    "effects": "Spadające obiekty",
+    "ligh": "Ramka ze światłem RGB",
+    "lightTip": "Wyświetlaj efekty RGB wokół okna warsztatu."
+  },
+  "menu": {
+    "name": "pierwsza strona"
+  },
+  "message": {
+    "Danger": "WeChat",
+    "Info": "Informacja",
+    "Primary": "kolor podstawowy",
+    "Success": "powodzenie",
+    "Warning": "ostrzegać",
+    "logoutFail": "Wylogowanie z konta nie powiodło się, spróbuj ponownie!",
+    "logoutSuccess": "Konto zostało wylogowane pomyślnie. Proszę zalogować się ponownie",
+    "offlineTip": "Po użyciu trybu offline niektóre funkcje rozrywkowe i społecznościowe, takie jak gry, pogoda itp., zostaną ukryte.",
+    "serverTimeout": "Przekroczono limit czasu połączenia z serwerem. \nSerwer może być w trakcie konserwacji. Spróbuj ponownie później.",
+    "teamTip": "Po użyciu trybu minimalistycznego niektóre funkcje rozrywkowe i społecznościowe, takie jak funkcja drużyny, zostaną ukryte."
+  },
+  "name": "Polski",
+  "setting": "Ustawienie",
+  "settings": {
+    "account": "Weryfikacja adresu",
+    "appInfo": "Informacje o aplikacji",
+    "appManage": "Zarządzanie aplikacją",
+    "base": "Podstawowe ustawienia",
+    "chooseScr": "ekran wyboru",
+    "common": "Powszechnie używane",
+    "dark": "tryb ciemny",
+    "enableAccValid": "Weryfikacja adresu",
+    "general": "Ustawienia główne",
+    "guideBar": "Edycja paska nawigacji",
+    "language": "ustawienie języka",
+    "msg": {
+      "save": "Po użyciu trybu wydajności różne animacje interfejsu zostaną wyłączone, a procesy zablokowane w pamięci zostaną w miarę możliwości oczyszczone. \nMoże to spowodować pogorszenie efektu otwierania interfejsu lub spowolnienie przełączania aplikacji. \nMoże jednak znacznie zmniejszyć zużycie pamięci, procesora i karty graficznej."
+    },
+    "offline": "Tryb offline",
+    "otherScr": "Ustawienia podzielonego ekranu",
+    "others": "Inny",
+    "power": "zasilacz",
+    "quiet": "Nie przeszkadzaj wiadomościom",
+    "save": "Tryb oszczędzania energii",
+    "simple": "tryb minimalistyczny",
+    "social": "Sieć społeczna",
+    "switch": "Funkcja szybkiego przełączania",
+    "text": "tekst",
+    "theme": "temat",
+    "themeColor": "kolor motywu",
+    "touch": "Skonfiguruj ekran dotykowy",
+    "wallpaper": "Tapeta",
+    "window": "sterowanie oknem"
+  },
+  "startUsage": "zacząć używać",
+  "toast": {
+    "walletConnected": "Portfel jest podłączony, logowanie..."
+  },
+  "welcome": {
+    "call": "Cześć",
+    "changeAcc": "Przełącz konto",
+    "description": "—— Kompleksowy terminal łączący web2 i web3",
+    "hello": "Witamy w wielołańcuchowym kliencie Pangu, który zabierze Cię do odkrywania nowego świata web3!",
+    "loginOrReg": "Zaloguj się/Zarejestruj konto",
+    "netErr": "Jeśli napotkasz problemy z siecią, sprawdź systemowe proxy lub poczekaj cierpliwie.",
+    "retry": "Spróbować ponownie",
+    "say1": "Ten klient wymaga pomocy usług obliczeniowych zaplecza.",
+    "say2": "Aby skorzystać, zaloguj się."
+  }
+}

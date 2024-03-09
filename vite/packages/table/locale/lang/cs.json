@@ -1,0 +1,95 @@
+{
+  "appName": "Křížový klient Pangu",
+  "backgroud": "Pozadí",
+  "bg": {
+    "addMark": "Při zapnutí zvyšuje rozostření pozadí",
+    "choose": "Vyberte si svůj oblíbený obrázek jako pozadí pracovní plochy.",
+    "clea": "jasné pozadí",
+    "clear": "jasné pozadí",
+    "desktop": "pozadí plochy",
+    "masrk": "rozostření pozadí",
+    "openTPTip": "Tento typ funkce spotřebovává vysoký výkon, povolte jej podle potřeby.",
+    "openTransparent": "Průhledné pozadí po zapnutí",
+    "setting": "Nastavení pozadí",
+    "transparent": "Průhledné pozadí"
+  },
+  "btn": {
+    "change": "přepínač",
+    "recoverTextColor": "Obnovit výchozí barvu textu",
+    "recoverThemeColor": "Obnovit výchozí barvy motivu",
+    "wallpapperColor": "Obnovit výchozí barvu tapety"
+  },
+  "chooseLang": "Vyberte jazyk",
+  "desktop": {
+    "effectFlow": "padající efekt",
+    "effectFlowTip": "Po zapnutí bude mít stránka chladný padající efekt.",
+    "effectNum": "Počet padajících předmětů",
+    "effectRain": "déšť",
+    "effects": "Padající předměty",
+    "ligh": "Rám RGB světlo",
+    "lightTip": "Zobrazte efekty RGB kolem okna pracovní plochy."
+  },
+  "menu": {
+    "name": "přední strana"
+  },
+  "message": {
+    "Danger": "WeChat",
+    "Info": "informace",
+    "Primary": "základní barva",
+    "Success": "úspěch",
+    "Warning": "varovat",
+    "logoutFail": "Odhlášení z účtu se nezdařilo, zkuste to prosím znovu!",
+    "logoutSuccess": "Účet byl úspěšně odhlášen, přihlaste se prosím znovu",
+    "offlineTip": "Po použití offline režimu budou některé zábavné a sociální funkce, jako jsou hry, počasí atd., skryty.",
+    "serverTimeout": "Vypršel časový limit připojení k serveru. \nNa serveru možná probíhá údržba, zkuste to znovu později.",
+    "teamTip": "Po použití minimalistického režimu se některé zábavní a společenské funkce, jako je funkce čety, skryjí."
+  },
+  "name": "Česky",
+  "setting": "Nastavení",
+  "settings": {
+    "account": "Ověření adresy",
+    "appInfo": "Informace o aplikaci",
+    "appManage": "Správa aplikací",
+    "base": "Základní nastavení",
+    "chooseScr": "obrazovka výběru",
+    "common": "Běžně používané",
+    "dark": "tmavý režim",
+    "enableAccValid": "Ověření adresy",
+    "general": "Obecné nastavení",
+    "guideBar": "Úprava navigační lišty",
+    "language": "nastavení jazyka",
+    "msg": {
+      "save": "Po použití výkonnostního režimu budou různé animace rozhraní vypnuty a procesy uvízlé v paměti budou co nejvíce vyčištěny. \nMůže to způsobit ohrožení efektu otevíracího rozhraní nebo pomalé přepínání aplikací. \nMůže však výrazně snížit využití paměti, CPU a GPU."
+    },
+    "offline": "Offline mód",
+    "otherScr": "Nastavení rozdělené obrazovky",
+    "others": "jiný",
+    "power": "zdroj napájení",
+    "quiet": "Zprávy Nerušit",
+    "save": "Režim úspory energie",
+    "simple": "minimalistický režim",
+    "social": "Sociální síť",
+    "switch": "Funkce rychlého spínání",
+    "text": "text",
+    "theme": "téma",
+    "themeColor": "barva motivu",
+    "touch": "Nastavte dotykovou obrazovku",
+    "wallpaper": "tapeta na zeď",
+    "window": "ovládání oken"
+  },
+  "startUsage": "začít používat",
+  "toast": {
+    "walletConnected": "Peněženka je připojena, přihlašování..."
+  },
+  "welcome": {
+    "call": "Ahoj",
+    "changeAcc": "Přepnout účet",
+    "description": "——One-stop terminál propojující web2 a web3",
+    "hello": "Vítejte v aplikaci Pangu cross-chain klienta, který vás vezme k prozkoumání nového světa web3!",
+    "loginOrReg": "Přihlášení/registrace účtu",
+    "netErr": "Pokud narazíte na problémy se sítí, zkontrolujte prosím server proxy nebo trpělivě vyčkejte.",
+    "retry": "Zkuste to znovu",
+    "say1": "Tento klient vyžaduje pomoc back-endových počítačových služeb.",
+    "say2": "Pro použití se prosím přihlaste."
+  }
+}

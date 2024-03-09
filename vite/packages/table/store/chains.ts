@@ -34,7 +34,7 @@ export const goerli: ChainNetInfo = {
 export const punkos: ChainNetInfo = {
   chainId: 11223344,
   name: 'PunkOS Test Network',
-  currency: 'ETH',
+  currency: 'PTH',
   explorerUrl: 'https://goerli.etherscan.io',
   rpcUrl: 'https://rpctest.byebyegfw.uk',
 };

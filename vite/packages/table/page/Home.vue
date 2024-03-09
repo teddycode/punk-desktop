@@ -97,59 +97,59 @@
       <template #settingsAll>
         <div class="xt-bg-2 rounded-xl p-3 mb-4 text-base">
           <div class="flex justify-between mb-3">
-            <div>桌面背景</div>
+            <div>{{ $t('bg.desktop') }}</div>
           </div>
-          <div class="xt-text-2 text-sm my-3">选择喜欢的图片作为工作台桌面背景。</div>
+          <div class="xt-text-2 text-sm my-3">{{ $t('bg.choose') }}</div>
           <div class="xt-text-2 flex text-sm my-3" v-if="!appSettings.transparent">
             <xt-task :modelValue="m01034" to="" @cb="goPaper">
-              <xt-button size="mini" :w="80" :h="40" type="theme" class="mr-3" @click="goPaper">背景设置</xt-button>
+              <xt-button size="mini" :w="80" :h="40" type="theme" class="mr-3" @click="goPaper">{{ $t('bg.setting') }}</xt-button>
             </xt-task>
-            <xt-button size="mini" class="xt-modal" :w="80" :h="40" @click="clearWallpaper">清除背景</xt-button>
+            <xt-button size="mini" class="xt-modal" :w="80" :h="40" @click="clearWallpaper">{{ $t('bg.clear') }}</xt-button>
           </div>
           <hr class="my-3" />
 
           <template v-if="!appSettings.transparent">
             <div class="flex justify-between mb-3">
-              <div>背景模糊度</div>
+              <div>{{ $t('bg.marsk') }}</div>
             </div>
-            <div class="xt-text-2 text-sm my-3">开启后增加背景模糊度</div>
+            <div class="xt-text-2 text-sm my-3">{{ $t('bg.addMark') }}</div>
             <div class="xt-text-2 text-sm my-3">
               <a-slider v-model:value="backgroundSettings.backGroundImgBlur" :max="100" :step="1" />
             </div>
             <hr class="my-3" />
           </template>
           <div class="flex justify-between mb-3">
-            <div>透明背景</div>
+            <div>{{ $t('bg.transparent') }}</div>
             <a-switch v-model:checked="appSettings.transparent" />
           </div>
-          <div class="xt-text-2 text-sm my-3">开启后透明背景</div>
+          <div class="xt-text-2 text-sm my-3">{{ $t('bg.openTransparent') }}</div>
           <hr class="my-3" />
         </div>
         <xt-task :modelValue="m01033" to=""> </xt-task>
         <div class="xt-bg-2 rounded-xl p-3 mb-1 text-base">
-          <div class="p-3 xt-modal rounded-xl xt-text-2">此类功能性能消耗较高，请酌情开启</div>
+          <div class="p-3 xt-modal rounded-xl xt-text-2">{{ $t('bg.openTPTip') }}</div>
           <div class="flex justify-between my-3">
-            <div>边框RGB灯</div>
+            <div>{{ $t('desktop.ligh') }}</div>
             <a-switch v-model:checked="appSettings.houserun" />
           </div>
-          <div class="xt-text-2 text-sm my-3">在工作台窗口四周显示RGB效果。</div>
+          <div class="xt-text-2 text-sm my-3">{{ $t('desktop.lightTip') }}</div>
           <hr class="my-3" />
           <div class="flex justify-between mb-3">
-            <div>飘落效果</div>
+            <div>{{ $t('desktop.effectFlow') }}</div>
             <a-switch v-model:checked="appSettings.down.enable" />
           </div>
-          <div class="xt-text-2 text-sm my-3">开启后页面会有炫酷的飘落效果</div>
+          <div class="xt-text-2 text-sm my-3">{{ $t('desktop.effectFlowTip') }}</div>
           <hr class="my-3" />
           <template v-if="appSettings.down.enable">
             <div class="flex justify-between my-3">
-              <div>飘落物</div>
+              <div>{{ $t('desktop.effects') }}</div>
             </div>
             <div class="xt-text-2 text-sm my-3">
               <xt-tab class="h-10" v-model="appSettings.down.type" :list="fallingList"></xt-tab>
             </div>
             <hr class="my-3" />
             <div class="flex justify-between my-3">
-              <div>飘落物数量</div>
+              <div>{{ $t('desktop.effectNum') }}</div>
             </div>
             <div class="xt-text-2 text-sm my-3">
               <xt-input v-model="appSettings.down.count" class="xt-modal xt-b" style="height: 40px"></xt-input>

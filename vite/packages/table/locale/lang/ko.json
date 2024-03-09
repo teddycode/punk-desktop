@@ -1,0 +1,95 @@
+{
+  "appName": "Pangu 크로스체인 클라이언트",
+  "backgroud": "배경",
+  "bg": {
+    "addMark": "켜져 있으면 배경 흐림이 증가합니다.",
+    "choose": "작업대 데스크탑 배경으로 좋아하는 사진을 선택하세요.",
+    "clea": "배경 지우기",
+    "clear": "배경 지우기",
+    "desktop": "데스크탑 바탕 화면",
+    "masrk": "배경 흐림",
+    "openTPTip": "이러한 유형의 기능은 높은 성능을 소모하므로 적절하게 활성화하십시오.",
+    "openTransparent": "전원을 켠 후 배경이 투명해집니다.",
+    "setting": "배경 설정",
+    "transparent": "투명한 배경"
+  },
+  "btn": {
+    "change": "스위치",
+    "recoverTextColor": "기본 텍스트 색상 복원",
+    "recoverThemeColor": "기본 테마 색상 복원",
+    "wallpapperColor": "기본 배경화면 색상 복원"
+  },
+  "chooseLang": "언어를 선택하세요",
+  "desktop": {
+    "effectFlow": "떨어지는 효과",
+    "effectFlowTip": "켜면 페이지에 시원한 떨어지는 효과가 나타납니다.",
+    "effectNum": "낙하물의 수",
+    "effectRain": "비",
+    "effects": "떨어지는 물체",
+    "ligh": "프레임 RGB 조명",
+    "lightTip": "작업대 창 주위에 RGB 효과를 표시합니다."
+  },
+  "menu": {
+    "name": "첫 장"
+  },
+  "message": {
+    "Danger": "위챗",
+    "Info": "정보",
+    "Primary": "원색",
+    "Success": "성공",
+    "Warning": "경고하다",
+    "logoutFail": "계정 로그아웃에 실패했습니다. 다시 시도해 주세요!",
+    "logoutSuccess": "계정이 성공적으로 로그아웃되었습니다. 다시 로그인해 주세요.",
+    "offlineTip": "오프라인 모드를 사용하면 게임, 날씨 등 일부 엔터테인먼트 및 소셜 기능이 숨겨집니다.",
+    "serverTimeout": "서버 연결 시간이 초과되었습니다. \n서버 점검 중일 수 있으니 나중에 다시 시도해 주세요.",
+    "teamTip": "미니멀리스트 모드를 사용하면 스쿼드 기능과 같은 일부 엔터테인먼트 및 소셜 기능이 숨겨집니다."
+  },
+  "name": "한국어",
+  "setting": "환경",
+  "settings": {
+    "account": "주소 확인",
+    "appInfo": "신청정보",
+    "appManage": "응용 관리",
+    "base": "기본 설정",
+    "chooseScr": "선택 화면",
+    "common": "일반적으로 사용되는",
+    "dark": "다크 모드",
+    "enableAccValid": "주소 확인",
+    "general": "일반 설정",
+    "guideBar": "네비게이션 바 편집",
+    "language": "언어 설정",
+    "msg": {
+      "save": "성능 모드를 사용한 후에는 다양한 인터페이스 애니메이션이 꺼지고, 메모리에 갇힌 프로세스가 최대한 정리됩니다. \n인터페이스 열기 효과가 손상되거나 애플리케이션 전환이 느려질 수 있습니다. \n그러나 메모리, CPU 및 GPU 사용량을 크게 줄일 수 있습니다."
+    },
+    "offline": "오프라인 모드",
+    "otherScr": "분할 화면 설정",
+    "others": "다른",
+    "power": "전원 공급 장치",
+    "quiet": "메시지를 방해하지 마세요",
+    "save": "에너지 절약 모드",
+    "simple": "미니멀 모드",
+    "social": "소셜 네트워크",
+    "switch": "퀵 스위치 기능",
+    "text": "텍스트",
+    "theme": "주제",
+    "themeColor": "테마 색상",
+    "touch": "터치 스크린 설정",
+    "wallpaper": "벽지",
+    "window": "창 제어"
+  },
+  "startUsage": "사용을 시작하다",
+  "toast": {
+    "walletConnected": "월렛이 연결되었습니다. 로그인 중입니다..."
+  },
+  "welcome": {
+    "call": "안녕하세요",
+    "changeAcc": "계정 전환",
+    "description": "——web2와 web3를 연결하는 원스톱 터미널",
+    "hello": "Web3의 새로운 세계를 탐험하기 위해 Pangu 크로스체인 클라이언트를 사용하신 것을 환영합니다!",
+    "loginOrReg": "로그인/회원가입",
+    "netErr": "네트워크 문제가 발생하면 시스템 프록시를 확인하거나 인내심을 갖고 기다리십시오.",
+    "retry": "다시 해 보다",
+    "say1": "이 클라이언트에는 백엔드 컴퓨팅 서비스의 도움이 필요합니다.",
+    "say2": "이용하시려면 로그인해주세요."
+  }
+}
