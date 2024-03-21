@@ -167,7 +167,13 @@ const logOutUser = () => {
 };
 
 onMounted(() => {
-  isConnected.value = useWeb3ModalAccount().isConnected;
+  setTimeout(() => {
+    try {
+      isConnected.value = useWeb3ModalAccount().isConnected;
+    } catch (e) {
+      console.warn(e);
+    }
+  }, 500);
 });
 </script>
 

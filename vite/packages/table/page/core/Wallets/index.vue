@@ -46,7 +46,7 @@
           </template>
           <template v-else-if="column.key === 'type'">
             <div v-if="record.type === 'address'">
-              <a-tag color="yellow"> 地址账户 </a-tag>
+              <a-tag color="yellow"> 外部账户 </a-tag>
             </div>
             <div v-else-if="record.type === 'contract'">
               <a-tag color="green"> 合约账户 </a-tag>
@@ -79,54 +79,95 @@
         </template>
       </a-table>
     </a-card>
-    <a-modal
-      centered
-      v-model:visible="modalVisible"
-      :title="isEdit ? '编辑账户' : '新建账户'"
-      ok-text="确定"
-      cancel-text="取消"
-      width="600px"
-      @ok="doModalConfirm"
-    >
-      <h6>账户名</h6>
-      <p>
-        <a-input
-          ref="accountName"
-          @keyup.enter="doModalConfirm"
-          v-model:value="account.name"
-          placeholder="账户别名"
-        ></a-input>
-      </p>
-
-      <h6>代币类型</h6>
-      <p>
-        <a-select style="width: 50%" v-model:value="account.symbol" placeholder="选择代币类型">
-          <a-select-option v-for="item in getCoinTypeList()" :value="item.id" :key="item.id">
-            <a-avatar size="8" :src="getCoinIcon(item?.name)" style="margin-right: 5px" /> {{ item.name }}
-          </a-select-option>
-        </a-select>
-      </p>
-      <h6>账户类型</h6>
-      <p>
-        <a-select style="width: 50%" v-model:value="account.type" placeholder="选择账户类型">
-          <a-select-option value="address"> 地址账户</a-select-option>
-          <a-select-option value="contract"> 合约账户</a-select-option>
-        </a-select>
-      </p>
-      <p></p>
-      <!-- 新增状态下徐亚验证钱包 -->
-      <template v-if="!isEdit">
-        <h6>签名随机数</h6>
-        <p>
-          <a-input ref="walletSecret" disabled v-model:value="walletAdd.secret"></a-input>
-        </p>
-        <h6>签名信息</h6>
-        <p>
-          <a-input ref="walletSignature" disabled v-model:value="walletAdd.signature"></a-input>
-        </p>
-        <a-button @click="bindWallet"> 点击获取绑定的钱包信息 </a-button>
-      </template>
-    </a-modal>
+    <Modal v-show="modalVisible" v-model:visible="modalVisible" :blurFlag="true" style="z-index: 5000">
+      <div class="flex flex-col items-center myinfo-container justify-between w-full p-6">
+        <vue-custom-scrollbar class="w-full" style="width: 300px">
+          <div class="flex justify-between items-center w-full h-12 mb-3">
+            <div class="flex items-center update-title justify-center" style="width: 100%">
+              {{ isEdit ? '编辑账户' : '新建账户' }}
+            </div>
+            <div
+              class="w-12 h-12 flex items-center com-button pointer justify-center rounded-lg"
+              style="background: var(--secondary-bg)"
+              @click="closeModal"
+            >
+              <Icon icon="guanbi" style="font-size: 1.45em"></Icon>
+            </div>
+          </div>
+          <div class="flex flex-col">
+            <span class="update-title mb-3">账户名</span>
+            <div
+              class="flex items-center rounded-xl justify-center h-10 px-3 mb-3"
+              style="border: 1px solid var(--divider); background: var(--secondary-bg)"
+            >
+              <a-input
+                v-model:value="account.name"
+                :bordered="false"
+                placeholder="账户别名"
+                style="padding: 0; width: 100%"
+              ></a-input>
+            </div>
+          </div>
+          <div class="flex flex-col">
+            <span class="update-title mb-3">代币类型</span>
+            <div
+              class="flex items-center rounded-xl justify-center h-10 px-3 mb-3"
+              style="border: 1px solid var(--divider); background: var(--secondary-bg)"
+            >
+              <a-select style="width: 100%" v-model:value="account.symbol" placeholder="选择代币类型">
+                <a-select-option v-for="item in getCoinTypeList()" :value="item.id" :key="item.id">
+                  <a-avatar size="8" :src="getCoinIcon(item?.name)" style="margin-right: 5px" /> {{ item.name }}
+                </a-select-option>
+              </a-select>
+            </div>
+          </div>
+          <div class="flex flex-col">
+            <span class="update-title mb-3">账户类型</span>
+            <div
+              class="flex items-center rounded-xl justify-center h-10 px-3 mb-3"
+              style="border: 1px solid var(--divider); background: var(--secondary-bg)"
+            >
+              <a-select style="width: 100%" v-model:value="account.type" placeholder="选择账户类型">
+                <a-select-option value="address"> 地址账户</a-select-option>
+                <a-select-option value="contract"> 合约账户</a-select-option>
+              </a-select>
+            </div>
+          </div>
+          <!-- 新增状态下徐亚验证钱包 -->
+          <template v-if="!isEdit">
+            <span class="update-title mb-3">签名随机数</span>
+            <p>
+              <a-input ref="walletSecret" disabled v-model:value="walletAdd.secret"></a-input>
+            </p>
+            <span class="update-title mb-3">签名信息</span>
+            <p>
+              <a-textarea ref="walletSignature" disabled v-model:value="walletAdd.sign"></a-textarea>
+            </p>
+            <div class="flex w-full items-center justify-center mt-6">
+              <a-button @click="bindWallet"> 点击获取绑定的钱包信息 </a-button>
+            </div>
+          </template>
+          <div class="flex w-full items-center justify-center mt-6">
+            <a-button
+              class="h-48 rounded-xl mr-3"
+              style="width: 120px; color: var(--primary-text); border: none; background: var(--secondary-bg)"
+              type="primary"
+              @click="closeModal"
+            >
+              取消
+            </a-button>
+            <a-button
+              class="h-48 rounded-xl"
+              style="width: 120px; color: var(--active-text)"
+              type="primary"
+              @click="doModalConfirm"
+            >
+              确定
+            </a-button>
+          </div>
+        </vue-custom-scrollbar>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -148,19 +189,22 @@ import {
   WalletTwoTone,
   DeleteOutlined,
 } from '@ant-design/icons-vue';
-import { useDisconnect, useWeb3Modal, useWeb3ModalAccount } from '@web3modal/ethers5/vue';
+import { useWeb3ModalAccount } from '@web3modal/ethers5/vue';
 import datas from './data';
 import { GetForWalletStatus, PostWalletPageList, PutForWalletInfo } from '@js/service/wallets';
 import { appStore } from '@store';
-import { appsStore } from '@store/apps';
 import { PageParams } from '@js/service/typing';
 import { message } from 'ant-design-vue';
-import { GetForLoginNonce, PostForAuthReq } from '@js/service/users';
-import { signMessage } from '@page/core/Wallets/events';
+import UploadImage from '@components/UploadImage.vue';
+import Modal from '@components/Modal.vue';
+import { createWeb3Modal } from '@web3modal/ethers5/vue';
+import { walletConfig } from '@store/wallet.ts';
 
 export default defineComponent({
   name: 'WalletsPage',
   components: {
+    Modal,
+    UploadImage,
     LayoutFooter,
     info,
     PlusOutlined,
@@ -176,7 +220,7 @@ export default defineComponent({
     // 样例数据
     let tableData = ref([]);
 
-    const currentAccount = useWeb3ModalAccount();
+    const currentAccount = '';
 
     let account = ref({
       name: '',
@@ -198,7 +242,7 @@ export default defineComponent({
 
     let walletAdd = ref({
       secret: '',
-      signature: '',
+      sign: '',
     });
 
     let currentRow = null;
@@ -238,10 +282,14 @@ export default defineComponent({
       }
       return false;
     }
+    // 关闭对话框
+    function closeModal() {
+      modalVisible.value = false;
+    }
     // 确认
     function doModalConfirm() {
       console.log('Editding');
-      if (isEdit) {
+      if (isEdit.value) {
         if (currentRow) {
           const params = {
             id: currentRow?.id,
@@ -279,7 +327,7 @@ export default defineComponent({
     }
     // 获取后端数据
     async function fetchStatusData() {
-      const userId = parseInt(userInfo.id);
+      const userId = parseInt(userInfo.uid);
       GetForWalletStatus(userId).then((data) => {
         console.log('钱包统计数据：', data);
         countStatus.value.types = data?.data.types;
@@ -291,7 +339,7 @@ export default defineComponent({
     async function fetchTableData() {
       const param: PageParams = {
         ...pageConfig.value,
-        userId: parseInt(userInfo.id),
+        userId: parseInt(userInfo.uid),
       };
       PostWalletPageList(param).then((resp) => {
         console.log('钱包分页数据：', resp);
@@ -301,8 +349,16 @@ export default defineComponent({
     }
     // 绑定钱包的信息
     async function bindWallet() {
-      // 断开现有钱包的连接
-      // TODO 封装web3Modal作为身份认证器
+      tsbApi.user.walletAuth((data) => {
+        console.log('绑定钱包返回数据了：', data);
+        const parts = data?.data.split('#=#');
+        if (parts.length != 2) {
+          message.error('返回消息格式不正确：', data);
+          return;
+        }
+        walletAdd.value.secret = parts[0];
+        walletAdd.value.sign = parts[1];
+      });
     }
 
     return {
@@ -313,6 +369,7 @@ export default defineComponent({
       isEdit,
       modalVisible,
       doModalConfirm,
+      closeModal,
       currentRow,
       getCoinTypeList,
       tableData,
@@ -330,6 +387,11 @@ export default defineComponent({
     };
   },
   mounted() {
+    try {
+      currentAccount = useWeb3ModalAccount();
+    } catch (e) {
+      console.warn(e);
+    }
     this.fetchStatusData();
     this.fetchTableData();
   },

@@ -146,7 +146,9 @@ canvas_binary_host_mirror=https://registry.npmmirror.com/-/binary/canvas
 
 5.vite 下执行`yarn run build`编译一遍
 
-6.（可选）复制一个/node_modules 下的 dragula/dist/dragula.css 到 dragula/dist/dragula.min.css，不然会报这个库缺文件
+6.（可选）复制一个/node_modules 下的 dragula/dist/dragula.css 到 dragula/dist/dragula.min.css，不然会报这个库缺文件 
+
+7.服务端本地开发与远程开发环境的切换需要全局搜索替换，本地开发的后端api地址为http://127.0.0.1:9090 远程服务端为http://123.157.213.104:18081（已注解）
 
 ## 启动项目
 

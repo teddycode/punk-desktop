@@ -27,15 +27,14 @@ if (typeof window !== 'undefined') {
   window = getWindowArgs(window);
   isDevelopmentMode = 'development-mode' in window.globalArgs;
 }
-const localNode = false; //设置为true， cyx则使用本地的node配置
-const localServer = false; //设置为true， cgz则使用本地的node配置 //两者不能同时为true
 
 const config = {
   SERVER_BASE_URL: 'https://s.apps.vip',
   SERVER_BACKEND_URL: 'https://sad.apps.vip',
   DEV_NODE_SERVER_BASE_URL: 'http://test1.com:9001',
   PROD_NODE_SERVER_BASE_URL: 'https://apps.vip',
-  NODE_SERVER_BASE_URL: 'https://apps.vip',
+  NODE_SERVER_BASE_URL: 'http://127.0.0.1:9090', // baseApi中用到了 wallet & auth 也用到了
+  // NODE_SERVER_BASE_URL: 'http://123.157.213.104:18081', // baseApi中用到了 wallet & auth 也用到了
   IM: {
     API_BASE_URL: 'http://im-serve.xiangtian.ren',
     WEB_SOCKET_URL: 'ws://im-socket.xiangtian.ren/socket.io',
@@ -55,22 +54,6 @@ const appConfig = {
   state: 1,
   response_type: 'code',
 };
-
-//cyx本地开发,则修改相应的配置项
-if (localNode && isDevelopmentMode) {
-  //本地环境下的配置项重置
-  config.NODE_SERVER_BASE_URL = 'http://test1.com:9001';
-  config.DEV_NODE_SERVER_BASE_URL = 'http://test1.com:9001';
-  appConfig.client_id = 10009;
-}
-
-//cgz本地开发
-if (localServer && isDevelopmentMode) {
-  config.NODE_SERVER_BASE_URL = 'http://test.com:9001';
-  config.SERVER_BASE_URL = 'http://pc2.mark.opensns.cn'; //测试站
-  config.SERVER_BACKEND_URL = 'https://osxbenew.mark.opensns.cn';
-  config.IM.FRONT_URL_DEV = 'http://127.0.0.1:8000';
-}
 
 const api = {
   //短说侧需要用到的api接口

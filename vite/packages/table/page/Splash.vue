@@ -201,7 +201,6 @@ export default {
       }, 1000)
     }, 100)
 
-    // TODO 获取本地已登录的用户
     this.getUserInfo()
     this.sortClock()
   },
@@ -228,13 +227,17 @@ export default {
       }, 5000)
     },
     //直接进入工作台选择界面
-    goDirect () {
-      this.doDefaultSettings();
+    async goDirect () {
+      await this.doDefaultSettings();
       this.$router.replace({ name: 'home' })
     },
     enter () {
       clearTimeout(this.timeoutHandler)//清理掉超时提示
-      chatStore().login()
+      try{
+        chatStore().login()
+      }catch(e){
+        console.log(e)
+      }
       tsbApi.window.setFullScreen(true) // default fullscreen when app launched
       const currentRoute = appStore().currentRoute
       if (currentRoute) {
@@ -249,43 +252,41 @@ export default {
       }
     },
     bindUserInfoResponse () {
-      window.loadedStore['userInfo'] = true
-      // ipc.removeAllListeners('userInfo')
-      // ipc.on('userInfo', async (event, args) => {
-      //   // TODO 搞嘛了，不知道这是从哪儿调的
-      //   console.log('splash接收到参数:', event ,JSON.stringify(args))
-      //   if (args.data.uid === -2) {
-      //     this.netError = true
-      //     message.error({
-      //       content: '网络错误，请重试', key: 'net'
-      //     })
-      //   }
-      //   this.tipped = false
-      //   this.loading = false
-      //   if (args.data.uid <= 0) {
-      //     window.loadedStore['userInfo'] = true
-      //     return
-      //   }
-      //
-      //   const userInfo = args.data
-      //
-      //   let lvInfo = this.lvInfo
-      //   lvInfo.lv = userInfo.onlineGradeExtra.lv
-      //   let current = this.gradeTableGenerate(64)[lvInfo.lv]
-      //   let section = this.gradeTableGenerate(64)[lvInfo.lv + 1]
-      //   let remain = section[0] * 60 - (userInfo.onlineGradeExtra.minutes)
-      //   lvInfo.remainHour = Math.floor(remain / 60)
-      //   lvInfo.remainMinute = remain - (Math.floor(remain / 60) * 60)
-      //   lvInfo.minute = userInfo.onlineGradeExtra.minutes
-      //   lvInfo.percentage = ((lvInfo.minute - current[0] * 60) / ((current[1] - current[0]) * 60)) * 100
-      //   //this.lvInfo = lvInfo
-      //   window.loadedStore['userInfo'] = true
-      //   console.info('更新了用户信息:', JSON.stringify(userInfo))
-      //   this.setUser(userInfo)
-      //   if (this.$route.name === 'splash') {
-      //     this.enter()
-      //   }
-      // })
+      ipc.removeAllListeners('userInfo')
+      ipc.on('userInfo', async (event, args) => {
+        console.log('splash接收到参数:', JSON.stringify(args))
+        if (args.data.uid === -2) {
+          this.netError = true
+          message.error({
+            content: '网络错误，请重试', key: 'net'
+          })
+        }
+        this.tipped = false
+        this.loading = false
+        if (args.data.uid <= 0) {
+          window.loadedStore['userInfo'] = true
+          return
+        }
+
+        const userInfo = args.data
+
+        // let lvInfo = this.lvInfo
+        // lvInfo.lv = userInfo.onlineGradeExtra.lv
+        // let current = this.gradeTableGenerate(64)[lvInfo.lv]
+        // let section = this.gradeTableGenerate(64)[lvInfo.lv + 1]
+        // let remain = section[0] * 60 - (userInfo.onlineGradeExtra.minutes)
+        // lvInfo.remainHour = Math.floor(remain / 60)
+        // lvInfo.remainMinute = remain - (Math.floor(remain / 60) * 60)
+        // lvInfo.minute = userInfo.onlineGradeExtra.minutes
+        // lvInfo.percentage = ((lvInfo.minute - current[0] * 60) / ((current[1] - current[0]) * 60)) * 100
+        //this.lvInfo = lvInfo
+        window.loadedStore['userInfo'] = true
+        console.info('更新了用户信息:', JSON.stringify(userInfo))
+        this.setUser(userInfo)
+        if (this.$route.name === 'splash') {
+          this.enter()
+        }
+      })
     },
     initStore (store, name) {
       if (!window.loadedStore) {
@@ -318,16 +319,7 @@ export default {
       }
       await tsbApi.window.setZoomFactor(+this.settings.zoomFactor / 100)//根据设置进行缩放比的强制调整
       if (this.settings.darkMod) {
-        // if( this.backgroundImage.path===''&&!this.backgroundImage.runpath) {
-        //   document.body.style.background = '#191919'
-        //
-        //
-        // }else if(this.backgroundImage.runpath){
-        //
-        // }else{
-        //   document.body.style.background=  ''
-        //   document.body.style.backgroundImage = "url(" + this.backgroundImage.path + ")"
-        // }
+        this.settings.darkMode=false;
       }
       this.launching = false
       if (!this.userInfo) {
@@ -339,21 +331,13 @@ export default {
     },
 
     gradeTableGenerate (num) {
-      let lvSys = {}
-      for (let i = 0; i < num + 1; i++) {
-        let arrLef = 0
-        let arrRg = 0
-        for (let j = 0; j < i; j++) {
-          arrLef += 10 * (j + 2)
-        }
-        for (let k = 0; k < i + 1; k++) {
-          arrRg += 10 * (k + 2)
-        }
-        arrRg -= 1
-        lvSys[`${i}`] = [arrLef, arrRg]
+      let lvSys = {};
+      for (let i = 1; i <= num; i++) {
+        let arrLef = 10 * i * (i + 1);
+        let arrRg = 10 * (i + 1) * (i + 2) - 1;
+        lvSys[`${i}`] = [arrLef, arrRg];
       }
-      delete lvSys['lv0']
-      return lvSys
+      return lvSys;
     },
     login () {
       // 打开登录对话框
@@ -507,19 +491,16 @@ export default {
         }
       }
       window.loadedStore['userInfo'] = true
-      ipc.invoke("saveUserToDB",userInfo);
-      this.setUser(userInfo)
-      if (this.$route.name === 'splash') {
-          this.enter();
-      }
-      // ipc.send('userInfo', {
-      //     data: {
-      //         ...data?.userInfo,
-      //         uid: data.userInfo?.id,
-      //     },
-      // });
+      console.log("等待存入数据库。。。")
+      ipc.invoke("saveUserToDB",userInfo).then((res)=>{
+           console.log("存入数据库成功，唤起用户数据读取：",res)
+           this.getUserInfo();
+          });
+      // this.setUser(userInfo)
+      // if (this.$route.name === 'splash') {
+      //     this.enter();
+      // }
     },
-
   },
 }
 </script>

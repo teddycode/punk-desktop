@@ -130,7 +130,7 @@ export default defineComponent({
 
     // 获取后端数据
     async function fetchStatusData() {
-      const userId = parseInt(userInfo.id);
+      const userId = parseInt(userInfo.uid);
       GetForTransactionStatus(userId, address).then((data) => {
         console.log('交易统计数据：', data);
         countStatus.value.income = data?.data.income;
@@ -139,8 +139,8 @@ export default defineComponent({
     }
     //   获取表格数据
     async function fetchTableData() {
-      const userId = parseInt(userInfo.id);
-      PostTransactionPageList(userId, address, pageConfig.value).then((resp) => {
+      const uid = parseInt(userInfo.uid);
+      PostTransactionPageList(uid, address, pageConfig.value).then((resp) => {
         console.log('交易分页数据：', resp);
         tableData.value = resp?.data?.records;
         pageConfig.value.current = resp?.data?.pageNumber;

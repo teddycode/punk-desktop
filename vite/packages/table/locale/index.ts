@@ -8,11 +8,11 @@
  */
 
 import { MissingHandler, createI18n } from 'vue-i18n'; //引入vue-i18n组件
-import { TranslateUsingGET } from '@js/service/transaction';
+import { TranslateUsingGET } from '@js/service/translation';
 import { langs } from './helper';
 
 // Override the missing translation handler
-const fetchMissing: MissingHandler =  async (locale, key): Promise<string | void> => {
+const fetchMissing: MissingHandler = async (locale, key): Promise<string | void> => {
   // Check if translation exists in cache
   const cacheKey = `${key}_${locale}`;
   const cachedTranslation = localStorage.getItem(cacheKey);
