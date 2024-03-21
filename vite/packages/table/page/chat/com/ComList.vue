@@ -167,37 +167,64 @@ const title = computed(() => {
   return result;
 });
 const islike = computed(()=>{
-  let result = false;
-  for(var i=0;i<store.user.likeIds.length;i++){
-    if(store.user.likeIds[i] == postData.value.id){
-      result = true;
-    }
-  }
-  return result
+  var index = store.loveList.findIndex(item => item.id == postData.value.id);
+  return index != -1
+  // let result = false;
+  // for(var i=0;i<store.loveList.length;i++){
+  //   if(store.loveList[i].id == postData.value.id){
+  //     result = true;
+  //   }
+  // }
+  // return result
 })
 const iscollect = computed(()=>{
-  let result = false;
-  for(var i=0;i<store.user.collectIds.length;i++){
-    if(store.user.collectIds[i] == postData.value.id){
-      result = true;
-    }
-  }
-  return result
+  var index = store.collectList.findIndex(item => item.id == postData.value.id);
+  return index != -1
+  // let result = false;
+  // for(var i=0;i<store.collectList.length;i++){
+  //   if(store.collectList[i].id == postData.value.id){
+  //     result = true;
+  //   }
+  // }
+  // return result
 })
 
 // 自定义事件，并返回 emit 函数
-const emits = defineEmits(['like','collect'])
+// const emits = defineEmits(['like','collect'])
 function emitLike() {
   // 触发自定义事件 like，并传递参数帖子id
-  emits('like',postData.value.id)
+  // emits('like',postData.value.id)
+  //先更新前端，后面后端处理后再重新赋值
+  if(islike.value){
+    postData.value.loveCount--;
+    var index = store.loveList.findIndex(item => item.id == postData.value.id);
+    store.loveList.splice(index,1);
+  }
+  else{
+    postData.value.loveCount++;
+    store.loveList.push(postData.value)
+  }
+
+  store._userLove(postData.value.id);
 }
 function emitCollect() {
-  emits('collect',postData.value.id)
+  // emits('collect',postData.value.id)
+  if(iscollect.value){
+    postData.value.collectCount--;
+    var index = store.collectList.findIndex(item => item.id == postData.value.id);
+    store.collectList.splice(index,1);
+  }
+  else{
+    postData.value.collectCount++;
+    store.collectList.push(postData.value)
+  }
+  store._userCollect(postData.value.id);
 }
 
 </script>
 <style lang="scss" scoped>
 .card {
+  background-color: white;
   .cover-wrapper {
     flex-wrap: wrap;
   }

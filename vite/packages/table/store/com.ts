@@ -9,6 +9,9 @@ const { axios } = window.$models;
 import { getConfig } from '../js/axios/serverApi';
 import { getDateTime } from '../util';
 
+
+import {getUserDetail, userLove, userCollect} from "../../../src/api/socialNetwork_user";
+
 export const comStore = defineStore('comStore', {
   state: () => ({
     signIn: {},
@@ -24,9 +27,33 @@ export const comStore = defineStore('comStore', {
       likeIds: [0,1],
       collectNum:1,
       collectIds:[0]
-    }
+    },
+
+
+    collectList:[],
+    loveList:[],
   }),
   actions: {
+    async _updateUserInfo(){
+      await getUserDetail(1).then(response=>{
+        this.user = response.data.user
+        this.collectList = response.data.collectList
+        this.loveList = response.data.loveList
+      })
+    },
+    //用户点赞
+    async _userLove(forumId){
+      await userLove(this.user.id, forumId)
+    },
+    //用户收藏
+    async _userCollect(forumId){
+      await userCollect(this.user.id, forumId)
+    },
+
+
+
+
+
     async updateTodayRank() {
       let response = await axios.get(getTodayRank, await getConfig());
       if (response.code === 1000) {

@@ -1,7 +1,7 @@
 <template>
 <!--  <div>这里是文章详情页面啦啦啦啦,id:{{ route.query.id }}</div>-->
   <div class="flex justify-center h-full ml-3">
-    <div class="pl-3 pr-3" style="width: 60%;">
+    <div class="pl-3 pr-3" style="width: 100%">
       <div class="flex justify-between h-[40px] mb-3">
         <div @click="OnBack" class="xt-text font-16 back-hover" style="line-height: 40px;">
           返回
@@ -11,14 +11,10 @@
         <vue-custom-scrollbar :key="currentPage" ref="threadListRef" :settings="settingsScroller"
                               class="w-full thread-list"
                               style="height: calc(100% - 90px );overflow: hidden;flex-shrink: 0;width: 100%;">
-        <ComList v-if="article" :cardData="article"
-                  style="background-color: white"
-                  @like="forumDetailLike"
-                  @collect="forumDetailcollect"
-        >
+        <ComList v-if="article" :cardData="article">
         </ComList>
 
-        <u-comment class="xt-bg" upload :config="config" @submit="submit" @like="like" relative-time>
+        <u-comment upload :config="config" @submit="submit" @like="like" relative-time>
 <!--           <div style="margin-top: -20px;"></div>-->
 <!--           <template #header>头部卡槽</template>-->
 <!--           <template #info>用户信息卡槽</template>-->
@@ -29,38 +25,6 @@
         </vue-custom-scrollbar>
       </div>
 
-    </div>
-    <div   class="pl-3 pr-3" style="width: 30%;">
-      <a-card title="热搜话题" class="xt-bg" :bordered="false" style="width: 300px;border-radius: 10px">
-        <template #extra><router-link :to="{name: 'topic'}">more</router-link></template>
-        <div v-for="(item,index) in topicData">
-          <div v-if="index<3" style="display: flex;justify-content: space-between">
-            <a-card-meta>
-              <template #title>
-                <router-link style="text-decoration-color: #0c0c0c" :to="{name: 'topic'}">{{ item.title }}</router-link>
-              </template>
-              <template #description>
-                <p>{{ item.description }}</p>
-              </template>
-
-            </a-card-meta>
-<!--            <trend-->
-<!--              :data="[1, 5, 2, 10, 4]"-->
-<!--              :gradient="['#000000']"-->
-<!--              auto-draw-->
-<!--              smooth-->
-<!--              height="50"-->
-<!--              width="50"-->
-<!--            >-->
-<!--            </trend>-->
-          </div>
-        </div>
-      </a-card>
-      <a-card class="xt-bg" title="公告" :bordered="false" style="width: 300px;border-radius: 10px;margin-top: 80px">
-        <template #extra><router-link :to="{name: 'notification'}">more</router-link></template>
-        <p>welcome！磐古</p>
-        <p>项目说明</p>
-      </a-card>
     </div>
   </div>
 </template>
@@ -213,7 +177,7 @@ const like = (id: string, finish: () => void) => {
 import {comStore} from '../../store/com'
 import {storeToRefs} from 'pinia'
 import VueCustomScrollbar from "../../../../src/components/vue-scrollbar.vue";
-import {getForumDetail} from'@package/../src/api/forum'
+import {getForumDetail} from '../../../../src/api/socialNetwork_forum'
 const store = comStore();
 const { user } = storeToRefs(store)
 const article = ref(null)
@@ -239,28 +203,28 @@ fetchForumDetail(route.query.id)
 // })
 
 
-function forumDetailLike(id){
-  var index = user.value.likeIds.findIndex(item => item == id)
-  if(index == -1){  //未点赞
-    article.value.support_count++;
-    user.value.likeIds.push(id)
-  }
-  else{
-    article.value.support_count--;
-    user.value.likeIds.splice(index,1);
-  }
-}
-function forumDetailcollect(id){
-  var index = user.value.collectIds.findIndex(item => item == id)
-  if(index == -1){ //未收藏
-    article.value.view_count++
-    user.value.collectIds.push(id);
-  }
-  else{
-    article.value.view_count--;
-    user.value.collectIds.splice(index,1)
-  }
-}
+// function forumDetailLike(id){
+//   var index = user.value.likeIds.findIndex(item => item == id)
+//   if(index == -1){  //未点赞
+//     article.value.support_count++;
+//     user.value.likeIds.push(id)
+//   }
+//   else{
+//     article.value.support_count--;
+//     user.value.likeIds.splice(index,1);
+//   }
+// }
+// function forumDetailcollect(id){
+//   var index = user.value.collectIds.findIndex(item => item == id)
+//   if(index == -1){ //未收藏
+//     article.value.view_count++
+//     user.value.collectIds.push(id);
+//   }
+//   else{
+//     article.value.view_count--;
+//     user.value.collectIds.splice(index,1)
+//   }
+// }
 const OnBack = () =>{
   router.back()
 }

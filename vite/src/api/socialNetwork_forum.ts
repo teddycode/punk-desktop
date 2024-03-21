@@ -15,3 +15,11 @@ export function getForumDetail(id) {
     method: 'get',
   });
 }
+//发表帖子
+export function addForum(data) {
+  return request({
+    url: '/forum/save',
+    method: 'post',
+    data,
+  });
+}

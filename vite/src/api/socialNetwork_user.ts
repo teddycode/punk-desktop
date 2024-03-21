@@ -15,3 +15,19 @@ export function getUserDetail(id) {
   });
 }
 
+//用户点赞
+export function userLove(userId, forumId) {
+  return request({
+    url: '/love/userLove',
+    method: 'put',
+    params:{userId, forumId},
+  });
+}
+//用户收藏
+export function userCollect(userId, forumId) {
+  return request({
+    url: '/collect/userCollect',
+    method: 'put',
+    params:{userId, forumId},
+  });
+}

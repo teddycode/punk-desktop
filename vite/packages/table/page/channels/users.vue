@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-center h-full ml-3">
-    <div class="pl-3 pr-3" style="width: 60%;">
+    <div class="pl-3 pr-3" >
       <div class="flex justify-between h-[40px] mb-3">
         <div  class="xt-text font-16" style="line-height: 40px;">
           用户
@@ -12,7 +12,7 @@
                               style="height: calc(100% - 90px );overflow: hidden;flex-shrink: 0;width: 100%;">
           <a-empty v-if="users?.length === 0" description="暂无内容" image="/img/test/load-ail.png"
                    style="margin-top: 30%;"></a-empty>
-        <a-card v-else v-for="item in userList" class="xt-bg" style="margin-bottom: 30px" :bordered="false">
+        <a-card v-else v-for="item in userList"  style="margin-bottom: 30px;" >
           <template #cover>
             <div class="image-container">
               <img
@@ -55,38 +55,6 @@
         </vue-custom-scrollbar>
       </div>
 
-    </div>
-    <div class="pl-3 pr-3" style="width: 30%;">
-      <a-card title="热搜话题" class="xt-bg" :bordered="false" style="width: 300px;border-radius: 10px">
-        <template #extra><router-link :to="{name: 'topic'}">more</router-link></template>
-        <div v-for="(item,index) in topicData">
-          <div v-if="index<3" class="spacebetween">
-            <a-card-meta>
-              <template #title>
-                <router-link :to="{name: 'topic'}">{{ item.title }}</router-link>
-              </template>
-              <template #description>
-                <p>{{ item.description }}</p>
-              </template>
-
-            </a-card-meta>
-<!--            <trend-->
-<!--              :data="[1, 5, 2, 10, 4]"-->
-<!--              :gradient="['#000000']"-->
-<!--              auto-draw-->
-<!--              smooth-->
-<!--              height="50"-->
-<!--              width="50"-->
-<!--            >-->
-<!--            </trend>-->
-          </div>
-        </div>
-      </a-card>
-      <a-card class="xt-bg" title="公告" :bordered="false" style="width: 300px;border-radius: 10px;margin-top: 80px">
-        <template #extra><router-link :to="{name: 'notification'}">more</router-link></template>
-        <p>welcome！磐古</p>
-        <p>项目说明</p>
-      </a-card>
     </div>
   </div>
 </template>

@@ -28,7 +28,8 @@ import Chat from '@page/chat/chat.vue';
 import Team from '@page/Team.vue';
 import Hall from '@page/team/Hall.vue';
 
-import Test from'@page/channels/test.vue'
+// import Test from'@page/channels/test.vue'
+import BaseLayout from "../../page/core/Layouts/BaseLayout.vue";
 
 export default [
   BarrageRoute,
@@ -147,7 +148,7 @@ export default [
   {
     path: '/test',
     name: 'test',
-    component: Test,
+    component: BaseLayout,
   },
   {
     path: "/topic",

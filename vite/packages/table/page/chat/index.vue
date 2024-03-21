@@ -1,17 +1,23 @@
 <template>
   <!-- 团队聊天主页面 -->
-  <div class="flex" style="width: 100%; height: 100%;background-color: white; border-radius: 10px;" >
+  <div class="flex" style="width: 100%; height: 100%;background-color:whitesmoke; border-radius: 10px;" >
     <!-- 左侧tab切换 -->
-    <SecondPanel v-if="!fullScreen" @changeTab="changeTab" :menus="menus"></SecondPanel>
+    <div style="flex: 1;">
+      <SecondPanel style="margin-left: 50px" v-if="!fullScreen" @changeTab="changeTab" :menus="menus"></SecondPanel>
+    </div>
 
     <!-- 右侧内容显示 -->
-    <div style="flex: 1; height: 100%">
+    <div class="middle-content" style="flex: 3; height: 100%">
       <div
-        class=""
-        style="height: calc(100% - 1em); border-radius: 10px; overflow: hidden; margin-top: 1em; margin: 0.5em"
+        class="mt-3"
+        style="height: calc(100% - 1em); border-radius: 10px; overflow: hidden; "
       >
         <router-view></router-view>
       </div>
+    </div>
+
+    <div class="mt-3" style="flex: 1; height: 100%;margin-right: 50px">
+      <RightSide ></RightSide>
     </div>
   </div>
 </template>
@@ -19,13 +25,15 @@
 <script>
 import { defineComponent } from 'vue';
 import SecondPanel from '../../components/SecondPanel.vue';
+import RightSide from '../channels/components/RightSide.vue';
 import { chatStore } from '../../store/chat';
+import {comStore} from "@store/com";
 import { mapActions, mapState } from 'pinia';
 import { appStore } from '../../store';
 
 export default defineComponent({
   name: 'index',
-  components: { SecondPanel },
+  components: { SecondPanel, RightSide },
   data() {
     return {
       menus: [
@@ -67,9 +75,14 @@ export default defineComponent({
         },
         {
           title: '收藏',
-          icon: 'star',
+          icon: 'moon',
           route: { name: 'collects' },
         },
+        // {
+        //   title: '测试',
+        //   icon: 'chat',
+        //   route: { name: 'test' },
+        // },
 
         // {
         //   title: '聊天',
@@ -103,16 +116,13 @@ export default defineComponent({
         //   route: { name: 'barrage' },
         //   tab: 'barrage',
         // },
-        // {
-        //   title: '测试',
-        //   icon: 'text-align-left',
-        //   route: { name: 'test' },
-        // },
+
       ],
     };
   },
   mounted() {
     chatStore().login();
+    comStore()._updateUserInfo();
   },
   computed: {
     ...mapState(appStore, ['fullScreen']),
@@ -127,4 +137,10 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+//middle-content左右两侧显示阴影边框
+.middle-content {
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+</style>
