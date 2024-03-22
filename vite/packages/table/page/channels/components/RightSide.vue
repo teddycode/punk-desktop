@@ -1,15 +1,15 @@
 <template>
   <div class="pl-3 pr-3">
     <a-card title="热搜话题"  style="width: 300px;border-radius: 10px">
-      <template #extra><router-link :to="{name: 'topic'}">more</router-link></template>
-      <div v-for="(item,index) in topicData">
-        <div v-if="index<3" style="display: flex;justify-content: space-between">
+      <template #extra><router-link :to="{name: 'tag'}">more</router-link></template>
+      <div v-for="(item,index) in topTagList">
+        <div  style="display: flex;justify-content: space-between">
           <a-card-meta>
             <template #title>
-              <router-link style="text-decoration-color: #0c0c0c" :to="{name: 'topic'}">{{ item.title }}</router-link>
+              <router-link  :to="{name: 'tagDetail',query:{id:item.id,tagName:item.tagName}}"># {{ item.tagName}}</router-link>
             </template>
             <template #description>
-              <p>{{ item.description }}</p>
+              <p>共被提到 {{item.forumCount}} 次</p>
             </template>
 
           </a-card-meta>
@@ -33,8 +33,16 @@
   </div>
 </template>
 <script setup lang="ts">
-
 import {topicData} from "@page/channels/mock";
+import { getTopTagList } from "../../../../../src/api/socialNetwork_tag";
+import {ref} from "vue";
+
+const topTagList = ref([]);
+const fetchTopTagListData = async () => {
+  const res = await getTopTagList(3);
+  topTagList.value = res.data;
+};
+fetchTopTagListData();
 </script>
 
 <style scoped lang="scss">
