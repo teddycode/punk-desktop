@@ -56,7 +56,7 @@ export default defineComponent({
         {
           title: '话题',
           icon: 'message',
-          route: { name: 'topic' },
+          route: { name: 'tag' },
         },
         {
           title: '用户',

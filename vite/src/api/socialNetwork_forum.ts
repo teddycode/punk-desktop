@@ -23,3 +23,10 @@ export function addForum(data) {
     data,
   });
 }
+//根据标签查询帖子
+export function getForumsByTag(tag_id) {
+  return request({
+    url: `/forum/getListByTag/${tag_id}`,
+    method: 'get',
+  });
+}

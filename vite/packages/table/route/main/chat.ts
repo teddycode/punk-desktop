@@ -12,12 +12,13 @@ import CircleDetail from '@page/channels/GroupsDetail.vue';
 
 import  Forum from '@page/channels/forum.vue';
 import ForumDetail from "@page/channels/forumDetail.vue";
-import Topic from "@page/channels/topic.vue"
+import Tag from "../../page/channels/tag.vue"
 import Notification from "@page/channels/notification.vue"
 import Likes from "@page/channels/likes.vue"
 import Collects from "../../page/channels/collects.vue";
 import Users from "../../page/channels/users.vue"
 import UserDetail from "../../page/channels/userDetail.vue"
+import TagDetail from "../../page/channels/tagDetail.vue";
 /**聊天团队模式结束**/
 //导入应用路由
 import ChatAdmin from '@page/chat/page/admin.vue';
@@ -151,9 +152,9 @@ export default [
     component: BaseLayout,
   },
   {
-    path: "/topic",
-    name: "topic",
-    component: Topic
+    path: "/tag",
+    name: "tag",
+    component: Tag
   },
   {
     path: "/users",
@@ -164,6 +165,11 @@ export default [
     path: "/userDetail",
     name: "userDetail",
     component: UserDetail
+  },
+  {
+    path: "/tagDetail",
+    name: "tagDetail",
+    component: TagDetail
   },
   {
     path: "/notification",

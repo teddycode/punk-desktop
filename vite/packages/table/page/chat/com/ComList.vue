@@ -67,7 +67,7 @@
 <!--              #{{ item }}</div>-->
             <div class="flex tag-box">
 <!--              <a-tag v-for="(item,index) in cardData.tags" :key="index" :bordered="false" color="orange">#{{ item }}</a-tag>-->
-            <router-link v-for="(item,index) in cardData.tags" class="tag-box" :key="index"  :to="{name: 'topic'}"># {{ item.tagName}}</router-link>
+            <router-link v-for="(item,index) in cardData.tags" class="tag-box" :key="index"  :to="{name: 'tagDetail',query:{id:item.id,tagName:item.tagName}}"># {{ item.tagName}}</router-link>
             </div>
           </div>
         </div>
