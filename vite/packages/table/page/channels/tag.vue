@@ -32,6 +32,7 @@
   <!--                  width="60"-->
   <!--                >-->
   <!--                </trend>-->
+                  <TrendChart :tag-data="item.trend"></TrendChart>
                 </div>
               </a-list-item>
             </template>
@@ -42,6 +43,7 @@
   </div>
 </template>
 <script lang='ts' setup>
+import TrendChart from "@page/channels/components/TrendChart.vue";
 import {topicData} from './mock';
 import { useRoute,useRouter } from 'vue-router';
 import { ref, reactive } from 'vue';

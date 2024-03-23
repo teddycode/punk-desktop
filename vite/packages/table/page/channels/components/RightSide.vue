@@ -22,6 +22,7 @@
           <!--              width="50"-->
           <!--            >-->
           <!--            </trend>-->
+          <TrendChart :tag-data="item.trend"></TrendChart>
         </div>
       </div>
     </a-card>
@@ -36,6 +37,7 @@
 import {topicData} from "@page/channels/mock";
 import { getTopTagList } from "../../../../../src/api/socialNetwork_tag";
 import {ref} from "vue";
+import TrendChart from "@page/channels/components/TrendChart.vue";
 
 const topTagList = ref([]);
 const fetchTopTagListData = async () => {
