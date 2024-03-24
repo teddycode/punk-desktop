@@ -10,7 +10,7 @@ import { getConfig } from '../js/axios/serverApi';
 import { getDateTime } from '../util';
 
 
-import {getUserDetail, userLove, userCollect} from "../../../src/api/socialNetwork_user";
+import {getUserDetail, userLove, userCollect, userFollow} from "../../../src/api/socialNetwork_user";
 
 export const comStore = defineStore('comStore', {
   state: () => ({
@@ -29,9 +29,10 @@ export const comStore = defineStore('comStore', {
       collectIds:[0]
     },
 
-
     collectList:[],
     loveList:[],
+    followList:[],
+    fansList:[],
   }),
   actions: {
     async _updateUserInfo(){
@@ -39,6 +40,8 @@ export const comStore = defineStore('comStore', {
         this.user = response.data.user
         this.collectList = response.data.collectList
         this.loveList = response.data.loveList
+        this.followList = response.data.followList
+        this.fansList = response.data.fansList
       })
     },
     //用户点赞
@@ -49,7 +52,16 @@ export const comStore = defineStore('comStore', {
     async _userCollect(forumId){
       await userCollect(this.user.id, forumId)
     },
-
+    //用户关注
+    async _userFollow(User){
+      this.followList.push(User)
+      await userFollow(this.user.id, User.id)
+    },
+    //用户取消关注
+    async _userUnFollow(User){
+      this.followList = this.followList.filter(item=>item.id!=User.id)
+      await userFollow(this.user.id, User.id)
+    },
 
 
 

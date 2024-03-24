@@ -43,7 +43,8 @@
                   <p style="font-weight:bold;margin: 0;padding: 0">正在关注</p>
                   <p style="margin: 0;padding: 0">{{ UserDetail.followNum }}</p>
                 </div>
-                <button style="color: var(--active-bg);width: 83px;height: 40px;">关注</button>
+                <a-button v-if="isFollowed(UserDetail.id)" type="primary" size="large" danger @click="store._userUnFollow(UserDetail)">取消关注</a-button>
+                <a-button v-else size="large" style="background-color: var(--active-bg);" @click="store._userFollow(UserDetail)">关注</a-button>
               </div>
             </div>
 
@@ -58,9 +59,7 @@
                              style="margin-top: 30%;"></a-empty>
                     <template v-else>
                       <ComList v-for="(card, index) in UserForums" :key="index" :cardData="card"
-                               class="xt-bg"
-                               @collect="forumcollect"
-                               @like="forumlike">
+                               class="xt-bg">
 
                       </ComList>
                     </template>
@@ -73,11 +72,19 @@
                     <a-empty v-if="UserLoves?.length === 0" description="暂无内容" image="/img/test/load-ail.png"
                              style="margin-top: 30%;"></a-empty>
                     <template v-else>
-                      <ComList v-for="(card, index) in UserLoves" :key="index" :cardData="card"
-                               class="xt-bg"
-                               @collect="forumcollect"
-                               @like="forumlike">
-
+                      <ComList v-for="(card, index) in UserLoves" :key="index" :cardData="card">
+                      </ComList>
+                    </template>
+                  </div>
+                </a-tab-pane>
+                <a-tab-pane key="3" tab="收藏" force-render>
+                  <div class="flex flex-col justify-center content">
+                    <!-- {{ checkMenuList.value[currentIndex.value].order }} -->
+                    <!-- 循环渲染多个 ComCard -->
+                    <a-empty v-if="UserCollects?.length === 0" description="暂无内容" image="/img/test/load-ail.png"
+                             style="margin-top: 30%;"></a-empty>
+                    <template v-else>
+                      <ComList v-for="(card, index) in UserCollects" :key="index" :cardData="card">
                       </ComList>
                     </template>
                   </div>
@@ -101,6 +108,8 @@ import {UFold} from "undraw-ui";
 import VueCustomScrollbar from "../../../../src/components/vue-scrollbar.vue";
 import ComList from "@page/chat/com/ComList.vue";
 const currentPage = ref(1)
+import { comStore } from '../../store/com'
+const store = comStore();
 
 const settingsScroller = reactive({
   useBothWheelAxes: true,
@@ -120,12 +129,14 @@ const activeKey = ref('1');
 const UserDetail = ref({})
 const UserForums = ref([]);
 const UserLoves = ref([]);
+const UserCollects = ref([]);
 
 function fetchUserDetailData() {
   getUserDetail(route.query.id).then(response=>{
     UserDetail.value = response.data.user;
     UserForums.value = response.data.forumList;
     UserLoves.value = response.data.loveList;
+    UserCollects.value = response.data.collectList;
   })
 }
 fetchUserDetailData();
@@ -145,7 +156,10 @@ fetchUserDetailData();
 //   }
 // })
 
-
+const isFollowed = (followId) =>{
+  var index = store.followList.findIndex(item => item.id == followId);
+  return index != -1
+}
 
 
 function OnBack() {

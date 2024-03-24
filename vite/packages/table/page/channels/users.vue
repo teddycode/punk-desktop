@@ -10,7 +10,7 @@
         <vue-custom-scrollbar :key="currentPage" ref="threadListRef" :settings="settingsScroller"
                               class="w-full thread-list"
                               style="height: calc(100% - 90px );overflow: hidden;flex-shrink: 0;width: 100%;">
-          <a-empty v-if="users?.length === 0" description="暂无内容" image="/img/test/load-ail.png"
+          <a-empty v-if="userList?.length === 0" description="暂无内容" image="/img/test/load-ail.png"
                    style="margin-top: 30%;"></a-empty>
         <a-card v-else v-for="item in userList"  style="margin-bottom: 30px;" >
           <template #cover>
@@ -48,7 +48,8 @@
                 <p style="font-weight:bold;margin: 0;padding: 0">正在关注</p>
                 <p style="margin: 0;padding: 0">{{ item.followNum }}</p>
               </div>
-              <button style="color: var(--active-bg);width: 83px;height: 40px;">关注</button>
+              <a-button v-if="isFollowed(item.id)" type="primary" size="large" danger @click="store._userUnFollow(item)">取消关注</a-button>
+              <a-button v-else size="large" style="background-color: var(--active-bg);" @click="store._userFollow(item)">关注</a-button>
             </div>
           </div>
         </a-card>
@@ -68,6 +69,8 @@ import VueCustomScrollbar from "../../../../src/components/vue-scrollbar.vue";
 import Template from "@package/user/pages/Template.vue";
 import Import from "@page/deck/Import.vue";
 import { getUserList } from "@package/../src/api/socialNetwork_user";
+import { comStore } from '../../store/com'
+const store = comStore();
 const currentPage = ref(1)
 const userList = ref([]);
 //userList.value = users;//假数据
@@ -78,6 +81,20 @@ async function fetchUserListData() {
 onMounted(async()=>{
   await fetchUserListData();
 })
+console.log(store.followList)
+const isFollowed = (followId) =>{
+  var index = store.followList.findIndex(item => item.id == followId);
+  return index != -1
+}
+// function follow(user){
+//   store.followList.push(user);
+//   store._userFollow(user.id)
+// }
+// function unfollow(user) {
+//   var index = store.followList.findIndex(item => item.id == user.id);
+//   store.followList.splice(index,1);
+//   store._userFollow(user.id)
+// }
 
 const settingsScroller = reactive({
   useBothWheelAxes: true,

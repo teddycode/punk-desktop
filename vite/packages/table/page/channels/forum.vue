@@ -52,7 +52,7 @@ import {Icon as newIcon} from '@iconify/vue'
 import ComList from '../chat/com/ComList.vue';
 import publishModal from '../chat/com/publishModal.vue';
 import {comCards,topicData} from './mock';
-import {comStore} from '../../store/com'
+import { comStore } from '../../store/com'
 import {storeToRefs} from 'pinia'
 const store = comStore();
 const { user } = storeToRefs(store)

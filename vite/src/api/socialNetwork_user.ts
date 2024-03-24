@@ -31,3 +31,11 @@ export function userCollect(userId, forumId) {
     params:{userId, forumId},
   });
 }
+//用户关注
+export function userFollow(userId, followId) {
+  return request({
+    url: '/follower/follow',
+    method: 'post',
+    params:{userId, followId},
+  });
+}
