@@ -48,7 +48,7 @@
                 <p style="font-weight:bold;margin: 0;padding: 0">正在关注</p>
                 <p style="margin: 0;padding: 0">{{ item.followNum }}</p>
               </div>
-              <a-button v-if="isFollowed(item.id)" type="primary" size="large" danger @click="store._userUnFollow(item)">取消关注</a-button>
+              <a-button v-if="store.isFollowed(item.id)" type="primary" size="large" danger @click="store._userUnFollow(item)">取消关注</a-button>
               <a-button v-else size="large" style="background-color: var(--active-bg);" @click="store._userFollow(item)">关注</a-button>
             </div>
           </div>
@@ -82,10 +82,10 @@ onMounted(async()=>{
   await fetchUserListData();
 })
 console.log(store.followList)
-const isFollowed = (followId) =>{
-  var index = store.followList.findIndex(item => item.id == followId);
-  return index != -1
-}
+// const isFollowed = (followId) =>{
+//   var index = store.followList.findIndex(item => item.id == followId);
+//   return index != -1
+// }
 // function follow(user){
 //   store.followList.push(user);
 //   store._userFollow(user.id)

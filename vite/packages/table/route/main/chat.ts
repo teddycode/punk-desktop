@@ -19,6 +19,7 @@ import Collects from "../../page/channels/collects.vue";
 import Users from "../../page/channels/users.vue"
 import UserDetail from "../../page/channels/userDetail.vue"
 import TagDetail from "../../page/channels/tagDetail.vue";
+import UserFollowers from "../../page/channels/userFollowers.vue";
 /**聊天团队模式结束**/
 //导入应用路由
 import ChatAdmin from '@page/chat/page/admin.vue';
@@ -165,6 +166,11 @@ export default [
     path: "/userDetail",
     name: "userDetail",
     component: UserDetail
+  },
+  {
+    path: "/userFollowers",
+    name: "userFollowers",
+    component: UserFollowers
   },
   {
     path: "/tagDetail",

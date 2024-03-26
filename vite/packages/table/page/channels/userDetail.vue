@@ -10,7 +10,7 @@
         <vue-custom-scrollbar :key="currentPage" ref="threadListRef" :settings="settingsScroller"
                               class="w-full thread-list"
                               style="height: calc(100% - 90px );overflow: hidden;flex-shrink: 0;width: 100%;">
-          <a-card class="xt-bg"  style="margin-bottom: 30px" :bordered="false">
+          <a-card  style="margin-bottom: 30px" :bordered="false">
             <template #cover>
               <div class="image-container">
                 <img
@@ -36,14 +36,14 @@
                   <p style="margin: 0;padding: 0">{{ UserDetail.forumNum }}</p>
                 </div>
                 <div style="padding :10px 0;text-align:center;">
-                  <p style="font-weight:bold;margin: 0;padding: 0">关注者</p>
+                  <p class="hover_underline" @click="router.push({name: 'userFollowers', query: {id: UserDetail.id, activeKey: '1' }})" style="font-weight:bold;margin: 0;padding: 0">关注者</p>
                   <p style="margin: 0;padding: 0">{{ UserDetail.fanNum }}</p>
                 </div>
                 <div style="padding :10px 0;text-align:center;">
-                  <p style="font-weight:bold;margin: 0;padding: 0">正在关注</p>
+                  <p class="hover_underline" @click="router.push({name: 'userFollowers', query: {id: UserDetail.id, activeKey: '2' }})" style="font-weight:bold;margin: 0;padding: 0">正在关注</p>
                   <p style="margin: 0;padding: 0">{{ UserDetail.followNum }}</p>
                 </div>
-                <a-button v-if="isFollowed(UserDetail.id)" type="primary" size="large" danger @click="store._userUnFollow(UserDetail)">取消关注</a-button>
+                <a-button v-if="store.isFollowed(UserDetail.id)" type="primary" size="large" danger @click="store._userUnFollow(UserDetail)">取消关注</a-button>
                 <a-button v-else size="large" style="background-color: var(--active-bg);" @click="store._userFollow(UserDetail)">关注</a-button>
               </div>
             </div>
@@ -156,10 +156,6 @@ fetchUserDetailData();
 //   }
 // })
 
-const isFollowed = (followId) =>{
-  var index = store.followList.findIndex(item => item.id == followId);
-  return index != -1
-}
 
 
 function OnBack() {

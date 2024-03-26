@@ -1,6 +1,6 @@
 <template>
   <div class="pl-3 pr-3">
-    <a-card title="热搜话题"  style="width: 300px;border-radius: 10px">
+    <a-card title="热搜话题"  style="width: 300px;border-radius: 10px;">
       <template #extra><router-link :to="{name: 'tag'}">more</router-link></template>
       <div v-for="(item,index) in topTagList">
         <div  style="display: flex;justify-content: space-between">

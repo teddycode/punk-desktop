@@ -63,6 +63,10 @@ export const comStore = defineStore('comStore', {
       await userFollow(this.user.id, User.id)
     },
 
+    isFollowed(followId){
+      var index = this.followList.findIndex(item => item.id == followId);
+      return index != -1
+    },
 
 
 

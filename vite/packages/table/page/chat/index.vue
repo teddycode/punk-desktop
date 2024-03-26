@@ -1,6 +1,6 @@
 <template>
   <!-- 团队聊天主页面 -->
-  <div class="flex" style="width: 100%; height: 100%;background-color:whitesmoke; border-radius: 10px;" >
+  <div class="flex" style="width: 100%; height: 100%;background-color:white; border-radius: 10px;" >
     <!-- 左侧tab切换 -->
     <div style="flex: 1;">
       <SecondPanel style="margin-left: 50px" v-if="!fullScreen" @changeTab="changeTab" :menus="menus"></SecondPanel>

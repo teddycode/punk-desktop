@@ -1,6 +1,6 @@
 <template>
   <!-- {{ props.cardData }} -->
-  <div class="w-full card">
+  <div class="w-full card ">
     <div class="card-content">
       <!-- {{ Imageheight.width }} -->
       <div class="w-full card-top">
@@ -225,6 +225,7 @@ function emitCollect() {
 <style lang="scss" scoped>
 .card {
   background-color: white;
+  border: 1px solid #e8e8e8;
   .cover-wrapper {
     flex-wrap: wrap;
   }
