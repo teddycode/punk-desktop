@@ -35,6 +35,11 @@ import {ref, reactive, onMounted, onBeforeMount} from 'vue';
 import ComList from '../chat/com/ComList.vue';
 import emoji from '../../assets/emoji'
 import { CommentApi, ConfigApi, SubmitParamApi, UToast, createObjectURL, dayjs } from 'undraw-ui'
+import {comStore} from '../../store/com'
+import {storeToRefs} from 'pinia'
+import VueCustomScrollbar from "../../../../src/components/vue-scrollbar.vue";
+import {getForumDetail} from '../../../../src/api/socialNetwork_forum'
+const store = comStore();
 const route  = useRoute()
 const router = useRouter()
 
@@ -67,6 +72,20 @@ const config = reactive<ConfigApi>({
   // comments: [],
   // total: 10,
 })
+const article = ref(null)
+console.log('这里是帖子详情页面')
+console.log('文章id：'+route.query.id)
+function fetchForumDetail(){
+  getForumDetail(route.query.id).then(response=>{
+    article.value = response.data
+  })
+}
+fetchForumDetail();
+config.user.id = store.user.id
+config.user.username = store.user.nickname
+config.user.avatar = store.user.avatar
+
+
 // 评论数据
 // setTimeout(() => {
 //   config.user = {
@@ -100,12 +119,11 @@ const config = reactive<ConfigApi>({
 //   ]
 // }, 500)
 
-import { getCommentList } from "@package/../src/api/comment";
+import { getCommentList, addComment } from "../../../../src/api/socialNetwork_comment";
 
 function fetchCommentList() {
   getCommentList(route.query.id).then(response => {
     config.comments = response.data;
-    console.log(response.data);
   })
 }
 fetchCommentList();
@@ -152,16 +170,24 @@ const submit = ({ content, parentId, files, finish }: SubmitParamApi) => {
     parentId: parentId,
     uid: config.user.id,
     content: content,
-    createTime: '1分钟前',
+    createTime: dayjs().subtract(5, 'seconds').toString(),
     user: {
       username: config.user.username,
       avatar: config.user.avatar
     },
     reply: null
   }
+  const commentData = {
+    forumId: article.value.id,
+    parentId: parentId,
+    userId: store.user.id,
+    content: content
+  }
+  addComment(commentData);
+
   setTimeout(() => {
     finish(comment)
-    UToast({ message: '评论成功!', type: 'info' })
+    UToast({ message: '评论成功!', type: 'success' })
   }, 200)
 }
 
@@ -173,58 +199,6 @@ const like = (id: string, finish: () => void) => {
   }, 200)
 }
 
-
-import {comStore} from '../../store/com'
-import {storeToRefs} from 'pinia'
-import VueCustomScrollbar from "../../../../src/components/vue-scrollbar.vue";
-import {getForumDetail} from '../../../../src/api/socialNetwork_forum'
-const store = comStore();
-const { user } = storeToRefs(store)
-const article = ref(null)
-console.log('这里是帖子详情页面')
-console.log('文章id：'+route.query.id)
-function fetchForumDetail(id){
-  getForumDetail(id).then(response=>{
-    article.value = response.data
-    config.user.username = response.data.user.nickname
-    config.user.avatar = response.data.user.avatar
-  })
-}
-fetchForumDetail(route.query.id)
-// async function fetchForumDetail(id){
-//   await getForumDetail(id).then(response=>{
-//     article.value = response.data
-//     console.log(response.data)
-//   })
-// }
-// // fetchForumDetail(route.query.id)
-// onBeforeMount(async()=>{
-//   await fetchForumDetail(route.query.id)
-// })
-
-
-// function forumDetailLike(id){
-//   var index = user.value.likeIds.findIndex(item => item == id)
-//   if(index == -1){  //未点赞
-//     article.value.support_count++;
-//     user.value.likeIds.push(id)
-//   }
-//   else{
-//     article.value.support_count--;
-//     user.value.likeIds.splice(index,1);
-//   }
-// }
-// function forumDetailcollect(id){
-//   var index = user.value.collectIds.findIndex(item => item == id)
-//   if(index == -1){ //未收藏
-//     article.value.view_count++
-//     user.value.collectIds.push(id);
-//   }
-//   else{
-//     article.value.view_count--;
-//     user.value.collectIds.splice(index,1)
-//   }
-// }
 const OnBack = () =>{
   router.back()
 }

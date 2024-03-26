@@ -36,7 +36,7 @@
 <script setup lang="ts">
 import {topicData} from "@page/channels/mock";
 import { getTopTagList } from "../../../../../src/api/socialNetwork_tag";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import TrendChart from "@page/channels/components/TrendChart.vue";
 
 const topTagList = ref([]);
@@ -45,6 +45,9 @@ const fetchTopTagListData = async () => {
   topTagList.value = res.data;
 };
 fetchTopTagListData();
+onMounted(() => {
+  fetchTopTagListData();
+})
 </script>
 
 <style scoped lang="scss">

@@ -7,3 +7,11 @@ export function getCommentList(id) {
     method: 'get',
   });
 }
+//发表帖子
+export function addComment(data) {
+  return request({
+    url: '/comment/save',
+    method: 'post',
+    data,
+  });
+}
