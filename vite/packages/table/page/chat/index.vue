@@ -123,6 +123,7 @@ export default defineComponent({
   mounted() {
     chatStore().login();
     comStore()._updateUserInfo();
+    comStore()._getTopTagList();
   },
   computed: {
     ...mapState(appStore, ['fullScreen']),

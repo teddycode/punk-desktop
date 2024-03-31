@@ -355,6 +355,7 @@ const publishPost = async () => {
       message.success('发布成功');
       postTitle.value = '';
       postValue.value = '';
+      store._getTopTagList(); //更新首页的热门标签
       handleOk();
   })
 

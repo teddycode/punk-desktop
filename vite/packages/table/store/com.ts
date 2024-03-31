@@ -11,6 +11,7 @@ import { getDateTime } from '../util';
 
 
 import {getUserDetail, userLove, userCollect, userFollow} from "../../../src/api/socialNetwork_user";
+import { getTopTagList } from "../../../src/api/socialNetwork_tag";
 
 export const comStore = defineStore('comStore', {
   state: () => ({
@@ -33,8 +34,10 @@ export const comStore = defineStore('comStore', {
     loveList:[],
     followList:[],
     fansList:[],
+    topTagList: [],
   }),
   actions: {
+    //获取登录用户信息
     async _updateUserInfo(){
       await getUserDetail(1).then(response=>{
         this.user = response.data.user
@@ -42,6 +45,12 @@ export const comStore = defineStore('comStore', {
         this.loveList = response.data.loveList
         this.followList = response.data.followList
         this.fansList = response.data.fansList
+      })
+    },
+    //获取热门标签
+    async _getTopTagList(){
+      await getTopTagList(3).then(response=>{
+        this.topTagList = response.data
       })
     },
     //用户点赞

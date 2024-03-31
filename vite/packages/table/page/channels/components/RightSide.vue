@@ -2,7 +2,7 @@
   <div class="pl-3 pr-3">
     <a-card title="热搜话题"  style="width: 300px;border-radius: 10px;">
       <template #extra><router-link :to="{name: 'tag'}">more</router-link></template>
-      <div v-for="(item,index) in topTagList">
+      <div v-for="(item,index) in store.topTagList">
         <div  style="display: flex;justify-content: space-between">
           <a-card-meta>
             <template #title>
@@ -38,16 +38,15 @@ import {topicData} from "@page/channels/mock";
 import { getTopTagList } from "../../../../../src/api/socialNetwork_tag";
 import {onMounted, ref} from "vue";
 import TrendChart from "@page/channels/components/TrendChart.vue";
+import { comStore } from "@store/com";
+const store = comStore();
 
-const topTagList = ref([]);
-const fetchTopTagListData = async () => {
-  const res = await getTopTagList(3);
-  topTagList.value = res.data;
-};
-fetchTopTagListData();
-onMounted(() => {
-  fetchTopTagListData();
-})
+// const topTagList = ref([]);
+// const fetchTopTagListData = async () => {
+//   const res = await getTopTagList(3);
+//   topTagList.value = res.data;
+// };
+// fetchTopTagListData();
 </script>
 
 <style scoped lang="scss">
