@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 import Antd from 'ant-design-vue';
-import 'ant-design-vue/dist/antd.css';
+import 'ant-design-vue/dist/reset.css';
 import App from './App.vue';
 import { createStore } from 'vuex';
 import { createRouter, createWebHashHistory } from 'vue-router';

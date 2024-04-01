@@ -7,7 +7,7 @@
   </vueCustomScrollbar>
 </template>
 <script>
-import articleService from '../js/service/articleService';
+import articleService from '@js/service/articles';
 
 export default {
   name: 'Article',

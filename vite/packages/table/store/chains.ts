@@ -29,3 +29,12 @@ export const goerli: ChainNetInfo = {
   explorerUrl: 'https://goerli.etherscan.io',
   rpcUrl: 'https://endpoints.omniatech.io/v1/eth/goerli/public',
 };
+
+// 磐古测试网
+export const punkos: ChainNetInfo = {
+  chainId: 123456789,
+  name: 'PunkOS Test Network',
+  currency: 'ETH',
+  explorerUrl: 'https://goerli.etherscan.io',
+  rpcUrl: 'https://rpctest.byebyegfw.uk',
+};

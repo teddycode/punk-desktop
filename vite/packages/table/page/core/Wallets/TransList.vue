@@ -2,10 +2,10 @@
   <a-card :bordered="true" style="margin-top: 10px">
     <a-row>
       <a-col :sm="12" :xs="24">
-        <info title="收入" value="约11100.443774元" :bordered="true" />
+        <info title="收入" :value="countStatus.income + ' USDT'" :bordered="true" />
       </a-col>
       <a-col :sm="12" :xs="24">
-        <info title="支出" value="约2020.13443元" :bordered="true" />
+        <info title="支出" :value="countStatus.outcome + ' USDT'" :bordered="true" />
       </a-col>
     </a-row>
   </a-card>
@@ -27,7 +27,7 @@
           刷新
         </a-button>
       </template>
-      <a-table :columns="columns" :data-source="data">
+      <a-table :columns="columns" :data-source="tableData" :pagination="pageConfig">
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'symbol'">
             <a-tooltip>
@@ -75,140 +75,98 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import info from './components/Info.vue';
-import TaskForm from './components/TaskForm.vue';
 import LayoutFooter from '@page/core/Layouts/components/layout-footer.vue';
 import { EyeOutlined, DeleteOutlined } from '@ant-design/icons-vue';
+import datas from './data';
+import { useRoute } from 'vue-router';
+import { GetForWalletStatus, PostWalletPageList } from '@js/service/wallets';
+import { PageParams } from '@js/service/typing';
+import { appStore } from '@store';
+import { GetForTransactionStatus, PostTransactionPageList } from '@js/service/transactions';
 
 export default defineComponent({
   name: 'TransactionsPage',
   components: {
     LayoutFooter,
     info,
-    TaskForm,
     EyeOutlined,
     DeleteOutlined,
   },
   setup() {
     // 代币类型，交易哈希，区块高度，付款方，收款方，交易类型，数额，费用，查看详情
-    const columns = [
-      {
-        title: '主键',
-        dataIndex: 'id',
-        key: 'id',
-        width: 60,
-      },
-      {
-        title: '代币符号',
-        dataIndex: 'symbol',
-        key: 'symbol',
-        width: 100,
-        align: 'center',
-      },
-      {
-        title: '交易哈希',
-        dataIndex: 'hash',
-        key: 'hash',
-        ellipsis: true,
-      },
-      {
-        title: '区块高度',
-        dataIndex: 'height',
-        key: 'height',
-      },
-      {
-        title: '付款方',
-        key: 'from',
-        dataIndex: 'from',
-        ellipsis: true,
-      },
-      {
-        title: '收款方',
-        key: 'to',
-        dataIndex: 'to',
-        ellipsis: true,
-      },
-      {
-        title: '交易类型',
-        key: 'type',
-        dataIndex: 'type',
-      },
-      {
-        title: '数额',
-        key: 'amount',
-        dataIndex: 'amount',
-      },
-      {
-        title: '费用',
-        key: 'fee',
-        dataIndex: 'fee',
-        ellipsis: true,
-      },
-      {
-        title: '时间',
-        key: 'timestamp',
-        dataIndex: 'timestamp',
-        ellipsis: true,
-      },
-      {
-        title: '操作',
-        key: 'action',
-      },
-    ];
+    const columns = datas.transactionColumn;
 
-    const data = [
-      {
-        id: 1,
-        symbol: 'ETH',
-        hash: '0x3c3f7013840ac8ae006bd68990d1ea6a217cb0afb85efe57ced298e5e61c9a77',
-        height: 10431437,
-        from: '0xEDaf4083F29753753d0Cd6c3C50ACEb08c87b5BD',
-        to: '0x1423f4ceC7fCBE8400A957121ad616C439a0d4CF',
-        type: 1,
-        amount: 0.02,
-        fee: '0.000000000025137 ETH',
-      },
-      {
-        id: 2,
-        symbol: 'ETH',
-        hash: '0xeda85045e89c98d55618b271657820508296c0d37cba88ada380fb5e34566869',
-        height: 10439797,
-        from: '0x87c9B02A10eC2CB4dcB3b2e573e26169CF3cd9Bf',
-        to: '0x1423f4ceC7fCBE8400A957121ad616C439a0d4CF',
-        type: 1,
-        amount: 0.02,
-        fee: '0.000000000065205 ETH',
-      },
-      {
-        id: 3,
-        symbol: 'ETH',
-        hash: '0x41aacfc5ff4ff1e066ec5ddad080be11b6901c421c996cfc5265d70c526c261f',
-        height: 10431498,
-        from: '0x1423f4ceC7fCBE8400A957121ad616C439a0d4CF',
-        to: '0x8942E52BE95b4f7e7566A91D77308F415DCf1d5D',
-        type: 0,
-        amount: 0.0,
-        fee: '0.000052501500385011 ETH',
-      },
-    ];
+    const address = useRoute().query?.address;
+
+    console.log('传递的地址参数：', address);
+
+    let tableData = ref([]);
+
     function add() {}
     function edit(record) {}
     // 获取代币图标
     function getCoinIcon(name) {
-      return '/icons/coins/svg/' + name.toLowerCase() + '.svg';
+      return '/icons/coins/svg/' + name?.toLowerCase() + '.svg';
     }
 
     let timeRange = ref({
       start: '',
       end: '',
     });
+
+    // 统计数据
+    let countStatus = ref({
+      income: 0.0,
+      outcome: 0.0,
+    });
+
+    const userInfo = appStore().userInfo;
+
+    let pageConfig = ref({
+      current: 1,
+      pageSize: 10,
+      total: 0,
+    });
+
+    // 获取后端数据
+    async function fetchStatusData() {
+      const userId = parseInt(userInfo.id);
+      GetForTransactionStatus(userId, address).then((data) => {
+        console.log('交易统计数据：', data);
+        countStatus.value.income = data?.data.income;
+        countStatus.value.outcome = data?.data.outcome;
+      });
+    }
+    //   获取表格数据
+    async function fetchTableData() {
+      const userId = parseInt(userInfo.id);
+      PostTransactionPageList(userId, address, pageConfig.value).then((resp) => {
+        console.log('交易分页数据：', resp);
+        tableData.value = resp?.data?.records;
+        pageConfig.value.current = resp?.data?.pageNumber;
+      });
+    }
+
     return {
       columns,
+      address,
       timeRange,
-      data,
+      countStatus,
+      tableData,
+      pageConfig,
+      userInfo,
       add,
       edit,
+      fetchTableData,
+      fetchStatusData,
       getCoinIcon,
     };
+  },
+  mounted() {
+    //  获取统计信息
+    this.fetchTableData();
+    //  获取表格信息
+    this.fetchStatusData();
   },
 });
 </script>

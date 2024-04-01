@@ -1,4 +1,4 @@
-@import url(../../../../../../node_modules/ant-design-vue/dist/antd.dark.css);
+@import url(../../../../../../node_modules/ant-design-vue/dist/reset.css);
 @media screen and (min-width: 600px) {
   .left-sidebar {
     flex: 0 0 100px !important;

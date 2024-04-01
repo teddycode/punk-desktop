@@ -126,8 +126,6 @@
 
 3.安装 python3.10 或以上版本，并设置 yarn 环境变量
 
-> 参考可运行的完整 npm 环境变量
-> ![img.png](docs/image/npmenv.png)
 > 项目推荐使用的环境变量：
 
 ```shell
@@ -142,13 +140,13 @@ canvas_binary_host_mirror=https://registry.npmmirror.com/-/binary/canvas
 ```
 > 若执行以下步骤后，出现项目依赖包安装错误或编译错误，请检查相应环境变量
 
-4.在根目录运行 yarn 命令
+4.在根目录下运行 `yarn` 命令
 
-5.在 vite 目录运行 yarn 命令
+5.在vite目录下运行 `yarn` 命令
 
-6.vite 下执行`yarn run build`编译一遍
+5.vite 下执行`yarn run build`编译一遍
 
-7.（可选）复制一个/node_modules 下的 dragula/dist/dragula.css 到 dragula/dist/dragula.min.css，不然会报这个库缺文件
+6.（可选）复制一个/node_modules 下的 dragula/dist/dragula.css 到 dragula/dist/dragula.min.css，不然会报这个库缺文件
 
 ## 启动项目
 

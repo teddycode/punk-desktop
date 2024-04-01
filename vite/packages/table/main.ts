@@ -167,15 +167,9 @@ window.USER_DATA_PATH = window.globalArgs['user-data-dir']; //挂载一个用户
 window.$app = $app;
 
 // ant 默认样式
-import 'ant-design-vue/dist/antd.css';
-import { createWeb3Modal } from '@web3modal/ethers5/vue';
-import { walletConfig } from './store/wallet';
-import { setupWalletListener } from './page/core/Wallets/services/events';
+import 'ant-design-vue/dist/reset.css';
 
 //处理路由记录
 processRouter();
-
-// 創建钱包连接对话框
-createWeb3Modal(walletConfig());
 
 export { router };

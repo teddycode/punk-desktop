@@ -122,7 +122,7 @@ import { mapActions, mapWritableState } from 'pinia';
 import { communityStore } from '../store/communityStore';
 import { chatStore } from '../../../store/chat';
 import _ from 'lodash-es';
-import articleService from '../../../js/service/articleService';
+import articleService from '@js/service/articles';
 import browser from '../../../js/common/browser';
 import { checkGroupShip } from '../../../js/common/sns';
 import { Icon as CommunityIcon } from '@iconify/vue';
