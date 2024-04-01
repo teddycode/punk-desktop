@@ -103,7 +103,7 @@
 import { CalendarOutlined } from '@ant-design/icons-vue'
 import {topicData,users,comCards} from './mock';
 import { useRoute,useRouter } from 'vue-router';
-import { ref, reactive } from 'vue';
+import {ref, reactive, watch} from 'vue';
 import {UFold} from "undraw-ui";
 import VueCustomScrollbar from "../../../../src/components/vue-scrollbar.vue";
 import ComList from "@page/chat/com/ComList.vue";
@@ -155,7 +155,9 @@ fetchUserDetailData();
 //     UserForums.value.push(item)
 //   }
 // })
-
+watch(()=>route.query.id,()=>{
+  fetchUserDetailData()
+})
 
 
 function OnBack() {

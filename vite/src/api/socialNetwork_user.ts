@@ -39,3 +39,11 @@ export function userFollow(userId, followId) {
     params:{userId, followId},
   });
 }
+//查询top用户
+export function getTopUserList(num) {
+  return request({
+    url: '/user/top',
+    method: 'get',
+    params:{num},
+  });
+}

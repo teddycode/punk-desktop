@@ -124,6 +124,7 @@ export default defineComponent({
     chatStore().login();
     comStore()._updateUserInfo();
     comStore()._getTopTagList();
+    comStore()._getTopUserList();
   },
   computed: {
     ...mapState(appStore, ['fullScreen']),
@@ -141,7 +142,8 @@ export default defineComponent({
 <style scoped lang="scss">
 //middle-content左右两侧显示阴影边框
 .middle-content {
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  //box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid #e8e8e8;
 }
 
 </style>

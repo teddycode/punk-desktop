@@ -10,7 +10,7 @@ import { getConfig } from '../js/axios/serverApi';
 import { getDateTime } from '../util';
 
 
-import {getUserDetail, userLove, userCollect, userFollow} from "../../../src/api/socialNetwork_user";
+import {getUserDetail, userLove, userCollect, userFollow, getTopUserList} from "../../../src/api/socialNetwork_user";
 import { getTopTagList } from "../../../src/api/socialNetwork_tag";
 
 export const comStore = defineStore('comStore', {
@@ -35,6 +35,7 @@ export const comStore = defineStore('comStore', {
     followList:[],
     fansList:[],
     topTagList: [],
+    topUserList: [],
   }),
   actions: {
     //获取登录用户信息
@@ -53,6 +54,12 @@ export const comStore = defineStore('comStore', {
         this.topTagList = response.data
       })
     },
+    //获取热门用户
+    async _getTopUserList(){
+      await getTopUserList(3).then(response=>{
+        this.topUserList = response.data
+      })
+    },
     //用户点赞
     async _userLove(forumId){
       await userLove(this.user.id, forumId)
@@ -65,11 +72,13 @@ export const comStore = defineStore('comStore', {
     async _userFollow(User){
       this.followList.push(User)
       await userFollow(this.user.id, User.id)
+      this._getTopUserList();
     },
     //用户取消关注
     async _userUnFollow(User){
       this.followList = this.followList.filter(item=>item.id!=User.id)
       await userFollow(this.user.id, User.id)
+      this._getTopUserList();
     },
 
     isFollowed(followId){
