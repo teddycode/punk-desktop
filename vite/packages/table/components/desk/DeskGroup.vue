@@ -677,8 +677,8 @@ export default {
       });
     },
     showMenu() {
-      this.$refs.currentDeskRef.showMenu();
-      console.log('object :>> ', this.$refs.currentDeskRef.dropdownMenu);
+      this.$refs.currentDeskRef?.showMenu();
+      console.log('object :>> ', this.$refs.currentDeskRef?.dropdownMenu);
     },
     showMore() {
       this.$emit('showMore');
