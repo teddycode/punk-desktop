@@ -42,7 +42,7 @@ import {storeToRefs} from 'pinia'
 const store = comStore();
 const { user } = storeToRefs(store)
 
-import { getForumsByTag } from "../../../../src/api/socialNetwork_forum";
+import { getForumsByTag } from "@js/service/socialNetwork_forum";
 import {useRoute, useRouter} from "vue-router";
 const route  = useRoute()
 const router = useRouter()

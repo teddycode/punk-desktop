@@ -47,7 +47,7 @@ import TrendChart from "@page/channels/components/TrendChart.vue";
 import {topicData} from './mock';
 import { useRoute,useRouter } from 'vue-router';
 import { ref, reactive } from 'vue';
-import { getTagList } from "../../../../src/api/socialNetwork_tag";
+import { getTagList } from "@js/service/socialNetwork_tag";
 import VueCustomScrollbar from "../../../../src/components/vue-scrollbar.vue";
 const route  = useRoute()
 const router = useRouter()

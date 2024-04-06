@@ -38,7 +38,7 @@ import { CommentApi, ConfigApi, SubmitParamApi, UToast, createObjectURL, dayjs }
 import {comStore} from '../../store/com'
 import {storeToRefs} from 'pinia'
 import VueCustomScrollbar from "../../../../src/components/vue-scrollbar.vue";
-import {getForumDetail} from '../../../../src/api/socialNetwork_forum'
+import {getForumDetail} from '@js/service/socialNetwork_forum'
 const store = comStore();
 const route  = useRoute()
 const router = useRouter()
@@ -119,7 +119,7 @@ config.user.avatar = store.user.avatar
 //   ]
 // }, 500)
 
-import { getCommentList, addComment } from "../../../../src/api/socialNetwork_comment";
+import { getCommentList, addComment } from "@js/service/socialNetwork_comment";
 
 function fetchCommentList() {
   getCommentList(route.query.id).then(response => {

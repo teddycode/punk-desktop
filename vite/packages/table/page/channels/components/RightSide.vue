@@ -36,7 +36,7 @@
             </template>
             <template #description>
               <u-fold line="1">
-                <p style="width: 180px;margin: 0">{{ item.description }}</p>
+                <p style="width: 120px;margin: 0">{{ item.description }}</p>
               </u-fold>
             </template>
             <template #avatar>
@@ -57,7 +57,7 @@
 </template>
 <script setup lang="ts">
 import {topicData} from "@page/channels/mock";
-import { getTopTagList } from "../../../../../src/api/socialNetwork_tag";
+import { getTopTagList } from "@js/service/socialNetwork_tag";
 import {onMounted, ref} from "vue";
 import TrendChart from "@page/channels/components/TrendChart.vue";
 import { comStore } from "@store/com";

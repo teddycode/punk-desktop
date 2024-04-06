@@ -62,7 +62,7 @@ const router = useRouter()
 
 const list = ref([]);
 //list.value = comCards.list;
-import {getForumList} from '../../../../src/api/socialNetwork_forum'
+import {getForumList} from '@js/service/socialNetwork_forum'
 import {ok} from "assert";
 async function fetchForumsData(){
   await getForumList().then(response=>{

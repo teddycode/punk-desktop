@@ -95,8 +95,7 @@ import {comStore} from '../../store/com'
 import {storeToRefs} from 'pinia'
 const store = comStore();
 const { user } = storeToRefs(store)
-
-import { getUserDetail } from "@package/../src/api/socialNetwork_user";
+import { getUserDetail } from "@js/service/socialNetwork_user";
 import {useRoute, useRouter} from "vue-router";
 import Template from "@package/user/pages/Template.vue";
 import {UFold} from "undraw-ui";

@@ -188,7 +188,7 @@ const store = comStore();
 //   browser.openInUserSelect(`https://s.apps.vip/forum?id=${props.forumId}`);
 // };
 
-import {addForum} from "../../../../../src/api/socialNetwork_forum";
+import {addForum} from "@js/service/socialNetwork_forum";
 
 const imageLoadVisible = computed(() => {
   return fileList.value?.length > 0;

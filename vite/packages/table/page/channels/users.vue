@@ -68,8 +68,8 @@ import {UFold} from "undraw-ui";
 import VueCustomScrollbar from "../../../../src/components/vue-scrollbar.vue";
 import Template from "@package/user/pages/Template.vue";
 import Import from "@page/deck/Import.vue";
-import { getUserList } from "@package/../src/api/socialNetwork_user";
-import { comStore } from '../../store/com'
+import { getUserList } from "@js/service/socialNetwork_user";
+import { comStore } from '@store/com'
 const store = comStore();
 const currentPage = ref(1)
 const userList = ref([]);

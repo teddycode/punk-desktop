@@ -65,7 +65,7 @@
 <!--                 class="tag-box"-->
 <!--                @click="null">-->
 <!--              #{{ item }}</div>-->
-            <div class="flex tag-box">
+            <div class="flex">
 <!--              <a-tag v-for="(item,index) in cardData.tags" :key="index" :bordered="false" color="orange">#{{ item }}</a-tag>-->
             <router-link v-for="(item,index) in cardData.tags" class="tag-box" :key="index"  :to="{name: 'tagDetail',query:{id:item.id,tagName:item.tagName}}"># {{ item.tagName}}</router-link>
             </div>
@@ -324,6 +324,12 @@ function emitCollect() {
     .tag-box {
       margin-right: 5px;
       color: var(--active-bg);
+    }
+    a {
+      text-decoration: none;
+    }
+    .router-link-active {
+      text-decoration: none;
     }
     .hide-images-video {
       display: none;

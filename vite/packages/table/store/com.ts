@@ -10,8 +10,8 @@ import { getConfig } from '../js/axios/serverApi';
 import { getDateTime } from '../util';
 
 
-import {getUserDetail, userLove, userCollect, userFollow, getTopUserList} from "../../../src/api/socialNetwork_user";
-import { getTopTagList } from "../../../src/api/socialNetwork_tag";
+import {getUserDetail, userLove, userCollect, userFollow, getTopUserList} from "../js/service/socialNetwork_user";
+import { getTopTagList } from "../js/service/socialNetwork_tag";
 
 export const comStore = defineStore('comStore', {
   state: () => ({

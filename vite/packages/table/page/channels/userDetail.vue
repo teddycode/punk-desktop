@@ -108,7 +108,7 @@ import {UFold} from "undraw-ui";
 import VueCustomScrollbar from "../../../../src/components/vue-scrollbar.vue";
 import ComList from "@page/chat/com/ComList.vue";
 const currentPage = ref(1)
-import { comStore } from '../../store/com'
+import { comStore } from '@store/com'
 const store = comStore();
 
 const settingsScroller = reactive({
@@ -122,7 +122,7 @@ const route  = useRoute()
 const router = useRouter()
 
 
-import { getUserDetail } from "@package/../src/api/socialNetwork_user";
+import { getUserDetail } from "@js/service/socialNetwork_user";
 console.log('这里是用户详情页面')
 console.log('用户id：'+route.query.id)
 const activeKey = ref('1');

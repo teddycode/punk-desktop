@@ -1,4 +1,4 @@
-import request from '../util/request';
+import request from '../axios/utils/request';
 
 //查询帖子所有评论
 export function getCommentList(id) {
