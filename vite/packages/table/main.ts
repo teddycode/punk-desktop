@@ -90,6 +90,9 @@ import mitt from 'mitt';
 // Your SDKAppID
 // init TUIKit
 
+import UndrawUi from 'undraw-ui'
+import 'undraw-ui/dist/style.css'
+// import Trend from 'vue3trend'
 const notice = new Notifications();
 window.$notice = notice;
 
@@ -98,7 +101,8 @@ const Mit = mitt();
 dayjs.locale('zh-cn');
 
 const app = createApp(App);
-
+app.use(UndrawUi)
+// app.use(Trend)
 // 使用 provide 将全局变量作为响应式对象
 app.provide('currentEnv', currentEnv);
 app.provide('isWeb', isWeb);

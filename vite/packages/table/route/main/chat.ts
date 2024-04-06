@@ -8,6 +8,18 @@ import Channel from '@page/channels/Channels.vue';
 import ChannelIndex from '@page/channels/ChannelsIndex.vue';
 import Circle from '@page/channels/Groups.vue';
 import CircleDetail from '@page/channels/GroupsDetail.vue';
+
+
+import  Forum from '@page/channels/forum.vue';
+import ForumDetail from "@page/channels/forumDetail.vue";
+import Tag from "../../page/channels/tag.vue"
+import Notification from "@page/channels/notification.vue"
+import Likes from "@page/channels/likes.vue"
+import Collects from "../../page/channels/collects.vue";
+import Users from "../../page/channels/users.vue"
+import UserDetail from "../../page/channels/userDetail.vue"
+import TagDetail from "../../page/channels/tagDetail.vue";
+import UserFollowers from "../../page/channels/userFollowers.vue";
 /**聊天团队模式结束**/
 //导入应用路由
 import ChatAdmin from '@page/chat/page/admin.vue';
@@ -17,6 +29,9 @@ import Contact from '@page/chat/contact.vue';
 import Chat from '@page/chat/chat.vue';
 import Team from '@page/Team.vue';
 import Hall from '@page/team/Hall.vue';
+
+// import Test from'@page/channels/test.vue'
+import BaseLayout from "../../page/core/Layouts/BaseLayout.vue";
 
 export default [
   BarrageRoute,
@@ -121,6 +136,61 @@ export default [
         component: Hall,
       },
     ],
+  },
+  {
+    path: "/forum",
+    name: "forum",
+    component: Forum
+  },
+  {
+    path: "/forumDetail",
+    name: "forumDetail",
+    component: ForumDetail
+  },
+  {
+    path: '/test',
+    name: 'test',
+    component: BaseLayout,
+  },
+  {
+    path: "/tag",
+    name: "tag",
+    component: Tag
+  },
+  {
+    path: "/users",
+    name: "users",
+    component: Users
+  },
+  {
+    path: "/userDetail",
+    name: "userDetail",
+    component: UserDetail
+  },
+  {
+    path: "/userFollowers",
+    name: "userFollowers",
+    component: UserFollowers
+  },
+  {
+    path: "/tagDetail",
+    name: "tagDetail",
+    component: TagDetail
+  },
+  {
+    path: "/notification",
+    name: "notification",
+    component: Notification
+  },
+  {
+    path: "/likes",
+    name: "likes",
+    component: Likes
+  },
+  {
+    path: "/collects",
+    name: "collects",
+    component: Collects
   },
   {
     path: '/channel',
