@@ -49,7 +49,7 @@ export const teamData = [
 export const workPanel = {
   left: [
     { type: 'systemApp', icon: 'shouye1', name: '主页', event: 'home' },
-    { type: 'systemApp', icon: 'yingyongzhongxin', name: '应用管理', event: 'apps' },
+    { type: 'systemApp', icon: 'yingyongzhongxin', name: '应用中心', event: 'apps' },
     { type: 'systemApp', icon: 'rizhi', name: '办公', tab: 'work', event: 'work' },
     { type: 'systemApp', icon: 'mingcute:back-fill', name: '返回', tab: '', event: 'goback' },
     { type: 'systemApp', icon: 'fluent:settings-16-regular', name: '基础设置', tab: '', event: 'setting' },
@@ -840,7 +840,7 @@ export const workPanel = {
 export const diyPanel = {
   left: [
     { type: 'systemApp', icon: 'shouye1', name: '主页', event: 'home' },
-    { type: 'systemApp', icon: 'yingyongzhongxin', name: '应用管理', event: 'apps' },
+    { type: 'systemApp', icon: 'yingyongzhongxin', name: '应用中心', event: 'apps' },
     { type: 'systemApp', icon: 'mingcute:back-fill', name: '返回', tab: '', event: 'goback' },
   ],
   bottom: [

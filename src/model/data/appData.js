@@ -9,6 +9,7 @@ const defaultLocalSysApp = [
     package: 'com.thisky.helper',
     theme_color: '#ff7b42',
     appid: 't3VLx3',
+    type: 'web',
     attribute: JSON.stringify({
       isOffical: 1,
       integration: 2,
@@ -30,7 +31,7 @@ const defaultLocalSysApp = [
   },
   {
     nanoid: nanoid(8),
-    name: '应用市场',
+    name: '开发者中心',
     logo: 'https://up.apps.vip/logo/favicon.svg',
     summary: '应用市场，助您发现更大的世界。',
     preload: '/pages/appStore/preload.js',

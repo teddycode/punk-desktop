@@ -15,6 +15,13 @@
           </a-menu>
         </template>
       </a-dropdown>
+      <a-dropdown>
+        <div class="app" style="height: 120px" @click="addIcons()">
+          <div class="flex justify-center items-center w-full h-full" style="">
+            <Icon class="xt-text" icon="tianjia2" style="font-size: 30px"></Icon>
+          </div>
+        </div>
+      </a-dropdown>
     </vue-custom-scrollbar>
   </div>
 </template>
@@ -24,7 +31,7 @@ import { Modal } from 'ant-design-vue';
 
 const { appModel } = window.$models;
 export default {
-  name: 'Web3Apps',
+  name: 'MiniApps',
   computed: {
     // ...mapWritableState(apps,['myApps','qingApps'])
   },
@@ -41,9 +48,12 @@ export default {
     };
   },
   async mounted() {
-    this.apps = await appModel.getAllApps({ where: { type: 'card' } });
+    this.apps = await appModel.getAllApps({ where: { type: 'web' } });
   },
   methods: {
+    addIcons() {
+      this.$emit('addIcons');
+    },
     // 运行app
     executeApp(app) {
       ipc.send('executeApp', { app: JSON.parse(JSON.stringify(app)) }); // 传给appManager.js执行

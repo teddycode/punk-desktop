@@ -19,12 +19,12 @@
         <div @click="loadDeskIconApps" class="btn" style="font-size: 1.5em; width: 8em">导入桌面应用</div>
       </div>
       <div style="margin: 1em">
-        <MyApps @addIcons="iconVisible = true" v-if="myApps.length > 0"></MyApps>
+        <MyApps @addIcons="addMyVisible = true" v-if="myApps.length > 0"></MyApps>
         <Teleport to="body">
           <AddIcon
-            v-if="iconVisible"
+            v-if="addMyVisible"
             @getSelectApps="getSelectApps"
-            @close="iconHide"
+            @close="addMyHide"
             navName="Desktop"
             :navList="[{ name: '桌面图标', component: 'Desktop' }]"
           >
@@ -33,148 +33,62 @@
       </div>
     </div>
     <!--  web3 应用   -->
-    <div v-if="currentIndex === 'qing'" class="app-content s-bg" style="margin: 1em; background: var(--primary-bg)">
+    <div v-if="currentIndex === 'web3'" class="app-content s-bg" style="margin: 1em; background: var(--primary-bg)">
       <QingApps />
     </div>
-    <!-- 应用市场   -->
-    <div
-      v-if="currentIndex === 'store'"
-      class="app-content s-bg"
-      style="margin: 1em; padding: 1em; background: var(--primary-bg)"
-    >
-      <vue-custom-scrollbar :settings="settings" style="position: relative; height: 100%; border-radius: 8px">
-        <div style="margin: auto; width: 100%; height: auto; margin-bottom: 1em; text-align: center">
-          <div style="margin-bottom: 1em; font-size: 1.5em">
-            <div @click="becomeDeveloper" class="pointer" style="float: left; font-size: 0.8em">
-              <notification-outlined />
-              入驻成为开发者
-            </div>
-            共 {{ storeApps.length }} 应用
-            <div class="pointer" @click="openDir" style="font-size: 0.8em; float: right">
-              <FolderOpenOutlined />
-              下载目录
-            </div>
-          </div>
-          <a-row :gutter="[30, 20]">
-            <template v-for="app in storeApps">
-              <a-col :span="3">
-                <div class="text-left" style="position: absolute; z-index: 9">
-                  <a-tag color="#ff5500cc" v-if="app.data.type === 'system'">系统</a-tag>
-                  <a-tag color="#87d068cc" v-else-if="app.needInstall">软件</a-tag>
-                  <a-tag color="black" v-else-if="app.data.type === 'game'">游戏</a-tag>
-                  <a-tag color="#108ee9cc" v-else>网页</a-tag>
-                </div>
-                <a-avatar shape="square" :src="app.icon" style="margin-top: 10px" :size="60"> </a-avatar>
-              </a-col>
-              <a-col :span="5">
-                <div
-                  class="app-name font-bold text-white"
-                  style="text-align: left"
-                  :style="{ color: 'var(--font-color)' }"
-                >
-                  {{ app.name }}
-                </div>
-
-                <div class="app-summary" :title="app.summary" style="text-align: left">
-                  {{ app.summary }}
-                </div>
-              </a-col>
-              <a-col :span="4">
-                <template v-if="app.needInstall">
-                  <div v-if="!checkInstalled(app)" @click="install(app)" class="btn">
-                    <template v-if="app.downloading">
-                      <svg
-                        style="vertical-align: text-bottom"
-                        class="ml-1 animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          class="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          stroke-width="4"
-                        ></circle>
-                        <path
-                          class="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                      <span>{{ app.percent }} %</span>
-                    </template>
-                    <template v-else-if="app.installing">
-                      <svg
-                        style="vertical-align: text-bottom"
-                        class="ml-1 animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          class="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          stroke-width="4"
-                        ></circle>
-                        <path
-                          class="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                      安装中
-                    </template>
-                    <template v-else>
-                      <span>下载安装</span>
-                    </template>
-                  </div>
-                  <div v-else @click="executeLocalApp(app)" class="btn">运行软件</div>
-                </template>
-                <template v-else>
-                  <div @click="executeApp(app.data)" class="btn">打开</div>
-                </template>
-              </a-col>
-            </template>
-          </a-row>
-        </div>
-      </vue-custom-scrollbar>
+    <!--  小程序 应用   -->
+    <div v-if="currentIndex === 'mini'" class="app-content s-bg" style="margin: 1em; background: var(--primary-bg)">
+      <MiniApps @addIcons="miniStoreVisible = true" />
+      <Teleport to="body">
+        <MiniAppStore v-if="miniStoreVisible" @getSelectApps="getSelectApps" @close="miniStoreHide" navName="Desktop">
+        </MiniAppStore>
+      </Teleport>
     </div>
   </div>
 </template>
 
 <script>
 import { mapWritableState, mapActions } from 'pinia';
-import { appStore } from '../store';
+import { appStore } from '@store';
 import SecondPanel from '../components/SecondPanel.vue';
 import QingApps from '../components/QingApps.vue';
+import MiniApps from '../components/MiniApps.vue';
+import MiniAppStore from '../components/miniStore/index.vue';
 import MyApps from '../components/MyApps.vue';
-import { appsStore } from '../store/apps';
+import { appsStore } from '@store/apps';
 import { message } from 'ant-design-vue';
-import { runExec } from '../js/common/exec';
+import { runExec } from '@js/common/exec';
 import Template from '../../user/pages/Template.vue';
 import { NotificationOutlined, FolderOpenOutlined } from '@ant-design/icons-vue';
 import browser from '../js/common/browser';
 import AddIcon from '../page/app/addIcon/index.vue';
 import Desktop from '../page/app/addIcon/modules/Desktop.vue';
+import storeApps from '@js/data/storeAppData.js';
 import pathLib from 'path';
 
 let { fs } = window.$models;
 export default {
   name: 'Apps',
-  components: { AddIcon, Desktop, Template, MyApps, QingApps, SecondPanel, NotificationOutlined, FolderOpenOutlined },
+  components: {
+    AddIcon,
+    Desktop,
+    Template,
+    MyApps,
+    MiniApps,
+    QingApps,
+    MiniAppStore,
+    SecondPanel,
+    NotificationOutlined,
+    FolderOpenOutlined,
+  },
   computed: {
     ...mapWritableState(appStore, ['appData']),
     ...mapWritableState(appsStore, ['myApps']),
   },
   data() {
     return {
-      iconVisible: false,
+      addMyVisible: false,
+      miniStoreVisible: false,
       settings: {
         useBothWheelAxes: true,
         swipeEasing: true,
@@ -191,330 +105,17 @@ export default {
         },
         {
           title: 'web3应用',
-          index: 'qing',
+          index: 'web3',
         },
         {
-          title: '应用市场',
+          title: '小程序应用',
           icon: '',
-          index: 'store',
+          index: 'mini',
         },
       ],
       desktopApps: [],
       dropFiles: [],
-      storeApps: [
-        // {
-        //   icon: 'https://s1.hdslb.com/bfs/static/jinkela/popular/assets/icon_popular.png',
-        //   name: 'AI助手',
-        //   summary: 'AI助手',
-        //   needInstall: false,
-        //   data: {
-        //     fullScreen: false,
-        //     theme: '#030c13',
-        //     name: 'ai',
-        //     type: 'system',
-        //     route: JSON.stringify({
-        //       name: 'ai',
-        //     })
-        //   }
-        // },
-        {
-          icon: 'https://s1.hdslb.com/bfs/static/jinkela/popular/assets/icon_popular.png',
-          name: '网页数据监控小助手',
-          summary:
-            '一个用于检测网页数据的工具，可以实时监测一个网页数据动态，并组织成可视化的报表，目前支持B站视频数据追踪。',
-          needInstall: false,
-          data: {
-            fullScreen: false,
-            theme: '#030c13',
-            name: 'watch',
-            type: 'system', //网页助手
-            route: JSON.stringify({
-              name: 'watch',
-            }),
-          },
-        },
-        // {
-        //   icon: 'http://a.apps.vip/icons/flappy.jpg',
-        //   name: 'Mlappy Bird',
-        //   summary: '和小伙伴们一起飞。',
-        //   needInstall: false,
-        //   data: {
-        //     theme: '#030c13',
-        //     name: 'mlappyBird',
-        //     url: 'http://bird.apps.vip/?',
-        //     background: false,
-        //     type: 'game'
-        //   }
-        // },
-        {
-          icon: 'https://a.apps.vip/icons/weather.png',
-          name: '浏览器',
-          summary: '内置于工作台的浏览器，方便在工作台打开网页。',
-          needInstall: false,
-          data: {
-            fullScreen: false,
-            theme: '#030c13',
-            name: 'browser',
-            type: 'system', //网页助手
-            route: JSON.stringify({
-              name: 'browser',
-            }),
-          },
-        },
-        {
-          icon: 'https://a.apps.vip/icons/weather.png',
-          name: '天气',
-          summary: '可以自由添加城市。',
-          needInstall: false,
-          data: {
-            fullScreen: false,
-            theme: '#030c13',
-            name: 'weather',
-            type: 'system', //网页助手
-            route: JSON.stringify({
-              name: 'weather',
-            }),
-          },
-        },
-        {
-          icon: '/img/game.png',
-          name: '游戏小助手',
-          summary: '',
-          needInstall: false,
-          data: {
-            fullScreen: false,
-            theme: '#030c13',
-            name: 'gameAssistant',
-            type: 'system', //网页助手
-            route: JSON.stringify({
-              name: 'gameIndex',
-            }),
-          },
-        },
-        {
-          icon: 'https://a.apps.vip/icons/paper.png',
-          name: '壁纸',
-          summary: '锁屏壁纸，支持导入本地壁纸，以及多个图源，同时支持动态壁纸。',
-          needInstall: false,
-          data: {
-            fullScreen: false,
-            theme: '#030c13',
-            name: 'gallery',
-            type: 'system', //网页助手
-            route: JSON.stringify({
-              name: 'my',
-            }),
-          },
-        },
-        {
-          icon: 'https://a.apps.vip/icons/music.png',
-          name: '音乐',
-          summary: '网络音乐播放器。',
-          needInstall: false,
-          data: {
-            fullScreen: false,
-            theme: '#030c13',
-            name: 'music',
-            type: 'system', //网页助手
-            route: JSON.stringify({
-              name: 'music',
-            }),
-          },
-        },
-        {
-          icon: 'https://a.apps.vip/icons/tomato.png',
-          name: '番茄钟',
-          summary: '一个时间管理工具。',
-          needInstall: false,
-          data: {
-            fullScreen: false,
-            theme: '#030c13',
-            name: 'tomato',
-            type: 'system', //网页助手
-            route: JSON.stringify({
-              name: 'tomato',
-            }),
-          },
-        },
-        {
-          icon: 'https://a.apps.vip/icons/tomato.png',
-          name: '便签',
-          summary: '便签工具',
-          needInstall: false,
-          data: {
-            fullScreen: false,
-            theme: '#030c13',
-            name: 'note',
-            type: 'system', //网页助手
-            route: JSON.stringify({
-              name: 'note',
-            }),
-          },
-        },
-        {
-          icon: 'https://a.apps.vip/icons/ppet.png',
-          name: 'PPet桌面宠物',
-          summary: '一款开源桌面看板娘，让你不再孤单。',
-          needInstall: true,
-          installPath: 'C:\\Program Files\\PPet3\\PPet3.exe',
-          downloadUrl: 'https://a.apps.vip/download/ppet3330.exe',
-          data: {
-            security: true,
-          },
-        },
-        {
-          icon: 'https://a.apps.vip/icons/debugtron.svg',
-          name: 'Debugtron',
-          summary: '基于Electron的调试工具，用于发现问题。',
-          needInstall: true,
-          installPath: '%LOCALAPPDATA%\\debugtron\\Debugtron.exe',
-          downloadUrl: 'https://a.apps.vip/download/debugtron.exe',
-          data: {
-            security: true,
-          },
-        },
-        {
-          icon: 'https://a.apps.vip/download/aida64.jpg',
-          name: 'AIDA64',
-          summary: '一款商业级计算机硬件状态监控软件。',
-          needInstall: true,
-          silent: false, //静默安装
-          installPath: 'C:\\Program Files (x86)\\FinalWire\\AIDA64 Extreme\\aida64.exe',
-          downloadUrl: 'https://a.apps.vip/download/aida64extreme685.exe',
-          data: {
-            security: true,
-          },
-        },
-        {
-          icon: 'https://a.apps.vip/download/rtss.png',
-          name: 'RTSS',
-          summary: '一款免费的游戏帧数监测软件。',
-          needInstall: true,
-          installPath: 'C:\\Program Files (x86)\\RivaTuner Statistics Server\\RTSS.exe',
-          downloadUrl: 'https://a.apps.vip/download/rtss.exe',
-          data: {
-            security: true,
-          },
-        },
-        {
-          icon: 'https://a.apps.vip/download/dsf.svg',
-          name: 'DisplayFusion',
-          summary: '解决游戏触摸最小化问题。一款用来提升副屏体验的商业软件。',
-          needInstall: true,
-          silent: false, //非静默安装
-          installPath: 'C:\\Program Files\\DisplayFusion\\DisplayFusion.exe',
-          downloadUrl: 'https://a.apps.vip/download/DisplayFusionSetup-10.0.exe',
-          data: {
-            security: true,
-          },
-        },
-        {
-          icon: 'https://a.apps.vip/wallpaper/favicon.png',
-          name: 'OneWallheaven壁纸',
-          summary: '开源壁纸轻应用，可以将wallheaven上的壁纸设置为桌面壁纸或者工作台壁纸。',
-          needInstall: false,
-          data: {
-            theme: '#030c13',
-            name: 'wallpapaer',
-            url: 'https://a.apps.vip/wallpaper',
-            preload: 'wallpaper',
-            background: true,
-            node: true,
-            security: false,
-          },
-        },
-        {
-          icon: 'https://a.apps.vip/icons/kook.png',
-          name: 'Kook',
-          summary: '在副屏上使用Kook，一个好用的开黑组团语音沟通工具',
-          needInstall: false,
-          data: {
-            theme: 'rgb(23,24,26)',
-            name: 'kook',
-            url: 'https://www.kookapp.cn/app/discover',
-            background: true,
-            node: false,
-            security: true,
-            fullScreen: false,
-          },
-        },
-        {
-          icon: 'https://res.wx.qq.com/a/wx_fed/assets/res/OTE0YTAw.png',
-          name: '微信',
-          summary: '在副屏上使用网页版微信聊天。（已适配小屏）',
-          needInstall: false,
-          data: {
-            theme: '#2e3238',
-            name: 'weixin',
-            url: 'https://wx.qq.com',
-            preload: 'weixin',
-            background: true,
-            node: false,
-            security: true,
-          },
-        },
-        {
-          icon: 'https://p1-hera.byteimg.com/tos-cn-i-jbbdkfciu3/22718e94fbd9483ea54301cf431ce2ee~tplv-jbbdkfciu3-image:0:0.image',
-          name: '飞书',
-          summary: '在副屏上使用飞书办公。（可用）',
-          needInstall: false,
-          data: {
-            theme: '#465069',
-            name: 'feishu',
-            url: ' https://feishu.cn/messenger/',
-            preload: 'app',
-            background: true,
-            node: false,
-            security: true,
-          },
-        },
-        {
-          icon: 'https://a.apps.vip/todo/logo.png',
-          name: '轻待办',
-          summary: '快速创建和管理你的待办。',
-          needInstall: false,
-          data: {
-            fullScreen: false,
-            theme: 'transparent',
-            name: 'todo',
-            url: 'https://a.apps.vip/todo',
-            preload: 'app',
-            background: true,
-            node: true,
-            security: true,
-          },
-        },
-        // {
-        //   icon: '/img/game.png',
-        //   name: '剪切板（正在开发中）',
-        //   summary: '',
-        //   needInstall: false,
-        //   data: {
-        //     fullScreen: false,
-        //     theme: '#030c13',
-        //     name: 'clipboard',
-        //     type: 'system',//网页助手
-        //     route: JSON.stringify({
-        //       name: 'clipboard',
-        //     })
-        //   }
-        // },
-        // {
-        //   icon: 'http://a.apps.vip/icons/flappy.jpg',
-        //   name: '快捷键 （开发中）',
-        //   summary: '',
-        //   needInstall: false,
-        //   data: {
-        //     fullScreen: false,
-        //     theme: '#030c13',
-        //     name: 'shortcutKey',
-        //     type: 'system',//网页助手
-        //     route: JSON.stringify({
-        //       name: 'shortcutKey',
-        //     })
-        //   }
-        // },
-      ],
+      storeApps: storeApps,
     };
   },
   mounted() {
@@ -539,8 +140,11 @@ export default {
     open(app) {
       require('electron').shell.openPath(app.path);
     },
-    iconHide() {
-      this.iconVisible = false;
+    addMyHide() {
+      this.addMyVisible = false;
+    },
+    miniStoreHide() {
+      this.miniStoreVisible = false;
     },
     async loadDeskIconApps() {
       this.iconVisible = true;

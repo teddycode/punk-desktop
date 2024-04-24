@@ -426,7 +426,7 @@ export const defaultDesks = [
           },
           size: {
             w: '280px',
-            h: '418px',
+            h: '632px',
           },
         },
         data: {},

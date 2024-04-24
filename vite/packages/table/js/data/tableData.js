@@ -5,11 +5,11 @@ const sendThis = (_this) => {
 export default {
   sendThis,
   navigationClassify: [
-    { name: 'systemApp', cname: '系统应用' },
-    { name: 'coolApp', cname: '酷应用' },
-    { name: 'tableApp', cname: 'Windows应用' },
-    { name: 'localApp', cname: '自定义应用' },
+    { name: 'systemApp', cname: '系统功能' },
+    { name: 'tableApp', cname: '本地应用' },
     { name: 'lightApp', cname: 'web3应用' },
+    { name: 'coolApp', cname: '小程序应用' },
+    { name: 'localApp', cname: '自定义应用' },
   ],
   coolAppList: [
     {
@@ -241,7 +241,7 @@ export default {
     {
       type: 'systemApp',
       icon: 'fluent:grid-16-regular',
-      name: '应用管理',
+      name: '应用中心',
       event: 'apps',
     },
     {
