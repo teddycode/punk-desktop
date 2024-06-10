@@ -379,10 +379,10 @@ export const defaultDesks = [
               linkValue: '',
               open: {
                 type: 'pageApp',
-                route: 'BlockchainBrowser',
+                route: 'Explorer',
                 name: '区块链浏览器',
-                params: '/web3/BlockchainBrowser',
-                value: 'BlockchainBrowser',
+                params: '/web3/Explorer',
+                value: 'Explorer',
               },
               isTitle: true,
               titleValue: '区块链浏览器',

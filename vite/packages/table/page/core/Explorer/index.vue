@@ -1,5 +1,5 @@
 <template>
-  <a-layout class="BlockchainBrowser">
+  <a-layout class="Explorer">
     <!-- 头部布局 -->
     <a-layout-header class="header-box">
       <!-- 导航栏 -->
@@ -10,7 +10,7 @@
         </a-col>
         <a-col :span="2">
           <!-- 区块链下拉列表 -->
-          <a-dropdown >
+          <a-dropdown>
             <a class="ant-dropdown-link">
               区块链
               <DownOutlined />
@@ -67,12 +67,17 @@
     <!-- 中间内容区 -->
     <a-layout-content class="content-box middle-box">
       <div class="overall">
-        <a-row align="middle" justify="space-between" >
+        <a-row align="middle" justify="space-between">
           <a-col>
             <h2 class="base-data-title">基础数据</h2>
           </a-col>
           <a-col>
-            <a-switch v-model:checked="state.checked2" checked-children="全部数据" un-checked-children="收起" @click="toggleData"/>
+            <a-switch
+              v-model:checked="state.checked2"
+              checked-children="全部数据"
+              un-checked-children="收起"
+              @click="toggleData"
+            />
           </a-col>
         </a-row>
         <a-card class="data-card">
@@ -141,12 +146,8 @@
               <!-- 交易概览 -->
               <a-col :span="6">
                 <div class="section-header">交易概览</div>
-                <p class="value">
-                  总交易数: <a href="javascript:void(0)" class="value-link">5,262,493,431 txns</a>
-                </p>
-                <p class="value">
-                  未确认交易数: <a href="javascript:void(0)" class="value-link">1,125 txns</a>
-                </p>
+                <p class="value">总交易数: <a href="javascript:void(0)" class="value-link">5,262,493,431 txns</a></p>
+                <p class="value">未确认交易数: <a href="javascript:void(0)" class="value-link">1,125 txns</a></p>
                 <p>总交易费用: <span class="value">2.28B BNB</span></p>
                 <p>24小时总交易数: <span class="value">3.02M BNB</span></p>
               </a-col>
@@ -165,10 +166,12 @@
               <a-col :span="6">
                 <div class="section-header">代币概览</div>
                 <p>
-                  代币数: <a href="javascript:void(0)" class="value-link">4,467,917</a> <span class="text-green">+2,146</span>
+                  代币数: <a href="javascript:void(0)" class="value-link">4,467,917</a>
+                  <span class="text-green">+2,146</span>
                 </p>
                 <p>
-                  BEP-20 代币: <a href="javascript:void(0)" class="value-link">3,883,921</a> <span class="text-green">+2,057</span>
+                  BEP-20 代币: <a href="javascript:void(0)" class="value-link">3,883,921</a>
+                  <span class="text-green">+2,057</span>
                 </p>
                 <p>BEP-721 代币: <span class="value">572,362</span> <span class="text-green">+88</span></p>
                 <p>BEP-1155 代币: <span class="value">11,634</span> <span class="text-green">+1</span></p>
@@ -195,10 +198,10 @@
           <a-tabs v-model:activeKey="activeKey" size="large">
             <a-tab-pane key="1">
               <template #tab>
-        <span>
-          <codepen-outlined />
-          区块
-        </span>
+                <span>
+                  <codepen-outlined />
+                  区块
+                </span>
               </template>
               <a-table
                 class="ant-table-custom"
@@ -206,14 +209,19 @@
                 :columns="block_columns"
                 :data-source="data"
                 :row-class-name="() => 'custom-row'"
-                :style="{fontSize: '16px' }"
+                :style="{ fontSize: '16px' }"
               >
                 <template v-slot:bodyCell="{ column, record }">
                   <template v-if="column.key === 'icon'">
-                    <CodepenOutlined :style="{fontSize: '24px', color: '#08c'}" />
+                    <CodepenOutlined :style="{ fontSize: '24px', color: '#08c' }" />
                   </template>
                   <template v-if="column.key === 'more'">
-                    <a-button type="text" shape="circle" :icon="h(RightOutlined)" @click="navigateToBlockInfo(record)"/>
+                    <a-button
+                      type="text"
+                      shape="circle"
+                      :icon="h(RightOutlined)"
+                      @click="navigateToBlockInfo(record)"
+                    />
                   </template>
                 </template>
               </a-table>
@@ -224,10 +232,10 @@
             </a-tab-pane>
             <a-tab-pane key="2">
               <template #tab>
-        <span>
-          <dollar-circle-filled />
-          交易
-        </span>
+                <span>
+                  <dollar-circle-filled />
+                  交易
+                </span>
               </template>
               <a-table
                 class="ant-table-custom"
@@ -235,22 +243,26 @@
                 :columns="tx_columns"
                 :data-source="transactions"
                 :row-class-name="() => 'custom-row'"
-                :style="{fontSize: '16px' }"
+                :style="{ fontSize: '16px' }"
               >
                 <template v-slot:bodyCell="{ column, record }">
                   <template v-if="column.key === 'icon'">
-                    <FileTextOutlined :style="{fontSize: '24px', color: '#08c'}" />
+                    <FileTextOutlined :style="{ fontSize: '24px', color: '#08c' }" />
                   </template>
 
                   <template v-if="column.key === 'more'">
-                    <a-button type="text" shape="circle" :icon="h(RightOutlined)" @click="navigateToTransactionInfo(record)"/>
+                    <a-button
+                      type="text"
+                      shape="circle"
+                      :icon="h(RightOutlined)"
+                      @click="navigateToTransactionInfo(record)"
+                    />
                   </template>
                 </template>
               </a-table>
               <a-button size="large" @click="goToTransactionList">
                 查看所有交易
                 <RightOutlined />
-
               </a-button>
             </a-tab-pane>
           </a-tabs>
@@ -261,17 +273,23 @@
 </template>
 
 <script lang="ts" setup>
-import {h, onMounted, ref} from 'vue';
-import {reactive} from "vue";
-import { DollarCircleFilled, CodepenOutlined, DownOutlined,RightOutlined,FileTextOutlined } from '@ant-design/icons-vue';
-import axios from "axios";
+import { h, onMounted, ref } from 'vue';
+import { reactive } from 'vue';
+import {
+  DollarCircleFilled,
+  CodepenOutlined,
+  DownOutlined,
+  RightOutlined,
+  FileTextOutlined,
+} from '@ant-design/icons-vue';
+import axios from 'axios';
 import { mockData } from './data/mock.js';
 import { transactionsData } from './data/transactions.js';
-import {useRouter} from "vue-router";
+import { useRouter } from 'vue-router';
 
 const value = ref<string>('');
 const selectedOption = ref<string>('All Filters');
-const LanguageChoice = ref<string>('中文')
+const LanguageChoice = ref<string>('中文');
 const onSearch = (searchValue: string) => {
   console.log('use value', searchValue);
   console.log('or use this.value', value.value);
@@ -289,7 +307,7 @@ const block_columns = [
   {
     key: 'icon',
     dataIndex: 'icon',
-    width:'20px',
+    width: '20px',
   },
   {
     title: '区块高度',
@@ -316,13 +334,13 @@ const block_columns = [
   {
     key: 'more',
     dataIndex: 'more',
-  }
+  },
 ];
 const tx_columns = [
   {
     key: 'icon',
     dataIndex: 'icon',
-    width:'20px',
+    width: '20px',
   },
   {
     title: '交易地址',
@@ -359,8 +377,8 @@ const tx_columns = [
   {
     key: 'more',
     dataIndex: 'more',
-  }
-]
+  },
+];
 // 初始化区块数据
 const data = ref([]);
 
@@ -380,22 +398,23 @@ const goToTransactionList = () => {
   router.push('./TransactionList');
 };
 const navigateToBlockInfo = (record) => {
-  router.push({name: 'BlockInfo', params:{number:record.number}});
-}
+  router.push({ name: 'BlockInfo', params: { number: record.number } });
+};
 const navigateToTransactionInfo = (record) => {
-  router.push({name: 'TransactionInfo', params:{txnHash:record.txnHash}});
-}
+  router.push({ name: 'TransactionInfo', params: { txnHash: record.txnHash } });
+};
 onMounted(fetchData);
-
 </script>
 
 <style scoped>
-.BlockchainBrowser {
+.Explorer {
   width: 100%;
   margin: 0 auto;
 }
 
-.header-box, .middle-box, .footer-box {
+.header-box,
+.middle-box,
+.footer-box {
   margin-left: 5%;
   margin-right: 5%;
   /*border: 1px solid black;*/
@@ -417,18 +436,18 @@ onMounted(fetchData);
 .footer-box {
   height: auto;
 }
-.navigation{
+.navigation {
   font-size: large;
 }
-.ant-dropdown-link{
+.ant-dropdown-link {
   color: black;
 }
-.overall{
+.overall {
   padding: 20px 30px;
 }
 .data-card {
   width: 100%;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
 .key-data .title {
@@ -451,11 +470,11 @@ onMounted(fetchData);
   margin-top: 20px;
   text-align: center;
 }
-.data-card-data{
+.data-card-data {
   font-size: large;
   font-weight: bold;
 }
-.base-data-title{
+.base-data-title {
   font-weight: bold;
 }
 .section-header {
