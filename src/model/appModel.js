@@ -767,6 +767,7 @@ const appModel = {
     }
     return result;
   },
+
   async getAll(option) {
     return await appModel.getAllApps(option);
   },

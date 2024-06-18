@@ -110,7 +110,7 @@
     </Widget>
   </div>
   <!-- 设置面板 -->
-  <a-drawer v-model:visible="settingVisible" :width="500" placement="right" title="设置">
+  <a-drawer v-model:open="settingVisible" :width="500" placement="right" title="设置">
     <vue-custom-scrollbar :settings="settingsScroller" style="height: 100%">
       <span
         v-for="(item, index) in todoList"

@@ -96,7 +96,7 @@
     </Widget>
   </div>
   <!-- 设置面板 -->
-  <a-drawer :width="500" title="设置" v-model:visible="settingVisible" placement="right">
+  <a-drawer :width="500" title="设置" v-model:open="settingVisible" placement="right">
     <vue-custom-scrollbar :settings="settingsScroller" style="height: 100%">
       <p>需要在小组件内显示的数据</p>
       <RadioTab

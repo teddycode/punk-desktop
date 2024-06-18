@@ -44,7 +44,7 @@
       <RankList></RankList>
     </div>
   </Widget>
-  <a-drawer v-model:visible="middleShow" placement="right" title="设置" width="500">
+  <a-drawer v-model:open="middleShow" placement="right" title="设置" width="500">
     <div class="flex flex-col" style="color: var(--primary-text)">
       <span
         v-for="(item, index) in rankingType"

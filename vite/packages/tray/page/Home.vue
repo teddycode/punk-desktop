@@ -207,7 +207,7 @@ export default defineComponent({
   mounted() {
     ipc.send('resizeTray', { width: 400, height: 435 });
     ipc.on('userInfo', (event, args) => {
-      console.log(args);
+      console.log('这里Tray收到了userInfo:', args);
       this.loading = false;
       this.$store.commit('setUser', args.data);
       this.lv = args.data.onlineGradeExtra.lv;

@@ -1,0 +1,95 @@
+{
+  "appName": "Pangu Cross-Chain-Client",
+  "backgroud": "Hintergrund",
+  "bg": {
+    "addMark": "Erhöht die Hintergrundunschärfe, wenn diese Option aktiviert ist",
+    "choose": "Wählen Sie Ihr Lieblingsbild als Hintergrund für Ihren Workbench-Desktop.",
+    "clea": "klarer Hintergrund",
+    "clear": "klarer Hintergrund",
+    "desktop": "Desktop-Hintergrund",
+    "masrk": "Hintergrundunschärfe",
+    "openTPTip": "Diese Art von Funktion verbraucht viel Leistung. Bitte aktivieren Sie sie entsprechend.",
+    "openTransparent": "Transparenter Hintergrund nach dem Einschalten",
+    "setting": "Hintergrundeinstellungen",
+    "transparent": "Transparenter Hintergrund"
+  },
+  "btn": {
+    "change": "schalten",
+    "recoverTextColor": "Standardtextfarbe wiederherstellen",
+    "recoverThemeColor": "Stellen Sie die Standard-Designfarben wieder her",
+    "wallpapperColor": "Stellen Sie die Standardhintergrundfarbe wieder her"
+  },
+  "chooseLang": "Wählen Sie eine Sprache",
+  "desktop": {
+    "effectFlow": "fallender Effekt",
+    "effectFlowTip": "Nach dem Einschalten hat die Seite einen coolen Falleffekt.",
+    "effectNum": "Anzahl fallender Gegenstände",
+    "effectRain": "Regen",
+    "effects": "Herabfallende Gegenstände",
+    "ligh": "Rahmen RGB-Licht",
+    "lightTip": "Zeigen Sie RGB-Effekte rund um das Workbench-Fenster an."
+  },
+  "menu": {
+    "name": "Titelseite"
+  },
+  "message": {
+    "Danger": "WeChat",
+    "Info": "Information",
+    "Primary": "Primärfarbe",
+    "Success": "Erfolg",
+    "Warning": "warnen",
+    "logoutFail": "Das Abmelden des Kontos ist fehlgeschlagen. Bitte versuchen Sie es erneut!",
+    "logoutSuccess": "Das Konto wurde erfolgreich abgemeldet. Bitte melden Sie sich erneut an",
+    "offlineTip": "Nach der Verwendung des Offline-Modus werden einige Unterhaltungs- und soziale Funktionen wie Spiele, Wetter usw. ausgeblendet.",
+    "serverTimeout": "Zeitüberschreitung bei der Serververbindung. \nDer Server wird möglicherweise gerade gewartet. Bitte versuchen Sie es später noch einmal.",
+    "teamTip": "Nach der Verwendung des minimalistischen Modus werden einige Unterhaltungs- und Sozialfunktionen, wie beispielsweise die Squad-Funktion, ausgeblendet."
+  },
+  "name": "Deutsch",
+  "setting": "Einstellung",
+  "settings": {
+    "account": "Adressverifikation",
+    "appInfo": "Bewerbungs informationen",
+    "appManage": "Bewerbungsmanagement",
+    "base": "Grundeinstellungen",
+    "chooseScr": "Auswahlbildschirm",
+    "common": "Häufig verwendet",
+    "dark": "Dunkelmodus",
+    "enableAccValid": "Adressverifikation",
+    "general": "Allgemeine Einstellungen",
+    "guideBar": "Bearbeitung der Navigationsleiste",
+    "language": "Spracheinstellungen",
+    "msg": {
+      "save": "Nach Verwendung des Leistungsmodus werden verschiedene Animationen der Benutzeroberfläche deaktiviert und im Speicher hängengebliebene Prozesse werden so weit wie möglich bereinigt. \nDies kann dazu führen, dass der Effekt der Öffnungsschnittstelle beeinträchtigt wird oder der Anwendungswechsel langsam erfolgt. \nEs kann jedoch die Speicher-, CPU- und GPU-Auslastung erheblich reduzieren."
+    },
+    "offline": "Offline-Modus",
+    "otherScr": "Split-Screen-Einstellungen",
+    "others": "andere",
+    "power": "Stromversorgung",
+    "quiet": "Nachrichten nicht stören",
+    "save": "Energiesparmodus",
+    "simple": "minimalistischer Modus",
+    "social": "Soziales Netzwerk",
+    "switch": "Schnellwechselfunktion",
+    "text": "Text",
+    "theme": "Thema",
+    "themeColor": "Themenfarbe",
+    "touch": "Richten Sie einen Touchscreen ein",
+    "wallpaper": "Hintergrund",
+    "window": "Fenstersteuerung"
+  },
+  "startUsage": "Beginnen Sie mit der Verwendung",
+  "toast": {
+    "walletConnected": "Wallet ist verbunden, Anmelden..."
+  },
+  "welcome": {
+    "call": "Hallo",
+    "changeAcc": "Benutzer wechseln",
+    "description": "——One-Stop-Terminal, das Web2 und Web3 verbindet",
+    "hello": "Willkommen beim Cross-Chain-Client von Pangu, der Sie in die neue Welt von web3 einführt!",
+    "loginOrReg": "Anmelden/Konto registrieren",
+    "netErr": "Wenn Sie auf Netzwerkprobleme stoßen, überprüfen Sie bitte den System-Proxy oder warten Sie geduldig.",
+    "retry": "Wiederholen",
+    "say1": "Dieser Client benötigt die Hilfe von Back-End-Computing-Diensten.",
+    "say2": "Bitte melden Sie sich an, um es zu verwenden."
+  }
+}

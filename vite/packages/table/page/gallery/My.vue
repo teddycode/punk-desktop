@@ -79,7 +79,7 @@
     </vue-custom-scrollbar>
   </div>
 
-  <a-drawer v-model:visible="visibleMenu" placement="bottom" :height="200">
+  <a-drawer v-model:open="visibleMenu" placement="bottom" :height="200">
     <a-row :gutter="20" style="text-align: center">
       <a-col :span="3">
         <div @click="setDesktopPaper" class="btn">
@@ -111,7 +111,7 @@
     </a-row>
   </a-drawer>
 
-  <a-drawer v-model:visible="visibleImport" placement="right" class="no-drag">
+  <a-drawer v-model:open="visibleImport" placement="right" class="no-drag">
     <Import :loadStaticPaper="loadStaticPaper" :getLoadLively="getLoadLively"></Import>
   </a-drawer>
 

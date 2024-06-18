@@ -21,20 +21,20 @@ export const arbitrum: ChainNetInfo = {
   explorerUrl: 'https://arbiscan.io',
   rpcUrl: 'https://arb1.arbitrum.io/rpc',
 };
-// 以太坊测试网
-export const goerli: ChainNetInfo = {
-  chainId: 5,
-  name: 'Goerli',
-  currency: 'ETH',
-  explorerUrl: 'https://goerli.etherscan.io',
-  rpcUrl: 'https://endpoints.omniatech.io/v1/eth/goerli/public',
+// 以太坊sepolia测试网
+export const sepolia: ChainNetInfo = {
+  chainId: 11155111,
+  name: 'Sepolia',
+  currency: 'SepETH',
+  explorerUrl: 'https://sepolia.etherscan.io',
+  rpcUrl: 'https://sepolia.infura.io/v3/',
 };
 
 // 磐古测试网
 export const punkos: ChainNetInfo = {
-  chainId: 123456789,
+  chainId: 11223344,
   name: 'PunkOS Test Network',
-  currency: 'ETH',
+  currency: 'PTH',
   explorerUrl: 'https://goerli.etherscan.io',
   rpcUrl: 'https://rpctest.byebyegfw.uk',
 };

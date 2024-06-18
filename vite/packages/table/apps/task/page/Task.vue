@@ -4,7 +4,7 @@
     :closable="false"
     style="z-index: 1000"
     placement="right"
-    v-model:visible="store.isTaskDrawer"
+    v-model:open="store.isTaskDrawer"
     :bodyStyle="{ padding: ' 0 ', overflow: 'hidden !important' }"
     @closeMessage="task.isTaskDrawer = false"
   >

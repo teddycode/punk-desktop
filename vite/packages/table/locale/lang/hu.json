@@ -1,0 +1,95 @@
+{
+  "appName": "Pangu cross-chain kliens",
+  "backgroud": "háttér",
+  "bg": {
+    "addMark": "Bekapcsoláskor növeli a háttér elmosódását",
+    "choose": "Válassza ki kedvenc képét a munkaasztal asztali háttereként.",
+    "clea": "tiszta háttér",
+    "clear": "tiszta háttér",
+    "desktop": "asztal háttere",
+    "masrk": "háttér elmosódott",
+    "openTPTip": "Ez a fajta funkció nagy teljesítményt igényel, szükség szerint engedélyezze.",
+    "openTransparent": "Átlátszó háttér bekapcsolás után",
+    "setting": "Háttérbeállítások",
+    "transparent": "Átlátszó háttér"
+  },
+  "btn": {
+    "change": "kapcsoló",
+    "recoverTextColor": "Az alapértelmezett szövegszín visszaállítása",
+    "recoverThemeColor": "Az alapértelmezett témaszínek visszaállítása",
+    "wallpapperColor": "A háttérkép alapértelmezett színének visszaállítása"
+  },
+  "chooseLang": "Válasszon nyelvet",
+  "desktop": {
+    "effectFlow": "leeső hatás",
+    "effectFlowTip": "Bekapcsolás után az oldal hűvös zuhanó hatású lesz.",
+    "effectNum": "A leeső tárgyak száma",
+    "effectRain": "eső",
+    "effects": "Leeső tárgyak",
+    "ligh": "Keret RGB fény",
+    "lightTip": "RGB effektusok megjelenítése a munkaasztal ablaka körül."
+  },
+  "menu": {
+    "name": "Címlap"
+  },
+  "message": {
+    "Danger": "WeChat",
+    "Info": "információ",
+    "Primary": "elsődleges szín",
+    "Success": "siker",
+    "Warning": "figyelmeztet",
+    "logoutFail": "A fiókból való kijelentkezés sikertelen, próbálja újra!",
+    "logoutSuccess": "A fiók sikeresen kijelentkezett, kérjük, jelentkezzen be újra",
+    "offlineTip": "Az offline mód használata után néhány szórakoztató és közösségi funkció, például játékok, időjárás stb., elrejtésre kerül.",
+    "serverTimeout": "A szerverkapcsolat időtúllépése lejárt. \nElőfordulhat, hogy a szerver karbantartás alatt áll, próbálja újra később.",
+    "teamTip": "A minimalista mód használata után néhány szórakoztató és közösségi funkció, mint például a csapat funkció, el lesz rejtve."
+  },
+  "name": "Hungarian (Hungary)",
+  "setting": "Beállítás",
+  "settings": {
+    "account": "Cím ellenőrzése",
+    "appInfo": "Alkalmazás információ",
+    "appManage": "Alkalmazáskezelés",
+    "base": "Alapbeállítások",
+    "chooseScr": "kiválasztási képernyő",
+    "common": "Általánosan használt",
+    "dark": "sötét mód",
+    "enableAccValid": "Cím ellenőrzése",
+    "general": "Általános beállítások",
+    "guideBar": "Navigációs sáv szerkesztése",
+    "language": "nyelvi beállítás",
+    "msg": {
+      "save": "A teljesítmény mód használata után a különféle interfész-animációk kikapcsolódnak, a memóriában megrekedt folyamatok pedig amennyire csak lehetséges, megtisztulnak. \nElőfordulhat, hogy a nyitófelület-effektus sérül, vagy az alkalmazásváltás lassú lesz. \nDe jelentősen csökkentheti a memória-, CPU- és GPU-használatot."
+    },
+    "offline": "Offline mód",
+    "otherScr": "Osztott képernyő beállításai",
+    "others": "Egyéb",
+    "power": "tápegység",
+    "quiet": "Ne zavarj üzeneteket",
+    "save": "Energiatakarékos mód",
+    "simple": "minimalista mód",
+    "social": "Közösségi háló",
+    "switch": "Gyors kapcsoló funkció",
+    "text": "szöveg",
+    "theme": "téma",
+    "themeColor": "téma színe",
+    "touch": "Érintőképernyő beállítása",
+    "wallpaper": "tapéta",
+    "window": "ablakvezérlés"
+  },
+  "startUsage": "kezdje el használni",
+  "toast": {
+    "walletConnected": "Wallet csatlakoztatva, bejelentkezés..."
+  },
+  "welcome": {
+    "call": "Helló",
+    "changeAcc": "Fiók váltása",
+    "description": "——A web2-t és a web3-at összekötő egyablakos terminál",
+    "hello": "Üdvözöljük a Pangu cross-chain kliens használatával, amellyel felfedezheti a web3 új világát!",
+    "loginOrReg": "Bejelentkezés / regisztráció fiók",
+    "netErr": "Ha hálózati problémákat tapasztal, ellenőrizze a rendszerproxyt, vagy várjon türelmesen.",
+    "retry": "Próbálja újra",
+    "say1": "Ez az ügyfél háttér-számítástechnikai szolgáltatások segítségét igényli.",
+    "say2": "Kérjük, jelentkezzen be a használathoz."
+  }
+}

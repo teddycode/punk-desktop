@@ -1,0 +1,95 @@
+{
+  "appName": "Pangu kryžminės grandinės klientas",
+  "backgroud": "fone",
+  "bg": {
+    "addMark": "Įjungus padidina fono suliejimą",
+    "choose": "Pasirinkite savo mėgstamą paveikslėlį kaip darbalaukio foną.",
+    "clea": "aiškus fonas",
+    "clear": "aiškus fonas",
+    "desktop": "darbalaukio fonas",
+    "masrk": "fono suliejimas",
+    "openTPTip": "Šio tipo funkcijai reikalingas didelis našumas, jei reikia, įjunkite.",
+    "openTransparent": "Skaidrus fonas po įjungimo",
+    "setting": "Fono nustatymai",
+    "transparent": "Skaidrus fonas"
+  },
+  "btn": {
+    "change": "jungiklis",
+    "recoverTextColor": "Atkurti numatytąją teksto spalvą",
+    "recoverThemeColor": "Atkurti numatytąsias temos spalvas",
+    "wallpapperColor": "Atkurti numatytąją ekrano fono spalvą"
+  },
+  "chooseLang": "Pasirinkite kalbą",
+  "desktop": {
+    "effectFlow": "kritimo efektas",
+    "effectFlowTip": "Jį įjungus, puslapis turės vėsų krintimo efektą.",
+    "effectNum": "Krintančių objektų skaičius",
+    "effectRain": "lietus",
+    "effects": "Krintantys objektai",
+    "ligh": "Rėmo RGB lemputė",
+    "lightTip": "Rodyti RGB efektus aplink darbastalio langą."
+  },
+  "menu": {
+    "name": "Titulinis lapas"
+  },
+  "message": {
+    "Danger": "WeChat",
+    "Info": "informacija",
+    "Primary": "pirminė spalva",
+    "Success": "sėkmė",
+    "Warning": "įspėti",
+    "logoutFail": "Atsijungti nuo paskyros nepavyko, bandykite dar kartą!",
+    "logoutSuccess": "Paskyra sėkmingai atsijungta, prisijunkite dar kartą",
+    "offlineTip": "Naudojus režimą neprisijungus, kai kurios pramoginės ir socialinės funkcijos, pvz., žaidimai, orai ir kt., bus paslėptos.",
+    "serverTimeout": "Baigėsi serverio ryšio skirtasis laikas. \nServeris gali būti prižiūrimas, bandykite dar kartą vėliau.",
+    "teamTip": "Pasinaudojus minimalistiniu režimu, kai kurios pramoginės ir socialinės funkcijos, pavyzdžiui, būrio funkcija, bus paslėptos."
+  },
+  "name": "Lietuvių",
+  "setting": "Nustatymas",
+  "settings": {
+    "account": "Adreso patvirtinimas",
+    "appInfo": "Informacija apie programą",
+    "appManage": "Programų valdymas",
+    "base": "Pagrindiniai nustatymai",
+    "chooseScr": "pasirinkimo ekranas",
+    "common": "Dažnai naudojamas",
+    "dark": "tamsus režimas",
+    "enableAccValid": "Adreso patvirtinimas",
+    "general": "Bendrieji nustatymai",
+    "guideBar": "Naršymo juostos redagavimas",
+    "language": "kalbos nustatymas",
+    "msg": {
+      "save": "Panaudojus našumo režimą įvairios sąsajos animacijos bus išjungtos, o atmintyje įstrigę procesai bus maksimaliai išvalyti. \nDėl to gali būti pažeistas atidarymo sąsajos efektas arba lėtas programų perjungimas. \nTačiau tai gali žymiai sumažinti atminties, procesoriaus ir GPU naudojimą."
+    },
+    "offline": "Režimas neprisijungus",
+    "otherScr": "Padalinto ekrano nustatymai",
+    "others": "kitas",
+    "power": "maitinimo šaltinis",
+    "quiet": "Netrukdyti žinutėms",
+    "save": "Energijos taupymo režimas",
+    "simple": "minimalistinis režimas",
+    "social": "Socialinis tinklas",
+    "switch": "Greito perjungimo funkcija",
+    "text": "tekstą",
+    "theme": "tema",
+    "themeColor": "temos spalva",
+    "touch": "Nustatykite jutiklinį ekraną",
+    "wallpaper": "tapetai",
+    "window": "langų valdymas"
+  },
+  "startUsage": "pradėti naudoti",
+  "toast": {
+    "walletConnected": "Piniginė prijungta, prisijungiama..."
+  },
+  "welcome": {
+    "call": "Sveiki",
+    "changeAcc": "Pakeisti paskyrą",
+    "description": "——Vieno langelio terminalas, jungiantis web2 ir web3",
+    "hello": "Sveiki atvykę į „Pangu cross-chain“ klientą, kad galėtumėte tyrinėti naują „web3“ pasaulį!",
+    "loginOrReg": "Prisijungti/užsiregistruoti paskyrą",
+    "netErr": "Jei susiduriate su tinklo problemomis, patikrinkite sistemos tarpinį serverį arba kantriai palaukite.",
+    "retry": "Bandykite dar kartą",
+    "say1": "Šiam klientui reikalinga galinio skaičiavimo paslaugų pagalba.",
+    "say2": "Norėdami naudotis, prisijunkite."
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "appName": "Cliente de cadeia cruzada Pangu",
+  "backgroud": "fundo",
+  "bg": {
+    "addMark": "Aumenta o desfoque do fundo quando ativado",
+    "choose": "Escolha sua imagem favorita como plano de fundo da área de trabalho do ambiente de trabalho.",
+    "clea": "fundo claro",
+    "clear": "fundo claro",
+    "desktop": "papel de parede",
+    "masrk": "desfoque de fundo",
+    "openTPTip": "Este tipo de função consome alto desempenho, habilite-a conforme apropriado.",
+    "openTransparent": "Fundo transparente após ligar",
+    "setting": "Configurações de plano de fundo",
+    "transparent": "Fundo Transparente"
+  },
+  "btn": {
+    "change": "trocar",
+    "recoverTextColor": "Restaurar a cor do texto padrão",
+    "recoverThemeColor": "Restaurar cores padrão do tema",
+    "wallpapperColor": "Restaurar a cor padrão do papel de parede"
+  },
+  "chooseLang": "Escolha um idioma",
+  "desktop": {
+    "effectFlow": "efeito de queda",
+    "effectFlowTip": "Depois de ligá-lo, a página terá um efeito de queda legal.",
+    "effectNum": "Número de objetos caindo",
+    "effectRain": "chuva",
+    "effects": "Objetos que caem",
+    "ligh": "Quadro de luz RGB",
+    "lightTip": "Exiba efeitos RGB ao redor da janela do ambiente de trabalho."
+  },
+  "menu": {
+    "name": "primeira página"
+  },
+  "message": {
+    "Danger": "WeChat",
+    "Info": "Informação",
+    "Primary": "cor primária",
+    "Success": "sucesso",
+    "Warning": "avisar",
+    "logoutFail": "Falha ao sair da conta. Tente novamente!",
+    "logoutSuccess": "Conta desconectada com sucesso, faça login novamente",
+    "offlineTip": "Depois de usar o modo offline, algumas funções sociais e de entretenimento, como jogos, previsão do tempo, etc., ficarão ocultas.",
+    "serverTimeout": "A conexão do servidor expirou. \nO servidor pode estar em manutenção, tente novamente mais tarde.",
+    "teamTip": "Depois de usar o modo minimalista, algumas funções sociais e de entretenimento, como a função de esquadrão, ficarão ocultas."
+  },
+  "name": "Portuguese (Portugal)",
+  "setting": "Contexto",
+  "settings": {
+    "account": "Verificação de endereço",
+    "appInfo": "Informações do aplicativo",
+    "appManage": "Gerenciamento de aplicativos",
+    "base": "Configurações básicas",
+    "chooseScr": "tela de seleção",
+    "common": "Comumente usado",
+    "dark": "modo escuro",
+    "enableAccValid": "Verificação de endereço",
+    "general": "Configurações Gerais",
+    "guideBar": "Edição da barra de navegação",
+    "language": "configuração de idioma",
+    "msg": {
+      "save": "Depois de usar o modo de desempenho, várias animações da interface serão desativadas e os processos presos na memória serão limpos tanto quanto possível. \nIsso pode fazer com que o efeito da interface de abertura seja comprometido ou que a troca de aplicativos seja lenta. \nMas pode reduzir significativamente o uso de memória, CPU e GPU."
+    },
+    "offline": "Modo offline",
+    "otherScr": "Configurações de tela dividida",
+    "others": "outro",
+    "power": "fonte de energia",
+    "quiet": "Não perturbe mensagens",
+    "save": "Modo de economia de energia",
+    "simple": "modo minimalista",
+    "social": "Rede social",
+    "switch": "Função de troca rápida",
+    "text": "texto",
+    "theme": "tema",
+    "themeColor": "cor do tema",
+    "touch": "Configurar uma tela sensível ao toque",
+    "wallpaper": "papel de parede",
+    "window": "controle de janela"
+  },
+  "startUsage": "comece a usar",
+  "toast": {
+    "walletConnected": "A carteira está conectada, fazendo login..."
+  },
+  "welcome": {
+    "call": "Olá",
+    "changeAcc": "Mudar de conta",
+    "description": "—— Terminal completo conectando web2 e web3",
+    "hello": "Bem-vindo ao uso do cliente cross-chain Pangu para levá-lo a explorar o novo mundo do web3!",
+    "loginOrReg": "Entrar/Registrar conta",
+    "netErr": "Se você encontrar problemas de rede, verifique o proxy do sistema ou aguarde pacientemente.",
+    "retry": "Tentar novamente",
+    "say1": "Este cliente requer a ajuda de serviços de computação back-end.",
+    "say2": "Faça login para usar."
+  }
+}

@@ -29,12 +29,12 @@
     </div>
   </div>
 
-  <a-drawer v-model:visible="groupShow" width="500" placement="right" :footer="null">
+  <a-drawer v-model:open="groupShow" width="500" placement="right" :footer="null">
     <GroupDetail :group="groupItem" :memeber="memeber" @closeDrawer="groupShow = false"></GroupDetail>
   </a-drawer>
 
   <teleport to="body">
-    <Modal v-model:visible="groupVisible" v-if="groupVisible" :blurFlag="true">
+    <Modal v-model:open="groupVisible" v-if="groupVisible" :blurFlag="true">
       <AddFriend @close="groupVisible = false"></AddFriend>
     </Modal>
   </teleport>

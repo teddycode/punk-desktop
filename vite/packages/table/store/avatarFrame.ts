@@ -9,7 +9,7 @@ import cache from '../components/card/hooks/cache';
 import { post } from '../js/axios/request';
 
 const getFrameUrl = sUrl('/app/good/frame/list'); // 获取头像商品数据
-const editInfoUrl = sUrl('/app/com/updateUserInfo'); // 修改文档信息
+const editInfoUrl = sUrl('/users/update'); // 修改用户信息
 const ensureOrderUrl = sUrl('/app/order/ensure');
 const getQrcodeUrl = sUrl('/app/order/getQrcode');
 const getMyFramesUrl = sUrl('/app/good/frame/my');
@@ -35,6 +35,7 @@ export const frameStore = defineStore('frameStore', {
     },
     async updateMyinfo(data) {
       // 修改我的信息
+      console.log('需要更新的信息：', data);
       return await post(editInfoUrl, data);
     },
     saveAvatarUrl() {

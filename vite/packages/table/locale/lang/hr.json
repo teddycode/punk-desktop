@@ -1,0 +1,95 @@
+{
+  "appName": "Pangu cross-chain klijent",
+  "backgroud": "pozadina",
+  "bg": {
+    "addMark": "Povećava zamućenje pozadine kada je uključeno",
+    "choose": "Odaberite svoju omiljenu sliku kao pozadinu radnog stola.",
+    "clea": "jasna pozadina",
+    "clear": "jasna pozadina",
+    "desktop": "pozadina radne površine",
+    "masrk": "zamućenje pozadine",
+    "openTPTip": "Ova vrsta funkcije troši visoke performanse, omogućite je prema potrebi.",
+    "openTransparent": "Prozirna pozadina nakon uključivanja",
+    "setting": "Postavke pozadine",
+    "transparent": "Prozirna pozadina"
+  },
+  "btn": {
+    "change": "sklopka",
+    "recoverTextColor": "Vrati zadanu boju teksta",
+    "recoverThemeColor": "Vratite zadane boje teme",
+    "wallpapperColor": "Vratite zadanu boju pozadine"
+  },
+  "chooseLang": "Odaberite jezik",
+  "desktop": {
+    "effectFlow": "učinak pada",
+    "effectFlowTip": "Nakon što ga uključite, stranica će imati efekt hladnog pada.",
+    "effectNum": "Broj padajućih predmeta",
+    "effectRain": "kiša",
+    "effects": "Padajući predmeti",
+    "ligh": "Okvir RGB svjetlo",
+    "lightTip": "Prikažite RGB efekte oko prozora radnog stola."
+  },
+  "menu": {
+    "name": "Naslovna strana"
+  },
+  "message": {
+    "Danger": "WeChat",
+    "Info": "informacija",
+    "Primary": "primarna boja",
+    "Success": "uspjeh",
+    "Warning": "upozoriti",
+    "logoutFail": "Odjava s računa nije uspjela, pokušajte ponovno!",
+    "logoutSuccess": "Račun se uspješno odjavio, prijavite se ponovo",
+    "offlineTip": "Nakon korištenja izvanmrežnog načina rada, neke zabavne i društvene funkcije, poput igara, vremena itd., bit će skrivene.",
+    "serverTimeout": "Veza s poslužiteljem je istekla. \nPoslužitelj je možda na održavanju, pokušajte ponovno kasnije.",
+    "teamTip": "Nakon korištenja minimalističkog načina rada, neke zabavne i društvene funkcije, poput funkcije tima, bit će skrivene."
+  },
+  "name": "Croatian",
+  "setting": "Postavka",
+  "settings": {
+    "account": "Provjera adrese",
+    "appInfo": "Informacije o aplikaciji",
+    "appManage": "Upravljanje aplikacijama",
+    "base": "Osnovne postavke",
+    "chooseScr": "zaslon za odabir",
+    "common": "Uobičajeno korišten",
+    "dark": "tamni način rada",
+    "enableAccValid": "Provjera adrese",
+    "general": "Opće postavke",
+    "guideBar": "Uređivanje navigacijske trake",
+    "language": "postavka jezika",
+    "msg": {
+      "save": "Nakon korištenja načina rada, različite animacije sučelja bit će isključene, a procesi zaglavljeni u memoriji bit će očišćeni koliko god je to moguće. \nTo može uzrokovati kompromitiranje efekta otvaranja sučelja ili sporo prebacivanje aplikacija. \nAli može značajno smanjiti korištenje memorije, CPU-a i GPU-a."
+    },
+    "offline": "Izvanmrežni način rada",
+    "otherScr": "Postavke podijeljenog zaslona",
+    "others": "drugo",
+    "power": "napajanje",
+    "quiet": "Ne uznemiravaj poruke",
+    "save": "Način rada za uštedu energije",
+    "simple": "minimalistički način rada",
+    "social": "Društvena mreža",
+    "switch": "Funkcija brzog prebacivanja",
+    "text": "tekst",
+    "theme": "tema",
+    "themeColor": "boja teme",
+    "touch": "Postavite zaslon osjetljiv na dodir",
+    "wallpaper": "tapeta",
+    "window": "kontrola prozora"
+  },
+  "startUsage": "početi koristiti",
+  "toast": {
+    "walletConnected": "Novčanik je povezan, prijava..."
+  },
+  "welcome": {
+    "call": "zdravo",
+    "changeAcc": "Promijeniti račun",
+    "description": "——Terminal na jednom mjestu koji povezuje web2 i web3",
+    "hello": "Dobrodošli u korištenje Pangu cross-chain klijenta koji će vas odvesti u istraživanje novog svijeta web3!",
+    "loginOrReg": "Prijava/Registracija računa",
+    "netErr": "Ako naiđete na probleme s mrežom, provjerite proxy sustava ili strpljivo pričekajte.",
+    "retry": "Pokušaj ponovo",
+    "say1": "Ovaj klijent zahtijeva pomoć pozadinskih računalnih usluga.",
+    "say2": "Molimo prijavite se za korištenje."
+  }
+}

@@ -77,7 +77,7 @@
       </div>
     </div>
   </Widget>
-  <a-drawer v-model:visible="settingVisible" :width="500" placement="right">
+  <a-drawer v-model:open="settingVisible" :width="500" placement="right">
     <template #title>
       <div class="text-center">「壁纸」设置</div>
     </template>

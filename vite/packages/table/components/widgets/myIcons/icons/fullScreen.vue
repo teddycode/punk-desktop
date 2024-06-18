@@ -28,7 +28,7 @@
       </div>
     </droppable-area>
 
-    <a-drawer v-model:visible="visible" :height="200" :width="500" placement="bottom" style="z-index: 99999999">
+    <a-drawer v-model:open="visible" :height="200" :width="500" placement="bottom" style="z-index: 99999999">
       <BottomEdit :menuList="menuList"></BottomEdit>
     </a-drawer>
   </teleport>

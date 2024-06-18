@@ -145,7 +145,7 @@
       ></NewAddCard>
     </div>
   </transition>
-  <a-drawer v-model:visible="settingVisible" placement="right">
+  <a-drawer v-model:open="settingVisible" placement="right">
     <XtTab
       v-if="settingVisible"
       v-model="currentSettingTab"

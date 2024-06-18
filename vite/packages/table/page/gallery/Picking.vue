@@ -85,7 +85,7 @@
   </div>
 
   <a-drawer
-    v-model:visible="pickFilterShow"
+    v-model:open="pickFilterShow"
     title="筛选"
     style="text-align: center !important"
     class="no-drag"
@@ -149,7 +149,7 @@
   </a-drawer>
 
   <a-drawer
-    v-model:visible="pickInfoShow"
+    v-model:open="pickInfoShow"
     title="信息"
     style="text-align: center !important"
     class="no-drag"
@@ -189,7 +189,7 @@
     </template>
   </a-drawer>
 
-  <a-drawer :height="200" v-model:visible="visibleMenu" placement="bottom">
+  <a-drawer :height="200" v-model:open="visibleMenu" placement="bottom">
     <a-row :gutter="20" style="text-align: center">
       <a-col :span="4">
         <div @click="setDesktopPaper" class="btn">

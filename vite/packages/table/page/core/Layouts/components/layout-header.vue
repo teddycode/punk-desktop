@@ -77,7 +77,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useLayoutStore } from '@store/baseSettings'; // 导入你的 Pinia store
 import { walletStore } from '@store/wallet';
 import { useRouter } from 'vue-router';
@@ -99,7 +99,7 @@ const aStore = appStore();
 const router = useRouter();
 
 const isMenu = computed(() => layoutStore.isMenu);
-const isConnected = useWeb3ModalAccount().isConnected;
+let isConnected = ref(false);
 const userInfo = computed(() => aStore.userInfo);
 // 获取父亲路由所有的平行路由作为菜单列表
 const munePath = computed(() => {
@@ -165,6 +165,16 @@ const logOutUser = () => {
   router.push('/');
   // window.location.reload()
 };
+
+onMounted(() => {
+  setTimeout(() => {
+    try {
+      isConnected.value = useWeb3ModalAccount().isConnected;
+    } catch (e) {
+      console.warn(e);
+    }
+  }, 500);
+});
 </script>
 
 <style scoped>

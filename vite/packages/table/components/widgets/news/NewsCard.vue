@@ -57,7 +57,7 @@
       <DataStatu v-else :btnToggle="false" imgDisplay="/img/test/load-ail.png" textPrompt="暂无数据"></DataStatu>
     </Widget>
 
-    <a-drawer v-model:visible="settingVisible" :width="500" placement="right" title="设置">
+    <a-drawer v-model:open="settingVisible" :width="500" placement="right" title="设置">
       <vue-custom-scrollbar :settings="settingsScroller" style="height: 100%">
         <div class="primary-title" style="color: var(--primary-text)">新闻类别</div>
         <div class="mt-2 mb-6 secondary-title" style="color: var(--secondary-text)">

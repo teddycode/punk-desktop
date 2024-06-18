@@ -1,0 +1,96 @@
+{
+  "appName": "磐古跨链客户端",
+  "backgroud": "背景",
+  "bg": {
+    "addMark": "开启后增加背景模糊度",
+    "choose": "选择喜欢的图片作为工作台桌面背景。",
+    "clea": "清除背景",
+    "clear": "清除背景",
+    "desktop": "桌面背景",
+    "marsk": "背景模糊度",
+    "masrk": "背景模糊度",
+    "openTPTip": "此类功能性能消耗较高，请酌情开启",
+    "openTransparent": "开启后透明背景",
+    "setting": "背景设置",
+    "transparent": "透明背景"
+  },
+  "btn": {
+    "change": "切换",
+    "recoverTextColor": "恢复默认文本颜色",
+    "recoverThemeColor": "恢复默认主題颜色",
+    "wallpapperColor": "恢复默认壁纸颜色"
+  },
+  "chooseLang": "选择语言",
+  "desktop": {
+    "effectFlow": "飘落效果",
+    "effectFlowTip": "开启后页面会有炫酷的飘落效果",
+    "effectNum": "飘落物数量",
+    "effectRain": "雨",
+    "effects": "飘落物",
+    "ligh": "边框RGB灯",
+    "lightTip": "在工作台窗口四周显示RGB效果。"
+  },
+  "menu": {
+    "name": "首页"
+  },
+  "message": {
+    "Danger": "微信",
+    "Info": "信息",
+    "Primary": "原色",
+    "Success": "成功",
+    "Warning": "警告",
+    "logoutFail": "账号退出失败，请重试！",
+    "logoutSuccess": "帐号退出成功,请重新登录",
+    "offlineTip": "使用离线模式后，将隐藏部分娱乐、社交类的功能，例如游戏、天气等。",
+    "serverTimeout": "服务器连接超时。可能服务器正在维护，请稍后再试。",
+    "teamTip": "使用极简模式后，将隐藏部分娱乐、社交类的功能，例如小队功能。"
+  },
+  "name": "中文（简体）",
+  "setting": "Setting",
+  "settings": {
+    "account": "地址校验",
+    "appInfo": "应用信息",
+    "appManage": "应用中心",
+    "base": "基础设置",
+    "chooseScr": "选择屏幕",
+    "common": "常用",
+    "dark": "深色模式",
+    "enableAccValid": "地址校验",
+    "general": "通用设置",
+    "guideBar": "导航栏编辑",
+    "language": "设置语言",
+    "msg": {
+      "save": "使用性能模式后，将关闭各种界面动画，同时尽可能清理掉滞留内存中的进程。可能导致打开界面效果折损或者应用切换缓慢。但可以显著降低内存、CPU、GPU占用。"
+    },
+    "offline": "离线模式",
+    "otherScr": "分屏设置",
+    "others": "其他",
+    "power": "电源",
+    "quiet": "消息免打扰",
+    "save": "节能模式",
+    "simple": "极简模式",
+    "social": "社交网络",
+    "switch": "快速开关功能",
+    "text": "文本",
+    "theme": "主题",
+    "themeColor": "主题颜色",
+    "touch": "设置触摸屏",
+    "wallpaper": "壁纸",
+    "window": "窗口控制"
+  },
+  "startUsage": "开始使用",
+  "toast": {
+    "walletConnected": "钱包已连接，正在登录..."
+  },
+  "welcome": {
+    "call": "你好",
+    "changeAcc": "切换账号",
+    "description": "—— 连接web2与web3的一站式终端",
+    "hello": "欢迎使用磐古跨链客户端，带你探索通往web3的新世界！",
+    "loginOrReg": "登录/注册账号",
+    "netErr": "如遇网络问题，请检查系统代理或耐心等待。",
+    "retry": "重试",
+    "say1": "本客户端需要借助后端计算服务，",
+    "say2": "请登录后使用。"
+  }
+}

@@ -1342,7 +1342,6 @@ app.whenReady().then(() => {
     }
   });
 
-  let loginWindow = null;
   ipc.on('closeUserWindow', () => {
     callUnModal(userWindow);
     if (userWindow) {
@@ -1399,19 +1398,20 @@ app.whenReady().then(() => {
     SidePanel.send('saving');
   });
 
-  ipc.on('login', (event, args) => {
-    if (loginWindow) {
-      loginWindow.show();
-      loginWindow.focus();
+  //  改成wallet auth了
+  let walletAuthWindow = null;
+  ipc.on('wallet-auth', (event, args) => {
+    if (walletAuthWindow) {
+      walletAuthWindow.show();
+      walletAuthWindow.focus();
     } else {
-      loginWindow = new BrowserWindow({
+      walletAuthWindow = new BrowserWindow({
         backgroundColor: '#00000000',
         show: false,
-        alwaysOnTop: true,
-        width: 550,
-        height: 730,
+        width: 450,
+        height: 700,
         webPreferences: {
-          preload: path.join(__dirname, 'pages/user/loginPreload.js'),
+          preload: path.join(__dirname, 'pages/walletAuth/authPreload.js'),
           nodeIntegration: true,
           contextIsolation: false,
           additionalArguments: [
@@ -1424,24 +1424,24 @@ app.whenReady().then(() => {
           partition: 'login',
         },
       });
-      loginWindow.setMenu(null);
+      walletAuthWindow.setMenu(null);
       if (isDevelopmentMode) {
-        loginWindow.webContents.openDevTools({ mode: 'detach' });
+        walletAuthWindow.webContents.openDevTools({ mode: 'detach' });
       }
-      loginWindow.on('close', () => {
-        loginWindow = null;
+      walletAuthWindow.on('close', () => {
+        walletAuthWindow = null;
       });
-      // loginWindow.loadURL('http://localhost:1600/html/login/index.html');
-      let api = require(path.join(__dirname, 'server-config.js')).api;
-      loginWindow.loadURL(api.getUrl(api.API_URL.user.login));
-      loginWindow.on('ready-to-show', () => {
+      walletAuthWindow.loadURL('http://localhost:1600/html/auth/dist/index.html');
+      // let api = require(path.join(__dirname, 'server-config.js')).api;
+      // walletAuthWindow.loadURL(api.getUrl(api.API_URL.user.login));
+      walletAuthWindow.on('ready-to-show', () => {
         if (userWindow && !userWindow.isDestroyed()) {
           userWindow.setAlwaysOnTop(false);
         }
-        loginWindow.show();
-        loginWindow.focus();
+        walletAuthWindow.show();
+        walletAuthWindow.focus();
       });
-      loginWindow.on('close', () => {
+      walletAuthWindow.on('close', () => {
         if (userWindow && !userWindow.isDestroyed()) {
           userWindow.setAlwaysOnTop(true);
         }

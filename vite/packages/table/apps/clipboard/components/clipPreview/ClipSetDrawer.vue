@@ -1,6 +1,6 @@
 <template>
   <!-- 设置 -->
-  <a-drawer v-model:visible="setShow" title="设置" width="500" placement="right">
+  <a-drawer v-model:open="setShow" title="设置" width="500" placement="right">
     <div class="flex items-center justify-between mb-6">
       <div class="flex flex-col">
         <span class="mb-2 primary-title">剪切板</span>
@@ -46,7 +46,7 @@
   </a-drawer>
 
   <!-- 代码高亮设置 -->
-  <a-drawer placement="right" width="500" title="代码高亮设置" v-model:visible="clipSetVisible" @close="onClose">
+  <a-drawer placement="right" width="500" title="代码高亮设置" v-model:open="clipSetVisible" @close="onClose">
     <div class="flex justify-between mb-6">
       <div class="flex flex-col">
         <span class="primary-title">代码高亮自动识别</span>

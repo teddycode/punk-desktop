@@ -4,17 +4,9 @@
     style="position: relative; height: calc(100vh - 14em)"
     @contextmenu.stop="menuVisible = true"
   >
-    <!-- 添加样式 -->
-    <a-dropdown>
-      <div class="app" style="height: 78px" @click="addIcons()">
-        <div class="flex justify-center items-center w-full h-full" style="">
-          <Icon class="xt-text" icon="tianjia2" style="font-size: 30px"></Icon>
-        </div>
-      </div>
-    </a-dropdown>
     <a-dropdown v-for="app in myApps" :trigger="['contextmenu']" @contextmenu.stop="() => {}">
       <div class="app" @click="open(app)">
-        <a-avatar :size="50" :src="renderIcon(app.icon)" shape="square"></a-avatar>
+        <a-avatar :size="64" :src="renderIcon(app.icon)" shape="square"></a-avatar>
         <br />
         <div class="name text-more">
           {{ app.name }}
@@ -28,8 +20,16 @@
         </a-menu>
       </template>
     </a-dropdown>
+    <!-- 添加样式 -->
+    <a-dropdown>
+      <div class="app" style="height: 78px" @click="addIcons()">
+        <div class="flex justify-center items-center w-full h-full" style="">
+          <Icon class="xt-text" icon="tianjia2" style="font-size: 30px"></Icon>
+        </div>
+      </div>
+    </a-dropdown>
   </vue-custom-scrollbar>
-  <a-drawer v-model:visible="menuVisible" :height="250" placement="bottom">
+  <a-drawer v-model:open="menuVisible" :height="240" placement="bottom">
     <a-row :gutter="[20, 20]" style="margin-top: 1em">
       <a-col>
         <div class="btn" @click="clear">
@@ -44,11 +44,12 @@
 <script>
 import { mapActions, mapWritableState } from 'pinia';
 import { Modal } from 'ant-design-vue';
-import { appsStore } from '../store/apps';
-import { renderIcon } from '../js/common/common';
+import { appsStore } from '@store/apps';
+import { renderIcon } from '@js/common/common';
 
 const { fs } = window.$models;
 
+// 应用中心->本地应用
 export default {
   name: 'MyApps',
   data() {

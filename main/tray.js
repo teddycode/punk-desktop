@@ -21,7 +21,7 @@ async function getUserInfo() {
     console.error(e);
   }
   return await baseApi.axios(
-    '/app/getUserInfo',
+    '/api/users/info',
     { fields: 'uid,fans,follow,grade,post_count,signature,nickname,avatar,frame' },
     'get',
   );
@@ -158,23 +158,55 @@ app.whenReady().then(() => {
       }
     }
   });
+  ipc.handle('saveUserToDB', async (event, args) => {
+    if (args) {
+      const userInfo = {
+        uid: args?.id,
+        code: args?.token,
+        token: args?.token,
+        user_info: args,
+        refresh_token: args.token,
+        expire_time: new Date().getTime() + 7 * 24 * 3600 * 1000,
+        refresh_expire_time: new Date().getTime() + 7 * 24 * 3600 * 1000,
+        last_login_time: Date.now(),
+        is_current: true,
+      };
+      console.log('saving userInfo:', userInfo);
+      let res = await userModel.setCurrent(userInfo);
+      return res;
+    }
+  });
   ipc.on('getDetailUserInfo', async (event, args) => {
+    // 检查本地是否保存用户信息
     const isLogged = await userModel.isLogged();
+    console.log('收到查询用户信息的消息，查询是否存在：', isLogged);
     if (isLogged) {
+      // 根据token获取服务端的用户信息
       getUserInfo()
         .then((result) => {
-          if (result.data.data.uid) {
-            event.reply('userInfo', result.data);
+          console.log('获取用户信息成功:', result);
+          const data = result?.data;
+          if (data) {
+            if (data?.code === 200 && data?.data) {
+              if (data?.data?.uid && data?.data?.uid > 0) {
+                event.reply('userInfo', data); // 查询到用户信息
+              } else {
+                event.reply('userInfo', { data: { uid: -1 } }); // 找不到，-1代表未登录
+              }
+            } else {
+              event.reply('userInfo', { data: { uid: -1 } }); // 找不到，-1代表未登录
+            }
           } else {
-            event.reply('userInfo', { data: { uid: -2 } }); // -2代表异常
+            event.reply('userInfo', { data: { uid: -2 } }); // 空响应，-2代表异常
           }
         })
-        .catch(() => {
+        .catch((error) => {
+          console.log('获取用户信息失败:', error);
           event.reply('userInfo', { data: { uid: -2 } }); // -2代表异常
         });
     } else {
       event.reply('userInfo', {
-        data: { uid: -1 }, // -1代表未登录
+        data: { uid: -1 }, // 本地没有信息，-1代表未登录
       });
     }
   });
@@ -228,6 +260,7 @@ app.whenReady().then(() => {
     }
   });
 
+  // 右键打开托盘
   tray.on('right-click', () => {
     let tableRunning = global.tableWin && !global.tableWin.window.isDestroyed();
     const keyM = global.keyMapManager;
@@ -250,7 +283,7 @@ app.whenReady().then(() => {
         },
       },
       {
-        label: '重置工作台窗口位置(找回)',
+        label: '重置窗口位置(找回)',
         click: () => {
           if (global.tableWin && !global.tableWin.window.isDestroyed()) {
             global.tableWin.close();
@@ -294,46 +327,35 @@ app.whenReady().then(() => {
       {
         type: 'separator',
       },
-
-      // {
-      //   label: '切换账号空间',
-      //   click: () => {
-      //     showUserWindow();
-      //   },
-      // },
-
-      // {
-      //   type: 'separator',
-      // },
     ];
 
     tpl.push(
-      // {
-      //   label: '社区和反馈',
-      //   click() {
-      //     require('electron').shell.openPath(userDataPath);
-      //   },
-      //   submenu: [
-      //     {
-      //       label: '打开官网',
-      //       click() {
-      //         require('electron').shell.openExternal('https://www.apps.vip');
-      //       },
-      //     },
-      //     {
-      //       label: '产品社区',
-      //       click() {
-      //         require('electron').shell.openExternal('https://s.apps.vip');
-      //       },
-      //     },
-      //     {
-      //       label: '提交bug和建议',
-      //       click() {
-      //         require('electron').shell.openExternal('https://s.apps.vip/forum?id=100304');
-      //       },
-      //     },
-      //   ],
-      // },
+      {
+        label: '社区和反馈',
+        click() {
+          require('electron').shell.openPath(userDataPath);
+        },
+        submenu: [
+          {
+            label: '打开官网',
+            click() {
+              require('electron').shell.openExternal('https://www.punkos.com');
+            },
+          },
+          {
+            label: '产品社区',
+            click() {
+              require('electron').shell.openExternal('https://www.punkos.com/social');
+            },
+          },
+          {
+            label: '提交bug和建议',
+            click() {
+              require('electron').shell.openExternal('https://www.punkos.com/bugs');
+            },
+          },
+        ],
+      },
       {
         label: '打开数据目录',
         click() {

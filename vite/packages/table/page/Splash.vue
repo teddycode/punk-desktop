@@ -16,7 +16,7 @@
           </path>
         </svg>
         <div style="color: #2eb9ce">
-          欢迎使用磐古跨链客户端，带你探索通往web3的新世界！
+          {{$t('welcome.hello')}}
         </div>
       </div>
     </div>
@@ -25,22 +25,27 @@
         <h3 style="text-align: center;font-size: 1.5em">
           <a-avatar src="/icons/logo128.png" style="vertical-align: top"></a-avatar>
           <div style="color: whitesmoke">
-           磐古跨链客户端
+            {{$t('appName')}}
           </div>
         </h3>
-        <div style="color: #2eb9ce" class="mb-10 ml-40 text-center text-md"> —— 连接web2与web3的一站式终端</div>
+        <div style="color: #2eb9ce" class="mb-10 ml-40 text-center text-md">
+          {{$t('welcome.description')}}
+        </div>
         <p v-if="!userInfo">
           <div class="mb-5 xt-text" style="font-size: 16px;color: whitesmoke">
-            本客户端需要借助后端计算服务，<strong>请登录后使用。</strong><br>
-
+            {{$t('welcome.say1')}}
+            <strong>
+            {{$t('welcome.say2')}}
+          </strong><br>
           </div>
-          <div class="mb-10 xt-text-2">如遇网络问题，请检查系统代理或耐心等待。</div>
+          <div class="mb-10 xt-text-2">{{$t('welcome.netErr')}}</div>
           <a-row :gutter="10" class="w-full">
             <a-col flex="1">
-              <xt-button size="mini" style="width: 100%" type="theme" @click="login">登录/注册账号</xt-button>
+              <xt-button size="mini" style="width: 100%" type="theme" @click="login">
+                {{$t('welcome.loginOrReg')}}</xt-button>
             </a-col>
             <a-col v-if="netError" flex="150px">
-              <xt-button style="width: 100%" @click="getUserInfo">重试</xt-button>
+              <xt-button style="width: 100%" @click="getUserInfo">{{$t('welcome.retry')}}</xt-button>
             </a-col>
           </a-row>
         </p>
@@ -50,15 +55,15 @@
               <a-avatar :size="68" :src="userInfo.avatar"></a-avatar>
             </div>
             <div  style="color: orange" class="mt-4 text-lg">
-              你好，{{ userInfo.nickname }}
+              {{$t('welcome.call')}}，{{ userInfo.nickname }}
             </div>
           </div>
         </div>
         <div class="flex">
-          <a-button v-if="userInfo" block class="m-3" size="large" type="primary" @click="goDirect">开始使用</a-button>
+          <a-button v-if="userInfo" block class="m-3" size="large" type="primary" @click="goDirect">{{ $t('startUsage') }}</a-button>
         </div>
         <div v-if="userInfo" >
-          <a @click="reLoginUser">切换账号</a>
+          <a @click="reLoginUser"> {{$t('welcome.changeAcc')}}</a>
         </div>
       </div>
     </div>
@@ -67,7 +72,7 @@
 </template>
 
 <script>
-import {message, Modal, Spin} from 'ant-design-vue'
+import {message, Modal} from 'ant-design-vue'
 import { appStore } from '@store'
 import { mapWritableState, mapActions } from 'pinia'
 import { codeStore } from '@store/code'
@@ -96,15 +101,12 @@ import {
 } from '@components/card/hooks/styleSwitch/setStyle';
 import {
   useWeb3Modal, useWeb3ModalAccount,
-  useWeb3ModalEvents,
   useDisconnect, createWeb3Modal,
 } from '@web3modal/ethers5/vue';
 import {preHandle} from "@components/widgets/courier/courierTool";
 import {useToast} from "vue-toastification";
-import {signMessage} from "./core/Wallets/events";
+import {setupWalletListener} from "./core/Wallets/events";
 import {walletConfig} from "@store/wallet";
-import {watch,h} from "vue";
-import {GetForLoginNonce, PostForAuthReq} from "@js/service/users";
 
 
 export default {
@@ -131,6 +133,10 @@ export default {
     ...mapWritableState(navStore, ['sideNavigationList', 'footNavigationList', 'rightNavigationList']),
     ...mapWritableState(myIcons, ['iconOption', 'iconList']),
   },
+  async beforeMount(){
+    // 創建钱包连接对话框
+    createWeb3Modal(walletConfig());
+  },
   async mounted () {
     // 后端服务器状态监测
     // setTimeout(() => {
@@ -143,10 +149,8 @@ export default {
     // }, 3000)
     // this.timeout()
 
-    // 創建钱包连接对话框
-    createWeb3Modal(walletConfig());
     // 设置钱包事件监听器
-    this.setupWalletListener();
+    setupWalletListener(this.processUserInfo,this.userInfo);
 
     //启动检测项的store，必须已经载入的项目，如果这边不写，就不确保必须载入完成
     //注意，此处的第二个参数，必须和此store同名，尤其注意有些命名里带了store的
@@ -212,9 +216,9 @@ export default {
     timeout () {
       this.timeoutHandler = setTimeout(() => {
         Modal.error({
-          content: '服务器连接超时。可能服务器正在维护，请稍后再试。',
+          content: this.$t('message.serverTimeout'),
           key: 'error',
-          okText: '重试',
+          okText: this.$t('welcome.retry'),
           centered: true,
           onOk: () => {
             window.location.reload()
@@ -223,13 +227,17 @@ export default {
       }, 5000)
     },
     //直接进入工作台选择界面
-    goDirect () {
-      this.doDefaultSettings();
+    async goDirect () {
+      await this.doDefaultSettings();
       this.$router.replace({ name: 'home' })
     },
     enter () {
       clearTimeout(this.timeoutHandler)//清理掉超时提示
-      chatStore().login()
+      try{
+        chatStore().login()
+      }catch(e){
+        console.log(e)
+      }
       tsbApi.window.setFullScreen(true) // default fullscreen when app launched
       const currentRoute = appStore().currentRoute
       if (currentRoute) {
@@ -246,7 +254,7 @@ export default {
     bindUserInfoResponse () {
       ipc.removeAllListeners('userInfo')
       ipc.on('userInfo', async (event, args) => {
-        console.log('splash接收到登录参数:', JSON.stringify(args))
+        console.log('splash接收到参数:', JSON.stringify(args))
         if (args.data.uid === -2) {
           this.netError = true
           message.error({
@@ -262,15 +270,15 @@ export default {
 
         const userInfo = args.data
 
-        let lvInfo = this.lvInfo
-        lvInfo.lv = userInfo.onlineGradeExtra.lv
-        let current = this.gradeTableGenerate(64)[lvInfo.lv]
-        let section = this.gradeTableGenerate(64)[lvInfo.lv + 1]
-        let remain = section[0] * 60 - (userInfo.onlineGradeExtra.minutes)
-        lvInfo.remainHour = Math.floor(remain / 60)
-        lvInfo.remainMinute = remain - (Math.floor(remain / 60) * 60)
-        lvInfo.minute = userInfo.onlineGradeExtra.minutes
-        lvInfo.percentage = ((lvInfo.minute - current[0] * 60) / ((current[1] - current[0]) * 60)) * 100
+        // let lvInfo = this.lvInfo
+        // lvInfo.lv = userInfo.onlineGradeExtra.lv
+        // let current = this.gradeTableGenerate(64)[lvInfo.lv]
+        // let section = this.gradeTableGenerate(64)[lvInfo.lv + 1]
+        // let remain = section[0] * 60 - (userInfo.onlineGradeExtra.minutes)
+        // lvInfo.remainHour = Math.floor(remain / 60)
+        // lvInfo.remainMinute = remain - (Math.floor(remain / 60) * 60)
+        // lvInfo.minute = userInfo.onlineGradeExtra.minutes
+        // lvInfo.percentage = ((lvInfo.minute - current[0] * 60) / ((current[1] - current[0]) * 60)) * 100
         //this.lvInfo = lvInfo
         window.loadedStore['userInfo'] = true
         console.info('更新了用户信息:', JSON.stringify(userInfo))
@@ -311,16 +319,7 @@ export default {
       }
       await tsbApi.window.setZoomFactor(+this.settings.zoomFactor / 100)//根据设置进行缩放比的强制调整
       if (this.settings.darkMod) {
-        // if( this.backgroundImage.path===''&&!this.backgroundImage.runpath) {
-        //   document.body.style.background = '#191919'
-        //
-        //
-        // }else if(this.backgroundImage.runpath){
-        //
-        // }else{
-        //   document.body.style.background=  ''
-        //   document.body.style.backgroundImage = "url(" + this.backgroundImage.path + ")"
-        // }
+        this.settings.darkMode=false;
       }
       this.launching = false
       if (!this.userInfo) {
@@ -332,21 +331,13 @@ export default {
     },
 
     gradeTableGenerate (num) {
-      let lvSys = {}
-      for (let i = 0; i < num + 1; i++) {
-        let arrLef = 0
-        let arrRg = 0
-        for (let j = 0; j < i; j++) {
-          arrLef += 10 * (j + 2)
-        }
-        for (let k = 0; k < i + 1; k++) {
-          arrRg += 10 * (k + 2)
-        }
-        arrRg -= 1
-        lvSys[`${i}`] = [arrLef, arrRg]
+      let lvSys = {};
+      for (let i = 1; i <= num; i++) {
+        let arrLef = 10 * i * (i + 1);
+        let arrRg = 10 * (i + 1) * (i + 2) - 1;
+        lvSys[`${i}`] = [arrLef, arrRg];
       }
-      delete lvSys['lv0']
-      return lvSys
+      return lvSys;
     },
     login () {
       // 打开登录对话框
@@ -355,7 +346,7 @@ export default {
       modal.open().then(()=>{
         let account = useWeb3ModalAccount();
         if (account.isConnected.value){
-          toast.success("钱包已连接，正在登录...");
+          toast.success(this.$t('toast.walletConnected'));
           setTimeout(()=>{
             modal.close();
           },2000);
@@ -401,12 +392,12 @@ export default {
       await this.deleteUserInfo();
       let res = await ipc.invoke('direct-logout', this.userInfo?.uid);
       if (res) {
-        message.success('帐号退出成功,请重新登录');
+        message.success(this.$t('message.logoutSuccess'));
         useDisconnect().disconnect().then(()=>{
           this.login();
         });
       } else {
-        message.error('账号退出失败，请重试！');
+        message.error(this.$t('message.logoutFail'));
       }
     },
     // 默认壁纸
@@ -463,139 +454,53 @@ export default {
       console.log("加载成功.")
     },
     async processUserInfo(data){
-        const userInfo = {
-            ...data?.userInfo,
-            uid: data.userInfo.id,
-            "fans": 100,
-            "follow": 10,
-            "grade": {
-                "id": 2,
-                "name": "6级",
-                "new_name": "6级",
-                "grade": 6,
-                "diff": 26,
-                "next": 50,
-                "icon": "https://jxxt-1257689580.cos.ap-chengdu.myqcloud.com/ef3c43f233adc069819fa367032238a3.png?upload_type",
-                "pc_icon": "https://jxxt-1257689580.cos.ap-chengdu.myqcloud.com/ef3c43f233adc069819fa367032238a3.png?imageMogr2/crop/64x32/gravity/center",
-                "image": "https://jxxt-1257689580.cos.ap-chengdu.myqcloud.com/ef3c43f233adc069819fa367032238a3.png?upload_type",
-                "now": 20,
-                "true_id": 2
-            },
-            "post_count": 0,
-            "signature": "",
-            "frame": "",
-            "onlineGrade": {
-                "crown": 0,
-                "sun": 0,
-                "moon": 1,
-                "star": 0
-            },
-            "onlineGradeExtra": {
-                "cumulativeHours": 171,
-                "lv": 4,
-                "minutes": 10269,
-                "rank": 3469,
-                "distance": 2,
-                "percentage": 0.8569602507009731
-            }
+      const userInfo = {
+        ...data?.userInfo,
+        uid: data.userInfo.id,
+        "fans": 100,
+        "follow": 10,
+        "grade": {
+            "id": 2,
+            "name": "6级",
+            "new_name": "6级",
+            "grade": 6,
+            "diff": 26,
+            "next": 50,
+            "icon": "https://jxxt-1257689580.cos.ap-chengdu.myqcloud.com/ef3c43f233adc069819fa367032238a3.png?upload_type",
+            "pc_icon": "https://jxxt-1257689580.cos.ap-chengdu.myqcloud.com/ef3c43f233adc069819fa367032238a3.png?imageMogr2/crop/64x32/gravity/center",
+            "image": "https://jxxt-1257689580.cos.ap-chengdu.myqcloud.com/ef3c43f233adc069819fa367032238a3.png?upload_type",
+            "now": 20,
+            "true_id": 2
+        },
+        "post_count": 0,
+        "signature": "",
+        "frame": "",
+        "onlineGrade": {
+            "crown": 0,
+            "sun": 0,
+            "moon": 1,
+            "star": 0
+        },
+        "onlineGradeExtra": {
+            "cumulativeHours": 171,
+            "lv": 4,
+            "minutes": 10269,
+            "rank": 3469,
+            "distance": 2,
+            "percentage": 0.8569602507009731
         }
-        this.setUser(userInfo)
-        if (this.$route.name === 'splash') {
-            this.enter();
-        }
-        // ipc.send('userInfo', {
-        //     data: {
-        //         ...data?.userInfo,
-        //         uid: data.userInfo?.id,
-        //     },
-        // });
+      }
+      window.loadedStore['userInfo'] = true
+      console.log("等待存入数据库。。。")
+      ipc.invoke("saveUserToDB",userInfo).then((res)=>{
+           console.log("存入数据库成功，唤起用户数据读取：",res)
+           this.getUserInfo();
+          });
+      // this.setUser(userInfo)
+      // if (this.$route.name === 'splash') {
+      //     this.enter();
+      // }
     },
-    async setupWalletListener(){
-      const toast = useToast();
-      // 监听钱包事件
-      const w3mEvent = useWeb3ModalEvents();
-      watch(w3mEvent, () => {
-        switch (w3mEvent.data.event) {
-          case 'MODAL_OPEN':
-            console.log('测试事件响应：打开了窗口');
-            break;
-          case 'SELECT_WALLET':
-            console.log('测试事件响应：选择了钱包');
-            break;
-          case 'CONNECT_ERROR':
-            console.log('测试事件响应：连接失败');
-            toast.error('钱包连接失败，请重试！', null);
-            break;
-          case 'CONNECT_SUCCESS': // TODO Bug here, no events emitted when connect or disconnect
-            console.log('钱包连接成功');
-            toast.success('钱包连接成功！', this);
-            break;
-          case 'DISCONNECT_SUCCESS':
-            console.log('测试事件响应：断开成功');
-            break;
-          case 'MODAL_CLOSE': // 只能通过监听close事件实现
-            const w3mAccount = useWeb3ModalAccount();
-            let connectStatus = w3mAccount.isConnected.value;
-            console.log('测试事件响应：关闭了窗口');
-            if (this.userInfo) {
-              console.log('登录后的钱包操作');
-              if (connectStatus) {
-                  console.log('还是处于登录状态！');
-              } else {
-                  console.log('已经断开钱包连接了！');
-              }
-            } else {
-              if (connectStatus) {
-                  console.log('钱包连接成功了');
-                toast.success('钱包连接成功');
-                // 向后端请求一个随机数
-                GetForLoginNonce(useWeb3ModalAccount().address.value).then((res) => {
-                  console.log('获取后端数据：', res);
-                  if (res === undefined || res === null) {
-                    message.error('认证失败，请稍后重试');
-                    return;
-                  }
-                  // 向钱包请求签名
-                  toast.success('正在请求签名');
-                  const modal = Modal.info({
-                    title:"正在请求认证...",
-                    centered: true,
-                    content: h('div', {
-                      style: { display: 'flex', justifyContent: 'center', alignItems: 'center' } },
-                        h(Spin, { size: 'large' })),
-                  });
-                  signMessage(res?.data).then((data) => {
-                    console.log('获取返回数据：', data);
-                    // 返回签名到后端并获取登录结果
-                    toast.success('请求验证');
-                    PostForAuthReq(data).then((resp) => {
-                      console.log('登录认证返回的数据：', resp);
-                      if (resp?.code === 200 && resp?.data !== null) {
-                          message.success('认证成功！');
-                          this.processUserInfo(resp?.data);
-                      } else {
-                          message.error('认证失败：', resp?.msg);
-                      }
-                      modal.destroy();
-                    });
-                  })
-                .catch((error) => {
-                    if (error?.code === 5000) {
-                        message.error('用户拒绝认证请求！');
-                    }
-                    modal.destroy();
-                  });
-                });
-              } else {
-                console.log('连接失败了，请重试');
-              }
-            }
-            break;
-          default:
-              break;
-    }
-      });
-    }
   },
 }
 </script>

@@ -80,6 +80,7 @@ export const appStore = defineStore(
         relevanceEnable: false, //开启关联的电商平台快递
         customCourier: false, // 自定义快递
         tagVisible: true, // 快递组件排序tag提示
+        language: 'zh-CN', // 语言
       },
 
       routeUpdateTime: Date.now(), //用于更新滚动条
@@ -178,26 +179,26 @@ export const appStore = defineStore(
        * @param userInfo
        */
       setUser(userInfo) {
-        userInfo.onlineGradeExtra.cumulativeMinutes =
-          Number(userInfo.onlineGradeExtra.minutes) - Number(userInfo.onlineGradeExtra.cumulativeHours) * 60;
-        userInfo.onlineGradeExtra.cumulativeMinute = userInfo.onlineGradeExtra.minutes;
-        userInfo.onlineGradeIcons = {};
-        userInfo.onlineGradeIcons.crown = [];
-        userInfo.onlineGradeIcons.sun = [];
-        userInfo.onlineGradeIcons.moon = [];
-        userInfo.onlineGradeIcons.star = [];
+        // userInfo.onlineGradeExtra.cumulativeMinutes =
+        //   Number(userInfo.onlineGradeExtra.minutes) - Number(userInfo.onlineGradeExtra.cumulativeHours) * 60;
+        // userInfo.onlineGradeExtra.cumulativeMinute = userInfo.onlineGradeExtra.minutes;
+        // userInfo.onlineGradeIcons = {};
+        // userInfo.onlineGradeIcons.crown = [];
+        // userInfo.onlineGradeIcons.sun = [];
+        // userInfo.onlineGradeIcons.moon = [];
+        // userInfo.onlineGradeIcons.star = [];
 
         userInfo.uid = Number(userInfo.uid);
-
-        function handleGrade(name) {
-          for (let i = 0; i < userInfo.onlineGrade[name]; i++) {
-            userInfo.onlineGradeIcons[name].push({
-              icon: 'file://' + window.globalArgs['app-dir_name'] + `/../../icons/grade/${name}.svg`,
-            });
-          }
-        }
-
-        Object.keys(userInfo.onlineGrade).forEach((v) => handleGrade(v));
+        //
+        // function handleGrade(name) {
+        //   for (let i = 0; i < userInfo.onlineGrade[name]; i++) {
+        //     userInfo.onlineGradeIcons[name].push({
+        //       icon: 'file://' + window.globalArgs['app-dir_name'] + `/../../icons/grade/${name}.svg`,
+        //     });
+        //   }
+        // }
+        //
+        // Object.keys(userInfo.onlineGrade).forEach((v) => handleGrade(v));
         this.userInfo = userInfo;
       },
 

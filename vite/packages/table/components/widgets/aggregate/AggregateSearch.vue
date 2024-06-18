@@ -63,7 +63,7 @@
     </div>
   </Widget>
 
-  <a-drawer v-model:visible="aggSearchShow" :width="500" placement="right" title="设置" @close="aggSearchShow = false">
+  <a-drawer v-model:open="aggSearchShow" :width="500" placement="right" title="设置" @close="aggSearchShow = false">
     <vue-custom-scrollbar :settings="settingsScroller" style="height: 100%">
       <div class="primary-title" style="color: var(--primary-text)">搜索引擎</div>
       <div class="mt-2 mb-6 secondary-title" style="color: var(--secondary-text)">
@@ -76,7 +76,7 @@
   </a-drawer>
 
   <teleport to="body">
-    <Modal v-if="searchVisible" v-model:visible="searchVisible" :blurFlag="true">
+    <Modal v-if="searchVisible" v-model:open="searchVisible" :blurFlag="true">
       <AggregateSearchFullScreen :list="aggList" :listId="openId" :urlType="customData.sortType">
       </AggregateSearchFullScreen>
     </Modal>

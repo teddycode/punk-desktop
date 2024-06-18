@@ -199,10 +199,9 @@ export default {
       };
       let rs = await this.updateMyinfo(saveUpdateMyInfo);
       console.log(rs);
-      if (rs.code === 200) {
+      if (rs) {
         this.$emit('infoUpdated', {});
         message.success('信息修改成功');
-
         this.updateInfoVisible = false;
         this.setInfoVisible(false);
         this.setSecondaryVisible(true);

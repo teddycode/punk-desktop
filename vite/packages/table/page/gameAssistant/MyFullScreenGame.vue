@@ -50,7 +50,7 @@
     </div>
   </div>
 
-  <a-drawer class="no-drag" v-model:visible="screenVisible" title="设置" :width="500">
+  <a-drawer class="no-drag" v-model:open="screenVisible" title="设置" :width="500">
     <div class="flex justify-between mb-4">
       <span>显示游戏时长</span>
       <a-switch v-model:checked="showTime" />

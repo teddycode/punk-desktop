@@ -75,7 +75,7 @@
     </div>
   </Widget>
   <a-drawer
-    v-model:visible="panelVisible"
+    v-model:open="panelVisible"
     :bodyStyle="{ padding: '0 24px ' }"
     :headerStyle="{ border: 0 }"
     :width="500"
@@ -273,7 +273,7 @@
     </Classification>
     <ModalList
       v-if="myImgShow"
-      v-model:visible="myImgShow"
+      v-model:open="myImgShow"
       :imgList="myPapers"
       title="我的收藏"
       @sendImg="sendImg"

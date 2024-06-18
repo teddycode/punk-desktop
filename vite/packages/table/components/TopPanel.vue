@@ -112,7 +112,7 @@
   </div>
 
   <a-drawer
-    v-model:visible="messageDrawer"
+    v-model:open="messageDrawer"
     :bodyStyle="{ padding: '12px 12px 12px 0 ', overflow: 'hidden !important' }"
     :closable="false"
     :width="500"
@@ -122,7 +122,7 @@
   >
     <MessagePopup @closeMessage="messageDrawer = false"></MessagePopup>
   </a-drawer>
-  <a-drawer v-model:visible="appStats" placement="left">
+  <a-drawer v-model:open="appStats" placement="left">
     <div class="app-stats">
       <div v-if="enable" class="cursor-pointer app" @click="enterClipboard">
         <a-row>

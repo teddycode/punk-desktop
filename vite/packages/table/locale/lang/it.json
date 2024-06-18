@@ -1,0 +1,95 @@
+{
+  "appName": "Client Pangu a catena incrociata",
+  "backgroud": "sfondo",
+  "bg": {
+    "addMark": "Aumenta la sfocatura dello sfondo quando è attivato",
+    "choose": "Scegli la tua immagine preferita come sfondo del desktop del tuo banco di lavoro.",
+    "clea": "sfondo chiaro",
+    "clear": "sfondo chiaro",
+    "desktop": "sfondo del desktop",
+    "masrk": "sfocatura dello sfondo",
+    "openTPTip": "Questo tipo di funzione consuma elevate prestazioni, abilitarlo come appropriato.",
+    "openTransparent": "Sfondo trasparente dopo l'accensione",
+    "setting": "Impostazioni dello sfondo",
+    "transparent": "Sfondo trasparente"
+  },
+  "btn": {
+    "change": "interruttore",
+    "recoverTextColor": "Ripristina il colore predefinito del testo",
+    "recoverThemeColor": "Ripristina i colori del tema predefiniti",
+    "wallpapperColor": "Ripristina il colore dello sfondo predefinito"
+  },
+  "chooseLang": "Scegli una lingua",
+  "desktop": {
+    "effectFlow": "effetto caduta",
+    "effectFlowTip": "Dopo averlo acceso, la pagina avrà un fantastico effetto cadente.",
+    "effectNum": "Numero di oggetti che cadono",
+    "effectRain": "piovere",
+    "effects": "Caduta di oggetti",
+    "ligh": "Luce RGB della cornice",
+    "lightTip": "Visualizza gli effetti RGB intorno alla finestra del workbench."
+  },
+  "menu": {
+    "name": "prima pagina"
+  },
+  "message": {
+    "Danger": "WeChat",
+    "Info": "informazione",
+    "Primary": "colore primario",
+    "Success": "successo",
+    "Warning": "avvisare",
+    "logoutFail": "Disconnessione dell'account non riuscita, riprova!",
+    "logoutSuccess": "Account disconnesso correttamente, effettua nuovamente l'accesso",
+    "offlineTip": "Dopo aver utilizzato la modalità offline, alcune funzioni di intrattenimento e sociali, come giochi, meteo, ecc., verranno nascoste.",
+    "serverTimeout": "Connessione al server scaduta. \nIl server potrebbe essere in manutenzione, riprova più tardi.",
+    "teamTip": "Dopo aver utilizzato la modalità minimalista, alcune funzioni di intrattenimento e sociali, come la funzione squadra, verranno nascoste."
+  },
+  "name": "Italiano",
+  "setting": "Collocamento",
+  "settings": {
+    "account": "Verifica dell'indirizzo",
+    "appInfo": "Informazioni sull'applicazione",
+    "appManage": "Gestione delle candidature",
+    "base": "Impostazioni di base",
+    "chooseScr": "schermata di selezione",
+    "common": "Usato comunemente",
+    "dark": "Modalità scura",
+    "enableAccValid": "Verifica dell'indirizzo",
+    "general": "Impostazioni generali",
+    "guideBar": "Modifica della barra di navigazione",
+    "language": "impostazione della lingua",
+    "msg": {
+      "save": "Dopo aver utilizzato la modalità prestazioni, varie animazioni dell'interfaccia verranno disattivate e i processi bloccati in memoria verranno ripuliti il ​​più possibile. \nCiò potrebbe compromettere l'effetto dell'interfaccia di apertura o rallentare il passaggio tra le applicazioni. \nMa può ridurre in modo significativo l’utilizzo di memoria, CPU e GPU."
+    },
+    "offline": "Modalità offline",
+    "otherScr": "Impostazioni dello schermo diviso",
+    "others": "altro",
+    "power": "Alimentazione elettrica",
+    "quiet": "Non disturbare i messaggi",
+    "save": "Modalità di risparmio energetico",
+    "simple": "modalità minimalista",
+    "social": "Rete sociale",
+    "switch": "Funzione di cambio rapido",
+    "text": "testo",
+    "theme": "tema",
+    "themeColor": "colore del tema",
+    "touch": "Configura un touch screen",
+    "wallpaper": "sfondo",
+    "window": "controllo della finestra"
+  },
+  "startUsage": "iniziare a utilizzare",
+  "toast": {
+    "walletConnected": "Wallet è connesso, accesso in corso..."
+  },
+  "welcome": {
+    "call": "Ciao",
+    "changeAcc": "Cambia account",
+    "description": "——Terminale unico che collega web2 e web3",
+    "hello": "Benvenuto nell'utilizzo del client cross-chain Pangu per portarti ad esplorare il nuovo mondo di web3!",
+    "loginOrReg": "Accedi/Registrati account",
+    "netErr": "Se riscontri problemi di rete, controlla il proxy di sistema o attendi pazientemente.",
+    "retry": "Riprova",
+    "say1": "Questo client richiede l'aiuto di servizi informatici back-end.",
+    "say2": "Effettua il login per utilizzare."
+  }
+}

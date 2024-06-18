@@ -1,0 +1,95 @@
+{
+  "appName": "Khách hàng chuỗi chéo Pangu",
+  "backgroud": "lý lịch",
+  "bg": {
+    "addMark": "Tăng độ mờ hậu cảnh khi bật",
+    "choose": "Chọn hình ảnh yêu thích của bạn làm hình nền bàn làm việc của bạn.",
+    "clea": "nền rõ ràng",
+    "clear": "nền rõ ràng",
+    "desktop": "nền desktop",
+    "masrk": "làm mờ nền",
+    "openTPTip": "Loại chức năng này tiêu tốn hiệu suất cao, vui lòng kích hoạt nó khi thích hợp.",
+    "openTransparent": "Nền trong suốt sau khi bật",
+    "setting": "Cài đặt nền",
+    "transparent": "Nền trong suốt"
+  },
+  "btn": {
+    "change": "công tắc",
+    "recoverTextColor": "Khôi phục màu văn bản mặc định",
+    "recoverThemeColor": "Khôi phục màu chủ đề mặc định",
+    "wallpapperColor": "Khôi phục màu hình nền mặc định"
+  },
+  "chooseLang": "Chọn một ngôn ngữ",
+  "desktop": {
+    "effectFlow": "hiệu ứng rơi",
+    "effectFlowTip": "Sau khi bật lên, trang sẽ có hiệu ứng rơi cực ngầu.",
+    "effectNum": "Số vật rơi",
+    "effectRain": "cơn mưa",
+    "effects": "Vật rơi",
+    "ligh": "Khung đèn RGB",
+    "lightTip": "Hiển thị hiệu ứng RGB xung quanh cửa sổ bàn làm việc."
+  },
+  "menu": {
+    "name": "trang đầu"
+  },
+  "message": {
+    "Danger": "WeChat",
+    "Info": "thông tin",
+    "Primary": "màu chính",
+    "Success": "thành công",
+    "Warning": "cảnh báo",
+    "logoutFail": "Đăng xuất tài khoản không thành công, vui lòng thử lại!",
+    "logoutSuccess": "Tài khoản đã đăng xuất thành công, vui lòng đăng nhập lại",
+    "offlineTip": "Sau khi sử dụng chế độ ngoại tuyến, một số chức năng giải trí và xã hội như trò chơi, thời tiết, v.v. sẽ bị ẩn.",
+    "serverTimeout": "Kết nối máy chủ đã hết thời gian chờ. \nMáy chủ có thể đang bảo trì, vui lòng thử lại sau.",
+    "teamTip": "Sau khi sử dụng chế độ tối giản, một số chức năng giải trí và xã hội, chẳng hạn như chức năng tổ đội, sẽ bị ẩn."
+  },
+  "name": "Tiếng Việt",
+  "setting": "Cài đặt",
+  "settings": {
+    "account": "Xác minh địa chỉ",
+    "appInfo": "Thông tin ứng dụng",
+    "appManage": "Quản lý ứng dụng",
+    "base": "Cài đặt cơ bản",
+    "chooseScr": "màn hình lựa chọn",
+    "common": "Thường được sử dụng",
+    "dark": "chế độ tối",
+    "enableAccValid": "Xác minh địa chỉ",
+    "general": "Cài đặt chung",
+    "guideBar": "Chỉnh sửa thanh điều hướng",
+    "language": "cài đặt ngôn ngữ",
+    "msg": {
+      "save": "Sau khi sử dụng chế độ hiệu suất, nhiều hoạt ảnh giao diện khác nhau sẽ bị tắt và các quá trình bị kẹt trong bộ nhớ sẽ được dọn sạch nhiều nhất có thể. \nNó có thể khiến hiệu ứng giao diện mở bị ảnh hưởng hoặc quá trình chuyển đổi ứng dụng bị chậm. \nNhưng nó có thể giảm đáng kể mức sử dụng bộ nhớ, CPU và GPU."
+    },
+    "offline": "Chế độ ngoại tuyến",
+    "otherScr": "Cài đặt chia đôi màn hình",
+    "others": "khác",
+    "power": "Nguồn cấp",
+    "quiet": "Không làm phiền tin nhắn",
+    "save": "Chế độ tiết kiệm năng lượng",
+    "simple": "chế độ tối giản",
+    "social": "Mạng xã hội",
+    "switch": "Chức năng chuyển đổi nhanh",
+    "text": "chữ",
+    "theme": "chủ đề",
+    "themeColor": "Màu chủ đề",
+    "touch": "Thiết lập màn hình cảm ứng",
+    "wallpaper": "hình nền",
+    "window": "điều khiển cửa sổ"
+  },
+  "startUsage": "bắt đầu sử dụng",
+  "toast": {
+    "walletConnected": "Ví đã được kết nối, đang đăng nhập..."
+  },
+  "welcome": {
+    "call": "Xin chào",
+    "changeAcc": "Chuyển tài khoản",
+    "description": "--Thiết bị đầu cuối một cửa kết nối web2 và web3",
+    "hello": "Chào mừng bạn sử dụng ứng dụng khách chuỗi chéo Pangu để đưa bạn khám phá thế giới mới của web3!",
+    "loginOrReg": "Đăng nhập/Đăng ký tài khoản",
+    "netErr": "Nếu bạn gặp sự cố mạng, vui lòng kiểm tra proxy hệ thống hoặc kiên nhẫn chờ đợi.",
+    "retry": "Thử lại",
+    "say1": "Khách hàng này yêu cầu sự trợ giúp của các dịch vụ điện toán phụ trợ.",
+    "say2": "Vui lòng đăng nhập để sử dụng."
+  }
+}

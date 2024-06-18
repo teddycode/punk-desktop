@@ -181,7 +181,7 @@
       <a-button>确定</a-button>
     </div>
   </a-drawer>
-  <a-drawer title="导出方案" placement="right" :closable="true" v-model:visible="shareMenuJsonVisible" @close="onClose">
+  <a-drawer title="导出方案" placement="right" :closable="true" v-model:open="shareMenuJsonVisible" @close="onClose">
     <div class="line">
       请将下方文本发送给其他用户，其他用户粘贴导入后即可导入成功。<br />
       注意：代码超过聊天工具可发送文本长度，可选择保存为文件，以发送文件方式分享。
@@ -195,7 +195,7 @@
       <a-button @click="saveFile">保存为文件</a-button>
     </div>
   </a-drawer>
-  <a-drawer title="修改组设置" placement="right" :closable="true" v-model:visible="editGridVisible" @close="onClose">
+  <a-drawer title="修改组设置" placement="right" :closable="true" v-model:open="editGridVisible" @close="onClose">
     <div class="line">
       <a-row :gutter="5">
         <a-col>
@@ -230,13 +230,7 @@
       ></a-input-number>
     </div>
   </a-drawer>
-  <a-drawer
-    title="导入方案"
-    placement="right"
-    :closable="true"
-    v-model:visible="importMenuJsonVisible"
-    @close="onClose"
-  >
+  <a-drawer title="导入方案" placement="right" :closable="true" v-model:open="importMenuJsonVisible" @close="onClose">
     <div class="line">导入的方案将被添加到最前面，您可以使用编辑布局自行调整位置。</div>
     <div class="line">方案代码：</div>
     <div class="line">
@@ -260,7 +254,7 @@
       >
     </div>
   </a-drawer>
-  <a-drawer :title="null" placement="bottom" :closable="true" v-model:visible="menuVisible" @close="onClose">
+  <a-drawer :title="null" placement="bottom" :closable="true" v-model:open="menuVisible" @close="onClose">
     <div style="display: none">
       <Widget :uniqueKey="newItem.id" :title="newItem.title" :showDelete="true" :resizable="true">
         <DeckItem :id="newItem.id" :item="newItem"></DeckItem>
@@ -353,7 +347,7 @@
       </a-col>
     </a-row>
   </a-drawer>
-  <!--  <a-modal :key="addKey" v-model:visible="visibleAdd" :title="null" width="800px" centered height="500px"-->
+  <!--  <a-modal :key="addKey" v-model:open="visibleAdd" :title="null" width="800px" centered height="500px"-->
   <!--    wrap-class-name="lg-modal" :footer="null">-->
   <!--    <DeckAdd :data="this.currentItem" @add="doAdd"></DeckAdd>-->
   <!--  </a-modal>-->

@@ -1,0 +1,95 @@
+{
+  "appName": "Pangu çapraz zincir istemcisi",
+  "backgroud": "arka plan",
+  "bg": {
+    "addMark": "Açıldığında arka plan bulanıklığını artırır",
+    "choose": "En sevdiğiniz resmi çalışma tezgahınızın masaüstü arka planı olarak seçin.",
+    "clea": "arka planı temizle",
+    "clear": "arka planı temizle",
+    "desktop": "masaüstü arkaplanı",
+    "masrk": "arka plan bulanıklığı",
+    "openTPTip": "Bu tür işlevler yüksek performans tüketir; lütfen bunu uygun şekilde etkinleştirin.",
+    "openTransparent": "Açıldıktan sonra şeffaf arka plan",
+    "setting": "Arka plan ayarları",
+    "transparent": "Şeffaf Arka Plan"
+  },
+  "btn": {
+    "change": "anahtar",
+    "recoverTextColor": "Varsayılan metin rengini geri yükle",
+    "recoverThemeColor": "Varsayılan tema renklerini geri yükle",
+    "wallpapperColor": "Varsayılan duvar kağıdı rengini geri yükle"
+  },
+  "chooseLang": "Bir dil seçin",
+  "desktop": {
+    "effectFlow": "düşme etkisi",
+    "effectFlowTip": "Açtıktan sonra sayfa serin bir düşme efektine sahip olacaktır.",
+    "effectNum": "Düşen nesnelerin sayısı",
+    "effectRain": "yağmur",
+    "effects": "Düşen nesneler",
+    "ligh": "Çerçeve RGB ışığı",
+    "lightTip": "Tezgah penceresinin etrafında RGB efektlerini görüntüleyin."
+  },
+  "menu": {
+    "name": "ön Sayfa"
+  },
+  "message": {
+    "Danger": "WeChat",
+    "Info": "bilgi",
+    "Primary": "ana renk",
+    "Success": "başarı",
+    "Warning": "uyarmak",
+    "logoutFail": "Hesaptan çıkış başarısız oldu, lütfen tekrar deneyin!",
+    "logoutSuccess": "Hesaptan başarıyla çıkış yapıldı, lütfen tekrar giriş yapın",
+    "offlineTip": "Çevrimdışı modu kullandıktan sonra oyunlar, hava durumu vb. gibi bazı eğlence ve sosyal işlevler gizlenecektir.",
+    "serverTimeout": "Sunucu bağlantısı zaman aşımına uğradı. \nSunucu bakımda olabilir lütfen daha sonra tekrar deneyiniz.",
+    "teamTip": "Minimalist modu kullandıktan sonra takım işlevi gibi bazı eğlence ve sosyal işlevler gizlenecektir."
+  },
+  "name": "Turkish (Turkey)",
+  "setting": "Ayar",
+  "settings": {
+    "account": "Adres doğrulama",
+    "appInfo": "Başvuru bilgisi",
+    "appManage": "Uygulama yönetimi",
+    "base": "Temel Ayarlar",
+    "chooseScr": "seçim ekranı",
+    "common": "Genel olarak kullanılan",
+    "dark": "karanlık mod",
+    "enableAccValid": "Adres doğrulama",
+    "general": "Genel Ayarlar",
+    "guideBar": "Gezinme çubuğu düzenleme",
+    "language": "dil ayarı",
+    "msg": {
+      "save": "Performans modunu kullandıktan sonra çeşitli arayüz animasyonları kapatılacak ve hafızaya takılan işlemler mümkün olduğunca temizlenecektir. \nAçılış arayüzü etkisinin bozulmasına veya uygulama geçişinin yavaş olmasına neden olabilir. \nAncak bellek, CPU ve GPU kullanımını önemli ölçüde azaltabilir."
+    },
+    "offline": "Çevrimdışı mod",
+    "otherScr": "Bölünmüş ekran ayarları",
+    "others": "diğer",
+    "power": "güç kaynağı",
+    "quiet": "Mesajları rahatsız etmeyin",
+    "save": "Enerji tasarrufu modu",
+    "simple": "minimalist mod",
+    "social": "Sosyal ağ",
+    "switch": "Hızlı geçiş fonksiyonu",
+    "text": "metin",
+    "theme": "tema",
+    "themeColor": "tema rengi",
+    "touch": "Dokunmatik ekran ayarlama",
+    "wallpaper": "duvar kağıdı",
+    "window": "pencere kontrolü"
+  },
+  "startUsage": "kullanmaya başla",
+  "toast": {
+    "walletConnected": "Cüzdan bağlandı, giriş yapılıyor..."
+  },
+  "welcome": {
+    "call": "Merhaba",
+    "changeAcc": "Hesap değiştir",
+    "description": "——web2 ve web3'ü birbirine bağlayan tek noktadan terminal",
+    "hello": "Sizi web3'ün yeni dünyasını keşfetmeye götürmek için Pangu çapraz zincir istemcisini kullanmaya hoş geldiniz!",
+    "loginOrReg": "Oturum aç/Hesaba kaydol",
+    "netErr": "Ağ sorunlarıyla karşılaşırsanız lütfen sistem proxy'sini kontrol edin veya sabırla bekleyin.",
+    "retry": "Yeniden dene",
+    "say1": "Bu istemci, arka uç bilgi işlem hizmetlerinin yardımına ihtiyaç duyuyor.",
+    "say2": "Kullanmak için lütfen giriş yapın."
+  }
+}

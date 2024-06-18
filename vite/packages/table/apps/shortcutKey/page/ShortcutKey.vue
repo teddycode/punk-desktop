@@ -63,7 +63,7 @@
   </div>
 
   <!-- 设置抽屉 -->
-  <a-drawer v-model:visible="setShow" title="设置" width="500" placement="right">
+  <a-drawer v-model:open="setShow" title="设置" width="500" placement="right">
     <div class="drawer-content">
       <div>
         <div class="title">应用启动时打开</div>

@@ -28,7 +28,7 @@
     </div>
 
     <!-- 设置面板 -->
-    <a-drawer v-model:visible="settingVisible" :width="500" placement="right" title="设置">
+    <a-drawer v-model:open="settingVisible" :width="500" placement="right" title="设置">
       <template #extra>
         <div
           v-show="this.setVisible"

@@ -17,6 +17,18 @@ const user = {
     ipc.send('login');
   },
   /**
+   * 钱包认证请求
+   * @param callback
+   */
+  walletAuth: (callback) => {
+    ipc.removeAllListeners('wallet-auth-callback');
+    ipc.once('wallet-auth-callback', (event, args) => {
+      callback(args);
+    });
+    console.info('认证第一步');
+    ipc.send('wallet-auth');
+  },
+  /**
    *
    * @param uid 0则为自己
    * @param type 类型app为应用内打开，web为网页打开

@@ -1,0 +1,95 @@
+{
+  "appName": "Cliente de cadena cruzada Pangu",
+  "backgroud": "fondo",
+  "bg": {
+    "addMark": "Aumenta el desenfoque del fondo cuando está activado",
+    "choose": "Elija su imagen favorita como fondo de escritorio de su mesa de trabajo.",
+    "clea": "fondo claro",
+    "clear": "fondo claro",
+    "desktop": "fondo de escritorio",
+    "masrk": "desenfoque de fondo",
+    "openTPTip": "Este tipo de función consume alto rendimiento, habilítela según corresponda.",
+    "openTransparent": "Fondo transparente después de encender",
+    "setting": "Configuración de fondo",
+    "transparent": "Fondo transparente"
+  },
+  "btn": {
+    "change": "cambiar",
+    "recoverTextColor": "Restaurar el color del texto predeterminado",
+    "recoverThemeColor": "Restaurar los colores predeterminados del tema",
+    "wallpapperColor": "Restaurar el color del fondo de pantalla predeterminado"
+  },
+  "chooseLang": "Elige un idioma",
+  "desktop": {
+    "effectFlow": "efecto de caída",
+    "effectFlowTip": "Después de encenderlo, la página tendrá un efecto de caída genial.",
+    "effectNum": "Número de objetos que caen",
+    "effectRain": "lluvia",
+    "effects": "Objetos que caen",
+    "ligh": "Marco de luz RGB",
+    "lightTip": "Muestre efectos RGB alrededor de la ventana del banco de trabajo."
+  },
+  "menu": {
+    "name": "página delantera"
+  },
+  "message": {
+    "Danger": "WeChat",
+    "Info": "información",
+    "Primary": "color primario",
+    "Success": "éxito",
+    "Warning": "advertir",
+    "logoutFail": "Error al cerrar sesión en la cuenta, ¡inténtelo de nuevo!",
+    "logoutSuccess": "La cuenta se cerró correctamente, inicie sesión nuevamente",
+    "offlineTip": "Después de usar el modo fuera de línea, algunas funciones sociales y de entretenimiento, como juegos, clima, etc., quedarán ocultas.",
+    "serverTimeout": "Se agotó el tiempo de conexión del servidor. \nEs posible que el servidor esté en mantenimiento, inténtelo de nuevo más tarde.",
+    "teamTip": "Después de usar el modo minimalista, algunas funciones sociales y de entretenimiento, como la función de escuadrón, quedarán ocultas."
+  },
+  "name": "Spanish",
+  "setting": "Configuración",
+  "settings": {
+    "account": "Verificación de dirección",
+    "appInfo": "Información de la aplicación",
+    "appManage": "Gestión de aplicaciones",
+    "base": "Ajustes básicos",
+    "chooseScr": "pantalla de selección",
+    "common": "Comúnmente utilizado",
+    "dark": "modo oscuro",
+    "enableAccValid": "Verificación de dirección",
+    "general": "Configuración general",
+    "guideBar": "Edición de la barra de navegación",
+    "language": "configuración de idioma",
+    "msg": {
+      "save": "Después de usar el modo de rendimiento, se desactivarán varias animaciones de la interfaz y los procesos bloqueados en la memoria se limpiarán tanto como sea posible. \nPuede hacer que el efecto de apertura de la interfaz se vea comprometido o que el cambio de aplicación sea lento. \nPero puede reducir significativamente el uso de memoria, CPU y GPU."
+    },
+    "offline": "Modo offline",
+    "otherScr": "Configuración de pantalla dividida",
+    "others": "otro",
+    "power": "fuente de alimentación",
+    "quiet": "No molestar mensajes",
+    "save": "Modo de ahorro de energía",
+    "simple": "modo minimalista",
+    "social": "Red social",
+    "switch": "Función de cambio rápido",
+    "text": "texto",
+    "theme": "tema",
+    "themeColor": "color del tema",
+    "touch": "Configurar una pantalla táctil",
+    "wallpaper": "fondo de pantalla",
+    "window": "control de ventana"
+  },
+  "startUsage": "Empieza a usar",
+  "toast": {
+    "walletConnected": "La billetera está conectada, iniciando sesión..."
+  },
+  "welcome": {
+    "call": "Hola",
+    "changeAcc": "Cambiar cuenta",
+    "description": "——Terminal integral que conecta web2 y web3",
+    "hello": "¡Bienvenido a utilizar el cliente de cadena cruzada Pangu para llevarlo a explorar el nuevo mundo de web3!",
+    "loginOrReg": "Iniciar sesión/Registrar cuenta",
+    "netErr": "Si tiene problemas de red, verifique el proxy del sistema o espere pacientemente.",
+    "retry": "Rever",
+    "say1": "Este cliente requiere la ayuda de servicios informáticos de back-end.",
+    "say2": "Por favor inicia sesión para usarlo."
+  }
+}

@@ -3,7 +3,7 @@
     <vue-custom-scrollbar :settings="outerSettings" style="position: relative; height: calc(100vh - 14em); width: 100%">
       <a-dropdown v-for="app in apps" :trigger="['contextmenu']">
         <div class="app" @click="executeApp(app)">
-          <a-avatar :size="50" :src="app.logo"></a-avatar>
+          <a-avatar :size="70" :src="app.logo"></a-avatar>
           <div class="name text-more">
             {{ app.name }}
           </div>
@@ -24,7 +24,7 @@ import { Modal } from 'ant-design-vue';
 
 const { appModel } = window.$models;
 export default {
-  name: 'QingApps',
+  name: 'Web3Apps',
   computed: {
     // ...mapWritableState(apps,['myApps','qingApps'])
   },
@@ -41,7 +41,7 @@ export default {
     };
   },
   async mounted() {
-    this.apps = await appModel.getAllApps();
+    this.apps = await appModel.getAllApps({ where: { type: 'card' } });
   },
   methods: {
     // 运行app

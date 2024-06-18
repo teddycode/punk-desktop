@@ -27,23 +27,19 @@ function execRefreshToken(config) {
       } else {
         ipc
           ? ipc.send('message', { type: 'error', config: { content: '登录信息过期，请重新登录', key: Date.now() } })
-          : sidePanel
-              .get()
-              .webContents.send('message', {
-                type: 'error',
-                config: { content: '登录信息过期，请重新登录', key: Date.now() },
-              });
+          : sidePanel.get().webContents.send('message', {
+              type: 'error',
+              config: { content: '登录信息过期，请重新登录', key: Date.now() },
+            });
       }
     })
     .catch((err) => {
       ipc
         ? ipc.send('message', { type: 'error', config: { content: '登录信息过期，请重新登录', key: Date.now() } })
-        : sidePanel
-            .get()
-            .webContents.send('message', {
-              type: 'error',
-              config: { content: '登录信息过期，请重新登录', key: Date.now() },
-            });
+        : sidePanel.get().webContents.send('message', {
+            type: 'error',
+            config: { content: '登录信息过期，请重新登录', key: Date.now() },
+          });
     })
     .finally(() => {
       isRefreshing = false;
@@ -80,7 +76,7 @@ axios.interceptors.request.use(
             //在主进程请求时发现refreshToken过期，清空storage用户标识，也要转发到渲染进程清空dexie中的用户标识
             // storage.setStoragePath(global.sharedPath.extra)
             // storage.clear()
-            global.utilWindow.webContents.send('clearCurrentUser');
+            global.utilWindow?.webContents.send('clearCurrentUser');
           } else {
             //在渲染进程请求时发现refreshToken过期
             ipc.send('clearStorageInfo');
@@ -132,12 +128,10 @@ axios.interceptors.response.use(
               ipc.send('message', { type: 'error', config: { content: response.data.message, key: Date.now() } });
             }
           } else {
-            sidePanel
-              .get()
-              .webContents.send('message', {
-                type: 'error',
-                config: { content: response.data.message, key: Date.now() },
-              });
+            sidePanel.get().webContents.send('message', {
+              type: 'error',
+              config: { content: response.data.message, key: Date.now() },
+            });
           }
           return Promise.reject(response.data);
         } catch (err) {

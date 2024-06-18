@@ -78,7 +78,7 @@
       </div>
     </Widget>
     <!-- {{ showOilData[0] }} -->
-    <a-drawer v-model:visible="settingVisible" :width="500" placement="right" title="设置">
+    <a-drawer v-model:open="settingVisible" :width="500" placement="right" title="设置">
       <vue-custom-scrollbar :settings="settingsScroller" style="height: 100%">
         <div class="primary-title" style="color: var(--primary-text)">选择地区</div>
         <div

@@ -135,7 +135,7 @@
   </div>
 
   <!-- 最近使用 -->
-  <a-drawer v-model:visible="recentlyUsedVisible" title="最近使用" width="500" placement="right">
+  <a-drawer v-model:open="recentlyUsedVisible" title="最近使用" width="500" placement="right">
     <div class="main-part">
       <div
         v-for="(item, index) in schemeList"
@@ -154,7 +154,7 @@
     </div>
   </a-drawer>
   <!-- 设置 -->
-  <a-drawer v-model:visible="openSet" title="设置" width="500" placement="right">
+  <a-drawer v-model:open="openSet" title="设置" width="500" placement="right">
     <span class="set-title" v-if="appContent.isCommunity">该快捷键方案来自创意市场</span>
     <span class="set-title" v-else-if="appContent.isMyCreate && appContent.isShare"
       >该快捷键方案由我创建，并已分享至创意市场</span

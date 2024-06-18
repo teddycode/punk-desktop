@@ -77,7 +77,7 @@ module.exports = class SystemHelper {
       const filepaths = [];
       // 读取目录
       let files = fs.readdirSync(_dir);
-      console.info('files:', files);
+      // console.info('files:', files);
       files.forEach((_file) => {
         let _p = path.join(_dir, _file);
         // 将路径中的反斜杠替换为斜杠
