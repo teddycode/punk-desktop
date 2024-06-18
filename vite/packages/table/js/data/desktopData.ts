@@ -405,7 +405,7 @@ export const defaultDesks = [
                 name: '节点管理',
                 wallet: true,
                 params: '/node/manager',
-                value: 'http://123.157.213.104:18080/home',
+                value: 'http://123.157.213.104:8010/home',
               },
               isTitle: true,
               titleValue: '节点管理',

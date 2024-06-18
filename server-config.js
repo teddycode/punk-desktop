@@ -33,8 +33,8 @@ const config = {
   SERVER_BACKEND_URL: 'https://sad.apps.vip',
   DEV_NODE_SERVER_BASE_URL: 'http://test1.com:9001',
   PROD_NODE_SERVER_BASE_URL: 'https://apps.vip',
-  NODE_SERVER_BASE_URL: 'http://127.0.0.1:9090', // baseApi中用到了 wallet & auth 也用到了
-  // NODE_SERVER_BASE_URL: 'http://123.157.213.104:18081', // baseApi中用到了 wallet & auth 也用到了
+  // NODE_SERVER_BASE_URL: 'http://127.0.0.1:9090', // baseApi中用到了 wallet & auth 也用到了
+  NODE_SERVER_BASE_URL: 'http://123.157.213.104:18081', // baseApi中用到了 wallet & auth 也用到了
   IM: {
     API_BASE_URL: 'http://im-serve.xiangtian.ren',
     WEB_SOCKET_URL: 'ws://im-socket.xiangtian.ren/socket.io',

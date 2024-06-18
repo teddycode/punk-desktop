@@ -10,6 +10,7 @@ let dev = {
       configFile: false,
       root: process.cwd(),
       server: {
+        host: '0.0.0.0',
         port: this.serverPort,
       },
       plugins: [vue()],
