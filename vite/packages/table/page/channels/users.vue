@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-center h-full ml-3">
-    <div class="pl-3 pr-3" >
+    <div class="pl-3 pr-3" style="width: 95%">
       <div class="flex justify-between h-[40px] mb-3">
         <div  class="xt-text font-16" style="line-height: 40px;">
           用户
@@ -76,7 +76,7 @@ const userList = ref([]);
 //userList.value = users;//假数据
 async function fetchUserListData() {
   const res = await getUserList();
-  userList.value = res.data;
+  userList.value = res.data.filter(item => item.id !== store.user.id);
 }
 onMounted(async()=>{
   await fetchUserListData();

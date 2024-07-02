@@ -22,13 +22,13 @@ export const arbitrum: ChainNetInfo = {
   rpcUrl: 'https://arb1.arbitrum.io/rpc',
 };
 // 以太坊sepolia测试网
-export const sepolia: ChainNetInfo = {
-  chainId: 11155111,
-  name: 'Sepolia',
-  currency: 'SepETH',
-  explorerUrl: 'https://sepolia.etherscan.io',
-  rpcUrl: 'https://sepolia.infura.io/v3/',
-};
+// export const sepolia: ChainNetInfo = {
+//   chainId: 11155111,
+//   name: 'Sepolia',
+//   currency: 'SepETH',
+//   explorerUrl: 'https://sepolia.etherscan.io',
+//   rpcUrl: 'https://sepolia.infura.io/v3/',
+// };
 
 // 磐古测试网
 export const punkos: ChainNetInfo = {
@@ -37,4 +37,11 @@ export const punkos: ChainNetInfo = {
   currency: 'PTH',
   explorerUrl: 'https://goerli.etherscan.io',
   rpcUrl: 'https://rpctest.byebyegfw.uk',
+};
+export const sepolia: ChainNetInfo = {
+  chainId: 11155111,
+  name: 'Sepolia Test Network',
+  currency: 'ETH',
+  explorerUrl: 'https://sepolia.etherscan.io',
+  rpcUrl: 'https://11155111.rpc.thirdweb.com',
 };

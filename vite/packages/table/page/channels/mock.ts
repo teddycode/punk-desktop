@@ -1,3 +1,1232 @@
+const socialContractAddress = "0x98fC79649A3121d397Ef22233CB3f9712933B0F5";
+const socialContractABI = [
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_commentId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_userId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_forumId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "_content",
+        "type": "string"
+      },
+      {
+        "internalType": "string[]",
+        "name": "_imagesCID",
+        "type": "string[]"
+      }
+    ],
+    "name": "addComment",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_forumId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_userId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "_title",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_content",
+        "type": "string"
+      },
+      {
+        "internalType": "string[]",
+        "name": "_imagesCID",
+        "type": "string[]"
+      }
+    ],
+    "name": "postForum",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_userId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "_nickname",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_avatarCID",
+        "type": "string"
+      }
+    ],
+    "name": "register",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "CommentMap",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "commentId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "userId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "forumId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "content",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "timeStamp",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "ForumMap",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "forumId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "userId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "content",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "timeStamp",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "likeCount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "collectCount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "commentCount",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_commentId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getCommentInfo",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "commentId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "userId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "forumId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "content",
+            "type": "string"
+          },
+          {
+            "internalType": "string[]",
+            "name": "imagesCID",
+            "type": "string[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "timeStamp",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct SocialNetwork.Comment",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_forumId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getForumInfo",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "forumId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "userId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "content",
+            "type": "string"
+          },
+          {
+            "internalType": "string[]",
+            "name": "imagesCID",
+            "type": "string[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "timeStamp",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "likeCount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "collectCount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "commentCount",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct SocialNetwork.Forum",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_userId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getUserInfo",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "userAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "userId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "nickname",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "avatarCID",
+            "type": "string"
+          }
+        ],
+        "internalType": "struct SocialNetwork.UserInfo",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "UserMap",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "userAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "userId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "nickname",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "avatarCID",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]
+// const socialContractAddress = '0x748808dC22B0923Bc130500D9C2A9F3d02A302A5';
+// const socialContractABI = [
+//   {
+//     "inputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "_commentId",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "uint256",
+//         "name": "_userId",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "uint256",
+//         "name": "_forumId",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "string",
+//         "name": "_content",
+//         "type": "string"
+//       }
+//     ],
+//     "name": "addComment",
+//     "outputs": [],
+//     "stateMutability": "nonpayable",
+//     "type": "function"
+//   },
+//   {
+//     "inputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "_userId",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "uint256",
+//         "name": "_forumId",
+//         "type": "uint256"
+//       }
+//     ],
+//     "name": "cancelCollectForum",
+//     "outputs": [],
+//     "stateMutability": "nonpayable",
+//     "type": "function"
+//   },
+//   {
+//     "inputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "_userId",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "uint256",
+//         "name": "_forumId",
+//         "type": "uint256"
+//       }
+//     ],
+//     "name": "cancelLikeForum",
+//     "outputs": [],
+//     "stateMutability": "nonpayable",
+//     "type": "function"
+//   },
+//   {
+//     "inputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "_userId",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "uint256",
+//         "name": "_forumId",
+//         "type": "uint256"
+//       }
+//     ],
+//     "name": "collectForum",
+//     "outputs": [],
+//     "stateMutability": "nonpayable",
+//     "type": "function"
+//   },
+//   {
+//     "inputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "_userId",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "uint256",
+//         "name": "_forumId",
+//         "type": "uint256"
+//       }
+//     ],
+//     "name": "likeForum",
+//     "outputs": [],
+//     "stateMutability": "nonpayable",
+//     "type": "function"
+//   },
+//   {
+//     "inputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "_forumId",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "uint256",
+//         "name": "_userId",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "string",
+//         "name": "_title",
+//         "type": "string"
+//       },
+//       {
+//         "internalType": "string",
+//         "name": "_content",
+//         "type": "string"
+//       },
+//       {
+//         "internalType": "string[]",
+//         "name": "_imagesCID",
+//         "type": "string[]"
+//       }
+//     ],
+//     "name": "postForum",
+//     "outputs": [],
+//     "stateMutability": "nonpayable",
+//     "type": "function"
+//   },
+//   {
+//     "inputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "_userId",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "string",
+//         "name": "_nickname",
+//         "type": "string"
+//       },
+//       {
+//         "internalType": "string",
+//         "name": "_avatarCID",
+//         "type": "string"
+//       }
+//     ],
+//     "name": "register",
+//     "outputs": [],
+//     "stateMutability": "nonpayable",
+//     "type": "function"
+//   },
+//   {
+//     "inputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "_userId",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "address",
+//         "name": "_userAddress",
+//         "type": "address"
+//       },
+//       {
+//         "internalType": "string",
+//         "name": "_nickname",
+//         "type": "string"
+//       },
+//       {
+//         "internalType": "string",
+//         "name": "_avatarCID",
+//         "type": "string"
+//       }
+//     ],
+//     "name": "updateUserInfo",
+//     "outputs": [],
+//     "stateMutability": "nonpayable",
+//     "type": "function"
+//   },
+//   {
+//     "inputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "",
+//         "type": "uint256"
+//       }
+//     ],
+//     "name": "CommentMap",
+//     "outputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "commentId",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "uint256",
+//         "name": "userId",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "uint256",
+//         "name": "forumId",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "string",
+//         "name": "content",
+//         "type": "string"
+//       },
+//       {
+//         "internalType": "uint256",
+//         "name": "timeStamp",
+//         "type": "uint256"
+//       }
+//     ],
+//     "stateMutability": "view",
+//     "type": "function"
+//   },
+//   {
+//     "inputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "",
+//         "type": "uint256"
+//       }
+//     ],
+//     "name": "comments",
+//     "outputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "commentId",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "uint256",
+//         "name": "userId",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "uint256",
+//         "name": "forumId",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "string",
+//         "name": "content",
+//         "type": "string"
+//       },
+//       {
+//         "internalType": "uint256",
+//         "name": "timeStamp",
+//         "type": "uint256"
+//       }
+//     ],
+//     "stateMutability": "view",
+//     "type": "function"
+//   },
+//   {
+//     "inputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "",
+//         "type": "uint256"
+//       }
+//     ],
+//     "name": "ForumInfoMap",
+//     "outputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "forumId",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "uint256",
+//         "name": "userId",
+//         "type": "uint256"
+//       }
+//     ],
+//     "stateMutability": "view",
+//     "type": "function"
+//   },
+//   {
+//     "inputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "",
+//         "type": "uint256"
+//       }
+//     ],
+//     "name": "ForumMap",
+//     "outputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "forumId",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "uint256",
+//         "name": "userId",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "string",
+//         "name": "title",
+//         "type": "string"
+//       },
+//       {
+//         "internalType": "string",
+//         "name": "content",
+//         "type": "string"
+//       },
+//       {
+//         "internalType": "uint256",
+//         "name": "timeStamp",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "uint256",
+//         "name": "likeCount",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "uint256",
+//         "name": "collectCount",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "uint256",
+//         "name": "commentCount",
+//         "type": "uint256"
+//       }
+//     ],
+//     "stateMutability": "view",
+//     "type": "function"
+//   },
+//   {
+//     "inputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "",
+//         "type": "uint256"
+//       }
+//     ],
+//     "name": "forums",
+//     "outputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "forumId",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "uint256",
+//         "name": "userId",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "string",
+//         "name": "title",
+//         "type": "string"
+//       },
+//       {
+//         "internalType": "string",
+//         "name": "content",
+//         "type": "string"
+//       },
+//       {
+//         "internalType": "uint256",
+//         "name": "timeStamp",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "uint256",
+//         "name": "likeCount",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "uint256",
+//         "name": "collectCount",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "uint256",
+//         "name": "commentCount",
+//         "type": "uint256"
+//       }
+//     ],
+//     "stateMutability": "view",
+//     "type": "function"
+//   },
+//   {
+//     "inputs": [],
+//     "name": "getAllForum",
+//     "outputs": [
+//       {
+//         "components": [
+//           {
+//             "internalType": "uint256",
+//             "name": "forumId",
+//             "type": "uint256"
+//           },
+//           {
+//             "internalType": "uint256",
+//             "name": "userId",
+//             "type": "uint256"
+//           },
+//           {
+//             "internalType": "string",
+//             "name": "title",
+//             "type": "string"
+//           },
+//           {
+//             "internalType": "string",
+//             "name": "content",
+//             "type": "string"
+//           },
+//           {
+//             "internalType": "string[]",
+//             "name": "imagesCID",
+//             "type": "string[]"
+//           },
+//           {
+//             "internalType": "uint256",
+//             "name": "timeStamp",
+//             "type": "uint256"
+//           },
+//           {
+//             "internalType": "uint256",
+//             "name": "likeCount",
+//             "type": "uint256"
+//           },
+//           {
+//             "internalType": "uint256",
+//             "name": "collectCount",
+//             "type": "uint256"
+//           },
+//           {
+//             "internalType": "uint256",
+//             "name": "commentCount",
+//             "type": "uint256"
+//           }
+//         ],
+//         "internalType": "struct SocialNetwork.Forum[]",
+//         "name": "",
+//         "type": "tuple[]"
+//       }
+//     ],
+//     "stateMutability": "view",
+//     "type": "function"
+//   },
+//   {
+//     "inputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "_forumId",
+//         "type": "uint256"
+//       }
+//     ],
+//     "name": "getCollectCount",
+//     "outputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "",
+//         "type": "uint256"
+//       }
+//     ],
+//     "stateMutability": "view",
+//     "type": "function"
+//   },
+//   {
+//     "inputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "_forumId",
+//         "type": "uint256"
+//       }
+//     ],
+//     "name": "getCommentCount",
+//     "outputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "",
+//         "type": "uint256"
+//       }
+//     ],
+//     "stateMutability": "view",
+//     "type": "function"
+//   },
+//   {
+//     "inputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "_userId",
+//         "type": "uint256"
+//       }
+//     ],
+//     "name": "getForumByUser",
+//     "outputs": [
+//       {
+//         "components": [
+//           {
+//             "internalType": "uint256",
+//             "name": "forumId",
+//             "type": "uint256"
+//           },
+//           {
+//             "internalType": "uint256",
+//             "name": "userId",
+//             "type": "uint256"
+//           },
+//           {
+//             "internalType": "string",
+//             "name": "title",
+//             "type": "string"
+//           },
+//           {
+//             "internalType": "string",
+//             "name": "content",
+//             "type": "string"
+//           },
+//           {
+//             "internalType": "string[]",
+//             "name": "imagesCID",
+//             "type": "string[]"
+//           },
+//           {
+//             "internalType": "uint256",
+//             "name": "timeStamp",
+//             "type": "uint256"
+//           },
+//           {
+//             "internalType": "uint256",
+//             "name": "likeCount",
+//             "type": "uint256"
+//           },
+//           {
+//             "internalType": "uint256",
+//             "name": "collectCount",
+//             "type": "uint256"
+//           },
+//           {
+//             "internalType": "uint256",
+//             "name": "commentCount",
+//             "type": "uint256"
+//           }
+//         ],
+//         "internalType": "struct SocialNetwork.Forum[]",
+//         "name": "",
+//         "type": "tuple[]"
+//       }
+//     ],
+//     "stateMutability": "view",
+//     "type": "function"
+//   },
+//   {
+//     "inputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "_forumId",
+//         "type": "uint256"
+//       }
+//     ],
+//     "name": "getForumComments",
+//     "outputs": [
+//       {
+//         "components": [
+//           {
+//             "internalType": "uint256",
+//             "name": "commentId",
+//             "type": "uint256"
+//           },
+//           {
+//             "internalType": "uint256",
+//             "name": "userId",
+//             "type": "uint256"
+//           },
+//           {
+//             "internalType": "uint256",
+//             "name": "forumId",
+//             "type": "uint256"
+//           },
+//           {
+//             "internalType": "string",
+//             "name": "content",
+//             "type": "string"
+//           },
+//           {
+//             "internalType": "uint256",
+//             "name": "timeStamp",
+//             "type": "uint256"
+//           }
+//         ],
+//         "internalType": "struct SocialNetwork.Comment[]",
+//         "name": "",
+//         "type": "tuple[]"
+//       }
+//     ],
+//     "stateMutability": "view",
+//     "type": "function"
+//   },
+//   {
+//     "inputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "_forumId",
+//         "type": "uint256"
+//       }
+//     ],
+//     "name": "getForumInfo",
+//     "outputs": [
+//       {
+//         "components": [
+//           {
+//             "internalType": "uint256",
+//             "name": "forumId",
+//             "type": "uint256"
+//           },
+//           {
+//             "internalType": "uint256",
+//             "name": "userId",
+//             "type": "uint256"
+//           },
+//           {
+//             "internalType": "string",
+//             "name": "title",
+//             "type": "string"
+//           },
+//           {
+//             "internalType": "string",
+//             "name": "content",
+//             "type": "string"
+//           },
+//           {
+//             "internalType": "string[]",
+//             "name": "imagesCID",
+//             "type": "string[]"
+//           },
+//           {
+//             "internalType": "uint256",
+//             "name": "timeStamp",
+//             "type": "uint256"
+//           },
+//           {
+//             "internalType": "uint256",
+//             "name": "likeCount",
+//             "type": "uint256"
+//           },
+//           {
+//             "internalType": "uint256",
+//             "name": "collectCount",
+//             "type": "uint256"
+//           },
+//           {
+//             "internalType": "uint256",
+//             "name": "commentCount",
+//             "type": "uint256"
+//           }
+//         ],
+//         "internalType": "struct SocialNetwork.Forum",
+//         "name": "",
+//         "type": "tuple"
+//       }
+//     ],
+//     "stateMutability": "view",
+//     "type": "function"
+//   },
+//   {
+//     "inputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "_forumId",
+//         "type": "uint256"
+//       }
+//     ],
+//     "name": "getLikeCount",
+//     "outputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "",
+//         "type": "uint256"
+//       }
+//     ],
+//     "stateMutability": "view",
+//     "type": "function"
+//   },
+//   {
+//     "inputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "_userId",
+//         "type": "uint256"
+//       }
+//     ],
+//     "name": "getUserForumCount",
+//     "outputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "",
+//         "type": "uint256"
+//       }
+//     ],
+//     "stateMutability": "view",
+//     "type": "function"
+//   },
+//   {
+//     "inputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "_userId",
+//         "type": "uint256"
+//       }
+//     ],
+//     "name": "getUserInfo",
+//     "outputs": [
+//       {
+//         "components": [
+//           {
+//             "internalType": "address",
+//             "name": "userAddress",
+//             "type": "address"
+//           },
+//           {
+//             "internalType": "uint256",
+//             "name": "userId",
+//             "type": "uint256"
+//           },
+//           {
+//             "internalType": "string",
+//             "name": "nickname",
+//             "type": "string"
+//           },
+//           {
+//             "internalType": "string",
+//             "name": "avatarCID",
+//             "type": "string"
+//           }
+//         ],
+//         "internalType": "struct SocialNetwork.UserInfo",
+//         "name": "",
+//         "type": "tuple"
+//       }
+//     ],
+//     "stateMutability": "view",
+//     "type": "function"
+//   },
+//   {
+//     "inputs": [],
+//     "name": "isRegister",
+//     "outputs": [
+//       {
+//         "internalType": "bool",
+//         "name": "",
+//         "type": "bool"
+//       }
+//     ],
+//     "stateMutability": "view",
+//     "type": "function"
+//   },
+//   {
+//     "inputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "",
+//         "type": "uint256"
+//       }
+//     ],
+//     "name": "UserForumCount",
+//     "outputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "",
+//         "type": "uint256"
+//       }
+//     ],
+//     "stateMutability": "view",
+//     "type": "function"
+//   },
+//   {
+//     "inputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "",
+//         "type": "uint256"
+//       }
+//     ],
+//     "name": "UserMap",
+//     "outputs": [
+//       {
+//         "internalType": "address",
+//         "name": "userAddress",
+//         "type": "address"
+//       },
+//       {
+//         "internalType": "uint256",
+//         "name": "userId",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "string",
+//         "name": "nickname",
+//         "type": "string"
+//       },
+//       {
+//         "internalType": "string",
+//         "name": "avatarCID",
+//         "type": "string"
+//       }
+//     ],
+//     "stateMutability": "view",
+//     "type": "function"
+//   },
+//   {
+//     "inputs": [
+//       {
+//         "internalType": "uint256",
+//         "name": "",
+//         "type": "uint256"
+//       }
+//     ],
+//     "name": "users",
+//     "outputs": [
+//       {
+//         "internalType": "address",
+//         "name": "userAddress",
+//         "type": "address"
+//       },
+//       {
+//         "internalType": "uint256",
+//         "name": "userId",
+//         "type": "uint256"
+//       },
+//       {
+//         "internalType": "string",
+//         "name": "nickname",
+//         "type": "string"
+//       },
+//       {
+//         "internalType": "string",
+//         "name": "avatarCID",
+//         "type": "string"
+//       }
+//     ],
+//     "stateMutability": "view",
+//     "type": "function"
+//   }
+// ]
 const groupMsg = [
   {
     logo: '	https://jxxt-1257689580.cos.ap-chengdu.myqcloud.com/e685acf36f7ca13d0a8fbe05f0b21aef.png?imageMogr2/crop/196x196/gravity/center',
@@ -328,4 +1557,4 @@ const comCards = {
   ],
 };
 
-export { comCards, groupMsg, users, topicData };
+export { comCards, groupMsg, users, topicData, socialContractAddress, socialContractABI };

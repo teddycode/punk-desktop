@@ -14,7 +14,7 @@ export const walletConfig = (): Web3ModalOptions => {
       url: 'https://www.punkos.com',
       icons: ['https://pic.imgdb.cn/item/65e292ac9f345e8d03288770.png'],
     },
-    defaultChainId: punkos.chainId,
+    defaultChainId: sepolia.chainId,
   });
 
   // 3. Create modala

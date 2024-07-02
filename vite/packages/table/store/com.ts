@@ -12,6 +12,7 @@ import { getDateTime } from '../util';
 
 import {getUserDetail, userLove, userCollect, userFollow, getTopUserList} from "../js/service/socialNetwork_user";
 import { getTopTagList } from "../js/service/socialNetwork_tag";
+import {imgUpload} from "../js/service/socialNetwork_forum";
 
 export const comStore = defineStore('comStore', {
   state: () => ({
@@ -39,9 +40,10 @@ export const comStore = defineStore('comStore', {
   }),
   actions: {
     //获取登录用户信息
-    async _updateUserInfo(){
-      await getUserDetail(1).then(response=>{
+    async _updateUserInfo(userId){
+      await getUserDetail(userId).then(response=>{
         this.user = response.data.user
+        this.user.id = userId
         this.collectList = response.data.collectList
         this.loveList = response.data.loveList
         this.followList = response.data.followList
@@ -56,8 +58,10 @@ export const comStore = defineStore('comStore', {
     },
     //获取热门用户
     async _getTopUserList(){
-      await getTopUserList(3).then(response=>{
-        this.topUserList = response.data
+      await getTopUserList(4).then(response=>{
+        // this.topUserList = response.data
+        console.log("topuser",response.data)
+        this.topUserList = response.data.filter((item: { id: any; }) => item.id !== this.user.id)
       })
     },
     //用户点赞
@@ -86,6 +90,17 @@ export const comStore = defineStore('comStore', {
       return index != -1
     },
 
+    async _imgUpload(fileData){
+      const formData = new FormData();
+      formData.append('file',fileData);
+      let url = "";
+      await imgUpload(formData).then(response => {
+        url =  response.data
+      }).catch(error => {
+          console.error('图片上传失败：:', error)
+        })
+      return url
+    },
 
 
     async updateTodayRank() {

@@ -162,8 +162,34 @@ let temp_id = 100
 //     UToast({ message: '评论成功!', type: 'info' })
 //   }, 200)
 // }
-const submit = ({ content, parentId, files, finish }: SubmitParamApi) => {
+import { useWeb3Modal, useWeb3ModalAccount,createWeb3Modal } from '@web3modal/ethers5/vue';
+import { walletConfig } from "@store/wallet";
+import { socialContractABI, socialContractAddress} from "@page/channels/mock";
+import { ethers } from 'ethers'
+import {message} from "ant-design-vue";
+const modal2 = createWeb3Modal(walletConfig());
+const postComment = async (_commentId,_userId,_forumId,_content,_imagesCID) => {
+  message.info("正在同步数据至区块链，请在手机钱包签名确认此操作！")
+  try {
+    const walletProvider = modal2.getWalletProvider()
+    if (!walletProvider) throw Error('User disconnected')
+    const ethersProvider = new ethers.providers.Web3Provider(walletProvider)
+    const signer = await ethersProvider.getSigner()
+    const socialContract = new ethers.Contract(socialContractAddress,socialContractABI,signer)
+    await socialContract.addComment(_commentId,_userId,_forumId,_content,_imagesCID).then(res => {
+      console.log('交易信息:',res)
+      message.success("评论信息成功上链！")
+    });
+  }catch (error){
+    console.error('评论信息上链出错:', error);
+  }
+}
+const submit = async ({content, parentId, files, finish}: SubmitParamApi) => {
   console.log('提交评论: ' + content, parentId, files)
+  /**
+   * 上传文件后端返回图片访问地址，格式以'||'为分割; 如:  '/static/img/program.gif||/static/img/normal.webp'
+   */
+  let contentImg = files?.map(e => createObjectURL(e)).join('||')
 
   const comment: CommentApi = {
     id: String((temp_id += 1)),
@@ -171,23 +197,43 @@ const submit = ({ content, parentId, files, finish }: SubmitParamApi) => {
     uid: config.user.id,
     content: content,
     createTime: dayjs().subtract(5, 'seconds').toString(),
+    contentImg: contentImg,
     user: {
       username: config.user.username,
       avatar: config.user.avatar
     },
     reply: null
   }
+  const imagesCID = [];
+  let imgs = [];
+  if (files.length > 0) {
+    imgs = await Promise.all(
+      files.map(async (item) => {
+        const url = await store._imgUpload(item);
+        imagesCID.push(url);
+        return {
+          img: url
+        }
+      })
+    );
+  }
   const commentData = {
     forumId: article.value.id,
     parentId: parentId,
     userId: store.user.id,
-    content: content
+    content: content,
+    imgs: imgs
   }
-  addComment(commentData);
+  console.log(commentData)
+  console.log("imagesCID:" , imagesCID)
+  addComment(commentData).then(res => {
+    console.log(res.data)
+    //postComment(res.data.id,res.data.userId,res.data.forumId,res.data.content,imagesCID);
+  });
 
   setTimeout(() => {
     finish(comment)
-    UToast({ message: '评论成功!', type: 'success' })
+    UToast({message: '评论成功!', type: 'success'})
   }, 200)
 }
 
