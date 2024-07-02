@@ -30,3 +30,11 @@ export function getForumsByTag(tag_id) {
     method: 'get',
   });
 }
+
+export function imgUpload(filedata) {
+  return request({
+    url: '/file/upload',
+    method: 'post',
+    data:filedata
+  });
+}

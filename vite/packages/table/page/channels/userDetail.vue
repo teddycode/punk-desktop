@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-center h-full ml-3">
-    <div class="pl-3 pr-3">
+    <div class="pl-3 pr-3" style="width: 95%">
       <div class="flex justify-between h-[40px] mb-3">
         <div @click="OnBack" class="xt-text font-16 hover_underline" style="line-height: 40px;">
           返回

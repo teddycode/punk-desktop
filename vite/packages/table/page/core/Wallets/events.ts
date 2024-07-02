@@ -6,6 +6,7 @@ import { GetForLoginNonce, PostForAuthReq } from '@js/service/users';
 import { message, Modal, Spin } from 'ant-design-vue';
 import { appStore } from '../../../store';
 import { ResponseType } from '@js/../../../typings/services';
+import { comStore } from "../../../store/com";
 
 // 认证的数据信息
 declare interface SignMessage {
@@ -81,6 +82,7 @@ export const setupWalletListener = async (calback: any, userInfo: any) => {
                     console.log('登录认证返回的数据：', resp);
                     if (resp?.code === 200 && resp?.data !== null) {
                       message.success('认证成功！');
+                      comStore()._updateUserInfo(resp.data.userInfo.id); //更新社交网络用户信息
                       calback(resp?.data);
                     } else {
                       message.error('认证失败：', resp?.msg);

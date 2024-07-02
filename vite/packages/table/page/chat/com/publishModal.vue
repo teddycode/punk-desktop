@@ -108,7 +108,7 @@
                 >
               </tippy>
 
-              <a-upload v-model:file-list="fileList" @preview="handlePreview" multiple>
+              <a-upload v-model:file-list="fileList" @preview="handlePreview" :showUploadList="false"  multiple>
                 <a-button type="text" size="small" class="xt-text" style="color: var(--secondary-text) !important"
                   ><template #icon>
                     <newIcon
@@ -169,18 +169,14 @@
   </Modal>
 </template>
 <script setup lang="ts">
-import {ref, reactive, onMounted, computed, nextTick} from 'vue';
-import { SmileOutlined, PictureOutlined, PlusOutlined } from '@ant-design/icons-vue';
-import type { UploadProps } from 'ant-design-vue';
-import browser from '../../../js/common/browser';
+import {computed, nextTick, reactive, ref} from 'vue';
+import {PlusOutlined} from '@ant-design/icons-vue';
+import type {CascaderProps, UploadProps} from 'ant-design-vue';
+import {message} from 'ant-design-vue';
 import Modal from '../../../components/Modal.vue';
-import { Icon as newIcon } from '@iconify/vue';
-import { fileUpload } from '../../../components/card/hooks/imageProcessing';
-import { useCommunityStore } from '../commun';
-import type { CascaderProps } from 'ant-design-vue';
-import fulentEmojis from '../../../js/chat/fulentEmojis';
-import { message } from 'ant-design-vue';
-import { comStore } from "@store/com";
+import {Icon as newIcon} from '@iconify/vue';
+import {comStore} from "@store/com";
+import {addForum} from "@js/service/socialNetwork_forum";
 const store = comStore();
 // const useCommunStore = useCommunityStore();
 // const imageLoadVisible = ref(true)
@@ -188,14 +184,12 @@ const store = comStore();
 //   browser.openInUserSelect(`https://s.apps.vip/forum?id=${props.forumId}`);
 // };
 
-import {addForum} from "@js/service/socialNetwork_forum";
-
 const imageLoadVisible = computed(() => {
   return fileList.value?.length > 0;
 });
 
 const inputTagRef = ref();
-const tags = ref(['Tag 1']);
+const tags = ref([]);
 const inputTagVisible = ref(false);
 const inputTagValue = ref('');
 // const state = reactive({
@@ -331,6 +325,27 @@ const handleOk = () => {
   visible.value = false;
   emit('handle-ok', visible);
 };
+import { useWeb3Modal, useWeb3ModalAccount,createWeb3Modal } from '@web3modal/ethers5/vue';
+import { walletConfig } from "@store/wallet";
+import { socialContractABI, socialContractAddress} from "@page/channels/mock";
+import { ethers } from 'ethers'
+const modal2 = createWeb3Modal(walletConfig());
+const postForum = async (_forumId,_userId,_title,_content,_imagesCID) => {
+  message.info("正在同步数据至区块链，请在手机钱包签名确认此操作！")
+  try {
+    const walletProvider = modal2.getWalletProvider()
+    if (!walletProvider) throw Error('User disconnected')
+    const ethersProvider = new ethers.providers.Web3Provider(walletProvider)
+    const signer = await ethersProvider.getSigner()
+    const socialContract = new ethers.Contract(socialContractAddress,socialContractABI,signer)
+    await socialContract.postForum(_forumId,_userId,_title,_content,_imagesCID).then(res=>{
+      console.log('交易信息：',res)
+      message.success("帖子信息成功上链！")
+    });
+  }catch (error){
+    console.error('帖子信息上链出错:', error);
+  }
+}
 // 发布帖子
 // const titleValue = ref('');
 const publishPost = async () => {
@@ -350,26 +365,51 @@ const publishPost = async () => {
     postTags.push({tagName: item});
   });
   postData.tags = postTags;
-  console.log(postData)
-  addForum(postData).then( response => {
+  const imagesCID = [];
+  if(fileList.value.length > 0){
+    const imageUrlList = await Promise.all(
+      fileList.value.map(async (item) => {
+        // const url = await fileUpload(item.originFileObj);
+        // return url;
+        const url = await store._imgUpload(item.originFileObj);
+        imagesCID.push(url)
+        return {
+          img: url
+        }
+      })
+    );
+    postData.imgs = imageUrlList;
+  }
+  console.log(postData);
+  console.log("imagesCID:" , imagesCID)
+  await addForum(postData).then( response => {
       message.success('发布成功');
       postTitle.value = '';
       postValue.value = '';
       store._getTopTagList(); //更新首页的热门标签
       handleOk();
+      //postForum(response.data.id,response.data.userId,response.data.title,response.data.content,imagesCID);
   })
 
 
 
 
 
-  if (postValue.value || fileList.value.length > 0) {
+
+
+
+  //if (postValue.value || fileList.value.length > 0) {
     // const imageUrlList = await Promise.all(
     //   fileList.value.map(async (item) => {
-    //     const url = await fileUpload(item.originFileObj);
-    //     return url;
+    //     // const url = await fileUpload(item.originFileObj);
+    //     // return url;
+    //     const url = await store._imgUpload(item.originFileObj);
+    //     return {
+    //       img: url
+    //     }
     //   }),
     // );
+    // console.log(imageUrlList)
     // // let image = JSON.stringify(imageUrlList.value)
     // let forumId = props.forumId;
     // let content = postValue.value;
@@ -393,7 +433,7 @@ const publishPost = async () => {
     //   handleOk();
     //   await useCommunStore.getCommunityPost(forumId);
     // });
-  }
+  //}
 };
 </script>
 <style lang="scss" scoped>

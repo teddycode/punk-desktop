@@ -2,12 +2,12 @@
   <!-- 团队聊天主页面 -->
   <div class="flex" style="width: 100%; height: 100%;background-color:white; border-radius: 10px;" >
     <!-- 左侧tab切换 -->
-    <div style="flex: 1;">
+    <div style="width: 18%;height: 100%">
       <SecondPanel style="margin-left: 50px" v-if="!fullScreen" @changeTab="changeTab" :menus="menus"></SecondPanel>
     </div>
 
     <!-- 右侧内容显示 -->
-    <div class="middle-content" style="flex: 3; height: 100%">
+    <div class="middle-content" style="width: 60%; height: 100%">
       <div
         class="mt-3"
         style="height: calc(100% - 1em); border-radius: 10px; overflow: hidden; "
@@ -16,7 +16,7 @@
       </div>
     </div>
 
-    <div class="mt-3" style="flex: 1; height: 100%;margin-right: 50px">
+    <div class="mt-3" style="width: 22%; height: 100%;margin-right: 50px">
       <RightSide ></RightSide>
     </div>
   </div>
@@ -122,7 +122,7 @@ export default defineComponent({
   },
   mounted() {
     chatStore().login();
-    comStore()._updateUserInfo();
+    // comStore()._updateUserInfo();
     comStore()._getTopTagList();
     comStore()._getTopUserList();
   },

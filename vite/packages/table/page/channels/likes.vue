@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-center h-full ml-3">
-    <div class="pl-3 pr-3">
+    <div class="pl-3 pr-3" style="width: 100%">
       <div class="flex justify-between h-[40px] mb-3">
         <div class="xt-text font-16" style="line-height: 40px;">
           喜欢
