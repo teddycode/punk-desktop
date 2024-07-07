@@ -13,7 +13,7 @@ export default {
   children: [
     {
       path: 'index',
-      name: 'LightComputingPage',
+      name: 'ComputingPage',
       component: HomePage,
       meta: {
         icon: FileOutlined,

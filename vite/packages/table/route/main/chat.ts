@@ -9,19 +9,18 @@ import ChannelIndex from '@page/channels/ChannelsIndex.vue';
 import Circle from '@page/channels/Groups.vue';
 import CircleDetail from '@page/channels/GroupsDetail.vue';
 
-
-import  Forum from '@page/channels/forum.vue';
-import ForumDetail from "@page/channels/forumDetail.vue";
-import Tag from "../../page/channels/tag.vue"
-import Notification from "@page/channels/notification.vue"
-import Likes from "@page/channels/likes.vue"
-import Collects from "../../page/channels/collects.vue";
-import Users from "../../page/channels/users.vue"
-import UserDetail from "../../page/channels/userDetail.vue"
-import TagDetail from "../../page/channels/tagDetail.vue";
-import UserFollowers from "../../page/channels/userFollowers.vue";
-import Test from "../../page/channels/test.vue";
-import TestWeb3 from "../../page/channels/testWeb3.vue";
+import Forum from '@page/channels/forum.vue';
+import ForumDetail from '@page/channels/forumDetail.vue';
+import Tag from '../../page/channels/tag.vue';
+import Notification from '@page/channels/notification.vue';
+import Likes from '@page/channels/likes.vue';
+import Collects from '../../page/channels/collects.vue';
+import Users from '../../page/channels/users.vue';
+import UserDetail from '../../page/channels/userDetail.vue';
+import TagDetail from '../../page/channels/tagDetail.vue';
+import UserFollowers from '../../page/channels/userFollowers.vue';
+import Test from '../../page/channels/test.vue';
+// import TestWeb3 from '../../page/channels/testWeb3.vue';
 /**聊天团队模式结束**/
 //导入应用路由
 import ChatAdmin from '@page/chat/page/admin.vue';
@@ -33,7 +32,7 @@ import Team from '@page/Team.vue';
 import Hall from '@page/team/Hall.vue';
 
 // import Test from'@page/channels/test.vue'
-import BaseLayout from "../../page/core/Layouts/BaseLayout.vue";
+import BaseLayout from '../../page/core/Layouts/BaseLayout.vue';
 
 export default [
   BarrageRoute,
@@ -140,59 +139,59 @@ export default [
     ],
   },
   {
-    path: "/forum",
-    name: "forum",
-    component: Forum
+    path: '/forum',
+    name: 'forum',
+    component: Forum,
   },
   {
-    path: "/forumDetail",
-    name: "forumDetail",
-    component: ForumDetail
+    path: '/forumDetail',
+    name: 'forumDetail',
+    component: ForumDetail,
+  },
+  // {
+  //   path: '/test',
+  //   name: 'test',
+  //   component: TestWeb3,
+  // },
+  {
+    path: '/tag',
+    name: 'tag',
+    component: Tag,
   },
   {
-    path: '/test',
-    name: 'test',
-    component: TestWeb3,
+    path: '/users',
+    name: 'users',
+    component: Users,
   },
   {
-    path: "/tag",
-    name: "tag",
-    component: Tag
+    path: '/userDetail',
+    name: 'userDetail',
+    component: UserDetail,
   },
   {
-    path: "/users",
-    name: "users",
-    component: Users
+    path: '/userFollowers',
+    name: 'userFollowers',
+    component: UserFollowers,
   },
   {
-    path: "/userDetail",
-    name: "userDetail",
-    component: UserDetail
+    path: '/tagDetail',
+    name: 'tagDetail',
+    component: TagDetail,
   },
   {
-    path: "/userFollowers",
-    name: "userFollowers",
-    component: UserFollowers
+    path: '/notification',
+    name: 'notification',
+    component: Notification,
   },
   {
-    path: "/tagDetail",
-    name: "tagDetail",
-    component: TagDetail
+    path: '/likes',
+    name: 'likes',
+    component: Likes,
   },
   {
-    path: "/notification",
-    name: "notification",
-    component: Notification
-  },
-  {
-    path: "/likes",
-    name: "likes",
-    component: Likes
-  },
-  {
-    path: "/collects",
-    name: "collects",
-    component: Collects
+    path: '/collects',
+    name: 'collects',
+    component: Collects,
   },
   {
     path: '/channel',
