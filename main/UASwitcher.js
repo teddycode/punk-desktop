@@ -59,6 +59,8 @@ function enableGoogleUASwitcher(ses) {
     const chromiumVersion = process.versions.chrome.split('.')[0];
     details.requestHeaders['SEC-CH-UA'] = `"Chromium";v="${chromiumVersion}", " Not A;Brand";v="99"`;
     details.requestHeaders['SEC-CH-UA-MOBILE'] = '?0';
+    details.requestHeaders['Referer'] = 'http://127.0.0.1:1600/'
+    details.requestHeaders['Origin'] = 'http://127.0.0.1:1600'
 
     callback({ cancel: false, requestHeaders: details.requestHeaders });
   });
