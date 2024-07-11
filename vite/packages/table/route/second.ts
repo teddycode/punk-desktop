@@ -135,7 +135,7 @@ export default [
     path: '/chat',
     name: 'chatIndex',
     component: ChatIndex,
-    rememberChildrenPosition: true,
+    rememberChildrenPosition: false,
     redirect: {
       name: 'chat',
     },

@@ -1,23 +1,20 @@
 <template>
   <!-- 团队聊天主页面 -->
-  <div class="flex" style="width: 100%; height: 100%;background-color:white; border-radius: 10px;" >
+  <div class="flex" style="width: 100%; height: 100%; background-color: white; border-radius: 10px">
     <!-- 左侧tab切换 -->
-    <div style="width: 18%;height: 100%">
+    <div style="width: 18%; height: 100%">
       <SecondPanel style="margin-left: 50px" v-if="!fullScreen" @changeTab="changeTab" :menus="menus"></SecondPanel>
     </div>
 
     <!-- 右侧内容显示 -->
     <div class="middle-content" style="width: 60%; height: 100%">
-      <div
-        class="mt-3"
-        style="height: calc(100% - 1em); border-radius: 10px; overflow: hidden; "
-      >
+      <div class="mt-3" style="height: calc(100% - 1em); border-radius: 10px; overflow: hidden">
         <router-view></router-view>
       </div>
     </div>
 
-    <div class="mt-3" style="width: 22%; height: 100%;margin-right: 50px">
-      <RightSide ></RightSide>
+    <div class="mt-3" style="width: 22%; height: 100%; margin-right: 50px">
+      <RightSide></RightSide>
     </div>
   </div>
 </template>
@@ -27,7 +24,7 @@ import { defineComponent } from 'vue';
 import SecondPanel from '../../components/SecondPanel.vue';
 import RightSide from '../channels/components/RightSide.vue';
 import { chatStore } from '../../store/chat';
-import {comStore} from "@store/com";
+import { comStore } from '@store/com';
 import { mapActions, mapState } from 'pinia';
 import { appStore } from '../../store';
 
@@ -116,7 +113,6 @@ export default defineComponent({
         //   route: { name: 'barrage' },
         //   tab: 'barrage',
         // },
-
       ],
     };
   },
@@ -132,8 +128,13 @@ export default defineComponent({
   methods: {
     ...mapActions(chatStore, ['login']),
     changeTab(args) {
-      this.$router.push(args.menu.route);
-      this.tab = args.index;
+      console.log('routers in chat:', args);
+      if (args && args.menu.route) {
+        this.$router.push(args.menu.route);
+        this.tab = args.index;
+        return;
+      }
+      console.log('Router error:', args);
     },
   },
 });
@@ -145,5 +146,4 @@ export default defineComponent({
   //box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
   border: 1px solid #e8e8e8;
 }
-
 </style>

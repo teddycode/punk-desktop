@@ -14,7 +14,7 @@ router.beforeEach((to, from, next) => {
   if (to.redirectedFrom) {
     if (to.redirectedFrom.meta.rememberChildrenPosition) {
       //查询记忆位置
-      let rememberPosition = localStorage.getItem('router:remember:' + to.redirectedFrom.name);
+      let rememberPosition = localStorage.getItem('router:remember:' + to?.redirectedFrom.name);
       if (rememberPosition) {
         try {
           const remRoute = JSON.parse(rememberPosition);
@@ -22,7 +22,7 @@ router.beforeEach((to, from, next) => {
             next(remRoute);
           }
         } catch (e) {
-          localStorage.removeItem('router:remember:' + to.redirectedFrom.name);
+          localStorage.removeItem('router:remember:' + to?.redirectedFrom.name);
           console.error('未找到记忆路由，不做操作');
         }
       }
@@ -44,7 +44,7 @@ router.beforeEach((to, from, next) => {
 
   if (from.name === 'home') {
     document.body.style.setProperty('--backGroundImgBlur', '12px');
-    document.body.style.setProperty('--backGroundImgLight', 0.3);
+    document.body.style.setProperty('--backGroundImgLight', '0.3');
   }
   cardStore().setRouteParams(to.params);
   next();

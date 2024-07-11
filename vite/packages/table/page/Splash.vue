@@ -135,7 +135,11 @@ export default {
   },
   async beforeMount(){
     // 創建钱包连接对话框
-    createWeb3Modal(walletConfig());
+    try{
+      createWeb3Modal(walletConfig());
+    }catch (e){
+      console.log("创建钱包错误：",e.toString());
+    }
   },
   async mounted () {
     // 后端服务器状态监测
