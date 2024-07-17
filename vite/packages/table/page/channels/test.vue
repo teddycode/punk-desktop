@@ -1,6 +1,6 @@
 <template>
   <div>
-    <input type="file" @change="axiosClient" />
+    <input type="file" @change="testImgUploadIPFS" />
     <div v-if="imageUrl">
       <p>IPFS Image URL: {{ imageUrl }}</p>
       <img :src="imageUrl" alt="Uploaded Image" />
@@ -8,10 +8,12 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import { create } from 'ipfs-http-client';
 import {imgUpload} from "@js/service/socialNetwork_forum";
+import {comStore} from "@store/com";
+const store = comStore();
 //导入axios模块
 import axios from "axios";
 
@@ -72,5 +74,10 @@ const axiosClient = async (event) => {
     console.log(e)
   }
 }
-
+const testImgUploadIPFS = async (event) => {
+  // store._imgUploadIpfs(event.target.files[0]);
+  console.log(tsbApi.util.friendlyDate(new Date().getTime()))
+  // imageUrl.value = await punkosApi.storage._imgUploadIpfs(event.target.files[0]);
+    imageUrl.value = await tsbApi.punkos.storage._imgUploadIpfs(event.target.files[0]);
+}
 </script>

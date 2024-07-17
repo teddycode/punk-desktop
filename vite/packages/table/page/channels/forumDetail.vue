@@ -209,7 +209,7 @@ const submit = async ({content, parentId, files, finish}: SubmitParamApi) => {
   if (files.length > 0) {
     imgs = await Promise.all(
       files.map(async (item) => {
-        const url = await store._imgUpload(item);
+        const url = await tsbApi.punkos.storage._imgUploadIpfs(item);
         imagesCID.push(url);
         return {
           img: url

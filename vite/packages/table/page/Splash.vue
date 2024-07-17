@@ -107,7 +107,7 @@ import {preHandle} from "@components/widgets/courier/courierTool";
 import {useToast} from "vue-toastification";
 import {setupWalletListener} from "./core/Wallets/events";
 import {walletConfig} from "@store/wallet";
-
+import {comStore} from "@store/com";
 
 export default {
   name: 'Splash',
@@ -286,6 +286,7 @@ export default {
         //this.lvInfo = lvInfo
         window.loadedStore['userInfo'] = true
         console.info('更新了用户信息:', JSON.stringify(userInfo))
+        comStore()._updateUserInfo(userInfo.uid) //更新社交网络用户
         this.setUser(userInfo)
         if (this.$route.name === 'splash') {
           this.enter()

@@ -16,6 +16,9 @@ const baseApi = {
   settings: require('./settings'), //设置接口
   db: require('./db'), //数据库接口,
   web: require('./web'), //网页接口
+  punkos:{
+    storage: require('./punkosApi/storage'),  //punkos存储接口
+  },
 };
 window.baseApi = baseApi;
 module.exports = baseApi;

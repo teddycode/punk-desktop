@@ -371,7 +371,7 @@ const publishPost = async () => {
       fileList.value.map(async (item) => {
         // const url = await fileUpload(item.originFileObj);
         // return url;
-        const url = await store._imgUpload(item.originFileObj);
+        const url = await tsbApi.punkos.storage._imgUploadIpfs(item.originFileObj);
         imagesCID.push(url)
         return {
           img: url
