@@ -13,6 +13,7 @@ import { getDateTime } from '../util';
 import {getUserDetail, userLove, userCollect, userFollow, getTopUserList} from "../js/service/socialNetwork_user";
 import { getTopTagList } from "../js/service/socialNetwork_tag";
 import {imgUpload} from "../js/service/socialNetwork_forum";
+// import axios from "axios";
 
 export const comStore = defineStore('comStore', {
   state: () => ({
@@ -89,7 +90,7 @@ export const comStore = defineStore('comStore', {
       var index = this.followList.findIndex(item => item.id == followId);
       return index != -1
     },
-
+    //调用后端接口上传图片
     async _imgUpload(fileData){
       const formData = new FormData();
       formData.append('file',fileData);
@@ -101,7 +102,24 @@ export const comStore = defineStore('comStore', {
         })
       return url
     },
-
+    //调用ipfs接口上传图片
+    // async _imgUploadIpfs(fileData){
+    //   const form = new FormData();
+    //   form.append('file', fileData);
+    //   let url = "";
+    //   try {
+    //     await axios.post("http://123.157.213.102:39761/api/v0/add/", form, {
+    //       headers: {
+    //         'Content-Type': 'multipart/form-data',
+    //       }
+    //     }).then(response => {
+    //       url = `http://123.157.213.102:39760/ipfs/${response.data.Hash}`;
+    //     })
+    //   }catch (e) {
+    //     console.log(e)
+    //   }
+    //   return url;
+    // },
 
     async updateTodayRank() {
       let response = await axios.get(getTodayRank, await getConfig());

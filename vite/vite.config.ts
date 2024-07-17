@@ -50,6 +50,7 @@ export const config = {
     sourcemap: true, //不打包sourcemap
     // target: 'es2020',
     rollupOptions: {
+      external:['#alloc','#util/as-uint8array'],
       input: inputs,
       output: {
         manualChunks: {
