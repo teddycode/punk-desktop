@@ -1,4 +1,5 @@
 !/packages/electron-chrome-extensions/dist
+!/packages/axios/dist
 /node_modules
 /.vscode
 .npm
