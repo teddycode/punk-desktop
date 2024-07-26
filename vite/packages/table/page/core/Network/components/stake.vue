@@ -1,16 +1,17 @@
 <template>
   <div class="content-wrapper">
-
     <div class="my-stake">
       <a-table :columns="columns" :dataSource="myData" rowKey="id" :pagination="{ pageSize: 2 }" />
     </div>
 
     <div class="action-area">
       <a-space class="action-space">
-        <a-button :type="actionType === 'stake' ? 'primary' : 'default'" @click="showStake"
-          class="action-button">质押</a-button>
-        <a-button :type="actionType === 'withdraw' ? 'primary' : 'default'" @click="showWithdraw"
-          class="action-button">提取</a-button>
+        <a-button :type="actionType === 'stake' ? 'primary' : 'default'" @click="showStake" class="action-button"
+          >质押</a-button
+        >
+        <a-button :type="actionType === 'withdraw' ? 'primary' : 'default'" @click="showWithdraw" class="action-button"
+          >提取</a-button
+        >
       </a-space>
 
       <a-form v-if="actionType" class="action-form">
@@ -27,7 +28,8 @@
           </div>
         </a-form-item>
         <a-form-item>
-          <a-button type="primary" @click="performAction" class="action-button">{{ actionType === 'stake' ? '质押' : '提取'
+          <a-button type="primary" @click="performAction" class="action-button">{{
+            actionType === 'stake' ? '质押' : '提取'
           }}</a-button>
         </a-form-item>
       </a-form>
@@ -37,7 +39,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import 'ant-design-vue/dist/antd.css';
+// import 'ant-design-vue/dist/antd.css';
 
 const actionType = ref('stake');
 const nodeId = ref('');
@@ -97,9 +99,6 @@ const submitForm = () => {
     alert(`从节点 ${form.value.nodeId} 提取 ${form.value.amount}`);
   }
 };
-
-
-
 </script>
 <style scoped>
 .content-wrapper {
@@ -163,7 +162,6 @@ const submitForm = () => {
   color: #fff;
 }
 
-
 .form-item-label {
   color: #f0f0f0;
   white-space: nowrap;
@@ -177,9 +175,8 @@ const submitForm = () => {
   color: #40a9ff;
 }
 
-.action-button[type="primary"] {
+.action-button[type='primary'] {
   background-color: #1890ff;
   border-color: #1890ff;
 }
 </style>
-
