@@ -1,0 +1,31 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:best-practices",
+    ":prConcurrentLimit10",
+    ":prHourlyLimit2",
+    ":semanticCommits",
+    ":semanticCommitScope(deps)"
+  ],
+  "rebaseWhen": "conflicted",
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["*"],
+      "enabled": false
+    },
+    {
+      "matchFileNames": ["apps/laboratory/package.json"],
+      "enabled": true,
+      "matchPackageNames": [
+        "@walletconnect/utils",
+        "wagmi",
+        "@wagmi/connectors",
+        "viem",
+        "ethers",
+        "@solana/web3.js"
+      ],
+      "matchPackagePrefixes": ["@web3modal/"],
+      "prPriority": 10
+    }
+  ]
+}

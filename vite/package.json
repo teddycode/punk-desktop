@@ -25,7 +25,7 @@
     "@vueuse/core": "^10.5.0",
     "@wangeditor/editor": "^5.1.23",
     "@wangeditor/editor-for-vue": "^5.1.12",
-    "@web3modal/ethers5": "^3.5.3",
+    "@web3modal/ethers5": "../packages/web3modal/packages/ethers5",
     "ant-design-vue": "4.1.2",
     "autoprefixer": "^10.4.14",
     "axios": "^1.6.1",

@@ -1,0 +1,9 @@
+{
+  "extends": [
+    "plugin:wc/recommended",
+    "plugin:lit/recommended",
+    "plugin:require-extensions/recommended",
+    "../../.eslintrc.json"
+  ],
+  "plugins": ["require-extensions"]
+}

@@ -197,7 +197,6 @@ import { PageParams } from '@js/service/typing';
 import { message } from 'ant-design-vue';
 import UploadImage from '@components/UploadImage.vue';
 import Modal from '@components/Modal.vue';
-import { createWeb3Modal } from '@web3modal/ethers5/vue';
 import { walletConfig } from '@store/wallet.ts';
 
 export default defineComponent({
