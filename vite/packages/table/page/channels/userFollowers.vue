@@ -43,7 +43,7 @@
                             </template>
                           </a-list-item-meta>
                           <a-button
-                            v-if="store.isFollowed(item?.id)"
+                            v-if="store.isFollowed(item?.userId)"
                             type="primary"
                             size="large"
                             danger
@@ -89,7 +89,7 @@
                             </template>
                           </a-list-item-meta>
                           <a-button
-                            v-if="store.isFollowed(item.id)"
+                            v-if="store.isFollowed(item.userId)"
                             type="primary"
                             size="large"
                             danger
@@ -160,7 +160,7 @@ const settingsScroller = reactive({
 });
 const selectedIndex = ref(-1);
 function userDetail(item) {
-  router.push({ name: 'userDetail', query: { id: item.id } });
+  router.push({ name: 'userDetail', query: { id: item.userId } });
 }
 </script>
 <style lang="scss" scoped>

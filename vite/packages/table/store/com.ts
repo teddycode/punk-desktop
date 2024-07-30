@@ -76,18 +76,18 @@ export const comStore = defineStore('comStore', {
     //用户关注
     async _userFollow(User){
       this.followList.push(User)
-      await userFollow(this.user.id, User.id)
+      await userFollow(this.user.id, User.userId)
       this._getTopUserList();
     },
     //用户取消关注
     async _userUnFollow(User){
-      this.followList = this.followList.filter(item=>item.id!=User.id)
-      await userFollow(this.user.id, User.id)
+      this.followList = this.followList.filter(item=>item.userId!=User.userId)
+      await userFollow(this.user.id, User.userId)
       this._getTopUserList();
     },
 
     isFollowed(followId){
-      var index = this.followList.findIndex(item => item.id == followId);
+      var index = this.followList.findIndex(item => item.userId == followId);
       return index != -1
     },
     //调用后端接口上传图片
