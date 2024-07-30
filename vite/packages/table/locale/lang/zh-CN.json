@@ -84,7 +84,7 @@
   },
   "welcome": {
     "call": "你好",
-    "changeAcc": "切换账号",
+    "changeAcc": "切换用户",
     "description": "—— 连接web2与web3的一站式终端",
     "hello": "欢迎使用磐古跨链客户端，带你探索通往web3的新世界！",
     "loginOrReg": "登录/注册账号",

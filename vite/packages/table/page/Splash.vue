@@ -1,7 +1,7 @@
 <template>
   <div
-    style="display:flex;height: 100vh;text-align: center;align-content: center;align-items: center;background:#333;justify-content: center"
-    class="drag">
+    style="display:flex;height: 100vh;text-align: center;align-content: center;
+            align-items: center;background:#333;justify-content: center" class="drag">
     <div v-if="launching" style="margin: auto;">
       <div class="mb-5 animate-bounce ">
         <a-avatar :size="60" src="/icons/logo128.png"></a-avatar>
@@ -31,12 +31,10 @@
         <div style="color: #2eb9ce" class="mb-10 ml-40 text-center text-md">
           {{$t('welcome.description')}}
         </div>
-        <p v-if="!userInfo">
+        <div v-if="!userInfo">
           <div class="mb-5 xt-text" style="font-size: 16px;color: whitesmoke">
             {{$t('welcome.say1')}}
-            <strong>
-            {{$t('welcome.say2')}}
-          </strong><br>
+            <strong> {{$t('welcome.say2')}} </strong><br>
           </div>
           <div class="mb-10 xt-text-2">{{$t('welcome.netErr')}}</div>
           <a-row :gutter="10" class="w-full">
@@ -48,22 +46,25 @@
               <xt-button style="width: 100%" @click="getUserInfo">{{$t('welcome.retry')}}</xt-button>
             </a-col>
           </a-row>
-        </p>
+          <div class="mt-2 text-md text-gray">
+            <a @click="onOfflineModel"> 离线模式 </a>
+          </div>
+        </div>
         <div v-else class="text-center">
           <div class="inline-block mt-3 mb-3">
             <div>
               <a-avatar :size="68" :src="userInfo.avatar"></a-avatar>
             </div>
-            <div  style="color: orange" class="mt-4 text-lg">
+            <div style="color: orange" class="mt-4 text-lg">
               {{$t('welcome.call')}}，{{ userInfo.nickname }}
             </div>
           </div>
-        </div>
-        <div class="flex">
-          <a-button v-if="userInfo" block class="m-3" size="large" type="primary" @click="goDirect">{{ $t('startUsage') }}</a-button>
-        </div>
-        <div v-if="userInfo" >
-          <a @click="reLoginUser"> {{$t('welcome.changeAcc')}}</a>
+            <div class="flex">
+            <a-button block class="m-3" size="large" type="primary" @click="goDirect">{{ $t('startUsage') }}</a-button>
+          </div>
+          <div>
+            <a @click="reLoginUser"> {{$t('welcome.changeAcc')}}</a>
+          </div>
         </div>
       </div>
     </div>
@@ -108,6 +109,7 @@ import {useToast} from "vue-toastification";
 import {setupWalletListener} from "./core/Wallets/events";
 import {walletConfig} from "@store/wallet";
 import {comStore} from "@store/com";
+import {defaultUserInfo} from "../js/constants.ts"
 
 export default {
   name: 'Splash',
@@ -134,12 +136,6 @@ export default {
     ...mapWritableState(myIcons, ['iconOption', 'iconList']),
   },
   async beforeMount(){
-    // 創建钱包连接对话框
-    try{
-      createWeb3Modal(walletConfig());
-    }catch (e){
-      console.log("创建钱包错误：",e.toString());
-    }
   },
   async mounted () {
     // 后端服务器状态监测
@@ -148,14 +144,9 @@ export default {
     //     this.$router.replace({ name: 'home' })
     //     this.launching = false
     //     // 暂时还没有排查到卡顿原因
-    //
     //   }
     // }, 3000)
     // this.timeout()
-
-    // // 设置钱包事件监听器
-    // setupWalletListener(this.processUserInfo,this.userInfo);
-    this.userInfo = true;
 
     //启动检测项的store，必须已经载入的项目，如果这边不写，就不确保必须载入完成
     //注意，此处的第二个参数，必须和此store同名，尤其注意有些命名里带了store的
@@ -179,6 +170,9 @@ export default {
     } else {
       this.bindSubIPC()
     }
+
+    // 初始化钱包
+    this.initWallet();
 
     window.loadedStore['userInfo'] = false
 
@@ -355,7 +349,7 @@ export default {
           toast.success(this.$t('toast.walletConnected'));
           setTimeout(()=>{
             modal.close();
-          },2000);
+          },3000);
         }
       });
 
@@ -393,7 +387,7 @@ export default {
       this.finishWizard();
       this.settings.zoomFactor = (await tsbApi.window.getZoomFactor()) * 100;
     },
-    //   切换账户
+    //  切换账户
     async reLoginUser() {
       await this.deleteUserInfo();
       let res = await ipc.invoke('direct-logout', this.userInfo?.uid);
@@ -452,49 +446,18 @@ export default {
         let desk = this.getCurrentDesk();
         await this.removeCards(desk);
         let iconList = await getDesktopAppList(this.iconOption);
-        console.log("处理前：",iconList);
         this.addCards(iconList,desk);
       }catch (e) {
         console.error("加载图标失败：",e);
       }
       console.log("加载成功.")
     },
+    // 处理用户信息
     async processUserInfo(data){
       const userInfo = {
+        ...defaultUserInfo,
         ...data?.userInfo,
         uid: data.userInfo.id,
-        "fans": 100,
-        "follow": 10,
-        "grade": {
-            "id": 2,
-            "name": "6级",
-            "new_name": "6级",
-            "grade": 6,
-            "diff": 26,
-            "next": 50,
-            "icon": "https://jxxt-1257689580.cos.ap-chengdu.myqcloud.com/ef3c43f233adc069819fa367032238a3.png?upload_type",
-            "pc_icon": "https://jxxt-1257689580.cos.ap-chengdu.myqcloud.com/ef3c43f233adc069819fa367032238a3.png?imageMogr2/crop/64x32/gravity/center",
-            "image": "https://jxxt-1257689580.cos.ap-chengdu.myqcloud.com/ef3c43f233adc069819fa367032238a3.png?upload_type",
-            "now": 20,
-            "true_id": 2
-        },
-        "post_count": 0,
-        "signature": "",
-        "frame": "",
-        "onlineGrade": {
-            "crown": 0,
-            "sun": 0,
-            "moon": 1,
-            "star": 0
-        },
-        "onlineGradeExtra": {
-            "cumulativeHours": 171,
-            "lv": 4,
-            "minutes": 10269,
-            "rank": 3469,
-            "distance": 2,
-            "percentage": 0.8569602507009731
-        }
       }
       window.loadedStore['userInfo'] = true
       console.log("等待存入数据库。。。")
@@ -507,7 +470,29 @@ export default {
       //     this.enter();
       // }
     },
-  },
+      // 启用离线模式
+    async onOfflineModel(){
+      this.offline = true;
+      this.userInfo = {
+        ...defaultUserInfo,
+        uid: null,
+        avatar:"/emoji/unlogin.png",
+        gender:1,
+        nickname:"匿名用户",
+      };
+    },
+    // 初始化钱包
+    async initWallet(){
+      // 創建钱包连接对话框
+      try{
+        await createWeb3Modal(walletConfig());
+        // 设置钱包事件监听器
+        setupWalletListener(this.processUserInfo,this.userInfo);
+      }catch (e){
+        console.log("创建钱包错误：",e.toString());
+      }
+    },
+   },
 }
 </script>
 
