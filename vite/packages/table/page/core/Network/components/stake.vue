@@ -37,7 +37,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import 'ant-design-vue/dist/antd.css';
+// import 'ant-design-vue/dist/antd.css';
 
 const actionType = ref('stake');
 const nodeId = ref('');
