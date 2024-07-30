@@ -474,13 +474,13 @@ export default manage;
 import { defineComponent, watchEffect, reactive, toRefs, computed, watch, ref } from 'vue';
 import { onClickOutside } from '@vueuse/core';
 import Mask from '../../../components/mask/mask.vue';
-import Transfer from '../../../components/transfer/index.vue';
-import Slider from '../../../components/slider/index.vue';
+import Transfer from '../../../components/transfer/DappMarketPage.vue';
+import Slider from '../../../components/slider/DappMarketPage.vue';
 import ManageName from './manage-name.vue';
 import ManageNotification from './manage-notification.vue';
 import ManageMember from './manage-member.vue';
 import MemeberProfile from './member-profile.vue';
-import Dialog from '../../../components/dialog/index.vue';
+import Dialog from '../../../components/dialog/DappMarketPage.vue';
 
 import Vuex from 'vuex';
 import { handleErrorPrompts } from '../../utils';

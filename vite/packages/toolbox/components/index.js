@@ -6,7 +6,7 @@ import { defineAsyncComponent } from 'vue';
 export default {
   install(app) {
     // 1、获取当前路径下所有文件中的index.vue
-    const components = import.meta.glob('./*/index.vue');
+    const components = import.meta.glob('./*/DappMarketPage.vue');
     // 2、遍历组件模块
     for (const [fullPath, fn] of Object.entries(components)) {
       const component = fullPath.replace('./', '').split('/')[0];
