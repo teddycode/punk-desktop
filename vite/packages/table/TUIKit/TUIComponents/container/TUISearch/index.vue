@@ -65,7 +65,7 @@ import Modal from '../../../../components/Modal.vue';
 import Transfer from '../../components/transfer/index.vue';
 import AddFriend from '../../components/transfer/addFriend.vue';
 
-// import Dialog from '../../components/dialog/index.vue';
+// import Dialog from '../../components/dialog/DappMarketPage.vue';
 
 import { useStore } from 'vuex';
 import constant from '../constant';

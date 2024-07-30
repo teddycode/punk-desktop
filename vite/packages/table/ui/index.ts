@@ -2,7 +2,7 @@ import { App } from 'vue';
 
 // 业务组件
 import XtCanvas from './components/Canvas/index.vue';
-// import XtColorPicker from "./components/ColorPicker/index.vue"
+// import XtColorPicker from "./components/ColorPicker/DappMarketPage.vue"
 import XtGuided from './components/Guided/index.vue';
 import XtLeftMenu from './components/LeftMenu/index.vue';
 import XtMenu from './components/Menu/index.vue';

@@ -20,6 +20,7 @@ export const setupWalletListener = async (calback: any, userInfo: any) => {
   // 监听钱包事件
   const w3mEvent = useWeb3ModalEvents();
   watch(w3mEvent, () => {
+    console.log("w3evenbt:",w3mEvent.data.event)
     switch (w3mEvent.data.event) {
       case 'MODAL_OPEN':
         console.log('测试事件响应：打开了窗口');

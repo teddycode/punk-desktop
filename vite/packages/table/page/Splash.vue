@@ -153,8 +153,9 @@ export default {
     // }, 3000)
     // this.timeout()
 
-    // 设置钱包事件监听器
-    setupWalletListener(this.processUserInfo,this.userInfo);
+    // // 设置钱包事件监听器
+    // setupWalletListener(this.processUserInfo,this.userInfo);
+    this.userInfo = true;
 
     //启动检测项的store，必须已经载入的项目，如果这边不写，就不确保必须载入完成
     //注意，此处的第二个参数，必须和此store同名，尤其注意有些命名里带了store的

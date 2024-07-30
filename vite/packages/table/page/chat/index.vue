@@ -75,11 +75,11 @@ export default defineComponent({
           icon: 'moon',
           route: { name: 'collects' },
         },
-        // {
-        //   title: '测试',
-        //   icon: 'chat',
-        //   route: { name: 'test' },
-        // },
+        {
+          title: '测试',
+          icon: 'chat',
+          route: { name: 'test' },
+        },
 
         // {
         //   title: '聊天',
