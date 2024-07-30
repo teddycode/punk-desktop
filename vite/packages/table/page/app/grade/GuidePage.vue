@@ -74,8 +74,8 @@
           </div>
           <div class="flex">
             <div class="mode-image mr-9 flex items-center justify-center">
-              <img :src="modeImg.initUrl" class="w-full h-full" alt="" v-if="defaultMode.name === 'intMode'" />
-              <img :src="modeImg.simpleUrl" v-else class="w-full h-full object-cover" alt="" />
+              <img :src="guideImg(modeImg.initImg)" class="w-full h-full" alt="" v-if="defaultMode.name === 'intMode'" />
+              <img :src="guideImg(modeImg.simpleImg)" v-else class="w-full h-full object-cover" alt="" />
             </div>
             <div class="flex flex-col">
               <HorizontalPanel :navList="modeData" v-model:selectType="defaultMode" class="mb-5"></HorizontalPanel>
@@ -125,10 +125,8 @@
         {{ step === 2 ? 'GO' : '下一步' }}
       </xt-button>
     </div>
-    <!--
-    新用户须知后期需要的话再考虑使用,现在暂时不使用
-    <GradeNotice v-else></GradeNotice>
-  --></div>
+    <GradeNotice></GradeNotice>
+  </div>
   <transition name="fade">
     <div class="guide-page-bg h-full flex items-center justify-center" v-if="showModal === true">
       <div class="rounded-lg flex flex-col p-4" style="width: 480px; background: var(--modal-bg)">
@@ -292,9 +290,12 @@ export default {
       this.switchToDesk(0);
     },
 
-    // 图片转换
+    // 图片地址转换
     guideImg(url) {
       return '/img/state/' + url + '.png';
+      // url =  tsbApi.punkos.storage.getFileUrl(url)
+      // console.log('图片'+url);
+      return url;
     },
   },
   watch: {

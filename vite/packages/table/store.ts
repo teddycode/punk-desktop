@@ -171,7 +171,9 @@ export const appStore = defineStore(
       },
 
       deleteUserInfo() {
-        console.log('deleted user info...');
+        this.userInfo = false;
+      },
+      resetUserInfo() {
         this.userInfo = false;
       },
       /**

@@ -1,11 +1,3 @@
-<!--
- * @Author: teddycode 1055334354@qq.com
- * @Date: 2023-11-08 16:07:35
- * @LastEditors: teddycode 1055334354@qq.com
- * @LastEditTime: 2023-11-09 21:58:05
- * @Description:
- * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved.
--->
 <script>
 import { defineComponent } from 'vue';
 import { message, Modal } from 'ant-design-vue';
@@ -71,12 +63,13 @@ export default defineComponent({
       openTeam: false,
       showMyProp: false,
       teamKey: Date.now(),
+      isLogoutVisible: false,
     };
   },
   computed: {
     ...mapWritableState(teamStore, ['team', 'teamVisible']),
     ...mapWritableState(taskStore, ['isTaskDrawer']),
-    ...mapWritableState(appStore, ['userInfo', 'deleteUserInfo']),
+    ...mapWritableState(appStore, ['userInfo', 'resetUserInfo','deleteUserInfo']),
   },
   mounted() {},
   methods: {
@@ -101,7 +94,7 @@ export default defineComponent({
           this.isTaskDrawer = true;
           break;
         case 'logout':
-          this.logout(this?.userInfo.uid);
+          this.isLogoutVisible = true;
           break;
       }
       this.openTeam = false;
@@ -112,41 +105,27 @@ export default defineComponent({
     closeMyProp(val) {
       this.showMyProp = val;
     },
-    login() {
-      // tsbApi.user.login((data) => {
-      //   console.log('用户已登录：', data);
-      //   this.userInfo = data;
-      //   ipc.send('getDetailUserInfo');
-      // });
+    async login() {
+      await this.resetUserInfo();
       this.$router.replace('/');
     },
-    logout(uid) {
-      Modal.confirm({
-        title: '退出此帐号: ' + this.userInfo.nickname,
-        content: '退出帐号并不会影响帐号数据，仅仅是将本地帐号退出。但是退出后无法再使用此帐号下的所有空间。',
-        centered: true,
-        confirmLoading: true,
-        destroyOnClose: true,
-        okText: '确认',
-        cancelText: '取消',
-        onOk: async () => {
-          await this.deleteUserInfo();
-          let res = await ipc.invoke('direct-logout', uid);
-          if (res) {
-            message.success('帐号退出成功！');
-            this.$router.replace('/');
-          } else {
-            message.error('账号退出失败，请重试！');
-          }
-        },
-      });
+    async handleLogout(uid) {
+      this.isLogoutVisible = false;
+      await this.deleteUserInfo();
+      let res = await ipc.invoke('direct-logout', uid);
+      if (res) {
+        message.success('帐号退出成功！');
+        this.$router.replace('/');
+      } else {
+        message.error('账号退出失败，请重试！');
+      }
     },
   },
 });
 </script>
 
 <template>
-  <div v-if="!userInfo">
+  <div v-if="!userInfo.uid">
     <!-- need login  -->
     <div style="padding: 0.5em" @click="login">
       <emoji icon="unlogin" style="width: 52px; height: 52px"></emoji>
@@ -171,6 +150,20 @@ export default defineComponent({
           <span>{{ t.title }}</span>
         </div>
       </div>
+    </div>
+    <div>
+      <a-modal
+        title="退出此帐号: {{ userInfo.nickname }}"
+        v-model="isLogoutVisible"
+        :centered="true"
+        :confirm-loading="true"
+        :destroy-on-close="true"
+        ok-text="确认"
+        cancel-text="取消"
+        @ok="handleLogout(userInfo?.uid)"
+      >
+        <p>退出帐号并不会影响帐号数据，仅仅是将本地帐号退出。但是退出后无法再使用此帐号下的所有空间。</p>
+      </a-modal>
     </div>
   </div>
 </template>

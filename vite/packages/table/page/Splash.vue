@@ -47,8 +47,8 @@
             </a-col>
           </a-row>
           <div class="mt-2 text-md text-gray">
-          <a @click="onOfflineModel"> 离线模式 </a>
-        </div>
+            <a @click="onOfflineModel"> 离线模式 </a>
+          </div>
         </div>
         <div v-else class="text-center">
           <div class="inline-block mt-3 mb-3">
@@ -136,12 +136,6 @@ export default {
     ...mapWritableState(myIcons, ['iconOption', 'iconList']),
   },
   async beforeMount(){
-    // 創建钱包连接对话框
-    try{
-      createWeb3Modal(walletConfig());
-    }catch (e){
-      console.log("创建钱包错误：",e.toString());
-    }
   },
   async mounted () {
     // 后端服务器状态监测
@@ -153,9 +147,6 @@ export default {
     //   }
     // }, 3000)
     // this.timeout()
-
-    // 设置钱包事件监听器
-    setupWalletListener(this.processUserInfo,this.userInfo);
 
     //启动检测项的store，必须已经载入的项目，如果这边不写，就不确保必须载入完成
     //注意，此处的第二个参数，必须和此store同名，尤其注意有些命名里带了store的
@@ -179,6 +170,9 @@ export default {
     } else {
       this.bindSubIPC()
     }
+
+    // 初始化钱包
+    this.initWallet();
 
     window.loadedStore['userInfo'] = false
 
@@ -480,13 +474,23 @@ export default {
     async onOfflineModel(){
       this.offline = true;
       this.userInfo = {
-        uid: 1,
-        avatar:"https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
-        gender:1,
-        id:1,
-        nickname:"匿名用户",
         ...defaultUserInfo,
+        uid: null,
+        avatar:"/emoji/unlogin.png",
+        gender:1,
+        nickname:"匿名用户",
       };
+    },
+    // 初始化钱包
+    async initWallet(){
+      // 創建钱包连接对话框
+      try{
+        await createWeb3Modal(walletConfig());
+        // 设置钱包事件监听器
+        setupWalletListener(this.processUserInfo,this.userInfo);
+      }catch (e){
+        console.log("创建钱包错误：",e.toString());
+      }
     },
    },
 }
