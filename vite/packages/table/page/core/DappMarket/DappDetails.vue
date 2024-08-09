@@ -1,20 +1,20 @@
 <template>
   <div>
     <NavBar></NavBar>
-    <div class="dapp-details">
+    <div v-if="dappDetails" class="dapp-details">
       <a-row :gutter="24">
         <a-col :span="14">
           <div>
             <a-carousel autoplay>
-              <div v-for="image in dappDetails.images" :key="image" class="image-carousel">
-                <img :src="image" alt="Dapp Image" class="carousel-image"/>
+              <div v-for="image in dappDetails.imgs" :key="image" class="image-carousel">
+                <img :src="image.img" alt="Dapp Image" class="carousel-image"/>
               </div>
             </a-carousel>
           </div>
         </a-col>
         <a-col :span="10">
           <div class="details">
-            <h1>{{ dappDetails.title }}</h1>
+            <h1>{{ dappDetails.name }}</h1>
             <p>{{ dappDetails.description }}</p>
             <div class="logo-container">
               <a-avatar :src="dappDetails.logo" shape="square" class="logo"/>
@@ -24,10 +24,10 @@
               </div>
             </div>
             <p><strong>所属区块链:</strong> {{ dappDetails.chain }}</p>
-            <p><strong>类别:</strong> {{ dappDetails.category }}</p>
-            <p><strong>创建时间:</strong> {{ dappDetails.createdAt }}</p>
-            <p><strong>最后更新时间:</strong> {{ dappDetails.updatedAt }}</p>
-            <p><strong>上传作者:</strong> {{ dappDetails.author }}</p>
+            <p><strong>类别:</strong> {{ dappDetails.tags[0].tagName }}</p>
+            <p><strong>创建时间:</strong> {{ dappDetails.createTime }}</p>
+            <p><strong>最后更新时间:</strong> {{ dappDetails.updateTime }}</p>
+            <p><strong>上传作者:</strong> {{ dappDetails.user.nickname }}</p>
             <div class="button-group">
               <a-button type="primary" @click="visitWebsite">访问网址</a-button>
               <a-button @click="editDapp" class="edit-button">编辑Dapp</a-button>
@@ -51,8 +51,8 @@
         :footer="null"
       >
         <div class="modal-content">
-          <h2 class="modal-title">{{ dappDetails.title }}</h2>
-          <p class="modal-description">{{ dappDetails.information }}</p>
+          <h2 class="modal-title">{{ dappDetails.name }}</h2>
+          <p class="modal-description">{{ dappDetails.detail }}</p>
         </div>
       </a-modal>
       <div class="contracts-row">
@@ -88,27 +88,13 @@
 import { ref, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { message } from 'ant-design-vue';
-import { dapps } from './data';
 import { DownCircleTwoTone, UpCircleTwoTone, LikeOutlined, LikeFilled, StarOutlined, StarFilled } from '@ant-design/icons-vue';
 import NavBar from "./NavBar.vue";
+import { getDappDetail, getisCollected,dappCollect,getisLiked,dappLiked} from "../../../js/service/dappMarket.ts";
 
 const route = useRoute();
-const dappId = route.params.id;
 
-const dappDetails = ref({
-  title: '',
-  description: '',
-  chain: '',
-  category: '',
-  createdAt: '',
-  updatedAt: '',
-  author: '',
-  website: '',
-  images: [],
-  logo: '',
-  information: '',
-  contracts: []
-});
+const dappDetails = ref(null);
 
 const isExpanded = ref(false);
 const isModalVisible = ref(false);
@@ -117,9 +103,9 @@ const favorited = ref(false);
 
 const truncatedInformation = computed(() => {
   if (isExpanded.value) {
-    return dappDetails.value.information;
+    return dappDetails.value.detail;
   }
-  const lines = dappDetails.value.information.split('\n');
+  const lines = dappDetails.value.detail.split('\n');
   return lines.slice(0, 3).join('\n') + (lines.length > 3 ? '...' : '');
 });
 
@@ -154,14 +140,25 @@ const toggleContracts = () => {
 const handlePageChange = (page) => {
   currentPage.value = page;
 };
-
-onMounted(() => {
-  const dapp = dapps.find(d => d.id === Number(dappId));
-  if (dapp) {
-    dappDetails.value = dapp;
-  } else {
-    message.error('Dapp not found');
-  }
+async function fetchDappDetail() {
+  await getDappDetail(route.params.id).then(response => {
+    dappDetails.value = response.data
+  })
+};
+async function fetchIsCollected() {
+  await getisCollected(1, route.params.id).then(response => {
+    favorited.value = response.data
+  })
+}
+async function fetchIsLiked() {
+  await getisLiked(1, route.params.id).then(response => {
+    liked.value = response.data
+  })
+}
+onMounted(async () => {
+  await fetchDappDetail();
+  await fetchIsCollected();
+  await fetchIsLiked();
 });
 
 const visitWebsite = () => {
@@ -174,10 +171,12 @@ const editDapp = () => {
 
 const toggleLike = () => {
   liked.value = !liked.value;
+  dappLiked(1,route.params.id);
 };
 
 const toggleFavorite = () => {
   favorited.value = !favorited.value;
+  dappCollect(1,route.params.id);
 };
 </script>
 

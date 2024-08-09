@@ -2,7 +2,7 @@
   <div class="submit-project">
     <div class="form-container">
       <h1>Submit a project</h1>
-      <p class="description">Learn how to optimize your project page to create more engagement</p>
+      <p class="description">please fill in DApp-related information</p>
       <a-form @submit.prevent="handleSubmit">
         <div class="form-content">
           <div class="upload-section">
@@ -10,6 +10,7 @@
               label="Project logo"
               :label-col="{ span: 24 }"
               :wrapper-col="{ span: 24 }"
+              name="logo"
             >
               <a-upload
                 v-model:file-list="fileList"
@@ -21,12 +22,12 @@
                 @remove="handleRemove"
               >
                 <div class="upload-placeholder">
-                  <template v-if="imageUrl">
-                    <img :src="imageUrl" alt="avatar" class="uploaded-image" />
+                  <template v-if="form.logo">
+                    <img :src="form.logo" alt="avatar" class="uploaded-image" />
                     <div class="ant-upload-remove-icon" @click.stop="handleRemove"><delete-outlined /></div>
                   </template>
                   <template v-else>
-                        <a-empty></a-empty>
+                    <a-empty></a-empty>
                   </template>
                 </div>
                 <a-button class="upload-button">
@@ -36,74 +37,160 @@
             </a-form-item>
           </div>
           <div class="form-fields">
-            <div class="form-row">
-              <a-form-item
-                label="Does your project have smart contracts?"
-                :label-col="{ span: 24 }"
-                :wrapper-col="{ span: 24 }"
-                class="form-item-half"
-              >
-                <a-select v-model="form.smartContracts">
-                  <a-select-option value="yes">Yes, my project is a dapp and has smart contracts</a-select-option>
-                  <a-select-option value="no">No, my project does not have smart contracts</a-select-option>
-                </a-select>
-              </a-form-item>
-              <a-form-item
-                label="Has your dapp been released?"
-                :label-col="{ span: 24 }"
-                :wrapper-col="{ span: 24 }"
-                class="form-item-half"
-              >
-                <a-select v-model="form.released">
-                  <a-select-option value="yes">Yes, my dapp is released</a-select-option>
-                  <a-select-option value="no">No, my dapp is not released</a-select-option>
-                </a-select>
-              </a-form-item>
-            </div>
-            <a-form-item label="Project Name" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }">
-              <a-input v-model="form.projectName" placeholder="Your dapp name"></a-input>
-            </a-form-item>
-            <a-form-item label="Categories" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }">
-              <a-select v-model="form.categories" mode="multiple" placeholder="Select categories">
-                <a-select-option value="category1">Category 1</a-select-option>
-                <a-select-option value="category2">Category 2</a-select-option>
-                <!-- Add more categories as needed -->
+            <a-form-item
+              label="Does your project have smart contracts?"
+              :label-col="{ span: 24 }"
+              :wrapper-col="{ span: 24 }"
+              name="smartContracts"
+            >
+              <a-select v-model:value="form.smartContracts" placeholder="Please select">
+                <a-select-option value="yes">Yes, my project is a dapp and has smart contracts</a-select-option>
+                <a-select-option value="no">No, my project does not have smart contracts</a-select-option>
               </a-select>
             </a-form-item>
-            <a-form-item label="Website" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }">
-              <a-input v-model="form.website" placeholder="https://myweb3project.com"></a-input>
-            </a-form-item>
-            <a-form-item label="Short description" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }">
-              <a-textarea v-model="form.description" placeholder="Project short description (160 characters limit)" :maxlength="160"></a-textarea>
-            </a-form-item>
-            <div class="form-row">
+            <template v-if="form.smartContracts === 'yes'">
               <a-form-item
-                label="Tags"
+                label="Smart Contract Addresses"
                 :label-col="{ span: 24 }"
                 :wrapper-col="{ span: 24 }"
-                class="form-item-half"
+                name="smartContractAddresses"
               >
-                <a-select v-model="form.tags" mode="multiple" placeholder="Select up to 5 tags">
-                  <a-select-option value="tag1">Tag 1</a-select-option>
-                  <a-select-option value="tag2">Tag 2</a-select-option>
-                  <!-- Add more tags as needed -->
-                </a-select>
+                <div v-for="(item, index) in form.smartContractAddresses" :key="index" class="address-input">
+                  <a-input
+                    v-model:value="form.smartContractAddresses[index]"
+                    placeholder="Enter smart contract address"
+                    style="flex: 1; margin-right: 10px;"
+                  />
+                  <a-button @click="removeSmartContractAddress(index)" type="primary" shape="circle">
+                    <template #icon><delete-outlined /></template>
+                  </a-button>
+                  <a-button @click="addSmartContractAddress" v-if="index === form.smartContractAddresses.length - 1" type="primary" shape="circle" style="margin-left: 5px;">
+                    <template #icon><plus-outlined /></template>
+                  </a-button>
+                </div>
               </a-form-item>
-              <a-form-item
-                label="Add chain"
-                :label-col="{ span: 24 }"
-                :wrapper-col="{ span: 24 }"
-                class="form-item-half"
-              >
-                <a-select v-model="form.chain" placeholder="Select chain">
-                  <a-select-option value="chain1">Chain 1</a-select-option>
-                  <a-select-option value="chain2">Chain 2</a-select-option>
-                  <!-- Add more chains as needed -->
-                </a-select>
-              </a-form-item>
-            </div>
-            <a-form-item label="Full description" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }">
-              <a-textarea v-model="form.fullDescription" placeholder="Full description" :rows="4"></a-textarea>
+            </template>
+
+            <a-form-item label="Project Name" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }" name="projectName">
+              <a-input v-model:value="form.projectName" placeholder="Your dapp name"></a-input>
+            </a-form-item>
+            <a-form-item label="Website" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }" name="website">
+              <a-input v-model:value="form.website" placeholder="https://myweb3project.com"></a-input>
+            </a-form-item>
+            <a-form-item label="Short description" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }" name="description">
+              <a-textarea v-model:value="form.description" placeholder="Project short description (50 characters limit)" :maxlength="160"></a-textarea>
+            </a-form-item>
+            <a-form-item label="Tags" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }" name="tags">
+              <div class="tags-container">
+                <template v-for="(tag, index) in form.tags" :key="tag">
+                  <a-tooltip v-if="tag.length > 20" :title="tag">
+                    <a-tag :closable="true" @close="handleClose(tag)">
+                      {{ `${tag.slice(0, 20)}...` }}
+                    </a-tag>
+                  </a-tooltip>
+                  <a-tag v-else :closable="true" @close="handleClose(tag)">
+                    {{ tag }}
+                  </a-tag>
+                </template>
+                <a-input
+                  v-if="inputVisible"
+                  ref="inputRef"
+                  type="text"
+                  size="small"
+                  :style="{ width: '100px' }"
+                  v-model:value="inputValue"
+                  @blur="handleInputConfirm"
+                  @keyup.enter="handleInputConfirm"
+                />
+                <a-tag v-else @click="showInput" class="new-tag">
+                  <plus-outlined />
+                  New Tag
+                </a-tag>
+              </div>
+            </a-form-item>
+            <a-form-item label="Add chain" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }" name="chain">
+              <a-select v-model:value="form.chain" placeholder="Select chain">
+                <a-select-option value="ETH">ETH</a-select-option>
+                <a-select-option value="BSC">BSC</a-select-option>
+                <a-select-option value="Polka">Polka</a-select-option>
+                <a-select-option value="BHchain">BSC</a-select-option>
+                <!-- Add more chains as needed -->
+              </a-select>
+            </a-form-item>
+            <a-form-item label="Full description" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }" name="fullDescription">
+              <a-textarea v-model:value="form.fullDescription" placeholder="Full description" :rows="4"></a-textarea>
+            </a-form-item>
+            <a-form-item label="Project Images" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }" name="images">
+              <div class="image-uploads">
+                <a-upload
+                  v-model:file-list="fileList1"
+                  name="image1"
+                  class="avatar-uploader"
+                  :show-upload-list="false"
+                  :before-upload="beforeUpload"
+                  @change="handleChange1"
+                  @remove="handleRemove1"
+                >
+                  <div class="upload-placeholder">
+                    <template v-if="form.images[0]">
+                      <img :src="form.images[0]" alt="uploaded image" class="uploaded-image" />
+                      <div class="ant-upload-remove-icon" @click.stop="handleRemove1"><delete-outlined /></div>
+                    </template>
+                    <template v-else>
+                      <a-empty></a-empty>
+                    </template>
+                  </div>
+                  <a-button class="upload-button">
+                    Click to Upload
+                  </a-button>
+                </a-upload>
+                <a-upload
+                  v-model:file-list="fileList2"
+                  name="image2"
+                  class="avatar-uploader"
+                  :show-upload-list="false"
+                  :before-upload="beforeUpload"
+                  @change="handleChange2"
+                  @remove="handleRemove2"
+                  style="margin-left: 10px;"
+                >
+                  <div class="upload-placeholder">
+                    <template v-if="form.images[1]">
+                      <img :src="form.images[1]" alt="uploaded image" class="uploaded-image" />
+                      <div class="ant-upload-remove-icon" @click.stop="handleRemove2"><delete-outlined /></div>
+                    </template>
+                    <template v-else>
+                      <a-empty></a-empty>
+                    </template>
+                  </div>
+                  <a-button class="upload-button">
+                    Click to Upload
+                  </a-button>
+                </a-upload>
+                <a-upload
+                  v-model:file-list="fileList3"
+                  name="image3"
+                  class="avatar-uploader"
+                  :show-upload-list="false"
+                  :before-upload="beforeUpload"
+                  @change="handleChange3"
+                  @remove="handleRemove3"
+                  style="margin-left: 10px;"
+                >
+                  <div class="upload-placeholder">
+                    <template v-if="form.images[2]">
+                      <img :src="form.images[2]" alt="uploaded image" class="uploaded-image" />
+                      <div class="ant-upload-remove-icon" @click.stop="handleRemove3"><delete-outlined /></div>
+                    </template>
+                    <template v-else>
+                      <a-empty></a-empty>
+                    </template>
+                  </div>
+                  <a-button class="upload-button">
+                    Click to Upload
+                  </a-button>
+                </a-upload>
+              </div>
             </a-form-item>
             <a-form-item :wrapper-col="{ span: 24 }">
               <a-button type="primary" html-type="submit">Submit</a-button>
@@ -116,25 +203,54 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
-import { DeleteOutlined } from '@ant-design/icons-vue';
+import { ref, reactive, nextTick } from 'vue';
+import { PlusOutlined, DeleteOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
+import { submitdapp } from "@js/service/dappMarket";
 
-const form = ref({
+const form = reactive({
   smartContracts: '',
-  released: '',
   projectName: '',
-  categories: [],
   website: '',
   description: '',
   tags: [],
   chain: '',
-  fullDescription: ''
+  fullDescription: '',
+  logo: '', // 新增字段
+  images: [],
+  smartContractAddresses: [''] // 新增字段，用于存储智能合约地址
 });
 
+let postData = {};
 const fileList = ref([]);
+const fileList1 = ref([]);
+const fileList2 = ref([]);
+const fileList3 = ref([]);
 const loading = ref(false);
-const imageUrl = ref('');
+
+const inputRef = ref();
+const inputVisible = ref(false);
+const inputValue = ref('');
+
+const handleClose = (removedTag: string) => {
+  form.tags = form.tags.filter(tag => tag !== removedTag);
+};
+
+const showInput = () => {
+  inputVisible.value = true;
+  nextTick(() => {
+    inputRef.value.focus();
+  });
+};
+
+const handleInputConfirm = () => {
+  const value = inputValue.value.trim();
+  if (value && !form.tags.includes(value)) {
+    form.tags.push(value);
+  }
+  inputVisible.value = false;
+  inputValue.value = '';
+};
 
 const getBase64 = (img: File, callback: (url: string) => void) => {
   const reader = new FileReader();
@@ -145,12 +261,12 @@ const getBase64 = (img: File, callback: (url: string) => void) => {
 const beforeUpload = (file: File) => {
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
   if (!isJpgOrPng) {
-    message.error('You can only upload JPG/PNG file!');
+    message.error('你只能上传 JPG/PNG 文件!');
     return false;
   }
   const isLt5M = file.size / 1024 / 1024 < 5;
   if (!isLt5M) {
-    message.error('Image must smaller than 5MB!');
+    message.error('图片必须小于 5MB!');
     return false;
   }
   return isJpgOrPng && isLt5M;
@@ -163,26 +279,146 @@ const handleChange = (info: any) => {
   }
   if (info.file.status === 'done') {
     getBase64(info.file.originFileObj, (url: string) => {
-      imageUrl.value = url;
+      form.logo = url;
       loading.value = false;
     });
   }
   if (info.file.status === 'error') {
     loading.value = false;
-    message.error('Upload error');
+    message.error('上传错误');
   }
 };
 
 const handleRemove = () => {
-  imageUrl.value = '';
+  form.logo = '';
   fileList.value = [];
 };
 
-const handleSubmit = () => {
-  // Handle form submission logic
-  console.log('Form submitted', form.value);
+const handleChange1 = (info: any) => {
+  if (info.file.status === 'uploading') {
+    loading.value = true;
+    return;
+  }
+  if (info.file.status === 'done') {
+    getBase64(info.file.originFileObj, (url: string) => {
+      form.images[0] = url;
+      loading.value = false;
+    });
+  }
+  if (info.file.status === 'error') {
+    loading.value = false;
+    message.error('上传错误');
+  }
 };
 
+const handleRemove1 = () => {
+  form.images.splice(0, 1);
+  fileList1.value = [];
+};
+
+const handleChange2 = (info: any) => {
+  if (info.file.status === 'uploading') {
+    loading.value = true;
+    return;
+  }
+  if (info.file.status === 'done') {
+    getBase64(info.file.originFileObj, (url: string) => {
+      form.images[1] = url;
+      loading.value = false;
+    });
+  }
+  if (info.file.status === 'error') {
+    loading.value = false;
+    message.error('上传错误');
+  }
+};
+
+const handleRemove2 = () => {
+  form.images.splice(1, 1);
+  fileList2.value = [];
+};
+
+const handleChange3 = (info: any) => {
+  if (info.file.status === 'uploading') {
+    loading.value = true;
+    return;
+  }
+  if (info.file.status === 'done') {
+    getBase64(info.file.originFileObj, (url: string) => {
+      form.images[2] = url;
+      loading.value = false;
+    });
+  }
+  if (info.file.status === 'error') {
+    loading.value = false;
+    message.error('上传错误');
+  }
+};
+
+const handleRemove3 = () => {
+  form.images.splice(2, 1);
+  fileList3.value = [];
+};
+
+const addSmartContractAddress = () => {
+  form.smartContractAddresses.push('');
+};
+
+const removeSmartContractAddress = (index: number) => {
+  if (form.smartContractAddresses.length > 1) {
+    form.smartContractAddresses.splice(index, 1);
+  }
+};
+
+const handleSubmit = () => {
+  const requiredFields = ['smartContracts', 'projectName', 'website', 'description', 'tags', 'chain', 'fullDescription', 'logo', 'images','smartContractAddresses'];
+  const emptyFields = [];
+
+  requiredFields.forEach(field => {
+    const value = form[field];
+    if ((typeof value === 'string' && value.trim() === '') || (Array.isArray(value) && value.length === 0)) {
+      emptyFields.push(field);
+    }
+    console.log(`${field}:`, value); // 输出每个字段的值以便调试
+  });
+
+  if (emptyFields.length > 0) {
+    console.log('未填写的字段:', emptyFields);
+    message.info('请填写所有字段.');
+  } else {
+    console.log('表单已完成:', form);
+    // 这里处理表单提交逻辑
+    postData.userId = 1;
+    postData.name = form.projectName;
+    postData.chain = form.chain;
+    postData.description = form.description;
+    postData.detail = form.fullDescription;
+    postData.website = form.website;
+    postData.logo = "https://pics7.baidu.com/feed/18d8bc3eb13533fa14a1a91332148d1140345bc9.jpeg";
+    postData.imgs = [
+      {
+        "img": "https://pics7.baidu.com/feed/18d8bc3eb13533fa14a1a91332148d1140345bc9.jpeg"
+      }
+    ];
+    let postTags = [];
+    form.tags.forEach((item) => {
+      postTags.push({
+        tagName: item
+      })
+    });
+    let postContracts = [];
+    form.smartContractAddresses.forEach((item)=>{
+      postContracts.push({
+        address:item
+      })
+    })
+    postData.contracts = postContracts;
+    postData.tags = postTags;
+    submitdapp(postData).then(response=>{
+      message.success('发布成功')
+    })
+  }
+};
 </script>
 
 <style scoped>
@@ -190,11 +426,9 @@ const handleSubmit = () => {
   display: flex;
   justify-content: center;
   padding: 20px;
-  /*background-color: #f9f9f9;*/
 }
 
 .form-container {
-  /*border: 1px solid black;*/
   width: 90%;
   padding: 20px;
   background: #ffffff;
@@ -203,7 +437,6 @@ const handleSubmit = () => {
 }
 
 .upload-section {
-  /*border: 1px solid black;*/
   height: 300px;
   width: 240px;
   margin-bottom: 16px;
@@ -229,9 +462,11 @@ const handleSubmit = () => {
   border: 1px dashed #d9d9d9;
   border-radius: 8px;
 }
-.upload-button{
+
+.upload-button {
   margin-top: 10px;
 }
+
 .uploaded-image {
   width: 200px;
   height: 200px;
@@ -278,12 +513,31 @@ const handleSubmit = () => {
   margin-left: 20px;
 }
 
-.form-row {
+.tags-container {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
 }
 
-.form-item-half {
-  width: 48%;
+.new-tag {
+  background: #fff;
+  border-style: dashed;
+  cursor: pointer;
+}
+
+.image-uploads {
+  display: flex;
+  gap: 10px;
+}
+
+.address-input {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.address-input .ant-btn {
+  margin-left: 5px;
 }
 </style>

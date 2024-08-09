@@ -3,17 +3,17 @@
     <div class="sidebar">
       <input type="text" v-model="searchQuery" placeholder="搜索" class="search-input" />
       <div class="all-button" @click="toggleAll">
-        <span>{{ allExpanded ? '➖' : '➕' }}</span> 全部 <span>（{{ filteredDapps.length }}）</span>
+        <span>{{ allExpanded ? '➖' : '➕' }}</span> 全部 <span>（{{ displayedDapps.length }}）</span>
       </div>
       <div v-if="allExpanded" class="dapp-list">
         <div
-          v-for="dapp in filteredDapps"
+          v-for="dapp in displayedDapps"
           :key="dapp.id"
           @click="goToDetails(dapp.id)"
           class="dapp-item"
         >
           <img :src="dapp.logo" alt="Logo" class="dapp-logo" />
-          <span class="dapp-title" v-tooltip="{ content: dapp.title }">{{ dapp.title }}</span>
+          <span class="dapp-title" v-tooltip="{ content: dapp.name }">{{ dapp.name }}</span>
         </div>
       </div>
     </div>
@@ -26,8 +26,8 @@
           class="content-col"
         >
           <div class="dapp-card" @click="goToDetails(dapp.id)">
-            <img :src="dapp.images[0]" alt="Dapp Image" class="dapp-image" />
-            <div class="dapp-title">{{ dapp.title }}</div>
+            <img :src="dapp.imgs[0].img" alt="Dapp Image" class="dapp-image" />
+            <div class="dapp-title">{{ dapp.name }}</div>
           </div>
         </a-col>
       </a-row>
@@ -36,24 +36,22 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue';
+import {ref, computed, onMounted} from 'vue';
 import { useRouter } from 'vue-router';
-import { dapps } from './data';
+import {getUserCollects} from "@js/service/dappMarket";
 
 const router = useRouter();
 const selectedDapp = ref<number | null>(null);
 const searchQuery = ref<string>('');
 const allExpanded = ref<boolean>(true);
-
-const displayedDapps = computed(() => {
-  if (selectedDapp.value === null) {
-    return dapps;
-  }
-  return dapps.filter(dapp => dapp.id === selectedDapp.value);
-});
-
-const filteredDapps = computed(() => {
-  return dapps.filter(dapp => dapp.title.toLowerCase().includes(searchQuery.value.toLowerCase()));
+const displayedDapps = ref([]);
+async function fetchUserCollects() {
+  await getUserCollects(1).then(response => {
+    displayedDapps.value = response.data
+  })
+}
+onMounted(async () => {
+   await fetchUserCollects();
 });
 
 const navigateTo = (routeName: string) => {
