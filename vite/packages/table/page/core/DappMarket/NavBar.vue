@@ -21,30 +21,24 @@
         </div>
       </a-col>
       <a-col :span="5">
-        <div class="search-container">
-          <a-input-search
-            v-model:value="searchValue"
-            placeholder="Search NFT collections"
-            @search="onSearch"
-            class="search-bar"
-            enter-button
-          />
-        </div>
+<!--        <div class="search-container">-->
+<!--          <a-input-search-->
+<!--            v-model:value="searchValue"-->
+<!--            placeholder="Search NFT collections"-->
+<!--            @search="onSearch"-->
+<!--            class="search-bar"-->
+<!--            enter-button-->
+<!--          />-->
+<!--        </div>-->
       </a-col>
     </a-row>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-const searchValue = ref<string>('');
 const router = useRouter();
-
-const onSearch = (value: string) => {
-  console.log('Search:', value);
-};
 
 const navigateTo = (routeName: string) => {
   router.push({ name: routeName });
@@ -91,15 +85,6 @@ const navigateTo = (routeName: string) => {
   border-radius: 8px;
 }
 
-.search-container {
-  width: 100%;
-}
-
-.search-bar {
-  width: 100%;
-  border-radius: 24px;
-  background-color: #3366ff;
-}
 
 .search-bar .ant-input-search-button {
   background-color: #ffc107; /* 亮黄色 */

@@ -13,10 +13,12 @@ export interface Dapp {
   images: string[];
   contracts: { name: string; address: string; }[];
 }
-
+export const userInfo = {
+  uid: 1
+}
 export const dapps: Dapp[] = [
   {
-    id: 0,
+    id: 6,
     title: 'Alien Worlds',
     description: '您可以收集和玩独特的数字项目。',
     chain: 'ETH',
