@@ -42,32 +42,50 @@ function getFirefoxUA() {
   return rootUA.replace(/FXVERSION/g, fxVersion);
 }
 
-/*
-Google blocks signin in some cases unless a custom UA is used
-see https://github.com/minbrowser/min/issues/868
-*/
-function enableGoogleUASwitcher(ses) {
+function requestSwitcher(ses) {
   ses.webRequest.onBeforeSendHeaders((details, callback) => {
-    if (!hasCustomUserAgent && details.url.includes('accounts.google.com')) {
-      const url = new URL(details.url);
-
-      if (url.hostname === 'accounts.google.com') {
-        details.requestHeaders['User-Agent'] = getFirefoxUA();
-      }
-    }
-
-    const chromiumVersion = process.versions.chrome.split('.')[0];
-    details.requestHeaders['SEC-CH-UA'] = `"Chromium";v="${chromiumVersion}", " Not A;Brand";v="99"`;
-    details.requestHeaders['SEC-CH-UA-MOBILE'] = '?0';
-    details.requestHeaders['Referer'] = 'http://127.0.0.1:1600/'
-    details.requestHeaders['Origin'] = 'http://127.0.0.1:1600'
-
+    enableReferer(details);
+    enableGoogleUASwitcher(details);
     callback({ cancel: false, requestHeaders: details.requestHeaders });
   });
 }
 
+// redefine referer
+function enableReferer(details) {
+  const refererOrigin = 'http://127.0.0.1'; // 设置默认的 Origin
+
+  // 检查请求是否跨源，并手动设置 referer
+  const requestOrigin = new URL(details.url).origin;
+  if (!details.requestHeaders['Referer']) {
+    details.requestHeaders['Referer'] = refererOrigin; // 设置默认的 referer
+  } else {
+    const currentRefererOrigin = new URL(details.requestHeaders['Referer']).origin;
+    if (currentRefererOrigin !== requestOrigin) {
+      details.requestHeaders['Referer'] = currentRefererOrigin; // 设置为 origin
+    }
+  }
+}
+
+/*
+Google blocks signin in some cases unless a custom UA is used
+see https://github.com/minbrowser/min/issues/868
+*/
+function enableGoogleUASwitcher(details) {
+  if (!hasCustomUserAgent && details.url.includes('accounts.google.com')) {
+    const url = new URL(details.url);
+
+    if (url.hostname === 'accounts.google.com') {
+      details.requestHeaders['User-Agent'] = getFirefoxUA();
+    }
+  }
+
+  const chromiumVersion = process.versions.chrome.split('.')[0];
+  details.requestHeaders['SEC-CH-UA'] = `"Chromium";v="${chromiumVersion}", " Not A;Brand";v="99"`;
+  details.requestHeaders['SEC-CH-UA-MOBILE'] = '?0';
+}
+
 app.once('ready', function () {
-  enableGoogleUASwitcher(session.defaultSession);
+  requestSwitcher(session.defaultSession);
 });
 
-app.on('session-created', enableGoogleUASwitcher);
+app.on('session-created', requestSwitcher);

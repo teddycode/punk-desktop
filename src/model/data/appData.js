@@ -205,7 +205,6 @@ const defaultPunkOSApp = [
     summary: '交易代币',
     type: 'card',
     appid: 'N1jkW6',
-    //url: serverConfig.IM.FRONT_URL+ serverConfig.IM.AUTO_LOGIN,
     url: '/web3/exchange',
     preload: '/pages/group/imPreload.js',
     package: 'ExchangePage',

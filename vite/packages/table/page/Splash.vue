@@ -1,6 +1,5 @@
 <template>
-  <div
-    style="display:flex;height: 100vh;text-align: center;align-content: center;
+  <div style="display:flex;height: 100vh;text-align: center;align-content: center;
             align-items: center;background:#333;justify-content: center" class="drag">
     <div v-if="launching" style="margin: auto;">
       <div class="mb-5 animate-bounce ">
@@ -47,7 +46,7 @@
             </a-col>
           </a-row>
           <div class="mt-2 text-md text-gray">
-            <a @click="onOfflineModel"> 离线模式 </a>
+            <a @click="onVisitorModel"> 访客模式 </a>
           </div>
         </div>
         <div v-else class="text-center">
@@ -140,7 +139,7 @@ export default {
   async mounted () {
     // 后端服务器状态监测
     // setTimeout(() => {
-    //   if (window.$isOffline && this.init) {
+    //   if (window.$isVisitor && this.init) {
     //     this.$router.replace({ name: 'home' })
     //     this.launching = false
     //     // 暂时还没有排查到卡顿原因
@@ -465,20 +464,16 @@ export default {
            console.log("存入数据库成功，唤起用户数据读取：",res)
            this.getUserInfo();
           });
-      // this.setUser(userInfo)
-      // if (this.$route.name === 'splash') {
-      //     this.enter();
-      // }
     },
-      // 启用离线模式
-    async onOfflineModel(){
-      this.offline = true;
+      // 启用访客模式
+    async onVisitorModel(){
+      this.visitor = true;
       this.userInfo = {
         ...defaultUserInfo,
         uid: null,
         avatar:"/emoji/unlogin.png",
         gender:1,
-        nickname:"匿名用户",
+        nickname:"访客用户",
       };
     },
     // 初始化钱包
