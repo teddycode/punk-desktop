@@ -35,7 +35,7 @@ const fetchMissing: MissingHandler = async (locale, key): Promise<string | void>
 };
 
 const i18n = createI18n({
-  locale: 'zn-CN', //默认显示的语言
+  locale: 'zh-CN', //默认显示的语言
   legacy: false, // composition AP
   globalInjection: true, //全局生效$
   silentTranslationWarn: true,
