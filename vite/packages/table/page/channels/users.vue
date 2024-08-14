@@ -52,7 +52,7 @@
                   <p style="margin: 0; padding: 0">{{ item?.followNum }}</p>
                 </div>
                 <a-button
-                  v-if="store.isFollowed(item?.id)"
+                  v-if="store.isFollowed(item?.userId)"
                   type="primary"
                   size="large"
                   danger
@@ -94,7 +94,7 @@ async function fetchUserListData() {
   try {
     const res = await getUserList();
     if (res && res?.data) {
-      return res?.data?.filter((item) => item?.id !== store.user?.id);
+      return res?.data?.filter((item) => item?.userId !== store.user?.id);
     }
   } catch (e) {
     console.error(e);
@@ -135,7 +135,7 @@ const settingsScroller = reactive({
 const router = useRouter();
 
 function userDetail(item) {
-  router.push({ name: 'userDetail', query: { id: item.id } });
+  router.push({ name: 'userDetail', query: { id: item.userId } });
 }
 </script>
 

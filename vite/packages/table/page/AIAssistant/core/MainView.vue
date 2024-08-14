@@ -12,7 +12,7 @@ export default {
   },
   components: {
     Chat: defineAsyncComponent(() => import('../chat/index.vue')),
-    // Model: defineAsyncComponent(() => import("../model/index.vue")),
+    // Model: defineAsyncComponent(() => import("../model/DappMarketPage.vue")),
     Mode: defineAsyncComponent(() => import('../mode/index.vue')),
   },
 };

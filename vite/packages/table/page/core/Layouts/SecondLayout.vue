@@ -1,5 +1,5 @@
 <template>
-  <div class="s-bg rounded-lg xt-text" style="height: 100%; width: 100%">
+  <div class="s-bg rounded-lg xt-text" style="height: 100%; width: 100% ;  overflow-y: auto;">
     <router-view></router-view>
   </div>
 </template>
@@ -14,4 +14,6 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

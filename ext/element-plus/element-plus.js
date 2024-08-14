@@ -10280,7 +10280,7 @@
   }
 
   script$1Y.render = render$1S;
-  script$1Y.__file = "packages/components/autocomplete/src/index.vue";
+  script$1Y.__file = "packages/components/autocomplete/src/DappMarketPage.vue";
 
   script$1Y.install = (app) => {
     app.component(script$1Y.name, script$1Y);
@@ -17079,7 +17079,7 @@
   }
 
   script$1z.render = render$1u;
-  script$1z.__file = "packages/components/cascader-panel/src/index.vue";
+  script$1z.__file = "packages/components/cascader-panel/src/DappMarketPage.vue";
 
   script$1z.install = (app) => {
     app.component(script$1z.name, script$1z);
@@ -17819,7 +17819,7 @@
   }
 
   script$1x.render = render$1s;
-  script$1x.__file = "packages/components/cascader/src/index.vue";
+  script$1x.__file = "packages/components/cascader/src/DappMarketPage.vue";
 
   script$1x.install = (app) => {
     app.component(script$1x.name, script$1x);
@@ -17862,7 +17862,7 @@
   }
 
   script$1w.render = render$1r;
-  script$1w.__file = "packages/components/check-tag/src/index.vue";
+  script$1w.__file = "packages/components/check-tag/src/DappMarketPage.vue";
 
   const ElCheckTag = withInstall(script$1w);
 
@@ -19264,7 +19264,7 @@
   }
 
   script$1o.render = render$1j;
-  script$1o.__file = "packages/components/color-picker/src/index.vue";
+  script$1o.__file = "packages/components/color-picker/src/DappMarketPage.vue";
 
   script$1o.install = (app) => {
     app.component(script$1o.name, script$1o);
@@ -22244,7 +22244,7 @@
   }
 
   script$1b.render = render$16;
-  script$1b.__file = "packages/components/descriptions/src/index.vue";
+  script$1b.__file = "packages/components/descriptions/src/DappMarketPage.vue";
 
   var DescriptionsItem = vue.defineComponent({
     name: "ElDescriptionsItem",
@@ -30732,7 +30732,7 @@
   }
 
   script$C.render = render$x;
-  script$C.__file = "packages/components/popover/src/index.vue";
+  script$C.__file = "packages/components/popover/src/DappMarketPage.vue";
 
   const attachEvents = (el, binding) => {
     const popperComponent = binding.arg || binding.value;
@@ -35591,7 +35591,7 @@
   }
 
   script$p.render = render$m;
-  script$p.__file = "packages/components/slider/src/index.vue";
+  script$p.__file = "packages/components/slider/src/DappMarketPage.vue";
 
   script$p.install = (app) => {
     app.component(script$p.name, script$p);
@@ -35868,7 +35868,7 @@
   }
 
   script$n.render = render$k;
-  script$n.__file = "packages/components/steps/src/index.vue";
+  script$n.__file = "packages/components/steps/src/DappMarketPage.vue";
 
   var script$m = vue.defineComponent({
     name: "ElStep",
@@ -41454,7 +41454,7 @@
     }
   });
 
-  script$f.__file = "packages/components/timeline/src/index.vue";
+  script$f.__file = "packages/components/timeline/src/DappMarketPage.vue";
 
   var script$e = vue.defineComponent({
     name: "ElTimelineItem",
@@ -42100,7 +42100,7 @@
   }
 
   script$c.render = render$a;
-  script$c.__file = "packages/components/transfer/src/index.vue";
+  script$c.__file = "packages/components/transfer/src/DappMarketPage.vue";
 
   script$c.install = (app) => {
     app.component(script$c.name, script$c);
@@ -46484,7 +46484,7 @@
     }
   });
 
-  script$3.__file = "packages/components/upload/src/index.vue";
+  script$3.__file = "packages/components/upload/src/DappMarketPage.vue";
 
   script$3.install = (app) => {
     app.component(script$3.name, script$3);
@@ -47695,7 +47695,7 @@
   }
 
   script$1.render = render$1;
-  script$1.__file = "packages/components/message-box/src/index.vue";
+  script$1.__file = "packages/components/message-box/src/DappMarketPage.vue";
 
   const messageInstance = /* @__PURE__ */ new Map();
   const initInstance = (props, container) => {

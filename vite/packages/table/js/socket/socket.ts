@@ -64,6 +64,6 @@ export const initSocket = async () => {
   });
   socket.on('disconnect', (reason) => {
     console.log('连接断开', reason);
-    console.log(socket.id);
+    // console.log(socket?.id);
   });
 };

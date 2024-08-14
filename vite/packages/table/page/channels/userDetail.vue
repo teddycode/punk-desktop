@@ -55,7 +55,7 @@
                   <p style="margin: 0; padding: 0">{{ UserDetail.followNum }}</p>
                 </div>
                 <a-button
-                  v-if="store.isFollowed(UserDetail.id)"
+                  v-if="store.isFollowed(UserDetail.userId)"
                   type="primary"
                   size="large"
                   danger

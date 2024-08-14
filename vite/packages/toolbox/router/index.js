@@ -10,7 +10,7 @@ let routes = [
   },
 ];
 
-const components = import.meta.glob('/packages/toolbox/views/tools/*/index.vue');
+const components = import.meta.glob('/packages/toolbox/views/tools/*/DappMarketPage.vue');
 Object.entries(components).forEach((item) => {
   const name = item[0].match(/\/tools\/(\w+)\/index\.vue/)?.[1];
   const route = {
