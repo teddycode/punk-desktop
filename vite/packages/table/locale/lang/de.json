@@ -7,6 +7,7 @@
     "clea": "klarer Hintergrund",
     "clear": "klarer Hintergrund",
     "desktop": "Desktop-Hintergrund",
+    "marsk": "Hintergrundunschärfe",
     "masrk": "Hintergrundunschärfe",
     "openTPTip": "Diese Art von Funktion verbraucht viel Leistung. Bitte aktivieren Sie sie entsprechend.",
     "openTransparent": "Transparenter Hintergrund nach dem Einschalten",
@@ -45,6 +46,9 @@
     "teamTip": "Nach der Verwendung des minimalistischen Modus werden einige Unterhaltungs- und Sozialfunktionen, wie beispielsweise die Squad-Funktion, ausgeblendet."
   },
   "name": "Deutsch",
+  "network": {
+    "retry": "Netzwerkfehler, bitte versuchen Sie es erneut"
+  },
   "setting": "Einstellung",
   "settings": {
     "account": "Adressverifikation",
@@ -57,6 +61,7 @@
     "enableAccValid": "Adressverifikation",
     "general": "Allgemeine Einstellungen",
     "guideBar": "Bearbeitung der Navigationsleiste",
+    "langTips": "Es wurde festgestellt, dass sich Ihre Region geändert hat zu:",
     "language": "Spracheinstellungen",
     "msg": {
       "save": "Nach Verwendung des Leistungsmodus werden verschiedene Animationen der Benutzeroberfläche deaktiviert und im Speicher hängengebliebene Prozesse werden so weit wie möglich bereinigt. \nDies kann dazu führen, dass der Effekt der Öffnungsschnittstelle beeinträchtigt wird oder der Anwendungswechsel langsam erfolgt. \nEs kann jedoch die Speicher-, CPU- und GPU-Auslastung erheblich reduzieren."
@@ -66,6 +71,7 @@
     "others": "andere",
     "power": "Stromversorgung",
     "quiet": "Nachrichten nicht stören",
+    "region": "Ihr aktueller Bereich ist:",
     "save": "Energiesparmodus",
     "simple": "minimalistischer Modus",
     "social": "Soziales Netzwerk",
@@ -90,6 +96,10 @@
     "netErr": "Wenn Sie auf Netzwerkprobleme stoßen, überprüfen Sie bitte den System-Proxy oder warten Sie geduldig.",
     "retry": "Wiederholen",
     "say1": "Dieser Client benötigt die Hilfe von Back-End-Computing-Diensten.",
-    "say2": "Bitte melden Sie sich an, um es zu verwenden."
+    "say2": "Bitte melden Sie sich an, um es zu verwenden.",
+    "visitorUser": "Gastbenutzer"
+  },
+  "wellcome": {
+    "visitorMode": "Gastmodus"
   }
 }

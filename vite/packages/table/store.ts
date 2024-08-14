@@ -80,7 +80,7 @@ export const appStore = defineStore(
         relevanceEnable: false, //开启关联的电商平台快递
         customCourier: false, // 自定义快递
         tagVisible: true, // 快递组件排序tag提示
-        language: 'zh-CN', // 语言
+        language: '', // 语言
       },
 
       routeUpdateTime: Date.now(), //用于更新滚动条
@@ -141,7 +141,7 @@ export const appStore = defineStore(
         this.backgroundImage = value;
       },
       setAgreeTest() {
-        this.agreeTest = false;
+        this.agreeTest = true;
       },
       setInfoVisible(value) {
         this.infoVisible = value;
@@ -286,6 +286,7 @@ export const appStore = defineStore(
             'style',
             'windowFullScreen',
             'aggList',
+            'language',
           ],
           storage: dbStorage,
           // state 中的字段名，按组打包储存

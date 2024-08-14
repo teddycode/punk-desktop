@@ -10,6 +10,7 @@
 import { MissingHandler, createI18n } from 'vue-i18n'; //引入vue-i18n组件
 import { TranslateUsingGET } from '@js/service/translation';
 import { langs } from './helper';
+import { GetUserLocateLang } from '@table/locale/location';
 
 // Override the missing translation handler
 const fetchMissing: MissingHandler = async (locale, key): Promise<string | void> => {
@@ -34,7 +35,7 @@ const fetchMissing: MissingHandler = async (locale, key): Promise<string | void>
 };
 
 const i18n = createI18n({
-  locale: 'zh-CN', //默认显示的语言
+  locale: 'zn-CN', //默认显示的语言
   legacy: false, // composition AP
   globalInjection: true, //全局生效$
   silentTranslationWarn: true,
@@ -42,10 +43,5 @@ const i18n = createI18n({
   messages: langs,
   missing: fetchMissing,
 });
-
-// 获取语言包的名称
-export const getLangList = () => {
-  return Object.keys(langs).map((key) => ({ label: langs[key]?.name, value: key }));
-};
 
 export default i18n; //将i18n暴露出去，在main.js中引入挂载

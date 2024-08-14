@@ -35,30 +35,34 @@ import zhTW from './lang/zh-TW.json';
 
 // 26国语言包
 export const langs = {
-    'zh-CN': zh, // 中文
-    'zh-TW' : zhTW, // 台湾
-    en,  // 英文
-    ar, // 阿拉伯语
-    bg,  //  保加利亚语
-    bn, // 孟加拉
-    cs,  // 捷克
-    de,  // 德语
-    'en-US':enUS, 
-    es, // 西班牙语
-    fa, // 波斯
-    fr, // 法语
-    hr, // 克罗埃西亚
-    hu, // 匈牙利
-    it,  // 意大利语
-    ja,  // 日语
-    ko, // 韩语
-    lt, // 立陶宛
-    pl, // 波兰
-    'pt-PB':ptBR, // 
-    'pt-PT': ptPT, // 葡萄牙语
-    ru, // 俄国
-    tr, // 土耳其语
-    uk, // 	乌克兰
-    uz, // 乌兹别克语
-    vi // 越南
-  };
+  'zh-CN': zh, // 中文
+  'zh-TW': zhTW, // 台湾
+  en, // 英文
+  ar, // 阿拉伯语
+  bg, //  保加利亚语
+  bn, // 孟加拉
+  cs, // 捷克
+  de, // 德语
+  'en-US': enUS,
+  es, // 西班牙语
+  fa, // 波斯
+  fr, // 法语
+  hr, // 克罗埃西亚
+  hu, // 匈牙利
+  it, // 意大利语
+  ja, // 日语
+  ko, // 韩语
+  lt, // 立陶宛
+  pl, // 波兰
+  'pt-PB': ptBR, //
+  'pt-PT': ptPT, // 葡萄牙语
+  ru, // 俄国
+  tr, // 土耳其语
+  uk, // 	乌克兰
+  uz, // 乌兹别克语
+  vi, // 越南
+};
+// 获取语言包的名称
+export const getLangList = () => {
+  return Object.keys(langs).map((key) => ({ label: langs[key]?.name, value: key }));
+};

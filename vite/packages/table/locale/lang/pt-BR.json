@@ -7,6 +7,7 @@
     "clea": "fundo claro",
     "clear": "fundo claro",
     "desktop": "papel de parede",
+    "marsk": "desfoque de fundo",
     "masrk": "desfoque de fundo",
     "openTPTip": "Este tipo de função consome alto desempenho, habilite-a conforme apropriado.",
     "openTransparent": "Fundo transparente após ligar",
@@ -45,6 +46,9 @@
     "teamTip": "Depois de usar o modo minimalista, algumas funções sociais e de entretenimento, como a função de esquadrão, ficarão ocultas."
   },
   "name": "Português (Brasil)",
+  "network": {
+    "retry": "Erro de rede, tente novamente"
+  },
   "setting": "Contexto",
   "settings": {
     "account": "Verificação de endereço",
@@ -57,6 +61,7 @@
     "enableAccValid": "Verificação de endereço",
     "general": "Configurações Gerais",
     "guideBar": "Edição da barra de navegação",
+    "langTips": "Foi detectado que sua região mudou para:",
     "language": "configuração de idioma",
     "msg": {
       "save": "Depois de usar o modo de desempenho, várias animações da interface serão desativadas e os processos presos na memória serão limpos tanto quanto possível. \nIsso pode fazer com que o efeito da interface de abertura seja comprometido ou que a troca de aplicativos seja lenta. \nMas pode reduzir significativamente o uso de memória, CPU e GPU."
@@ -66,6 +71,7 @@
     "others": "outro",
     "power": "fonte de energia",
     "quiet": "Não perturbe mensagens",
+    "region": "Sua área atual é:",
     "save": "Modo de economia de energia",
     "simple": "modo minimalista",
     "social": "Rede social",
@@ -90,6 +96,10 @@
     "netErr": "Se você encontrar problemas de rede, verifique o proxy do sistema ou aguarde pacientemente.",
     "retry": "Tentar novamente",
     "say1": "Este cliente requer a ajuda de serviços de computação back-end.",
-    "say2": "Faça login para usar."
+    "say2": "Faça login para usar.",
+    "visitorUser": "usuário convidado"
+  },
+  "wellcome": {
+    "visitorMode": "modo visitante"
   }
 }

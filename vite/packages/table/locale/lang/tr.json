@@ -7,6 +7,7 @@
     "clea": "arka planı temizle",
     "clear": "arka planı temizle",
     "desktop": "masaüstü arkaplanı",
+    "marsk": "arka plan bulanıklığı",
     "masrk": "arka plan bulanıklığı",
     "openTPTip": "Bu tür işlevler yüksek performans tüketir; lütfen bunu uygun şekilde etkinleştirin.",
     "openTransparent": "Açıldıktan sonra şeffaf arka plan",
@@ -45,6 +46,9 @@
     "teamTip": "Minimalist modu kullandıktan sonra takım işlevi gibi bazı eğlence ve sosyal işlevler gizlenecektir."
   },
   "name": "Turkish (Turkey)",
+  "network": {
+    "retry": "Ağ hatası, lütfen tekrar deneyin"
+  },
   "setting": "Ayar",
   "settings": {
     "account": "Adres doğrulama",
@@ -57,6 +61,7 @@
     "enableAccValid": "Adres doğrulama",
     "general": "Genel Ayarlar",
     "guideBar": "Gezinme çubuğu düzenleme",
+    "langTips": "Bölgenizin şu şekilde değiştiği tespit edildi:",
     "language": "dil ayarı",
     "msg": {
       "save": "Performans modunu kullandıktan sonra çeşitli arayüz animasyonları kapatılacak ve hafızaya takılan işlemler mümkün olduğunca temizlenecektir. \nAçılış arayüzü etkisinin bozulmasına veya uygulama geçişinin yavaş olmasına neden olabilir. \nAncak bellek, CPU ve GPU kullanımını önemli ölçüde azaltabilir."
@@ -66,6 +71,7 @@
     "others": "diğer",
     "power": "güç kaynağı",
     "quiet": "Mesajları rahatsız etmeyin",
+    "region": "Şu anki alanınız:",
     "save": "Enerji tasarrufu modu",
     "simple": "minimalist mod",
     "social": "Sosyal ağ",
@@ -90,6 +96,10 @@
     "netErr": "Ağ sorunlarıyla karşılaşırsanız lütfen sistem proxy'sini kontrol edin veya sabırla bekleyin.",
     "retry": "Yeniden dene",
     "say1": "Bu istemci, arka uç bilgi işlem hizmetlerinin yardımına ihtiyaç duyuyor.",
-    "say2": "Kullanmak için lütfen giriş yapın."
+    "say2": "Kullanmak için lütfen giriş yapın.",
+    "visitorUser": "misafir kullanıcı"
+  },
+  "wellcome": {
+    "visitorMode": "misafir modu"
   }
 }
