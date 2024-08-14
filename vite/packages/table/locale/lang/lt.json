@@ -7,6 +7,7 @@
     "clea": "aiškus fonas",
     "clear": "aiškus fonas",
     "desktop": "darbalaukio fonas",
+    "marsk": "fono suliejimas",
     "masrk": "fono suliejimas",
     "openTPTip": "Šio tipo funkcijai reikalingas didelis našumas, jei reikia, įjunkite.",
     "openTransparent": "Skaidrus fonas po įjungimo",
@@ -45,6 +46,9 @@
     "teamTip": "Pasinaudojus minimalistiniu režimu, kai kurios pramoginės ir socialinės funkcijos, pavyzdžiui, būrio funkcija, bus paslėptos."
   },
   "name": "Lietuvių",
+  "network": {
+    "retry": "Tinklo klaida, bandykite dar kartą"
+  },
   "setting": "Nustatymas",
   "settings": {
     "account": "Adreso patvirtinimas",
@@ -57,6 +61,7 @@
     "enableAccValid": "Adreso patvirtinimas",
     "general": "Bendrieji nustatymai",
     "guideBar": "Naršymo juostos redagavimas",
+    "langTips": "Aptikta, kad jūsų regionas pasikeitė į:",
     "language": "kalbos nustatymas",
     "msg": {
       "save": "Panaudojus našumo režimą įvairios sąsajos animacijos bus išjungtos, o atmintyje įstrigę procesai bus maksimaliai išvalyti. \nDėl to gali būti pažeistas atidarymo sąsajos efektas arba lėtas programų perjungimas. \nTačiau tai gali žymiai sumažinti atminties, procesoriaus ir GPU naudojimą."
@@ -66,6 +71,7 @@
     "others": "kitas",
     "power": "maitinimo šaltinis",
     "quiet": "Netrukdyti žinutėms",
+    "region": "Jūsų dabartinė sritis yra:",
     "save": "Energijos taupymo režimas",
     "simple": "minimalistinis režimas",
     "social": "Socialinis tinklas",
@@ -90,6 +96,10 @@
     "netErr": "Jei susiduriate su tinklo problemomis, patikrinkite sistemos tarpinį serverį arba kantriai palaukite.",
     "retry": "Bandykite dar kartą",
     "say1": "Šiam klientui reikalinga galinio skaičiavimo paslaugų pagalba.",
-    "say2": "Norėdami naudotis, prisijunkite."
+    "say2": "Norėdami naudotis, prisijunkite.",
+    "visitorUser": "svečias vartotojas"
+  },
+  "wellcome": {
+    "visitorMode": "svečio režimas"
   }
 }

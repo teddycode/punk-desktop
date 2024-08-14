@@ -7,6 +7,7 @@
     "clea": "aniq fon",
     "clear": "aniq fon",
     "desktop": "ish stoli foni",
+    "marsk": "fon xiralashishi",
     "masrk": "fon xiralashishi",
     "openTPTip": "Ushbu turdagi funksiya yuqori unumdorlikni sarflaydi, iltimos, uni mos ravishda yoqing.",
     "openTransparent": "Yoqilgandan keyin shaffof fon",
@@ -45,6 +46,9 @@
     "teamTip": "Minimalist rejimdan foydalangandan so'ng, ba'zi ko'ngilochar va ijtimoiy funktsiyalar, masalan, otryad funksiyasi yashiriladi."
   },
   "name": "Uzbek",
+  "network": {
+    "retry": "Tarmoq xatosi, qayta urinib koʻring"
+  },
   "setting": "Sozlama",
   "settings": {
     "account": "Manzilni tekshirish",
@@ -57,6 +61,7 @@
     "enableAccValid": "Manzilni tekshirish",
     "general": "Umumiy sozlamalar",
     "guideBar": "Navigatsiya panelini tahrirlash",
+    "langTips": "Hududingiz quyidagilarga oʻzgargani aniqlandi:",
     "language": "til sozlamalari",
     "msg": {
       "save": "Ishlash rejimidan foydalangandan so'ng, turli xil interfeys animatsiyalari o'chiriladi va xotirada tiqilib qolgan jarayonlar imkon qadar tozalanadi. \nBu ochilish interfeysi effektining buzilishiga yoki dastur almashinuvining sekinlashishiga olib kelishi mumkin. \nAmmo bu xotira, protsessor va GPU foydalanishni sezilarli darajada kamaytirishi mumkin."
@@ -66,6 +71,7 @@
     "others": "boshqa",
     "power": "quvvatlantirish manbai",
     "quiet": "Xabarlarni bezovta qilmang",
+    "region": "Sizning hozirgi hududingiz:",
     "save": "Energiyani tejash rejimi",
     "simple": "minimalist rejim",
     "social": "Ijtimoiy tarmoq",
@@ -90,6 +96,10 @@
     "netErr": "Agar tarmoq muammolariga duch kelsangiz, tizim proksi-serverini tekshiring yoki sabr bilan kuting.",
     "retry": "Qayta urinish",
     "say1": "Bu mijoz backend hisoblash xizmatlari yordamini talab qiladi.",
-    "say2": "Foydalanish uchun tizimga kiring."
+    "say2": "Foydalanish uchun tizimga kiring.",
+    "visitorUser": "mehmon foydalanuvchi"
+  },
+  "wellcome": {
+    "visitorMode": "mehmon rejimi"
   }
 }

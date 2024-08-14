@@ -32,11 +32,11 @@ export const arbitrum: ChainNetInfo = {
 
 // 磐古测试网
 export const punkos: ChainNetInfo = {
-  chainId: 11223344,
+  chainId: 1122334455,
   name: 'PunkOS Test Network',
   currency: 'PTH',
   explorerUrl: 'https://goerli.etherscan.io',
-  rpcUrl: 'https://rpctest.byebyegfw.uk',
+  rpcUrl: 'https://rpc.punkos.buaadcl.tech:18080',
 };
 export const sepolia: ChainNetInfo = {
   chainId: 11155111,

@@ -102,9 +102,13 @@
           <div class="xt-text-2 text-sm my-3">{{ $t('bg.choose') }}</div>
           <div class="xt-text-2 flex text-sm my-3" v-if="!appSettings.transparent">
             <xt-task :modelValue="m01034" to="" @cb="goPaper">
-              <xt-button size="mini" :w="80" :h="40" type="theme" class="mr-3" @click="goPaper">{{ $t('bg.setting') }}</xt-button>
+              <xt-button size="mini" :w="80" :h="40" type="theme" class="mr-3" @click="goPaper">{{
+                $t('bg.setting')
+              }}</xt-button>
             </xt-task>
-            <xt-button size="mini" class="xt-modal" :w="80" :h="40" @click="clearWallpaper">{{ $t('bg.clear') }}</xt-button>
+            <xt-button size="mini" class="xt-modal" :w="80" :h="40" @click="clearWallpaper">{{
+              $t('bg.clear')
+            }}</xt-button>
           </div>
           <hr class="my-3" />
 
@@ -195,7 +199,7 @@
     <GradeNotice></GradeNotice>
   </div> -->
 
-  <div class="fixed inset-0 home-guide" style="z-index: 999" v-if="agreeTest">
+  <div class="fixed inset-0 home-guide" style="z-index: 999" v-if="!agreeTest">
     <GuidePage></GuidePage>
   </div>
 

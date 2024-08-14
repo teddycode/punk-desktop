@@ -7,6 +7,7 @@
     "clea": "tiszta háttér",
     "clear": "tiszta háttér",
     "desktop": "asztal háttere",
+    "marsk": "háttér elmosódott",
     "masrk": "háttér elmosódott",
     "openTPTip": "Ez a fajta funkció nagy teljesítményt igényel, szükség szerint engedélyezze.",
     "openTransparent": "Átlátszó háttér bekapcsolás után",
@@ -45,6 +46,9 @@
     "teamTip": "A minimalista mód használata után néhány szórakoztató és közösségi funkció, mint például a csapat funkció, el lesz rejtve."
   },
   "name": "Hungarian (Hungary)",
+  "network": {
+    "retry": "Hálózati hiba, próbálkozzon újra"
+  },
   "setting": "Beállítás",
   "settings": {
     "account": "Cím ellenőrzése",
@@ -57,6 +61,7 @@
     "enableAccValid": "Cím ellenőrzése",
     "general": "Általános beállítások",
     "guideBar": "Navigációs sáv szerkesztése",
+    "langTips": "Azt észleltük, hogy az Ön régiója a következőre változott:",
     "language": "nyelvi beállítás",
     "msg": {
       "save": "A teljesítmény mód használata után a különféle interfész-animációk kikapcsolódnak, a memóriában megrekedt folyamatok pedig amennyire csak lehetséges, megtisztulnak. \nElőfordulhat, hogy a nyitófelület-effektus sérül, vagy az alkalmazásváltás lassú lesz. \nDe jelentősen csökkentheti a memória-, CPU- és GPU-használatot."
@@ -66,6 +71,7 @@
     "others": "Egyéb",
     "power": "tápegység",
     "quiet": "Ne zavarj üzeneteket",
+    "region": "Jelenlegi területe:",
     "save": "Energiatakarékos mód",
     "simple": "minimalista mód",
     "social": "Közösségi háló",
@@ -90,6 +96,10 @@
     "netErr": "Ha hálózati problémákat tapasztal, ellenőrizze a rendszerproxyt, vagy várjon türelmesen.",
     "retry": "Próbálja újra",
     "say1": "Ez az ügyfél háttér-számítástechnikai szolgáltatások segítségét igényli.",
-    "say2": "Kérjük, jelentkezzen be a használathoz."
+    "say2": "Kérjük, jelentkezzen be a használathoz.",
+    "visitorUser": "vendég felhasználó"
+  },
+  "wellcome": {
+    "visitorMode": "vendég mód"
   }
 }

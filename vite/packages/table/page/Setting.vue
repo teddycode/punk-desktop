@@ -86,7 +86,7 @@
               </div>
             </a-col>
             <a-col :span="6">
-              <div @click="this.openLangModal = true" class="btn">
+              <div @click="onOpenLangModal" class="btn">
                 <Iconify icon="la:language" style="font-size: 2em" />
                 <div>{{ $t('settings.language') }}</div>
               </div>
@@ -118,7 +118,7 @@
               <div @click="editNavigationVisible = true" class="btn">
                 <!-- <Icon icon="Pushpin" style="font-size: 2em"></Icon> -->
                 <Iconify icon="fluent:tablet-16-regular" style="font-size: 2em" />
-                <div> {{ $t('settings.guideBar') }} </div>
+                <div>{{ $t('settings.guideBar') }}</div>
               </div>
             </a-col>
             <a-col :span="6">
@@ -161,20 +161,20 @@
                 </div>
               </xt-task>
             </a-col>
-            <!--            <a-col v-if="isMain() && !this.isOffline" :span="6">-->
-            <!--              <div @click="invite" class="btn">-->
-            <!--                &lt;!&ndash; <Icon icon="tianjiachengyuan" style="font-size: 2em"></Icon> &ndash;&gt;-->
-            <!--                <Iconify icon="fluent:people-add-16-regular" style="font-size: 2em" />-->
-            <!--                <div>邀请</div>-->
-            <!--              </div>-->
-            <!--            </a-col>-->
-            <!--            <a-col v-if="isMain() && !this.isOffline" :span="6">-->
-            <!--              <div @click="verify" class="btn">-->
-            <!--                &lt;!&ndash; <Icon icon="team" style="font-size: 2em"></Icon> &ndash;&gt;-->
-            <!--                <Iconify icon="fluent:people-16-regular" style="font-size: 2em" />-->
-            <!--                <div>受邀</div>-->
-            <!--              </div>-->
-            <!--            </a-col>-->
+            <a-col v-if="isMain() && !this.isOffline" :span="6">
+              <div @click="invite" class="btn">
+                <!-- <Icon icon="tianjiachengyuan" style="font-size: 2em"></Icon> -->
+                <Iconify icon="fluent:people-add-16-regular" style="font-size: 2em" />
+                <div>邀请</div>
+              </div>
+            </a-col>
+            <a-col v-if="isMain() && !this.isOffline" :span="6">
+              <div @click="verify" class="btn">
+                <!-- <Icon icon="team" style="font-size: 2em"></Icon> -->
+                <Iconify icon="fluent:people-16-regular" style="font-size: 2em" />
+                <div>受邀</div>
+              </div>
+            </a-col>
             <a-col :span="6">
               <div @click="power" class="btn">
                 <!-- <Icon icon="tuichu" style="font-size: 2em"></Icon> -->
@@ -194,8 +194,18 @@
   </div>
   <a-drawer :width="500" v-if="styleVisible" v-model:open="styleVisible" placement="right" style="z-index: 9999999">
     <xt-task :modelValue="m03012"></xt-task>
-    <XtColor v-model:color="bgColor" title="{{ $t('settings.theme') }}" btnText="{{ $t('btn.recoverThemeColor') }}" @onBtnClick="clearBgColor"></XtColor>
-    <XtColor v-model:color="textColor" title="{{ $t('settings.text') }}" btnText="{{ $t('btn.recoverTextColor') }}" @onBtnClick="clearTextColor"></XtColor>
+    <XtColor
+      v-model:color="bgColor"
+      title="{{ $t('settings.theme') }}"
+      btnText="{{ $t('btn.recoverThemeColor') }}"
+      @onBtnClick="clearBgColor"
+    ></XtColor>
+    <XtColor
+      v-model:color="textColor"
+      title="{{ $t('settings.text') }}"
+      btnText="{{ $t('btn.recoverTextColor') }}"
+      @onBtnClick="clearTextColor"
+    ></XtColor>
     <XtColor
       v-model:color="wallpaperColor"
       title="{{ $t('backgroud') }}"
@@ -222,11 +232,26 @@
       </div>
     </div>
   </a-modal>
-  <a-modal v-model:open="openLangModal" :title="this.$t('chooseLang')" width="300px" height="300px" :okText="this.$t('btn.change')" centered @ok="handleChangeLang">
+  <a-modal
+    v-model:open="openLangModal"
+    :title="this.$t('chooseLang')"
+    width="300px"
+    height="300px"
+    :okText="this.$t('btn.change')"
+    centered
+    @ok="handleChangeLang"
+  >
     <div>
       <a-flex justify="center">
-        <a-select ref="select" v-model:value="settings.language" style="width: 200px" :options="langOptions">
-        </a-select>
+        <a-row>
+          <a-col span="24">
+            根据您当前所在位置：{{ location.countryName }}，建议您选择语言{{ location.langName }}
+          </a-col>
+          <a-col>
+            <a-select ref="select" v-model:value="settings.language" style="width: 200px" :options="langOptions">
+            </a-select>
+          </a-col>
+        </a-row>
       </a-flex>
     </div>
   </a-modal>
@@ -262,7 +287,8 @@ import { taskStore } from '@apps/task/store';
 import { offlineStore } from '@js/common/offline';
 import { Icon as Iconify } from '@iconify/vue';
 import cp from 'child_process';
-import { getLangList } from '@table/locale/index';
+import { getLangList } from '@table/locale/helper';
+import { getUserCountryAndLanguage } from '@table/locale/location';
 export default {
   name: 'Setting',
   components: { EditNavigation, MyAvatar, SecondPanel, ChooseScreen, GradeSmallTip, Iconify },
@@ -283,6 +309,10 @@ export default {
       editNavigationVisible: false,
       openLangModal: false,
       langOptions: [],
+      location: {
+        countryName: '',
+        languageName: '',
+      },
     };
   },
   watch: {
@@ -304,7 +334,6 @@ export default {
     this.textColor = getTextColor();
     this.wallpaperColor = getWallpaperColor();
     this.langOptions = getLangList();
-    console.log('语言包：', this.langOptions);
   },
   computed: {
     ...mapWritableState(appStore, ['settings', 'saving', 'simple', 'styles', 'style', 'showWindowController']),
@@ -433,6 +462,16 @@ export default {
       } else {
         window.$manager.hidden();
       }
+    },
+    async onOpenLangModal() {
+      const result = await getUserCountryAndLanguage();
+      const langName = this.langOptions.find((item) => item.label === location.languageCode);
+      console.log('finded:', langName);
+      this.location = {
+        countryName: result.countryName,
+        languageName: langName || 'unknown',
+      };
+      this.openLangModal = true;
     },
   },
 };

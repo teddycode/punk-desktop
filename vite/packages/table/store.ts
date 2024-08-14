@@ -141,7 +141,7 @@ export const appStore = defineStore(
         this.backgroundImage = value;
       },
       setAgreeTest() {
-        this.agreeTest = false;
+        this.agreeTest = true;
       },
       setInfoVisible(value) {
         this.infoVisible = value;
@@ -286,6 +286,7 @@ export const appStore = defineStore(
             'style',
             'windowFullScreen',
             'aggList',
+            'language',
           ],
           storage: dbStorage,
           // state 中的字段名，按组打包储存

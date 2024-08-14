@@ -7,6 +7,7 @@
     "clea": "nền rõ ràng",
     "clear": "nền rõ ràng",
     "desktop": "nền desktop",
+    "marsk": "làm mờ nền",
     "masrk": "làm mờ nền",
     "openTPTip": "Loại chức năng này tiêu tốn hiệu suất cao, vui lòng kích hoạt nó khi thích hợp.",
     "openTransparent": "Nền trong suốt sau khi bật",
@@ -45,6 +46,9 @@
     "teamTip": "Sau khi sử dụng chế độ tối giản, một số chức năng giải trí và xã hội, chẳng hạn như chức năng tổ đội, sẽ bị ẩn."
   },
   "name": "Tiếng Việt",
+  "network": {
+    "retry": "Lỗi mạng, vui lòng thử lại"
+  },
   "setting": "Cài đặt",
   "settings": {
     "account": "Xác minh địa chỉ",
@@ -57,6 +61,7 @@
     "enableAccValid": "Xác minh địa chỉ",
     "general": "Cài đặt chung",
     "guideBar": "Chỉnh sửa thanh điều hướng",
+    "langTips": "Chúng tôi đã phát hiện ra rằng khu vực của bạn đã thay đổi thành:",
     "language": "cài đặt ngôn ngữ",
     "msg": {
       "save": "Sau khi sử dụng chế độ hiệu suất, nhiều hoạt ảnh giao diện khác nhau sẽ bị tắt và các quá trình bị kẹt trong bộ nhớ sẽ được dọn sạch nhiều nhất có thể. \nNó có thể khiến hiệu ứng giao diện mở bị ảnh hưởng hoặc quá trình chuyển đổi ứng dụng bị chậm. \nNhưng nó có thể giảm đáng kể mức sử dụng bộ nhớ, CPU và GPU."
@@ -66,6 +71,7 @@
     "others": "khác",
     "power": "Nguồn cấp",
     "quiet": "Không làm phiền tin nhắn",
+    "region": "Khu vực hiện tại của bạn là:",
     "save": "Chế độ tiết kiệm năng lượng",
     "simple": "chế độ tối giản",
     "social": "Mạng xã hội",
@@ -90,6 +96,10 @@
     "netErr": "Nếu bạn gặp sự cố mạng, vui lòng kiểm tra proxy hệ thống hoặc kiên nhẫn chờ đợi.",
     "retry": "Thử lại",
     "say1": "Khách hàng này yêu cầu sự trợ giúp của các dịch vụ điện toán phụ trợ.",
-    "say2": "Vui lòng đăng nhập để sử dụng."
+    "say2": "Vui lòng đăng nhập để sử dụng.",
+    "visitorUser": "người dùng khách"
+  },
+  "wellcome": {
+    "visitorMode": "chế độ khách"
   }
 }
