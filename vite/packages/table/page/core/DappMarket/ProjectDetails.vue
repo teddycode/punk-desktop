@@ -2,94 +2,61 @@
   <div class="project-details">
     <h1>Project Details</h1>
     <a-steps :current="currentStep" class="steps-container">
-      <a-step v-for="step in steps" :key="step.title" :title="step.title" />
+      <a-step title="提交完成" />
+      <a-step title="审核中" :status="secondStepStatus" />
+      <a-step :title="finalStepTitle" :status="finalStepStatus" />
     </a-steps>
-    <div class="details-container">
-      <div class="form-container">
-        <a-form>
-          <div class="form-content">
-            <div class="upload-section">
-              <a-form-item
-                label="Project logo"
-                :label-col="{ span: 24 }"
-                :wrapper-col="{ span: 24 }"
-              >
-                <div class="upload-placeholder">
-                  <img :src="projectDetails.logo" alt="avatar" class="uploaded-image" />
-                </div>
-              </a-form-item>
-            </div>
-            <div class="form-fields">
-              <div class="form-row">
-                <a-form-item
-                  label="Does your project have smart contracts?"
-                  :label-col="{ span: 24 }"
-                  :wrapper-col="{ span: 24 }"
-                  class="form-item-half"
-                >
-                  <a-select v-model="projectDetails.smartContracts" disabled>
-                    <a-select-option value="yes">Yes, my project is a dapp and has smart contracts</a-select-option>
-                    <a-select-option value="no">No, my project does not have smart contracts</a-select-option>
-                  </a-select>
-                </a-form-item>
-                <a-form-item
-                  label="Has your dapp been released?"
-                  :label-col="{ span: 24 }"
-                  :wrapper-col="{ span: 24 }"
-                  class="form-item-half"
-                >
-                  <a-select v-model="projectDetails.released" disabled>
-                    <a-select-option value="yes">Yes, my dapp is released</a-select-option>
-                    <a-select-option value="no">No, my dapp is not released</a-select-option>
-                  </a-select>
-                </a-form-item>
+    <div class="form-container">
+      <a-form>
+        <div class="form-content">
+          <div class="upload-section">
+            <a-form-item
+              label="Project logo"
+              :label-col="{ span: 24 }"
+              :wrapper-col="{ span: 24 }"
+              name="logo"
+            >
+              <div class="upload-placeholder">
+                <img :src="projectDetails.logo" alt="avatar" class="uploaded-image" />
               </div>
-              <a-form-item label="Project Name" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }">
-                <a-input v-model="projectDetails.projectName" disabled></a-input>
-              </a-form-item>
-              <a-form-item label="Categories" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }">
-                <a-select v-model="projectDetails.categories" mode="multiple" disabled>
-                  <a-select-option value="category1">Category 1</a-select-option>
-                  <a-select-option value="category2">Category 2</a-select-option>
-                </a-select>
-              </a-form-item>
-              <a-form-item label="Website" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }">
-                <a-input v-model="projectDetails.website" disabled></a-input>
-              </a-form-item>
-              <a-form-item label="Short description" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }">
-                <a-textarea v-model="projectDetails.description" :maxlength="160" disabled></a-textarea>
-              </a-form-item>
-              <div class="form-row">
-                <a-form-item
-                  label="Tags"
-                  :label-col="{ span: 24 }"
-                  :wrapper-col="{ span: 24 }"
-                  class="form-item-half"
-                >
-                  <a-select v-model="projectDetails.tags" mode="multiple" disabled>
-                    <a-select-option value="tag1">Tag 1</a-select-option>
-                    <a-select-option value="tag2">Tag 2</a-select-option>
-                  </a-select>
-                </a-form-item>
-                <a-form-item
-                  label="Add chain"
-                  :label-col="{ span: 24 }"
-                  :wrapper-col="{ span: 24 }"
-                  class="form-item-half"
-                >
-                  <a-select v-model="projectDetails.chain" disabled>
-                    <a-select-option value="chain1">Chain 1</a-select-option>
-                    <a-select-option value="chain2">Chain 2</a-select-option>
-                  </a-select>
-                </a-form-item>
-              </div>
-              <a-form-item label="Full description" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }">
-                <a-textarea v-model="projectDetails.fullDescription" :rows="4" disabled></a-textarea>
-              </a-form-item>
-            </div>
+            </a-form-item>
           </div>
-        </a-form>
-      </div>
+          <div class="form-fields">
+            <a-form-item label="Project Name" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }" name="projectName">
+              <a-input v-model:value="projectDetails.name" disabled></a-input>
+            </a-form-item>
+            <a-form-item label="Website" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }" name="website">
+              <a-input v-model:value="projectDetails.website" disabled></a-input>
+            </a-form-item>
+            <a-form-item label="Short description" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }" name="description">
+              <a-textarea v-model:value="projectDetails.description" :maxlength="160" disabled></a-textarea>
+            </a-form-item>
+
+            <a-form-item label="Tags" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }" name="tags">
+              <div class="tags-container">
+                <template v-for="(tag, index) in projectDetails.tags" :key="index">
+                  <a-tag>{{ tag.tagName }}</a-tag>
+                </template>
+              </div>
+            </a-form-item>
+
+            <a-form-item label="Add chain" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }" name="chain">
+              <a-textarea v-model:value="projectDetails.chain" disabled></a-textarea>
+            </a-form-item>
+            <a-form-item label="Full description" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }" name="fullDescription">
+              <a-textarea v-model:value="projectDetails.detail" :rows="4" disabled></a-textarea>
+            </a-form-item>
+
+            <a-form-item label="Project Images" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }" name="images">
+              <div class="image-uploads">
+                <div v-for="(image, index) in projectDetails.imgs" :key="index" class="upload-placeholder">
+                  <img :src="image.img" alt="uploaded image" class="uploaded-image" />
+                </div>
+              </div>
+            </a-form-item>
+          </div>
+        </div>
+      </a-form>
     </div>
   </div>
 </template>
@@ -97,59 +64,53 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-
-interface ProjectDetails {
-  smartContracts: string;
-  released: string;
-  projectName: string;
-  categories: string[];
-  website: string;
-  description: string;
-  tags: string[];
-  chain: string;
-  fullDescription: string;
-  logo: string;
-}
+import { getDappDetail } from "@js/service/dappMarket";
 
 const route = useRoute();
 const projectId = route.params.id;
 
-const currentStep = ref(1); // Example current step, should be set based on project status
-const steps = ref([
-  { title: 'Step 1' },
-  { title: 'Step 2' },
-  { title: 'Step 3' },
-  { title: 'Completed' }
-]);
+const currentStep = ref(0);  // 初始化为 0，即显示 "提交完成" 的步骤
+const secondStepStatus = ref('process');  // 第二步初始状态
+const finalStepTitle = ref('审核完成');
+const finalStepStatus = ref('process');
 
-const projectDetails = ref<ProjectDetails>({
-  smartContracts: '',
-  released: '',
-  projectName: '',
-  categories: [],
+const projectDetails = ref({
+  name: '',
   website: '',
   description: '',
   tags: [],
   chain: '',
-  fullDescription: '',
-  logo: ''
+  detail: '',
+  logo: '',
+  imgs: []
 });
 
-onMounted(() => {
-  // Fetch project details based on projectId
-  // This should be replaced with an actual API call to fetch project details
-  projectDetails.value = {
-    smartContracts: 'yes',
-    released: 'yes',
-    projectName: 'Example Project',
-    categories: ['category1', 'category2'],
-    website: 'https://example.com',
-    description: 'This is a short description of the project.',
-    tags: ['tag1', 'tag2'],
-    chain: 'chain1',
-    fullDescription: 'This is a full description of the project.',
-    logo: 'https://via.placeholder.com/200'
-  };
+async function fetchProjectDetails() {
+  await getDappDetail(projectId).then(response => {
+    projectDetails.value = response.data;
+
+    // 根据 state 更新步骤条状态
+    if (response.data.state === 0) {
+      currentStep.value = 1;  // 当前处于 "审核中" 步骤
+      secondStepStatus.value = 'process';  // "审核中" 正在进行中
+      finalStepTitle.value = '审核完成';  // 第三步显示 "审核完成"
+      finalStepStatus.value = 'wait';  // 它在等待完成
+    } else if (response.data.state === 1) {
+      currentStep.value = 2;  // 当前处于最后一步 "审核失败"
+      secondStepStatus.value = 'finish';  // 审核中已完成
+      finalStepTitle.value = '审核失败';
+      finalStepStatus.value = 'error'; // 红色
+    } else if (response.data.state === 2) {
+      currentStep.value = 2;  // 当前处于最后一步 "审核通过"
+      secondStepStatus.value = 'finish';  // 审核中已完成
+      finalStepTitle.value = '审核通过';
+      finalStepStatus.value = 'finish'; // 绿色
+    }
+  });
+}
+
+onMounted(async () => {
+  await fetchProjectDetails();
 });
 </script>
 
@@ -162,7 +123,7 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 
-.details-container {
+.form-container {
   background: #fff;
   padding: 20px;
   border-radius: 8px;
@@ -189,7 +150,6 @@ onMounted(() => {
   width: 200px;
   height: 200px;
   object-fit: cover;
-  border: 1px dashed #d9d9d9;
   border-radius: 8px;
 }
 
@@ -202,12 +162,14 @@ onMounted(() => {
   margin-left: 20px;
 }
 
-.form-row {
+.tags-container {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
-.form-item-half {
-  width: 48%;
+.image-uploads {
+  display: flex;
+  gap: 10px;
 }
 </style>
