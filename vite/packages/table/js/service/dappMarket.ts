@@ -62,3 +62,11 @@ export function submitdapp(data){
     data
   });
 }
+
+export function getUserDapps(userId,state){
+  return request({
+    url:'/dDappinfo/getUserDapps',
+    method: 'get',
+    params: {userId,state}
+  });
+}

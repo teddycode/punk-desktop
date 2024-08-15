@@ -26,12 +26,14 @@
           </div>
         </div>
         <div class="table-body">
-          <div class="table-row" v-for="project in projects" :key="project.id">
+          <div class="table-row" v-for="project in projectList" :key="project.id">
             <div class="table-cell">{{ project.name }}</div>
-            <div class="table-cell">{{ project.dateAdded }}</div>
+            <div class="table-cell">{{ project.createTime }}</div>
             <div class="table-cell">{{ project.chain }}</div>
             <div class="table-cell">
-              <span :class="{'pending': project.status === 'pending', 'approved': project.status === 'approved', 'rejected': project.status === 'rejected'}">{{ project.status }}</span>
+                <span :class="{'pending': project.state === 0, 'approved': project.state === 2, 'rejected': project.state === 1 }">
+    {{ project.state === 0 ? 'Pending' : project.state === 1 ? 'Rejected' : 'Approved' }}
+                </span>
             </div>
             <div class="table-cell">
               <a-button type="link" @click="handleRowClick(project.id)">View Details</a-button>
@@ -44,47 +46,36 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import {onMounted, ref} from 'vue';
 import { useRouter } from 'vue-router';
+import { getUserDapps } from "@js/service/dappMarket";
+const state = ref(-1);
+const projectList = ref([])
 
-interface Project {
-  id: number;
-  name: string;
-  chain: string;
-  dateAdded: string;
-  status: string;
-}
 
 const router = useRouter();
 
-const submittedProjects = ref(15);
-const approvedProjects = ref(10);
-const pendingReviews = ref(5);
+const submittedProjects = ref(0);
+const approvedProjects = ref(0);
+const pendingReviews = ref(0);
+async function fetchUserDapps() {
+  await getUserDapps(1, state.value).then(response=> {
+    projectList.value = response.data
+    submittedProjects.value = response.data.length
+    for (let i=0;i<response.data.length;i++){
+      if (response.data[i].state == 0){
+        pendingReviews.value ++ ;
+      }
+      if (response.data[i].state == 2){
+        approvedProjects.value ++ ;
+      }
+    }
+  })
+}
+onMounted(async () => {
+  await fetchUserDapps();
+});
 
-const projects = ref<Project[]>([
-  {
-    id: 1,
-    name: 'Project 1',
-    chain: 'Ethereum',
-    dateAdded: '2023-01-01',
-    status: 'pending',
-  },
-  {
-    id: 2,
-    name: 'Project 2',
-    chain: 'Binance Smart Chain',
-    dateAdded: '2023-01-02',
-    status: 'approved',
-  },
-  {
-    id: 3,
-    name: 'Project 3',
-    chain: 'Polygon',
-    dateAdded: '2023-01-03',
-    status: 'rejected',
-  },
-  // Add more projects as needed
-]);
 
 const handleRowClick = (projectId: number) => {
   router.push({ name: 'ProjectDetails', params: { id: projectId } });
