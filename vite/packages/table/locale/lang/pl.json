@@ -7,6 +7,7 @@
     "clea": "jasne tło",
     "clear": "jasne tło",
     "desktop": "tło pulpitu",
+    "marsk": "rozmycie tła",
     "masrk": "rozmycie tła",
     "openTPTip": "Ten typ funkcji zużywa dużą wydajność. Włącz ją w razie potrzeby.",
     "openTransparent": "Przezroczyste tło po włączeniu",
@@ -45,6 +46,9 @@
     "teamTip": "Po użyciu trybu minimalistycznego niektóre funkcje rozrywkowe i społecznościowe, takie jak funkcja drużyny, zostaną ukryte."
   },
   "name": "Polski",
+  "network": {
+    "retry": "Błąd sieci. Spróbuj ponownie"
+  },
   "setting": "Ustawienie",
   "settings": {
     "account": "Weryfikacja adresu",
@@ -57,6 +61,7 @@
     "enableAccValid": "Weryfikacja adresu",
     "general": "Ustawienia główne",
     "guideBar": "Edycja paska nawigacji",
+    "langTips": "Wykryto, że Twój region zmienił się na:",
     "language": "ustawienie języka",
     "msg": {
       "save": "Po użyciu trybu wydajności różne animacje interfejsu zostaną wyłączone, a procesy zablokowane w pamięci zostaną w miarę możliwości oczyszczone. \nMoże to spowodować pogorszenie efektu otwierania interfejsu lub spowolnienie przełączania aplikacji. \nMoże jednak znacznie zmniejszyć zużycie pamięci, procesora i karty graficznej."
@@ -66,6 +71,7 @@
     "others": "Inny",
     "power": "zasilacz",
     "quiet": "Nie przeszkadzaj wiadomościom",
+    "region": "Twój obecny obszar to:",
     "save": "Tryb oszczędzania energii",
     "simple": "tryb minimalistyczny",
     "social": "Sieć społeczna",
@@ -90,6 +96,10 @@
     "netErr": "Jeśli napotkasz problemy z siecią, sprawdź systemowe proxy lub poczekaj cierpliwie.",
     "retry": "Spróbować ponownie",
     "say1": "Ten klient wymaga pomocy usług obliczeniowych zaplecza.",
-    "say2": "Aby skorzystać, zaloguj się."
+    "say2": "Aby skorzystać, zaloguj się.",
+    "visitorUser": "użytkownik-gość"
+  },
+  "wellcome": {
+    "visitorMode": "tryb gościa"
   }
 }

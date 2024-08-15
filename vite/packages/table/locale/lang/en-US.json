@@ -7,6 +7,7 @@
     "clea": "clear background",
     "clear": "clear background",
     "desktop": "desktop background",
+    "marsk": "background blur",
     "masrk": "background blur",
     "openTPTip": "This type of function consumes high performance, please enable it as appropriate.",
     "openTransparent": "Transparent background after turning on",
@@ -45,6 +46,9 @@
     "teamTip": "After using the minimalist mode, some entertainment and social functions, such as the squad function, will be hidden."
   },
   "name": "English (United States)",
+  "network": {
+    "retry": "Network error, please try again"
+  },
   "setting": "Setting",
   "settings": {
     "account": "Address verification",
@@ -57,6 +61,7 @@
     "enableAccValid": "Address verification",
     "general": "General settings",
     "guideBar": "Navigation bar editing",
+    "langTips": "It has been detected that your region has changed to:",
     "language": "language setting",
     "msg": {
       "save": "After using performance mode, various interface animations will be turned off, and processes stuck in memory will be cleaned up as much as possible. \nIt may cause the opening interface effect to be compromised or application switching to be slow. \nBut it can significantly reduce memory, CPU, and GPU usage."
@@ -66,6 +71,7 @@
     "others": "other",
     "power": "power supply",
     "quiet": "Do not disturb messages",
+    "region": "Your current area is:",
     "save": "Energy saving mode",
     "simple": "minimalist mode",
     "social": "Social network",
@@ -90,6 +96,10 @@
     "netErr": "If you encounter network problems, please check the system proxy or wait patiently.",
     "retry": "Retry",
     "say1": "This client requires the help of back-end computing services.",
-    "say2": "Please log in to use."
+    "say2": "Please log in to use.",
+    "visitorUser": "guest user"
+  },
+  "wellcome": {
+    "visitorMode": "guest mode"
   }
 }

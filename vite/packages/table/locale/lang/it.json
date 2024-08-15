@@ -7,6 +7,7 @@
     "clea": "sfondo chiaro",
     "clear": "sfondo chiaro",
     "desktop": "sfondo del desktop",
+    "marsk": "sfocatura dello sfondo",
     "masrk": "sfocatura dello sfondo",
     "openTPTip": "Questo tipo di funzione consuma elevate prestazioni, abilitarlo come appropriato.",
     "openTransparent": "Sfondo trasparente dopo l'accensione",
@@ -45,6 +46,9 @@
     "teamTip": "Dopo aver utilizzato la modalità minimalista, alcune funzioni di intrattenimento e sociali, come la funzione squadra, verranno nascoste."
   },
   "name": "Italiano",
+  "network": {
+    "retry": "Errore di rete, riprova"
+  },
   "setting": "Collocamento",
   "settings": {
     "account": "Verifica dell'indirizzo",
@@ -57,6 +61,7 @@
     "enableAccValid": "Verifica dell'indirizzo",
     "general": "Impostazioni generali",
     "guideBar": "Modifica della barra di navigazione",
+    "langTips": "È stato rilevato che la tua regione è cambiata in:",
     "language": "impostazione della lingua",
     "msg": {
       "save": "Dopo aver utilizzato la modalità prestazioni, varie animazioni dell'interfaccia verranno disattivate e i processi bloccati in memoria verranno ripuliti il ​​più possibile. \nCiò potrebbe compromettere l'effetto dell'interfaccia di apertura o rallentare il passaggio tra le applicazioni. \nMa può ridurre in modo significativo l’utilizzo di memoria, CPU e GPU."
@@ -66,6 +71,7 @@
     "others": "altro",
     "power": "Alimentazione elettrica",
     "quiet": "Non disturbare i messaggi",
+    "region": "La tua zona attuale è:",
     "save": "Modalità di risparmio energetico",
     "simple": "modalità minimalista",
     "social": "Rete sociale",
@@ -90,6 +96,10 @@
     "netErr": "Se riscontri problemi di rete, controlla il proxy di sistema o attendi pazientemente.",
     "retry": "Riprova",
     "say1": "Questo client richiede l'aiuto di servizi informatici back-end.",
-    "say2": "Effettua il login per utilizzare."
+    "say2": "Effettua il login per utilizzare.",
+    "visitorUser": "utente ospite"
+  },
+  "wellcome": {
+    "visitorMode": "modalità ospite"
   }
 }

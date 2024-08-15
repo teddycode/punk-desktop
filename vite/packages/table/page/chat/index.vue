@@ -76,7 +76,7 @@ export default defineComponent({
           route: { name: 'collects' },
         },
         {
-          title: '测试',
+          title: 'IPFS测试',
           icon: 'chat',
           route: { name: 'test' },
         },

@@ -7,6 +7,7 @@
     "clea": "jasna pozadina",
     "clear": "jasna pozadina",
     "desktop": "pozadina radne površine",
+    "marsk": "zamućenje pozadine",
     "masrk": "zamućenje pozadine",
     "openTPTip": "Ova vrsta funkcije troši visoke performanse, omogućite je prema potrebi.",
     "openTransparent": "Prozirna pozadina nakon uključivanja",
@@ -45,6 +46,9 @@
     "teamTip": "Nakon korištenja minimalističkog načina rada, neke zabavne i društvene funkcije, poput funkcije tima, bit će skrivene."
   },
   "name": "Croatian",
+  "network": {
+    "retry": "Mrežna pogreška, pokušajte ponovo"
+  },
   "setting": "Postavka",
   "settings": {
     "account": "Provjera adrese",
@@ -57,6 +61,7 @@
     "enableAccValid": "Provjera adrese",
     "general": "Opće postavke",
     "guideBar": "Uređivanje navigacijske trake",
+    "langTips": "Otkriveno je da se vaša regija promijenila u:",
     "language": "postavka jezika",
     "msg": {
       "save": "Nakon korištenja načina rada, različite animacije sučelja bit će isključene, a procesi zaglavljeni u memoriji bit će očišćeni koliko god je to moguće. \nTo može uzrokovati kompromitiranje efekta otvaranja sučelja ili sporo prebacivanje aplikacija. \nAli može značajno smanjiti korištenje memorije, CPU-a i GPU-a."
@@ -66,6 +71,7 @@
     "others": "drugo",
     "power": "napajanje",
     "quiet": "Ne uznemiravaj poruke",
+    "region": "Vaše trenutno područje je:",
     "save": "Način rada za uštedu energije",
     "simple": "minimalistički način rada",
     "social": "Društvena mreža",
@@ -90,6 +96,10 @@
     "netErr": "Ako naiđete na probleme s mrežom, provjerite proxy sustava ili strpljivo pričekajte.",
     "retry": "Pokušaj ponovo",
     "say1": "Ovaj klijent zahtijeva pomoć pozadinskih računalnih usluga.",
-    "say2": "Molimo prijavite se za korištenje."
+    "say2": "Molimo prijavite se za korištenje.",
+    "visitorUser": "gost korisnik"
+  },
+  "wellcome": {
+    "visitorMode": "način rada za goste"
   }
 }

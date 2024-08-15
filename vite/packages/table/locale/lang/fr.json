@@ -7,6 +7,7 @@
     "clea": "fond clair",
     "clear": "fond clair",
     "desktop": "fond d'écran",
+    "marsk": "flou d'arrière-plan",
     "masrk": "flou d'arrière-plan",
     "openTPTip": "Ce type de fonction consomme des performances élevées, veuillez l'activer le cas échéant.",
     "openTransparent": "Fond transparent après la mise sous tension",
@@ -45,6 +46,9 @@
     "teamTip": "Après avoir utilisé le mode minimaliste, certaines fonctions de divertissement et sociales, comme la fonction équipe, seront masquées."
   },
   "name": "Français",
+  "network": {
+    "retry": "Erreur réseau, veuillez réessayer"
+  },
   "setting": "Paramètre",
   "settings": {
     "account": "Vérification de l'adresse",
@@ -57,6 +61,7 @@
     "enableAccValid": "Vérification de l'adresse",
     "general": "Réglages généraux",
     "guideBar": "Modification de la barre de navigation",
+    "langTips": "Il a été détecté que votre région est devenue :",
     "language": "Paramètres de langue",
     "msg": {
       "save": "Après avoir utilisé le mode performance, diverses animations d'interface seront désactivées et les processus bloqués en mémoire seront nettoyés autant que possible. \nCela peut compromettre l’effet d’ouverture de l’interface ou ralentir le changement d’application. \nMais cela peut réduire considérablement l’utilisation de la mémoire, du processeur et du GPU."
@@ -66,6 +71,7 @@
     "others": "autre",
     "power": "source de courant",
     "quiet": "Ne pas déranger les messages",
+    "region": "Votre région actuelle est :",
     "save": "Mode économie d'énergie",
     "simple": "mode minimaliste",
     "social": "Réseau social",
@@ -90,6 +96,10 @@
     "netErr": "Si vous rencontrez des problèmes de réseau, veuillez vérifier le proxy du système ou attendre patiemment.",
     "retry": "Recommencez",
     "say1": "Ce client nécessite l'aide de services informatiques back-end.",
-    "say2": "Veuillez vous connecter pour utiliser."
+    "say2": "Veuillez vous connecter pour utiliser.",
+    "visitorUser": "utilisateur invité"
+  },
+  "wellcome": {
+    "visitorMode": "mode invité"
   }
 }

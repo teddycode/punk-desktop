@@ -7,6 +7,7 @@
     "clea": "jasné pozadí",
     "clear": "jasné pozadí",
     "desktop": "pozadí plochy",
+    "marsk": "rozostření pozadí",
     "masrk": "rozostření pozadí",
     "openTPTip": "Tento typ funkce spotřebovává vysoký výkon, povolte jej podle potřeby.",
     "openTransparent": "Průhledné pozadí po zapnutí",
@@ -45,6 +46,9 @@
     "teamTip": "Po použití minimalistického režimu se některé zábavní a společenské funkce, jako je funkce čety, skryjí."
   },
   "name": "Česky",
+  "network": {
+    "retry": "Chyba sítě, zkuste to znovu"
+  },
   "setting": "Nastavení",
   "settings": {
     "account": "Ověření adresy",
@@ -57,6 +61,7 @@
     "enableAccValid": "Ověření adresy",
     "general": "Obecné nastavení",
     "guideBar": "Úprava navigační lišty",
+    "langTips": "Bylo zjištěno, že se váš region změnil na:",
     "language": "nastavení jazyka",
     "msg": {
       "save": "Po použití výkonnostního režimu budou různé animace rozhraní vypnuty a procesy uvízlé v paměti budou co nejvíce vyčištěny. \nMůže to způsobit ohrožení efektu otevíracího rozhraní nebo pomalé přepínání aplikací. \nMůže však výrazně snížit využití paměti, CPU a GPU."
@@ -66,6 +71,7 @@
     "others": "jiný",
     "power": "zdroj napájení",
     "quiet": "Zprávy Nerušit",
+    "region": "Vaše aktuální oblast je:",
     "save": "Režim úspory energie",
     "simple": "minimalistický režim",
     "social": "Sociální síť",
@@ -90,6 +96,10 @@
     "netErr": "Pokud narazíte na problémy se sítí, zkontrolujte prosím server proxy nebo trpělivě vyčkejte.",
     "retry": "Zkuste to znovu",
     "say1": "Tento klient vyžaduje pomoc back-endových počítačových služeb.",
-    "say2": "Pro použití se prosím přihlaste."
+    "say2": "Pro použití se prosím přihlaste.",
+    "visitorUser": "hostující uživatel"
+  },
+  "wellcome": {
+    "visitorMode": "režim pro hosty"
   }
 }
