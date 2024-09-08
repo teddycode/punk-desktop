@@ -70,3 +70,37 @@ export function getUserDapps(userId,state){
     params: {userId,state}
   });
 }
+
+//dapp评论模块
+//查询dapp所有评论
+export function getDappCommentList(id) {
+  return request({
+    url: `/dComment/list/${id}`,
+    method: 'get',
+  });
+}
+//发表评论
+export function addDappComent(data) {
+  return request({
+    url: '/dComment/save',
+    method: 'post',
+    data,
+  });
+}
+//dapp评分模块
+//查询dapp评分
+export function getDappRatingInfo(dappId, userId) {
+  return request({
+    url: `/dRating/getRatingInfo/${dappId}`,
+    method: 'get',
+    params: {userId},
+  });
+}
+//发表评分
+export function addDappRating(data) {
+  return request({
+    url: '/dRating/save',
+    method: 'post',
+    data,
+  });
+}
