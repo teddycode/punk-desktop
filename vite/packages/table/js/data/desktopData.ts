@@ -418,7 +418,6 @@ export const defaultDesks = [
               backgroundColor: '',
               backgroundIndex: 0,
             },
-
           ],
           groupTitle: '系统核心功能',
           zoom: {
@@ -550,6 +549,47 @@ export const defaultDesks = [
             },
           ],
           groupTitle: '以太坊应用',
+          zoom: {
+            state: true,
+            value: '',
+          },
+          size: {
+            w: '280px',
+            h: '204px',
+          },
+        },
+        data: {},
+      },
+      {
+        name: 'myIcons',
+        id: 1702566140780,
+        customData: {
+          iconList: [
+            {
+              size: 'mini',
+              link: 'fast',
+              linkValue: '',
+              open: {
+                type: 'internal',
+                route: 'TestPage',
+                name: 'TestPage',
+                wallet: true,
+                params: '/web3/testPage',
+                value: 'http://localhost:1600/html/test.html',
+              },
+              isTitle: true,
+              titleValue: 'TestPage',
+              src: 'https://pic.imgdb.cn/item/658514b6c458853aefb6669f.png',
+              isRadius: true,
+              radius: 5,
+              imgState: 'cover',
+              imgShape: 'square',
+              isBackground: false,
+              backgroundColor: '',
+              backgroundIndex: 0,
+            },
+          ],
+          groupTitle: '测试应用',
           zoom: {
             state: true,
             value: '',

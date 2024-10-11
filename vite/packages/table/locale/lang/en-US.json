@@ -83,7 +83,7 @@
     "wallpaper": "wallpaper",
     "window": "window control"
   },
-  "startUsage": "start using",
+  "startUsage": "Get starting",
   "toast": {
     "walletConnected": "Wallet is connected, logging in..."
   },
@@ -92,7 +92,7 @@
     "changeAcc": "Switch account",
     "description": "——One-stop terminal connecting web2 and web3",
     "hello": "Welcome to use Pangu cross-chain client to take you to explore the new world of web3!",
-    "loginOrReg": "Login/Register account",
+    "loginOrReg": "Login/Register Account",
     "netErr": "If you encounter network problems, please check the system proxy or wait patiently.",
     "retry": "Retry",
     "say1": "This client requires the help of back-end computing services.",
@@ -100,6 +100,6 @@
     "visitorUser": "guest user"
   },
   "wellcome": {
-    "visitorMode": "guest mode"
+    "visitorMode": "Guest mode"
   }
 }

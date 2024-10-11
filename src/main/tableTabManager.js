@@ -84,15 +84,15 @@ class TableTabManager {
       } else if (input.key.toLowerCase() === 'f11') {
         view.webContents.executeJavaScript(`
         function toggleFullScreen() {
-  if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen();
-  } else {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    }
-  }
-}
-    toggleFullScreen()
+          if (!document.fullscreenElement) {
+              document.documentElement.requestFullscreen();
+          } else {
+            if (document.exitFullscreen) {
+              document.exitFullscreen();
+            }
+          }
+        }
+        toggleFullScreen()
         `);
         event.preventDefault();
       }
