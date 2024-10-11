@@ -105,8 +105,6 @@ async function fetchDappList() {
   await getDapplist(currentPage.value, pageSize.value, selectedButton.value, searchValue.value).then(res => {
     displayedDapps.value = res.data.records;
     totalRow.value = res.data.totalRow; // 确保 totalRow 正确设置
-    console.log('totalRow:', res.data.totalRow);
-    console.log('records:', res.data.records);
   });
 }
 

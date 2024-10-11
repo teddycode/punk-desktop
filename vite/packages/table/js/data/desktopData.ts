@@ -575,4 +575,64 @@ export const defaultDesks = [
     },
     deskHeight: 874,
   },
+  {
+    name: '小程序',
+    id: 'LDjs',
+    nanoid: 'pRl1',
+    cards: [
+      {
+        name: 'myIcons',
+        id: 1702566059799,
+        customData: {
+          iconList: [
+            {
+              size: 'mini',
+              link: 'fast',
+              linkValue: '',
+              open: {
+                type: 'pageApp',
+                route: 'DappMarketPage',
+                name: '应用市场',
+                params: '/web3/DappMarket',
+                value: 'DappMarketPage',
+              },
+              isTitle: true,
+              titleValue: '应用市场',
+              src: 'https://pic.imgdb.cn/item/658514e5c458853aefb6f0f9.png',
+              isRadius: true,
+              radius: 5,
+              imgState: 'cover',
+              imgShape: 'square',
+              isBackground: false,
+              backgroundColor: '',
+              backgroundIndex: 0,
+            },
+
+          ],
+          groupTitle: '常用小程序',
+          zoom: {
+            state: true,
+            value: '',
+          },
+          size: {
+            w: '280px',
+            h: '632px',
+          },
+        },
+        data: {},
+      },
+    ],
+    settings: {
+      cardZoom: 120,
+      marginTop: 10,
+      cardMargin: 10,
+      enableZoom: true,
+      vDirection: false,
+    },
+    layoutSize: {
+      width: 370,
+      height: 874,
+    },
+    deskHeight: 874,
+  },
 ];

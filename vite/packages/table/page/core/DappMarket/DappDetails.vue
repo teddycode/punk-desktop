@@ -29,8 +29,16 @@
             <p><strong>最后更新时间:</strong> {{ dappDetails.updateTime }}</p>
             <p><strong>上传作者:</strong> {{ dappDetails.user.nickname }}</p>
             <div class="button-group">
-              <a-button type="primary" @click="visitWebsite">访问网址</a-button>
-              <a-button @click="editDapp" class="edit-button">编辑Dapp</a-button>
+              <span>
+                <a-button type="primary" @click="visitWebsite">访问网址</a-button>
+              </span>
+              <span>
+                <a-button type="primary" @click="editDapp" class="edit-button">编辑Dapp</a-button>
+              </span>
+              <span>
+                <a-button v-if="!isAdded" type="primary" @click="addDappToDesk" class="edit-button">添加到桌面</a-button>
+                <a-button v-else disabled type="primary"  class="edit-button">已添加到桌面</a-button>
+              </span>
               <div class="icon-group">
                 <span @click="toggleLike">
                   <LikeOutlined v-if="!liked" class="like-icon" />
@@ -140,6 +148,9 @@ import { DownCircleTwoTone, UpCircleTwoTone, LikeOutlined, LikeFilled, StarOutli
 import NavBar from "./NavBar.vue";
 import { getDappDetail, getisCollected,dappCollect,getisLiked,dappLiked} from "../../../js/service/dappMarket.ts";
 import { getDappCommentList, addDappComent, getDappRatingInfo, addDappRating} from "../../../js/service/dappMarket.ts";
+import { addDappCard, getisAdded } from "../../../js/service/dappMarket.ts";
+import { cardStore } from "@store/card";
+
 const route = useRoute();
 const overallRating = ref(3.9); // 总评分
 const totalReviews = ref(5588); // 总评论人数
@@ -236,6 +247,7 @@ const isExpanded = ref(false);
 const isModalVisible = ref(false);
 const liked = ref(false);
 const favorited = ref(false);
+const isAdded = ref(false);
 
 const truncatedInformation = computed(() => {
   if (isExpanded.value) {
@@ -282,12 +294,12 @@ async function fetchDappDetail() {
   })
 };
 async function fetchIsCollected() {
-  await getisCollected(1, route.params.id).then(response => {
+  await getisCollected(appStore().userInfo.uid, route.params.id).then(response => {
     favorited.value = response.data
   })
 }
 async function fetchDappCommentList() {
-  await getDappCommentList(route.params.id, ).then(response => {
+  await getDappCommentList(route.params.id).then(response => {
     config.comments = response.data;
   })
 }
@@ -300,14 +312,21 @@ async function fetchDappRatingInfo() {
   })
 }
 async function fetchIsLiked() {
-  await getisLiked(1, route.params.id).then(response => {
+  await getisLiked(appStore().userInfo.uid, route.params.id).then(response => {
     liked.value = response.data
   })
+}
+//判断dapp是否已添加到桌面
+async function fetchIsAdded() {
+    await getisAdded(appStore().userInfo.uid, route.params.id).then(response => {
+        isAdded.value = response.data
+    })
 }
 onMounted(async () => {
   await fetchDappDetail();
   await fetchIsCollected();
   await fetchIsLiked();
+  await fetchIsAdded();
   await fetchDappCommentList();
   await fetchDappRatingInfo();
 });
@@ -315,6 +334,12 @@ onMounted(async () => {
 const visitWebsite = () => {
   window.open(dappDetails.value.website, '_blank');
 };
+const addDappToDesk = async () => {
+  isAdded.value = !isAdded.value;
+  await addDappCard(appStore().userInfo.uid, route.params.id)
+  cardStore().getUserDappDesk(appStore().userInfo.uid) //更新桌面
+  message.success("已成功添加到桌面")
+}
 
 const editDapp = () => {
   message.info('编辑Dapp功能暂未实现');
@@ -322,12 +347,12 @@ const editDapp = () => {
 
 const toggleLike = () => {
   liked.value = !liked.value;
-  dappLiked(1,route.params.id);
+  dappLiked(appStore().userInfo.uid,route.params.id);
 };
 
 const toggleFavorite = () => {
   favorited.value = !favorited.value;
-  dappCollect(1,route.params.id);
+  dappCollect(appStore().userInfo.uid,route.params.id);
 };
 </script>
 
@@ -470,7 +495,7 @@ const toggleFavorite = () => {
   align-items: center;
 }
 
-.button-group a-button {
+.button-group span {
   margin-right: 1rem; /* Add spacing between buttons */
 }
 
@@ -483,7 +508,6 @@ const toggleFavorite = () => {
 .like-icon, .favorite-icon, .liked-icon, .favorited-icon {
   font-size: 24px;
   cursor: pointer;
-  margin-left: 16px;
 }
 
 .like-icon:hover, .favorite-icon:hover, .liked-icon:hover, .favorited-icon:hover {

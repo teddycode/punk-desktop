@@ -210,6 +210,10 @@ export default {
           console.log('跳转路由：', route);
           this.$router.push(route);
           break;
+        // dapp小程序
+        case 'Dapp':
+          this.$router.push({ name: 'DappDetails', params: { id: this.open.dappId } });
+          break;
         // 系统应用
         // case "systemApp":
         //   if (this.open.value.event === "fullscreen") {
