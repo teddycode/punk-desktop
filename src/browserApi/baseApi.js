@@ -18,6 +18,7 @@ const baseApi = {
   web: require('./web'), //网页接口
   punkos:{
     storage: require('./punkosApi/storage'),  //punkos存储接口
+    network: require('./punkosApi/network')
   },
 };
 window.baseApi = baseApi;

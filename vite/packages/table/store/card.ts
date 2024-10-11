@@ -6,6 +6,8 @@ import { marketStore } from './market';
 import { noteStore } from '../apps/note/store';
 import { homeStore } from './home';
 import { defaultDesks } from '@js/data/desktopData';
+import { getUserDesk, addDappCard } from "@js/service/dappMarket";
+import { appStore } from "@table/store";
 
 export const cardStore = defineStore(
   'cardStore',
@@ -381,6 +383,37 @@ export const cardStore = defineStore(
         });
         return desk;
       },
+      //获取用户小程序桌面
+      async getUserDappDesk(userId) {
+        let desk = this.desks.find((item) => {
+          return item.name === "小程序";
+        });
+        this.removeCards(desk);//先清除用户小程序桌面
+        //从后端获取用户小程序桌面数据
+        let iconList = [];
+        await getUserDesk(userId).then(response=> {
+
+          for(const dappinfo of response.data){
+            let newIcon = {};
+            newIcon.titleValue = dappinfo.name;
+            newIcon.link = 'fast';
+            newIcon.src = dappinfo.logo;
+            newIcon.open = {
+              type: 'Dapp',
+              dappId: dappinfo.id
+            };
+            let random = Math.floor(Math.random() * 50) * Math.floor(Math.random() * 100);
+            iconList.push({
+              name: 'myIcons',
+              id: Date.now() - random,
+              type: 'Dapp',
+              dappId: dappinfo.id,
+              customData: { iconList: [newIcon] },
+            });
+          }
+        })
+        this.addCards(iconList, desk);
+      },
       setRouteParams(value) {
         this.routeParams = value;
       },
@@ -620,6 +653,13 @@ export const cardStore = defineStore(
 
         let currentDesk = this.getCurrentDesk();
         desk = desk || currentDesk;
+
+        let card = desk.cards.find((item) => String(item.id) === String(customIndex))
+        console.log("要删除的卡片：", card);
+        if(card.type == "Dapp") { //如果为小程序卡片，则调用后端接口删除
+          addDappCard(appStore().userInfo.uid, card.dappId)
+        }
+
         desk.cards.splice(
           desk.cards.findIndex((item) => {
             return String(item.id) === String(customIndex);

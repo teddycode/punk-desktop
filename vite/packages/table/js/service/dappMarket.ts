@@ -104,3 +104,28 @@ export function addDappRating(data) {
     data,
   });
 }
+
+//dapp桌面模块
+//查询用户dapp桌面
+export function getUserDesk(userId) {
+  return request({
+    url: `/dDesk/getUserDesk/${userId}`,
+    method: 'get',
+  });
+}
+//添加桌面小程序
+export function addDappCard(userId,dappId){
+  return request({
+    url:'/dDesk/addDappCard',
+    method: 'get',
+    params: {userId,dappId}
+  });
+}
+//查询是否已添加该dapp到桌面
+export function getisAdded(userId,dappId){
+  return request({
+    url:'/dDesk/isAdded',
+    method: 'get',
+    params: {userId,dappId}
+  });
+}

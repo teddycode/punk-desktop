@@ -3,8 +3,10 @@
     <input type="file" @change="testImgUploadIPFS" />
     <div v-if="imageUrl">
       <p>IPFS Image URL: {{ imageUrl }}</p>
-      <img :src="imageUrl" alt="Uploaded Image" />
+<!--      <img :src="imageUrl" alt="Uploaded Image" />-->
     </div>
+    <a-button @click="clearDesk">清除桌面</a-button>
+    <a-button @click="addDeskCards">添加小程序</a-button>
   </div>
 </template>
 
@@ -13,6 +15,8 @@ import { ref } from 'vue';
 import { create } from 'ipfs-http-client';
 import {imgUpload} from "@js/service/socialNetwork_forum";
 import {comStore} from "@store/com";
+import {cardStore} from "@store/card";
+
 const store = comStore();
 //导入axios模块
 import axios from "axios";
@@ -23,6 +27,34 @@ const client = create({ host: '123.157.213.102', port: '39761', protocol: 'http'
 // const client = create({ host: 'localhost', port: '5001', protocol: 'http', apiPath: '/api/v0',});
 const imageUrl = ref('http://123.157.213.102:39760/ipfs/QmYkBmPGrPFD5gcfZTe1EBK7oaxWECtZaqugTB9KBXUNzm');
 
+const clearDesk = async () => {
+  await cardStore().switchToDesk(3);
+  cardStore().removeCards();
+}
+const addDeskCards = async () => {
+  await cardStore().switchToDesk(3);
+  let iconList = [];
+  let newIcon = {};
+  let id = 2;
+  newIcon.titleValue = "节点管";
+  newIcon.link = 'fast';
+  newIcon.src = 'https://cryptofonts.com/img/icons/her.svg';
+  newIcon.open = {
+    type: 'Dapp',
+    dappId: id
+  };
+  let random = Math.floor(Math.random() * 50) * Math.floor(Math.random() * 100);
+  iconList.push({
+    name: 'myIcons',
+    id: Date.now() - random,
+    type: 'Dapp',
+    dappId: id,
+    customData: { iconList: [newIcon] },
+  });
+  let desk = cardStore().getCurrentDesk();
+  await cardStore().removeCards(desk);
+  cardStore().addCards(iconList, desk)
+}
 //使用ipfs-http-client上传文件(有问题)
 async function uploadToIPFS(event) {
   const file = event.target.files[0];

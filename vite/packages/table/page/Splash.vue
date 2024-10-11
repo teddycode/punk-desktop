@@ -227,6 +227,7 @@ export default {
       'removeCards',
       'addCards',
       'switchToDesk',
+      'getUserDappDesk',
     ]),
     ...mapActions(screenStore, ['bindMainIPC', 'bindSubIPC', 'onTableStarted']),
     ...mapActions(codeStore, ['active', 'getSerialHash', 'verify']),
@@ -306,6 +307,7 @@ export default {
         window.loadedStore['userInfo'] = true;
         console.info('更新了用户信息:', JSON.stringify(userInfo));
         comStore()._updateUserInfo(userInfo.uid); //更新社交网络用户
+        this.getUserDappDesk(userInfo.uid); //获取用户小程序桌面
         this.setUser(userInfo);
         if (this.$route.name === 'splash') {
           this.enter();
