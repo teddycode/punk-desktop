@@ -118,6 +118,7 @@ import { comStore } from '@store/com';
 import { defaultUserInfo } from '@js/constants';
 import { getUserCountryAndLanguage } from '@table/locale/location';
 import { langs } from '@table/locale/helper';
+import { watch } from 'vue';
 
 export default {
   name: 'Splash',
@@ -188,8 +189,6 @@ export default {
 
     // 初始化钱包
     this.initWallet();
-
-    this.setLocaleLang();
 
     window.loadedStore['userInfo'] = false;
 
@@ -330,7 +329,8 @@ export default {
 
       clipboardStore().prepare();
       clipboardStore().start();
-
+      // 设置默认语言
+      this.setLocaleLang();
       // 设置默认壁纸
       this.setDefaultWallpaper();
       // 加载桌面图标
@@ -518,18 +518,27 @@ export default {
     },
     // 初始化地区语言
     async setLocaleLang() {
+      // 监听变化并赋值全局变量
+      watch(this.settings.language, (newVal) => {
+        console.log('语言变了：', this.settings.language, newVal);
+        global.userLanguage = newVal;
+      });
       getUserCountryAndLanguage().then((location) => {
         const toast = useToast();
         console.log('位置信息：', location);
         const lang = location.languageCode;
         console.log(this.settings.language);
-        if (lang in langs && lang !== this.settings.language) {
-          toast.info(this.$t('settings.langTips') + location.countryName);
-          this.settings.language = lang;
-          this.$i18n.locale = lang;
-        } else {
-          toast.info(this.$t('settings.region') + location.countryName);
+        if (lang in langs) {
+          if (lang !== this.settings.language) {
+            this.settings.language = lang;
+            this.$i18n.locale = lang;
+            toast.info(this.$t('settings.langTips') + location.countryName);
+          } else {
+            this.$i18n.locale = lang;
+            toast.info(this.$t('settings.region') + location.countryName);
+          }
         }
+        global.userLanguage = this.settings.language;
       });
     },
   },

@@ -13,7 +13,7 @@ import { langs } from './helper';
 import { GetUserLocateLang } from '@table/locale/location';
 
 // Override the missing translation handler
-const fetchMissing: MissingHandler = async (locale, key): Promise<string | void> => {
+export const fetchMissing: MissingHandler = async (locale, key): string | void => {
   // Check if translation exists in cache
   const cacheKey = `${key}_${locale}`;
   const cachedTranslation = localStorage.getItem(cacheKey);
@@ -28,9 +28,10 @@ const fetchMissing: MissingHandler = async (locale, key): Promise<string | void>
   if (resp?.code === 200) {
     // Store translation in cache
     localStorage.setItem(cacheKey, resp?.data);
+    console.info('翻译成功=', locale, ':', key, '->', resp.data);
     return resp?.data;
   }
-  console.log('翻译失败：', resp);
+  console.error('翻译失败：', resp);
   return key;
 };
 

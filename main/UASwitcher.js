@@ -44,26 +44,26 @@ function getFirefoxUA() {
 
 function requestSwitcher(ses) {
   ses.webRequest.onBeforeSendHeaders((details, callback) => {
-    enableReferer(details);
+    enableRefererSettings(details);
     enableGoogleUASwitcher(details);
     callback({ cancel: false, requestHeaders: details.requestHeaders });
   });
 }
 
 // redefine referer
-function enableReferer(details) {
-  const refererOrigin = 'http://127.0.0.1'; // 设置默认的 Origin
-
+function enableRefererSettings(details) {
+  const refererOrigin = 'https://www.punkos.com'; // 设置默认的 Origin
   // 检查请求是否跨源，并手动设置 referer
   const requestOrigin = new URL(details.url).origin;
-  if (!details.requestHeaders['Referer']) {
-    details.requestHeaders['Referer'] = refererOrigin; // 设置默认的 referer
+  if (!details.requestHeaders['Referrer']) {
+    details.requestHeaders['Referrer'] = refererOrigin; // 设置默认的 referer
   } else {
-    const currentRefererOrigin = new URL(details.requestHeaders['Referer']).origin;
+    const currentRefererOrigin = new URL(details.requestHeaders['Referrer']).origin;
     if (currentRefererOrigin !== requestOrigin) {
-      details.requestHeaders['Referer'] = currentRefererOrigin; // 设置为 origin
+      details.requestHeaders['Referrer'] = currentRefererOrigin; // 设置为 origin
     }
   }
+  details.requestHeaders['Referrer-Policy'] = 'strict-origin-when-cross-origin';
 }
 
 /*
