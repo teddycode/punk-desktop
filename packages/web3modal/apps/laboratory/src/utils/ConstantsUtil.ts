@@ -5,7 +5,7 @@ if (!projectId) {
 export const WALLET_URL = process.env['WALLET_URL'] || 'https://react-wallet.walletconnect.com/'
 export const PUBLIC_URL = 'https://lab.web3modal.com'
 
-export const RELAY_URL = 'wss://relay.buaadcl.tech:15566'
+export const RELAY_URL = 'wss://relay.buaadcl.tech:36010'
 
 
 export const CUSTOM_WALLET = 'wc:custom_wallet'

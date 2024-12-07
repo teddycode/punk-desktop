@@ -28,7 +28,7 @@ export const walletConfig = (): Web3ModalOptions => {
       '--w3m-color-mix-strength': 20,
     },
     relayConfig:{
-      url: 'wss://relay.buaadcl.tech:15566'
+      url: 'wss://relay.buaadcl.tech:36010'
     }
   };
   return options as Web3ModalOptions;
