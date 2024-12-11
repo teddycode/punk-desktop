@@ -1,4 +1,4 @@
-import CryptoPage from '@page/core/Crypto/CryptoPage.vue';
+import CryptoPage from '@page/core/Crypto/index.vue';
 import { CodeOutlined } from '@ant-design/icons-vue';
 
 export default {
