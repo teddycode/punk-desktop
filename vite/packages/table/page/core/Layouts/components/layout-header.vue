@@ -31,7 +31,8 @@
                   </a-sub-menu>
                 </template>
                 <template v-else>
-                  <a-menu-item :key="value.name">
+<!--                  当value.meta.noShow不存在或为false时显示菜单-->
+                  <a-menu-item :key="value.name" v-if="!value.meta?.noShow">
                     <span class="anticon anticon-desktop">
                       <!--                      <a-icon type="user"></a-icon>-->
                     </span>
