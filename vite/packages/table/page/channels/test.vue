@@ -3,7 +3,7 @@
     <input type="file" @change="testImgUploadIPFS" />
     <div v-if="imageUrl">
       <p>IPFS Image URL: {{ imageUrl }}</p>
-<!--      <img :src="imageUrl" alt="Uploaded Image" />-->
+      <img :src="imageUrl" alt="Uploaded Image" />
     </div>
     <a-button @click="clearDesk">清除桌面</a-button>
     <a-button @click="addDeskCards">添加小程序</a-button>
@@ -25,7 +25,7 @@ import axios from "axios";
 // const client = create({ url: 'http://localhost:5001' });
 const client = create({ host: '123.157.213.102', port: '39761', protocol: 'http'});
 // const client = create({ host: 'localhost', port: '5001', protocol: 'http', apiPath: '/api/v0',});
-const imageUrl = ref('http://123.157.213.102:39760/ipfs/QmYkBmPGrPFD5gcfZTe1EBK7oaxWECtZaqugTB9KBXUNzm');
+const imageUrl = ref('http://111.119.239.159:17801/ipfs/QmWvwK3K443XH9Srr38Nh8r1RytpArwthCUgUna3zrG2MV');
 
 const clearDesk = async () => {
   await cardStore().switchToDesk(3);

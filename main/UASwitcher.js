@@ -55,15 +55,15 @@ function enableRefererSettings(details) {
   const refererOrigin = 'https://www.punkos.com'; // 设置默认的 Origin
   // 检查请求是否跨源，并手动设置 referer
   const requestOrigin = new URL(details.url).origin;
-  if (!details.requestHeaders['Referrer']) {
-    details.requestHeaders['Referrer'] = refererOrigin; // 设置默认的 referer
+  if (!details.requestHeaders['Referer']) {
+    details.requestHeaders['Referer'] = refererOrigin; // 设置默认的 referer
   } else {
-    const currentRefererOrigin = new URL(details.requestHeaders['Referrer']).origin;
+    const currentRefererOrigin = new URL(details.requestHeaders['Referer']).origin;
     if (currentRefererOrigin !== requestOrigin) {
-      details.requestHeaders['Referrer'] = currentRefererOrigin; // 设置为 origin
+      details.requestHeaders['Referer'] = currentRefererOrigin; // 设置为 origin
     }
   }
-  details.requestHeaders['Referrer-Policy'] = 'strict-origin-when-cross-origin';
+  details.requestHeaders['Referer-Policy'] = 'strict-origin-when-cross-origin';
 }
 
 /*

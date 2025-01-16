@@ -1,19 +1,20 @@
 
 const axios = require('axios1')
-const endpoint = 'http://123.157.213.102:39761';
+const endpoint = 'http://111.119.239.159:12801';
+const gateway = 'http://111.119.239.159:17801'
 const storage = {
   //调用ipfs接口上传图片
   async _imgUploadIpfs(fileData){
     const form = new FormData();
     form.append('file', fileData);
-    let url = "https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png";
+    let url = "https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"; // 默认图片
     try {
       await axios.post(endpoint + "/api/v0/add/", form, {
         headers: {
           'Content-Type': 'multipart/form-data',
         }
       }).then(response => {
-        url = endpoint +`/ipfs/${response.data.Hash}`;
+        url = gateway +`/ipfs/${response.data.Hash}`;
       })
     }catch (e) {
       console.log(e)
@@ -23,11 +24,11 @@ const storage = {
   // 从ipfs接口获取文件
   async getFileByCid(cid){
     if(!cid) return null
-    return axios.get(endpoint +'/ipfs/'+cid)
+    return axios.get(gateway +'/ipfs/'+cid)
   },
   // 获取文件url
   getFileUrl(cid){
-    return endpoint + '/' + cid;
+    return gateway + '/' + cid;
   }
 }
 
