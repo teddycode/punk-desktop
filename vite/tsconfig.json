@@ -28,7 +28,7 @@
       "@assets/*": ["packages/table/assets/*"],
       "@js/*": ["packages/table/js/*"]
     },
-    "typeRoots": ["node_modules/@types"]
+    "typeRoots": ["node_modules/@types","./typings"]
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", 
               "packages/**/*.d.ts","packages/**/*.vue", "packages/**/*.ts","packages/**/*.tsx",  
