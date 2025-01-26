@@ -383,7 +383,7 @@ export const defaultDesks = [
                 name: '节点管理',
                 wallet: true,
                 params: '/node/manager',
-                value: 'http://123.157.213.104:8010/home',
+                value: 'http://111.119.239.159:36011/home',
               },
               isTitle: true,
               titleValue: '节点管理',
@@ -647,7 +647,6 @@ export const defaultDesks = [
               backgroundColor: '',
               backgroundIndex: 0,
             },
-
           ],
           groupTitle: '常用小程序',
           zoom: {
