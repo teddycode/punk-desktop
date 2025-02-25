@@ -3,7 +3,7 @@ export const RELAYER_DEFAULT_PROTOCOL = "irn";
 export const RELAYER_DEFAULT_LOGGER = "error";
 
 export const RELAYER_DEFAULT_RELAY_URL = "wss://relay.walletconnect.org";
-export const RELAYER_FALLBACK_RELAY_URL = "wss://www.buaadcl.tech:15566";
+export const RELAYER_FALLBACK_RELAY_URL = "wss://relay.buaadcl.tech:36010";
 
 export const RELAYER_CONTEXT = "relayer";
 
