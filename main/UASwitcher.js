@@ -55,15 +55,19 @@ function enableRefererSettings(details) {
   const refererOrigin = 'https://www.punkos.com'; // 设置默认的 Origin
   // 检查请求是否跨源，并手动设置 referer
   const requestOrigin = new URL(details.url).origin;
-  if (!details.requestHeaders['Referer']) {
-    details.requestHeaders['Referer'] = refererOrigin; // 设置默认的 referer
-  } else {
-    const currentRefererOrigin = new URL(details.requestHeaders['Referer']).origin;
-    if (currentRefererOrigin !== requestOrigin) {
-      details.requestHeaders['Referer'] = currentRefererOrigin; // 设置为 origin
+  const ipfsUploadPath = '/api/v0/add/';// ipfs上传图片接口
+  // 如果请求是上传图片接口，则设置 referer
+  if (details.url.includes(ipfsUploadPath)) {
+    if (!details.requestHeaders['Referer']) {
+      details.requestHeaders['Referer'] = refererOrigin; // 设置默认的 referer
+    } else {
+      const currentRefererOrigin = new URL(details.requestHeaders['Referer']).origin;
+      if (currentRefererOrigin !== requestOrigin) {
+        details.requestHeaders['Referer'] = currentRefererOrigin; // 设置为 origin
+      }
     }
+    details.requestHeaders['Referer-Policy'] = 'strict-origin-when-cross-origin';
   }
-  details.requestHeaders['Referer-Policy'] = 'strict-origin-when-cross-origin';
 }
 
 /*

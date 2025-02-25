@@ -202,11 +202,11 @@ export const defaultDesks = [
               link: 'fast',
               linkValue: '',
               open: {
-                type: 'pageApp',
+                type: 'internal',
                 route: 'ExchangePage',
                 name: '交易',
                 params: '/web3/exchange',
-                value: 'ExchangePage',
+                value: 'http://111.119.239.159:36015/',
               },
               isTitle: true,
               titleValue: '交易',
