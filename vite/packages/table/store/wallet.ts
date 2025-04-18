@@ -14,10 +14,10 @@ export const walletConfig = (): Web3ModalOptions => {
       url: 'https://www.punkos.com',
       icons: ['https://pic.imgdb.cn/item/65e292ac9f345e8d03288770.png'],
     },
-    defaultChainId: sepolia.chainId,
+    defaultChainId: punkos.chainId,
   });
 
-  // 3. Create modala
+  // 3. Create modal
   let options = {
     ethersConfig,
     projectId,
@@ -28,7 +28,7 @@ export const walletConfig = (): Web3ModalOptions => {
       '--w3m-color-mix-strength': 20,
     },
     relayConfig:{
-      url: 'wss://relay.buaadcl.tech:36010'
+      url: 'wss://relay.walletconnect.com'
     }
   };
   return options as Web3ModalOptions;

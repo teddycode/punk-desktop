@@ -21,6 +21,7 @@ export const arbitrum: ChainNetInfo = {
   explorerUrl: 'https://arbiscan.io',
   rpcUrl: 'https://arb1.arbitrum.io/rpc',
 };
+
 // 以太坊sepolia测试网
 // export const sepolia: ChainNetInfo = {
 //   chainId: 11155111,
@@ -32,12 +33,13 @@ export const arbitrum: ChainNetInfo = {
 
 // 磐古测试网
 export const punkos: ChainNetInfo = {
-  chainId: 1122334455,
-  name: 'PunkOS Test Network',
-  currency: 'PTH',
+  chainId: 20250226,
+  name: 'PunkOS-XWK',
+  currency: 'PUNK',
   explorerUrl: 'https://goerli.etherscan.io',
-  rpcUrl: 'https://rpc.punkos.buaadcl.tech:18080',
+  rpcUrl: 'http://111.119.239.159:36054',
 };
+
 export const sepolia: ChainNetInfo = {
   chainId: 11155111,
   name: 'Sepolia Test Network',

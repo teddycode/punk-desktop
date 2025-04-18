@@ -64,16 +64,21 @@
             </div>
           </template>
           <template v-else-if="column.key === 'action'">
-            <EditOutlined /> <a key="list-edit" @click="onEdit(record)">编辑</a>
+            <EditOutlined /> <a key="list-edit" @click="onEditOpen(record)">编辑</a>
+            <a-divider type="vertical" />
+            <LockOutlined /> <a key="list-lock" @click="onStakingOpen(record)">质押</a>
             <a-divider type="vertical" />
             <a-popconfirm
-              title="停用后，将无法通过该账户登录！"
+              title="解绑后，将无法通过该账户登录！"
               ok-text="确认"
               cancel-text="取消"
               @confirm="onDisable"
-              @cancel=""
+              @cancel="
+                {
+                }
+              "
             >
-              <DeleteOutlined /> <a href="#">停用</a>
+              <DeleteOutlined /> <a href="#">解绑</a>
             </a-popconfirm>
           </template>
         </template>
@@ -168,6 +173,114 @@
         </vue-custom-scrollbar>
       </div>
     </Modal>
+    <Modal v-show="stakeModalVisible" v-model:visible="stakeModalVisible" :blurFlag="true" style="z-index: 5000">
+      <div class="flex flex-col items-center myinfo-container justify-between w-full p-6">
+        <vue-custom-scrollbar class="w-full" style="width: 450px">
+          <div class="flex justify-between items-center w-full h-12 mb-3">
+            <div class="flex items-center update-title justify-center" style="width: 100%">账户质押</div>
+            <div
+              class="w-12 h-12 flex items-center com-button pointer justify-center rounded-lg"
+              style="background: var(--secondary-bg)"
+              @click="closeStakeModal"
+            >
+              <Icon icon="guanbi" style="font-size: 1.45em"></Icon>
+            </div>
+          </div>
+
+          <!-- 保留用户需要填写的字段 -->
+          <div class="flex flex-col">
+            <span class="update-title mb-3">合约代码</span>
+            <div
+              class="flex items-center rounded-xl justify-center px-3 mb-3"
+              style="border: 1px solid var(--divider); background: var(--secondary-bg)"
+            >
+              <a-textarea v-model:value="stakeData.data" placeholder="合约创建代码" :rows="4"></a-textarea>
+            </div>
+          </div>
+
+          <div class="flex flex-col">
+            <span class="update-title mb-3">质押信息</span>
+            <div
+              class="flex items-center rounded-xl justify-center h-10 px-3 mb-3"
+              style="border: 1px solid var(--divider); background: var(--secondary-bg)"
+            >
+              <div class="flex items-center w-full">
+                <span class="input-prefix-text" :style="{ width: '40px' }">金额</span>
+                <a-input-number
+                  style="width: 100%"
+                  v-model:value="stakeData.stakeAmount"
+                  placeholder="质押金额 (ETH)"
+                ></a-input-number>
+              </div>
+            </div>
+            <div
+              class="flex items-center rounded-xl justify-center h-10 px-3 mb-3"
+              style="border: 1px solid var(--divider); background: var(--secondary-bg)"
+            >
+              <div class="flex items-center w-full">
+                <span class="input-prefix-text" :style="{ width: '40px' }">时长</span>
+                <a-input-number
+                  style="width: 100%"
+                  v-model:value="stakeData.stakeTime"
+                  placeholder="质押时间"
+                ></a-input-number>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-col">
+            <span class="update-title mb-3">地址信息</span>
+            <div
+              class="flex items-center rounded-xl justify-center h-10 px-3 mb-3"
+              style="border: 1px solid var(--divider); background: var(--secondary-bg)"
+            >
+              <div class="flex items-center w-full">
+                <span class="input-prefix-text" :style="{ width: '60px' }">部署人</span>
+                <a-input v-model:value="stakeData.deployAddress" placeholder="部署地址"></a-input>
+              </div>
+            </div>
+            <div
+              class="flex items-center rounded-xl justify-center h-10 px-3 mb-3"
+              style="border: 1px solid var(--divider); background: var(--secondary-bg)"
+            >
+              <div class="flex items-center w-full">
+                <span class="input-prefix-text" :style="{ width: '60px' }">受益人</span>
+                <a-input v-model:value="stakeData.beneficiaryAddress" placeholder="受益人地址"></a-input>
+              </div>
+            </div>
+            <div
+              class="flex items-center rounded-xl justify-center h-10 px-3 mb-3"
+              style="border: 1px solid var(--divider); background: var(--secondary-bg)"
+            >
+              <div class="flex items-center w-full">
+                <span class="input-prefix-text" :style="{ width: '60px' }">投资者</span>
+                <a-input v-model:value="stakeData.investorAddress" placeholder="投资者地址"></a-input>
+              </div>
+            </div>
+          </div>
+
+          <!-- 添加确认和取消按钮 -->
+          <div class="flex w-full items-center justify-center mt-6">
+            <a-button
+              class="h-48 rounded-xl mr-3"
+              style="width: 120px; color: var(--primary-text); border: none; background: var(--secondary-bg)"
+              type="primary"
+              @click="closeStakeModal"
+            >
+              取消
+            </a-button>
+            <a-button
+              class="h-48 rounded-xl"
+              style="width: 120px; color: var(--active-text)"
+              type="primary"
+              @click="doStakeModalConfirm"
+            >
+              确认质押
+            </a-button>
+          </div>
+        </vue-custom-scrollbar>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -184,12 +297,12 @@ import LayoutFooter from '@page/core/Layouts/components/layout-footer.vue';
 import {
   BarsOutlined,
   EditOutlined,
+  LockOutlined,
   EyeOutlined,
   PlusOutlined,
   WalletTwoTone,
   DeleteOutlined,
 } from '@ant-design/icons-vue';
-import { useWeb3ModalAccount } from '@web3modal/ethers5/vue';
 import datas from './data';
 import { GetForWalletStatus, PostWalletPageList, PutForWalletInfo } from '@js/service/wallets';
 import { appStore } from '@store';
@@ -197,7 +310,8 @@ import { PageParams } from '@js/service/typing';
 import { message } from 'ant-design-vue';
 import UploadImage from '@components/UploadImage.vue';
 import Modal from '@components/Modal.vue';
-import { walletConfig } from '@store/wallet.ts';
+import { ethers } from 'ethers';
+import { useWeb3ModalProvider, useWeb3ModalAccount } from '@web3modal/ethers5/vue';
 
 export default defineComponent({
   name: 'WalletsPage',
@@ -212,6 +326,7 @@ export default defineComponent({
     BarsOutlined,
     DeleteOutlined,
     WalletTwoTone,
+    LockOutlined,
   },
   setup() {
     // 列表元素： 账户别名。网络名称、钱包地址、币种符号、资产数额、钱包状态、操作【删除、编辑、交易记录、】
@@ -219,11 +334,11 @@ export default defineComponent({
     // 样例数据
     let tableData = ref([]);
 
-    const currentAccount = '';
+    let currentAccount = useWeb3ModalAccount();
 
     let account = ref({
       name: '',
-      symbol: 'ETH',
+      symbol: 'PUNK',
       type: 'address',
     });
     // 统计数据
@@ -244,24 +359,103 @@ export default defineComponent({
       sign: '',
     });
 
+    let stakeData = ref({
+      // 默认固定值，不需要用户输入
+      value: 0,
+      maxFeePerGas: 1,
+      maxPriorityFeePerGas: 1,
+      gasLimit: 51000,
+
+      // 用户需要填写的字段
+      data: '0x608060405234801561001057600080fd5b5060008060006101000a81548167ffffffffffffffff021916908367ffffffffffffffff16021790555061025d806100496000396000f3fe608060405234801561001057600080fd5b50600436106100415760003560e01c8063569c5f6d146100465780637b88119614610064578063853255cc14610080575b600080fd5b61004e61009e565b60405161005b9190610143565b60405180910390f35b61007e6004803603810190610079919061018f565b6100bb565b005b610088610108565b6040516100959190610143565b60405180910390f35b60008060009054906101000a900467ffffffffffffffff16905090565b806000808282829054906101000a900467ffffffffffffffff166100df91906101eb565b92506101000a81548167ffffffffffffffff021916908367ffffffffffffffff16021790555050565b60008054906101000a900467ffffffffffffffff1681565b600067ffffffffffffffff82169050919050565b61013d81610120565b82525050565b60006020820190506101586000830184610134565b92915050565b600080fd5b61016c81610120565b811461017757600080fd5b50565b60008135905061018981610163565b92915050565b6000602082840312156101a5576101a461015e565b5b60006101b38482850161017a565b91505092915050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b60006101f682610120565b915061020183610120565b9250828201905067ffffffffffffffff811115610221576102206101bc565b5b9291505056fea2646970667358221220a2bec65f95c2f4ddc18b03d1dd689c6bead9dac6e5562703da6561d98a2e1f5f64736f6c63430008120033',
+      stakeAmount: 1,
+      stakeTime: 2,
+      deployAddress: '',
+      beneficiaryAddress: '',
+      investorAddress: '',
+    });
+
     let currentRow = null;
 
     const userInfo = appStore().userInfo;
 
     let isEdit = ref(false);
     let modalVisible = ref(false);
+    let stakeModalVisible = ref(false);
 
     function onAdd() {
       isEdit.value = false;
       modalVisible.value = true;
     }
 
-    function onEdit(record) {
+    function onEditOpen(record) {
       currentRow = record;
       account.value.name = record.name;
       account.value.type = record.type;
       isEdit.value = true;
       modalVisible.value = true;
+    }
+
+    // 质押相关
+    function onStakingOpen(record) {
+      console.log('质押', record);
+      currentRow = record;
+
+      // 如果有钱包配置信息，预填地址
+      if (currentAccount?.address?.value) {
+        stakeData.value.deployAddress = currentAccount.address.value;
+        stakeData.value.beneficiaryAddress = currentAccount.address.value;
+        stakeData.value.investorAddress = currentAccount.address.value;
+      }
+
+      stakeModalVisible.value = true;
+    }
+
+    function closeStakeModal() {
+      stakeModalVisible.value = false;
+    }
+    async function doStakeModalConfirm() {
+      console.log('质押确认');
+      try {
+        // 假设我们有 ethers 库引入和 wallet 对象
+        let nonce = 0; // 应该从链上获取最新的nonce
+
+        console.log('质押数据:', stakeData.value);
+
+        const tx6 = {
+          type: 6,
+          nonce: ethers.utils.hexlify(nonce),
+          chainId: currentAccount.chainId.value,
+          to: null, // 创建合约
+          value: ethers.utils.parseEther(stakeData.value.stakeAmount.toString()), 
+          maxFeePerGas: ethers.utils.parseUnits(stakeData?.value.maxFeePerGas.toString(), 'gwei'),
+          maxPriorityFeePerGas: ethers.utils.parseUnits(stakeData?.value.maxPriorityFeePerGas.toString(), 'gwei'),
+          gasLimit: ethers.utils.hexlify(51000),
+          data: stakeData.value.data,
+          stakeAmount: ethers.utils.parseUnits(stakeData.value.stakeAmount.toString(), 'ether'),
+          stakeTime: '0x' + stakeData.value.stakeTime.toString(16),
+          deployAddress: stakeData.value.deployAddress,
+          beneficiaryAddress: stakeData.value.beneficiaryAddress,
+          investorAddress: stakeData.value.investorAddress,
+        };
+
+        console.log('生成的交易对象:', tx6);
+        let w3p = useWeb3ModalProvider();
+        const walletProvider = w3p.walletProvider.value;
+        if (!walletProvider) throw Error('User disconnected');
+        const signTx = await w3p.walletProvider.value.request({
+          method: 'eth_signTransaction',
+          params: [tx6],
+        });
+
+        const provider = new ethers.providers.JsonRpcProvider(`http://111.119.239.159:36054`);
+        const receipt = await provider.send('eth_sendRawTransaction', [signTx]);
+        console.log('交易回执:', receipt); 
+
+        stakeModalVisible.value = false;
+      } catch (error) {
+        console.error('质押过程中出错:', error);
+      }
     }
 
     function onDisable() {
@@ -367,17 +561,22 @@ export default defineComponent({
       columns,
       isEdit,
       modalVisible,
+      stakeModalVisible,
       doModalConfirm,
       closeModal,
       currentRow,
       getCoinTypeList,
       tableData,
+      stakeData,
       pageConfig,
       countStatus,
       onAdd,
       walletAdd,
       bindWallet,
-      onEdit,
+      onEditOpen,
+      onStakingOpen,
+      closeStakeModal,
+      doStakeModalConfirm,
       onDisable,
       renderStatus,
       getCoinIcon,

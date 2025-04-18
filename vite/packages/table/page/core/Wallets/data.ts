@@ -1,3 +1,5 @@
+import { el } from "element-plus/es/locale";
+
 export default {
   // 钱包列表字段
   walletColumn: [
@@ -5,6 +7,7 @@ export default {
       title: '序号',
       dataIndex: 'id',
       key: 'id',
+      width: 60,
     },
     {
       title: '账户别名',
@@ -15,6 +18,8 @@ export default {
       title: '账户地址',
       dataIndex: 'address',
       key: 'address',
+      ellipsis: true,
+      width: "25%",
     },
     {
       title: '币种符号',
