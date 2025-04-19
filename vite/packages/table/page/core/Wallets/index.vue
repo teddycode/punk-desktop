@@ -430,7 +430,7 @@ export default defineComponent({
           value: ethers.utils.parseEther(stakeData.value.stakeAmount.toString()), 
           maxFeePerGas: ethers.utils.parseUnits(stakeData?.value.maxFeePerGas.toString(), 'gwei'),
           maxPriorityFeePerGas: ethers.utils.parseUnits(stakeData?.value.maxPriorityFeePerGas.toString(), 'gwei'),
-          gasLimit: ethers.utils.hexlify(51000),
+          gasLimit: ethers.utils.hexlify(73000),
           data: stakeData.value.data,
           stakeAmount: ethers.utils.parseUnits(stakeData.value.stakeAmount.toString(), 'ether'),
           stakeTime: '0x' + stakeData.value.stakeTime.toString(16),
