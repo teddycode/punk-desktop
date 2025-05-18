@@ -184,7 +184,7 @@ export default defineComponent({
     onMounted(() => {
       const mit = globalProperties.$bus;
       // console.log('查看mit',mit);
-      mit.on('defaultClickItem', (item) => {
+      mit?.on('defaultClickItem', (item) => {
         // console.log('监听item',item);
         currentItem(item);
       });

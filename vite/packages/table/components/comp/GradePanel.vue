@@ -183,15 +183,19 @@ export default defineComponent({
     };
   },
   mounted() {
-    this.getUserInfo();
-    this.onlineGrade = this.userInfo.onlineGrade;
-    this.grade = this.userInfo.onlineGradeExtra;
-    let lv = this.grade.lv;
-    let section = this.gradeTableGenerate(64)[lv + 1];
-    let remain = section[0] * 60 - this.grade.cumulativeMinute;
-    this.remainHour = Math.floor(remain / 60);
-    this.remainMinute = remain - Math.floor(remain / 60) * 60;
-    this.times = this.getTimes();
+    try {
+      this.getUserInfo();
+      this.onlineGrade = this.userInfo.onlineGrade;
+      this.grade = this.userInfo.onlineGradeExtra;
+      let lv = this.grade.lv;
+      let section = this.gradeTableGenerate(64)[lv + 1];
+      let remain = section[0] * 60 - this.grade.cumulativeMinute;
+      this.remainHour = Math.floor(remain / 60);
+      this.remainMinute = remain - Math.floor(remain / 60) * 60;
+      this.times = this.getTimes();
+    } catch (e) {
+      console.error('获取在线等级失败', e);
+    }
   },
 
   methods: {

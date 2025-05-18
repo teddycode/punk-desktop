@@ -31,7 +31,7 @@ onBeforeRouteUpdate((to, from) => {
 
 const activeState = computed(() => {
   if (props.model == 'router') {
-    return isActive(props.item.tab || props.item.id, 3, tabParams.value);
+    return isActive(props?.item.tab || props?.item.id, 3, tabParams.value);
   } else if (props.model == 'id') {
     return props.item.id == props.id;
   }

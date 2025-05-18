@@ -26,7 +26,21 @@
           <PlusOutlined />添加</a-button
         >
       </template>
-      <a-table bordered :columns="columns" :data-source="tableData" :pagination="pageConfig" row-key="id">
+      <a-table
+        bordered
+        :columns="columns"
+        :data-source="tableData"
+        :pagination="{
+          current: pageConfig.current,
+          pageSize: pageConfig.pageSize,
+          total: pageConfig.total,
+          showSizeChanger: true,
+          showQuickJumper: true,
+          showTotal: (total) => `共 ${total} 条记录`,
+        }"
+        @change="handleTableChange"
+        row-key="id"
+      >
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'address'">
             <a-tooltip>
@@ -46,7 +60,7 @@
           </template>
           <template v-else-if="column.key === 'type'">
             <div v-if="record.type === 'address'">
-              <a-tag color="yellow"> 外部账户 </a-tag>
+              <a-tag color="yellow"> 私钥账户 </a-tag>
             </div>
             <div v-else-if="record.type === 'contract'">
               <a-tag color="green"> 合约账户 </a-tag>
@@ -66,7 +80,10 @@
           <template v-else-if="column.key === 'action'">
             <EditOutlined /> <a key="list-edit" @click="onEditOpen(record)">编辑</a>
             <a-divider type="vertical" />
-            <LockOutlined /> <a key="list-lock" @click="onStakingOpen(record)">质押</a>
+            <template v-if="stakedAccounts.has(record.id)">
+              <LockOutlined style="color: #52c41a" /> <a key="list-lock" style="color: #52c41a">已质押</a>
+            </template>
+            <template v-else> <LockOutlined /> <a key="list-lock" @click="onStakingOpen(record)">质押</a> </template>
             <a-divider type="vertical" />
             <a-popconfirm
               title="解绑后，将无法通过该账户登录！"
@@ -282,6 +299,25 @@
       </div>
     </Modal>
   </div>
+  <a-modal
+    v-model:visible="signingInProgress"
+    :footer="null"
+    :closable="false"
+    :maskClosable="false"
+    centered
+    width="400px"
+    :destroyOnClose="true"
+    class="signing-modal"
+  >
+    <div style="text-align: center; padding: 20px 0">
+      <a-spin size="large" />
+      <div style="margin-top: 20px">
+        <h3>等待钱包签名</h3>
+        <p>请在您的钱包应用中确认交易签名...</p>
+        <p style="color: #999; font-size: 12px">请不要关闭此窗口，签名完成后将自动继续</p>
+      </div>
+    </div>
+  </a-modal>
 </template>
 
 <!--
@@ -334,6 +370,8 @@ export default defineComponent({
     // 样例数据
     let tableData = ref([]);
 
+    let signingInProgress = ref(false);
+
     let currentAccount = useWeb3ModalAccount();
 
     let account = ref({
@@ -367,7 +405,7 @@ export default defineComponent({
       gasLimit: 51000,
 
       // 用户需要填写的字段
-      data: '0x608060405234801561001057600080fd5b5060008060006101000a81548167ffffffffffffffff021916908367ffffffffffffffff16021790555061025d806100496000396000f3fe608060405234801561001057600080fd5b50600436106100415760003560e01c8063569c5f6d146100465780637b88119614610064578063853255cc14610080575b600080fd5b61004e61009e565b60405161005b9190610143565b60405180910390f35b61007e6004803603810190610079919061018f565b6100bb565b005b610088610108565b6040516100959190610143565b60405180910390f35b60008060009054906101000a900467ffffffffffffffff16905090565b806000808282829054906101000a900467ffffffffffffffff166100df91906101eb565b92506101000a81548167ffffffffffffffff021916908367ffffffffffffffff16021790555050565b60008054906101000a900467ffffffffffffffff1681565b600067ffffffffffffffff82169050919050565b61013d81610120565b82525050565b60006020820190506101586000830184610134565b92915050565b600080fd5b61016c81610120565b811461017757600080fd5b50565b60008135905061018981610163565b92915050565b6000602082840312156101a5576101a461015e565b5b60006101b38482850161017a565b91505092915050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b60006101f682610120565b915061020183610120565b9250828201905067ffffffffffffffff811115610221576102206101bc565b5b9291505056fea2646970667358221220a2bec65f95c2f4ddc18b03d1dd689c6bead9dac6e5562703da6561d98a2e1f5f64736f6c63430008120033',
+      data: datas.contractBinary,
       stakeAmount: 1,
       stakeTime: 2,
       deployAddress: '',
@@ -376,6 +414,8 @@ export default defineComponent({
     });
 
     let currentRow = null;
+
+    let stakedAccounts = ref(new Set());
 
     const userInfo = appStore().userInfo;
 
@@ -415,28 +455,31 @@ export default defineComponent({
       stakeModalVisible.value = false;
     }
     async function doStakeModalConfirm() {
+      const provider = new ethers.providers.JsonRpcProvider(`http://111.119.239.159:36054`);
       console.log('质押确认');
       try {
+        // 显示加载提示
+        signingInProgress.value = true;
         // 假设我们有 ethers 库引入和 wallet 对象
-        let nonce = 0; // 应该从链上获取最新的nonce
-
+        const nonce = await provider.getTransactionCount(currentAccount.address.value, 'latest');
+        console.log('sender address:', currentAccount.address.value, 'with', nonce);
         console.log('质押数据:', stakeData.value);
 
         const tx6 = {
           type: 6,
-          nonce: ethers.utils.hexlify(nonce),
-          chainId: currentAccount.chainId.value,
-          to: null, // 创建合约
-          value: ethers.utils.parseEther(stakeData.value.stakeAmount.toString()), 
-          maxFeePerGas: ethers.utils.parseUnits(stakeData?.value.maxFeePerGas.toString(), 'gwei'),
-          maxPriorityFeePerGas: ethers.utils.parseUnits(stakeData?.value.maxPriorityFeePerGas.toString(), 'gwei'),
-          gasLimit: ethers.utils.hexlify(73000),
+          chainId: 20250226,
+          nonce: nonce,
+          maxPriorityFeePerGas: ethers.utils.parseUnits('1', 'gwei'),
+          maxFeePerGas: ethers.utils.parseUnits('1', 'gwei'),
+          gasLimit: 3810004,
+          to: null,
+          value: 0,
           data: stakeData.value.data,
-          stakeAmount: ethers.utils.parseUnits(stakeData.value.stakeAmount.toString(), 'ether'),
-          stakeTime: '0x' + stakeData.value.stakeTime.toString(16),
-          deployAddress: stakeData.value.deployAddress,
-          beneficiaryAddress: stakeData.value.beneficiaryAddress,
-          investorAddress: stakeData.value.investorAddress,
+          deployerAddress: ethers.utils.hexlify(stakeData.value.investorAddress),
+          investorAddress: ethers.utils.hexlify(stakeData.value.investorAddress),
+          beneficiaryAddress: ethers.utils.hexlify(stakeData.value.investorAddress),
+          stakedAmount: 3,
+          stakedTime: 2,
         };
 
         console.log('生成的交易对象:', tx6);
@@ -448,14 +491,31 @@ export default defineComponent({
           params: [tx6],
         });
 
-        const provider = new ethers.providers.JsonRpcProvider(`http://111.119.239.159:36054`);
         const receipt = await provider.send('eth_sendRawTransaction', [signTx]);
-        console.log('交易回执:', receipt); 
+        console.log('交易回执:', receipt);
 
+        // 在交易成功后，记录该账户已质押
+        stakedAccounts.value.add(currentRow?.id);
+
+        // 如果交易成功，通过以下代码查询返回值
+        // const result = await provider.send(receipt);
+
+        // 隐藏加载提示
+        signingInProgress.value = false;
         stakeModalVisible.value = false;
       } catch (error) {
         console.error('质押过程中出错:', error);
       }
+    }
+
+    // 在 setup 函数内部添加以下函数
+    function handleTableChange(pagination, filters, sorter) {
+      // 更新页码配置
+      pageConfig.value.current = pagination.current;
+      pageConfig.value.pageSize = pagination.pageSize;
+
+      // 重新获取表格数据
+      fetchTableData();
     }
 
     function onDisable() {
@@ -531,13 +591,15 @@ export default defineComponent({
     //   获取表格数据
     async function fetchTableData() {
       const param: PageParams = {
-        ...pageConfig.value,
+        pageNumber: pageConfig.value.current,
+        pageSize: pageConfig.value.pageSize,
         userId: parseInt(userInfo.uid),
       };
       PostWalletPageList(param).then((resp) => {
         console.log('钱包分页数据：', resp);
         tableData.value = resp?.data?.records;
         pageConfig.value.current = resp?.data?.pageNumber;
+        pageConfig.value.total = resp?.data?.totalRow;
       });
     }
     // 绑定钱包的信息
@@ -562,7 +624,9 @@ export default defineComponent({
       isEdit,
       modalVisible,
       stakeModalVisible,
+      signingInProgress,
       doModalConfirm,
+      stakedAccounts,
       closeModal,
       currentRow,
       getCoinTypeList,
@@ -582,6 +646,7 @@ export default defineComponent({
       getCoinIcon,
       fetchStatusData,
       fetchTableData,
+      handleTableChange,
     };
   },
   mounted() {

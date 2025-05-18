@@ -75,21 +75,22 @@ export default defineComponent({
           icon: 'moon',
           route: { name: 'collects' },
         },
-        {
-          title: 'IPFS测试',
-          icon: 'chat',
-          route: { name: 'test' },
-        },
-
         // {
-        //   title: '聊天',
-        //   index: 'chat',
-        //   icon: 'message',
-        //   tab: 'chat',
-        //   route: { name: 'chat' },
+        //   title: 'IPFS测试',
+        //   icon: 'chat',
+        //   route: { name: 'test' },
         // },
+        {
+          title: '聊天',
+          index: 'chat',
+          icon: 'message',
+          tab: 'chat',
+          route: { name: 'chat' },
+        },
         // {
-        //   title: '通讯录',index: 'contact',icon:'team',
+        //   title: '通讯录',
+        //   index: 'contact',
+        //   icon:'team',
         //   route:{ name: 'contact' }
         // },
         // {

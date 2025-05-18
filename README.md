@@ -120,6 +120,8 @@
 
 ## 开发调试
 
+0.先下载代码，git clone --recurse-submodules xxx.
+
 1.安装 nodejs-16 版本（建议使用 nvm 管理 node 版本，亲测 node16.15.0 对本项目正常使用）
 
 2.在管理员终端安装 win sdk 工具（需要等待较长时间）`npm install --g --production windows-build-tools`

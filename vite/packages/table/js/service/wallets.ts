@@ -27,3 +27,13 @@ export function PutForWalletInfo(data: any) {
     data: data,
   });
 }
+
+
+// 获取质押信息
+export function GetAccountPledge(address: string) {
+  return request({
+    url: '/wallets/pledge',
+    method: 'get',
+    params: { address: address },
+  });
+}
