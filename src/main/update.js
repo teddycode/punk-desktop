@@ -25,7 +25,7 @@ class Updater {
       const content = {
         title: '自动更新',
         body:
-          '自动更新程序意外终止,错误原因： ' + errInfo + ' ，请检查系统代理和网络。或者到www.apps.vip手动下载更新。',
+          '自动更新程序意外终止,错误原因： ' + errInfo + ' ，请检查系统代理和网络。',
       };
       const notification = new Notification(content);
       notification.show();

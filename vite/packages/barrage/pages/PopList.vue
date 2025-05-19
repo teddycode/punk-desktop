@@ -482,7 +482,7 @@ export default {
             <p style="color: #999; font-size: 12px">{{ new Date(currentBarrageData.create_time).toLocaleString() }}</p>
           </a-col></a-row
         >
-        <template #footer="">
+        <template #footer>
           <div style="text-align: center">
             <a-button
               :loading="supporting"
