@@ -63,31 +63,6 @@ async function ready() {
   Menu.setApplicationMenu(mainMenu);
   createDockMenu();
   appStart();
-  //每分钟执行提交在线时长
-  // async function uploadCumulativeTime() {
-  //   try {
-  //     let clientId = settings.get('clientID');
-  //     const userInfo = await userModel.getCurrent();
-  //     const options = {
-  //       uid: userInfo && userInfo.data.uid != 0 ? userInfo.data.uid : 0, // 用户uid
-  //       client_id: clientId, // 设备号
-  //     };
-  //
-  //     await baseApi.init();
-  //     baseApi
-  //       .axios('/app/open/usageStats/cumulativeTime', options, 'post')
-  //       .catch((e) => {
-  //         console.warn('上传在线时长失败', e);
-  //       })
-  //       .then((rs) => {
-  //         //console.log('提交在线时长成功',rs)
-  //       });
-  //   } catch (e) {
-  //     console.warn('上传在线时间意外错误', e);
-  //   }
-  // }
-  //
-  // setInterval(uploadCumulativeTime, 1000 * 60); // 每分钟上报在线时间
 }
 await ready();
 
@@ -158,7 +133,7 @@ if (isDevelopmentMode) {
 
 electronLog.transports.file.file = app.getPath('userData') + '/myLog.log';
 
-electronLog.transports.file.level = 'info';
+electronLog.transports.file.level = 'debug';
 electronLog.transports.console.level = 'debug';
 // workaround for flicker when focusing app (https://github.com/electron/electron/issues/17942)
 app.commandLine.appendSwitch('disable-backgrounding-occluded-windows', 'true');
@@ -168,6 +143,101 @@ const originDataPath = app.getPath('userData'); //记录下原始路径，后面
 
 global.userDataPath = app.getPath('userData');
 //必须先加载到userData目录才可以加载settings
+
+// =====================save log========================
+// 日志文件路径
+const logPath = path.join(global.userDataPath, 'app.log');
+
+// 备份原始 console 方法
+const originalConsole = {
+  log: console.log,
+  info: console.info,
+  warn: console.warn,
+  error: console.error,
+};
+
+// 获取调用者信息（文件名和行号）
+function getCallerInfo() {
+  const error = new Error();
+  const stackLines = error.stack.split('\n');
+  // 跳过前3行（Error对象创建、getCallerInfo函数、wrapper函数）
+  const callerLine = stackLines[3] || '';
+
+  // 正则匹配文件名和行号
+  const match = /at\s+(.*)\s+\((.*):(\d+):(\d+)\)/.exec(callerLine);
+  if (match) {
+    return {
+      function: match[1],
+      file: path.basename(match[2]),
+      line: match[3],
+      column: match[4],
+    };
+  }
+
+  // 备用匹配（针对不同格式的调用栈）
+  const matchAlt = /at\s+([^()]+|)\s*\(?([^:]+):(\d+):(\d+)\)?/.exec(callerLine);
+  if (matchAlt) {
+    return {
+      function: matchAlt[1] || 'anonymous',
+      file: path.basename(matchAlt[2]),
+      line: matchAlt[3],
+      column: matchAlt[4],
+    };
+  }
+
+  return { file: 'unknown', line: 'unknown', column: 'unknown' };
+}
+
+// 重写 console 方法
+function setupLogging() {
+  // 创建日志目录
+  const logDir = path.dirname(logPath);
+  if (!fs.existsSync(logDir)) {
+    fs.mkdirSync(logDir, { recursive: true });
+  }
+
+  // 写入日志到文件
+  function writeLog(level, message, caller) {
+    const timestamp = new Date().toISOString();
+    const fileInfo = `${caller.file}:${caller.line}`;
+    const logEntry = `[${timestamp}] [${level}] [${fileInfo}] ${message}\n`;
+
+    fs.appendFile(logPath, logEntry, (err) => {
+      if (err) originalConsole.error('Failed to write log:', err);
+    });
+  }
+
+  // 包装 console 方法
+  console.log = (...args) => {
+    const message = args.map((arg) => String(arg)).join(' ');
+    const caller = getCallerInfo();
+    originalConsole.log(...args);
+    writeLog('LOG', message, caller);
+  };
+
+  console.info = (...args) => {
+    const message = args.map((arg) => String(arg)).join(' ');
+    const caller = getCallerInfo();
+    originalConsole.info(...args);
+    writeLog('INFO', message, caller);
+  };
+
+  console.warn = (...args) => {
+    const message = args.map((arg) => String(arg)).join(' ');
+    const caller = getCallerInfo();
+    originalConsole.warn(...args);
+    writeLog('WARN', message, caller);
+  };
+
+  console.error = (...args) => {
+    const message = args.map((arg) => String(arg)).join(' ');
+    const caller = getCallerInfo();
+    originalConsole.error(...args);
+    writeLog('ERROR', message, caller);
+  };
+}
+
+setupLogging();
 
 const browserPage = 'file://' + __dirname + '/index.html';
 
@@ -366,12 +436,14 @@ function createWindowWithBounds(bounds) {
     let timer = setInterval(() => {
       // console.log('检查会话是否注册了协议',require('electron').session.defaultSession.protocol.isProtocolRegistered('crx'))
       if (require('electron').session.defaultSession.protocol.isProtocolRegistered('crx')) {
+        console.log('加载页面地址：', browserPage);
         mainWindow.loadURL(browserPage);
         clearInterval(timer);
       }
     }, 100);
   } else {
     browser = new Browser(electron.session.fromPartition('persist:webcontent'));
+    console.log('加载页面地址：', browserPage);
     mainWindow.loadURL(browserPage);
   }
 

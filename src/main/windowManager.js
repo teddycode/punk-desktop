@@ -381,9 +381,9 @@ class WindowManager {
     if (url) {
       window.loadURL(url);
     }
-    if (isDevelopmentMode) {
-      window.webContents.openDevTools({ mode: 'detach' });
-    }
+    // if (isDevelopmentMode) {
+    window.webContents.openDevTools({ mode: 'detach' });
+    // }
     this.windowMap[name] = window;
     instance = new WindowInstance({
       window: window,

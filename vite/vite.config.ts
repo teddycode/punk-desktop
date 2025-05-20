@@ -44,13 +44,16 @@ export const config = {
       '@components': path.resolve('./packages/table/components'),
       '@assets': path.resolve('./packages/table/assets'),
       '@js': path.resolve('./packages/table/js'),
+      // 添加以下别名解析
+      '#alloc': path.resolve('./node_modules/uint8arrays/dist/src/alloc.js'),
+      '#util/as-uint8array': path.resolve('./node_modules/uint8arrays/dist/src/util/as-uint8array.js'),
     },
   },
   build: {
     sourcemap: true, //不打包sourcemap
     target: 'es2020',
     rollupOptions: {
-      external: ['#alloc', '#util/as-uint8array'],
+      // external: ['#alloc', '#util/as-uint8array'],
       input: inputs,
       output: {
         manualChunks: {

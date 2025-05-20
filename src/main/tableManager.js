@@ -106,7 +106,10 @@ class TableManager {
       //     callback(result.deviceId);
       //   }
       // })
-      tableWin.window.webContents.loadURL(render.getUrl('table.html', {}, 'table.com'));
+      let tableUrl = render.getUrl('table.html', {}, 'table.com');
+      console.log('1.打开的tableUrl', tableUrl);
+      tableWin.window.webContents.loadURL(tableUrl);
+      tableWin.webContents.openDevTools({ mode: 'detach' });
       tableWin.window.webContents.session.setPermissionRequestHandler((webContents, permission, callback) => {
         let allowedPermissions = ['audioCapture', 'media', 'fullscreen']; // Full list here: https://developer.chrome.com/extensions/declare_permissions#manifest
 

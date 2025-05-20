@@ -1431,9 +1431,9 @@ app.whenReady().then(() => {
       walletAuthWindow.on('close', () => {
         walletAuthWindow = null;
       });
-      walletAuthWindow.loadURL('http://localhost:1600/html/auth/dist/index.html');
-      // let api = require(path.join(__dirname, 'server-config.js')).api;
-      // walletAuthWindow.loadURL(api.getUrl(api.API_URL.user.login));
+      // walletAuthWindow.loadURL('http://localhost:1600/html/auth/dist/index.html');
+      let api = require(path.join(__dirname, 'server-config.js')).api;
+      walletAuthWindow.loadURL(api.getUrl(api.API_URL.user.login));
       walletAuthWindow.on('ready-to-show', () => {
         if (userWindow && !userWindow.isDestroyed()) {
           userWindow.setAlwaysOnTop(false);

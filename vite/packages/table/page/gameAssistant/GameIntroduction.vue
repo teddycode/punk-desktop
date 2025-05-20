@@ -193,7 +193,7 @@
 <script>
 import HorizontalPanel from '../../components/HorizontalPanel.vue'
 // import { sendRequest } from '../../js/axios/api';
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio';
 import browser from '../../js/common/browser'
 import axios from 'axios'
 import { steamUserStore } from '../../store/steamUser'

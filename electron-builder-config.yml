@@ -50,7 +50,7 @@ win:
   icon: ./icons/logowin.ico
   target:
     - target: nsis
-    - target: zip
+#    - target: zip
   publish:
     - provider: generic
       url: http://123.157.213.104:18081/update/binary/win/

@@ -417,7 +417,10 @@ global.render = {
     }
 
     fs.readFile(filePath, (error, data) => {
-      if (error) return;
+      if (error) {
+        console.log('2.协议转换失败：:', request.url, '->', filePath, '==', error);
+        return;
+      }
       let mimeType = '';
       if (extension === '.js') {
         mimeType = 'text/javascript';
@@ -436,6 +439,7 @@ global.render = {
       } else if (extension === '.jpg') {
         mimeType = 'image/jpeg';
       }
+      console.log('2.协议转换成功:', request.url, '->', filePath, '==', mimeType);
       response({ mimeType, data });
     });
   },
