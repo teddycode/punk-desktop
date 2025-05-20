@@ -3,7 +3,7 @@ const Server = {
   // baseUrl: 'https://wad.apps.vip/api',
   //baseUrl:'http://test1.com:9001'
   // baseUrl: 'http://127.0.0.1:9090/api',
-  // baseUrl: 'http://123.157.213.104:18081/api',
+  // baseUrl: 'http://111.119.239.159:36066/api',
   baseUrl: 'http://111.119.239.159:36066/api',
 };
 

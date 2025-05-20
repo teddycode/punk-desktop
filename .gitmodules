@@ -1,0 +1,4 @@
+[submodule "packages/ethersjs-punkos"]
+	path = packages/ethersjs-punkos
+	url = https://github.com/teddycode/ethersjs-punkos
+	branch = v5.7.2-punkos

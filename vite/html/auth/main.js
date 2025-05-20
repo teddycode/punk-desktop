@@ -68,7 +68,7 @@ modal.subscribeEvents((event) => {
         //  获取后端的nonce
         const address = modal.getAddress();
         axios // TODO 这里需要更新服务器地址
-          .get('http://123.157.213.104:18081/api/users/login/nonce', {
+          .get('http://111.119.239.159:36066/api/users/login/nonce', {
             params: { address: address },
           })
           .then((res) => {

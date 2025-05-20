@@ -53,7 +53,7 @@ win:
 #    - target: zip
   publish:
     - provider: generic
-      url: http://123.157.213.104:18081/update/binary/win/
+      url: http://111.119.239.159:36066/update/binary/win/
 #      url: http://127.0.0.1:9090/update/binary/win/
       channel: latest
 
@@ -77,7 +77,7 @@ mac:
     - target: zip
   publish:
     - provider: generic
-      url: http://123.157.213.104:18081/update/browser/mac-${arch}/
+      url: http://111.119.239.159:36066/update/browser/mac-${arch}/
 #      url: http://127.0.0.1:9090/update/binary/mac/
       channel: latest
 #   extendInfo:
