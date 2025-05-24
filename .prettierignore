@@ -1,3 +1,11 @@
 dist
 ext
 node_modules
+packages
+setup
+setup-x64
+main.build.js
+*.log
+logo
+res
+reader

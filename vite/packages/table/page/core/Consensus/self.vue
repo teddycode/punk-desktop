@@ -14,7 +14,7 @@
             <a-statistic title="地址" :value="'1NvTaPya8mMC47fLrtfTZ5F4zWGseaj8ek'" />
           </a-col>
           <a-col :span="4">
-            <a-statistic title="挖矿奖励" :value="60" suffix="Token" />
+            <a-statistic title="挖矿奖励" :value="60" suffix="PUNK" />
           </a-col>
           <a-col :span="4">
             <a-statistic title="网络ID" value="2a9fc4123b" />

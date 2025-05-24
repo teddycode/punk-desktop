@@ -33,6 +33,8 @@ files:
   - resources/**/*
   - src/**/*
   - vite/dist/**/* #增加渲染进程
+  - vite/html/auth/dist/**/* # 添加 auth 目录的构建结果
+  
 fileAssociations:
   ext:
     - html
