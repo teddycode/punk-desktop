@@ -15,6 +15,11 @@ export const hashColumns = [
     key: 'version',
   },
   {
+    title: '详情',
+    dataIndex: 'details',
+    key: 'details',
+  },
+  {
     title: '更新时间',
     dataIndex: 'lastUpdate',
     key: 'lastUpdate',
@@ -109,6 +114,11 @@ export const sigColumns = [
     key: 'version',
   },
   {
+    title: '详情',
+    dataIndex: 'details',
+    key: 'details',
+  },
+  {
     title: '更新时间',
     dataIndex: 'lastUpdate',
     key: 'lastUpdate',
@@ -119,44 +129,73 @@ export const sigData = [
     name: 'BLS',
     type: '常规签名',
     version: '0.1.0',
+    details: '基于椭圆曲线配对的数字签名方案，支持签名聚合和门限签名',
     lastUpdate: '2023-08-03',
   },
   {
     name: 'ECDSA',
     type: '常规签名',
     version: '0.1.0',
+    details: '椭圆曲线数字签名算法，广泛用于比特币等区块链系统',
     lastUpdate: '2023-08-03',
   },
   {
     name: 'ECSchnorr',
     type: '常规签名',
     version: '0.1.0',
+    details: '基于椭圆曲线的Schnorr签名，支持签名聚合和批量验证',
     lastUpdate: '2023-08-03',
   },
   {
     name: 'EdDSA',
     type: '常规签名',
     version: '0.1.0',
+    details: '爱德华曲线数字签名算法，具有高性能和安全性',
     lastUpdate: '2023-08-03',
   },
   {
     name: 'SM2',
     type: '常规签名',
     version: '0.1.0',
+    details: '中国商用密码标准的数字签名算法，基于椭圆曲线',
     lastUpdate: '2023-08-03',
   },
   {
     name: 'BLS多重签名',
     type: '多重签名',
     version: '0.1.0',
+    details: 'BLS签名的多重签名扩展，支持多方签名聚合',
     lastUpdate: '2023-08-03',
   },
   {
     name: 'BLS门限签名',
     type: '门限签名',
     version: '0.1.0',
+    details: 'BLS签名的门限版本，支持t-of-n门限签名方案',
     lastUpdate: '2023-08-03',
   },
+  {
+    name: 'Aigis',
+    type: '后量子签名',
+    version: '0.2.0',
+    details: '面向后量子时代的数字签名算法，抗量子计算机攻击',
+    lastUpdate: '2025-09-25',
+  },
+  {
+    name: 'DILITHIUM',
+    type: '后量子签名',
+    version: '0.2.0',
+    details: 'NIST标准化的格基后量子数字签名算法',
+    lastUpdate: '2025-09-25',
+  },
+  {
+    name: 'ML_DSA',
+    type: '后量子签名',
+    version: '0.2.0',
+    details: 'NIST推荐的机器学习增强数字签名算法',
+    lastUpdate: '2025-09-25',
+  },
+
 ];
 export const keyExchangeColumns = [
   {
@@ -168,6 +207,11 @@ export const keyExchangeColumns = [
     title: '版本',
     dataIndex: 'version',
     key: 'version',
+  },
+  {
+    title: '详情',
+    dataIndex: 'details',
+    key: 'details',
   },
   {
     title: '更新时间',
@@ -202,6 +246,11 @@ export const commitmentColumns = [
     title: '版本',
     dataIndex: 'version',
     key: 'version',
+  },
+  {
+    title: '详情',
+    dataIndex: 'details',
+    key: 'details',
   },
   {
     title: '更新时间',
@@ -243,6 +292,11 @@ export const secretSharingColumns = [
     key: 'version',
   },
   {
+    title: '详情',
+    dataIndex: 'details',
+    key: 'details',
+  },
+  {
     title: '更新时间',
     dataIndex: 'lastUpdate',
     key: 'lastUpdate',
@@ -277,6 +331,11 @@ export const vrfColumns = [
     key: 'version',
   },
   {
+    title: '详情',
+    dataIndex: 'details',
+    key: 'details',
+  },
+  {
     title: '更新时间',
     dataIndex: 'lastUpdate',
     key: 'lastUpdate',
@@ -299,6 +358,11 @@ export const vdfColumns = [
     title: '版本',
     dataIndex: 'version',
     key: 'version',
+  },
+  {
+    title: '详情',
+    dataIndex: 'details',
+    key: 'details',
   },
   {
     title: '更新时间',
@@ -328,6 +392,11 @@ export const zkpColumns = [
     title: '版本',
     dataIndex: 'version',
     key: 'version',
+  },
+  {
+    title: '详情',
+    dataIndex: 'details',
+    key: 'details',
   },
   {
     title: '更新时间',
