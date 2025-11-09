@@ -33,11 +33,11 @@ export const arbitrum: ChainNetInfo = {
 
 // 磐古测试网
 export const punkos: ChainNetInfo = {
-  chainId: 20250226,
+  chainId: 20251101,
   name: 'PunkOS-XWK',
   currency: 'PUNK',
   explorerUrl: 'https://goerli.etherscan.io',
-  rpcUrl: 'http://111.119.239.159:36054',
+  rpcUrl: 'http://47.243.174.71:36054',
 };
 
 export const sepolia: ChainNetInfo = {

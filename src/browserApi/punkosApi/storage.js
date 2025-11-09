@@ -1,7 +1,7 @@
 
 const axios = require('axios1')
-const endpoint = 'http://111.119.239.159:12801';
-const gateway = 'http://111.119.239.159:17801'
+const endpoint = 'http://47.243.174.71:12801';
+const gateway = 'http://47.243.174.71:17801'
 const storage = {
   //调用ipfs接口上传图片
   async _imgUploadIpfs(fileData){

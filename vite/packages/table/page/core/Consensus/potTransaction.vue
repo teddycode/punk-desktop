@@ -735,7 +735,7 @@ export default defineComponent({
         };
 
         const response = await axios.post(
-          'http://111.119.239.159:18025/api/createlocktransaction',
+          'http://47.243.174.71:18025/api/createlocktransaction',
           requestData,
           { headers: { 'Content-Type': 'application/json' } }
         );

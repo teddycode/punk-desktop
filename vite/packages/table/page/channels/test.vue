@@ -25,7 +25,7 @@ import axios from "axios";
 // const client = create({ url: 'http://localhost:5001' });
 const client = create({ host: '123.157.213.102', port: '39761', protocol: 'http'});
 // const client = create({ host: 'localhost', port: '5001', protocol: 'http', apiPath: '/api/v0',});
-const imageUrl = ref('http://111.119.239.159:17801/ipfs/QmWvwK3K443XH9Srr38Nh8r1RytpArwthCUgUna3zrG2MV');
+const imageUrl = ref('http://47.243.174.71:17801/ipfs/QmWvwK3K443XH9Srr38Nh8r1RytpArwthCUgUna3zrG2MV');
 
 const clearDesk = async () => {
   await cardStore().switchToDesk(3);

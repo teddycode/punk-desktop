@@ -455,7 +455,7 @@ export default defineComponent({
       stakeModalVisible.value = false;
     }
     async function doStakeModalConfirm() {
-      const provider = new ethers.providers.JsonRpcProvider(`http://111.119.239.159:36054`);
+      const provider = new ethers.providers.JsonRpcProvider(`http://47.243.174.71:36054`);
       console.log('质押确认');
       try {
         // 显示加载提示
@@ -467,7 +467,7 @@ export default defineComponent({
 
         const tx6 = {
           type: 6,
-          chainId: 20250226,
+          chainId: 20251101,
           nonce: nonce,
           maxPriorityFeePerGas: ethers.utils.parseUnits('1', 'gwei'),
           maxFeePerGas: ethers.utils.parseUnits('1', 'gwei'),

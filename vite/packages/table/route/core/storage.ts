@@ -49,8 +49,8 @@ export default {
         icon: CodeOutlined,
       },
       beforeEnter(){
-        browser.openInTable('http://111.119.239.159:36014/group-storage/#/dashboard/upload', { wallet: true });
-        // window.location.href = 'https://punk.buaadcl.tech/group-storage/#/dashboard/upload';
+        browser.openInTable('http://47.243.174.71:36014/group-storage/#/dashboard/upload', { wallet: true });
+        // window.location.href = 'https://47.243.174.71/group-storage/#/dashboard/upload';
       },
     },
   ],
