@@ -20,6 +20,7 @@ const walletConfig = () => {
     enableInjected: true, // true by default
     enableCoinbase: true, // true by default
     rpcUrl: 'https://cloudflare-eth.com', // used for the Coinbase SDK
+    //rpcUrl: 'https://rpc.ankr.com/eth',
     defaultChainId: punkos.chainId,
   });
 

@@ -49,8 +49,11 @@ export default defineComponent({
         },
         {
           img: '/img/bottomPanel/keymgr.png',
-          title: '密钥管理',
-          type: 'task',
+          title: '权限设置',
+          route: {
+            name: 'userSettings',
+          },
+          type: 'route',
         },
         {
           img: '/img/bottomPanel/logout.png',

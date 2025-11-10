@@ -50,6 +50,8 @@ import storage from './core/storage';
 import wallets from './core/wallets';
 import Explorer from './core/explorer';
 import DappMarket from "./core/DappMarket";
+import CrossChain from "./core/crosschain";
+import userSettings from './core/userSettings';
 // import BackgroundPage from "@page/core/components/BackgroundPage.vue";
 
 // 二级路由，
@@ -74,7 +76,9 @@ export default [
       storage,
       wallets,
       Explorer,
-      DappMarket
+      DappMarket,
+      CrossChain,
+      userSettings,
     ],
   },
   {
