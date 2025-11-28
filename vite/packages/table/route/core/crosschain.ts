@@ -1,4 +1,4 @@
-import CrossChainPage from '@page/core/CrossChain/index.vue';
+import ThirdLayout from '@page/core/Layouts/ThirdLayout.vue';
 import MultichainView from '@page/core/CrossChain/Multichain.vue';
 import BridgeView from "@page/core/CrossChain/Bridge.vue";
 import RelayView from '@page/core/CrossChain/Relay.vue';
@@ -12,13 +12,13 @@ import { CodeOutlined } from '@ant-design/icons-vue';
 export default {
   path: 'crosschain',
   redirect: { name: 'CrossChainPage' },
-  component: CrossChainPage,
+  component: ThirdLayout,
   meta: {
     icon: CodeOutlined,
   },
   children: [
     {
-      path: 'index',
+      path: '/crosschain/index',
       name: 'CrossChainPage',
       component: MultichainView,
       meta: { title: '浏览器' },
@@ -27,7 +27,7 @@ export default {
       path: '/multi/bridge/:chain_id',
       name: 'Bridge',
       component: BridgeView,
-      meta: { title: '跨链桥' },
+      meta: { title: '跨链桥', noShow: true },
     },
     {
       path: '/relay',
@@ -36,28 +36,29 @@ export default {
       meta: { title: '跨链中继' }
     },
     {
-      path: '/transport',
-      name: 'Transport',
-      component: TransportView,
-      meta: { title: '跨链传输' }
-    },
-    {
       path: '/multi/tx/:tx_hash',
       name: 'Tx',
       component: TransportView,
-      meta: { title: '中继链交易' }
+      meta: { title: '中继链交易', noShow: true }
     },
     {
       path: '/multi/block/:block_hash',
       name: 'Block',
       component: BlockView,
-      meta: { title: '中继链区块' }
+      meta: { title: '中继链区块', noShow: true }
     },
     {
       path: '/manager',
       name: 'Manager',
+      meta: { title: '跨链管理' },
       //component: () => import('../views/Address.vue')
       component: ManagerView
-    }
+    },
+    {
+      path: '/transport',
+      name: 'Transport',
+      component: TransportView,
+      meta: { title: '跨链传输' }
+    },
   ],
 };

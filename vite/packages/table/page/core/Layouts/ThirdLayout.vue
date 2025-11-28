@@ -55,4 +55,12 @@ export default defineComponent({
 [data-theme='dark'] .site-layout-content {
   background: #141414;
 }
+/* 覆盖与增强：确保页面背景与内容高度覆盖整个视口 */
+.layout {
+  min-height: 100vh;
+  background: #fffffa;
+}
+.ant-layout-content {
+  background: #fffffa;
+}
 </style>
