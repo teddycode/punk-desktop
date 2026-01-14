@@ -35,7 +35,7 @@ const config = {
   PROD_NODE_SERVER_BASE_URL: 'https://apps.vip',
   // NODE_SERVER_BASE_URL: 'http://127.0.0.1:9090', // baseApi中用到了 wallet & auth 也用到了
   // NODE_SERVER_BASE_URL: 'http://punk.buaadcl.tech:36066', // baseApi中用到了 wallet & auth 也用到了
-  NODE_SERVER_BASE_URL: 'http://punk.buaadcl.tech:36066', // baseApi中用到了 wallet & auth 也用到了
+  NODE_SERVER_BASE_URL: 'http://47.243.174.71:36066', // baseApi中用到了 wallet & auth 也用到了
   IM: {
     API_BASE_URL: 'http://im-serve.xiangtian.ren',
     WEB_SOCKET_URL: 'ws://im-socket.xiangtian.ren/socket.io',

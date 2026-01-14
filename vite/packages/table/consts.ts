@@ -4,7 +4,7 @@ const Server = {
   //baseUrl:'http://test1.com:9001'
   // baseUrl: 'http://127.0.0.1:9090/api',
   // baseUrl: 'http://punk.buaadcl.tech:36066/api',
-  baseUrl: 'http://punk.buaadcl.tech:36066/api',
+  baseUrl: 'http://47.243.174.71:36066/api',
 };
 
 /**

@@ -22,13 +22,22 @@
         >本地应用
       </a-button>
     </div>
-    <div
-      class="h-10 w-28 bg-gray-800 rounded-lg flex justify-evenly items-center pointer"
-      style="background: var(--primary-bg); color: var(--primary-text)"
-      @click.stop="closeAll()"
-    >
-      <Icon icon="minus-circle-fill "></Icon>
-      全部关闭
+    <div class="flex flex-row">
+      <div
+        class="h-10 w-28 bg-gray-800 rounded-lg flex justify-evenly items-center pointer mr-3"
+        style="background: var(--primary-bg); color: var(--primary-text)"
+        @click.stop="closeAll()"
+      >
+        <Icon icon="minus-circle-fill "></Icon>
+        全部关闭
+      </div>
+      <div
+        class="h-10 w-10 bg-gray-800 rounded-lg flex justify-evenly items-center pointer"
+        style="background: var(--primary-bg); color: var(--primary-text)"
+        @click.stop="$emit('closeChangeApp')"
+      >
+        <Icon icon="close-circle-fill"></Icon>
+      </div>
     </div>
   </div>
   <vue-custom-scrollbar :settings="settings" style="position: relative; height: 250px; border-radius: 8px">
@@ -135,6 +144,10 @@ export default {
     ipc.send('getRunningTableApps');
 
     this.loadRecently().then();
+    window.addEventListener('keydown', this.handleEsc);
+  },
+  beforeUnmount() {
+    window.removeEventListener('keydown', this.handleEsc);
   },
   computed: {
     ...mapWritableState(appsStore, ['runningApps', 'runningAppsInfo', 'runningTableApps']),
@@ -160,6 +173,11 @@ export default {
     },
     setType(tag) {
       this.type = tag;
+    },
+    handleEsc(e) {
+      if (e.key === 'Escape') {
+        this.$emit('closeChangeApp');
+      }
     },
   },
 };
