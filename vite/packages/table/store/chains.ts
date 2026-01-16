@@ -12,7 +12,7 @@ export const mainnet: ChainNetInfo = {
   currency: 'ETH',
   explorerUrl: 'https://etherscan.io',
   rpcUrl: 'https://cloudflare-eth.com',
-  //rpcUrl: 'https://rpc.ankr.com/eth',
+  // rpcUrl: 'https://rpc.ankr.com/eth',
 };
 
 export const arbitrum: ChainNetInfo = {

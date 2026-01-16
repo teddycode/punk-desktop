@@ -163,12 +163,12 @@ export default {
         const routePermissionMap = {
           CryptoPage: 'cryptoEnabled',
           StoragePage: 'storageEnabled',
-          Explorer: 'blockchainExplorerEnabled',
+          // Explorer: 'blockchainExplorerEnabled',
           TransferPage: 'transferEnabled',
           ExchangePage: 'tradingEnabled',
           ConsensusPage: 'consensusEnabled',
           NetworkPage: 'networkEnabled',
-          GovernancePage: 'governanceEnabled',
+          // GovernancePage: 'governanceEnabled',
           DappMarketPage: 'appMarketEnabled',
           // CrossChainPage 不在权限开关列表中，不进行拦截
         };
@@ -316,3 +316,4 @@ export default {
 </script>
 
 <style lang="scss" scoped></style>
+
