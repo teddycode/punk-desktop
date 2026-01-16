@@ -19,7 +19,7 @@
   <!--  <div v-else>-->
   <div>
     <div style="max-width: 1200px; margin: auto">
-      <RunningApps />
+      <RunningApps @closeChangeApp="$emit('closeChangeApp')" />
     </div>
   </div>
 

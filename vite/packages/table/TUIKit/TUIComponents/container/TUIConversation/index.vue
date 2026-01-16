@@ -5,7 +5,14 @@
       <p>️{{ $t('TUIConversation.网络异常，请您检查网络设置') }}</p>
     </div>
     <main class="TUI-conversation-list">
+      <div
+        v-if="conversationData.list && conversationData.list.length === 0"
+        style="display: flex; justify-content: center; align-items: center; height: 100%; color: #999; font-size: 14px"
+      >
+        暂无会话
+      </div>
       <TUIConversationList
+        v-else
         :currentID="currentConversationID"
         :data="conversationData"
         @handleItem="handleCurrentConversation"
@@ -69,17 +76,17 @@ const TUIConversation = defineComponent({
 
     TUIConversationList.TUIServer = TUIServer;
 
-    watch(
-      () => data.conversationData.list,
-      (newVal) => {
-        //加上会话对置顶的排序，放置置顶的低于新会话
-        data.conversationData.list = data.conversationData.list.sort((a, b) => {
-          let aIndex = a.isPinned ? 1 : 0;
-          let bIndex = b.isPinned ? 1 : 0;
-          return bIndex - aIndex;
-        });
-      },
-    );
+    // watch(
+    //   () => data.conversationData.list,
+    //   (newVal) => {
+    //     //加上会话对置顶的排序，放置置顶的低于新会话
+    //     data.conversationData.list = data.conversationData.list.sort((a, b) => {
+    //       let aIndex = a.isPinned ? 1 : 0;
+    //       let bIndex = b.isPinned ? 1 : 0;
+    //       return bIndex - aIndex;
+    //     });
+    //   },
+    // );
 
     watch(
       () => data.currentConversationID,
@@ -154,8 +161,8 @@ const TUIConversation = defineComponent({
             });
           }
         } else {
-          message.warn('温馨提示,当前聊天页没有对话,进入发现页创建聊天会话或者点击左侧栏底部添加按钮创建');
-          router.push({ name: 'chatFind' });
+          // message.warn('温馨提示,当前聊天页没有对话,进入发现页创建聊天会话或者点击左侧栏底部添加按钮创建');
+          // router.push({ name: 'chatFind' });
         }
       });
     });

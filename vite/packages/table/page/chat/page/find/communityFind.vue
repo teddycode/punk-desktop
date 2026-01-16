@@ -1,7 +1,7 @@
 <template>
-  <div class="flex flex-col items-center justify-center mt-4" style="height: 89%" v-if="searchShow === false">
-    <vue-custom-scrollbar :settings="settingsScroller">
-      <div class="flex flex-col">
+  <div class="flex flex-col items-start justify-start mt-4 pl-4" style="height: 89%" v-if="searchShow === false">
+    <vue-custom-scrollbar :settings="settingsScroller" style="width: 100%">
+      <div class="flex flex-col" style="width: 1184px">
         <span class="font-16 font-500 mb-4" style="color: var(--primary-text)">官方推荐</span>
         <div class="content-list">
           <div
@@ -103,8 +103,8 @@
     </vue-custom-scrollbar>
   </div>
 
-  <div class="flex flex-col items-center justify-start mt-4" style="height: 89%" v-else>
-    <vue-custom-scrollbar :settings="settingsScroller">
+  <div class="flex flex-col items-start justify-start mt-4 pl-4" style="height: 89%" v-else>
+    <vue-custom-scrollbar :settings="settingsScroller" style="width: 100%">
       <div class="flex flex-col" style="width: 1184px">
         <span class="font-16 font-500 my-4" style="color: var(--primary-text)">搜索结果</span>
         <div class="content-list">
@@ -173,7 +173,7 @@ export default {
         useBothWheelAxes: true,
         swipeEasing: true,
         suppressScrollY: false,
-        suppressScrollX: true,
+        suppressScrollX: false,
         wheelPropagation: true,
       },
       searchShow: false,
