@@ -1,136 +1,153 @@
 <template>
   <div class="favorites-page">
-    <div class="sidebar">
-      <input type="text" v-model="searchQuery" placeholder="搜索" class="search-input" />
-      <div class="all-button" @click="toggleAll">
-        <span>{{ allExpanded ? '➖' : '➕' }}</span> 全部 <span>（{{ displayedDapps.length }}）</span>
-      </div>
-      <div v-if="allExpanded" class="dapp-list">
-        <div
-          v-for="dapp in displayedDapps"
-          :key="dapp.id"
-          @click="goToDetails(dapp.id)"
-          class="dapp-item"
-        >
-          <img :src="dapp.logo" alt="Logo" class="dapp-logo" />
-          <span class="dapp-title" v-tooltip="{ content: dapp.name }">{{ dapp.name }}</span>
+    <div class="content">
+      <div class="header">
+        <div class="header-left">
+          <h2 class="page-title">我的收藏 <span class="count">（{{ displayedDapps.length }}）</span></h2>
+        </div>
+        <div class="header-right">
+          <input type="text" v-model="searchQuery" placeholder="搜索收藏的DApp..." class="search-input" />
         </div>
       </div>
-    </div>
-    <div class="content">
       <a-row :gutter="[24, 24]" class="content-row">
         <a-col
-          v-for="dapp in displayedDapps"
+          v-for="dapp in filteredDapps"
           :key="dapp.id"
           :span="6"
           class="content-col"
         >
           <div class="dapp-card" @click="goToDetails(dapp.id)">
             <img :src="dapp.imgs[0].img" alt="Dapp Image" class="dapp-image" />
-            <div class="dapp-title">{{ dapp.name }}</div>
+            <div class="dapp-info">
+              <div class="dapp-title" v-tooltip="{ content: dapp.name }">{{ dapp.name }}</div>
+              <div class="dapp-description" v-if="dapp.description">{{ dapp.description }}</div>
+            </div>
           </div>
         </a-col>
       </a-row>
+      <div v-if="filteredDapps.length === 0" class="empty-state">
+        <div class="empty-icon">📭</div>
+        <div class="empty-text">{{ searchQuery ? '未找到匹配的DApp' : '暂无收藏的DApp' }}</div>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import {ref, computed, onMounted} from 'vue';
-import { useRouter } from 'vue-router';
 import {getUserCollects} from "@js/service/dappMarket";
 
-const router = useRouter();
-const selectedDapp = ref<number | null>(null);
+const emit = defineEmits(['viewDapp']);
+
 const searchQuery = ref<string>('');
-const allExpanded = ref<boolean>(true);
 const displayedDapps = ref([]);
+
 async function fetchUserCollects() {
   await getUserCollects(1).then(response => {
     displayedDapps.value = response.data
   })
 }
+
 onMounted(async () => {
    await fetchUserCollects();
 });
 
-const navigateTo = (routeName: string) => {
-  router.push({ name: routeName });
-};
-
-const selectDapp = (id: number) => {
-  selectedDapp.value = id;
-};
+const filteredDapps = computed(() => {
+  if (!searchQuery.value) {
+    return displayedDapps.value;
+  }
+  return displayedDapps.value.filter(dapp => 
+    dapp.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+});
 
 const goToDetails = (id: number) => {
-  router.push({ name: 'DappDetails', params: { id } });
-};
-
-const toggleAll = () => {
-  allExpanded.value = !allExpanded.value;
+  emit('viewDapp', id);
 };
 </script>
 
 <style scoped>
 .favorites-page {
   display: flex;
-  height: 100vh; /* Ensure the page takes the full height */
-  /*overflow: hidden; !* Prevent the entire page from scrolling *!*/
-}
-
-.sidebar {
-  width: 200px;
-  padding-right: 16px;
-  /*border-right: 1px solid #d9d9d9;*/
-  /*background-color: #2c3e50;*/
-  /*color: white;*/
-  /*height: 100vh; !* Ensure the sidebar takes the full height *!*/
-  /*overflow-y: auto; !* Make the sidebar scrollable *!*/
-}
-
-.search-input {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 16px;
-  border-radius: 4px;
-  border: 1px solid #d9d9d9;
-  color: black;
-}
-
-.all-button {
-  cursor: pointer;
-  padding: 8px 0;
-  margin-bottom: 16px;
-  font-weight: bold;
-}
-
-
-.dapp-item {
-  display: flex;
-  align-items: center;
-  padding: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.dapp-item:hover {
-  background-color: #34495e;
-}
-
-.dapp-logo {
-  width: 24px;
-  height: 24px;
-  margin-right: 12px;
+  flex-direction: column;
+  height: 100%;
+  color: var(--primary-text);
 }
 
 .content {
   flex: 1;
-  padding: 16px;
-  height: 100vh; /* Ensure the content takes the full height */
-  overflow-y: auto; /* Make the content scrollable */
+  padding: 24px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  gap: 20px;
+}
+
+.header-left {
+  flex: 1;
+}
+
+.page-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+  color: #000000;
+}
+
+.count {
+  font-size: 18px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.6);
+  margin-left: 8px;
+}
+
+.header-right {
+  flex-shrink: 0;
+}
+
+.search-input {
+  width: 280px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--primary-text);
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.05);
+}
+
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .content-row {
@@ -144,29 +161,69 @@ const toggleAll = () => {
 
 .dapp-card {
   width: 100%;
-  padding: 16px;
-  border: 1px solid #d9d9d9;
-  border-radius: 4px;
+  background: var(--secondary-bg);
+  border-radius: 12px;
   cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition: all 0.3s ease;
+  overflow: hidden;
 }
 
 .dapp-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 .dapp-image {
   width: 100%;
-  height: 150px;
+  height: 180px;
   object-fit: cover;
-  border-radius: 4px;
-  margin-bottom: 8px;
+}
+
+.dapp-info {
+  padding: 16px;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
 }
 
 .dapp-title {
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 600;
+  color: #000000;
+  margin-bottom: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dapp-description {
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.6);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
   text-align: center;
+}
+
+.empty-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.empty-text {
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.5);
 }
 </style>

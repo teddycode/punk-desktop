@@ -57,7 +57,7 @@
             <HorizontalPanel v-model:selectType="gender" :navList="sexType"></HorizontalPanel>
             <div class="my-16 flex mx-auto">
               <span class="com-title" style="color: var(--secondary-text)">更多个人信息编辑、账号设置等，请前往</span>
-              <span class="go-com pl-2 pointer" @click="go('https://s.apps.vip/user/info')">元社区</span>
+              <span class="go-com pl-2 pointer" @click="go('https://s.apps.vip/user/info')">磐古社区</span>
             </div>
           </div>
         </div>

@@ -214,6 +214,11 @@ export default {
         case 'Dapp':
           this.$router.push({ name: 'DappDetails', params: { id: this.open.dappId } });
           break;
+        // 应用市场弹窗
+        case 'sysPage':
+          // 触发事件通知父组件打开 NewDAppCard
+          this.$emit('open-dapp-market');
+          break;
         // 系统应用
         // case "systemApp":
         //   if (this.open.value.event === "fullscreen") {

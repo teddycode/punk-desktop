@@ -39,6 +39,15 @@ const handleClick = () => {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  background: var(--secondary-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.dapp-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .dapp-image {
@@ -47,19 +56,28 @@ const handleClick = () => {
   height: 100%;
   object-fit: cover;
   transition: transform 0.3s;
-  /*transform-origin: center;*/
 }
 
 .dapp-card:hover .dapp-image {
-  transform: scale(1.02);
+  transform: scale(1.05);
 }
 
 .overlay {
   position: absolute;
   bottom: 0;
   width: 100%;
-  background: rgba(255, 255, 255, 0.71);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
   padding: 10px;
+  color: var(--primary-text);
+}
+
+:deep(.dapp-meta .ant-card-meta-title) {
+  color: var(--primary-text);
+}
+
+:deep(.dapp-meta .ant-card-meta-description) {
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .description {

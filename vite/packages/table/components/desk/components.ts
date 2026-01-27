@@ -68,6 +68,7 @@ import RightMenu from './RightMenu.vue';
 import FreeDesk from './free/index';
 
 const NewAddCard = defineAsyncComponent(() => import('@page/app/card/NewAddCard.vue'));
+const NewDAppCard = defineAsyncComponent(() => import('@page/app/card/NewDAppCard.vue'));
 
 export default {
   components: {
@@ -120,6 +121,7 @@ export default {
     SmallWallpaper,
     MiddleWallpaper,
     NewAddCard,
+    NewDAppCard,
     Clocks,
     Notes,
     GameStrategy,

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <NavBar></NavBar>
     <div v-if="dappDetails" class="dapp-details">
       <a-row :gutter="24">
         <a-col :span="14">
@@ -63,8 +62,18 @@
           <p class="modal-description">{{ dappDetails.detail }}</p>
         </div>
       </a-modal>
-      <div class="contracts-row">
-        <div v-if="dappDetails.contracts.length === 0">暂无合约数据！</div>
+      
+      <!-- 双栏布局 -->
+      <a-row :gutter="20" style="margin-top: 10px;">
+        <!-- 左栏：智能合约地址 -->
+        <a-col :span="12">
+          <div class="section-card">
+            <h3 class="section-title">
+              <span class="title-icon">📜</span>
+              智能合约地址
+            </h3>
+            <div class="section-content">
+        <div v-if="dappDetails.contracts.length === 0" class="empty-state">暂无合约数据</div>
         <div v-else>
           <a-button @click="toggleContracts" type="link" class="show-more-button">
             <template v-if="isExpanded">
@@ -74,9 +83,11 @@
               <DownCircleTwoTone style="font-size: 24px;"/>
             </template>
           </a-button>
-          <div v-for="(contract, index) in displayedContracts" :key="index" class="contract-item">
-            <span class="contract-index">{{ (currentPage - 1) * pageSize + index + 1 }}.</span>
-            <span class="contract-address">{{ contract.address }}</span>
+          <div class="scrollable-container">
+            <div v-for="(contract, index) in displayedContracts" :key="index" class="contract-item">
+              <span class="contract-index">{{ (currentPage - 1) * pageSize + index + 1 }}.</span>
+              <span class="contract-address">{{ contract.address }}</span>
+            </div>
           </div>
           <a-pagination
             v-if="isExpanded && totalContracts > 9"
@@ -87,8 +98,18 @@
             class="pagination"
           />
         </div>
-      </div>
-      <div class="rating-section">
+            </div>
+          </div>
+        </a-col>
+        
+        <!-- 右栏：用户评分 -->
+        <a-col :span="12">
+          <div class="section-card">
+            <h3 class="section-title">
+              <span class="title-icon">⭐</span>
+              用户评分
+            </h3>
+            <div class="section-content">
         <div class="rating-container">
           <!-- Overall Rating Display -->
           <div v-if="totalReviews == 0" class="overall-rating">
@@ -113,8 +134,7 @@
         <div class="user-rating">
           <a-avatar size="large" :src="config.user.avatar" shape="square" />
           <div class="user-comment">
-            <h3>Hi, {{config.user.username}}</h3>
-            <p>请为此小程序评分吧</p>
+            <h3>Hi, {{config.user.username}}！请为此小程序评分吧</h3>
             <a-rate v-model:value="userRating" />
             <span class="ant-rate-text">{{ desc[userRating - 1] }}</span>
           </div>
@@ -125,7 +145,11 @@
             您已评分
           </a-button>
         </div>
-      </div>
+            </div>
+          </div>
+        </a-col>
+      </a-row>
+      
       <u-comment upload :config="config" @submit="submit" relative-time>
         <!-- <template>导航栏卡槽</template> -->
         <!-- <template #header>头部卡槽</template> -->
@@ -141,17 +165,20 @@
 import emoji from '../../../assets/emoji'
 import { CommentApi, ConfigApi, SubmitParamApi, UToast, createObjectURL, dayjs } from 'undraw-ui'
 import { appStore } from "@table/store";
-import { ref, reactive, onMounted, computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, reactive, onMounted, computed, watch } from 'vue';
 import { message } from 'ant-design-vue';
 import { DownCircleTwoTone, UpCircleTwoTone, LikeOutlined, LikeFilled, StarOutlined, StarFilled } from '@ant-design/icons-vue';
-import NavBar from "./NavBar.vue";
-import { getDappDetail, getisCollected,dappCollect,getisLiked,dappLiked} from "../../../js/service/dappMarket.ts";
-import { getDappCommentList, addDappComent, getDappRatingInfo, addDappRating} from "../../../js/service/dappMarket.ts";
-import { addDappCard, getisAdded } from "../../../js/service/dappMarket.ts";
+import { getDappDetail, getisCollected,dappCollect,getisLiked,dappLiked} from "../../../js/service/dappMarket";
+import { getDappCommentList, addDappComent, getDappRatingInfo, addDappRating} from "../../../js/service/dappMarket";
+import { addDappCard, getisAdded,delDappCard} from "../../../js/service/dappMarket";
 import { cardStore } from "@store/card";
 
-const route = useRoute();
+const props = defineProps<{
+  dappId: number | null;
+}>();
+
+const emit = defineEmits(['back']);
+
 const overallRating = ref(3.9); // 总评分
 const totalReviews = ref(5588); // 总评论人数
 const ratingPercentages = ref([70, 20, 5, 3, 2]); // 每个评分等级的百分比
@@ -212,7 +239,7 @@ const submit = async ({ content, parentId, files, finish }: SubmitParamApi) => {
     );
   }
   const commentData = {
-    dappId: route.params.id,
+    dappId: props.dappId,
     parentId: parentId,
     userId: config.user.id,
     content: content,
@@ -231,7 +258,7 @@ const submitRating = () => {
     return;
   }
   let ratingData = {
-    dappId: route.params.id,
+    dappId: props.dappId,
     userId: appStore().userInfo.uid,
     score: userRating.value
   }
@@ -288,55 +315,79 @@ const toggleContracts = () => {
 const handlePageChange = (page) => {
   currentPage.value = page;
 };
+
 async function fetchDappDetail() {
-  await getDappDetail(route.params.id).then(response => {
+  if (!props.dappId) return;
+  await getDappDetail(props.dappId).then(response => {
     dappDetails.value = response.data
   })
 };
+
 async function fetchIsCollected() {
-  await getisCollected(appStore().userInfo.uid, route.params.id).then(response => {
+  if (!props.dappId) return;
+  await getisCollected(appStore().userInfo.uid, props.dappId).then(response => {
     favorited.value = response.data
   })
 }
+
 async function fetchDappCommentList() {
-  await getDappCommentList(route.params.id).then(response => {
+  if (!props.dappId) return;
+  await getDappCommentList(props.dappId).then(response => {
     config.comments = response.data;
   })
 }
+
 async function fetchDappRatingInfo() {
-  await getDappRatingInfo(route.params.id, appStore().userInfo.uid).then(response => {
+  if (!props.dappId) return;
+  await getDappRatingInfo(props.dappId, appStore().userInfo.uid).then(response => {
     totalReviews.value = response.data.totalReviews
     overallRating.value = response.data.overallRating
     ratingPercentages.value = response.data.ratingPercentages
     userRating.value = response.data.userRating
   })
 }
+
 async function fetchIsLiked() {
-  await getisLiked(appStore().userInfo.uid, route.params.id).then(response => {
+  if (!props.dappId) return;
+  await getisLiked(appStore().userInfo.uid, props.dappId).then(response => {
     liked.value = response.data
   })
 }
+
 //判断dapp是否已添加到桌面
 async function fetchIsAdded() {
-    await getisAdded(appStore().userInfo.uid, route.params.id).then(response => {
+  if (!props.dappId) return;
+    await getisAdded(appStore().userInfo.uid, props.dappId).then(response => {
         isAdded.value = response.data
     })
 }
-onMounted(async () => {
+
+async function loadDappData() {
   await fetchDappDetail();
   await fetchIsCollected();
   await fetchIsLiked();
   await fetchIsAdded();
   await fetchDappCommentList();
   await fetchDappRatingInfo();
+}
+
+onMounted(async () => {
+  await loadDappData();
+});
+
+watch(() => props.dappId, async (newId) => {
+  if (newId) {
+    await loadDappData();
+  }
 });
 
 const visitWebsite = () => {
   window.open(dappDetails.value.website, '_blank');
 };
+
 const addDappToDesk = async () => {
   isAdded.value = !isAdded.value;
-  await addDappCard(appStore().userInfo.uid, route.params.id)
+  await addDappCard(appStore().userInfo.uid, props.dappId)
   cardStore().getUserDappDesk(appStore().userInfo.uid) //更新桌面
   message.success("已成功添加到桌面")
 }
@@ -347,22 +398,92 @@ const editDapp = () => {
 
 const toggleLike = () => {
   liked.value = !liked.value;
-  dappLiked(appStore().userInfo.uid,route.params.id);
+  dappLiked(appStore().userInfo.uid, props.dappId);
 };
 
 const toggleFavorite = () => {
   favorited.value = !favorited.value;
-  dappCollect(appStore().userInfo.uid,route.params.id);
+  dappCollect(appStore().userInfo.uid, props.dappId);
 };
 </script>
 
 <style scoped>
+/* 双栏卡片容器 */
+.section-card {
+  background: var(--secondary-bg);
+  border-radius: 12px;
+  padding: 12px 16px;
+  height: 100%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.section-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+/* 区域标题样式 */
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #000000 !important;
+  margin: 0 0 10px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.title-icon {
+  font-size: 1.4rem;
+}
+
+/* 内容区域 */
+.section-content {
+  color: var(--primary-text);
+}
+
+/* 滚动容器样式 */
+.scrollable-container {
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.scrollable-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollable-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+}
+
+.scrollable-container::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.scrollable-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* 空状态样式 */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 1rem;
+}
+
 .rating-section {
   margin-top: 20px;
-  background-color: #fff;
+  background: var(--secondary-bg);
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  color: var(--primary-text);
 }
 
 /* Flex container for overall rating and breakdown */
@@ -370,16 +491,23 @@ const toggleFavorite = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 12px;
 }
 
 .overall-rating {
   text-align: center;
-  margin-right: 20px; /* Adjust spacing between overall rating and breakdown */
+  margin-right: 15px;
 }
 
 .overall-rating h2 {
-  font-size: 36px;
-  margin: 0;
+  font-size: 32px;
+  margin: 0 0 4px 0;
+  color: var(--primary-text);
+}
+
+.overall-rating p {
+  margin: 4px 0 0 0;
+  font-size: 0.9rem;
 }
 
 .rating-breakdown {
@@ -390,41 +518,51 @@ const toggleFavorite = () => {
 .rating-item {
   display: flex;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .rating-item span {
   width: 40px;
   text-align: right;
   margin-right: 10px;
+  color: var(--primary-text);
 }
 
 .user-rating {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Ensure button aligns right */
-  margin-top: 20px;
+  justify-content: space-between;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .user-comment {
   margin-left: 10px;
+  flex-grow: 1;
 }
 
 .user-comment h3 {
-  margin: 0;
+  margin: 0 0 6px 0;
+  font-size: 1rem;
+  color: var(--primary-text);
 }
 
 .user-comment p {
   margin: 5px 0;
+  color: rgba(0, 0, 0, 0.7);
 }
 
 /* Styles for the rating button */
 .rate-button {
-  margin-left: auto; /* Pushes button to the right */
+  margin-left: auto;
+  border-radius: 8px;
 }
+
 .dapp-details {
-  padding: 2%;
-  height: 60%;
+  padding: 20px;
+  height: 100%;
+  color: var(--primary-text);
 }
 
 .image-carousel {
@@ -433,6 +571,8 @@ const toggleFavorite = () => {
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 12px;
+  background: var(--secondary-bg);
 }
 
 .carousel-image {
@@ -443,9 +583,9 @@ const toggleFavorite = () => {
 }
 
 .details {
-  padding: 2%;
-  background-color: #fff;
-  border-radius: 8px;
+  padding: 20px;
+  background: var(--secondary-bg);
+  border-radius: 12px;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -453,29 +593,32 @@ const toggleFavorite = () => {
 }
 
 .details h1 {
-  margin-bottom: 0.5%;
+  margin-bottom: 12px;
   font-size: 2rem;
+  color: var(--primary-text);
 }
 
 .details p {
-  margin-bottom: 1%;
+  margin-bottom: 12px;
   font-size: 1rem;
+  color: rgba(0, 0, 0, 0.8);
 }
 
 .logo-container {
   display: flex;
   align-items: flex-start;
-  margin-bottom: 2%;
+  margin-bottom: 16px;
 }
 
 .logo-container .logo {
   width: 60px;
   height: 60px;
   flex-shrink: 0;
+  border-radius: 8px;
 }
 
 .info-container {
-  margin-left: 2%;
+  margin-left: 16px;
   flex-grow: 1;
 }
 
@@ -486,32 +629,67 @@ const toggleFavorite = () => {
   overflow: hidden;
   text-overflow: ellipsis;
   margin-bottom: 0;
-  height: 20%;
+  color: rgba(0, 0, 0, 0.7);
 }
 
 .button-group {
-  margin-top: 2%;
+  margin-top: 16px;
   display: flex;
   align-items: center;
+  gap: 12px;
 }
 
 .button-group span {
-  margin-right: 1rem; /* Add spacing between buttons */
+  margin-right: 0;
+}
+
+:deep(.ant-btn) {
+  border-radius: 8px;
 }
 
 .icon-group {
   margin-left: auto;
   display: flex;
   align-items: center;
+  gap: 16px;
 }
 
 .like-icon, .favorite-icon, .liked-icon, .favorited-icon {
   font-size: 24px;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.like-icon:hover, .favorite-icon:hover, .liked-icon:hover, .favorited-icon:hover {
-  color: #1890ff; /* Change icon color on hover */
+.like-icon:hover, .favorite-icon:hover {
+  color: #1890ff;
+  transform: scale(1.2);
+}
+
+.liked-icon, .favorited-icon {
+  color: #ff4d4f;
+}
+
+.liked-icon:hover, .favorited-icon:hover {
+  color: #ff7875;
+  transform: scale(1.2);
+}
+
+:deep(.ant-modal-content) {
+  background: var(--secondary-bg);
+  border-radius: 12px;
+}
+
+:deep(.ant-modal-header) {
+  background: transparent;
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+:deep(.ant-modal-title) {
+  color: var(--primary-text);
+}
+
+:deep(.ant-modal-close-x) {
+  color: var(--primary-text);
 }
 
 .modal-content {
@@ -520,40 +698,49 @@ const toggleFavorite = () => {
 
 .modal-title {
   font-size: 1.5rem;
-  margin-bottom: 1%;
+  margin-bottom: 16px;
+  color: var(--primary-text);
 }
 
 .modal-description {
   font-size: 1rem;
   text-align: left;
+  color: rgba(0, 0, 0, 0.8);
 }
 
 .contracts-row {
   position: relative;
-  padding: 2%;
-  background-color: #fff;
+  padding: 20px;
+  background: var(--secondary-bg);
   margin-top: 20px;
-  border-radius: 8px;
+  border-radius: 12px;
+}
+
+.contracts-row > div {
+  color: var(--primary-text);
 }
 
 .contract-item {
   display: inline-block;
   width: 33%;
-  margin-bottom: 10px; /* 增加行距 */
+  margin-bottom: 10px;
 }
 
 .contract-index {
-  color: #ffc107; /* 黄色 */
+  color: #ffa940;
   margin-right: 5px;
+  font-weight: 600;
 }
 
 .contract-address {
-  color: #0056b3; /* 深蓝色 */
+  color: #40a9ff;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .contract-address:hover {
-  color: #000dfd; /* 更深的蓝色 */
+  color: #69c0ff;
+  text-decoration: underline;
 }
 
 .show-more-button {
@@ -561,11 +748,23 @@ const toggleFavorite = () => {
   top: 10px;
   right: 10px;
   z-index: 1;
-  font-size: 24px; /* 增加按钮大小 */
+  font-size: 24px;
 }
 
 .pagination {
   margin-top: 20px;
   text-align: center;
+}
+
+:deep(.u-comment) {
+  background: var(--secondary-bg);
+  border-radius: 12px;
+  margin-top: 20px;
+  padding: 20px;
+  color: var(--primary-text);
+}
+
+:deep(.u-comment-container) {
+  background: transparent;
 }
 </style>

@@ -1,31 +1,52 @@
 <template>
   <div class="dappmarket">
-    <NavBar></NavBar>
     <div class="header-box">
-      <a-row class="navigation" align="middle">
-        <a-col class="logo" :span="2">推荐</a-col>
-        <a-col :span="17">
-          <div class="nav-buttons">
-            <a-button
-              v-for="button in buttons"
-              :key="button.key"
-              type="text"
-              :class="{'nav-button': true, 'selected': selectedButton === button.key}"
-              @click="selectButton(button.key)"
-            >
-              <template #icon>
-                <component :is="button.icon" />
-              </template>
-              {{ button.label }}
-            </a-button>
+      <!-- 单行导航：LOGO + Dapp类型筛选 + 排序 + 搜索框 -->
+      <a-row class="navigation-row" align="middle" :gutter="24">
+        <a-col :span="2">
+          <div class="logo">LOGO</div>
+        </a-col>
+        <a-col :span="15">
+          <div class="filter-section">
+            <div class="filter-buttons">
+              <a-button
+                v-for="category in dappCategories"
+                :key="category.key"
+                type="text"
+                size="small"
+                :class="{'filter-button': true, 'selected': selectedCategory === category.key}"
+                @click="selectCategory(category.key)"
+              >
+                <template #icon>
+                  <component :is="category.icon" />
+                </template>
+                {{ category.label }}
+              </a-button>
+            </div>
           </div>
         </a-col>
-        <a-col :span="5">
+        <a-col :span="3">
+          <div class="sort-section">
+            <a-select
+              v-model:value="sortBy"
+              @change="handleSortChange"
+              class="sort-select"
+              size="large"
+              :getPopupContainer="(trigger) => trigger.parentNode"
+            >
+              <a-select-option value="hot">🔥 热度</a-select-option>
+              <a-select-option value="time">🕐 最新</a-select-option>
+              <a-select-option value="profit">💰 收益</a-select-option>
+            </a-select>
+          </div>
+        </a-col>
+        <a-col :span="4">
           <a-input-search
             v-model:value="searchValue"
-            placeholder="搜索"
+            placeholder="搜索 DApp..."
             @search="onSearch"
             class="search-bar"
+            size="large"
           />
         </a-col>
       </a-row>
@@ -78,33 +99,45 @@
 
 <script lang="ts" setup>
 import { ref, computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { AppstoreOutlined, FundOutlined, NodeExpandOutlined, PieChartOutlined, AppstoreAddOutlined, DatabaseOutlined } from '@ant-design/icons-vue';
+import { 
+  AppstoreOutlined, 
+  WalletOutlined,
+  SwapOutlined,
+  RocketOutlined,
+  PictureOutlined,
+  TrophyOutlined,
+  GlobalOutlined
+} from '@ant-design/icons-vue';
 import DappCard from "./DappCard.vue";
-import NavBar from "./NavBar.vue";
-import { getDapplist } from "../../../js/service/dappMarket.ts";
+import { getDapplist } from "../../../js/service/dappMarket";
+
+const emit = defineEmits(['viewDappDetails']);
 
 const searchValue = ref<string>('');
-const selectedButton = ref<string>('');
-const router = useRouter();
+const selectedCategory = ref<string>('');
+const sortBy = ref<string>('hot');
 
-const buttons = [
+// Dapp类型分类
+const dappCategories = [
   { key: '', label: '全部', icon: AppstoreOutlined },
-  { key: 'eth', label: '以太坊', icon: FundOutlined },
-  { key: 'tron', label: '波场', icon: NodeExpandOutlined },
-  { key: 'filecoin', label: 'Filecoin', icon: PieChartOutlined },
-  { key: 'bnb', label: 'BNB Chain', icon: AppstoreAddOutlined },
-  { key: 'solana', label: 'Solana', icon: DatabaseOutlined },
+  { key: 'defi', label: 'DeFi', icon: WalletOutlined },
+  { key: 'dex', label: 'DEX', icon: SwapOutlined },
+  { key: 'game', label: '游戏', icon: RocketOutlined },
+  { key: 'nft', label: 'NFT', icon: PictureOutlined },
+  { key: 'dao', label: 'DAO', icon: TrophyOutlined },
+  { key: 'social', label: '社交', icon: GlobalOutlined },
 ];
+
 const displayedDapps = ref([]);
 const currentPage = ref(1);
 const pageSize = ref(6);
-const totalRow = ref(0);  // 使用totalRow来表示总行数
+const totalRow = ref(0);
 
 async function fetchDappList() {
-  await getDapplist(currentPage.value, pageSize.value, selectedButton.value, searchValue.value).then(res => {
+  // 可以根据 selectedCategory, sortBy 来调整请求参数
+  await getDapplist(currentPage.value, pageSize.value, selectedCategory.value, searchValue.value).then(res => {
     displayedDapps.value = res.data.records;
-    totalRow.value = res.data.totalRow; // 确保 totalRow 正确设置
+    totalRow.value = res.data.totalRow;
   });
 }
 
@@ -113,16 +146,24 @@ onMounted(async () => {
 });
 
 const onSearch = (value: string) => {
+  currentPage.value = 1;
   fetchDappList();
 };
 
-const selectButton = (key: string) => {
-  selectedButton.value = key;
+const selectCategory = (key: string) => {
+  selectedCategory.value = key;
+  currentPage.value = 1;
+  fetchDappList();
+};
+
+const handleSortChange = (value: string) => {
+  sortBy.value = value;
+  currentPage.value = 1;
   fetchDappList();
 };
 
 const goToDetails = (id: number) => {
-  router.push({ name: 'DappDetails', params: { id } });
+  emit('viewDappDetails', id);
 };
 
 const handlePageChange = (page: number) => {
@@ -138,54 +179,202 @@ const smallDapps = computed(() => displayedDapps.value.slice(2));
 .dappmarket {
   height: 100%;
   overflow-y: auto;
+  color: var(--primary-text);
+  padding: 20px;
 }
 
 .header-box {
-  padding: 2% 2% 1% 2%;
+  padding: 20px 28px;
+  background: linear-gradient(135deg, rgba(167, 217, 254, 0.15) 0%, rgba(138, 180, 248, 0.1) 100%);
+  border-radius: 16px;
+  margin-bottom: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
 }
 
-.navigation {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.navigation-row {
+  margin-bottom: 0;
 }
 
 .logo {
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 1.8rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #a7d9fe 0%, #8ab4f8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+  white-space: nowrap;
 }
 
-.nav-buttons {
-  display: flex;
-  gap: 10px;
-}
-
-.nav-button {
+.filter-section {
   display: flex;
   align-items: center;
-  color: white;
-  font-size: 1rem;
-  transition: background-color 0.3s;
+  gap: 16px;
 }
 
-.nav-button > .anticon {
-  margin-right: 8px;
+.filter-label {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary-text);
+  white-space: nowrap;
+  opacity: 0.95;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.nav-button.selected {
-  background-color: #a7d9fe;
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-button {
+  display: flex;
+  align-items: center;
+  color: var(--primary-text);
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 8px 16px;
+  height: auto;
+}
+
+.filter-button:hover {
+  background: rgba(167, 217, 254, 0.25);
+  border-color: rgba(167, 217, 254, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(167, 217, 254, 0.35);
+}
+
+.filter-button > .anticon {
+  margin-right: 6px;
+  font-size: 1.1rem;
+}
+
+.filter-button.selected {
+  background: linear-gradient(135deg, rgba(167, 217, 254, 0.5) 0%, rgba(138, 180, 248, 0.4) 100%);
+  border-color: #a7d9fe;
   color: #ffffff;
-  border-radius: 8px;
-  padding: 0 12px;
+  font-weight: 700;
+  box-shadow: 0 6px 20px rgba(167, 217, 254, 0.5);
+  transform: translateY(-1px);
 }
 
-.search-bar {
-  width: 90%;
+.sort-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+.sort-label {
+  font-size: 1.3rem;
+  opacity: 0.9;
+}
+
+:deep(.sort-select) {
+  flex: 1;
+  width: 100%;
+}
+
+:deep(.sort-select .ant-select-selector) {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.25) !important;
+  border-radius: 12px !important;
+  color: var(--primary-text) !important;
+  transition: all 0.3s ease;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+}
+
+:deep(.sort-select .ant-select-selector:hover) {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(167, 217, 254, 0.6) !important;
+  box-shadow: 0 4px 12px rgba(167, 217, 254, 0.25);
+}
+
+:deep(.sort-select .ant-select-selection-item) {
+  color: var(--primary-text) !important;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+:deep(.sort-select .ant-select-arrow) {
+  color: var(--primary-text) !important;
+}
+
+/* 下拉菜单样式 - 确保显示在最上层 */
+:deep(.ant-select-dropdown) {
+  z-index: 9999 !important;
+  background: rgba(30, 30, 30, 0.95) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+:deep(.ant-select-item) {
+  color: var(--primary-text) !important;
+  transition: all 0.2s ease;
+}
+
+:deep(.ant-select-item:hover) {
+  background: rgba(167, 217, 254, 0.2) !important;
+}
+
+:deep(.ant-select-item-option-selected) {
+  background: rgba(167, 217, 254, 0.3) !important;
+  font-weight: 600;
+}
+
+:deep(.search-bar) {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+:deep(.search-bar:hover) {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(167, 217, 254, 0.6);
+  box-shadow: 0 4px 16px rgba(167, 217, 254, 0.25);
+}
+
+:deep(.search-bar input) {
+  background: transparent !important;
+  color: var(--primary-text) !important;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+:deep(.search-bar input::placeholder) {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 400;
+}
+
+:deep(.search-bar .ant-input-search-button) {
+  background: linear-gradient(135deg, #a7d9fe 0%, #8ab4f8 100%);
+  border: none;
+  height: 100%;
+  transition: all 0.3s ease;
+}
+
+:deep(.search-bar .ant-input-search-button:hover) {
+  background: linear-gradient(135deg, #8ab4f8 0%, #6a94d8 100%);
+  box-shadow: 0 0 20px rgba(167, 217, 254, 0.5);
 }
 
 .content {
   height: 85%;
-  padding: 16px;
+  padding: 0 4px;
 }
 
 .content-row-large {
@@ -210,5 +399,44 @@ const smallDapps = computed(() => displayedDapps.value.slice(2));
   margin: 10px 16px 20px;
   display: flex;
   justify-content: center;
+}
+
+:deep(.ant-pagination-item) {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.25);
+  transition: all 0.3s ease;
+}
+
+:deep(.ant-pagination-item:hover) {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(167, 217, 254, 0.5);
+}
+
+:deep(.ant-pagination-item a) {
+  color: var(--primary-text);
+  font-weight: 500;
+}
+
+:deep(.ant-pagination-item-active) {
+  background: linear-gradient(135deg, rgba(167, 217, 254, 0.4) 0%, rgba(138, 180, 248, 0.3) 100%);
+  border-color: #a7d9fe;
+  box-shadow: 0 4px 12px rgba(167, 217, 254, 0.3);
+}
+
+:deep(.ant-pagination-item-active a) {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+:deep(.ant-pagination-prev),
+:deep(.ant-pagination-next) {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+:deep(.ant-pagination-prev:hover),
+:deep(.ant-pagination-next:hover) {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(167, 217, 254, 0.5);
 }
 </style>

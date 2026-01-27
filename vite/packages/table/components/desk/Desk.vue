@@ -117,6 +117,7 @@
                   :customIndex="item.id"
                   :desk="currentDesk"
                   :editing="editing"
+                  @open-dapp-market="newAddDAppCard"
                 ></component>
               </div>
             </template>
@@ -143,6 +144,24 @@
           }
         "
       ></NewAddCard>
+    </div>
+  </transition>
+  <transition name="fade">
+    <div
+      v-if="addDAppCardVisible"
+      class="home-blur"
+      style="position: fixed; top: 0; right: 0; left: 0; bottom: 0; z-index: 999"
+    >
+      <NewDAppCard
+        :desk="currentDesk"
+        @addSuccess="hideAddDAppCard"
+        @close="hideAddDAppCard"
+        @onBack="
+          () => {
+            this.addDAppCardVisible = false;
+          }
+        "
+      ></NewDAppCard>
     </div>
   </transition>
   <a-drawer v-model:open="settingVisible" placement="right">
@@ -423,6 +442,12 @@ export default {
           fn: this.newAddCard,
         },
         {
+          id: 3,
+          newIcon: 'fluent:collections-add-24-regular',
+          name: '添加小程序',
+          fn: this.newAddDAppCard,
+        },
+        {
           id: 4,
           divider: true,
         },
@@ -474,6 +499,7 @@ export default {
       key: Date.now(),
       menuVisible: false,
       addCardVisible: false,
+      addDAppCardVisible: false,
       scrollbarSettings: {
         useBothWheelAxes: true,
         swipeEasing: true,
@@ -560,8 +586,16 @@ export default {
       // addCardVisible
       this.menuVisible = false;
     },
+    newAddDAppCard() {
+      this.addDAppCardVisible = true;
+      // addCardVisible
+      this.menuVisible = false;
+    },
     hideAddCard() {
       this.addCardVisible = false;
+    },
+    hideAddDAppCard() {
+      this.addDAppCardVisible = false;
     },
     onClose() {
       this.menuVisible = false;

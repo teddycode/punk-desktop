@@ -6,7 +6,7 @@ import { marketStore } from './market';
 import { noteStore } from '../apps/note/store';
 import { homeStore } from './home';
 import { defaultDesks } from '@js/data/desktopData';
-import { getUserDesk, addDappCard } from "@js/service/dappMarket";
+import { getUserDesk, addDappCard, delDappCard } from "@js/service/dappMarket";
 import { appStore } from "@table/store";
 
 export const cardStore = defineStore(
@@ -385,15 +385,81 @@ export const cardStore = defineStore(
       },
       //获取用户小程序桌面
       async getUserDappDesk(userId) {
+        console.log('=== getUserDappDesk 开始执行 ===');
+        console.log('userId:', userId);
+
         let desk = this.desks.find((item) => {
           return item.name === "小程序";
         });
-        this.removeCards(desk);//先清除用户小程序桌面
+        console.log('找到的小程序桌面:', desk);
+
+        if (!desk) {
+          console.log('⚠️ 未找到小程序桌面');
+          return;
+        }
+
+        // 只删除用户添加的小程序卡片（type为Dapp的），保留默认的常用小程序卡片
+        console.log('删除前的cards:', desk.cards);
+        desk.cards = desk.cards.filter(card => card.type !== 'Dapp');
+        console.log('删除用户小程序后的cards:', desk.cards);
+
+        // 添加默认的"应用市场"图标
+        const defaultDappMarketIcon = {
+          size: 'mini',
+          link: 'fast',
+          linkValue: '',
+          open: {
+            type: 'sysPage',
+            name: '应用市场',
+          },
+          isTitle: true,
+          titleValue: '应用市场',
+          src: 'https://pic.imgdb.cn/item/658514e5c458853aefb6f0f9.png',
+          isRadius: true,
+          radius: 5,
+          imgState: 'cover',
+          imgShape: 'square',
+          isBackground: false,
+          backgroundColor: '',
+          backgroundIndex: 0,
+        };
+
+        // 检查是否已存在"应用市场"图标，避免重复添加
+        const hasDappMarket = desk.cards.some(card =>
+          card.customData?.iconList?.some(icon => icon.titleValue === '应用市场')
+        );
+
+        if (!hasDappMarket) {
+          console.log('添加默认的"应用市场"图标...');
+          const dappMarketCard = {
+            name: 'myIcons',
+            id: Date.now() - 999999, // 使用固定的偏移量避免ID冲突
+            customData: {
+              iconList: [defaultDappMarketIcon],
+              groupTitle: '常用小程序',
+              zoom: {
+                state: true,
+                value: '',
+              },
+              size: {
+                w: '280px',
+                h: '632px',
+              },
+            },
+          };
+          this.addCards([dappMarketCard], desk);
+          console.log('添加"应用市场"图标后的cards:', desk.cards);
+        } else {
+          console.log('"应用市场"图标已存在，跳过添加');
+        }
+
         //从后端获取用户小程序桌面数据
         let iconList = [];
-        await getUserDesk(userId).then(response=> {
+        console.log('开始从后端获取用户小程序数据...');
+        await getUserDesk(userId).then(response => {
+          console.log('后端返回的数据:', response);
 
-          for(const dappinfo of response.data){
+          for (const dappinfo of response.data) {
             let newIcon = {};
             newIcon.titleValue = dappinfo.name;
             newIcon.link = 'fast';
@@ -411,8 +477,13 @@ export const cardStore = defineStore(
               customData: { iconList: [newIcon] },
             });
           }
+          console.log('构建的用户图标列表:', iconList);
         })
+        // 添加用户的小程序图标
+        console.log('开始添加用户小程序图标...');
         this.addCards(iconList, desk);
+        console.log('最终的desk.cards:', desk?.cards);
+        console.log('=== getUserDappDesk 执行完成 ===');
       },
       setRouteParams(value) {
         this.routeParams = value;
@@ -656,8 +727,8 @@ export const cardStore = defineStore(
 
         let card = desk.cards.find((item) => String(item.id) === String(customIndex))
         console.log("要删除的卡片：", card);
-        if(card.type == "Dapp") { //如果为小程序卡片，则调用后端接口删除
-          addDappCard(appStore().userInfo.uid, card.dappId)
+        if (card.type == "Dapp") { //如果为小程序卡片，则调用后端接口删除
+          delDappCard(appStore().userInfo.uid, card.dappId)
         }
 
         desk.cards.splice(
@@ -681,7 +752,7 @@ export const cardStore = defineStore(
         desk = desk || currentDesk;
         desk.cards = [];
       },
-      setDataEmpty() {},
+      setDataEmpty() { },
       insetSteamSize(value, newData) {
         let currentDesk = this.getCurrentDesk();
         const findCustom = currentDesk.cards.find((el) => {

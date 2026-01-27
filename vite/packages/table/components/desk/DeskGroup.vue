@@ -164,12 +164,12 @@
                 class="mr-10 xt-active-bg rounded-full border-none"
                 style="color: var(--active-text)"
                 type="primary"
-                @click="moreDesk"
+                @click="moreSP"
               >
-                <icon class="mr-1" icon="shop" style="font-size: 18px"></icon>&nbsp;查看桌面市场
+                <icon class="mr-1" icon="shop" style="font-size: 18px"></icon>&nbsp;逛小程序市场
               </xt-button>
               <xt-button key="console" :w="140" class="mr-10 rounded-full xt-bg-2 border-none" @click="newAddCard">
-                <icon class="mr-1" icon="tianjia2"></icon>&nbsp;DIY添加卡片
+                <icon class="mr-1" icon="tianjia2"></icon>&nbsp;添加小组件卡片
               </xt-button>
             </div>
           </div>
@@ -659,6 +659,9 @@ export default {
     },
     addCard() {
       this.$refs.currentDeskRef.newAddCard();
+    },
+    moreSP() {
+      this.$refs.currentDeskRef.newAddSPCard();
     },
     moreDesk() {
       this.panelIndex = 1;

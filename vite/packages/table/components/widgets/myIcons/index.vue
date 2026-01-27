@@ -37,12 +37,13 @@
                   @iconsRightClick="handleMenu()"
                   @updateGroupTitle="updateGroupTitle"
                   @custom-event="handleCustomEvent"
+                  @open-dapp-market="$emit('open-dapp-market')"
                 ></icons>
               </div>
             </template>
             <!-- 单图标组件 -->
             <template v-else-if="customData.iconList !== undefined && customData.iconList.length > 0">
-              <icon v-bind="customData.iconList[0]" @custom-event="handleCustomEvent"></icon>
+              <icon v-bind="customData.iconList[0]" @custom-event="handleCustomEvent" @open-dapp-market="$emit('open-dapp-market')"></icon>
             </template>
           </drag-and-follow>
         </xt-task>
@@ -213,13 +214,13 @@ export default {
             }
           },
         },
-        // {
-        //   icon: "guanbi2",
-        //   title: "删除",
-        //   fn: () => {
-        //     this.deleteIcon();
-        //   },
-        // },
+        {
+          icon: "guanbi2",
+          title: "删除",
+          fn: () => {
+            this.deleteIcon();
+          },
+        },
         // {
         //   icon: "guanbi2",
         //   title: "长按框选图标（开发中）",

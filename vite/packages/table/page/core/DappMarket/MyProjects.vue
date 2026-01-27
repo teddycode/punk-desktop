@@ -47,17 +47,17 @@
 
 <script lang="ts" setup>
 import {onMounted, ref} from 'vue';
-import { useRouter } from 'vue-router';
 import { getUserDapps } from "@js/service/dappMarket";
+
+const emit = defineEmits(['viewProject']);
+
 const state = ref(-1);
 const projectList = ref([])
-
-
-const router = useRouter();
 
 const submittedProjects = ref(0);
 const approvedProjects = ref(0);
 const pendingReviews = ref(0);
+
 async function fetchUserDapps() {
   await getUserDapps(1, state.value).then(response=> {
     projectList.value = response.data
@@ -72,54 +72,59 @@ async function fetchUserDapps() {
     }
   })
 }
+
 onMounted(async () => {
   await fetchUserDapps();
 });
 
-
 const handleRowClick = (projectId: number) => {
-  router.push({ name: 'ProjectDetails', params: { id: projectId } });
+  emit('viewProject', projectId);
 };
 </script>
 
 <style scoped>
 .my-projects {
   padding: 20px;
+  color: var(--primary-text);
 }
 
 .overview {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
+  gap: 16px;
 }
 
 .stat-card {
-  background: #fff;
+  background: var(--secondary-bg);
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
   flex: 1;
-  margin-right: 20px;
+  transition: all 0.3s ease;
 }
 
-.stat-card:last-child {
-  margin-right: 0;
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .stat-card h3 {
   margin-bottom: 10px;
+  color: var(--primary-text);
+  font-weight: 600;
 }
 
 .stat-card p {
-  font-size: 24px;
+  font-size: 32px;
   margin: 0;
+  color: var(--primary-text);
+  font-weight: bold;
 }
 
 .table-container {
-  background: #fff;
+  background: var(--secondary-bg);
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
 }
 
 .table {
@@ -128,19 +133,26 @@ const handleRowClick = (projectId: number) => {
 }
 
 .table-header {
-  background: #f5f5f5;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
 }
 
 .table-row {
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.table-row:hover {
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .table-cell {
   flex: 1;
   padding: 12px;
   text-align: left;
+  color: var(--primary-text);
 }
 
 .table-cell:last-child {
@@ -149,14 +161,21 @@ const handleRowClick = (projectId: number) => {
 }
 
 .pending {
-  color: orange;
+  color: #ffa940;
+  font-weight: 600;
 }
 
 .approved {
-  color: green;
+  color: #52c41a;
+  font-weight: 600;
 }
 
 .rejected {
-  color: red;
+  color: #ff4d4f;
+  font-weight: 600;
+}
+
+:deep(.ant-btn-link) {
+  color: #1890ff;
 }
 </style>

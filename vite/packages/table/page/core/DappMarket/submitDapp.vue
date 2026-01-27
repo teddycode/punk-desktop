@@ -425,15 +425,23 @@ const handleSubmit = () => {
 .submit-project {
   display: flex;
   justify-content: center;
-  padding: 20px;
+  padding: 10px;
+  color: var(--primary-text);
+}
+
+.submit-project h1 {
+  color: var(--primary-text);
+}
+
+.submit-project .description {
+  color: rgba(0, 0, 0, 0.7);
 }
 
 .form-container {
-  width: 90%;
-  padding: 20px;
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  padding: 12px;
+  background: var(--secondary-bg);
+  border-radius: 12px;
 }
 
 .upload-section {
@@ -448,9 +456,16 @@ const handleSubmit = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px dashed #d9d9d9;
-  border-radius: 8px;
+  border: 1px dashed rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
   position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.avatar-uploader > .ant-upload:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .upload-placeholder {
@@ -459,30 +474,31 @@ const handleSubmit = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px dashed #d9d9d9;
-  border-radius: 8px;
+  border: 1px dashed rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .upload-button {
   margin-top: 10px;
+  border-radius: 8px;
 }
 
 .uploaded-image {
   width: 200px;
   height: 200px;
   object-fit: cover;
-  border: 1px dashed #d9d9d9;
-  border-radius: 8px;
+  border-radius: 12px;
 }
 
 .ant-upload-select-picture-card i {
   font-size: 32px;
-  color: #999;
+  color: var(--primary-text);
 }
 
 .ant-upload-select-picture-card .ant-upload-text {
   margin-top: 8px;
-  color: #666;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .ant-upload-remove-icon {
@@ -490,18 +506,15 @@ const handleSubmit = () => {
   top: 8px;
   right: 8px;
   font-size: 18px;
-  color: red;
+  color: #ff4d4f;
   cursor: pointer;
-}
-
-.details h1 {
-  margin-bottom: 16px;
-  font-size: 24px;
-}
-
-.details .description {
-  margin-bottom: 24px;
-  color: #888;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .form-content {
@@ -513,6 +526,32 @@ const handleSubmit = () => {
   margin-left: 20px;
 }
 
+:deep(.ant-form-item-label > label) {
+  color: var(--primary-text);
+  font-weight: 600;
+}
+
+:deep(.ant-input),
+:deep(.ant-select-selector),
+:deep(.ant-input-textarea textarea) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--primary-text);
+  border-radius: 8px;
+}
+
+:deep(.ant-input:focus),
+:deep(.ant-select-focused .ant-select-selector),
+:deep(.ant-input-textarea-focused textarea) {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+:deep(.ant-input::placeholder),
+:deep(.ant-input-textarea textarea::placeholder) {
+  color: rgba(0, 0, 0, 0.4);
+}
+
 .tags-container {
   display: flex;
   flex-wrap: wrap;
@@ -520,10 +559,22 @@ const handleSubmit = () => {
   margin-top: 8px;
 }
 
+:deep(.ant-tag) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--primary-text);
+  border-radius: 6px;
+}
+
 .new-tag {
-  background: #fff;
+  background: rgba(255, 255, 255, 0.05);
   border-style: dashed;
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.new-tag:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .image-uploads {
@@ -539,5 +590,6 @@ const handleSubmit = () => {
 
 .address-input .ant-btn {
   margin-left: 5px;
+  border-radius: 8px;
 }
 </style>

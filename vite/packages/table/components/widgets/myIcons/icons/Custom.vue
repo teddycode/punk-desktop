@@ -20,6 +20,7 @@
             :state="true"
             :isBoxed="true"
             v-bind="iconList[i - 1]"
+            @open-dapp-market="$emit('open-dapp-market')"
           >
           </Icon>
         </div>

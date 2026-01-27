@@ -8,66 +8,66 @@ export function getDappDetail(id) {
   });
 }
 
-export function getDapplist(pageNum,pageSize,chain,name){
+export function getDapplist(pageNum, pageSize, chain, name) {
   return request({
-    url:'/dDappinfo/page',
+    url: '/dDappinfo/page',
     method: 'get',
-    params: {pageNum,pageSize,chain,name}
+    params: { pageNum, pageSize, chain, name }
   });
 }
 
-export function getisLiked(userId,dappId){
+export function getisLiked(userId, dappId) {
   return request({
-    url:'/dLove/isLiked',
+    url: '/dLove/isLiked',
     method: 'get',
-    params: {userId,dappId}
+    params: { userId, dappId }
   });
 }
 
-export function dappLiked(userId,dappId){
+export function dappLiked(userId, dappId) {
   return request({
-    url:'/dLove/dappLove',
+    url: '/dLove/dappLove',
     method: 'put',
-    params: {userId,dappId}
+    params: { userId, dappId }
   });
 }
 
-export function getisCollected(userId,dappId){
+export function getisCollected(userId, dappId) {
   return request({
-    url:'/dCollect/isCollected',
+    url: '/dCollect/isCollected',
     method: 'get',
-    params: {userId,dappId}
+    params: { userId, dappId }
   });
 }
 
-export function dappCollect(userId,dappId){
+export function dappCollect(userId, dappId) {
   return request({
-    url:'/dCollect/dappCollect',
+    url: '/dCollect/dappCollect',
     method: 'put',
-    params: {userId,dappId}
+    params: { userId, dappId }
   });
 }
 
-export function getUserCollects(userId){
+export function getUserCollects(userId) {
   return request({
-    url:`/dCollect/getUserCollects/${userId}`,
+    url: `/dCollect/getUserCollects/${userId}`,
     method: 'get',
   });
 }
 
-export function submitdapp(data){
+export function submitdapp(data) {
   return request({
-    url:'/dDappinfo/save',
+    url: '/dDappinfo/save',
     method: 'post',
     data
   });
 }
 
-export function getUserDapps(userId,state){
+export function getUserDapps(userId, state) {
   return request({
-    url:'/dDappinfo/getUserDapps',
+    url: '/dDappinfo/getUserDapps',
     method: 'get',
-    params: {userId,state}
+    params: { userId, state }
   });
 }
 
@@ -93,7 +93,7 @@ export function getDappRatingInfo(dappId, userId) {
   return request({
     url: `/dRating/getRatingInfo/${dappId}`,
     method: 'get',
-    params: {userId},
+    params: { userId },
   });
 }
 //发表评分
@@ -114,18 +114,28 @@ export function getUserDesk(userId) {
   });
 }
 //添加桌面小程序
-export function addDappCard(userId,dappId){
+export function addDappCard(userId, dappId) {
   return request({
-    url:'/dDesk/addDappCard',
+    url: '/dDesk/addDappCard',
     method: 'get',
-    params: {userId,dappId}
+    params: { userId, dappId }
   });
 }
-//查询是否已添加该dapp到桌面
-export function getisAdded(userId,dappId){
+
+//删除桌面小程序
+export function delDappCard(userId, dappId) {
   return request({
-    url:'/dDesk/isAdded',
+    url: '/dDesk/removeDappCard',
+    method: 'delete',
+    params: { userId, dappId }
+  });
+}
+
+//查询是否已添加该dapp到桌面
+export function getisAdded(userId, dappId) {
+  return request({
+    url: '/dDesk/isAdded',
     method: 'get',
-    params: {userId,dappId}
+    params: { userId, dappId }
   });
 }
