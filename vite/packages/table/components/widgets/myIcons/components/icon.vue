@@ -153,16 +153,6 @@ export default {
           this.$emit('custom-event');
           return;
         }
-        // 先检测是不是web端
-        // if (!this.$isXT) {
-        //   let arr = ["default", "internal", "thinksky"];
-        //   if (this.link == "link" && arr.includes(this.open.type)) {
-        //     window.open(this.open.value);
-        //   } else {
-        //     this.visible = true;
-        //   }
-        //   return;
-        // }
         if (this.open !== undefined && this.open.value !== '') {
           // 链接
           this.newOpenApp();
@@ -212,6 +202,7 @@ export default {
           break;
         // dapp小程序
         case 'Dapp':
+          console.log("跳转Dapp详情页，ID：",this.open);
           this.$router.push({ name: 'DappDetails', params: { id: this.open.dappId } });
           break;
         // 应用市场弹窗

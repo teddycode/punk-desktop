@@ -39,7 +39,7 @@
         <div class="right no-drag" :class="{ 'full-width': currentView !== 'menu' }">
           <!-- DApp Details View -->
           <div v-if="currentView === 'dappDetails'" class="page-content">
-            <DappDetailsContent :dappId="selectedDappId" @back="handleBackToMenu" />
+            <DappDetailsContent :id="String(selectedDappId)" @back="handleBackToMenu" />
           </div>
           
           <!-- Project Details View -->

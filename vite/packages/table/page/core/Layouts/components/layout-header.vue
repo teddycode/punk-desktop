@@ -82,7 +82,8 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { useLayoutStore } from '@store/baseSettings'; // 导入你的 Pinia store
 import { walletStore } from '@store/wallet';
 import { useRouter } from 'vue-router';
-import { useDisconnect, useWeb3Modal, useWeb3ModalAccount } from '@web3modal/ethers5/vue';
+import { useDisconnect, useWeb3Modal, useWeb3ModalAccount } from '@punkos/ethers5/vue';
+import { useUserStore } from '@store/users';
 import { EyeOutlined } from '@ant-design/icons-vue';
 import BorderAvatar from '@components/avatar/BorderAvatar.vue';
 import { appStore } from '@store';
@@ -162,6 +163,7 @@ const getWalletInfo = async () => {
 };
 // 退出登录的用户
 const logOutUser = () => {
+  useUserStore().setAuthenticated(false);
   window.localStorage.removeItem('token');
   router.push('/');
   // window.location.reload()

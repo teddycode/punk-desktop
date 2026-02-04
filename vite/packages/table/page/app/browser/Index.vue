@@ -238,8 +238,13 @@ export default {
         return;
       }
       if (params.url) {
+        console.log('[Browser Page] 接收到路由参数:', params);
         //如果存在需要打开的url
-        await this.invokeAddTab({ url: params.url });
+        await this.invokeAddTab({ 
+          url: params.url,
+          wallet: params.wallet || false,
+          isLocalHtml: params.isLocalHtml || false,
+        });
         setTimeout(() => {
           ipc.send('getRunningTableTabs');
         }, 3000);
@@ -297,10 +302,16 @@ export default {
       return position;
     },
     async invokeAddTab(tab) {
+      console.log('[Browser Page] invokeAddTab 调用:', tab);
+      
       let args = {
         position: this.getContentBounds(),
         url: tab.url,
+        wallet: tab.wallet || false,
+        isLocalHtml: tab.isLocalHtml || false,
       };
+      
+      console.log('[Browser Page] 发送 addTableTab 消息:', args);
       await ipc.send('addTableTab', JSON.parse(JSON.stringify(args)));
     },
     addedTab(args) {

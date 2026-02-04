@@ -110,11 +110,13 @@ import taskStore from '../page/app/todo/stores/task';
 import cache from '../components/card/hooks/cache';
 import { myIcons } from '@store/myIcons';
 import { setBgColor, setSecondaryBgColor } from '@components/card/hooks/styleSwitch/setStyle';
-import { useWeb3Modal, useWeb3ModalAccount, useDisconnect, createWeb3Modal } from '@web3modal/ethers5/vue';
+import { useWeb3Modal, useWeb3ModalAccount, useDisconnect, createWeb3Modal, useWeb3ModalProvider } from '@punkos/ethers5/vue';
+import { ethers } from 'ethers';
 import { useToast } from 'vue-toastification';
 import { setupWalletListener } from './core/Wallets/events';
 import { walletConfig } from '@store/wallet';
 import { comStore } from '@store/com';
+import { useUserStore } from '@store/users';
 import { defaultUserInfo } from '@js/constants';
 import { getUserCountryAndLanguage } from '@table/locale/location';
 import { langs } from '@table/locale/helper';
@@ -136,6 +138,7 @@ export default {
       reloginFlg: false,
       timeoutHandler: null,
       version: tsbApi.runtime.appVersion,
+      w3mEvent: null, // 钱包事件对象
     };
   },
   computed: {
@@ -189,6 +192,9 @@ export default {
 
     // 初始化钱包
     this.initWallet();
+    
+    // 设置钱包 IPC 监听器
+    this.setupWalletIPC();
 
     window.loadedStore['userInfo'] = false;
 
@@ -367,6 +373,7 @@ export default {
     },
     login() {
       // 打开登录对话框
+      useUserStore().setAuthenticated(false);
       const toast = useToast();
       let modal = useWeb3Modal();
       modal.open().then(() => {
@@ -415,6 +422,7 @@ export default {
     },
     //  切换账户
     async reLoginUser() {
+      useUserStore().setAuthenticated(false);
       await this.deleteUserInfo();
       let res = await ipc.invoke('direct-logout', this.userInfo?.uid);
       if (res) {
@@ -509,13 +517,403 @@ export default {
     async initWallet() {
       // 創建钱包连接对话框
       try {
-        await createWeb3Modal(walletConfig());
-        // 设置钱包事件监听器
-        setupWalletListener(this.processUserInfo, this.userInfo);
+        const modal = await createWeb3Modal(walletConfig());
+        console.log('[Splash] ✅ Web3Modal 创建完成');
+        
+        // 设置钱包事件监听器（传入 modal 实例）
+        this.w3mEvent = setupWalletListener(modal, this.processUserInfo, this.userInfo);
+        console.log('[Splash] ✅ 钱包事件监听器已设置');
       } catch (e) {
         console.log('创建钱包错误：', e.toString());
       }
+      console.log('[Splash] ✅ 钱包初始化完成');
     },
+    
+    // 设置钱包 IPC 监听器（用于内嵌网页的钱包调用）
+    setupWalletIPC() {
+      console.log('[Splash] 设置钱包 IPC 监听器');
+      
+      // 1. 初始化钱包请求
+      window.ipc.on('wallet-init-request', async (data) => {
+        console.log('[Splash] 收到钱包初始化请求', data);
+        try {
+          const modal = useWeb3Modal();
+          const account = useWeb3ModalAccount();
+          const initialized = account.isConnected?.value || false;
+          
+          console.log('[Splash] 钱包初始化状态:', initialized);
+          window.ipc.send('wallet-init-complete', {
+            success: true,
+            initialized: initialized
+          });
+        } catch (error) {
+          console.error('[Splash] 钱包初始化错误:', error);
+          window.ipc.send('wallet-init-complete', {
+            success: false,
+            error: error.message
+          });
+        }
+      });
+
+      // 2. 连接钱包请求
+      window.ipc.on('wallet-connect-request', async (data) => {
+        console.log('[Splash] 收到钱包连接请求', data);
+        try {
+          // 让主窗口获得焦点并隐藏 BrowserView，确保弹窗可见
+          await window.ipc.invoke('focus-main-window').catch(e => {
+            console.warn('[Splash] 无法聚焦主窗口:', e);
+          });
+          
+          const modal = useWeb3Modal();
+          
+          // 打开钱包连接对话框
+          await modal.open();
+          
+          // 等待用户连接
+          const account = useWeb3ModalAccount();
+          
+          // 等待连接完成
+          await new Promise((resolve) => {
+            const checkInterval = setInterval(() => {
+              if (account.isConnected.value) {
+                clearInterval(checkInterval);
+                resolve();
+              }
+            }, 500);
+            
+            // 60秒超时
+            setTimeout(() => {
+              clearInterval(checkInterval);
+              resolve();
+            }, 60000);
+          });
+          
+          console.log('[Splash] 钱包连接成功:', account.address.value);
+          
+          // 恢复 BrowserView
+          await window.ipc.invoke('restore-browser-views').catch(e => {
+            console.warn('[Splash] 无法恢复 BrowserView:', e);
+          });
+          
+          window.ipc.send('wallet-connect-complete', {
+            success: true,
+            address: account.address.value,
+            chainId: account.chainId.value
+          });
+        } catch (error) {
+          console.error('[Splash] 钱包连接错误:', error);
+          
+          // 即使出错也要恢复 BrowserView
+          await window.ipc.invoke('restore-browser-views').catch(e => {
+            console.warn('[Splash] 无法恢复 BrowserView:', e);
+          });
+          
+          window.ipc.send('wallet-connect-complete', {
+            success: false,
+            error: error.message
+          });
+        }
+      });
+
+      // 3. 断开钱包请求
+      window.ipc.on('wallet-disconnect-request', async (data) => {
+        console.log('[Splash] 收到钱包断开请求', data);
+        try {
+          const { disconnect } = useDisconnect();
+          await disconnect();
+          
+          console.log('[Splash] 钱包已断开');
+          window.ipc.send('wallet-disconnect-complete', {
+            success: true
+          });
+        } catch (error) {
+          console.error('[Splash] 钱包断开错误:', error);
+          window.ipc.send('wallet-disconnect-complete', {
+            success: false,
+            error: error.message
+          });
+        }
+      });
+
+      // 4. 获取钱包状态请求
+      window.ipc.on('wallet-get-state-request', async (data) => {
+        console.log('[Splash] 收到获取钱包状态请求', data);
+        try {
+          const account = useWeb3ModalAccount();
+          const state = {
+            success: true,
+            initialized: account.isConnected?.value || false,
+            connected: account.isConnected?.value || false,
+            address: account.address?.value || null,
+            chainId: account.chainId?.value || null
+          };
+          
+          console.log('[Splash] 钱包状态:', state);
+          window.ipc.send('wallet-get-state-complete', state);
+        } catch (error) {
+          console.error('[Splash] 获取钱包状态错误:', error);
+          window.ipc.send('wallet-get-state-complete', {
+            success: false,
+            error: error.message
+          });
+        }
+      });
+
+      // 5. 获取 Provider 请求
+      window.ipc.on('wallet-get-provider-request', async (data) => {
+        console.log('[Splash] 收到获取 Provider 请求', data);
+        try {
+          const provider = useWeb3ModalProvider();
+          
+          window.ipc.send('wallet-get-provider-complete', {
+            success: true,
+            hasProvider: !!provider.walletProvider.value
+          });
+        } catch (error) {
+          console.error('[Splash] 获取 Provider 错误:', error);
+          window.ipc.send('wallet-get-provider-complete', {
+            success: false,
+            error: error.message
+          });
+        }
+      });
+
+      // 6. 查询合约请求（只读）
+      window.ipc.on('wallet-query-contract-request', async (data) => {
+        console.log('[Splash] 收到查询合约请求', data);
+        try {
+          const { contractAddress, abi, method, params } = data;
+          const parsedAbi = JSON.parse(abi);
+          
+          const provider = useWeb3ModalProvider();
+          const walletProvider = provider.walletProvider.value;
+          
+          if (!walletProvider) {
+            throw new Error('钱包未连接');
+          }
+          
+          const ethersProvider = new ethers.providers.Web3Provider(walletProvider);
+          const contract = new ethers.Contract(contractAddress, parsedAbi, ethersProvider);
+          
+          console.log('[Splash] 调用合约方法:', method, '参数:', params);
+          const result = await contract[method](...params);
+          
+          // 处理 BigNumber 等特殊类型
+          let serializedResult = result;
+          if (result && result._isBigNumber) {
+            serializedResult = result.toString();
+          } else if (typeof result === 'object') {
+            serializedResult = JSON.stringify(result);
+          }
+          
+          console.log('[Splash] 合约查询结果:', serializedResult);
+          window.ipc.send('wallet-query-contract-complete', {
+            success: true,
+            data: serializedResult
+          });
+        } catch (error) {
+          console.error('[Splash] 查询合约错误:', error);
+          window.ipc.send('wallet-query-contract-complete', {
+            success: false,
+            error: error.message
+          });
+        }
+      });
+
+      // 7. 调用合约请求（写操作）
+      window.ipc.on('wallet-invoke-contract-request', async (data) => {
+        console.log('[Splash] 收到调用合约请求', data);
+        try {
+          const { contractAddress, abi, method, params } = data;
+          const parsedAbi = JSON.parse(abi);
+          
+          const provider = useWeb3ModalProvider();
+          const walletProvider = provider.walletProvider.value;
+          
+          if (!walletProvider) {
+            throw new Error('钱包未连接');
+          }
+          
+          const ethersProvider = new ethers.providers.Web3Provider(walletProvider);
+          const signer = await ethersProvider.getSigner();
+          const contract = new ethers.Contract(contractAddress, parsedAbi, signer);
+          
+          console.log('[Splash] 调用合约方法（写）:', method, '参数:', params);
+          const tx = await contract[method](...params);
+          
+          console.log('[Splash] 交易已发送:', tx.hash);
+          
+          // 等待交易确认（可选）
+          // const receipt = await tx.wait();
+          
+          window.ipc.send('wallet-invoke-contract-complete', {
+            success: true,
+            data: {
+              hash: tx.hash,
+              from: tx.from,
+              to: tx.to,
+              nonce: tx.nonce,
+              gasLimit: tx.gasLimit?.toString(),
+              gasPrice: tx.gasPrice?.toString(),
+              data: tx.data,
+              value: tx.value?.toString(),
+              chainId: tx.chainId
+            }
+          });
+        } catch (error) {
+          console.error('[Splash] 调用合约错误:', error);
+          window.ipc.send('wallet-invoke-contract-complete', {
+            success: false,
+            error: error.message
+          });
+        }
+      });
+
+      // 8. 部署合约请求
+      window.ipc.on('wallet-deploy-contract-request', async (event, data) => {
+        console.log('[Splash] 收到部署合约请求', data);
+        try {
+          const { abi, bytecode, constructorArgs } = data;
+          const parsedAbi = JSON.parse(abi);
+          
+          const provider = useWeb3ModalProvider();
+          const walletProvider = provider.walletProvider.value;
+          
+          if (!walletProvider) {
+            throw new Error('钱包未连接');
+          }
+          
+          const ethersProvider = new ethers.providers.Web3Provider(walletProvider);
+          const signer = await ethersProvider.getSigner();
+          
+          console.log('[Splash] 创建合约工厂');
+          const factory = new ethers.ContractFactory(parsedAbi, bytecode, signer);
+          
+          console.log('[Splash] 部署合约，构造函数参数:', constructorArgs);
+          const contract = await factory.deploy(...constructorArgs);
+          
+          console.log('[Splash] 合约部署交易已发送:', contract.deployTransaction.hash);
+          console.log('[Splash] 等待合约部署确认...');
+          
+          // 等待部署交易确认
+          await contract.deployed();
+          
+          console.log('[Splash] 合约部署成功，地址:', contract.address);
+          
+          window.ipc.send('wallet-deploy-contract-complete', {
+            success: true,
+            address: contract.address,
+            transactionHash: contract.deployTransaction.hash
+          });
+        } catch (error) {
+          console.error('[Splash] 部署合约错误:', error);
+          window.ipc.send('wallet-deploy-contract-complete', {
+            success: false,
+            error: error.message
+          });
+        }
+      });
+
+      // 9. 签名消息请求
+      window.ipc.on('wallet-sign-message-request', async (data) => {
+        console.log('[Splash] 收到签名消息请求', data);
+        try {
+          const { message } = data;
+          
+          const provider = useWeb3ModalProvider();
+          const walletProvider = provider.walletProvider.value;
+          
+          if (!walletProvider) {
+            throw new Error('钱包未连接');
+          }
+          
+          const ethersProvider = new ethers.providers.Web3Provider(walletProvider);
+          const signer = await ethersProvider.getSigner();
+          
+          const signature = await signer.signMessage(message);
+          
+          console.log('[Splash] 消息已签名');
+          window.ipc.send('wallet-sign-message-complete', {
+            success: true,
+            signature: signature
+          });
+        } catch (error) {
+          console.error('[Splash] 签名消息错误:', error);
+          window.ipc.send('wallet-sign-message-complete', {
+            success: false,
+            error: error.message
+          });
+        }
+      });
+
+      // 9. 发送交易请求
+      window.ipc.on('wallet-send-transaction-request', async (data) => {
+        console.log('[Splash] 收到发送交易请求', data);
+        try {
+          const { tx } = data;
+          
+          const provider = useWeb3ModalProvider();
+          const walletProvider = provider.walletProvider.value;
+          
+          if (!walletProvider) {
+            throw new Error('钱包未连接');
+          }
+          
+          const ethersProvider = new ethers.providers.Web3Provider(walletProvider);
+          const signer = await ethersProvider.getSigner();
+          
+          const transaction = await signer.sendTransaction(tx);
+          
+          console.log('[Splash] 交易已发送:', transaction.hash);
+          window.ipc.send('wallet-send-transaction-complete', {
+            success: true,
+            data: {
+              hash: transaction.hash
+            }
+          });
+        } catch (error) {
+          console.error('[Splash] 发送交易错误:', error);
+          window.ipc.send('wallet-send-transaction-complete', {
+            success: false,
+            error: error.message
+          });
+        }
+      });
+
+      // 10. 获取网络信息请求
+      window.ipc.on('wallet-get-network-request', async (data) => {
+        console.log('[Splash] 收到获取网络信息请求', data);
+        try {
+          const provider = useWeb3ModalProvider();
+          const walletProvider = provider.walletProvider.value;
+          
+          if (!walletProvider) {
+            throw new Error('钱包未连接');
+          }
+          
+          const ethersProvider = new ethers.providers.Web3Provider(walletProvider);
+          const network = await ethersProvider.getNetwork();
+          
+          console.log('[Splash] 网络信息:', network);
+          window.ipc.send('wallet-get-network-complete', {
+            success: true,
+            data: {
+              name: network.name,
+              chainId: network.chainId
+            }
+          });
+        } catch (error) {
+          console.error('[Splash] 获取网络信息错误:', error);
+          window.ipc.send('wallet-get-network-complete', {
+            success: false,
+            error: error.message
+          });
+        }
+      });
+      
+      console.log('[Splash] ✅ 钱包 IPC 监听器设置完成');
+    },
+    
     // 初始化地区语言
     async setLocaleLang() {
       // 监听变化并赋值全局变量

@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 
 const outFile = path.resolve(__dirname, '../dist/preload.js');
+const walletPreloadOutFile = path.resolve(__dirname, '../dist/walletPreload.js');
 
 const modules = [
   'js/preload/default.js',
@@ -24,6 +25,14 @@ function buildPreload() {
   });
 
   fs.writeFileSync(outFile, output, 'utf-8');
+  
+  /* build wallet preload separately */
+  const walletPreloadSource = path.resolve(__dirname, '../js/preload/walletPreload.js');
+  if (fs.existsSync(walletPreloadSource)) {
+    const walletPreloadContent = fs.readFileSync(walletPreloadSource, 'utf-8');
+    fs.writeFileSync(walletPreloadOutFile, walletPreloadContent, 'utf-8');
+    console.log('✅ Wallet preload built to:', walletPreloadOutFile);
+  }
 }
 
 if (module.parent) {

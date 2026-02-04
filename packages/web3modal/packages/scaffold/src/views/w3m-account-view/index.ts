@@ -228,13 +228,14 @@ export class W3mAccountView extends LitElement {
     return isMultiNetwork || !isValidNetwork
   }
 
-  private onCopyAddress() {
+  private async onCopyAddress() {
     try {
       if (this.address) {
-        CoreHelperUtil.copyToClopboard(this.address)
+        await CoreHelperUtil.copyToClopboard(this.address)
         SnackController.showSuccess('Address copied')
       }
-    } catch {
+    } catch (error) {
+      console.error('Copy address failed:', error)
       SnackController.showError('Failed to copy')
     }
   }

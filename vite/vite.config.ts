@@ -48,13 +48,40 @@ export const config = {
       // 添加以下别名解析
       '#alloc': path.resolve('./node_modules/uint8arrays/dist/src/alloc.js'),
       '#util/as-uint8array': path.resolve('./node_modules/uint8arrays/dist/src/util/as-uint8array.js'),
+      // 添加 web3modal 本地包的别名解析
+      '@web3modal/scaffold-utils': path.resolve('../packages/web3modal/packages/scaffold-utils/dist/esm/exports'),
+      '@web3modal/scaffold': path.resolve('../packages/web3modal/packages/scaffold/dist/esm'),
+      '@web3modal/core': path.resolve('../packages/web3modal/packages/core/dist/esm'),
+      '@web3modal/ui': path.resolve('../packages/web3modal/packages/ui/dist/esm'),
+      '@web3modal/common': path.resolve('../packages/web3modal/packages/common/dist/esm'),
+      '@web3modal/polyfills': path.resolve('../packages/web3modal/packages/polyfills/dist/esm'),
+      '@web3modal/wallet': path.resolve('../packages/web3modal/packages/wallet/dist/esm'),
     },
   },
   build: {
     sourcemap: true, //不打包sourcemap
     target: 'es2020',
     rollupOptions: {
-      // external: ['#alloc', '#util/as-uint8array'],
+      external: [
+        '@coinbase/wallet-sdk',
+        /^@walletconnect\/.*/,
+        /^@ethersproject\/.*/,        'ethers',        'valtio',
+        'valtio/vanilla',
+        'valtio/utils',
+        'lit',
+        /^lit\/.*/,
+        '@web3modal/scaffold-vue',
+        '@web3modal/scaffold-react',
+        '@web3modal/siwe',
+        'zod',
+        'dayjs',
+        /^dayjs\/.*/,
+        'qrcode',
+        'buffer',
+        'react',
+        'react-dom',
+        'vue',
+      ],
       input: inputs,
       output: {
         manualChunks: {

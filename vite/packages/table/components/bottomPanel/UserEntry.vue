@@ -64,6 +64,7 @@ export default defineComponent({
       showMyProp: false,
       teamKey: Date.now(),
       isLogoutVisible: false,
+      logoutLoading: false,
     };
   },
   computed: {
@@ -74,6 +75,7 @@ export default defineComponent({
   mounted() {},
   methods: {
     async jump(type, val) {
+      console.log('菜单跳转：', type, val);
       switch (type) {
         case 'route':
           this.$router.push(val.route);
@@ -110,14 +112,19 @@ export default defineComponent({
       this.$router.replace('/');
     },
     async handleLogout(uid) {
-      this.isLogoutVisible = false;
-      await this.deleteUserInfo();
-      let res = await ipc.invoke('direct-logout', uid);
-      if (res) {
-        message.success('帐号退出成功！');
-        this.$router.replace('/');
-      } else {
-        message.error('账号退出失败，请重试！');
+      this.logoutLoading = true;
+      try {
+        await this.deleteUserInfo();
+        let res = await ipc.invoke('direct-logout', uid);
+        if (res) {
+          message.success('帐号退出成功！');
+          this.isLogoutVisible = false;
+          this.$router.replace('/');
+        } else {
+          message.error('账号退出失败，请重试！');
+        }
+      } finally {
+        this.logoutLoading = false;
       }
     },
   },
@@ -153,10 +160,10 @@ export default defineComponent({
     </div>
     <div>
       <a-modal
-        title="退出此帐号: {{ userInfo.nickname }}"
-        v-model="isLogoutVisible"
+        title="退出当前帐号？"
+        v-model:open="isLogoutVisible"
         :centered="true"
-        :confirm-loading="true"
+        :confirm-loading="logoutLoading"
         :destroy-on-close="true"
         ok-text="确认"
         cancel-text="取消"

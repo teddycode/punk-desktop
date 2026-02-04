@@ -1,4 +1,16 @@
 app.whenReady().then(() => {
+  // 剪贴板复制功能 - 用于 Web3Modal 等需要复制的场景
+  ipc.handle('copyToClipboard', async (event, text) => {
+    try {
+      const { clipboard } = require('electron');
+      clipboard.writeText(text);
+      return { success: true };
+    } catch (error) {
+      console.error('Clipboard write failed:', error);
+      return { success: false, error: error.message };
+    }
+  });
+
   // 设置默认浏览器部分代码开始
   // 获取默认浏览器
   ipc.on('getIsDefaultBrowser', function (event) {

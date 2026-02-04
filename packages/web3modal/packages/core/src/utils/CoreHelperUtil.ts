@@ -37,8 +37,55 @@ export const CoreHelperUtil = {
     return Date.now() - lastRetry >= ConstantsUtil.ONE_SEC_MS
   },
 
-  copyToClopboard(text: string) {
-    navigator.clipboard.writeText(text)
+  async copyToClopboard(text: string) {
+    // 方案1: 尝试使用 Electron IPC (如果在 Electron 环境中)
+    if (typeof window !== 'undefined' && (window as any).ipc?.invoke) {
+      try {
+        const result = await (window as any).ipc.invoke('copyToClipboard', text)
+        if (result?.success) {
+          return
+        }
+        console.warn('Electron clipboard failed:', result?.error)
+      } catch (error) {
+        console.warn('Electron IPC clipboard failed:', error)
+      }
+    }
+
+    // 方案2: 尝试使用 Clipboard API
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try {
+        await navigator.clipboard.writeText(text)
+        return
+      } catch (error) {
+        console.warn('Clipboard API failed:', error)
+      }
+    }
+
+    // 方案3: 使用传统的 document.execCommand 备用方案
+    if (typeof document !== 'undefined') {
+      try {
+        const textArea = document.createElement('textarea')
+        textArea.value = text
+        textArea.style.position = 'fixed'
+        textArea.style.left = '-999999px'
+        textArea.style.top = '-999999px'
+        document.body.appendChild(textArea)
+        textArea.focus()
+        textArea.select()
+        
+        const successful = document.execCommand('copy')
+        document.body.removeChild(textArea)
+        
+        if (successful) {
+          return
+        }
+      } catch (err) {
+        console.error('execCommand copy failed:', err)
+      }
+    }
+
+    // 所有方法都失败
+    throw new Error('Failed to copy to clipboard')
   },
 
   getPairingExpiry() {

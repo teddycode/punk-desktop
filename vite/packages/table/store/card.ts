@@ -410,10 +410,10 @@ export const cardStore = defineStore(
           linkValue: '',
           open: {
             type: 'sysPage',
-            name: '应用市场',
+            name: 'DApp Store',
           },
           isTitle: true,
-          titleValue: '应用市场',
+          titleValue: 'DApp Store',
           src: 'https://pic.imgdb.cn/item/658514e5c458853aefb6f0f9.png',
           isRadius: true,
           radius: 5,

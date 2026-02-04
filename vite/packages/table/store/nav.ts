@@ -132,7 +132,7 @@ let arrData = [
       package: 'com.thisky.appStore',
       preload: '/pages/appStore/preload.js',
       logo: 'https://up.apps.vip/logo/favicon.svg',
-      summary: '应用市场，助您发现更大的世界。',
+      summary: 'c，助您发现更大的世界。',
       site: null,
       type: 'web',
       url: 'https://a.apps.vip/d.appStore/index.html',

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet Client Test - iframe</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .status-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .status-item:last-child {
+            border-bottom: none;
+        }
+        
+        .label {
+            font-weight: 600;
+            opacity: 0.8;
+        }
+        
+        .value {
+            font-family: 'Courier New', monospace;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            color: #667eea;
+        }
+        
+        button:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .log {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+        
+        .log-entry {
+            padding: 4px 0;
+            opacity: 0.9;
+        }
+        
+        .log-entry.success {
+            color: #52c41a;
+        }
+        
+        .log-entry.error {
+            color: #ff4d4f;
+        }
+        
+        .log-entry.info {
+            color: #1890ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌉 iframe 钱包客户端测试</h1>
+        
+        <div class="status-card">
+            <h3 style="margin-bottom: 15px;">钱包状态</h3>
+            <div class="status-item">
+                <span class="label">初始化:</span>
+                <span class="value" id="init-status">未知</span>
+            </div>
+            <div class="status-item">
+                <span class="label">连接状态:</span>
+                <span class="value" id="connect-status">未连接</span>
+            </div>
+            <div class="status-item">
+                <span class="label">钱包地址:</span>
+                <span class="value" id="wallet-address">无</span>
+            </div>
+            <div class="status-item">
+                <span class="label">链 ID:</span>
+                <span class="value" id="chain-id">无</span>
+            </div>
+        </div>
+        
+        <div class="button-group">
+            <button onclick="initWallet()">🚀 初始化钱包</button>
+            <button onclick="connectWallet()">🔌 连接钱包</button>
+            <button onclick="disconnectWallet()">🔌 断开钱包</button>
+            <button onclick="getStatus()">🔍 获取状态</button>
+        </div>
+        
+        <div class="status-card">
+            <h3 style="margin-bottom: 10px;">日志</h3>
+            <div class="log" id="log"></div>
+        </div>
+    </div>
+    
+    <script>
+        // WalletClient 类 - iframe 客户端
+        class WalletClient {
+            constructor() {
+                this.requestId = 0;
+                this.pendingRequests = new Map();
+                this.statusCallbacks = [];
+                this.setupMessageListener();
+            }
+            
+            setupMessageListener() {
+                window.addEventListener('message', (event) => {
+                    const { type, data, requestId } = event.data;
+                    
+                    // 处理响应
+                    const pending = this.pendingRequests.get(requestId);
+                    if (pending) {
+                        if (type.endsWith('_ERROR')) {
+                            pending.reject(new Error(data.error));
+                        } else {
+                            pending.resolve(data);
+                        }
+                        this.pendingRequests.delete(requestId);
+                    }
+                    
+                    // 触发状态更新回调
+                    if (type === 'WALLET_STATUS_RESPONSE' || type === 'WALLET_CONNECT_RESPONSE') {
+                        this.statusCallbacks.forEach(callback => callback(data));
+                    }
+                });
+            }
+            
+            sendRequest(type, data = {}) {
+                return new Promise((resolve, reject) => {
+                    const reqId = `${type}_${++this.requestId}_${Date.now()}`;
+                    
+                    this.pendingRequests.set(reqId, { resolve, reject });
+                    
+                    window.parent.postMessage({
+                        type,
+                        data,
+                        requestId: reqId,
+                    }, '*');
+                    
+                    // 10秒超时
+                    setTimeout(() => {
+                        if (this.pendingRequests.has(reqId)) {
+                            this.pendingRequests.delete(reqId);
+                            reject(new Error('请求超时'));
+                        }
+                    }, 10000);
+                });
+            }
+            
+            async init() {
+                return this.sendRequest('WALLET_INIT');
+            }
+            
+            async connect() {
+                return this.sendRequest('WALLET_CONNECT');
+            }
+            
+            async disconnect() {
+                return this.sendRequest('WALLET_DISCONNECT');
+            }
+            
+            async getStatus() {
+                return this.sendRequest('WALLET_STATUS');
+            }
+            
+            onStatusChange(callback) {
+                this.statusCallbacks.push(callback);
+            }
+        }
+        
+        // 创建客户端实例
+        const walletClient = new WalletClient();
+        
+        // 监听状态变化
+        walletClient.onStatusChange((status) => {
+            updateStatus(status);
+            addLog(`状态更新: ${JSON.stringify(status)}`, 'info');
+        });
+        
+        // 工具函数
+        function addLog(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logDiv.insertBefore(entry, logDiv.firstChild);
+            
+            // 限制日志数量
+            if (logDiv.children.length > 50) {
+                logDiv.removeChild(logDiv.lastChild);
+            }
+        }
+        
+        function updateStatus(status) {
+            document.getElementById('init-status').textContent = status.isInitialized ? '✅ 已初始化' : '❌ 未初始化';
+            document.getElementById('connect-status').textContent = status.isConnected ? '✅ 已连接' : '❌ 未连接';
+            document.getElementById('wallet-address').textContent = status.address 
+                ? `${status.address.slice(0, 6)}...${status.address.slice(-4)}`
+                : '无';
+            document.getElementById('chain-id').textContent = status.chainId || '无';
+        }
+        
+        // 按钮操作
+        async function initWallet() {
+            try {
+                addLog('发送初始化请求...', 'info');
+                const result = await walletClient.init();
+                addLog(`初始化成功: ${JSON.stringify(result)}`, 'success');
+            } catch (error) {
+                addLog(`初始化失败: ${error.message}`, 'error');
+            }
+        }
+        
+        async function connectWallet() {
+            try {
+                addLog('发送连接请求...', 'info');
+                const result = await walletClient.connect();
+                addLog(`连接成功: ${result.address}`, 'success');
+            } catch (error) {
+                addLog(`连接失败: ${error.message}`, 'error');
+            }
+        }
+        
+        async function disconnectWallet() {
+            try {
+                addLog('发送断开请求...', 'info');
+                const result = await walletClient.disconnect();
+                addLog(`断开成功`, 'success');
+            } catch (error) {
+                addLog(`断开失败: ${error.message}`, 'error');
+            }
+        }
+        
+        async function getStatus() {
+            try {
+                addLog('查询钱包状态...', 'info');
+                const result = await walletClient.getStatus();
+                addLog(`状态查询成功`, 'success');
+                updateStatus(result);
+            } catch (error) {
+                addLog(`状态查询失败: ${error.message}`, 'error');
+            }
+        }
+        
+        // 页面加载时自动获取状态
+        window.addEventListener('load', () => {
+            addLog('iframe 页面已加载', 'info');
+            setTimeout(() => {
+                getStatus();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

@@ -347,7 +347,8 @@ import { message } from 'ant-design-vue';
 import UploadImage from '@components/UploadImage.vue';
 import Modal from '@components/Modal.vue';
 import { ethers } from 'ethers';
-import { useWeb3ModalProvider, useWeb3ModalAccount } from '@web3modal/ethers5/vue';
+import { useWeb3ModalProvider, useWeb3ModalAccount } from '@punkos/ethers5/vue';
+import { punkos } from '../../../store/chains';
 
 export default defineComponent({
   name: 'WalletsPage',
@@ -455,8 +456,8 @@ export default defineComponent({
       stakeModalVisible.value = false;
     }
     async function doStakeModalConfirm() {
-      const provider = new ethers.providers.JsonRpcProvider(`http://47.243.174.71:36054`);
-      console.log('质押确认');
+      const provider = new ethers.providers.JsonRpcProvider(punkos.rpcUrl);
+      console.log('质押确认:',punkos.rpcUrl);
       try {
         // 显示加载提示
         signingInProgress.value = true;

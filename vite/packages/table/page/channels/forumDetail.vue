@@ -162,7 +162,7 @@ let temp_id = 100
 //     UToast({ message: '评论成功!', type: 'info' })
 //   }, 200)
 // }
-import { useWeb3Modal, useWeb3ModalAccount,createWeb3Modal } from '@web3modal/ethers5/vue';
+import { useWeb3Modal, useWeb3ModalAccount,createWeb3Modal } from '@punkos/ethers5/vue';
 import { walletConfig } from "@store/wallet";
 import { socialContractABI, socialContractAddress} from "@page/channels/mock";
 import { ethers } from 'ethers'

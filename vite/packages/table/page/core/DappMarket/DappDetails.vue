@@ -29,7 +29,7 @@
             <p><strong>上传作者:</strong> {{ dappDetails.user.nickname }}</p>
             <div class="button-group">
               <span>
-                <a-button type="primary" @click="visitWebsite">访问网址</a-button>
+                <a-button type="primary" @click="visitWebsite">应用预览</a-button>
               </span>
               <span>
                 <a-button type="primary" @click="editDapp" class="edit-button">编辑Dapp</a-button>
@@ -174,8 +174,10 @@ import { addDappCard, getisAdded,delDappCard} from "../../../js/service/dappMark
 import { cardStore } from "@store/card";
 
 const props = defineProps<{
-  dappId: number | null;
+  id: string;
 }>();
+
+const dappId = computed(() => Number(props.id));
 
 const emit = defineEmits(['back']);
 
@@ -200,9 +202,6 @@ console.log("appstore.userInfo:",appStore().userInfo)
 config.user.id = appStore().userInfo.uid
 config.user.username = appStore().userInfo.nickname
 config.user.avatar = appStore().userInfo.avatar
-
-
-
 
 // 评论提交事件
 let temp_id = 100
@@ -239,7 +238,7 @@ const submit = async ({ content, parentId, files, finish }: SubmitParamApi) => {
     );
   }
   const commentData = {
-    dappId: props.dappId,
+    dappId: dappId.value,
     parentId: parentId,
     userId: config.user.id,
     content: content,
@@ -258,7 +257,7 @@ const submitRating = () => {
     return;
   }
   let ratingData = {
-    dappId: props.dappId,
+    dappId: dappId.value,
     userId: appStore().userInfo.uid,
     score: userRating.value
   }
@@ -317,29 +316,29 @@ const handlePageChange = (page) => {
 };
 
 async function fetchDappDetail() {
-  if (!props.dappId) return;
-  await getDappDetail(props.dappId).then(response => {
+  if (!dappId.value) return;
+  await getDappDetail(dappId.value).then(response => {
     dappDetails.value = response.data
   })
 };
 
 async function fetchIsCollected() {
-  if (!props.dappId) return;
-  await getisCollected(appStore().userInfo.uid, props.dappId).then(response => {
+  if (!dappId.value) return;
+  await getisCollected(appStore().userInfo.uid, dappId.value).then(response => {
     favorited.value = response.data
   })
 }
 
 async function fetchDappCommentList() {
-  if (!props.dappId) return;
-  await getDappCommentList(props.dappId).then(response => {
+  if (!dappId.value) return;
+  await getDappCommentList(dappId.value).then(response => {
     config.comments = response.data;
   })
 }
 
 async function fetchDappRatingInfo() {
-  if (!props.dappId) return;
-  await getDappRatingInfo(props.dappId, appStore().userInfo.uid).then(response => {
+  if (!dappId.value) return;
+  await getDappRatingInfo(dappId.value, appStore().userInfo.uid).then(response => {
     totalReviews.value = response.data.totalReviews
     overallRating.value = response.data.overallRating
     ratingPercentages.value = response.data.ratingPercentages
@@ -348,16 +347,16 @@ async function fetchDappRatingInfo() {
 }
 
 async function fetchIsLiked() {
-  if (!props.dappId) return;
-  await getisLiked(appStore().userInfo.uid, props.dappId).then(response => {
+  if (!dappId.value) return;
+  await getisLiked(appStore().userInfo.uid, dappId.value).then(response => {
     liked.value = response.data
   })
 }
 
 //判断dapp是否已添加到桌面
 async function fetchIsAdded() {
-  if (!props.dappId) return;
-    await getisAdded(appStore().userInfo.uid, props.dappId).then(response => {
+  if (!dappId.value) return;
+    await getisAdded(appStore().userInfo.uid, dappId.value).then(response => {
         isAdded.value = response.data
     })
 }
@@ -375,7 +374,7 @@ onMounted(async () => {
   await loadDappData();
 });
 
-watch(() => props.dappId, async (newId) => {
+watch(() => dappId.value, async (newId) => {
   if (newId) {
     await loadDappData();
   }
@@ -387,7 +386,7 @@ const visitWebsite = () => {
 
 const addDappToDesk = async () => {
   isAdded.value = !isAdded.value;
-  await addDappCard(appStore().userInfo.uid, props.dappId)
+  await addDappCard(appStore().userInfo.uid, dappId.value)
   cardStore().getUserDappDesk(appStore().userInfo.uid) //更新桌面
   message.success("已成功添加到桌面")
 }
@@ -398,12 +397,12 @@ const editDapp = () => {
 
 const toggleLike = () => {
   liked.value = !liked.value;
-  dappLiked(appStore().userInfo.uid, props.dappId);
+  dappLiked(appStore().userInfo.uid, dappId.value);
 };
 
 const toggleFavorite = () => {
   favorited.value = !favorited.value;
-  dappCollect(appStore().userInfo.uid, props.dappId);
+  dappCollect(appStore().userInfo.uid, dappId.value);
 };
 </script>
 

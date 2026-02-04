@@ -1,4 +1,4 @@
-import { createWeb3Modal, defaultConfig } from '@web3modal/ethers5';
+import { createWeb3Modal, defaultConfig } from '@punkos/ethers5';
 import { ethers } from 'ethers';
 import { arbitrum, goerli, mainnet, punkos } from './chains.js';
 import axios from 'axios';
@@ -68,7 +68,7 @@ modal.subscribeEvents((event) => {
         //  获取后端的nonce
         const address = modal.getAddress();
         axios // TODO 这里需要更新服务器地址
-          .get('http://47.243.174.71:36066/api/users/login/nonce', {
+          .get('http://punk.buaadcl.tech:36066/api/users/login/nonce', {
             params: { address: address },
           })
           .then((res) => {

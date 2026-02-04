@@ -54,7 +54,7 @@ win:
 #    - target: zip
   publish:
     - provider: generic
-      url: http://47.243.174.71:36066/update/binary/win/
+      url: http://punk.buaadcl.tech:36066/update/binary/win/
 #      url: http://127.0.0.1:9090/update/binary/win/
       channel: latest
 
@@ -78,7 +78,7 @@ mac:
     - target: zip
   publish:
     - provider: generic
-      url: http://47.243.174.71:36066/update/browser/mac-${arch}/
+      url: http://punk.buaadcl.tech:36066/update/browser/mac-${arch}/
 #      url: http://127.0.0.1:9090/update/binary/mac/
       channel: latest
 #   extendInfo:

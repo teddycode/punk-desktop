@@ -3,6 +3,43 @@
   -webkit-app-region: no-drag;
 }
 
+/* Web3Modal 修复 - 确保所有弹窗元素可点击 */
+w3m-modal,
+wcm-modal,
+w3m-router,
+w3m-connect-button,
+w3m-account-button,
+w3m-network-button,
+wui-flex,
+wui-button,
+wui-icon,
+wui-text,
+wui-list-item,
+wui-separator,
+wui-wallet-image,
+wui-qr-code,
+wui-chip,
+wui-icon-link,
+wui-link,
+wui-tooltip,
+wui-card,
+wui-input-text,
+[data-testid*="w3m"],
+[data-testid*="wui"],
+[class*="w3m"],
+[class*="wui"],
+[class*="wcm"] {
+  -webkit-app-region: no-drag !important;
+  pointer-events: auto !important;
+}
+
+/* Web3Modal 内部所有交互元素 */
+w3m-modal *,
+wcm-modal *,
+w3m-router * {
+  -webkit-app-region: no-drag !important;
+}
+
 .ant-drawer-close {
   background: #333;
   border-radius: 4px;

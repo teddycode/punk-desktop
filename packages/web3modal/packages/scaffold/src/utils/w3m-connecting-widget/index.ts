@@ -195,13 +195,14 @@ export class W3mConnectingWidget extends LitElement {
   }
 
   // -- Protected ----------------------------------------- //
-  protected onCopyUri() {
+  protected async onCopyUri() {
     try {
       if (this.uri) {
-        CoreHelperUtil.copyToClopboard(this.uri)
+        await CoreHelperUtil.copyToClopboard(this.uri)
         SnackController.showSuccess('Link copied')
       }
-    } catch {
+    } catch (error) {
+      console.error('Copy failed:', error)
       SnackController.showError('Failed to copy')
     }
   }

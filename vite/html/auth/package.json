@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "axios": "^1.6.1",
-    "@web3modal/ethers5": "^4.1.1",
+    "@punkos/ethers5": "^4.1.1",
     "ethers": "^5.7.2"
   },
   "devDependencies": {
