@@ -1,5 +1,7 @@
 <template>
   <div
+    class="main-layout-root"
+    :class="{ 'punk-claw-mode': punkClawOpen }"
     style="
       display: flex;
       flex-direction: column;
@@ -9,17 +11,18 @@
       align-items: stretch;
     "
   >
+    <PunkClaw v-show="punkClawOpen" />
     <div style="height: auto; flex: 0">
       <!--顶部状态栏      -->
-      <TopPanel v-if="!fullScreen"></TopPanel>
+      <TopPanel v-if="!fullScreen && !punkClawOpen"></TopPanel>
     </div>
     <div
-      :class="{ 'mt-3': !fullScreen }"
+      :class="{ 'mt-3': !fullScreen && !punkClawOpen }"
       :style="{ margin: fullScreen ? 0 : '-3px', padding: fullScreen ? 0 : '8px' }"
       style="display: flex; flex-grow: 1; flex-shrink: 1; flex-basis: fit-content; overflow: hidden; height: 100%"
     >
       <div
-        v-if="!fullScreen && navigationToggle[0]"
+        v-if="!fullScreen && !punkClawOpen && navigationToggle[0]"
         style="display: flex; align-content: center; align-items: center; height: 100%"
       >
         <!--左侧栏区域        -->
@@ -36,6 +39,8 @@
         ></SidePanel>
       </div>
       <div
+        class="main-layout-router-host"
+        :class="{ 'main-layout-router-host--preview': punkClawOpen }"
         :style="{ margin: fullScreen ? 0 : '-8px', padding: fullScreen ? 0 : '8px' }"
         style="
           flex-shrink: 1;
@@ -58,7 +63,7 @@
       </div>
       <Transition name="bounce">
         <div
-          v-if="teamVisible && !fullScreen"
+          v-if="teamVisible && !fullScreen && !punkClawOpen"
           class="h-100"
           style="
             height: auto;
@@ -72,7 +77,7 @@
           <TeamPanel></TeamPanel>
         </div>
       </Transition>
-      <div v-if="!fullScreen && navigationToggle[1]" style="display: flex; align-content: center; align-items: center">
+      <div v-if="!fullScreen && !punkClawOpen && navigationToggle[1]" style="display: flex; align-content: center; align-items: center">
         <!--右侧栏区域        -->
         <SidePanel
           :delNavList="removeRightNavigationList"
@@ -91,7 +96,6 @@
       <!-- 底部任务栏 -->
       <BottomPanel v-if="!fullScreen" :delZone="delZone" @getDelIcon="getDelIcon"></BottomPanel>
     </div>
-    <PunkAIFloatAssistant v-if="!fullScreen"></PunkAIFloatAssistant>
   </div>
 </template>
 
@@ -105,21 +109,23 @@ import TeamPanel from '../components/team/TeamPanel.vue';
 import { teamStore } from '@store/team';
 import { isMain } from '@js/common/screenUtils';
 import { navStore } from '@store/nav';
-import fullScreen from '../components/widgets/myIcons/icons/fullScreen.vue';
-import PunkAIFloatAssistant from '../components/PunkAIFloatAssistant.vue';
+import { agentStore } from '@store/agent';
+import PunkClaw from './core/PunkClaw/PunkClaw.vue';
 
 export default {
   name: 'MainLayout',
-  components: { TeamPanel, BottomPanel, TopPanel, SidePanel, PunkAIFloatAssistant },
+  components: { TeamPanel, BottomPanel, TopPanel, SidePanel, PunkClaw },
   mounted() {
     this.$router.afterEach((to, from) => {
       this.routeUpdateTime = Date.now();
     });
+    window.addEventListener('keydown', this.onPunkClawHotkey);
+  },
+  beforeUnmount() {
+    window.removeEventListener('keydown', this.onPunkClawHotkey);
   },
   computed: {
-    fullScreen() {
-      return fullScreen;
-    },
+    ...mapWritableState(agentStore, ['punkClawOpen']),
     ...mapWritableState(appStore, ['routeUpdateTime', 'fullScreen', 'settings', 'init']),
     ...mapWritableState(teamStore, ['teamVisible']),
     ...mapWritableState(navStore, [
@@ -156,6 +162,15 @@ export default {
     getDelIcon(val) {
       this.delZone = val;
     },
+    onPunkClawHotkey(e) {
+      if (e.ctrlKey && (e.key === 'g' || e.key === 'G') && !e.repeat) {
+        e.preventDefault();
+        agentStore().togglePunkClaw();
+      }
+      if (e.key === 'Escape' && agentStore().punkClawOpen) {
+        agentStore().setPunkClawOpen(false);
+      }
+    },
   },
 };
 </script>
@@ -184,6 +199,30 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.main-layout-root.punk-claw-mode {
+  position: relative;
+}
+.main-layout-router-host--preview {
+  position: fixed !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) scale(0.58) !important;
+  width: min(96vw, 1280px) !important;
+  height: min(82vh, 880px) !important;
+  max-height: 82vh !important;
+  /* 低于 PunkClaw 覆盖层，中央留空区域可穿透点击预览；侧栏/顶栏/日志在驾驶舱内盖住预览边缘 */
+  z-index: 480 !important;
+  margin: 0 !important;
+  padding: 8px !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  box-shadow: 0 8px 48px rgba(0, 200, 255, 0.18) !important;
+  border: 1px solid rgba(0, 200, 255, 0.25) !important;
+  transition:
+    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.35s ease;
+  background: var(--primary-bg, #0d1117);
+}
 .del-icon {
   width: 100%;
   height: 100%;

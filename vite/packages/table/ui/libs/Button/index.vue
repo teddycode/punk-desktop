@@ -1,7 +1,7 @@
 <template>
   <button
     @click="handleClick"
-    :disabled="disabled"
+    :disabled="disabled || loading"
     class="flex items-center justify-center text-base xt-text"
     :class="[buttonStyle]"
     :style="{
@@ -48,6 +48,8 @@ interface ButtonProps {
   iconSize?: number | string;
   // 禁用状态
   disabled?: boolean;
+  /** 加载中：禁用点击 */
+  loading?: boolean;
   // 将按钮适合其父宽度
   block?: boolean;
   // 另一种风格的按钮
@@ -64,8 +66,10 @@ const props = withDefaults(defineProps<ButtonProps>(), {
   iconPosition: 'prefix',
   iconSize: 24,
   copy: '',
+  disabled: false,
+  loading: false,
 });
-const { throttleTime, type, disabled, block, plain, copy } = toRefs(props);
+const { throttleTime, type, disabled, loading, block, plain, copy } = toRefs(props);
 
 const emits = defineEmits(['click']);
 const handleClick = useThrottleFn(() => {
@@ -74,7 +78,7 @@ const handleClick = useThrottleFn(() => {
 }, throttleTime.value);
 
 const buttonStyle = computed(() => {
-  return disabled.value ? ' xt-disabled-btn ' : ` xt-${type.value}${plain.value ? '-plain' : ''}-btn xt-active `;
+  return disabled.value || loading.value ? ' xt-disabled-btn ' : ` xt-${type.value}${plain.value ? '-plain' : ''}-btn xt-active `;
 });
 
 function copyToClipboard() {
