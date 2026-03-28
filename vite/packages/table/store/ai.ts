@@ -88,7 +88,7 @@ export const aiStore = defineStore('aiStore', {
     enabled: true,
     strategies: [
       {
-        paths: ['url', 'key', 'temperature', 'count', 'topicList', 'chatList'],
+        paths: ['url', 'key', 'gpt', 'temperature', 'count', 'topicList', 'chatList'],
         storage: localStorage,
       },
     ],

@@ -403,59 +403,6 @@ export const cardStore = defineStore(
         desk.cards = desk.cards.filter(card => card.type !== 'Dapp');
         console.log('删除用户小程序后的cards:', desk.cards);
 
-        // 添加默认的"应用市场"图标
-        const DAPP_MARKET_CARD_ID = 'dapp-market-default-icon'; // 使用固定ID标识
-        const defaultDappMarketIcon = {
-          size: 'mini',
-          link: 'fast',
-          linkValue: '',
-          open: {
-            type: 'sysPage',
-            name: 'DApp Store',
-          },
-          isTitle: true,
-          titleValue: 'DApp Store',
-          src: 'https://pic.imgdb.cn/item/658514e5c458853aefb6f0f9.png',
-          isRadius: true,
-          radius: 5,
-          imgState: 'cover',
-          imgShape: 'square',
-          isBackground: false,
-          backgroundColor: '',
-          backgroundIndex: 0,
-        };
-
-        // 检查是否已存在"DApp Store"图标，避免重复添加
-        const hasDappMarket = desk.cards.some(card =>
-          card.id === DAPP_MARKET_CARD_ID ||
-          card.customData?.iconList?.some(icon =>
-            icon.titleValue === 'DApp Store' && icon.open?.name === 'DApp Store'
-          )
-        );
-
-        if (!hasDappMarket) {
-          console.log('添加默认的"DApp Store"图标...');
-          const dappMarketCard = {
-            name: 'myIcons',
-            id: DAPP_MARKET_CARD_ID, // 使用固定ID，方便后续识别
-            customData: {
-              iconList: [defaultDappMarketIcon],
-              groupTitle: '常用小程序',
-              zoom: {
-                state: true,
-                value: '',
-              },
-              size: {
-                w: '280px',
-                h: '632px',
-              },
-            },
-          };
-          this.addCards([dappMarketCard], desk);
-          console.log('添加"DApp Store"图标后的cards:', desk.cards);
-        } else {
-          console.log('"DApp Store"图标已存在，跳过添加');
-        }
 
         //从后端获取用户小程序桌面数据
         let iconList = [];

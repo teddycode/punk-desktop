@@ -184,7 +184,7 @@ export default {
       selectedCAppId: null,
       menuItems: [
         { label: 'DApp Store', key: 'market' },
-        { label: 'CApp Store', key: 'cappstore' },
+        { label: 'SApp Store', key: 'cappstore' },
         { label: '合约广场', key: 'contracts' },
         { label: '我的收藏', key: 'favorites' },
         { label: '我的投资', key: 'investment' },

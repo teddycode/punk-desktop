@@ -91,6 +91,7 @@
       <!-- 底部任务栏 -->
       <BottomPanel v-if="!fullScreen" :delZone="delZone" @getDelIcon="getDelIcon"></BottomPanel>
     </div>
+    <PunkAIFloatAssistant v-if="!fullScreen"></PunkAIFloatAssistant>
   </div>
 </template>
 
@@ -105,10 +106,11 @@ import { teamStore } from '@store/team';
 import { isMain } from '@js/common/screenUtils';
 import { navStore } from '@store/nav';
 import fullScreen from '../components/widgets/myIcons/icons/fullScreen.vue';
+import PunkAIFloatAssistant from '../components/PunkAIFloatAssistant.vue';
 
 export default {
   name: 'MainLayout',
-  components: { TeamPanel, BottomPanel, TopPanel, SidePanel },
+  components: { TeamPanel, BottomPanel, TopPanel, SidePanel, PunkAIFloatAssistant },
   mounted() {
     this.$router.afterEach((to, from) => {
       this.routeUpdateTime = Date.now();
