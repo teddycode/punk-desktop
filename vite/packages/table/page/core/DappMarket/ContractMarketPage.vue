@@ -1,34 +1,31 @@
 <template>
-  <div class="dappmarket">
+  <div class="contract-market">
     <div class="header-box">
-      <!-- 单行导航：LOGO + Dapp类型筛选 + 排序 + 搜索框 -->
       <a-row class="navigation-row" align="middle" :gutter="24">
         <a-col :span="2">
           <div class="logo">
-            <img src="/images/dapps/dapp-store.png" alt="DApp Store" />
+            <img src="/images/dapps/contract-store.png" alt="合约广场" />
           </div>
         </a-col>
         <a-col :span="15">
           <div class="filter-section">
+            <span class="filter-label">分类:</span>
             <div class="filter-buttons">
               <a-button
-                v-for="category in dappCategories"
-                :key="category.key"
-                type="text"
-                size="small"
-                :class="{'filter-button': true, 'selected': selectedCategory === category.key}"
-                @click="selectCategory(category.key)"
+                v-for="cat in categories"
+                :key="cat.key"
+                :class="['filter-button', { selected: selectedCategory === cat.key }]"
+                @click="selectCategory(cat.key)"
               >
-                <template #icon>
-                  <component :is="category.icon" />
-                </template>
-                {{ category.label }}
+                <component :is="cat.icon" />
+                {{ cat.label }}
               </a-button>
             </div>
           </div>
         </a-col>
-        <a-col :span="3">
+        <a-col :span="4">
           <div class="sort-section">
+            <FireOutlined class="sort-label" />
             <xt-select
               v-model="sortBy"
               :list="sortOptions"
@@ -36,68 +33,39 @@
             />
           </div>
         </a-col>
-        <a-col :span="4">
+        <a-col :span="3">
           <a-input-search
             v-model:value="searchValue"
-            placeholder="搜索 DApp..."
-            @search="onSearch"
+            placeholder="搜索合约..."
             class="search-bar"
-            size="large"
+            @search="onSearch"
           />
         </a-col>
       </a-row>
     </div>
+
     <div class="content">
-      <a-row :gutter="[24, 24]" class="content-row-large">
+      <a-row :gutter="[24, 24]">
         <a-col
-          v-for="dapp in largeDapps"
-          :key="dapp.id"
-          :span="12"
-          class="content-col-large"
-        >
-          <DappCard
-            :image="dapp.imgs[0].img"
-            :title="dapp.name"
-            :description="dapp.description"
-            :id="dapp.id"
-            :qualityLevel="dapp.qualityLevel"
-            :visitCount="dapp.visitCount"
-            :stakersCount="dapp.stakersCount"
-            :totalStaked="dapp.totalStaked"
-            :stakingCap="dapp.stakingCap"
-            :revenue="dapp.revenue"
-            @click="goToDetails(dapp.id)"
-          />
-        </a-col>
-      </a-row>
-      <a-row :gutter="[24, 24]" class="content-row">
-        <a-col
-          v-for="dapp in smallDapps"
-          :key="dapp.id"
+          v-for="contract in displayedContracts"
+          :key="contract.id"
           :span="6"
           class="content-col"
         >
-          <DappCard
-            :image="dapp.imgs[0].img"
-            :title="dapp.name"
-            :description="dapp.description"
-            :id="dapp.id"
-            :qualityLevel="dapp.qualityLevel"
-            :visitCount="dapp.visitCount"
-            :stakersCount="dapp.stakersCount"
-            :totalStaked="dapp.totalStaked"
-            :stakingCap="dapp.stakingCap"
-            :revenue="dapp.revenue"
-            @click="goToDetails(dapp.id)"
+          <ContractCard
+            :contract="contract"
+            @view-details="handleViewDetails"
+            @stake="handleStake"
           />
         </a-col>
       </a-row>
     </div>
+
     <div class="button-container">
       <a-pagination
-        :current="currentPage"
-        :pageSize="pageSize"
-        :total="totalRow"
+        v-model:current="currentPage"
+        :total="filteredContracts.length"
+        :page-size="pageSize"
         @change="handlePageChange"
         showQuickJumper
       />
@@ -107,88 +75,122 @@
 
 <script lang="ts" setup>
 import { ref, computed, onMounted, watch } from 'vue';
-import { 
-  AppstoreOutlined, WalletOutlined,
-  SwapOutlined, RocketOutlined,
-  PictureOutlined, TrophyOutlined, 
-  GlobalOutlined
+import {
+  AppstoreOutlined,
+  WalletOutlined,
+  TeamOutlined,
+  RocketOutlined,
+  ToolOutlined,
+  PictureOutlined,
+  BankOutlined,
+  FireOutlined
 } from '@ant-design/icons-vue';
-import DappCard from "./DappCard.vue";
-import { getDapplist } from "../../../js/service/dappMarket";
+import ContractCard from './ContractCard.vue';
+import { mockContracts, SmartContract } from '../../../data/mockContracts';
 
-const emit = defineEmits(['viewDappDetails']);
+const emit = defineEmits(['viewContractDetails', 'stakeContract']);
 
 const searchValue = ref<string>('');
-const selectedCategory = ref<string>('');
+const selectedCategory = ref<string>('');  
 const sortBy = ref<string>('hot');
+const currentPage = ref(1);
+const pageSize = ref(16);
 
 // 排序选项
 const sortOptions = [
-  { value: 'hot', name: '🔥 热度' },
-  { value: 'time', name: '🕐 最新' },
-  { value: 'profit', name: '💰 收益' },
+  { value: 'hot', name: '🔥 最热门' },
+  { value: 'stakers', name: '👥 质押人数' },
+  { value: 'staked', name: '💰 质押总额' },
+  { value: 'revenue', name: '📈 收益最高' },
+  { value: 'certification', name: '⭐ 认证等级' },
 ];
 
-// Dapp类型分类
-const dappCategories = [
+const categories = [
   { key: '', label: '全部', icon: AppstoreOutlined },
-  { key: 'defi', label: 'DeFi', icon: WalletOutlined },
-  { key: 'dex', label: 'DEX', icon: SwapOutlined },
-  { key: 'game', label: '游戏', icon: RocketOutlined },
+  { key: 'finance', label: '金融', icon: WalletOutlined },
   { key: 'nft', label: 'NFT', icon: PictureOutlined },
-  { key: 'dao', label: 'DAO', icon: TrophyOutlined },
-  { key: 'social', label: '社交', icon: GlobalOutlined },
+  { key: 'game', label: '游戏', icon: RocketOutlined },
+  { key: 'social', label: '社交', icon: TeamOutlined },
+  { key: 'tool', label: '工具', icon: ToolOutlined },
+  { key: 'dao', label: 'DAO', icon: BankOutlined },
 ];
 
-const displayedDapps = ref([]);
-const currentPage = ref(1);
-const pageSize = ref(6);
-const totalRow = ref(0);
+// 过滤和排序逻辑
+const filteredContracts = computed(() => {
+  let contracts = [...mockContracts];
 
-async function fetchDappList() {
-  // 可以根据 selectedCategory, sortBy 来调整请求参数
-  await getDapplist(currentPage.value, pageSize.value, selectedCategory.value, searchValue.value).then(res => {
-    displayedDapps.value = res.data.records;
-    totalRow.value = res.data.totalRow;
-  });
-}
+  // 分类过滤
+  if (selectedCategory.value) {
+    contracts = contracts.filter(c => c.category === selectedCategory.value);
+  }
 
-onMounted(async () => {
-  await fetchDappList();
+  // 搜索过滤
+  if (searchValue.value) {
+    const search = searchValue.value.toLowerCase();
+    contracts = contracts.filter(c =>
+      c.name.toLowerCase().includes(search) ||
+      c.address.toLowerCase().includes(search) ||
+      c.description.toLowerCase().includes(search)
+    );
+  }
+
+  // 排序
+  switch (sortBy.value) {
+    case 'hot':
+      contracts.sort((a, b) => b.visitCount - a.visitCount);
+      break;
+    case 'stakers':
+      contracts.sort((a, b) => b.stakersCount - a.stakersCount);
+      break;
+    case 'staked':
+      contracts.sort((a, b) => b.totalStaked - a.totalStaked);
+      break;
+    case 'revenue':
+      contracts.sort((a, b) => b.revenue - a.revenue);
+      break;
+    case 'certification':
+      contracts.sort((a, b) => b.certificationLevel - a.certificationLevel);
+      break;
+  }
+
+  return contracts;
+});
+
+const displayedContracts = computed(() => {
+  const start = (currentPage.value - 1) * pageSize.value;
+  const end = start + pageSize.value;
+  return filteredContracts.value.slice(start, end);
 });
 
 const onSearch = (value: string) => {
   currentPage.value = 1;
-  fetchDappList();
 };
 
 const selectCategory = (key: string) => {
   selectedCategory.value = key;
   currentPage.value = 1;
-  fetchDappList();
 };
 
 // 监听 sortBy 变化，自动触发数据刷新
 watch(sortBy, () => {
   currentPage.value = 1;
-  fetchDappList();
 });
 
-const goToDetails = (id: number) => {
-  emit('viewDappDetails', id);
+const handleViewDetails = (address: string) => {
+  emit('viewContractDetails', address);
+};
+
+const handleStake = (address: string) => {
+  emit('stakeContract', address);
 };
 
 const handlePageChange = (page: number) => {
   currentPage.value = page;
-  fetchDappList();
 };
-
-const largeDapps = computed(() => displayedDapps.value.slice(0, 2));
-const smallDapps = computed(() => displayedDapps.value.slice(2));
 </script>
 
 <style scoped>
-.dappmarket {
+.contract-market {
   height: 100%;
   overflow-y: auto;
   color: var(--primary-text);
@@ -203,9 +205,6 @@ const smallDapps = computed(() => displayedDapps.value.slice(2));
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
-  position: relative;
-  z-index: 100;
-  overflow: visible;
 }
 
 .navigation-row {
@@ -294,8 +293,6 @@ const smallDapps = computed(() => displayedDapps.value.slice(2));
   display: flex;
   align-items: center;
   gap: 10px;
-  position: relative;
-  overflow: visible;
 }
 
 .sort-label {
@@ -308,7 +305,6 @@ const smallDapps = computed(() => displayedDapps.value.slice(2));
   width: 100%;
 }
 
-/* xt-select 样式覆盖 */
 :deep(.sort-select .ant-select-selector) {
   background: rgba(255, 255, 255, 0.1) !important;
   border: 1.5px solid rgba(255, 255, 255, 0.25) !important;
@@ -416,30 +412,16 @@ const smallDapps = computed(() => displayedDapps.value.slice(2));
 }
 
 .content {
-  height: 85%;
+  min-height: 500px;
   padding: 0 4px;
-}
-
-.content-row-large {
-  height: 60%;
-  margin-bottom: 1%;
-}
-
-.content-row {
-  height: 40%;
-  margin-bottom: 1%;
 }
 
 .content-col {
   padding: 8px;
 }
 
-.content-col-large {
-  padding: 8px;
-}
-
 .button-container {
-  margin: 10px 16px 20px;
+  margin: 20px 16px;
   display: flex;
   justify-content: center;
 }

@@ -404,6 +404,7 @@ export const cardStore = defineStore(
         console.log('删除用户小程序后的cards:', desk.cards);
 
         // 添加默认的"应用市场"图标
+        const DAPP_MARKET_CARD_ID = 'dapp-market-default-icon'; // 使用固定ID标识
         const defaultDappMarketIcon = {
           size: 'mini',
           link: 'fast',
@@ -424,16 +425,19 @@ export const cardStore = defineStore(
           backgroundIndex: 0,
         };
 
-        // 检查是否已存在"应用市场"图标，避免重复添加
+        // 检查是否已存在"DApp Store"图标，避免重复添加
         const hasDappMarket = desk.cards.some(card =>
-          card.customData?.iconList?.some(icon => icon.titleValue === '应用市场')
+          card.id === DAPP_MARKET_CARD_ID ||
+          card.customData?.iconList?.some(icon =>
+            icon.titleValue === 'DApp Store' && icon.open?.name === 'DApp Store'
+          )
         );
 
         if (!hasDappMarket) {
-          console.log('添加默认的"应用市场"图标...');
+          console.log('添加默认的"DApp Store"图标...');
           const dappMarketCard = {
             name: 'myIcons',
-            id: Date.now() - 999999, // 使用固定的偏移量避免ID冲突
+            id: DAPP_MARKET_CARD_ID, // 使用固定ID，方便后续识别
             customData: {
               iconList: [defaultDappMarketIcon],
               groupTitle: '常用小程序',
@@ -448,9 +452,9 @@ export const cardStore = defineStore(
             },
           };
           this.addCards([dappMarketCard], desk);
-          console.log('添加"应用市场"图标后的cards:', desk.cards);
+          console.log('添加"DApp Store"图标后的cards:', desk.cards);
         } else {
-          console.log('"应用市场"图标已存在，跳过添加');
+          console.log('"DApp Store"图标已存在，跳过添加');
         }
 
         //从后端获取用户小程序桌面数据
@@ -480,6 +484,45 @@ export const cardStore = defineStore(
           console.log('构建的用户图标列表:', iconList);
         })
         // 添加用户的小程序图标
+        // 1. Fetch remote dapps
+        // 2. Fetch local CApps (WASM)
+
+        // Local CApps logic (added for WASM CApp support)
+        try {
+          // @ts-ignore
+          if (window.$models && window.$models.appModel) {
+            // @ts-ignore
+            const localCApps = await window.$models.appModel.getAllApps({ where: { type: 'capp' } });
+            console.log('Local CApps found:', localCApps);
+
+            for (const capp of localCApps) {
+              // Combine into iconList
+              let newIcon: any = {};
+              newIcon.titleValue = capp.name;
+              newIcon.link = 'fast';
+              newIcon.src = capp.logo || 'https://pic.imgdb.cn/item/658514e5c458853aefb6f0f9.png'; // fallback icon
+              newIcon.open = {
+                type: 'CApp', // New type for CApp Runner
+                appId: capp.nanoid, // Use app nanoid
+                wasmPath: capp.url.replace('file://', '') // Get file path
+              };
+
+              // Avoid duplicates if already added (though getUserDappDesk rebuilds usually)
+              // Generate unique ID for the card
+              let random = Math.floor(Math.random() * 50) * Math.floor(Math.random() * 100);
+              iconList.push({
+                name: 'myIcons',
+                id: Date.now() - random,
+                type: 'CApp',
+                dappId: capp.nanoid,
+                customData: { iconList: [newIcon] }
+              });
+            }
+          }
+        } catch (e) {
+          console.error("Failed to load local CApps:", e);
+        }
+
         console.log('开始添加用户小程序图标...');
         this.addCards(iconList, desk);
         console.log('最终的desk.cards:', desk?.cards);

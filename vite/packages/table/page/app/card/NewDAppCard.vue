@@ -17,7 +17,7 @@
           >
             <Icon icon="xiangzuo" style="font-size: 1.5em"></Icon>
           </div>
-          <div class="box-title no-drag">DApp市场</div>
+          <div class="box-title no-drag">Web3应用广场</div>
         </div>
         <div class="flex no-grag">
         </div>
@@ -38,13 +38,49 @@
         </div>
         <div class="right no-drag" :class="{ 'full-width': currentView !== 'menu' }">
           <!-- DApp Details View -->
-          <div v-if="currentView === 'dappDetails'" class="page-content">
-            <DappDetailsContent :id="String(selectedDappId)" @back="handleBackToMenu" />
+          <div v-if="currentView === 'dappDetails'" class="page-content dapp-details-view">
+            <DappDetailsContent :id="String(selectedDappId)" @back="handleBackToMenu" @stake="handleStakeDapp" />
           </div>
           
           <!-- Project Details View -->
           <div v-else-if="currentView === 'projectDetails'" class="page-content">
             <ProjectDetailsContent :projectId="selectedProjectId" @back="handleBackToMenu" />
+          </div>
+
+          <!-- Contract Details View -->
+          <div v-else-if="currentView === 'contractDetails'" class="page-content">
+            <ContractDetailsContent 
+              :address="selectedContractAddress" 
+              @back="handleBackToMenu" 
+              @viewContract="handleViewContractDetails"
+              @stake="handleStakeContract"
+            />
+          </div>
+
+          <!-- DApp Staking View -->
+          <div v-else-if="currentView === 'dappStaking'" class="page-content">
+            <DappStakingContent 
+              :dappId="selectedDappId"
+              :contractAddress="selectedContractAddress"
+              @back="handleBackToMenu" 
+              @success="handleStakingSuccess"
+              @viewContract="handleViewContractDetails"
+            />
+          </div>
+
+          <!-- Staking Details View -->
+          <div v-else-if="currentView === 'stakingDetails'" class="page-content">
+            <StakingDetailsContent 
+              :stakingId="selectedStakingId" 
+              @back="handleBackToMenu"
+              @withdraw="handleWithdrawSuccess"
+              @viewContract="handleViewContractDetails"
+            />
+          </div>
+          
+          <!-- CApp Details View -->
+          <div v-else-if="currentView === 'cappDetails'" class="page-content">
+            <CAppDetailsContent :id="String(selectedCAppId)" @back="handleBackToMenu" />
           </div>
           
           <!-- Menu Views -->
@@ -53,20 +89,37 @@
             <div v-if="navIndex === 0" class="page-content">
               <DappMarketContent @viewDappDetails="handleViewDappDetails" />
             </div>
-            
-            <!-- My Info Page -->
+
+            <!-- CApp Store Page -->
             <div v-else-if="navIndex === 1" class="page-content">
-              <MyInfoContent />
+              <CAppStoreContent @viewCAppDetails="handleViewCAppDetails" />
+            </div>
+
+            <!-- Contract Market Page -->
+            <div v-else-if="navIndex === 2" class="page-content">
+              <ContractMarketContent 
+                @viewContractDetails="handleViewContractDetails" 
+                @stakeContract="handleStakeContract"
+              />
             </div>
             
             <!-- Favorites Page -->
-            <div v-else-if="navIndex === 2" class="page-content">
+            <div v-else-if="navIndex === 3" class="page-content">
               <FavoritesContent @viewDapp="handleViewDappDetails" />
             </div>
+
+            <!-- My Investment Page -->
+            <div v-else-if="navIndex === 4" class="page-content">
+              <MyInvestmentContent 
+                @viewDapp="handleViewDappDetails" 
+                @viewStakingDetails="handleViewStakingDetails"
+                @goToMarket="() => updateNavIndex(0)"
+              />
+            </div>
             
-            <!-- My Projects Page -->
-            <div v-else-if="navIndex === 3" class="page-content">
-              <MyProjectsContent @viewProject="handleViewProjectDetails" />
+            <!-- My Info Page -->
+            <div v-else-if="navIndex === 5" class="page-content">
+              <MyInfoContent @viewProject="handleViewProjectDetails" />
             </div>
 
           </template>
@@ -80,9 +133,15 @@
 import DappMarketContent from '../../core/DappMarket/DappMarketPage.vue';
 import MyInfoContent from '../../core/DappMarket/myInfoPage.vue';
 import FavoritesContent from '../../core/DappMarket/Favorites.vue';
-import MyProjectsContent from '../../core/DappMarket/MyProjects.vue';
 import DappDetailsContent from '../../core/DappMarket/DappDetails.vue';
 import ProjectDetailsContent from '../../core/DappMarket/ProjectDetails.vue';
+import ContractMarketContent from '../../core/DappMarket/ContractMarketPage.vue';
+import ContractDetailsContent from '../../core/DappMarket/ContractDetails.vue';
+import MyInvestmentContent from '../../core/DappMarket/MyInvestmentPage.vue';
+import DappStakingContent from '../../core/DappMarket/DappStakingPage.vue';
+import StakingDetailsContent from '../../core/DappMarket/StakingDetailsPage.vue';
+import CAppStoreContent from '../../core/DappMarket/CAppStorePage.vue';
+import CAppDetailsContent from '../../core/DappMarket/CAppDetails.vue';
 
 export default {
   name: 'NewDAppCard',
@@ -90,9 +149,15 @@ export default {
     DappMarketContent,
     MyInfoContent,
     FavoritesContent,
-    MyProjectsContent,
     DappDetailsContent,
     ProjectDetailsContent,
+    ContractMarketContent,
+    ContractDetailsContent,
+    MyInvestmentContent,
+    DappStakingContent,
+    StakingDetailsContent,
+    CAppStoreContent,
+    CAppDetailsContent,
   },
   emits: ['onClose', 'close'],
   props: {
@@ -111,14 +176,19 @@ export default {
   data() {
     return {
       navIndex: 0,
-      currentView: 'menu', // 'menu', 'dappDetails', 'projectDetails'
+      currentView: 'menu', // 'menu', 'dappDetails', 'projectDetails', 'contractDetails', 'dappStaking', 'stakingDetails', 'cappDetails'
       selectedDappId: null,
       selectedProjectId: null,
+      selectedContractAddress: null,
+      selectedStakingId: null,
+      selectedCAppId: null,
       menuItems: [
-        { label: '市场首页', key: 'market' },
-        { label: '我的信息', key: 'myinfo' },
+        { label: 'DApp Store', key: 'market' },
+        { label: 'CApp Store', key: 'cappstore' },
+        { label: '合约广场', key: 'contracts' },
         { label: '我的收藏', key: 'favorites' },
-        { label: '我的项目', key: 'myprojects' },
+        { label: '我的投资', key: 'investment' },
+        { label: '我的信息', key: 'myinfo' },
       ],
     };
   },
@@ -154,10 +224,45 @@ export default {
       this.selectedProjectId = projectId;
       this.currentView = 'projectDetails';
     },
+    handleViewContractDetails(address) {
+      this.selectedContractAddress = address;
+      this.currentView = 'contractDetails';
+    },
+    handleStakeDapp(dappId) {
+      this.selectedDappId = dappId;
+      this.selectedContractAddress = null;
+      this.currentView = 'dappStaking';
+    },
+    handleStakeContract(address) {
+      this.selectedContractAddress = address;
+      this.selectedDappId = null;
+      this.currentView = 'dappStaking';
+    },
+    handleViewStakingDetails(stakingId) {
+      this.selectedStakingId = stakingId;
+      this.currentView = 'stakingDetails';
+    },
+    handleStakingSuccess(stakingData) {
+      // 质押成功后跳转到我的投资
+      this.navIndex = 3;
+      this.currentView = 'menu';
+    },
+    handleWithdrawSuccess(stakingId) {
+      // 退出成功后返回我的投资
+      this.currentView = 'menu';
+      this.navIndex = 3;
+    },
     handleBackToMenu() {
       this.currentView = 'menu';
       this.selectedDappId = null;
       this.selectedProjectId = null;
+      this.selectedContractAddress = null;
+      this.selectedStakingId = null;
+      this.selectedCAppId = null;
+    },
+    handleViewCAppDetails(cappId) {
+      this.selectedCAppId = cappId;
+      this.currentView = 'cappDetails';
     },
   },
 };
@@ -183,7 +288,7 @@ export default {
 }
 
 .controller {
-  z-index: 9999;
+  z-index: 1000;
   position: fixed;
   top: 0;
   left: 0;
@@ -267,6 +372,10 @@ export default {
         height: 100%;
         overflow: auto;
       }
+
+      .dapp-details-view {
+        overflow: visible !important;
+      }
     }
   }
 }
@@ -278,5 +387,18 @@ export default {
   font-size: 18px;
   color: var(--primary-text);
   font-weight: 600;
+}
+</style>
+
+<style lang="scss">
+/* 全局样式 - 确保表情选择器显示在最高层 */
+/* 必须比 .controller (z-index: 1000) 更高 */
+.emoji-picker,
+.u-emoji-picker,
+.emoji-picker-container,
+.u-emoji-container,
+[class*="emoji-picker"],
+[class*="u-emoji"] {
+  z-index: 99999 !important;
 }
 </style>

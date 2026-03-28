@@ -14,6 +14,9 @@ const {
   defaultLocalSysApp,
   defaultPunkOSApp,
 } = require('./data/appData');
+const fs = require('fs');
+const path = require('path');
+const dbUtil = require('../util/dbUtil');
 
 let settingModel;
 const defaultWindow = {
@@ -405,6 +408,7 @@ const appModel = {
         this._testPin(testApp.name, word) ||
         this._testPin(testApp.summary, word) ||
         this._testPin(testApp.url, word) ||
+        (testApp.type === 'capp' && (testApp.name.includes(word) || testApp.summary.includes(word))) ||
         isOrderMatch(testApp.name, word) ||
         isOrderMatch(testApp.summary, word)
       ) {
@@ -576,6 +580,89 @@ const appModel = {
     }
     let insertResult = await sqlDb.knex('app').insert(appInstall);
     if (insertResult.length > 0) return appInstall.nanoid;
+  },
+
+  /**
+   * 安装 WASM CApp 应用
+   * @param {Object} appInfo 应用信息
+   * @param {Uint8Array} bufferData WASM二进制数据
+   * @returns {Promise<string>} 安装成功的appId
+   */
+  async installCApp(appInfo, bufferData) {
+    // 1. 确定存储路径
+    let userDataPath;
+    try {
+      if (typeof window !== 'undefined' && window.globalArgs && window.globalArgs['user-data-path']) {
+        userDataPath = window.globalArgs['user-data-path'];
+      } else {
+        const { app } = require('electron');
+        if (app) {
+          userDataPath = app.getPath('userData');
+        } else {
+          // Fallback for some dev environments or mocked contexts
+          userDataPath =
+            process.env.APPDATA ||
+            (process.platform == 'darwin' ? process.env.HOME + '/Library/Preferences' : '/var/local');
+        }
+
+        // Check for development mode suffix logic similar to dbUtil
+        const isDevelopmentMode = process.argv.some((arg) => arg === '--development-mode');
+        if (isDevelopmentMode && userDataPath.indexOf('-development') === -1) {
+          userDataPath += '-development';
+        }
+      }
+    } catch (e) {
+      console.error('Error determining userData path:', e);
+      // Last resort fallback
+      userDataPath = './userData';
+    }
+
+    // 2. 创建目录
+    const cappsDir = path.join(userDataPath, 'capps');
+    if (!fs.existsSync(cappsDir)) {
+      fs.mkdirSync(cappsDir, { recursive: true });
+    }
+
+    // 3. 生成ID和文件名
+    const appId = appInfo.nanoid || nanoid(8);
+    const fileName = `${appId}.wasm`;
+    const filePath = path.join(cappsDir, fileName);
+
+    // 4. 写入文件
+    try {
+      fs.writeFileSync(filePath, Buffer.from(bufferData));
+      console.log(`CApp WASM saved to: ${filePath}`);
+    } catch (e) {
+      console.error('Failed to save WASM file:', e);
+      throw e;
+    }
+
+    // 5. 准备应用记录
+    // URL: stored as file:// path
+    const fileUrl = `file://${filePath.replace(/\\/g, '/')}`;
+
+    const appRecord = {
+      ...appInfo,
+      nanoid: appId,
+      type: 'capp', // Mark as CApp
+      url: fileUrl,
+      package: appInfo.package || `com.capp.${appId}`,
+      is_debug: false,
+      // Ensure window settings are appropriate for CApp
+      window: appInfo.window || {
+        defaultType: 'window',
+        window: {
+          enable: true,
+          width: 800,
+          height: 600,
+          canResize: true,
+        },
+      },
+    };
+
+    // 6. Register using standard install
+    // We pass the record as the second argument which overrides defaults in install()
+    return await appModel.install(fileUrl, appRecord);
   },
   /**
    * 获得全部自启动的应用

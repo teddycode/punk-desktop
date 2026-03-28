@@ -182,7 +182,28 @@ export default {
     },
     // 预设头像拼接
     getAvatarUrl(item) {
-      return 'https://up.apps.vip/avatar/' + item + '.png';
+      // 预设头像URL列表
+      const avatarUrls = [
+        'https://pic1.imgdb.cn/item/69889816ac0326447d74a5e0.png',
+        'https://pic1.imgdb.cn/item/69889816ac0326447d74a5dc.png',
+        'https://pic1.imgdb.cn/item/69889816ac0326447d74a5df.png',
+        'https://pic1.imgdb.cn/item/69889816ac0326447d74a5e1.png',
+        'https://pic1.imgdb.cn/item/69889816ac0326447d74a5de.png',
+        'https://pic1.imgdb.cn/item/69889816ac0326447d74a5dd.png',
+        'https://pic1.imgdb.cn/item/698898c0ac0326447d74a5e8.png',
+        'https://pic1.imgdb.cn/item/698898c0ac0326447d74a5ea.png',
+        'https://pic1.imgdb.cn/item/698898c0ac0326447d74a5e9.png',
+        'https://pic1.imgdb.cn/item/698898c0ac0326447d74a5e7.png',
+        'https://pic1.imgdb.cn/item/698898c0ac0326447d74a5eb.png',
+        'https://pic1.imgdb.cn/item/698898c0ac0326447d74a5ec.png',
+        'https://pic1.imgdb.cn/item/698898d5ac0326447d74a5ed.png',
+        'https://pic1.imgdb.cn/item/698898d5ac0326447d74a5ee.png',
+        'https://pic1.imgdb.cn/item/698898d5ac0326447d74a5ef.png',
+        'https://pic1.imgdb.cn/item/698898d5ac0326447d74a5f0.png',
+      ];
+      // 将 '001' 转换为 0 (数组索引从0开始)
+      const avatarId = parseInt(item, 10) - 1;
+      return avatarUrls[avatarId] || avatarUrls[0];
     },
     // 点击选中预设头像
     selectPreset(item) {

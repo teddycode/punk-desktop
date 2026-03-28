@@ -38,6 +38,7 @@ import ChatChild from './main/chat';
 import Power from '@page/Power.vue';
 // import coreBasicLayout from "@page/core/Layouts/BaseLayout.vue";
 import SecondLayout from '../page/core/Layouts/SecondLayout.vue';
+import CAppRunner from '@page/core/CAppRunner/index.vue';
 import computing from './core/computing';
 import consensus from './core/consensus';
 import crypto from './core/crypto';
@@ -217,5 +218,10 @@ export default [
     path: '/remoteCommunity',
     name: 'remoteCommunity',
     component: RemoteCommunity,
+  },
+  {
+    path: '/cAppRunner',
+    name: 'CAppRunner',
+    component: CAppRunner,
   },
 ];

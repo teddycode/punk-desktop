@@ -4,11 +4,11 @@
       <a-menu mode="vertical" class="menu" v-model:selectedKeys="selectedKeys">
         <a-menu-item key="overview" @click="currentPage = 'overview'">
           <AppstoreOutlined />
-          概览
+          工作台
         </a-menu-item>
-        <a-menu-item key="submitDapp" @click="currentPage = 'submitDapp'">
-          <CloudUploadOutlined />
-          提交DApp
+        <a-menu-item key="myProjects" @click="currentPage = 'myProjects'">
+          <AppstoreAddOutlined />
+          我的应用
         </a-menu-item>
         <a-menu-item key="api" @click="currentPage = 'api'">
           <ApiOutlined />
@@ -18,7 +18,7 @@
     </div>
     <div class="content">
       <Overview v-if="currentPage === 'overview'" />
-      <SubmitDapp v-else-if="currentPage === 'submitDapp'" />
+      <MyProjects v-else-if="currentPage === 'myProjects'" @viewProject="$emit('viewProject', $event)" />
       <APIContent v-else-if="currentPage === 'api'" />
     </div>
   </div>
@@ -28,12 +28,14 @@
 import { ref } from 'vue';
 import {
   AppstoreOutlined,
-  CloudUploadOutlined,
   ApiOutlined,
+  AppstoreAddOutlined,
 } from '@ant-design/icons-vue';
 import Overview from './Overview.vue';
-import SubmitDapp from './submitDapp.vue';
 import APIContent from './API.vue';
+import MyProjects from './MyProjects.vue';
+
+defineEmits(['viewProject']);
 
 const currentPage = ref<string>('overview');
 const selectedKeys = ref<string[]>(['overview']);

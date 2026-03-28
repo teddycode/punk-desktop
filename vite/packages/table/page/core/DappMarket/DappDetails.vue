@@ -32,6 +32,9 @@
                 <a-button type="primary" @click="visitWebsite">应用预览</a-button>
               </span>
               <span>
+                <a-button type="primary" @click="stakeDapp" class="edit-button">质押投资</a-button>
+              </span>
+              <span>
                 <a-button type="primary" @click="editDapp" class="edit-button">编辑Dapp</a-button>
               </span>
               <span>
@@ -86,7 +89,9 @@
           <div class="scrollable-container">
             <div v-for="(contract, index) in displayedContracts" :key="index" class="contract-item">
               <span class="contract-index">{{ (currentPage - 1) * pageSize + index + 1 }}.</span>
-              <span class="contract-address">{{ contract.address }}</span>
+              <span class="contract-address" @click="viewContractDetails(contract.address)">
+                {{ contract.address }}
+              </span>
             </div>
           </div>
           <a-pagination
@@ -134,7 +139,7 @@
         <div class="user-rating">
           <a-avatar size="large" :src="config.user.avatar" shape="square" />
           <div class="user-comment">
-            <h3>Hi, {{config.user.username}}！请为此小程序评分吧</h3>
+            <h3>Hi, {{config.user.username}}，请为此小程序评分吧！</h3>
             <a-rate v-model:value="userRating" />
             <span class="ant-rate-text">{{ desc[userRating - 1] }}</span>
           </div>
@@ -151,11 +156,6 @@
       </a-row>
       
       <u-comment upload :config="config" @submit="submit" relative-time>
-        <!-- <template>导航栏卡槽</template> -->
-        <!-- <template #header>头部卡槽</template> -->
-        <!-- <template #info>信息卡槽</template> -->
-        <!-- <template #card>用户信息卡片卡槽</template> -->
-        <!-- <template #func>功能区域卡槽</template> -->
       </u-comment>
     </div>
   </div>
@@ -179,7 +179,7 @@ const props = defineProps<{
 
 const dappId = computed(() => Number(props.id));
 
-const emit = defineEmits(['back']);
+const emit = defineEmits(['back', 'stake', 'viewContractDetails']);
 
 const overallRating = ref(3.9); // 总评分
 const totalReviews = ref(5588); // 总评论人数
@@ -404,6 +404,14 @@ const toggleFavorite = () => {
   favorited.value = !favorited.value;
   dappCollect(appStore().userInfo.uid, dappId.value);
 };
+
+const stakeDapp = () => {
+  emit('stake', dappId.value);
+};
+
+const viewContractDetails = (contractAddress: string) => {
+  emit('viewContractDetails', contractAddress);
+};
 </script>
 
 <style scoped>
@@ -415,6 +423,8 @@ const toggleFavorite = () => {
   height: 100%;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
 }
 
 .section-card:hover {
@@ -562,6 +572,8 @@ const toggleFavorite = () => {
   padding: 20px;
   height: 100%;
   color: var(--primary-text);
+  overflow: visible;
+  position: relative;
 }
 
 .image-carousel {
@@ -735,6 +747,9 @@ const toggleFavorite = () => {
   color: #40a9ff;
   cursor: pointer;
   transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .contract-address:hover {
@@ -746,7 +761,7 @@ const toggleFavorite = () => {
   position: absolute;
   top: 10px;
   right: 10px;
-  z-index: 1;
+  z-index: 2;
   font-size: 24px;
 }
 
@@ -761,9 +776,87 @@ const toggleFavorite = () => {
   margin-top: 20px;
   padding: 20px;
   color: var(--primary-text);
+  position: relative;
+  z-index: 10;
+  overflow: visible !important;
 }
 
 :deep(.u-comment-container) {
   background: transparent;
+  overflow: visible !important;
 }
+
+/* 修复评论区用户昵称颜色 - 更全面的选择器 */
+:deep(.u-comment .u-username),
+:deep(.u-comment .u-comment-username),
+:deep(.u-comment h3),
+:deep(.u-comment .username),
+:deep(.u-comment-item .username),
+:deep(.u-comment-item h3),
+:deep(.u-comment-header .username),
+:deep(.u-comment .u-user .username),
+:deep(.u-comment .user .username),
+:deep(.u-comment-header .u-username),
+:deep(div[class*="username"]),
+:deep(span[class*="username"]),
+:deep(.u-comment-input h3),
+:deep(.u-comment-input .username) {
+  color: #000000 !important;
+}
+
+/* 确保评论内容文字为黑色 */
+:deep(.u-comment .u-comment-content),
+:deep(.u-comment .comment-content),
+:deep(.u-comment p),
+:deep(.u-comment-item p) {
+  color: #000000 !important;
+}
+
+/* 确保表情选择器不被遮挡 - 更全面的样式 */
+:deep(.u-comment .u-emoji-picker),
+:deep(.u-comment .emoji-picker),
+:deep(.u-comment .u-comment-emoji),
+:deep(.emoji-picker-container),
+:deep(.u-emoji-container),
+:deep(div[class*="emoji-picker"]),
+:deep(div[class*="emoji"]),
+:deep(.el-popover),
+:deep(.ant-popover) {
+  z-index: 99999 !important;
+}
+
+/* 确保表情按钮区域不会overflow hidden */
+:deep(.u-comment .u-comment-input),
+:deep(.u-comment .u-comment-action),
+:deep(.u-comment .u-comment-toolbar),
+:deep(.u-comment .toolbar) {
+  position: relative;
+  z-index: 100;
+  overflow: visible !important;
+}
+
+/* 修复整个评论输入区域 */
+:deep(.u-comment .u-comment-input-wrapper),
+:deep(.u-comment .input-wrapper) {
+  overflow: visible !important;
+  position: relative;
+}
+
+/* 全局样式 - 确保undraw-ui组件正确显示 */
+:deep(.u-comment *) {
+  box-sizing: border-box;
+}
+
+/* 强制所有文本内容为黑色（排除按钮） */
+:deep(.u-comment div:not([class*="button"]):not([class*="btn"])),
+:deep(.u-comment span:not([class*="button"]):not([class*="btn"])),
+:deep(.u-comment h1),
+:deep(.u-comment h2),
+:deep(.u-comment h3),
+:deep(.u-comment h4),
+:deep(.u-comment h5),
+:deep(.u-comment p) {
+  color: #000000 !important;
+}
+
 </style>

@@ -2,7 +2,7 @@
   <div class="submit-project">
     <div class="form-container">
       <h1>Submit a project</h1>
-      <p class="description">please fill in DApp-related information</p>
+      <p class="description">Please fill in DApp-related information</p>
       <a-form @submit.prevent="handleSubmit">
         <div class="form-content">
           <div class="upload-section">
