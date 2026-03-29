@@ -37,7 +37,7 @@
     <div class="investments-list">
       <div
         v-for="investment in displayedInvestments"
-        :key="investment.id"
+        :key="investment.contractAddress"
         class="investment-card"
       >
         <div class="card-header">
@@ -81,6 +81,33 @@
             </a-col>
           </a-row>
 
+          <a-row v-if="investment.rpcLabels" :gutter="[12, 8]" class="rpc-row">
+            <a-col :span="6">
+              <div class="info-item rpc-mini">
+                <span class="label">实时利息 eth_getCurrentInterest</span>
+                <span class="value">{{ investment.rpcLabels.live }}</span>
+              </div>
+            </a-col>
+            <a-col :span="6">
+              <div class="info-item rpc-mini">
+                <span class="label">链上已赚 eth_getEarnInterest</span>
+                <span class="value">{{ investment.rpcLabels.earn }}</span>
+              </div>
+            </a-col>
+            <a-col :span="6">
+              <div class="info-item rpc-mini">
+                <span class="label">年限 eth_getPledgeYear</span>
+                <span class="value">{{ investment.rpcLabels.year }}</span>
+              </div>
+            </a-col>
+            <a-col :span="6">
+              <div class="info-item rpc-mini">
+                <span class="label">起始区块 eth_getStartTime</span>
+                <span class="value">{{ investment.rpcLabels.start }}</span>
+              </div>
+            </a-col>
+          </a-row>
+
           <!-- 收益趋势图 -->
           <div class="revenue-chart">
             <div class="chart-header">
@@ -102,14 +129,14 @@
           <a-button size="small" @click="viewDappDetails(investment.dapp.id)">
             查看详情
           </a-button>
-          <a-button size="small" @click="viewStakingDetails(investment.id)">
+          <a-button size="small" @click="viewStakingDetails(investment.contractAddress)">
             收益详情
           </a-button>
           <a-button
             v-if="investment.status === 'active'"
             size="small"
             danger
-            @click="handleWithdraw(investment.id)"
+            @click="handleWithdraw(investment.contractAddress)"
           >
             退出质押
           </a-button>
@@ -155,13 +182,28 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { message } from 'ant-design-vue';
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
-import { appStore } from "@table/store";
+import { useWeb3ModalAccount } from '@punkos/ethers5/vue';
+import { ethers } from 'ethers';
+import {
+  createPledgeReadProvider,
+  formatPledgeRpcError,
+  getCurrentInterestWei,
+  getEarnInterestWei,
+  getInvestorInterest,
+  getPledgeYearWei,
+  getStartTimeWei,
+  normalizeToBigNumber,
+  formatPunkAmount
+} from '../../../js/service/pledgeRpc';
+import { listStakePositionsForInvestor } from '../../../js/service/stakePositionsStorage';
+
+const w3mAccount = useWeb3ModalAccount();
 
 interface Investment {
-  id: number;
+  contractAddress: string;
   dapp: {
     id: number;
     name: string;
@@ -176,6 +218,12 @@ interface Investment {
   startTime: string;
   revenueChart: number[];
   trendPercent: number;
+  rpcLabels?: {
+    live: string;
+    earn: string;
+    year: string;
+    start: string;
+  };
 }
 
 const emit = defineEmits(['viewDapp', 'viewStakingDetails', 'goToMarket']);
@@ -211,7 +259,7 @@ const displayedInvestments = computed(() => {
         return b.currentRevenue - a.currentRevenue;
       case 'time':
       default:
-        return new Date(b.startTime).getTime() - new Date(a.startTime).getTime();
+        return (Number(b.startTime) || 0) - (Number(a.startTime) || 0);
     }
   });
 
@@ -222,61 +270,107 @@ onMounted(() => {
   loadInvestments();
 });
 
+watch(
+  () => w3mAccount.address?.value,
+  () => loadInvestments()
+);
+
+function buildTrendPlaceholder(amount: number, revenue: number): { chart: number[]; trend: number } {
+  const base = Math.max(amount, 1);
+  const chart = [15, 22, 28, 35, 42, 55, 68, 80, 92, 100].map((p) => Math.min(100, (revenue / base) * 100 * (p / 100)));
+  const trend = revenue > 0 ? Math.min(99, (revenue / base) * 100) : 0;
+  return { chart, trend };
+}
+
 const loadInvestments = async () => {
-  // Mock 数据
-  investments.value = [
-    {
-      id: 1,
-      dapp: {
-        id: 1,
-        name: 'Uniswap V3',
-        logo: 'https://cryptologos.cc/logos/uniswap-uni-logo.png',
-        category: 'DeFi'
-      },
-      amount: 50000,
-      currentRevenue: 6250,
-      revenueRate: 12.5,
-      duration: '45 天',
-      status: 'active',
-      startTime: '2024-01-15',
-      revenueChart: [20, 35, 45, 60, 75, 85, 100],
-      trendPercent: 15.2
-    },
-    {
-      id: 2,
-      dapp: {
-        id: 2,
-        name: 'Aave Lending',
-        logo: 'https://cryptologos.cc/logos/aave-aave-logo.png',
-        category: 'DeFi'
-      },
-      amount: 30000,
-      currentRevenue: 3300,
-      revenueRate: 11.0,
-      duration: '30 天',
-      status: 'active',
-      startTime: '2024-02-01',
-      revenueChart: [15, 30, 50, 70, 85, 95, 100],
-      trendPercent: 8.5
-    },
-    {
-      id: 3,
-      dapp: {
-        id: 3,
-        name: 'Compound cETH',
-        logo: 'https://cryptologos.cc/logos/compound-comp-logo.png',
-        category: 'DeFi'
-      },
-      amount: 20000,
-      currentRevenue: 2100,
-      revenueRate: 10.5,
-      duration: '已完成',
-      status: 'completed',
-      startTime: '2023-12-01',
-      revenueChart: [10, 25, 40, 55, 70, 85, 100],
-      trendPercent: 10.5
+  const addr = w3mAccount.address?.value;
+  if (!addr) {
+    investments.value = [];
+    return;
+  }
+
+  const positions = listStakePositionsForInvestor(addr);
+  if (positions.length === 0) {
+    investments.value = [];
+    return;
+  }
+
+  const read = createPledgeReadProvider();
+  const out: Investment[] = [];
+
+  for (const pos of positions) {
+    let amount = pos.principalPunk ?? 0;
+    let currentRevenue = 0;
+    let revenueRate = 0;
+    let duration = '—';
+    let status: 'active' | 'completed' = 'active';
+    let startTime = String(pos.updatedAt);
+
+    try {
+      const interest = await getInvestorInterest(pos.contractAddress, addr, read);
+      const pledgeBn = normalizeToBigNumber(interest.pledgeAmount);
+      const chainPrincipal = parseFloat(formatPunkAmount(pledgeBn));
+      if (chainPrincipal > 0) amount = chainPrincipal;
+
+      const accruedBn = normalizeToBigNumber(interest.accruedInterest);
+      currentRevenue = parseFloat(formatPunkAmount(accruedBn));
+
+      const rateBn = normalizeToBigNumber(interest.interestRate);
+      if (rateBn.gt(0)) revenueRate = rateBn.toNumber() / 100;
+
+      const yearBn = normalizeToBigNumber(interest.pledgeYear);
+      if (yearBn.gt(0)) duration = `${yearBn.toString()} 年`;
+
+      if (interest.isMatured === true) {
+        status = 'completed';
+        duration = '已完成';
+      }
+
+      const startBn = normalizeToBigNumber(interest.startTime);
+      if (startBn.gt(0)) startTime = startBn.toString();
+    } catch {
+      /* 使用本地记录 principalPunk */
     }
-  ];
+
+    const rpcOne = async (fn: () => Promise<ethers.BigNumber>, asEther: boolean) => {
+      try {
+        const bn = await fn();
+        if (asEther) return `${formatPunkAmount(bn)} PUNK`;
+        return bn.gt(0) ? bn.toString() : '—';
+      } catch {
+        return '—';
+      }
+    };
+    const rpcLabels: Investment['rpcLabels'] = {
+      live: await rpcOne(() => getCurrentInterestWei(pos.contractAddress, addr, read), true),
+      earn: await rpcOne(() => getEarnInterestWei(pos.contractAddress, addr, read), true),
+      year: await rpcOne(() => getPledgeYearWei(pos.contractAddress, addr, read), false),
+      start: await rpcOne(() => getStartTimeWei(pos.contractAddress, addr, read), false)
+    };
+
+    const { chart, trend } = buildTrendPlaceholder(amount, currentRevenue);
+
+    out.push({
+      contractAddress: pos.contractAddress,
+      dapp: {
+        id: pos.dappId ?? 0,
+        name: pos.dappName || `合约 ${pos.contractAddress.slice(0, 8)}…`,
+        logo: pos.logo || '',
+        category: pos.category || '—'
+      },
+      amount,
+      currentRevenue,
+      revenueRate,
+      duration,
+      status,
+      startTime,
+      revenueChart: chart,
+      trendPercent: Math.round(trend * 10) / 10,
+      rpcLabels
+    });
+  }
+
+  investments.value = out;
 };
 
 const formatNumber = (num: number) => {
@@ -301,27 +395,23 @@ const viewDappDetails = (dappId: number) => {
   emit('viewDapp', dappId);
 };
 
-const viewStakingDetails = (investmentId: number) => {
-  emit('viewStakingDetails', investmentId);
+const viewStakingDetails = (contractAddress: string) => {
+  emit('viewStakingDetails', contractAddress);
 };
 
-const handleWithdraw = (investmentId: number) => {
-  selectedInvestment.value = investments.value.find(inv => inv.id === investmentId) || null;
+const handleWithdraw = (contractAddress: string) => {
+  selectedInvestment.value = investments.value.find((inv) => inv.contractAddress === contractAddress) || null;
   withdrawModalVisible.value = true;
 };
 
 const confirmWithdraw = async () => {
   try {
-    // TODO: 调用退出质押接口
-    message.success('退出成功，资金将在24小时内到账');
+    message.warning(
+      '文档未提供退出质押的链上方法；需合约 / RPC 支持后在此对接。'
+    );
     withdrawModalVisible.value = false;
-
-    // 更新状态
-    if (selectedInvestment.value) {
-      selectedInvestment.value.status = 'completed';
-    }
-  } catch (error) {
-    message.error('退出失败: ' + error.message);
+  } catch (error: unknown) {
+    message.error('操作失败: ' + formatPledgeRpcError(error));
   }
 };
 
@@ -496,6 +586,24 @@ const goToMarket = () => {
 
 .info-item .value.success {
   color: #52c41a;
+}
+
+.rpc-row {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.rpc-mini .label {
+  font-size: 11px;
+  color: var(--secondary-text);
+  line-height: 1.3;
+}
+
+.rpc-mini .value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #a7d9fe;
 }
 
 .revenue-chart {

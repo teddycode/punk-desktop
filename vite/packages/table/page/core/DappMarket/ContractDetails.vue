@@ -68,6 +68,27 @@
       </a-col>
     </a-row>
 
+    <!-- 链上质押扩展（文档 eth_* RPC） -->
+    <div class="section-card chain-pledge-section" v-if="chainPledgeUi">
+      <h3 class="section-title">
+        <ApiOutlined class="title-icon" />
+        链上质押扩展信息
+      </h3>
+      <p class="chain-pledge-hint">以下数据来自节点 RPC；若节点未实现对应方法则显示为「—」。</p>
+      <a-descriptions bordered size="small" :column="2" class="chain-descriptions">
+        <a-descriptions-item label="已质押 (eth_getStakeFlag)">{{ chainPledgeUi.stakeFlag }}</a-descriptions-item>
+        <a-descriptions-item label="安全等级 (eth_getSecurityLevel)">{{ chainPledgeUi.securityLevel }}</a-descriptions-item>
+        <a-descriptions-item label="年费 (eth_getAnnualFee)">{{ chainPledgeUi.annualFee }}</a-descriptions-item>
+        <a-descriptions-item label="上次年费时间 (eth_getLastAnnualFeeTime)">{{ chainPledgeUi.lastAnnualFeeTime }}</a-descriptions-item>
+        <a-descriptions-item label="部署者 (eth_getDeployedAddress)" :span="2">{{ chainPledgeUi.deployed }}</a-descriptions-item>
+        <a-descriptions-item label="旧版投资人 (eth_getInvestorAddress)" :span="2">{{ chainPledgeUi.legacyInvestor }}</a-descriptions-item>
+        <a-descriptions-item label="单受益人 (eth_getBeneficiaryAddress)" :span="2">{{ chainPledgeUi.singleBeneficiary }}</a-descriptions-item>
+        <a-descriptions-item label="总 Gas (eth_getTotalNumberOfGas)">{{ chainPledgeUi.totalGas }}</a-descriptions-item>
+        <a-descriptions-item label="调用次数 (eth_getContractCallCount)">{{ chainPledgeUi.callCount }}</a-descriptions-item>
+        <a-descriptions-item label="总交易值 (eth_getTotalValueTx)" :span="2">{{ chainPledgeUi.totalValueTx }}</a-descriptions-item>
+      </a-descriptions>
+    </div>
+
     <!-- 合约描述 -->
     <div class="section-card">
       <h3 class="section-title">
@@ -186,6 +207,7 @@
 <script lang="ts" setup>
 import { ref, computed, onMounted } from 'vue';
 import { message } from 'ant-design-vue';
+import { ethers } from 'ethers';
 import {
   CopyOutlined,
   EyeOutlined,
@@ -204,6 +226,24 @@ import {
   RightOutlined
 } from '@ant-design/icons-vue';
 import { getContractByAddress, SmartContract } from '../../../data/mockContracts';
+import {
+  createPledgeReadProvider,
+  formatPledgeRpcError,
+  getAllInvestorsInterest,
+  getAnnualFeeWei,
+  getBeneficiaryAddress,
+  getContractCallCountWei,
+  getDeployedAddress,
+  getInvestorAddressLegacy,
+  getLastAnnualFeeTimeWei,
+  getPledgeInfo,
+  getSecurityLevelWei,
+  getStakeFlag,
+  getTotalNumberOfGasWei,
+  getTotalValueTxWei,
+  normalizeToBigNumber,
+  formatPunkAmount
+} from '../../../js/service/pledgeRpc';
 
 const props = defineProps<{
   address: string;
@@ -212,6 +252,56 @@ const props = defineProps<{
 const emit = defineEmits(['back', 'viewContract', 'stake']);
 
 const contract = ref<SmartContract | null>(null);
+
+interface ChainPledgeUiRow {
+  stakeFlag: string;
+  annualFee: string;
+  lastAnnualFeeTime: string;
+  deployed: string;
+  legacyInvestor: string;
+  singleBeneficiary: string;
+  totalGas: string;
+  callCount: string;
+  totalValueTx: string;
+  securityLevel: string;
+}
+
+const chainPledgeUi = ref<ChainPledgeUiRow | null>(null);
+
+const ZERO = ethers.constants.AddressZero;
+
+function displayAddr(a: string | undefined | null) {
+  if (!a || a.toLowerCase() === ZERO.toLowerCase()) return '—';
+  return a;
+}
+
+async function safeStr(fn: () => Promise<string>, fallback = '—') {
+  try {
+    const s = await fn();
+    return displayAddr(s);
+  } catch {
+    return fallback;
+  }
+}
+
+async function safeBnLabel(fn: () => Promise<ethers.BigNumber>, asPunk: boolean) {
+  try {
+    const bn = await fn();
+    if (asPunk) return `${formatPunkAmount(bn)} PUNK`;
+    return bn.toString();
+  } catch {
+    return '—';
+  }
+}
+
+async function safeBool(fn: () => Promise<boolean>) {
+  try {
+    const v = await fn();
+    return v ? '是' : '否';
+  } catch {
+    return '—';
+  }
+}
 
 const categoryLabels = {
   finance: '金融',
@@ -230,12 +320,69 @@ onMounted(() => {
   loadContractDetails();
 });
 
-const loadContractDetails = () => {
+const loadContractDetails = async () => {
   const foundContract = getContractByAddress(props.address);
-  if (foundContract) {
-    contract.value = foundContract;
-  } else {
+  if (!foundContract) {
     message.error('合约不存在');
+    contract.value = null;
+    return;
+  }
+  contract.value = { ...foundContract };
+
+  if (!/^0x[a-fA-F0-9]{40}$/.test(foundContract.address)) {
+    chainPledgeUi.value = null;
+    return;
+  }
+
+  const ca = foundContract.address;
+  try {
+    const read = createPledgeReadProvider();
+    const info = await getPledgeInfo(ca, read);
+    const pledgeBn = normalizeToBigNumber(info.pledgeAmount as string | number);
+    const staked = parseFloat(formatPunkAmount(pledgeBn));
+    if (staked > 0) contract.value.totalStaked = staked;
+
+    const investors = await getAllInvestorsInterest(ca, read);
+    if (investors.length > 0) contract.value.stakersCount = investors.length;
+
+    const earnBn = normalizeToBigNumber(info.earnInterest as string | number);
+    const earned = parseFloat(formatPunkAmount(earnBn));
+    if (earned > 0) contract.value.revenue = earned;
+  } catch (e) {
+    console.warn('[ContractDetails] 链上质押概览不可用，使用 Mock:', formatPledgeRpcError(e));
+  }
+
+  try {
+    const read = createPledgeReadProvider();
+    const [stakeFlag, annualFee, lastFee, deployed, legacyInv, singleBen, totalGas, calls, txVal, sec] =
+      await Promise.all([
+        safeBool(() => getStakeFlag(ca, read)),
+        safeBnLabel(() => getAnnualFeeWei(ca, read), true),
+        safeBnLabel(() => getLastAnnualFeeTimeWei(ca, read), false),
+        safeStr(() => getDeployedAddress(ca, read)),
+        safeStr(() => getInvestorAddressLegacy(ca, read)),
+        safeStr(() => getBeneficiaryAddress(ca, read)),
+        safeBnLabel(() => getTotalNumberOfGasWei(ca, read), false),
+        safeBnLabel(() => getContractCallCountWei(ca, read), false),
+        safeBnLabel(() => getTotalValueTxWei(ca, read), true),
+        safeBnLabel(() => getSecurityLevelWei(ca, read), false)
+      ]);
+
+    chainPledgeUi.value = {
+      stakeFlag,
+      annualFee,
+      lastAnnualFeeTime: lastFee,
+      deployed,
+      legacyInvestor: legacyInv,
+      singleBeneficiary: singleBen,
+      totalGas,
+      callCount: calls,
+      totalValueTx: txVal,
+      securityLevel: sec
+    };
+  } catch (e) {
+    chainPledgeUi.value = null;
+    console.warn('[ContractDetails] 链上扩展字段不可用:', formatPledgeRpcError(e));
   }
 };
 
@@ -487,6 +634,17 @@ const handleViewRelatedContract = (address: string) => {
   font-size: 20px;
   font-weight: 700;
   color: var(--primary-text);
+}
+
+.chain-pledge-hint {
+  font-size: 12px;
+  color: var(--secondary-text);
+  margin: -8px 0 12px 0;
+}
+
+.chain-descriptions :deep(.ant-descriptions-item-label) {
+  font-size: 12px;
+  max-width: 280px;
 }
 
 .section-card {

@@ -76,6 +76,25 @@
       </a-col>
     </a-row>
 
+    <!-- 文档中单字段 RPC（与 getInvestorInterest 对照展示） -->
+    <div class="chart-card rpc-fields-card" v-if="investorRpcUi">
+      <h3 class="card-title">
+        <PercentageOutlined />
+        链上逐字段查询（投资人）
+      </h3>
+      <a-descriptions bordered size="small" :column="2" class="rpc-desc">
+        <a-descriptions-item label="eth_getPledgeAmount">{{ investorRpcUi.pledgeAmount }}</a-descriptions-item>
+        <a-descriptions-item label="eth_getPledgeYear">{{ investorRpcUi.pledgeYear }}</a-descriptions-item>
+        <a-descriptions-item label="eth_getStartTime（区块）">{{ investorRpcUi.startBlock }}</a-descriptions-item>
+        <a-descriptions-item label="eth_getInterestRate">{{ investorRpcUi.interestRate }}</a-descriptions-item>
+        <a-descriptions-item label="eth_getEarnInterest（链上存储）">{{ investorRpcUi.earnStored }}</a-descriptions-item>
+        <a-descriptions-item label="eth_getCurrentInterest（实时）">{{ investorRpcUi.currentLive }}</a-descriptions-item>
+        <a-descriptions-item label="getInvestorInterest.elapsedRatio">{{ investorRpcUi.elapsedRatio }}</a-descriptions-item>
+        <a-descriptions-item label="getInvestorInterest.totalInterest">{{ investorRpcUi.totalInterest }}</a-descriptions-item>
+        <a-descriptions-item label="eth_getBeneficiaryInfo（当前钱包）" :span="2">{{ investorRpcUi.beneficiaryShare }}</a-descriptions-item>
+      </a-descriptions>
+    </div>
+
     <!-- 收益趋势图 -->
     <div class="chart-card">
       <div class="card-header">
@@ -135,7 +154,7 @@
     <div class="allocation-card">
       <h3 class="card-title">
         <DeploymentUnitOutlined />
-        合约分配详情
+        受益人分配（eth_getBeneficiariesInfo）
       </h3>
       <div class="allocation-list">
         <div
@@ -173,11 +192,11 @@
             <div class="progress-bar">
               <div
                 class="progress-fill"
-                :style="{ width: (allocation.amount / staking.amount) * 100 + '%' }"
+                :style="{ width: (staking.amount > 0 ? (allocation.amount / staking.amount) * 100 : 0) + '%' }"
               ></div>
             </div>
             <span class="progress-label">
-              占比 {{ ((allocation.amount / staking.amount) * 100).toFixed(1) }}%
+              占比 {{ staking.amount > 0 ? ((allocation.amount / staking.amount) * 100).toFixed(1) : '0.0' }}%
             </span>
           </div>
         </div>
@@ -212,8 +231,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted, h } from 'vue';
+import { ref, onMounted, h, watch } from 'vue';
 import { message, Modal } from 'ant-design-vue';
+import { useWeb3ModalAccount } from '@punkos/ethers5/vue';
+import { ethers } from 'ethers';
 import {
   WalletOutlined,
   RiseOutlined,
@@ -226,14 +247,33 @@ import {
   HistoryOutlined,
   ExclamationCircleOutlined
 } from '@ant-design/icons-vue';
+import {
+  createPledgeReadProvider,
+  formatPledgeRpcError,
+  getBeneficiariesInfo,
+  getBeneficiaryInfo,
+  getCurrentInterestWei,
+  getEarnInterestWei,
+  getInterestRateWei,
+  getInvestorInterest,
+  getPledgeAmountWei,
+  getPledgeYearWei,
+  getStartTimeWei,
+  normalizeToBigNumber,
+  formatPunkAmount
+} from '../../../js/service/pledgeRpc';
+
+const w3mAccount = useWeb3ModalAccount();
 
 const props = defineProps<{
-  stakingId: number;
+  /** 质押合约地址（与 eth_getInvestorInterest 第一参数一致） */
+  contractAddress: string;
 }>();
 
 const emit = defineEmits(['back', 'withdraw', 'viewContract']);
 
 const staking = ref<any>(null);
+const investorRpcUi = ref<Record<string, string> | null>(null);
 const chartPeriod = ref('30d');
 const trendData = ref<number[]>([]);
 const xAxisLabels = ref<string[]>([]);
@@ -252,58 +292,147 @@ onMounted(() => {
   loadStakingDetails();
 });
 
+watch(
+  () => [props.contractAddress, w3mAccount.address?.value],
+  () => loadStakingDetails()
+);
+
 const loadStakingDetails = async () => {
-  // Mock 数据
-  staking.value = {
-    id: props.stakingId,
-    dapp: {
-      name: 'Uniswap V3',
-      logo: 'https://cryptologos.cc/logos/uniswap-uni-logo.png'
-    },
-    amount: 50000,
-    totalRevenue: 6250,
-    revenueRate: 12.5,
-    days: 45,
-    status: 'active',
-    startTime: '2024-01-15',
-    endTime: '',
-    allocations: [
-      {
-        contractAddress: '0xE592427A0AEce92De3Edee1F18E0157C05861564',
-        contractName: 'Uniswap V3 Router',
-        amount: 30000,
-        revenue: 3750,
-        revenueRate: 12.5
+  const investor = w3mAccount.address?.value;
+  if (!investor || !props.contractAddress) {
+    staking.value = null;
+    investorRpcUi.value = null;
+    message.warning('请连接钱包或提供合约地址');
+    return;
+  }
+
+  const read = createPledgeReadProvider();
+  try {
+    const ca = ethers.utils.getAddress(props.contractAddress);
+    const interest = await getInvestorInterest(ca, investor, read);
+    const pledgeBn = normalizeToBigNumber(interest.pledgeAmount);
+    const amount = parseFloat(formatPunkAmount(pledgeBn));
+    const accruedBn = normalizeToBigNumber(interest.accruedInterest);
+    const totalRevenue = parseFloat(formatPunkAmount(accruedBn));
+    const rateBn = normalizeToBigNumber(interest.interestRate);
+    const revenueRate = rateBn.gt(0) ? rateBn.toNumber() / 100 : 0;
+    const yearBn = normalizeToBigNumber(interest.pledgeYear);
+    const days = yearBn.gt(0) ? yearBn.mul(365).toNumber() : 0;
+    const matured = interest.isMatured === true;
+    const startBn = normalizeToBigNumber(interest.startTime);
+
+    let allocations: Array<{
+      contractAddress: string;
+      contractName: string;
+      amount: number;
+      revenue: number;
+      revenueRate: number;
+    }> = [];
+
+    try {
+      const ben = await getBeneficiariesInfo(ca, read);
+      const totalAlpha = ben.reduce((s, b) => s + normalizeToBigNumber(b.alphaIndex).toNumber(), 0) || 10000;
+      allocations = ben.map((b) => {
+        const alpha = normalizeToBigNumber(b.alphaIndex).toNumber();
+        const share = totalAlpha > 0 ? alpha / totalAlpha : 0;
+        return {
+          contractAddress: b.beneficiaryAddress,
+          contractName: `受益人 ${b.beneficiaryAddress.slice(0, 8)}…`,
+          amount: amount * share,
+          revenue: totalRevenue * share,
+          revenueRate
+        };
+      });
+    } catch {
+      allocations = [];
+    }
+
+    if (allocations.length === 0) {
+      allocations = [
+        {
+          contractAddress: ca,
+          contractName: '当前合约',
+          amount,
+          revenue: totalRevenue,
+          revenueRate
+        }
+      ];
+    }
+
+    staking.value = {
+      id: ca,
+      dapp: {
+        name: `合约 ${ca.slice(0, 10)}…`,
+        logo: ''
       },
-      {
-        contractAddress: '0x1F98431c8aD98523631AE4a59f267346ea31F984',
-        contractName: 'Uniswap V3 Factory',
-        amount: 15000,
-        revenue: 1875,
-        revenueRate: 12.5
-      },
-      {
-        contractAddress: '0xC36442b4a4522E871399CD717aBDD847Ab11FE88',
-        contractName: 'Position Manager',
-        amount: 5000,
-        revenue: 625,
-        revenueRate: 12.5
+      amount,
+      totalRevenue,
+      revenueRate,
+      days: days || 0,
+      status: matured ? 'completed' : 'active',
+      startTime: startBn.gt(0) ? `区块 ${startBn.toString()}` : '—',
+      endTime: matured ? '已到期' : '',
+      allocations
+    };
+
+    const fmtWei = async (fn: () => Promise<ethers.BigNumber>, asEther: boolean) => {
+      try {
+        const bn = await fn();
+        return asEther ? `${formatPunkAmount(bn)} PUNK` : bn.toString();
+      } catch {
+        return '—';
       }
-    ]
-  };
+    };
 
-  // Mock 趋势数据
-  trendData.value = [1000, 1500, 2200, 2800, 3500, 4200, 5000, 5600, 6250];
-  xAxisLabels.value = ['1/15', '1/22', '1/29', '2/5', '2/12', '2/19', '2/26', '3/4', '今'];
+    const elBn = normalizeToBigNumber(interest.elapsedRatio);
+    const elapsedLabel =
+      elBn.gt(0) ? `${(elBn.toNumber() / 100).toFixed(2)}%（万分比 10000=100%）` : '—';
+    const totBn = normalizeToBigNumber(interest.totalInterest);
+    const totalIntLabel = totBn.gt(0) ? `${formatPunkAmount(totBn)} PUNK` : '—';
 
-  // Mock 收益记录
-  revenueHistory.value = [
-    { date: '2024-03-04', type: 'daily', amount: 138.89, total: 6250, note: '每日质押收益' },
-    { date: '2024-03-03', type: 'daily', amount: 138.89, total: 6111.11, note: '每日质押收益' },
-    { date: '2024-03-02', type: 'daily', amount: 138.89, total: 5972.22, note: '每日质押收益' },
-    { date: '2024-03-01', type: 'bonus', amount: 500, total: 5833.33, note: '持有30天奖励' },
-    { date: '2024-02-29', type: 'daily', amount: 138.89, total: 5333.33, note: '每日质押收益' }
-  ];
+    let beneficiaryShare = '—';
+    try {
+      const b = await getBeneficiaryInfo(ca, investor, read);
+      if (b?.alphaIndex != null) {
+        const ai = normalizeToBigNumber(b.alphaIndex).toNumber();
+        beneficiaryShare = `${(ai / 100).toFixed(2)}%（基数 10000）`;
+      }
+    } catch {
+      /* 非受益人或未实现 */
+    }
+
+    investorRpcUi.value = {
+      pledgeAmount: await fmtWei(() => getPledgeAmountWei(ca, investor, read), true),
+      pledgeYear: await fmtWei(() => getPledgeYearWei(ca, investor, read), false),
+      startBlock: await fmtWei(() => getStartTimeWei(ca, investor, read), false),
+      interestRate: await fmtWei(() => getInterestRateWei(ca, investor, read), false),
+      earnStored: await fmtWei(() => getEarnInterestWei(ca, investor, read), true),
+      currentLive: await fmtWei(() => getCurrentInterestWei(ca, investor, read), true),
+      elapsedRatio: elapsedLabel,
+      totalInterest: totalIntLabel,
+      beneficiaryShare
+    };
+
+    const steps = 10;
+    trendData.value = Array.from({ length: steps }, (_, i) =>
+      Math.min(totalRevenue, (totalRevenue * (i + 1)) / steps)
+    );
+    xAxisLabels.value = Array.from({ length: steps }, (_, i) => `${i + 1}`);
+
+    revenueHistory.value = [
+      {
+        date: new Date().toISOString().slice(0, 10),
+        type: 'daily',
+        amount: Math.round((totalRevenue / Math.max(steps, 1)) * 100) / 100,
+        total: totalRevenue,
+        note: '链上累计利息（示意，非逐日明细）'
+      }
+    ];
+  } catch (e) {
+    staking.value = null;
+    investorRpcUi.value = null;
+    message.error('加载质押详情失败: ' + formatPledgeRpcError(e));
+  }
 };
 
 const formatNumber = (num: number) => {
@@ -317,10 +446,15 @@ const getStatusLabel = (status: string) => {
 };
 
 const getTrendLinePoints = () => {
-  return trendData.value
+  const pts = trendData.value;
+  const n = pts.length;
+  if (n === 0) return '';
+  const denomX = n > 1 ? n - 1 : 1;
+  const maxY = Math.max(...pts, 1);
+  return pts
     .map((point, index) => {
-      const x = (index / (trendData.value.length - 1)) * 100;
-      const y = 100 - (point / 10000) * 100;
+      const x = (index / denomX) * 100;
+      const y = 100 - (point / maxY) * 100;
       return `${x},${y}`;
     })
     .join(' ');
@@ -340,10 +474,9 @@ const handleWithdraw = () => {
     cancelText: '取消',
     onOk: async () => {
       try {
-        // TODO: 调用退出接口
-        message.success('退出成功，资金将在24小时内到账');
-        emit('withdraw', props.stakingId);
-      } catch (error) {
+        message.warning('文档未提供退出质押的链上方法；需后续对接。');
+        emit('withdraw', props.contractAddress);
+      } catch {
         message.error('退出失败');
       }
     }
@@ -487,6 +620,19 @@ const handleWithdraw = () => {
   font-size: 22px;
   font-weight: 700;
   color: var(--primary-text);
+}
+
+.rpc-fields-card {
+  margin-bottom: 20px;
+}
+
+.rpc-fields-card .card-title {
+  margin-bottom: 16px;
+}
+
+.rpc-desc :deep(.ant-descriptions-item-label) {
+  font-size: 11px;
+  max-width: 240px;
 }
 
 .chart-card,

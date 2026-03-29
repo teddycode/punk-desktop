@@ -69,9 +69,9 @@
           </div>
 
           <!-- Staking Details View -->
-          <div v-else-if="currentView === 'stakingDetails'" class="page-content">
+          <div v-else-if="currentView === 'stakingDetails' && selectedStakingContract" class="page-content">
             <StakingDetailsContent 
-              :stakingId="selectedStakingId" 
+              :contract-address="selectedStakingContract" 
               @back="handleBackToMenu"
               @withdraw="handleWithdrawSuccess"
               @viewContract="handleViewContractDetails"
@@ -180,7 +180,7 @@ export default {
       selectedDappId: null,
       selectedProjectId: null,
       selectedContractAddress: null,
-      selectedStakingId: null,
+      selectedStakingContract: null,
       selectedCAppId: null,
       menuItems: [
         { label: 'DApp Store', key: 'market' },
@@ -238,26 +238,26 @@ export default {
       this.selectedDappId = null;
       this.currentView = 'dappStaking';
     },
-    handleViewStakingDetails(stakingId) {
-      this.selectedStakingId = stakingId;
+    handleViewStakingDetails(contractAddress) {
+      this.selectedStakingContract = contractAddress;
       this.currentView = 'stakingDetails';
     },
     handleStakingSuccess(stakingData) {
       // 质押成功后跳转到我的投资
-      this.navIndex = 3;
+      this.navIndex = 4;
       this.currentView = 'menu';
     },
-    handleWithdrawSuccess(stakingId) {
+    handleWithdrawSuccess() {
       // 退出成功后返回我的投资
       this.currentView = 'menu';
-      this.navIndex = 3;
+      this.navIndex = 4;
     },
     handleBackToMenu() {
       this.currentView = 'menu';
       this.selectedDappId = null;
       this.selectedProjectId = null;
       this.selectedContractAddress = null;
-      this.selectedStakingId = null;
+      this.selectedStakingContract = null;
       this.selectedCAppId = null;
     },
     handleViewCAppDetails(cappId) {

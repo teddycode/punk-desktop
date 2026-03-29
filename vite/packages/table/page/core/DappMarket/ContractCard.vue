@@ -4,7 +4,10 @@
       <img :src="contract.logo" :alt="contract.name" class="contract-logo" />
       <div class="header-info">
         <h3 class="contract-name">{{ contract.name }}</h3>
-        <div class="category-tag">{{ getCategoryLabel(contract.category) }}</div>
+        <div class="header-tags">
+          <div class="category-tag">{{ getCategoryLabel(contract.category) }}</div>
+          <span v-if="stakeFlagLabel" class="stake-flag-tag" :title="'eth_getStakeFlag'">{{ stakeFlagLabel }}</span>
+        </div>
       </div>
     </div>
 
@@ -52,11 +55,27 @@
 </template>
 
 <script lang="ts" setup>
+import { ref, onMounted } from 'vue';
 import { SmartContract } from '../../../data/mockContracts';
+import { createPledgeReadProvider, getStakeFlag } from '../../../js/service/pledgeRpc';
 
 const props = defineProps<{
   contract: SmartContract;
 }>();
+
+const stakeFlagLabel = ref('');
+
+onMounted(async () => {
+  const a = props.contract.address;
+  if (!/^0x[a-fA-F0-9]{40}$/i.test(a)) return;
+  try {
+    const read = createPledgeReadProvider();
+    const f = await getStakeFlag(a, read);
+    stakeFlagLabel.value = f ? '已质押' : '';
+  } catch {
+    stakeFlagLabel.value = '';
+  }
+});
 
 const emit = defineEmits(['view-details', 'stake', 'click']);
 
@@ -139,6 +158,22 @@ const handleClick = () => {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.header-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.stake-flag-tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(82, 196, 26, 0.2);
+  color: #52c41a;
+  font-weight: 600;
 }
 
 .category-tag {

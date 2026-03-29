@@ -168,6 +168,8 @@ export function getRelatedContracts(address) {
 }
 
 // ==================== 质押投资相关接口 ====================
+// 说明：DApp 广场质押展示与交易已改为链上 RPC（见 @js/service/pledgeRpc.ts、stakeDeposit.ts）。
+// 以下 REST 仍保留供其他模块或后续后端同步使用；新页面请勿再依赖此处作为唯一数据源。
 
 //提交质押投资
 export function submitStaking(data) {

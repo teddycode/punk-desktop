@@ -88,6 +88,14 @@
             </div>
           </div>
 
+          <div v-if="contract.chainRpc" class="contract-rpc-strip">
+            <span class="rpc-pill" title="eth_getStakeFlag">{{ contract.chainRpc.stakeFlag }}</span>
+            <span class="rpc-pill" title="eth_getAnnualFee">年费 {{ contract.chainRpc.annualFee }}</span>
+            <span class="rpc-pill" title="eth_getLastAnnualFeeTime">上次年费 {{ contract.chainRpc.lastFeeTime }}</span>
+            <span class="rpc-pill" title="eth_getBeneficiaryAddress">受益人 {{ contract.chainRpc.beneficiary }}</span>
+            <span class="rpc-pill" title="eth_getContractCallCount">调用 {{ contract.chainRpc.callCount }}</span>
+          </div>
+
           <div class="allocation-controls">
             <div class="slider-container">
               <a-slider
@@ -197,7 +205,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted, reactive } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { message } from 'ant-design-vue';
 import {
   WalletOutlined,
@@ -206,7 +214,29 @@ import {
   BarChartOutlined,
   ExclamationCircleOutlined
 } from '@ant-design/icons-vue';
-import { appStore } from "@table/store";
+import { ethers } from 'ethers';
+import { useWeb3ModalAccount, useWeb3ModalProvider } from '@punkos/ethers5/vue';
+import {
+  createPledgeReadProvider,
+  formatPledgeRpcError,
+  getAllInvestorsInterest,
+  getAnnualFeeWei,
+  getBeneficiaryAddress,
+  getContractCallCountWei,
+  getLastAnnualFeeTimeWei,
+  getPledgeInfo,
+  getStakeFlag,
+  normalizeToBigNumber,
+  formatPunkAmount
+} from '../../../js/service/pledgeRpc';
+import { buildType6StakeDepositTx, waitStakeTxMined } from '../../../js/service/stakeDeposit';
+import { upsertStakePosition } from '../../../js/service/stakePositionsStorage';
+
+/** 与 docs/stake-deposit-test.js 默认一致 */
+const DEFAULT_STAKED_TIME = 2;
+
+const w3mAccount = useWeb3ModalAccount();
+const w3mProvider = useWeb3ModalProvider();
 
 interface ContractAllocation {
   address: string;
@@ -215,6 +245,14 @@ interface ContractAllocation {
   allocatedAmount: number;
   totalStaked?: number;
   stakingCap?: number;
+  /** 合约级 RPC 摘要，用于分配卡片展示 */
+  chainRpc?: {
+    stakeFlag: string;
+    annualFee: string;
+    lastFeeTime: string;
+    beneficiary: string;
+    callCount: string;
+  };
 }
 
 const props = defineProps<{
@@ -249,6 +287,49 @@ const canStake = computed(() => {
 onMounted(() => {
   loadDappInfo();
 });
+
+function shortAddr(a: string) {
+  if (!a || a.length < 12) return a || '—';
+  return `${a.slice(0, 6)}…${a.slice(-4)}`;
+}
+
+async function enrichContractsFromRpc() {
+  const read = createPledgeReadProvider();
+  for (const c of contracts.value) {
+    if (!c.address || !/^0x[a-fA-F0-9]{40}$/.test(c.address)) continue;
+    try {
+      const info = await getPledgeInfo(c.address, read);
+      const pledgeBn = normalizeToBigNumber(info.pledgeAmount as string | number);
+      c.totalStaked = parseFloat(formatPunkAmount(pledgeBn)) || c.totalStaked;
+      const investors = await getAllInvestorsInterest(c.address, read);
+      if (props.contractAddress && contracts.value.length === 1) {
+        (dapp.value as { stakersCount?: number }).stakersCount = investors.length;
+      }
+    } catch {
+      /* RPC 不可用时保留 Mock */
+    }
+
+    const safe = async <T, F>(fn: () => Promise<T>, fallback: F) => {
+      try {
+        return await fn();
+      } catch {
+        return fallback;
+      }
+    };
+    const flag = await safe(() => getStakeFlag(c.address, read), null as boolean | null);
+    const feeBn = await safe(() => getAnnualFeeWei(c.address, read), ethers.BigNumber.from(0));
+    const lastBn = await safe(() => getLastAnnualFeeTimeWei(c.address, read), ethers.BigNumber.from(0));
+    const ben = await safe(() => getBeneficiaryAddress(c.address, read), '');
+    const ccBn = await safe(() => getContractCallCountWei(c.address, read), ethers.BigNumber.from(0));
+    c.chainRpc = {
+      stakeFlag: flag === null ? '—' : flag ? '已质押' : '未质押',
+      annualFee: feeBn.gt(0) ? `${formatPunkAmount(feeBn)} PUNK` : '—',
+      lastFeeTime: lastBn.gt(0) ? lastBn.toString() : '—',
+      beneficiary: ben && ben !== ethers.constants.AddressZero ? shortAddr(ben) : '—',
+      callCount: ccBn.gt(0) ? ccBn.toString() : '—'
+    };
+  }
+}
 
 const loadDappInfo = async () => {
   // Mock 加载 DApp 信息
@@ -312,6 +393,7 @@ const loadDappInfo = async () => {
       }
     ];
   }
+  enrichContractsFromRpc().catch(() => {});
 };
 
 const formatNumber = (num: number) => {
@@ -399,30 +481,68 @@ const handleStake = async () => {
     return;
   }
 
+  const walletProvider = w3mProvider.walletProvider.value as { request: (a: { method: string; params?: unknown[] }) => Promise<string> } | null | undefined;
+  if (!walletProvider) {
+    message.error('请先连接钱包');
+    return;
+  }
+
+  const investor = w3mAccount.address?.value;
+  if (!investor) {
+    message.error('无法获取当前钱包地址');
+    return;
+  }
+
   staking.value = true;
 
   try {
-    // TODO: 调用质押接口
-    // 构造质押交易数据
+    let sumWei = ethers.BigNumber.from(0);
+    for (const c of contracts.value) {
+      if ((c.allocatedAmount || 0) <= 0) continue;
+      sumWei = sumWei.add(ethers.utils.parseEther(String(c.allocatedAmount)));
+    }
+    if (sumWei.lte(0)) {
+      message.warning('质押总额须大于 0');
+      return;
+    }
+
+    const { txHash } = await buildType6StakeDepositTx(walletProvider, {
+      stakedAmountWei: sumWei,
+      stakedTime: DEFAULT_STAKED_TIME,
+      deployerAddress: investor,
+      investorAddress: investor,
+      beneficiaryAddress: investor
+    });
+
+    await waitStakeTxMined(txHash);
+
+    for (const c of contracts.value) {
+      if ((c.allocatedAmount || 0) <= 0) continue;
+      upsertStakePosition({
+        contractAddress: ethers.utils.getAddress(c.address),
+        investorAddress: ethers.utils.getAddress(investor),
+        principalPunk: c.allocatedAmount,
+        dappId: dapp.value?.id,
+        dappName: dapp.value?.name,
+        logo: dapp.value?.logo,
+        category: 'DeFi',
+        lastTxHash: txHash
+      });
+    }
+
     const stakingData = {
-      userId: appStore().userInfo.uid,
-      dappId: dapp.value.id,
+      txHash,
       totalAmount: totalStakeAmount.value,
-      allocations: contracts.value.map(c => ({
+      allocations: contracts.value.map((c) => ({
         contractAddress: c.address,
         amount: c.allocatedAmount
       }))
     };
 
-    console.log('质押数据:', stakingData);
-
-    // Mock 延迟
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
-    message.success('质押成功！');
+    message.success('质押交易已确认');
     emit('success', stakingData);
-  } catch (error) {
-    message.error('质押失败: ' + error.message);
+  } catch (error: unknown) {
+    message.error('质押失败: ' + formatPledgeRpcError(error));
   } finally {
     staking.value = false;
   }
@@ -634,6 +754,22 @@ const handleCancel = () => {
 .stat-mini .value {
   font-size: 14px;
   font-weight: 600;
+}
+
+.contract-rpc-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.rpc-pill {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(167, 217, 254, 0.25);
+  color: var(--secondary-text);
 }
 
 .allocation-controls {
