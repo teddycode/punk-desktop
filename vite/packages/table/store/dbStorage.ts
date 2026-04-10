@@ -13,7 +13,8 @@ function getSign(): string {
   if (href.startsWith('tsbapp://./')) {
     return 'table.com';
   } else if (href.startsWith('http://localhost:1600')) {
-    return 'table.com';
+    let url = new URL(href);
+    return url.searchParams.get('__render_domain') || 'table.com';
   } else {
     let url = new URL(href);
     return url.hostname;

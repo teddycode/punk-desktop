@@ -334,6 +334,7 @@ ipc.on('closeSelf', (event, args) => {
 global.render = {
   renderWindows: [], //渲染窗体
   renderPopups: [], //渲染弹窗
+  DEV_RENDER_DOMAIN_PARAM: '__render_domain',
   /**
    * 获得一个url，调试环境下，返回vite调试协议路径，正式环境下，返回tsbapp协议地址
    * @param url
@@ -344,20 +345,23 @@ global.render = {
    */
   getUrl(url, params, domain = '.', forcePrd = false) {
     let protocolUrl;
-    protocolUrl = `tsbapp://${domain}/${url}`; //todo 需要验证正式环境的协议情况
+    const normalizedUrl = url.startsWith('/') ? url.slice(1) : url;
+    protocolUrl = `tsbapp://${domain}/${normalizedUrl}`; //todo 需要验证正式环境的协议情况
     if (isDevelopmentMode && forcePrd === false) {
-      if (domain === '.') {
-        protocolUrl = `http://localhost:1600/html/${url}`;
-      } else {
-        protocolUrl = `http://${domain}:1600/html/${url}`;
-      }
+      // Development mode always goes through localhost so we don't depend on hosts file entries.
+      protocolUrl = `http://localhost:1600/html/${normalizedUrl}`;
     }
-    if (params) {
+    if (params || (isDevelopmentMode && forcePrd === false && domain !== '.')) {
       let url = new URL(protocolUrl);
       //拼装参数
-      Object.keys(params).forEach((key) => {
-        url.searchParams.set(key, params[key]);
-      });
+      if (params) {
+        Object.keys(params).forEach((key) => {
+          url.searchParams.set(key, params[key]);
+        });
+      }
+      if (isDevelopmentMode && forcePrd === false && domain !== '.') {
+        url.searchParams.set(this.DEV_RENDER_DOMAIN_PARAM, domain);
+      }
 
       protocolUrl = url.toString();
     }
