@@ -62,26 +62,9 @@ export const config = {
     sourcemap: true, //不打包sourcemap
     target: 'es2020',
     rollupOptions: {
-      external: [
-        '@coinbase/wallet-sdk',
-        /^@walletconnect\/.*/,
-        /^@ethersproject\/.*/,        'ethers',        'valtio',
-        'valtio/vanilla',
-        'valtio/utils',
-        'lit',
-        /^lit\/.*/,
-        '@web3modal/scaffold-vue',
-        '@web3modal/scaffold-react',
-        '@web3modal/siwe',
-        'zod',
-        'dayjs',
-        /^dayjs\/.*/,
-        'qrcode',
-        'buffer',
-        'react',
-        'react-dom',
-        'vue',
-      ],
+      // Packaged Electron loads these pages from local files, so runtime
+      // dependencies must be bundled instead of left as bare module imports.
+      external: [],
       input: inputs,
       output: {
         manualChunks: {
