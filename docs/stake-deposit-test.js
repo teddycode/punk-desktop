@@ -1,5 +1,21 @@
 "use strict";
 
+/**
+ * 质押 type=6 交易调试脚本。
+ *
+ * 用途：
+ * - 验证本地私钥是否能正确构造并签名质押交易
+ * - 验证节点是否支持发送和查询 type=6 交易
+ *
+ * 常用环境变量：
+ * - PUNKOS_RPC_URL
+ * - PUNKOS_CHAIN_ID
+ * - PUNKOS_PRIVATE_KEY
+ * - PUNKOS_EXPECTED_ADDRESS
+ * - PUNKOS_STAKE_CONTRACT
+ * - PUNKOS_DRY_RUN=1
+ */
+
 const assert = require("assert");
 const { ethers } = require("ethers");
 

@@ -9,6 +9,10 @@
     "build": "node --max_old_space_size=14096 node_modules/vite/bin/vite.js build",
     "preview": "vite preview"
   },
+  "resolutions": {
+    "@solana/web3.js": "1.95.8",
+    "unstorage": "1.10.2"
+  },
   "dependencies": {
     "@ant-design/icons-vue": "^6.1.0",
     "@codemirror/lang-json": "^6.0.1",

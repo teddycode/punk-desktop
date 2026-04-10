@@ -1,260 +1,170 @@
-<!--
- * @Author: teddycode 1055334354@qq.com
- * @Date: 2023-10-31 18:05:17
- * @LastEditors: teddycode 1055334354@qq.com
- * @LastEditTime: 2023-11-09 20:50:09
- * @Description: 阅读项目文档
- * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved.
--->
+# PunkOS Desktop
 
-# 磐古 OS APP 说明文档
+PunkOS Desktop 是一个基于 Electron 的桌面客户端项目，用于承载浏览器能力、桌面工作台和 Web3 应用场景。
 
-致力于构建一个打通区块链与互联网的多链跨链应用操作终端
+- 官网：https://www.punkos.com
+- 桌面前端：`vite/`
+- 主进程与本地能力：`main/`、`src/`
+- 项目文档：`docs/`
 
-本项目官方主页：[磐古跨链客户端官方主页](https://www.punkos.com)
+![技术框架](./docs/image/技术框架.png)
 
-## 总体架构
+## 技术概览
 
-![img_2.png](./docs/image/技术框架.png)
+- Electron 26
+- Vue 3 + Vite
+- SQLite + Knex
+- Yarn 作为依赖安装器
+- 支持页面级应用、网页级应用和部分钱包能力接入
 
-> 本文档为桌面应用介绍文档，后端文档参考这里[TODO]。
+## 目录说明
 
-## 项目代码结构
-> 底层（主进程）基于mini浏览器,支持插件扩展，尚未测试是否支持钱包插件
+| 目录 | 说明 |
+|------|------|
+| `main/` | Electron 主进程代码 |
+| `src/` | 预加载、本地模型、桌面 API |
+| `vite/` | 渲染进程与桌面工作台页面 |
+| `pages/` | 主进程页面资源 |
+| `packages/` | 本地第三方扩展包 |
+| `res/` | 二进制资源 |
+| `scripts/` | 构建脚本 |
+| `docs/` | 项目文档 |
 
-```shell
-├── api   // 自定义应用模版
-├── build // webpack打包脚本
-├── css   // 浏览器样式资源
-├── db    // 本地数据库定义
-├── dist  // 语言包打包资源
-├── docs  // 项目文档
-├── ext   // 浏览器的依赖包
-├── icons // 图标资源包
-├── img   // 一些图片包
-├── js    // 浏览器js脚本支持
-├── localization // 浏览器多语言支持
-├── main  // 浏览器主进程代码
-├── packages // 浏览器第三方扩展包
-│   ├── dragula
-│   ├── electron-chrome-context-menu
-│   ├── electron-chrome-extensions  // chrome插件
-│   ├── loudness
-│   ├── spotlight  // 壁纸插件
-│   ├── vue-shepherd
-├── pages  // 浏览器主进程页面
-│   ├── apps
-│   ├── appStore
-│   ├── circle
-│   ├── com
-│   ├── download
-│   ├── error
-│   ├── fav
-│   ├── globalSearch
-│   ├── group
-│   ├── guide
-│   ├── import
-│   ├── lanuchBar
-│   ├── messageCenterSetting
-│   ├── mobile
-│   ├── mvideo
-│   ├── newtab
-│   ├── pdfViewerFull
-│   ├── phishing
-│   ├── prompt
-│   ├── saApp
-│   ├── selectTask
-│   ├── sessionRestoreError
-│   ├── settings
-│   ├── sidebar
-│   ├── siteCard
-│   ├── switch
-│   ├── toolBar
-│   ├── update
-│   ├── user
-│   ├── userScript
-│   └── util
-├── reader  // 未知
-├── res     // 二进制资源包
-├── resources  // 脚本资源包
-│   ├── extensions // 浏览器插件默认安装（metamask）
-├── scripts // 开发构建脚本
-├── src     // 主程序代码包
-│   ├── api
-│   ├── appPreload
-│   ├── appWatch
-│   ├── browserApi
-│   ├── main // 又是js代码包
-│   ├── model // 主进程存储相关
-│   ├── preload
-│   ├── rpc
-│   ├── tableApi // 封装的桌面功能接口定义
-│   ├── tsApi  // 封装的接口定义
-│   ├── util
-│   └── watchPreload
-└── vite   // 渲染进程代码
-    ├── dist // 打包后的的资源
-    ├── html // 静态html
-    ├── packages // 页面包
-    │   ├── app
-    │   ├── barrage
-    │   ├── extension
-    │   ├── frame
-    │   ├── icon
-    │   ├── index
-    │   ├── kee
-    │   ├── search
-    │   ├── selectIcon
-    │   ├── settings
-    │   ├── table // 桌面页面
-    │   ├── task
-    │   ├── toolbox
-    │   ├── tray
-    │   └── user
-    ├── public // 公共文件
-    ├── script // 开发脚本支持
-    └── src // 桌面页面资源
+## 环境要求
 
+- Node.js `18.04`（使用 `nvm` 时可对应 `18.4.0`）
+- Yarn `1.x`
+- Python `3.10+`
+- Windows 下建议提前准备 C/C++ 构建工具，避免 `sqlite3`、`node-hid` 等原生依赖安装失败
 
-```
+依赖下载较慢时，可按需配置镜像环境变量：
 
-## 开发调试
-
-0.先下载代码，git clone --recurse-submodules xxx.
-
-1.安装 nodejs-16 版本（建议使用 nvm 管理 node 版本，亲测 node16.15.0 对本项目正常使用）
-
-2.在管理员终端安装 win sdk 工具（需要等待较长时间）`npm install --g --production windows-build-tools`
-
-3.安装 python3.10 或以上版本，并设置 yarn 环境变量
-
-> 项目推荐使用的环境变量：
-
-```shell
+```bash
 electron_mirror=https://registry.npmmirror.com/mirrors/electron/
 ELECTRON_BUILDER_BINARIES_MIRROR=http://registry.npmmirror.com/mirrors/electron-builder-binaries/
 node_sqlite3_binary_host_mirror=http://registry.npmmirror.com/mirrors/
 sass_binary_site=https://registry.npmmirror.com/mirrors/node-sass/
 PYTHON_MIRROR=http://registry.npmmirror.com/mirrors/python
 profiler_binary_host_mirror=http://registry.npmmirror.com/mirrors/node-inspector/
-registry=https://registry.registry.npmmirror.com
+registry=https://registry.npmmirror.com
 canvas_binary_host_mirror=https://registry.npmmirror.com/-/binary/canvas
 ```
-> 若执行以下步骤后，出现项目依赖包安装错误或编译错误，请检查相应环境变量
 
-4.在根目录下运行 `yarn` 命令
+## 安装依赖
 
-5.在vite目录下运行 `yarn` 命令
+```bash
+git clone --recurse-submodules <repo-url>
+cd punk-desktop
+nvm install 18.4.0
+nvm use 18.4.0
+yarn
+cd vite
+yarn
+cd ..
+```
 
-5.vite 下执行`yarn run build`编译一遍
+首次安装后，建议先执行一次前端构建：
 
-6.（可选）复制一个/node_modules 下的 dragula/dist/dragula.css 到 dragula/dist/dragula.min.css，不然会报这个库缺文件 
+```bash
+cd vite
+yarn build
+cd ..
+```
 
-7.服务端本地开发与远程开发环境的切换需要全局搜索替换，本地开发的后端api地址为http://127.0.0.1:9090 远程服务端为http://punk.buaadcl.tech:36066（已注解）
+## 本地启动
 
-## 启动项目
+### 1. 配置 hosts
 
-hosts 下添加映射
+在 `C:\Windows\System32\drivers\etc\hosts` 中加入：
 
-C:\Windows\System32\drivers\etc\hosts 注意这个文件不能带.txt 扩展名，否则不生效
-注意，是每行一个。MD 解析可能混在一行上了
-
-```shell
+```text
 127.0.0.1 table.com
-
 127.0.0.1 1.table.com
-
 127.0.0.1 2.table.com
-
 127.0.0.1 3.table.com
-
 127.0.0.1 4.table.com
-
 127.0.0.1 5.table.com
-
 127.0.0.1 6.table.com
 ```
 
-验证方式，使用 cmd ping table.com，响应 127.0.0.1 ip 数据包
+可用 `ping table.com` 验证是否生效。若本机开了代理，请将这些域名加入直连列表。
 
-注意：代理要排除这个域名，否则可能导致无法打开
+### 2. 启动渲染进程
 
-1. 在/vite 目录下执行 yarn run start 命令，启动渲染进程
+```bash
+cd vite
+yarn start
+```
 
-2. 在/根目录下执行 yarn run start 启动 electron 客户端
+### 3. 启动 Electron
 
-> 注意：代码部分更新后，需要清理用户数据目录并重启客户端才生效，
-> 程序执行后右键托盘图标，选择打开数据目录，直接删除即可（若删除失败，需要在任务管理器检查electron进程是否完全退出）
+```bash
+yarn start
+```
 
-## 打包桌面客户端
+如果代码改动后界面没有更新，先退出 Electron，再删除用户数据目录后重启。可通过托盘菜单打开数据目录。
 
-在根目录运行 yarn run packageWin
+## 常用命令
 
-## 协作指南
+| 命令 | 说明 |
+|------|------|
+| `yarn build` | 构建主进程与浏览器相关资源 |
+| `cd vite && yarn build` | 构建桌面前端资源 |
+| `yarn start` | 启动桌面客户端 |
+| `yarn packageWin` | 打包 Windows 客户端 |
+| `yarn package` | 使用 `electron-builder` 打包 |
+| `yarn lint` | 格式化并修复部分代码风格问题 |
 
-约定一些规范,制订相关流程，便于高效协作开发。
+## 开发说明
 
-### 1. 代码提交规范
+- 本地后端默认地址：`http://127.0.0.1:9090`
+- 远程服务端地址：`http://punk.buaadcl.tech:36066`
+- 本地与远程切换目前通过全局搜索替换完成
 
-即`git commit`
-中写的 message 信息规范，规范的提交信息有利于代码迭代的可读性，请参阅[约定式提交规范](https://zhuanlan.zhihu.com/p/90281637)
+## 常见问题
 
-### 2. 代码命名规范
+### 依赖安装失败或速度慢
 
-- 对于 js 代码文件，命名尽量一个单词搞定，如`preload.js`，若有歧义再采用小写开头的匈牙利命名方式，如`fileManager.js`
-  ，尽可能简洁易懂，如果双单词命名过多，说明需要划分功能模块了。
-- 对于 vue 页面代码，均放在 views 下，每个模块名均以大写开头的匈牙利命名方式，如`Collections`,尽可能单个单词完成命名。
+- 确认使用 `yarn`
+- 检查镜像环境变量或执行 `yarn config set registry https://registry.npmmirror.com/`
 
-### 3. 代码结构规范
+### Electron 相关依赖下载失败
 
-- 对于 js 和 vue 代码，一个模块的实现对应一个文件夹，文件夹内的主文件应命名为`index.js / index.vue`, 文件夹内其他 js 文件命名遵循命名规范。
-- 对于一个 vue 页面模块，如治理组页面模块，允许在模块内的 components 文件夹下自定义新组件，参考以下结构：
+```bash
+yarn config set electron_mirror https://cdn.npmmirror.com/binaries/electron/
+yarn config set electron_builder_binaries_mirror https://npmmirror.com/mirrors/electron-builder-binaries/
+```
 
-![img.png](./docs/image/治理组结构示例.png)
+### `sqlite3` 编译失败
 
-- `/renderer`文件夹下的`/api、/router、/store`均采用模块化方式组织代码结构，小组更新代码请在对应的模块下完成更新。
+- 确认 Python 和系统构建工具已安装
+- Windows 下优先使用管理员终端
 
-### 4. 小组页面开发流程
+### 缺少 `dragula.min.css`
 
-> 小组页面所在目录为 vite/packages/table/
+如果启动时报 `dragula.min.css` 缺失，可复制：
 
-- **新建页面代码**： 在`page/core/` 目录下寻找本组的文件夹，创建`index.vue`作为小组主界面，完成页面逻辑。
-- **合约调用示例**： 参考[WallectConnect Smart Contract Interaction](https://docs.walletconnect.com/web3modal/vue/about?platform=ethers),前置条件为web3Modal已创建，且用户已连接钱包，详情参考[这里](./docs/钱包使用说明.md)。
-- **新建状态存储**:  在`store/`下对应的小组状态文件,添加状态信息，可参考work.ts,如需持久化则参考配置persist字段。
-- **新建页面路由**： 在`route/core` 下对应的小组路由文件，创建三级路由信息，中间页面可以引用`page/core/Layouts/BaseLayout.vue`,。
-- **新建接口定义**： 如需要后端提供数据，请在`api/`下按照现有示例添加本组 API 接口，遵循 RESTFUL 接口规范。
-- **新建模拟数据**： 如有接口但是后端尚未实现，请在`mock/`下按照现有示例添加本组的模拟接口，实现模拟数据返回。
-- **页面效果预览**： 在桌面打开对应功能部分，根据调试窗口的信息获取页面运行状态。
+```text
+node_modules/dragula/dist/dragula.css
+```
 
-## 常见问题解决
+为：
 
-1. 问题：npm/yarn 下载依赖失败或速度慢
+```text
+node_modules/dragula/dist/dragula.min.css
+```
 
-- 解决: (1)删除文件`rm yarn.lock & rm package-lock.json` (2) 更换源 `npm/yarn config set registry https://registry.npmmirror.com/`
+## 文档索引
 
-2. 问题：electron 依赖下载失败
+详细说明请查看 [docs/README.md](./docs/README.md)。
 
-- 解决：添加单独的代理 `npm/yarn config set electron_mirror=https://cdn.npmmirror.com/binaries/electron/`
-  以及 `npm/yarn config set electron_builder_binaries_mirror=https://npmmirror.com/mirrors/electron-builder-binaries/`
+| 文档 | 说明 |
+|------|------|
+| [docs/钱包使用说明.md](./docs/钱包使用说明.md) | 钱包与合约调用接入说明 |
+| [docs/SQLiteStorageAnalysis.md](./docs/SQLiteStorageAnalysis.md) | 本地 SQLite 存储说明 |
+| [docs/table-ui-libs.md](./docs/table-ui-libs.md) | Table UI 基础组件速查 |
+| [docs/pledge_api_reference.md](./docs/pledge_api_reference.md) | 质押 RPC 接口速查 |
 
-3. 问题：sqlite3 模块安装失败
+## 开源说明
 
-- 解决：在管理员终端安装 win-build-tools，参考[博客](https://blog.csdn.net/zhuijingtang2714/article/details/134148372?spm=1001.2014.3001.5501)
-
-4. 问题：TS 文件中引入 vue 报错提示 can not find modules or its corresponding type
-
-- 解决：在 webstorm 中打开`File | Settings | Languages & Frameworks | TypeScript` 将 TypeScript version 选择到 4.8.4 以上，参考[这里](https://youtrack.jetbrains.com/issue/WEB-60908/Typescript-service-doesnt-recognise-Vue-files-in-Typescript-5#focus=Comments-27-7313266.0-0)
-
-## 开源引用说明
-
-本项目基于一些开源组件开发而成。最底层是基于 Electron 的 Min 浏览器，这是一个多标签浏览器，我们在此基础上增加了大量的优化和开发。
-
-包括开发了多功能左侧栏、标签组空间、密码管理器、收藏夹等等大量功能。
-
-其中浏览器插件部分，引用了一个基于 AGPL 的插件。大家可以自行查阅依赖，已经放置到/packages 目录下了。
-
-项目是磐古跨链客户端的客户端前端部分，是全部前端源码，基于开源 AGPL3.0 协议的[想天工作台](https://gitee.com/tsbrowser/xtui)，后端未开源。
-
-## 代码笔记
-1. 桌面图标打开： 
-2. 存储组的接口：\src\browserApi\punkosApi\storage.js
+本项目基于 Electron 生态与开源浏览器能力扩展实现，桌面前端部分参考并整合了已有开源工作台方案；后端服务不在本仓库中。
