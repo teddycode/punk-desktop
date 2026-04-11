@@ -15,11 +15,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { agentStore } from '@store/agent';
 import { walletStore } from '@store/wallet';
+import { useWeb3ModalAccount } from '@punkos/ethers5/vue';
 import { ensureAgentRouteMappings } from '@js/agent/syncRouteMappings';
 import StatusDashboard from './StatusDashboard.vue';
 import ContextPanel from './ContextPanel.vue';
@@ -33,18 +34,29 @@ const store = agentStore();
 const route = useRoute();
 const router = useRouter();
 const w = walletStore();
+const account = useWeb3ModalAccount();
 const { punkClawOpen } = storeToRefs(store);
 
 const cmdRef = ref<InstanceType<typeof CommandPanel> | null>(null);
 
+const walletConnected = computed(() => Boolean(account?.isConnected?.value));
+const liveAddress = computed(() => (walletConnected.value ? account?.address?.value || '' : ''));
+const liveChainId = computed(() => (walletConnected.value ? account?.chainId?.value || 0 : 0));
+
 function syncContext() {
   const meta: any = route.meta || {};
   const title = typeof meta.title === 'string' ? meta.title : '';
+
+  const walletAddress = liveAddress.value || '';
+  const walletChainId = liveChainId.value || 0;
+  const chainName = walletConnected.value ? w.chainName || null : null;
+  const balanceHint = walletConnected.value ? (w.balance ? String(w.balance) : null) : null;
+
   store.setContextSnapshot({
-    walletAddress: w.address || null,
-    chainName: w.chainName || null,
-    chainId: w.chainId || null,
-    balanceHint: w.balance ? String(w.balance) : null,
+    walletAddress: walletAddress || null,
+    chainName,
+    chainId: walletChainId || null,
+    balanceHint,
     currentRouteName: route.name ? String(route.name) : null,
     currentRouteTitle: title || null,
   });
@@ -58,7 +70,7 @@ onMounted(() => {
 
 watch(() => route.fullPath, syncContext);
 watch(
-  () => [w.address, w.chainName, w.balance],
+  () => [walletConnected.value, liveAddress.value, liveChainId.value, w.chainName, w.balance],
   () => syncContext(),
   { deep: true }
 );
