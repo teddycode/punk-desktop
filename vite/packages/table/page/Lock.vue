@@ -89,7 +89,6 @@
 </template>
 
 <script>
-import Spotlight from 'spotlight.js';
 import { appStore } from '../store';
 import { countDownStore } from '../store/countDown';
 import { cardStore } from '../store/card';

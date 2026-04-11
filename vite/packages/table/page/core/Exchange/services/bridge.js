@@ -1,4 +1,4 @@
-import * as config from './config';
+import { tokens } from './config';
 import { ethers } from 'ethers';
 import erc20ShadowArtifact from './abi/VaultShadow.json';
 
@@ -7,7 +7,7 @@ import { ethVault, wallet_side } from './bridge_setup';
 export async function deposit(chainId, token, amount, receiver) {
   // todo: chainId unused
 
-  if (token === config.token.eth) {
+  if (token === tokens.eth) {
     const input = ethers.utils.defaultAbiCoder.encode(['address'], [receiver]);
     const tx = await ethVault.deposit(input, { value: ethers.utils.parseEther(amount) });
     console.log(tx.hash);

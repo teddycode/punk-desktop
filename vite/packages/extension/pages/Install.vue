@@ -19,8 +19,8 @@ export default {
   mounted(){
    let args=  window.globalArgs
     this.userDataPath=args['user-data-path']
-   eval('require')('electron').ipcRenderer.invoke('getPopArgs').then(data=>{
-     const path=eval('require')('path')
+   window.require('electron').ipcRenderer.invoke('getPopArgs').then(data=>{
+     const path=window.require('path')
      this.manifest=data.manifest
      this.manifestPath=data.manifestPath
      this.extensionPath=path.dirname(this.manifestPath)
@@ -37,12 +37,12 @@ export default {
   methods: {
     convertPermissionsToText:extension.convertPermissionsToText,
     close(){
-      eval('require')('electron').ipcRenderer.send('closeSelf')
+      window.require('electron').ipcRenderer.send('closeSelf')
     },
 
     getName(){
-      const fs=eval('require')('fs')
-      const path=eval('require')('path')
+      const fs=window.require('fs')
+      const path=window.require('path')
       let name=this.manifest['name']
       let cnName='zh_CN'
       let localePath=path.resolve(this.extensionPath,'_locales')
@@ -70,8 +70,8 @@ export default {
           publicKey:this.crxInfo.publicKey
         }
       }
-      eval('require')('electron').ipcRenderer.send('doInstallCrx',args)
-      eval('require')('electron').ipcRenderer.send('closeSelf',args)
+      window.require('electron').ipcRenderer.send('doInstallCrx',args)
+      window.require('electron').ipcRenderer.send('closeSelf',args)
     }
   }
 }

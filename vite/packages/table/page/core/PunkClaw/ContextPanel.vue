@@ -61,7 +61,7 @@ function formatTs(ts: number) {
 
 <style scoped>
 .agent-ctx {
-  width: 260px;
+  width: var(--punk-claw-ctx-width, 260px);
   flex-shrink: 0;
   padding: 12px 14px;
   background: rgba(8, 14, 28, 0.88);

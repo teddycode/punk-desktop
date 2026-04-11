@@ -11,6 +11,30 @@ devPlugin[VUEJS_DEVTOOLS.id] = { installed: false };
 devPlugin[REACT_DEVELOPER_TOOLS.id] = { installed: false };
 
 function buildAppMenu(options = {}) {
+  function getLocalServiceMenuItems() {
+    if (!global.serviceManager) {
+      return [{ label: '本地服务未初始化', enabled: false }];
+    }
+
+    const services = global.serviceManager.listServices();
+    if (!services.length) {
+      return [{ label: '暂无本地服务', enabled: false }];
+    }
+
+    return services.map((service) => {
+      const statusLabel = service.error ? '不可用' : service.status === 'running' ? '运行中' : '可启动';
+      return {
+        label: `${service.displayName} (${statusLabel})`,
+        enabled: !service.error,
+        click: function () {
+          global.serviceManager.openServicePage(service.id).catch((error) => {
+            console.error(`打开本地服务失败 [${service.name}]:`, error);
+          });
+        },
+      };
+    });
+  }
+
   function getFormattedKeyMapEntry(keybinding) {
     const value = settings.get('keyMap')?.[keybinding];
 
@@ -280,6 +304,10 @@ function buildAppMenu(options = {}) {
           },
         },
       ],
+    },
+    {
+      label: '本地服务',
+      submenu: getLocalServiceMenuItems(),
     },
     {
       label: l('appMenuView'),

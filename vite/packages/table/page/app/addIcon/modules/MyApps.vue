@@ -74,5 +74,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../components/index.scss';
+@use '../components/index.scss';
 </style>

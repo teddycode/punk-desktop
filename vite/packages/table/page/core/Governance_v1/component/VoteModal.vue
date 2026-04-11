@@ -22,7 +22,7 @@
 </template>
   
 <script setup>
-    import { defineEmits, ref } from 'vue';
+    import { ref } from 'vue';
     import { message } from 'ant-design-vue';
 
     const voteOption = ref('yes');

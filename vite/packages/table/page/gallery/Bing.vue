@@ -46,7 +46,6 @@
 
 <script>
 import axios from 'axios';
-import Spotlight from 'spotlight.js';
 import justifiedGallery from 'justifiedGallery';
 import { mapActions } from 'pinia';
 import PaperList from '../../components/comp/PaperList.vue';

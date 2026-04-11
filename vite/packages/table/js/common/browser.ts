@@ -1,4 +1,8 @@
 const browser = {
+  isLocalHtmlUrl(url: string) {
+    const normalizedUrl = (url || '').split(/[?#]/)[0];
+    return normalizedUrl.endsWith('.html') && !/^[a-zA-Z][a-zA-Z\d+\-.]*:/.test(url);
+  },
   /**
    * 在用户选择的浏览器内打开，根据工作台设置自动选择浏览器
    * @param url
@@ -41,7 +45,7 @@ const browser = {
     console.log('[Browser] openInTable 调用:', { url, options });
 
     // 检测 URL 类型
-    const isLocalHtml = url.endsWith('.html') && !url.startsWith('http');
+    const isLocalHtml = this.isLocalHtmlUrl(url);
     console.log('[Browser] URL 类型:', isLocalHtml ? '本地 HTML' : '外部 URL');
 
     // 如果是本地 HTML 文件，添加 wallet 参数到 URL

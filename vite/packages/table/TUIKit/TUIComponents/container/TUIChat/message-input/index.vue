@@ -30,7 +30,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineProps, defineEmits, toRefs, ref, defineExpose, watch } from 'vue';
+import { toRefs, ref, watch } from 'vue';
 import MessageInputEditor from './message-input-editor.vue';
 import MessageInputAt from './message-input-at.vue';
 import MessageInputButton from './message-input-button.vue';
@@ -225,8 +225,8 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
-@import url('../../../styles/common.scss');
-@import url('../../../styles/icon.scss');
+@use '../../../styles/common.scss';
+@use '../../../styles/icon.scss';
 .message-input {
   flex: 1;
   position: relative;

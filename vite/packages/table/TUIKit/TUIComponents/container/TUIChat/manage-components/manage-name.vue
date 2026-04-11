@@ -92,8 +92,8 @@ export default manageName;
 </script>
 
 <style lang="scss" scoped>
-@import url('../../../styles/common.scss');
-@import url('../../../styles/icon.scss');
+@use '../../../styles/common.scss';
+@use '../../../styles/icon.scss';
 .name {
   padding: 14px 20px;
   font-weight: 400;

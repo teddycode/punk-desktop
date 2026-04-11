@@ -118,7 +118,9 @@ export default {
   mounted() {
     this.$router.afterEach((to, from) => {
       this.routeUpdateTime = Date.now();
+      this.schedulePunkClawAutoOpen();
     });
+    this.schedulePunkClawAutoOpen();
     window.addEventListener('keydown', this.onPunkClawHotkey);
   },
   beforeUnmount() {
@@ -162,6 +164,17 @@ export default {
     getDelIcon(val) {
       this.delZone = val;
     },
+    schedulePunkClawAutoOpen() {
+      const store = agentStore();
+      if (!store.consumeDesktopAutoOpen()) return;
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (!['splash', 'lock', 'power'].includes(String(this.$route?.name || ''))) {
+            store.setPunkClawOpen(true);
+          }
+        });
+      });
+    },
     onPunkClawHotkey(e) {
       if (e.ctrlKey && (e.key === 'g' || e.key === 'G') && !e.repeat) {
         e.preventDefault();
@@ -201,15 +214,31 @@ export default {
 <style lang="scss" scoped>
 .main-layout-root.punk-claw-mode {
   position: relative;
+  --punk-claw-ctx-width: 260px;
+  --punk-claw-cmd-width: 328px;
+  --punk-claw-dash-height: 52px;
+  --punk-claw-log-height: 108px;
+  --punk-claw-preview-gap: 12px;
+  --punk-claw-preview-scale: 0.74;
+  --punk-claw-preview-center-x: calc((100vw + var(--punk-claw-ctx-width) - var(--punk-claw-cmd-width)) / 2);
+  --punk-claw-preview-center-y: calc((100vh + var(--punk-claw-dash-height) - var(--punk-claw-log-height)) / 2);
+  --punk-claw-preview-width: calc(
+    (100vw - var(--punk-claw-ctx-width) - var(--punk-claw-cmd-width) - (var(--punk-claw-preview-gap) * 2)) /
+      var(--punk-claw-preview-scale)
+  );
+  --punk-claw-preview-height: calc(
+    (100vh - var(--punk-claw-dash-height) - var(--punk-claw-log-height) - (var(--punk-claw-preview-gap) * 2)) /
+      var(--punk-claw-preview-scale)
+  );
 }
 .main-layout-router-host--preview {
   position: fixed !important;
-  left: 50% !important;
-  top: 50% !important;
-  transform: translate(-50%, -50%) scale(0.58) !important;
-  width: min(96vw, 1280px) !important;
-  height: min(82vh, 880px) !important;
-  max-height: 82vh !important;
+  left: var(--punk-claw-preview-center-x) !important;
+  top: var(--punk-claw-preview-center-y) !important;
+  transform: translate(-50%, -50%) scale(var(--punk-claw-preview-scale)) !important;
+  width: var(--punk-claw-preview-width) !important;
+  height: var(--punk-claw-preview-height) !important;
+  max-height: var(--punk-claw-preview-height) !important;
   /* 低于 PunkClaw 覆盖层，中央留空区域可穿透点击预览；侧栏/顶栏/日志在驾驶舱内盖住预览边缘 */
   z-index: 480 !important;
   margin: 0 !important;
@@ -223,6 +252,27 @@ export default {
     box-shadow 0.35s ease;
   background: var(--primary-bg, #0d1117);
 }
+
+@media (max-width: 1600px) {
+  .main-layout-root.punk-claw-mode {
+    --punk-claw-preview-scale: 0.7;
+  }
+}
+
+@media (max-width: 1366px) {
+  .main-layout-root.punk-claw-mode {
+    --punk-claw-preview-gap: 10px;
+    --punk-claw-preview-scale: 0.64;
+  }
+}
+
+@media (max-width: 1200px) {
+  .main-layout-root.punk-claw-mode {
+    --punk-claw-preview-gap: 8px;
+    --punk-claw-preview-scale: 0.58;
+  }
+}
+
 .del-icon {
   width: 100%;
   height: 100%;

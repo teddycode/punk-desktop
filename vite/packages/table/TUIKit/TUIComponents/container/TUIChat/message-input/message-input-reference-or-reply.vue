@@ -35,7 +35,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineProps, toRefs, defineEmits } from 'vue';
+import { toRefs } from 'vue';
 const props = defineProps({
   replyOrReference: {
     type: Object,
@@ -53,8 +53,8 @@ const close = () => {
 };
 </script>
 <style lang="scss" scoped>
-@import url('../../../styles/common.scss');
-@import url('../../../styles/icon.scss');
+@use '../../../styles/common.scss';
+@use '../../../styles/icon.scss';
 .message-input-reference {
   order: 1;
   .reference {

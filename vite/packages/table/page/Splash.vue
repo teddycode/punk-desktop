@@ -158,6 +158,7 @@ export default {
   },
 
   async mounted() {
+    agentStore().setPunkClawOpen(false);
     // 后端服务器状态监测
     // setTimeout(() => {
     //   if (window.$isVisitor && this.init) {
@@ -258,12 +259,12 @@ export default {
     //直接进入工作台选择界面
     async goDirect() {
       await this.doDefaultSettings();
-      agentStore().setPunkClawOpen(true);
+      agentStore().requestDesktopAutoOpen();
       this.$router.replace({ name: 'home' });
     },
     enter() {
       clearTimeout(this.timeoutHandler); //清理掉超时提示
-      agentStore().setPunkClawOpen(true);
+      agentStore().requestDesktopAutoOpen();
       try {
         chatStore().login();
       } catch (e) {

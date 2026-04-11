@@ -567,8 +567,9 @@ export const throttle = (fn: any): (() => void) => {
   let isRunning = false;
   return (...args) => {
     if (isRunning) return;
+    isRunning = true;
     setTimeout(() => {
-      fn.apply(this, args);
+      fn(...args);
       isRunning = false;
     }, 100);
   };

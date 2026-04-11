@@ -9,6 +9,15 @@ class TableTabManager {
   runningTabsInstance = [];
   lastPosition = {};
 
+  normalizeBoolean(value) {
+    return value === true || value === 'true' || value === 1 || value === '1';
+  }
+
+  isLocalHtmlUrl(url) {
+    const normalizedUrl = String(url || '').split(/[?#]/)[0];
+    return normalizedUrl.endsWith('.html') && !/^[a-zA-Z][a-zA-Z\d+\-.]*:/.test(String(url || ''));
+  }
+
   setTableWin(tableWin) {
     this.tableWin = tableWin;
   }
@@ -59,7 +68,9 @@ class TableTabManager {
    */
   async addTab(args) {
     //app args silent静默
-    let { url, position, silent, wallet, isLocalHtml } = args;
+    let { url, position, silent } = args;
+    const wallet = this.normalizeBoolean(args.wallet);
+    const isLocalHtml = this.isLocalHtmlUrl(url);
     console.log('[TableTabManager] addTab 调用:', { url, wallet, isLocalHtml });
     
     if (!position) {
@@ -79,7 +90,7 @@ class TableTabManager {
       url: finalUrl,
       id: id,
       name: this.getName(id),
-      wallet: wallet || false,
+      wallet,
     };
     
     console.log('[TableTabManager] 创建标签页:', tab);
@@ -312,17 +323,18 @@ class TableTabManager {
       console.log('[TableTabManager] 收到 addTableTab 消息:', args);
       let tab = {};
       try {
-        let result = await this.addTab({ 
-          url: args.url, 
+        const wallet = this.normalizeBoolean(args.wallet);
+        let result = await this.addTab({
+          url: args.url,
           position: args.position,
-          wallet: args.wallet || false,
-          isLocalHtml: args.isLocalHtml || false,
+          wallet,
+          isLocalHtml: args.isLocalHtml,
         });
         tab = result.tab;
         console.log('[TableTabManager] ✅ 标签页添加完成:', tab);
         
         // 如果启用了钱包，发送初始化消息
-        if (args.wallet) {
+        if (wallet) {
           console.log('[TableTabManager] 钱包功能已启用，准备发送初始化消息');
           // 等待页面加载完成后发送
           setTimeout(() => {

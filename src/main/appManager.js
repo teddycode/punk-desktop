@@ -6,7 +6,12 @@ const remote = require('@electron/remote/main');
 const _ = require('lodash');
 const SaApp = require('./saAppClass');
 const appModel = require('../model/appModel');
-appModel.initDb();
+const NODE_MONITOR_APP_PACKAGE = 'com.punk.nodeMonitor';
+const NODE_MONITOR_SERVICE_NAME = 'node-monitor';
+const appModelReady = appModel.initialize().catch((error) => {
+  console.error('初始化应用数据库失败:', error);
+  throw error;
+});
 const userModel = require('../model/userModel');
 const ipc = require('electron').ipcMain;
 const ipcMessageMain = require('./ipcMessageMain.js');
@@ -32,6 +37,7 @@ class AppManager {
    * @returns {Promise<void>}
    */
   async executeAutoRunApps() {
+    await appModelReady;
     let apps = await appModel.getAutoRunApps();
     apps.forEach((app) => {
       appManager.openApp(app.nanoid, true, app);
@@ -39,7 +45,12 @@ class AppManager {
   }
 
   async executeAppByPackage(pkg, cb) {
+    await appModelReady;
     let app = await appModel.get({ package: pkg });
+    if (!app && pkg === NODE_MONITOR_APP_PACKAGE) {
+      await appModel.ensureAppsData();
+      app = await appModel.get({ package: pkg });
+    }
     if (app) {
       appManager.openApp(app.nanoid, false, app, undefined, cb);
     }
@@ -885,11 +896,38 @@ class AppManager {
     }
   }
 
-  getUrl(saApp) {
+  async ensureNodeMonitorServiceManager() {
+    if (global.serviceManager && typeof global.serviceManager.ensureServicePageUrl === 'function') {
+      return global.serviceManager;
+    }
+
+    if (!global.ServiceManager) {
+      throw new Error('本地服务管理器类未加载');
+    }
+
+    if (!global.serviceManagerInitPromise) {
+      global.serviceManagerInitPromise = (async () => {
+        const manager = new global.ServiceManager();
+        await manager.init();
+        global.serviceManager = manager;
+        return manager;
+      })().finally(() => {
+        global.serviceManagerInitPromise = null;
+      });
+    }
+
+    return global.serviceManagerInitPromise;
+  }
+
+  async getUrl(saApp) {
     //todo 真实实现debug_url功能
     if (saApp.debug_url) {
       //debug_url优先级最高
       return saApp.debug_url;
+    }
+    if (saApp.package === NODE_MONITOR_APP_PACKAGE) {
+      await this.ensureNodeMonitorServiceManager();
+      return global.serviceManager.ensureServicePageUrl(NODE_MONITOR_SERVICE_NAME);
     }
     let url = '';
     if (saApp.type === 'local' && saApp.package) {
@@ -1033,7 +1071,8 @@ class AppManager {
     } else {
       saApp.authAll = []; //修复后面的判断报错的问题
     }
-    let url = this.getUrl(saApp);
+    let url = await this.getUrl(saApp);
+    saApp.url = url;
     let name = appModel.getName(saApp);
     let config = saApp.window[saApp.window.defaultType];
     let windowParams = this.convertToWindowParams(config) || [];
@@ -1294,11 +1333,7 @@ app.whenReady().then(() => {
   ipc.on('executeAppByPackage', async (event, args) => {
     //这里传app，代表app未运行则直接执行起来
     try {
-      args.package;
-      let app = await appModel.get({ package: args.package });
-      if (app) {
-        appManager.openApp(app.nanoid, false, app);
-      }
+      await appManager.executeAppByPackage(args.package);
     } catch (e) {
       console.warn(e);
     }

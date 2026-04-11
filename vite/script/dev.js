@@ -1,38 +1,34 @@
 let vite = require('vite');
-let vue = require('@vitejs/plugin-vue');
 const path = require('path');
 
 let dev = {
   server: null,
   serverPort: 1600,
-  async createServer() {
-    let options = {
+  async getServerOptions() {
+    const root = process.cwd();
+    const configFile = path.resolve(root, 'vite.config.ts');
+    const configEnv = {
+      command: 'serve',
+      mode: process.env.NODE_ENV || 'development',
+    };
+    const loadedConfig = await vite.loadConfigFromFile(configEnv, configFile, root);
+    const inlineConfig = {
       configFile: false,
-      root: process.cwd(),
+      root,
       server: {
         host: '0.0.0.0',
         port: this.serverPort,
       },
-      plugins: [vue()],
-      resolve: {
-        // 与vite.config.ts相同
-        alias: {
-          '@package': path.resolve('./packages'),
-          '@table': path.resolve('./packages/table'),
-          '@page': path.resolve('./packages/table/page'),
-          '@store': path.resolve('./packages/table/store'),
-          '@route': path.resolve('./packages/table/route'),
-          '@apps': path.resolve('./packages/table/apps'),
-          '@components': path.resolve('./packages/table/components'),
-          '@assets': path.resolve('./packages/table/assets'),
-          '@js': path.resolve('./packages/table/js'),
-        },
-      },
-      build: {
-        target: 'es2020',
-        sourcemap: true,
-      },
     };
+
+    if (!loadedConfig || !loadedConfig.config) {
+      return inlineConfig;
+    }
+
+    return vite.mergeConfig(loadedConfig.config, inlineConfig);
+  },
+  async createServer() {
+    let options = await this.getServerOptions();
     this.server = await vite.createServer(options);
     await this.server.listen();
     this.server.printUrls();

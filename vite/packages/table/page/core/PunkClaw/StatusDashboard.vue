@@ -87,7 +87,7 @@ function closePunkClaw() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 52px;
+  height: var(--punk-claw-dash-height, 52px);
   padding: 0 16px;
   background: linear-gradient(180deg, rgba(12, 18, 32, 0.96), rgba(8, 12, 24, 0.92));
   border-bottom: 1px solid rgba(0, 200, 255, 0.2);

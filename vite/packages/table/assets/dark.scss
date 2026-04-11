@@ -1,5 +1,5 @@
 @import '../../../node_modules/ant-design-vue/dist/reset.css';
-@import 'custom';
+@use 'custom';
 .dark {
   .key-button {
     border: 1px solid #3a3a3a;

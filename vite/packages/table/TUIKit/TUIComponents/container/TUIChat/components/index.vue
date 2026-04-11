@@ -48,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-import { toRefs, defineProps, defineEmits } from 'vue';
+import { toRefs } from 'vue';
 import MessageBubble from './message-bubble.vue';
 import MessageText from './message-text.vue';
 import MessageImage from './message-image.vue';
@@ -173,8 +173,8 @@ const resendMessage = (message: Message) => {
 };
 </script>
 <style lang="scss" scoped>
-@import url('../../../styles/common.scss');
-@import url('../../../styles/icon.scss');
+@use '../../../styles/common.scss';
+@use '../../../styles/icon.scss';
 .message-item {
   display: flex;
   flex-direction: column;

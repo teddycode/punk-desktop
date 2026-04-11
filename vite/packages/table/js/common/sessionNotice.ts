@@ -1,9 +1,9 @@
 import { useToast } from 'vue-toastification';
+import type { Router } from 'vue-router';
 import { appStore } from '../../store';
 import { chatStore } from '../../store/chat';
 import { noticeStore } from '../../page/notice/store/noticeStore';
 import { storeToRefs } from 'pinia';
-import { router } from '../../router';
 import _ from 'lodash-es';
 import TIM from '../../TUIKit/TUICore/tim';
 
@@ -12,6 +12,14 @@ import SystemNoticeToast from '../../page/notice/toast/SystemNoticeToast.vue';
 import MessageNoticeToast from '../../page/notice/toast/MessageNoticeToast.vue';
 
 const toast = useToast();
+let routerPromise: Promise<Router> | null = null;
+
+function getAppRouter() {
+  if (!routerPromise) {
+    routerPromise = import('../../router').then((mod) => mod.router);
+  }
+  return routerPromise;
+}
 
 export class Notifications {
   // 闹钟的通知
@@ -63,9 +71,10 @@ export class Notifications {
           //   noticeStore().putNoticeData(msg,'message');
           // },
 
-          messageExamine: function () {
+          messageExamine: async function () {
             chatStore().updateConversation(conversationID);
             appStore().hideNoticeEntry();
+            const router = await getAppRouter();
             router.push({ name: 'chatMain' });
             (window as any).$TUIKit.TUIServer.TUIConversation.getConversationProfile(conversationID).then(
               (imResponse: any) => {
@@ -112,8 +121,9 @@ export class Notifications {
           //   appStore().hideNoticeEntry();
           // },
 
-          systemExamine: function () {
+          systemExamine: async function () {
             chatStore().updateConversation(conversationID);
+            const router = await getAppRouter();
             router.push({ name: 'chatMain' });
             (window as any).$TUIKit.TUIServer.TUIConversation.getConversationProfile(conversationID).then(
               (imResponse: any) => {
@@ -255,10 +265,11 @@ export class Notifications {
     const { settings, userInfo } = storeToRefs(appStore());
     const app = appStore();
     const server = (window as any).$TUIKit.TUIServer.TUIChat.store;
+    const router = await getAppRouter();
 
     const config = {
       enable: settings.value.noticeEnable === false, // 消息通知开关
-      global: router.options.history.state.current !== '/chatMain', // 是否在聊天页面
+      global: router.currentRoute.value.name !== 'chatMain', // 是否在聊天页面
       cue: settings.value.enablePlay, // 提示音开关
       currentSession: server.conversation?.conversationID === data.conversationID, // 当前会话
       atMsg: data.atUserList.length !== 0, // @全部消息

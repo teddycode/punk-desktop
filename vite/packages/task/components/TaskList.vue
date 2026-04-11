@@ -1,7 +1,7 @@
 <script lang="ts">
 import { CloseOutlined, CheckOutlined, DeleteOutlined } from '@ant-design/icons-vue';
 
-const ipc = eval('require')('electron').ipcRenderer;
+const ipc = window.require('electron').ipcRenderer;
 export default {
   components: { CloseOutlined, CheckOutlined, DeleteOutlined },
   props: {
@@ -25,7 +25,7 @@ export default {
     },
   },
   mounted() {
-    this.ipc = eval('require')('electron').ipcRenderer;
+    this.ipc = window.require('electron').ipcRenderer;
   },
   methods: {
     remove(id) {

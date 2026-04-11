@@ -366,7 +366,7 @@ app.whenReady().then(() => {
         label: '全部退出',
         click() {
           global.trayExit = true;
-          app.exit();
+          app.quit();
         },
       },
     );

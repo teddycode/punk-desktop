@@ -1,7 +1,6 @@
-@import 'wild';
-@import 'min';
-@import 'dark';
-
+@use 'wild';
+@use 'min';
+@use 'dark';
 .main-content {
   padding-left: 10px;
   padding-top: 10px;

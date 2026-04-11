@@ -12,6 +12,7 @@ var appIsReady = false;
 let isInstallerRunning = false;
 var mainMenu = null;
 let sqlDb;
+let stoppingServicesForQuit = null;
 
 async function ready() {
   console.log('触发ready');
@@ -277,7 +278,8 @@ global.saveWindowBounds = function () {
  */
 function sendIPCToWindow(window, action, data, needCreateWindow = true) {
   // if there are no windows, create a new one
-  if (!mainWindow) {
+  if (!mainWindow || mainWindow.isDestroyed()) {
+    mainWindow = null;
     if (needCreateWindow) {
       //如果是要求创建后再发的才发，不然就直接放弃了
       createWindow(function () {
@@ -296,6 +298,18 @@ function sendIPCToWindow(window, action, data, needCreateWindow = true) {
   } else {
     mainWindow.webContents.send(action, data || {});
   }
+}
+
+async function ensureServiceManagerReady() {
+  if (global.serviceManager) {
+    return global.serviceManager;
+  }
+
+  global.serviceManager = new ServiceManager();
+  await global.serviceManager.init();
+  mainMenu = buildAppMenu();
+  Menu.setApplicationMenu(mainMenu);
+  return global.serviceManager;
 }
 
 function openTabInWindow(url) {
@@ -485,7 +499,7 @@ function createWindowWithBounds(bounds) {
       }
     }
     if (closeExit === 0) {
-      app.exit();
+      app.quit();
     }
   }
   mainWindow.on('close', async function (e) {
@@ -541,7 +555,7 @@ function createWindowWithBounds(bounds) {
       if (typeof trayExit === 'undefined' || !trayExit) {
         askCloseExit();
       } else {
-        app.exit();
+        app.quit();
       }
 
       //windows上，且不是在切换空间，则关闭整个应用
@@ -768,7 +782,27 @@ app.on('ready', function () {
   if (electron.nativeTheme.shouldUseDarkColors !== settings.get('systemShouldUseDarkColors')) {
     settings.set('systemShouldUseDarkColors', electron.nativeTheme.shouldUseDarkColors);
   }
-  app.on('before-quit', () => {
+  app.on('before-quit', (event) => {
+    if (global.serviceManager && !global.serviceManager.hasStoppedAll) {
+      if (!stoppingServicesForQuit) {
+        event.preventDefault();
+        global.isExit = true;
+        stoppingServicesForQuit = global.serviceManager
+          .stopAll()
+          .catch((error) => {
+            console.error('停止本地服务失败:', error);
+          })
+          .finally(() => {
+            stoppingServicesForQuit = null;
+            app.exit();
+          });
+        return;
+      }
+
+      event.preventDefault();
+      return;
+    }
+
     if (isExit) {
       app.exit();
     }
@@ -813,7 +847,14 @@ ipc.on('errorClose', (e, args) => {
   // }
 });
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+  try {
+    await ensureServiceManagerReady();
+  } catch (error) {
+    global.serviceManager = null;
+    console.error('初始化本地服务失败:', error);
+  }
+
   ipc.on('tabs.current', (e, a) => {
     //这是一个非常经典的ipc.sendSync的回调实现。
     function getCurrentTab(callBack) {

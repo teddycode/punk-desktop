@@ -1,11 +1,14 @@
 const packager = require('electron-packager');
 const rebuild = require('electron-rebuild').default;
+const fs = require('fs-extra');
+const path = require('path');
 
 const packageFile = require('./../package.json');
 const version = packageFile.version;
 const electronVersion = packageFile.electronVersion;
 
 const basedir = require('path').join(__dirname, '../');
+const servicesRuntimeSource = path.join(basedir, 'dist', 'services-runtime');
 
 // directories that will be ignored when building binaries
 const ignoredDirs = [
@@ -13,6 +16,7 @@ const ignoredDirs = [
   'dist/app',
   'dist/mac-arm64',
   'setup',
+  'services/',
   /\.map$/g,
   /\.md$/g,
   // electron-installer-debian is actually a development module, but it isn't pruned because it's optional
@@ -44,7 +48,17 @@ var baseOptions = {
   afterCopy: [
     (buildPath, electronVersion, platform, arch, callback) => {
       rebuild({ buildPath, electronVersion, arch })
-        .then(() => callback())
+        .then(() => {
+          if (!fs.existsSync(servicesRuntimeSource)) {
+            callback();
+            return;
+          }
+
+          const targetPath = path.join(buildPath, 'dist', 'services-runtime');
+          fs.removeSync(targetPath);
+          fs.copySync(servicesRuntimeSource, targetPath);
+          callback();
+        })
         .catch((error) => callback(error));
     },
   ],

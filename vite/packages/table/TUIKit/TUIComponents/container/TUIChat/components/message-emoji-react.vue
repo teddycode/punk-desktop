@@ -173,8 +173,8 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
-@import url('../../../styles/common.scss');
-@import url('../../../styles/icon.scss');
+@use '../../../styles/common.scss';
+@use '../../../styles/icon.scss';
 .dialog-emoji {
   margin-left: 2px;
   background: #ffffff;

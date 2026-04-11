@@ -92,7 +92,7 @@ function toggleExpand(id: string) {
 
 <style scoped>
 .agent-log {
-  height: 108px;
+  height: var(--punk-claw-log-height, 108px);
   flex-shrink: 0;
   background: rgba(6, 10, 20, 0.94);
   border-top: 1px solid rgba(0, 200, 255, 0.15);

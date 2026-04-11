@@ -1,0 +1,11 @@
+apscheduler==3.7.0
+Django==2.2.28
+asgiref==3.2.10
+channels==2.3.1
+paramiko==2.11.0
+requests==2.27.1
+GitPython==3.1.41
+openpyxl==3.0.3
+user_agents==2.2.0
+uvicorn==0.29.0
+websockets==12.0

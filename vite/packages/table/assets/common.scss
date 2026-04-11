@@ -1,12 +1,11 @@
-@import 'card';
-@import 'reset';
-@import 'dark';
-@import 'deck';
-@import 'custom';
-@import 'rgb';
-@import 'game';
-@import './chat/fixChat';
-
+@use 'card';
+@use 'reset';
+@use 'dark';
+@use 'deck';
+@use 'custom';
+@use 'rgb';
+@use 'game';
+@use './chat/fixChat';
 body {
   //background-color: rgb(50, 50, 50);
   overflow: hidden;

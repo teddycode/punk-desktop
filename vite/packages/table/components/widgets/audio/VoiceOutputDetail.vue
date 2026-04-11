@@ -88,7 +88,7 @@ export default {
   filter: brightness(0.8);
   background: rgba(42, 42, 42, 0.25);
 }
-::v-deep .ps__thumb-y {
+:deep(.ps__thumb-y) {
   display: none !important;
 }
 .voice-item-hover:hover {

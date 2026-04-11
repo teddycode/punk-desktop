@@ -108,8 +108,8 @@ const MessageReference = defineComponent({
 export default MessageReference;
 </script>
 <style lang="scss" scoped>
-@import url('../../../styles/common.scss');
-@import url('../../../styles/icon.scss');
+@use '../../../styles/common.scss';
+@use '../../../styles/icon.scss';
 .reference {
   width: 100%;
   display: flex;
@@ -169,15 +169,15 @@ export default MessageReference;
   flex-direction: column;
   align-self: start;
   border-left: 2px solid rgba(0, 110, 255, 0.499298);
-  &-reverse {
-    border-left: 2px solid rgba(153, 153, 153, 0.3);
-  }
   padding-left: 7px;
   margin-bottom: 5px;
   color: #999999;
   font-size: 12px;
   line-height: 20px;
   min-width: 40px;
+  &-reverse {
+    border-left: 2px solid rgba(153, 153, 153, 0.3);
+  }
   .message-img,
   .message-video-cover,
   .message-videoimg {

@@ -15,7 +15,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineProps, defineEmits, toRefs, ref, defineExpose } from 'vue';
+import { toRefs, ref } from 'vue';
 import { useEditor, EditorContent } from '@tiptap/vue-3';
 import Document from '@tiptap/extension-document';
 import Paragraph from '@tiptap/extension-paragraph';
@@ -393,8 +393,8 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
-@import url('../../../styles/common.scss');
-@import url('../../../styles/icon.scss');
+@use '../../../styles/common.scss';
+@use '../../../styles/icon.scss';
 .message-input {
   &-container {
     display: flex;
@@ -457,11 +457,11 @@ defineExpose({
     font-style: normal;
   }
   p {
+    color: var(--primary-text) !important;
     * {
       vertical-align: bottom;
       color: var(--primary-text) !important;
     }
-    color: var(--primary-text) !important;
   }
   -webkit-user-select: text;
   user-select: text;

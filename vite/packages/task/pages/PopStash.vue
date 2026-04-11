@@ -4,8 +4,8 @@ import { Modal } from 'ant-design-vue';
 import '../assets/task-list.css';
 import TaskList from '../components/TaskList.vue';
 
-const path = eval('require')('path');
-const fs = eval('require')('fs');
+const path = window.require('path');
+const fs = window.require('fs');
 export default {
   components: {
     TaskList,
@@ -21,7 +21,7 @@ export default {
     };
   },
   async mounted() {
-    this.ipc = eval('require')('electron').ipcRenderer;
+    this.ipc = window.require('electron').ipcRenderer;
     this.callerId = await this.ipc.invoke('getPopCallerId');
     this.ipc.on('gotStashTasks', (event, args) => {
       let tasks = args.tasks;

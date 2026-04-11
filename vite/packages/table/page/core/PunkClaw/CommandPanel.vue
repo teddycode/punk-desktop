@@ -200,7 +200,7 @@ async function submit() {
   working.value = true;
   store.setAgentWorking(true);
   try {
-    const result = await parseUserIntent(text);
+    const result = await parseUserIntent(text, router);
     if (result.kind === 'task_plan' && result.plan) {
       presentTaskPlan(result.plan);
       if (punkClawCommandMode.value === 'ask') {
@@ -254,7 +254,7 @@ defineExpose({
 
 <style scoped>
 .agent-cmd {
-  width: 328px;
+  width: var(--punk-claw-cmd-width, 328px);
   flex-shrink: 0;
   padding: 12px 14px;
   display: flex;

@@ -31,6 +31,18 @@ htmls.forEach((html) => {
 export const config = {
   plugins: [vue(), require('tailwindcss'), require('autoprefixer')],
   base: './',
+  css: {
+    preprocessorOptions: {
+      scss: {
+        quietDeps: true,
+        silenceDeprecations: ['import', 'legacy-js-api'],
+      },
+      sass: {
+        quietDeps: true,
+        silenceDeprecations: ['import', 'legacy-js-api'],
+      },
+    },
+  },
   resolve: {
     alias: {
       '@package': path.resolve('./packages'),

@@ -115,8 +115,7 @@ function copyStr(text) {
 </script>
 
 <style lang="scss" scoped>
-@import './style.scss';
-
+@use './style.scss';
 button {
   cursor: pointer;
   border: none;

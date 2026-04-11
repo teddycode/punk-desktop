@@ -1,4 +1,4 @@
-import { router } from '../../router';
+import type { Router } from 'vue-router';
 import { agentStore } from '@store/agent';
 import { chatCompletion } from './modelRouter';
 import { planFromPayload } from './taskPlanner';
@@ -34,7 +34,7 @@ function findMappingByText(text: string) {
 }
 
 /** 本地规则：零成本快速路径 */
-export function parseLocalIntent(command: string): IntentResult | null {
+export function parseLocalIntent(command: string, router: Router): IntentResult | null {
   const text = String(command || '').trim();
   if (!text) return null;
 
@@ -157,8 +157,8 @@ export async function parseIntentWithLLM(command: string): Promise<IntentResult>
 }
 
 /** 三级漏斗入口 */
-export async function parseUserIntent(command: string): Promise<IntentResult> {
-  const local = parseLocalIntent(command);
+export async function parseUserIntent(command: string, router: Router): Promise<IntentResult> {
+  const local = parseLocalIntent(command, router);
   if (local) {
     return local;
   }

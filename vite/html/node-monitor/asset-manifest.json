@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/static/css/main.0ca5668d.chunk.css",
+    "main.js": "/static/js/main.855ec795.chunk.js",
+    "runtime-main.js": "/static/js/runtime-main.8997d517.js",
+    "static/css/2.80a40609.chunk.css": "/static/css/2.80a40609.chunk.css",
+    "static/js/2.67188d85.chunk.js": "/static/js/2.67188d85.chunk.js",
+    "index.html": "/index.html",
+    "precache-manifest.b85d2b41bc954438bd7d034a704feb45.js": "/precache-manifest.b85d2b41bc954438bd7d034a704feb45.js",
+    "service-worker.js": "/service-worker.js",
+    "static/js/2.67188d85.chunk.js.LICENSE.txt": "/static/js/2.67188d85.chunk.js.LICENSE.txt",
+    "static/media/libs.module.css": "/static/media/404.77e1571b.svg",
+    "static/media/login.module.css": "/static/media/bg.a568162c.svg",
+    "static/media/logo-spug-txt.png": "/static/media/logo-spug-txt.a4258c04.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.8997d517.js",
+    "static/css/2.80a40609.chunk.css",
+    "static/js/2.67188d85.chunk.js",
+    "static/css/main.0ca5668d.chunk.css",
+    "static/js/main.855ec795.chunk.js"
+  ]
+}

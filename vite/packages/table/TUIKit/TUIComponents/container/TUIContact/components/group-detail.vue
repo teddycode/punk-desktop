@@ -83,9 +83,9 @@
 
 <script>
 import { defineComponent, onMounted, reactive, toRefs } from 'vue';
+import { useRouter } from 'vue-router';
 import useClipboard from 'vue-clipboard3';
 import { message, Modal as antdModal } from 'ant-design-vue';
-import { router } from '../../../../../router';
 import Modal from '../../../../../components/Modal.vue';
 import UserSelect from '../../../components/userselect/index.vue';
 
@@ -95,6 +95,7 @@ export default defineComponent({
   components: { Modal, UserSelect },
 
   setup(props, ctx) {
+    const router = useRouter();
     const types = window.$TUIKit.TIM.TYPES;
 
     const data = reactive({

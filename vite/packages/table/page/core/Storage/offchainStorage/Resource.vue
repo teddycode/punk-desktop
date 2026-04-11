@@ -2,9 +2,9 @@
   <div class="content st-background">
     <!-- 存储服务提供商部分 -->
     <div class="section" style="display: flex; flex-direction: column; align-items: center; justify-content: center">
-      <caption>
+      <div class="section-title">
         存储服务提供商资源注册
-      </caption>
+      </div>
       <div class="flex-container">
         <div class="input-column">
           <div class="input-row">
@@ -26,9 +26,9 @@
 
     <!-- 数据所有者部分 -->
     <div class="section" style="display: flex; flex-direction: column; align-items: center; justify-content: center">
-      <caption>
+      <div class="section-title">
         数据所有者资源注册
-      </caption>
+      </div>
       <div class="flex-container">
         <div class="input-column">
           <div class="input-row">
@@ -49,9 +49,9 @@
     </div>
 
     <div class="section" style="display: flex; flex-direction: column; align-items: center; justify-content: center">
-      <caption>
+      <div class="section-title">
         数据所有者执行数据访问控制
-      </caption>
+      </div>
       <div class="flex-container">
         <div class="input-column">
           <div class="input-row">
@@ -510,7 +510,7 @@ h2 {
   margin-bottom: 20px;
 }
 
-caption {
+.section-title {
   /* color: white;
     font-size: 20px;
     font-weight: bold;

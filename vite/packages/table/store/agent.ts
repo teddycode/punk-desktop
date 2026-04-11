@@ -36,6 +36,8 @@ function defaultModelFromAiStore(): ModelProvider {
 export const agentStore = defineStore('agentStore', {
   state: () => ({
     punkClawOpen: false,
+    /** 一次性请求：进入桌面主布局后自动展开 PunkClaw */
+    pendingDesktopAutoOpen: false,
     modelSettingsOpen: false,
     connectionStatus: 'offline' as AgentConnectionStatus,
     modelProviders: [] as ModelProvider[],
@@ -94,6 +96,14 @@ export const agentStore = defineStore('agentStore', {
     },
     setPunkClawOpen(open: boolean) {
       this.punkClawOpen = open;
+    },
+    requestDesktopAutoOpen() {
+      this.pendingDesktopAutoOpen = true;
+    },
+    consumeDesktopAutoOpen() {
+      const pending = this.pendingDesktopAutoOpen;
+      this.pendingDesktopAutoOpen = false;
+      return pending;
     },
     openModelSettings(open = true) {
       this.modelSettingsOpen = open;
@@ -288,7 +298,6 @@ export const agentStore = defineStore('agentStore', {
         key: 'agentStore',
         storage: localStorage,
         paths: [
-          'punkClawOpen',
           'punkClawCommandMode',
           'modelProviders',
           'activeModelId',

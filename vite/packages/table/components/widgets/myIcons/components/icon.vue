@@ -45,6 +45,9 @@ import { renderIcon } from '@js/common/common';
 import { cardStore } from '@store/card';
 import { mapWritableState } from 'pinia';
 
+const NODE_MONITOR_APP_PACKAGE = 'com.punk.nodeMonitor';
+const NODE_MONITOR_SERVICE_NAME = 'node-monitor';
+
 export default {
   mixins: [editProps],
   props: {
@@ -108,6 +111,21 @@ export default {
   },
   methods: {
     renderIcon,
+    isNodeMonitorIcon() {
+      const open = this.open || {};
+      return (
+        open?.value === NODE_MONITOR_APP_PACKAGE ||
+        (open?.route === 'NodeMgr' && (open?.name === '节点管理' || this.titleValue === '节点管理'))
+      );
+    },
+    async openNodeMonitorPage() {
+      const service = await ipc.invoke('services.resolvePage', NODE_MONITOR_SERVICE_NAME);
+      if (!service?.pageUrl) {
+        throw new Error('节点管理服务页面地址获取失败');
+      }
+
+      browser.openInTable(service.pageUrl, { wallet: this?.open?.wallet });
+    },
     getSizeValues(size) {
       if (this.isReSize) {
         size = 'mini';
@@ -146,7 +164,7 @@ export default {
       this.visible = false;
     },
     // 单图标点击执行app
-    iconClick(event) {
+    async iconClick(event) {
       try {
         console.log('点击信息: ', JSON.stringify(this?.open));
         if (event.ctrlKey && event.button === 0) {
@@ -155,7 +173,7 @@ export default {
         }
         if (this.open !== undefined && this.open.value !== '') {
           // 链接
-          this.newOpenApp();
+          await this.newOpenApp();
         } else if (this.link !== '') {
           // 其他应用
           this.openApp(this.linkValue);
@@ -166,7 +184,12 @@ export default {
       }
     },
     // 新版app打开方式
-    newOpenApp() {
+    async newOpenApp() {
+      if (this.isNodeMonitorIcon()) {
+        await this.openNodeMonitorPage();
+        return;
+      }
+
       switch (this.open.type) {
         // 默认浏览器
         case 'default':

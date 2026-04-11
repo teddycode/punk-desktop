@@ -185,13 +185,13 @@ body .a-drawer {
   padding: none;
 }
 
-.common-layout >>> .ant-menu {
+.common-layout :deep(.ant-menu) {
   background: none !important;
   color: #fff;
   line-height: inherit;
 }
 
-.common-layout >>> .ant-menu-horizontal {
+.common-layout :deep(.ant-menu-horizontal) {
   border: none;
 }
 </style>

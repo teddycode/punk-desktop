@@ -6,7 +6,7 @@ import tools from '../../src/util/tools.js';
 import { createRouter, createWebHashHistory } from 'vue-router';
 import Install from './pages/Install.vue';
 import PopList from './pages/PopList.vue';
-const ipc = eval('require')('electron').ipcRenderer;
+const ipc = window.require('electron').ipcRenderer;
 window.ipc = ipc;
 window.callerId = 0;
 const routes = [

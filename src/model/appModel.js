@@ -13,6 +13,9 @@ const {
   authAbilityList,
   defaultLocalSysApp,
   defaultPunkOSApp,
+  NODE_MONITOR_APP_PACKAGE,
+  NODE_MONITOR_APP_ICON,
+  createNodeMonitorApp,
 } = require('./data/appData');
 const fs = require('fs');
 const path = require('path');
@@ -202,6 +205,9 @@ const appModel = {
     let todo = await appModel.get({
       package: 'com.thisky.todo',
     });
+    let nodeMonitor = await appModel.get({
+      package: NODE_MONITOR_APP_PACKAGE,
+    });
     await appModel.updateAppData(
       { name: '超级收藏夹' },
       {
@@ -257,6 +263,55 @@ const appModel = {
         is_new: true,
         unread_count: 0,
       });
+    }
+    if (!nodeMonitor) {
+      await sqlDb.knex('app').insert(createNodeMonitorApp());
+    } else {
+      await appModel.updateAppData(
+        { package: NODE_MONITOR_APP_PACKAGE },
+        {
+          name: '节点管理',
+          logo: NODE_MONITOR_APP_ICON,
+          summary: '管理本地 node-monitor 服务。',
+          type: 'web',
+          appid: 'NodeMon1',
+          url: 'http://127.0.0.1/__node-monitor__',
+          theme_color: '#2f8f83',
+          settings: JSON.stringify({
+            bounds: {
+              width: 1280,
+              height: 900,
+            },
+            showInSideBar: false,
+          }),
+          window: JSON.stringify({
+            defaultType: 'frameWindow',
+            frameWindow: {
+              enable: true,
+              width: 1280,
+              height: 900,
+              controllers: {
+                goBack: true,
+                goForward: true,
+                refresh: true,
+                home: true,
+              },
+              top: false,
+              canResize: true,
+            },
+            window: {},
+            attach: {},
+          }),
+          auth: JSON.stringify({
+            base: {
+              webSecure: false,
+              node: false,
+            },
+            api: {},
+            ability: {},
+          }),
+        },
+      );
     }
 
     // await appModel.updateAppData({ package: 'com.thisky.group' }, {

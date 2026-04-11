@@ -240,7 +240,7 @@ export default {
     cursor: pointer;
 }
 
-/* ::v-deep .ant-select-selection-placeholder {
+/* :deep(.ant-select-selection-placeholder) {
   color: rgb(0, 0, 0) !important;
 } */
 </style>

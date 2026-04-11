@@ -203,6 +203,8 @@ export default {
       },
       urlInput: '', //用户输入的地址
       showEdit: false,
+      frameResizeObserver: null,
+      syncBoundsDebounced: null,
     };
   },
   components: {
@@ -220,12 +222,15 @@ export default {
   },
   mounted() {
     this.setEvent('addedTab', this.addedTab);
+    this.syncBoundsDebounced = _.debounce(() => {
+      this.syncBounds();
+    }, 100);
     ipc.send('getRunningTableTabs');
     let params = this.$route.params;
     if (typeof params.fullScreen === 'undefined') {
       params.fullScreen = false; //默认全屏
     } else {
-      params.fullScreen = !(params.fullScreen === 'false');
+      params.fullScreen = this.normalizeBoolean(params.fullScreen);
     }
     if (params.fullScreen) {
       this.fullScreen = params.fullScreen;
@@ -239,11 +244,13 @@ export default {
       }
       if (params.url) {
         console.log('[Browser Page] 接收到路由参数:', params);
+        const wallet = this.normalizeBoolean(params.wallet);
+        const isLocalHtml = this.detectLocalHtmlUrl(params.url);
         //如果存在需要打开的url
-        await this.invokeAddTab({ 
+        await this.invokeAddTab({
           url: params.url,
-          wallet: params.wallet || false,
-          isLocalHtml: params.isLocalHtml || false,
+          wallet,
+          isLocalHtml,
         });
         setTimeout(() => {
           ipc.send('getRunningTableTabs');
@@ -254,19 +261,53 @@ export default {
           this.switchToTab(this.currentTab.id);
         }
       }
-      let frame = document.getElementById('frame');
-      frame.addEventListener('resize', () => {
-        _.debounce(() => {
-          this.syncBounds();
-        }, 1000);
-      });
+      this.observeFrameBounds();
     });
   },
   beforeUnmount() {
+    this.cleanupFrameObserver();
     this.handleLeave();
   },
   methods: {
     ...mapActions(browserStore, ['updateTabCapture', 'setEvent']),
+    normalizeBoolean(value) {
+      return value === true || value === 'true' || value === 1 || value === '1';
+    },
+    detectLocalHtmlUrl(url) {
+      const normalizedUrl = String(url || '').split(/[?#]/)[0];
+      return normalizedUrl.endsWith('.html') && !/^[a-zA-Z][a-zA-Z\d+\-.]*:/.test(String(url || ''));
+    },
+    observeFrameBounds() {
+      this.cleanupFrameObserver();
+      const frame = document.getElementById('frame');
+      if (!frame) {
+        return;
+      }
+
+      if (typeof ResizeObserver === 'function') {
+        this.frameResizeObserver = new ResizeObserver(() => {
+          if (this.syncBoundsDebounced) {
+            this.syncBoundsDebounced();
+          }
+        });
+        this.frameResizeObserver.observe(frame);
+      }
+
+      if (this.syncBoundsDebounced) {
+        window.addEventListener('resize', this.syncBoundsDebounced);
+      }
+    },
+    cleanupFrameObserver() {
+      if (this.frameResizeObserver) {
+        this.frameResizeObserver.disconnect();
+        this.frameResizeObserver = null;
+      }
+
+      if (this.syncBoundsDebounced) {
+        window.removeEventListener('resize', this.syncBoundsDebounced);
+        this.syncBoundsDebounced.cancel();
+      }
+    },
     switchToTab(id) {
       let found = this.runningTabs.find((tab) => {
         return tab.id === id;
@@ -286,20 +327,32 @@ export default {
     fixZoom(num) {
       return Number(((num * this.settings.zoomFactor) / 100).toFixed(0));
     },
+    getFrameBounds() {
+      let frame = document.getElementById('frame');
+      if (!frame) {
+        return {
+          x: 0,
+          y: 0,
+          width: 0,
+          height: 0,
+        };
+      }
+
+      const rect = frame.getBoundingClientRect();
+      return {
+        x: this.fixZoom(rect.x),
+        y: this.fixZoom(rect.y),
+        width: this.fixZoom(rect.width),
+        height: this.fixZoom(rect.height),
+      };
+    },
     /**
      * 执行添加一个tab
      * @param tab
      * @returns {Promise<void>}
      */
     getContentBounds() {
-      let frame = document.getElementById('frame');
-      let position = {
-        x: this.fixZoom(frame.getBoundingClientRect().x),
-        y: this.fixZoom(frame.getBoundingClientRect().y),
-        width: this.fixZoom(frame.offsetWidth),
-        height: this.fixZoom(frame.offsetHeight),
-      };
-      return position;
+      return this.getFrameBounds();
     },
     async invokeAddTab(tab) {
       console.log('[Browser Page] invokeAddTab 调用:', tab);
@@ -319,6 +372,13 @@ export default {
       this.currentTab = tab;
       this.urlInput = this.currentTab.url;
       this.runningTabs.push(JSON.parse(JSON.stringify(this.currentTab)));
+      this.$nextTick(() => {
+        if (this.syncBoundsDebounced) {
+          this.syncBoundsDebounced();
+        } else {
+          this.syncBounds();
+        }
+      });
     },
     /**
      * 切换缩放
@@ -357,13 +417,7 @@ export default {
       if (!this.currentTab) {
         return;
       }
-      let frame = document.getElementById('frame');
-      let position = {
-        x: this.fixZoom(frame.getBoundingClientRect().x),
-        y: this.fixZoom(frame.getBoundingClientRect().y),
-        width: this.fixZoom(frame.offsetWidth),
-        height: this.fixZoom(frame.offsetHeight),
-      };
+      let position = this.getFrameBounds();
       let args = {
         bounds: position,
         tab: this.currentTab,

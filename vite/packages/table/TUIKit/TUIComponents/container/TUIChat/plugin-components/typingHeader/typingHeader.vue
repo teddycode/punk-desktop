@@ -199,8 +199,8 @@ const TypingHeader = defineComponent({
 export default TypingHeader;
 </script>
 <style scoped>
-@import url('../../../../styles/common.scss');
-@import url('../../../../styles/icon.scss');
+@use '../../../../styles/common.scss';
+@use '../../../../styles/icon.scss';
 h1 {
   overflow: hidden;
   white-space: nowrap;

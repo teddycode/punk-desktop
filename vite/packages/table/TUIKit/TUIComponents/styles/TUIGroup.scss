@@ -1,6 +1,5 @@
-@import url('../../styles/common.scss');
-@import url('../../styles/icon.scss');
-
+@use './common.scss';
+@use './icon.scss';
 .TUI-group {
   position: relative;
   width: 100%;

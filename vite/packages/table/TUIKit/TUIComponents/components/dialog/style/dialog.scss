@@ -1,5 +1,5 @@
-@import './color.scss';
-@import './web.scss';
-@import './h5.scss';
-@import url('../../../styles/common.scss');
-@import url('../../../styles/icon.scss');
+@use './color.scss';
+@use './web.scss';
+@use './h5.scss';
+@use '../../../styles/common.scss';
+@use '../../../styles/icon.scss';

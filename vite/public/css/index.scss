@@ -1,2 +1,2 @@
-@import './styleSwitch/index.scss';
-@import './fonts/index.scss';
+@use './styleSwitch/index.scss' as styleSwitch;
+@use './fonts/index.scss' as fonts;

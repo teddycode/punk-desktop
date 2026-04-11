@@ -85,9 +85,6 @@ export const deskStore = defineStore('desk', {
             deskWidth: 1173,
             deskHeight: 800,
             cardsHeight: 708,
-            blurb:
-              '一键快速打开系统性能监控面板、一键启动游戏模式、一键退出当前所有打开的应用等等游戏玩家专用的小组件集合。',
-            labelList: ['游戏', '玩家'],
             cards: [
               {
                 name: 'weather',

@@ -239,7 +239,7 @@ export default {
   font-weight: 500;
 }
 
-::v-deep .ps__thumb-y {
+:deep(.ps__thumb-y) {
   display: none !important;
 }
 .detail-container {
@@ -254,7 +254,7 @@ export default {
 .min-introduction {
   .game-intro {
     width: 100%;
-    ::v-deep .bb_ul {
+    :deep(.bb_ul) {
       padding: 0 !important;
       li {
         list-style: none !important;
@@ -266,11 +266,11 @@ export default {
         }
       }
     }
-    ::v-deep p img {
+    :deep(p img) {
       width: 100% !important;
       object-fit: cover;
     }
-    ::v-deep img {
+    :deep(img) {
       width: 100% !important;
       object-fit: cover;
     }
@@ -301,13 +301,13 @@ export default {
     max-width: 600px !important;
     .game-intro {
       width: 100% !important;
-      ::v-deep p img {
+      :deep(p img) {
         width: 100% !important;
       }
-      ::v-deep img {
+      :deep(img) {
         width: 100% !important;
       }
-      ::v-deep .bb_ul {
+      :deep(.bb_ul) {
         width: 100% !important;
         li {
           padding: 0 !important;
@@ -339,13 +339,13 @@ export default {
     max-width: 500px !important;
     .game-intro {
       width: 100% !important;
-      ::v-deep p img {
+      :deep(p img) {
         width: 100% !important;
       }
-      ::v-deep img {
+      :deep(img) {
         width: 100% !important;
       }
-      ::v-deep .bb_ul {
+      :deep(.bb_ul) {
         width: 100% !important;
         li {
           padding: 0 !important;

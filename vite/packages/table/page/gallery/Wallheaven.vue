@@ -297,7 +297,6 @@ import axios from 'axios';
 import justifiedGallery from 'justifiedGallery';
 import { paperStore } from '../../store/paper';
 import { mapActions, mapState } from 'pinia';
-import Spotlight from 'spotlight.js';
 
 export default defineComponent({
   name: 'Wallheaven',
@@ -534,12 +533,12 @@ export default defineComponent({
     width: 200px !important;
     background: rgba(255, 255, 255, 0.15) !important;
   }
-  ::v-deep .ant-select-selector {
+  :deep(.ant-select-selector) {
     background: rgba(255, 255, 255, 0.15) !important;
     border: none !important;
     border-radius: 8px !important;
   }
-  ::v-deep .ant-select-item {
+  :deep(.ant-select-item) {
     background-color: rgba(255, 255, 255, 0.15) !important;
   }
   .ant-input-affix-wrapper {

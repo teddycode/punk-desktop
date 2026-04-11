@@ -259,7 +259,7 @@ const OnBack = () =>{
   }
 }
 
-::v-deep .u-comment .comment-list-wrapper .comment-list .comment .comment-primary .reply-box{
+:deep(.u-comment .comment-list-wrapper .comment-list .comment .comment-primary .reply-box) {
   background: var(--primary-bg) !important;
 }
 

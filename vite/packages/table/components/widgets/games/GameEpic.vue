@@ -284,7 +284,7 @@ export default {
   border-radius: 8px !important;
 }
 
-.nav-list-container ::v-deep .s-item {
+.nav-list-container :deep(.s-item) {
   border-radius: 6px !important;
 }
 </style>

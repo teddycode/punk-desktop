@@ -62,8 +62,8 @@
 .cockpit-ambient__hint {
   position: absolute;
   left: 50%;
-  bottom: 14%;
-  transform: translateX(-50%);
+  top: calc(100% - var(--punk-claw-preview-gap, 12px));
+  transform: translate(-50%, -50%);
   text-align: center;
   max-width: min(420px, 86vw);
   display: flex;
@@ -74,6 +74,7 @@
   background: rgba(6, 14, 28, 0.45);
   border: 1px solid rgba(0, 200, 255, 0.12);
   backdrop-filter: blur(8px);
+  z-index: 2;
 }
 .cockpit-ambient__hint-title {
   font-size: 11px;

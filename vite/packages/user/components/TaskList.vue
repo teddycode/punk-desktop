@@ -2,7 +2,7 @@
 import { CloseOutlined, CheckOutlined, DeleteOutlined } from '@ant-design/icons-vue';
 import '../assets/task-list.css';
 import vueCustomScrollbar from '../../../src/components/vue-scrollbar.vue';
-const ipc = eval('require')('electron').ipcRenderer;
+const ipc = window.require('electron').ipcRenderer;
 
 export default {
   components: { vueCustomScrollbar, CloseOutlined, CheckOutlined, DeleteOutlined },
@@ -32,7 +32,7 @@ export default {
     },
   },
   mounted() {
-    this.ipc = eval('require')('electron').ipcRenderer;
+    this.ipc = window.require('electron').ipcRenderer;
   },
   methods: {
     getTabName(tab) {

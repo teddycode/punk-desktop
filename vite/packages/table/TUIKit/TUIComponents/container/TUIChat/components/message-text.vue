@@ -30,8 +30,8 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
-@import url('../../../styles/common.scss');
-@import url('../../../styles/icon.scss');
+@use '../../../styles/common.scss';
+@use '../../../styles/icon.scss';
 .text-img {
   width: 20px;
   height: 20px;

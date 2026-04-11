@@ -183,8 +183,8 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
-@import url('../../../styles/common.scss');
-@import url('../../../styles/icon.scss');
+@use '../../../styles/common.scss';
+@use '../../../styles/icon.scss';
 .dialog-item {
   background: #ffffff;
   min-width: min-content;

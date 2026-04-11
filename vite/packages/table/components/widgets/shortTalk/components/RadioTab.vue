@@ -106,7 +106,7 @@ export default {
   padding: 0 20px;
 }
 
-::v-deep .xt-active-btn {
+:deep(.xt-active-btn) {
   justify-content: start;
 }
 

@@ -14,8 +14,8 @@ import {
   ExclamationCircleOutlined,
 } from '@ant-design/icons-vue ';
 import { Modal } from 'ant-design-vue';
-const path = eval('require')('path');
-const fs = eval('require')('fs');
+const path = window.require('path');
+const fs = window.require('fs');
 export default {
   components: {
     PlusOutlined,
@@ -39,9 +39,9 @@ export default {
     };
   },
   async mounted() {
-    const { injectBrowserAction } = eval('require')('electron-chrome-extensions/dist/browser-action.js');
+    const { injectBrowserAction } = window.require('electron-chrome-extensions/dist/browser-action.js');
     injectBrowserAction();
-    this.ipc = eval('require')('electron').ipcRenderer;
+    this.ipc = window.require('electron').ipcRenderer;
     this.ipc.on('show', () => {
       this.getList();
     });
@@ -131,7 +131,7 @@ export default {
       ipc.send('installExtensionFolder');
     },
     close() {
-      eval('require')('electron').ipcRenderer.send('closeSelf');
+      window.require('electron').ipcRenderer.send('closeSelf');
     },
     setup() {
       let args = {
@@ -141,8 +141,8 @@ export default {
           publicKey: this.crxInfo.publicKey,
         },
       };
-      eval('require')('electron').ipcRenderer.send('doInstallCrx', args);
-      eval('require')('electron').ipcRenderer.send('closeSelf', args);
+      window.require('electron').ipcRenderer.send('doInstallCrx', args);
+      window.require('electron').ipcRenderer.send('closeSelf', args);
     },
   },
 };

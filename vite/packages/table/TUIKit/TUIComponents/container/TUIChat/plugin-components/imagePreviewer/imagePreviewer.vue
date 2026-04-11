@@ -47,7 +47,7 @@
 
 <script setup lang="ts">
 import TUIEnv from '../../../../../TUIPlugin/TUIEnv';
-import { defineProps, ref, defineEmits, watchEffect, onMounted, onUnmounted } from 'vue';
+import { ref, watchEffect, onMounted, onUnmounted } from 'vue';
 import { Message } from '../../interface';
 // import { isNumber } from '@vueuse/core';
 
@@ -269,8 +269,8 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-@import url('../../../../styles/common.scss');
-@import url('../../../../styles/icon.scss');
+@use '../../../../styles/common.scss';
+@use '../../../../styles/icon.scss';
 .image-previewer {
   position: fixed;
   z-index: 200;

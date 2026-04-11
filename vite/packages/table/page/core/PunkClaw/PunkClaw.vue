@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { agentStore } from '@store/agent';
 import { walletStore } from '@store/wallet';
@@ -31,6 +31,7 @@ import CockpitAmbient from './CockpitAmbient.vue';
 
 const store = agentStore();
 const route = useRoute();
+const router = useRouter();
 const w = walletStore();
 const { punkClawOpen } = storeToRefs(store);
 
@@ -51,7 +52,7 @@ function syncContext() {
 
 onMounted(() => {
   store.ensureDefaultProviders();
-  ensureAgentRouteMappings();
+  ensureAgentRouteMappings(router);
   syncContext();
 });
 

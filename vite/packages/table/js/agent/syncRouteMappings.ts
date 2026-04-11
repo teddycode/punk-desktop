@@ -1,4 +1,4 @@
-import { router } from '../../router';
+import type { Router } from 'vue-router';
 import { agentStore } from '@store/agent';
 import type { RouteMappingItem } from '@store/agent';
 
@@ -28,7 +28,7 @@ function prettyRouteLabel(record: { meta?: any; name?: string | symbol | null })
   return routeName.replace(/([a-z])([A-Z])/g, '$1 $2');
 }
 
-function buildDefaultMappings(): RouteMappingItem[] {
+function buildDefaultMappings(router: Router): RouteMappingItem[] {
   const allRoutes = router
     .getRoutes()
     .filter((item) => item.name && !String(item.path || '').includes(':') && !item.redirect)
@@ -70,11 +70,11 @@ function buildDefaultMappings(): RouteMappingItem[] {
 }
 
 /** 若本地无映射，则写入默认路由别名表 */
-export function ensureAgentRouteMappings() {
+export function ensureAgentRouteMappings(router: Router) {
   const store = agentStore();
   store.loadRouteMappingsFromStorage();
   if (store.routeMappings.length) {
     return;
   }
-  store.setRouteMappings(buildDefaultMappings());
+  store.setRouteMappings(buildDefaultMappings(router));
 }

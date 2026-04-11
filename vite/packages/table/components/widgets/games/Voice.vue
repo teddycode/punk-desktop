@@ -208,7 +208,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .ant-slider-track {
+:deep(.ant-slider-track) {
   // background: linear-gradient(90deg, rgba(98, 193, 255, 1) 0%, rgba(51, 141, 255, 1) 100%) !important;
 }
 

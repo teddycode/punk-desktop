@@ -262,7 +262,7 @@ export default {
   border-radius: 8px;
 }
 
-::v-deep .ps__thumb-y {
+:deep(.ps__thumb-y) {
   display: none !important;
 }
 

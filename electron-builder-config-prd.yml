@@ -34,7 +34,17 @@ files:
   - src/**/*
   - vite/dist/**/* #增加渲染进程
   - vite/html/auth/dist/**/* # 添加 auth 目录的构建结果
-  
+
+extraResources:
+  - from: ./res
+    to: ./res
+    filter:
+      - '**/*'
+  - from: ./dist/services-runtime
+    to: ./services
+    filter:
+      - '**/*'
+
 fileAssociations:
   ext:
     - html
@@ -44,11 +54,6 @@ dmg:
   sign: false
 
 win:
-  extraResources:
-    - from: res
-      to: res
-      filter:
-        - '**/*'
   icon: ./icons/logowin.ico
   target:
     - target: nsis

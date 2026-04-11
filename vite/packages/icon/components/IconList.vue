@@ -4,7 +4,7 @@ import fruit from '../../../public/iconLists/fruit.json';
 import animal from '../../../public/iconLists/animal.json';
 import jingling from '../../../public/iconLists/jingling.json';
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons-vue';
-const ipc = eval('require')('electron').ipcRenderer;
+const ipc = window.require('electron').ipcRenderer;
 export default {
   components: { CloseOutlined, CheckOutlined },
   data() {

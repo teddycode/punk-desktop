@@ -28,5 +28,5 @@ export default TUIGroup;
 </script>
 
 <style lang="scss" scoped>
-@import '../../styles/TUIGroup.scss';
+@use '../../styles/TUIGroup.scss';
 </style>

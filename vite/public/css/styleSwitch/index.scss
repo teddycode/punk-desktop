@@ -1,7 +1,7 @@
 // 全局变量 存储所有自定义变量数据
-@import './style.scss';
+@use './style.scss';
 // 全局变量公共类
-@import './class.scss';
-@import './components.scss';
+@use './class.scss';
+@use './components.scss';
 // antd组件库 存储所有antd修改的样式
-@import './antd.scss';
+@use './antd.scss';

@@ -1,3 +1,5 @@
+const NODE_MONITOR_APP_PACKAGE = 'com.punk.nodeMonitor';
+
 export const defaultDesks = [
   {
     id: 'mDBc',
@@ -379,12 +381,9 @@ export const defaultDesks = [
               link: 'fast',
               linkValue: '',
               open: {
-                type: 'internal',
-                route: 'NodeMgr',
+                type: 'lightApp',
                 name: '节点管理',
-                wallet: true,
-                params: '/node/manager',
-                value: 'http://47.243.174.71:36011/home',
+                value: NODE_MONITOR_APP_PACKAGE,
               },
               isTitle: true,
               titleValue: '节点管理',

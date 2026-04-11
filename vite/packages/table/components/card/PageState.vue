@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, computed } from 'vue';
+import { ref, computed } from 'vue';
 import { Icon } from '@iconify/vue';
 import { storeToRefs } from 'pinia';
 import { onMounted } from 'vue';

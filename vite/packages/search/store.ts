@@ -41,13 +41,12 @@ export const appStore = defineStore('app', {
       return this.selectedTask;
     },
   },
-  mutations: {
-    REFRESH_ALLTASKS: (state, tasksList) => {
+  actions: {
+    REFRESH_ALLTASKS(tasksList) {
       this.allTasks = tasksList;
     },
-    SET_SELECTEDTASK: (state, selectedTask) => {
+    SET_SELECTEDTASK(selectedTask) {
       this.selectedTask = selectedTask;
     },
   },
-  actions: {},
 });

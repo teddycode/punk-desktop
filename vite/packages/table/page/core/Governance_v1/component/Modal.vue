@@ -13,7 +13,7 @@
 </template>
   
 <script setup>
-    import { ref, defineProps, defineEmits } from 'vue';
+    import { ref } from 'vue';
     import { message } from 'ant-design-vue';
 
     // 接收父组件传递的属性

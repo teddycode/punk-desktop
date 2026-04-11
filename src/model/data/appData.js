@@ -1,4 +1,69 @@
 const { nanoid } = require('nanoid');
+
+const NODE_MONITOR_APP_PACKAGE = 'com.punk.nodeMonitor';
+const NODE_MONITOR_APP_ICON = 'https://pic1.imgdb.cn/item/6977819a9c48e6126bdac69b.png';
+
+function createNodeMonitorApp() {
+  const timestamp = Date.now();
+
+  return {
+    nanoid: nanoid(8),
+    name: '节点管理',
+    logo: NODE_MONITOR_APP_ICON,
+    summary: '管理本地 node-monitor 服务。',
+    type: 'web',
+    appid: 'NodeMon1',
+    package: NODE_MONITOR_APP_PACKAGE,
+    url: 'http://127.0.0.1/__node-monitor__',
+    theme_color: '#2f8f83',
+    user_theme_color: '',
+    create_time: timestamp,
+    update_time: timestamp,
+    account_avatar: '',
+    order: 0,
+    use_count: 0,
+    attribute: JSON.stringify({
+      isOffical: 1,
+      integration: 2,
+    }),
+    last_execute_time: timestamp,
+    settings: JSON.stringify({
+      bounds: {
+        width: 1280,
+        height: 900,
+      },
+      showInSideBar: false,
+    }),
+    window: JSON.stringify({
+      defaultType: 'frameWindow',
+      frameWindow: {
+        enable: true,
+        width: 1280,
+        height: 900,
+        controllers: {
+          goBack: true,
+          goForward: true,
+          refresh: true,
+          home: true,
+        },
+        top: false,
+        canResize: true,
+      },
+      window: {},
+      attach: {},
+    }),
+    auth: JSON.stringify({
+      base: {
+        webSecure: false,
+        node: false,
+      },
+      api: {},
+      ability: {},
+    }),
+    is_new: true,
+    unread_count: 0,
+  };
+}
 // 默认本机应用
 const defaultLocalSysApp = [
   {
@@ -60,6 +125,7 @@ const defaultLocalSysApp = [
     }),
     unread_count: 0,
   },
+  createNodeMonitorApp(),
 ];
 // 默认web3应用
 const defaultWeb3Apps = [
@@ -520,6 +586,9 @@ const defaultPunkOSApp = [
 ];
 
 module.exports = {
+  NODE_MONITOR_APP_PACKAGE,
+  NODE_MONITOR_APP_ICON,
+  createNodeMonitorApp,
   defaultLocalSysApp,
   defaultPunkOSApp,
   defaultWeb3Apps,

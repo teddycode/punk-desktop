@@ -4,7 +4,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineProps, toRefs, ref, watch } from 'vue';
+import { toRefs, ref, watch } from 'vue';
 const props = defineProps({
   currTime: {
     type: Number,
@@ -94,8 +94,8 @@ function calculateTimestamp(timestamp: number): string {
 }
 </script>
 <style lang="scss" scoped>
-@import url('../../../styles/common.scss');
-@import url('../../../styles/icon.scss');
+@use '../../../styles/common.scss';
+@use '../../../styles/icon.scss';
 .message-timestamp {
   margin: 0 auto;
   color: var(--secondary-text);

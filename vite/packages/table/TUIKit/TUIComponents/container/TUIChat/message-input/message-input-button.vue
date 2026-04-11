@@ -12,7 +12,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineProps, toRefs, defineEmits, ref, computed } from 'vue';
+import { toRefs, ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
@@ -41,8 +41,8 @@ const isChatMain = computed(() => {
 });
 </script>
 <style scoped lang="scss">
-@import url('../../../styles/common.scss');
-@import url('../../../styles/icon.scss');
+@use '../../../styles/common.scss';
+@use '../../../styles/icon.scss';
 .message-input-button {
   position: absolute;
   bottom: 20px;
