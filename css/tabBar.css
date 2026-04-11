@@ -95,39 +95,9 @@
 .dark-mode .tab-item.active:not(:only-child).theme-background-low-contrast .tab-item.active:not(:only-child) {
   background: rgba(255, 255, 255, 0.1);
 }
-.dark-mode .split-bar {
-  background: #202020;
-}
-.dark-mode .split-bar .inner-bar {
-  background: #767676;
-}
-.dark-mode .split-bar .inner-bar:hover {
-  background: rgba(34, 189, 255, 0.6);
-}
 .dark-mode #task-area .task-container {
   background: #3f3f3f;
   border: none;
-}
-
-.split-bar {
-  width: 10px;
-  display: inline-block;
-  position: fixed;
-  background: linear-gradient(to right, #ececec, #ffffff, #ececec);
-}
-.split-bar .inner-bar {
-  display: inline-block;
-  border-radius: 100px;
-  background: rgba(169, 169, 169, 0.24);
-  height: 40px;
-  width: 4px;
-  position: absolute;
-  top: calc(50% - 20px);
-  left: 3px;
-  cursor: col-resize;
-}
-.split-bar .inner-bar:hover {
-  background: rgba(66, 212, 255, 0.6);
 }
 
 #navbar {

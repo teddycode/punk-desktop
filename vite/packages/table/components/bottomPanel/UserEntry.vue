@@ -81,6 +81,7 @@ export default defineComponent({
   mounted() {},
   methods: {
     async jump(type, val) {
+      console.log('菜单跳转：', type, val);
       switch (type) {
         case 'route':
           this.$router.push(val.route);

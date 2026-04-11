@@ -325,7 +325,7 @@ const handleOk = () => {
   visible.value = false;
   emit('handle-ok', visible);
 };
-import { useWeb3Modal, useWeb3ModalAccount,createWeb3Modal } from '@web3modal/ethers5/vue';
+import { useWeb3Modal, useWeb3ModalAccount,createWeb3Modal } from '@punkos/ethers5/vue';
 import { walletConfig } from "@store/wallet";
 import { socialContractABI, socialContractAddress} from "@page/channels/mock";
 import { ethers } from 'ethers'

@@ -171,7 +171,6 @@ class ViewManager {
         width: mainViewPreWidth,
         height: viewBounds.height,
       };
-      sendIPCToMainWindow('showSplitBar', { bounds });
       view.setBounds(bounds);
     });
     let attachedViewBounds = windowManager.attachedView.getBounds();
@@ -596,10 +595,6 @@ class WindowManager {
     remote.enable(appView.webContents);
 
     function updateView(url) {
-      if (frameWindow.isFocused()) {
-        //发送弹幕更新ipc
-        if (barrageManager) barrageManager.changeUrl(url);
-      }
       frameWindow.webContents.send('updateView', {
         url: url,
         canGoBack: appView.webContents.canGoBack(),
@@ -806,46 +801,6 @@ class WindowManager {
 
       //todo viewManager重新调整位置
       //todo 根据options重新创建view到主浏览器中
-    }
-  }
-
-  setTabAttach(option, width = 480) {
-    let { tab, pos } = option;
-    pos = pos || 'right';
-    let name = 'tab_' + tab.id;
-    let viewInstance = new ViewInstance(
-      {
-        view: viewMap[tab.id],
-        name: tab.id,
-      },
-      mainWindow,
-    );
-    switch (pos) {
-      case this.POS.RIGHT:
-        this.attachedInstance = viewInstance;
-        this.attachStatus = {
-          pos: pos,
-          name: name,
-          bounds: {},
-        };
-        //this.stashCreateOptions=instance.createOptions
-        let parentBounds = mainWindow.getBounds();
-        let viewBounds = {
-          x: parentBounds.width - width,
-          y: 0,
-          height: parentBounds.height,
-          width,
-        };
-        viewInstance.view.setBounds(viewBounds);
-        viewInstance.view.setAutoResize({
-          width: false,
-          height: false,
-          horizontal: false,
-          vertical: false,
-        });
-        this.attachedInstance = viewInstance;
-        this.attachedView = viewInstance.view;
-        this.viewManager.autoAdjustPosition('right', viewBounds.width);
     }
   }
 

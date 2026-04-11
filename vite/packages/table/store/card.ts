@@ -6,7 +6,7 @@ import { marketStore } from './market';
 import { noteStore } from '../apps/note/store';
 import { homeStore } from './home';
 import { defaultDesks } from '@js/data/desktopData';
-import { getUserDesk, addDappCard } from "@js/service/dappMarket";
+import { getUserDesk, addDappCard, delDappCard } from "@js/service/dappMarket";
 import { appStore } from "@table/store";
 
 export const cardStore = defineStore(
@@ -385,15 +385,32 @@ export const cardStore = defineStore(
       },
       //获取用户小程序桌面
       async getUserDappDesk(userId) {
+        console.log('=== getUserDappDesk 开始执行 ===');
+        console.log('userId:', userId);
+
         let desk = this.desks.find((item) => {
           return item.name === "小程序";
         });
-        this.removeCards(desk);//先清除用户小程序桌面
+        console.log('找到的小程序桌面:', desk);
+
+        if (!desk) {
+          console.log('⚠️ 未找到小程序桌面');
+          return;
+        }
+
+        // 只删除用户添加的小程序卡片（type为Dapp的），保留默认的常用小程序卡片
+        console.log('删除前的cards:', desk.cards);
+        desk.cards = desk.cards.filter(card => card.type !== 'Dapp');
+        console.log('删除用户小程序后的cards:', desk.cards);
+
+
         //从后端获取用户小程序桌面数据
         let iconList = [];
-        await getUserDesk(userId).then(response=> {
+        console.log('开始从后端获取用户小程序数据...');
+        await getUserDesk(userId).then(response => {
+          console.log('后端返回的数据:', response);
 
-          for(const dappinfo of response.data){
+          for (const dappinfo of response.data) {
             let newIcon = {};
             newIcon.titleValue = dappinfo.name;
             newIcon.link = 'fast';
@@ -411,8 +428,52 @@ export const cardStore = defineStore(
               customData: { iconList: [newIcon] },
             });
           }
+          console.log('构建的用户图标列表:', iconList);
         })
+        // 添加用户的小程序图标
+        // 1. Fetch remote dapps
+        // 2. Fetch local CApps (WASM)
+
+        // Local CApps logic (added for WASM CApp support)
+        try {
+          // @ts-ignore
+          if (window.$models && window.$models.appModel) {
+            // @ts-ignore
+            const localCApps = await window.$models.appModel.getAllApps({ where: { type: 'capp' } });
+            console.log('Local CApps found:', localCApps);
+
+            for (const capp of localCApps) {
+              // Combine into iconList
+              let newIcon: any = {};
+              newIcon.titleValue = capp.name;
+              newIcon.link = 'fast';
+              newIcon.src = capp.logo || 'https://pic.imgdb.cn/item/658514e5c458853aefb6f0f9.png'; // fallback icon
+              newIcon.open = {
+                type: 'CApp', // New type for CApp Runner
+                appId: capp.nanoid, // Use app nanoid
+                wasmPath: capp.url.replace('file://', '') // Get file path
+              };
+
+              // Avoid duplicates if already added (though getUserDappDesk rebuilds usually)
+              // Generate unique ID for the card
+              let random = Math.floor(Math.random() * 50) * Math.floor(Math.random() * 100);
+              iconList.push({
+                name: 'myIcons',
+                id: Date.now() - random,
+                type: 'CApp',
+                dappId: capp.nanoid,
+                customData: { iconList: [newIcon] }
+              });
+            }
+          }
+        } catch (e) {
+          console.error("Failed to load local CApps:", e);
+        }
+
+        console.log('开始添加用户小程序图标...');
         this.addCards(iconList, desk);
+        console.log('最终的desk.cards:', desk?.cards);
+        console.log('=== getUserDappDesk 执行完成 ===');
       },
       setRouteParams(value) {
         this.routeParams = value;
@@ -656,8 +717,8 @@ export const cardStore = defineStore(
 
         let card = desk.cards.find((item) => String(item.id) === String(customIndex))
         console.log("要删除的卡片：", card);
-        if(card.type == "Dapp") { //如果为小程序卡片，则调用后端接口删除
-          addDappCard(appStore().userInfo.uid, card.dappId)
+        if (card.type == "Dapp") { //如果为小程序卡片，则调用后端接口删除
+          delDappCard(appStore().userInfo.uid, card.dappId)
         }
 
         desk.cards.splice(
@@ -681,7 +742,7 @@ export const cardStore = defineStore(
         desk = desk || currentDesk;
         desk.cards = [];
       },
-      setDataEmpty() {},
+      setDataEmpty() { },
       insetSteamSize(value, newData) {
         let currentDesk = this.getCurrentDesk();
         const findCustom = currentDesk.cards.find((el) => {

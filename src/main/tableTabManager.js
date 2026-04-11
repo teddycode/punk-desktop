@@ -42,6 +42,16 @@ class TableTabManager {
       this.tableWin.webContents.send(channel, args);
     }
   }
+
+  getUrl(url) {
+    let protocolUrl;
+    let dev = isDevelopmentMode; //调试开关
+    protocolUrl = `tsbapp://./${url}`; //todo 需要验证正式环境的协议情况
+    if (dev) {
+      protocolUrl = `http://localhost:1600/html/${url}`;
+    }
+    return protocolUrl;
+  }
   /**
    * 打开标签页
    * @param args
@@ -49,31 +59,58 @@ class TableTabManager {
    */
   async addTab(args) {
     //app args silent静默
-    let { url, position, silent } = args;
+    let { url, position, silent, wallet, isLocalHtml } = args;
+    console.log('[TableTabManager] addTab 调用:', { url, wallet, isLocalHtml });
+    
     if (!position) {
       position = this.lastPosition;
     }
+    
+    // 处理本地 HTML 文件
+    let finalUrl = url;
+    if (isLocalHtml) {
+      console.log('[TableTabManager] 检测到本地 HTML 文件:', url);
+      finalUrl = this.getUrl(url);
+      console.log('[TableTabManager] 转换后的 URL:', finalUrl);
+    }
+    
     let id = nanoid(4);
     let tab = {
-      url: url,
+      url: finalUrl,
       id: id,
       name: this.getName(id),
+      wallet: wallet || false,
     };
+    
+    console.log('[TableTabManager] 创建标签页:', tab);
+    
+    // 构建 webPreferences
+    const webPreferences = {
+      sandbox: false,
+      partition: 'persist:webcontent',
+      nodeIntegration: false,
+      webSecurity: true,
+      contextIsolation: true,
+      additionalArguments: [
+        // '--app-type=table'//添加控制台参数
+      ],
+    };
+    
+    // 如果启用钱包功能，添加钱包 preload 脚本
+    if (wallet) {
+      const path = require('path');
+      // 使用构建后的 walletPreload.js
+      webPreferences.preload = path.join(__dirname, '../../dist/walletPreload.js');
+      console.log('[TableTabManager] 🔐 钱包功能已启用，添加 preload:', webPreferences.preload);
+    }
+    
     let tabInstance = await global.windowManager.createView({
       name: tab.name,
-      webPreferences: {
-        //preload: app.preload ? ___dirname + '/src/appPreload/' + app.preload + '.js' : appPreload, //默认使用tsApi
-        sandbox: false,
-        partition: 'persist:webcontent',
-        nodeIntegration: false,
-        webSecurity: true,
-        contextIsolation: true,
-        additionalArguments: [
-          // '--app-type=table'//添加控制台参数
-        ],
-      },
-      url: url,
+      webPreferences: webPreferences,
+      url: finalUrl,
     });
+    
+    console.log('[TableTabManager] ✅ 标签页创建成功, ID:', id);
     let view = tabInstance.view;
     view.webContents.on('before-input-event', (event, input) => {
       if (input.key.toLowerCase() === 'f12') {
@@ -272,17 +309,37 @@ class TableTabManager {
     });
 
     ipc.on('addTableTab', async (event, args) => {
-      console.log('需要添加tab', args);
+      console.log('[TableTabManager] 收到 addTableTab 消息:', args);
       let tab = {};
       try {
-        let result = await this.addTab({ url: args.url, position: args.position });
+        let result = await this.addTab({ 
+          url: args.url, 
+          position: args.position,
+          wallet: args.wallet || false,
+          isLocalHtml: args.isLocalHtml || false,
+        });
         tab = result.tab;
-        console.log('完成添加', tab);
+        console.log('[TableTabManager] ✅ 标签页添加完成:', tab);
+        
+        // 如果启用了钱包，发送初始化消息
+        if (args.wallet) {
+          console.log('[TableTabManager] 钱包功能已启用，准备发送初始化消息');
+          // 等待页面加载完成后发送
+          setTimeout(() => {
+            if (result.tabInstance && result.tabInstance.view) {
+              console.log('[TableTabManager] 发送钱包初始化消息到页面');
+              result.tabInstance.view.webContents.send('init-wallet', {
+                enabled: true
+              });
+            }
+          }, 1000);
+        }
+        
         this.sendToBrowser('addedTableTab', {
           tab: tab,
         });
       } catch (e) {
-        console.error(e, '创建出错');
+        console.error('[TableTabManager] ❌ 创建标签页出错:', e);
       }
     });
 
@@ -333,6 +390,504 @@ class TableTabManager {
     ipc.on('showTableTab', (event, args) => {
       this.showTab(args.id, args.position);
     });
+
+    // ========== 钱包相关 IPC 处理器 ==========
+    
+    /**
+     * 聚焦主窗口（用于显示 Web3Modal 弹窗）
+     */
+    ipc.handle('focus-main-window', async (event) => {
+      console.log('[TableTabManager IPC] 收到聚焦主窗口请求');
+      try {
+        if (this.tableWin && !this.tableWin.isDestroyed()) {
+          // 临时移除所有 BrowserView，避免遮挡 Web3Modal 弹窗
+          const currentBrowserViews = this.tableWin.getBrowserViews();
+          console.log('[TableTabManager IPC] 临时移除', currentBrowserViews.length, '个 BrowserView');
+          
+          currentBrowserViews.forEach(view => {
+            this.tableWin.removeBrowserView(view);
+          });
+          
+          // 显示窗口（如果最小化）
+          if (this.tableWin.isMinimized()) {
+            this.tableWin.restore();
+          }
+          
+          // 将窗口置于最前
+          this.tableWin.show();
+          this.tableWin.focus();
+          
+          console.log('[TableTabManager IPC] ✅ 主窗口已聚焦，BrowserView 已隐藏');
+          
+          // 保存 BrowserView 引用，以便后续恢复
+          this._hiddenBrowserViews = currentBrowserViews;
+          
+          return { success: true };
+        } else {
+          console.error('[TableTabManager IPC] ❌ 主窗口不存在或已销毁');
+          return { success: false, error: '主窗口不可用' };
+        }
+      } catch (error) {
+        console.error('[TableTabManager IPC] ❌ 聚焦主窗口错误:', error);
+        return { success: false, error: error.message };
+      }
+    });
+    
+    /**
+     * 恢复 BrowserView（钱包连接完成后调用）
+     */
+    ipc.handle('restore-browser-views', async (event) => {
+      console.log('[TableTabManager IPC] 收到恢复 BrowserView 请求');
+      try {
+        if (this.tableWin && !this.tableWin.isDestroyed() && this._hiddenBrowserViews) {
+          console.log('[TableTabManager IPC] 恢复', this._hiddenBrowserViews.length, '个 BrowserView');
+          
+          this._hiddenBrowserViews.forEach(view => {
+            this.tableWin.addBrowserView(view);
+          });
+          
+          this._hiddenBrowserViews = null;
+          
+          console.log('[TableTabManager IPC] ✅ BrowserView 已恢复');
+          return { success: true };
+        } else {
+          console.log('[TableTabManager IPC] 没有需要恢复的 BrowserView');
+          return { success: true };
+        }
+      } catch (error) {
+        console.error('[TableTabManager IPC] ❌ 恢复 BrowserView 错误:', error);
+        return { success: false, error: error.message };
+      }
+    });
+    
+    /**
+     * 钱包初始化
+     */
+    ipc.handle('wallet-init', async (event) => {
+      console.log('[TableTabManager IPC] wallet-init 调用');
+      try {
+        if (!this.tableWin || this.tableWin.isDestroyed()) {
+          return { success: false, error: '桌面窗口不可用' };
+        }
+
+        return new Promise((resolve, reject) => {
+          const timeout = setTimeout(() => {
+            ipc.off('wallet-init-complete', listener);
+            reject(new Error('初始化超时'));
+          }, 10000); // 10秒超时
+
+          const listener = (e, result) => {
+            clearTimeout(timeout);
+            ipc.off('wallet-init-complete', listener);
+            console.log('[TableTabManager IPC] wallet-init 响应:', result);
+            resolve(result);
+          };
+
+          ipc.once('wallet-init-complete', listener);
+
+          this.tableWin.webContents.send('wallet-init-request', {
+            requestId: Date.now(),
+          });
+        });
+      } catch (error) {
+        console.error('[TableTabManager IPC] wallet-init 错误:', error);
+        return {
+          success: false,
+          error: error.message,
+        };
+      }
+    });
+
+    /**
+     * 钱包连接
+     */
+    ipc.handle('wallet-connect', async (event) => {
+      console.log('[TableTabManager IPC] wallet-connect 调用');
+      try {
+        if (!this.tableWin || this.tableWin.isDestroyed()) {
+          return { success: false, error: '桌面窗口不可用' };
+        }
+
+        return new Promise((resolve, reject) => {
+          const timeout = setTimeout(() => {
+            ipc.off('wallet-connect-complete', listener);
+            reject(new Error('连接超时'));
+          }, 60000); // 60秒超时（用户需要时间扫码）
+
+          const listener = (e, result) => {
+            clearTimeout(timeout);
+            ipc.off('wallet-connect-complete', listener);
+            console.log('[TableTabManager IPC] wallet-connect 响应:', result);
+            resolve(result);
+          };
+
+          ipc.once('wallet-connect-complete', listener);
+
+          this.tableWin.webContents.send('wallet-connect-request', {
+            requestId: Date.now(),
+          });
+        });
+      } catch (error) {
+        console.error('[TableTabManager IPC] wallet-connect 错误:', error);
+        return {
+          success: false,
+          error: error.message,
+        };
+      }
+    });
+
+    /**
+     * 钱包断开连接
+     */
+    ipc.handle('wallet-disconnect', async (event) => {
+      console.log('[TableTabManager IPC] wallet-disconnect 调用');
+      try {
+        if (!this.tableWin || this.tableWin.isDestroyed()) {
+          return { success: false, error: '桌面窗口不可用' };
+        }
+
+        return new Promise((resolve, reject) => {
+          const timeout = setTimeout(() => {
+            ipc.off('wallet-disconnect-complete', listener);
+            reject(new Error('断开超时'));
+          }, 10000); // 10秒超时
+
+          const listener = (e, result) => {
+            clearTimeout(timeout);
+            ipc.off('wallet-disconnect-complete', listener);
+            console.log('[TableTabManager IPC] wallet-disconnect 响应:', result);
+            resolve(result);
+          };
+
+          ipc.once('wallet-disconnect-complete', listener);
+
+          this.tableWin.webContents.send('wallet-disconnect-request', {
+            requestId: Date.now(),
+          });
+        });
+      } catch (error) {
+        console.error('[TableTabManager IPC] wallet-disconnect 错误:', error);
+        return {
+          success: false,
+          error: error.message,
+        };
+      }
+    });
+
+    /**
+     * 获取钱包状态
+     */
+    ipc.handle('wallet-get-state', async (event) => {
+      console.log('[TableTabManager IPC] wallet-get-state 调用');
+      try {
+        if (!this.tableWin || this.tableWin.isDestroyed()) {
+          return { success: false, error: '桌面窗口不可用' };
+        }
+
+        return new Promise((resolve, reject) => {
+          const timeout = setTimeout(() => {
+            ipc.off('wallet-get-state-complete', listener);
+            reject(new Error('获取状态超时'));
+          }, 5000); // 5秒超时
+
+          const listener = (e, result) => {
+            clearTimeout(timeout);
+            ipc.off('wallet-get-state-complete', listener);
+            console.log('[TableTabManager IPC] wallet-get-state 响应:', result);
+            resolve(result);
+          };
+
+          ipc.once('wallet-get-state-complete', listener);
+
+          this.tableWin.webContents.send('wallet-get-state-request', {
+            requestId: Date.now(),
+          });
+        });
+      } catch (error) {
+        console.error('[TableTabManager IPC] wallet-get-state 错误:', error);
+        return {
+          success: false,
+          error: error.message,
+        };
+      }
+    });
+
+    console.log('[TableTabManager] ✅ 钱包 IPC 处理器注册完成');
+
+    // ========== 高级功能：合约调用相关 IPC 处理器 ==========
+
+    /**
+     * 获取 WalletProvider
+     */
+    ipc.handle('wallet-get-provider', async (event) => {
+      console.log('[TableTabManager IPC] wallet-get-provider 调用');
+      try {
+        if (!this.tableWin || this.tableWin.isDestroyed()) {
+          return { success: false, error: '桌面窗口不可用' };
+        }
+
+        return new Promise((resolve, reject) => {
+          const timeout = setTimeout(() => {
+            ipc.off('wallet-get-provider-complete', listener);
+            reject(new Error('获取 Provider 超时'));
+          }, 5000);
+
+          const listener = (e, result) => {
+            clearTimeout(timeout);
+            ipc.off('wallet-get-provider-complete', listener);
+            console.log('[TableTabManager IPC] wallet-get-provider 响应:', result);
+            resolve(result);
+          };
+
+          ipc.once('wallet-get-provider-complete', listener);
+
+          this.tableWin.webContents.send('wallet-get-provider-request', {
+            requestId: Date.now(),
+          });
+        });
+      } catch (error) {
+        console.error('[TableTabManager IPC] wallet-get-provider 错误:', error);
+        return {
+          success: false,
+          error: error.message,
+        };
+      }
+    });
+
+    /**
+     * 查询合约（只读）
+     */
+    ipc.handle('wallet-query-contract', async (event, args) => {
+      console.log('[TableTabManager IPC] wallet-query-contract 调用:', args);
+      try {
+        if (!this.tableWin || this.tableWin.isDestroyed()) {
+          return { success: false, error: '桌面窗口不可用' };
+        }
+
+        return new Promise((resolve, reject) => {
+          const timeout = setTimeout(() => {
+            ipc.off('wallet-query-contract-complete', listener);
+            reject(new Error('查询合约超时'));
+          }, 30000); // 30秒超时
+
+          const listener = (e, result) => {
+            clearTimeout(timeout);
+            ipc.off('wallet-query-contract-complete', listener);
+            console.log('[TableTabManager IPC] wallet-query-contract 响应:', result);
+            resolve(result);
+          };
+
+          ipc.once('wallet-query-contract-complete', listener);
+
+          this.tableWin.webContents.send('wallet-query-contract-request', {
+            requestId: Date.now(),
+            ...args,
+          });
+        });
+      } catch (error) {
+        console.error('[TableTabManager IPC] wallet-query-contract 错误:', error);
+        return {
+          success: false,
+          error: error.message,
+        };
+      }
+    });
+
+    /**
+     * 调用合约（写操作）
+     */
+    ipc.handle('wallet-invoke-contract', async (event, args) => {
+      console.log('[TableTabManager IPC] wallet-invoke-contract 调用:', args);
+      try {
+        if (!this.tableWin || this.tableWin.isDestroyed()) {
+          return { success: false, error: '桌面窗口不可用' };
+        }
+
+        return new Promise((resolve, reject) => {
+          const timeout = setTimeout(() => {
+            ipc.off('wallet-invoke-contract-complete', listener);
+            reject(new Error('调用合约超时'));
+          }, 60000); // 60秒超时（用户可能需要时间确认交易）
+
+          const listener = (e, result) => {
+            clearTimeout(timeout);
+            ipc.off('wallet-invoke-contract-complete', listener);
+            console.log('[TableTabManager IPC] wallet-invoke-contract 响应:', result);
+            resolve(result);
+          };
+
+          ipc.once('wallet-invoke-contract-complete', listener);
+
+          this.tableWin.webContents.send('wallet-invoke-contract-request', {
+            requestId: Date.now(),
+            ...args,
+          });
+        });
+      } catch (error) {
+        console.error('[TableTabManager IPC] wallet-invoke-contract 错误:', error);
+        return {
+          success: false,
+          error: error.message,
+        };
+      }
+    });
+
+    /**
+     * 部署合约
+     */
+    ipc.handle('wallet-deploy-contract', async (event, args) => {
+      console.log('[TableTabManager IPC] wallet-deploy-contract 调用:', args);
+      try {
+        if (!this.tableWin || this.tableWin.isDestroyed()) {
+          return { success: false, error: '桌面窗口不可用' };
+        }
+
+        return new Promise((resolve, reject) => {
+          const timeout = setTimeout(() => {
+            ipc.off('wallet-deploy-contract-complete', listener);
+            reject(new Error('部署合约超时'));
+          }, 120000); // 120秒超时（部署需要更长时间）
+
+          const listener = (e, result) => {
+            clearTimeout(timeout);
+            ipc.off('wallet-deploy-contract-complete', listener);
+            console.log('[TableTabManager IPC] wallet-deploy-contract 响应:', result);
+            resolve(result);
+          };
+
+          ipc.once('wallet-deploy-contract-complete', listener);
+
+          this.tableWin.webContents.send('wallet-deploy-contract-request', {
+            requestId: Date.now(),
+            ...args,
+          });
+        });
+      } catch (error) {
+        console.error('[TableTabManager IPC] wallet-deploy-contract 错误:', error);
+        return {
+          success: false,
+          error: error.message,
+        };
+      }
+    });
+
+    /**
+     * 签名消息
+     */
+    ipc.handle('wallet-sign-message', async (event, args) => {
+      console.log('[TableTabManager IPC] wallet-sign-message 调用:', args);
+      try {
+        if (!this.tableWin || this.tableWin.isDestroyed()) {
+          return { success: false, error: '桌面窗口不可用' };
+        }
+
+        return new Promise((resolve, reject) => {
+          const timeout = setTimeout(() => {
+            ipc.off('wallet-sign-message-complete', listener);
+            reject(new Error('签名消息超时'));
+          }, 60000);
+
+          const listener = (e, result) => {
+            clearTimeout(timeout);
+            ipc.off('wallet-sign-message-complete', listener);
+            console.log('[TableTabManager IPC] wallet-sign-message 响应:', result);
+            resolve(result);
+          };
+
+          ipc.once('wallet-sign-message-complete', listener);
+
+          this.tableWin.webContents.send('wallet-sign-message-request', {
+            requestId: Date.now(),
+            ...args,
+          });
+        });
+      } catch (error) {
+        console.error('[TableTabManager IPC] wallet-sign-message 错误:', error);
+        return {
+          success: false,
+          error: error.message,
+        };
+      }
+    });
+
+    /**
+     * 发送交易
+     */
+    ipc.handle('wallet-send-transaction', async (event, args) => {
+      console.log('[TableTabManager IPC] wallet-send-transaction 调用:', args);
+      try {
+        if (!this.tableWin || this.tableWin.isDestroyed()) {
+          return { success: false, error: '桌面窗口不可用' };
+        }
+
+        return new Promise((resolve, reject) => {
+          const timeout = setTimeout(() => {
+            ipc.off('wallet-send-transaction-complete', listener);
+            reject(new Error('发送交易超时'));
+          }, 60000);
+
+          const listener = (e, result) => {
+            clearTimeout(timeout);
+            ipc.off('wallet-send-transaction-complete', listener);
+            console.log('[TableTabManager IPC] wallet-send-transaction 响应:', result);
+            resolve(result);
+          };
+
+          ipc.once('wallet-send-transaction-complete', listener);
+
+          this.tableWin.webContents.send('wallet-send-transaction-request', {
+            requestId: Date.now(),
+            ...args,
+          });
+        });
+      } catch (error) {
+        console.error('[TableTabManager IPC] wallet-send-transaction 错误:', error);
+        return {
+          success: false,
+          error: error.message,
+        };
+      }
+    });
+
+    /**
+     * 获取网络信息
+     */
+    ipc.handle('wallet-get-network', async (event) => {
+      console.log('[TableTabManager IPC] wallet-get-network 调用');
+      try {
+        if (!this.tableWin || this.tableWin.isDestroyed()) {
+          return { success: false, error: '桌面窗口不可用' };
+        }
+
+        return new Promise((resolve, reject) => {
+          const timeout = setTimeout(() => {
+            ipc.off('wallet-get-network-complete', listener);
+            reject(new Error('获取网络信息超时'));
+          }, 5000);
+
+          const listener = (e, result) => {
+            clearTimeout(timeout);
+            ipc.off('wallet-get-network-complete', listener);
+            console.log('[TableTabManager IPC] wallet-get-network 响应:', result);
+            resolve(result);
+          };
+
+          ipc.once('wallet-get-network-complete', listener);
+
+          this.tableWin.webContents.send('wallet-get-network-request', {
+            requestId: Date.now(),
+          });
+        });
+      } catch (error) {
+        console.error('[TableTabManager IPC] wallet-get-network 错误:', error);
+        return {
+          success: false,
+          error: error.message,
+        };
+      }
+    });
+
+    console.log('[TableTabManager] ✅ 钱包高级功能 IPC 处理器注册完成');
   }
 }
 

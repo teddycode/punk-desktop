@@ -22,31 +22,39 @@
             </a-form-item>
           </div>
           <div class="form-fields">
-            <a-form-item label="Project Name" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }" name="projectName">
-              <a-input v-model:value="projectDetails.name" disabled></a-input>
-            </a-form-item>
-            <a-form-item label="Website" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }" name="website">
-              <a-input v-model:value="projectDetails.website" disabled></a-input>
-            </a-form-item>
-            <a-form-item label="Short description" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }" name="description">
-              <a-textarea v-model:value="projectDetails.description" :maxlength="160" disabled></a-textarea>
-            </a-form-item>
+            <a-row :gutter="24">
+              <!-- 左栏 -->
+              <a-col :span="12">
+                <a-form-item label="Project Name" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }" name="projectName">
+                  <a-input v-model:value="projectDetails.name" disabled></a-input>
+                </a-form-item>
+                <a-form-item label="Website" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }" name="website">
+                  <a-input v-model:value="projectDetails.website" disabled></a-input>
+                </a-form-item>
+                <a-form-item label="Short description" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }" name="description">
+                  <a-textarea v-model:value="projectDetails.description" :maxlength="160" disabled></a-textarea>
+                </a-form-item>
+              </a-col>
 
-            <a-form-item label="Tags" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }" name="tags">
-              <div class="tags-container">
-                <template v-for="(tag, index) in projectDetails.tags" :key="index">
-                  <a-tag>{{ tag.tagName }}</a-tag>
-                </template>
-              </div>
-            </a-form-item>
+              <!-- 右栏 -->
+              <a-col :span="12">
+                <a-form-item label="Tags" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }" name="tags">
+                  <div class="tags-container">
+                    <template v-for="(tag, index) in projectDetails.tags" :key="index">
+                      <a-tag>{{ tag.tagName }}</a-tag>
+                    </template>
+                  </div>
+                </a-form-item>
+                <a-form-item label="Add chain" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }" name="chain">
+                  <a-textarea v-model:value="projectDetails.chain" disabled></a-textarea>
+                </a-form-item>
+                <a-form-item label="Full description" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }" name="fullDescription">
+                  <a-textarea v-model:value="projectDetails.detail" :rows="4" disabled></a-textarea>
+                </a-form-item>
+              </a-col>
+            </a-row>
 
-            <a-form-item label="Add chain" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }" name="chain">
-              <a-textarea v-model:value="projectDetails.chain" disabled></a-textarea>
-            </a-form-item>
-            <a-form-item label="Full description" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }" name="fullDescription">
-              <a-textarea v-model:value="projectDetails.detail" :rows="4" disabled></a-textarea>
-            </a-form-item>
-
+            <!-- Project Images 独占一行 -->
             <a-form-item label="Project Images" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }" name="images">
               <div class="image-uploads">
                 <div v-for="(image, index) in projectDetails.imgs" :key="index" class="upload-placeholder">
@@ -62,12 +70,12 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, onMounted, watch } from 'vue';
 import { getDappDetail } from "@js/service/dappMarket";
 
-const route = useRoute();
-const projectId = route.params.id;
+const props = defineProps<{
+  projectId: number | null;
+}>();
 
 const currentStep = ref(0);  // 初始化为 0，即显示 "提交完成" 的步骤
 const secondStepStatus = ref('process');  // 第二步初始状态
@@ -86,7 +94,8 @@ const projectDetails = ref({
 });
 
 async function fetchProjectDetails() {
-  await getDappDetail(projectId).then(response => {
+  if (!props.projectId) return;
+  await getDappDetail(props.projectId).then(response => {
     projectDetails.value = response.data;
 
     // 根据 state 更新步骤条状态
@@ -112,22 +121,44 @@ async function fetchProjectDetails() {
 onMounted(async () => {
   await fetchProjectDetails();
 });
+
+watch(() => props.projectId, async (newId) => {
+  if (newId) {
+    await fetchProjectDetails();
+  }
+});
 </script>
 
 <style scoped>
 .project-details {
   padding: 20px;
+  color: var(--primary-text);
+}
+
+.project-details h1 {
+  color: var(--primary-text);
+  margin-bottom: 20px;
 }
 
 .steps-container {
   margin-bottom: 20px;
+  background: var(--secondary-bg);
+  padding: 20px;
+  border-radius: 12px;
+}
+
+:deep(.ant-steps-item-title) {
+  color: var(--primary-text) !important;
+}
+
+:deep(.ant-steps-item-description) {
+  color: rgba(255, 255, 255, 0.7) !important;
 }
 
 .form-container {
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: var(--secondary-bg);
+  padding: 24px;
+  border-radius: 12px;
 }
 
 .upload-section {
@@ -142,15 +173,16 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px dashed #d9d9d9;
-  border-radius: 8px;
+  border: 1px dashed rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .uploaded-image {
   width: 200px;
   height: 200px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 12px;
 }
 
 .form-content {
@@ -162,10 +194,30 @@ onMounted(async () => {
   margin-left: 20px;
 }
 
+:deep(.ant-form-item-label > label) {
+  color: var(--primary-text);
+  font-weight: 600;
+}
+
+:deep(.ant-input[disabled]),
+:deep(.ant-input-textarea-disabled textarea) {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #000000;
+  border-radius: 8px;
+}
+
 .tags-container {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+:deep(.ant-tag) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--primary-text);
+  border-radius: 6px;
 }
 
 .image-uploads {

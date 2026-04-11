@@ -3,11 +3,11 @@ import { defineStore } from 'pinia';
 interface UserInfoType {
   address: string;
   balance: string;
-  isLogin: boolean;
   wallet: any;
   transferRecords: any[];
   token: string;
   proposals: any[];
+  isAuthenticated: boolean;
 }
 
 export const useUserStore = defineStore({
@@ -15,11 +15,11 @@ export const useUserStore = defineStore({
   state: (): UserInfoType => ({
     address: '',
     balance: '0',
-    isLogin: false,
     wallet: null,
     transferRecords: [] as any[],
     token: localStorage.getItem('token') || '',
     proposals: JSON.parse(localStorage.getItem('proposals') || '[]'),
+    isAuthenticated: false,
   }),
   getters: {
     getShortAddress(): string {
@@ -46,6 +46,9 @@ export const useUserStore = defineStore({
     removeToken() {
       localStorage.removeItem('token');
       this.token = '';
+    },
+    setAuthenticated(flag: boolean) {
+      this.isAuthenticated = flag;
     },
   },
 });

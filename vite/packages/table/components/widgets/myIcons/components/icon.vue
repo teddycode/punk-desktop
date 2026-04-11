@@ -259,8 +259,18 @@ export default {
           break;
         // dapp小程序
         case 'Dapp':
+          console.log("跳转Dapp详情页，ID：",this.open);
           this.$router.push({ name: 'DappDetails', params: { id: this.open.dappId } });
           break;
+        // Dapp Store
+        case 'sysPage':
+          this.$emit('open-dapp-market');
+          break;
+        // CApp WASM App
+        case 'CApp':
+           console.log("跳转CApp运行环境，ID：", this.open);
+           this.$router.push({ name: 'CAppRunner', query: { id: this.open.appId, path: this.open.wasmPath } });
+           break;
         // 系统应用
         // case "systemApp":
         //   if (this.open.value.event === "fullscreen") {

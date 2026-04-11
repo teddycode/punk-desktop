@@ -1,80 +1,132 @@
 <template>
-  <div>
-    <NavBar />
-    <div class="main-container">
-      <div class="sidebar">
-        <a-button type="primary" block class="submit-dapp-button" @click="navigateTo('submitDapp')">Submit dapp</a-button>
-        <a-menu mode="vertical" class="menu" defaultSelectedKeys="['overview']">
-          <a-menu-item key="overview" @click="navigateTo('overview')">
-            <AppstoreOutlined />
-            Overview
-          </a-menu-item>
-          <a-menu-item key="myProjects" @click="navigateTo('myProjects')">
-            <ProjectOutlined />
-            My Projects
-          </a-menu-item>
-          <a-menu-item key="favorites" @click="navigateTo('favorites')">
-            <StarOutlined />
-            Favorites
-          </a-menu-item>
-          <a-menu-item key="api" @click="navigateTo('api')">
-            <ApiOutlined />
-            API
-          </a-menu-item>
-        </a-menu>
-      </div>
-      <div class="content">
-        <router-view></router-view>
-      </div>
+  <div class="main-container">
+    <div class="sidebar">
+      <a-menu mode="vertical" class="menu" v-model:selectedKeys="selectedKeys">
+        <a-menu-item key="overview" @click="currentPage = 'overview'">
+          <AppstoreOutlined />
+          工作台
+        </a-menu-item>
+        <a-menu-item key="myProjects" @click="currentPage = 'myProjects'">
+          <AppstoreAddOutlined />
+          我的应用
+        </a-menu-item>
+        <a-menu-item key="api" @click="currentPage = 'api'">
+          <ApiOutlined />
+          API文档
+        </a-menu-item>
+      </a-menu>
+    </div>
+    <div class="content">
+      <Overview v-if="currentPage === 'overview'" />
+      <MyProjects v-else-if="currentPage === 'myProjects'" @viewProject="$emit('viewProject', $event)" />
+      <APIContent v-else-if="currentPage === 'api'" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import NavBar from './NavBar.vue';
+import { ref } from 'vue';
 import {
   AppstoreOutlined,
-  ProjectOutlined,
-  StarOutlined,
   ApiOutlined,
+  AppstoreAddOutlined,
 } from '@ant-design/icons-vue';
-import { useRouter } from 'vue-router';
+import Overview from './Overview.vue';
+import APIContent from './API.vue';
+import MyProjects from './MyProjects.vue';
 
-const router = useRouter();
+defineEmits(['viewProject']);
 
-const navigateTo = (routeName: string) => {
-  router.push({ name: routeName });
-};
+const currentPage = ref<string>('overview');
+const selectedKeys = ref<string[]>(['overview']);
 </script>
 
 <style scoped>
 .main-container {
-  /*height: 100%;*/
-  /*overflow-y: auto;*/
   display: flex;
+  height: 100%;
+  color: var(--primary-text);
+  gap: 12px;
 }
 
 .sidebar {
-  width: 200px;
-  padding: 16px;
-  border-right: 1px solid #d9d9d9;
+  width: 160px;
+  padding: 20px 16px;
+  background: transparent;
+  position: relative;
 }
 
-.submit-dapp-button {
-  margin-bottom: 16px;
+.sidebar::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(180deg, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.1) 10%, 
+    rgba(255, 255, 255, 0.2) 50%, 
+    rgba(255, 255, 255, 0.1) 90%, 
+    transparent 100%
+  );
 }
 
-.menu {
+:deep(.menu) {
   border: none;
+  background: transparent;
 }
 
-.menu .ant-menu-item {
-  font-size: 18px; /* 增大字体 */
+:deep(.menu .ant-menu-item) {
+  font-size: 15px;
+  font-weight: 500;
   cursor: pointer;
+  color: rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+  margin-bottom: 4px;
+  padding: 10px 16px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+:deep(.menu .ant-menu-item:hover) {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+:deep(.menu .ant-menu-item-selected) {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+:deep(.menu .ant-menu-item .anticon) {
+  font-size: 18px;
+  transition: all 0.3s ease;
 }
 
 .content {
   flex: 1;
-  padding: 16px;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
 </style>

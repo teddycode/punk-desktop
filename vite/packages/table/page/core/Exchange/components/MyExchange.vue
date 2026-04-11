@@ -281,7 +281,7 @@ export default {
     },
     async exchange() {
       const store = useUserStore();
-      this.userLoggedIn = store.isLogin;
+      this.userLoggedIn = store.isAuthenticated;
       if (!this.userLoggedIn) {
         alert('您还没有连接钱包！');
       } else if (this.selectedToken1 && this.selectedToken2 && this.tokenAmount1) {

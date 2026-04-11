@@ -1,12 +1,13 @@
 <template>
   <textarea
-    class="rounded-xl xt-bg-2 xt-scrollbar w-full p-2 no-darg"
+    class="rounded-xl xt-bg-2 xt-scrollbar w-full p-2 no-darg xt-text"
     :class="border"
     style="resize: none; background-color: transparent; outline: 0px solid transparent; outline-offset: 0px"
-    rows="1"
+    :rows="rows"
     v-model="searchValue"
     spellcheck="false"
     :placeholder="placeholder"
+    :disabled="disabled"
     @keydown.enter.exact.prevent="handleEnter"
     @change="handleChange"
     @focus="handleFocus"
@@ -24,6 +25,14 @@ export default {
     },
     border: {
       default: 'xt-border',
+    },
+    rows: {
+      type: Number,
+      default: 1,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

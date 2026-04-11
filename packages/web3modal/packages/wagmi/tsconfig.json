@@ -11,5 +11,9 @@
     }
   },
   "extends": "../../tsconfig.json",
-  "include": ["exports", "src"]
+  "include": ["exports", "src"],
+  "references": [
+    { "path": "../scaffold-utils" },
+    { "path": "../siwe" }
+  ]
 }

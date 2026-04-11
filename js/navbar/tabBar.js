@@ -501,27 +501,6 @@ const tabBar = {
       const tab = tabs.get(data.id);
       let templateAdd = [];
       if (!tab.url.startsWith('file://')) {
-        let item;
-        if (tab.attached) {
-          item = {
-            label: '还原到主屏…',
-            click: function () {
-              try {
-                require('../browserUI.js').detachTab(data.id);
-              } catch (e) {
-                console.warn(e);
-              }
-            },
-          };
-        } else {
-          item = {
-            id: 'setAttach',
-            label: '在右侧分屏打开…',
-            click: function () {
-              tabBar.setAttach(data.id);
-            },
-          };
-        }
         templateAdd = [
           [
             {
@@ -536,7 +515,6 @@ const tabBar = {
                 tabBar.addToApps(data.id);
               },
             },
-            item,
           ],
         ];
       }
@@ -876,11 +854,6 @@ const tabBar = {
     };
     ipc.send('installAppConfirm', option);
   },
-  setAttach(id) {
-    const tab = tabs.get(id);
-    window.mainTab = tabs.get(tabs.getSelected());
-    ipc.send('setTabAttach', { tab });
-  },
   // 扩充一个获取icon的方法
   createIconEl: function (tabData, loaded) {
     var iconEl = document.createElement('img');
@@ -1110,22 +1083,6 @@ ipc.on('getCurrentTab', (e, a) => {
   const data = tabs.get(tabs.getSelected());
   data.sourceUrl = urlParser.getSourceURL(data.url);
   ipc.send('gotCurrentTab', { data });
-});
-
-ipc.on('changeTabAttach', (e, args) => {
-  const tab = tabs.get(args.tab.id);
-  window.attachedTab = tab; // 记录下吸附的tab
-  tasks.forEach((task) => {
-    task.tabs.forEach((item) => {
-      if (item.id !== args.tab.id) {
-        item.attached = false;
-      } else {
-        item.attached = true;
-      }
-    });
-  });
-  tabBar.updateAll();
-  require('../browserUI.js').focusTab(args.tab.id);
 });
 
 ipc.on('speedup', (e, a) => {

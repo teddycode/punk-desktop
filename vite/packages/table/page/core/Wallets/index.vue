@@ -347,7 +347,8 @@ import { message } from 'ant-design-vue';
 import UploadImage from '@components/UploadImage.vue';
 import Modal from '@components/Modal.vue';
 import { ethers } from 'ethers';
-import { useWeb3ModalProvider, useWeb3ModalAccount } from '@web3modal/ethers5/vue';
+import { useWeb3ModalProvider, useWeb3ModalAccount } from '@punkos/ethers5/vue';
+import { punkos } from '../../../store/chains';
 
 export default defineComponent({
   name: 'WalletsPage',
@@ -455,19 +456,25 @@ export default defineComponent({
       stakeModalVisible.value = false;
     }
     async function doStakeModalConfirm() {
-      const provider = new ethers.providers.JsonRpcProvider(`http://47.243.174.71:36054`);
-      console.log('质押确认');
+      const readProvider = new ethers.providers.JsonRpcProvider(punkos.rpcUrl);
+      console.log('质押确认:', punkos.rpcUrl);
       try {
-        // 显示加载提示
         signingInProgress.value = true;
-        // 假设我们有 ethers 库引入和 wallet 对象
-        const nonce = await provider.getTransactionCount(currentAccount.address.value, 'latest');
-        console.log('sender address:', currentAccount.address.value, 'with', nonce);
+
+        const w3p = useWeb3ModalProvider();
+        const walletProvider = w3p.walletProvider.value;
+        if (!walletProvider) throw new Error('User disconnected');
+
+        const sender = currentAccount.address?.value;
+        if (!sender) throw new Error('未连接钱包');
+
+        const nonce = await readProvider.getTransactionCount(sender, 'latest');
+        console.log('sender address:', sender, 'with', nonce);
         console.log('质押数据:', stakeData.value);
 
         const tx6 = {
           type: 6,
-          chainId: 20251101,
+          chainId: punkos.chainId,
           nonce: nonce,
           maxPriorityFeePerGas: ethers.utils.parseUnits('1', 'gwei'),
           maxFeePerGas: ethers.utils.parseUnits('1', 'gwei'),
@@ -483,28 +490,26 @@ export default defineComponent({
         };
 
         console.log('生成的交易对象:', tx6);
-        let w3p = useWeb3ModalProvider();
-        const walletProvider = w3p.walletProvider.value;
-        if (!walletProvider) throw Error('User disconnected');
-        const signTx = await w3p.walletProvider.value.request({
+
+        const signed = await walletProvider.request({
           method: 'eth_signTransaction',
           params: [tx6],
         });
+        if (typeof signed !== 'string') throw new Error('eth_signTransaction 应返回已签名十六进制串');
 
-        const receipt = await provider.send('eth_sendRawTransaction', [signTx]);
-        console.log('交易回执:', receipt);
+        const txHash = await walletProvider.request({
+          method: 'eth_sendRawTransaction',
+          params: [signed],
+        });
+        console.log('交易哈希:', txHash);
 
-        // 在交易成功后，记录该账户已质押
         stakedAccounts.value.add(currentRow?.id);
 
-        // 如果交易成功，通过以下代码查询返回值
-        // const result = await provider.send(receipt);
-
-        // 隐藏加载提示
-        signingInProgress.value = false;
         stakeModalVisible.value = false;
       } catch (error) {
         console.error('质押过程中出错:', error);
+      } finally {
+        signingInProgress.value = false;
       }
     }
 
