@@ -372,17 +372,6 @@ const webviewMenu = {
         },
       },
     ];
-    if (currentTab.attached) {
-      let item = {
-        label: '还原到主屏…',
-        click: function () {
-          try {
-            browserUI.detachTab(currentTab.id);
-          } catch (e) {}
-        },
-      };
-      navigationActions.push(item);
-    }
     menuSections.push(navigationActions);
 
     /* inspect element */

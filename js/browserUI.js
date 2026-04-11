@@ -315,80 +315,6 @@ function activeTab(id) {
   }
 }
 
-/**
- * 关闭分屏
- * @param id
- */
-function detachTab(id) {
-  switchToTab(id);
-  ipc.send('detachTab');
-  let tab = tabs.tabs.find((t) => {
-    return t.id === id;
-  });
-  tab.attached = false;
-}
-
-/**
- * 聚焦到某个tab，仅用于分屏的时候操作，此操作并不会切换tab，只是聚焦tabbar而已，一般请使用switchToTab
- * @param id
- */
-function focusTab(id) {
-  if (typeof attachedTab === 'undefined') {
-    //未设置attach，无需操作
-    return;
-  }
-  let selectedTask = tasks.getSelected(); //取出当前选中的标签组
-  if (tabs.getSelected() !== attachedTab.id) {
-    //获得到选中的tab，不是吸附的，则更新主窗体的tab
-    window.mainTab = tabs.get(tabs.getSelected());
-  } //设置当前的主tab
-  if (id === attachedTab.id) {
-    //是聚焦到吸附窗体，要切换到对应标签组，并选中此tab
-    tasks.forEach((task) => {
-      task.tabs.forEach((item) => {
-        if (item.id === id) {
-          //找到了要聚焦的tab
-          if (task.id !== selectedTask.id) {
-            switchToTask(task.id, { focusWebview: false }, false);
-          }
-        }
-      });
-    });
-    //tabBar.events.emit('tab-selected', id)
-    activeTab(id, { focusWebview: false });
-  } else if (selectedTask.id !== id) {
-    //聚焦到主窗体的webview，定位到主窗体的webview,并且当前并不是激活的此webview
-    tasks.forEach((task) => {
-      task.tabs.forEach((item) => {
-        if (item.id === id) {
-          //找到了要聚焦的tab
-          if (task.id !== selectedTask.id) {
-            switchToTask(task.id, { focusWebview: false }, false);
-          }
-        }
-      });
-    });
-    //tabBar.events.emit('tab-selected', id)
-    activeTab(id, { focusWebview: false });
-  }
-  // if(tabs.attachedTab.id===tabs.getSelected()){
-  //   console.log('吸附的id',tabs.attachedTab.id)
-  //   console.log('选中的tab',tabs.getSelected())
-  //   //如果当前吸附的已经是激活的窗体了
-  //   return
-  // }
-  //
-  // if(id===tabs.getSelected()){
-  //   return
-  // }
-  // console.log('聚焦了一个tab')
-  // if(!tabs.get(id)){
-  //   //不在当前分组
-  //   tasks.setSelected()
-  // }
-  //如果，不在当前组，则自动切换到这个组，并聚焦这个tab
-}
-
 tasks.on('tab-updated', function (id, key) {
   if (key === 'url' && id === tabs.getSelected()) {
     document.body.classList.remove('is-ntp');
@@ -677,7 +603,5 @@ module.exports = {
   moveTabRight,
   duplicateTab,
   duplicateCopyTab,
-  focusTab,
-  detachTab,
   passwordToFill,
 };

@@ -193,7 +193,7 @@ export default [
     children: BasicSettingsChild,
   },
   {
-    path: '/setting',
+    path: '/addCardSetting',
     name: 'addCardSetting',
     component: SetupCard,
   },

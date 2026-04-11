@@ -10,12 +10,10 @@ function getPath(name: string) {
 }
 
 const htmls = [
-  'index', //无任何作用
   'icon', //图标选择器
   'extension', //扩展插件
   'task', //选择任务，暂存任务
   'settings', //设置页面
-  'barrage', //弹幕插件
   'user', //用户空间选择
   'tray', //托盘
   'frame', //应用外框
