@@ -49,8 +49,11 @@ export default defineComponent({
         },
         {
           img: '/img/bottomPanel/keymgr.png',
-          title: '密钥管理',
-          type: 'task',
+          title: '权限设置',
+          route: {
+            name: 'userSettings',
+          },
+          type: 'route',
         },
         {
           img: '/img/bottomPanel/logout.png',
@@ -71,6 +74,9 @@ export default defineComponent({
     ...mapWritableState(teamStore, ['team', 'teamVisible']),
     ...mapWritableState(taskStore, ['isTaskDrawer']),
     ...mapWritableState(appStore, ['userInfo', 'resetUserInfo','deleteUserInfo']),
+    logoutNickname() {
+      return (this.userInfo && this.userInfo.nickname) || '访客';
+    },
   },
   mounted() {},
   methods: {
@@ -112,10 +118,14 @@ export default defineComponent({
       this.$router.replace('/');
     },
     async handleLogout(uid) {
+      if (!uid) {
+        message.error('未获取到用户信息，请稍后重试！');
+        return;
+      }
       this.logoutLoading = true;
       try {
         await this.deleteUserInfo();
-        let res = await ipc.invoke('direct-logout', uid);
+        const res = await ipc.invoke('direct-logout', uid);
         if (res) {
           message.success('帐号退出成功！');
           this.isLogoutVisible = false;
@@ -123,6 +133,9 @@ export default defineComponent({
         } else {
           message.error('账号退出失败，请重试！');
         }
+      } catch (error) {
+        console.error('logout error', error);
+        message.error('退出过程中发生错误，请稍后重试！');
       } finally {
         this.logoutLoading = false;
       }
@@ -160,22 +173,100 @@ export default defineComponent({
     </div>
     <div>
       <a-modal
-        title="退出当前帐号？"
-        v-model:open="isLogoutVisible"
+        :title="null"
+        v-model:visible="isLogoutVisible"
         :centered="true"
+        :width="460"
         :confirm-loading="logoutLoading"
         :destroy-on-close="true"
-        ok-text="确认"
-        cancel-text="取消"
-        @ok="handleLogout(userInfo?.uid)"
+        wrap-class-name="logout-modal"
+        ok-text="确认退出"
+        cancel-text="暂不退出"
+        @ok="handleLogout(userInfo && userInfo.uid)"
       >
-        <p>退出帐号并不会影响帐号数据，仅仅是将本地帐号退出。但是退出后无法再使用此帐号下的所有空间。</p>
+        <div class="logout-modal__body">
+          <div class="logout-modal__header">
+            <span class="logout-modal__tag">安全提醒</span>
+            <h3 class="logout-modal__title">退出帐号 · {{ logoutNickname }}</h3>
+            <p class="logout-modal__subtitle">退出不会影响链上数据，可随时重新登录。</p>
+          </div>
+          <div class="logout-modal__content">
+            <ul>
+              <li>退出后暂时无法访问当前帐号桌面与个性化配置。</li>
+              <li>重新连接钱包登录，即可继续使用所有空间。</li>
+            </ul>
+          </div>
+        </div>
       </a-modal>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+:global(.logout-modal .ant-modal-content) {
+  border-radius: 18px;
+  padding: 0;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.98), rgba(243, 248, 255, 0.94));
+  box-shadow: 0 20px 60px rgba(17, 36, 55, 0.15);
+  font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  overflow: hidden;
+}
+
+:global(.logout-modal .ant-modal-footer) {
+  border-top: none;
+  padding: 0 32px 18px;
+}
+
+.logout-modal__body {
+  padding: 26px 32px 18px;
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 18px 18px 0 0;
+}
+
+.logout-modal__header {
+  text-align: left;
+  margin-bottom: 16px;
+}
+
+.logout-modal__tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  color: #ff9b0f;
+  background: rgba(255, 155, 15, 0.15);
+}
+
+.logout-modal__title {
+  margin: 12px 0 4px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #0c1d34;
+}
+
+.logout-modal__subtitle {
+  margin: 0;
+  font-size: 13px;
+  color: #647087;
+}
+
+.logout-modal__content {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  padding: 16px 18px;
+  box-shadow: inset 0 0 0 1px rgba(56, 116, 255, 0.08);
+}
+
+.logout-modal__content ul {
+  padding-left: 18px;
+  margin: 0;
+  color: #3a4661;
+  line-height: 1.6;
+  font-size: 15px;
+  font-weight: 500;
+}
+
 .team-module {
   position: relative;
 

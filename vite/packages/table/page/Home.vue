@@ -298,6 +298,7 @@ if (steamUser && steamSession) {
 }
 
 let List = [];
+const ipc = window?.ipc;
 
 export default {
   name: 'Home',
@@ -397,6 +398,7 @@ export default {
       // 在页面创建的第一次触发，后面就不触发了--替换图标
       hasTriggered: 1,
       replaceFlag: true,
+      localDeskWallpaperUrl: '',
     };
   },
   components: {
@@ -551,6 +553,10 @@ export default {
         this.replaceIcon();
         n++;
       }, 1000);
+    }
+
+    if (this.currentDesk?.name === '本地桌面') {
+      this.applyLocalDesktopWallpaper();
     }
 
     // let counte=0
@@ -816,6 +822,41 @@ export default {
       //   event.stopPropagation();
       // } else {
       // }
+    },
+    toFileUrlPath(rawPath) {
+      if (!rawPath) {
+        return '';
+      }
+      if (rawPath.startsWith('file://')) {
+        return rawPath;
+      }
+      return `file:///${rawPath.replace(/\\/g, '/')}`;
+    },
+    async applyLocalDesktopWallpaper() {
+      try {
+        if (this.currentDesk?.name !== '本地桌面') {
+          return;
+        }
+        if (process.platform !== 'win32') {
+          return;
+        }
+        if (this.localDeskWallpaperUrl && this.backgroundImage?.path === this.localDeskWallpaperUrl) {
+          return;
+        }
+        if (!ipc || typeof ipc.invoke !== 'function') {
+          console.warn('ipc不可用，无法同步主机壁纸');
+          return;
+        }
+        const wallpaperInfo = await ipc.invoke('getHostWallpaper');
+        const fileUrl = wallpaperInfo?.fileUrl || this.toFileUrlPath(wallpaperInfo?.path);
+        if (!fileUrl) {
+          return;
+        }
+        this.localDeskWallpaperUrl = fileUrl;
+        this.setBackgroundImage({ path: fileUrl });
+      } catch (err) {
+        console.error('同步Windows主机壁纸失败：', err);
+      }
     },
     runExec,
     ...mapActions(cardStore, [
@@ -1104,6 +1145,9 @@ export default {
         } else {
           this.cardSettings = this.settings;
           this.cardSwitch = false;
+        }
+        if (val?.name === '本地桌面') {
+          this.applyLocalDesktopWallpaper();
         }
       },
     },

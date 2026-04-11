@@ -333,12 +333,12 @@ export default {
                 });
                 window.Spotlight.show(LockArr, this.config);
               } else {
-                Modal.error({ content: '网络加载错误，请检查设备后重试' });
+                message.error('网络加载错误，请检查设备后重试');
                 return;
               }
             },
             (rej) => {
-              Modal.error({ content: '网络加载错误，请检查设备后重试' });
+              message.error('网络加载错误，请检查设备后重试');
               return;
             },
           )
@@ -366,7 +366,7 @@ export default {
               }
             },
             (rej) => {
-              Modal.error({ content: '网络加载错误，请检查设备后重试' });
+              message.error('网络加载错误，请检查设备后重试');
               return;
             },
           )

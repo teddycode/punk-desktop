@@ -32,7 +32,14 @@ instance.interceptors.response.use(
 
 // 请求返回业务代码处理
 const onResponseHandler = (response) => {
-  const { data } = response;
+  const { data, config } = response;
+  
+  // Explorer 接口特殊处理：只要状态码是 200 且有数据，就直接返回 data
+  // 因为 Explorer 接口返回结构不包含 code 字段
+  if (config && config.url && (config.url.indexOf('/blocks') !== -1 || config.url.indexOf('/transaction') !== -1 || config.url.indexOf('/accounts') !== -1)) {
+    return data;
+  }
+
   if (data.code && data.code === 200) {
     return data;
   }
@@ -90,3 +97,4 @@ const onRejectHandler = (error) => {
 
 // 将serves抛出去
 export default instance;
+

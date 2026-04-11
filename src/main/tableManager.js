@@ -2,6 +2,8 @@ global.tableWin = null;
 let { app, ipcMain: ipc, Notification, session } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const wallpaper = require('wallpaper');
+const { pathToFileURL } = require('url');
 const TableScreenManager = require('./tableScreenManager');
 const ScreenCaptureManager = require('./screenCaptureManager');
 const { getDeskFiles } = require('./libs/systemHelper');
@@ -299,6 +301,22 @@ app.whenReady().then(() => {
       e.returnValue = WP_ROOT;
     } else {
       e.returnValue = undefined;
+    }
+  });
+
+  ipc.handle('getHostWallpaper', async () => {
+    try {
+      const wpPath = await wallpaper.get();
+      if (!wpPath) {
+        return null;
+      }
+      return {
+        path: wpPath,
+        fileUrl: pathToFileURL(wpPath).href,
+      };
+    } catch (error) {
+      console.warn('获取主机壁纸失败：', error);
+      return null;
     }
   });
 

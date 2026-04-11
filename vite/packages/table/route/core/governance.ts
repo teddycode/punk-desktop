@@ -9,6 +9,7 @@ import ProposalListPage from "@page/core/Governance_v1/ProposalList.vue";
 import ProposalPage from "@page/core/Governance_v1/Proposal.vue";
 import CreateProposalPage from "@page/core/Governance_v1/CreateProposal.vue";
 import StakePage from "@page/core/Governance_v1/Stake.vue";
+import SystemSpecialTransactionPage from "@page/core/Governance_v1/SystemSpecialTransaction.vue";
 import { CodeOutlined } from '@ant-design/icons-vue';
 import ThirdLayout from "@page/core/Layouts/ThirdLayout.vue";
 
@@ -68,6 +69,15 @@ export default {
         icon: CodeOutlined,
       },
     },
+    {
+      path: 'SystemSpecialTransaction',
+      name: 'SystemSpecialTransactionPage',
+      component: SystemSpecialTransactionPage,
+      meta: {
+        title: '系统特殊交易',
+        icon: CodeOutlined,
+      },
+    },
   ],
 };
 // export default {
@@ -120,3 +130,4 @@ export default {
 //     },
 //   ],
 // };
+

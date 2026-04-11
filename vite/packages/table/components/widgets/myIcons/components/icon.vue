@@ -44,6 +44,7 @@ import { sizeValues } from './iconConfig';
 import { renderIcon } from '@js/common/common';
 import { cardStore } from '@store/card';
 import { mapWritableState } from 'pinia';
+import { getCurrentUserPermissions } from '@js/service/usersetting';
 
 const NODE_MONITOR_APP_PACKAGE = 'com.punk.nodeMonitor';
 const NODE_MONITOR_SERVICE_NAME = 'node-monitor';
@@ -171,6 +172,62 @@ export default {
           this.$emit('custom-event');
           return;
         }
+
+        // 在跳转前进行一次权限校验（只针对需要权限的功能）
+        // 与用户设置页面保持一致的 API 字段：
+        // transferEnabled, tradingEnabled, computingEnabled, consensusEnabled,
+        // storageEnabled, cryptoEnabled, networkEnabled, governanceEnabled,
+        // blockchainExplorerEnabled, nodeManagementEnabled, appMarketEnabled
+        const routePermissionMap = {
+          CryptoPage: 'cryptoEnabled',
+          StoragePage: 'storageEnabled',
+          // Explorer: 'blockchainExplorerEnabled',
+          TransferPage: 'transferEnabled',
+          ExchangePage: 'tradingEnabled',
+          ConsensusPage: 'consensusEnabled',
+          NetworkPage: 'networkEnabled',
+          // GovernancePage: 'governanceEnabled',
+          DappMarketPage: 'appMarketEnabled',
+          // CrossChainPage 不在权限开关列表中，不进行拦截
+        };
+        const routeName = this?.open?.route;
+        let permissionKey = routePermissionMap[routeName];
+        // NodeMgr 既用于“计算”又用于“节点管理”，根据图标名称区分权限
+        if (!permissionKey && routeName === 'NodeMgr') {
+          const iconName = this?.open?.name;
+          if (iconName === '计算') permissionKey = 'computingEnabled';
+          else if (iconName === '节点管理') permissionKey = 'nodeManagementEnabled';
+        }
+        if (permissionKey) {
+          try {
+            const resp = await getCurrentUserPermissions();
+            // 兼容两种返回结构：{ code: 200, data: {...} } 或者直接 {...}
+            let payload = resp;
+            if (resp && typeof resp === 'object' && 'data' in resp) {
+              payload = resp.data;
+            }
+            const allowed = Boolean(payload && payload[permissionKey]);
+            if (!allowed) {
+              message.error('请先打开对应的功能权限');
+              return; // 阻止后续跳转
+            }
+          } catch (err) {
+            console.error('获取用户权限失败:', err);
+            message.error('无法验证应用权限，请稍后重试');
+            return; // 出错时也阻止跳转，避免误放行
+          }
+        }
+
+        // 先检测是不是web端
+        // if (!this.$isXT) {
+        //   let arr = ["default", "internal", "thinksky"];
+        //   if (this.link == "link" && arr.includes(this.open.type)) {
+        //     window.open(this.open.value);
+        //   } else {
+        //     this.visible = true;
+        //   }
+        //   return;
+        // }
         if (this.open !== undefined && this.open.value !== '') {
           // 链接
           await this.newOpenApp();
@@ -292,3 +349,4 @@ export default {
 </script>
 
 <style lang="scss" scoped></style>
+

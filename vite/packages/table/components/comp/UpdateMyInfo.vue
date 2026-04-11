@@ -127,7 +127,7 @@ export default {
         { title: '男', sex: 1 },
         { title: '女', sex: 2 },
       ],
-      gender: '', // 接收切换到的性别
+      gender: null, // 当前选中的性别
       areaValue: '', // 接收文本输入框值
       randomNickname: '',
       presetIndex: '', // 预设头像选中下标
@@ -142,10 +142,7 @@ export default {
     ...mapWritableState(frameStore, ['frameData']),
   },
   mounted() {
-    if (this.userInfo) {
-      this.randomNickname = this.userInfo.nickname;
-      this.areaValue = this.userInfo.signature;
-    }
+    this.syncFormWithUser();
   },
   methods: {
     ...mapActions(appStore, ['editPresetAvatar', 'setInfoVisible', 'setSecondaryVisible', 'getUserInfo']),
@@ -210,13 +207,28 @@ export default {
       this.presetIndex = item.id;
       this.frameData.avatar_url = this.getAvatarUrl(item.id);
     },
+    syncFormWithUser() {
+      if (!this.userInfo) {
+        return;
+      }
+      this.randomNickname = this.userInfo.nickname || '';
+      this.areaValue = this.userInfo.signature || '';
+      const matchedGender =
+        this.sexType.find((item) => Number(item.sex) === Number(this.userInfo.sex)) || this.sexType[0];
+      this.gender = matchedGender;
+      if (!this.frameData.avatar_url) {
+        this.frameData.avatar_url = this.userInfo.avatar;
+      }
+    },
     // 点击保存
     async comSave() {
+      const avatar = this.frameData.avatar_url || this.userInfo.avatar || '';
+      const sexValue = this.gender?.sex ?? (this.sexType[0] ? this.sexType[0].sex : 0);
       const saveUpdateMyInfo = {
-        nickname: this.randomNickname,
-        sex: this.gender.sex,
-        signature: this.areaValue,
-        avatar: this.frameData.avatar_url,
+        nickname: this.randomNickname?.trim(),
+        sex: sexValue,
+        signature: this.areaValue?.trim(),
+        avatar,
       };
       let rs = await this.updateMyinfo(saveUpdateMyInfo);
       console.log(rs);
@@ -243,6 +255,18 @@ export default {
     },
   },
   watch: {
+    updateVisible(newVal) {
+      this.updateInfoVisible = newVal;
+      if (newVal) {
+        this.syncFormWithUser();
+      }
+    },
+    userInfo: {
+      handler() {
+        this.syncFormWithUser();
+      },
+      deep: true,
+    },
     gender: {
       handler(newVal) {
         this.gender = newVal;
