@@ -50,6 +50,15 @@ export default {
     remove(id) {
       this.$emit('remove', id);
     },
+    selectTab(task, tab) {
+      if (!tab || !tab.id) {
+        return;
+      }
+      ipc.send('switchToTab', {
+        taskId: task.id,
+        tabId: tab.id,
+      });
+    },
     getUserIconName(userIcon) {
       let iconPath = userIcon.split('.');
       return iconPath[2];

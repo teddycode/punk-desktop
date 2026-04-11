@@ -1,5 +1,4 @@
 import Promotion from '../../apps/promotion/page/index.vue';
-import Rank from '@page/social/Rank.vue';
 import BillingRecord from '@page/social/BillingRecord.vue';
 import Message from '@page/social/Message.vue';
 import Com from '@page/social/Com.vue';
@@ -32,11 +31,6 @@ export default [
     path: '/message',
     name: 'message',
     component: Message,
-  },
-  {
-    path: '/rank',
-    name: 'rank',
-    component: Rank,
   },
   {
     path: '/bill',

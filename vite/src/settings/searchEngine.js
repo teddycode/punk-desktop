@@ -20,8 +20,8 @@ let searchEnginePage = {
       },
       yuan: {
         name: 'yuan',
-        alias: '元社区',
-        searchURL: 'https://s.apps.vip/search-result?keyword=%s',
+        alias: '磐古社区',
+        searchURL: 'https://www.punkos.com/social?keyword=%s',
         //suggestionsURL: 'https://www.baidu.com/su?wd=%s&action=opensearch',
         queryParam: 'keyword',
       },

@@ -21,8 +21,8 @@
         <div class="flex justify-between mb-2">
           <span class="xt-text-2 font-16">详情</span>
           <div class="flex items-center">
-            <a-tooltip title="前往元社区" placement="bottom">
-              <xt-button :w="22" :h="22" style="background: transparent">
+            <a-tooltip title="前往磐古社区" placement="bottom">
+              <xt-button :w="22" :h="22" style="background: transparent" @click="goYuan">
                 <div class="flex items-center juscify-center">
                   <Icon class="xt-text pointer active-icon" icon="fluent:chat-16-regular" />
                 </div>
@@ -48,7 +48,7 @@
               </xt-button>
             </a-tooltip>
             <a-tooltip title="外部打开" placement="bottom">
-              <xt-button :w="22" :h="22" style="background: transparent" @click="goYuan" class="ml-3">
+              <xt-button :w="22" :h="22" style="background: transparent" @click="openExternal" class="ml-3">
                 <div class="flex items-center juscify-center">
                   <Icon class="xt-text pointer active-icon" icon="majesticons:open" />
                 </div>
@@ -247,7 +247,11 @@ const showCard = (uid, userInfo) => {
   useUserStore.showUserCard(uid, userInfo);
 };
 const goYuan = () => {
-  browser.openInUserSelect(`https://s.apps.vip/post/${props.cardData.pay_set.tid}`);
+  browser.openForum();
+};
+const openExternal = () => {
+  const detailTid = props.cardData.pay_set?.tid || props.cardData.id;
+  browser.openInUserSelect(`https://s.apps.vip/post/${detailTid}`);
 };
 const detailVisible = ref(true);
 const emit = defineEmits(['closeDetail']);

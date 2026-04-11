@@ -121,7 +121,7 @@ const sidebarTpl = /*html*/ `
                     <div style="margin-bottom: 10px" @click="myCommunity" class="my-info-panel actions flex flex-direction justify-between align-center">
                       <div class="actions-top flex justify-start  align-center">
                         <img src="./assets/tizi.svg" alt="" style="width: 16px; height: 16px">
-                        <div class="text-grey" style="margin-left: 6px">我的元社区</div>
+                        <div class="text-grey" style="margin-left: 6px">我的磐古社区</div>
                       </div>
                       <div class="actions-bottom flex justify-around align-center">
                         <div class="action-bottom-action flex flex-direction justify-around align-center">
@@ -1035,7 +1035,7 @@ Vue.component('sidebar', {
         'tsb://app/redirect/?package=com.thisky.helper&url=https://www.yuque.com/tswork/browser/gd9qad';
     },
     myCommunity() {
-      window.location.href = 'tsb://app/redirect/?package=com.thisky.com&url=https://s.apps.vip';
+      window.location.href = 'tsb://app/redirect/?package=com.thisky.com&url=https://www.punkos.com/social';
     },
     gradeTableGenerate(num) {
       let lvSys = {};

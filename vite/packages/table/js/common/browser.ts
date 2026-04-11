@@ -27,6 +27,11 @@ const browser = {
     console.log('在磐古跨链客户端打开', url);
     ipc.send('addTab', { url: url });
   },
+  openForum() {
+    window.$app.$router.push({
+      name: 'forum',
+    });
+  },
   /**
    * 在工作台内打开
    * @param url

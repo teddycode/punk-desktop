@@ -351,8 +351,8 @@ const appModel = {
       { package: 'com.thisky.com' },
       {
         package: 'com.thisky.com',
-        name: '元社区',
-        url: 'https://s.apps.vip',
+        name: '磐古社区',
+        url: 'https://www.punkos.com/social',
         logo: 'https://up.apps.vip/logo/yuan.png',
         appid: 'A0Iap3',
         theme_color: '#4188ff',

@@ -59,7 +59,7 @@
             <Icon class="text-lg xt-text" style="vertical-align: sub" icon="akar-icons:arrow-clockwise" />
           </xt-button>
         </a-tooltip>
-        <a-tooltip title="前往元社区" placement="bottom">
+        <a-tooltip title="前往磐古社区" placement="bottom">
           <xt-button
             class="ml-3 border-0 rounded-md xt-bg pointer"
             @click="goYuan"
@@ -220,7 +220,7 @@ const setCurrentIndex = (index) => {
   // }
 };
 const goYuan = () => {
-  browser.openInUserSelect(`https://s.apps.vip/forum?id=${props.forumId}`);
+  browser.openForum();
 };
 const refreshPost = () => {
   refreshFlag.value = true;

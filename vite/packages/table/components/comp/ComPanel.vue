@@ -9,12 +9,12 @@
 <template>
   <h3 style="margin-bottom: 1em; color: var(--primary-text)">
     <a-avatar src="https://up.apps.vip/logo/yuan.png"></a-avatar>
-    元社区
+    磐古社区
 
     <div style="float: right">
-      <a-button style="color: var(--primary-text)" @click="go('https://s.apps.vip')">
+      <a-button style="color: var(--primary-text)" @click="goForum">
         <Icon icon="yichu"></Icon>
-        前往元社区
+        前往磐古社区
       </a-button>
     </div>
   </h3>
@@ -49,7 +49,6 @@
 import { appStore } from '../../store';
 import { mapState } from 'pinia';
 import { EditOutlined, EyeOutlined, SendOutlined, UserAddOutlined } from '@ant-design/icons-vue ';
-import browser from '../../js/common/browser';
 
 export default {
   name: 'ComPanel',
@@ -67,8 +66,8 @@ export default {
   },
   mounted() {},
   methods: {
-    go(url) {
-      browser.openInInner(url);
+    goForum() {
+      this.$router.push({ name: 'forum' });
     },
   },
 };

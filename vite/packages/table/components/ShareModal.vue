@@ -10,7 +10,7 @@
         <span class="ml-2" style="font-size: 18px; color: var(--primary-text); font-weight: 500">分享成功</span>
       </div>
       <div style="font-size: 16px; margin: 24px 0; color: var(--secondary-text)">
-        「 {{ shareName }} 」成功分享至创意市场，选择分享到元社区让更多人看到吧～
+        「 {{ shareName }} 」成功分享至创意市场，选择分享到磐古社区让更多人看到吧～
       </div>
       <div class="flex">
         <div
@@ -18,7 +18,7 @@
           style="width: 160px; height: 48px"
           @click="openDrawer"
         >
-          同时分享到元社区
+          同时分享到磐古社区
         </div>
         <div
           class="ml-3 flex justify-center items-center xt-text xt-bg-2 rounded-lg pointer"

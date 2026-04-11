@@ -84,50 +84,29 @@
           </div>
         </div>
 
-        <a-tooltip :title="showScreen ? '运行中的分屏' : '运行中的应用'">
+        <a-tooltip title="运行中的应用">
           <div
             v-if="isMain"
             class="flex items-center justify-center h-2/3 pointer"
             style="flex-shrink: 0; border-left: 1px solid var(--divider); width: 72px; height: 58px"
             @click="appChange"
           >
-            <template v-if="!showScreen">
-              <navIcon
-                icon="fluent:window-multiple-16-filled"
-                style="width: 40px; height: 40px; margin-left: 5px; margin-top: 1px"
-              ></navIcon>
-              <span
-                style="
-                  position: absolute;
-                  width: 48px;
-                  height: 48px;
-                  text-align: center;
-                  line-height: 48px;
-                  font-weight: bold;
-                  font-size: 18px;
-                "
-                >{{ runningApps.length + runningTableApps.length }}</span
-              >
-            </template>
-            <template v-else>
-              <navIcon
-                icon="majesticons:monitor-line"
-                style="width: 40px; height: 40px; margin-left: 2px; margin-top: 1px"
-              ></navIcon>
-              <span
-                style="
-                  position: absolute;
-                  width: 48px;
-                  height: 48px;
-                  text-align: center;
-                  line-height: 48px;
-                  font-weight: bold;
-                  font-size: 18px;
-                  margin-bottom: 6px;
-                "
-                >{{ runningScreen }}</span
-              >
-            </template>
+            <navIcon
+              icon="fluent:window-multiple-16-filled"
+              style="width: 40px; height: 40px; margin-left: 5px; margin-top: 1px"
+            ></navIcon>
+            <span
+              style="
+                position: absolute;
+                width: 48px;
+                height: 48px;
+                text-align: center;
+                line-height: 48px;
+                font-weight: bold;
+                font-size: 18px;
+              "
+              >{{ runningApps.length + runningTableApps.length }}</span
+            >
           </div>
         </a-tooltip>
       </div>
@@ -219,7 +198,6 @@ import TeamTip from './TeamTip.vue';
 import { teamStore } from '../store/team';
 import { messageStore } from '../store/message';
 import { appsStore } from '../store/apps';
-import { screenStore } from '../store/screen';
 import { renderIcon } from '../js/common/common';
 import Sortable from 'sortablejs';
 import TaskBox from '../apps/task/page/TaskBox.vue';
@@ -257,7 +235,7 @@ export default {
     return {
       sortable: null,
 
-      tab: 'screen',
+      tab: 'apps',
 
       lastTime: 0,
       visibleTrans: false,
@@ -281,7 +259,6 @@ export default {
       },
       changeFlag: false,
       timerRunning: false,
-      showScreen: false,
       leftNav: false,
       rightNav: false,
       delNav: false,
@@ -303,10 +280,6 @@ export default {
     }
   },
   mounted() {
-    // TODO 删掉分屏管理
-    // this.timerRunning = setInterval(() => {
-    //   this.showScreen = !this.showScreen;
-    // }, 5000);
     // let inserted=localStorage.getItem('insertBird')
     // if(!inserted){
     //   this.navigationList.unshift( {
@@ -359,7 +332,6 @@ export default {
     ...mapWritableState(appStore, ['userInfo', 'settings', 'lvInfo', 'simple']),
     ...mapWritableState(appsStore, ['runningApps', 'runningTableApps']),
     ...mapWritableState(teamStore, ['team', 'teamVisible']),
-    ...mapWritableState(screenStore, ['screens']),
     ...mapWritableState(cardStore, ['routeParams']),
     ...mapWritableState(navStore, [
       'footNavigationList',
@@ -373,15 +345,6 @@ export default {
 
     isMain() {
       return isMain();
-    },
-    runningScreen() {
-      let count = 0;
-      this.screens.forEach((s) => {
-        if (s.running) {
-          count++;
-        }
-      });
-      return count;
     },
   },
   watch: {
@@ -445,19 +408,11 @@ export default {
       this.full = value;
     },
     appChange() {
-      if (this.showScreen) {
-        this.tab = 'screen';
-        this.routeParams.url &&
-          ipc.send('hideTableApp', {
-            app: JSON.parse(JSON.stringify(this.routeParams)),
-          });
-      } else {
-        this.tab = 'apps';
-        this.routeParams.url &&
-          ipc.send('hideTableApp', {
-            app: JSON.parse(JSON.stringify(this.routeParams)),
-          });
-      }
+      this.tab = 'apps';
+      this.routeParams.url &&
+        ipc.send('hideTableApp', {
+          app: JSON.parse(JSON.stringify(this.routeParams)),
+        });
       this.changeFlag = true;
     },
     closeChangeApp() {

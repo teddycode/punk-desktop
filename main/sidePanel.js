@@ -1154,199 +1154,36 @@ ipc.on('showAllSaApps', async (event, args) => {
   allAppsWindow.focus();
 });
 
-const configModel = require(__dirname + '/src/model/configModel');
 const { BrowserWindow } = require('electron');
 
-let userWindow = null;
-let lastWindowArgs = {};
 let changingSpace = false;
 
 async function showUserWindow(args) {
-  const _ = require('lodash');
-  if (userWindow) {
-    if (masked) {
-      return;
-    }
-    userWindow.show();
-    userWindow.focus();
-  } else {
-    let defaultArgs = {
-      tip: '',
-      modal: false,
-    };
-    if (typeof args === 'undefined') {
-      args = {};
-    }
-    let additionalArgs = Object.assign(defaultArgs, args);
-    lastWindowArgs = additionalArgs;
-    let formatArgs = [];
-
-    _.mapKeys(additionalArgs, (value, key) => {
-      formatArgs.push('--' + key + '=' + value);
-    });
-    let userWindowInstance = await windowManager.create({
-      name: 'user',
-      windowOption: {
-        //backgroundColor: '#00000000',
-        frame: true,
-        show: false,
-        minWidth: 900,
-        minHeight: 550,
-        width: 900,
-        height: 550,
-        title: '选择空间',
-        maximizable: false,
-        alwaysOnTop: true, //一直保持最高，防止被遮挡
-      },
-      webPreferences: {
-        preload: path.join(__dirname, 'src/preload/user.js'),
-        nodeIntegration: true,
-        contextIsolation: false,
-        sandbox: false,
-        webSecurity: false,
-        additionalArguments: [...formatArgs],
-      },
-      url: render.getUrl('user.html'),
-    });
-    if (isDevelopmentMode) {
-      userWindow.webContents.openDevTools();
-    }
-    userWindow = userWindowInstance.window;
-
-    function computeBounds(parentBounds, selfBounds) {
-      let bounds = {};
-      bounds.x = parseInt((parentBounds.x + parentBounds.x + parentBounds.width) / 2 - selfBounds.width / 2, 0);
-      bounds.y = parseInt((parentBounds.y + parentBounds.y + parentBounds.height) / 2 - selfBounds.height / 2);
-      bounds.width = parseInt(selfBounds.width);
-      bounds.height = parseInt(selfBounds.height);
-      return bounds;
-    }
-
-    userWindow.setMenu(null);
-    //userWindow.webContents.openDevTools()
-    userWindow.on('ready-to-show', () => {
-      userWindow.show();
-      if (mainWindow && !mainWindow.isDestroyed())
-        userWindow.setBounds(computeBounds(mainWindow.getBounds(), userWindow.getBounds()));
-      else {
-      }
-      if (additionalArgs.modal) {
-        callModal(userWindow);
-      }
-    });
-    userWindow.on('close', () => {
-      userWindow = null;
-    });
+  let defaultArgs = {
+    tip: '',
+    modal: false,
+    tab: 'space',
+  };
+  if (typeof args === 'undefined') {
+    args = {};
   }
-}
+  let additionalArgs = Object.assign(defaultArgs, args);
 
-let masked = false;
-let inseartedCSS = [];
-
-/**
- * 调用模态方法，给所有窗体添加模态
- * @param window
- */
-function callModal(win) {
-  if (masked) {
-    return;
-  }
-  win.setSkipTaskbar(true);
-  let css = `._mask{
-     position:fixed;
-     top:0;
-     left: 0;
-     right: 0;
-     bottom: 0;
-     background-color: #00000090;
-     z-index: 9999999;
-     display:block;
-     }`;
-  let code = `
-  let div=document.createElement('div');
-  div.id='_modalWindowMask';
-  div.classList.add('_mask');
-  //div.hidden=true;
-  document.body.appendChild(div);
-  `;
-  webContents.getAllWebContents().forEach(async (wb) => {
-    if (wb.id === win.webContents.id || wb.getURL().startsWith('tsbapp://') || wb.getURL() === '') return;
-    inseartedCSS.push({ id: wb.id, cssHandler: await wb.insertCSS(css) });
-    await wb.executeJavaScript(code);
-  });
   if (mainWindow && !mainWindow.isDestroyed()) {
-    mainWindow.setMinimizable(false);
-    mainWindow.setClosable(false);
-    mainWindow.setMaximizable(false);
-  }
-  masked = true;
-  //
-  // BrowserWindow.getAllWindows().forEach(async w=>{
-  //   if(w.id===win.id) return ;
-  //   await w.webContents.insertCSS(css)
-  //   await w.webContents.executeJavaScript(code)
-  // })
-}
-
-function callUnModal(win) {
-  if (masked) {
-    webContents.getAllWebContents().forEach(async (wb) => {
-      try {
-        if (wb.id === win.webContents.id || wb.getURL().startsWith('tsbapp://') || wb.getURL() === '') return;
-        let handler = inseartedCSS.find((item) => {
-          return item.id === wb.id;
-        });
-        wb.removeInsertedCSS(handler);
-        await wb.executeJavaScript("document.body.removeChild(document.getElementById('_modalWindowMask'))");
-      } catch (e) {}
-    });
-    if (mainWindow && !mainWindow.isDestroyed()) {
-      mainWindow.setMinimizable(true);
-      mainWindow.setClosable(true);
-      mainWindow.setMaximizable(true);
+    if (mainWindow.isMinimized()) {
+      mainWindow.restore();
     }
-    inseartedCSS = [];
-    masked = false;
+    if (!mainWindow.isVisible()) {
+      mainWindow.show();
+    }
+    mainWindow.focus();
   }
-}
 
-/*user面板代码*/
+  sendIPCToWindow(mainWindow, 'openUserManagement', additionalArgs);
+}
 app.whenReady().then(() => {
-  ipc.on('startApp', () => {
-    if (!mainWindow) {
-      createWindow(() => {
-        if (userWindow) {
-          if (userWindow.isDestroyed() === false) userWindow.close();
-        }
-      });
-    }
-  });
-
   ipc.on('showUserWindow', (event, args) => {
     showUserWindow(args);
-  });
-
-  /**
-   * 只关闭主窗体，不做任何其他的操作
-   */
-  ipc.on('justCloseMainWindow', () => {
-    if (mainWindow && !mainWindow.isDestroyed()) {
-      destroyAllViews();
-      saveWindowBounds();
-      mainWindow.close();
-      if (SidePanel.alive()) {
-        sidePanel.close();
-      }
-      mainWindow = null;
-      showUserWindow();
-    }
-  });
-
-  ipc.on('closeUserWindow', () => {
-    callUnModal(userWindow);
-    if (userWindow) {
-      if (userWindow.isDestroyed() === false) userWindow.close();
-    }
   });
   ipc.handle('createWindow', () => {
     createWindow();
@@ -1432,19 +1269,11 @@ app.whenReady().then(() => {
         walletAuthWindow = null;
       });
       // walletAuthWindow.loadURL('http://localhost:1600/html/auth/dist/index.html');
-       let authUrl = render.getUrl('/auth/index.html', {}, 'table.com');
+      let authUrl = render.getUrl('/auth/index.html', {}, 'table.com');
       walletAuthWindow.loadURL(authUrl);
       walletAuthWindow.on('ready-to-show', () => {
-        if (userWindow && !userWindow.isDestroyed()) {
-          userWindow.setAlwaysOnTop(false);
-        }
         walletAuthWindow.show();
         walletAuthWindow.focus();
-      });
-      walletAuthWindow.on('close', () => {
-        if (userWindow && !userWindow.isDestroyed()) {
-          userWindow.setAlwaysOnTop(true);
-        }
       });
     }
   });

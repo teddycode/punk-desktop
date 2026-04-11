@@ -235,7 +235,6 @@ const spaceModel = {
     //关闭mainWindow（自动会保存）
     let result = await spaceModel.adapterModel.changeCurrent(space, spaceModel.user);
     if (result.status) {
-      ipc.send('closeUserWindow');
       return result.data;
     }
     //设置数据库中的当前空间

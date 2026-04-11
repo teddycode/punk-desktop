@@ -22,7 +22,7 @@ export const offlineStore = defineStore('offlineStore', {
     // 屏蔽导航栏
     navList: ['chat', 'market'],
     // 屏蔽轻应用
-    appList: ['应用市场', '元社区'],
+    appList: ['应用市场', '磐古社区'],
   }),
   getters: {},
   actions: {

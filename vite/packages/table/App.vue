@@ -147,6 +147,7 @@ export default {
       dialogVisible: false,
       videoPath: '',
       frameStoreVisible: false,
+      openUserManagementHandler: null,
     };
   },
 
@@ -186,6 +187,37 @@ export default {
       app.memoryUsage = args.info.memoryUsage;
     });
 
+    this.openUserManagementHandler = (event, args = {}) => {
+      const normalize = (value, fallback = '') => {
+        return typeof value === 'undefined' || value === null ? fallback : String(value);
+      };
+
+      const query: Record<string, string> = {
+        userTab: normalize(args.tab, 'space'),
+        userActionAt: String(Date.now()),
+      };
+
+      if (args.tip) {
+        query.userTip = normalize(args.tip);
+      }
+      if (args.modal) {
+        query.userModal = 'true';
+      }
+      if (args.title) {
+        query.userTitle = normalize(args.title);
+      }
+      if (args.description) {
+        query.userDescription = normalize(args.description);
+      }
+
+      const navigation = { name: 'socialMy', query };
+      const routeTask =
+        this.$route.name === 'socialMy' ? this.$router.replace(navigation) : this.$router.push(navigation);
+
+      Promise.resolve(routeTask).catch(() => {});
+    };
+    ipc.on('openUserManagement', this.openUserManagementHandler);
+
     document.body.classList.add('lg');
     this.reset(); //重置部分状态
     this.sortClock();
@@ -193,6 +225,11 @@ export default {
 
     this.bindTouchEvents();
     //this.$router.push({name:'sensor'})
+  },
+  beforeUnmount() {
+    if (this.openUserManagementHandler) {
+      ipc.removeListener('openUserManagement', this.openUserManagementHandler);
+    }
   },
 
   computed: {

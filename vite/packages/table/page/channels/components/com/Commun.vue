@@ -217,7 +217,7 @@ const setCurrentIndex = (index) => {
   // }
 };
 const goYuan = () => {
-  browser.openInUserSelect(`https://s.apps.vip/forum?id=${props.forumId}`);
+  browser.openForum();
 };
 const goBack = () => {
   router.push({ name: 'circle' });

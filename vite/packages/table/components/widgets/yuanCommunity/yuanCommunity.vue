@@ -119,7 +119,7 @@
     <!-- <teleport to="body" :disabled="false">
     </teleport> -->
 
-    <a-drawer v-model:open="settingVisible" :width="500" placement="right" title="元社区小组件设置">
+    <a-drawer v-model:open="settingVisible" :width="500" placement="right" title="磐古社区小组件设置">
       <template #extra>
         <xt-button
           :h="32"
@@ -185,7 +185,7 @@ import YuanHorizontalPanel from './YuanHorizontalPanel.vue';
 import detailModal from './DetailModal.vue';
 
 export default {
-  name: '元社区',
+  name: '磐古社区',
   components: {
     Widget,
     YuanIcon,
@@ -227,7 +227,7 @@ export default {
       ],
       options: {
         className: 'card double ',
-        title: '元社区',
+        title: '磐古社区',
         // rightIcon: ' fluent:arrow-counterclockwise-20-filled',
         type: 'community',
       },
@@ -265,7 +265,7 @@ export default {
       showDetailModal: false,
       openWay: [
         { title: '弹窗形式打开', name: 'popup' },
-        { title: '在元社区主应用中打开', name: 'main' },
+        { title: '在磐古社区主应用中打开', name: 'main' },
       ],
       defaultOpenWay: { title: '弹窗形式打开', name: 'popup' },
       cardData: null,
@@ -420,7 +420,7 @@ export default {
           this.options.title = newValue[0].value.name;
           // console.log(this.options.title)
         } else if (newValue.length > 1 || newValue.length < 1) {
-          this.options.title = '元社区';
+          this.options.title = '磐古社区';
           console.log(this.options.title);
         }
       },

@@ -1,21 +1,7 @@
 import { defineStore } from 'pinia';
 import dbStorage from './dbStorage';
-import { isMain } from '../js/common/screenUtils';
-import _ from 'lodash-es';
-import { subIPC, mainIPC } from '../js/common/screenIPC';
-import { nanoid } from 'nanoid';
-const tips = {
-  zoom: {
-    status: true,
-    content: '说明：缩放设置是每个分屏默认独立的。部分功能仅可在主屏使用。',
-  },
-  wallpaper: {
-    status: true,
-    content: '壁纸功能需要到达等级之后方可解锁全部功能。',
-  },
-};
 
-declare interface position {
+declare interface Position {
   x: number;
   y: number;
   width: number;
@@ -27,181 +13,122 @@ declare interface Screen {
   key: string;
   closable: boolean;
   running: boolean;
-  settings: object;
+  settings: Record<string, any>;
   domain: string;
   fullDomain: string;
-  position?: position;
+  active?: boolean;
+  position?: Position;
 }
-const domainSuffix = 'table.com';
+
+function createTips() {
+  return {
+    single: {
+      status: true,
+      content: '当前版本仅支持主屏运行，分屏功能已移除。',
+    },
+  };
+}
+
+function createMainScreen(overrides: Partial<Screen> = {}): Screen {
+  const screen = {
+    title: '主屏',
+    key: 'main',
+    closable: false,
+    running: true,
+    domain: '',
+    fullDomain: '',
+    settings: {},
+    active: true,
+    ...overrides,
+  };
+
+  screen.title = '主屏';
+  screen.key = 'main';
+  screen.closable = false;
+  screen.running = true;
+  screen.domain = '';
+  screen.fullDomain = '';
+  screen.settings = {
+    ...(screen.settings || {}),
+  };
+  screen.active = true;
+
+  return screen;
+}
 
 // @ts-ignore
 export const screenStore = defineStore('screen', {
   state: () => ({
-    screens: [
-      {
-        title: '主屏',
-        key: 'main',
-        closable: false,
-        domain: '',
-        fullDomain: '',
-        settings: {},
-        running: true,
-      },
-    ] as [Screen],
-    tips: tips,
-    currentTip: 'zoom',
-    taggingScreen: false, //标记屏幕
-    screenDetail: {}, //当前屏幕信息
-
+    screens: [createMainScreen()] as Screen[],
+    tips: createTips(),
+    currentTip: 'single',
+    taggingScreen: false,
+    screenDetail: {} as Record<string, any>,
     timerTag: 0,
   }),
   actions: {
-    add() {
-      let s = {
-        key: nanoid(6),
-        title: '分屏',
-        closable: true,
-        settings: {
-          autoRun: true,
-        },
-        apps: {
-          deck: false,
-        },
-      };
-      this.screens.push(s);
-      return s;
-    },
-    /**
-     * 副屏专门绑定的IPC信息
-     */
-    bindSubIPC() {
-      console.log('绑定副屏事件');
-      subIPC.on('tagScreen', () => {
-        this.tagScreen();
-      });
-      subIPC.on('updateDetail', (event, args) => {
-        this.screenDetail = args.detail;
-      });
-      subIPC.on('restore', () => {
-        window.restore();
-      });
-    },
+    ensureSingleScreenMode() {
+      const currentMain = this.screens.find((screen) => screen.key === 'main');
+      const normalizedMain = createMainScreen(currentMain || {});
 
-    /**
-     * 主屏专门绑定的IPC
-     */
+      this.screens = [normalizedMain];
+      this.taggingScreen = false;
+
+      if (this.screenDetail && this.screenDetail.key && this.screenDetail.key !== 'main') {
+        this.screenDetail = {};
+      }
+
+      return normalizedMain;
+    },
+    add() {
+      return this.ensureSingleScreenMode();
+    },
+    bindSubIPC() {
+      console.log('单屏模式，跳过副屏事件绑定');
+      this.ensureSingleScreenMode();
+    },
     bindMainIPC() {
       console.log('绑定主屏事件');
-      mainIPC.on('updateCapture', (event, args) => {
-        console.log(args, '获取到屏幕截图');
-        this.getScreen(args.key).capture = args.image;
-        this.getScreen(args.key).running = true;
-      });
+      this.ensureSingleScreenMode();
     },
-    //运行在全部屏幕中
     tagScreen() {
-      this.taggingScreen = true;
-      if (isMain()) {
-        //主窗口则发送到子窗口
-        mainIPC.sendToSubs('tagScreen');
-      }
-      if (this.timer) {
-        clearTimeout(this.timerTag);
-      }
-      this.timer = setTimeout(() => {
-        this.taggingScreen = false;
-        clearTimeout(this.timerTag);
-      }, 3000);
+      this.ensureSingleScreenMode();
     },
-
     async onTableStarted() {
-      this.runAutoRun();
+      this.ensureSingleScreenMode();
     },
     runAutoRun() {
-      this.screens.forEach((s) => {
-        if (s.key !== 'main') {
-          if (s.settings.autoRun) {
-            this.startupScreen(s.key);
-          }
-        }
-      });
+      this.ensureSingleScreenMode();
     },
-
-    getFullDomain(domain) {
-      if (!domain) {
-        return domainSuffix;
-      }
-      if (domain) {
-        return domain + '.' + domainSuffix;
-      }
+    getFullDomain() {
+      return 'table.com';
     },
-    /**
-     * 从可用的域名中取出一个
-     */
     generateDomain() {
-      let canUse = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
-      //遍历一遍，取出数量
-      let usedDomain = [];
-      this.screens.forEach((s) => {
-        if (s.domain && s.key !== 'main') {
-          usedDomain.push(s.domain);
-        }
-      });
-      canUse = _.pull(canUse, ...usedDomain);
-      if (canUse.length > 0) {
-        return canUse[0];
-      } else {
-        throw '已经无法分配域名';
-      }
+      return '';
     },
-    getScreen(key) {
-      let screen = this.screens.find((s) => {
-        return s.key === key;
-      });
-      if (!screen.settings) {
-        screen.settings = {
-          skipTaskbar: false,
-        };
-      }
-      if (!screen.domain && screen.key !== 'main') {
-        //非主屏，但是还没分配domain
-        screen.domain = this.generateDomain();
-      }
-      screen.fullDomain = this.getFullDomain(screen.domain);
-      return screen;
+    getScreen() {
+      return this.ensureSingleScreenMode();
     },
     getScreenIndex(key) {
-      return this.scrrens.findIndex((s) => {
-        return s.key === key;
-      });
+      return key === 'main' ? 0 : -1;
     },
     reset() {
-      this.screens = [
-        {
-          title: '主屏',
-          key: 'main',
-          closable: false,
-        },
-      ];
+      this.screens = [createMainScreen()];
+      this.taggingScreen = false;
+      this.screenDetail = {};
+      this.currentTip = 'single';
     },
     resetTips() {
-      this.tips = tips;
+      this.tips = createTips();
+      this.currentTip = 'single';
     },
-    /**
-     * 启动分屏
-     * @param key
-     */
-    startupScreen(key) {
-      let screen = JSON.parse(JSON.stringify(this.getScreen(key)));
-      ipc.send('startupScreen', { screen: screen });
+    startupScreen() {
+      this.ensureSingleScreenMode();
+      return false;
     },
-    /**
-     * 关闭分屏
-     * @param key
-     */
-    stopScreen(key) {
-      let screen = JSON.parse(JSON.stringify(this.getScreen(key)));
-      ipc.send('stopScreen', { screen: screen });
+    stopScreen() {
+      this.ensureSingleScreenMode();
+      return false;
     },
   },
   persist: {

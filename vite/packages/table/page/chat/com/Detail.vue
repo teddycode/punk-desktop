@@ -16,7 +16,7 @@
               icon="akar-icons:arrow-clockwise"
               @click="refreshDetail"
           /></a-tooltip>
-          <a-tooltip title="前往元社区" placement="bottom">
+          <a-tooltip title="前往磐古社区" placement="bottom">
             <Icon class="ml-3 text-xl xt-text pointer active-icon" icon="majesticons:open" @click="goYuan"
           /></a-tooltip>
           <a-tooltip title="关闭" placement="bottom">
@@ -166,7 +166,7 @@ const showCard = (uid, userInfo) => {
   useUserStore.showUserCard(uid, userInfo);
 };
 const goYuan = () => {
-  browser.openInUserSelect(`https://s.apps.vip/post/${props.cardData.pay_set.tid}`);
+  browser.openForum();
 };
 const detailVisible = ref(true);
 const emit = defineEmits(['closeDetail']);

@@ -62,14 +62,6 @@ export default {
             name: 'message',
           },
         },
-        {
-          title: '榜单',
-          index: 'rank',
-          icon: 'trophy',
-          route: {
-            name: 'rank',
-          },
-        },
         //  {
         //   title:'推广中心',
         //   index:'promotion',

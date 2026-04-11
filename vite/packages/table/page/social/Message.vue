@@ -9,10 +9,10 @@
         <div class="message-title flex items-center justify-between mb-4">
           <div class="flex items-center">
             <a-avatar src="/icons/logo128.png" :size="24"></a-avatar>
-            <span class="ml-2" style="font-size: 16px; color: rgba(255, 255, 255, 0.85); font-weight: 400">元社区</span>
+            <span class="ml-2" style="font-size: 16px; color: rgba(255, 255, 255, 0.85); font-weight: 400">磐古社区</span>
           </div>
           <a-button type="primary" @click="goYuan" style="font-size: 16px; font-weight: 400; float: right"
-            >前往元社区查收</a-button
+            >前往磐古社区查收</a-button
           >
         </div>
       </a-col>
@@ -408,7 +408,7 @@ export default {
       browser.openInInner('https://s.apps.vip/post/' + item.tid);
     },
     goYuan() {
-      browser.openInInner('https://s.apps.vip/user/message');
+      this.$router.push({ name: 'forum' });
     },
   },
 };

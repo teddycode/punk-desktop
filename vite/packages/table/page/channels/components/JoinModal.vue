@@ -59,7 +59,7 @@ import Modal from '../../../components/Modal.vue';
 import { Icon } from '@iconify/vue';
 import { message } from 'ant-design-vue';
 const goYuan = () => {
-  browser.openInUserSelect(`https://s.apps.vip/forum?id=${props.forumId}`);
+  browser.openForum();
 };
 // const userName = ref('我是皮克斯呀')
 const postValue = ref('');

@@ -73,7 +73,7 @@ const tpl = `
 <h2 style="text-align: center;margin-top: 20px"><img src="./assets/level.svg" style="width: 26px;vertical-align: text-top"> 在线等级</h2>
 <p>
 启动磐古跨链客户端主程序的情况下即可升级。<br>
-无需打开元社区、轻聊。
+无需打开磐古社区、轻聊。
 </p>
 <p>
 排名展示规则：<br>

@@ -934,8 +934,8 @@ export const NavList = [
       },
       {
         name: 'yuanCommunity',
-        cname: '元社区动态(开发中)',
-        detail: '元社区里又发了什么好玩的事情？时刻关注热门和最新动态。',
+        cname: '磐古社区动态(开发中)',
+        detail: '磐古社区里又发了什么好玩的事情？时刻关注热门和最新动态。',
         sizes: ['4x4', '4x6'],
         option: [
           {

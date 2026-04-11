@@ -128,13 +128,16 @@ export default {
           },
           {
             title: '加入开发者学院',
-            description: '在元社区假如开发者学院，学习开发知识',
-            href: 'https://s.apps.vip/forum?id=123',
-            target: '_tab',
+            description: '在磐古社区加入开发者学院，学习开发知识',
+            hrefText: '去加入',
+            target: 'button',
+            onClick: () => {
+              this.$router.push({ name: 'forum' });
+            },
           },
           {
             title: '加入轻聊开发者学院群聊',
-            description: '通过加入元社区圈子自动加入群聊',
+            description: '通过加入磐古社区圈子自动加入群聊',
           },
         ],
       },
@@ -182,7 +185,7 @@ export default {
         subTitle: '',
         nodes: [
           {
-            title: '开通元社区版块',
+            title: '开通磐古社区版块',
           },
           {
             title: '开通轻聊群聊',

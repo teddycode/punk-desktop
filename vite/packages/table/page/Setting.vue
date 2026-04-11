@@ -98,13 +98,6 @@
                 <div>{{ $t('settings.chooseScr') }}</div>
               </div>
             </a-col>
-            <a-col :span="6">
-              <div v-if="isMain()" @click="subscreen" class="btn">
-                <!-- <Icon icon="pingmufenge02" style="font-size: 2em"></Icon> -->
-                <Iconify icon="fluent:slide-settings-24-regular" style="font-size: 2em" />
-                <div>{{ $t('settings.otherScr') }}</div>
-              </div>
-            </a-col>
             <a-col v-if="simple && !this.isOffline" :span="6">
               <MyAvatar :size="37"></MyAvatar>
             </a-col>
@@ -431,9 +424,6 @@ export default {
       cp.exec('MultiDigiMon.exe -pen', async (err) => {
         await tsbApi.window.setAlwaysOnTop(true);
       });
-    },
-    subscreen() {
-      this.$router.push({ name: 'subscreen' });
     },
     chooseScreen() {
       this.visibleChooseScreen = true;

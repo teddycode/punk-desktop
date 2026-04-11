@@ -54,7 +54,7 @@ export default {
           img: '/img/bottomPanel/wallet.png',
           title: '我的钱包',
           route: {
-            name: 'rank',
+            name: 'myWallets',
           },
           type: 'route',
         },

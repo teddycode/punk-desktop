@@ -538,9 +538,6 @@ function createWindowWithBounds(bounds) {
     mainWindow = null;
     mainWindowIsMinimized = false;
     if (process.platform === 'win32' && !changingSpace) {
-      if (userWindow) {
-        return;
-      }
       if (typeof trayExit === 'undefined' || !trayExit) {
         askCloseExit();
       } else {

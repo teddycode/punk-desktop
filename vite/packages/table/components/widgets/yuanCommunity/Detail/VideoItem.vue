@@ -87,7 +87,7 @@ const useYuanCommunityStore = yuanCommunityStore();
 const browserUrl = ref('https://s.apps.vip/forum?id=');
 const emoji = ref('https://sad.apps.vip/public/static/emoji/emojistatic/');
 const goYuan = () => {
-  browser.openInUserSelect(`${browserUrl.value}${props.forumId}`);
+  browser.openForum();
 };
 const titleContent = ref('');
 const publishType = ref([

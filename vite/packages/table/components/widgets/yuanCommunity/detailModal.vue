@@ -14,8 +14,13 @@
         <div class="flex justify-between mb-2">
           <span class="xt-text-2 font-16">详情</span>
           <div class="flex items-center">
-            <a-tooltip placement="bottom" title="前往元社区">
-              <Icon class="xt-text pointer active-icon" icon="fluent:chat-16-regular" style="font-size: 20px" />
+            <a-tooltip placement="bottom" title="前往磐古社区">
+              <Icon
+                class="xt-text pointer active-icon"
+                icon="fluent:chat-16-regular"
+                style="font-size: 20px"
+                @click="goYuan"
+              />
             </a-tooltip>
             <a-tooltip placement="bottom" title="全屏">
               <Icon
@@ -37,7 +42,7 @@
                 class="ml-3 xt-text pointer active-icon"
                 icon="majesticons:open"
                 style="font-size: 20px"
-                @click="goYuan"
+                @click="openExternal"
               />
             </a-tooltip>
             <a-divider class="w-[3px]" style="color: var(--divider)" type="vertical" />
@@ -215,7 +220,11 @@ const showCard = (uid, userInfo) => {
   useUserStore.showUserCard(uid, userInfo);
 };
 const goYuan = () => {
-  browser.openInUserSelect(`https://s.apps.vip/post/${props.cardData.pay_set.tid}`);
+  browser.openForum();
+};
+const openExternal = () => {
+  const detailTid = props.cardData.pay_set?.tid || props.cardData.id;
+  browser.openInUserSelect(`https://s.apps.vip/post/${detailTid}`);
 };
 const detailVisible = ref(true);
 const emit = defineEmits(['closeDetail']);

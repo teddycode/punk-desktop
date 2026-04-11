@@ -219,9 +219,9 @@ export default {
         },
         {
           name: 'yuanCommunity',
-          cname: '元社区动态',
+          cname: '磐古社区动态',
           icon: 'time-circle',
-          detail: '元社区里又发了什么好玩的事情？时刻关注热门和最新动态。',
+          detail: '磐古社区里又发了什么好玩的事情？时刻关注热门和最新动态。',
           images: ['yuanCommunity'],
           size: ['4x4'],
         },

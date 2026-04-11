@@ -105,6 +105,7 @@ import { clipboardStore } from '@apps/clipboard/store';
 import { browserStore } from '@store/browser';
 import RayMedal from '../components/small/RayMedal.vue';
 import { chatStore } from '@store/chat';
+import { agentStore } from '@store/agent';
 import navigationData from '../js/data/tableData';
 import taskStore from '../page/app/todo/stores/task';
 import cache from '../components/card/hooks/cache';
@@ -257,10 +258,12 @@ export default {
     //直接进入工作台选择界面
     async goDirect() {
       await this.doDefaultSettings();
+      agentStore().setPunkClawOpen(true);
       this.$router.replace({ name: 'home' });
     },
     enter() {
       clearTimeout(this.timeoutHandler); //清理掉超时提示
+      agentStore().setPunkClawOpen(true);
       try {
         chatStore().login();
       } catch (e) {
@@ -344,7 +347,7 @@ export default {
       // 设置主题颜色
       setBgColor('#FFB342');
 
-      //执行分屏的启动操作
+      // 单屏模式下同步屏幕状态
       this.onTableStarted().then();
       if (!this.settings.zoomFactor) {
         this.settings.zoomFactor = 100;
