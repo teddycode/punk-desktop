@@ -440,7 +440,6 @@ export const defaultDesks = [
               backgroundColor: '',
               backgroundIndex: 0,
             },
-            }
           ],
           groupTitle: '系统核心功能',
           zoom: {

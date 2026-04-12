@@ -409,10 +409,21 @@ global.render = {
     });
   },
   regDefaultProtocol(request, response) {
-    let pathName = new URL(request.url).pathname;
-    let extension = path.extname(pathName).toLowerCase();
-    if (!extension) return;
+    let pathName = '';
+    try {
+      pathName = new URL(request.url).pathname;
+    } catch (error) {
+      console.log('2.协议转换失败：URL解析异常', request.url, error);
+      response({ statusCode: 400, data: Buffer.from('') });
+      return;
+    }
     pathName = decodeURI(pathName);
+    let extension = path.extname(pathName).toLowerCase();
+    if (!extension) {
+      console.log('2.协议转换失败：缺少文件后缀', request.url);
+      response({ statusCode: 404, data: Buffer.from('') });
+      return;
+    }
     let filePath;
     if (extension === '.html') {
       filePath = path.join(__dirname, 'vite', 'dist', 'html', pathName);
@@ -420,28 +431,39 @@ global.render = {
       filePath = path.join(__dirname, 'vite', 'dist', pathName);
     }
 
+    const mimeTypeMap = {
+      '.js': 'text/javascript',
+      '.mjs': 'text/javascript',
+      '.html': 'text/html',
+      '.css': 'text/css',
+      '.svg': 'image/svg+xml',
+      '.json': 'application/json',
+      '.map': 'application/json',
+      '.mp3': 'audio/mpeg',
+      '.mp4': 'video/mp4',
+      '.webm': 'video/webm',
+      '.wav': 'audio/wav',
+      '.ogg': 'audio/ogg',
+      '.png': 'image/png',
+      '.jpg': 'image/jpeg',
+      '.jpeg': 'image/jpeg',
+      '.gif': 'image/gif',
+      '.ico': 'image/x-icon',
+      '.webp': 'image/webp',
+      '.ttf': 'font/ttf',
+      '.otf': 'font/otf',
+      '.woff': 'font/woff',
+      '.woff2': 'font/woff2',
+      '.wasm': 'application/wasm',
+      '.txt': 'text/plain',
+    };
+    const mimeType = mimeTypeMap[extension] || 'application/octet-stream';
+
     fs.readFile(filePath, (error, data) => {
       if (error) {
         console.log('2.协议转换失败：:', request.url, '->', filePath, '==', error);
+        response({ statusCode: 404, mimeType, data: Buffer.from('') });
         return;
-      }
-      let mimeType = '';
-      if (extension === '.js') {
-        mimeType = 'text/javascript';
-      } else if (extension === '.html') {
-        mimeType = 'text/html';
-      } else if (extension === '.css') {
-        mimeType = 'text/css';
-      } else if (extension === '.svg') {
-        mimeType = 'image/svg+xml';
-      } else if (extension === '.json') {
-        mimeType = 'application/json';
-      } else if (extension === '.mp3') {
-        mimeType = 'audio/mpeg';
-      } else if (extension === '.png') {
-        mimeType = 'image/png';
-      } else if (extension === '.jpg') {
-        mimeType = 'image/jpeg';
       }
       console.log('2.协议转换成功:', request.url, '->', filePath, '==', mimeType);
       response({ mimeType, data });

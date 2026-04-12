@@ -111,6 +111,42 @@ class TableManager {
       let tableUrl = render.getUrl('table.html', {}, 'table.com');
       console.log('1.打开的tableUrl', tableUrl);
       tableWin.window.webContents.loadURL(tableUrl);
+      let hasShownTableWindow = false;
+      let showFallbackTimer = null;
+      const showTableWindow = (reason) => {
+        if (!tableWin.window || tableWin.window.isDestroyed()) {
+          return;
+        }
+        if (showFallbackTimer) {
+          clearTimeout(showFallbackTimer);
+          showFallbackTimer = null;
+        }
+        if (!hasShownTableWindow) {
+          hasShownTableWindow = true;
+          console.log(`table窗口触发显示: ${reason}`);
+        }
+        if (!tableWin.window.isVisible()) {
+          tableWin.window.show();
+        }
+        tableWin.window.focus();
+      };
+      tableWin.window.webContents.once('did-finish-load', () => {
+        showTableWindow('did-finish-load');
+      });
+      tableWin.window.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL, isMainFrame) => {
+        console.error('table页面加载失败', {
+          errorCode,
+          errorDescription,
+          validatedURL,
+          isMainFrame,
+        });
+        if (isMainFrame) {
+          showTableWindow('did-fail-load(main-frame)');
+        }
+      });
+      showFallbackTimer = setTimeout(() => {
+        showTableWindow('fallback-timeout-10000ms');
+      }, 10000);
       // tableWin.webContents.openDevTools({ mode: 'detach' });
       tableWin.window.webContents.session.setPermissionRequestHandler((webContents, permission, callback) => {
         let allowedPermissions = ['audioCapture', 'media', 'fullscreen']; // Full list here: https://developer.chrome.com/extensions/declare_permissions#manifest
@@ -126,6 +162,10 @@ class TableManager {
       });
 
       tableWin.window.on('close', () => {
+        if (showFallbackTimer) {
+          clearTimeout(showFallbackTimer);
+          showFallbackTimer = null;
+        }
         this.saveBounds();
         global.tableWin = null;
       });
@@ -164,8 +204,7 @@ class TableManager {
         this.saveBounds();
       });
       tableWin.window.on('ready-to-show', () => {
-        tableWin.window.show();
-        tableWin.window.focus();
+        showTableWindow('ready-to-show');
       });
     } else {
       if (tableWin.window) {
