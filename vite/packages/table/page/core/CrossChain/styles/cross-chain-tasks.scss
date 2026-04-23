@@ -1,0 +1,414 @@
+// 导入全局主题变量（复用科技蓝/深色背景）
+@import "./dark-theme.scss";
+
+// 唯一前缀，避免样式污染（替代 scoped）
+.cross-chain-tasks {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  // 头部区域
+  .header-section {
+    text-align: center;
+    margin-bottom: 40px;
+
+    h1 {
+      font-size: 2.5rem;
+      color: var(--text-primary) !important; // 复用全局文字色
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: var(--text-secondary) !important; // 复用次要文字色
+      font-size: 1.1rem;
+    }
+  }
+
+  // 加载状态
+  .loading-state {
+    text-align: center;
+    padding: 60px;
+    color: var(--text-primary) !important;
+  }
+
+  // 任务网格
+  .task-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  // 任务卡片（适配深色主题）
+  .task-card {
+    background: var(--card-bg) !important; // 复用卡片背景
+    border: 1px solid var(--border-color) !important; // 复用边框色
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px var(--shadow-color) !important; // 复用科技蓝光影
+    }
+
+    // 卡片头部
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border-color) !important;
+
+      h3 {
+        margin: 0;
+        font-size: 1.3rem;
+        color: var(--text-primary) !important;
+      }
+
+      // 状态徽章（适配深色）
+      .status-badge {
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        font-weight: 600;
+
+        &.active {
+          background: rgba(0, 230, 118, 0.2) !important;
+          color: #00e676 !important; // BOT Chain 绿
+        }
+
+        &.inactive {
+          background: rgba(255, 59, 48, 0.2) !important;
+          color: #ff3b30 !important;
+        }
+      }
+    }
+
+    // 卡片内容
+    .task-body {
+      margin-bottom: 20px;
+
+      p {
+        margin: 8px 0;
+        color: var(--text-primary) !important;
+        font-size: 0.95rem;
+      }
+    }
+
+    // 操作按钮（替换为科技蓝渐变）
+    .action-button {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(0, 191, 255, 0.35) !important;
+      background: linear-gradient(
+        180deg,
+        rgba(0, 191, 255, 0.28),
+        rgba(0, 191, 255, 0.10)
+      ) !important;
+      color: rgba(255, 255, 255, 0.92) !important;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      cursor: pointer;
+      transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        border-color 0.18s ease,
+        background 0.18s ease;
+      backdrop-filter: blur(6px);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.06),
+        0 10px 24px rgba(0, 0, 0, 0.22);
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          120deg,
+          transparent 0%,
+          rgba(255, 255, 255, 0.10) 35%,
+          transparent 70%
+        );
+        transform: translateX(-120%);
+        transition: transform 0.45s ease;
+        pointer-events: none;
+      }
+
+      &:hover:not(:disabled) {
+        transform: translateY(-1px);
+        border-color: rgba(0, 191, 255, 0.55) !important;
+        background: linear-gradient(
+          180deg,
+          rgba(26, 214, 255, 0.30),
+          rgba(26, 214, 255, 0.12)
+        ) !important;
+        box-shadow:
+          0 0 0 4px rgba(0, 191, 255, 0.10),
+          0 12px 28px rgba(0, 0, 0, 0.30) !important;
+
+        &::before {
+          transform: translateX(120%);
+        }
+      }
+
+      &:active:not(:disabled) {
+        transform: translateY(0);
+        box-shadow:
+          0 0 0 3px rgba(0, 191, 255, 0.08),
+          0 8px 18px rgba(0, 0, 0, 0.24) !important;
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+        border-color: rgba(255, 255, 255, 0.10) !important;
+        background: rgba(255, 255, 255, 0.04) !important;
+        color: rgba(255, 255, 255, 0.45) !important;
+        box-shadow: none !important;
+      }
+    }
+
+
+  }
+
+  // 弹窗遮罩
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8) !important; // 更深的遮罩
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  // 弹窗内容（适配深色）
+  .modal-content {
+    background: var(--card-bg) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 12px;
+    padding: 30px;
+    width: 90%;
+    max-width: 550px;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+    animation: slideUp 0.3s ease;
+
+    h2 {
+      margin: 0 0 20px 0;
+      color: var(--text-primary) !important;
+      font-size: 1.5rem;
+    }
+
+    // 关闭按钮（适配深色）
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: #292929 !important;
+      color: var(--text-primary) !important;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        background: #333 !important;
+        transform: rotate(90deg);
+      }
+    }
+
+    // 信息框（适配深色）
+    .info-box {
+      background: #292929 !important;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+
+      p {
+        margin: 8px 0;
+        color: var(--text-primary) !important;
+      }
+    }
+
+    // 表单组
+    .form-group {
+      margin-bottom: 20px;
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--text-primary) !important;
+      }
+
+      textarea,
+      input {
+        width: 100%;
+        padding: 12px;
+        background: #292929 !important;
+        border: 1px solid var(--border-color) !important;
+        border-radius: 6px;
+        font-size: 14px;
+        font-family: inherit;
+        transition: border-color 0.3s;
+        color: var(--text-primary) !important;
+
+        &::placeholder {
+          color: var(--text-secondary) !important;
+        }
+
+        &:focus {
+          outline: none;
+          border-color: var(--highlight-color) !important; // 科技蓝聚焦
+        }
+      }
+
+      textarea {
+        font-family: 'Courier New', monospace;
+        resize: vertical;
+      }
+
+      .hint {
+        margin-top: 6px;
+        font-size: 12px;
+        color: var(--text-secondary) !important;
+
+        &.warning {
+          color: #e6a23c !important; // 警告色
+        }
+      }
+    }
+
+    // 费用预估（适配深色）
+    .fee-estimate {
+      background: #292929 !important;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+
+      .fee-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 14px;
+        color: var(--text-primary) !important;
+
+        &.total {
+          font-size: 16px;
+          font-weight: 600;
+        }
+
+        .fee-value {
+          color: var(--highlight-color) !important; // 科技蓝金额
+          font-family: 'Courier New', monospace;
+        }
+      }
+
+      hr {
+        border: none;
+        border-top: 1px solid var(--border-color) !important;
+        margin: 10px 0;
+      }
+    }
+
+    // 按钮组
+    .button-group {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+
+      .btn-cancel,
+      .btn-submit {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 6px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+
+        &:disabled {
+          cursor: not-allowed;
+          opacity: 0.7;
+        }
+      }
+
+      .btn-cancel {
+        background: #292929 !important;
+        color: var(--text-primary) !important;
+
+        &:hover:not(:disabled) {
+          background: #333 !important;
+        }
+      }
+
+      .btn-submit {
+        background: linear-gradient(135deg, var(--highlight-color) 0%, #096dd9 100%) !important;
+        color: white !important;
+
+        &:hover:not(:disabled) {
+          opacity: 0.9;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px var(--shadow-color) !important;
+        }
+      }
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(50px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  // 响应式适配
+  @media (max-width: 768px) {
+    .task-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .header-section h1 {
+      font-size: 2rem;
+    }
+
+    .modal-content {
+      width: 95%;
+      padding: 20px;
+    }
+  }
+}
+
+// 全局盒模型
+* {
+  box-sizing: border-box;
+}

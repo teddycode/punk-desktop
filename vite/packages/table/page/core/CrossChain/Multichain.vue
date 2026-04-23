@@ -1,642 +1,519 @@
 <template>
-  <a-layout class="manager-layout">
+  <a-layout class="dashboard-layout">
     <!-- 页面头部 -->
     <div class="page-header">
       <div class="page-title-wrap">
-        <div class="page-title">交易详情解析</div>
-        <div class="page-desc">跨链区管理员状态及交易的执行明细、事件日志分析</div>
-      </div>
-      <div class="page-actions">
-        <a-button type="primary" :loading="checkingAuth" @click="handleOpenRegisterDialog">
-          新增任务类型
-        </a-button>
+        <div class="page-title">跨链专区概览</div>
+        <div class="page-desc">展示跨链系统状态、源链信息与关联合约</div>
       </div>
     </div>
 
-    <!-- 管理员信息卡片 -->
-    <a-card
-      class="manager-card"
-      :class="{'error-card': !apiAvailable}"
-      :bordered="false"
-    >
-      <template #title>
-        <div class="card-title">
-          <span>跨链区管理员</span>
-          <a-spin v-if="loading" size="small" style="margin-left: 12px;" />
-          <a-tag v-else :color="apiAvailable ? 'blue' : 'red'" style="margin-left: 12px;">
-            {{ apiAvailable ? '在线' : '离线' }}
-          </a-tag>
-        </div>
-      </template>
-      <div class="manager-address">
-        {{ zone_info.manager || (apiAvailable ? '加载中...' : '服务不可用') }}
+    <!-- 统计信息 -->
+    <a-card class="info-card" :bordered="false">
+      <div class="statistics-container">
+        <a-row :gutter="[20, 20]" justify="center">
+          <a-col
+            v-for="(stat, index) in zoneColumns"
+            :key="index"
+            :xs="24"
+            :sm="12"
+            :md="8"
+            class="stat-col"
+          >
+            <a-card hoverable class="stat-card">
+              <a-statistic
+                :title="stat.title"
+                :value="stat.value"
+                :loading="loading"
+              />
+            </a-card>
+          </a-col>
+        </a-row>
       </div>
     </a-card>
 
-    <!-- 选项卡容器 -->
-    <div class="tabs-container">
-      <a-tabs
-        v-model:activeKey="activeKey"
-        class="custom-tabs"
-        @change="handleTabChange"
-      >
-        <a-tab-pane key="overview" tab="交易概览" />
-        <a-tab-pane key="events" tab="交易事件" />
-        <a-tab-pane key="raw" tab="原始数据" />
-      </a-tabs>
+    <!-- 源链列表 -->
+    <div class="section-header">
+      <div class="section-title">源链列表</div>
+      <div class="section-subtitle">点击卡片可进入对应链的跨链详情</div>
     </div>
 
-    <!-- 交易概览面板 -->
-    <a-card
-      v-if="activeKey === 'overview'"
-      class="detail-card"
-      :loading="loading"
-      :bordered="false"
-    >
-      <div class="info-grid">
-        <div class="info-item full-width">
-          <span class="info-label">交易哈希 (Transaction Hash)</span>
-          <span class="info-value">
-            <a-tooltip v-if="safeTxDetails.hash">
-              <span style="color: #1890ff; cursor: pointer;">{{ safeTxDetails.hash }}</span>
-              <template #title>点击复制</template>
-            </a-tooltip>
-            <span v-else class="error-text">无法获取交易哈希</span>
-          </span>
-        </div>
-
-        <div class="info-item">
-          <span class="info-label">交易状态 (Status)</span>
-          <span class="info-value">
-            <a-tag :color="txStatusColor" style="margin: 0; font-family: inherit;">
-              {{ txStatusText }}
-            </a-tag>
-          </span>
-        </div>
-
-        <div class="info-item">
-          <span class="info-label">区块高度 (Block)</span>
-          <span class="info-value">
-            {{ safeTxDetails.blockNumber || '--' }}
-          </span>
-        </div>
-
-        <div class="info-item">
-          <span class="info-label">时间戳 (Timestamp)</span>
-          <span class="info-value">
-            {{ formatTimestamp(safeTxDetails.timestamp) }}
-          </span>
-        </div>
-
-        <div class="info-item">
-          <span class="info-label">发送方 (From)</span>
-          <span class="info-value">
-            <a-button type="link" style="padding: 0; font-family: inherit; font-size: inherit; height: auto;">
-              {{ safeTxDetails.from || '未知地址' }}
-            </a-button>
-          </span>
-        </div>
-
-        <div class="info-item">
-          <span class="info-label">接收方 (To)</span>
-          <span class="info-value">
-            <a-button
-              v-if="safeTxDetails.to"
-              type="link"
-              style="padding: 0; font-family: inherit; font-size: inherit; height: auto;"
-            >
-              {{ safeTxDetails.to }}
-            </a-button>
-            <span v-else class="contract-creation">
-              <api-outlined />
-              合约创建交易
-            </span>
-          </span>
-        </div>
-
-        <div class="info-item">
-          <span class="info-label">交易金额 (Value)</span>
-          <span class="info-value">
-            {{ formatEther(safeTxDetails.value) }} ETH
-          </span>
-        </div>
-
-        <div class="info-item">
-          <span class="info-label">Gas 价格 (Gas Price)</span>
-          <span class="info-value">
-            {{ formatUnits(safeTxDetails.gasPrice, 'gwei') }} Gwei
-          </span>
-        </div>
-
-        <div class="info-item">
-          <span class="info-label">Gas 用量 (Gas Limit)</span>
-          <span class="info-value">
-            {{ safeTxDetails.gasLimit }}
-          </span>
-        </div>
-
-        <div class="info-item full-width">
-          <span class="info-label">输入数据 (Input Data)</span>
-          <span class="info-value">
-            <div v-if="safeTxDetails.data" class="data-preview">
-              {{ safeTxDetails.data }}
+    <a-row :gutter="[24, 24]">
+      <a-col
+        v-for="chain in sourceInfoWithContracts"
+        :key="chain.chain_id"
+        :xs="24"
+        :sm="12"
+        :xl="8"
+      >
+        <a-card hoverable class="source-card" @click="handleBridgeClick(chain)">
+          <div class="chain-header">
+            <div class="chain-logo-placeholder">
+              {{ getChainLogoText(chain.symbol) }}
             </div>
-            <span v-else class="empty-data">无输入数据</span>
-          </span>
-        </div>
-      </div>
-    </a-card>
 
-    <!-- 交易事件面板 -->
-    <a-card
-      v-if="activeKey === 'events'"
-      class="detail-card"
-      :loading="loading"
-      :bordered="false"
-    >
-      <a-table
-        :columns="eventColumns"
-        :data-source="safeEvents"
-        :pagination="false"
-        class="custom-table"
-      >
-        <template #emptyText>
-          <a-empty
-            :description="apiAvailable ? '暂无事件记录' : '无法获取事件数据'"
-          />
-        </template>
+            <div class="chain-title-group">
+              <div class="chain-name">{{ chain.name }}</div>
+              <div class="chain-symbol">{{ chain.symbol }}</div>
+            </div>
 
-        <template #bodyCell="{ column, record }">
-          <template v-if="column.dataIndex === 'value'">
-            <span style="font-weight: 600; color: #1890ff;">{{ formatEther(record.args.value) }} ETH</span>
-          </template>
+            <div class="chain-id-tag">
+              #{{ chain.chain_id }}
+            </div>
+          </div>
 
-          <template v-if="column.dataIndex === 'address'">
-            <a-button type="link" style="padding: 0; font-family: monospace;">
-              {{ shortenAddress(record.address) }}
-            </a-button>
-          </template>
+          <div class="chain-meta">
+            <div class="meta-item">
+              <span class="meta-label">最新区块</span>
+              <span class="meta-value">{{ chain.latest_raw_height ?? '--' }}</span>
+            </div>
 
-          <template v-if="column.dataIndex === 'data'">
-            <div style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: monospace; color: #666;">
-              <a-tooltip :title="record.data" placement="topLeft">
-                {{ record.data }}
+            <div class="meta-item">
+              <span class="meta-label">最新区块哈希</span>
+              <a-tooltip :title="chain.latest_raw_hash || '-'">
+                <span class="meta-hash">
+                  {{ shortenValue(chain.latest_raw_hash || '-') }}
+                </span>
               </a-tooltip>
             </div>
-          </template>
-        </template>
-      </a-table>
-    </a-card>
-
-    <!-- 原始数据面板 -->
-    <a-card
-      v-if="activeKey === 'raw'"
-      class="detail-card"
-      :bordered="false"
-    >
-      <a-collapse v-model:activeKey="collapseActiveKey" ghost>
-        <a-collapse-panel key="tx" header="交易原始数据 (Transaction Raw Data)">
-          <pre class="raw-data-panel">{{ JSON.stringify(safeTxDetails, null, 2) }}</pre>
-        </a-collapse-panel>
-
-        <a-collapse-panel key="events" header="事件原始数据 (Events Raw Data)">
-          <pre class="raw-data-panel">{{ JSON.stringify(safeEvents, null, 2) }}</pre>
-        </a-collapse-panel>
-      </a-collapse>
-    </a-card>
-
-    <!-- 注册任务类型弹窗 -->
-    <div v-if="showRegisterDialog" class="modal-overlay" @click.self="showRegisterDialog = false">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>注册新任务类型</h3>
-          <button class="close-btn" @click="showRegisterDialog = false">&times;</button>
-        </div>
-        
-        <div class="modal-body">
-          <div class="form-group">
-            <label>任务类型 ID (uint16)</label>
-            <input 
-              v-model.number="registerForm.taskType" 
-              type="number" 
-              min="1" 
-              max="65535"
-              placeholder="例如: 1"
-            >
-            <span class="help-text">有效范围: 1-65535</span>
           </div>
 
-          <div class="form-group">
-            <label>任务名称 (string)</label>
-            <input
-              v-model="registerForm.name"
-              type="text"
-              placeholder="例如: Route-1"
-            >
+          <div class="chain-info">
+            <div class="info-block">
+              <div class="info-label">中继合约地址</div>
+              <a-tooltip :title="chain.relay_addr">
+                <div class="address-link" @click.stop="handleRelayClick(chain)">
+                  {{ shortenValue(chain.relay_addr) }}
+                </div>
+              </a-tooltip>
+            </div>
           </div>
-
-          <div class="form-group">
-            <label>验证器地址 (address)</label>
-            <input
-              v-model="registerForm.verifier"
-              type="text"
-              placeholder="0x..."
-            >
-          </div>
-
-          <div class="form-group">
-            <label>是否启用 (bool)</label>
-            <select v-model="registerForm.isActive">
-              <option :value="true">启用</option>
-              <option :value="false">禁用</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>管理员地址</label>
-            <input
-              :value="resolvedTransportAddress"
-              type="text"
-              placeholder="禁止为空"
-              readonly
-            >
-          </div>
-        </div>
-
-        <div class="modal-footer">
-          <button class="btn-cancel" @click="showRegisterDialog = false">取消</button>
-          <button 
-            class="btn-primary" 
-            :disabled="submitting || checkingAuth || !registerForm.taskType || !registerForm.name || !registerForm.verifier"
-            @click="handleRegisterSubmit"
-          >
-            <span v-if="submitting || checkingAuth">注册中...</span>
-            <span v-else>确认注册</span>
-          </button>
-        </div>
-      </div>
-    </div>
+        </a-card>
+      </a-col>
+    </a-row>
   </a-layout>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted, reactive } from 'vue'
-import { useRoute } from 'vue-router'
-import {
-  ReloadOutlined,
-  LinkOutlined,
-  ApiOutlined,
-  SwapOutlined
-} from '@ant-design/icons-vue'
+import { ref, onMounted, computed, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { message } from 'ant-design-vue'
 import { ethers } from 'ethers'
 import axios from 'axios'
-import { ElMessage } from 'element-plus'
-import {
-  useTaskContract,
-  useResolvedTransportAddressByManager
-} from '../../../services/crosschain'
 
-// 导入和状态扩展
-const { submitting, submitRegisterTaskType } = useTaskContract()
-
-// 弹窗状态和表单数据
-const showRegisterDialog = ref(false)
-const checkingAuth = ref(false)
-const currentWalletAddress = ref('')
-const resolvedTransportAddress = ref<string>('')
-const crosschainApi = (window as any).baseApi?.crosschain
-
-type RegisterFormState = {
-  taskType: string | number
+interface SourceData {
+  chain_id: number
+  symbol: string
   name: string
-  verifier: string
-  isActive: boolean
+  state?: number
+  visit_block_height?: number
+  register_tx_hash?: string | null
+  created_at?: string
+  updated_at?: string
+  latest_raw_height?: number | null
+  latest_raw_hash?: string | null
 }
 
-const registerForm = reactive<RegisterFormState>({
-  taskType: '',
-  name: '',
-  verifier: '',
-  isActive: true
+interface ContractData {
+  contract_id: number
+  contract_addr: string
+  manager_addr: string
+  contract_state: number
+  chain_id: number
+  level_id: number
+}
+
+interface CrosschainzoneData {
+  zone_type: number
+  rpc: string
+  multi_addr: string
+}
+
+interface SourceCardData extends SourceData {
+  relay_addr: string
+}
+
+const loading = ref(false)
+let provider: ethers.providers.JsonRpcProvider
+const router = useRouter()
+
+const crosschainzoneInfo = ref<CrosschainzoneData>({
+  zone_type: -1,
+  rpc: '',
+  multi_addr: '0x'
 })
 
-const normalizeAddress = (address: string) => {
-  try {
-    return ethers.utils.getAddress(address)
-  } catch {
-    return ''
-  }
-}
+const managerAddress = ref('0x')
 
-const managerAddress = computed(() => normalizeAddress(zone_info.value.manager || ''))
-const currentUserAddress = computed(() => normalizeAddress(currentWalletAddress.value || ''))
-const isCurrentUserManager = computed(() => {
-  if (!managerAddress.value || !currentUserAddress.value) return false
-  return managerAddress.value === currentUserAddress.value
+const dataFromRpc = ref({
+  block_number: 0,
+  source_num: 0,
+  contract_num: 0
 })
 
-const getWalletAddress = async (requestConnect = false): Promise<string> => {
-  const ethereum = (window as any)?.ethereum
-  if (!ethereum?.request) {
-    throw new Error('未检测到钱包插件')
-  }
+const sourceInfo = ref<SourceData[]>([])
+const contractInfo = ref<ContractData[]>([])
 
-  const method = requestConnect ? 'eth_requestAccounts' : 'eth_accounts'
-  const accounts = await ethereum.request({ method })
-  const first = Array.isArray(accounts) ? accounts[0] : ''
-  currentWalletAddress.value = first || ''
-  return currentWalletAddress.value
-}
-
-const handleOpenRegisterDialog = async () => {
-  showRegisterDialog.value = true
-}
-
-// 处理注册提交
-const handleRegisterSubmit = async () => {
-  if (!registerForm.taskType || !registerForm.name || !registerForm.verifier) {
-    ElMessage.warning('请填写完整信息')
-    return
-  }
-
-  if (!/^0x[a-fA-F0-9]{40}$/.test(registerForm.verifier)) {
-    ElMessage.error('无效的验证器地址格式')
-    return
-  }
-
-  try {
-    checkingAuth.value = true
-
-    if (!zone_info.value.manager) {
-      await fetchZoneInfo()
-    }
-
-    if (!zone_info.value.manager) {
-      ElMessage.error('未获取到管理员地址，无法校验权限。请检查跨链区配置服务是否可用')
-      return
-    }
-
-    let address = await getWalletAddress(false)
-    if (!address) {
-      address = await getWalletAddress(true)
-    }
-
-    if (!address) {
-      ElMessage.warning('请先连接钱包')
-      return
-    }
-
-    if (!isCurrentUserManager.value) {
-      ElMessage.error(`当前钱包 ${shortenAddress(currentUserAddress.value)} 不是管理员，无权限新增任务类型`)
-      return
-    }
-
-    if (!resolvedTransportAddress.value) {
-      const rpcUrl = zone_info.value.rpc || undefined
-      resolvedTransportAddress.value = await useResolvedTransportAddressByManager({
-        managerAddress: zone_info.value.manager,
-        rpcUrl
-      })
-    }
-
-    const success = await submitRegisterTaskType({
-      typeId: Number(registerForm.taskType),
-      name: String(registerForm.name).trim(),
-      verifier: registerForm.verifier,
-      isActive: !!registerForm.isActive
-    })
-    
-    if (success) {
-      ElMessage.success('任务类型注册请求已提交')
-      showRegisterDialog.value = false
-      // 清空表单
-      registerForm.taskType = ''
-      registerForm.name = ''
-      registerForm.verifier = ''
-      registerForm.isActive = true
-      resolvedTransportAddress.value = ''
-    }
-  } catch (error: any) {
-    ElMessage.error(error.message || '注册失败')
-  } finally {
-    checkingAuth.value = false
-  }
-}
-
-// 响应式状态
-const loading = ref(true)
-const apiAvailable = ref(true)
-const activeKey = ref('overview')
-const collapseActiveKey = ref(['tx'])
-const zone_info = ref<Record<string, any>>({})
-const safeTxDetails = ref<Record<string, any>>({})
-const safeEvents = ref<any[]>([])
-
-// 表格列配置
-const eventColumns = [
-  { title: '事件合约', dataIndex: 'address', width: 200 },
-  { title: '发送方', dataIndex: ['args', 'from'], width: 180 },
-  { title: '接收方', dataIndex: ['args', 'to'], width: 180 },
-  { title: '金额', dataIndex: 'value', width: 120 },
-  { title: '原始数据', dataIndex: 'data' }
+const managerABI = [
+  'function getSourceChainNum() view returns (uint256)',
+  'function getSourceChainInfo(uint256 sourceID) view returns (string symbol, string name, uint256 state, uint256 contractNum, address[] contractAddressList)',
+  'function getSystemContractNum() view returns (uint256)'
 ]
 
-// 计算属性
-const txStatusColor = computed(() => {
-  if (!safeTxDetails.value) return 'gray'
-  return safeTxDetails.value.confirmations > 0 ? 'green' : 'orange'
+const relayABI = [
+  'function getTopKeyFromShadowLedger_slot() view returns (bytes32)',
+  'function getTopKeyFromShadowLedger() view returns (bytes32)'
+]
+
+const zoneColumns = computed(() => [
+  { title: '最新区块', value: dataFromRpc.value.block_number },
+  { title: '源链数量', value: dataFromRpc.value.source_num },
+  { title: '系统合约数量', value: dataFromRpc.value.contract_num }
+])
+
+const chainContractMap = computed(() => {
+  const map = new Map<number, { relay: string }>()
+
+  contractInfo.value.forEach(contract => {
+    const chainId = Number(contract.chain_id)
+    if (!Number.isFinite(chainId) || chainId <= 0) return
+
+    if (!map.has(chainId)) {
+      map.set(chainId, { relay: '-' })
+    }
+
+    const contractData = map.get(chainId)!
+    if (contract.level_id === 0) {
+      contractData.relay = contract.contract_addr
+    }
+  })
+
+  return map
 })
 
-const txStatusText = computed(() => {
-  if (!safeTxDetails.value) return '未知状态'
-  return safeTxDetails.value.confirmations > 0
-    ? `已确认 (${safeTxDetails.value.confirmations} 确认)`
-    : '待确认'
+const sourceInfoWithContracts = computed<SourceCardData[]>(() => {
+  return sourceInfo.value.map(source => {
+    const chainId = Number(source.chain_id)
+    const contracts =
+      Number.isFinite(chainId) && chainId > 0
+        ? (chainContractMap.value.get(chainId) || { relay: '-' })
+        : { relay: '-' }
+    return {
+      ...source,
+      relay_addr: contracts.relay
+    }
+  })
 })
 
-// 工具函数
-const formatEther = (value: string | number) => {
-  try {
-    return ethers.utils.formatEther(value.toString())
-  } catch {
-    return '0.0'
-  }
+const shortenValue = (value: string) => {
+  if (!value || value === '-') return value
+  if (value.length <= 14) return value
+  return `${value.slice(0, 8)}...${value.slice(-6)}`
 }
 
-const formatUnits = (value: string | number, unit: 'gwei' | 'ether' = 'gwei') => {
-  try {
-    return ethers.utils.formatUnits(value.toString(), unit)
-  } catch {
-    return '0.0'
-  }
+const getChainLogoText = (symbol?: string) => {
+  if (!symbol) return 'C'
+  return symbol.trim().charAt(0).toUpperCase()
 }
 
-const shortenAddress = (address: string) => {
-  return address ? `${address.slice(0, 6)}...${address.slice(-4)}` : '--'
-}
-
-const formatTimestamp = (timestamp: number) => {
-  if (!timestamp) return '--'
-  const date = new Date(timestamp * 1000)
-  return date.toLocaleString()
-}
-
-// API 安全调用封装
-const safeApiCall = async <T>(fn: () => Promise<T>, fallback: T, errorMsg?: string) => {
-  try {
-    return await fn()
-  } catch (error) {
-    console.error(errorMsg || 'API 调用失败:', error)
-    apiAvailable.value = false
-    return fallback
-  }
-}
-
-// 数据获取函数
-const fetchZoneInfo = async () => {
-  zone_info.value = await safeApiCall<Record<string, any>>(
-    async () => {
-      const fetchByBridge = async () => {
-        const response = await crosschainApi.getCrosschainzone()
-        if (response?.success) {
-          return response.data?.[0] || {}
-        }
-        throw new Error(response?.error || 'IPC 获取跨链区信息失败')
-      }
-
-      const fetchByHttp = async () => {
-        const response = await axios.get('http://localhost:3020/api/crosschainzone')
-        return response.data?.[0] || {}
-      }
-
-      if (crosschainApi?.getCrosschainzone) {
-        try {
-          return await fetchByBridge()
-        } catch (bridgeError) {
-          console.warn('IPC 获取跨链区信息失败，回退 HTTP:', bridgeError)
-        }
-      }
-
-      return await fetchByHttp()
-    },
-    {},
-    '获取跨链区信息失败'
-  )
-}
-
-// 修改后的数据获取函数
-const fetchTransactionDetails = async (txHash: string) => {
-  const fallbackTx: Record<string, any> = {
-    hash: txHash,
-    error: true,
-    confirmations: 0
-  }
-
-  // 修改后的 Provider 实例化
-  const provider = await safeApiCall<ethers.providers.JsonRpcProvider | null>(
-    async () => {
-      if (!zone_info.value.rpc) throw new Error('RPC 地址未配置')
-      return new ethers.providers.JsonRpcProvider(zone_info.value.rpc)
-    },
-    null,
-    'RPC 连接失败'
-  )
-
-  // 修改后的交易详情获取
-  safeTxDetails.value = await safeApiCall<Record<string, any>>(
-    async () => {
-      if (!provider) throw new Error('RPC 不可用')
-      const tx = await provider.getTransaction(txHash)
-      if (!tx) throw new Error('交易不存在')
-
-      // 获取额外信息
-      const [receipt, block] = await Promise.all([
-        provider.getTransactionReceipt(txHash),
-        tx.blockNumber ? provider.getBlock(tx.blockNumber) : null
-      ])
-
-      return {
-        ...tx,
-        confirmations: tx.confirmations,
-        timestamp: block?.timestamp,
-        gasUsed: receipt?.gasUsed.toString()
-      }
-    },
-    fallbackTx,
-    '获取交易详情失败'
-  )
-
-  // 修改后的事件日志处理
-  safeEvents.value = await safeApiCall(
-    async () => {
-      if (!provider) return []
-      const receipt = await provider.getTransactionReceipt(txHash)
-      return receipt?.logs.map(log => ({
-        address: log.address,
-        topics: log.topics,
-        data: log.data,
-        args: {
-          from: log.topics[1] ?
-            ethers.utils.hexStripZeros(log.topics[1]) : '',
-          to: log.topics[2] ?
-            ethers.utils.hexStripZeros(log.topics[2]) : '',
-          value: log.data
-        }
-      })) || []
-    },
-    [],
-    '获取事件日志失败'
-  )
-}
-
-// 未实现功能（保留结构）
-/* 待实现 - 自动刷新功能
-const startPolling = () => {
-  // 实现定时刷新逻辑
-  // setInterval(fetchTransactionDetails, 15000)
-}
-*/
-
-/* 待实现 - 区块信息获取
-const fetchBlockInfo = async (blockNumber: number) => {
-  // 实现区块详细信息获取
-}
-*/
-
-/* 待实现 - 交易列表获取
-const fetchTxList = async () => {
-  // 实现交易列表获取
-}
-*/
-
-// 生命周期
-onMounted(async () => {
-  const route = useRoute()
-  const txHash = route.params.txHash as string
-
-  try {
+const getBackendUrl = async (retries = 5) => {
+  for (let i = 0; i < retries; i++) {
     try {
-      await getWalletAddress(false)
-    } catch {
-      currentWalletAddress.value = ''
+      const ipc = (window as any).ipcRenderer || (window as any).require?.('electron')?.ipcRenderer
+      if (ipc) {
+        const serviceInfo = await ipc.invoke('services.get', 'crosschain')
+        if (serviceInfo && serviceInfo.status === 'running' && serviceInfo.gatewayPort) {
+          console.log(`[CrossChain] Using service gateway port: ${serviceInfo.gatewayPort}`)
+          return `http://127.0.0.1:${serviceInfo.gatewayPort}`
+        }
+        console.warn(`[CrossChain] Service not ready (attempt ${i + 1}/${retries}), status: ${serviceInfo?.status}`)
+        // Try to start it if not running or discovered
+        await ipc.invoke('services.resolvePage', 'crosschain')
+      } else {
+        console.warn(`[CrossChain] ipcRenderer not found (attempt ${i + 1}/${retries})`)
+      }
+    } catch (e) {
+      console.warn(`[CrossChain] IPC call failed (attempt ${i + 1}/${retries}):`, e)
+    }
+    if (i < retries - 1) await new Promise(resolve => setTimeout(resolve, 1500))
+  }
+
+  const fallback = (window as any).crosschainBackendUrl || 'http://localhost:3020'
+  console.log(`[CrossChain] Falling back to: ${fallback}`)
+  return fallback
+}
+
+const fallbackRpcUrl = 'http://47.243.174.71:36054'
+const fallbackManagerAddr = '0x6d811bf404DaE8Df3d39b15604e32eF040d3D236'
+
+const fetchCrosschainzoneInfo = async () => {
+  crosschainzoneInfo.value = {
+    zone_type: 0,
+    rpc: fallbackRpcUrl,
+    multi_addr: fallbackManagerAddr
+  }
+}
+
+const fetchManagerAddress = async () => {
+  managerAddress.value = fallbackManagerAddr
+}
+
+const supplementSourceInfoFromManager = async () => {
+  try {
+    const rpcUrl = crosschainzoneInfo.value.rpc || fallbackRpcUrl
+    const managerAddr = managerAddress.value || fallbackManagerAddr
+
+    if (!managerAddr || managerAddr === '0x' || !ethers.utils.isAddress(managerAddr)) return
+
+    const rpcProvider = new ethers.providers.JsonRpcProvider(rpcUrl)
+    const managerContract = new ethers.Contract(managerAddr, managerABI, rpcProvider)
+
+    let rpcLatestHeight: number | null = null
+    let rpcLatestHash: string | null = null
+    try {
+      const latestBlock = await rpcProvider.getBlock('latest')
+      if (latestBlock) {
+        rpcLatestHeight = Number(latestBlock.number)
+        rpcLatestHash = latestBlock.hash ? String(latestBlock.hash) : null
+      }
+    } catch (latestErr) {
+      console.warn('读取 RPC 最新区块失败:', latestErr)
     }
 
-    await fetchZoneInfo()
-    if (!zone_info.value.manager) {
-      ElMessage.warning('跨链区配置未就绪：管理员地址为空，新增任务类型将不可用')
+    const sourceNumRaw = await managerContract.getSourceChainNum()
+    const sourceNum = Number(sourceNumRaw)
+    if (!Number.isFinite(sourceNum) || sourceNum <= 0) return
+
+    const onchainSources: SourceData[] = []
+    const supplementedContracts: ContractData[] = []
+
+    for (let chainId = 1; chainId <= sourceNum; chainId++) {
+      try {
+        const chainInfo = await managerContract.getSourceChainInfo(chainId)
+
+        const symbol = String(chainInfo?.symbol ?? chainInfo?.[0] ?? '').trim()
+        const name = String(chainInfo?.name ?? chainInfo?.[1] ?? '').trim()
+        const state = Number(chainInfo?.state ?? chainInfo?.[2] ?? 0)
+        const contractAddressList = (chainInfo?.contractAddressList ?? chainInfo?.[4] ?? []) as string[]
+        const relayAddr = String(contractAddressList?.[0] ?? '').trim()
+
+        let latestRawHeight: number | null = null
+        let latestRawHash: string | null = null
+
+        if (relayAddr && ethers.utils.isAddress(relayAddr)) {
+          try {
+            const relayContract = new ethers.Contract(relayAddr, relayABI, rpcProvider)
+            const [topHeightRaw, topKeyRaw] = await Promise.all([
+              relayContract.getTopKeyFromShadowLedger_slot(),
+              relayContract.getTopKeyFromShadowLedger()
+            ])
+
+            latestRawHeight = Number(BigInt(topHeightRaw))
+            latestRawHash = String(topKeyRaw)
+          } catch (relayErr) {
+            console.warn(`读取链 ${chainId} 中继 top 信息失败:`, relayErr)
+          }
+
+          supplementedContracts.push({
+            contract_id: -chainId,
+            contract_addr: relayAddr,
+            manager_addr: managerAddr,
+            contract_state: 2,
+            chain_id: chainId,
+            level_id: 0
+          })
+        }
+
+        onchainSources.push({
+          chain_id: chainId,
+          symbol,
+          name,
+          state,
+          latest_raw_height:
+            symbol.toUpperCase() === 'LCL'
+              ? (rpcLatestHeight ?? latestRawHeight)
+              : latestRawHeight,
+          latest_raw_hash:
+            symbol.toUpperCase() === 'LCL'
+              ? (rpcLatestHash ?? latestRawHash)
+              : latestRawHash
+        })
+      } catch (innerErr) {
+        console.warn(`读取链上 source chain ${chainId} 失败:`, innerErr)
+      }
     }
-    await fetchTransactionDetails(txHash)
-  } catch (error) {
-    console.error('初始化失败:', error)
+
+    sourceInfo.value = onchainSources.sort((a, b) => Number(a.chain_id) - Number(b.chain_id))
+    contractInfo.value = supplementedContracts
+  } catch (err) {
+    console.warn('链上读取 source chain 失败:', err)
+  }
+}
+
+const fetchDataFromDB = async () => {
+  loading.value = true
+  try {
+    await fetchCrosschainzoneInfo()
+    await fetchManagerAddress()
+    await supplementSourceInfoFromManager()
+  } catch (err) {
+    console.error('数据获取失败:', err)
+    message.error('数据获取失败')
   } finally {
     loading.value = false
   }
+}
+
+const fetchDataFromRPC = async () => {
+  try {
+    await fetchDataFromDB()
+
+    if (!crosschainzoneInfo.value.rpc) {
+      throw new Error('RPC地址未设置')
+    }
+
+    provider = new ethers.providers.JsonRpcProvider(crosschainzoneInfo.value.rpc)
+
+    try {
+      await provider.getNetwork()
+    } catch (error) {
+      console.error('RPC连接测试失败:', error)
+      throw new Error('无法连接到RPC节点')
+    }
+
+    const statsContractAddr = String(managerAddress.value || crosschainzoneInfo.value.multi_addr || '').trim()
+
+    if (!statsContractAddr || statsContractAddr === '0x' || !ethers.utils.isAddress(statsContractAddr)) {
+      throw new Error('合约地址无效')
+    }
+
+    let blockNumber: number
+    try {
+      blockNumber = await provider.getBlockNumber()
+    } catch (error) {
+      console.error('获取区块高度失败:', error)
+      throw new Error('获取区块高度失败')
+    }
+
+    const multiABI = [
+      'function getSourceChainNum() view returns (uint256)',
+      'function getSystemContractNum() view returns (uint256)'
+    ]
+
+    const multiContract = new ethers.Contract(
+      statsContractAddr,
+      multiABI,
+      provider
+    )
+
+    let sourceNum, contractNum
+    try {
+      ;[sourceNum, contractNum] = await Promise.all([
+        multiContract.getSourceChainNum(),
+        multiContract.getSystemContractNum()
+      ])
+    } catch (error) {
+      console.error('获取合约数据失败:', error)
+      throw new Error('获取合约数据失败')
+    }
+
+    dataFromRpc.value = {
+      block_number: Number(blockNumber),
+      source_num: Number(sourceNum),
+      contract_num: Number(contractNum)
+    }
+  } catch (err) {
+    console.error('RPC数据获取失败:', err)
+    message.error(err instanceof Error ? err.message : '获取RPC数据失败')
+
+    dataFromRpc.value = {
+      block_number: -1,
+      source_num: -1,
+      contract_num: -1
+    }
+  }
+}
+
+const handleBridgeClick = (record: SourceCardData) => {
+  router.push({
+    path: `/multi/bridge/${record.chain_id}`,
+    state: {
+      multi_addr: crosschainzoneInfo.value.multi_addr,
+      rpc: crosschainzoneInfo.value.rpc,
+      symbol: record.symbol,
+      name: record.name
+    }
+  })
+}
+
+const handleRelayClick = (record: SourceCardData) => {
+  router.push({
+    path: '/relayer',
+    query: {
+      chain_id: String(record.chain_id),
+      multi_addr: crosschainzoneInfo.value.multi_addr,
+      rpc: crosschainzoneInfo.value.rpc,
+      symbol: record.symbol,
+      name: record.name,
+      addr: record.relay_addr
+    }
+  })
+}
+
+const refreshData = async () => {
+  loading.value = true
+  try {
+    await fetchDataFromRPC()
+  } catch (err) {
+    console.error('数据刷新失败:', err)
+    message.error('数据刷新失败')
+  } finally {
+    loading.value = false
+  }
+}
+
+const initializeRPC = async () => {
+  try {
+    await fetchCrosschainzoneInfo()
+
+    if (!crosschainzoneInfo.value.rpc) {
+      throw new Error('RPC地址未设置')
+    }
+
+    if (!crosschainzoneInfo.value.multi_addr || crosschainzoneInfo.value.multi_addr === '0x') {
+      throw new Error('合约地址无效')
+    }
+
+    await fetchDataFromRPC()
+  } catch (error) {
+    console.error('初始化RPC失败:', error)
+    message.error('初始化RPC连接失败')
+  }
+}
+
+let pollingTimer: ReturnType<typeof setInterval> | null = null
+
+const startPolling = () => {
+  if (!pollingTimer) {
+    pollingTimer = setInterval(refreshData, 30000)
+  }
+}
+
+const stopPolling = () => {
+  if (pollingTimer) {
+    clearInterval(pollingTimer)
+    pollingTimer = null
+  }
+}
+
+onMounted(async () => {
+  await initializeRPC()
+  startPolling()
 })
 
-// 事件处理
-const handleTabChange = (key: string) => {
-  console.log('Tab changed to:', key)
-}
+onUnmounted(() => {
+  stopPolling()
+})
 </script>
 
-<style src="@assets/CrossChain/manager.scss"></style>
+<style src="@assets/CrossChain/multichain.scss"></style>

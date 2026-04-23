@@ -145,6 +145,30 @@ const router = useRouter()
 const route = useRoute()  
 const routerState = history.state  
 
+const normalizeChainId = (value: unknown) => {
+  const id = Number(value)
+  return Number.isFinite(id) && id > 0 ? id : 0
+}
+
+const getBackendUrl = async (retries = 5) => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const ipc = (window as any).ipcRenderer || (window as any).require?.('electron')?.ipcRenderer
+      if (ipc) {
+        const serviceInfo = await ipc.invoke('services.get', 'crosschain')
+        if (serviceInfo && serviceInfo.status === 'running' && serviceInfo.gatewayPort) {
+          return `http://127.0.0.1:${serviceInfo.gatewayPort}`
+        }
+        await ipc.invoke('services.resolvePage', 'crosschain')
+      }
+    } catch (e) {
+      console.warn('[Relay] IPC call failed:', e)
+    }
+    if (i < retries - 1) await new Promise(resolve => setTimeout(resolve, 1000))
+  }
+  return (window as any).crosschainBackendUrl || 'http://localhost:3020'
+}
+
 // 表格配置  
 const tablePagination = {  
   pageSize: 10,  
@@ -154,7 +178,7 @@ const tablePagination = {
 
 // 路由数据  
 const data_from_route = ref({  
-  chain_id: Number(route.params.chain_id),  
+  chain_id: normalizeChainId(route.params.chain_id || route.query.chain_id || routerState.chain_id),  
   rpc: route.query.rpc || routerState.rpc,  
   symbol: route.query.symbol || routerState.symbol,  
   name: route.query.name || routerState.name,  
@@ -203,7 +227,13 @@ const shortenHash = (hash: string) => {
 // 数据获取函数  
 const fetchShadowData = async () => {  
   try {  
-    const response = await axios.get(`http://localhost:3020/api/shadowBlocks/${route.params.chain_id}`)  
+    if (!data_from_route.value.chain_id) {
+      shadow_info.value = []
+      return
+    }
+
+    const baseUrl = await getBackendUrl()
+    const response = await axios.get(`${baseUrl}/api/shadowBlocks/${data_from_route.value.chain_id}`)  
     if (Array.isArray(response.data)) {  
       shadow_info.value = response.data  
     } else {  
@@ -231,7 +261,7 @@ const refreshData = async () => {
 }  
 
 // 自动刷新  
-let refreshTimer: NodeJS.Timer | null = null  
+let refreshTimer: ReturnType<typeof setInterval> | null = null  
 
 const startAutoRefresh = () => {  
   if (!refreshTimer) {  
