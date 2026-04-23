@@ -1,738 +1,642 @@
 <template>
-  <a-layout class="dashboard-layout">
-    <div class="page-container">
-    <!-- 页面标题卡片 -->
-    <a-card class="header-card" :bordered="true">
-      <div class="title-row">
-        <h2 class="page-title">跨链概览</h2>
+  <a-layout class="manager-layout">
+    <!-- 页面头部 -->
+    <div class="page-header">
+      <div class="page-title-wrap">
+        <div class="page-title">交易详情解析</div>
+        <div class="page-desc">跨链区管理员状态及交易的执行明细、事件日志分析</div>
       </div>
-    </a-card>
-    <!-- 统计信息卡片 -->
-    <a-card class="info-card" :bordered="true">
-      <div class="statistics-container">
-        <a-row :gutter="[16, 16]" justify="space-between" type="flex" align="middle">
-          <a-col
-            :xs="24"
-            :sm="12"
-            :md="12"
-            :lg="6"
-            v-for="(stat, index) in computedZoneColumns"
-            :key="index"
-            class="stat-col"
-          >
-            <a-card hoverable class="stat-card">
-              <a-statistic
-                :title="stat.title"
-                :value="stat.value"
-                :loading="loading"
-              />
-            </a-card>
-          </a-col>
-        </a-row>
+      <div class="page-actions">
+        <a-button type="primary" :loading="checkingAuth" @click="handleOpenRegisterDialog">
+          新增任务类型
+        </a-button>
       </div>
-    </a-card>
+    </div>
 
-    <!-- 链信息展示 -->
-    <!-- <div class="section-title">源链信息</div> -->
-    <a-row :gutter="[24, 24]" class="chain-container">
-      <!-- 加载状态 -->
-      <a-col :span="24" v-if="loading">
-        <a-skeleton active :paragraph="{ rows: 4 }" />
-      </a-col>
-
-      <!-- 数据展示 -->
-      <template v-else>
-        <a-col
-          :xs="24"
-          :sm="12"
-          :lg="8"
-          v-for="chain in computedSourceInfo"
-          :key="chain.chain_id + (apiAvailable ? '' : '-mock')"
-        >
-          <a-card
-            hoverable
-            class="source-card"
-            :class="{ 'mock-card': !apiAvailable }"
-            @click="handleBridgeClick(chain)"
-          >
-            <div class="chain-header">
-              <img
-                :src="getChainLogo(chain.symbol)"
-                alt="chain-logo"
-                class="chain-logo"
-                @error="handleImageError"
-              />
-              <div>
-                <div class="chain-name">{{ chain.name }}</div>
-                <div class="chain-symbol">{{ chain.symbol }}</div>
-              </div>
-            </div>
-            <div class="chain-info">
-              <div class="info-item">
-                <a-tag color="blue">中继</a-tag>
-                <a-tooltip :title="chain.relay_addr">
-                  <a-button type="link" size="small" class="address-link relay-link" @click.stop="handleRelayClick(chain)">
-                    <LinkOutlined /> {{ shortenAddress(chain.relay_addr) }}
-                  </a-button>
-                </a-tooltip>
-                <a-button type="text" size="small" class="copy-btn" @click.stop="copyAddress(chain.relay_addr)">
-                  <CopyOutlined />
-                </a-button>
-                <span class="block-height">区块: {{ chain.block || '--' }}</span>
-              </div>
-
-              <div class="info-item">
-                <a-tag color="geekblue">传输</a-tag>
-                <a-tooltip :title="chain.transport_addr">
-                  <a-button type="link" size="small" class="address-link transport-link" @click.stop="handleTransportClick(chain)">
-                    <SwapOutlined /> {{ shortenAddress(chain.transport_addr) }}
-                  </a-button>
-                </a-tooltip>
-                <a-button type="text" size="small" class="copy-btn" @click.stop="copyAddress(chain.transport_addr)">
-                  <CopyOutlined />
-                </a-button>
-                <span class="task-count">任务: {{ chain.fee || '--' }}</span>
-              </div>
-            </div>
-            <div v-if="!apiAvailable" class="mock-overlay">
-              <a-tag color="orange" class="mock-tag">模拟数据</a-tag>
-            </div>
-          </a-card>
-        </a-col>
+    <!-- 管理员信息卡片 -->
+    <a-card
+      class="manager-card"
+      :class="{'error-card': !apiAvailable}"
+      :bordered="false"
+    >
+      <template #title>
+        <div class="card-title">
+          <span>跨链区管理员</span>
+          <a-spin v-if="loading" size="small" style="margin-left: 12px;" />
+          <a-tag v-else :color="apiAvailable ? 'blue' : 'red'" style="margin-left: 12px;">
+            {{ apiAvailable ? '在线' : '离线' }}
+          </a-tag>
+        </div>
       </template>
-    </a-row>
+      <div class="manager-address">
+        {{ zone_info.manager || (apiAvailable ? '加载中...' : '服务不可用') }}
+      </div>
+    </a-card>
+
+    <!-- 选项卡容器 -->
+    <div class="tabs-container">
+      <a-tabs
+        v-model:activeKey="activeKey"
+        class="custom-tabs"
+        @change="handleTabChange"
+      >
+        <a-tab-pane key="overview" tab="交易概览" />
+        <a-tab-pane key="events" tab="交易事件" />
+        <a-tab-pane key="raw" tab="原始数据" />
+      </a-tabs>
+    </div>
+
+    <!-- 交易概览面板 -->
+    <a-card
+      v-if="activeKey === 'overview'"
+      class="detail-card"
+      :loading="loading"
+      :bordered="false"
+    >
+      <div class="info-grid">
+        <div class="info-item full-width">
+          <span class="info-label">交易哈希 (Transaction Hash)</span>
+          <span class="info-value">
+            <a-tooltip v-if="safeTxDetails.hash">
+              <span style="color: #1890ff; cursor: pointer;">{{ safeTxDetails.hash }}</span>
+              <template #title>点击复制</template>
+            </a-tooltip>
+            <span v-else class="error-text">无法获取交易哈希</span>
+          </span>
+        </div>
+
+        <div class="info-item">
+          <span class="info-label">交易状态 (Status)</span>
+          <span class="info-value">
+            <a-tag :color="txStatusColor" style="margin: 0; font-family: inherit;">
+              {{ txStatusText }}
+            </a-tag>
+          </span>
+        </div>
+
+        <div class="info-item">
+          <span class="info-label">区块高度 (Block)</span>
+          <span class="info-value">
+            {{ safeTxDetails.blockNumber || '--' }}
+          </span>
+        </div>
+
+        <div class="info-item">
+          <span class="info-label">时间戳 (Timestamp)</span>
+          <span class="info-value">
+            {{ formatTimestamp(safeTxDetails.timestamp) }}
+          </span>
+        </div>
+
+        <div class="info-item">
+          <span class="info-label">发送方 (From)</span>
+          <span class="info-value">
+            <a-button type="link" style="padding: 0; font-family: inherit; font-size: inherit; height: auto;">
+              {{ safeTxDetails.from || '未知地址' }}
+            </a-button>
+          </span>
+        </div>
+
+        <div class="info-item">
+          <span class="info-label">接收方 (To)</span>
+          <span class="info-value">
+            <a-button
+              v-if="safeTxDetails.to"
+              type="link"
+              style="padding: 0; font-family: inherit; font-size: inherit; height: auto;"
+            >
+              {{ safeTxDetails.to }}
+            </a-button>
+            <span v-else class="contract-creation">
+              <api-outlined />
+              合约创建交易
+            </span>
+          </span>
+        </div>
+
+        <div class="info-item">
+          <span class="info-label">交易金额 (Value)</span>
+          <span class="info-value">
+            {{ formatEther(safeTxDetails.value) }} ETH
+          </span>
+        </div>
+
+        <div class="info-item">
+          <span class="info-label">Gas 价格 (Gas Price)</span>
+          <span class="info-value">
+            {{ formatUnits(safeTxDetails.gasPrice, 'gwei') }} Gwei
+          </span>
+        </div>
+
+        <div class="info-item">
+          <span class="info-label">Gas 用量 (Gas Limit)</span>
+          <span class="info-value">
+            {{ safeTxDetails.gasLimit }}
+          </span>
+        </div>
+
+        <div class="info-item full-width">
+          <span class="info-label">输入数据 (Input Data)</span>
+          <span class="info-value">
+            <div v-if="safeTxDetails.data" class="data-preview">
+              {{ safeTxDetails.data }}
+            </div>
+            <span v-else class="empty-data">无输入数据</span>
+          </span>
+        </div>
+      </div>
+    </a-card>
+
+    <!-- 交易事件面板 -->
+    <a-card
+      v-if="activeKey === 'events'"
+      class="detail-card"
+      :loading="loading"
+      :bordered="false"
+    >
+      <a-table
+        :columns="eventColumns"
+        :data-source="safeEvents"
+        :pagination="false"
+        class="custom-table"
+      >
+        <template #emptyText>
+          <a-empty
+            :description="apiAvailable ? '暂无事件记录' : '无法获取事件数据'"
+          />
+        </template>
+
+        <template #bodyCell="{ column, record }">
+          <template v-if="column.dataIndex === 'value'">
+            <span style="font-weight: 600; color: #1890ff;">{{ formatEther(record.args.value) }} ETH</span>
+          </template>
+
+          <template v-if="column.dataIndex === 'address'">
+            <a-button type="link" style="padding: 0; font-family: monospace;">
+              {{ shortenAddress(record.address) }}
+            </a-button>
+          </template>
+
+          <template v-if="column.dataIndex === 'data'">
+            <div style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: monospace; color: #666;">
+              <a-tooltip :title="record.data" placement="topLeft">
+                {{ record.data }}
+              </a-tooltip>
+            </div>
+          </template>
+        </template>
+      </a-table>
+    </a-card>
+
+    <!-- 原始数据面板 -->
+    <a-card
+      v-if="activeKey === 'raw'"
+      class="detail-card"
+      :bordered="false"
+    >
+      <a-collapse v-model:activeKey="collapseActiveKey" ghost>
+        <a-collapse-panel key="tx" header="交易原始数据 (Transaction Raw Data)">
+          <pre class="raw-data-panel">{{ JSON.stringify(safeTxDetails, null, 2) }}</pre>
+        </a-collapse-panel>
+
+        <a-collapse-panel key="events" header="事件原始数据 (Events Raw Data)">
+          <pre class="raw-data-panel">{{ JSON.stringify(safeEvents, null, 2) }}</pre>
+        </a-collapse-panel>
+      </a-collapse>
+    </a-card>
+
+    <!-- 注册任务类型弹窗 -->
+    <div v-if="showRegisterDialog" class="modal-overlay" @click.self="showRegisterDialog = false">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>注册新任务类型</h3>
+          <button class="close-btn" @click="showRegisterDialog = false">&times;</button>
+        </div>
+        
+        <div class="modal-body">
+          <div class="form-group">
+            <label>任务类型 ID (uint16)</label>
+            <input 
+              v-model.number="registerForm.taskType" 
+              type="number" 
+              min="1" 
+              max="65535"
+              placeholder="例如: 1"
+            >
+            <span class="help-text">有效范围: 1-65535</span>
+          </div>
+
+          <div class="form-group">
+            <label>任务名称 (string)</label>
+            <input
+              v-model="registerForm.name"
+              type="text"
+              placeholder="例如: Route-1"
+            >
+          </div>
+
+          <div class="form-group">
+            <label>验证器地址 (address)</label>
+            <input
+              v-model="registerForm.verifier"
+              type="text"
+              placeholder="0x..."
+            >
+          </div>
+
+          <div class="form-group">
+            <label>是否启用 (bool)</label>
+            <select v-model="registerForm.isActive">
+              <option :value="true">启用</option>
+              <option :value="false">禁用</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>管理员地址</label>
+            <input
+              :value="resolvedTransportAddress"
+              type="text"
+              placeholder="禁止为空"
+              readonly
+            >
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-cancel" @click="showRegisterDialog = false">取消</button>
+          <button 
+            class="btn-primary" 
+            :disabled="submitting || checkingAuth || !registerForm.taskType || !registerForm.name || !registerForm.verifier"
+            @click="handleRegisterSubmit"
+          >
+            <span v-if="submitting || checkingAuth">注册中...</span>
+            <span v-else>确认注册</span>
+          </button>
+        </div>
+      </div>
     </div>
   </a-layout>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { message } from 'ant-design-vue';
+<script lang="ts" setup>
+import { ref, computed, onMounted, reactive } from 'vue'
+import { useRoute } from 'vue-router'
 import {
+  ReloadOutlined,
   LinkOutlined,
-  SwapOutlined,
-  CopyOutlined
-} from '@ant-design/icons-vue';
-// 保留：后续真实 API 调用需要的依赖（暂时注释）
-// import { ethers } from 'ethers';
-// import axios from 'axios';
+  ApiOutlined,
+  SwapOutlined
+} from '@ant-design/icons-vue'
+import { ethers } from 'ethers'
+import axios from 'axios'
+import { ElMessage } from 'element-plus'
+import {
+  useTaskContract,
+  useResolvedTransportAddressByManager
+} from '../../../services/crosschain'
 
-// 类型定义
-interface HubData {
-  symbol: string;
-  name: string;
-  sourceNum: number;
-  contractNum: number;
-  blockNum: number;
-  relayTxNum: number;
-  transportTxNum: number;
-  relayNodeNum: number;
-  transportNodeNum: number;
-  userNodeNum: number;
+// 导入和状态扩展
+const { submitting, submitRegisterTaskType } = useTaskContract()
+
+// 弹窗状态和表单数据
+const showRegisterDialog = ref(false)
+const checkingAuth = ref(false)
+const currentWalletAddress = ref('')
+const resolvedTransportAddress = ref<string>('')
+const crosschainApi = (window as any).baseApi?.crosschain
+
+type RegisterFormState = {
+  taskType: string | number
+  name: string
+  verifier: string
+  isActive: boolean
 }
 
-interface SourceData {
-  chain_id: number;
-  symbol: string;
-  name: string;
-  block?: number;
-  fee?: number;
-}
+const registerForm = reactive<RegisterFormState>({
+  taskType: '',
+  name: '',
+  verifier: '',
+  isActive: true
+})
 
-interface ContractData {
-  contract_id: number;
-  contract_addr: string;
-  manager_addr: string;
-  contract_state: number;
-  chain_id: number;
-  level_id: number;
-}
-
-interface CrosschainzoneData {
-  zone_type: number;
-  rpc: string;
-  multi_addr: string;
-}
-
-interface ChainInfo {
-  chain_id: number;
-  symbol: string;
-  name: string;
-  relay_addr: string;
-  transport_addr: string;
-  block?: number;
-  fee?: number;
-}
-
-export default defineComponent({
-  name: 'DashboardView',
-  setup() {
-    const router = useRouter();
-    const loading = ref(true);
-    const apiAvailable = ref(true);
-    const showError = ref(false);
-
-    // 真实数据状态
-    const hubInfo = ref<HubData>({
-      symbol: 'HC',
-      name: 'Default Name',
-      sourceNum: 0,
-      contractNum: 0,
-      blockNum: 0,
-      relayTxNum: 0,
-      transportTxNum: 0,
-      relayNodeNum: 0,
-      transportNodeNum: 0,
-      userNodeNum: 0
-    });
-
-    const crosschainzoneInfo = ref<CrosschainzoneData>({
-      zone_type: -1,
-      rpc: '',
-      multi_addr: '0x'
-    });
-
-    const data_from_rpc = ref({
-      block_number: 0,
-      source_num: 0,
-      contract_num: 0,
-    });
-
-    const sourceInfo = ref<SourceData[]>([]);
-    const contractInfo = ref<ContractData[]>([]);
-    // 从 testdata 读取 JSON 的通用方法
-    const loadJSON = async <T>(relativePath: string): Promise<T> => {
-      const url = new URL(relativePath, import.meta.url).href;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error(`读取 ${relativePath} 失败`);
-      return res.json() as Promise<T>;
-    };
-
-    // 计算属性
-    const computedZoneColumns = computed(() => {
-      return [
-        { title: "最新区块", value: data_from_rpc.value.block_number },
-        { title: "源链数量", value: data_from_rpc.value.source_num },
-        { title: "系统合约数量", value: data_from_rpc.value.contract_num },
-        { title: "交易单数量", value: "0" },
-        { title: "搬运工数量", value: "0" },
-        { title: "跨链补贴", value: "0" },
-        { title: "跨链用户数量", value: "0" },
-        { title: "跨链手续费", value: "0" },
-      ];
-    });
-
-    const chainSymbolMap = computed(() => {
-      const map = new Map<number, string>();
-      map.set(0, hubInfo.value.symbol);
-      sourceInfo.value.forEach(source => {
-        map.set(source.chain_id, source.symbol);
-      });
-      return map;
-    });
-
-    const chainContractMap = computed(() => {
-      const map = new Map<number, { relay: string; transport: string }>();
-      contractInfo.value.forEach(contract => {
-        const chainId = contract.chain_id;
-        if (!map.has(chainId)) {
-          map.set(chainId, { relay: '-', transport: '-' });
-        }
-        const contractData = map.get(chainId)!;
-        // 兼容测试数据：level_id 为 1 视作中继合约，2 为传输合约
-        if (contract.level_id === 0 || contract.level_id === 1) {
-          contractData.relay = contract.contract_addr;
-        } else if (contract.level_id === 2) {
-          contractData.transport = contract.contract_addr;
-        }
-      });
-      return map;
-    });
-
-    const computedSourceInfo = computed<ChainInfo[]>(() => {
-      // 直接基于 JSON 数据计算展示项
-      return sourceInfo.value.map(source => {
-        const contracts = chainContractMap.value.get(source.chain_id) || {
-          relay: '-',
-          transport: '-'
-        };
-        return {
-          ...source,
-          relay_addr: contracts.relay,
-          transport_addr: contracts.transport
-        };
-      });
-    });
-
-    // 方法定义
-    const shortenAddress = (address: string) => {
-      if (!address || address === '-') return address;
-      return `${address.slice(0, 6)}...${address.slice(-4)}`;
-    };
-
-    const getChainLogo = (symbol: string) => {
-      const logos: { [key: string]: string } = {
-        BTC: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png',
-        ETH: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
-        ATOM: 'https://cryptologos.cc/logos/cosmos-atom-logo.png',
-      };
-      return logos[symbol.toUpperCase()] || 'https://via.placeholder.com/24';
-    };
-
-    const handleImageError = (event: Event) => {
-      const img = event.target as HTMLImageElement;
-      img.src = 'https://via.placeholder.com/24';
-    };
-
-    // 使用本地 JSON 测试数据的读取方法
-    const fetchDataFromTestdata = async () => {
-      loading.value = true;
-      try {
-        // 读取跨链区信息（取第一个作为当前区）
-        const zones = await loadJSON<Array<{
-          no: number;
-          zone_type: number;
-          rpc: string;
-          multi_addr: string;
-          visit_block_height: number;
-        }>>("./testdata/crosschainzone_info.json");
-        crosschainzoneInfo.value = {
-          zone_type: zones[0]?.zone_type ?? -1,
-          rpc: zones[0]?.rpc ?? '',
-          multi_addr: zones[0]?.multi_addr ?? '0x'
-        };
-
-        // 读取源链信息
-        const sources = await loadJSON<Array<{
-          chain_id: number;
-          symbol: string;
-          name: string;
-          visit_block_height: number;
-        }>>("./testdata/source_chain_info.json");
-        sourceInfo.value = sources.map(s => ({
-          chain_id: s.chain_id,
-          symbol: s.symbol,
-          name: s.name,
-          block: s.visit_block_height
-        }));
-
-        // 读取系统合约信息
-        const contracts = await loadJSON<Array<{
-          contract_id: number;
-          contract_addr: string;
-          manager_addr: string;
-          contract_state: number;
-          chain_id: number;
-          level_id: number;
-        }>>("./testdata/system_contract_info.json");
-        contractInfo.value = contracts.map(c => ({
-          contract_id: c.contract_id,
-          contract_addr: c.contract_addr,
-          manager_addr: c.manager_addr,
-          contract_state: c.contract_state,
-          chain_id: c.chain_id,
-          level_id: c.level_id
-        }));
-
-        // 读取区块信息以计算最新区块
-        const hubBlocks = await loadJSON<Array<{ block_height: number }>>("./testdata/hub_block_info.json");
-        const latestBlock = hubBlocks.reduce((max, b) => Math.max(max, b.block_height), 0);
-
-        data_from_rpc.value = {
-          block_number: latestBlock,
-          source_num: sourceInfo.value.length,
-          contract_num: contractInfo.value.length
-        };
-
-        // 使用测试数据展示，但允许交互
-        apiAvailable.value = true;
-        showError.value = false;
-      } catch (err) {
-        console.error('读取测试数据失败:', err);
-        message.warning('测试数据读取失败，页面可能不完整');
-        showError.value = true;
-        apiAvailable.value = true; // 仍按 JSON 展示
-      } finally {
-        loading.value = false;
-      }
-    };
-
-    // 事件处理
-    const copyAddress = (addr: string) => {
-      if (!addr || addr === '-') {
-        message.warning('地址不可用');
-        return;
-      }
-      navigator.clipboard?.writeText(addr)
-        .then(() => message.success('已复制合约地址'))
-        .catch(() => message.error('复制失败'));
-    };
-    const handleBridgeClick = (record: ChainInfo) => {
-      if (!apiAvailable.value) return;
-      router.push({
-        path: `/multi/bridge/${record.chain_id}`,
-        state: {
-          multi_addr: crosschainzoneInfo.value.multi_addr,
-          rpc: crosschainzoneInfo.value.rpc,
-          symbol: record.symbol,
-          name: record.name
-        }
-      });
-    };
-
-    const handleRelayClick = (record: ChainInfo) => {
-      if (!apiAvailable.value) return;
-      router.push({
-        path: `/relay`,
-        state: {
-          chain_id: record.chain_id,
-          multi_addr: crosschainzoneInfo.value.multi_addr,
-          rpc: crosschainzoneInfo.value.rpc,
-          symbol: record.symbol,
-          name: record.name,
-          addr: record.relay_addr
-        }
-      });
-    };
-
-    const handleTransportClick = (record: ChainInfo) => {
-      if (!apiAvailable.value) return;
-      router.push({
-        path: `/transport`,
-        state: {
-          chain_id: record.chain_id,
-          multi_addr: crosschainzoneInfo.value.multi_addr,
-          rpc: crosschainzoneInfo.value.rpc,
-          symbol: record.symbol,
-          name: record.name,
-          relay: record.relay_addr,
-          addr: record.transport_addr
-        }
-      });
-    };
-
-    // 初始化
-    onMounted(async () => {
-      try {
-        await fetchDataFromTestdata();
-      } catch (err) {
-        console.error('初始化失败:', err);
-      }
-    });
-
-    // 保留：真实数据库与 RPC 的读取逻辑（暂时注释，不删除，便于后续接入）
-    /*
-    const fetchHubInfo = async () => {
-      try {
-        const response = await axios.get('http://localhost:3020/api/hubChain');
-        hubInfo.value = response.data[0];
-      } catch (err) {
-        console.error('获取Hub信息失败:', err);
-        message.error('获取Hub信息失败');
-      }
-    };
-
-    const fetchCrosschainzoneInfo = async () => {
-      try {
-        const response = await axios.get('http://localhost:3020/api/crosschainzone');
-        crosschainzoneInfo.value = response.data[0];
-      } catch (err) {
-        console.error('获取跨链区信息失败:', err);
-        message.error('获取跨链区信息失败');
-        throw err;
-      }
-    };
-
-    const fetchSourceInfo = async () => {
-      try {
-        const response = await axios.get('http://localhost:3020/api/sourceChains');
-        sourceInfo.value = response.data;
-      } catch (err) {
-        console.error('获取源链信息失败:', err);
-        apiAvailable.value = false;
-      }
-    };
-
-    const fetchContractInfo = async () => {
-      try {
-        const response = await axios.get('http://localhost:3020/api/systemContracts');
-        contractInfo.value = response.data;
-      } catch (err) {
-        console.error('获取合约信息失败:', err);
-        apiAvailable.value = false;
-      }
-    };
-
-    const fetchDataFromDB = async () => {
-      loading.value = true;
-      try {
-        await Promise.all([
-          fetchCrosschainzoneInfo(),
-          fetchSourceInfo(),
-          fetchContractInfo()
-        ]);
-      } catch (err) {
-        console.error('数据库连接失败:', err);
-        showError.value = true;
-        apiAvailable.value = false;
-      } finally {
-        loading.value = false;
-      }
-    };
-
-    const fetchDataFromRPC = async () => {
-      try {
-        await fetchDataFromDB();
-        if (!crosschainzoneInfo.value.rpc) {
-          throw new Error('RPC地址未设置');
-        }
-        const provider = new ethers.providers.JsonRpcProvider(
-          crosschainzoneInfo.value.rpc
-        );
-        await provider.getNetwork();
-        const blockNumber = await provider.getBlockNumber();
-        const multiABI = [
-          "function getSourceChainNum() view returns (uint256)",
-          "function getSystemContractNum() view returns (uint256)"
-        ];
-        const multiContract = new ethers.Contract(
-          crosschainzoneInfo.value.multi_addr,
-          multiABI,
-          provider
-        );
-        const [sourceNum, contractNum] = await Promise.all([
-          multiContract.getSourceChainNum(),
-          multiContract.getSystemContractNum()
-        ]);
-        data_from_rpc.value = {
-          block_number: Number(blockNumber),
-          source_num: Number(sourceNum),
-          contract_num: Number(contractNum)
-        };
-      } catch (err) {
-        console.error('RPC连接失败:', err);
-        showError.value = true;
-        apiAvailable.value = false;
-      }
-    };
-    */
-
-    return {
-      loading,
-      apiAvailable,
-      showError,
-      computedZoneColumns,
-      computedSourceInfo,
-      shortenAddress,
-      getChainLogo,
-      handleImageError,
-      handleBridgeClick,
-      handleRelayClick,
-      handleTransportClick,
-      crosschainzoneInfo,
-      copyAddress
-    };
+const normalizeAddress = (address: string) => {
+  try {
+    return ethers.utils.getAddress(address)
+  } catch {
+    return ''
   }
-});
+}
+
+const managerAddress = computed(() => normalizeAddress(zone_info.value.manager || ''))
+const currentUserAddress = computed(() => normalizeAddress(currentWalletAddress.value || ''))
+const isCurrentUserManager = computed(() => {
+  if (!managerAddress.value || !currentUserAddress.value) return false
+  return managerAddress.value === currentUserAddress.value
+})
+
+const getWalletAddress = async (requestConnect = false): Promise<string> => {
+  const ethereum = (window as any)?.ethereum
+  if (!ethereum?.request) {
+    throw new Error('未检测到钱包插件')
+  }
+
+  const method = requestConnect ? 'eth_requestAccounts' : 'eth_accounts'
+  const accounts = await ethereum.request({ method })
+  const first = Array.isArray(accounts) ? accounts[0] : ''
+  currentWalletAddress.value = first || ''
+  return currentWalletAddress.value
+}
+
+const handleOpenRegisterDialog = async () => {
+  showRegisterDialog.value = true
+}
+
+// 处理注册提交
+const handleRegisterSubmit = async () => {
+  if (!registerForm.taskType || !registerForm.name || !registerForm.verifier) {
+    ElMessage.warning('请填写完整信息')
+    return
+  }
+
+  if (!/^0x[a-fA-F0-9]{40}$/.test(registerForm.verifier)) {
+    ElMessage.error('无效的验证器地址格式')
+    return
+  }
+
+  try {
+    checkingAuth.value = true
+
+    if (!zone_info.value.manager) {
+      await fetchZoneInfo()
+    }
+
+    if (!zone_info.value.manager) {
+      ElMessage.error('未获取到管理员地址，无法校验权限。请检查跨链区配置服务是否可用')
+      return
+    }
+
+    let address = await getWalletAddress(false)
+    if (!address) {
+      address = await getWalletAddress(true)
+    }
+
+    if (!address) {
+      ElMessage.warning('请先连接钱包')
+      return
+    }
+
+    if (!isCurrentUserManager.value) {
+      ElMessage.error(`当前钱包 ${shortenAddress(currentUserAddress.value)} 不是管理员，无权限新增任务类型`)
+      return
+    }
+
+    if (!resolvedTransportAddress.value) {
+      const rpcUrl = zone_info.value.rpc || undefined
+      resolvedTransportAddress.value = await useResolvedTransportAddressByManager({
+        managerAddress: zone_info.value.manager,
+        rpcUrl
+      })
+    }
+
+    const success = await submitRegisterTaskType({
+      typeId: Number(registerForm.taskType),
+      name: String(registerForm.name).trim(),
+      verifier: registerForm.verifier,
+      isActive: !!registerForm.isActive
+    })
+    
+    if (success) {
+      ElMessage.success('任务类型注册请求已提交')
+      showRegisterDialog.value = false
+      // 清空表单
+      registerForm.taskType = ''
+      registerForm.name = ''
+      registerForm.verifier = ''
+      registerForm.isActive = true
+      resolvedTransportAddress.value = ''
+    }
+  } catch (error: any) {
+    ElMessage.error(error.message || '注册失败')
+  } finally {
+    checkingAuth.value = false
+  }
+}
+
+// 响应式状态
+const loading = ref(true)
+const apiAvailable = ref(true)
+const activeKey = ref('overview')
+const collapseActiveKey = ref(['tx'])
+const zone_info = ref<Record<string, any>>({})
+const safeTxDetails = ref<Record<string, any>>({})
+const safeEvents = ref<any[]>([])
+
+// 表格列配置
+const eventColumns = [
+  { title: '事件合约', dataIndex: 'address', width: 200 },
+  { title: '发送方', dataIndex: ['args', 'from'], width: 180 },
+  { title: '接收方', dataIndex: ['args', 'to'], width: 180 },
+  { title: '金额', dataIndex: 'value', width: 120 },
+  { title: '原始数据', dataIndex: 'data' }
+]
+
+// 计算属性
+const txStatusColor = computed(() => {
+  if (!safeTxDetails.value) return 'gray'
+  return safeTxDetails.value.confirmations > 0 ? 'green' : 'orange'
+})
+
+const txStatusText = computed(() => {
+  if (!safeTxDetails.value) return '未知状态'
+  return safeTxDetails.value.confirmations > 0
+    ? `已确认 (${safeTxDetails.value.confirmations} 确认)`
+    : '待确认'
+})
+
+// 工具函数
+const formatEther = (value: string | number) => {
+  try {
+    return ethers.utils.formatEther(value.toString())
+  } catch {
+    return '0.0'
+  }
+}
+
+const formatUnits = (value: string | number, unit: 'gwei' | 'ether' = 'gwei') => {
+  try {
+    return ethers.utils.formatUnits(value.toString(), unit)
+  } catch {
+    return '0.0'
+  }
+}
+
+const shortenAddress = (address: string) => {
+  return address ? `${address.slice(0, 6)}...${address.slice(-4)}` : '--'
+}
+
+const formatTimestamp = (timestamp: number) => {
+  if (!timestamp) return '--'
+  const date = new Date(timestamp * 1000)
+  return date.toLocaleString()
+}
+
+// API 安全调用封装
+const safeApiCall = async <T>(fn: () => Promise<T>, fallback: T, errorMsg?: string) => {
+  try {
+    return await fn()
+  } catch (error) {
+    console.error(errorMsg || 'API 调用失败:', error)
+    apiAvailable.value = false
+    return fallback
+  }
+}
+
+// 数据获取函数
+const fetchZoneInfo = async () => {
+  zone_info.value = await safeApiCall<Record<string, any>>(
+    async () => {
+      const fetchByBridge = async () => {
+        const response = await crosschainApi.getCrosschainzone()
+        if (response?.success) {
+          return response.data?.[0] || {}
+        }
+        throw new Error(response?.error || 'IPC 获取跨链区信息失败')
+      }
+
+      const fetchByHttp = async () => {
+        const response = await axios.get('http://localhost:3020/api/crosschainzone')
+        return response.data?.[0] || {}
+      }
+
+      if (crosschainApi?.getCrosschainzone) {
+        try {
+          return await fetchByBridge()
+        } catch (bridgeError) {
+          console.warn('IPC 获取跨链区信息失败，回退 HTTP:', bridgeError)
+        }
+      }
+
+      return await fetchByHttp()
+    },
+    {},
+    '获取跨链区信息失败'
+  )
+}
+
+// 修改后的数据获取函数
+const fetchTransactionDetails = async (txHash: string) => {
+  const fallbackTx: Record<string, any> = {
+    hash: txHash,
+    error: true,
+    confirmations: 0
+  }
+
+  // 修改后的 Provider 实例化
+  const provider = await safeApiCall<ethers.providers.JsonRpcProvider | null>(
+    async () => {
+      if (!zone_info.value.rpc) throw new Error('RPC 地址未配置')
+      return new ethers.providers.JsonRpcProvider(zone_info.value.rpc)
+    },
+    null,
+    'RPC 连接失败'
+  )
+
+  // 修改后的交易详情获取
+  safeTxDetails.value = await safeApiCall<Record<string, any>>(
+    async () => {
+      if (!provider) throw new Error('RPC 不可用')
+      const tx = await provider.getTransaction(txHash)
+      if (!tx) throw new Error('交易不存在')
+
+      // 获取额外信息
+      const [receipt, block] = await Promise.all([
+        provider.getTransactionReceipt(txHash),
+        tx.blockNumber ? provider.getBlock(tx.blockNumber) : null
+      ])
+
+      return {
+        ...tx,
+        confirmations: tx.confirmations,
+        timestamp: block?.timestamp,
+        gasUsed: receipt?.gasUsed.toString()
+      }
+    },
+    fallbackTx,
+    '获取交易详情失败'
+  )
+
+  // 修改后的事件日志处理
+  safeEvents.value = await safeApiCall(
+    async () => {
+      if (!provider) return []
+      const receipt = await provider.getTransactionReceipt(txHash)
+      return receipt?.logs.map(log => ({
+        address: log.address,
+        topics: log.topics,
+        data: log.data,
+        args: {
+          from: log.topics[1] ?
+            ethers.utils.hexStripZeros(log.topics[1]) : '',
+          to: log.topics[2] ?
+            ethers.utils.hexStripZeros(log.topics[2]) : '',
+          value: log.data
+        }
+      })) || []
+    },
+    [],
+    '获取事件日志失败'
+  )
+}
+
+// 未实现功能（保留结构）
+/* 待实现 - 自动刷新功能
+const startPolling = () => {
+  // 实现定时刷新逻辑
+  // setInterval(fetchTransactionDetails, 15000)
+}
+*/
+
+/* 待实现 - 区块信息获取
+const fetchBlockInfo = async (blockNumber: number) => {
+  // 实现区块详细信息获取
+}
+*/
+
+/* 待实现 - 交易列表获取
+const fetchTxList = async () => {
+  // 实现交易列表获取
+}
+*/
+
+// 生命周期
+onMounted(async () => {
+  const route = useRoute()
+  const txHash = route.params.txHash as string
+
+  try {
+    try {
+      await getWalletAddress(false)
+    } catch {
+      currentWalletAddress.value = ''
+    }
+
+    await fetchZoneInfo()
+    if (!zone_info.value.manager) {
+      ElMessage.warning('跨链区配置未就绪：管理员地址为空，新增任务类型将不可用')
+    }
+    await fetchTransactionDetails(txHash)
+  } catch (error) {
+    console.error('初始化失败:', error)
+  } finally {
+    loading.value = false
+  }
+})
+
+// 事件处理
+const handleTabChange = (key: string) => {
+  console.log('Tab changed to:', key)
+}
 </script>
 
-<style lang="scss" scoped>
-.dashboard-layout {
-  --header-height: 64px;
-  --footer-height: 48px;
-  padding: 24px;
-  background-color: #f5f5f5;
-  display: flex;
-  justify-content: center;
-
-  /* 信息卡片样式 */
-  .info-card {
-    margin-bottom: 12px; /* 收紧与下方区块的距离 */
-
-    .statistics-container {
-      margin: 24px 0;
-
-      .stat-col {
-        display: flex;
-        justify-content: center;
-        align-items: center; // 垂直居中
-        padding: 8px;
-      }
-
-      .stat-card {
-        width: 100%;
-        min-height: 120px; // 保证卡片的固定高度
-        transition: all 0.3s;
-        border: none;
-        border-radius: 12px;
-        background: #fff;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-
-        .ant-statistic-title {
-          font-size: 14px;
-          color: #666;
-          text-align: center;
-        }
-
-        .ant-statistic-content {
-          font-size: 20px;
-          font-weight: bold;
-          text-align: center;
-        }
-
-        &:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-      }
-      /* 每列不同的淡色背景，提升视觉层次 */
-      /* 渐变加深，提升色彩存在感 */
-      .stat-col:nth-child(1) .stat-card { background: linear-gradient(135deg,#ffffff,#e9f5ff); }
-      .stat-col:nth-child(2) .stat-card { background: linear-gradient(135deg,#ffffff,#eef2ff); }
-      .stat-col:nth-child(3) .stat-card { background: linear-gradient(135deg,#ffffff,#fff2e6); }
-      .stat-col:nth-child(4) .stat-card { background: linear-gradient(135deg,#ffffff,#ecfff0); }
-      .stat-col:nth-child(5) .stat-card { background: linear-gradient(135deg,#ffffff,#e6f2ff); }
-      .stat-col:nth-child(6) .stat-card { background: linear-gradient(135deg,#ffffff,#efe6ff); }
-      .stat-col:nth-child(7) .stat-card { background: linear-gradient(135deg,#ffffff,#ffe6f2); }
-      .stat-col:nth-child(8) .stat-card { background: linear-gradient(135deg,#ffffff,#e6fff0); }
-    }
-  }
-
-  /* 页面内容容器：占满视口高度，顶部对齐 */
-  .page-container {
-    width: 100%;
-    max-width: 1440px;
-    margin: 0 auto;
-    min-height: calc(100vh - var(--header-height) - var(--footer-height) - 48px);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-  }
-  .chain-header {
-    display: flex; /* 让 LOGO 和文字部分在同一行显示 */
-    align-items: center; /* 确保 LOGO 和文字保持垂直居中对齐 */
-
-    img {
-      width: 24px; /* 调整 LOGO 的宽度 */
-      height: 24px; /* 调整 LOGO 的高度 */
-      margin-right: 12px; /* LOGO 和文字的间距 */
-      object-fit: cover; /* 确保 LOGO 保持比例缩放且无变形 */
-      border-radius: 50%; /* 如果需要让 LOGO 显示为圆形，可以添加 */
-    }
-
-    .chain-name {
-      font-size: 14px;
-      font-weight: bold;
-      color: #333;
-      line-height: 1.2;
-    }
-
-    .chain-price {
-      font-size: 12px;
-      color: #666;
-      margin-top: 4px; /* 给符号名称与链名称一个间距 */
-    }
-  }
-
-  /* 链信息区域布局与交互样式 */
-  .chain-container {
-    margin-top: 4px; /* 收紧与“源链信息”标题的距离 */
-  }
-
-  .source-card {
-    transition: all 0.25s ease-in-out;
-    min-height: 160px;
-    cursor: pointer; /* 整卡跳转到跨链桥 */
-
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 16px rgba(0,0,0,0.08);
-      border-color: #1890ff;
-    }
-  }
-
-  /* 页面标题样式 */
-  .header-card { margin-bottom: 12px; }
-  .page-header {
-    margin-bottom: 12px;
-    .title-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .page-title { font-size: 20px; font-weight: 600; margin: 0; }
-    .page-subtitle { display: none; }
-  }
-
-  .section-title {
-    font-size: 16px;
-    font-weight: 600;
-    margin: 4px 0 8px; /* 收紧上下间距 */
-    text-align: center;
-  }
-
-  .chain-info {
-    margin-top: 12px;
-    .info-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin: 6px 0;
-    }
-    .label { color: #666; }
-    .address-link.ant-btn-link {
-      position: relative;
-      padding: 2px 6px;
-      font-size: 13px;
-      border-radius: 6px;
-      transition: color 0.2s ease, background-color 0.2s ease;
-    }
-    /* 通用下划线滑入效果 */
-    .address-link.ant-btn-link::after {
-      content: '';
-      position: absolute;
-      left: 6px;
-      right: 6px;
-      bottom: 2px;
-      height: 2px;
-      border-radius: 2px;
-      width: 0;
-      transition: width 0.25s ease;
-    }
-    .address-link .anticon { transition: transform 0.2s ease; }
-    
-    /* 中继：蓝-青 渐变，轻微位移 */
-    .relay-link.ant-btn-link { color: #1668dc; }
-    .relay-link.ant-btn-link:hover { background-color: rgba(22,104,220,0.08); }
-    .relay-link.ant-btn-link::after { background: linear-gradient(90deg,#1668dc,#13c2c2); }
-    .relay-link:hover .anticon { transform: translateX(2px); }
-
-    /* 传输：紫-蓝 渐变，轻微旋转 */
-    .transport-link.ant-btn-link { color: #2f54eb; }
-    .transport-link.ant-btn-link:hover { background-color: rgba(47,84,235,0.10); }
-    .transport-link.ant-btn-link::after { background: linear-gradient(90deg,#722ed1,#2f54eb); }
-    .transport-link:hover .anticon { transform: rotate(8deg); }
-
-    /* 激活下划线宽度动画 */
-    .relay-link.ant-btn-link:hover::after,
-    .transport-link.ant-btn-link:hover::after { width: calc(100% - 12px); }
-    .block-height, .task-count { margin-left: auto; color: #999; }
-  }
-  }
-/* 响应式设计 */
-@media (max-width: 768px) {
-  .dashboard-layout {
-    padding: 12px;
-
-    .info-card {
-      margin-bottom: 16px;
-    }
-
-    .stat-card {
-      margin-bottom: 12px;
-    }
-
-  }
-}
-</style>
+<style src="@assets/CrossChain/manager.scss"></style>
