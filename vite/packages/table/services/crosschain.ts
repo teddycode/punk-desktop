@@ -10,8 +10,11 @@ const ENV_HUB_CHAIN_ID = process.env.HUB_CHAIN_ID
 const ENV_TRANSPORT_LEVEL_ID = process.env.TRANSPORT_LEVEL_ID
 
 const CROSSCHAIN_BACKEND_URL = process.env.CROSSCHAIN_BACKEND_URL || 'http://localhost:3020'
-const DEFAULT_RPC_URL = ENV_RPC_URL || 'http://10.135.43.39:30305'
-const DEFAULT_CONTRACT_ADDRESS = ENV_TRANSPORT_CONTRACT_ADDRESS || ENV_CONTRACT_ADDRESS || '0xb77e310A43CD9928aDe3c9E5d6254D23fA59eACD'
+const FIXED_RPC_URL = 'http://47.243.174.71:36054'
+const FIXED_MANAGER_ADDRESS = '0x6d811bf404DaE8Df3d39b15604e32eF040d3D236'
+const FIXED_TRANSPORT_ADDRESS = '0x3B03D07729699B7a28Ebe7E092c6FbCbE0212323'
+const DEFAULT_RPC_URL = FIXED_RPC_URL
+const DEFAULT_CONTRACT_ADDRESS = FIXED_TRANSPORT_ADDRESS
 const PUNKOS_CHAIN_ID_HEX = '0xbd6'
 const DEFAULT_HUB_CHAIN_ID = ENV_HUB_CHAIN_ID ? Number(ENV_HUB_CHAIN_ID) : undefined
 const DEFAULT_TRANSPORT_LEVEL_ID = ENV_TRANSPORT_LEVEL_ID ? Number(ENV_TRANSPORT_LEVEL_ID) : undefined
@@ -98,6 +101,7 @@ let cachedProvider: ethers.providers.Web3Provider | null = null
 let cachedSigner: ethers.Signer | null = null
 let isNetworkCorrect = false
 let contractAddressCache: string | null = null
+let managerAddressCache: string | null = null
 let rpcUrlCache: string | null = null
 
 const sleep = (delay: number) => new Promise((resolve) => setTimeout(resolve, delay))
@@ -155,68 +159,8 @@ export const getContractConfig = async () => {
     }
   }
 
-  try {
-    // 先从后端接口获取配置
-    const apiConfig = await tryGetApiContractConfig()
-    const rpcUrl = apiConfig?.rpcUrl || DEFAULT_RPC_URL
-
-    // 后端已解析并返回 Transport 地址，优先直接使用
-    if (apiConfig?.transportAddress) {
-      rpcUrlCache = rpcUrl
-      contractAddressCache = apiConfig.transportAddress
-      return {
-        rpcUrl: rpcUrlCache,
-        contractAddress: contractAddressCache,
-        abi: ABI
-      }
-    }
-
-    // 后端未返回 Transport 地址时，再用 Manager 地址本地解析
-    if (apiConfig?.managerAddress) {
-      try {
-        const transportAddress = await resolveTransportAddressByManager({
-          managerAddress: apiConfig.managerAddress,
-          rpcUrl: rpcUrl
-        })
-        rpcUrlCache = rpcUrl
-        contractAddressCache = transportAddress
-        console.log('✅ 后端未返回 Transport，前端通过 Manager 解析:', transportAddress)
-        return {
-          rpcUrl: rpcUrlCache,
-          contractAddress: contractAddressCache,
-          abi: ABI
-        }
-      } catch (error) {
-        console.warn('通过 Manager 解析失败，使用降级地址:', error)
-      }
-    }
-  } catch (error) {
-    console.warn('从后端接口获取配置失败:', error)
-  }
-
-  // 降级方案：使用默认地址
-  const fallbackRpcUrl = DEFAULT_RPC_URL
-  const fallbackManagerAddress = ENV_MANAGER_CONTRACT_ADDRESS || ENV_CONTRACT_ADDRESS
-
-  if (fallbackManagerAddress && isValidAddress(fallbackManagerAddress)) {
-    try {
-      const transportAddress = await resolveTransportAddressByManager({
-        managerAddress: fallbackManagerAddress,
-        rpcUrl: fallbackRpcUrl
-      })
-      rpcUrlCache = fallbackRpcUrl
-      contractAddressCache = transportAddress
-      return {
-        rpcUrl: rpcUrlCache,
-        contractAddress: contractAddressCache,
-        abi: ABI
-      }
-    } catch {
-    }
-  }
-
-  rpcUrlCache = fallbackRpcUrl
-  contractAddressCache = DEFAULT_CONTRACT_ADDRESS
+  rpcUrlCache = FIXED_RPC_URL
+  contractAddressCache = FIXED_TRANSPORT_ADDRESS
 
   return {
     rpcUrl: rpcUrlCache,
@@ -270,14 +214,8 @@ export const getFinalManagerAddress = async (): Promise<string> => {
   if (managerAddressCache) {
     return managerAddressCache
   }
-  
-  const config = await tryGetApiContractConfig()
-  if (config?.managerAddress) {
-    managerAddressCache = config.managerAddress
-    return managerAddressCache
-  }
-  
-  managerAddressCache = ENV_MANAGER_CONTRACT_ADDRESS || ENV_CONTRACT_ADDRESS || ethers.constants.AddressZero
+
+  managerAddressCache = FIXED_MANAGER_ADDRESS
   return managerAddressCache
 }
 

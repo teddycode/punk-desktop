@@ -184,6 +184,107 @@ $border-color: #f0f0f0;
     gap: 16px;
   }
 
+  .invitation-alert {
+    background: $highlight-soft;
+    border: 1px solid rgba(24, 144, 255, 0.2);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    animation: slideDown 0.4s ease-out;
+
+    .alert-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      .icon {
+        font-size: 20px;
+      }
+
+      p {
+        margin: 0;
+        font-size: 14px;
+        color: #1a1a1a;
+      }
+    }
+  }
+
+  @keyframes slideDown {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .btn-sm {
+    padding: 6px 14px;
+    font-size: 13px;
+    border-radius: 8px;
+  }
+
+  .btn-danger-outline {
+    background: #fff;
+    border: 1px solid #ff4d4f;
+    color: #ff4d4f;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover:not(:disabled) {
+      background: #ff4d4f;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(255, 77, 79, 0.2);
+    }
+
+    &:disabled {
+      background: #fafafa;
+      border-color: #e8e8e8;
+      color: #bfbfbf;
+      cursor: not-allowed;
+    }
+  }
+
+  .btn-block {
+    width: 100%;
+  }
+
+  .self-label {
+    display: block;
+    text-align: center;
+    font-size: 13px;
+    color: $text-muted;
+    padding: 8px 0;
+  }
+
+  .committee-foot {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid $border-color;
+  }
+
+  .task-section {
+    margin-top: 32px;
+    
+    .section-header {
+      margin-bottom: 20px;
+      h2 {
+        margin: 0 0 4px;
+        font-size: 20px;
+        font-weight: 700;
+        color: #1a1a1a;
+      }
+      p {
+        margin: 0;
+        font-size: 13px;
+        color: $text-secondary;
+      }
+    }
+  }
+
   .committee-card,
   .task-card {
     background: $card-bg;

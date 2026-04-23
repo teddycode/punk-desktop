@@ -19,24 +19,105 @@
       font-weight: 600;
     }
 
-    .subtitle {
+  .subtitle {
       color: #666;
       font-size: 1.1rem;
+    }
+  }
+
+  // 筛选区域
+  .filter-section {
+    display: flex;
+    gap: 24px;
+    background: #ffffff;
+    padding: 20px 24px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    border: 1px solid #ebeef5;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+    .filter-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      label {
+        font-size: 12px;
+        color: #909399;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .chain-tag {
+        background: #f0f7ff;
+        color: #0066ff;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-weight: 600;
+        border: 1px solid #d0e5ff;
+        font-size: 14px;
+      }
+
+      select {
+        padding: 8px 12px;
+        border-radius: 8px;
+        border: 1px solid #dcdfe6;
+        background: #fff;
+        color: #606266;
+        min-width: 200px;
+        font-size: 14px;
+        cursor: pointer;
+        outline: none;
+
+        &:focus {
+          border-color: #40a9ff;
+        }
+      }
     }
   }
 
   // 加载状态
   .loading-state {
     text-align: center;
-    padding: 60px;
-    color: #666;
+    padding: 80px 0;
+    
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #3498db;
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      animation: spin 1s linear infinite;
+    }
+
+    p {
+      color: #909399;
+      font-size: 15px;
+    }
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
 
   // 任务网格
   .task-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+  }
+
+  .empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px dashed #dcdfe6;
+    color: #909399;
   }
 
   // 任务卡片
@@ -45,13 +126,20 @@
     border: 1px solid #ebeef5;
     border-radius: 12px;
     padding: 24px;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
 
-    &:hover {
+    &:hover:not(.disabled) {
       transform: translateY(-5px);
-      box-shadow: 0 12px 24px rgba(0, 191, 255, 0.15);
-      border-color: rgba(0, 191, 255, 0.3);
+      box-shadow: 0 12px 24px rgba(24, 144, 255, 0.15);
+      border-color: #40a9ff;
+    }
+
+    &.disabled {
+      opacity: 0.6;
+      filter: grayscale(0.5);
     }
 
     // 卡片头部

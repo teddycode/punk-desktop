@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <a-layout class="dashboard-layout">
     <!-- 页面头部 -->
     <div class="page-header">
@@ -214,33 +214,6 @@ const shortenValue = (value: string) => {
 const getChainLogoText = (symbol?: string) => {
   if (!symbol) return 'C'
   return symbol.trim().charAt(0).toUpperCase()
-}
-
-const getBackendUrl = async (retries = 5) => {
-  for (let i = 0; i < retries; i++) {
-    try {
-      const ipc = (window as any).ipcRenderer || (window as any).require?.('electron')?.ipcRenderer
-      if (ipc) {
-        const serviceInfo = await ipc.invoke('services.get', 'crosschain')
-        if (serviceInfo && serviceInfo.status === 'running' && serviceInfo.gatewayPort) {
-          console.log(`[CrossChain] Using service gateway port: ${serviceInfo.gatewayPort}`)
-          return `http://127.0.0.1:${serviceInfo.gatewayPort}`
-        }
-        console.warn(`[CrossChain] Service not ready (attempt ${i + 1}/${retries}), status: ${serviceInfo?.status}`)
-        // Try to start it if not running or discovered
-        await ipc.invoke('services.resolvePage', 'crosschain')
-      } else {
-        console.warn(`[CrossChain] ipcRenderer not found (attempt ${i + 1}/${retries})`)
-      }
-    } catch (e) {
-      console.warn(`[CrossChain] IPC call failed (attempt ${i + 1}/${retries}):`, e)
-    }
-    if (i < retries - 1) await new Promise(resolve => setTimeout(resolve, 1500))
-  }
-
-  const fallback = (window as any).crosschainBackendUrl || 'http://localhost:3020'
-  console.log(`[CrossChain] Falling back to: ${fallback}`)
-  return fallback
 }
 
 const fallbackRpcUrl = 'http://47.243.174.71:36054'

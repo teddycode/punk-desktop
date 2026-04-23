@@ -80,7 +80,7 @@ export default {
       path: '/tasks_created',
       name: 'TasksCreated',
       component: CrossTasksCreatedView,
-      meta: { title: '已创建任务' }
+      meta: { title: '中继者' }
     },
   ],
 };
