@@ -1,0 +1,4 @@
+interface:
+  display_name: "Punk Project Integration"
+  short_description: "Integrate external modules into punk-desktop"
+  default_prompt: "Use $punk-project-integration to integrate an external project into this repo as a core module or managed local service."
