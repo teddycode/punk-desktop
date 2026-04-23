@@ -38,7 +38,7 @@ export default {
       path: '/relayer',
       name: 'Relay',
       component: RelayView,
-      meta: { title: '跨链中继' }
+      meta: { title: '搬运工' }
     },
     // {
     //   path: '/transport',

@@ -266,6 +266,21 @@ export const useResolvedTransportAddressByManager = async (
   return transportAddress
 }
 
+export const getFinalManagerAddress = async (): Promise<string> => {
+  if (managerAddressCache) {
+    return managerAddressCache
+  }
+  
+  const config = await tryGetApiContractConfig()
+  if (config?.managerAddress) {
+    managerAddressCache = config.managerAddress
+    return managerAddressCache
+  }
+  
+  managerAddressCache = ENV_MANAGER_CONTRACT_ADDRESS || ENV_CONTRACT_ADDRESS || ethers.constants.AddressZero
+  return managerAddressCache
+}
+
 export const getFinalContractAddress = async (): Promise<string> => {
   const config = await getContractConfig()
   return config.contractAddress

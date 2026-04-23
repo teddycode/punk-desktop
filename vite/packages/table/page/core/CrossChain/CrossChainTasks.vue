@@ -4,10 +4,6 @@
     <div class="header-section">
       <h1>🌐 跨链任务市场</h1>
       <p class="subtitle">选择任务类型，发起跨链请求</p>
-      <!-- ← 新增：调试按钮 -->
-      <button @click="handleDebug" style="margin-top: 10px; padding: 8px 16px; background: #ff9800; color: white; border: none; border-radius: 4px; cursor: pointer;">
-        🔧 调试加载
-      </button>
     </div>
 
     <!-- 加载状态（添加类名） -->
@@ -65,21 +61,19 @@
 
         <!-- 表单 -->
         <div class="form-group">
-          <label>⛓️ 源链 ID</label>
+          <label>🔗 源链 ID</label>
           <input 
             v-model="formData.srcChainId"
-            type="text"
-            placeholder="例如: 11155111"
-          />
+            type="number"
+            placeholder="例如: 1"/>
         </div>
 
         <div class="form-group">
-          <label>🎯 目标链 ID</label>
+          <label>🔗 目标链 ID</label>
           <input 
             v-model="formData.destChainId"
-            type="text"
-            placeholder="例如: 1"
-          />
+            type="number"
+            placeholder="例如: 2"/>
         </div>
 
         <div class="form-group">
@@ -140,9 +134,8 @@ import { ElMessage } from 'element-plus'
 import {
   useTaskContract,
   formatAddress,
-  debugLoadTaskTypes,
   type TaskTypeInfo
-} from '../../../services/crosschain'  // 路径改为你的实际路径
+} from '../../../services/crosschain'
 
 // 使用组合式函数
 const { loading, submitting, tasks, loadTasks, submitTask } = useTaskContract()
@@ -153,8 +146,8 @@ const currentTask = ref<TaskTypeInfo | null>(null)
 
 // 表单数据
 const formData = reactive({
-  srcChainId: '',
-  destChainId: '',
+  srcChainId: 1,
+  destChainId: 2,
   payload: '',
   fee: '0.01'
 })
@@ -168,8 +161,8 @@ const openModal = (task: TaskTypeInfo) => {
   }
   
   currentTask.value = task
-  formData.srcChainId = ''
-  formData.destChainId = ''
+  formData.srcChainId = 1
+  formData.destChainId = 2
   formData.payload = ''
   formData.fee = '0.01'
   showDialog.value = true
@@ -191,14 +184,6 @@ const calculateTotal = () => {
 
 // 提交任务
 const handleSubmit = async () => {
-  if (!formData.srcChainId) {
-    ElMessage.warning('请输入源链 ID')
-    return
-  }
-  if (!formData.destChainId) {
-    ElMessage.warning('请输入目标链 ID')
-    return
-  }
   if (!formData.payload) {
     ElMessage.warning('请输入 Payload 数据')
     return
@@ -211,29 +196,18 @@ const handleSubmit = async () => {
 
   try {
     await submitTask({
-      srcChainId: Number(formData.srcChainId),
-      destChainId: Number(formData.destChainId),
+      srcChainId: Number(formData.srcChainId) || 0,
+      destChainId: Number(formData.destChainId) || 0,
       payload: formData.payload,
       taskType: currentTask.value.typeId,
-      routeName: currentTask.value.name,
+      routeName: currentTask.value.name,  // ← 传入 routeName
       fee: formData.fee
     })
     
+    // ✅ 修复：添加换行
     closeModal()
   } catch (error) {
     console.error('提交失败:', error)
-  }
-}
-// ← 新增：调试函数
-const handleDebug = async () => {
-  console.log('🔍 开始调试...')
-  try {
-    const result = await debugLoadTaskTypes()
-    console.log('✅ 调试结果:', result)
-    ElMessage.success('调试完成，请查看控制台日志')
-  } catch (error: any) {
-    console.error('❌ 调试失败:', error)
-    ElMessage.error('调试失败: ' + error.message)
   }
 }
 
@@ -245,4 +219,4 @@ onMounted(() => {
 </script>
 
 <!-- 引入外部 SCSS 样式，取消 scoped -->
-<style src="@assets/CrossChain/cross-chain-tasks.scss"></style>
+<style src="@assets/CrossChain/cross-tasks-created.scss"></style>
