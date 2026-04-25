@@ -1,23 +1,23 @@
-<template>
+﻿<template>
   <a-layout class="dashboard-layout">
-    <div class="page-container">
-    <!-- 页面标题卡片 -->
-    <a-card class="header-card" :bordered="true">
-      <div class="title-row">
-        <h2 class="page-title">跨链概览</h2>
+    <!-- 页面头部 -->
+    <div class="page-header">
+      <div class="page-title-wrap">
+        <div class="page-title">跨链专区概览</div>
+        <div class="page-desc">展示跨链系统状态、源链信息与关联合约</div>
       </div>
-    </a-card>
-    <!-- 统计信息卡片 -->
-    <a-card class="info-card" :bordered="true">
+    </div>
+
+    <!-- 统计信息 -->
+    <a-card class="info-card" :bordered="false">
       <div class="statistics-container">
-        <a-row :gutter="[16, 16]" justify="space-between" type="flex" align="middle">
+        <a-row :gutter="[20, 20]" justify="center">
           <a-col
+            v-for="(stat, index) in zoneColumns"
+            :key="index"
             :xs="24"
             :sm="12"
-            :md="12"
-            :lg="6"
-            v-for="(stat, index) in computedZoneColumns"
-            :key="index"
+            :md="8"
             class="stat-col"
           >
             <a-card hoverable class="stat-card">
@@ -32,707 +32,461 @@
       </div>
     </a-card>
 
-    <!-- 链信息展示 -->
-    <!-- <div class="section-title">源链信息</div> -->
-    <a-row :gutter="[24, 24]" class="chain-container">
-      <!-- 加载状态 -->
-      <a-col :span="24" v-if="loading">
-        <a-skeleton active :paragraph="{ rows: 4 }" />
-      </a-col>
-
-      <!-- 数据展示 -->
-      <template v-else>
-        <a-col
-          :xs="24"
-          :sm="12"
-          :lg="8"
-          v-for="chain in computedSourceInfo"
-          :key="chain.chain_id + (apiAvailable ? '' : '-mock')"
-        >
-          <a-card
-            hoverable
-            class="source-card"
-            :class="{ 'mock-card': !apiAvailable }"
-            @click="handleBridgeClick(chain)"
-          >
-            <div class="chain-header">
-              <img
-                :src="getChainLogo(chain.symbol)"
-                alt="chain-logo"
-                class="chain-logo"
-                @error="handleImageError"
-              />
-              <div>
-                <div class="chain-name">{{ chain.name }}</div>
-                <div class="chain-symbol">{{ chain.symbol }}</div>
-              </div>
-            </div>
-            <div class="chain-info">
-              <div class="info-item">
-                <a-tag color="blue">中继</a-tag>
-                <a-tooltip :title="chain.relay_addr">
-                  <a-button type="link" size="small" class="address-link relay-link" @click.stop="handleRelayClick(chain)">
-                    <LinkOutlined /> {{ shortenAddress(chain.relay_addr) }}
-                  </a-button>
-                </a-tooltip>
-                <a-button type="text" size="small" class="copy-btn" @click.stop="copyAddress(chain.relay_addr)">
-                  <CopyOutlined />
-                </a-button>
-                <span class="block-height">区块: {{ chain.block || '--' }}</span>
-              </div>
-
-              <div class="info-item">
-                <a-tag color="geekblue">传输</a-tag>
-                <a-tooltip :title="chain.transport_addr">
-                  <a-button type="link" size="small" class="address-link transport-link" @click.stop="handleTransportClick(chain)">
-                    <SwapOutlined /> {{ shortenAddress(chain.transport_addr) }}
-                  </a-button>
-                </a-tooltip>
-                <a-button type="text" size="small" class="copy-btn" @click.stop="copyAddress(chain.transport_addr)">
-                  <CopyOutlined />
-                </a-button>
-                <span class="task-count">任务: {{ chain.fee || '--' }}</span>
-              </div>
-            </div>
-            <div v-if="!apiAvailable" class="mock-overlay">
-              <a-tag color="orange" class="mock-tag">模拟数据</a-tag>
-            </div>
-          </a-card>
-        </a-col>
-      </template>
-    </a-row>
+    <!-- 源链列表 -->
+    <div class="section-header">
+      <div class="section-title">源链列表</div>
+      <div class="section-subtitle">点击卡片可进入对应链的跨链详情</div>
     </div>
+
+    <a-row :gutter="[24, 24]">
+      <a-col
+        v-for="chain in sourceInfoWithContracts"
+        :key="chain.chain_id"
+        :xs="24"
+        :sm="12"
+        :xl="8"
+      >
+        <a-card hoverable class="source-card" @click="handleBridgeClick(chain)">
+          <div class="chain-header">
+            <div class="chain-logo-placeholder">
+              {{ getChainLogoText(chain.symbol) }}
+            </div>
+
+            <div class="chain-title-group">
+              <div class="chain-name">{{ chain.name }}</div>
+              <div class="chain-symbol">{{ chain.symbol }}</div>
+            </div>
+
+            <div class="chain-id-tag">
+              #{{ chain.chain_id }}
+            </div>
+          </div>
+
+          <div class="chain-meta">
+            <div class="meta-item">
+              <span class="meta-label">最新区块</span>
+              <span class="meta-value">{{ chain.latest_raw_height ?? '--' }}</span>
+            </div>
+
+            <div class="meta-item">
+              <span class="meta-label">最新区块哈希</span>
+              <a-tooltip :title="chain.latest_raw_hash || '-'">
+                <span class="meta-hash">
+                  {{ shortenValue(chain.latest_raw_hash || '-') }}
+                </span>
+              </a-tooltip>
+            </div>
+          </div>
+
+          <div class="chain-info">
+            <div class="info-block">
+              <div class="info-label">中继合约地址</div>
+              <a-tooltip :title="chain.relay_addr">
+                <div class="address-link" @click.stop="handleRelayClick(chain)">
+                  {{ shortenValue(chain.relay_addr) }}
+                </div>
+              </a-tooltip>
+            </div>
+          </div>
+        </a-card>
+      </a-col>
+    </a-row>
   </a-layout>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { message } from 'ant-design-vue';
-import {
-  LinkOutlined,
-  SwapOutlined,
-  CopyOutlined
-} from '@ant-design/icons-vue';
-// 保留：后续真实 API 调用需要的依赖（暂时注释）
-// import { ethers } from 'ethers';
-// import axios from 'axios';
-
-// 类型定义
-interface HubData {
-  symbol: string;
-  name: string;
-  sourceNum: number;
-  contractNum: number;
-  blockNum: number;
-  relayTxNum: number;
-  transportTxNum: number;
-  relayNodeNum: number;
-  transportNodeNum: number;
-  userNodeNum: number;
-}
+<script lang="ts" setup>
+import { ref, onMounted, computed, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { message } from 'ant-design-vue'
+import { ethers } from 'ethers'
+import axios from 'axios'
 
 interface SourceData {
-  chain_id: number;
-  symbol: string;
-  name: string;
-  block?: number;
-  fee?: number;
+  chain_id: number
+  symbol: string
+  name: string
+  state?: number
+  visit_block_height?: number
+  register_tx_hash?: string | null
+  created_at?: string
+  updated_at?: string
+  latest_raw_height?: number | null
+  latest_raw_hash?: string | null
 }
 
 interface ContractData {
-  contract_id: number;
-  contract_addr: string;
-  manager_addr: string;
-  contract_state: number;
-  chain_id: number;
-  level_id: number;
+  contract_id: number
+  contract_addr: string
+  manager_addr: string
+  contract_state: number
+  chain_id: number
+  level_id: number
 }
 
 interface CrosschainzoneData {
-  zone_type: number;
-  rpc: string;
-  multi_addr: string;
+  zone_type: number
+  rpc: string
+  multi_addr: string
 }
 
-interface ChainInfo {
-  chain_id: number;
-  symbol: string;
-  name: string;
-  relay_addr: string;
-  transport_addr: string;
-  block?: number;
-  fee?: number;
+interface SourceCardData extends SourceData {
+  relay_addr: string
 }
 
-export default defineComponent({
-  name: 'DashboardView',
-  setup() {
-    const router = useRouter();
-    const loading = ref(true);
-    const apiAvailable = ref(true);
-    const showError = ref(false);
+const loading = ref(false)
+let provider: ethers.providers.JsonRpcProvider
+const router = useRouter()
 
-    // 真实数据状态
-    const hubInfo = ref<HubData>({
-      symbol: 'HC',
-      name: 'Default Name',
-      sourceNum: 0,
-      contractNum: 0,
-      blockNum: 0,
-      relayTxNum: 0,
-      transportTxNum: 0,
-      relayNodeNum: 0,
-      transportNodeNum: 0,
-      userNodeNum: 0
-    });
+const crosschainzoneInfo = ref<CrosschainzoneData>({
+  zone_type: -1,
+  rpc: '',
+  multi_addr: '0x'
+})
 
-    const crosschainzoneInfo = ref<CrosschainzoneData>({
-      zone_type: -1,
-      rpc: '',
-      multi_addr: '0x'
-    });
+const managerAddress = ref('0x')
 
-    const data_from_rpc = ref({
-      block_number: 0,
-      source_num: 0,
-      contract_num: 0,
-    });
+const dataFromRpc = ref({
+  block_number: 0,
+  source_num: 0,
+  contract_num: 0
+})
 
-    const sourceInfo = ref<SourceData[]>([]);
-    const contractInfo = ref<ContractData[]>([]);
-    // 从 testdata 读取 JSON 的通用方法
-    const loadJSON = async <T>(relativePath: string): Promise<T> => {
-      const url = new URL(relativePath, import.meta.url).href;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error(`读取 ${relativePath} 失败`);
-      return res.json() as Promise<T>;
-    };
+const sourceInfo = ref<SourceData[]>([])
+const contractInfo = ref<ContractData[]>([])
 
-    // 计算属性
-    const computedZoneColumns = computed(() => {
-      return [
-        { title: "最新区块", value: data_from_rpc.value.block_number },
-        { title: "源链数量", value: data_from_rpc.value.source_num },
-        { title: "系统合约数量", value: data_from_rpc.value.contract_num },
-        { title: "交易单数量", value: "0" },
-        { title: "搬运工数量", value: "0" },
-        { title: "跨链补贴", value: "0" },
-        { title: "跨链用户数量", value: "0" },
-        { title: "跨链手续费", value: "0" },
-      ];
-    });
+const managerABI = [
+  'function getSourceChainNum() view returns (uint256)',
+  'function getSourceChainInfo(uint256 sourceID) view returns (string symbol, string name, uint256 state, uint256 contractNum, address[] contractAddressList)',
+  'function getSystemContractNum() view returns (uint256)'
+]
 
-    const chainSymbolMap = computed(() => {
-      const map = new Map<number, string>();
-      map.set(0, hubInfo.value.symbol);
-      sourceInfo.value.forEach(source => {
-        map.set(source.chain_id, source.symbol);
-      });
-      return map;
-    });
+const relayABI = [
+  'function getTopKeyFromShadowLedger_slot() view returns (bytes32)',
+  'function getTopKeyFromShadowLedger() view returns (bytes32)'
+]
 
-    const chainContractMap = computed(() => {
-      const map = new Map<number, { relay: string; transport: string }>();
-      contractInfo.value.forEach(contract => {
-        const chainId = contract.chain_id;
-        if (!map.has(chainId)) {
-          map.set(chainId, { relay: '-', transport: '-' });
-        }
-        const contractData = map.get(chainId)!;
-        // 兼容测试数据：level_id 为 1 视作中继合约，2 为传输合约
-        if (contract.level_id === 0 || contract.level_id === 1) {
-          contractData.relay = contract.contract_addr;
-        } else if (contract.level_id === 2) {
-          contractData.transport = contract.contract_addr;
-        }
-      });
-      return map;
-    });
+const zoneColumns = computed(() => [
+  { title: '最新区块', value: dataFromRpc.value.block_number },
+  { title: '源链数量', value: dataFromRpc.value.source_num },
+  { title: '系统合约数量', value: dataFromRpc.value.contract_num }
+])
 
-    const computedSourceInfo = computed<ChainInfo[]>(() => {
-      // 直接基于 JSON 数据计算展示项
-      return sourceInfo.value.map(source => {
-        const contracts = chainContractMap.value.get(source.chain_id) || {
-          relay: '-',
-          transport: '-'
-        };
-        return {
-          ...source,
-          relay_addr: contracts.relay,
-          transport_addr: contracts.transport
-        };
-      });
-    });
+const chainContractMap = computed(() => {
+  const map = new Map<number, { relay: string }>()
 
-    // 方法定义
-    const shortenAddress = (address: string) => {
-      if (!address || address === '-') return address;
-      return `${address.slice(0, 6)}...${address.slice(-4)}`;
-    };
+  contractInfo.value.forEach(contract => {
+    const chainId = Number(contract.chain_id)
+    if (!Number.isFinite(chainId) || chainId <= 0) return
 
-    const getChainLogo = (symbol: string) => {
-      const logos: { [key: string]: string } = {
-        BTC: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png',
-        ETH: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
-        ATOM: 'https://cryptologos.cc/logos/cosmos-atom-logo.png',
-      };
-      return logos[symbol.toUpperCase()] || 'https://via.placeholder.com/24';
-    };
+    if (!map.has(chainId)) {
+      map.set(chainId, { relay: '-' })
+    }
 
-    const handleImageError = (event: Event) => {
-      const img = event.target as HTMLImageElement;
-      img.src = 'https://via.placeholder.com/24';
-    };
+    const contractData = map.get(chainId)!
+    if (contract.level_id === 0) {
+      contractData.relay = contract.contract_addr
+    }
+  })
 
-    // 使用本地 JSON 测试数据的读取方法
-    const fetchDataFromTestdata = async () => {
-      loading.value = true;
-      try {
-        // 读取跨链区信息（取第一个作为当前区）
-        const zones = await loadJSON<Array<{
-          no: number;
-          zone_type: number;
-          rpc: string;
-          multi_addr: string;
-          visit_block_height: number;
-        }>>("./testdata/crosschainzone_info.json");
-        crosschainzoneInfo.value = {
-          zone_type: zones[0]?.zone_type ?? -1,
-          rpc: zones[0]?.rpc ?? '',
-          multi_addr: zones[0]?.multi_addr ?? '0x'
-        };
+  return map
+})
 
-        // 读取源链信息
-        const sources = await loadJSON<Array<{
-          chain_id: number;
-          symbol: string;
-          name: string;
-          visit_block_height: number;
-        }>>("./testdata/source_chain_info.json");
-        sourceInfo.value = sources.map(s => ({
-          chain_id: s.chain_id,
-          symbol: s.symbol,
-          name: s.name,
-          block: s.visit_block_height
-        }));
-
-        // 读取系统合约信息
-        const contracts = await loadJSON<Array<{
-          contract_id: number;
-          contract_addr: string;
-          manager_addr: string;
-          contract_state: number;
-          chain_id: number;
-          level_id: number;
-        }>>("./testdata/system_contract_info.json");
-        contractInfo.value = contracts.map(c => ({
-          contract_id: c.contract_id,
-          contract_addr: c.contract_addr,
-          manager_addr: c.manager_addr,
-          contract_state: c.contract_state,
-          chain_id: c.chain_id,
-          level_id: c.level_id
-        }));
-
-        // 读取区块信息以计算最新区块
-        const hubBlocks = await loadJSON<Array<{ block_height: number }>>("./testdata/hub_block_info.json");
-        const latestBlock = hubBlocks.reduce((max, b) => Math.max(max, b.block_height), 0);
-
-        data_from_rpc.value = {
-          block_number: latestBlock,
-          source_num: sourceInfo.value.length,
-          contract_num: contractInfo.value.length
-        };
-
-        // 使用测试数据展示，但允许交互
-        apiAvailable.value = true;
-        showError.value = false;
-      } catch (err) {
-        console.error('读取测试数据失败:', err);
-        message.warning('测试数据读取失败，页面可能不完整');
-        showError.value = true;
-        apiAvailable.value = true; // 仍按 JSON 展示
-      } finally {
-        loading.value = false;
-      }
-    };
-
-    // 事件处理
-    const copyAddress = (addr: string) => {
-      if (!addr || addr === '-') {
-        message.warning('地址不可用');
-        return;
-      }
-      navigator.clipboard?.writeText(addr)
-        .then(() => message.success('已复制合约地址'))
-        .catch(() => message.error('复制失败'));
-    };
-    const handleBridgeClick = (record: ChainInfo) => {
-      if (!apiAvailable.value) return;
-      router.push({
-        path: `/multi/bridge/${record.chain_id}`,
-        state: {
-          multi_addr: crosschainzoneInfo.value.multi_addr,
-          rpc: crosschainzoneInfo.value.rpc,
-          symbol: record.symbol,
-          name: record.name
-        }
-      });
-    };
-
-    const handleRelayClick = (record: ChainInfo) => {
-      if (!apiAvailable.value) return;
-      router.push({
-        path: `/relay`,
-        state: {
-          chain_id: record.chain_id,
-          multi_addr: crosschainzoneInfo.value.multi_addr,
-          rpc: crosschainzoneInfo.value.rpc,
-          symbol: record.symbol,
-          name: record.name,
-          addr: record.relay_addr
-        }
-      });
-    };
-
-    const handleTransportClick = (record: ChainInfo) => {
-      if (!apiAvailable.value) return;
-      router.push({
-        path: `/transport`,
-        state: {
-          chain_id: record.chain_id,
-          multi_addr: crosschainzoneInfo.value.multi_addr,
-          rpc: crosschainzoneInfo.value.rpc,
-          symbol: record.symbol,
-          name: record.name,
-          relay: record.relay_addr,
-          addr: record.transport_addr
-        }
-      });
-    };
-
-    // 初始化
-    onMounted(async () => {
-      try {
-        await fetchDataFromTestdata();
-      } catch (err) {
-        console.error('初始化失败:', err);
-      }
-    });
-
-    // 保留：真实数据库与 RPC 的读取逻辑（暂时注释，不删除，便于后续接入）
-    /*
-    const fetchHubInfo = async () => {
-      try {
-        const response = await axios.get('http://localhost:3020/api/hubChain');
-        hubInfo.value = response.data[0];
-      } catch (err) {
-        console.error('获取Hub信息失败:', err);
-        message.error('获取Hub信息失败');
-      }
-    };
-
-    const fetchCrosschainzoneInfo = async () => {
-      try {
-        const response = await axios.get('http://localhost:3020/api/crosschainzone');
-        crosschainzoneInfo.value = response.data[0];
-      } catch (err) {
-        console.error('获取跨链区信息失败:', err);
-        message.error('获取跨链区信息失败');
-        throw err;
-      }
-    };
-
-    const fetchSourceInfo = async () => {
-      try {
-        const response = await axios.get('http://localhost:3020/api/sourceChains');
-        sourceInfo.value = response.data;
-      } catch (err) {
-        console.error('获取源链信息失败:', err);
-        apiAvailable.value = false;
-      }
-    };
-
-    const fetchContractInfo = async () => {
-      try {
-        const response = await axios.get('http://localhost:3020/api/systemContracts');
-        contractInfo.value = response.data;
-      } catch (err) {
-        console.error('获取合约信息失败:', err);
-        apiAvailable.value = false;
-      }
-    };
-
-    const fetchDataFromDB = async () => {
-      loading.value = true;
-      try {
-        await Promise.all([
-          fetchCrosschainzoneInfo(),
-          fetchSourceInfo(),
-          fetchContractInfo()
-        ]);
-      } catch (err) {
-        console.error('数据库连接失败:', err);
-        showError.value = true;
-        apiAvailable.value = false;
-      } finally {
-        loading.value = false;
-      }
-    };
-
-    const fetchDataFromRPC = async () => {
-      try {
-        await fetchDataFromDB();
-        if (!crosschainzoneInfo.value.rpc) {
-          throw new Error('RPC地址未设置');
-        }
-        const provider = new ethers.providers.JsonRpcProvider(
-          crosschainzoneInfo.value.rpc
-        );
-        await provider.getNetwork();
-        const blockNumber = await provider.getBlockNumber();
-        const multiABI = [
-          "function getSourceChainNum() view returns (uint256)",
-          "function getSystemContractNum() view returns (uint256)"
-        ];
-        const multiContract = new ethers.Contract(
-          crosschainzoneInfo.value.multi_addr,
-          multiABI,
-          provider
-        );
-        const [sourceNum, contractNum] = await Promise.all([
-          multiContract.getSourceChainNum(),
-          multiContract.getSystemContractNum()
-        ]);
-        data_from_rpc.value = {
-          block_number: Number(blockNumber),
-          source_num: Number(sourceNum),
-          contract_num: Number(contractNum)
-        };
-      } catch (err) {
-        console.error('RPC连接失败:', err);
-        showError.value = true;
-        apiAvailable.value = false;
-      }
-    };
-    */
-
+const sourceInfoWithContracts = computed<SourceCardData[]>(() => {
+  return sourceInfo.value.map(source => {
+    const chainId = Number(source.chain_id)
+    const contracts =
+      Number.isFinite(chainId) && chainId > 0
+        ? (chainContractMap.value.get(chainId) || { relay: '-' })
+        : { relay: '-' }
     return {
-      loading,
-      apiAvailable,
-      showError,
-      computedZoneColumns,
-      computedSourceInfo,
-      shortenAddress,
-      getChainLogo,
-      handleImageError,
-      handleBridgeClick,
-      handleRelayClick,
-      handleTransportClick,
-      crosschainzoneInfo,
-      copyAddress
-    };
+      ...source,
+      relay_addr: contracts.relay
+    }
+  })
+})
+
+const shortenValue = (value: string) => {
+  if (!value || value === '-') return value
+  if (value.length <= 14) return value
+  return `${value.slice(0, 8)}...${value.slice(-6)}`
+}
+
+const getChainLogoText = (symbol?: string) => {
+  if (!symbol) return 'C'
+  return symbol.trim().charAt(0).toUpperCase()
+}
+
+const fallbackRpcUrl = 'http://47.243.174.71:36054'
+const fallbackManagerAddr = '0x6d811bf404DaE8Df3d39b15604e32eF040d3D236'
+
+const fetchCrosschainzoneInfo = async () => {
+  crosschainzoneInfo.value = {
+    zone_type: 0,
+    rpc: fallbackRpcUrl,
+    multi_addr: fallbackManagerAddr
   }
-});
+}
+
+const fetchManagerAddress = async () => {
+  managerAddress.value = fallbackManagerAddr
+}
+
+const supplementSourceInfoFromManager = async () => {
+  try {
+    const rpcUrl = crosschainzoneInfo.value.rpc || fallbackRpcUrl
+    const managerAddr = managerAddress.value || fallbackManagerAddr
+
+    if (!managerAddr || managerAddr === '0x' || !ethers.utils.isAddress(managerAddr)) return
+
+    const rpcProvider = new ethers.providers.JsonRpcProvider(rpcUrl)
+    const managerContract = new ethers.Contract(managerAddr, managerABI, rpcProvider)
+
+    let rpcLatestHeight: number | null = null
+    let rpcLatestHash: string | null = null
+    try {
+      const latestBlock = await rpcProvider.getBlock('latest')
+      if (latestBlock) {
+        rpcLatestHeight = Number(latestBlock.number)
+        rpcLatestHash = latestBlock.hash ? String(latestBlock.hash) : null
+      }
+    } catch (latestErr) {
+      console.warn('读取 RPC 最新区块失败:', latestErr)
+    }
+
+    const sourceNumRaw = await managerContract.getSourceChainNum()
+    const sourceNum = Number(sourceNumRaw)
+    if (!Number.isFinite(sourceNum) || sourceNum <= 0) return
+
+    const onchainSources: SourceData[] = []
+    const supplementedContracts: ContractData[] = []
+
+    for (let chainId = 1; chainId <= sourceNum; chainId++) {
+      try {
+        const chainInfo = await managerContract.getSourceChainInfo(chainId)
+
+        const symbol = String(chainInfo?.symbol ?? chainInfo?.[0] ?? '').trim()
+        const name = String(chainInfo?.name ?? chainInfo?.[1] ?? '').trim()
+        const state = Number(chainInfo?.state ?? chainInfo?.[2] ?? 0)
+        const contractAddressList = (chainInfo?.contractAddressList ?? chainInfo?.[4] ?? []) as string[]
+        const relayAddr = String(contractAddressList?.[0] ?? '').trim()
+
+        let latestRawHeight: number | null = null
+        let latestRawHash: string | null = null
+
+        if (relayAddr && ethers.utils.isAddress(relayAddr)) {
+          try {
+            const relayContract = new ethers.Contract(relayAddr, relayABI, rpcProvider)
+            const [topHeightRaw, topKeyRaw] = await Promise.all([
+              relayContract.getTopKeyFromShadowLedger_slot(),
+              relayContract.getTopKeyFromShadowLedger()
+            ])
+
+            latestRawHeight = Number(BigInt(topHeightRaw))
+            latestRawHash = String(topKeyRaw)
+          } catch (relayErr) {
+            console.warn(`读取链 ${chainId} 中继 top 信息失败:`, relayErr)
+          }
+
+          supplementedContracts.push({
+            contract_id: -chainId,
+            contract_addr: relayAddr,
+            manager_addr: managerAddr,
+            contract_state: 2,
+            chain_id: chainId,
+            level_id: 0
+          })
+        }
+
+        onchainSources.push({
+          chain_id: chainId,
+          symbol,
+          name,
+          state,
+          latest_raw_height:
+            symbol.toUpperCase() === 'LCL'
+              ? (rpcLatestHeight ?? latestRawHeight)
+              : latestRawHeight,
+          latest_raw_hash:
+            symbol.toUpperCase() === 'LCL'
+              ? (rpcLatestHash ?? latestRawHash)
+              : latestRawHash
+        })
+      } catch (innerErr) {
+        console.warn(`读取链上 source chain ${chainId} 失败:`, innerErr)
+      }
+    }
+
+    sourceInfo.value = onchainSources.sort((a, b) => Number(a.chain_id) - Number(b.chain_id))
+    contractInfo.value = supplementedContracts
+  } catch (err) {
+    console.warn('链上读取 source chain 失败:', err)
+  }
+}
+
+const fetchDataFromDB = async () => {
+  loading.value = true
+  try {
+    await fetchCrosschainzoneInfo()
+    await fetchManagerAddress()
+    await supplementSourceInfoFromManager()
+  } catch (err) {
+    console.error('数据获取失败:', err)
+    message.error('数据获取失败')
+  } finally {
+    loading.value = false
+  }
+}
+
+const fetchDataFromRPC = async () => {
+  try {
+    await fetchDataFromDB()
+
+    if (!crosschainzoneInfo.value.rpc) {
+      throw new Error('RPC地址未设置')
+    }
+
+    provider = new ethers.providers.JsonRpcProvider(crosschainzoneInfo.value.rpc)
+
+    try {
+      await provider.getNetwork()
+    } catch (error) {
+      console.error('RPC连接测试失败:', error)
+      throw new Error('无法连接到RPC节点')
+    }
+
+    const statsContractAddr = String(managerAddress.value || crosschainzoneInfo.value.multi_addr || '').trim()
+
+    if (!statsContractAddr || statsContractAddr === '0x' || !ethers.utils.isAddress(statsContractAddr)) {
+      throw new Error('合约地址无效')
+    }
+
+    let blockNumber: number
+    try {
+      blockNumber = await provider.getBlockNumber()
+    } catch (error) {
+      console.error('获取区块高度失败:', error)
+      throw new Error('获取区块高度失败')
+    }
+
+    const multiABI = [
+      'function getSourceChainNum() view returns (uint256)',
+      'function getSystemContractNum() view returns (uint256)'
+    ]
+
+    const multiContract = new ethers.Contract(
+      statsContractAddr,
+      multiABI,
+      provider
+    )
+
+    let sourceNum, contractNum
+    try {
+      ;[sourceNum, contractNum] = await Promise.all([
+        multiContract.getSourceChainNum(),
+        multiContract.getSystemContractNum()
+      ])
+    } catch (error) {
+      console.error('获取合约数据失败:', error)
+      throw new Error('获取合约数据失败')
+    }
+
+    dataFromRpc.value = {
+      block_number: Number(blockNumber),
+      source_num: Number(sourceNum),
+      contract_num: Number(contractNum)
+    }
+  } catch (err) {
+    console.error('RPC数据获取失败:', err)
+    message.error(err instanceof Error ? err.message : '获取RPC数据失败')
+
+    dataFromRpc.value = {
+      block_number: -1,
+      source_num: -1,
+      contract_num: -1
+    }
+  }
+}
+
+const handleBridgeClick = (record: SourceCardData) => {
+  router.push({
+    path: `/multi/bridge/${record.chain_id}`,
+    state: {
+      multi_addr: crosschainzoneInfo.value.multi_addr,
+      rpc: crosschainzoneInfo.value.rpc,
+      symbol: record.symbol,
+      name: record.name
+    }
+  })
+}
+
+const handleRelayClick = (record: SourceCardData) => {
+  router.push({
+    path: '/relayer',
+    query: {
+      chain_id: String(record.chain_id),
+      multi_addr: crosschainzoneInfo.value.multi_addr,
+      rpc: crosschainzoneInfo.value.rpc,
+      symbol: record.symbol,
+      name: record.name,
+      addr: record.relay_addr
+    }
+  })
+}
+
+const refreshData = async () => {
+  loading.value = true
+  try {
+    await fetchDataFromRPC()
+  } catch (err) {
+    console.error('数据刷新失败:', err)
+    message.error('数据刷新失败')
+  } finally {
+    loading.value = false
+  }
+}
+
+const initializeRPC = async () => {
+  try {
+    await fetchCrosschainzoneInfo()
+
+    if (!crosschainzoneInfo.value.rpc) {
+      throw new Error('RPC地址未设置')
+    }
+
+    if (!crosschainzoneInfo.value.multi_addr || crosschainzoneInfo.value.multi_addr === '0x') {
+      throw new Error('合约地址无效')
+    }
+
+    await fetchDataFromRPC()
+  } catch (error) {
+    console.error('初始化RPC失败:', error)
+    message.error('初始化RPC连接失败')
+  }
+}
+
+let pollingTimer: ReturnType<typeof setInterval> | null = null
+
+const startPolling = () => {
+  if (!pollingTimer) {
+    pollingTimer = setInterval(refreshData, 30000)
+  }
+}
+
+const stopPolling = () => {
+  if (pollingTimer) {
+    clearInterval(pollingTimer)
+    pollingTimer = null
+  }
+}
+
+onMounted(async () => {
+  await initializeRPC()
+  startPolling()
+})
+
+onUnmounted(() => {
+  stopPolling()
+})
 </script>
 
-<style lang="scss" scoped>
-.dashboard-layout {
-  --header-height: 64px;
-  --footer-height: 48px;
-  padding: 24px;
-  background-color: #f5f5f5;
-  display: flex;
-  justify-content: center;
-
-  /* 信息卡片样式 */
-  .info-card {
-    margin-bottom: 12px; /* 收紧与下方区块的距离 */
-
-    .statistics-container {
-      margin: 24px 0;
-
-      .stat-col {
-        display: flex;
-        justify-content: center;
-        align-items: center; // 垂直居中
-        padding: 8px;
-      }
-
-      .stat-card {
-        width: 100%;
-        min-height: 120px; // 保证卡片的固定高度
-        transition: all 0.3s;
-        border: none;
-        border-radius: 12px;
-        background: #fff;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-
-        .ant-statistic-title {
-          font-size: 14px;
-          color: #666;
-          text-align: center;
-        }
-
-        .ant-statistic-content {
-          font-size: 20px;
-          font-weight: bold;
-          text-align: center;
-        }
-
-        &:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-      }
-      /* 每列不同的淡色背景，提升视觉层次 */
-      /* 渐变加深，提升色彩存在感 */
-      .stat-col:nth-child(1) .stat-card { background: linear-gradient(135deg,#ffffff,#e9f5ff); }
-      .stat-col:nth-child(2) .stat-card { background: linear-gradient(135deg,#ffffff,#eef2ff); }
-      .stat-col:nth-child(3) .stat-card { background: linear-gradient(135deg,#ffffff,#fff2e6); }
-      .stat-col:nth-child(4) .stat-card { background: linear-gradient(135deg,#ffffff,#ecfff0); }
-      .stat-col:nth-child(5) .stat-card { background: linear-gradient(135deg,#ffffff,#e6f2ff); }
-      .stat-col:nth-child(6) .stat-card { background: linear-gradient(135deg,#ffffff,#efe6ff); }
-      .stat-col:nth-child(7) .stat-card { background: linear-gradient(135deg,#ffffff,#ffe6f2); }
-      .stat-col:nth-child(8) .stat-card { background: linear-gradient(135deg,#ffffff,#e6fff0); }
-    }
-  }
-
-  /* 页面内容容器：占满视口高度，顶部对齐 */
-  .page-container {
-    width: 100%;
-    max-width: 1440px;
-    margin: 0 auto;
-    min-height: calc(100vh - var(--header-height) - var(--footer-height) - 48px);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-  }
-  .chain-header {
-    display: flex; /* 让 LOGO 和文字部分在同一行显示 */
-    align-items: center; /* 确保 LOGO 和文字保持垂直居中对齐 */
-
-    img {
-      width: 24px; /* 调整 LOGO 的宽度 */
-      height: 24px; /* 调整 LOGO 的高度 */
-      margin-right: 12px; /* LOGO 和文字的间距 */
-      object-fit: cover; /* 确保 LOGO 保持比例缩放且无变形 */
-      border-radius: 50%; /* 如果需要让 LOGO 显示为圆形，可以添加 */
-    }
-
-    .chain-name {
-      font-size: 14px;
-      font-weight: bold;
-      color: #333;
-      line-height: 1.2;
-    }
-
-    .chain-price {
-      font-size: 12px;
-      color: #666;
-      margin-top: 4px; /* 给符号名称与链名称一个间距 */
-    }
-  }
-
-  /* 链信息区域布局与交互样式 */
-  .chain-container {
-    margin-top: 4px; /* 收紧与“源链信息”标题的距离 */
-  }
-
-  .source-card {
-    transition: all 0.25s ease-in-out;
-    min-height: 160px;
-    cursor: pointer; /* 整卡跳转到跨链桥 */
-
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 16px rgba(0,0,0,0.08);
-      border-color: #1890ff;
-    }
-  }
-
-  /* 页面标题样式 */
-  .header-card { margin-bottom: 12px; }
-  .page-header {
-    margin-bottom: 12px;
-    .title-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .page-title { font-size: 20px; font-weight: 600; margin: 0; }
-    .page-subtitle { display: none; }
-  }
-
-  .section-title {
-    font-size: 16px;
-    font-weight: 600;
-    margin: 4px 0 8px; /* 收紧上下间距 */
-    text-align: center;
-  }
-
-  .chain-info {
-    margin-top: 12px;
-    .info-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin: 6px 0;
-    }
-    .label { color: #666; }
-    .address-link.ant-btn-link {
-      position: relative;
-      padding: 2px 6px;
-      font-size: 13px;
-      border-radius: 6px;
-      transition: color 0.2s ease, background-color 0.2s ease;
-    }
-    /* 通用下划线滑入效果 */
-    .address-link.ant-btn-link::after {
-      content: '';
-      position: absolute;
-      left: 6px;
-      right: 6px;
-      bottom: 2px;
-      height: 2px;
-      border-radius: 2px;
-      width: 0;
-      transition: width 0.25s ease;
-    }
-    .address-link .anticon { transition: transform 0.2s ease; }
-    
-    /* 中继：蓝-青 渐变，轻微位移 */
-    .relay-link.ant-btn-link { color: #1668dc; }
-    .relay-link.ant-btn-link:hover { background-color: rgba(22,104,220,0.08); }
-    .relay-link.ant-btn-link::after { background: linear-gradient(90deg,#1668dc,#13c2c2); }
-    .relay-link:hover .anticon { transform: translateX(2px); }
-
-    /* 传输：紫-蓝 渐变，轻微旋转 */
-    .transport-link.ant-btn-link { color: #2f54eb; }
-    .transport-link.ant-btn-link:hover { background-color: rgba(47,84,235,0.10); }
-    .transport-link.ant-btn-link::after { background: linear-gradient(90deg,#722ed1,#2f54eb); }
-    .transport-link:hover .anticon { transform: rotate(8deg); }
-
-    /* 激活下划线宽度动画 */
-    .relay-link.ant-btn-link:hover::after,
-    .transport-link.ant-btn-link:hover::after { width: calc(100% - 12px); }
-    .block-height, .task-count { margin-left: auto; color: #999; }
-  }
-  }
-/* 响应式设计 */
-@media (max-width: 768px) {
-  .dashboard-layout {
-    padding: 12px;
-
-    .info-card {
-      margin-bottom: 16px;
-    }
-
-    .stat-card {
-      margin-bottom: 12px;
-    }
-
-  }
-}
-</style>
+<style src="@assets/CrossChain/multichain.scss"></style>
