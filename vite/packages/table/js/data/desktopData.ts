@@ -208,7 +208,7 @@ export const defaultDesks = [
                 route: 'ExchangePage',
                 name: '交易',
                 params: '/web3/exchange',
-                value: 'http://47.251.49.240:36011',
+                value: 'http://82.156.244.246:18080/',
               },
               isTitle: true,
               titleValue: '交易',
