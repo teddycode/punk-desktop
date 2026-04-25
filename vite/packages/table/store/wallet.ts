@@ -31,7 +31,7 @@ export const walletConfig = (): Web3ModalOptions => {
       // Arbitrum - 使用 WalletConnect CDN  
       42161: 'https://imagedelivery.net/_aTEfDRm7z3tKgu9JhfeKA/600a9a04-c1b9-42ca-6785-9b4b6ff85200/sm',
       // PunkOS - 使用自定义图标
-      20251101: 'https://pic.imgdb.cn/item/65e292ac9f345e8d03288770.png',
+      20260418: 'https://pic.imgdb.cn/item/65e292ac9f345e8d03288770.png',
     },
     themeMode: 'light',
     themeVariables: {

@@ -6,20 +6,25 @@ import TransportView from '@page/core/CrossChain/Transport.vue';
 import TransactionView from '@page/core/CrossChain/Transaction.vue';
 import BlockView from '@page/core/CrossChain/Block.vue';
 import ManagerView from "@page/core/CrossChain/Manager.vue";
+import UserView from '@page/core/CrossChain/User.vue';
+import CrossChainTasksView from '@page/core/CrossChain/CrossChainTasks.vue';
+import CrossTasksCreatedView from '@page/core/CrossChain/CrossTasksCreated.vue';
+
 
 import { CodeOutlined } from '@ant-design/icons-vue';
 
 export default {
   path: 'crosschain',
-  redirect: { name: 'CrossChainPage' },
+  name: 'CrossChainPage',
+  redirect: { name: 'Multichain' },
   component: ThirdLayout,
   meta: {
     icon: CodeOutlined,
   },
   children: [
     {
-      path: '/crosschain/index',
-      name: 'CrossChainPage',
+      path: '/multi',
+      name: 'Multichain',
       component: MultichainView,
       meta: { title: '浏览器' },
     },
@@ -30,15 +35,21 @@ export default {
       meta: { title: '跨链桥', noShow: true },
     },
     {
-      path: '/relay',
+      path: '/relayer',
       name: 'Relay',
       component: RelayView,
-      meta: { title: '跨链中继' }
+      meta: { title: '搬运工' }
     },
+    // {
+    //   path: '/transport',
+    //   name: 'Transport',
+    //   component: TransportView,
+    //   meta: { title: '跨链传输' }
+    // },
     {
       path: '/multi/tx/:tx_hash',
       name: 'Tx',
-      component: TransportView,
+      component: TransactionView,
       meta: { title: '中继链交易', noShow: true }
     },
     {
@@ -50,15 +61,26 @@ export default {
     {
       path: '/manager',
       name: 'Manager',
-      meta: { title: '跨链管理' },
-      //component: () => import('../views/Address.vue')
-      component: ManagerView
+      component: ManagerView,
+      meta: { title: '管理者' }
+    },
+    // {
+    //   path: '/user',
+    //   name: 'User',
+    //   component: UserView,
+    //   meta: { title: '用户中心' }
+    // },
+    {
+      path: '/tasks',
+      name: 'Tasks',
+      component: CrossChainTasksView,
+      meta: { title: '跨链任务' }
     },
     {
-      path: '/transport',
-      name: 'Transport',
-      component: TransportView,
-      meta: { title: '跨链传输' }
+      path: '/tasks_created',
+      name: 'TasksCreated',
+      component: CrossTasksCreatedView,
+      meta: { title: '中继者' }
     },
   ],
 };

@@ -1,0 +1,8 @@
+web3
+eth-account
+eth-abi
+rlp
+eth-utils
+hexbytes
+python-dotenv
+mysql-connector-python
