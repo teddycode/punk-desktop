@@ -1,6 +1,7 @@
 import { ethers } from 'ethers'
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
+import { useWeb3ModalAccount, useWeb3ModalProvider } from '@punkos/ethers5/vue'
 
 const ENV_RPC_URL = (process.env.RPC_URL || '').trim()
 const ENV_CONTRACT_ADDRESS = (process.env.CONTRACT_ADDRESS || '').trim()
@@ -15,8 +16,9 @@ const FIXED_MANAGER_ADDRESS = '0x6d811bf404DaE8Df3d39b15604e32eF040d3D236'
 const FIXED_TRANSPORT_ADDRESS = '0x3B03D07729699B7a28Ebe7E092c6FbCbE0212323'
 const DEFAULT_RPC_URL = FIXED_RPC_URL
 const DEFAULT_CONTRACT_ADDRESS = FIXED_TRANSPORT_ADDRESS
-const PUNKOS_CHAIN_ID_HEX = '0xbd6'
-const DEFAULT_HUB_CHAIN_ID = ENV_HUB_CHAIN_ID ? Number(ENV_HUB_CHAIN_ID) : undefined
+const PUNKOS_CHAIN_ID = 20260418
+const PUNKOS_CHAIN_ID_HEX = ethers.utils.hexValue(PUNKOS_CHAIN_ID)
+const DEFAULT_HUB_CHAIN_ID = ENV_HUB_CHAIN_ID ? Number(ENV_HUB_CHAIN_ID) : PUNKOS_CHAIN_ID
 const DEFAULT_TRANSPORT_LEVEL_ID = ENV_TRANSPORT_LEVEL_ID ? Number(ENV_TRANSPORT_LEVEL_ID) : undefined
 
 const ABI = [
@@ -118,12 +120,32 @@ const normalizeNonNegativeInteger = (value: unknown): number | undefined => {
   return Math.trunc(numeric)
 }
 
-const getEthereum = () => {
-  const ethereum = (window as any)?.ethereum
-  if (!ethereum?.request) {
-    throw new Error('未检测到钱包')
+const getWalletProvider = () => {
+  const injectedEthereum = (window as any)?.ethereum
+  if (injectedEthereum?.request) {
+    return injectedEthereum
   }
-  return ethereum
+
+  try {
+    const web3ModalProvider = useWeb3ModalProvider().walletProvider.value as any
+    if (web3ModalProvider?.request) {
+      return web3ModalProvider
+    }
+  } catch (error) {
+    console.warn('读取 Web3Modal Provider 失败:', error)
+  }
+
+  throw new Error('未检测到钱包')
+}
+
+const getConnectedWalletAddress = (): string => {
+  try {
+    const account = useWeb3ModalAccount()
+    return String(account.address?.value || '').trim()
+  } catch (error) {
+    console.warn('读取 Web3Modal 账户地址失败:', error)
+    return ''
+  }
 }
 
 const tryGetApiContractConfig = async () => {
@@ -259,7 +281,7 @@ export const formatTxHash = (hash: string): string => {
 export const ensureNetwork = async (): Promise<void> => {
   if (isNetworkCorrect) return
 
-  const ethereum = getEthereum()
+  const ethereum = getWalletProvider()
   const currentChainId = await ethereum.request({ method: 'eth_chainId' })
 
   if (currentChainId === PUNKOS_CHAIN_ID_HEX) {
@@ -276,37 +298,64 @@ export const ensureNetwork = async (): Promise<void> => {
     return
   } catch (error: any) {
     if (error?.code !== 4902 && error?.code !== 4901) {
-      throw new Error('切换网络失败')
+      throw new Error(error?.message || '切换网络失败')
     }
   }
 
   const rpcUrl = await getFinalRpcUrl()
-  await ethereum.request({
-    method: 'wallet_addEthereumChain',
-    params: [{
-      chainId: PUNKOS_CHAIN_ID_HEX,
-      chainName: 'PunkOS',
-      rpcUrls: [rpcUrl],
-      nativeCurrency: {
-        name: 'PUNK',
-        symbol: 'PUNK',
-        decimals: 18
-      }
-    }]
-  })
-  isNetworkCorrect = true
+  if (!/^https:\/\//i.test(rpcUrl)) {
+    throw new Error(`当前钱包无法自动添加该链：rpcUrl 必须是 HTTPS，但当前配置为 ${rpcUrl}。请先在钱包中手动添加 chainId=${PUNKOS_CHAIN_ID}（hex=${PUNKOS_CHAIN_ID_HEX}）的链，或提供 HTTPS RPC。`)
+  }
+
+  const addChainParams: Record<string, unknown> = {
+    chainId: PUNKOS_CHAIN_ID_HEX,
+    chainName: 'PunkOS',
+    rpcUrls: [rpcUrl],
+    nativeCurrency: {
+      name: 'PUNK',
+      symbol: 'PUNK',
+      decimals: 18
+    }
+  }
+
+  try {
+    await ethereum.request({
+      method: 'wallet_addEthereumChain',
+      params: [addChainParams]
+    })
+    isNetworkCorrect = true
+  } catch (error: any) {
+    if (/https url 'rpcUrls'/i.test(error?.message || '')) {
+      throw new Error(`当前钱包只接受 HTTPS 的 rpcUrls，当前配置为 ${rpcUrl}。请先在钱包中手动添加 chainId=${PUNKOS_CHAIN_ID} 的链，或提供 HTTPS RPC。`)
+    }
+    throw new Error(error?.message || '添加网络失败')
+  }
 }
 
 export const getSigner = async (): Promise<ethers.Signer> => {
   if (cachedSigner) return cachedSigner
 
-  const ethereum = getEthereum()
-  await ethereum.request({ method: 'eth_requestAccounts' })
+  const walletProvider = getWalletProvider()
+  const connectedAddress = getConnectedWalletAddress()
 
-  cachedProvider = new ethers.providers.Web3Provider(ethereum)
+  if (!connectedAddress) {
+    await walletProvider.request({ method: 'eth_requestAccounts' })
+  }
+
+  cachedProvider = new ethers.providers.Web3Provider(walletProvider)
   cachedSigner = cachedProvider.getSigner()
 
   return cachedSigner
+}
+
+export const getCurrentWalletAddress = async (): Promise<string> => {
+  const connectedAddress = getConnectedWalletAddress()
+  if (connectedAddress) {
+    return connectedAddress
+  }
+
+  const signer = await getSigner()
+  return signer.getAddress()
 }
 
 export const getAllTaskTypes = async (): Promise<TaskTypeInfo[]> => {

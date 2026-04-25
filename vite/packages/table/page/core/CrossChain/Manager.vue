@@ -291,6 +291,7 @@ import {
   getFinalManagerAddress, 
   getFinalRpcUrl, 
   getSigner, 
+  getCurrentWalletAddress,
   ensureNetwork,
   registerTaskTypeOnChain,
   getAllTaskTypes,
@@ -373,8 +374,7 @@ const loadCommitteeData = async () => {
 
     // 获取操作者地址
     try {
-      const signer = await getSigner()
-      operatorAddress.value = await signer.getAddress()
+      operatorAddress.value = await getCurrentWalletAddress()
     } catch (e) {
       console.warn('获取当前钱包地址失败:', e)
       operatorAddress.value = ''
