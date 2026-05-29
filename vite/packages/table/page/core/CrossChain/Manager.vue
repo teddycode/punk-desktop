@@ -543,53 +543,119 @@ const handleInviteSubmit = async () => {
 }
 
 const handleRegisterSubmit = async () => {
-  if (!registerForm.name.trim() || !registerForm.typeId.trim()) {
+  const name = registerForm.name.trim()
+  const typeIdRaw = String(registerForm.typeId || '').trim()
+  const validatorInput = String(registerForm.validator || '').trim()
+  const validatorAddress = ethers.utils.isAddress(validatorInput)
+    ? validatorInput
+    : ethers.constants.AddressZero
+
+  console.group('[CrossChain][Manager] 开始注册任务类型')
+  console.info('[CrossChain][Manager] 表单数据:', {
+    name,
+    typeIdRaw,
+    isActive: registerForm.isActive,
+    validatorInput,
+    validatorAddress
+  })
+
+  if (!name || !typeIdRaw) {
+    console.warn('[CrossChain][Manager] 表单校验失败：缺少名称或类型 ID')
+    console.groupEnd()
     ElMessage.warning('请填写完整的任务类型信息')
     return
   }
 
-  const typeIdNum = Number(registerForm.typeId)
-  if (Number.isNaN(typeIdNum)) return
+  const typeIdNum = Number(typeIdRaw)
+  if (Number.isNaN(typeIdNum)) {
+    console.warn('[CrossChain][Manager] 类型 ID 不是有效数字:', typeIdRaw)
+    console.groupEnd()
+    ElMessage.warning('类型 ID 必须是数字')
+    return
+  }
 
   registering.value = true
   try {
+    console.info('[CrossChain][Manager] 开始解析链上配置')
+
     // 优先使用动态解析的 Transport 合约
     const managerAddr = await getFinalManagerAddress()
     const rpcUrl = await getFinalRpcUrl()
+    console.info('[CrossChain][Manager] 解析结果:', {
+      managerAddr,
+      rpcUrl
+    })
+
     const provider = new ethers.providers.JsonRpcProvider(rpcUrl)
     const managerContract = new ethers.Contract(managerAddr, MANAGER_ABI, provider)
     const transportAddr = await managerContract.contract_chain_index(0, 1)
 
+    console.info('[CrossChain][Manager] 解析到 Transport 地址:', transportAddr)
+
     if (ethers.utils.isAddress(transportAddr) && transportAddr !== ethers.constants.AddressZero) {
+      console.info('[CrossChain][Manager] 使用动态解析到的 Transport 合约注册路由')
       await ensureNetwork()
+      console.info('[CrossChain][Manager] 网络校验通过')
+
       const signer = await getSigner()
+      const signerAddress = await signer.getAddress()
+      console.info('[CrossChain][Manager] 当前签名地址:', signerAddress)
+
       const transportContract = new ethers.Contract(transportAddr, TRANSPORT_ABI, signer)
+      console.info('[CrossChain][Manager] 准备发送 setCrossChainRoute 交易:', {
+        typeIdNum,
+        name,
+        isActive: registerForm.isActive,
+        validatorAddress
+      })
+
       const tx = await transportContract.setCrossChainRoute(
         typeIdNum,
-        registerForm.name.trim(),
+        name,
         registerForm.isActive,
-        ethers.utils.isAddress(registerForm.validator) ? registerForm.validator : ethers.constants.AddressZero
+        validatorAddress
       )
+      console.info('[CrossChain][Manager] 交易已发送:', tx.hash)
       ElMessage.success('任务类型注册中...')
-      await tx.wait()
+
+      const receipt = await tx.wait()
+      console.info('[CrossChain][Manager] 交易已确认:', receipt)
       ElMessage.success('注册成功')
       closeRegisterModal()
       await loadTasksData()
     } else {
+      console.warn('[CrossChain][Manager] 未解析到有效 Transport 地址，回退到 service 注册逻辑')
+      console.info('[CrossChain][Manager] registerTaskTypeOnChain 参数:', {
+        typeId: typeIdNum,
+        name,
+        isActive: registerForm.isActive,
+        verifier: validatorAddress
+      })
+
       // 使用 service
       await registerTaskTypeOnChain({
         typeId: typeIdNum,
-        name: registerForm.name.trim(),
+        name,
         isActive: registerForm.isActive,
-        verifier: ethers.utils.isAddress(registerForm.validator) ? registerForm.validator : ethers.constants.AddressZero
+        verifier: validatorAddress
       })
+      console.info('[CrossChain][Manager] service 注册完成')
       closeRegisterModal()
       await loadTasksData()
     }
   } catch (error: any) {
+    console.error('[CrossChain][Manager] 注册任务类型失败:', {
+      error,
+      message: error?.message,
+      reason: error?.reason,
+      code: error?.code,
+      data: error?.data,
+      stack: error?.stack
+    })
     ElMessage.error(error?.message || '注册失败')
   } finally {
     registering.value = false
+    console.groupEnd()
   }
 }
 
