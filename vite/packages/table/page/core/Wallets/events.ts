@@ -18,18 +18,19 @@ declare interface SignMessage {
 
 export const setupWalletListener = (modal: any, calback: any, userInfo: any) => {
   const toast = useToast();
-  
+
   // 在外部创建 account 实例，避免在事件回调中重复调用导致生命周期警告
   const w3mAccount = useWeb3ModalAccount();
-  
+
   // 创建响应式事件对象（不使用 useWeb3ModalEvents 避免生命周期钩子问题）
   const w3mEvent = reactive(modal.getEvent());
-  
+  let pendingAuthentication = false;
+
   // 直接订阅 modal 的事件（不依赖 Vue 生命周期）
   const unsubscribe = modal.subscribeEvents(next => {
     w3mEvent.data = next.data;
     w3mEvent.timestamp = next.timestamp;
-    
+
     // 处理事件
     console.log("🔔 [钱包事件]", w3mEvent.data.event, "时间戳:", w3mEvent.timestamp);
     switch (w3mEvent.data.event) {
@@ -38,24 +39,32 @@ export const setupWalletListener = (modal: any, calback: any, userInfo: any) => 
         break;
       case 'SELECT_WALLET':
         console.log('测试事件响应：选择了钱包');
+        pendingAuthentication = true;
         break;
       case 'CONNECT_ERROR':
         console.log('测试事件响应：连接失败');
+        pendingAuthentication = false;
         toast.error('钱包连接失败，请重试！', null);
         break;
       case 'CONNECT_SUCCESS':
         console.log('✅ [CONNECT_SUCCESS] 钱包连接成功');
+        pendingAuthentication = true;
         toast.success('钱包连接成功！');
         break;
       case 'DISCONNECT_SUCCESS':
         console.log('测试事件响应：断开成功');
+        pendingAuthentication = false;
         useUserStore().setAuthenticated(false);
         break;
-      case 'MODAL_CLOSE':
-        // 注意：CONNECT_SUCCESS 事件可能不会触发（取决于连接方式）
-        // 所以在 MODAL_CLOSE 时检查连接状态是最可靠的方式
+      case 'MODAL_CLOSE': {
         let connectStatus = w3mAccount.isConnected.value;
         console.log('🔔 [MODAL_CLOSE] 窗口关闭，连接状态:', connectStatus);
+        // 注意：CONNECT_SUCCESS 事件可能不会触发（取决于连接方式）
+        // 所以在 MODAL_CLOSE 时检查连接状态是最可靠的方式
+        if (!pendingAuthentication) {
+          return;
+        }
+        pendingAuthentication = false;
         if (userInfo) {
           console.log('登录后的钱包操作');
           if (connectStatus) {
@@ -123,12 +132,13 @@ export const setupWalletListener = (modal: any, calback: any, userInfo: any) => 
           }
         }
         break;
+      }
       default:
         console.log('其他事件：', w3mEvent.data.event);
         break;
     }
   });
-  
+
   // 返回事件对象和取消订阅函数
   return { event: w3mEvent, unsubscribe };
 };

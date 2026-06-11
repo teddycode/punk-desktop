@@ -29,12 +29,12 @@
       </a-col>
       <a-col :xs="24" :sm="12" :md="6">
         <a-card size="small" class="stat-card">
-          <a-statistic title="我的质押" :value="relayerStatus.my_stake_eth" suffix="ETH" />
+          <a-statistic title="我的质押" :value="relayerStatus.my_stake_eth" :suffix="nativeSymbol" />
         </a-card>
       </a-col>
       <a-col :xs="24" :sm="12" :md="6">
         <a-card size="small" class="stat-card">
-          <a-statistic title="要求质押" :value="relayerStatus.require_stake_eth" suffix="ETH" />
+          <a-statistic title="要求质押" :value="relayerStatus.require_stake_eth" :suffix="nativeSymbol" />
         </a-card>
       </a-col>
       <a-col :xs="24" :sm="12" :md="6">
@@ -124,43 +124,89 @@
     <a-modal
       v-model:open="registerDialogVisible"
       title="中继者管理"
+      width="760px"
+      centered
+      wrap-class-name="relayer-manage-modal"
       @ok="confirmRegister"
       :confirm-loading="registering"
+      cancel-text="取消"
       ok-text="确认操作"
     >
-      <div class="modal-form">
-        <div class="form-item">
-          <label>当前钱包地址</label>
-          <div class="address-box mono">{{ operatorAddress || '请先连接钱包' }}</div>
-        </div>
-        <div class="form-item">
-          <label>已质押金额</label>
-          <div class="value-text">{{ relayerStatus.my_stake_eth }} ETH</div>
-        </div>
-        <div class="form-item">
-          <label>系统要求金额</label>
-          <div class="value-text">{{ relayerStatus.require_stake_eth }} ETH</div>
-        </div>
-        <div class="form-item">
-          <label>质押状态</label>
-          <a-tag :color="isRelayer ? 'success' : 'warning'">
-            {{ isRelayer ? '资格有效' : '质押不足' }}
+      <div class="register-modal-content">
+        <div class="register-hero">
+          <div>
+            <div class="register-hero-title">中继者质押面板</div>
+            <div class="register-hero-desc">查看当前身份状态，并在同一处完成追加质押或提取质押操作。</div>
+          </div>
+          <a-tag class="status-chip" :color="isRelayer ? 'success' : 'warning'">
+            {{ isRelayer ? '正式中继者' : '观察员 / 质押不足' }}
           </a-tag>
         </div>
-        <div class="form-item">
-          <label>操作类型</label>
-          <a-radio-group v-model:value="registerType">
-            <a-radio value="deposit">追加质押</a-radio>
-            <a-radio value="withdraw">提取质押</a-radio>
-          </a-radio-group>
+
+        <div class="wallet-panel">
+          <div class="panel-label">当前钱包地址</div>
+          <div class="address-box mono">{{ operatorAddress || '请先连接钱包' }}</div>
         </div>
-        <div class="form-item">
-          <label>{{ registerType === 'deposit' ? '质押金额' : '提取金额' }} (ETH)</label>
-          <a-input-number v-model:value="stakeAmount" :min="0" :step="0.1" style="width: 100%" />
+
+        <div class="summary-grid">
+          <div class="summary-card">
+            <div class="summary-label">已质押金额</div>
+            <div class="summary-value">{{ relayerStatus.my_stake_eth }} {{ nativeSymbol }}</div>
+            <div class="summary-subtext">当前钱包在 Transport 合约中的质押余额</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">系统要求金额</div>
+            <div class="summary-value">{{ relayerStatus.require_stake_eth }} {{ nativeSymbol }}</div>
+            <div class="summary-subtext">成为正式中继者所需的最低门槛</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">当前身份</div>
+            <div class="summary-value">{{ roleText }}</div>
+            <div class="summary-subtext">身份会随质押余额变化实时更新</div>
+          </div>
+          <div class="summary-card" :class="{ highlight: missingStakeAmount > 0 }">
+            <div class="summary-label">还需补足</div>
+            <div class="summary-value">{{ missingStakeAmount.toFixed(4) }} {{ nativeSymbol }}</div>
+            <div class="summary-subtext">
+              {{ missingStakeAmount > 0 ? '补足后即可具备接单资格' : '当前已满足最低质押要求' }}
+            </div>
+          </div>
         </div>
-        <p v-if="registerType === 'deposit'" class="hint">
-          注意：成为中继者至少需要质押 {{ relayerStatus.require_stake_eth }} ETH。
-        </p>
+
+        <div class="action-panel">
+          <div class="panel-header">
+            <div class="panel-title">质押操作</div>
+            <div class="panel-desc">建议先确认钱包网络与账户余额，再提交链上交易。</div>
+          </div>
+
+          <div class="action-switch">
+            <a-radio-group v-model:value="registerType" button-style="solid">
+              <a-radio-button value="deposit">追加质押</a-radio-button>
+              <a-radio-button value="withdraw">提取质押</a-radio-button>
+            </a-radio-group>
+          </div>
+
+          <div class="amount-row">
+            <div class="amount-field">
+              <label>{{ registerType === 'deposit' ? '质押金额' : '提取金额' }} ({{ nativeSymbol }})</label>
+              <a-input-number v-model:value="stakeAmount" :min="0" :step="0.1" style="width: 100%" />
+            </div>
+            <div class="amount-tip-card">
+              <div class="tip-title">{{ registerType === 'deposit' ? '操作提示' : '提取说明' }}</div>
+              <div class="tip-text">
+                {{ registerType === 'deposit'
+                  ? `至少补足 ${missingStakeAmount.toFixed(4)} ${nativeSymbol} 可恢复接单资格。`
+                  : `当前最多可尝试提取 ${withdrawableStakeAmount.toFixed(4)} ${nativeSymbol}。` }}
+              </div>
+            </div>
+          </div>
+
+          <p class="hint">
+            {{ registerType === 'deposit'
+              ? `注意：成为中继者至少需要质押 ${relayerStatus.require_stake_eth} ${nativeSymbol}。`
+              : '注意：提取后若低于要求金额，身份会变为观察员，无法继续接单。' }}
+          </p>
+        </div>
       </div>
     </a-modal>
 
@@ -265,6 +311,10 @@ const isRelayer = computed(() => {
 })
 
 const roleText = computed(() => isRelayer.value ? '正式中继者' : '观察员 (质押不足)')
+const currentStakeAmount = computed(() => parseFloat(relayerStatus.value.my_stake_eth) || 0)
+const requiredStakeAmount = computed(() => parseFloat(relayerStatus.value.require_stake_eth) || 0)
+const missingStakeAmount = computed(() => Math.max(requiredStakeAmount.value - currentStakeAmount.value, 0))
+const withdrawableStakeAmount = computed(() => Math.max(currentStakeAmount.value, 0))
 const pendingTaskCount = computed(() => tasks.value.filter(t => t.label === 1).length)
 
 // 注册弹窗状态
@@ -282,6 +332,9 @@ const destTxHash = ref('')
 const destTxHeight = ref('')
 const destConfirmHeight = ref('')
 const destRpcUrl = ref('http://47.243.174.71:36054')
+const nativeSymbol = 'PUNK'
+const TX_CONFIRM_TIMEOUT_MS = 120000
+const TX_POLL_INTERVAL_MS = 2000
 
 const columns = [
   { title: '类型', key: 'task_type', dataIndex: 'taskType', width: 80 },
@@ -297,6 +350,40 @@ const shortenValue = (value: string) => {
   if (!value || value === '-') return value
   if (value.length <= 14) return value
   return `${value.slice(0, 8)}...${value.slice(-6)}`
+}
+
+const extractErrorMessage = (error: any): string => {
+  const nestedMessage =
+    error?.reason ||
+    error?.data?.message ||
+    error?.error?.message ||
+    error?.message ||
+    ''
+
+  if (/user rejected|user denied|rejected request|4001/i.test(nestedMessage)) {
+    return '用户取消了钱包签名'
+  }
+
+  return nestedMessage || '未知错误'
+}
+
+const waitForTransactionReceipt = async (
+  provider: ethers.providers.JsonRpcProvider,
+  txHash: string,
+  timeoutMs = TX_CONFIRM_TIMEOUT_MS,
+  pollIntervalMs = TX_POLL_INTERVAL_MS
+) => {
+  const startedAt = Date.now()
+
+  while (Date.now() - startedAt < timeoutMs) {
+    const receipt = await provider.getTransactionReceipt(txHash)
+    if (receipt) {
+      return receipt
+    }
+    await new Promise(resolve => setTimeout(resolve, pollIntervalMs))
+  }
+
+  throw new Error(`交易已发送，但在 ${Math.round(timeoutMs / 1000)} 秒内未等到链上确认。请稍后刷新重试。`)
 }
 
 const refreshData = async () => {
@@ -374,13 +461,18 @@ const fetchRelayerStatus = async () => {
 }
 
 const openRegisterDialog = () => {
-  stakeAmount.value = 0
+  registerType.value = 'deposit'
+  const myStake = parseFloat(relayerStatus.value.my_stake_eth) || 0
+  const reqStake = parseFloat(relayerStatus.value.require_stake_eth) || 0
+  const missingStake = Math.max(reqStake - myStake, 0)
+  stakeAmount.value = missingStake > 0 ? Number(missingStake.toFixed(4)) : 0
   registerDialogVisible.value = true
 }
 
 const confirmRegister = async () => {
-  if (stakeAmount.value <= 0) {
-    message.warning('请输入有效金额')
+  const normalizedAmount = Number(stakeAmount.value)
+  if (!Number.isFinite(normalizedAmount) || normalizedAmount <= 0) {
+    message.warning(`请输入有效的 ${nativeSymbol} 金额`)
     return
   }
 
@@ -395,22 +487,32 @@ const confirmRegister = async () => {
     const transportAddr = await managerContract.contract_chain_index(0, 1)
     
     const transportContract = new ethers.Contract(transportAddr, TRANSPORT_ABI, signer)
-    const valWei = ethers.utils.parseEther(String(stakeAmount.value))
+    const valWei = ethers.utils.parseEther(String(normalizedAmount))
     
     let tx
     if (registerType.value === 'deposit') {
+      await transportContract.callStatic.becomeRelayer({ value: valWei })
       tx = await transportContract.becomeRelayer({ value: valWei })
     } else {
+      await transportContract.callStatic.withdrawStake(valWei)
       tx = await transportContract.withdrawStake(valWei)
     }
-    
-    message.success('交易已发送，等待确认...')
-    await tx.wait()
-    message.success('操作成功')
+
+    if (!tx?.hash) {
+      throw new Error('钱包未返回交易哈希，请确认是否已签名')
+    }
+
+    message.success(`交易已发送：${shortenValue(tx.hash)}`)
+    const receipt = await waitForTransactionReceipt(provider, tx.hash)
+    if (receipt.status !== 1) {
+      throw new Error('链上交易执行失败，请检查质押金额或合约状态')
+    }
+
+    message.success('操作成功，质押状态已同步')
     registerDialogVisible.value = false
     await refreshData()
   } catch (e: any) {
-    message.error(e.message || '操作失败')
+    message.error(extractErrorMessage(e))
   } finally {
     registering.value = false
   }
@@ -428,12 +530,18 @@ const handleAccept = async (taskKey: string) => {
     
     const transportContract = new ethers.Contract(transportAddr, TRANSPORT_ABI, signer)
     const tx = await transportContract.acceptTask(taskKey)
-    message.success('接单交易已发送...')
-    await tx.wait()
+    if (!tx?.hash) {
+      throw new Error('钱包未返回接单交易哈希')
+    }
+    message.success(`接单交易已发送：${shortenValue(tx.hash)}`)
+    const receipt = await waitForTransactionReceipt(provider, tx.hash)
+    if (receipt.status !== 1) {
+      throw new Error('链上接单交易执行失败')
+    }
     message.success('接单成功！请开始在目标链执行任务。')
     await refreshData()
   } catch (e: any) {
-    message.error(e.message || '接单失败')
+    message.error(extractErrorMessage(e))
   }
 }
 
@@ -488,13 +596,19 @@ const handleSubmitProof = async () => {
     )
 
     message.success('任务证明已提交，等待链上验证...')
-    await tx.wait()
+    if (!tx?.hash) {
+      throw new Error('钱包未返回任务证明交易哈希')
+    }
+    const receipt = await waitForTransactionReceipt(provider, tx.hash)
+    if (receipt.status !== 1) {
+      throw new Error('链上任务证明交易执行失败')
+    }
     message.success('🎉 任务完成！奖励已发放至质押余额。')
     submitDialogVisible.value = false
     await refreshData()
   } catch (e: any) {
     console.error(e)
-    message.error(e.message || '证明提交失败')
+    message.error(extractErrorMessage(e))
   } finally {
     submitting.value = false
   }
@@ -589,6 +703,163 @@ onMounted(() => {
 .finished-text { color: #52c41a; font-weight: bold; }
 .failed-text { color: #ff4d4f; font-weight: bold; }
 
+.register-modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.register-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 18px 20px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(22, 119, 255, 0.1), rgba(13, 35, 89, 0.05));
+  border: 1px solid rgba(24, 144, 255, 0.14);
+}
+
+.register-hero-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #102a43;
+  margin-bottom: 6px;
+}
+
+.register-hero-desc {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #486581;
+}
+
+.status-chip {
+  margin-top: 2px;
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+
+.wallet-panel,
+.action-panel {
+  padding: 18px 20px;
+  border-radius: 16px;
+  background: #f8fbff;
+  border: 1px solid #d8e8ff;
+}
+
+.panel-label {
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #486581;
+}
+
+.address-box {
+  background: #ffffff;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #d9e2ec;
+  word-break: break-all;
+  color: #243b53;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.summary-card {
+  padding: 18px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid #e8eef6;
+  box-shadow: 0 10px 24px rgba(16, 42, 67, 0.06);
+}
+
+.summary-card.highlight {
+  border-color: rgba(250, 173, 20, 0.35);
+  background: linear-gradient(180deg, #fffaf0 0%, #ffffff 100%);
+}
+
+.summary-label {
+  margin-bottom: 10px;
+  font-size: 13px;
+  color: #7b8794;
+}
+
+.summary-value {
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #102a43;
+}
+
+.summary-subtext {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #7b8794;
+}
+
+.panel-header {
+  margin-bottom: 16px;
+}
+
+.panel-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #102a43;
+}
+
+.panel-desc {
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #7b8794;
+}
+
+.action-switch {
+  margin-bottom: 16px;
+}
+
+.amount-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(220px, 1fr);
+  gap: 14px;
+  align-items: end;
+}
+
+.amount-field {
+  label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+  }
+}
+
+.amount-tip-card {
+  min-height: 74px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1px solid #e8eef6;
+}
+
+.tip-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #102a43;
+  margin-bottom: 6px;
+}
+
+.tip-text {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #52606d;
+}
+
 .modal-form {
   .form-item {
     margin-bottom: 20px;
@@ -635,6 +906,45 @@ onMounted(() => {
   font-size: 12px;
   color: #8c8c8c;
   margin-top: 6px;
+}
+
+@media (max-width: 768px) {
+  .amount-row {
+    grid-template-columns: 1fr;
+  }
+
+  .register-hero {
+    flex-direction: column;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+:deep(.relayer-manage-modal .ant-modal-content) {
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+:deep(.relayer-manage-modal .ant-modal-header) {
+  padding: 18px 24px 12px;
+  border-bottom: 1px solid #eef2f7;
+}
+
+:deep(.relayer-manage-modal .ant-modal-title) {
+  font-size: 22px;
+  font-weight: 700;
+  color: #102a43;
+}
+
+:deep(.relayer-manage-modal .ant-modal-body) {
+  padding: 20px 24px 16px;
+}
+
+:deep(.relayer-manage-modal .ant-modal-footer) {
+  padding: 12px 24px 20px;
+  border-top: 1px solid #eef2f7;
 }
 </style>
 

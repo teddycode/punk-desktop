@@ -341,9 +341,17 @@ export default {
     messageAlert() {
       this.messageDrawer = true;
       this.$nextTick(async () => {
-        await this.loadNoticeDB();
+        try {
+          await noticeStore().loadNoticeDB();
+        } catch (error) {
+          console.error('[TopPanel] 加载通知列表失败:', error);
+        }
       });
-      this.hideNoticeEntry();
+      try {
+        appStore().hideNoticeEntry();
+      } catch (error) {
+        console.error('[TopPanel] 隐藏消息入口失败:', error);
+      }
     },
     topClockTimerVisibleSetting() {
       this.filterClock(this.clockTag, this.chooseType);

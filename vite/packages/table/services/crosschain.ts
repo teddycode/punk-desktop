@@ -1,21 +1,53 @@
 import { ethers } from 'ethers'
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import { useWeb3ModalAccount, useWeb3ModalProvider } from '@punkos/ethers5/vue'
 
-const ENV_RPC_URL = (process.env.RPC_URL || '').trim()
-const ENV_CONTRACT_ADDRESS = (process.env.CONTRACT_ADDRESS || '').trim()
-const ENV_MANAGER_CONTRACT_ADDRESS = (process.env.MANAGER_CONTRACT_ADDRESS || '').trim()
-const ENV_TRANSPORT_CONTRACT_ADDRESS = (process.env.TRANSPORT_CONTRACT_ADDRESS || '').trim()
-const ENV_HUB_CHAIN_ID = process.env.HUB_CHAIN_ID
-const ENV_TRANSPORT_LEVEL_ID = process.env.TRANSPORT_LEVEL_ID
+const viteEnv = (typeof import.meta !== 'undefined' && (import.meta as any).env)
+  ? (import.meta as any).env
+  : {}
 
-const CROSSCHAIN_BACKEND_URL = process.env.CROSSCHAIN_BACKEND_URL || 'http://localhost:3020'
-const FIXED_RPC_URL = 'http://47.243.174.71:36054'
-const FIXED_MANAGER_ADDRESS = '0x6d811bf404DaE8Df3d39b15604e32eF040d3D236'
-const FIXED_TRANSPORT_ADDRESS = '0x3B03D07729699B7a28Ebe7E092c6FbCbE0212323'
-const DEFAULT_RPC_URL = FIXED_RPC_URL
-const DEFAULT_CONTRACT_ADDRESS = FIXED_TRANSPORT_ADDRESS
+const readEnvString = (...values: any[]): string => {
+  for (const value of values) {
+    if (typeof value === 'string' && value.trim()) {
+      return value.trim()
+    }
+  }
+  return ''
+}
+
+const ENV_RPC_URL = readEnvString(
+  viteEnv.VITE_RPC_URL,
+  viteEnv.RPC_URL,
+  (process as any)?.env?.VITE_RPC_URL,
+  (process as any)?.env?.RPC_URL
+)
+const ENV_MANAGER_CONTRACT_ADDRESS = readEnvString(
+  viteEnv.VITE_MANAGER_CONTRACT_ADDRESS,
+  viteEnv.MANAGER_CONTRACT_ADDRESS,
+  (process as any)?.env?.VITE_MANAGER_CONTRACT_ADDRESS,
+  (process as any)?.env?.MANAGER_CONTRACT_ADDRESS
+)
+const ENV_HUB_CHAIN_ID = readEnvString(
+  viteEnv.VITE_HUB_CHAIN_ID,
+  viteEnv.HUB_CHAIN_ID,
+  (process as any)?.env?.VITE_HUB_CHAIN_ID,
+  (process as any)?.env?.HUB_CHAIN_ID
+)
+const ENV_TRANSPORT_LEVEL_ID = readEnvString(
+  viteEnv.VITE_TRANSPORT_LEVEL_ID,
+  viteEnv.TRANSPORT_LEVEL_ID,
+  (process as any)?.env?.VITE_TRANSPORT_LEVEL_ID,
+  (process as any)?.env?.TRANSPORT_LEVEL_ID
+)
+
+const CROSSCHAIN_BACKEND_URL = readEnvString(
+  viteEnv.VITE_CROSSCHAIN_BACKEND_URL,
+  viteEnv.CROSSCHAIN_BACKEND_URL,
+  (process as any)?.env?.VITE_CROSSCHAIN_BACKEND_URL,
+  (process as any)?.env?.CROSSCHAIN_BACKEND_URL
+) || 'http://localhost:3020'
+const FALLBACK_RPC_URL = 'http://47.243.174.71:36054'
+const DEFAULT_RPC_URL = ENV_RPC_URL || FALLBACK_RPC_URL
 const PUNKOS_CHAIN_ID = 20260418
 const PUNKOS_CHAIN_ID_HEX = ethers.utils.hexValue(PUNKOS_CHAIN_ID)
 const DEFAULT_HUB_CHAIN_ID = ENV_HUB_CHAIN_ID ? Number(ENV_HUB_CHAIN_ID) : PUNKOS_CHAIN_ID
@@ -105,6 +137,8 @@ let isNetworkCorrect = false
 let contractAddressCache: string | null = null
 let managerAddressCache: string | null = null
 let rpcUrlCache: string | null = null
+let injectedWalletProviderRef: any = null
+let injectedWalletAccountRef: any = null
 
 const sleep = (delay: number) => new Promise((resolve) => setTimeout(resolve, delay))
 
@@ -120,15 +154,19 @@ const normalizeNonNegativeInteger = (value: unknown): number | undefined => {
   return Math.trunc(numeric)
 }
 
-const getWalletProvider = () => {
-  const injectedEthereum = (window as any)?.ethereum
-  if (injectedEthereum?.request) {
-    return injectedEthereum
-  }
+export const setCrosschainWalletContext = (context: {
+  walletProviderRef?: any
+  walletAccountRef?: any
+}) => {
+  injectedWalletProviderRef = context?.walletProviderRef || null
+  injectedWalletAccountRef = context?.walletAccountRef || null
+}
 
+const getWalletProvider = () => {
   try {
-    const web3ModalProvider = useWeb3ModalProvider().walletProvider.value as any
+    const web3ModalProvider = injectedWalletProviderRef?.walletProvider?.value as any
     if (web3ModalProvider?.request) {
+      console.info('[CrossChain][Service] using injected Web3Modal provider')
       return web3ModalProvider
     }
   } catch (error) {
@@ -136,12 +174,18 @@ const getWalletProvider = () => {
   }
 
   throw new Error('未检测到钱包')
+  const injectedEthereum = (window as any)?.ethereum
+  if (injectedEthereum?.request) {
+    console.info('[CrossChain][Service] fallback to window.ethereum provider')
+    return injectedEthereum
+  }
+
+  throw new Error('No wallet provider available')
 }
 
 const getConnectedWalletAddress = (): string => {
   try {
-    const account = useWeb3ModalAccount()
-    return String(account.address?.value || '').trim()
+    return String(injectedWalletAccountRef?.address?.value || '').trim()
   } catch (error) {
     console.warn('读取 Web3Modal 账户地址失败:', error)
     return ''
@@ -156,15 +200,12 @@ const tryGetApiContractConfig = async () => {
     const first = Array.isArray(data) ? data[0] : null
     if (!first) return null
     const rpcUrl = first.rpc || DEFAULT_RPC_URL
-    const transportAddress = [first.transport_addr, first.multi_addr]
-      .find((address: string) => isValidAddress(address)) || null
     const managerAddress = [first.manager_addr, first.multi_addr]
       .find((address: string) => isValidAddress(address)) || null
 
-    if (!transportAddress && !managerAddress) return null
+    if (!managerAddress) return null
     return {
       rpcUrl,
-      transportAddress,
       managerAddress
     }
   } catch {
@@ -172,25 +213,49 @@ const tryGetApiContractConfig = async () => {
   }
 }
 
-export const getContractConfig = async () => {
-  if (rpcUrlCache && contractAddressCache) {
-    return {
-      rpcUrl: rpcUrlCache,
-      contractAddress: contractAddressCache,
-      abi: ABI
+const getBaseContractConfig = async (): Promise<{
+  rpcUrl: string
+  managerAddress: string
+}> => {
+  let rpcUrl = rpcUrlCache || DEFAULT_RPC_URL
+  let managerAddress = managerAddressCache
+
+  if (!managerAddress && isValidAddress(ENV_MANAGER_CONTRACT_ADDRESS)) {
+    managerAddress = ethers.utils.getAddress(ENV_MANAGER_CONTRACT_ADDRESS)
+  }
+
+  if (!managerAddress) {
+    const apiConfig = await tryGetApiContractConfig()
+    if (apiConfig?.rpcUrl) {
+      rpcUrl = apiConfig.rpcUrl
+    }
+    if (apiConfig?.managerAddress) {
+      managerAddress = ethers.utils.getAddress(apiConfig.managerAddress)
     }
   }
 
-  rpcUrlCache = FIXED_RPC_URL
-  contractAddressCache = FIXED_TRANSPORT_ADDRESS
+  if (!managerAddress) {
+    throw new Error('未配置 VITE_MANAGER_CONTRACT_ADDRESS，且后端未返回可用的 manager 地址')
+  }
+
+  rpcUrlCache = rpcUrl
+  managerAddressCache = managerAddress
 
   return {
-    rpcUrl: rpcUrlCache,
-    contractAddress: contractAddressCache,
-    abi: ABI
+    rpcUrl,
+    managerAddress
   }
 }
 
+export const getContractConfig = async () => {
+  const rpcUrl = await getFinalRpcUrl()
+  const contractAddress = await getFinalContractAddress()
+  return {
+    rpcUrl,
+    contractAddress,
+    abi: ABI
+  }
+}
 
 export const resolveTransportAddressByManager = async (
   params: ResolveTransportAddressParams
@@ -200,7 +265,7 @@ export const resolveTransportAddressByManager = async (
     throw new Error('Manager 地址格式错误')
   }
 
-  const rpcUrl = params?.rpcUrl || DEFAULT_RPC_URL
+  const rpcUrl = params?.rpcUrl || await getFinalRpcUrl()
   const provider = new ethers.providers.JsonRpcProvider(rpcUrl)
   const managerContract = new ethers.Contract(managerAddress, MANAGER_ABI, provider)
 
@@ -236,19 +301,27 @@ export const getFinalManagerAddress = async (): Promise<string> => {
   if (managerAddressCache) {
     return managerAddressCache
   }
-
-  managerAddressCache = FIXED_MANAGER_ADDRESS
-  return managerAddressCache
+  const { managerAddress } = await getBaseContractConfig()
+  return managerAddress
 }
 
 export const getFinalContractAddress = async (): Promise<string> => {
-  const config = await getContractConfig()
-  return config.contractAddress
+  if (contractAddressCache) {
+    return contractAddressCache
+  }
+
+  const { rpcUrl, managerAddress } = await getBaseContractConfig()
+  const transportAddress = await resolveTransportAddressByManager({
+    managerAddress,
+    rpcUrl
+  })
+  contractAddressCache = transportAddress
+  return transportAddress
 }
 
 export const getFinalRpcUrl = async (): Promise<string> => {
-  const config = await getContractConfig()
-  return config.rpcUrl
+  const { rpcUrl } = await getBaseContractConfig()
+  return rpcUrl
 }
 
 export const formatAddress = (address: string): string => {
@@ -740,6 +813,7 @@ export const resetCache = () => {
   cachedProvider = null
   isNetworkCorrect = false
   contractAddressCache = null
+  managerAddressCache = null
   rpcUrlCache = null
 }
 

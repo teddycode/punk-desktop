@@ -124,6 +124,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { message } from 'ant-design-vue'
 import { ethers } from 'ethers'
+import { getFinalManagerAddress, getFinalRpcUrl } from '../../../services/crosschain'
 
 import sepBundleUrl from './relay-bundles/sep_relay_bundle.zip?url'
 import sscScriptUrl from './relay-scripts/ssc_relay_runner.py?url'
@@ -267,9 +268,6 @@ const shortenValue = (value: string) => {
   return `${value.slice(0, 8)}...${value.slice(-6)}`
 }
 
-const fallbackRpcUrl = 'http://47.243.174.71:36054'
-const fallbackManagerAddr = '0x6d811bf404DaE8Df3d39b15604e32eF040d3D236'
-
 const managerABI = [
   'function getSourceChainNum() view returns (uint256)',
   'function getSourceChainInfo(uint256 sourceID) view returns (string symbol, string name, uint256 state, uint256 contractNum, address[] contractAddressList)'
@@ -283,8 +281,8 @@ const relayABI = [
 const fetchRelayData = async () => {
   loading.value = true
   try {
-    const rpcUrl = fallbackRpcUrl
-    const managerAddr = fallbackManagerAddr
+    const rpcUrl = await getFinalRpcUrl()
+    const managerAddr = await getFinalManagerAddress()
 
     if (!managerAddr || managerAddr === '0x' || !ethers.utils.isAddress(managerAddr)) return
 

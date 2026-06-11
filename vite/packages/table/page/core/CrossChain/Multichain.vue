@@ -100,6 +100,7 @@ import { useRouter } from 'vue-router'
 import { message } from 'ant-design-vue'
 import { ethers } from 'ethers'
 import axios from 'axios'
+import { getFinalManagerAddress, getFinalRpcUrl } from '../../../services/crosschain'
 
 interface SourceData {
   chain_id: number
@@ -216,25 +217,26 @@ const getChainLogoText = (symbol?: string) => {
   return symbol.trim().charAt(0).toUpperCase()
 }
 
-const fallbackRpcUrl = 'http://47.243.174.71:36054'
-const fallbackManagerAddr = '0x6d811bf404DaE8Df3d39b15604e32eF040d3D236'
-
 const fetchCrosschainzoneInfo = async () => {
+  const rpcUrl = await getFinalRpcUrl()
+  const managerAddr = await getFinalManagerAddress()
   crosschainzoneInfo.value = {
     zone_type: 0,
-    rpc: fallbackRpcUrl,
-    multi_addr: fallbackManagerAddr
+    rpc: rpcUrl,
+    multi_addr: managerAddr
   }
 }
 
 const fetchManagerAddress = async () => {
-  managerAddress.value = fallbackManagerAddr
+  managerAddress.value = await getFinalManagerAddress()
 }
 
 const supplementSourceInfoFromManager = async () => {
   try {
-    const rpcUrl = crosschainzoneInfo.value.rpc || fallbackRpcUrl
-    const managerAddr = managerAddress.value || fallbackManagerAddr
+    const rpcUrl = crosschainzoneInfo.value.rpc || await getFinalRpcUrl()
+    const managerAddr = managerAddress.value !== '0x'
+      ? managerAddress.value
+      : await getFinalManagerAddress()
 
     if (!managerAddr || managerAddr === '0x' || !ethers.utils.isAddress(managerAddr)) return
 
