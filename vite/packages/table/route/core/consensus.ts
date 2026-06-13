@@ -4,6 +4,7 @@ import myConsensus from '@page/core/Consensus/self.vue';
 import nodeManager from '@page/core/Consensus/node.vue';
 import { CodeOutlined } from '@ant-design/icons-vue';
 import PotTransaction from "@page/core/Consensus/potTransaction.vue";
+import PotVisualization from '@page/core/Consensus/PotVisualization.vue';
 export default {
   path: 'consensusHome',
   redirect: { name: 'ConsensusPage' },
@@ -38,6 +39,15 @@ export default {
         icon: CodeOutlined,
       },
       component: nodeManager,
+    },
+    {
+      path: '/potVisualization',
+      name: 'PotVisualization',
+      meta: {
+        title: 'PoT可视化',
+        icon: CodeOutlined,
+      },
+      component: PotVisualization,
     },
     {
       path: '/potTransaction', // 新路由路径

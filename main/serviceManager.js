@@ -704,6 +704,7 @@ class ServiceManager {
     const candidates = [
       path.join(entry.serviceDir, 'frontend'),
       path.join(this.repoRoot, 'vite', 'html', entry.name),
+      path.join(entry.sourceDir, 'web', 'dist'),
       path.join(entry.sourceDir, 'spug_web', 'build'),
     ];
 

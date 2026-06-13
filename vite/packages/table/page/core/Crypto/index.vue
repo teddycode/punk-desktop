@@ -140,7 +140,7 @@ export default defineComponent({
       this.$router.push({ name: 'GovernancePage' });
     },
     gotoNewProposal() {
-      this.$router.push({ name: 'ProposalHomePage' });
+      this.$router.push({ name: 'GovernanceProposals' });
     },
   },
   data() {

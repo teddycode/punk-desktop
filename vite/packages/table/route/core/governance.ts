@@ -1,12 +1,8 @@
-import governancePage from '@page/core/Governance/index.vue';
-import proposalHomePage from '@page/core/Governance/proposalHomePage.vue';
-import RicardianContract from '@page/core/Governance/RicardianContract.vue';
-import OneProposals from '@page/core/Governance/OneProposals.vue';
-import EmergencyResponse from '@page/core/Governance/EmergencyResponse.vue';
-import MainBackground from '@page/core/components/MainBackground.vue';
 import TreasuryPage from "@page/core/Governance_v1/Treasury.vue";
-import ProposalListPage from "@page/core/Governance_v1/ProposalList.vue";
-import ProposalPage from "@page/core/Governance_v1/Proposal.vue";
+import GovernanceHomePage from "@page/core/Governance_v1/Home.vue";
+import ProposalsPage from "@page/core/Governance_v1/Proposals.vue";
+import ParameterProposalDetailPage from "@page/core/Governance_v1/ProposalDetail.vue";
+import UpgradeProposalDetailPage from "@page/core/Governance_v1/UpgradeProposalDetail.vue";
 import CreateProposalPage from "@page/core/Governance_v1/CreateProposal.vue";
 import StakePage from "@page/core/Governance_v1/Stake.vue";
 import SystemSpecialTransactionPage from "@page/core/Governance_v1/SystemSpecialTransaction.vue";
@@ -23,18 +19,47 @@ export default {
   },
   children: [
     {
-      path: 'ProposalList',
+      path: 'index',
       name: 'GovernancePage',
-      component: ProposalListPage,
+      component: GovernanceHomePage,
+      meta: {
+        title: '治理',
+        icon: CodeOutlined,
+      },
+    },
+    {
+      path: 'ProposalList',
+      name: 'GovernanceProposals',
+      component: ProposalsPage,
       meta: {
         title: '提案',
         icon: CodeOutlined,
       },
     },
     {
-      path: '/proposal/:id',
+      path: 'proposal/:id',
       name: 'Proposal',
-      component: ProposalPage,
+      redirect: (to) => ({ name: 'ParameterProposalDetail', params: to.params }),
+      meta: {
+        title: '提案详情',
+        icon: CodeOutlined,
+        noShow: true,
+      },
+    },
+    {
+      path: 'proposal/parameter/:id',
+      name: 'ParameterProposalDetail',
+      component: ParameterProposalDetailPage,
+      meta: {
+        title: '参数提案详情',
+        icon: CodeOutlined,
+        noShow: true,
+      },
+    },
+    {
+      path: 'proposal/upgrade/:id',
+      name: 'UpgradeProposalDetail',
+      component: UpgradeProposalDetailPage,
       meta: {
         title: '提案详情',
         icon: CodeOutlined,
@@ -130,4 +155,4 @@ export default {
 //     },
 //   ],
 // };
-
+
