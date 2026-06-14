@@ -11,6 +11,7 @@ const BASE_HEIGHT = 12345;
 
 const wsClients = new Map();
 let wsClientId = 0;
+const submittedTransactions = [];
 
 function nowIso() {
   return new Date().toISOString();
@@ -322,6 +323,143 @@ function getNetworkTopology() {
   };
 }
 
+function getConsensusNodes() {
+  const locations = ['北京市海淀区', '浙江省杭州市', '上海市浦东新区', '广东省深圳市', '四川省成都市'];
+  const topology = getNetworkTopology();
+
+  return topology.nodes.map((node, index) => {
+    const isCommittee = node.type === 'committee';
+    const role = isCommittee ? (node.isLeader ? '委员会Leader' : '委员会节点') : 'PoT矿工节点';
+
+    return {
+      id: node.id,
+      name: node.peerId,
+      peerId: node.peerId,
+      url: `http://127.0.0.1:${7890 + node.id}/${node.peerId}`,
+      address: node.address,
+      location: locations[index % locations.length],
+      role,
+      type: node.type,
+      status: node.status,
+      blockNum: seededInt(`node-block:${node.id}:${Math.floor(currentHeight() / 6)}`, isCommittee ? 20 : 36, isCommittee ? 120 : 220),
+      latency: node.latency,
+      connections: node.connections,
+      isLeader: node.isLeader,
+      lastSeen: new Date(Date.now() - seededInt(`last-seen:${node.id}`, 1, 48) * 1000).toISOString(),
+    };
+  });
+}
+
+function getBusinessBlockInfo(height, latestHeight = currentHeight()) {
+  const committee = getCommitteeMembers();
+  const leader = committee[height % committee.length];
+
+  return {
+    height,
+    hash: hex(`business-block:${height}`, 64),
+    leader: `committee-replica-${height % committee.length}`,
+    leaderAddress: leader.address,
+    transactionCount: seededInt(`business-tx-count:${height}`, 18, 96),
+    size: seededInt(`business-block-size:${height}`, 32000, 210000),
+    parentHash: hex(`business-block:${height - 1}`, 64),
+    time: new Date(getBlockTimestamp(height, latestHeight) * 1000).toISOString(),
+    timestamp: getBlockTimestamp(height, latestHeight),
+    committee: committee.map((member, index) => ({
+      name: `replica_${index + 1}`,
+      address: member.address,
+      publicKey: member.publicKey,
+      isLeader: member.isLeader,
+    })),
+    consensus: 'HotStuff',
+    confirmDelay: 6,
+  };
+}
+
+function getRecentBusinessBlocks(count) {
+  const latestHeight = Math.max(1, currentHeight() - 6);
+  const safeCount = Math.max(1, Math.min(Number(count) || 10, 50));
+  const startHeight = Math.max(1, latestHeight - safeCount + 1);
+
+  return Array.from({ length: latestHeight - startHeight + 1 }, (_, index) =>
+    getBusinessBlockInfo(startHeight + index, latestHeight)
+  );
+}
+
+function getSelfOverview() {
+  const nodes = getConsensusNodes();
+  const selfNode = nodes.find((node) => node.peerId === 'peer-pot-0') || nodes[0];
+  const bci = getBCIStatus();
+  const pot = getPotStatus();
+
+  return {
+    address: selfNode.address,
+    peerId: selfNode.peerId,
+    role: selfNode.role,
+    networkId: hex('network-id', 10).replace(/^0x/, ''),
+    potBlockCount: seededInt(`self-pot-blocks:${Math.floor(currentHeight() / 20)}`, 28, 96),
+    businessBlockCount: seededInt(`self-business-blocks:${Math.floor(currentHeight() / 30)}`, 120, 360),
+    miningReward: bci.pendingRewards + seededInt(`self-reward:${currentHeight()}`, 20, 80),
+    lockedReward: bci.lockedReward,
+    successRate: pot.miningSuccessRate,
+    latency: selfNode.latency,
+    lastSeen: selfNode.lastSeen,
+  };
+}
+
+function getSelfBlocks(count) {
+  const safeCount = Math.max(1, Math.min(Number(count) || 8, 30));
+  const potBlocks = getRecentBlocks(safeCount * 3)
+    .filter((block, index) => block.miner === 'peer-pot-0' || index % 3 === 0)
+    .slice(-safeCount);
+  const businessBlocks = getRecentBusinessBlocks(safeCount)
+    .filter((block, index) => index % 2 === 0 || block.leader === 'committee-replica-0')
+    .slice(-safeCount);
+
+  return { potBlocks, businessBlocks };
+}
+
+function normalizeSubmittedTransaction(body, result) {
+  const tx = body && body.transaction ? body.transaction : {};
+  const txInputs = Array.isArray(tx.TxInputs) ? tx.TxInputs : [];
+  const txOutputs = Array.isArray(tx.TxOutputs) ? tx.TxOutputs : [];
+
+  return {
+    id: `${Date.now()}-${submittedTransactions.length}`,
+    txid: result.data.txid,
+    hash: result.data.txid,
+    type: String((body && body.type) || '1'),
+    typeName: seededChoice(Number((body && body.type) || 1), ['initial-lock', 'lock-transfer', 'non-lock-transfer', 'bci-devastate']),
+    transactionFee: String(tx.TransactionFee || '0'),
+    inputCount: txInputs.length,
+    outputCount: txOutputs.length,
+    inputs: txInputs,
+    outputs: txOutputs,
+    status: 'accepted',
+    timestamp: result.data.acceptedAt,
+  };
+}
+
+function getRecentTransactions(count) {
+  const safeCount = Math.max(1, Math.min(Number(count) || 12, 50));
+  const mempool = getMempoolStatus();
+  const generated = mempool.recentTxs.map((tx, index) => ({
+    id: `mempool-${index}`,
+    txid: tx.hash,
+    hash: tx.hash,
+    type: tx.type,
+    typeName: tx.type,
+    transactionFee: String(seededInt(`tx-fee:${tx.hash}`, 0, 5)),
+    inputCount: seededInt(`tx-input:${tx.hash}`, 1, 3),
+    outputCount: seededInt(`tx-output:${tx.hash}`, 1, 4),
+    inputs: [],
+    outputs: [],
+    status: tx.status,
+    timestamp: tx.timestamp,
+  }));
+
+  return [...submittedTransactions, ...generated].slice(0, safeCount);
+}
+
 function getRecentBlocks(count) {
   const latestHeight = currentHeight();
   const safeCount = Math.max(1, Math.min(Number(count) || 10, 50));
@@ -335,7 +473,7 @@ function getRecentBlocks(count) {
 function createLockTransaction(body) {
   const tx = body && body.transaction ? body.transaction : {};
   const seed = JSON.stringify(body || {}) || String(Date.now());
-  return {
+  const result = {
     code: 200,
     message: 'ok',
     data: {
@@ -347,6 +485,13 @@ function createLockTransaction(body) {
       acceptedAt: nowIso(),
     },
   };
+
+  submittedTransactions.unshift(normalizeSubmittedTransaction(body, result));
+  if (submittedTransactions.length > 30) {
+    submittedTransactions.length = 30;
+  }
+
+  return result;
 }
 
 function routeRequest(method, requestUrl, body) {
@@ -368,8 +513,24 @@ function routeRequest(method, requestUrl, body) {
   if (method === 'GET' && pathname === '/bci/status') return getBCIStatus();
   if (method === 'GET' && pathname === '/mempool/status') return getMempoolStatus();
   if (method === 'GET' && pathname === '/network/topology') return getNetworkTopology();
+  if (method === 'GET' && pathname === '/nodes') return getConsensusNodes();
+  if (method === 'GET' && pathname === '/business/blocks/recent') {
+    return getRecentBusinessBlocks(searchParams.get('count'));
+  }
+  if (method === 'GET' && pathname === '/self/overview') return getSelfOverview();
+  if (method === 'GET' && pathname === '/self/blocks/recent') {
+    return getSelfBlocks(searchParams.get('count'));
+  }
+  if (method === 'GET' && pathname === '/transactions/recent') {
+    return getRecentTransactions(searchParams.get('count'));
+  }
   if (method === 'GET' && pathname === '/blocks/recent') {
     return getRecentBlocks(searchParams.get('count'));
+  }
+
+  const businessBlockMatch = pathname.match(/^\/business\/blocks\/(\d+)$/);
+  if (method === 'GET' && businessBlockMatch) {
+    return getBusinessBlockInfo(Number(businessBlockMatch[1]));
   }
 
   const blockMatch = pathname.match(/^\/blocks\/(\d+)$/);

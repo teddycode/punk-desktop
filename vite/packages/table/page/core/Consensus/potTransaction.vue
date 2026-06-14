@@ -6,7 +6,7 @@
       <a-card-body>
         <a-row :gutter="16">
           <a-col :span="4">
-            <a-statistic :value="33" />
+            <a-statistic :value="potHeight" />
           </a-col>
         </a-row>
       </a-card-body>
@@ -448,10 +448,10 @@
 
 <script>
 
-import {defineComponent, reactive, ref, computed, h} from 'vue';
+import { defineComponent, reactive, ref, computed, h, onMounted } from 'vue';
 import {Modal} from 'ant-design-vue';
-import axios from 'axios';
 import { EyeOutlined } from '@ant-design/icons-vue';
+import { normalizeTransaction, requestPotApi } from './services/potApi';
 
 export default defineComponent({
   methods: {h},
@@ -461,6 +461,7 @@ export default defineComponent({
     const transactionFee = ref('');
     const privateKey = ref('');
     const selectedTransactionType = ref(null);
+    const potHeight = ref('-');
 
     // 输入输出列表
     const txinputs = ref([]);
@@ -734,16 +735,15 @@ export default defineComponent({
           type: typeMapping[selectedTransactionType.value] || '1'
         };
 
-        const response = await axios.post(
-          'http://47.243.174.71:18025/api/createlocktransaction',
-          requestData,
-          { headers: { 'Content-Type': 'application/json' } }
-        );
+        const response = await requestPotApi('/createlocktransaction', {
+          method: 'POST',
+          body: JSON.stringify(requestData),
+        });
 
-        if (response.data.code === 200) {
+        if (response.code === 200) {
           const newTransaction = {
             id: Date.now().toString(),
-            txid: txid.value,
+            txid: response.data?.txid || txid.value,
             transactionFee: transactionFee.value,
             time: new Date().toLocaleString(),
             inputs: txinputs.value.map(input => ({
@@ -769,14 +769,14 @@ export default defineComponent({
         } else {
           Modal.error({
             title: '提交失败',
-            content: response.data.message || '未知错误'
+            content: response.message || '未知错误'
           });
         }
       } catch (error) {
         console.error('提交出错:', error);
         Modal.error({
           title: '请求失败',
-          content: error.response?.data?.message || error.message
+          content: error.message
         });
       }
     };
@@ -792,19 +792,23 @@ export default defineComponent({
 
 // 完善显示详情方法
     const showTransactionDetail = (record) => {
+      const rawData = record.rawData || {
+        TxInputs: record.inputs || [],
+        TxOutputs: record.outputs || [],
+      };
       selectedTransaction.value = {
         ...record,
-        inputs: record.rawData.TxInputs.map(input => ({
-          Address: input.Address,
-          Value: input.Value,
-          BciType: input.BciType,
-          Txid: input.Txid
+        inputs: (rawData.TxInputs || []).map(input => ({
+          Address: input.Address || input.address || '-',
+          Value: input.Value || input.value || '-',
+          BciType: input.BciType || input.bciType || '-',
+          Txid: input.Txid || input.txid || '-'
         })),
-        outputs: record.rawData.TxOutputs.map(output => ({
-          Address: output.Address,
-          Value: output.Value,
-          LockTime: output.LockTime,
-          BciType: output.BciType
+        outputs: (rawData.TxOutputs || []).map(output => ({
+          Address: output.Address || output.address || '-',
+          Value: output.Value || output.value || '-',
+          LockTime: output.LockTime || output.lockTime || '-',
+          BciType: output.BciType || output.bciType || '-'
         }))
       };
       transactionDetailVisible.value = true;
@@ -815,8 +819,39 @@ export default defineComponent({
         : (currentPageOutput.value - 1) * pageSize.value;
       return start + index;
     };
+
+    const loadPotTransactionData = async () => {
+      try {
+        const [potStatus, transactions] = await Promise.all([
+          requestPotApi('/pot/status'),
+          requestPotApi('/transactions/recent?count=12'),
+        ]);
+        potHeight.value = potStatus.currentHeight || '-';
+        transactionHistory.value = transactions.map((item) => {
+          const tx = normalizeTransaction(item);
+          return {
+            id: tx.id,
+            txid: tx.txid,
+            transactionFee: tx.transactionFee,
+            time: tx.timestamp,
+            inputs: tx.inputs,
+            outputs: tx.outputs,
+            rawData: {
+              TxInputs: tx.inputs,
+              TxOutputs: tx.outputs,
+            },
+          };
+        });
+      } catch (error) {
+        console.warn('[Consensus] load POT transaction data failed:', error);
+      }
+    };
+
+    onMounted(loadPotTransactionData);
+
     return {
       // 状态变量
+      potHeight,
       txid,
       transactionFee,
       privateKey,
