@@ -187,7 +187,6 @@ import { ThunderboltFilled } from '@ant-design/icons-vue';
 import { message, notification } from 'ant-design-vue';
 import SidePanel from './SidePanel.vue';
 import SecondPanel from './SecondPanel.vue';
-import GradeSmallTip from './GradeSmallTip.vue';
 import { isMain } from '../js/common/screenUtils';
 
 import EditNavigation from './bottomPanel/EditNavigation.vue';
@@ -227,7 +226,6 @@ export default {
     EditNavigation,
     ChangeApp,
     ScrolX,
-    GradeSmallTip,
     TaskBox,
     navIcon,
   },
@@ -329,7 +327,7 @@ export default {
     });
   },
   computed: {
-    ...mapWritableState(appStore, ['userInfo', 'settings', 'lvInfo', 'simple']),
+    ...mapWritableState(appStore, ['userInfo', 'settings', 'simple']),
     ...mapWritableState(appsStore, ['runningApps', 'runningTableApps']),
     ...mapWritableState(teamStore, ['team', 'teamVisible']),
     ...mapWritableState(cardStore, ['routeParams']),

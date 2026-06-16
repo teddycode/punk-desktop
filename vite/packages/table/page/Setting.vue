@@ -272,7 +272,6 @@ import { Modal } from 'ant-design-vue';
 import { mapActions } from 'pinia';
 import { codeStore } from '@store/code';
 import SecondPanel from '../components/SecondPanel.vue';
-import GradeSmallTip from '../components/GradeSmallTip.vue';
 import { isMain, isWin } from '@js/common/screenUtils';
 import MyAvatar from '../components/small/MyAvatar.vue';
 import EditNavigation from '../components/bottomPanel/EditNavigation.vue';
@@ -284,7 +283,7 @@ import { getLangList } from '@table/locale/helper';
 import { getUserCountryAndLanguage } from '@table/locale/location';
 export default {
   name: 'Setting',
-  components: { EditNavigation, MyAvatar, SecondPanel, ChooseScreen, GradeSmallTip, Iconify },
+  components: { EditNavigation, MyAvatar, SecondPanel, ChooseScreen, Iconify },
   data() {
     return {
       bgColor: '',

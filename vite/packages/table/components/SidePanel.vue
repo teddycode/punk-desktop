@@ -68,7 +68,6 @@
         <div class="relative btn" @click="editNavigation">
           <Icon icon="tianjia1" style="font-size: 3em"></Icon>
           <div><span>编辑导航</span></div>
-          <GradeSmallTip powerType="bottomNavigation" @closeDrawer="closeDrawer"></GradeSmallTip>
         </div>
         <div v-for="item in builtInFeatures" :key="item.name" class="btn" @click="clickNavigation(item)">
           <navIcon :icon="item.icon" style="font-size: 3em"></navIcon>
@@ -97,14 +96,12 @@ import { message } from 'ant-design-vue';
 import routerTab from '../js/common/routerTab';
 import { Icon as navIcon } from '@iconify/vue';
 import { renderIcon } from '@js/common/common';
-import GradeSmallTip from './GradeSmallTip.vue';
 
 export default {
   name: 'SidePanel',
   components: {
     EditNavigation,
     navIcon,
-    GradeSmallTip,
   },
   data() {
     return {

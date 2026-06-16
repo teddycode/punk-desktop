@@ -5,12 +5,12 @@
       style="width: 600px; height: 80%; background: var(--modal-bg)"
     >
       <div class="head-nav">
-        <span class="ml-2" style="font-size: 16px; color: var(--primary-text); font-weight: 500">1外部小组件</span>
+        <span class="ml-2" style="font-size: 16px; color: var(--primary-text); font-weight: 500">外部小组件</span>
         <div @click="close" class="h-11 w-11 flex justify-center items-center xt-bg-2 rounded-lg pointer">
           <Icon icon="guanbi" style="color: var(--primary-text); font-size: 24px"></Icon>
         </div>
       </div>
-      <div class="content" @scroll="scrollBox" id="scroll-box">
+      <div class="content" id="scroll-box">
         <div class="box xt-bg-2">
           <div class="add no-drag" @click="addNewCard(custom)">
             <div class="icons">
@@ -30,7 +30,6 @@
             </div>
           </div>
         </div>
-        <Market :desk="desk" @closeMarket="close"></Market>
       </div>
     </div>
   </div>
@@ -44,15 +43,13 @@
 </template>
 
 <script>
-import { mapActions, mapWritableState } from 'pinia';
+import { mapActions } from 'pinia';
 import { cardStore } from '../../../store/card';
 import { message } from 'ant-design-vue';
 import NewPreviewCardDetails from './NewPreviewCardDetails.vue';
-import Market from '../../../components/card/remote/Market.vue';
 export default {
   components: {
     NewPreviewCardDetails,
-    Market,
   },
   props: {
     openRemote: {
@@ -74,9 +71,6 @@ export default {
       carouselIndex: 0,
       isCardDetails: false,
       cardDetails: {},
-      remoteContent: {},
-      showModal: false,
-      fixed: false,
     };
   },
   methods: {
@@ -111,25 +105,6 @@ export default {
     },
     closeCardDetails() {
       this.isCardDetails = false;
-    },
-    scrollBox(val) {
-      let scroll = document.getElementById('scroll-box');
-      // console.log(scroll.scrollHeight - scroll.scrollTop == scroll.clientHeight)
-      let nav = document.getElementById('nav');
-      let navList = document.getElementById('navList');
-      if (scroll.scrollTop > 120) {
-        nav.classList.add('suspension-r-nav');
-        navList.classList.add('classList-contnet');
-      } else {
-        nav.classList.remove('suspension-r-nav');
-        navList.classList.remove('classList-contnet');
-      }
-    },
-  },
-  watch: {
-    openRemote(val) {
-      if (val) {
-      }
     },
   },
 };
@@ -320,19 +295,5 @@ export default {
 }
 .content::-webkit-scrollbar {
   display: none;
-}
-</style>
-<style lang="scss">
-.suspension-r-nav {
-  z-index: 99999;
-  position: fixed;
-  top: 50px;
-  left: 0;
-  right: 0;
-  padding: 16px 0;
-  background: var(--modal-bg);
-}
-.classList-contnet {
-  padding-top: 76px;
 }
 </style>

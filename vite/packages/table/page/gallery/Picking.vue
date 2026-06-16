@@ -209,7 +209,6 @@
           <div @click="setAppPaper" class="btn relative">
             <Icon style="font-size: 3em" icon="tianjia1"></Icon>
             <div>设为工作台背景</div>
-            <GradeSmallTip powerType="mainWallpaper"></GradeSmallTip>
           </div>
         </xt-task>
       </a-col>
@@ -224,7 +223,6 @@ import axios from 'axios';
 import { paperStore } from '../../store/paper';
 import { mapActions, mapState, mapWritableState } from 'pinia';
 import { message, Modal } from 'ant-design-vue';
-import GradeSmallTip from '../../components/GradeSmallTip.vue';
 import { appStore } from '../../store';
 import browser from '../../js/common/browser';
 import { taskStore } from '../../apps/task/store';
@@ -232,7 +230,6 @@ export default defineComponent({
   name: 'Picking',
   components: {
     InfoCircleOutlined,
-    GradeSmallTip,
   },
   computed: {
     ...mapState(paperStore, ['myPapers', 'settings']),

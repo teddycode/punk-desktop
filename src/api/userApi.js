@@ -10,7 +10,7 @@ const url = {
 const userApi = {
   async getUserInfo() {
     await baseApi.init();
-    return baseApi.axios(url.getUserInfo, { fields: 'fans,follow,grade,post_count,signature,nickname,avatar' }, 'get');
+    return baseApi.axios(url.getUserInfo, { fields: 'fans,follow,post_count,signature,nickname,avatar' }, 'get');
   },
   async refreshToken(user) {
     await baseApi.init(user);

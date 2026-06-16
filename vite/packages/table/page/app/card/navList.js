@@ -123,20 +123,6 @@ export const NavList = [
         ],
         time: '2023/5/31',
       },
-      {
-        name: 'fish',
-        cname: '木鱼',
-        detail: '休闲减压神器，每天敲一敲，积攒功德。',
-        sizes: ['2x2'],
-        option: [
-          {
-            name: 'fish',
-            size: '2x2',
-            zoom: '20',
-          },
-        ],
-        time: '2023/5/31',
-      },
     ],
   },
   {
@@ -716,20 +702,6 @@ export const NavList = [
         time: '2023/5/31',
       },
       {
-        name: 'fish',
-        cname: '木鱼',
-        detail: '休闲减压神器，每天敲一敲，积攒功德。',
-        sizes: ['2x2'],
-        option: [
-          {
-            name: 'fish',
-            size: '2x2',
-            zoom: '20',
-          },
-        ],
-        time: '2023/5/31',
-      },
-      {
         name: 'singleDoubanFilm',
         cname: '正在热映',
         detail: '电影荒了？来看看近期正在上映的热门电影。',
@@ -818,7 +790,7 @@ export const NavList = [
         name: 'remote',
         cname: '外部小组件',
         detail: '添加一个链接到外部网页的小组件，可以实现各种自定义功能',
-        sizes: ['社区分享', '自定义大小'],
+        sizes: ['自定义大小'],
         option: [
           {
             name: 'Remote',
@@ -827,138 +799,6 @@ export const NavList = [
           },
         ],
         time: '2023/5/31',
-      },
-    ],
-  },
-  {
-    cname: '施工中',
-    children: [
-      {
-        name: 'smallRank',
-        cname: '排行榜(开发中)',
-        detail: '快来看看你的等级、你的小队都是啥名次。',
-        sizes: ['2x2', '2x4'],
-        option: [
-          {
-            name: 'smallRank',
-            size: '2x2',
-            zoom: '18',
-          },
-        ],
-        time: '2023/6/29',
-      },
-      {
-        name: 'gameInformation',
-        cname: '电竞资讯(开发中)',
-        detail: '时刻关注电竞游戏资讯',
-        sizes: ['2x4'],
-        option: [
-          {
-            name: 'gameInformation',
-            size: '2x2',
-            zoom: '11',
-          },
-        ],
-        time: '2023/9/8',
-      },
-
-      {
-        name: 'clipBoard',
-        cname: '剪贴板小组件(开发中)',
-        detail: '在你的桌面上快速访问最近的剪贴板数据。',
-        sizes: ['4x4'],
-        option: [
-          {
-            name: 'clipBoard',
-            size: '4x4',
-            zoom: '11',
-          },
-        ],
-        time: '2023/9/14',
-      },
-      {
-        name: 'Dashboard',
-        cname: '社区数据看板(开发中)',
-        detail: '支持自定义短说运营数据看板，时刻关注你的社区活跃情况',
-        sizes: ['2x4', '4x4'],
-        option: [
-          {
-            name: 'Dashboard',
-            size: '2x4',
-            zoom: '11',
-          },
-        ],
-        time: '2023/9/15',
-      },
-      {
-        name: 'ShortTodo',
-        cname: '社区待办(开发中)',
-        detail: '短说社区审核通知不再遗漏，在工作台中即可快速查看和访问',
-        sizes: ['2x4'],
-        option: [
-          {
-            name: 'ShortTodo',
-            size: '2x4',
-            zoom: '20',
-          },
-        ],
-        time: '2023/9/16',
-      },
-      {
-        name: 'Guider',
-        cname: '社区助手(开发中)',
-        detail: '短说社区助手，随时翻阅使用手册，快速进入客服交流群',
-        sizes: ['2x4'],
-        option: [
-          {
-            name: 'Guider',
-            size: '2x4',
-            zoom: '20',
-          },
-        ],
-        time: '2023/9/18',
-      },
-      {
-        name: 'ShortChart',
-        cname: '社区数据图表(开发中)',
-        detail: '将短说管理后台的数据统计面板搬到了工作台，运营数据时刻查看',
-        sizes: ['4x4'],
-        option: [
-          {
-            name: 'ShortChart',
-            size: '4x4',
-            zoom: '11',
-          },
-        ],
-        time: '2023/9/19',
-      },
-      {
-        name: 'yuanCommunity',
-        cname: '磐古社区动态(开发中)',
-        detail: '磐古社区里又发了什么好玩的事情？时刻关注热门和最新动态。',
-        sizes: ['4x4', '4x6'],
-        option: [
-          {
-            name: 'yuanCommunity',
-            size: '4x4',
-            zoom: '24',
-          },
-        ],
-        time: '2023/10/11',
-      },
-      {
-        name: 'Courier',
-        cname: '我的快递',
-        detail: '在桌面上时刻关注你的快递动态，支持批量添加快递单号，自定义修改快递名称和图标',
-        sizes: ['2x2', '4x4', '4x6'],
-        option: [
-          {
-            name: 'Courier',
-            size: '4x6',
-            zoom: '24',
-          },
-        ],
-        time: '2023/10/27',
       },
     ],
   },

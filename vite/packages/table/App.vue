@@ -368,15 +368,6 @@ export default {
       },
       immediate: true,
     },
-    'userInfo.onlineGradeExtra': {
-      handler(newVal, oldVal) {
-        window.lv = 1;
-        if (this.userInfo.onlineGradeExtra) {
-          window.lv = this.userInfo.onlineGradeExtra.lv;
-        }
-      },
-      immediate: true,
-    },
     backgroundImage: {
       handler() {
         if (this.backgroundImage.runpath) {

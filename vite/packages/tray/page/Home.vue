@@ -45,45 +45,9 @@
             <a-avatar @click="openUserSpace" style="position: relative; cursor: pointer" :size="55" :src="avatar">
             </a-avatar>
           </div>
-          <div
-            class="content"
-            @click="goDetail('grade')"
-            style="cursor: pointer; margin-left: 15px; width: 100%; height: 60px; margin-top: 5px"
-          >
-            <span style="color: #f3f3f3; font-size: 14px"
-              >在线等级：{{ lv }}级 &nbsp;&nbsp;
-              <span v-if="this.lv > 0">
-                <span class="ts-grade-crown" v-for="item in onlineGrade.crown">
-                  <img :src="item.icon" alt="" style="width: 20px; height: 20px" />
-                </span>
-                <span class="ts-grade-sun" v-for="item in onlineGrade.sun">
-                  <img :src="item.icon" alt="" style="width: 20px; height: 20px" />
-                </span>
-                <span class="ts-grade-moon" v-for="item in onlineGrade.moon">
-                  <img :src="item.icon" alt="" style="width: 20px; height: 20px" />
-                </span>
-                <span class="ts-grade-star" v-for="item in onlineGrade.star">
-                  <img :src="item.icon" alt="" style="width: 20px; height: 20px" />
-                </span> </span
-            ></span>
-
-            <div class="flex" style="margin-top: 5px">
-              <a-progress
-                strokeColor="#ffffff"
-                trailColor="#4d4d4d"
-                :percent="percentage"
-                :showInfo="false"
-                style="width: 165px"
-              />
-              &nbsp; &nbsp;
-              <a-tooltip>
-                <template #title>正在累计在线时长。<br />无需启动浏览器即可累计时长。</template>
-                <thunderbolt-filled class="thunder" style="color: rgba(255, 140, 44, 0.98); vertical-align: middle" />
-                <span style="color: #f3f3f3; font-size: 12px; vertical-align: middle"
-                  >{{ remainHour }}小时{{ remainMinute }}分后升级</span
-                >
-              </a-tooltip>
-            </div>
+          <div class="content" style="margin-left: 15px; width: 100%; height: 60px; margin-top: 5px">
+            <span style="color: #f3f3f3; font-size: 14px">{{ user.nickname || '已登录用户' }}</span>
+            <div style="color: #b6b6b6; font-size: 12px; margin-top: 5px">点击头像进入个人空间</div>
           </div>
           <!--          <div class="upgrade flex flex-direction" style="width: 130px;height: 60px;margin-left: 15px;margin-top: 5px">-->
           <!--            <div  style="color: #afaf61;margin-bottom: 5px;margin-left: 15px">-->
@@ -102,7 +66,7 @@
         <div style="height: 75px; color: white; text-align: center">
           <div v-if="this.loading === false">
             <div v-if="this.user.uid === -1">
-              <p>请登录后查看用户等级信息</p>
+              <p>请登录后查看用户信息</p>
               <p>
                 <a-button type="primary" @click="goLogin" size="small">前往登录</a-button>
               </p>
@@ -132,13 +96,7 @@ import InternalStorage from '../compontents/InternalStorage.vue';
 import { mapState } from 'vuex';
 import { defineComponent } from 'vue';
 
-import { ThunderboltFilled, LeftOutlined, RightOutlined, LoadingOutlined } from '@ant-design/icons-vue';
-
-// let grade
-// ipcRenderer.once('userInfo',(event,args)=>{
-//   grade = args
-//   console.log(grade)
-// })
+import { LeftOutlined, RightOutlined, LoadingOutlined } from '@ant-design/icons-vue';
 
 export default defineComponent({
   name: 'Home',
@@ -149,7 +107,6 @@ export default defineComponent({
     Task,
     Team,
     App,
-    ThunderboltFilled,
     LeftOutlined,
     RightOutlined,
     LoadingOutlined,
@@ -157,16 +114,11 @@ export default defineComponent({
   data() {
     return {
       loading: false,
-      lv: '',
       avatar: '',
-      remainHour: '',
-      remainMinute: '',
-      minute: '',
-      percentage: '',
     };
   },
   computed: {
-    ...mapState(['onlineGrade', 'user']),
+    ...mapState(['user']),
   },
   methods: {
     openUserSpace() {
@@ -179,26 +131,6 @@ export default defineComponent({
       };
     },
 
-    gradeTableGenerate(num) {
-      let lvSys = {};
-      for (let i = 0; i < num + 1; i++) {
-        let arrLef = 0;
-        let arrRg = 0;
-        for (let j = 0; j < i; j++) {
-          arrLef += 10 * (j + 2);
-        }
-        for (let k = 0; k < i + 1; k++) {
-          arrRg += 10 * (k + 2);
-        }
-        arrRg -= 1;
-        lvSys[`${i}`] = [arrLef, arrRg];
-      }
-      delete lvSys['lv0'];
-      return lvSys;
-    },
-    goDetail(path) {
-      this.$router.push({ name: 'detail', params: { path: path } });
-    },
     loadUserInfo() {
       this.loading = true;
       ipc.send('getDetailUserInfo');
@@ -210,14 +142,7 @@ export default defineComponent({
       console.log('这里Tray收到了userInfo:', args);
       this.loading = false;
       this.$store.commit('setUser', args.data);
-      this.lv = args.data.onlineGradeExtra.lv;
       this.avatar = args.data.avatar;
-      let section = this.gradeTableGenerate(64)[this.lv + 1];
-      let remain = section[0] * 60 - args.data.onlineGradeExtra.minutes;
-      this.remainHour = Math.floor(remain / 60);
-      this.remainMinute = remain - Math.floor(remain / 60) * 60;
-      this.minute = args.data.onlineGradeExtra.minutes;
-      this.percentage = (this.minute / (section[0] * 60)) * 100;
     });
     ipc.send('getMemory');
     this.loadUserInfo();
@@ -233,28 +158,6 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@keyframes twinkling {
-  0% {
-    opacity: 0.5;
-    filter: alpha(opacity=50);
-  }
-
-  50% {
-    opacity: 1;
-    filter: alpha(opacity=100);
-  }
-
-  100% {
-    opacity: 0.5;
-    filter: alpha(opacity=50);
-  }
-}
-.thunder {
-  animation: twinkling 1.2s ease-in-out infinite;
-}
-.ts-grade-crown {
-  display: inline-block;
-}
 .rank {
   width: 380px;
   height: 75px;

@@ -26,7 +26,6 @@ import BasicSettingsChild from './main/basicSetting';
 import SocialChild from './main/social';
 import MarketIndex from '@page/market/MarketIndex.vue';
 import MarketChild from './main/market';
-import RemoteCommunity from '@page/app/card/RemoteCommunity.vue';
 import GameAssistChild from './main/GameAssist';
 /*办公助手*/
 import WorkIndex from '@page/work/WorkIndex.vue';
@@ -217,11 +216,6 @@ export default [
     name: 'marketIndex',
     component: MarketIndex,
     children: MarketChild,
-  },
-  {
-    path: '/remoteCommunity',
-    name: 'remoteCommunity',
-    component: RemoteCommunity,
   },
   {
     path: '/cAppRunner',

@@ -22,7 +22,7 @@ async function getUserInfo() {
   }
   return await baseApi.axios(
     '/api/users/info',
-    { fields: 'uid,fans,follow,grade,post_count,signature,nickname,avatar,frame' },
+    { fields: 'uid,fans,follow,post_count,signature,nickname,avatar,frame' },
     'get',
   );
 }

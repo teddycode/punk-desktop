@@ -109,15 +109,6 @@ export default {
           size: ['1x1'],
         },
         {
-          name: 'fish',
-          cname: '木鱼',
-          icon: 'naozhong',
-          detail: '休闲减压神器，积攒功德',
-          images: ['fish'],
-          size: ['1x1'],
-        },
-
-        {
           name: 'games',
           cname: '游戏折扣推荐',
           icon: 'steam',
@@ -216,22 +207,6 @@ export default {
           detail: '时刻关注你所在的城市的92号，96号，98号，0号油价',
           images: ['OilPrices'],
           size: ['2x4'],
-        },
-        {
-          name: 'yuanCommunity',
-          cname: '磐古社区动态',
-          icon: 'time-circle',
-          detail: '磐古社区里又发了什么好玩的事情？时刻关注热门和最新动态。',
-          images: ['yuanCommunity'],
-          size: ['4x4'],
-        },
-        {
-          name: 'Courier',
-          cname: '我的快递',
-          icon: 'time-circle',
-          detail: '在桌面上时刻关注你的快递动态，支持批量添加快递单号，自定义修改快递名称和图标',
-          images: ['courier'],
-          size: ['4x6'],
         },
       ],
       cardType: {},

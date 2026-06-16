@@ -58,9 +58,6 @@
       <a-button block type="primary" @click="save">确定</a-button>
     </div>
   </a-drawer>
-  <!-- <template v-if="openShare">
-    <RemoteShare :openShare="openShare" @closeShare="closeShare" :desk="desk" :cardId="customIndex"></RemoteShare>
-  </template> -->
 </template>
 
 <script>
@@ -68,21 +65,6 @@ import Widget from '../../card/Widget.vue';
 import { message } from 'ant-design-vue';
 import { taskStore } from '../../../apps/task/store';
 import { mapWritableState } from 'pinia';
-
-// import RemoteShare from '../../card/remote/RemoteShare.vue';
-function loadScript(src, id, callback) {
-  const s = document.createElement('script', id);
-  s.type = 'text/javascript';
-  s.src = src;
-  s.id = id;
-  s.onload = s.onreadystatechange = function () {
-    if (!this.readyState || this.readyState === 'loaded' || this.readyState === 'complete') {
-      callback && callback();
-      s.onload = s.onreadystatechange = null;
-    }
-  };
-  document.body.appendChild(s);
-}
 
 export default {
   name: 'Remote',
@@ -113,9 +95,7 @@ export default {
       height: 2,
 
       panelVisible: false,
-      showCommunity: false,
       id: Date.now().toString(),
-      openShare: false,
       options: {
         className: 'card small',
         title: '',
@@ -124,32 +104,6 @@ export default {
         noTitle: true,
       },
       menuList: [
-        {
-          icon: 'shop',
-          title: '发现',
-          fn: () => {
-            this.$router.push({
-              name: 'remoteCommunity',
-              params: { id: this.desk.id, cardId: this.customIndex, size: JSON.stringify(this.cardSize) },
-            });
-          },
-        },
-        {
-          icon: 'fenxiang',
-          title: '分享',
-          fn: () => {
-            this.$router.push({
-              name: 'remoteCommunity',
-              params: {
-                id: this.desk.id,
-                cardId: this.customIndex,
-                direct: true,
-                size: JSON.stringify(this.cardSize),
-              },
-            });
-            // this.openShare = true
-          },
-        },
         {
           icon: 'shezhi1',
           title: '设置',
@@ -173,9 +127,6 @@ export default {
     openRightMenu() {
       this.$refs.remote.menuVisible = true;
     },
-    closeModal(val) {
-      this.showCommunity = val;
-    },
     ensureEvenNumber(value) {
       const parsedValue = parseInt(value);
       return Math.ceil(parsedValue / 2) * 2;
@@ -187,9 +138,6 @@ export default {
       this.customData.height = this.height / 2;
       this.customData.url = this.url;
       message.success('修改成功');
-    },
-    closeShare(val) {
-      this.openShare = val;
     },
     setUA() {
       //暂时没有办法实现此处展现为移动端的界面

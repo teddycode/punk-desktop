@@ -29,7 +29,6 @@
               }
             "
           >
-            <GradeSmallTip lastPowerType="创建小队" powerType="team"></GradeSmallTip>
             立即创建
           </div>
         </div>
@@ -55,7 +54,6 @@
                 @click="join"
               >
                 加入
-                <GradeSmallTip powerType="team"></GradeSmallTip>
               </div>
             </a-col>
           </a-row>
@@ -74,12 +72,10 @@ import { UsergroupAddOutlined } from '@ant-design/icons-vue';
 import CreateTeam from './CreateTeam.vue';
 import BackBtn from './comp/BackBtn.vue';
 import { teamStore } from '../store/team';
-import GradeSmallTip from './GradeSmallTip.vue';
 
 export default {
   name: 'TeamTip',
   components: {
-    GradeSmallTip,
     BackBtn,
     CreateTeam,
     UsergroupAddOutlined,

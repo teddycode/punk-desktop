@@ -125,7 +125,6 @@
         {{ step === 2 ? 'GO' : '下一步' }}
       </xt-button>
     </div>
-    <GradeNotice></GradeNotice>
   </div>
   <transition name="fade">
     <div class="guide-page-bg h-full flex items-center justify-center" v-if="showModal === true">
@@ -158,7 +157,6 @@ import { navStore } from '@store/nav';
 import { cardStore } from '@store/card';
 import { defaultAvatar } from '@js/common/teamAvatar';
 import { taskStore } from '@apps/task/store';
-// import GradeNotice from './GradeNotice.vue'
 import {
   deskTemplate,
   diyPanel,
@@ -176,7 +174,6 @@ import _ from 'lodash-es';
 
 export default {
   components: {
-    // GradeNotice,
     HorizontalPanel,
   },
   data() {

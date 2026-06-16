@@ -105,7 +105,6 @@
         <div class="btn relative" @click="setAppPaper">
           <Icon icon="tianjia1" style="font-size: 3em"></Icon>
           <div>设为工作台背景</div>
-          <GradeSmallTip powerType="mainWallpaper"></GradeSmallTip>
         </div>
       </a-col>
     </a-row>
@@ -134,7 +133,6 @@ import { mapWritableState, mapActions } from 'pinia';
 import { appStore } from '../../store';
 import Import from './Import.vue';
 import { message, Modal } from 'ant-design-vue';
-import GradeSmallTip from '../../components/GradeSmallTip.vue';
 
 const fs = window.$models.fs;
 const path = require('path');
@@ -144,7 +142,7 @@ import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'My',
-  components: { Import, GradeSmallTip },
+  components: { Import },
   computed: {
     ...mapWritableState(paperStore, ['settings', 'activePapers', 'myPapers']),
     ...mapWritableState(appStore, ['backgroundImage', 'styles']),

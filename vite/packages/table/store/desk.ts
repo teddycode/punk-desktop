@@ -47,12 +47,6 @@ export const deskStore = defineStore('desk', {
                 },
                 _$muuri_id: 'eafb4083-41d6-4cab-8f65-89ad3a28e1e4',
               },
-              {
-                name: 'fish',
-                id: 1689081869660,
-                customData: {},
-                _$muuri_id: '0cc78ee8-e1ab-41ef-ac24-1f1793786afa',
-              },
             ],
             settings: {
               cardZoom: 100,
@@ -92,13 +86,6 @@ export const deskStore = defineStore('desk', {
                 customData: {},
                 data: {},
                 _$muuri_id: 'dc95cc3c-3b09-441b-a7b7-387a0c8f68e5',
-              },
-              {
-                name: 'fish',
-                id: 1689174654809,
-                customData: {},
-                data: {},
-                _$muuri_id: '731b5a76-3b9c-42a3-a1b2-a44b96694697',
               },
               {
                 name: 'timer',

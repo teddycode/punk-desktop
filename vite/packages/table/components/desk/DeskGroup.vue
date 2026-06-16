@@ -133,12 +133,6 @@
               </div>
             </a-col>
             <a-col>
-              <div class="btn" @click="shareDesk">
-                <Icon icon="fenxiang" style="font-size: 3em"></Icon>
-                <div><span>分享桌面</span></div>
-              </div>
-            </a-col>
-            <a-col>
               <div class="btn" @click="exportDesk">
                 <Icon icon="upload" style="font-size: 3em"></Icon>
                 <div><span>导出桌面</span></div>
@@ -173,25 +167,6 @@
               </xt-button>
             </div>
           </div>
-          <div class="text-center mt-2 xt-text" style="font-size: 18px">
-            <icon icon="arrowdown" style="font-size: 1.2em; vertical-align: text-bottom"></icon>
-            为您推荐（左右滑动）
-          </div>
-          <vue-custom-scrollbar :scrollbarSettings="scrollbarSettings" class="mt-3" style="width: 100%; height: 315px">
-            <DeskMarket
-              :closeParent="true"
-              :desks="deskList"
-              :items="recommendList"
-              :wrapperStyle="{
-                height: '100%',
-                flexWrap: 'nowrap',
-                overflow: 'visible',
-                width: 'auto',
-              }"
-              deskItemStyle="width:435px; height:300px"
-              @openPreview="openPreview"
-            ></DeskMarket>
-          </vue-custom-scrollbar>
         </div>
       </slot>
       <span v-show="false">
@@ -229,15 +204,9 @@
                   <div><span>删除桌面</span></div>
                 </div>
               </a-col>
-              <a-col>
-                <div class="btn" @click="shareDesk">
-                  <xt-new-icon icon="fluent:share-android-24-regular" size="42" />
-                  <div><span>分享桌面</span></div>
-                </div>
-              </a-col>
-              <a-col>
-                <div class="btn" @click="exportDesk">
-                  <xt-new-icon icon="fluent:open-20-filled" size="42" />
+            <a-col>
+              <div class="btn" @click="exportDesk">
+                <xt-new-icon icon="fluent:open-20-filled" size="42" />
                   <div><span>导出桌面</span></div>
                 </div>
               </a-col>
@@ -262,37 +231,9 @@
     ></AllDeskList>
   </a-drawer>
 
-  <a-drawer v-if="addDeskVisible" v-model:open="addDeskVisible" title="添加桌面" width="500" @close="shareCode = false">
-    <HorizontalPanel v-model:select-type="currentAddTab" :nav-list="currentAddMethod"> </HorizontalPanel>
+  <a-drawer v-if="addDeskVisible" v-model:open="addDeskVisible" title="添加桌面" width="500">
     <xt-task :modelValue="M03023"> </xt-task>
-    <div v-if="currentAddTab.name === 'market'">
-      <!--      <div class="p-2 mt-2 text-lg pb-0">您可以使用其他用户共享给您的分享码直接添加，也可以从桌面市场选择适合的桌面添加。</div>-->
-      <!--      <div class="p-2 pt-0">-->
-      <!--        <a-input v-model:value="deskCode" spellcheck="false" class="input" placeholder="使用分享码添加"-->
-      <!--                 aria-placeholder="font-size: 16px;"/>-->
-      <!--        <div class="btn-item xt-active-bg w-full" style=" margin:0;">使用分享码添加</div>-->
-
-      <!--      </div>-->
-      <div class="flex justify-between">
-        <span class="flex items-center">
-          <span class="desk-title mr-2">热门桌面</span>
-          <Icon icon="daohang_remen-xuanzhong" style="font-size: 20px"></Icon>
-        </span>
-        <xt-task :modelValue="M03024" @cb="moreDesk">
-          <div class="btn-item" style="width: 160px" @click="moreDesk">更多桌面分享</div>
-        </xt-task>
-      </div>
-      <div>
-        <DeskMarket
-          :closeParent="true"
-          :desks="deskList"
-          :items="recommendList"
-          deskItemStyle="width:435px; height:auto;"
-          @openPreview="openPreview"
-        ></DeskMarket>
-      </div>
-    </div>
-    <div v-else>
+    <div>
       <xt-task :modelValue="M01023"> </xt-task>
 
       <div class="desk-title mt-4">标题</div>
@@ -316,26 +257,7 @@
         <div class="btn-item" @click="importDesk">导入桌面</div>
       </div>
     </div>
-    <template v-if="shareCode" #extra></template>
-    <div v-if="!shareCode"></div>
-    <div v-else>
-      <span class="desk-title">分享码</span>
-      <a-input
-        v-model:value="deskCode"
-        aria-placeholder="font-size: 16px;"
-        class="input"
-        placeholder="请输入"
-        spellcheck="false"
-      />
-    </div>
   </a-drawer>
-  <ShareDesk
-    ref="shareDeskRef"
-    :deskList="deskList"
-    :deskRef="$refs.currentDeskRef"
-    :openDrawer="shareDeskVisible"
-    @closeShare="closeShare"
-  ></ShareDesk>
   <ExportDesk
     :desks="deskList"
     :layoutSize="layoutSize"
@@ -343,22 +265,12 @@
     @closeExport="closeExport"
   ></ExportDesk>
 
-  <div style="z-index: 9999">
-    <DeskPreview
-      :deskList="deskList"
-      :scheme="scheme"
-      :showModal="showModal"
-      @afterAdded="afterAdded"
-      @closePreview="closePreview"
-    ></DeskPreview>
-  </div>
-  <div v-if="deskMarketVisible" class="" style="position: fixed; top: 0; right: 0; left: 0; bottom: 0; z-index: 999">
+  <div v-if="addCardMarketVisible" class="" style="position: fixed; top: 0; right: 0; left: 0; bottom: 0; z-index: 999">
     <NewAddCard
-      v-if="deskMarketVisible"
+      v-if="addCardMarketVisible"
       :desk="currentDesk"
       :deskList="deskList"
-      :panelIndex="panelIndex"
-      @onClose="hideMarket"
+      @onClose="hideAddCardMarket"
     ></NewAddCard>
   </div>
 </template>
@@ -368,24 +280,15 @@ import Desk from './Desk.vue';
 import { appStore } from '../../store';
 import { taskStore } from '../../apps/task/store';
 import { mapActions, mapWritableState } from 'pinia';
-import GameListDrawer from '../game/GameListDrawer.vue';
 import AllDeskList from './AllDeskList.vue';
 import { message, Modal, notification } from 'ant-design-vue';
 import HorizontalPanel from '../HorizontalPanel.vue';
 import ExportDesk from './ExportDesk.vue';
 import { nanoid } from 'nanoid';
-import Template from '../../../user/pages/Template.vue';
 
 import { deskTemplates } from '@js/data/deskTemplates';
-import DeskMarket from '@page/app/card/DeskMarket.vue';
-import { deskStore } from '../../store/desk';
-import ShareDesk from './ShareDesk.vue';
 import NewAddCard from '@page/app/card/NewAddCard.vue';
-import DeskPreview from './DeskPreview.vue';
-import { marketStore } from '../../store/market';
 import Icon from '../Icon.vue';
-import VueCustomScrollbar from '../../../../src/components/vue-scrollbar.vue';
-import Emoji from '../comp/Emoji.vue';
 import RightMenu from './RightMenu.vue';
 import { useFreeDeskStore } from './free/store';
 
@@ -393,18 +296,11 @@ export default {
   name: 'DeskGroup',
   components: {
     RightMenu,
-    Emoji,
-    VueCustomScrollbar,
     Icon,
-    DeskPreview,
     NewAddCard,
-    ShareDesk,
-    DeskMarket,
-    Template,
     ExportDesk,
     HorizontalPanel,
     AllDeskList,
-    GameListDrawer,
     Desk,
   },
   emits: ['update:currentDeskId', 'showMore', 'changeDesk'],
@@ -466,12 +362,6 @@ export default {
               fn: this.exportDesk,
             },
             {
-              id: 3,
-              newIcon: 'fluent:share-android-24-regular',
-              name: '分享桌面',
-              fn: this.shareDesk,
-            },
-            {
               id: 5,
               newIcon: 'akar-icons:trash-can',
               name: '删除桌面',
@@ -488,14 +378,11 @@ export default {
         wheelPropagation: true,
         currentItemId: -1,
       },
-      currentAddTab: { name: 'market' },
       key: Date.now(),
-      moreDesksVisible: false, //显示更多桌面
       allDeskListVisible: false,
       editing: false, //编辑桌面
 
       addDeskVisible: false,
-      shareDeskVisible: false,
       deskType: [
         { title: '日常桌面', name: 'daily' },
         { title: '游戏桌面', name: 'game' },
@@ -504,38 +391,19 @@ export default {
       ],
       selectDesk: { title: '日常桌面', name: 'daily' },
       deskTitle: '',
-      hotDesk: [],
-      scheme: {},
-      showModal: false,
-      deskCode: '',
-      shareCode: false,
       exportModal: false,
       layoutSize: { width: 0, height: 0 },
-      deskMarketVisible: false, //桌面市场
-      panelIndex: 0,
-      currentAddMethod: [
-        { title: '从市场添加', name: 'market' },
-        { title: '自行添加', name: 'custom' },
-      ],
-
-      recommendList: [], //推荐桌面
+      addCardMarketVisible: false,
     };
   },
   async mounted() {
-    if (this.deskList.length > 0) {
-      this.currentDesk = this.deskList[0];
-    }
     this.deskList.forEach((desk) => {
       if (!desk.id) {
         desk.id = desk.nanoid;
       }
     });
-
-    this.hotDesk.push(this.apiList[0].children[0]);
-    this.recommendList = await this.getRecommend({ goodType: 'desk' });
   },
   computed: {
-    ...mapWritableState(deskStore, ['apiList']),
     ...mapWritableState(appStore, ['fullScreen']),
     ...mapWritableState(taskStore, ['taskID', 'step']),
     getStep() {
@@ -616,7 +484,6 @@ export default {
     },
   },
   methods: {
-    ...mapActions(marketStore, ['getRecommend']),
     ...mapActions(useFreeDeskStore, ['delFreeDeskState']),
 
     newAddCard() {
@@ -625,28 +492,8 @@ export default {
     learn() {
       this.$refs.currentDeskRef.learn();
     },
-    closePreview() {
-      this.showModal = false;
-      //this.getHomeSize()
-    },
-    hideMarket() {
-      this.deskMarketVisible = false;
-    },
-    afterAdded() {
-      this.hideMarket();
-    },
-    openPreview({ scheme, showModal }) {
-      this.scheme = scheme;
-      this.showModal = showModal;
-    },
-    shareDesk() {
-      this.$refs.shareDeskRef.update();
-      this.$refs.shareDeskRef.setSelectVal(this.currentDeskId);
-      this.shareDeskVisible = true;
-      this.$refs.currentDeskRef.hideMenu();
-    },
-    closeShare() {
-      this.shareDeskVisible = false;
+    hideAddCardMarket() {
+      this.addCardMarketVisible = false;
     },
     startEdit() {
       this.key = Date.now();
@@ -662,11 +509,6 @@ export default {
     },
     moreSP() {
       this.$refs.currentDeskRef.newAddSPCard();
-    },
-    moreDesk() {
-      this.panelIndex = 1;
-      this.addDeskVisible = false;
-      this.deskMarketVisible = true;
     },
     setFullScreen(flag = true) {
       this.$refs.currentDeskRef.stashLayout();
@@ -729,11 +571,6 @@ export default {
     showAddDeskForm() {
       if (this.M01022) {
         this.deskTitle = '新桌面';
-        this.currentAddTab = {
-          title: '自行添加',
-          name: 'custom',
-          state: false,
-        };
       }
 
       this.$refs.currentDeskRef.hideMenu();

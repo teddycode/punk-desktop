@@ -149,7 +149,6 @@ export default {
       'routeUpdateTime',
       'userInfo',
       'init',
-      'lvInfo',
       'backgroundImage',
       'style',
     ]),
@@ -303,16 +302,6 @@ export default {
 
         const userInfo = args.data;
 
-        // let lvInfo = this.lvInfo
-        // lvInfo.lv = userInfo.onlineGradeExtra.lv
-        // let current = this.gradeTableGenerate(64)[lvInfo.lv]
-        // let section = this.gradeTableGenerate(64)[lvInfo.lv + 1]
-        // let remain = section[0] * 60 - (userInfo.onlineGradeExtra.minutes)
-        // lvInfo.remainHour = Math.floor(remain / 60)
-        // lvInfo.remainMinute = remain - (Math.floor(remain / 60) * 60)
-        // lvInfo.minute = userInfo.onlineGradeExtra.minutes
-        // lvInfo.percentage = ((lvInfo.minute - current[0] * 60) / ((current[1] - current[0]) * 60)) * 100
-        //this.lvInfo = lvInfo
         window.loadedStore['userInfo'] = true;
         console.info('更新了用户信息:', JSON.stringify(userInfo));
         comStore()._updateUserInfo(userInfo.uid); //更新社交网络用户
@@ -366,15 +355,6 @@ export default {
       }
     },
 
-    gradeTableGenerate(num) {
-      let lvSys = {};
-      for (let i = 1; i <= num; i++) {
-        let arrLef = 10 * i * (i + 1);
-        let arrRg = 10 * (i + 1) * (i + 2) - 1;
-        lvSys[`${i}`] = [arrLef, arrRg];
-      }
-      return lvSys;
-    },
     login() {
       // 打开登录对话框
       useUserStore().setAuthenticated(false);
