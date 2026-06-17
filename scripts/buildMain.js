@@ -11,6 +11,7 @@ const modules = [
   'main/touchbar.js',
   'main/registryConfig.js',
   'main/main.js',
+  'main/walletWindow.js',
   'main/extension.js',
   'main/render.js',
   'main/capture.js',

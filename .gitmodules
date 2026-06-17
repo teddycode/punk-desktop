@@ -6,3 +6,7 @@
 	path = services/pot-mock/pot
 	url = https://github.com/alanbuaa/pot
 	branch = main
+[submodule "services/wallet-client"]
+	path = services/wallet-client
+	url = https://github.com/BUAA-punkos/wallet-client
+	branch = main

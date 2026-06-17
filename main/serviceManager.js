@@ -25,6 +25,7 @@ const serviceMimeTypes = {
   '.png': 'image/png',
   '.svg': 'image/svg+xml',
   '.txt': 'text/plain; charset=utf-8',
+  '.wasm': 'application/wasm',
   '.webp': 'image/webp',
   '.woff': 'font/woff',
   '.woff2': 'font/woff2',
@@ -271,6 +272,26 @@ class ServiceManager {
       throw new Error('meta.autostart must be a boolean');
     }
 
+    if (typeof meta.staticOnly !== 'undefined' && typeof meta.staticOnly !== 'boolean') {
+      throw new Error('meta.staticOnly must be a boolean when provided');
+    }
+
+    if (
+      typeof meta.pageRootCandidates !== 'undefined' &&
+      (!Array.isArray(meta.pageRootCandidates) ||
+        !meta.pageRootCandidates.every((candidate) => typeof candidate === 'string'))
+    ) {
+      throw new Error('meta.pageRootCandidates must be an array of strings when provided');
+    }
+
+    if (
+      typeof meta.requiredStaticPaths !== 'undefined' &&
+      (!Array.isArray(meta.requiredStaticPaths) ||
+        !meta.requiredStaticPaths.every((candidate) => typeof candidate === 'string'))
+    ) {
+      throw new Error('meta.requiredStaticPaths must be an array of strings when provided');
+    }
+
     ['build', 'start', 'health', 'stop'].forEach((methodName) => {
       if (typeof serviceModule[methodName] !== 'function') {
         throw new Error(`${methodName}() must be exported`);
@@ -482,6 +503,34 @@ class ServiceManager {
     entry.status = 'starting';
     entry.error = null;
     entry.stopping = false;
+
+    if (entry.meta.staticOnly) {
+      const pageRoot = this.resolvePageRoot(entry);
+      const requiredStaticPaths = entry.meta.requiredStaticPaths || [entry.meta.pageEntry];
+
+      if (!pageRoot || !serviceExists(pageRoot)) {
+        throw new Error(`Static assets not found for ${entry.name}. Missing: ${entry.meta.pageEntry}`);
+      }
+
+      const missingStaticPath = requiredStaticPaths.find((requiredPath) => {
+        return !serviceExists(path.join(pageRoot, requiredPath));
+      });
+
+      if (missingStaticPath) {
+        throw new Error(
+          `Static assets not found for ${entry.name}. Missing: ${missingStaticPath}`,
+        );
+      }
+
+      entry.gatewayServer = await this.startGateway(entry);
+      entry.status = 'running';
+      entry.startedAt = new Date().toISOString();
+      entry.pageUrl = this.buildPageUrl(entry);
+      this.refreshMenus();
+
+      console.log(`静态服务启动成功 [${entry.name}]`, entry.gatewayPort);
+      return entry;
+    }
 
     const startContext = this.createContext(entry);
     const processInfo = await Promise.resolve(entry.module.start(startContext));
@@ -701,8 +750,17 @@ class ServiceManager {
   }
 
   resolvePageRoot(entry) {
+    const configuredCandidates =
+      entry.meta && Array.isArray(entry.meta.pageRootCandidates)
+        ? entry.meta.pageRootCandidates.map((candidate) => {
+            return path.isAbsolute(candidate) ? candidate : path.join(entry.sourceDir, candidate);
+          })
+        : [];
+
     const candidates = [
       path.join(entry.serviceDir, 'frontend'),
+      ...configuredCandidates,
+      path.join(entry.sourceDir, 'export'),
       path.join(this.repoRoot, 'vite', 'html', entry.name),
       path.join(entry.sourceDir, 'web', 'dist'),
       path.join(entry.sourceDir, 'spug_web', 'build'),

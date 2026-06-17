@@ -91,14 +91,15 @@ async function buildService(serviceDirName) {
   }
 
   (buildResult.runtimeFiles || []).forEach((item) => {
-    const sourcePath = typeof item === 'string' ? item : item.from;
+    const rawSourcePath = typeof item === 'string' ? item : item.from;
     const targetRelativePath =
       typeof item === 'string' ? path.basename(item) : item.to || path.basename(item.from);
 
-    if (!sourcePath) {
+    if (!rawSourcePath) {
       throw new Error(`Invalid runtime file manifest for ${serviceModule.meta.name}`);
     }
 
+    const sourcePath = path.isAbsolute(rawSourcePath) ? rawSourcePath : path.join(serviceDir, rawSourcePath);
     copyPath(sourcePath, path.join(runtimeDir, targetRelativePath));
   });
 
