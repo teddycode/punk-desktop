@@ -74,6 +74,14 @@ function getServiceMimeType(filePath) {
   return serviceMimeTypes[path.extname(filePath).toLowerCase()] || 'application/octet-stream';
 }
 
+function normalizeServiceBasePath(basePath) {
+  if (!basePath || basePath === '/') {
+    return '';
+  }
+
+  return `/${String(basePath).replace(/^\/+|\/+$/g, '')}`;
+}
+
 async function isPortAvailable(port) {
   return new Promise((resolve) => {
     const tester = serviceNet
@@ -272,6 +280,10 @@ class ServiceManager {
       throw new Error('meta.autostart must be a boolean');
     }
 
+    if (typeof meta.pageBasePath !== 'undefined' && typeof meta.pageBasePath !== 'string') {
+      throw new Error('meta.pageBasePath must be a string when provided');
+    }
+
     if (typeof meta.staticOnly !== 'undefined' && typeof meta.staticOnly !== 'boolean') {
       throw new Error('meta.staticOnly must be a boolean when provided');
     }
@@ -435,6 +447,7 @@ class ServiceManager {
       displayName: entry.meta ? entry.meta.displayName : entry.id,
       autostart: Boolean(entry.meta && entry.meta.autostart),
       pageEntry: entry.meta ? entry.meta.pageEntry : null,
+      pageBasePath: entry.meta ? entry.meta.pageBasePath || '' : '',
       healthPath: entry.meta ? entry.meta.healthPath : null,
       status: entry.status,
       error: entry.error,
@@ -640,12 +653,32 @@ class ServiceManager {
 
   async handleGatewayRequest(entry, request, response) {
     const requestUrl = new URL(request.url, 'http://127.0.0.1');
+    const servicePath = this.stripPageBasePath(entry, requestUrl.pathname);
+    const serviceUrl = new URL(requestUrl.toString());
+    serviceUrl.pathname = servicePath;
 
-    if (requestUrl.pathname === '/api' || requestUrl.pathname.startsWith('/api/')) {
-      return this.proxyHttpRequest(entry, request, response, requestUrl);
+    if (servicePath === '/api' || servicePath.startsWith('/api/')) {
+      return this.proxyHttpRequest(entry, request, response, serviceUrl);
     }
 
-    return this.serveStaticAsset(entry, requestUrl, response);
+    return this.serveStaticAsset(entry, serviceUrl, response);
+  }
+
+  stripPageBasePath(entry, pathname) {
+    const basePath = normalizeServiceBasePath(entry.meta && entry.meta.pageBasePath);
+    if (!basePath || pathname === '/') {
+      return pathname;
+    }
+
+    if (pathname === basePath || pathname === `${basePath}/`) {
+      return '/';
+    }
+
+    if (pathname.startsWith(`${basePath}/`)) {
+      return pathname.slice(basePath.length) || '/';
+    }
+
+    return pathname;
   }
 
   async serveStaticAsset(entry, requestUrl, response) {
@@ -716,13 +749,14 @@ class ServiceManager {
 
   handleGatewayUpgrade(entry, request, socket, head) {
     const requestUrl = new URL(request.url, 'http://127.0.0.1');
-    if (!(requestUrl.pathname === '/api' || requestUrl.pathname.startsWith('/api/'))) {
+    const servicePath = this.stripPageBasePath(entry, requestUrl.pathname);
+    if (!(servicePath === '/api' || servicePath.startsWith('/api/'))) {
       socket.destroy();
       return;
     }
 
     const targetSocket = serviceNet.connect(entry.backendPort, '127.0.0.1', () => {
-      const targetPath = `${requestUrl.pathname.replace(/^\/api/, '') || '/'}${requestUrl.search}`;
+      const targetPath = `${servicePath.replace(/^\/api/, '') || '/'}${requestUrl.search}`;
       const headers = cloneServiceHeaders(request.headers);
       headers.host = `127.0.0.1:${entry.backendPort}`;
 
@@ -771,7 +805,9 @@ class ServiceManager {
 
   buildPageUrl(entry) {
     const pageEntry = entry.meta && entry.meta.pageEntry && entry.meta.pageEntry !== 'index.html' ? entry.meta.pageEntry : '';
-    const pathname = pageEntry ? `/${pageEntry.replace(/^\/+/, '')}` : '/';
+    const pagePath = pageEntry ? `/${pageEntry.replace(/^\/+/, '')}` : '/';
+    const basePath = normalizeServiceBasePath(entry.meta && entry.meta.pageBasePath);
+    const pathname = basePath ? `${basePath}${pagePath}` : pagePath;
     return `http://127.0.0.1:${entry.gatewayPort}${pathname}`;
   }
 

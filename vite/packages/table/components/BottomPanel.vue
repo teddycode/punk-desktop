@@ -207,6 +207,10 @@ import UserEntry from './bottomPanel/UserEntry.vue';
 import SearchButton from './bottomPanel/SearchButton.vue';
 import { Icon as navIcon } from '@iconify/vue';
 import navigationData from '../js/data/tableData';
+import browser from '../js/common/browser';
+
+const STORAGE_MARKET_PACKAGE = 'StoragePage';
+const STORAGE_MARKET_SERVICE_NAME = 'storage-market';
 
 export default {
   name: 'BottomPanel',
@@ -477,6 +481,14 @@ export default {
         },
       });
     },
+    async openStorageMarketPage() {
+      const service = await ipc.invoke('services.resolvePage', STORAGE_MARKET_SERVICE_NAME);
+      if (!service?.pageUrl) {
+        throw new Error('Storage market service page URL is unavailable');
+      }
+
+      await browser.openInTable(service.pageUrl);
+    },
     async setFullScreen() {
       if (this.full) {
         tsbApi.window.setFullScreen(false);
@@ -526,6 +538,13 @@ export default {
           require('electron').shell.openPath(item.path);
           break;
         case 'lightApp':
+          if (item?.package === STORAGE_MARKET_PACKAGE) {
+            this.openStorageMarketPage().catch((error) => {
+              console.error('Failed to open storage market service:', error);
+              message.error('Storage service failed to open');
+            });
+            break;
+          }
           if (item?.url.startsWith('/web3/')) {
             let route = { name: item?.package, params: { data: '' } };
             console.log('跳转路由：', route);

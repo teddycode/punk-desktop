@@ -48,6 +48,8 @@ import { getCurrentUserPermissions } from '@js/service/usersetting';
 
 const NODE_MONITOR_APP_PACKAGE = 'com.punk.nodeMonitor';
 const NODE_MONITOR_SERVICE_NAME = 'node-monitor';
+const STORAGE_MARKET_PACKAGE = 'StoragePage';
+const STORAGE_MARKET_SERVICE_NAME = 'storage-market';
 
 export default {
   mixins: [editProps],
@@ -126,6 +128,22 @@ export default {
       }
 
       browser.openInTable(service.pageUrl, { wallet: this?.open?.wallet });
+    },
+    isStorageMarketIcon() {
+      const open = this.open || {};
+      return (
+        open?.value === STORAGE_MARKET_SERVICE_NAME ||
+        open?.value === STORAGE_MARKET_PACKAGE ||
+        open?.route === STORAGE_MARKET_PACKAGE
+      );
+    },
+    async openStorageMarketPage() {
+      const service = await ipc.invoke('services.resolvePage', STORAGE_MARKET_SERVICE_NAME);
+      if (!service?.pageUrl) {
+        throw new Error('Storage market service page URL is unavailable');
+      }
+
+      await browser.openInTable(service.pageUrl, { wallet: this?.open?.wallet });
     },
     getSizeValues(size) {
       if (this.isReSize) {
@@ -244,6 +262,11 @@ export default {
     async newOpenApp() {
       if (this.isNodeMonitorIcon()) {
         await this.openNodeMonitorPage();
+        return;
+      }
+
+      if (this.isStorageMarketIcon()) {
+        await this.openStorageMarketPage();
         return;
       }
 

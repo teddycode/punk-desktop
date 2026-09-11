@@ -275,7 +275,7 @@ export const defaultDesks = [
                 route: 'StoragePage',
                 name: '存储',
                 params: '/web3/storage',
-                value: 'StoragePage',
+                value: 'storage-market',
               },
               isTitle: true,
               titleValue: '存储',

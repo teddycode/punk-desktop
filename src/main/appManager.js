@@ -15,6 +15,8 @@ const appModelReady = appModel.initialize().catch((error) => {
 const userModel = require('../model/userModel');
 const ipc = require('electron').ipcMain;
 const ipcMessageMain = require('./ipcMessageMain.js');
+const STORAGE_MARKET_PACKAGE = 'StoragePage';
+const STORAGE_MARKET_SERVICE_NAME = 'storage-market';
 
 /**
  * 运行中的应用窗体，结构{window:窗体对象,saApp:独立窗体app对象}
@@ -45,6 +47,15 @@ class AppManager {
   }
 
   async executeAppByPackage(pkg, cb) {
+    if (pkg === STORAGE_MARKET_PACKAGE || pkg === STORAGE_MARKET_SERVICE_NAME) {
+      const serviceManager = await this.ensureNodeMonitorServiceManager();
+      await serviceManager.openServicePage(STORAGE_MARKET_SERVICE_NAME);
+      if (typeof cb === 'function') {
+        cb();
+      }
+      return;
+    }
+
     await appModelReady;
     let app = await appModel.get({ package: pkg });
     if (!app && pkg === NODE_MONITOR_APP_PACKAGE) {

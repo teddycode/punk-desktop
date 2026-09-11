@@ -96,6 +96,10 @@ import { message } from 'ant-design-vue';
 import routerTab from '../js/common/routerTab';
 import { Icon as navIcon } from '@iconify/vue';
 import { renderIcon } from '@js/common/common';
+import browser from '../js/common/browser';
+
+const STORAGE_MARKET_PACKAGE = 'StoragePage';
+const STORAGE_MARKET_SERVICE_NAME = 'storage-market';
 
 export default {
   name: 'SidePanel',
@@ -300,6 +304,13 @@ export default {
           require('electron').shell.openPath(item.path);
           break;
         case 'lightApp':
+          if (item?.package === STORAGE_MARKET_PACKAGE) {
+            this.openStorageMarketPage().catch((error) => {
+              console.error('Failed to open storage market service:', error);
+              message.error('Storage service failed to open');
+            });
+            break;
+          }
           if (item?.url.startsWith('/web3/')) {
             // web3应用默认的url前缀为/web3/
             let route = { name: item?.package, params: { data: '' } };
@@ -312,6 +323,14 @@ export default {
         default:
           require('electron').shell.openPath(item.path);
       }
+    },
+    async openStorageMarketPage() {
+      const service = await ipc.invoke('services.resolvePage', STORAGE_MARKET_SERVICE_NAME);
+      if (!service?.pageUrl) {
+        throw new Error('Storage market service page URL is unavailable');
+      }
+
+      await browser.openInTable(service.pageUrl);
     },
     // scrollNav(refVal, scrollDirection) {
     //   // let content = this.$refs[refVal]
