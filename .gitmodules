@@ -2,3 +2,7 @@
 	path = packages/ethersjs-punkos
 	url = https://github.com/teddycode/ethersjs-punkos
 	branch = v5.7.2-punkos
+[submodule "services/pot-mock/pot"]
+	path = services/pot-mock/pot
+	url = https://github.com/alanbuaa/pot
+	branch = main

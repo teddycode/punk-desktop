@@ -3,7 +3,7 @@ import ThirdLayout from '@page/core/Layouts/ThirdLayout.vue';
 import myConsensus from '@page/core/Consensus/self.vue';
 import nodeManager from '@page/core/Consensus/node.vue';
 import { CodeOutlined } from '@ant-design/icons-vue';
-import PotTransaction from "@page/core/Consensus/potTransaction.vue";
+import PotVisualization from '@page/core/Consensus/PotVisualization.vue';
 export default {
   path: 'consensusHome',
   redirect: { name: 'ConsensusPage' },
@@ -40,13 +40,13 @@ export default {
       component: nodeManager,
     },
     {
-      path: '/potTransaction', // 新路由路径
-      name: 'PotTransaction', // 新路由名称
+      path: '/potVisualization',
+      name: 'PotVisualization',
       meta: {
-        title: 'Pot交易', // 路由的标题
+        title: 'PoT可视化',
         icon: CodeOutlined,
       },
-      component: PotTransaction, // 引入的组件
+      component: PotVisualization,
     },
   ],
 };

@@ -65,6 +65,12 @@ export const config = {
       '@web3modal/common': path.resolve('../packages/web3modal/packages/common/dist/esm'),
       '@web3modal/polyfills': path.resolve('../packages/web3modal/packages/polyfills/dist/esm'),
       '@web3modal/wallet': path.resolve('../packages/web3modal/packages/wallet/dist/esm'),
+      '@governance-fronted': path.resolve('../services/governance/fronted'),
+    },
+  },
+  server: {
+    fs: {
+      allow: [path.resolve(pkg), path.resolve(pkg, '..')],
     },
   },
   build: {
