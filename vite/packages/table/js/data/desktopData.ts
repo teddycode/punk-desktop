@@ -182,11 +182,11 @@ export const defaultDesks = [
               link: 'fast',
               linkValue: '',
               open: {
-                type: 'pageApp',
+                type: 'internal',
                 route: 'TransferPage',
                 name: '转账',
                 params: '/web3/transfer',
-                value: 'TransferPage',
+                value: 'https://pangupay-demo-hk.tail76793e.ts.net:8443',
               },
               isTitle: true,
               titleValue: '转账',

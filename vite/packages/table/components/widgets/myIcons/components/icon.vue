@@ -50,6 +50,7 @@ const NODE_MONITOR_APP_PACKAGE = 'com.punk.nodeMonitor';
 const NODE_MONITOR_SERVICE_NAME = 'node-monitor';
 const STORAGE_MARKET_PACKAGE = 'StoragePage';
 const STORAGE_MARKET_SERVICE_NAME = 'storage-market';
+const TRANSFER_PAGE_URL = 'https://pangupay-demo-hk.tail76793e.ts.net:8443';
 
 export default {
   mixins: [editProps],
@@ -144,6 +145,16 @@ export default {
       }
 
       await browser.openInTable(service.pageUrl, { wallet: this?.open?.wallet });
+    },
+    isTransferIcon() {
+      const open = this.open || {};
+      return (
+        open?.value === TRANSFER_PAGE_URL ||
+        (open?.route === 'TransferPage' && open?.value === 'TransferPage')
+      );
+    },
+    async openTransferPage() {
+      await browser.openInTable(TRANSFER_PAGE_URL, { wallet: this?.open?.wallet });
     },
     getSizeValues(size) {
       if (this.isReSize) {
@@ -267,6 +278,11 @@ export default {
 
       if (this.isStorageMarketIcon()) {
         await this.openStorageMarketPage();
+        return;
+      }
+
+      if (this.isTransferIcon()) {
+        await this.openTransferPage();
         return;
       }
 
