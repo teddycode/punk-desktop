@@ -4,7 +4,7 @@
     <div class="page-header">
       <div class="page-title-wrap">
         <div class="page-title">源链搬运工脚本中心</div>
-        <div class="page-desc">当前页面固定表示本链的中继入口，并根据浏览器里的源链列表，为每一条源链分发独立的 Python 静态脚本。</div>
+        <div class="page-desc">根据已注册源链提供搬运器下载。LCL v2 运行包包含 Python 模块、合约 ABI 和配置说明。</div>
       </div>
       <div class="hero-badge" style="padding: 4px 10px; border-radius: 999px; background: #e6f7ff; color: #1890ff; font-size: 12px; font-weight: 600; border: 1px solid rgba(24, 144, 255, 0.2);">当前链：punkos</div>
     </div>
@@ -90,19 +90,25 @@
               </div>
               
               <div class="info-block" style="display: flex; flex-direction: column; gap: 10px; padding-top: 12px;">
-                <a-tooltip v-if="chain.nodeClientUrl" placement="top" title="作为搬运工，理论上需要先运行该链的全节点客户端以独立获取并验证区块数据。">
-                  <a-button block :href="chain.nodeClientUrl" target="_blank">{{ chain.nodeClientLabel || '下载全节点客户端' }}</a-button>
+                <a-tooltip v-if="chain.nodeClientUrl" placement="top" title="解压后安装固定版本 Geth 并同步 LCL，需要能访问指定的内网节点。">
+                  <a-button block :href="chain.nodeClientUrl" :download="chain.nodeClientFileName">{{ chain.nodeClientLabel || '下载全节点客户端' }}</a-button>
                 </a-tooltip>
+                <div v-if="chain.nodeClientUrl" style="font-size: 12px; color: #666;">
+                  支持 Windows x64、macOS 和 Linux。首次安装需联网下载 Geth 1.13.15，并接入 LCL 局域网或 VPN。同步后源链 RPC 为 http://127.0.0.1:18545。
+                </div>
                 <a-button
                   type="primary"
                   block
                   :disabled="!chain.supported"
                   @click="downloadRelayScript(chain)"
                 >
-                  {{ chain.symbol === 'SEP' ? '下载 SEP 完整压缩包' : `下载 ${chain.symbol} 搬运脚本` }}
+                  {{ ['SEP', 'LCL'].includes(chain.symbol.toUpperCase()) ? `下载 ${chain.symbol} 完整运行包` : `下载 ${chain.symbol} 搬运脚本` }}
                 </a-button>
+                <div v-if="chain.symbol.toUpperCase() === 'LCL'" style="font-size: 12px; color: #666;">
+                  解压后按 README 安装依赖、配置源链与目标链 RPC、搬运账户和合约地址。无需 Forge。已有搬运器运行时，请勿使用同一账户重复启动。
+                </div>
                 <a-typography-paragraph v-if="chain.supported" style="margin-bottom: 0; padding: 8px; background: #fafafa; border: 1px solid #f0f0f0; border-radius: 6px; font-size: 12px;" copyable>
-                  {{ chain.symbol === 'SEP' ? '解压后执行：python sep_relay_runner.py --env dev --interval 5 --finality-depth 8 --verify-window 16' : `python ${chain.fileName} --env dev --interval 5` }}
+                  {{ chain.symbol.toUpperCase() === 'LCL' ? '配置完成后，使用安装依赖的 Python 执行：python lcl_relay_runner.py --env dev --batch-size 4 --interval 1 --confirmations 2' : chain.symbol === 'SEP' ? '解压后执行：python sep_relay_runner.py --env dev --interval 5 --finality-depth 8 --verify-window 16' : `python ${chain.fileName} --env dev --interval 5` }}
                 </a-typography-paragraph>
               </div>
             </div>
@@ -131,7 +137,8 @@ import sscScriptUrl from './relay-scripts/ssc_relay_runner.py?url'
 import btcScriptUrl from './relay-scripts/btc_relay_runner.py?url'
 import btrScriptUrl from './relay-scripts/btr_relay_runner.py?url'
 import ethScriptUrl from './relay-scripts/eth_relay_runner.py?url'
-import lclScriptUrl from './relay-scripts/lcl_relay_runner.py?url'
+import lclBundleUrl from './relay-bundles/lcl_relay_bundle.zip?url'
+import lclNodeBundleUrl from './node-bundles/lcl_node_bundle.zip?url'
 
 interface SourceData {
   chain_id: number
@@ -148,6 +155,9 @@ interface ContractData {
 }
 
 interface RelayScriptPreset {
+  nodeClientUrl?: string
+  nodeClientLabel?: string
+  nodeClientFileName?: string
   scriptLabel?: string
   forgeScript: string
   headerLabel?: string
@@ -217,11 +227,15 @@ const relayScriptConfigMap: Record<string, RelayScriptPreset> = {
     rpcPort: '8545'
   },
   LCL: {
-    forgeScript: 'script/LCL/LCL_Relay.d.sol',
-    envKey: 'LCL_RPC_URL',
+    nodeClientUrl: lclNodeBundleUrl,
+    nodeClientLabel: '下载 LCL 全节点安装运行包',
+    nodeClientFileName: 'lcl_node_bundle.zip',
+    scriptLabel: '运行方式',
+    forgeScript: 'LCL v2 Python 批量搬运，无需 Forge',
+    envKey: 'LCL_RPC_URL（源链）、DEV_RPC_URL / TEST_RPC_URL（目标链）',
     headerScript: 'script/LCL/get_LCL_Header.py',
-    downloadUrl: lclScriptUrl,
-    downloadFileName: 'lcl_relay_runner.py',
+    downloadUrl: lclBundleUrl,
+    downloadFileName: 'lcl_relay_bundle.zip',
     rpcPort: '8545'
   }
 }
@@ -252,6 +266,9 @@ const relayCards = computed<RelayCardData[]>(() => {
       fileName: preset?.downloadFileName || `${symbol.toLowerCase()}_relay_runner.py`,
       downloadUrl: preset?.downloadUrl || '',
       supported: Boolean(preset?.downloadUrl),
+      nodeClientUrl: preset?.nodeClientUrl,
+      nodeClientLabel: preset?.nodeClientLabel,
+      nodeClientFileName: preset?.nodeClientFileName,
       rpcPort: preset?.rpcPort || '8545'
     }
   })

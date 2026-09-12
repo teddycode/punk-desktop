@@ -127,7 +127,7 @@ import type { TxOverview } from './utils/type'
 
 const loading = ref(false);
 const activeTable = ref('overview'); // 默认显示源链信息表
-let provider: ethers.JsonRpcProvider;
+let provider: ethers.providers.JsonRpcProvider;
 const route = useRoute()
 const router = useRouter() 
 const routerState = history.state     
@@ -278,7 +278,7 @@ const fetchDataFromDB = async() => {
   await fetchBridgeTxInfo()
 };
 const fetchTxFromRPC = async() => {
-  provider = new ethers.JsonRpcProvider(data_from_route.value['rpc']);
+  provider = new ethers.providers.JsonRpcProvider(data_from_route.value['rpc']);
   const transaction = await provider.getTransaction(data_from_route.value.tx_hash)
   const receipt = await provider.getTransactionReceipt(data_from_route.value.tx_hash)
   if (transaction && receipt){

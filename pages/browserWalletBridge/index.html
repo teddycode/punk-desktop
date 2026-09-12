@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>PunkOS · MetaMask 交易钱包</title><link rel="stylesheet" href="/wallet.css"><script src="/wallet.js" defer></script></head>
+<body><main><div class="brand">PunkOS · 跨链交易钱包</div><h1>浏览器 MetaMask</h1>
+<p>此钱包支持发起跨链业务交易，包括任务奖励、质押和 Gas 支出。保持此页面打开，在客户端发起业务后，在这里核对金额并到 MetaMask 确认。</p>
+<select id="wallet" aria-label="选择 MetaMask"></select><button id="connect">连接 MetaMask</button>
+<p id="status" role="status" aria-live="polite">正在检测钱包…</p><p id="account"></p><p id="network"></p>
+<button id="reconnect" class="secondary" hidden>授权卡住？重新建立连接</button>
+<section id="request" hidden><h2>客户端请求</h2><p id="payment"></p><pre id="details"></pre><button id="approve">核对无误，打开 MetaMask 确认</button><button id="reject" class="secondary">拒绝请求</button></section>
+<button id="disconnect" class="secondary">断开交易钱包</button><footer>可在 MetaMask 中切换账户或网络，客户端会同步显示。关闭此页面后连接将失效；如交易已提交，请先检查交易记录，不要重复发送。</footer>
+</main></body></html>

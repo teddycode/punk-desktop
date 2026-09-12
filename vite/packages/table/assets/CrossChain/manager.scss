@@ -211,6 +211,13 @@ $border-color: #f0f0f0;
         color: #1a1a1a;
       }
     }
+
+    .alert-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
   }
 
   @keyframes slideDown {

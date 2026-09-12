@@ -1,6 +1,5 @@
 <template>
   <a-layout class="dashboard-layout">
-    <!-- 页面头部 -->
     <div class="page-header">
       <div class="page-title-wrap">
         <div class="page-title">跨链任务监控</div>
@@ -20,7 +19,6 @@
       </div>
     </div>
 
-    <!-- 状态概览 -->
     <a-row :gutter="[16, 16]" class="status-overview">
       <a-col :xs="24" :sm="12" :md="6">
         <a-card size="small" class="stat-card">
@@ -44,7 +42,6 @@
       </a-col>
     </a-row>
 
-    <!-- 任务表格 -->
     <a-card class="table-card" :bordered="false">
       <a-table
         :columns="columns"
@@ -55,7 +52,7 @@
       >
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'task_type'">
-            <a-tag color="blue">#{{ record.taskType }}</a-tag>
+            <a-tag color="blue">{{ getTaskTypeLabel(record.taskType) }}</a-tag>
           </template>
 
           <template v-else-if="column.key === 'task_key'">
@@ -90,29 +87,29 @@
 
           <template v-else-if="column.key === 'action'">
             <a-space>
-              <a-button 
-                v-if="record.label === 1" 
-                type="primary" 
+              <a-button
+                v-if="record.label === 1"
+                type="primary"
                 size="small"
                 :disabled="!isRelayer"
                 @click="handleAccept(record.task_key)"
               >
-                ⚡ 接单
+                接单
               </a-button>
-              
-              <a-button 
-                v-else-if="record.label === 2" 
-                type="primary" 
+
+              <a-button
+                v-else-if="record.label === 2"
+                type="primary"
                 size="small"
                 danger
                 :disabled="!isMyTask(record)"
                 @click="openSubmitDialog(record)"
               >
-                📤 提交证明
+                提交证明
               </a-button>
-              
-              <span v-else-if="record.label === 4" class="finished-text">✅ 任务成功</span>
-              <span v-else-if="record.label === 5" class="failed-text">❌ 任务失败</span>
+
+              <span v-else-if="record.label === 4" class="finished-text">任务成功</span>
+              <span v-else-if="record.label === 5" class="failed-text">任务失败</span>
               <span v-else>--</span>
             </a-space>
           </template>
@@ -120,7 +117,6 @@
       </a-table>
     </a-card>
 
-    <!-- 中继者注册/管理弹窗 -->
     <a-modal
       v-model:open="registerDialogVisible"
       title="中继者管理"
@@ -176,7 +172,7 @@
         <div class="action-panel">
           <div class="panel-header">
             <div class="panel-title">质押操作</div>
-            <div class="panel-desc">建议先确认钱包网络与账户余额，再提交链上交易。</div>
+            <div class="panel-desc">请先确认钱包网络与账户余额，再提交链上交易。</div>
           </div>
 
           <div class="action-switch">
@@ -210,7 +206,6 @@
       </div>
     </a-modal>
 
-    <!-- 提交证明弹窗 -->
     <a-modal
       v-model:open="submitDialogVisible"
       title="提交任务执行证明"
@@ -220,8 +215,13 @@
       ok-text="提交到链上"
     >
       <div class="modal-form">
-        <a-alert message="请确保任务已在目标链执行成功，并获取对应交易凭证" type="info" show-icon style="margin-bottom: 20px" />
-        
+        <a-alert
+          message="请确保任务已在目标链执行成功，并获取对应交易凭证"
+          type="info"
+          show-icon
+          style="margin-bottom: 20px"
+        />
+
         <a-descriptions bordered :column="1" size="small">
           <a-descriptions-item label="任务 Key">
             <span class="mono">{{ currentTaskKey }}</span>
@@ -234,12 +234,52 @@
           </a-descriptions-item>
         </a-descriptions>
 
+        <div class="reverse-helper-card">
+          <div class="reverse-helper-header">
+            <div>
+              <div class="reverse-helper-title">反向跨链任务回填助手</div>
+              <div class="reverse-helper-desc">运行目标链执行脚本后，系统会回填交易哈希、交易高度和确认高度。</div>
+            </div>
+            <a-tag color="blue">{{ reversePathText }}</a-tag>
+          </div>
+
+          <a-form layout="vertical">
+            <a-row :gutter="16">
+              <a-col :span="12">
+                <a-form-item label="源链">
+                  <a-select v-model:value="reverseSourceChainId">
+                    <a-select-option v-for="chain in reverseChainOptions" :key="`src-${chain.id}`" :value="chain.id">
+                      {{ chain.name }} ({{ chain.symbol }})
+                    </a-select-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+              <a-col :span="12">
+                <a-form-item label="目标链">
+                  <a-select v-model:value="reverseDestinationChainId" @change="handleReverseDestinationChange">
+                    <a-select-option v-for="chain in reverseChainOptions" :key="`dest-${chain.id}`" :value="chain.id">
+                      {{ chain.name }} ({{ chain.symbol }})
+                    </a-select-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+            </a-row>
+
+            <a-form-item label="确认深度">
+              <a-input-number v-model:value="reverseConfirmations" :min="0" :precision="0" style="width: 100%" />
+              <a-button class="fill-proof-btn" type="primary" block :loading="reverseExecuting" @click="handleRunTargetScriptAndFill">
+                {{ reverseExecuting ? '正在运行目标链脚本...' : '运行目标链脚本并回填' }}
+              </a-button>
+            </a-form-item>
+          </a-form>
+        </div>
+
         <div class="form-group-title">目标链执行信息</div>
         <a-form layout="vertical">
           <a-form-item label="源链交易哈希 (Source Tx Hash)" required>
             <a-input v-model:value="destTxHash" placeholder="请输入目标链上执行该任务的交易哈希 0x..." />
           </a-form-item>
-          
+
           <a-row :gutter="16">
             <a-col :span="12">
               <a-form-item label="交易高度 (Tx Height)" required>
@@ -264,20 +304,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import { message, Modal } from 'ant-design-vue'
+import { ref, onMounted, computed, watch } from 'vue'
+import { browserWallet } from '../../../services/browserWallet'
+import { message } from 'ant-design-vue'
 import { UserOutlined, ReloadOutlined } from '@ant-design/icons-vue'
 import { ethers } from 'ethers'
-import { 
-  getFinalManagerAddress, 
-  getFinalRpcUrl, 
-  getSigner, 
-  ensureNetwork,
-  formatAddress,
-  toHexPayload
+import {
+  getFinalManagerAddress,
+  getFinalRpcUrl,
+  getSigner,
+  getCurrentWalletAddress,
+  ensureNetwork
 } from '../../../services/crosschain'
 
-// 合约 ABI 定义
 const TRANSPORT_ABI = [
   'function taskNum() view returns (uint256)',
   'function taskIndex(uint256) view returns (bytes32)',
@@ -291,10 +330,34 @@ const TRANSPORT_ABI = [
 ]
 
 const MANAGER_ABI = [
-  'function contract_chain_index(uint256 _chainId, uint256 _levelId) view returns (address)'
+  'function contract_chain_index(uint256 _chainId, uint256 _levelId) view returns (address)',
+  'function getSourceChainNum() view returns (uint256)',
+  'function getSourceChainInfo(uint256 sourceID) view returns (string symbol, string name, uint256 state, uint256 contractNum, address[] contractAddressList)'
 ]
 
-// 状态定义
+interface ChainOption {
+  id: number
+  symbol: string
+  name: string
+}
+
+const REVERSE_TASK_ROUTE_NAME_MAP: Record<number, string> = {
+  1: 'SEP'
+}
+const CHAIN_CONFIRMATION_DEPTH_MAP: Record<string, number> = {
+  SEP: 12
+}
+const RELAYER_RESULT_MARKER = '__PUNKOS_REVERSE_RESULT__'
+
+const normalizeConfirmations = (value: unknown): number => {
+  if (value === undefined || value === null || value === '') return 0
+  const normalized = Number(value)
+  if (!Number.isInteger(normalized) || normalized < 0) {
+    throw new Error(`Invalid confirmations: ${value}`)
+  }
+  return normalized
+}
+
 const tasks = ref<any[]>([])
 const loading = ref(false)
 const totalTaskNum = ref(0)
@@ -304,26 +367,27 @@ const relayerStatus = ref({
   require_stake_eth: '0'
 })
 
+const nativeSymbol = 'PUNK'
+const TX_CONFIRM_TIMEOUT_MS = 120000
+const TX_POLL_INTERVAL_MS = 2000
+
 const isRelayer = computed(() => {
   const my = parseFloat(relayerStatus.value.my_stake_eth)
   const req = parseFloat(relayerStatus.value.require_stake_eth)
   return my >= req && req > 0
 })
-
-const roleText = computed(() => isRelayer.value ? '正式中继者' : '观察员 (质押不足)')
+const roleText = computed(() => isRelayer.value ? '正式中继者' : '观察员(质押不足)')
 const currentStakeAmount = computed(() => parseFloat(relayerStatus.value.my_stake_eth) || 0)
 const requiredStakeAmount = computed(() => parseFloat(relayerStatus.value.require_stake_eth) || 0)
 const missingStakeAmount = computed(() => Math.max(requiredStakeAmount.value - currentStakeAmount.value, 0))
 const withdrawableStakeAmount = computed(() => Math.max(currentStakeAmount.value, 0))
 const pendingTaskCount = computed(() => tasks.value.filter(t => t.label === 1).length)
 
-// 注册弹窗状态
 const registerDialogVisible = ref(false)
 const registering = ref(false)
 const registerType = ref('deposit')
 const stakeAmount = ref(0)
 
-// 提交证明弹窗状态
 const submitDialogVisible = ref(false)
 const submitting = ref(false)
 const currentTaskKey = ref('')
@@ -332,9 +396,29 @@ const destTxHash = ref('')
 const destTxHeight = ref('')
 const destConfirmHeight = ref('')
 const destRpcUrl = ref('http://47.243.174.71:36054')
-const nativeSymbol = 'PUNK'
-const TX_CONFIRM_TIMEOUT_MS = 120000
-const TX_POLL_INTERVAL_MS = 2000
+const reverseExecuting = ref(false)
+const sourceChains = ref<ChainOption[]>([])
+const reverseSourceChainId = ref(0)
+const reverseDestinationChainId = ref(1)
+const reverseConfirmations = ref(0)
+
+const hubChainOption = computed<ChainOption>(() => ({
+  id: 0,
+  symbol: 'PUNK',
+  name: 'PunkOS Hub'
+}))
+const reverseChainOptions = computed<ChainOption[]>(() => [hubChainOption.value, ...sourceChains.value])
+const findReverseChain = (chainId: number) => reverseChainOptions.value.find(chain => Number(chain.id) === Number(chainId))
+const reversePathText = computed(() => {
+  const source = findReverseChain(reverseSourceChainId.value)
+  const destination = findReverseChain(reverseDestinationChainId.value)
+  return `${source ? source.symbol : `#${reverseSourceChainId.value}`} -> ${destination ? destination.symbol : `#${reverseDestinationChainId.value}`}`
+})
+const getConfirmationDepthForChain = (chainId: number) => {
+  const chain = findReverseChain(chainId)
+  const symbol = String(chain?.symbol || '').toUpperCase()
+  return CHAIN_CONFIRMATION_DEPTH_MAP[symbol] ?? 0
+}
 
 const columns = [
   { title: '类型', key: 'task_type', dataIndex: 'taskType', width: 80 },
@@ -353,17 +437,10 @@ const shortenValue = (value: string) => {
 }
 
 const extractErrorMessage = (error: any): string => {
-  const nestedMessage =
-    error?.reason ||
-    error?.data?.message ||
-    error?.error?.message ||
-    error?.message ||
-    ''
-
+  const nestedMessage = error?.reason || error?.data?.message || error?.error?.message || error?.message || ''
   if (/user rejected|user denied|rejected request|4001/i.test(nestedMessage)) {
     return '用户取消了钱包签名'
   }
-
   return nestedMessage || '未知错误'
 }
 
@@ -374,16 +451,124 @@ const waitForTransactionReceipt = async (
   pollIntervalMs = TX_POLL_INTERVAL_MS
 ) => {
   const startedAt = Date.now()
-
   while (Date.now() - startedAt < timeoutMs) {
     const receipt = await provider.getTransactionReceipt(txHash)
-    if (receipt) {
-      return receipt
-    }
+    if (receipt) return receipt
     await new Promise(resolve => setTimeout(resolve, pollIntervalMs))
   }
-
   throw new Error(`交易已发送，但在 ${Math.round(timeoutMs / 1000)} 秒内未等到链上确认。请稍后刷新重试。`)
+}
+
+const getNodeRequire = () => {
+  let localRequire: any = null
+  try {
+    localRequire = (0, eval)('require')
+  } catch {
+    localRequire = null
+  }
+  const runtimeRequire = localRequire || (globalThis as any)?.require || (window as any)?.require
+  if (typeof runtimeRequire !== 'function') {
+    throw new Error('当前运行环境不支持本地脚本调用')
+  }
+  return runtimeRequire
+}
+
+const resolveRelayerScriptPath = () => {
+  const nodeRequire = getNodeRequire()
+  const path = nodeRequire('path')
+  const fs = nodeRequire('fs')
+  const cwd = nodeRequire('process').cwd()
+  const appDir = (window as any)?.globalArgs?.['app-dir_name'] || ''
+  const candidates = [
+    path.resolve(cwd, 'vite/packages/table/page/core/CrossChain/relayer.js'),
+    appDir ? path.resolve(appDir, 'vite/packages/table/page/core/CrossChain/relayer.js') : '',
+    appDir ? path.resolve(appDir, '../vite/packages/table/page/core/CrossChain/relayer.js') : ''
+  ].filter(Boolean)
+
+  const scriptPath = candidates.find((item: string) => fs.existsSync(item))
+  if (!scriptPath) {
+    throw new Error(`找不到 relayer.js：${candidates.join(' | ')}`)
+  }
+  return scriptPath
+}
+
+const parseRelayerResult = (output: string) => {
+  const markerIndex = output.lastIndexOf(RELAYER_RESULT_MARKER)
+  if (markerIndex >= 0) {
+    const jsonText = output.slice(markerIndex + RELAYER_RESULT_MARKER.length).trim().split(/\r?\n/)[0]
+    return JSON.parse(jsonText)
+  }
+
+  const txHashMatch = output.match(/\b(0x[a-fA-F0-9]{64})\b/)
+  const blockNumberMatch = output.match(/Block Number:\s*(\d+)/i) || output.match(/区块高度[:：\s]+(\d+)/)
+  return {
+    txHash: txHashMatch ? txHashMatch[1] : '',
+    blockNumber: blockNumberMatch ? Number(blockNumberMatch[1]) : null
+  }
+}
+
+const runRelayerReverseExecute = (payload: string, chainSymbol: string) => {
+  if (browserWallet.selected) {
+    throw new Error('浏览器钱包模式不使用本地脚本私钥自动执行目标链交易。请先在目标链执行，再手动填写交易信息提交结果。')
+  }
+  const nodeRequire = getNodeRequire()
+  const { execFile } = nodeRequire('child_process')
+  const path = nodeRequire('path')
+  const scriptPath = resolveRelayerScriptPath()
+  const nodeBin = (nodeRequire('process').env.PUNKOS_NODE || 'node')
+
+  return new Promise<any>((resolve, reject) => {
+    execFile(nodeBin, [scriptPath, '--reverse-execute', '--payload', payload, '--chain', chainSymbol], {
+      cwd: path.dirname(scriptPath),
+      maxBuffer: 1024 * 1024 * 10
+    }, (error: any, stdoutText: string, stderrText: string) => {
+      const output = `${stdoutText || ''}${stderrText ? `\n${stderrText}` : ''}`
+      if (error) {
+        reject(new Error(output.trim() || error.message))
+        return
+      }
+      try {
+        const result = parseRelayerResult(output)
+        if (!result?.txHash || !result?.blockNumber) {
+          reject(new Error(`relayer.js 未返回目标链交易哈希或区块高度：${output}`))
+          return
+        }
+        resolve(result)
+      } catch (parseError: any) {
+        reject(new Error(parseError?.message || '解析 relayer.js 输出失败'))
+      }
+    })
+  })
+}
+
+const fetchSourceChains = async () => {
+  try {
+    const managerAddr = await getFinalManagerAddress()
+    const rpcUrl = await getFinalRpcUrl()
+    const provider = new ethers.providers.JsonRpcProvider(rpcUrl)
+    const managerContract = new ethers.Contract(managerAddr, MANAGER_ABI, provider)
+    const total = Number(await managerContract.getSourceChainNum())
+    const chains: ChainOption[] = []
+    for (let chainId = 1; chainId <= total; chainId++) {
+      try {
+        const info = await managerContract.getSourceChainInfo(chainId)
+        chains.push({
+          id: chainId,
+          symbol: String(info?.symbol ?? info?.[0] ?? `#${chainId}`),
+          name: String(info?.name ?? info?.[1] ?? `Chain ${chainId}`)
+        })
+      } catch (error) {
+        console.warn(`读取源链 ${chainId} 失败:`, error)
+      }
+    }
+    sourceChains.value = chains
+    if (!findReverseChain(reverseDestinationChainId.value) && chains.length > 0) {
+      reverseDestinationChainId.value = chains[0].id
+    }
+    handleReverseDestinationChange(reverseDestinationChainId.value)
+  } catch (error) {
+    console.warn('读取源链列表失败:', error)
+  }
 }
 
 const refreshData = async () => {
@@ -393,19 +578,15 @@ const refreshData = async () => {
     const rpcUrl = await getFinalRpcUrl()
     const provider = new ethers.providers.JsonRpcProvider(rpcUrl)
     const managerContract = new ethers.Contract(managerAddr, MANAGER_ABI, provider)
-    
-    // Hub Chain ID = 0, Transport Level ID = 1
     const transportAddr = await managerContract.contract_chain_index(0, 1)
     if (!ethers.utils.isAddress(transportAddr)) throw new Error('解析传输合约失败')
 
     const transportContract = new ethers.Contract(transportAddr, TRANSPORT_ABI, provider)
     const total = await transportContract.taskNum()
     totalTaskNum.value = Number(total)
-
     const fetchedTasks = []
     const limit = 20
     const start = Math.max(0, totalTaskNum.value - limit)
-
     for (let i = totalTaskNum.value - 1; i >= start; i--) {
       try {
         const key = await transportContract.taskIndex(i)
@@ -440,17 +621,13 @@ const fetchRelayerStatus = async () => {
     const provider = new ethers.providers.JsonRpcProvider(rpcUrl)
     const managerContract = new ethers.Contract(managerAddr, MANAGER_ABI, provider)
     const transportAddr = await managerContract.contract_chain_index(0, 1)
-
-    const signer = await getSigner()
-    const addr = await signer.getAddress()
+    const addr = await getCurrentWalletAddress()
     operatorAddress.value = addr
-
     const transportContract = new ethers.Contract(transportAddr, TRANSPORT_ABI, provider)
     const [myStake, reqStake] = await Promise.all([
       transportContract.getMyStake({ from: addr }).catch(() => BigInt(0)),
       transportContract.getRequireStake()
     ])
-
     relayerStatus.value = {
       my_stake_eth: ethers.utils.formatEther(myStake),
       require_stake_eth: ethers.utils.formatEther(reqStake)
@@ -468,6 +645,12 @@ const openRegisterDialog = () => {
   stakeAmount.value = missingStake > 0 ? Number(missingStake.toFixed(4)) : 0
   registerDialogVisible.value = true
 }
+watch(() => [browserWallet.address, browserWallet.connected], () => {
+  if (!browserWallet.selected) return
+  operatorAddress.value = browserWallet.connected ? browserWallet.address : ''
+  relayerStatus.value = { my_stake_eth: '0', require_stake_eth: '0' }
+  if (browserWallet.connected) void fetchRelayerStatus()
+})
 
 const confirmRegister = async () => {
   const normalizedAmount = Number(stakeAmount.value)
@@ -475,7 +658,6 @@ const confirmRegister = async () => {
     message.warning(`请输入有效的 ${nativeSymbol} 金额`)
     return
   }
-
   registering.value = true
   try {
     await ensureNetwork()
@@ -485,10 +667,8 @@ const confirmRegister = async () => {
     const provider = new ethers.providers.JsonRpcProvider(rpcUrl)
     const managerContract = new ethers.Contract(managerAddr, MANAGER_ABI, provider)
     const transportAddr = await managerContract.contract_chain_index(0, 1)
-    
     const transportContract = new ethers.Contract(transportAddr, TRANSPORT_ABI, signer)
     const valWei = ethers.utils.parseEther(String(normalizedAmount))
-    
     let tx
     if (registerType.value === 'deposit') {
       await transportContract.callStatic.becomeRelayer({ value: valWei })
@@ -497,17 +677,10 @@ const confirmRegister = async () => {
       await transportContract.callStatic.withdrawStake(valWei)
       tx = await transportContract.withdrawStake(valWei)
     }
-
-    if (!tx?.hash) {
-      throw new Error('钱包未返回交易哈希，请确认是否已签名')
-    }
-
+    if (!tx?.hash) throw new Error('钱包未返回交易哈希，请确认是否已签名')
     message.success(`交易已发送：${shortenValue(tx.hash)}`)
     const receipt = await waitForTransactionReceipt(provider, tx.hash)
-    if (receipt.status !== 1) {
-      throw new Error('链上交易执行失败，请检查质押金额或合约状态')
-    }
-
+    if (receipt.status !== 1) throw new Error('链上交易执行失败，请检查质押金额或合约状态')
     message.success('操作成功，质押状态已同步')
     registerDialogVisible.value = false
     await refreshData()
@@ -527,18 +700,13 @@ const handleAccept = async (taskKey: string) => {
     const provider = new ethers.providers.JsonRpcProvider(rpcUrl)
     const managerContract = new ethers.Contract(managerAddr, MANAGER_ABI, provider)
     const transportAddr = await managerContract.contract_chain_index(0, 1)
-    
     const transportContract = new ethers.Contract(transportAddr, TRANSPORT_ABI, signer)
     const tx = await transportContract.acceptTask(taskKey)
-    if (!tx?.hash) {
-      throw new Error('钱包未返回接单交易哈希')
-    }
+    if (!tx?.hash) throw new Error('钱包未返回接单交易哈希')
     message.success(`接单交易已发送：${shortenValue(tx.hash)}`)
     const receipt = await waitForTransactionReceipt(provider, tx.hash)
-    if (receipt.status !== 1) {
-      throw new Error('链上接单交易执行失败')
-    }
-    message.success('接单成功！请开始在目标链执行任务。')
+    if (receipt.status !== 1) throw new Error('链上接单交易执行失败')
+    message.success('接单成功，请开始在目标链执行任务。')
     await refreshData()
   } catch (e: any) {
     message.error(extractErrorMessage(e))
@@ -551,7 +719,44 @@ const openSubmitDialog = (record: any) => {
   destTxHash.value = ''
   destTxHeight.value = ''
   destConfirmHeight.value = ''
+  reverseSourceChainId.value = 0
+  reverseDestinationChainId.value = sourceChains.value[0]?.id || 1
+  reverseConfirmations.value = 0
+  handleReverseDestinationChange(reverseDestinationChainId.value)
   submitDialogVisible.value = true
+  if (sourceChains.value.length === 0) fetchSourceChains()
+}
+
+const handleReverseDestinationChange = (chainId: number) => {
+  reverseConfirmations.value = getConfirmationDepthForChain(Number(chainId))
+}
+
+const handleRunTargetScriptAndFill = async () => {
+  if (!currentTask.value?.payload) {
+    message.warning('当前任务缺少 Payload，无法运行目标链脚本')
+    return
+  }
+  const destination = findReverseChain(reverseDestinationChainId.value)
+  const chainSymbol = String(destination?.symbol || '').toUpperCase()
+  if (!chainSymbol) {
+    message.warning('请先选择目标链')
+    return
+  }
+  reverseExecuting.value = true
+  try {
+    const data = await runRelayerReverseExecute(currentTask.value.payload, chainSymbol)
+    if (!data?.txHash || !data?.blockNumber) throw new Error('目标链脚本未返回交易哈希或区块高度')
+    const confirmDepth = normalizeConfirmations(reverseConfirmations.value)
+    destTxHash.value = data.txHash
+    destTxHeight.value = String(data.blockNumber)
+    destConfirmHeight.value = String(Number(data.blockNumber) + confirmDepth)
+    message.success('目标链脚本执行成功，交易信息已回填')
+  } catch (e: any) {
+    console.error(e)
+    message.error(extractErrorMessage(e) || 'relayer.js 执行失败')
+  } finally {
+    reverseExecuting.value = false
+  }
 }
 
 const handleSubmitProof = async () => {
@@ -559,7 +764,6 @@ const handleSubmitProof = async () => {
     message.warning('请提供目标链交易哈希与高度')
     return
   }
-
   submitting.value = true
   try {
     await ensureNetwork()
@@ -569,41 +773,20 @@ const handleSubmitProof = async () => {
     const provider = new ethers.providers.JsonRpcProvider(rpcUrl)
     const managerContract = new ethers.Contract(managerAddr, MANAGER_ABI, provider)
     const transportAddr = await managerContract.contract_chain_index(0, 1)
-    
-    // 1. 获取目标链数据 (通过用户提供的 RPC)
     const dRpc = destRpcUrl.value.trim() || rpcUrl
     const dProvider = new ethers.providers.JsonRpcProvider(dRpc)
     const dHash = destTxHash.value.trim()
-    
     const dTx = await dProvider.send('eth_getRawTransactionByHash', [dHash])
     if (!dTx) throw new Error('无法从目标链获取原始交易，请检查 RPC 或哈希')
-    
     const dReceipt = await dProvider.getTransactionReceipt(dHash)
     if (!dReceipt?.blockHash) throw new Error('交易未确认')
-
-    // 2. 调用合约提交 (简化验证模式)
     const transportContract = new ethers.Contract(transportAddr, TRANSPORT_ABI, signer)
-    
-    // 调用参数顺序: taskKey, rawTx, leafNode, proof, keyShadowBlock
-    // 在 LCL 简化模式下，通常使用 rawTx 填充 leafNode, proof 可为 0x
-    const tx = await transportContract.finishTask(
-      currentTaskKey.value,
-      dTx,
-      dTx,
-      '0x',
-      dReceipt.blockHash,
-      { gasLimit: 2000000 }
-    )
-
+    const tx = await transportContract.finishTask(currentTaskKey.value, dTx, dTx, '0x', dReceipt.blockHash, { gasLimit: 2000000 })
     message.success('任务证明已提交，等待链上验证...')
-    if (!tx?.hash) {
-      throw new Error('钱包未返回任务证明交易哈希')
-    }
+    if (!tx?.hash) throw new Error('钱包未返回任务证明交易哈希')
     const receipt = await waitForTransactionReceipt(provider, tx.hash)
-    if (receipt.status !== 1) {
-      throw new Error('链上任务证明交易执行失败')
-    }
-    message.success('🎉 任务完成！奖励已发放至质押余额。')
+    if (receipt.status !== 1) throw new Error('链上任务证明交易执行失败')
+    message.success('任务完成，奖励已发放至质押余额。')
     submitDialogVisible.value = false
     await refreshData()
   } catch (e: any) {
@@ -629,8 +812,12 @@ const getStatusColor = (label: number) => {
   return map[label] || 'default'
 }
 
-const isMyTask = (record: any) => 
-  String(record.relayer).toLowerCase() === String(operatorAddress.value).toLowerCase()
+const getTaskTypeLabel = (taskType: number) => {
+  const mappedName = REVERSE_TASK_ROUTE_NAME_MAP[Number(taskType)]
+  return mappedName || `#${taskType}`
+}
+
+const isMyTask = (record: any) => String(record.relayer).toLowerCase() === String(operatorAddress.value).toLowerCase()
 
 const decodePayloadPreview = (payload: string) => {
   try {
@@ -648,10 +835,10 @@ const copyToClipboard = (text: string) => {
 }
 
 onMounted(() => {
+  fetchSourceChains()
   refreshData()
 })
 </script>
-
 <style lang="scss" scoped>
 .dashboard-layout {
   padding: 24px;
@@ -858,6 +1045,39 @@ onMounted(() => {
   font-size: 12px;
   line-height: 1.6;
   color: #52606d;
+}
+
+.reverse-helper-card {
+  margin: 18px 0 20px;
+  padding: 16px;
+  border-radius: 12px;
+  background: #f8fbff;
+  border: 1px solid #d8e8ff;
+}
+
+.reverse-helper-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.reverse-helper-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #102a43;
+}
+
+.reverse-helper-desc {
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #52606d;
+}
+
+.fill-proof-btn {
+  margin-top: 10px;
 }
 
 .modal-form {

@@ -19,7 +19,8 @@ module.exports = {
     
     return {
       runtimeFiles: [
-        'server.js',
+        { from: path.join(ctx.serviceDir, 'server.js'), to: 'server.js' },
+        { from: path.join(ctx.serviceDir, 'data'), to: 'data' }
       ],
     };
   },

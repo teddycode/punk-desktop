@@ -1,0 +1,6 @@
+:root { color-scheme: dark; font-family: system-ui, "Microsoft YaHei", sans-serif; background: #16191f; color: #eef1f5; }
+body { margin: 0; display: grid; min-height: 100vh; place-items: center; }
+main { box-sizing: border-box; width: min(680px, calc(100% - 32px)); margin: 24px; padding: 32px; background: #222730; border: 1px solid #3c4350; border-radius: 20px; }
+h1 { font-size: 28px; }.brand, #status { color: #91dcd3; }p, footer { line-height: 1.7; }footer { color: #b5becb; font-size: 13px; margin-top: 20px; }
+button, select { box-sizing: border-box; width: 100%; padding: 13px; border-radius: 10px; font: inherit; margin-top: 12px; }select { background: #16191f; color: white; }button { background: #ffb545; color: #241a09; border: 0; font-weight: 600; cursor: pointer; }.secondary { background: transparent; color: white; border: 1px solid #566172; }button:disabled { opacity: .5; cursor: wait; }
+pre { max-height: 280px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; padding: 15px; background: #16191f; font-size: 13px; }#account { overflow-wrap: anywhere; }section { border-top: 1px solid #566172; margin-top: 20px; }

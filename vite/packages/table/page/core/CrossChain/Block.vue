@@ -109,7 +109,7 @@
   const router = useRouter();
   const loading = ref(false);
   const activeTable = ref('overview'); // 默认显示概览
-  let provider: ethers.JsonRpcProvider;
+  let provider: ethers.providers.JsonRpcProvider;
 
 
   // 路由数据
@@ -166,7 +166,7 @@
   // 数据查询：获取区块和区块内交易列表
   const fetchBlockData = async () => {
     const rpcUrl = data_from_route.value.rpc;
-    provider = new ethers.JsonRpcProvider(rpcUrl);
+    provider = new ethers.providers.JsonRpcProvider(rpcUrl);
 
 
     const block = await provider.getBlock(data_from_route.value.block_hash);

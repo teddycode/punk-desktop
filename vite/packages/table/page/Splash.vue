@@ -64,7 +64,7 @@
           <div class="mb-10 xt-text-2">{{ $t('welcome.netErr') }}</div>
           <a-row :gutter="10" class="w-full">
             <a-col flex="1">
-              <xt-button size="mini" style="width: 100%" type="theme" @click="login">
+              <xt-button size="mini" style="width: 100%" type="theme" :disabled="browserLoginPending" @click="login">
                 {{ $t('welcome.loginOrReg') }}</xt-button
               >
             </a-col>
@@ -72,6 +72,15 @@
               <xt-button style="width: 100%" @click="getUserInfo">{{ $t('welcome.retry') }}</xt-button>
             </a-col>
           </a-row>
+          <div v-if="isWindows" class="mt-3">
+            <a-button block size="large" :loading="browserLoginPending" :disabled="browserLoginPending" @click="loginWithBrowser">
+              Windows 浏览器 MetaMask 登录
+            </a-button>
+            <p class="mt-2" style="color: #bac3cf; font-size: 12px">无需手机，在默认浏览器中选择 MetaMask 账户并签名。</p>
+            <p v-if="browserLoginPending" role="status" style="color: #91dcd3">请在浏览器完成授权和签名，成功后将返回客户端。</p>
+            <a-button v-if="browserLoginPending" type="link" @click="cancelBrowserLogin">取消浏览器登录</a-button>
+            <p v-if="browserLoginError" role="alert" style="color: #ffb4a9">{{ browserLoginError }}</p>
+          </div>
           <div class="mt-2 text-md text-gray">
             <a @click="onVisitorModel"> {{ $t('wellcome.visitorMode') }} </a>
           </div>
@@ -133,6 +142,7 @@ import { defaultUserInfo } from '@js/constants';
 import { getUserCountryAndLanguage } from '@table/locale/location';
 import { langs } from '@table/locale/helper';
 import { watch } from 'vue';
+import { selectBrowserWallet } from '@table/services/browserWallet';
 
 export default {
   name: 'Splash',
@@ -151,6 +161,9 @@ export default {
       timeoutHandler: null,
       version: tsbApi.runtime.appVersion,
       w3mEvent: null, // 钱包事件对象
+      isWindows: navigator.platform === 'Win32',
+      browserLoginPending: false,
+      browserLoginError: '',
     };
   },
   computed: {
@@ -167,6 +180,9 @@ export default {
     ...mapWritableState(myIcons, ['iconOption', 'iconList']),
   },
 
+  beforeUnmount() {
+    if (this.browserLoginPending) this.cancelBrowserLogin();
+  },
   async mounted() {
     agentStore().setPunkClawOpen(false);
     // 后端服务器状态监测
@@ -367,6 +383,7 @@ export default {
     },
 
     async login() {
+      if (this.browserLoginPending) return;
       // 打开登录对话框
       useUserStore().setAuthenticated(false);
       try {
@@ -395,6 +412,30 @@ export default {
         console.error('打开钱包小窗失败:', error);
         message.error(error.message || 'Failed to open wallet window');
       }
+    },
+    async loginWithBrowser() {
+      if (this.browserLoginPending) return;
+      this.browserLoginPending = true;
+      this.browserLoginError = '';
+      try {
+        const result = await window.ipc.invoke('browser-wallet-login:start');
+        if (!result?.ok) throw new Error(result?.error || '浏览器登录失败');
+        if (result.browserWallet) selectBrowserWallet();
+        await this.processUserInfo(result.data);
+        const userStore = useUserStore();
+        userStore.setAddress(result.address);
+        if (result.data.token) userStore.setToken(result.data.token);
+        userStore.setAuthenticated(true);
+        comStore()._updateUserInfo(result.data.userInfo.id);
+        message.success('MetaMask 登录成功');
+      } catch (error) {
+        this.browserLoginError = error.message || '浏览器登录失败，请重试';
+      } finally {
+        this.browserLoginPending = false;
+      }
+    },
+    async cancelBrowserLogin() {
+      await window.ipc.invoke('browser-wallet-login:cancel');
     },
     replaceIcon() {
       navigationData.systemAppList.forEach((item) => {
@@ -500,16 +541,18 @@ export default {
         ...defaultUserInfo,
         ...data?.userInfo,
         uid: data.userInfo.id,
+        token: data.userInfo.token || data.token,
       };
       window.loadedStore['userInfo'] = true;
       console.log('等待存入数据库。。。');
-      ipc.invoke('saveUserToDB', userInfo).then((res) => {
+      await ipc.invoke('saveUserToDB', userInfo).then((res) => {
         console.log('存入数据库成功，唤起用户数据读取：', res);
         this.getUserInfo();
       });
     },
     // 启用访客模式
     async onVisitorModel() {
+      if (this.browserLoginPending) await this.cancelBrowserLogin();
       this.visitor = true;
       this.userInfo = {
         ...defaultUserInfo,

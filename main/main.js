@@ -7,6 +7,19 @@ const KdbxManager = require(__dirname + '/src/main/kdbxManager.js');
 global.kdbxManager = new KdbxManager();
 const { config } = require(__dirname + '/server-config.js');
 global.serverConfig = config;
+const browserWalletBridge = require(__dirname + '/src/main/browserWalletBridge.js').registerBrowserWalletBridge({
+  ipcMain: electron.ipcMain,
+  app: electron.app,
+  shell: electron.shell,
+});
+require(__dirname + '/src/main/browserWalletLogin.js').registerBrowserWalletLogin({
+  ipcMain: electron.ipcMain,
+  app: electron.app,
+  shell: electron.shell,
+  BrowserWindow: electron.BrowserWindow,
+  apiBaseUrl: config.NODE_SERVER_BASE_URL + '/api',
+  walletBridge: browserWalletBridge,
+});
 global.isExit = false;
 var appIsReady = false;
 let isInstallerRunning = false;

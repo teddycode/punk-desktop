@@ -1,5 +1,7 @@
+import deployment from '../../../../services/crosschain/data/dev/deployment.json'
 import { ethers } from 'ethers'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
+import { browserWallet, browserWalletProvider } from './browserWallet'
 import { ElMessage } from 'element-plus'
 
 const viteEnv = (typeof import.meta !== 'undefined' && (import.meta as any).env)
@@ -45,12 +47,12 @@ const CROSSCHAIN_BACKEND_URL = readEnvString(
   viteEnv.CROSSCHAIN_BACKEND_URL,
   (process as any)?.env?.VITE_CROSSCHAIN_BACKEND_URL,
   (process as any)?.env?.CROSSCHAIN_BACKEND_URL
-) || 'http://localhost:3020'
-const FALLBACK_RPC_URL = 'http://47.243.174.71:36054'
+) || 'http://localhost:37100'
+const FALLBACK_RPC_URL = deployment.rpc
 const DEFAULT_RPC_URL = ENV_RPC_URL || FALLBACK_RPC_URL
-const PUNKOS_CHAIN_ID = 20260418
+const PUNKOS_CHAIN_ID = deployment.chainId
 const PUNKOS_CHAIN_ID_HEX = ethers.utils.hexValue(PUNKOS_CHAIN_ID)
-const DEFAULT_HUB_CHAIN_ID = ENV_HUB_CHAIN_ID ? Number(ENV_HUB_CHAIN_ID) : PUNKOS_CHAIN_ID
+const DEFAULT_HUB_CHAIN_ID = ENV_HUB_CHAIN_ID ? Number(ENV_HUB_CHAIN_ID) : 0
 const DEFAULT_TRANSPORT_LEVEL_ID = ENV_TRANSPORT_LEVEL_ID ? Number(ENV_TRANSPORT_LEVEL_ID) : undefined
 
 const ABI = [
@@ -163,6 +165,7 @@ export const setCrosschainWalletContext = (context: {
 }
 
 const getWalletProvider = () => {
+  if (browserWallet.selected) return browserWalletProvider
   try {
     const web3ModalProvider = injectedWalletProviderRef?.walletProvider?.value as any
     if (web3ModalProvider?.request) {
@@ -184,6 +187,7 @@ const getWalletProvider = () => {
 }
 
 const getConnectedWalletAddress = (): string => {
+  if (browserWallet.selected) return browserWallet.address
   try {
     return String(injectedWalletAccountRef?.address?.value || '').trim()
   } catch (error) {
@@ -218,7 +222,7 @@ const getBaseContractConfig = async (): Promise<{
   managerAddress: string
 }> => {
   let rpcUrl = rpcUrlCache || DEFAULT_RPC_URL
-  let managerAddress = managerAddressCache
+  let managerAddress = managerAddressCache || (ENV_MANAGER_CONTRACT_ADDRESS ? '' : deployment.contracts.Manager.address)
 
   if (!managerAddress && isValidAddress(ENV_MANAGER_CONTRACT_ADDRESS)) {
     managerAddress = ethers.utils.getAddress(ENV_MANAGER_CONTRACT_ADDRESS)
@@ -352,7 +356,7 @@ export const formatTxHash = (hash: string): string => {
 }
 
 export const ensureNetwork = async (): Promise<void> => {
-  if (isNetworkCorrect) return
+  if (isNetworkCorrect && !browserWallet.selected) return
 
   const ethereum = getWalletProvider()
   const currentChainId = await ethereum.request({ method: 'eth_chainId' })
@@ -367,6 +371,7 @@ export const ensureNetwork = async (): Promise<void> => {
       method: 'wallet_switchEthereumChain',
       params: [{ chainId: PUNKOS_CHAIN_ID_HEX }]
     })
+    if (Number(await ethereum.request({ method: 'eth_chainId' })) !== PUNKOS_CHAIN_ID) throw new Error('钱包尚未切换到 PunkOS 网络')
     isNetworkCorrect = true
     return
   } catch (error: any) {
@@ -375,8 +380,10 @@ export const ensureNetwork = async (): Promise<void> => {
     }
   }
 
-  const rpcUrl = await getFinalRpcUrl()
-  if (!/^https:\/\//i.test(rpcUrl)) {
+  const rpcUrl = browserWallet.selected
+    ? (await (window as any).ipc.invoke('browser-wallet:network')).rpcUrls[0]
+    : await getFinalRpcUrl()
+  if (!browserWallet.selected && !/^https:\/\//i.test(rpcUrl)) {
     throw new Error(`当前钱包无法自动添加该链：rpcUrl 必须是 HTTPS，但当前配置为 ${rpcUrl}。请先在钱包中手动添加 chainId=${PUNKOS_CHAIN_ID}（hex=${PUNKOS_CHAIN_ID_HEX}）的链，或提供 HTTPS RPC。`)
   }
 
@@ -396,6 +403,8 @@ export const ensureNetwork = async (): Promise<void> => {
       method: 'wallet_addEthereumChain',
       params: [addChainParams]
     })
+    await ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: PUNKOS_CHAIN_ID_HEX }] })
+    if (Number(await ethereum.request({ method: 'eth_chainId' })) !== PUNKOS_CHAIN_ID) throw new Error('钱包尚未切换到 PunkOS 网络')
     isNetworkCorrect = true
   } catch (error: any) {
     if (/https url 'rpcUrls'/i.test(error?.message || '')) {
@@ -406,22 +415,18 @@ export const ensureNetwork = async (): Promise<void> => {
 }
 
 export const getSigner = async (): Promise<ethers.Signer> => {
-  if (cachedSigner) return cachedSigner
-
-  const walletProvider = getWalletProvider()
-  const connectedAddress = getConnectedWalletAddress()
-
-  if (!connectedAddress) {
-    await walletProvider.request({ method: 'eth_requestAccounts' })
-  }
-
-  cachedProvider = new ethers.providers.Web3Provider(walletProvider)
-  cachedSigner = cachedProvider.getSigner()
-
-  return cachedSigner
+  if (!browserWallet.selected) throw new Error('跨链交易必须先登录并选择 MetaMask 浏览器钱包')
+  await ensureNetwork()
+  const accounts = await browserWalletProvider.request({ method: 'eth_accounts' })
+  if (!accounts?.[0]) throw new Error('MetaMask 没有授权账户')
+  return new ethers.providers.Web3Provider(browserWalletProvider as any, 'any').getSigner(accounts[0])
 }
 
 export const getCurrentWalletAddress = async (): Promise<string> => {
+  if (browserWallet.selected) {
+    const accounts = await browserWalletProvider.request({ method: 'eth_accounts' })
+    return accounts?.[0] || ''
+  }
   const connectedAddress = getConnectedWalletAddress()
   if (connectedAddress) {
     return connectedAddress
@@ -816,6 +821,8 @@ export const resetCache = () => {
   managerAddressCache = null
   rpcUrlCache = null
 }
+
+watch(() => [browserWallet.selected, browserWallet.address, browserWallet.chainId, browserWallet.connected], () => resetCache())
 
 export const useTaskContract = () => {
   const loading = ref(false)

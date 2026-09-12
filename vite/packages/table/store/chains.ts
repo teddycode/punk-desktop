@@ -1,3 +1,4 @@
+import deployment from '../../../../services/crosschain/data/dev/deployment.json';
 type ChainNetInfo = {
   chainId: number;
   name: string;
@@ -34,11 +35,11 @@ export const arbitrum: ChainNetInfo = {
 
 // 磐古测试网
 export const punkos: ChainNetInfo = {
-  chainId: 20260418,
+  chainId: deployment.chainId,
   name: 'PunkOS-XWK',
   currency: 'PUNK',
-  explorerUrl: 'https://goerli.etherscan.io',
-  rpcUrl: 'http://47.243.174.71:36054',
+  explorerUrl: '',
+  rpcUrl: deployment.rpc,
 };
 
 export const sepolia: ChainNetInfo = {

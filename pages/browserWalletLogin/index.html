@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MetaMask 登录 · PunkOS</title>
+  <link rel="stylesheet" href="/login.css">
+  <script src="/login.js" defer></script>
+</head>
+<body>
+  <main>
+    <div class="brand">PunkOS · Windows</div>
+    <h1>使用 MetaMask 登录</h1>
+    <p>在 MetaMask 中选择账户并签名登录。登录签名本身不扣款；登录后可使用该钱包发起跨链业务交易，包括任务奖励、质押及 Gas 支出，每笔交易由你在 MetaMask 中确认。</p>
+    <p class="hint">如果默认浏览器没有安装 MetaMask，可将当前完整网址复制到已安装插件的 Chrome 或 Edge 中打开。</p>
+    <label for="wallet">检测到的 MetaMask</label>
+    <select id="wallet"></select>
+    <button id="connect">连接 MetaMask 并签名登录</button>
+    <p id="status" role="status" aria-live="polite">正在检测浏览器钱包…</p>
+    <p id="account"></p>
+    <button id="cancel" class="secondary">取消登录</button>
+    <footer>签名内容以 login#punkos# 开头。请在 MetaMask 弹窗中核对账户和消息。成功后将进入跨链交易钱包连接页，请保持该页面打开。</footer>
+  </main>
+</body>
+</html>

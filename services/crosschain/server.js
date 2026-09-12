@@ -50,7 +50,8 @@ const TRANSPORT_LEVEL_ID = 1;
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 // RPC URLs
-const DEFAULT_RPC_URL = 'http://47.243.174.71:36054';
+const deployment = require('./data/dev/deployment.json');
+const DEFAULT_RPC_URL = deployment.rpc;
 const RPC_URL = process.env.RPC_URL || DEFAULT_RPC_URL;
 const LCL_RPC_URL = process.env.LCL_RPC_URL || RPC_URL;
 
@@ -331,22 +332,18 @@ router.get('/health', (req, res) => res.json({ status: 'ok' }));
 
 router.get('/crosschainzone', async (req, res) => {
     try {
-        const [rows] = await pool.query('SELECT * FROM crosschainzone_info LIMIT 1');
+        const [rows] = await pool.query('SELECT * FROM crosschainzone_info LIMIT 1').catch(() => [[]]);
         const transportAddress = await getTransportAddress();
         const managerAddress = getManagerAddress();
         
-        const formatRpc = (rpc) => {
-            if (!rpc || rpc.includes('127.0.0.1')) return RPC_URL;
-            return rpc;
-        };
 
         const result = rows.length > 0 ? rows.map(item => ({
             ...item,
-            rpc: formatRpc(item.rpc),
-            multi_addr: item.multi_addr || transportAddress,
+            rpc: RPC_URL,
+            multi_addr: managerAddress,
             transport_addr: transportAddress,
             manager_addr: managerAddress
-        })) : [{ name: 'PunkOS Cross-Chain Zone', rpc: RPC_URL, multi_addr: transportAddress, transport_addr: transportAddress, manager_addr: managerAddress }];
+        })) : [{ name: 'PunkOS Cross-Chain Zone', rpc: RPC_URL, multi_addr: managerAddress, transport_addr: transportAddress, manager_addr: managerAddress }];
         res.json(result);
     } catch (e) { res.status(500).json({ error: e.message }); }
 });

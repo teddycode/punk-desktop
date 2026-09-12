@@ -105,14 +105,14 @@
         </div>
 
         <div class="form-group">
-          <label>💰 跨链保证金/费用 (ETH)</label>
+          <label>💰 跨链保证金/费用 (PUNK)</label>
           <div class="input-with-unit">
             <input 
               v-model="formData.fee"
               type="number"
               step="0.001"
               placeholder="0.01"/>
-            <span class="unit">ETH</span>
+            <span class="unit">PUNK</span>
           </div>
           <p class="hint warning">⚠️ 费用将作为奖励支付给执行任务的搬运工</p>
         </div>
@@ -120,16 +120,16 @@
         <div class="fee-estimate">
           <div class="fee-row">
             <span>预估基础 Gas:</span>
-            <span class="fee-value">~0.002 ETH</span>
+            <span class="fee-value">~0.002 PUNK</span>
           </div>
           <div class="fee-row">
             <span>设置奖励金额:</span>
-            <span class="fee-value">{{ formData.fee || '0' }} ETH</span>
+            <span class="fee-value">{{ formData.fee || '0' }} PUNK</span>
           </div>
           <hr>
           <div class="fee-row total">
             <span>预计总支出:</span>
-            <span class="fee-value">~{{ calculateTotal() }} ETH</span>
+            <span class="fee-value">~{{ calculateTotal() }} PUNK</span>
           </div>
         </div>
 
@@ -186,6 +186,19 @@ const TRANSPORT_ABI = [
   'function createTask(bytes _payload, string _routeName, uint256 _taskType) external payable',
   'function getRequireStake() public view returns (uint256)'
 ]
+
+const normalizeEtherInput = (value: unknown): string => {
+  if (value === undefined || value === null || String(value).trim() === '') {
+    return '0'
+  }
+
+  const normalized = String(value).trim()
+  if (!/^\d+(\.\d+)?$/.test(normalized)) {
+    throw new Error(`Invalid ether amount: ${value}`)
+  }
+
+  return normalized
+}
 
 const loading = ref(false)
 const submitting = ref(false)
@@ -305,7 +318,7 @@ const handleSubmit = async () => {
     const transportContract = new ethers.Contract(transportAddr, TRANSPORT_ABI, signer)
     
     const payloadHex = toHexPayload(formData.payload.trim())
-    const value = ethers.utils.parseEther(formData.fee || '0')
+    const value = ethers.utils.parseEther(normalizeEtherInput(formData.fee))
 
     const tx = await transportContract.createTask(
       payloadHex,

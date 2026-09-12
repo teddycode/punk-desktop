@@ -30,9 +30,14 @@
           <span class="icon">✉️</span>
           <p>您收到来自 <span class="mono">{{ shortenAddress(pendingInvitation.inviter) }}</span> 的委员会加入邀请</p>
         </div>
-        <button class="btn-primary btn-sm" :disabled="accepting" @click="handleAcceptInvitation">
-          {{ accepting ? '加入中...' : '接受邀请' }}
-        </button>
+        <div class="alert-actions">
+          <button class="btn-primary btn-sm" :disabled="accepting || sendingInvitationTransaction" @click="handleAcceptInvitation">
+            {{ accepting ? '加入中...' : '接受邀请' }}
+          </button>
+          <button class="btn-ghost btn-sm" :disabled="accepting || sendingInvitationTransaction" @click="handleSendInvitationTransaction">
+            {{ sendingInvitationTransaction ? '发送中...' : '发送交易' }}
+          </button>
+        </div>
       </section>
 
       <section class="committee-section">
@@ -283,23 +288,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, watch } from 'vue'
+import { browserWallet } from '../../../services/browserWallet'
 import { ElMessage } from 'element-plus'
 import { ethers } from 'ethers'
 import { useWeb3ModalAccount, useWeb3ModalProvider } from '@punkos/ethers5/vue'
-import { 
+import {
   formatAddress, 
   getFinalManagerAddress, 
   getFinalRpcUrl, 
-  getSigner, 
+  getSigner,
   getCurrentWalletAddress,
-  ensureNetwork,
-  registerTaskTypeOnChain,
   getAllTaskTypes,
   setCrosschainWalletContext,
   TaskTypeInfo
 } from '../../../services/crosschain'
-
 const MANAGER_ABI = [
   'function getCommitteeMembers() external view returns (address[])',
   'function inviteCommitteeMember(address _member) external',
@@ -309,6 +312,7 @@ const MANAGER_ABI = [
   'function getCommitteeRemovalApproval(address _member) external view returns (uint256 count, uint256 required)',
   'function hasApprovedCommitteeRemoval(address _member, address _approver) external view returns (bool approved)',
   'function addNewSourceChain(string _symbol, string _name) external',
+  'function operateSystemContract(address _address, bytes payload) external',
   'function contract_chain_index(uint256 _chainId, uint256 _levelId) external view returns (address)'
 ]
 
@@ -338,10 +342,13 @@ const pendingInvitation = reactive({
   inviter: ''
 })
 const accepting = ref(false)
+const sendingInvitationTransaction = ref(false)
 const removingMember = ref('')
 
 const TX_CONFIRM_TIMEOUT_MS = 120000
 const TX_POLL_INTERVAL_MS = 2000
+const REQUEST_TIMEOUT_MS = 30000
+const WALLET_ACTION_TIMEOUT_MS = 120000
 
 // 弹窗与表单
 const showRegisterDialog = ref(false)
@@ -366,10 +373,6 @@ const sourceChainForm = reactive({
 })
 const web3Account = useWeb3ModalAccount()
 const web3Provider = useWeb3ModalProvider()
-const LOCAL_PUNKOS_CHAIN_ID = 20260418
-const LOCAL_PUNKOS_CHAIN_ID_HEX = ethers.utils.hexValue(LOCAL_PUNKOS_CHAIN_ID)
-const TX_SEND_TIMEOUT_MS = 30000
-
 setCrosschainWalletContext({
   walletProviderRef: web3Provider,
   walletAccountRef: web3Account
@@ -440,151 +443,92 @@ const waitForTransactionReceipt = async (
   throw new Error(timeoutMessage)
 }
 
-const resolveManagerFeeData = async (provider: ethers.providers.JsonRpcProvider) => {
+const withTimeout = async <T,>(
+  promise: Promise<T>,
+  timeoutMs: number,
+  message: string
+): Promise<T> => {
+  let timer: ReturnType<typeof setTimeout> | undefined
   try {
-    const feeData = await provider.getFeeData()
-    if (feeData.maxPriorityFeePerGas && feeData.maxFeePerGas) {
-      return {
-        maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,
-        maxFeePerGas: feeData.maxFeePerGas
-      }
-    }
-  } catch (error) {
-    console.warn('[CrossChain][Manager] 获取 EIP-1559 费率失败，尝试回退 gasPrice:', error)
+    return await Promise.race([
+      promise,
+      new Promise<never>((_, reject) => {
+        timer = setTimeout(() => reject(new Error(message)), timeoutMs)
+      })
+    ])
+  } finally {
+    if (timer) clearTimeout(timer)
   }
+}
 
-  const gasPrice = await provider.getGasPrice()
+const parseWalletTxHash = (result: unknown): string => {
+  if (typeof result === 'string' && result.startsWith('0x')) {
+    return result
+  }
+  if (result && typeof result === 'object') {
+    const hash = (result as { hash?: unknown }).hash
+    if (typeof hash === 'string' && hash.startsWith('0x')) {
+      return hash
+    }
+  }
+  return ''
+}
+
+const getManagerWalletContext = async () => {
+  const signer = await getSigner()
+  const signerAddress = await signer.getAddress()
   return {
-    maxPriorityFeePerGas: gasPrice,
-    maxFeePerGas: gasPrice
+    signer,
+    signerAddress
   }
 }
 
-const getManagerWalletProvider = () => {
-  const walletProvider = web3Provider.walletProvider.value as any
-  if (walletProvider?.request) {
-    console.info('[CrossChain][Manager] 使用当前页面注入的 Web3Modal provider')
-    return walletProvider
+const sendAndConfirmWithConnectedWallet = async (
+  options: {
+    contractAddress: string
+    abi: string[]
+    method: string
+    params?: any[]
+    provider: ethers.providers.JsonRpcProvider
+    submittedMessage: string
   }
-
-  const ethereum = (window as any)?.ethereum
-  if (ethereum?.request) {
-    console.info('[CrossChain][Manager] 回退到 window.ethereum provider')
-    return ethereum
-  }
-
-  throw new Error('未检测到可用钱包 provider')
-}
-
-const ensureManagerNetwork = async () => {
-  const walletProvider = getManagerWalletProvider()
-  const currentChainId = await walletProvider.request({ method: 'eth_chainId' })
-  const currentChainIdNum =
-    typeof currentChainId === 'string'
-      ? Number(currentChainId)
-      : Number(currentChainId || 0)
-
-  console.info('[CrossChain][Manager] 当前钱包链 ID:', currentChainId)
-
-  if (currentChainId === LOCAL_PUNKOS_CHAIN_ID_HEX || currentChainIdNum === LOCAL_PUNKOS_CHAIN_ID) {
-    return
-  }
-
-  try {
-    await walletProvider.request({
-      method: 'wallet_switchEthereumChain',
-      params: [{ chainId: LOCAL_PUNKOS_CHAIN_ID_HEX }]
-    })
-    console.info('[CrossChain][Manager] 已切换到目标链')
-    return
-  } catch (error: any) {
-    if (error?.code !== 4902 && error?.code !== 4901) {
-      throw new Error(error?.message || '切换网络失败')
-    }
-  }
-
-  const rpcUrl = await getFinalRpcUrl()
-  await walletProvider.request({
-    method: 'wallet_addEthereumChain',
-    params: [{
-      chainId: LOCAL_PUNKOS_CHAIN_ID_HEX,
-      chainName: 'PunkOS',
-      rpcUrls: [rpcUrl],
-      nativeCurrency: {
-        name: 'PUNK',
-        symbol: 'PUNK',
-        decimals: 18
-      }
-    }]
-  })
-  console.info('[CrossChain][Manager] 已添加并切换到目标链')
-}
-
-const getManagerSigner = async () => {
-  const walletProvider = getManagerWalletProvider()
-  const connectedAddress = String(web3Account.address.value || '').trim()
-
-  if (!connectedAddress) {
-    console.info('[CrossChain][Manager] 当前页面未拿到钱包地址，主动请求账户授权')
-    await walletProvider.request({ method: 'eth_requestAccounts' })
-  }
-
-  const ethersProvider = new ethers.providers.Web3Provider(walletProvider)
-  return ethersProvider.getSigner()
-}
-
-const sendAcceptInvitationViaWalletTx = async (
-  signer: ethers.Signer,
-  provider: ethers.providers.JsonRpcProvider,
-  managerAddr: string,
-  signerAddress: string
 ) => {
-  const iface = new ethers.utils.Interface(MANAGER_ABI)
-  const data = iface.encodeFunctionData('acceptCommitteeInvitation', [])
-  const nonce = await provider.getTransactionCount(signerAddress, 'pending')
-  const feeData = await resolveManagerFeeData(provider)
-  const gasEstimate = await provider.estimateGas({
-    from: signerAddress,
-    to: managerAddr,
-    data,
-    value: 0
-  })
-  const gasLimit = gasEstimate.mul(120).div(100)
+  const { signer, signerAddress } = await getManagerWalletContext()
+  const contract = new ethers.Contract(options.contractAddress, options.abi, signer)
+  const params = options.params || []
 
-  const txRequest: ethers.providers.TransactionRequest = {
-    chainId: LOCAL_PUNKOS_CHAIN_ID,
-    nonce,
-    from: signerAddress,
-    to: managerAddr,
-    value: 0,
-    data,
-    gasLimit,
-    maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,
-    maxFeePerGas: feeData.maxFeePerGas
-  }
-
-  console.info('[CrossChain][Manager] 准备使用标准钱包交易方式发送:', {
-    ...txRequest,
-    value: '0x0',
-    gasLimit: gasLimit.toHexString(),
-    maxPriorityFeePerGas: feeData.maxPriorityFeePerGas.toHexString(),
-    maxFeePerGas: feeData.maxFeePerGas.toHexString()
+  console.info('[CrossChain][Manager] 准备通过跨链内置 signer 发送交易:', {
+    contractAddress: options.contractAddress,
+    method: options.method,
+    params,
+    signerAddress
   })
 
-  const txResponse = await Promise.race([
-    signer.sendTransaction(txRequest),
-    new Promise<never>((_, reject) => {
-      setTimeout(() => {
-        reject(new Error(`钱包在 ${Math.round(TX_SEND_TIMEOUT_MS / 1000)} 秒内没有返回交易确认结果，请检查钱包确认弹窗是否被遮挡。`))
-      }, TX_SEND_TIMEOUT_MS)
-    })
-  ])
+  const gasEstimate = await contract.estimateGas[options.method](...params)
+  const tx = await withTimeout(
+    contract[options.method](...params, {
+      gasLimit: gasEstimate.mul(120).div(100)
+    }),
+    WALLET_ACTION_TIMEOUT_MS,
+    '跨链内置账户在 120 秒内没有返回交易哈希，请检查 RPC 或账户余额。'
+  )
+  const txHash = parseWalletTxHash(tx)
 
-  if (!txResponse || typeof txResponse !== 'object' || typeof (txResponse as { hash?: unknown }).hash !== 'string') {
-    throw new Error('钱包发送交易后未返回有效交易哈希')
+  if (typeof txHash !== 'string' || !txHash.startsWith('0x')) {
+    throw new Error('交易发送后未返回有效交易哈希')
   }
 
-  return (txResponse as { hash: string }).hash
+  console.info('[CrossChain][Manager] 交易已发送:', {
+    method: options.method,
+    txHash
+  })
+  ElMessage.success(options.submittedMessage)
+  const receipt = await waitForTransactionReceipt(options.provider, txHash)
+  console.info('[CrossChain][Manager] 交易确认结果:', receipt)
+  if (receipt.status !== 1) {
+    throw new Error('链上交易执行失败')
+  }
+  return txHash
 }
 
 const loadCommitteeData = async () => {
@@ -599,7 +543,7 @@ const loadCommitteeData = async () => {
     try {
       operatorAddress.value = await getCurrentWalletAddress()
     } catch (e) {
-      console.warn('获取当前钱包地址失败:', e)
+      console.warn('获取当前跨链操作地址失败:', e)
       operatorAddress.value = ''
     }
 
@@ -676,14 +620,11 @@ const handleAcceptInvitation = async () => {
   })
   console.group('[CrossChain][Manager] 接受委员会邀请')
   try {
-    console.info('[CrossChain][Manager] 开始检查网络与钱包状态')
-    await ensureManagerNetwork()
-    const signer = await getManagerSigner()
-    const signerAddress = await signer.getAddress()
+    console.info('[CrossChain][Manager] 开始检查跨链内置账户状态')
+    const { signerAddress } = await getManagerWalletContext()
     const managerAddr = await getFinalManagerAddress()
     const rpcUrl = await getFinalRpcUrl()
     const provider = new ethers.providers.JsonRpcProvider(rpcUrl)
-    const managerContract = new ethers.Contract(managerAddr, MANAGER_ABI, signer)
     const managerReadContract = new ethers.Contract(managerAddr, MANAGER_ABI, provider)
 
     console.info('[CrossChain][Manager] 基础信息:', {
@@ -692,31 +633,37 @@ const handleAcceptInvitation = async () => {
       rpcUrl
     })
 
-    const [pendingBefore, inviterBefore] = await managerReadContract.getCommitteeInvitation(signerAddress)
+    const [pendingBefore, inviterBefore] = await withTimeout(
+      managerReadContract.getCommitteeInvitation(signerAddress),
+      REQUEST_TIMEOUT_MS,
+      '读取邀请状态超时，请检查 RPC 连接。'
+    ) as [boolean, string]
     console.info('[CrossChain][Manager] 接受前邀请状态:', {
       pending: pendingBefore,
       inviter: inviterBefore
     })
 
-    await managerContract.callStatic.acceptCommitteeInvitation()
+    await withTimeout(
+      managerReadContract.callStatic.acceptCommitteeInvitation({ from: signerAddress }),
+      REQUEST_TIMEOUT_MS,
+      '链上预检查超时，请稍后重试。'
+    )
     console.info('[CrossChain][Manager] callStatic 校验通过，准备发送交易')
 
-    console.info('[CrossChain][Manager] 开始请求钱包发送交易(标准模式)')
-    const txHash = await sendAcceptInvitationViaWalletTx(
-      signer,
+    console.info('[CrossChain][Manager] 开始使用跨链内置账户发送交易')
+    await sendAndConfirmWithConnectedWallet({
+      contractAddress: managerAddr,
+      abi: MANAGER_ABI,
+      method: 'acceptCommitteeInvitation',
       provider,
-      managerAddr,
-      signerAddress
-    )
-    console.info('[CrossChain][Manager] 交易已发送:', txHash)
-    ElMessage.success('加入请求已发送，正在等待链上确认')
-    const receipt = await waitForTransactionReceipt(provider, txHash)
-    console.info('[CrossChain][Manager] 交易确认结果:', receipt)
-    if (receipt.status !== 1) {
-      throw new Error('链上交易执行失败')
-    }
+      submittedMessage: '加入请求已发送，正在等待链上确认'
+    })
 
-    const [pendingAfter, inviterAfter] = await managerReadContract.getCommitteeInvitation(signerAddress)
+    const [pendingAfter, inviterAfter] = await withTimeout(
+      managerReadContract.getCommitteeInvitation(signerAddress),
+      REQUEST_TIMEOUT_MS,
+      '读取加入后的邀请状态超时，请稍后刷新列表确认。'
+    ) as [boolean, string]
     console.info('[CrossChain][Manager] 接受后邀请状态:', {
       pending: pendingAfter,
       inviter: inviterAfter
@@ -748,17 +695,83 @@ const handleAcceptInvitation = async () => {
   }
 }
 
+const handleSendInvitationTransaction = async () => {
+  sendingInvitationTransaction.value = true
+  console.info('[CrossChain][Manager] 点击了发送交易按钮', {
+    clickedAt: new Date().toISOString()
+  })
+  console.group('[CrossChain][Manager] 通过跨链内置账户发送接受邀请交易')
+  try {
+    const { signerAddress } = await getManagerWalletContext()
+    const managerAddr = await getFinalManagerAddress()
+    const rpcUrl = await getFinalRpcUrl()
+    const provider = new ethers.providers.JsonRpcProvider(rpcUrl)
+    const managerReadContract = new ethers.Contract(managerAddr, MANAGER_ABI, provider)
+
+    const [pendingBefore, inviterBefore] = await withTimeout(
+      managerReadContract.getCommitteeInvitation(signerAddress),
+      REQUEST_TIMEOUT_MS,
+      '读取邀请状态超时，请检查 RPC 连接。'
+    ) as [boolean, string]
+    console.info('[CrossChain][Manager] 发送前邀请状态:', {
+      pending: pendingBefore,
+      inviter: inviterBefore
+    })
+
+    if (!pendingBefore) {
+      throw new Error('当前操作地址没有待处理的委员会邀请')
+    }
+
+    await withTimeout(
+      managerReadContract.callStatic.acceptCommitteeInvitation({ from: signerAddress }),
+      REQUEST_TIMEOUT_MS,
+      '链上预检查超时，请稍后重试。'
+    )
+
+    await sendAndConfirmWithConnectedWallet({
+      contractAddress: managerAddr,
+      abi: MANAGER_ABI,
+      method: 'acceptCommitteeInvitation',
+      provider,
+      submittedMessage: '交易已发送，正在等待链上确认'
+    })
+
+    ElMessage.success('交易确认完成')
+    await loadCommitteeData()
+  } catch (error: any) {
+    console.error('[CrossChain][Manager] 发送接受邀请交易失败:', {
+      error,
+      message: error?.message,
+      reason: error?.reason,
+      code: error?.code,
+      data: error?.data,
+      stack: error?.stack
+    })
+    ElMessage.error(extractErrorMessage(error) || '发送交易失败')
+  } finally {
+    sendingInvitationTransaction.value = false
+    console.info('[CrossChain][Manager] 发送交易流程结束', {
+      finishedAt: new Date().toISOString()
+    })
+    console.groupEnd()
+  }
+}
+
 const handleRemoveMember = async (memberAddr: string) => {
   removingMember.value = memberAddr
   try {
-    await ensureNetwork()
-    const signer = await getSigner()
     const managerAddr = await getFinalManagerAddress()
-    const managerContract = new ethers.Contract(managerAddr, MANAGER_ABI, signer)
-    
-    const tx = await managerContract.approveCommitteeMemberRemoval(memberAddr)
-    ElMessage.success('投票移除请求已发送')
-    await tx.wait()
+    const rpcUrl = await getFinalRpcUrl()
+    const provider = new ethers.providers.JsonRpcProvider(rpcUrl)
+
+    await sendAndConfirmWithConnectedWallet({
+      contractAddress: managerAddr,
+      abi: MANAGER_ABI,
+      method: 'approveCommitteeMemberRemoval',
+      params: [memberAddr],
+      provider,
+      submittedMessage: '投票移除请求已发送'
+    })
     await loadCommitteeData()
   } catch (error: any) {
     ElMessage.error(error?.message || '操作失败')
@@ -807,15 +820,19 @@ const handleInviteSubmit = async () => {
 
   invitingCommitteeMember.value = true
   try {
-    await ensureNetwork()
-    const signer = await getSigner()
     const managerAddr = await getFinalManagerAddress()
-    const managerContract = new ethers.Contract(managerAddr, MANAGER_ABI, signer)
-    
-    const tx = await managerContract.inviteCommitteeMember(memberInput)
-    ElMessage.success('邀请已提交')
+    const rpcUrl = await getFinalRpcUrl()
+    const provider = new ethers.providers.JsonRpcProvider(rpcUrl)
+
+    await sendAndConfirmWithConnectedWallet({
+      contractAddress: managerAddr,
+      abi: MANAGER_ABI,
+      method: 'inviteCommitteeMember',
+      params: [memberInput],
+      provider,
+      submittedMessage: '邀请已提交，正在等待链上确认'
+    })
     closeInviteModal()
-    await tx.wait()
     await loadCommitteeData()
   } catch (error: any) {
     ElMessage.error(error?.message || '邀请失败')
@@ -876,14 +893,6 @@ const handleRegisterSubmit = async () => {
 
     if (ethers.utils.isAddress(transportAddr) && transportAddr !== ethers.constants.AddressZero) {
       console.info('[CrossChain][Manager] 使用动态解析到的 Transport 合约注册路由')
-      await ensureNetwork()
-      console.info('[CrossChain][Manager] 网络校验通过')
-
-      const signer = await getSigner()
-      const signerAddress = await signer.getAddress()
-      console.info('[CrossChain][Manager] 当前签名地址:', signerAddress)
-
-      const transportContract = new ethers.Contract(transportAddr, TRANSPORT_ABI, signer)
       console.info('[CrossChain][Manager] 准备发送 setCrossChainRoute 交易:', {
         typeIdNum,
         name,
@@ -891,39 +900,32 @@ const handleRegisterSubmit = async () => {
         validatorAddress
       })
 
-      const tx = await transportContract.setCrossChainRoute(
+      const transportInterface = new ethers.utils.Interface(TRANSPORT_ABI)
+      const payload = transportInterface.encodeFunctionData('setCrossChainRoute', [
         typeIdNum,
         name,
         registerForm.isActive,
         validatorAddress
-      )
-      console.info('[CrossChain][Manager] 交易已发送:', tx.hash)
-      ElMessage.success('任务类型注册中...')
+      ])
 
-      const receipt = await tx.wait()
-      console.info('[CrossChain][Manager] 交易已确认:', receipt)
+      console.info('[CrossChain][Manager] 已编码 Manager 代理调用 payload:', {
+        transportAddr,
+        payload
+      })
+
+      await sendAndConfirmWithConnectedWallet({
+        contractAddress: managerAddr,
+        abi: MANAGER_ABI,
+        method: 'operateSystemContract',
+        params: [transportAddr, payload],
+        provider,
+        submittedMessage: '任务类型注册中...'
+      })
       ElMessage.success('注册成功')
       closeRegisterModal()
       await loadTasksData()
     } else {
-      console.warn('[CrossChain][Manager] 未解析到有效 Transport 地址，回退到 service 注册逻辑')
-      console.info('[CrossChain][Manager] registerTaskTypeOnChain 参数:', {
-        typeId: typeIdNum,
-        name,
-        isActive: registerForm.isActive,
-        verifier: validatorAddress
-      })
-
-      // 使用 service
-      await registerTaskTypeOnChain({
-        typeId: typeIdNum,
-        name,
-        isActive: registerForm.isActive,
-        verifier: validatorAddress
-      })
-      console.info('[CrossChain][Manager] service 注册完成')
-      closeRegisterModal()
-      await loadTasksData()
+      throw new Error('未解析到有效 Transport 合约地址，无法注册任务类型')
     }
   } catch (error: any) {
     console.error('[CrossChain][Manager] 注册任务类型失败:', {
@@ -949,19 +951,21 @@ const handleSourceChainSubmit = async () => {
 
   registeringSourceChain.value = true
   try {
-    await ensureNetwork()
-    const signer = await getSigner()
     const managerAddr = await getFinalManagerAddress()
-    const managerContract = new ethers.Contract(managerAddr, MANAGER_ABI, signer)
-    
-    const tx = await managerContract.addNewSourceChain(
-      sourceChainForm.symbol.trim(),
-      sourceChainForm.name.trim()
-    )
-    ElMessage.success('注册交易已发送')
+    const rpcUrl = await getFinalRpcUrl()
+    const provider = new ethers.providers.JsonRpcProvider(rpcUrl)
+
+    await sendAndConfirmWithConnectedWallet({
+      contractAddress: managerAddr,
+      abi: MANAGER_ABI,
+      method: 'addNewSourceChain',
+      params: [sourceChainForm.symbol.trim(), sourceChainForm.name.trim()],
+      provider,
+      submittedMessage: '注册交易已发送，正在等待链上确认'
+    })
     closeSourceChainModal()
-    await tx.wait()
     ElMessage.success('源链注册成功')
+    await loadTasksData()
   } catch (error: any) {
     ElMessage.error(error?.message || '注册失败')
   } finally {
@@ -972,6 +976,12 @@ const handleSourceChainSubmit = async () => {
 onMounted(() => {
   loadTasksData()
   loadCommitteeData()
+})
+watch(() => [browserWallet.address, browserWallet.connected], () => {
+  if (browserWallet.selected) {
+    operatorAddress.value = browserWallet.connected ? browserWallet.address : ''
+    loadCommitteeData()
+  }
 })
 </script>
 <!-- 引入外部 SCSS 样式，取消 scoped -->

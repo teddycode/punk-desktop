@@ -1,0 +1,27 @@
+{
+  "windows-amd64": {
+    "url": "https://gethstore.blob.core.windows.net/builds/geth-windows-amd64-1.13.15-c5ba367e.zip",
+    "size": 29792981,
+    "md5": "bc2a88a05e6f3964460cf685e7655cdd"
+  },
+  "linux-amd64": {
+    "url": "https://gethstore.blob.core.windows.net/builds/geth-linux-amd64-1.13.15-c5ba367e.tar.gz",
+    "size": 28249065,
+    "md5": "97f470dfa48cd688bc3cc4a9559cd42d"
+  },
+  "linux-arm64": {
+    "url": "https://gethstore.blob.core.windows.net/builds/geth-linux-arm64-1.13.15-c5ba367e.tar.gz",
+    "size": 26358643,
+    "md5": "4c31ac21b136bc954861aa02757ce454"
+  },
+  "darwin-amd64": {
+    "url": "https://gethstore.blob.core.windows.net/builds/geth-darwin-amd64-1.13.15-c5ba367e.tar.gz",
+    "size": 16317644,
+    "md5": "95f42ebf21cb2f37c8ffe0418b4217bc"
+  },
+  "darwin-arm64": {
+    "url": "https://gethstore.blob.core.windows.net/builds/geth-darwin-arm64-1.13.15-c5ba367e.tar.gz",
+    "size": 15467277,
+    "md5": "0d680a95bfa23c8045661a039d93768f"
+  }
+}

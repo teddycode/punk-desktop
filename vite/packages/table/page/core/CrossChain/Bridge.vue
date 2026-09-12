@@ -134,7 +134,7 @@ import { LinkOutlined, SwapOutlined, CopyOutlined } from '@ant-design/icons-vue'
 
 const loading = ref(false);
 const activeTable = ref('transactions'); // 概览固定在上方，默认显示业务交易
-let provider: ethers.JsonRpcProvider;
+let provider: ethers.providers.JsonRpcProvider;
 const route = useRoute()
 const router = useRouter()
 const routerState = history.state
@@ -395,7 +395,7 @@ const fetchDataFromDB = async () => {
 };
 const fetchDataFromRPC = async () => {
   //await fetchDataFromDB();
-  provider = new ethers.JsonRpcProvider(data_from_route.value['rpc']);
+  provider = new ethers.providers.JsonRpcProvider(data_from_route.value['rpc']);
   let multiABI = [
     "function getSourceChainNum() view returns (uint256)",
     "function getSystemContractNum() view returns (uint256)",
