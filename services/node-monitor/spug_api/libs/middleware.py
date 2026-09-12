@@ -3,11 +3,47 @@
 # Released under the AGPL-3.0 License.
 from django.utils.deprecation import MiddlewareMixin
 from django.conf import settings
+from django.db import OperationalError
 from .utils import json_response, get_request_real_ip
 from apps.account.models import User
 from apps.setting.utils import AppSetting
+import logging
 import traceback
 import time
+
+
+logger = logging.getLogger(__name__)
+
+
+def _is_database_locked(error):
+    message = str(error).lower()
+    return 'database is locked' in message or 'database table is locked' in message
+
+
+def _refresh_token_expiry(user):
+    now = time.time()
+    current_expiry = user.token_expired or 0
+    refresh_interval = getattr(settings, 'TOKEN_REFRESH_INTERVAL', 5 * 60)
+    if current_expiry - now > refresh_interval:
+        return
+
+    new_expiry = int(now + settings.TOKEN_TTL)
+    retry_count = max(int(getattr(settings, 'TOKEN_REFRESH_RETRIES', 3)), 1)
+    for attempt in range(retry_count):
+        try:
+            updated = User.objects.filter(pk=user.pk, token_expired=current_expiry).update(
+                token_expired=new_expiry
+            )
+            if updated:
+                user.token_expired = new_expiry
+            return
+        except OperationalError as error:
+            if not _is_database_locked(error):
+                raise
+            if attempt == retry_count - 1:
+                logger.warning('Skipped token refresh because the SQLite database is locked')
+                return
+            time.sleep(0.05 * (attempt + 1))
 
 
 class HandleExceptionMiddleware(MiddlewareMixin):
@@ -37,8 +73,7 @@ class AuthenticationMiddleware(MiddlewareMixin):
             if user and user.token_expired >= time.time() and user.is_active:
                 if x_real_ip == user.last_ip or AppSetting.get_default('bind_ip') is False:
                     request.user = user
-                    user.token_expired = time.time() + settings.TOKEN_TTL
-                    user.save()
+                    _refresh_token_expiry(user)
                     return None
         response = json_response(error="验证失败，请重新登录")
         response.status_code = 401
