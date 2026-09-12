@@ -187,7 +187,6 @@ import { ThunderboltFilled } from '@ant-design/icons-vue';
 import { message, notification } from 'ant-design-vue';
 import SidePanel from './SidePanel.vue';
 import SecondPanel from './SecondPanel.vue';
-import GradeSmallTip from './GradeSmallTip.vue';
 import { isMain } from '../js/common/screenUtils';
 
 import EditNavigation from './bottomPanel/EditNavigation.vue';
@@ -208,6 +207,10 @@ import UserEntry from './bottomPanel/UserEntry.vue';
 import SearchButton from './bottomPanel/SearchButton.vue';
 import { Icon as navIcon } from '@iconify/vue';
 import navigationData from '../js/data/tableData';
+import browser from '../js/common/browser';
+
+const STORAGE_MARKET_PACKAGE = 'StoragePage';
+const STORAGE_MARKET_SERVICE_NAME = 'storage-market';
 
 export default {
   name: 'BottomPanel',
@@ -227,7 +230,6 @@ export default {
     EditNavigation,
     ChangeApp,
     ScrolX,
-    GradeSmallTip,
     TaskBox,
     navIcon,
   },
@@ -329,7 +331,7 @@ export default {
     });
   },
   computed: {
-    ...mapWritableState(appStore, ['userInfo', 'settings', 'lvInfo', 'simple']),
+    ...mapWritableState(appStore, ['userInfo', 'settings', 'simple']),
     ...mapWritableState(appsStore, ['runningApps', 'runningTableApps']),
     ...mapWritableState(teamStore, ['team', 'teamVisible']),
     ...mapWritableState(cardStore, ['routeParams']),
@@ -479,6 +481,14 @@ export default {
         },
       });
     },
+    async openStorageMarketPage() {
+      const service = await ipc.invoke('services.resolvePage', STORAGE_MARKET_SERVICE_NAME);
+      if (!service?.pageUrl) {
+        throw new Error('Storage market service page URL is unavailable');
+      }
+
+      await browser.openInTable(service.pageUrl);
+    },
     async setFullScreen() {
       if (this.full) {
         tsbApi.window.setFullScreen(false);
@@ -528,6 +538,13 @@ export default {
           require('electron').shell.openPath(item.path);
           break;
         case 'lightApp':
+          if (item?.package === STORAGE_MARKET_PACKAGE) {
+            this.openStorageMarketPage().catch((error) => {
+              console.error('Failed to open storage market service:', error);
+              message.error('Storage service failed to open');
+            });
+            break;
+          }
           if (item?.url.startsWith('/web3/')) {
             let route = { name: item?.package, params: { data: '' } };
             console.log('跳转路由：', route);

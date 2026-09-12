@@ -36,7 +36,17 @@
       </div>
     </div>
     <div v-else class="" style="background: #333; width: 100vw; height: auto">
-      <div class="p-10 rounded-lg no-drag s-bg" style="width: 600px; margin: auto">
+      <div class="p-10 rounded-lg no-drag s-bg splash-panel" style="width: 600px; margin: auto">
+        <a-button
+          v-if="!launching"
+          class="wallet-window-entry"
+          type="text"
+          shape="circle"
+          title="Open PunkOS Wallet"
+          @click="openWalletWindow"
+        >
+          <WalletOutlined />
+        </a-button>
         <h3 style="text-align: center; font-size: 1.5em">
           <a-avatar src="/icons/logo128.png" style="vertical-align: top"></a-avatar>
           <div style="color: whitesmoke">
@@ -87,6 +97,7 @@
 
 <script>
 import { message, Modal } from 'ant-design-vue';
+import { WalletOutlined } from '@ant-design/icons-vue';
 import { appStore } from '@store';
 import { mapWritableState, mapActions } from 'pinia';
 import { codeStore } from '@store/code';
@@ -125,7 +136,7 @@ import { watch } from 'vue';
 
 export default {
   name: 'Splash',
-  components: { RayMedal },
+  components: { RayMedal, WalletOutlined },
   data() {
     return {
       showTip: false,
@@ -149,7 +160,6 @@ export default {
       'routeUpdateTime',
       'userInfo',
       'init',
-      'lvInfo',
       'backgroundImage',
       'style',
     ]),
@@ -303,16 +313,6 @@ export default {
 
         const userInfo = args.data;
 
-        // let lvInfo = this.lvInfo
-        // lvInfo.lv = userInfo.onlineGradeExtra.lv
-        // let current = this.gradeTableGenerate(64)[lvInfo.lv]
-        // let section = this.gradeTableGenerate(64)[lvInfo.lv + 1]
-        // let remain = section[0] * 60 - (userInfo.onlineGradeExtra.minutes)
-        // lvInfo.remainHour = Math.floor(remain / 60)
-        // lvInfo.remainMinute = remain - (Math.floor(remain / 60) * 60)
-        // lvInfo.minute = userInfo.onlineGradeExtra.minutes
-        // lvInfo.percentage = ((lvInfo.minute - current[0] * 60) / ((current[1] - current[0]) * 60)) * 100
-        //this.lvInfo = lvInfo
         window.loadedStore['userInfo'] = true;
         console.info('更新了用户信息:', JSON.stringify(userInfo));
         comStore()._updateUserInfo(userInfo.uid); //更新社交网络用户
@@ -366,33 +366,35 @@ export default {
       }
     },
 
-    gradeTableGenerate(num) {
-      let lvSys = {};
-      for (let i = 1; i <= num; i++) {
-        let arrLef = 10 * i * (i + 1);
-        let arrRg = 10 * (i + 1) * (i + 2) - 1;
-        lvSys[`${i}`] = [arrLef, arrRg];
-      }
-      return lvSys;
-    },
-    login() {
+    async login() {
       // 打开登录对话框
       useUserStore().setAuthenticated(false);
-      const toast = useToast();
-      let modal = useWeb3Modal();
-      modal.open().then(() => {
-        let account = useWeb3ModalAccount();
-        if (account.isConnected.value) {
-          toast.success(this.$t('toast.walletConnected'));
-          setTimeout(() => {
-            modal.close();
-          }, 3000);
-        }
-      });
+      try {
+        let modal = useWeb3Modal();
+        await modal.open();
+      } catch (error) {
+        console.error('打开钱包连接弹窗失败：', error);
+        message.error(error.message || '打开钱包连接弹窗失败');
+      }
 
       // tsbApi.user.login((data) => {
       //   this.getUserInfo()
       // })
+    },
+    async openWalletWindow() {
+      try {
+        if (!window.ipc || typeof window.ipc.invoke !== 'function') {
+          throw new Error('Electron IPC is not available');
+        }
+
+        const result = await window.ipc.invoke('wallet-window.open');
+        if (result && result.error) {
+          throw new Error(result.error);
+        }
+      } catch (error) {
+        console.error('打开钱包小窗失败:', error);
+        message.error(error.message || 'Failed to open wallet window');
+      }
     },
     replaceIcon() {
       navigationData.systemAppList.forEach((item) => {
@@ -950,5 +952,29 @@ export default {
 <style>
 .ant-modal-body {
   -webkit-app-region: no-drag;
+}
+
+.splash-panel {
+  position: relative;
+}
+
+.wallet-window-entry {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #f7f7f7;
+  background: rgba(16, 20, 24, 0.18);
+  -webkit-app-region: no-drag;
+}
+
+.wallet-window-entry:hover,
+.wallet-window-entry:focus {
+  color: #ffffff;
+  border-color: #ffb342;
+  background: rgba(255, 179, 66, 0.18);
 }
 </style>

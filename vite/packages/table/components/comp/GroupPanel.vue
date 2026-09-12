@@ -6,9 +6,8 @@
       style="float: right; border-radius: 8px; border: none"
       type="primary"
       @click="createGroup"
-      >创建团队
-      <GradeSmallTip lastPowerType="创建团队" powerType="group"></GradeSmallTip>
-    </a-button>
+      >创建团队</a-button
+    >
   </h3>
   <a-tabs v-model:activeKey="activeKey">
     <template #rightExtra>
@@ -92,7 +91,6 @@
 <script>
 import { appStore } from '../../store';
 import { mapWritableState } from 'pinia';
-import GradeSmallTip from '../GradeSmallTip.vue';
 import browser from '../../js/common/browser';
 
 const { groupApi } = window.$apis;
@@ -110,7 +108,7 @@ export default {
       },
     };
   },
-  components: { GradeSmallTip },
+  components: {},
   mounted() {
     this.getMyCircle({ page: 1, row: 20 });
     this.getJoinedCircle({ page: 1, row: 20 });

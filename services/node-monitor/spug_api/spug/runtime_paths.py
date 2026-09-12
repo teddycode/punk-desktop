@@ -9,6 +9,7 @@ RUNTIME_DIR = os.path.dirname(os.path.abspath(sys.executable)) if getattr(sys, '
 
 DATA_DIR = os.path.join(RUNTIME_DIR, 'data')
 DATABASE_PATH = os.path.join(DATA_DIR, 'db.sqlite3')
+SQLITE_BUSY_TIMEOUT_SECONDS = 30
 LOG_DIR = os.path.join(RUNTIME_DIR, 'logs')
 REPOS_DIR = os.path.join(RUNTIME_DIR, 'repos')
 BUILD_DIR = os.path.join(REPOS_DIR, 'build')

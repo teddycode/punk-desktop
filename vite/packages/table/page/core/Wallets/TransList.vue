@@ -79,8 +79,6 @@ import LayoutFooter from '@page/core/Layouts/components/layout-footer.vue';
 import { EyeOutlined, DeleteOutlined } from '@ant-design/icons-vue';
 import datas from './data';
 import { useRoute } from 'vue-router';
-import { GetForWalletStatus, PostWalletPageList } from '@js/service/wallets';
-import { PageParams } from '@js/service/typing';
 import { appStore } from '@store';
 import { GetForTransactionStatus, PostTransactionPageList } from '@js/service/transactions';
 
@@ -96,7 +94,8 @@ export default defineComponent({
     // 代币类型，交易哈希，区块高度，付款方，收款方，交易类型，数额，费用，查看详情
     const columns = datas.transactionColumn;
 
-    const address = useRoute().query?.address;
+    const routeAddress = useRoute().query?.address;
+    const address = Array.isArray(routeAddress) ? routeAddress[0] : routeAddress || null;
 
     console.log('传递的地址参数：', address);
 
@@ -131,20 +130,35 @@ export default defineComponent({
     // 获取后端数据
     async function fetchStatusData() {
       const userId = parseInt(userInfo.uid);
-      GetForTransactionStatus(userId, address).then((data) => {
-        console.log('交易统计数据：', data);
-        countStatus.value.income = data?.data.income;
-        countStatus.value.outcome = data?.data.outcome;
-      });
+      GetForTransactionStatus(userId, address)
+        .then((data) => {
+          console.log('交易统计数据：', data);
+          const status = data?.data ?? {};
+          countStatus.value.income = status.income ?? 0;
+          countStatus.value.outcome = status.outcome ?? 0;
+        })
+        .catch((error) => {
+          console.error('获取交易统计数据失败：', error);
+          countStatus.value.income = 0;
+          countStatus.value.outcome = 0;
+        });
     }
     //   获取表格数据
     async function fetchTableData() {
       const uid = parseInt(userInfo.uid);
-      PostTransactionPageList(uid, address, pageConfig.value).then((resp) => {
-        console.log('交易分页数据：', resp);
-        tableData.value = resp?.data?.records;
-        pageConfig.value.current = resp?.data?.pageNumber;
-      });
+      PostTransactionPageList(uid, address, pageConfig.value)
+        .then((resp) => {
+          console.log('交易分页数据：', resp);
+          const pageData = resp?.data ?? {};
+          tableData.value = pageData.records ?? [];
+          pageConfig.value.current = pageData.pageNumber ?? pageConfig.value.current;
+          pageConfig.value.total = pageData.totalRow ?? 0;
+        })
+        .catch((error) => {
+          console.error('获取交易分页数据失败：', error);
+          tableData.value = [];
+          pageConfig.value.total = 0;
+        });
     }
 
     return {

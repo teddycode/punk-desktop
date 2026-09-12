@@ -68,7 +68,6 @@
         <div class="relative btn" @click="editNavigation">
           <Icon icon="tianjia1" style="font-size: 3em"></Icon>
           <div><span>编辑导航</span></div>
-          <GradeSmallTip powerType="bottomNavigation" @closeDrawer="closeDrawer"></GradeSmallTip>
         </div>
         <div v-for="item in builtInFeatures" :key="item.name" class="btn" @click="clickNavigation(item)">
           <navIcon :icon="item.icon" style="font-size: 3em"></navIcon>
@@ -97,14 +96,16 @@ import { message } from 'ant-design-vue';
 import routerTab from '../js/common/routerTab';
 import { Icon as navIcon } from '@iconify/vue';
 import { renderIcon } from '@js/common/common';
-import GradeSmallTip from './GradeSmallTip.vue';
+import browser from '../js/common/browser';
+
+const STORAGE_MARKET_PACKAGE = 'StoragePage';
+const STORAGE_MARKET_SERVICE_NAME = 'storage-market';
 
 export default {
   name: 'SidePanel',
   components: {
     EditNavigation,
     navIcon,
-    GradeSmallTip,
   },
   data() {
     return {
@@ -303,6 +304,13 @@ export default {
           require('electron').shell.openPath(item.path);
           break;
         case 'lightApp':
+          if (item?.package === STORAGE_MARKET_PACKAGE) {
+            this.openStorageMarketPage().catch((error) => {
+              console.error('Failed to open storage market service:', error);
+              message.error('Storage service failed to open');
+            });
+            break;
+          }
           if (item?.url.startsWith('/web3/')) {
             // web3应用默认的url前缀为/web3/
             let route = { name: item?.package, params: { data: '' } };
@@ -315,6 +323,14 @@ export default {
         default:
           require('electron').shell.openPath(item.path);
       }
+    },
+    async openStorageMarketPage() {
+      const service = await ipc.invoke('services.resolvePage', STORAGE_MARKET_SERVICE_NAME);
+      if (!service?.pageUrl) {
+        throw new Error('Storage market service page URL is unavailable');
+      }
+
+      await browser.openInTable(service.pageUrl);
     },
     // scrollNav(refVal, scrollDirection) {
     //   // let content = this.$refs[refVal]

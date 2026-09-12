@@ -2,7 +2,7 @@
 from PyInstaller.utils.hooks import collect_submodules
 from PyInstaller.utils.hooks import collect_all
 
-datas = [('G:\\CodeProjects\\buaa\\punk-desktop\\services\\node-monitor\\spug_api\\data', 'data')]
+datas = [('E:\\CodeProjects\\buaa\\punk-desktop\\services\\node-monitor\\spug_api\\data', 'data')]
 binaries = []
 hiddenimports = []
 hiddenimports += collect_submodules('apps')
@@ -26,7 +26,7 @@ datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
 
 
 a = Analysis(
-    ['G:\\CodeProjects\\buaa\\punk-desktop\\services\\node-monitor\\spug_api\\server.py'],
+    ['E:\\CodeProjects\\buaa\\punk-desktop\\services\\node-monitor\\spug_api\\server.py'],
     pathex=[],
     binaries=binaries,
     datas=datas,

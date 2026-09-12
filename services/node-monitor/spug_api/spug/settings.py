@@ -16,14 +16,19 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 import re
+import logging
+from django.db.backends.signals import connection_created
 from spug.runtime_paths import (
     BUILD_DIR as RUNTIME_BUILD_DIR,
     DATABASE_PATH,
     REPOS_DIR as RUNTIME_REPOS_DIR,
     RUNTIME_DIR,
+    SQLITE_BUSY_TIMEOUT_SECONDS,
     TRANSFER_DIR as RUNTIME_TRANSFER_DIR,
     ensure_runtime_layout,
 )
+
+logger = logging.getLogger(__name__)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = RUNTIME_DIR
@@ -77,11 +82,32 @@ ASGI_APPLICATION = 'spug.routing.application'
 
 DATABASES = {
     'default': {
-        'ATOMIC_REQUESTS': True,
+        'ATOMIC_REQUESTS': False,
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': DATABASE_PATH,
+        'OPTIONS': {
+            'timeout': SQLITE_BUSY_TIMEOUT_SECONDS,
+        },
     }
 }
+
+
+def configure_sqlite_connection(sender, connection, **kwargs):
+    if connection.vendor != 'sqlite':
+        return
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute('PRAGMA journal_mode=WAL')
+            cursor.execute('PRAGMA busy_timeout=30000')
+    except Exception as error:
+        logger.warning('Unable to configure SQLite concurrency settings: %s', error)
+
+
+connection_created.connect(
+    configure_sqlite_connection,
+    dispatch_uid='spug.configure_sqlite_connection',
+)
 
 CACHES = {
     "default": {
@@ -105,6 +131,8 @@ TEMPLATES = [
 ]
 
 TOKEN_TTL = 8 * 3600
+TOKEN_REFRESH_INTERVAL = 5 * 60
+TOKEN_REFRESH_RETRIES = 3
 SCHEDULE_KEY = 'spug:schedule'
 SCHEDULE_WORKER_KEY = 'spug:schedule:worker'
 MONITOR_KEY = 'spug:monitor'

@@ -20,7 +20,6 @@ module.exports = {
     return {
       runtimeFiles: [
         'server.js',
-        'package.json'
       ],
     };
   },

@@ -258,12 +258,7 @@
                         </a-col>
                         <a-col :span="6">
                           <a-button @click.stop="startTask(item)" type="primary" class="relative">
-                            <Icon
-                              class="text-xl"
-                              icon="suoding"
-                              v-if="superiorLimit <= runningTasks.length || blocking === false"
-                            ></Icon>
-                            <Icon class="text-xl" icon="bofang" v-else></Icon>
+                            <Icon class="text-xl" icon="bofang"></Icon>
                           </a-button>
                         </a-col>
                       </a-row>
@@ -373,43 +368,6 @@
       </a-col>
     </a-row>
   </a-drawer>
-  <a-modal
-    v-model:open="clickTipShow"
-    :closable="false"
-    title=""
-    @ok="() => {}"
-    :footer="null"
-    style="font-size: 8px"
-    :maskClosable="false"
-    :centered="true"
-  >
-    <div
-      class="flex flex-col items-center rounded-lg h-44 w-96 justify-evenly text-sm text-white mx-auto"
-      style="background: rgba(33, 33, 33, 1)"
-    >
-      <div><Icon icon="-dengpao" style="font-size: 1.2em" class="mr-2"></Icon>提示</div>
-      <div v-if="blocking === false">
-        当前「 等级{{ lv }} 」，解锁{{ powerAlias }}功能需要达到「 等级 {{ powerLv }} 」
-      </div>
-      <div v-else>当前「 等级{{ lv }} 」，已达当前等级上限</div>
-      <div class="flex flex-row w-2/3 justify-between">
-        <div
-          class="rounded-lg w-28 h-10 flex justify-center items-center mt-4 pointer"
-          style="background: rgba(42, 42, 42, 1)"
-          @click="goGrade"
-        >
-          了解更多
-        </div>
-        <div
-          class="rounded-lg w-28 h-10 flex justify-center items-center mt-4 pointer"
-          style="background: rgba(42, 42, 42, 1)"
-          @click="closeTip"
-        >
-          关闭
-        </div>
-      </div>
-    </div>
-  </a-modal>
 </template>
 
 <script>
@@ -419,7 +377,6 @@ import Widget from '../../../components/muuri/Widget.vue';
 import bili from '../../../js/watch/bili';
 import BiliStage from '../../../components/watch/BiliStage.vue';
 import { formatSeconds, fixHttp } from '../../../util';
-import { powerState } from '../../../js/watch/grade';
 export default {
   name: 'Index',
   components: {
@@ -464,22 +421,10 @@ export default {
       menuVisible: false,
       stoppedTasksKey: Date.now(),
       runningTasksKey: Date.now(),
-      superiorLimit: 10,
-      lv: 0,
-      clickTipShow: false,
-      blocking: false,
-      powerAlias: '',
-      powerLv: 0,
     };
   },
   computed: {},
   mounted() {
-    this.lv = lv;
-    const { blocking, superiorLimit, powerAlias, powerLv } = this.powerState('dataMonitoring', lv);
-    this.superiorLimit = superiorLimit;
-    this.blocking = blocking;
-    this.powerAlias = powerAlias;
-    this.powerLv = powerLv;
     this.loadAllTasks().then();
     this.setUpTaskUpdateHandler(); //挂载状态更新器
     this.updateExecutedTimer = setInterval(() => {
@@ -492,14 +437,6 @@ export default {
     clearInterval(this.updateExecutedTimer);
   },
   methods: {
-    powerState,
-    closeTip() {
-      this.clickTipShow = false;
-    },
-    goGrade() {
-      this.closeTip();
-      this.$router.push({ name: 'grade' });
-    },
     showMenu(task) {
       this.currentTask = task;
       this.menuVisible = true;
@@ -586,10 +523,6 @@ export default {
       this.sortTasks();
     },
     startTask(task) {
-      if (this.superiorLimit <= this.runningTasks.length || this.blocking === false) {
-        this.clickTipShow = true;
-        return;
-      }
       task.last_execute_time = Date.now();
       tableApi.watch.startTask(task);
     },

@@ -13,18 +13,7 @@
             如果您的好友对此类软件有兴趣，可通过下方生成邀请码，赠与对方。
             <br />对方将获得 <img style="width: 24px" src="https://a.apps.vip/icons/test_sm.png" /> 受邀用户勋章。
           </p>
-          <p>
-            兑换方式：每200小时可兑换1枚邀请码，四舍五入（第1个邀请码在100小时释放，第2个在300小时） <br />
-            您的在线总时长：<strong class="text-green-400">{{ totalHours }}</strong> 小时，总计可兑换：<strong
-              class="text-red-400"
-              >{{ canExchange }}</strong
-            >，已兑换：<strong class="text-green-400">{{ exchanged }}</strong
-            >，剩余：<strong class="text-red-400">{{ leave }}</strong
-            >。
-            <a-button type="primary" @click="confirmExchange" :disabled="leave === 0" style="color: var(--main-text)">
-              兑换1枚
-            </a-button>
-          </p>
+          <p>下方可查看已生成的邀请码和邀请记录。</p>
 
           <p>您已成功邀请{{ invitedUsers.length }}位用户。</p>
           <div>
@@ -212,18 +201,8 @@ export default {
   computed: {
     ...mapState(appStore, ['userInfo']),
     ...mapWritableState(codeStore, ['verified']),
-    totalHours() {
-      return this.userInfo.onlineGradeExtra.cumulativeHours;
-    },
-
-    canExchange() {
-      return (this.userInfo.onlineGradeExtra.cumulativeHours / 200).toFixed(0);
-    },
     exchanged() {
       return this.codes.length;
-    },
-    leave() {
-      return this.canExchange - this.exchanged;
     },
     invitedUsers() {
       let invited = this.codes.filter((code) => {
@@ -304,25 +283,6 @@ export default {
     },
     isMarked(key) {
       return this.marked.indexOf(key) > -1;
-    },
-    confirmExchange() {
-      Modal.confirm({
-        content:
-          '确认使用200小时在线时长兑换1枚邀请码？此操作无法撤回。兑换并不会减少你的在线时长以及影响你的在线等级，请放心。',
-        okText: '确认兑换',
-        onOk: async () => {
-          let rs = await this.exchange();
-          if (rs.status) {
-            rs.data.forEach((item) => {
-              this.codes.unshift(item);
-            });
-
-            message.success('兑换成功。');
-          } else {
-            message.error('兑换失败，您已无法兑换邀请码。');
-          }
-        },
-      });
     },
   },
 };

@@ -21,7 +21,6 @@
   <div>
     <a-row :gutter="[0, 10]">
       <a-col :span="24"> UID：{{ userInfo.uid }} （用于社区活动身份） </a-col>
-      <a-col :span="24"> 社区等级：{{ userInfo.grade?.new_name }} </a-col>
       <a-col :span="24" style="text-align: center">
         <a-row>
           <a-col :span="8">

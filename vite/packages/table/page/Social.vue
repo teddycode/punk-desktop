@@ -8,7 +8,6 @@
 </template>
 
 <script>
-import GradePanel from '../components/comp/GradePanel.vue';
 import ComPanel from '../components/comp/ComPanel.vue';
 import ComActionPanel from '../components/comp/ComActionPanel.vue';
 import GroupPanel from '../components/comp/GroupPanel.vue';
@@ -18,7 +17,7 @@ import browser from '../js/common/browser';
 
 export default {
   name: 'Social',
-  components: { SecondPanel, GroupPanel, GradePanel, ComPanel, ComActionPanel },
+  components: { SecondPanel, GroupPanel, ComPanel, ComActionPanel },
   data() {
     return {
       tabs: [
@@ -44,14 +43,6 @@ export default {
           icon: 'tianjiachengyuan',
           route: {
             name: 'invite',
-          },
-        },
-        {
-          title: '等级权益',
-          index: 'grade',
-          icon: 'star',
-          route: {
-            name: 'grade',
           },
         },
         {

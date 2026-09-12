@@ -1,18 +1,15 @@
 <script>
-import { ThunderboltFilled } from '@ant-design/icons-vue';
 import BorderAvatar from '../avatar/BorderAvatar.vue';
 import FrameAvatar from '../avatar/FrameAvatar.vue';
 import { mapWritableState } from 'pinia';
 import { messageStore } from '../../store/message';
 import { appStore } from '../../store';
-import { Modal } from 'ant-design-vue';
 import Emoji from '../comp/Emoji.vue';
 import { isMain } from '../../js/common/screenUtils';
 
 export default {
   components: {
     Emoji,
-    ThunderboltFilled,
     BorderAvatar,
     FrameAvatar,
   },
@@ -22,14 +19,13 @@ export default {
       myFrameUrl: '',
     };
   },
-  props: ['size', 'chat', 'level'],
+  props: ['size', 'chat'],
   computed: {
     ...mapWritableState(messageStore, ['messageIndex', 'totalCount']),
-    ...mapWritableState(appStore, ['userInfo', 'settings', 'lvInfo', 'simple']),
+    ...mapWritableState(appStore, ['userInfo', 'settings', 'simple']),
   },
   mounted() {
     this.lastTime = Number(localStorage.getItem('lastBarrageMessageTime'));
-    this.setMinute();
     // this.loadMessages()
     // setInterval(() => {
     //   this.loadMessages()
@@ -37,27 +33,6 @@ export default {
   },
   methods: {
     isMain,
-    setMinute() {
-      setInterval(() => {
-        this.$refs.minute?.classList.add('move');
-        this.lvInfo.remainMinute--;
-        if (this.lvInfo.remainMinute <= 0) {
-          this.lvInfo.remainHour--;
-          if (this.lvInfo.remainHour < 0 && this.tipped === false) {
-            this.tipped = true;
-            ipc.send('getDetailUserInfo');
-            Modal.info({
-              title: '升级提示',
-              content: '恭喜您等级提升',
-            });
-          }
-          this.lvInfo.remainMinute = 59;
-        }
-        this.timer = setTimeout(() => {
-          this.$refs.minute?.classList.remove('move');
-        }, 1000);
-      }, 60000);
-    },
     // async loadMessages() {
     //   this.messages = await messageModel.allList()
     //   this.messages.forEach(mes => {
@@ -133,33 +108,6 @@ export default {
               class="frame"
             ></FrameAvatar>
           </a-col>
-          <!-- 等级 -->
-          <a-col v-if="!simple && level" :span="12" style="position: relative" @click.stop="goMy()">
-            <span ref="minute" class="tip">+1</span>
-            <div class="xt-text" style="padding-top: 0.1em; min-height: 50px">
-              <span style="font-size: 0.8em"></span> {{ lvInfo.lv }}级 <br />
-              <span>
-                <a-tooltip>
-                  <a-progress
-                    :percent="lvInfo.percentage"
-                    :showInfo="false"
-                    strokeColor="var(--active-bg)"
-                    style="width: 4em"
-                    trailColor="var(--secondary-bg)"
-                  />
-                  <template #title>
-                    <thunderbolt-filled
-                      class="thunder"
-                      style="color: rgba(255, 140, 44, 0.98); vertical-align: middle"
-                    />
-                    <span style="color: #f3f3f3; font-size: 12px; vertical-align: middle"
-                      >{{ lvInfo.remainHour }}小时{{ lvInfo.remainMinute }}分后升级</span
-                    >
-                  </template>
-                </a-tooltip>
-              </span>
-            </div>
-          </a-col>
         </a-row>
       </div>
     </div>
@@ -189,55 +137,6 @@ export default {
   line-height: 2em;
   display: inline-block;
   background: rgba(42, 40, 40, 0.51);
-}
-
-.thunder {
-  animation: twinkling 1.2s ease-in-out infinite;
-}
-
-@keyframes twinkling {
-  0% {
-    opacity: 0.5;
-    filter: alpha(opacity=50);
-  }
-
-  50% {
-    opacity: 1;
-    filter: alpha(opacity=100);
-  }
-
-  100% {
-    opacity: 0.5;
-    filter: alpha(opacity=50);
-  }
-}
-
-.tip {
-  position: absolute;
-  top: 0;
-  right: -25px;
-  opacity: 0;
-  background: rgba(0, 0, 0, 0.25);
-  border-radius: 100px;
-  width: 30px;
-  text-align: center;
-  line-height: 15px;
-}
-
-.move {
-  animation: moveUp 0.8s;
-}
-
-@keyframes moveUp {
-  from {
-    top: 20px;
-    opacity: 100;
-  }
-
-  to {
-    top: -10px;
-    opacity: 0;
-  }
 }
 
 :deep(.ant-badge-count) {

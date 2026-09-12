@@ -4,7 +4,6 @@ import { useWeb3ModalAccount, useWeb3ModalProvider } from '@punkos/ethers5/vue';
 import { ethers } from 'ethers';
 import { GetForLoginNonce, PostForAuthReq } from '@js/service/users';
 import { message, Modal, Spin } from 'ant-design-vue';
-import { appStore } from '../../../store';
 import { ResponseType } from '@js/../../../typings/services';
 import { comStore } from "../../../store/com";
 import { useUserStore } from '../../../store/users';
@@ -16,12 +15,134 @@ declare interface SignMessage {
   message: string;
 }
 
+const waitForConnectedAddress = (account: any, timeout = 10000): Promise<string> => {
+  return new Promise((resolve) => {
+    const getAddress = () => account.address?.value || '';
+
+    if (account.isConnected?.value && getAddress()) {
+      resolve(getAddress());
+      return;
+    }
+
+    const startedAt = Date.now();
+    const timer = setInterval(() => {
+      if (account.isConnected?.value && getAddress()) {
+        clearInterval(timer);
+        resolve(getAddress());
+        return;
+      }
+
+      if (Date.now() - startedAt >= timeout) {
+        clearInterval(timer);
+        resolve('');
+      }
+    }, 200);
+  });
+};
+
 export const setupWalletListener = (modal: any, calback: any, userInfo: any) => {
   const toast = useToast();
-
+  let isAuthenticating = false;
+  
   // 在外部创建 account 实例，避免在事件回调中重复调用导致生命周期警告
   const w3mAccount = useWeb3ModalAccount();
 
+  const authenticateConnectedWallet = async () => {
+    const address = await waitForConnectedAddress(w3mAccount);
+    const connectStatus = w3mAccount.isConnected.value;
+
+    console.log('🔔 [钱包认证] 连接状态:', connectStatus, '地址:', address);
+
+    if (userInfo) {
+      console.log('登录后的钱包操作');
+      if (connectStatus) {
+        console.log('还是处于登录状态！');
+      } else {
+        console.log('已经断开钱包连接了！');
+      }
+      return;
+    }
+
+    if (!connectStatus) {
+      console.log('连接失败了，请重试');
+      return;
+    }
+
+    if (!address) {
+      console.warn('钱包已连接，但地址尚未同步，跳过登录认证请求');
+      message.error('钱包地址获取失败，请重新连接钱包');
+      return;
+    }
+
+    const userStore = useUserStore();
+    if (userStore.isAuthenticated) {
+      console.log('已认证，无需重新认证');
+      return;
+    }
+
+    if (isAuthenticating) {
+      console.log('登录认证正在进行中，跳过重复请求');
+      return;
+    }
+
+    isAuthenticating = true;
+
+    try {
+      console.log('钱包连接成功了');
+      toast.success('钱包连接成功');
+
+      const res = await GetForLoginNonce(address);
+      console.log('获取后端数据：', res);
+      if (res === undefined || res === null || !res?.data) {
+        message.error('认证失败，请稍后重试');
+        return;
+      }
+
+      toast.success('正在请求签名');
+      const authModal = Modal.info({
+        title: '正在请求认证...',
+        centered: true,
+        content: h(
+          'div',
+          {
+            style: { display: 'flex', justifyContent: 'center', alignItems: 'center' },
+          },
+          h(Spin, { size: 'large' }),
+        ),
+      });
+
+      try {
+        const data = await signMessage(res.data, address);
+        console.log('获取返回数据：', data);
+
+        toast.success('请求验证');
+        const resp: ResponseType = await PostForAuthReq(data);
+        console.log('登录认证返回的数据：', resp);
+        if (resp?.code === 200 && resp?.data !== null) {
+          message.success('认证成功！');
+          useUserStore().setAuthenticated(true);
+          comStore()._updateUserInfo(resp.data.userInfo.id); //更新社交网络用户信息
+          if (typeof calback === 'function') {
+            calback(resp?.data);
+          }
+        } else {
+          message.error('认证失败：' + (resp?.msg || '请稍后重试'));
+        }
+      } finally {
+        authModal.destroy();
+      }
+    } catch (error: any) {
+      console.error('钱包登录认证失败：', error);
+      if (error?.code === 5000) {
+        message.error('用户拒绝认证请求！');
+      } else {
+        message.error(error?.data?.message || error?.response?.data?.message || error?.message || '认证失败，请稍后重试');
+      }
+    } finally {
+      isAuthenticating = false;
+    }
+  };
+  
   // 创建响应式事件对象（不使用 useWeb3ModalEvents 避免生命周期钩子问题）
   const w3mEvent = reactive(modal.getEvent());
   let pendingAuthentication = false;
@@ -48,8 +169,8 @@ export const setupWalletListener = (modal: any, calback: any, userInfo: any) => 
         break;
       case 'CONNECT_SUCCESS':
         console.log('✅ [CONNECT_SUCCESS] 钱包连接成功');
-        pendingAuthentication = true;
-        toast.success('钱包连接成功！');
+        pendingAuthentication = false;
+        authenticateConnectedWallet();
         break;
       case 'DISCONNECT_SUCCESS':
         console.log('测试事件响应：断开成功');
@@ -59,78 +180,10 @@ export const setupWalletListener = (modal: any, calback: any, userInfo: any) => 
       case 'MODAL_CLOSE': {
         let connectStatus = w3mAccount.isConnected.value;
         console.log('🔔 [MODAL_CLOSE] 窗口关闭，连接状态:', connectStatus);
-        // 注意：CONNECT_SUCCESS 事件可能不会触发（取决于连接方式）
-        // 所以在 MODAL_CLOSE 时检查连接状态是最可靠的方式
-        if (!pendingAuthentication) {
-          return;
-        }
+        // 仅在选择钱包后认证，避免切链或普通关闭弹窗触发登录。
+        if (!pendingAuthentication) return;
         pendingAuthentication = false;
-        if (userInfo) {
-          console.log('登录后的钱包操作');
-          if (connectStatus) {
-            console.log('还是处于登录状态！');
-          } else {
-            console.log('已经断开钱包连接了！');
-          }
-        } else {
-          const userStore = useUserStore();
-          if (connectStatus) {
-            console.log('钱包连接成功了');
-            toast.success('钱包连接成功');
-            // 检查是否已认证
-            if (userStore.isAuthenticated) {
-              console.log('已认证，无需重新认证');
-              return;
-            }
-            // 向后端请求一个随机数
-            GetForLoginNonce(useWeb3ModalAccount().address.value).then((res) => {
-              console.log('获取后端数据：', res);
-              if (res === undefined || res === null) {
-                message.error('认证失败，请稍后重试');
-                return;
-              }
-              // 向钱包请求签名
-              toast.success('正在请求签名');
-              const authModal = Modal.info({
-                title: '正在请求认证...',
-                centered: true,
-                content: h(
-                  'div',
-                  {
-                    style: { display: 'flex', justifyContent: 'center', alignItems: 'center' },
-                  },
-                  h(Spin, { size: 'large' }),
-                ),
-              });
-              signMessage(res?.data)
-                .then((data) => {
-                  console.log('获取返回数据：', data);
-                  // 返回签名到后端并获取登录结果
-                  toast.success('请求验证');
-                  PostForAuthReq(data).then((resp: ResponseType) => {
-                    console.log('登录认证返回的数据：', resp);
-                    if (resp?.code === 200 && resp?.data !== null) {
-                      message.success('认证成功！');
-                      useUserStore().setAuthenticated(true);
-                      comStore()._updateUserInfo(resp.data.userInfo.id); //更新社交网络用户信息
-                      calback(resp?.data);
-                    } else {
-                      message.error('认证失败：', resp?.msg);
-                    }
-                    authModal.destroy();
-                  });
-                })
-                .catch((error) => {
-                  if (error?.code === 5000) {
-                    message.error('用户拒绝认证请求！');
-                  }
-                  authModal.destroy();
-                });
-            });
-          } else {
-            console.log('连接失败了，请重试');
-          }
-        }
+        authenticateConnectedWallet();
         break;
       }
       default:
@@ -143,11 +196,13 @@ export const setupWalletListener = (modal: any, calback: any, userInfo: any) => 
   return { event: w3mEvent, unsubscribe };
 };
 
-export const signMessage = async (nonce: string): Promise<SignMessage> => {
+export const signMessage = async (nonce: string, connectedAddress?: string): Promise<SignMessage> => {
   let w3p = useWeb3ModalProvider();
   const walletProvider = w3p.walletProvider.value;
   let account = useWeb3ModalAccount();
   if (!walletProvider) throw Error('钱包链接已断开，请重新连接');
+  const address = connectedAddress || account.address.value;
+  if (!address) throw Error('钱包地址获取失败，请重新连接钱包');
   const ethersProvider = new ethers.providers.Web3Provider(walletProvider);
   const signer = await ethersProvider.getSigner();
   const message = 'login#punkos#' + nonce;
@@ -163,6 +218,6 @@ export const signMessage = async (nonce: string): Promise<SignMessage> => {
   return {
     message: message,
     signature: signature,
-    address: account.address.value.toString(),
+    address: address.toString(),
   };
 };

@@ -9,6 +9,30 @@ function getPath(name: string) {
   return path.resolve(pkg, 'html', name + '.html');
 }
 
+const ucMicroRegexRE = /node_modules[\\/]uc\.micro[\\/]categories[\\/][^\\/]+[\\/]regex\.mjs(?:\?.*)?$/;
+
+function ucMicroRegexCompatPlugin() {
+  return {
+    name: 'uc-micro-regex-compat',
+    enforce: 'pre',
+    transform(code: string, id: string) {
+      if (!ucMicroRegexRE.test(id)) {
+        return null;
+      }
+
+      const match = code.trim().match(/^export default \/(.*)\/([a-z]*)$/s);
+      if (!match) {
+        return null;
+      }
+
+      return {
+        code: `export default new RegExp(${JSON.stringify(match[1])}, ${JSON.stringify(match[2])});\n`,
+        map: null,
+      };
+    },
+  };
+}
+
 const htmls = [
   'icon', //图标选择器
   'extension', //扩展插件
@@ -29,7 +53,7 @@ htmls.forEach((html) => {
 });
 
 export const config = {
-  plugins: [vue(), require('tailwindcss'), require('autoprefixer')],
+  plugins: [ucMicroRegexCompatPlugin(), vue(), require('tailwindcss'), require('autoprefixer')],
   base: './',
   css: {
     preprocessorOptions: {

@@ -12,7 +12,7 @@ export default {
         className: 'card small',
         title: '',
         icon: '',
-        type: 'fish',
+        type: 'custom',
         noTitle: true,
       },
     };

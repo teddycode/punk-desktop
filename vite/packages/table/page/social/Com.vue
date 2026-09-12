@@ -98,7 +98,6 @@
 </template>
 
 <script>
-import GradePanel from '../../components/comp/GradePanel.vue';
 import { message } from 'ant-design-vue';
 import axios from 'axios';
 import { Server } from '../../consts';
@@ -114,7 +113,7 @@ import FrameAvatar from '../../components/avatar/FrameAvatar.vue';
 
 export default {
   name: 'Com',
-  components: { FrameAvatar, SingIn, VueCustomScrollbar, HorizontalPanel, GradePanel, vuuri },
+  components: { FrameAvatar, SingIn, VueCustomScrollbar, HorizontalPanel, vuuri },
   data() {
     return {
       currentTab: { name: 'com' },

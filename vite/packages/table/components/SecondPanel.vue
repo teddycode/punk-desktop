@@ -21,18 +21,12 @@
     >
       <Icon v-if="menu.icon" :icon="menu.icon"></Icon>
       <span class="s-text" style="margin-left: 0.5em; font-size: 1em; color: var(--font-color)">{{ menu.title }}</span>
-      <!--      <GradeSmallTip-->
-      <!--        v-if="menu.title === '动态壁纸'"-->
-      <!--        lastPowerType="动态壁纸"-->
-      <!--        powerType="lockWallpaper"-->
-      <!--      ></GradeSmallTip>-->
     </div>
     <xt-task :modelValue="M01035"></xt-task>
   </div>
 </template>
 
 <script>
-import GradeSmallTip from './GradeSmallTip.vue';
 import { taskStore } from '../apps/task/store';
 import { mapWritableState } from 'pinia';
 import routerTab from '../js/common/routerTab';
@@ -41,7 +35,7 @@ export default {
   name: 'SecondPanel',
   props: ['menus', 'logo', 'size', 'search', 'close', 'back', 'goHome', 'gallery'],
   emits: ['changeTab'],
-  components: { GradeSmallTip },
+  components: {},
   data() {
     return {
       panel: {},

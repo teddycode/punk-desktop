@@ -42,7 +42,6 @@
         <div class="btn relative" @click="setAppPaper">
           <Icon icon="tianjia1" style="font-size: 3em"></Icon>
           <div>设为工作台背景</div>
-          <GradeSmallTip powerType="mainWallpaper"></GradeSmallTip>
         </div>
       </a-col>
     </a-row>
@@ -53,15 +52,12 @@
 import { mapActions, mapState } from 'pinia';
 import { appStore } from '../../store';
 import { paperStore } from '../../store/paper';
-import GradeSmallTip from '../GradeSmallTip.vue';
 import { message, Modal } from 'ant-design-vue';
 
 export default {
   name: 'PaperList',
   props: ['list'],
-  components: {
-    GradeSmallTip,
-  },
+  components: {},
   data() {
     return {
       options: {

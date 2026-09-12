@@ -16,6 +16,7 @@
 | 文档 | 说明 |
 |------|------|
 | [`pledge_api_reference.md`](./pledge_api_reference.md) | 质押相关 JSON-RPC 接口速查 |
+| [`app-backend-api-requirements.md`](./app-backend-api-requirements.md) | App 各功能模块后端 API 需求梳理 |
 | [`dapp_market_pledge_integration_status.md`](./dapp_market_pledge_integration_status.md) | DApp 广场质押对接现状 |
 | [`CAPP_STORE_SUMMARY.md`](./CAPP_STORE_SUMMARY.md) | CApp Store 页面实现摘要 |
 | [`stake-deposit-test.js`](./stake-deposit-test.js) | type=6 质押交易本地测试脚本 |

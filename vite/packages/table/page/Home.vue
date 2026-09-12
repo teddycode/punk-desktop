@@ -195,10 +195,6 @@
       <AddIcon @setCustoms="setCustoms" @close="iconHide" :desk="currentDesk"></AddIcon>
     </div>
   </transition>
-  <!-- <div class="fixed inset-0 p-12 home-blur" style="z-index: 999" >
-    <GradeNotice></GradeNotice>
-  </div> -->
-
   <div class="fixed inset-0 home-guide" style="z-index: 999" v-if="!agreeTest">
     <GuidePage></GuidePage>
   </div>
@@ -217,7 +213,6 @@ import Music from '../components/widgets/Music.vue';
 import Stock from '../components/widgets/Stock.vue';
 import AddMore from '../components/widgets/AddMore.vue';
 import Dou from '../components/widgets/Dou.vue';
-import Fish from '../components/widgets/Fish.vue';
 import CustomTimer from '../components/widgets/CustomTimer.vue';
 import SmallCountdownDay from '../components/widgets/SmallCountdownDay.vue';
 import Clock from '../components/widgets/Clock.vue';
@@ -240,7 +235,6 @@ import SmallWallpaper from '../components/widgets/SmallWallpaper.vue';
 import MyGameSmall from '../components/widgets/games/MyGameSmall.vue';
 import Capture from '../components/widgets/games/Capture.vue';
 import AddCard from './app/card/AddCard.vue';
-import GradeNotice from './app/grade/GradeNotice.vue';
 import Voice from '../components/widgets/audio/Voice.vue';
 import Audio from '../components/widgets/audio/Audio.vue';
 import CaptureNewCard from '../components/widgets/games/CaptureNewCard.vue';
@@ -269,10 +263,6 @@ import KeyBoard from '../apps/shortcutKey/components/KeyBoard.vue';
 import SmallRank from '../components/widgets/SmallRank.vue';
 import AggregateSearch from '../components/widgets/aggregate/AggregateSearch.vue';
 import UpdateMyInfo from '../components/comp/UpdateMyInfo.vue';
-import ShareDesk from '../components/desk/ShareDesk.vue';
-import DeskMarket from './app/card/DeskMarket.vue';
-import { deskStore } from '@store/desk';
-import DeskPreview from '../components/desk/DeskPreview.vue';
 import ExportDesk from '../components/desk/ExportDesk.vue';
 import DeskGroup from '../components/desk/DeskGroup.vue';
 import Template from '../../user/pages/Template.vue';
@@ -372,7 +362,6 @@ export default {
           minBounceBackAngle: Math.PI / 2,
         },
       },
-      openDesk: false,
       deskType: [
         { title: '日常桌面', name: 'daily' },
         { title: '游戏桌面', name: 'game' },
@@ -382,11 +371,6 @@ export default {
       selectDesk: { title: '日常桌面', name: 'daily' },
       deskTitle: '',
       hotDesk: [],
-      scheme: {},
-      showModal: false,
-      deskCode: '',
-      shareCode: false,
-      panelIndex: 0,
       cardSettings: {},
       cardDesk: 'all',
       cardDeskList: [
@@ -419,7 +403,6 @@ export default {
     Clock,
     Remote,
     CountdownDay,
-    Fish,
     vuuri,
     Widget,
     CPULineChart,
@@ -428,7 +411,6 @@ export default {
     SmallCPUCard,
     SmallGPUCard,
     AddCard,
-    GradeNotice,
     GamesDiscount,
     DiscountPercentage,
     MiddleWallpaper,
@@ -457,9 +439,6 @@ export default {
     KeyBoard,
     SmallRank,
     AggregateSearch,
-    ShareDesk,
-    DeskMarket,
-    DeskPreview,
     UpdateMyInfo,
     ExportDesk,
     Todo,
@@ -484,7 +463,6 @@ export default {
     ...mapWritableState(appStore, {
       appSettings: 'settings',
     }),
-    ...mapWritableState(deskStore, ['deskList']),
     ...mapWritableState(taskStore, ['taskID', 'step']),
     ...mapWritableState(homeStore, ['currentDeskId', 'currentDeskIndex']),
     m01033() {
@@ -866,7 +844,6 @@ export default {
       'removeDesk',
       'getCurrentIndex',
       'setDeskSize',
-      'addShareDesk',
     ]),
     ...mapActions(appStore, ['setBackgroundImage']),
     ...mapActions(weatherStore, ['fixData']),
@@ -1029,26 +1006,6 @@ export default {
     },
     setCustoms() {
       this.visibleAdd = false;
-    },
-    shareDesk() {
-      this.openDesk = true;
-      this.menuVisible = false;
-    },
-    openPerview({ scheme, showModal }) {
-      this.scheme = scheme;
-      this.showModal = showModal;
-    },
-    closePreview() {
-      this.showModal = false;
-      this.getHomeSize();
-    },
-    closeShare(val) {
-      this.openDesk = val;
-    },
-    moreDesk() {
-      this.panelIndex = 1;
-      this.visibleAdd = true;
-      this.addDeskVisible = false;
     },
     getHomeSize() {
       this.$nextTick(() => {

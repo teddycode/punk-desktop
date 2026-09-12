@@ -40,13 +40,7 @@
                   {{ item.detail }}
                 </div>
                 <div class="icon">
-                  <div
-                    class="icon-box xt-active-bg-2"
-                    v-for="i in item.sizes"
-                    :key="i"
-                    style="color: var(--secondary-text)"
-                    :class="i === '社区分享' ? 'share' : ''"
-                  >
+                  <div class="icon-box xt-active-bg-2" v-for="i in item.sizes" :key="i" style="color: var(--secondary-text)">
                     {{ i }}
                   </div>
                 </div>
@@ -98,13 +92,7 @@
               {{ item.detail }}
             </div>
             <div class="icon">
-              <div
-                class="icon-box xt-active-bg-2"
-                v-for="i in item.sizes"
-                :key="i"
-                style="color: var(--secondary-text)"
-                :class="i === '社区分享' ? 'share' : ''"
-              >
+              <div class="icon-box xt-active-bg-2" v-for="i in item.sizes" :key="i" style="color: var(--secondary-text)">
                 {{ i }}
               </div>
             </div>

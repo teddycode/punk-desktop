@@ -39,12 +39,6 @@ export const deskTemplates = {
       data: {},
     },
     {
-      name: 'fish',
-      id: 1681303797561,
-      _$muuri_id: '6a6bf415-1491-4a70-bc45-c72877843a34',
-      data: {},
-    },
-    {
       name: 'customTimer',
       id: 1681303790200,
       _$muuri_id: '5084aec4-5597-40e3-9b71-8eda52328eb1',

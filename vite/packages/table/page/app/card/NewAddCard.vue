@@ -20,20 +20,7 @@
           >
             <Icon icon="xiangzuo" style="font-size: 1.5em"></Icon>
           </div>
-          <div class="box-title no-drag">{{ selectNav.name === 'small' ? '小组件' : '桌面市场' }}</div>
-          <!-- <a-input v-model:value="selectContent" class="search no-drag" placeholder="搜索">
-            <template #prefix>
-              <Icon icon="sousuo" style="margin-right: 5px;"></Icon>
-            </template>
-          </a-input>
-          <a-select style=" z-index: 99999999; position: relative;" v-model:value="searchValue" class=" no-drag select"
-            size="large" @change="handleChange"
-            :dropdownStyle="{ 'z-index': 999999999999, backgroundColor: 'var(--secondary-bg)' }">
-            <a-select-option class="no-drag" v-for=" item  in  searchOptions " :value="item.value">{{
-              item.name
-            }}
-            </a-select-option>
-          </a-select> -->
+          <div class="box-title no-drag">小组件</div>
         </div>
         <div class="flex no-grag">
           <div class="no-drag mr-3">
@@ -49,16 +36,6 @@
               :isFiltrate="true"
               @search="doSearch"
             />
-          </div>
-
-          <!-- 分享 -->
-          <div
-            v-if="selectNav.name === 'desktop'"
-            class="pointer xt-mask flex items-center rounded-lg justify-center ml-3 no-drag"
-            style="width: 134px; height: 48px; font-size: 16px; color: var(--primary-text)"
-            @click="share"
-          >
-            我来分享
           </div>
         </div>
       </div>
@@ -80,10 +57,6 @@
           </div>
         </div>
         <div class="right no-drag">
-          <div class="warn xt-bg-2" v-if="navIndex === 10">
-            <div class="icon">i</div>
-            以下组件正在奋力💪开发中，部分功能还不完善或有明显Bug🐞，可以尝鲜试用～
-          </div>
           <!-- 进行数据筛选 将离线模式屏蔽的隐藏 -->
           <NewCardPreViews
             @addSuccess="onBack"
@@ -100,21 +73,6 @@
           </template>
         </div>
       </div>
-      <div v-else-if="selectNav.name === 'desktop'" class="no-drag flex" style="height: 90%">
-        <NavMenu :list="categories" :currenIndex="categoryIndex" @changeNav="changeCategory" />
-        <div class="ml-5 no-drag w-full">
-          <DeskMarket :selected="searchValue" :items="desks" @openPreview="openPreview"></DeskMarket>
-          <!-- 预览 -->
-          <DeskPreview
-            @afterAdded="onBack"
-            :deskList="deskList"
-            :scheme="scheme"
-            :showModal="showModal"
-            @closePreview="closePreview"
-          ></DeskPreview>
-        </div>
-        <ShareDesk :openDrawer="openDrawer" @closeShare="closeShare"></ShareDesk>
-      </div>
     </div>
   </teleport>
 </template>
@@ -125,28 +83,17 @@ import { NavList } from './navList';
 import HorizontalPanel from '../../../components/HorizontalPanel.vue';
 import _ from 'lodash-es';
 import Search from '../../../components/Search.vue';
-import NavMenu from '../../../components/NavMenu.vue';
-import { deskStore } from '../../../store/desk';
-import { cardStore } from '../../../store/card';
 import { mapActions, mapWritableState } from 'pinia';
-import DeskMarket from './DeskMarket.vue';
-import ShareDesk from '../../../components/desk/ShareDesk.vue';
-import DeskPreview from '../../../components/desk/DeskPreview.vue';
-import { marketStore } from '../../../store/market';
 import { offlineStore } from '../../../js/common/offline';
 
 export default {
   name: 'AddCard',
-  components: { NewCardPreViews, HorizontalPanel, Search, NavMenu, DeskMarket, ShareDesk, DeskPreview },
+  components: { NewCardPreViews, HorizontalPanel, Search },
   emits: ['onClose'],
   props: {
     desk: {
       type: Object,
       default: () => {},
-    },
-    panelIndex: {
-      type: Number,
-      default: () => 0,
     },
     deskList: {
       type: Array,
@@ -155,35 +102,20 @@ export default {
   data() {
     return {
       navIndex: 0,
-      selectContent: '',
       searchValue: '默认排序',
       baseNavList: NavList,
+      allNavList: [],
       searchOptions: [
         { value: 'default', name: '默认排序' },
-        { value: 'count', name: '销量/下载量' },
-        { value: 'support', name: '点赞数' },
+        { value: 'download', name: '下载量' },
         { value: 'updateTime', name: '更新时间' },
         { value: 'createTime', name: '发布时间' },
       ],
       navType: [
         { title: '小组件', name: 'small' },
-        { title: '社区桌面分享', name: 'desktop' },
       ],
       selectNav: { title: '小组件', name: 'small' },
       navDeskIndex: 0,
-      openDrawer: false,
-      scheme: {},
-      showModal: false,
-
-      categoryIndex: 0,
-      categories: [
-        {
-          cname: '推荐',
-          id: 0,
-        },
-      ], //分类列表
-      desks: [],
-      deskPagination: {},
       //搜索表单值
       search: {
         keywords: '',
@@ -223,7 +155,7 @@ export default {
       li.cname = li.cname + `（${li.children.length}）`;
     });
 
-    this.baseNavList = navList.map((item) => {
+    const displayNavList = navList.map((item) => {
       if (item.children != null) {
         let children = [];
         item.children.forEach((i) => {
@@ -240,100 +172,45 @@ export default {
         };
       } else return item;
     });
-    if (this.panelIndex === 1) {
-      this.selectNav = this.navType[this.panelIndex];
-    } else {
-      this.selectNav = this.navType[0];
-    }
+    this.allNavList = displayNavList;
+    this.baseNavList = displayNavList;
+    this.selectNav = this.navType[0];
   },
   computed: {
     ...mapWritableState(offlineStore, ['isOffline', 'offlineList']),
-    ...mapWritableState(deskStore, ['apiList']),
-    displayList() {
-      // return this.apiList.filter
-    },
     isSearching() {
       return this.searching;
     },
   },
-  watch: {
-    selectNav(newV) {
-      if (newV.name === 'desktop') {
-        this.getDeskData();
-        this.navIndex = 0;
-        this.updateDesks('0');
-      }
-    },
-    selectContent(newV, oldV) {
-      if (newV == '' || newV == null) {
-        this.navList = this.baseNavList;
-        this.navIndex = 0;
-        return;
-      }
-      let data = [];
-      this.navList = this.baseNavList;
-      let arr = [];
-      this.navList.filter((item) => {
-        if (item.children != null) {
-          item.children.forEach((i) => {
-            if (i.cname.includes(newV) || i.detail.includes(newV)) arr.push(i);
-          });
-        }
-      });
-      if (arr != false) {
-        data.push({
-          cname: '全部数据',
-          children: arr,
-        });
-        this.navIndex = 0;
-        this.navList = data;
-      }
-    },
-  },
   methods: {
-    ...mapActions(marketStore, ['getCategories', 'getDesks', 'getRecommend']),
-    // ...mapActions(deskStore,['setDeskSize']),
-    ...mapActions(cardStore, ['setDeskSize']),
     ...mapActions(offlineStore, ['getIsOffline']),
     doSearch() {
       if (this.search.keywords === '') {
         this.cancelSearch();
         return;
       }
-      this.categories[0].cname = '全部';
       this.searching = true;
       this.keyword = this.search.keywords;
-      this.updateDesks(this.categoryIndex, this.keyword, this.search.order);
+      const keyWord = this.keyword.trim();
+      const children = this.sortWidgets(this.allNavList
+        .flatMap((item) => item.children || [])
+        .filter((item) => item.cname.includes(keyWord) || item.detail.includes(keyWord)));
+      this.baseNavList = [
+        {
+          cname: `搜索结果（${children.length}）`,
+          children,
+        },
+      ];
+      this.navIndex = 0;
     },
     cancelSearch() {
-      this.categories[0].cname = '推荐';
       this.searching = false;
       this.search.keywords = '';
       this.keyword = '';
-      this.updateDesks();
-    },
-    async getDeskData() {
-      //获取桌面分类
-      let cats = await this.getCategories('desk');
-      if (cats) {
-        this.categories = [
-          {
-            cname: '推荐',
-            id: 0,
-          },
-          ...cats.map((cat) => {
-            return {
-              cname: cat.name,
-              id: cat.id,
-            };
-          }),
-        ];
-      }
+      this.baseNavList = this.allNavList;
+      this.navIndex = 0;
     },
     onClick() {},
-    handleChange(value) {
-      // console.log(`selected ${value}`)
-    },
     getTimes() {
       const currentTime = Date.now();
       const startDate = new Date('2023-01-01T00:00:00Z').getTime();
@@ -350,76 +227,15 @@ export default {
     updateNavIndex(index) {
       this.navIndex = index;
     },
-    changeCategory(category) {
-      this.updateDesks(category.id);
-    },
-    /**
-     * 更新桌面列表
-     * @param categoryIndex 当前分类
-     * @param keywords
-     * @param order
-     * @returns {Promise<void>}
-     */
-    async updateDesks(categoryIndex = this.categoryIndex) {
-      this.categoryIndex = categoryIndex;
-      const keyWord = this.keyword;
-      const order = this.search.order === 'default' ? undefined : this.search.order;
-      if (this.categoryIndex == 0) {
-        if (!this.isSearching) {
-          this.desks = await this.getRecommend({ goodType: 'desk', order: order });
-        } else {
-          let params = {
-            page: 1,
-            size: 20,
-            keyWord: keyWord,
-            order: order,
-          };
-          let rs = await this.getDesks(params);
-          this.desks = rs.list;
-          this.deskPagination = rs.pagination;
-        }
-        return;
-      }
-      let params = {
-        page: 1,
-        size: 20,
-        categoryId: categoryIndex,
-        keyWord: keyWord,
-        order: order,
+    sortWidgets(items) {
+      const sortKeyMap = {
+        download: 'download',
+        updateTime: 'time',
+        createTime: 'time',
       };
-      console.log('需要搜索', params);
-      let rs = await this.getDesks(params);
-      console.log(rs, '搜索结果');
-      this.desks = rs.list;
-      this.deskPagination = rs.pagination;
-    },
-    changeSelect(event) {
-      // console.log('选择下拉',event)
-      this.searchValue = event;
-    },
-    share() {
-      this.openDrawer = true;
-    },
-    closeShare(val) {
-      this.openDrawer = val;
-    },
-    openPreview({ scheme, showModal }) {
-      this.scheme = scheme;
-      this.showModal = showModal;
-    },
-    closePreview() {
-      this.showModal = false;
-      setTimeout(() => {
-        let cardsHeight = document.getElementById('cardContent')?.offsetHeight;
-        let deskHeight = document.documentElement.clientHeight; // 高
-        let deskWidth = document.documentElement.clientWidth; // 宽
-        let size = {
-          deskWidth,
-          deskHeight,
-          cardsHeight,
-        };
-        this.setDeskSize(size);
-      }, 300);
+      const sortKey = sortKeyMap[this.search.order];
+      if (!sortKey) return items;
+      return [...items].sort((a, b) => Number(b[sortKey] || 0) - Number(a[sortKey] || 0));
     },
   },
 };

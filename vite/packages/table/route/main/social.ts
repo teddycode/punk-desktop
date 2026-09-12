@@ -4,7 +4,6 @@ import Message from '@page/social/Message.vue';
 import Com from '@page/social/Com.vue';
 import SocialMy from '@page/social/My.vue';
 import Invite from '@page/social/Invite.vue';
-import Grade from '@page/social/Grade.vue';
 
 export default [
   {
@@ -21,11 +20,6 @@ export default [
     path: '/invite',
     name: 'invite',
     component: Invite,
-  },
-  {
-    path: '/grade',
-    name: 'grade',
-    component: Grade,
   },
   {
     path: '/message',

@@ -28,7 +28,6 @@ import Timer from '../widgets/Timer.vue';
 import Music from '../widgets/Music.vue';
 import Stock from '../widgets/Stock.vue';
 import Dou from '../widgets/Dou.vue';
-import Fish from '../widgets/Fish.vue';
 import CustomTimer from '../widgets/CustomTimer.vue';
 import SmallCountdownDay from '../widgets/SmallCountdownDay.vue';
 import Clock from '../widgets/Clock.vue';
@@ -100,7 +99,6 @@ export default {
     Music,
     Stock,
     Dou,
-    Fish,
     CustomTimer,
     SmallCountdownDay,
     Clock,
