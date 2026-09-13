@@ -685,6 +685,39 @@ export default {
       });
 
       // 6. 查询合约请求（只读）
+      // 6. EIP-1193 RPC forwarding for embedded DApps.
+      window.ipc.on('wallet-rpc-request', async (data) => {
+        console.log('[Splash] 收到钱包 RPC 请求:', data?.method);
+        try {
+          const provider = useWeb3ModalProvider();
+          const walletProvider = provider.walletProvider.value;
+
+          if (!walletProvider) {
+            throw new Error('钱包尚未连接，请先连接 StarX 钱包');
+          }
+
+          const result = await walletProvider.request({
+            method: data.method,
+            params: Array.isArray(data.params) ? data.params : [],
+          });
+
+          window.ipc.send('wallet-rpc-complete', {
+            requestId: data.requestId,
+            success: true,
+            result,
+          });
+        } catch (error) {
+          console.error('[Splash] 钱包 RPC 错误:', error);
+          window.ipc.send('wallet-rpc-complete', {
+            requestId: data.requestId,
+            success: false,
+            code: error.code,
+            error: error.message,
+          });
+        }
+      });
+
+      // 7. 鏌ヨ鍚堢害璇锋眰锛堝彧璇伙級
       window.ipc.on('wallet-query-contract-request', async (data) => {
         console.log('[Splash] 收到查询合约请求', data);
         try {

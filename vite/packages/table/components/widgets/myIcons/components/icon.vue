@@ -51,6 +51,8 @@ const NODE_MONITOR_SERVICE_NAME = 'node-monitor';
 const STORAGE_MARKET_PACKAGE = 'StoragePage';
 const STORAGE_MARKET_SERVICE_NAME = 'storage-market';
 const TRANSFER_PAGE_URL = 'https://pangupay-demo-hk.tail76793e.ts.net:8443';
+const NETWORK_PAGE_URL = 'http://47.251.49.240:36011/group-network/';
+const GOVERNANCE_PAGE_URL = 'http://47.251.49.240:36012/group-governance';
 
 export default {
   mixins: [editProps],
@@ -144,7 +146,7 @@ export default {
         throw new Error('Storage market service page URL is unavailable');
       }
 
-      await browser.openInTable(service.pageUrl, { wallet: this?.open?.wallet });
+      await browser.openInTable(service.pageUrl, { wallet: true });
     },
     isTransferIcon() {
       const open = this.open || {};
@@ -155,6 +157,32 @@ export default {
     },
     async openTransferPage() {
       await browser.openInTable(TRANSFER_PAGE_URL, { wallet: this?.open?.wallet });
+    },
+    isNetworkIcon() {
+      const open = this.open || {};
+      return (
+        open?.value === NETWORK_PAGE_URL ||
+        (open?.route === 'NetworkPage' && open?.value === 'NetworkPage')
+      );
+    },
+    async openNetworkPage() {
+      await browser.openInTable(NETWORK_PAGE_URL, { wallet: this?.open?.wallet });
+    },
+    isGovernanceIcon() {
+      const open = this.open || {};
+      return (
+        open?.value === GOVERNANCE_PAGE_URL ||
+        (open?.route === 'GovernancePage' && open?.value === 'GovernancePage')
+      );
+    },
+    async openGovernancePage() {
+      await browser.openInTable(GOVERNANCE_PAGE_URL, { wallet: true });
+    },
+    isWalletTestIcon() {
+      return this.open?.value === 'starx-wallet-test.html';
+    },
+    async openWalletTestPage() {
+      await browser.openInTable('starx-wallet-test.html', { wallet: true });
     },
     getSizeValues(size) {
       if (this.isReSize) {
@@ -283,6 +311,21 @@ export default {
 
       if (this.isTransferIcon()) {
         await this.openTransferPage();
+        return;
+      }
+
+      if (this.isNetworkIcon()) {
+        await this.openNetworkPage();
+        return;
+      }
+
+      if (this.isGovernanceIcon()) {
+        await this.openGovernancePage();
+        return;
+      }
+
+      if (this.isWalletTestIcon()) {
+        await this.openWalletTestPage();
         return;
       }
 

@@ -173,7 +173,7 @@
             <div class="manual-network__grid">
               <span>Network Name</span><strong>PunkChain</strong>
               <span>RPC URL</span><strong>http://47.243.174.71:36054</strong>
-              <span>Chain ID</span><strong>20260418</strong>
+              <span>Chain ID</span><strong>20260902</strong>
               <span>Currency Symbol</span><strong>PUNK</strong>
             </div>
           </div>

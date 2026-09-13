@@ -9,6 +9,23 @@ function fileExists(targetPath) {
   }
 }
 
+function isFrontendDir(targetPath) {
+  return (
+    fileExists(path.join(targetPath, 'index.html')) &&
+    fileExists(path.join(targetPath, 'assets'))
+  );
+}
+
+function resolveFrontendDir(serviceDir) {
+  const candidates = [
+    serviceDir,
+    path.join(serviceDir, 'dist'),
+    path.join(serviceDir, 'frontend'),
+  ];
+
+  return candidates.find(isFrontendDir) || null;
+}
+
 module.exports = {
   meta: {
     name: 'storage-market',
@@ -18,14 +35,16 @@ module.exports = {
     pageEntry: 'index.html',
     pageBasePath: '/group-storage',
     healthPath: '/',
-    pageRootCandidates: ['.'],
+    pageRootCandidates: ['dist', 'frontend', '.'],
     requiredStaticPaths: ['index.html'],
   },
 
   async build(ctx) {
-    const frontendDir = ctx.serviceDir;
-    if (!fileExists(path.join(frontendDir, this.meta.pageEntry))) {
-      throw new Error(`Missing storage market frontend: ${frontendDir}`);
+    const frontendDir = resolveFrontendDir(ctx.serviceDir);
+    if (!frontendDir) {
+      throw new Error(
+        `Missing storage market frontend: expected index.html and assets under ${ctx.serviceDir}`,
+      );
     }
 
     return {

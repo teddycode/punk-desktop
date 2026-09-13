@@ -45,6 +45,7 @@ const htmls = [
   'table', //工作台
   'search', //全局搜索
   'toolbox', //工具箱
+  'starx-wallet-test', // StarX 钱包 RPC 测试页
   'auth/index', // 添加 auth 页面
 ];
 let inputs = {};

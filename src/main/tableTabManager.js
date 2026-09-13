@@ -1,6 +1,8 @@
 const { ipcMain: ipc } = require('electron');
 const { nanoid } = require('nanoid');
 const { capture } = require('./captureHelper');
+const fs = require('fs');
+const path = require('path');
 
 class TableTabManager {
   //运行中的tab
@@ -109,9 +111,12 @@ class TableTabManager {
     
     // 如果启用钱包功能，添加钱包 preload 脚本
     if (wallet) {
-      const path = require('path');
       // 使用构建后的 walletPreload.js
-      webPreferences.preload = path.join(__dirname, '../../dist/walletPreload.js');
+      const preloadCandidates = [
+        path.join(__dirname, '../../dist/walletPreload.js'),
+        path.join(__dirname, 'dist/walletPreload.js'),
+      ];
+      webPreferences.preload = preloadCandidates.find((candidate) => fs.existsSync(candidate)) || preloadCandidates[0];
       console.log('[TableTabManager] 🔐 钱包功能已启用，添加 preload:', webPreferences.preload);
     }
     
@@ -669,6 +674,43 @@ class TableTabManager {
     /**
      * 查询合约（只读）
      */
+    /**
+     * EIP-1193 RPC forwarding for DApps loaded in a BrowserView.
+     */
+    ipc.handle('wallet-rpc-request', async (event, args = {}) => {
+      console.log('[TableTabManager IPC] wallet-rpc-request 调用:', args.method);
+      try {
+        if (!this.tableWin || this.tableWin.isDestroyed()) {
+          return { success: false, error: '桌面窗口不可用' };
+        }
+
+        const requestId = `wallet-rpc-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+        return new Promise((resolve, reject) => {
+          const timeout = setTimeout(() => {
+            ipc.off('wallet-rpc-complete', listener);
+            reject(new Error(`钱包 RPC 请求超时: ${args.method}`));
+          }, 60000);
+
+          const listener = (e, result) => {
+            if (!result || result.requestId !== requestId) return;
+            clearTimeout(timeout);
+            ipc.off('wallet-rpc-complete', listener);
+            resolve(result);
+          };
+
+          ipc.on('wallet-rpc-complete', listener);
+          this.tableWin.webContents.send('wallet-rpc-request', {
+            requestId,
+            method: args.method,
+            params: Array.isArray(args.params) ? args.params : [],
+          });
+        });
+      } catch (error) {
+        console.error('[TableTabManager IPC] wallet-rpc-request 错误:', error);
+        return { success: false, error: error.message };
+      }
+    });
+
     ipc.handle('wallet-query-contract', async (event, args) => {
       console.log('[TableTabManager IPC] wallet-query-contract 调用:', args);
       try {

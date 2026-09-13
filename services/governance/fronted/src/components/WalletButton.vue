@@ -30,7 +30,7 @@ const networks = computed(() => [
   {
     key: 'punkchain',
     label: 'PunkChain',
-    description: 'Chain 20260418',
+    description: 'Chain 20260902',
     isCurrent: isPunkChain.value
   },
   {

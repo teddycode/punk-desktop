@@ -22,3 +22,4 @@ main.build.js
 /packages/vuuri/
 /packages/wallpaper/
 /packages/spotlight/node_modules
+!services/storage-market-dist/dist

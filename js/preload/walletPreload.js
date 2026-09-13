@@ -27,6 +27,188 @@ console.log('[Wallet Preload] ✅ IPC 接口注入成功');
 
 // 注入简化的钱包服务接口
 // 这里创建一个占位对象，真实的钱包服务由主窗口通过 IPC 消息注入
+// Provide an EIP-1193 provider so standard DApps can use the StarX wallet.
+const STARX_CHAIN_ID = 20260902;
+const ethereumListeners = new Map();
+let ethereumStatePoller = null;
+let lastEthereumState = { address: null, chainId: STARX_CHAIN_ID };
+
+function toChainIdHex(chainId) {
+  return `0x${Number(chainId || STARX_CHAIN_ID).toString(16)}`;
+}
+
+function createProviderError(code, message) {
+  const error = new Error(message);
+  error.code = code;
+  return error;
+}
+
+function emitEthereumEvent(eventName, value) {
+  const listeners = ethereumListeners.get(eventName) || [];
+  listeners.slice().forEach((listener) => {
+    try {
+      listener(value);
+    } catch (error) {
+      console.error(`[Wallet Preload] ethereum ${eventName} listener failed`, error);
+    }
+  });
+}
+
+async function getEthereumState() {
+  const result = await ipcRenderer.invoke('wallet-get-state');
+  if (!result || result.success === false) {
+    throw new Error(result?.error || 'Unable to read StarX wallet state');
+  }
+
+  return {
+    address: result.connected && result.address ? result.address : null,
+    chainId: Number(result.chainId || STARX_CHAIN_ID),
+  };
+}
+
+async function pollEthereumState() {
+  try {
+    const state = await getEthereumState();
+    if (state.address !== lastEthereumState.address) {
+      lastEthereumState.address = state.address;
+      emitEthereumEvent('accountsChanged', state.address ? [state.address] : []);
+    }
+    if (state.chainId !== lastEthereumState.chainId) {
+      lastEthereumState.chainId = state.chainId;
+      emitEthereumEvent('chainChanged', toChainIdHex(state.chainId));
+    }
+  } catch (error) {
+    console.warn('[Wallet Preload] ethereum state polling failed:', error.message);
+  }
+}
+
+function startEthereumStatePolling() {
+  if (!ethereumStatePoller) {
+    ethereumStatePoller = setInterval(pollEthereumState, 1500);
+  }
+}
+
+async function requestEthereum(method, params = []) {
+  switch (method) {
+    case 'eth_accounts': {
+      const state = await getEthereumState();
+      return state.address ? [state.address] : [];
+    }
+    case 'eth_requestAccounts': {
+      const result = await ipcRenderer.invoke('wallet-connect');
+      if (!result || !result.success || !result.address) {
+        throw createProviderError(4001, result?.error || 'User rejected the wallet connection');
+      }
+      lastEthereumState = {
+        address: result.address,
+        chainId: Number(result.chainId || STARX_CHAIN_ID),
+      };
+      emitEthereumEvent('accountsChanged', [result.address]);
+      emitEthereumEvent('chainChanged', toChainIdHex(lastEthereumState.chainId));
+      return [result.address];
+    }
+    case 'eth_chainId': {
+      const state = await getEthereumState();
+      return toChainIdHex(state.chainId);
+    }
+    case 'net_version': {
+      const state = await getEthereumState();
+      return String(state.chainId);
+    }
+    case 'wallet_requestPermissions': {
+      const result = await ipcRenderer.invoke('wallet-connect');
+      if (!result || !result.success || !result.address) {
+        throw createProviderError(4001, result?.error || 'User rejected the wallet connection');
+      }
+      lastEthereumState = {
+        address: result.address,
+        chainId: Number(result.chainId || STARX_CHAIN_ID),
+      };
+      emitEthereumEvent('accountsChanged', [result.address]);
+      return [{
+        parentCapability: 'eth_accounts',
+        caveats: [{ type: 'restrictReturnedAccounts', value: [result.address] }],
+      }];
+    }
+    default: {
+      const result = await ipcRenderer.invoke('wallet-rpc-request', {
+        method,
+        params,
+      });
+      if (!result || !result.success) {
+        const error = createProviderError(-32603, result?.error || `StarX wallet RPC failed: ${method}`);
+        if (result?.code) error.code = result.code;
+        throw error;
+      }
+      return result.result;
+    }
+  }
+}
+
+const ethereumProvider = {
+  isStarX: true,
+  // Some legacy DApps only recognize a provider through this compatibility flag.
+  isMetaMask: true,
+  request: ({ method, params = [] } = {}) => {
+    if (!method) {
+      return Promise.reject(createProviderError(-32600, 'A JSON-RPC method is required'));
+    }
+    return requestEthereum(method, params);
+  },
+  on(eventName, listener) {
+    if (typeof listener !== 'function') return this;
+    const listeners = ethereumListeners.get(eventName) || [];
+    if (!listeners.includes(listener)) listeners.push(listener);
+    ethereumListeners.set(eventName, listeners);
+    if (eventName === 'accountsChanged' || eventName === 'chainChanged') {
+      startEthereumStatePolling();
+    }
+    return this;
+  },
+  addListener(eventName, listener) {
+    return this.on(eventName, listener);
+  },
+  enable() {
+    return requestEthereum('eth_requestAccounts');
+  },
+  removeListener(eventName, listener) {
+    const listeners = ethereumListeners.get(eventName) || [];
+    ethereumListeners.set(eventName, listeners.filter((item) => item !== listener));
+    return this;
+  },
+  off(eventName, listener) {
+    return this.removeListener(eventName, listener);
+  },
+  removeAllListeners(eventName) {
+    if (eventName) ethereumListeners.delete(eventName);
+    else ethereumListeners.clear();
+    return this;
+  },
+  sendAsync(payload, callback) {
+    const request = Array.isArray(payload) ? payload[0] : payload;
+    requestEthereum(request.method, request.params || []).then(
+      (result) => callback(null, { id: request.id, jsonrpc: '2.0', result }),
+      (error) => callback(error, { id: request.id, jsonrpc: '2.0', error: { code: error.code, message: error.message } }),
+    );
+  },
+  send(methodOrPayload, params = []) {
+    if (typeof methodOrPayload === 'object') {
+      if (typeof params === 'function') {
+        return this.sendAsync(methodOrPayload, params);
+      }
+      return requestEthereum(methodOrPayload.method, methodOrPayload.params || []).then((result) => ({
+        id: methodOrPayload.id,
+        jsonrpc: '2.0',
+        result,
+      }));
+    }
+    return requestEthereum(methodOrPayload, params);
+  },
+};
+
+contextBridge.exposeInMainWorld('ethereum', ethereumProvider);
+console.log('[Wallet Preload] ethereum provider adapter injected');
+
 contextBridge.exposeInMainWorld('wallet', {
   // 标记钱包服务可用
   _initialized: false,
