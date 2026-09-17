@@ -1,0 +1,87 @@
+/**
+ * 跨链区 · 设计 token
+ *
+ * 依据：存储区构建产物实测值（services/storage-market-dist/assets/index-BaQU4OCh.css）
+ *   浅色主色 hsl(74 100% 36%) = #8DB800；深色主色 hsl(74 100% 46%) = #B4EB00
+ *   深色面板 #192421（实测 48 次；V1.0 文档中的 #18211E 仅 3 次）
+ *   深色边框 rgba(39,53,48,.8) = #273530CC（实测 63 次）
+ *
+ * 作用域：所有变量挂在 .crosschain-module 下，深色通过祖先类 .dark / .dark-model 覆盖。
+ * 不新增任何全局（body / .ant-layout / .ant-table）规则。
+ */
+
+.crosschain-module {
+  /* 浅色 */
+  --cc-primary: #8db800;
+  --cc-primary-strong: #759900;
+  --cc-accent: #13b984;
+  --cc-gradient: linear-gradient(135deg, rgba(180, 233, 0, 0.12), rgba(63, 200, 151, 0.12));
+  --cc-bg: #f7faf9;
+  --cc-bg-panel: #ffffff;
+  --cc-bg-hover: rgba(25, 36, 33, 0.04);
+  --cc-bg-soft: rgba(25, 36, 33, 0.06);
+  --cc-border: hsl(156, 8%, 87%);
+  --cc-border-strong: rgba(25, 36, 33, 0.16);
+  --cc-text: hsl(162, 17%, 12%);
+  --cc-text-2: hsl(165, 9%, 38%);
+  --cc-text-3: hsl(165, 9%, 50%);
+  --cc-shadow: 0 1px 2px rgba(12, 18, 16, 0.04), 0 8px 24px rgba(12, 18, 16, 0.06);
+
+  /* 语义色 */
+  --cc-success: #16a249;
+  --cc-success-bg: #e8fdf6;
+  --cc-warning: #d48806;
+  --cc-warning-bg: #fffbe6;
+  --cc-danger: #d4380d;
+  --cc-danger-bg: #fff1f0;
+  --cc-info: #11a274;
+  --cc-info-bg: #e8fdf6;
+
+  /* 尺寸 */
+  --cc-radius-panel: 20px;
+  --cc-radius-card: 16px;
+  --cc-radius-control: 12px;
+  --cc-radius-chip: 8px;
+  --cc-gap: 20px;
+  --cc-pad: 24px;
+  --cc-max-width: 1400px;
+
+  /* 字号 */
+  --cc-font-title: 24px;
+  --cc-font-section: 18px;
+  --cc-font-sub: 16px;
+  --cc-font-body: 14px;
+  --cc-font-compact: 13px;
+  --cc-font-hint: 12px;
+
+  --cc-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  --cc-transition: 180ms ease;
+}
+
+/* 深色：兼容 documentElement 上的 dark-model 与容器上的 dark 两种约定 */
+.dark .crosschain-module,
+.dark-model .crosschain-module {
+  --cc-primary: #b4eb00;
+  --cc-primary-strong: #c9ff1a;
+  --cc-accent: #18e7a5;
+  --cc-gradient: linear-gradient(135deg, rgba(180, 233, 0, 0.1), rgba(63, 200, 151, 0.15));
+  --cc-bg: #0c1210;
+  --cc-bg-panel: #192421;
+  --cc-bg-hover: rgba(255, 255, 255, 0.06);
+  --cc-bg-soft: rgba(255, 255, 255, 0.08);
+  --cc-border: rgba(39, 53, 48, 0.8);
+  --cc-border-strong: rgba(39, 53, 48, 1);
+  --cc-text: #dce5e2;
+  --cc-text-2: #9bb0a9;
+  --cc-text-3: #687d78;
+  --cc-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.36);
+
+  --cc-success: #5deec0;
+  --cc-success-bg: rgba(24, 231, 165, 0.12);
+  --cc-warning: #d5ff4d;
+  --cc-warning-bg: rgba(180, 235, 0, 0.12);
+  --cc-danger: #ff7875;
+  --cc-danger-bg: rgba(255, 120, 117, 0.12);
+  --cc-info: #18e7a5;
+  --cc-info-bg: rgba(24, 231, 165, 0.12);
+}

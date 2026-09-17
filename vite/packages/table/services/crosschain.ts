@@ -4,6 +4,8 @@ import { ref, watch } from 'vue'
 import { browserWallet, browserWalletProvider } from './browserWallet'
 import { ElMessage } from 'element-plus'
 
+import { TRANSPORT_ABI } from '@page/core/CrossChain/services/abi'
+
 const viteEnv = (typeof import.meta !== 'undefined' && (import.meta as any).env)
   ? (import.meta as any).env
   : {}
@@ -42,12 +44,6 @@ const ENV_TRANSPORT_LEVEL_ID = readEnvString(
   (process as any)?.env?.TRANSPORT_LEVEL_ID
 )
 
-const CROSSCHAIN_BACKEND_URL = readEnvString(
-  viteEnv.VITE_CROSSCHAIN_BACKEND_URL,
-  viteEnv.CROSSCHAIN_BACKEND_URL,
-  (process as any)?.env?.VITE_CROSSCHAIN_BACKEND_URL,
-  (process as any)?.env?.CROSSCHAIN_BACKEND_URL
-) || 'http://localhost:37100'
 const FALLBACK_RPC_URL = deployment.rpc
 const DEFAULT_RPC_URL = ENV_RPC_URL || FALLBACK_RPC_URL
 const PUNKOS_CHAIN_ID = deployment.chainId
@@ -55,16 +51,12 @@ const PUNKOS_CHAIN_ID_HEX = ethers.utils.hexValue(PUNKOS_CHAIN_ID)
 const DEFAULT_HUB_CHAIN_ID = ENV_HUB_CHAIN_ID ? Number(ENV_HUB_CHAIN_ID) : 0
 const DEFAULT_TRANSPORT_LEVEL_ID = ENV_TRANSPORT_LEVEL_ID ? Number(ENV_TRANSPORT_LEVEL_ID) : undefined
 
-const ABI = [
-  'function getAllRoutes() external view returns (uint256[] memory typeIds, string[] memory names, bool[] memory isActive, address[] memory validators)',
-  'function createTask(uint256 _srcChainId, uint256 _destChainId, bytes _payload, string _routeName, uint256 _taskType) external payable',
-  'function finishTask(bytes32 _taskKey, bytes rawTx, bytes leafNode, bytes proof, bytes32 keyShadowBlock) external returns (bool)',
-  'function setCrossChainRoute(uint256 _routeId, string _name, bool _isActive, address _verifier) external',
-  'function taskNum() external view returns (uint256)',
-  'function taskIndex(uint256) external view returns (bytes32)',
-  'function getTaskInfoByKey(bytes32) external view returns (tuple(address user, uint256 fee, bytes payload, uint8 label))',
-  'function acceptTask(bytes32 _taskKey) external'
-]
+/**
+ * 合约 ABI 现统一由 @page/core/CrossChain/services/abi 提供（唯一来源）。
+ * 历史上的 5 参 createTask 与 4 字段 getTaskInfoByKey 与已部署合约不符，已移除。
+ */
+export { TRANSPORT_ABI as CROSSCHAIN_TRANSPORT_ABI } from '@page/core/CrossChain/services/abi'
+const ABI = TRANSPORT_ABI
 
 const MANAGER_ABI = [
   'function contract_chain_index(uint256 _chainId, uint256 _levelId) external view returns (address)'
@@ -78,10 +70,12 @@ export interface TaskTypeInfo {
 }
 
 export interface CreateTaskParams {
-  srcChainId: number
-  destChainId: number
+  /** 合约不存储源链/目标链，以下两项仅为兼容旧调用保留，不影响创建 */
+  srcChainId?: number
+  destChainId?: number
   payload: string
   taskType: number
+  /** 必须与链上 routes(taskType).name 完全一致 */
   routeName: string
   fee: string
 }
@@ -90,6 +84,10 @@ export interface FinishTaskParams {
   taskKey: string
   rawTx: string
   blockHash: string
+  /** 可选：需要证明的业务类型由外部工具产出后提供 */
+  leafNode?: string
+  proof?: string
+  keyShadowBlock?: string
 }
 
 export interface RegisterTaskTypeParams {
@@ -196,27 +194,6 @@ const getConnectedWalletAddress = (): string => {
   }
 }
 
-const tryGetApiContractConfig = async () => {
-  try {
-    const response = await fetch(`${CROSSCHAIN_BACKEND_URL}/api/crosschainzone`)
-    if (!response.ok) return null
-    const data = await response.json()
-    const first = Array.isArray(data) ? data[0] : null
-    if (!first) return null
-    const rpcUrl = first.rpc || DEFAULT_RPC_URL
-    const managerAddress = [first.manager_addr, first.multi_addr]
-      .find((address: string) => isValidAddress(address)) || null
-
-    if (!managerAddress) return null
-    return {
-      rpcUrl,
-      managerAddress
-    }
-  } catch {
-    return null
-  }
-}
-
 const getBaseContractConfig = async (): Promise<{
   rpcUrl: string
   managerAddress: string
@@ -228,18 +205,10 @@ const getBaseContractConfig = async (): Promise<{
     managerAddress = ethers.utils.getAddress(ENV_MANAGER_CONTRACT_ADDRESS)
   }
 
+  // 地址只从本地配置解析（环境变量 / deployment.json）。
+  // 原先还会调用本地后端 /api/crosschainzone，按“所有数据来自链上”的决策已移除。
   if (!managerAddress) {
-    const apiConfig = await tryGetApiContractConfig()
-    if (apiConfig?.rpcUrl) {
-      rpcUrl = apiConfig.rpcUrl
-    }
-    if (apiConfig?.managerAddress) {
-      managerAddress = ethers.utils.getAddress(apiConfig.managerAddress)
-    }
-  }
-
-  if (!managerAddress) {
-    throw new Error('未配置 VITE_MANAGER_CONTRACT_ADDRESS，且后端未返回可用的 manager 地址')
+    throw new Error('未解析到 Manager 地址：请在环境变量配置 VITE_MANAGER_CONTRACT_ADDRESS，或确认 deployment.json 中的 Manager 地址')
   }
 
   rpcUrlCache = rpcUrl
@@ -504,7 +473,14 @@ export const debugLoadTaskTypes = async () => {
 
 
 export const createTask = async (params: CreateTaskParams): Promise<string> => {
-  const { srcChainId, destChainId, payload, taskType, routeName, fee } = params
+  // 合约方法为 createTask(bytes _payload, string _routeName, uint256 _taskType)。
+  // 任务结构里没有源链/目标链字段；_routeName 必须与链上 routes[_taskType].name 完全一致，
+  // 否则合约会以 "Route name mismatch" 回滚。
+  const { payload, taskType, routeName, fee } = params
+
+  if (!routeName || !routeName.trim()) {
+    throw new Error('缺少业务类型名称：必须使用链上 routes(taskType).name 的原文')
+  }
 
   await ensureNetwork()
   const signer = await getSigner()
@@ -514,17 +490,14 @@ export const createTask = async (params: CreateTaskParams): Promise<string> => {
   const contract = new ethers.Contract(contractAddress, ABI, signer)
 
   try {
-    const tx = await contract.createTask(
-      srcChainId || 0,
-      destChainId || 0,
-      payloadHex,
-      routeName,
-      taskType,
-      {
-        value: valueInWei,
-        gasLimit: 600000
-      }
-    )
+    const estimatedGas = await contract.estimateGas.createTask(payloadHex, routeName, taskType, {
+      value: valueInWei
+    })
+
+    const tx = await contract.createTask(payloadHex, routeName, taskType, {
+      value: valueInWei,
+      gasLimit: estimatedGas.mul(120).div(100)
+    })
 
     const receipt = await tx.wait()
     if (receipt?.status === 1) {
@@ -538,7 +511,14 @@ export const createTask = async (params: CreateTaskParams): Promise<string> => {
     cachedSigner = null
     cachedProvider = null
     isNetworkCorrect = false
-    throw new Error(error?.reason || error?.message || '交易失败')
+    const reason = error?.reason || error?.message || '交易失败'
+    if (/Route invalid/i.test(reason)) {
+      throw new Error('该业务类型不存在或已停用，请重新选择')
+    }
+    if (/Route name mismatch/i.test(reason)) {
+      throw new Error('业务类型名称与链上记录不一致，请重新选择后再提交')
+    }
+    throw new Error(reason)
   }
 }
 
@@ -565,6 +545,24 @@ export const getDestChainTxData = async (
   }
 }
 
+/**
+ * finishTask 回滚原因 → 可理解文案。
+ * 依据合约 require 分支：Invalid task / Verification failed / Tx already used /
+ * Payload match check failed / Leaf node match check failed / SPV verify call failed / Get key failed。
+ */
+export const mapFinishTaskError = (rawMessage: string): string => {
+  const msg = String(rawMessage || '')
+  if (/Invalid task/i.test(msg)) return '任务状态不允许提交证明：仅已被你接单的任务可以提交。请确认任务未完成、未超时、且执行者是你'
+  if (/Tx already used/i.test(msg)) return '该目标链交易已被用于完成其他任务，不能重复提交'
+  if (/Custom verification execution failed/i.test(msg)) return '验证器在链上执行时报错，请确认证明参数与业务类型匹配'
+  if (/Verification failed/i.test(msg)) return '证明未通过验证。请核对：目标链交易是否与证明一致、区块高度是否匹配、证明是否由对应工具导出'
+  if (/Payload match check failed/i.test(msg)) return '提交的交易内容与任务约定的内容不匹配'
+  if (/Leaf node match check failed/i.test(msg)) return 'leafNode 与提交的交易不匹配'
+  if (/SPV verify call failed/i.test(msg)) return '轻客户端校验调用失败，可能是影子区块或证明格式不正确'
+  if (/Get key failed/i.test(msg)) return '无法从原始交易中提取 key，请检查交易数据'
+  return msg
+}
+
 export const finishTask = async (
   taskKey: string,
   destTxHash: string,
@@ -577,16 +575,11 @@ export const finishTask = async (
   const contract = new ethers.Contract(contractAddress, ABI, signer)
 
   try {
-    const tx = await contract.finishTask(
-      taskKey,
-      rawTx,
-      rawTx,
-      '0x',
-      blockHash,
-      {
-        gasLimit: 3000000
-      }
-    )
+    // 仅传目标链原始交易：leafNode / proof 传空。
+    // 适用于不要求链上证明的验证器（例如事件型）；需要证明的业务请用 finishTaskWithParams。
+    const tx = await contract.finishTask(taskKey, rawTx, '0x', '0x', blockHash, {
+      gasLimit: 3000000
+    })
 
     const receipt = await tx.wait()
     if (receipt?.status === 1) {
@@ -595,17 +588,36 @@ export const finishTask = async (
     throw new Error('交易执行失败')
   } catch (error: any) {
     if (error?.code === 'ACTION_REJECTED' || error?.code === 4001) {
-      throw new Error('用户取消了交易')
+      throw new Error('你已取消本次签名')
     }
     cachedSigner = null
     cachedProvider = null
     isNetworkCorrect = false
-    throw new Error(error?.reason || error?.message || '完成任务失败')
+    throw new Error(mapFinishTaskError(error?.reason || error?.message || '提交证明失败'))
   }
 }
 
-export const finishTaskWithData = async (params: FinishTaskParams): Promise<string> => {
-  const { taskKey, rawTx, blockHash } = params
+/**
+ * 按显式参数提交证明（新执行页使用）。
+ * 四个参数的含义完全由验证器决定，前端不做业务假设。
+ */
+export const finishTaskWithParams = async (params: {
+  taskKey: string
+  rawTx: string
+  leafNode?: string
+  proof?: string
+  keyShadowBlock?: string
+}): Promise<string> => {
+  const { taskKey, rawTx } = params
+  const leafNode = params.leafNode && params.leafNode !== '0x' ? params.leafNode : '0x'
+  const proof = params.proof && params.proof !== '0x' ? params.proof : '0x'
+  const keyShadowBlock =
+    params.keyShadowBlock && /^0x[0-9a-fA-F]{64}$/.test(params.keyShadowBlock)
+      ? params.keyShadowBlock
+      : ethers.constants.HashZero
+
+  if (!taskKey || !/^0x[0-9a-fA-F]{64}$/.test(taskKey)) throw new Error('任务 Key 格式不正确')
+  if (!rawTx || rawTx === '0x') throw new Error('缺少目标链原始交易')
 
   await ensureNetwork()
   const signer = await getSigner()
@@ -613,29 +625,39 @@ export const finishTaskWithData = async (params: FinishTaskParams): Promise<stri
   const contract = new ethers.Contract(contractAddress, ABI, signer)
 
   try {
-    const tx = await contract.finishTask(
-      taskKey,
-      rawTx,
-      rawTx,
-      '0x',
-      blockHash,
-      { gasLimit: 3000000 }
-    )
+    // 先做静态预检，把链上拒绝原因提前暴露，避免白花 gas
+    await contract.callStatic.finishTask(taskKey, rawTx, leafNode, proof, keyShadowBlock)
+  } catch (error: any) {
+    throw new Error(mapFinishTaskError(error?.reason || error?.message || '静态预检失败'))
+  }
 
+  try {
+    const tx = await contract.finishTask(taskKey, rawTx, leafNode, proof, keyShadowBlock, {
+      gasLimit: 3000000
+    })
     const receipt = await tx.wait()
-    if (receipt?.status === 1) {
-      return tx.hash
-    }
-    throw new Error('交易失败')
+    if (receipt?.status === 1) return tx.hash
+    throw new Error('交易执行失败')
   } catch (error: any) {
     if (error?.code === 'ACTION_REJECTED' || error?.code === 4001) {
-      throw new Error('用户取消了交易')
+      throw new Error('你已取消本次签名')
     }
     cachedSigner = null
     cachedProvider = null
     isNetworkCorrect = false
-    throw new Error(error?.reason || error?.message || '完成任务失败')
+    throw new Error(mapFinishTaskError(error?.reason || error?.message || '提交证明失败'))
   }
+}
+
+export const finishTaskWithData = async (params: FinishTaskParams): Promise<string> => {
+  const { taskKey, rawTx, blockHash, leafNode, proof, keyShadowBlock } = params
+  return finishTaskWithParams({
+    taskKey,
+    rawTx,
+    leafNode,
+    proof,
+    keyShadowBlock: keyShadowBlock || blockHash
+  })
 }
 
 export const registerTaskTypeOnChain = async (
@@ -837,15 +859,8 @@ export const useTaskContract = () => {
       ElMessage.success(`成功加载 ${tasks.value.length} 个任务类型`)
     } catch (error: any) {
       console.error('加载任务失败:', error)
-      ElMessage.error(error?.message || '加载失败')
-      tasks.value = [
-        {
-          typeId: 1,
-          name: 'Auction',
-          isActive: false,
-          validator: ethers.constants.AddressZero
-        }
-      ]
+      tasks.value = []
+      ElMessage.error(error?.message || '加载业务类型失败')
     } finally {
       loading.value = false
     }

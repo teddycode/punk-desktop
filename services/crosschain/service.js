@@ -5,7 +5,10 @@ module.exports = {
   meta: {
     name: 'crosschain',
     displayName: 'Cross Chain Service',
-    autostart: true,
+    // 已退役自动启动：跨链前端已按决策改为直读链上（无索引库、无本机执行），
+    // 本服务仅供需要时手工启动（如需只读证明帮助器）。
+    // 如需恢复随应用启动，将 autostart 改回 true 并配置 DB_* / DEV_PRIVATE_KEY 环境变量。
+    autostart: false,
     pageEntry: 'index.html', // This might not be used if it's purely an API service
     healthPath: '/api/health',
   },
