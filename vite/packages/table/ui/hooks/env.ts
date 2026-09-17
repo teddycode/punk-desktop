@@ -40,10 +40,14 @@ export default currentEnv;
 
 export { isWeb, isClient, isMac, isOffline };
 
-module.exports = {
-  currentEnv,
-  isWeb,
-  isClient,
-  isMac,
-  isOffline,
-};
+// Keep the legacy CommonJS export for Electron/preload consumers while
+// allowing the Vite browser bundle to evaluate this module as native ESM.
+if (typeof module !== 'undefined') {
+  module.exports = {
+    currentEnv,
+    isWeb,
+    isClient,
+    isMac,
+    isOffline,
+  };
+}
