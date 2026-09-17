@@ -134,6 +134,7 @@ import { LinkOutlined, SwapOutlined, CopyOutlined } from '@ant-design/icons-vue'
 
 const loading = ref(false);
 const activeTable = ref('transactions'); // 概览固定在上方，默认显示业务交易
+const CROSSCHAIN_BACKEND_URL = 'http://localhost:37100';
 let provider: ethers.providers.JsonRpcProvider;
 const route = useRoute()
 const router = useRouter()
@@ -314,14 +315,18 @@ const openDetailModal = async (dataIndex: string, hash: string) => {
     detailTitle.value = '区块详情'
     let block = hubBlockList.value.find((b: any) => b.block_hash === hash)
     if (!block) {
-      const blocks = await loadAssetJSON('../crosschain/testdata/hub_block_info.json')
-      hubBlockList.value = blocks || []
+      try {
+        const response = await axios.get(`${CROSSCHAIN_BACKEND_URL}/api/blocks`)
+        hubBlockList.value = response.data || []
+      } catch (e) {
+        hubBlockList.value = []
+      }
       block = hubBlockList.value.find((b: any) => b.block_hash === hash)
     }
     if (block) {
       detailItems.value = [
         { label: '区块号', value: block.block_number },
-        { label: '父区块哈希', value: block.parent_hash },
+        { label: '父区块哈希', value: block.prev_hash || block.parent_hash },
         { label: '出块时间', value: block.timestamp },
         { label: '交易数量', value: block.tx_count }
       ]
@@ -331,8 +336,12 @@ const openDetailModal = async (dataIndex: string, hash: string) => {
     detailTitle.value = '交易详情'
     let tx = txList.value.find((t: any) => t.tx_hash === hash)
     if (!tx) {
-      const hubTxs = await loadAssetJSON('../crosschain/testdata/hub_tx_info.json')
-      txList.value = hubTxs || []
+      try {
+        const response = await axios.get(`${CROSSCHAIN_BACKEND_URL}/api/bridgeTxs`)
+        txList.value = response.data || []
+      } catch (e) {
+        txList.value = []
+      }
       tx = txList.value.find((t: any) => t.tx_hash === hash)
     }
     if (tx) {
@@ -368,7 +377,7 @@ const handleBlockClick = (block_hash: string) => {
 const fetchBridgeTxInfo = async () => {
   try {
     loading.value = true;
-    const response = await axios.get('http://localhost:3020/api/bridgeTxs')
+    const response = await axios.get(`${CROSSCHAIN_BACKEND_URL}/api/bridgeTxs`)
     txList.value = response.data
     //console.log(txList)  
   } catch (err) {
@@ -378,88 +387,47 @@ const fetchBridgeTxInfo = async () => {
     loading.value = false;
   }
 };
-// 使用相对资源路径加载（Vite 会正确解析）
-const loadAssetJSON = async (relativePath: string) => {
-  try {
-    const url = new URL(relativePath, import.meta.url).href;
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    return await response.json();
-  } catch (error) {
-    console.error(`加载 ${relativePath} 失败:`, error);
-    return null;
-  }
-};
-const fetchDataFromDB = async () => {
-  await fetchBridgeTxInfo()
-};
 const fetchDataFromRPC = async () => {
-  //await fetchDataFromDB();
   provider = new ethers.providers.JsonRpcProvider(data_from_route.value['rpc']);
   let multiABI = [
     "function getSourceChainNum() view returns (uint256)",
     "function getSystemContractNum() view returns (uint256)",
-    "function getSystemContractAddressByLevelID(uint256, uint256)view returns (address)",
-    "function getSystemContractAddressByLevelID(uint256, uint256)view returns (address)",
+    "function contract_chain_index(uint256, uint256)view returns (address)",
     "function getSourceChainInfo(uint256) view returns (string, string, uint256, uint256, address[])"
   ];
   const multiContract = new ethers.Contract(data_from_route.value['multi_addr'], multiABI, provider);
   let res = await multiContract.getSourceChainInfo(data_from_route.value.chain_id);
-  console.log(res)
+  const transportAddr = await multiContract.contract_chain_index(0, 1).catch(() => '')
   data_from_rpc.value = {
     'state': res[2],
     'relay_addr': res[4][0],
-    'transport_addr': res[4][0],
+    'transport_addr': transportAddr || '',
   }
 }
 const fetchData = async () => {
   loading.value = true;
   const chainId = data_from_route.value.chain_id;
-
-  // 概览数据
-  const sourceChainInfo = await loadAssetJSON('../crosschain/testdata/source_chain_info.json');
-  const systemContractInfo = await loadAssetJSON('../crosschain/testdata/system_contract_info.json');
-  if (sourceChainInfo) {
-    const chainInfo = sourceChainInfo.find((c: any) => c.chain_id === chainId);
-    if (chainInfo) {
-      data_from_rpc.value.state = chainInfo.state;
-      data_from_rpc.value.visit_block_height = chainInfo.visit_block_height;
-      data_from_rpc.value.register_tx_hash = chainInfo.register_tx_hash;
-    }
+  try {
+    await fetchDataFromRPC();
+    const [txs, blocks, tasks, shadow] = await Promise.all([
+      axios.get(`${CROSSCHAIN_BACKEND_URL}/api/bridgeTxs`).then(r => r.data).catch(() => []),
+      axios.get(`${CROSSCHAIN_BACKEND_URL}/api/blocks`).then(r => r.data).catch(() => []),
+      axios.get(`${CROSSCHAIN_BACKEND_URL}/api/tasks`).then(r => r.data).catch(() => []),
+      axios.get(`${CROSSCHAIN_BACKEND_URL}/api/shadowBlocks/${chainId}`).then(r => r.data).catch(() => [])
+    ])
+    txList.value = txs || []
+    hubBlockList.value = blocks || []
+    transferTaskList.value = tasks || []
+    shadowBlockList.value = shadow || []
+    // These two tables are populated by relay event/indexer APIs when enabled.
+    porterList.value = []
+    controlTxList.value = []
+  } catch (error) {
+    console.error('读取链上跨链桥数据失败:', error)
+    message.error('读取链上跨链桥数据失败，请检查 Hub RPC')
+  } finally {
+    loading.value = false
   }
-  if (systemContractInfo) {
-    const byChain = systemContractInfo.filter((c: any) => c.chain_id === chainId);
-    const relay = byChain.find((c: any) => c.level_id === 1);
-    const transport = byChain.find((c: any) => c.level_id === 2);
-    data_from_rpc.value.relay_addr = relay?.contract_addr || '';
-    data_from_rpc.value.transport_addr = transport?.contract_addr || '';
-  }
-
-  // 业务交易
-  const hubTxs = await loadAssetJSON('../crosschain/testdata/hub_tx_info.json');
-  if (hubTxs) txList.value = hubTxs;
-
-  // 影子区块
-  const shadowBlocks = await loadAssetJSON('../crosschain/testdata/source_shadow_info_101.json');
-  if (shadowBlocks) shadowBlockList.value = shadowBlocks;
-
-  // 传输任务
-  const transferTasks = await loadAssetJSON('../crosschain/testdata/transport_task_info_101.json');
-  if (transferTasks) transferTaskList.value = transferTasks;
-
-  // 搬运工（中继配置）
-  const porterCfg = await loadAssetJSON('../crosschain/testdata/relay_basic_info.json');
-  if (porterCfg) porterList.value = porterCfg;
-
-  // 控制交易（事件数据）
-  const controlTxs = await loadAssetJSON('../crosschain/testdata/event_info.json');
-  if (controlTxs) controlTxList.value = controlTxs;
-
-  // 区块数据（供弹窗使用）
-  const hubBlocks = await loadAssetJSON('../crosschain/testdata/hub_block_info.json');
-  if (hubBlocks) hubBlockList.value = hubBlocks;
-
-  loading.value = false;
 }
 onMounted(fetchData)
 

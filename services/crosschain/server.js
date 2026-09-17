@@ -152,6 +152,13 @@ const MANAGER_ABI = [
         type: 'function'
     },
     {
+        inputs: [],
+        name: 'getSystemContractNum',
+        outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+        stateMutability: 'view',
+        type: 'function'
+    },
+    {
         inputs: [{ internalType: 'uint256', name: 'sourceID', type: 'uint256' }],
         name: 'getSourceChainInfo',
         outputs: [
@@ -245,6 +252,74 @@ const getSourceChainsFromManager = async () => {
     } catch (e) { return []; }
 };
 
+// Chain data is the source of truth for the cross-chain UI.  The SQL index is
+// optional and may be unavailable on a desktop client, so keep small RPC
+// readers here for the overview APIs instead of failing the whole request.
+const getSystemContractsFromChain = async () => {
+    const contracts = Object.entries(deployment.contracts || {}).map(([name, item]) => ({
+        name,
+        address: item && item.address ? item.address : ZERO_ADDRESS,
+        state: item && item.state ? item.state : 'Working'
+    }));
+    const managerAddress = getManagerAddress();
+    if (web3 && isAddress(managerAddress) && managerAddress !== ZERO_ADDRESS) {
+        try {
+            const manager = new web3.eth.Contract(MANAGER_ABI, managerAddress);
+            const count = Number(await manager.methods.getSystemContractNum().call());
+            return contracts.map((item, index) => ({ ...item, no: index + 1, on_chain_index: index < count }));
+        } catch (e) {
+            // Deployment metadata is still useful when an RPC node is briefly unavailable.
+        }
+    }
+    return contracts.map((item, index) => ({ ...item, no: index + 1 }));
+};
+
+const getRecentHubBlocksFromChain = async (limit = 20) => {
+    if (!web3) return [];
+    const latest = Number(await web3.eth.getBlockNumber());
+    const first = Math.max(0, latest - Math.max(1, limit) + 1);
+    const blocks = [];
+    for (let height = latest; height >= first; height -= 1) {
+        const block = await web3.eth.getBlock(height, false);
+        if (!block) continue;
+        blocks.push({
+            block_number: Number(block.number),
+            block_hash: block.hash,
+            prev_hash: block.parentHash,
+            if_matter: '是',
+            created_at: new Date(Number(block.timestamp) * 1000).toISOString(),
+            no: Number(block.number)
+        });
+    }
+    return blocks;
+};
+
+const getRecentHubTxsFromChain = async (limit = 20) => {
+    if (!web3) return [];
+    const latest = Number(await web3.eth.getBlockNumber());
+    const result = [];
+    for (let height = latest; height >= 0 && result.length < limit; height -= 1) {
+        const block = await web3.eth.getBlock(height, true);
+        if (!block || !Array.isArray(block.transactions)) continue;
+        for (let index = block.transactions.length - 1; index >= 0 && result.length < limit; index -= 1) {
+            const tx = block.transactions[index];
+            if (!tx || typeof tx === 'string') continue;
+            result.push({
+                tx_hash: tx.hash,
+                block_number: Number(block.number),
+                tx_index: Number(tx.transactionIndex ?? index),
+                block_hash: block.hash,
+                created_at: new Date(Number(block.timestamp) * 1000).toISOString(),
+                from_addr: tx.from || '',
+                to_addr: tx.to || '',
+                value: web3.utils.fromWei(String(tx.value || 0), 'ether'),
+                gas_used: '0'
+            });
+        }
+    }
+    return result;
+};
+
 // ================= 4. API Endpoints =================
 const router = express ? express.Router() : null;
 
@@ -302,7 +377,7 @@ const startFallbackServer = () => {
             return;
         }
 
-        if (req.method === 'GET' && (normalizedApiPath === '/systemContracts' || normalizedApiPath === '/blocks' || normalizedApiPath === '/txs' || normalizedApiPath === '/tasks')) {
+        if (req.method === 'GET' && (normalizedApiPath === '/systemContracts' || normalizedApiPath === '/blocks' || normalizedApiPath === '/txs' || normalizedApiPath === '/bridgeTxs' || normalizedApiPath === '/tasks')) {
             res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
             res.end(JSON.stringify([]));
             return;
@@ -350,8 +425,9 @@ router.get('/crosschainzone', async (req, res) => {
 
 router.get('/sourceChains', async (req, res) => {
     try {
-        const [dbRows] = await pool.query('SELECT * FROM source_chain_info');
         const managerRows = await getSourceChainsFromManager();
+        let dbRows = [];
+        try { [dbRows] = await pool.query('SELECT * FROM source_chain_info'); } catch (e) { /* SQL index is optional */ }
         const mergedMap = new Map();
         dbRows.forEach(r => mergedMap.set(Number(r.chain_id), r));
         managerRows.forEach(r => { if (!mergedMap.has(r.chain_id)) mergedMap.set(r.chain_id, r); });
@@ -361,23 +437,40 @@ router.get('/sourceChains', async (req, res) => {
 
 router.get('/systemContracts', async (req, res) => {
     try {
-        const [rows] = await pool.query('SELECT * FROM system_contract_info');
-        res.json(rows);
+        try {
+            const [rows] = await pool.query('SELECT * FROM system_contract_info');
+            if (rows.length > 0) return res.json(rows);
+        } catch (e) { /* fall through to deployment/on-chain data */ }
+        res.json(await getSystemContractsFromChain());
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
 router.get('/blocks', async (req, res) => {
     try {
-        const [rows] = await pool.query('SELECT no, block_hash, prev_hash, block_height, if_matter, created_at FROM hub_block_info ORDER BY block_height DESC LIMIT 20');
-        res.json(rows.map(b => ({ block_number: b.block_height, block_hash: b.block_hash, prev_hash: b.prev_hash, if_matter: b.if_matter === 1 ? '是' : '否', created_at: b.created_at, no: b.no })));
-    } catch (e) { res.status(500).json([]); }
+        try {
+            const [rows] = await pool.query('SELECT no, block_hash, prev_hash, block_height, if_matter, created_at FROM hub_block_info ORDER BY block_height DESC LIMIT 20');
+            if (rows.length > 0) return res.json(rows.map(b => ({ block_number: b.block_height, block_hash: b.block_hash, prev_hash: b.prev_hash, if_matter: b.if_matter === 1 ? '是' : '否', created_at: b.created_at, no: b.no })));
+        } catch (e) { /* fall through to Hub RPC */ }
+        res.json(await getRecentHubBlocksFromChain());
+    } catch (e) { res.status(502).json({ error: `Hub RPC unavailable: ${e.message}` }); }
 });
 
 router.get('/txs', async (req, res) => {
     try {
-        const [rows] = await pool.query('SELECT t.tx_hash, t.tx_index, t.created_at, b.block_height as block_number, b.block_hash FROM hub_tx_info t LEFT JOIN hub_block_info b ON t.block_hash = b.block_hash ORDER BY t.no DESC LIMIT 20');
-        res.json(rows.map(tx => ({ tx_hash: tx.tx_hash, block_number: tx.block_number || '未知', tx_index: tx.tx_index, block_hash: tx.block_hash || '未知', created_at: tx.created_at, from_addr: '暂无', to_addr: '暂无', value: '0', gas_used: '0' })));
-    } catch (e) { res.status(500).json([]); }
+        try {
+            const [rows] = await pool.query('SELECT t.tx_hash, t.tx_index, t.created_at, b.block_height as block_number, b.block_hash FROM hub_tx_info t LEFT JOIN hub_block_info b ON t.block_hash = b.block_hash ORDER BY t.no DESC LIMIT 20');
+            if (rows.length > 0) return res.json(rows.map(tx => ({ tx_hash: tx.tx_hash, block_number: tx.block_number || '未知', tx_index: tx.tx_index, block_hash: tx.block_hash || '未知', created_at: tx.created_at, from_addr: '暂无', to_addr: '暂无', value: '0', gas_used: '0' })));
+        } catch (e) { /* fall through to Hub RPC */ }
+        res.json(await getRecentHubTxsFromChain());
+    } catch (e) { res.status(502).json({ error: `Hub RPC unavailable: ${e.message}` }); }
+});
+
+router.get('/bridgeTxs', async (req, res) => {
+    try {
+        res.json(await getRecentHubTxsFromChain(50));
+    } catch (e) {
+        res.status(502).json({ error: `Hub RPC unavailable: ${e.message}` });
+    }
 });
 
 router.get('/tasks', async (req, res) => {
@@ -403,13 +496,18 @@ router.get('/shadowBlocks/:chainId', async (req, res) => {
             return res.json([]);
         }
 
-        const [rows] = await pool.query(
-            'SELECT * FROM source_shadow_info WHERE chain_id = ? ORDER BY no DESC LIMIT 200',
-            [chainId]
-        );
-        res.json(rows);
+        try {
+            const [rows] = await pool.query(
+                'SELECT * FROM source_shadow_info WHERE chain_id = ? ORDER BY no DESC LIMIT 200',
+                [chainId]
+            );
+            if (rows.length > 0) return res.json(rows);
+        } catch (e) { /* shadow index is optional */ }
+        // Shadow blocks are emitted by each source-chain relay.  Until a relay
+        // ABI is configured, return an empty on-chain result instead of a SQL 500.
+        res.json([]);
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        res.status(502).json({ error: e.message });
     }
 });
 
