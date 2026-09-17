@@ -8,6 +8,7 @@ main.build.js
 .DS_Store
 /.idea
 /yarn-error.log
+*.log
 /setup
 /setup-x64/
 /setup-ia32/
@@ -22,3 +23,16 @@ main.build.js
 /packages/vuuri/
 /packages/wallpaper/
 /packages/spotlight/node_modules
+
+# Local verification output
+/.check-output/
+/.check-output-*.log
+
+# Electron development profiles and runtime logs
+/.electron-*/
+/.desktop-*.log
+/.crosschain-*.log
+/.vite-*.log
+
+# Local cross-chain task scratch data
+/services/crosschain/current_task_payload.txt
