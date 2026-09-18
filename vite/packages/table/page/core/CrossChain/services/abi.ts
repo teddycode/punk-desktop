@@ -86,6 +86,10 @@ export const TRANSPORT_ABI = [
   'function delay() view returns (uint256)',
   'function txIfCheck(bytes32) view returns (bool)',
 
+  // —— 质押（继承自 AbstractStakeManagement）——
+  'function getRequireStake() view returns (uint256)',
+  'function getMyStake() view returns (uint256)',
+
   // —— 写入（全部由钱包签名）——
   'function createTask(bytes _payload, string _routeName, uint256 _taskType) payable',
   'function acceptTask(bytes32 _taskKey)',
@@ -93,6 +97,8 @@ export const TRANSPORT_ABI = [
   'function reAcceptTask(bytes32 _taskKey)',
   'function withdrawTask(bytes32 _taskKey)',
   'function setCrossChainRoute(uint256 _routeId, string _name, bool _isActive, address _verifier)',
+  'function becomeRelayer() payable',
+  'function withdrawStake(uint256 _amount)',
 ]
 
 /**

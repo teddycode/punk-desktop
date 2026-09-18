@@ -313,7 +313,7 @@ async function loadQualification() {
       const [required, mine] = await Promise.all([
         contract.getRequireStake().catch(() => null),
         crossChainState.walletAddress
-          ? contract.getMyStake().catch(() => null)
+          ? contract.getMyStake({ from: crossChainState.walletAddress }).catch(() => null)
           : Promise.resolve(null),
       ])
       requireStake.value = required ? required.toString() : '0'

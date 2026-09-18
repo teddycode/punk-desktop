@@ -525,9 +525,9 @@ export async function getRelayParams(chainId: number, ownerAddress?: string): Pr
   const [relayAddress] = managerInterface.decodeFunctionResult('contract_chain_index', relayResult)
   if (!relayAddress || relayAddress === ethers.constants.AddressZero) return null
 
-  const call = async (fn: string, params: any[] = []) => {
+  const call = async (fn: string, params: any[] = [], from?: string) => {
     const data = relayInterface.encodeFunctionData(fn, params)
-    const raw = await client.tryEthCall(relayAddress, data).catch(() => null)
+    const raw = await client.tryEthCall(relayAddress, data, 'latest', from).catch(() => null)
     if (!raw) return null
     try {
       return relayInterface.decodeFunctionResult(fn, raw)[0]
@@ -537,7 +537,7 @@ export async function getRelayParams(chainId: number, ownerAddress?: string): Pr
   }
 
   const [myStakeRaw, requireStakeRaw, stateRaw, topKeyRaw, delayRaw] = await Promise.all([
-    ownerAddress ? call('getMyStake') : Promise.resolve(null),
+    ownerAddress ? call('getMyStake', [], ownerAddress) : Promise.resolve(null),
     call('getRequireStake'),
     call('getContractState'),
     call('getTopKeyFromShadowLedger'),

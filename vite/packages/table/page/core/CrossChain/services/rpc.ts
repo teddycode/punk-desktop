@@ -221,10 +221,12 @@ export class JsonRpcClient {
     return this.request<string>('eth_getCode', [address, 'latest'])
   }
 
-  /** eth_call；失败抛 RpcError（调用方据此判断“方法不存在”与“调用回滚”） */
-  ethCall(to: string, data: string, block: string | number = 'latest'): Promise<string> {
+  /** eth_call；失败抛 RpcError（调用方据此判断“方法不存在”与“调用回滚”）；from 用于让合约读到正确的 msg.sender */
+  ethCall(to: string, data: string, block: string | number = 'latest', from?: string): Promise<string> {
     const tag = typeof block === 'number' ? this.numberToHex(block) : block
-    return this.request<string>('eth_call', [{ to, data }, tag])
+    const callParams: { to: string; data: string; from?: string } = { to, data }
+    if (from) callParams.from = from
+    return this.request<string>('eth_call', [callParams, tag])
   }
 
   ethCallBatch(calls: Array<{ to: string; data: string }>, block: string | number = 'latest'): Promise<string[]> {
@@ -235,9 +237,9 @@ export class JsonRpcClient {
   }
 
   /** 只读调用，失败返回 null 而不抛错（用于能力探测） */
-  async tryEthCall(to: string, data: string, block: string | number = 'latest'): Promise<string | null> {
+  async tryEthCall(to: string, data: string, block: string | number = 'latest', from?: string): Promise<string | null> {
     try {
-      return await this.ethCall(to, data, block)
+      return await this.ethCall(to, data, block, from)
     } catch {
       return null
     }
